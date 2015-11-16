@@ -476,7 +476,7 @@ qreal Note::tabHeadWidth(StaffType* tab) const
       if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
             qreal mags = magS();
             QFont f = tab->fretFont();
-            int size = lrint(tab->fretFontSize() * MScore::DPI / PPI);
+            int size = lrint(tab->fretFontSize());
             f.setPixelSize(size);
             QFontMetricsF fm(f);
             QString s;

@@ -32,7 +32,7 @@ ExampleView::ExampleView(QWidget* parent)
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
       double mag = 1.0;
-      qreal _spatium = SPATIUM20 * MScore::DPI;
+      qreal _spatium = SPATIUM20;
       _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 6);
       imatrix  = _matrix.inverted();
       }
@@ -337,8 +337,8 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
 QSize ExampleView::sizeHint() const
       {
       return QSize(
-            1000 * guiScaling * (MScore::DPI / 90),
-              80 * guiScaling * (MScore::DPI / 90));
+            1000 * guiScaling * (DPI / 90),
+              80 * guiScaling * (DPI / 90));
       }
 
 

@@ -233,7 +233,7 @@ qreal Element::spatium() const
 
 qreal Element::magS() const
       {
-      return mag() * (_score->spatium() / (MScore::DPI * SPATIUM20));
+      return mag() * (_score->spatium() / SPATIUM20);
       }
 
 //---------------------------------------------------------

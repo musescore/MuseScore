@@ -25,8 +25,9 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+#      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
       ${FREETYPE_INCLUDE_DIRS}
+      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
 if (SCRIPT_INTERFACE)
@@ -306,7 +307,6 @@ target_link_libraries(mscore
       qzip
       beatroot
       kqoauth
-      ${FREETYPE_LIBRARIES}
       )
 
 if (MINGW)
@@ -389,7 +389,7 @@ if (MINGW)
       )
 
    if (OMR)
-      target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
+      target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -476,6 +476,11 @@ else (MINGW)
    target_link_libraries(mscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
+#      freetype
+      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
+      png
+      bz2
+      harfbuzz
       z
       dl
       pthread
@@ -495,7 +500,7 @@ else (MINGW)
       )
 
    if (OMR)
-      target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)
+      target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)

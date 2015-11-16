@@ -401,7 +401,7 @@ void StaffType::setOnLines(bool val)
 
 void StaffType::setDurationMetrics()
       {
-      if (_durationMetricsValid && _refDPI == MScore::DPI)           // metrics are still valid
+      if (_durationMetricsValid && _refDPI == DPI)           // metrics are still valid
             return;
 
       QFontMetricsF fm(durationFont());
@@ -417,13 +417,13 @@ void StaffType::setDurationMetrics()
       _durationBoxH = bb.height();
       _durationBoxY = bb.y()  + _durationYOffset;
       // keep track of the conditions under which metrics have been computed
-      _refDPI = MScore::DPI;
+      _refDPI = DPI;
       _durationMetricsValid = true;
       }
 
 void StaffType::setFretMetrics()
       {
-      if (_fretMetricsValid && _refDPI == MScore::DPI)
+      if (_fretMetricsValid && _refDPI == DPI)
             return;
 
       QFontMetricsF fm(fretFont());
@@ -451,14 +451,14 @@ void StaffType::setFretMetrics()
             }
       // if on string, we are done; if between strings, raise by half line distance
       if (!_onLines)
-            _fretYOffset -= lineDistance().val()*MScore::DPI*SPATIUM20 / 2.0;
+            _fretYOffset -= lineDistance().val() * SPATIUM20 * 0.5;
 
       // from _fretYOffset, compute _fretBoxH and _fretBoxY
       _fretBoxH = bb.height();
       _fretBoxY = bb.y()  + _fretYOffset;
 
       // keep track of the conditions under which metrics have been computed
-      _refDPI = MScore::DPI;
+      _refDPI = DPI;
       _fretMetricsValid = true;
       }
 
@@ -509,7 +509,7 @@ qreal StaffType::durationBoxY()
       if (!_genDurations && !_slashStyle)
             return 0.0;
       setDurationMetrics();
-      return _durationBoxY + _durationFontUserY * MScore::MScore::DPI * SPATIUM20;
+      return _durationBoxY + _durationFontUserY * SPATIUM20;
       }
 
 //---------------------------------------------------------
@@ -519,14 +519,14 @@ qreal StaffType::durationBoxY()
 void StaffType::setDurationFontSize(qreal val)
       {
       _durationFontSize = val;
-      _durationFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
+      _durationFont.setPixelSize( lrint(val) );
       _durationMetricsValid = false;
       }
 
 void StaffType::setFretFontSize(qreal val)
       {
       _fretFontSize = val;
-      _fretFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
+      _fretFont.setPixelSize( lrint(val) );
       _fretMetricsValid = false;
       }
 

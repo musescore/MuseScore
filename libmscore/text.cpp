@@ -213,9 +213,9 @@ QFont TextFragment::font(const Text* t) const
       {
       QFont font;
 
-      qreal m = format.fontSize() * MScore::DPI / PPI;
+      qreal m = format.fontSize();
       if (t->textStyle().sizeIsSpatiumDependent())
-            m *= t->spatium() / ( SPATIUM20 * MScore::DPI);
+            m *= t->spatium() / SPATIUM20;
 
       font.setUnderline(format.underline() || format.preedit());
       if (format.type() == CharFormatType::TEXT) {
@@ -273,8 +273,8 @@ void TextBlock::layout(Text* t)
                   case Element::Type::VBOX:
                   case Element::Type::TBOX: {
                         Box* b = static_cast<Box*>(e);
-                        layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
-                        lm = b->leftMargin() * MScore::DPMM;
+                        layoutWidth -= ((b->leftMargin() + b->rightMargin()) * DPMM);
+                        lm = b->leftMargin() * DPMM;
                         }
                         break;
                   case Element::Type::PAGE: {
@@ -1247,8 +1247,8 @@ void Text::layout1()
                   if (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX || parent()->type() == Element::Type::TBOX) {
                         // consider inner margins of frame
                         Box* b = static_cast<Box*>(parent());
-                        yoff = b->topMargin()  * MScore::DPMM;
-                        h  = b->height() - yoff - b->bottomMargin() * MScore::DPMM;
+                        yoff = b->topMargin()  * DPMM;
+                        h  = b->height() - yoff - b->bottomMargin() * DPMM;
                         }
                   else if (parent()->type() == Element::Type::PAGE) {
                         Page* p = static_cast<Page*>(parent());
@@ -2314,11 +2314,11 @@ bool Text::readProperties(XmlReader& e)
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
       else if (tag == "frameWidth") {           // obsolete
-            qreal spMM = spatium() / MScore::DPMM;
+            qreal spMM = spatium() / DPMM;
             textStyle().setFrameWidth(Spatium(e.readDouble() / spMM));
             }
       else if (tag == "paddingWidth") {          // obsolete
-            qreal spMM = spatium() / MScore::DPMM;
+            qreal spMM = spatium() / DPMM;
             textStyle().setPaddingWidth(Spatium(e.readDouble() / spMM));
             }
       else if (_textStyle.readProperties(e))
@@ -2405,10 +2405,10 @@ QRectF Text::pageRectangle() const
       if (parent() && (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX || parent()->type() == Element::Type::TBOX)) {
             Box* box = static_cast<Box*>(parent());
             QRectF r = box->abbox();
-            qreal x = r.x() + box->leftMargin() * MScore::DPMM;
-            qreal y = r.y() + box->topMargin() * MScore::DPMM;
-            qreal h = r.height() - (box->topMargin() + box->bottomMargin()) * MScore::DPMM;
-            qreal w = r.width()  - (box->leftMargin() + box->rightMargin()) * MScore::DPMM;
+            qreal x = r.x() + box->leftMargin() * DPMM;
+            qreal y = r.y() + box->topMargin() * DPMM;
+            qreal h = r.height() - (box->topMargin() + box->bottomMargin()) * DPMM;
+            qreal w = r.width()  - (box->leftMargin() + box->rightMargin()) * DPMM;
 
             // QSizeF ps = _doc->pageSize();
             // return QRectF(x, y, ps.width(), ps.height());
@@ -2833,7 +2833,7 @@ QString Text::convertFromHtml(const QString& ss) const
                         qreal htmlSize = font.pointSizeF();
                         // html font sizes may have spatium adjustments; need to undo this
                         if (textStyle().sizeIsSpatiumDependent())
-                              htmlSize *= SPATIUM20 * MScore::DPI / spatium();
+                              htmlSize *= SPATIUM20 / spatium();
                         if (fabs(size - htmlSize) > 0.1) {
                               size = htmlSize;
                               s += QString("<font size=\"%1\"/>").arg(size);

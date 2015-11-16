@@ -249,7 +249,7 @@ bool MTest::savePdf(Score* cs, const QString& saveName)
       QPainter p(&printerDev);
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
-      double mag = printerDev.logicalDpiX() / MScore::DPI;
+      double mag = printerDev.logicalDpiX() / DPI;
             p.scale(mag, mag);
 
       const QList<Page*> pl = cs->pages();
@@ -318,9 +318,8 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 void MTest::initMTest()
       {
       initMyResources();
-      MScore::DPI  = 120;
-      MScore::PDPI = 120;
-      MScore::DPMM = MScore::DPI / INCH;
+//      DPI  = 120;
+//      PDPI = 120;
       MScore::noGui = true;
 
       synti  = new MasterSynthesizer();

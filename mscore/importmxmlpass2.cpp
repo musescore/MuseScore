@@ -4757,7 +4757,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       double styleYOff = _score->textStyle(TextStyleType::HARMONY).offset().y();
       OffsetType offsetType = _score->textStyle(TextStyleType::HARMONY).offsetType();
       if (offsetType == OffsetType::ABS) {
-            styleYOff = styleYOff * MScore::DPMM / _score->spatium();
+            styleYOff = styleYOff * DPMM / _score->spatium();
             }
 
       // TODO: check correct dy handling

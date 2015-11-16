@@ -1417,7 +1417,7 @@ void Score::doLayout()
             }
 
       _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
-      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
       if (layoutFlags & LayoutFlag::FIX_TICKS)
             fixTicks();
@@ -3104,7 +3104,7 @@ void Score::layoutSystems()
       bool firstSystem        = true;
       bool startWithLongNames = true;
 
-      qreal w  = pageFormat()->printableWidth() * MScore::DPI;
+      qreal w  = pageFormat()->printableWidth() * DPI;
 
       while (curMeasure) {
             Element::Type t = curMeasure->type();
@@ -3442,13 +3442,13 @@ PAGEDBG("  system %d", i);
             qreal h = pC.sr.height();
 
 PAGEDBG("   y:%f + h:%f + tm:%f + qMax(bm:%f,%f)[=%f] > %f",
-    pC.y    / MScore::DPMM,
-    h       / MScore::DPMM,
-    tmargin / MScore::DPMM,
-    bmargin / MScore::DPMM,
-    slb     / MScore::DPMM,
-    (pC.y + h + tmargin + qMax(bmargin, slb)) / MScore::DPMM,
-    pC.ey   / MScore::DPMM
+    pC.y    / DPMM,
+    h       / DPMM,
+    tmargin / DPMM,
+    bmargin / DPMM,
+    slb     / DPMM,
+    (pC.y + h + tmargin + qMax(bmargin, slb)) / DPMM,
+    pC.ey   / DPMM
     );
 
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {

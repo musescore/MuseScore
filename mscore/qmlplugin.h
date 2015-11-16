@@ -105,7 +105,7 @@ class QmlPlugin : public QQuickItem {
       int mscoreMajorVersion() const      { return majorVersion();  }
       int mscoreMinorVersion() const      { return minorVersion();  }
       int mscoreUpdateVersion() const     { return updateVersion(); }
-      qreal mscoreDPI() const             { return MScore::DPI;     }
+      qreal mscoreDPI() const             { return DPI;     }
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();

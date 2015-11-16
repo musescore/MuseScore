@@ -407,7 +407,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "SyntiSettings")
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
-                  _style.setSpatium (e.readDouble() * MScore::DPMM);
+                  _style.setSpatium (e.readDouble() * DPMM);
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -433,7 +433,7 @@ Score::FileError Score::read114(XmlReader& e)
                   TextStyle s;
                   s.read(e);
 
-                  qreal spMM = _style.spatium() / MScore::DPMM;
+                  qreal spMM = _style.spatium() / DPMM;
                   if (s.frameWidthMM() != 0.0)
                         s.setFrameWidth(Spatium(s.frameWidthMM() / spMM));
                   if (s.paddingWidthMM() != 0.0)

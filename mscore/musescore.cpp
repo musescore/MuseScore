@@ -342,6 +342,10 @@ void MuseScore::preferencesChanged()
 MuseScore::MuseScore()
    : QMainWindow()
       {
+      QScreen* screen      = QGuiApplication::primaryScreen();
+      _physicalDotsPerInch = screen->physicalDotsPerInch();        // physical resolution
+      _physicalDotsPerInch *= guiScaling;
+
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
@@ -3235,8 +3239,8 @@ void MuseScore::writeSessionFile(bool cleanExit)
                         xml.tag("mag", v->mag());
                   else
                         xml.tag("magIdx", int(v->magIdx()));
-                  xml.tag("x",   v->xoffset() / MScore::DPMM);
-                  xml.tag("y",   v->yoffset() / MScore::DPMM);
+                  xml.tag("x",   v->xoffset() / DPMM);
+                  xml.tag("y",   v->yoffset() / DPMM);
                   xml.etag();
                   }
             }
@@ -3255,8 +3259,8 @@ void MuseScore::writeSessionFile(bool cleanExit)
                               xml.tag("mag", v->mag());
                         else
                               xml.tag("magIdx", int(v->magIdx()));
-                        xml.tag("x",   v->xoffset() / MScore::DPMM);
-                        xml.tag("y",   v->yoffset() / MScore::DPMM);
+                        xml.tag("x",   v->xoffset() / DPMM);
+                        xml.tag("y",   v->yoffset() / DPMM);
                         xml.etag();
                         }
                   }
@@ -3417,9 +3421,9 @@ bool MuseScore::restoreSession(bool always)
                                     else if (tag == "magIdx")
                                           magIdx = MagIdx(e.readInt());
                                     else if (tag == "x")
-                                          x = e.readDouble() * MScore::DPMM;
+                                          x = e.readDouble() * DPMM;
                                     else if (tag == "y")
-                                          y = e.readDouble() * MScore::DPMM;
+                                          y = e.readDouble() * DPMM;
                                     else {
                                           e.unknown();
                                           return false;
@@ -4803,11 +4807,6 @@ int main(int argc, char* av[])
 
       QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-      QScreen* screen = QGuiApplication::primaryScreen();
-      MScore::PDPI = screen->physicalDotsPerInch();        // physical resolution
-      MScore::DPI  = screen->logicalDotsPerInch();         // logical drawing resolution
-      MScore::DPI *= guiScaling;
-
       MScore::init();                                      // initialize libmscore
       if (!MScore::testMode) {
             QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
@@ -4822,8 +4821,9 @@ int main(int argc, char* av[])
       qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
 #endif
       if (MScore::debugMode) {
-            qDebug("DPI %f", MScore::DPI);
+            qDebug("DPI %f", DPI);
 
+            QScreen* screen      = QGuiApplication::primaryScreen();
             qDebug() << "Information for screen:" << screen->name();
             qDebug() << "  Available geometry:" << screen->availableGeometry().x() << screen->availableGeometry().y() << screen->availableGeometry().width() << "x" << screen->availableGeometry().height();
             qDebug() << "  Available size:" << screen->availableSize().width() << "x" << screen->availableSize().height();
@@ -5003,7 +5003,7 @@ int main(int argc, char* av[])
 
       // rastral size of font is 20pt = 20/72 inch = 20*DPI/72 dots
       //   staff has 5 lines = 4 * _spatium
-      //   _spatium    = SPATIUM20  * DPI;     // 20.0 / 72.0 * DPI / 4.0;
+      //   _spatium    = SPATIUM20;     // 20.0 / 72.0 * DPI / 4.0;
 
       if (!MScore::noGui) {
 #ifndef Q_OS_MAC
@@ -5019,7 +5019,7 @@ int main(int argc, char* av[])
       gscore->style()->set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
-      gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / (MScore::DPI * SPATIUM20));
+      gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
 
       if (!noSeq) {
             if (!seq->init())

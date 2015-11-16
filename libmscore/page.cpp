@@ -825,7 +825,7 @@ QList<const Element*> Page::elements()
 qreal Page::tm() const
       {
       const PageFormat* pf = _score->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddTopMargin() : pf->evenTopMargin()) * MScore::DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddTopMargin() : pf->evenTopMargin()) * DPI;
       }
 
 //---------------------------------------------------------
@@ -835,7 +835,7 @@ qreal Page::tm() const
 qreal Page::bm() const
       {
       const PageFormat* pf = _score->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddBottomMargin() : pf->evenBottomMargin()) * MScore::DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddBottomMargin() : pf->evenBottomMargin()) * DPI;
       }
 
 //---------------------------------------------------------
@@ -845,7 +845,7 @@ qreal Page::bm() const
 qreal Page::lm() const
       {
       const PageFormat* pf = _score->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddLeftMargin() : pf->evenLeftMargin()) * MScore::DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddLeftMargin() : pf->evenLeftMargin()) * DPI;
       }
 
 //---------------------------------------------------------
@@ -855,7 +855,7 @@ qreal Page::lm() const
 qreal Page::rm() const
       {
       const PageFormat* pf = _score->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * MScore::DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * DPI;
       }
 
 //---------------------------------------------------------

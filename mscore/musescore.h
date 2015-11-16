@@ -371,6 +371,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QStringList _recentScores;
       QToolButton* _playButton;
 
+      qreal _physicalDotsPerInch;
+
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
@@ -692,6 +694,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateInspector();
       void showSynthControl(bool);
       void showMixer(bool);
+
+      qreal physicalDotsPerInch() const { return _physicalDotsPerInch; }
       };
 
 extern MuseScore* mscore;

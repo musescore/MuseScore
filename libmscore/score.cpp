@@ -1304,7 +1304,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       scanElements(data, spatiumHasChanged, true);
       foreach (Staff* staff, _staves)
             staff->spatiumChanged(oldValue, newValue);
-      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
       }
 
 void Score::setSpatium(qreal v)
@@ -3255,7 +3255,7 @@ qreal Score::tempo(int tick) const
 
 qreal Score::loWidth() const
       {
-      return pageFormat()->size().width() * MScore::DPI;
+      return pageFormat()->size().width() * DPI;
       }
 
 //---------------------------------------------------------
@@ -3264,7 +3264,7 @@ qreal Score::loWidth() const
 
 qreal Score::loHeight() const
       {
-      return pageFormat()->size().height() * MScore::DPI;
+      return pageFormat()->size().height() * DPI;
       }
 
 //---------------------------------------------------------
@@ -4213,9 +4213,9 @@ void Score::cropPage(qreal margins)
                   f.copy(*curFormat);
 
                   qreal margin = margins / INCH;
-                  f.setSize(QSizeF((ttbox.width() / MScore::DPI) + 2 * margin, (ttbox.height()/ MScore::DPI) + 2 * margin));
+                  f.setSize(QSizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height()/ DPI) + 2 * margin));
 
-                  qreal offset = curFormat->oddLeftMargin() - ttbox.x() / MScore::DPI;
+                  qreal offset = curFormat->oddLeftMargin() - ttbox.x() / DPI;
                   if (offset < 0)
                         offset = 0.0;
                   f.setOddLeftMargin(margin + offset);

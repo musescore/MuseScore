@@ -54,7 +54,7 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # for debugging the make system uncomment next line:
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set (CMAKE_AUTOMOC TRUE)
 
@@ -186,18 +186,18 @@ SET(QT_USE_QTHELP        TRUE)
 ## freetype2 >= 2.5.2
 ##
 
-if (APPLE)
-      PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
-      if (FREETYPE_INCLUDE_DIRS)
-          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
-          message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
-      else (FREETYPE_INCLUDE_DIRS)
-          message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
-      endif (FREETYPE_INCLUDE_DIRS)
-else (APPLE)
-    find_package(Freetype REQUIRED)
-endif (APPLE)
+##if (APPLE)
+##      PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+##      if (FREETYPE_INCLUDE_DIRS)
+##          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
+##          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
+##          message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
+##      else (FREETYPE_INCLUDE_DIRS)
+##          message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
+##      endif (FREETYPE_INCLUDE_DIRS)
+##else (APPLE)
+##    find_package(Freetype REQUIRED)
+##endif (APPLE)
 
 ##
 ## alsa >= 1.0.0
@@ -552,7 +552,8 @@ include_directories(
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
    ${LAME_INCLUDE_DIR}
-   ${FREETYPE_INCLUDE_DIRS}
+#   ${FREETYPE_INCLUDE_DIRS}
+   ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
 )
 
 ##

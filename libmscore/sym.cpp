@@ -5339,7 +5339,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                   font->setFamily(_family);
                   font->setStyleStrategy(QFont::NoFontMerging);
                   font->setHintingPreference(QFont::PreferVerticalHinting);
-                  qreal size = 20.0 * MScore::DPI / PPI;
+                  qreal size = 20.0;
                   font->setPixelSize(lrint(size));
                   }
             qreal imag = 1.0 / mag;
@@ -5526,7 +5526,7 @@ void ScoreFont::load()
             }
       cache = new QCache<GlyphKey, GlyphPixmap>(100);
 
-      qreal pixelSize = 200.0 * MScore::DPI/PPI;
+      qreal pixelSize = 200.0;
       FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
 
       QFile fi(_fontPath + "glyphnames.json");
@@ -5562,7 +5562,7 @@ void ScoreFont::load()
 
       QJsonObject oo = o.value("glyphsWithAnchors").toObject();
       for (auto i : oo.keys()) {
-            qreal scale = MScore::DPI * SPATIUM20;
+            constexpr qreal scale = SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
             if (symId == SymId::noSym) {
@@ -5576,12 +5576,12 @@ void ScoreFont::load()
                   if (i == "stemDownNW") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setStemDownNW(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        sym->setStemDownNW(QPointF(4.0 * x, 4.0 * -y));
                         }
                   else if (i == "stemUpSE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setStemUpSE(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        sym->setStemUpSE(QPointF(4.0 * x, 4.0 * -y));
                         }
                   else if (i == "cutOutNE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;

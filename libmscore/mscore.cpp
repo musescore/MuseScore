@@ -58,9 +58,6 @@
 
 namespace Ms {
 
-qreal MScore::PDPI;
-qreal MScore::DPI;
-qreal MScore::DPMM;
 bool  MScore::debugMode;
 bool  MScore::testMode = false;
 bool  MScore::saveTemplateMode = false;
@@ -142,7 +139,7 @@ void MScore::init()
       qRegisterMetaType<Glissando::Type>("GlissandoType");
 #endif
 
-      DPMM = DPI / INCH;       // dots/mm
+//      DPMM = DPI / INCH;       // dots/mm
 
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));

@@ -1370,7 +1370,7 @@ void ScoreView::moveCursor(int tick)
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
-      qreal mag = _spatium / (MScore::DPI * SPATIUM20);
+      qreal mag = _spatium / SPATIUM20;
       double w  = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       double h  = 6 * _spatium;
       //
@@ -1433,13 +1433,13 @@ void ScoreView::moveCursor()
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
       double h;
-      qreal mag       = _spatium / (MScore::DPI * SPATIUM20);
-      double w        = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
-      Staff* staff    = _score->staff(staffIdx);
-      double lineDist = staff->staffType()->lineDistance().val() * _spatium;
-      int lines       = staff->lines();
-      int strg        = is.string();
-      x              -= _spatium;
+      qreal mag               = _spatium / SPATIUM20;
+      double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
+      Staff* staff            = _score->staff(staffIdx);
+      double lineDist         = staffType->lineDistance().val() * _spatium;
+      int lines               = staff->lines();
+      int strg                = is.string();
+      x                       -= _spatium;
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
       if (staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
@@ -1566,7 +1566,7 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score()->spatium();
 
-      qreal mag = _spatium / (MScore::DPI * SPATIUM20);
+      qreal mag = _spatium / SPATIUM20;
       double w  = (_spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag))/3;
       double h  = 6 * _spatium;
       //
@@ -2350,6 +2350,7 @@ void ScoreView::setMag(qreal nmag)
       {
       qreal m = _matrix.m11();
 
+      nmag *= mscore->physicalDotsPerInch() / DPI;
       if (nmag == m)
             return;
       double deltamag = nmag / m;
@@ -3718,7 +3719,7 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
 
 qreal ScoreView::mag() const
       {
-      return _matrix.m11();
+      return _matrix.m11() / (mscore->physicalDotsPerInch() / DPI);
       }
 
 //---------------------------------------------------------

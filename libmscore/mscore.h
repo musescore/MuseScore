@@ -18,7 +18,7 @@
 namespace Ms {
 
 #define MSC_VERSION     "2.06"
-static const int MSCVERSION = 206;
+static constexpr int MSCVERSION = 206;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -59,7 +59,7 @@ static const int MSCVERSION = 206;
 class MStyle;
 class Sequencer;
 
-static const int VOICES = 4;
+static constexpr int VOICES = 4;
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
 inline int track2staff(int voice)    { return voice >> 2;    }
 inline int track2voice(int track)    { return track & 3;     }
@@ -67,11 +67,13 @@ inline int trackZeroVoice(int track) { return track & ~3;    }
 
 static const int MAX_TAGS = 32;
 
-static const qreal INCH = 25.4;
-static const qreal PPI  = 72.0;           // printer points per inch
-static const qreal SPATIUM20 = 5.0 / PPI; // size of Spatium for 20pt font in inch
-static const int MAX_STAVES = 4;
-#define MMSP(x)  Spatium((x) * .1)
+static constexpr qreal INCH      = 25.4;
+static constexpr qreal PPI       = 72.0;           // printer points per inch
+static constexpr qreal SPATIUM20 = 5.0;
+static constexpr qreal DPI       = 72.0;
+static constexpr qreal DPMM      = DPI / INCH;
+
+static constexpr int MAX_STAVES  = 4;
 
 static const char mimeSymbolFormat[]      = "application/musescore/symbol";
 static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
@@ -400,9 +402,6 @@ class MScore : public QObject {
       static int mtcType;
       static Sequencer* seq;
 
-      static qreal PDPI;
-      static qreal DPI;
-      static qreal DPMM;
       static bool debugMode;
       static bool testMode;
       static bool saveTemplateMode;
@@ -423,7 +422,8 @@ class MScore : public QObject {
 //   center
 //---------------------------------------------------------
 
-inline static qreal center(qreal x1, qreal x2) {
+inline static qreal center(qreal x1, qreal x2)
+      {
       return (x1 + (x2 - x1) * .5);
       }
 
@@ -431,7 +431,8 @@ inline static qreal center(qreal x1, qreal x2) {
 //   limit
 //---------------------------------------------------------
 
-inline static int limit(int val, int min, int max) {
+inline static int limit(int val, int min, int max)
+      {
       if (val > max)
             return max;
       if (val < min)
