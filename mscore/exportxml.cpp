@@ -309,7 +309,7 @@ public:
       ExportMusicXml(Score* s)
             {
             _score = s; tick = 0; div = 1; tenths = 40;
-            millimeters = _score->spatium() * tenths / (10 * MScore::DPMM);
+            millimeters = _score->spatium() * tenths / (10 * DPMM);
             }
       void write(QIODevice* dev);
       void credits(Xml& xml);
@@ -1070,7 +1070,7 @@ static void writePageFormat(const PageFormat* pf, Xml& xml, double conversion)
 //   defaults
 //---------------------------------------------------------
 
-// _spatium = MScore::DPMM * (millimeter * 10.0 / tenths);
+// _spatium = DPMM * (millimeter * 10.0 / tenths);
 
 static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       {
@@ -4548,7 +4548,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   else
                         measureTag += QString("\"%1\"").arg(measureNo++);
                   if (preferences.musicxmlExportLayout)
-                        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / MScore::DPMM / millimeters * tenths,'f',2));
+                        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
                   xml.stag(measureTag);
 
                   // Handle the <print> element.
@@ -5044,7 +5044,7 @@ double ExportMusicXml::getTenthsFromInches(double inches)
 
 double ExportMusicXml::getTenthsFromDots(double dots)
       {
-      return dots / MScore::DPMM / millimeters * tenths;
+      return dots / DPMM / millimeters * tenths;
       }
 
 //---------------------------------------------------------

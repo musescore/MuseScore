@@ -46,10 +46,10 @@ void InspectorLasso::setElement(Element* e)
       Lasso* lasso = static_cast<Lasso*>(e);
       QRectF bb(lasso->rect());
 
-      b.posX->setValue(bb.x() / MScore::DPMM);
-      b.posY->setValue(bb.y() / MScore::DPMM);
-      b.sizeWidth->setValue(bb.width() / MScore::DPMM);
-      b.sizeHeight->setValue(bb.height() / MScore::DPMM);
+      b.posX->setValue(bb.x() / DPMM);
+      b.posY->setValue(bb.y() / DPMM);
+      b.sizeWidth->setValue(bb.width() / DPMM);
+      b.sizeHeight->setValue(bb.height() / DPMM);
 
       InspectorBase::setElement();
       }

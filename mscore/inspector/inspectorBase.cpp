@@ -81,7 +81,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   break;
             case P_TYPE::POINT_MM:
             case P_TYPE::SIZE_MM:
-                  v = v.toDouble() * MScore::DPMM;
+                  v = v.toDouble() * DPMM;
                   break;
             default:
                   break;
@@ -106,9 +106,9 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       else if (t == P_TYPE::TEMPO)
             val = val.toDouble() * 60.0;
       else if (t == P_TYPE::POINT_MM)
-            val = val.toDouble() / MScore::DPMM;
+            val = val.toDouble() / DPMM;
       else if (t == P_TYPE::SIZE_MM)
-            val = val.toDouble() / MScore::DPMM;
+            val = val.toDouble() / DPMM;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());

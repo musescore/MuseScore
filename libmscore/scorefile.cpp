@@ -1060,7 +1060,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "Synthesizer")
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
-                  _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
+                  _style.setSpatium (e.readDouble() * DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
                   setPageNumberOffset(e.readInt());
             else if (tag == "Division")
