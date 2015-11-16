@@ -376,6 +376,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setDropAnchor(const QLineF&);
       const QTransform& matrix() const  { return _matrix; }
       qreal mag() const;
+      qreal pmag() const;
       MagIdx magIdx() const             { return _magIdx; }
       void setMag(MagIdx idx, double mag);
       qreal xoffset() const;
