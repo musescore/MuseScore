@@ -108,10 +108,7 @@ add_executable(
 target_link_libraries(
       mtest
       ${QT_LIBRARIES}
-      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
-      png
-      bz2
-      harfbuzz
+      mscore_freetype
       )
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
