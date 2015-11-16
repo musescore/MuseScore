@@ -1,70 +1,7 @@
-# CMakeLists.txt
-#
-# Copyright 2013-2015 by
-# David Turner, Robert Wilhelm, and Werner Lemberg.
-#
-# Written originally by John Cary <cary@txcorp.com>
-#
-# This file is part of the FreeType project, and may only be used, modified,
-# and distributed under the terms of the FreeType project license,
-# LICENSE.TXT.  By continuing to use, modify, or distribute this file you
-# indicate that you have read the license and understand and accept it
-# fully.
-#
-#
-# As a preliminary, create a compilation directory and change into it, for
-# example
-#
-#   mkdir ~/freetype2.compiled
-#   cd ~/freetype2.compiled
-#
-# Now you can say
-#
-#   cmake <path-to-freetype2-src-dir>
-#
-# to create a Makefile that builds a static version of the library.
-#
-# For a dynamic library, use
-#
-#   cmake <path-to-freetype2-src-dir> -D BUILD_SHARED_LIBS:BOOL=true
-#
-# For a framework on OS X, use
-#
-#   cmake <path-to-freetype2-src-dir> -D BUILD_FRAMEWORK:BOOL=true -G Xcode
-#
-# instead.
-#
-# For an iOS static library, use
-#
-#   cmake <path-to-freetype2-src-dir> -D IOS_PLATFORM=OS -G Xcode
-#
-# or
-#
-#   cmake <path-to-freetype2-src-dir> -D IOS_PLATFORM=SIMULATOR -G Xcode
-#
-# Please refer to the cmake manual for further options, in particular, how
-# to modify compilation and linking parameters.
-#
-# Some notes.
-#
-# . `cmake' creates configuration files in
-#
-#     <build-directory>/include/freetype/config
-#
-#   which should be further modified if necessary.
-#
-# . You can use `cmake' directly on a freshly cloned FreeType git
-#   repository.
-#
-# . `CMakeLists.txt' is provided as-is since it is normally not used by the
-#   developer team.
-
-
-cmake_minimum_required(VERSION 2.6)
-
 
 include(CheckIncludeFile)
 
+set(BUILD_SHARED_LIBS OFF)
 
 # CMAKE_TOOLCHAIN_FILE must be set before `project' is called, which
 # configures the base build environment and references the toolchain file
@@ -92,7 +29,7 @@ if (APPLE)
     set(BUILD_SHARED_LIBS OFF)
 
     set(CMAKE_TOOLCHAIN_FILE
-      ${PROJECT_SOURCE_DIR}/builds/cmake/iOS.cmake)
+      ${PROJECT_SOURCE_DIR}/thirdparty/freetyp/builds/cmake/iOS.cmake)
   endif ()
 else ()
   if (DEFINED IOS_PLATFORM)
@@ -100,41 +37,12 @@ else ()
   endif ()
 endif ()
 
-if (WIN32 AND BUILD_SHARED_LIBS)
-  message(FATAL_ERROR "Shared libraries not supported on Windows.")
-endif ()
 
-
-project(freetype)
-
-
-# Disallow in-source builds
-if ("${PROJECT_BINARY_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}")
-  message(FATAL_ERROR
-    "
-In-source builds are not permitted!  Make a separate folder for"
-    " building, e.g.,"
-    "
-  mkdir build; cd build; cmake .."
-    "
-Before that, remove the files created by this failed run with"
-    "
-  rm -rf CMakeCache.txt CMakeFiles")
-endif ()
+# project(freetype)
 
 
 # Add local cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/builds)
-
-
-if (BUILD_FRAMEWORK)
-  if (NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
-    message(FATAL_ERROR
-      "You should use Xcode generator with BUILD_FRAMEWORK enabled")
-  endif ()
-  set(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD_32_64_BIT)")
-  set(BUILD_SHARED_LIBS ON)
-endif ()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/thirdparty/freetype/builds)
 
 
 set(VERSION_MAJOR "2")
@@ -150,10 +58,10 @@ add_definitions(-DFT2_BUILD_LIBRARY)
 
 
 # Find dependencies
-find_package(ZLIB)
-find_package(BZip2)
-find_package(PNG)
-find_package(HarfBuzz)
+###find_package(ZLIB)
+###find_package(BZip2)
+###find_package(PNG)
+###find_package(HarfBuzz)
 
 
 message(STATUS
@@ -170,7 +78,7 @@ if (UNIX)
   check_include_file("fcntl.h" HAVE_FCNTL_H)
   check_include_file("stdint.h" HAVE_STDINT_H)
 
-  file(READ "${PROJECT_SOURCE_DIR}/builds/unix/ftconfig.in"
+  file(READ "${PROJECT_SOURCE_DIR}/thirdparty/freetype/builds/unix/ftconfig.in"
     FTCONFIG_H)
   if (HAVE_UNISTD_H)
     string(REGEX REPLACE
@@ -203,7 +111,7 @@ endif ()
 message(STATUS
   "Creating file ${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h")
 
-file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftoption.h"
+file(READ "${PROJECT_SOURCE_DIR}/thirdparty/freetype/include/freetype/config/ftoption.h"
   FTOPTION_H)
 if (ZLIB_FOUND)
   string(REGEX REPLACE
@@ -230,8 +138,8 @@ file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h"
 
 
 # Specify library include directories
-include_directories("${PROJECT_SOURCE_DIR}/include")
-include_directories(BEFORE "${PROJECT_BINARY_DIR}/include")
+include_directories("${PROJECT_SOURCE_DIR}/thirdparty/freetype/include")
+include_directories(BEFORE "${PROJECT_BINARY_DIR}/thirdparty/freetype/include")
 
 
 file(GLOB PUBLIC_HEADERS "include/ft2build.h" "include/freetype/*.h")
@@ -300,34 +208,12 @@ if (BUILD_FRAMEWORK)
 endif ()
 
 
-add_library(freetype
+add_library(mscore_freetype
   ${PUBLIC_HEADERS}
   ${PUBLIC_CONFIG_HEADERS}
   ${PRIVATE_HEADERS}
   ${BASE_SRCS}
 )
-
-
-if (BUILD_SHARED_LIBS)
-  set_target_properties(freetype PROPERTIES
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${SHARED_LIBRARY_VERSION}
-    COMPILE_DEFINITIONS freetype_EXPORTS
-  )
-endif ()
-
-
-if (BUILD_FRAMEWORK)
-  set_property(SOURCE ${PUBLIC_CONFIG_HEADERS}
-    PROPERTY MACOSX_PACKAGE_LOCATION Headers/config
-  )
-  set_target_properties(freetype PROPERTIES
-    FRAMEWORK TRUE
-    MACOSX_FRAMEWORK_INFO_PLIST builds/mac/freetype-Info.plist
-    PUBLIC_HEADER "${PUBLIC_HEADERS}"
-    XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
-  )
-endif ()
 
 
 if (MSVC)
@@ -336,69 +222,3 @@ if (MSVC)
 endif ()
 
 
-if (ZLIB_FOUND)
-  target_link_libraries(freetype ${ZLIB_LIBRARIES})
-  include_directories(${ZLIB_INCLUDE_DIRS})
-endif ()
-if (BZIP2_FOUND)
-  target_link_libraries(freetype ${BZIP2_LIBRARIES})
-  include_directories(${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
-endif ()
-if (PNG_FOUND)
-  add_definitions(${PNG_DEFINITIONS})
-  target_link_libraries(freetype ${PNG_LIBRARIES})
-  include_directories(${PNG_INCLUDE_DIRS})
-endif ()
-if (HARFBUZZ_FOUND)
-  target_link_libraries(freetype ${HARFBUZZ_LIBRARIES})
-  include_directories(${HARFBUZZ_INCLUDE_DIRS})
-endif ()
-
-
-# Installations
-# Note the trailing slash in the argument to the `DIRECTORY' directive
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-  DESTINATION include/freetype2
-  PATTERN "internal" EXCLUDE
-  PATTERN "ftconfig.h" EXCLUDE
-  PATTERN "ftoption.h" EXCLUDE
-)
-install(FILES
-  ${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h
-  ${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h
-  DESTINATION include/freetype2/freetype/config
-)
-install(TARGETS freetype
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  FRAMEWORK DESTINATION Library/Frameworks
-)
-
-
-# Packaging
-# CPack version numbers for release tarball name.
-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH}})
-if (NOT DEFINED CPACK_PACKAGE_DESCRIPTION_SUMMARY)
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
-endif ()
-if (NOT DEFINED CPACK_SOURCE_PACKAGE_FILE_NAME)
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME
-    "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}-r${PROJECT_REV}"
-    CACHE INTERNAL "tarball basename"
-  )
-endif ()
-set(CPACK_SOURCE_GENERATOR TGZ)
-set(CPACK_SOURCE_IGNORE_FILES
-  "/CVS/;/.svn/;.swp$;.#;/#;/build/;/serial/;/ser/;/parallel/;/par/;~;/preconfig.out;/autom4te.cache/;/.config")
-set(CPACK_GENERATOR TGZ)
-include(CPack)
-
-
-# add make dist target
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
-
-
-# eof
