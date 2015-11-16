@@ -476,8 +476,8 @@ else (MINGW)
    target_link_libraries(mscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
-#      freetype
-      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
+      mscore_freetype
+#      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
       png
       bz2
       harfbuzz
