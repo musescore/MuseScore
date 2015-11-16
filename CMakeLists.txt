@@ -538,6 +538,8 @@ if (OSC)
       subdirs (thirdparty/ofqf)
 endif (OSC)
 
+subdirs (thirdparty/freetype)
+
 
 ##
 ## includes
