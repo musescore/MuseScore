@@ -35,7 +35,7 @@ FretDiagram::FretDiagram(Score* score)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
       font.setFamily("FreeSans");
-      int size = lrint(4.0 * MScore::DPI * mag()/ PPI);
+      int size = lrint(4.0 * mag());
       font.setPixelSize(size);
       }
 

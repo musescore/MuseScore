@@ -179,14 +179,14 @@ void InspectorImage::valueChanged(int idx)
             if (cb->isChecked()) {
                   b1->setSuffix("sp");
                   b2->setSuffix("sp");
-                  b1->setValue(b1->value() * MScore::DPMM / _spatium);
-                  b2->setValue(b2->value() * MScore::DPMM / _spatium);
+                  b1->setValue(b1->value() * DPMM / _spatium);
+                  b2->setValue(b2->value() * DPMM / _spatium);
                   }
             else {
                   b1->setSuffix("mm");
                   b2->setSuffix("mm");
-                  b1->setValue(b1->value() * _spatium / MScore::DPMM);
-                  b2->setValue(b2->value() * _spatium / MScore::DPMM);
+                  b1->setValue(b1->value() * _spatium / DPMM);
+                  b2->setValue(b2->value() * _spatium / DPMM);
                   }
             b1->blockSignals(false);
             b2->blockSignals(false);

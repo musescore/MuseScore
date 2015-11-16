@@ -1100,7 +1100,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             return;
 
       score->style()->set(StyleIdx::measureSpacing, 1.0);
-      score->setSpatium(cap->normalLineDist * MScore::DPMM);
+      score->setSpatium(cap->normalLineDist * DPMM);
       score->style()->set(StyleIdx::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
       score->style()->set(StyleIdx::minSystemDistance, Spatium(8));
       score->style()->set(StyleIdx::maxSystemDistance, Spatium(12));

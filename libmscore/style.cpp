@@ -609,7 +609,7 @@ StyleData::StyleData()
             _values[int(values2[i].idx)] = values2[i].val;
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
-      _spatium = SPATIUM20 * MScore::DPI;
+      _spatium = SPATIUM20;
 
       _articulationAnchor[int(ArticulationType::Fermata)]         = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
@@ -812,7 +812,7 @@ QFont TextStyleData::font(qreal _spatium) const
       f.setUnderline(underline);
 
       if (sizeIsSpatiumDependent)
-            m *= _spatium / ( SPATIUM20 * MScore::DPI);
+            m *= _spatium / SPATIUM20;
 
       f.setPointSizeF(m);
       return f;
@@ -824,7 +824,7 @@ QFont TextStyleData::font(qreal _spatium) const
 
 QFont TextStyleData::fontPx(qreal _spatium) const
       {
-      qreal m = size * MScore::DPI / PPI;
+      qreal m = size;
 
       QFont f(family);
       f.setBold(bold);
@@ -834,7 +834,7 @@ QFont TextStyleData::fontPx(qreal _spatium) const
       f.setHintingPreference(QFont::PreferVerticalHinting);
 #endif
       if (sizeIsSpatiumDependent)
-            m *= _spatium / (SPATIUM20 * MScore::DPI);
+            m *= _spatium / SPATIUM20;
 
       f.setPixelSize(lrint(m));
       return f;
@@ -1063,7 +1063,7 @@ void StyleData::load(XmlReader& e)
                   setTextStyle(s);
                   }
             else if (tag == "Spatium")
-                  setSpatium (e.readDouble() * MScore::DPMM);
+                  setSpatium (e.readDouble() * DPMM);
             else if (tag == "page-layout")
                   _pageFormat.read(e);
             else if (tag == "displayInConcertPitch")
@@ -1178,7 +1178,7 @@ void StyleData::load(XmlReader& e)
       //  into spatium units
       //
       int n = _textStyles.size();
-      qreal spMM = _spatium / MScore::DPMM;
+      qreal spMM = _spatium / DPMM;
       for (int i = 0; i < n; ++i) {
             TextStyle* s = &_textStyles[i];
             if (s->frameWidthMM() != 0.0)
@@ -1239,7 +1239,7 @@ void StyleData::save(Xml& xml, bool optimize) const
             }
       if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
             _pageFormat.write(xml);
-      xml.tag("Spatium", _spatium / MScore::DPMM);
+      xml.tag("Spatium", _spatium / DPMM);
       xml.etag();
       }
 

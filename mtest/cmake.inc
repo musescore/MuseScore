@@ -30,7 +30,11 @@ target_link_libraries(
       qzip
       z
       ${QT_LIBRARIES}
-      ${FREETYPE_LIBRARIES}
+      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
+      png
+      bz2
+      harfbuzz
+      z
       )
 
 if (NOT MINGW AND NOT APPLE)

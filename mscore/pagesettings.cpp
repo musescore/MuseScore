@@ -203,7 +203,7 @@ void PageSettings::updateValues()
             evenPageLeftMargin->setValue(pf->evenLeftMargin() * INCH);
             evenPageRightMargin->setValue(pf->evenRightMargin() * INCH);
 
-            spatiumEntry->setValue(sc->spatium()/MScore::DPMM);
+            spatiumEntry->setValue(sc->spatium()/DPMM);
             pageHeight->setValue(pf->size().height() * INCH);
             widthValue          *= INCH;
             }
@@ -218,7 +218,7 @@ void PageSettings::updateValues()
             evenPageLeftMargin->setValue(pf->evenLeftMargin());
             evenPageRightMargin->setValue(pf->evenRightMargin());
 
-            spatiumEntry->setValue(sc->spatium()/MScore::DPI);
+            spatiumEntry->setValue(sc->spatium()/DPI);
             pageHeight->setValue(pf->size().height());
             }
       pageWidth->setValue(widthValue);
@@ -318,7 +318,7 @@ void PageSettings::apply()
 void PageSettings::applyToScore(Score* s)
       {
       double f  = mmUnit ? 1.0/INCH : 1.0;
-      double f1 = mmUnit ? MScore::DPMM : MScore::DPI;
+      double f1 = mmUnit ? DPMM : DPI;
 
       PageFormat pf;
 
@@ -559,7 +559,7 @@ void PageSettings::ebmChanged(double val)
 
 void PageSettings::spatiumChanged(double val)
       {
-      val *= mmUnit ? MScore::DPMM : MScore::DPI;
+      val *= mmUnit ? DPMM : DPI;
       double oldVal = preview->score()->spatium();
       preview->score()->setSpatium(val);
       preview->score()->spatiumChanged(oldVal, val);

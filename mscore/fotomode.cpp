@@ -662,12 +662,12 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             QString size = QSettings().value(QString("fotoSize%1").arg(cmd[6]), "50x40").toString();
             qreal w = size.split("x")[0].toDouble();
             qreal h = size.split("x")[1].toDouble();
-            _foto->setSize(w * MScore::DPMM, h * MScore::DPMM);
+            _foto->setSize(w * DPMM, h * DPMM);
             updateGrips();
             }
       else if (cmd.startsWith("set")) {
-            qreal w   = _foto->rect().width() / MScore::DPMM;
-            qreal h   = _foto->rect().height() / MScore::DPMM;
+            qreal w   = _foto->rect().width() / DPMM;
+            qreal h   = _foto->rect().height() / DPMM;
             QString val(QString("%1x%2").arg(w).arg(h));
             QSettings().setValue(QString("fotoSize%1").arg(cmd[3]), val);
             }
@@ -686,7 +686,7 @@ void ScoreView::fotoModeCopy()
       // oowriter wants transparent==false
       bool transparent = false; // preferences.pngTransparent;
       double convDpi   = preferences.pngResolution;
-      double mag       = convDpi / MScore::DPI;
+      double mag       = convDpi / DPI;
 
       QRectF r(_foto->rect());
 
@@ -696,8 +696,8 @@ void ScoreView::fotoModeCopy()
       QImage::Format f;
       f = QImage::Format_ARGB32_Premultiplied;
       QImage printer(w, h, f);
-      printer.setDotsPerMeterX(lrint(MScore::DPMM * 1000.0));
-      printer.setDotsPerMeterY(lrint(MScore::DPMM * 1000.0));
+      printer.setDotsPerMeterX(lrint(DPMM * 1000.0));
+      printer.setDotsPerMeterY(lrint(DPMM * 1000.0));
       printer.fill(transparent ? 0 : 0xffffffff);
       QPainter p(&printer);
       paintRect(true, p, r, mag);
@@ -773,14 +773,14 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
 
       bool transparent = preferences.pngTransparent;
       double convDpi   = preferences.pngResolution;
-      double mag       = convDpi / MScore::DPI;
+      double mag       = convDpi / DPI;
 
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
 
       if (ext == "pdf") {
             QPrinter printer(QPrinter::HighResolution);
-            mag = printer.logicalDpiX() / MScore::DPI;
+            mag = printer.logicalDpiX() / DPI;
             printer.setPaperSize(QSizeF(r.width() * mag, r.height() * mag) , QPrinter::DevicePixel);
             printer.setCreator("MuseScore Version: " VERSION);
             printer.setFullPage(true);
@@ -870,7 +870,7 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
 
       SvgGenerator printer;
       double convDpi   = preferences.pngResolution;
-      double mag       = convDpi / MScore::DPI;
+      double mag       = convDpi / DPI;
       printer.setResolution(int(convDpi));
       printer.setFileName(fn);
       printer.setSize(QSize(r.width() * mag, r.height() * mag));

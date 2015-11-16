@@ -407,22 +407,21 @@ void StaffType::setOnLines(bool val)
 
 void StaffType::setDurationMetrics()
       {
-      if (_durationMetricsValid && _refDPI == MScore::DPI)           // metrics are still valid
+      if (_durationMetricsValid && _refDPI == DPI)           // metrics are still valid
             return;
 
 // QFontMetrics[F]() returns results unreliably rounded to integral pixels;
 // use a scaled up font and then scale computed values down
 //      QFontMetricsF fm(durationFont());
       QFont font(durationFont());
-      qreal pixelSize = _durationFontSize * MScore::DPI / PPI;
+      qreal pixelSize = _durationFontSize;
       font.setPixelSize(lrint(pixelSize) * 100.0);
       QFontMetricsF fm(font);
       QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
       QRectF bb( fm.tightBoundingRect(txt) );
       // raise symbols by a default margin and, if marks are above lines, by half the line distance
       // (converted from spatium units to raster units)
-      _durationGridYOffset    = ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()/2.0) )
-                  * MScore::DPI*SPATIUM20;
+      _durationGridYOffset = ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()*0.5) ) * SPATIUM20;
       // this is the bottomest point of any duration sign
       _durationYOffset        = _durationGridYOffset;
       // move symbols so that the lowest margin 'sits' on the base line:
@@ -432,13 +431,13 @@ void StaffType::setDurationMetrics()
       _durationBoxH           = bb.height() / 100.0;
       _durationBoxY           = _durationGridYOffset - bb.height() / 100.0;
       // keep track of the conditions under which metrics have been computed
-      _refDPI = MScore::DPI;
+      _refDPI = DPI;
       _durationMetricsValid = true;
       }
 
 void StaffType::setFretMetrics()
       {
-      if (_fretMetricsValid && _refDPI == MScore::DPI)
+      if (_fretMetricsValid && _refDPI == DPI)
             return;
 
       QFontMetricsF fm(fretFont());
@@ -466,14 +465,14 @@ void StaffType::setFretMetrics()
             }
       // if on string, we are done; if between strings, raise by half line distance
       if (!_onLines)
-            _fretYOffset -= lineDistance().val()*MScore::DPI*SPATIUM20 / 2.0;
+            _fretYOffset -= lineDistance().val() * SPATIUM20 * 0.5;
 
       // from _fretYOffset, compute _fretBoxH and _fretBoxY
       _fretBoxH = bb.height();
       _fretBoxY = bb.y()  + _fretYOffset;
 
       // keep track of the conditions under which metrics have been computed
-      _refDPI = MScore::DPI;
+      _refDPI = DPI;
       _fretMetricsValid = true;
       }
 
@@ -528,7 +527,7 @@ qreal StaffType::durationBoxY()
       if (!_genDurations && !_slashStyle)
             return 0.0;
       setDurationMetrics();
-      return _durationBoxY + _durationFontUserY * MScore::MScore::DPI * SPATIUM20;
+      return _durationBoxY + _durationFontUserY * SPATIUM20;
       }
 
 //---------------------------------------------------------
@@ -538,14 +537,14 @@ qreal StaffType::durationBoxY()
 void StaffType::setDurationFontSize(qreal val)
       {
       _durationFontSize = val;
-      _durationFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
+      _durationFont.setPixelSize( lrint(val) );
       _durationMetricsValid = false;
       }
 
 void StaffType::setFretFontSize(qreal val)
       {
       _fretFontSize = val;
-      _fretFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
+      _fretFont.setPixelSize( lrint(val) );
       _fretMetricsValid = false;
       }
 
@@ -742,7 +741,7 @@ void StaffType::drawInputStringMarks(QPainter *p, int string, int voice, QRectF 
       {
       if (_group != StaffGroup::TAB)
             return;
-      qreal       spatium     = MScore::MScore::DPI * SPATIUM20;
+      qreal       spatium     = SPATIUM20;
       qreal       lineDist    = _lineDistance.val() * spatium;
       bool        hasFret;
       QString     text        = tabBassStringPrefix(string, &hasFret);
