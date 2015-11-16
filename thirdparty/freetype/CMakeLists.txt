@@ -29,7 +29,7 @@ if (APPLE)
     set(BUILD_SHARED_LIBS OFF)
 
     set(CMAKE_TOOLCHAIN_FILE
-      ${PROJECT_SOURCE_DIR}/thirdparty/freetyp/builds/cmake/iOS.cmake)
+      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/builds/cmake/iOS.cmake)
   endif ()
 else ()
   if (DEFINED IOS_PLATFORM)
@@ -100,7 +100,7 @@ if (UNIX)
   file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h"
     "${FTCONFIG_H}")
 else ()
-  file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftconfig.h"
+  file(READ "${PROJECT_SOURCE_DIR}/thirdparty/freetype/include/freetype/config/ftconfig.h"
     FTCONFIG_H)
   file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h"
     "${FTCONFIG_H}")
