@@ -385,6 +385,7 @@ if (MINGW)
       portaudio
       portmidi
       winmm
+      mscore_freetype
       z
       )
 
@@ -434,8 +435,6 @@ if (MINGW)
       ${CROSSQT}/bin/icudt53.dll
       ${CROSSQT}/bin/Qt5Help.dll
       ${CROSSQT}/bin/Qt5CLucene.dll
-      $ENV{FREETYPE_DIR}/bin/freetype6.dll
-      $ENV{FREETYPE_DIR}/bin/zlib1.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
