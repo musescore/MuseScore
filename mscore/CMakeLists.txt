@@ -477,10 +477,6 @@ else (MINGW)
       ${ALSA_LIB}
       ${QT_LIBRARIES}
       mscore_freetype
-#      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
-      png
-      bz2
-      harfbuzz
       z
       dl
       pthread
