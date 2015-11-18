@@ -2062,7 +2062,7 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
             _mag = 0.05;
 
       mscore->setMag(_mag);
-      setMag(_mag);
+      setMag(_mag * (mscore->physicalDotsPerInch() / DPI));
       _magIdx = MagIdx::MAG_FREE;
 
       QPointF p2 = imatrix.map(pos);
@@ -2344,13 +2344,13 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
 
 //---------------------------------------------------------
 //   setMag
+//    nmag - physical scale
 //---------------------------------------------------------
 
 void ScoreView::setMag(qreal nmag)
       {
       qreal m = _matrix.m11();
 
-      nmag *= mscore->physicalDotsPerInch() / DPI;
       if (nmag == m)
             return;
       double deltamag = nmag / m;
@@ -2372,12 +2372,13 @@ void ScoreView::setMag(qreal nmag)
 
 //---------------------------------------------------------
 //   setMagIdx
+//    mag - logical scale
 //---------------------------------------------------------
 
 void ScoreView::setMag(MagIdx idx, double mag)
       {
       _magIdx = idx;
-      setMag(mag);
+      setMag(mag * (mscore->physicalDotsPerInch() / DPI));
       emit viewRectChanged();
       update();
       }
@@ -3714,19 +3715,19 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
       }
 
 //---------------------------------------------------------
-//   mag
+//   lmag
 //---------------------------------------------------------
 
-qreal ScoreView::mag() const
+qreal ScoreView::lmag() const
       {
       return _matrix.m11() / (mscore->physicalDotsPerInch() / DPI);
       }
 
 //---------------------------------------------------------
-//   pmag
+//   mag
 //---------------------------------------------------------
 
-qreal ScoreView::pmag() const
+qreal ScoreView::mag() const
       {
       return _matrix.m11();
       }
