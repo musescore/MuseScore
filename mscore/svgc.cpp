@@ -98,7 +98,7 @@ QString checkSafety(Score * score) {
     int endTick= rs->tick + rs->len;
     qreal endtime = score->tempomap()->tick2time(endTick);
 
-    if (endtime>60*10) return QString("Piece lasts too long");
+    if (endtime>60*20) return QString("Piece lasts too long");
   }
 
   if (score->lastMeasure() == NULL) return QString("No notes");
@@ -437,8 +437,8 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       uz->addFile(prefix+"metainfo.json",QJsonDocument(qts).toJson());
    }
 
-QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems) {
-    QSet<Note*>* res = new QSet<Note*>; 
+QSet<ChordRest *> * mark_tie_ends(QList<const Element*> const &elems) {
+    QSet<ChordRest*>* res = new QSet<ChordRest*>; 
     foreach(const Element * e, elems) {
       //qDebug()<<e->name();
       if (e->type() == Element::Type::SLUR_SEGMENT) {
@@ -452,7 +452,9 @@ QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems) {
           Chord *beg = (Chord*)span->startElement(), 
                 *end = (Chord*)span->endElement();
 
-          same = beg->notes().size() == end->notes().size();
+          same = beg->type() == Element::Type::CHORD && end->type() == Element::Type::CHORD &&
+                 beg->notes().size() == end->notes().size();
+
           if (same) {
             for(int i = 0; i< beg->notes().size(); i++)
               same = same && (beg->notes()[i]->ppitch() == end->notes()[i]->ppitch());
@@ -461,7 +463,8 @@ QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems) {
 
         if (same) {
           //qDebug() << "TIE FOUND";
-          res->insert( ((Tie *)ss->slurTie())->endNote() );
+          SlurSegment * ss = (SlurSegment *)e;
+          res->insert( (ChordRest*)ss->slurTie()->endElement() );
         }
         //else qDebug() << "SLUR FOUND";
       }
@@ -544,16 +547,17 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
       if (top_margin<bot_margin) top_margin = bot_margin;
       delete [] margins;
 
-      QSet<Note *> * tie_ends = NULL; 
+      QSet<ChordRest *> * tie_ends = NULL; 
 
       TempoMap * tempomap = score->tempomap();
 
       QJsonArray result;
-
+      
       // Find max system width
       qreal max_w = 0;
       foreach( Page* page, score->pages() )
          foreach( System* sys, *(page->systems()) ) {
+            if (sys->isVbox()) continue; // Skip vboxes like the heading
             qreal cur_w = sys->pageBoundingRect().width();
             if (cur_w>max_w) max_w = cur_w;
         }
@@ -566,6 +570,8 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
             //w = sys_rect.width() + 2*h_margin;
             w = max_w + 2*h_margin; // Make systems uniform width
             h = sys_rect.height() + top_margin + bot_margin;
+
+            if (sys_rect.width()>max_w) w = sys_rect.width(); // Make sure vboxes are not cropped
  
             svgname = basename + QString::number(count++)+".svg";
             sobj["img"] = svgname;
@@ -641,7 +647,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
                   // NB! ar[17] = !ar.contains(17); would not work as expected...
                   just_tied.insert(tick,just_tied.value(tick,true) && 
                                   (e->type() == Element::Type::NOTE && 
-                                    tie_ends->contains((Note*)e)));
+                                    tie_ends->contains(cr)));
                   is_rest.insert(tick,is_rest.value(tick,true) && 
                                   (e->type() == Element::Type::REST));
 
