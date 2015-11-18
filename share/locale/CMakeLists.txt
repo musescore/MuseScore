@@ -65,6 +65,7 @@ install(FILES
       mscore_sk.qm
       mscore_sl.qm
       mscore_sr.qm
+      mscore_sr_RS.qm
       mscore_sv.qm
       mscore_th.qm
       mscore_tr.qm
@@ -153,6 +154,7 @@ install(FILES
       instruments_sk.qm
       instruments_sl.qm
       instruments_sr.qm
+      instruments_sr_RS.qm
       instruments_sv.qm
       instruments_th.qm
       instruments_tr.qm
