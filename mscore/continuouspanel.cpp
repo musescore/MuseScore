@@ -112,9 +112,9 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
       //
       // Check elements at current panel position
       //
-      _offsetPanel = -(_sv->xoffset()) / _sv->pmag();
+      _offsetPanel = -(_sv->xoffset()) / _sv->mag();
       _rect = QRect(_offsetPanel + _width, _y, 1, _height);
-      //qDebug() << "width=" << _width << "_y="<< _y << "_offsetPanel=" << _offsetPanel << "_sv->xoffset()" << _sv->xoffset() << "_sv->pmag()" << _sv->pmag() <<"_spatium" << _spatium << "s->canvasPos().x()" << s->canvasPos().x() << "s->x()" << s->x();
+      //qDebug() << "width=" << _width << "_y="<< _y << "_offsetPanel=" << _offsetPanel << "_sv->xoffset()" << _sv->xoffset() << "_sv->mag()" << _sv->mag() <<"_spatium" << _spatium << "s->canvasPos().x()" << s->canvasPos().x() << "s->x()" << s->x();
       Page* page = _score->pages().front();
       QList<Element*> elementsCurrent = page->items(_rect);
       if (elementsCurrent.empty()) {
@@ -155,11 +155,11 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
       findElementWidths(elementsCurrent);
 
       // Don't show panel if staff names are visible
-      if (_sv->xoffset() / _sv->pmag() + _xPosMeasure > 0) {
+      if (_sv->xoffset() / _sv->mag() + _xPosMeasure > 0) {
             _visible = false;
             return;
             }
-      //qDebug() << "_sv->xoffset()=" <<_sv->xoffset() << " _sv->pmag()="<< _sv->pmag() <<" s->x=" << s->x() << " width=" << _width << " currentMeasue=" << _currentMeasure->x() << " _xPosMeasure=" << _xPosMeasure;
+      //qDebug() << "_sv->xoffset()=" <<_sv->xoffset() << " _sv->mag()="<< _sv->mag() <<" s->x=" << s->x() << " width=" << _width << " currentMeasue=" << _currentMeasure->x() << " _xPosMeasure=" << _xPosMeasure;
 
       draw(p, elementsCurrent);
       _visible = true;

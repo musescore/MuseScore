@@ -44,25 +44,8 @@ endif ()
 # Add local cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/thirdparty/freetype/builds)
 
-
-set(VERSION_MAJOR "2")
-set(VERSION_MINOR "6")
-set(VERSION_PATCH "1")
-
-set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
-set(SHARED_LIBRARY_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
-
-
 # Compiler definitions for building the library
 add_definitions(-DFT2_BUILD_LIBRARY)
-
-
-# Find dependencies
-###find_package(ZLIB)
-###find_package(BZip2)
-###find_package(PNG)
-###find_package(HarfBuzz)
-
 
 message(STATUS
   "Creating directory ${PROJECT_BINARY_DIR}/include/freetype/config")
@@ -141,7 +124,6 @@ file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h"
 include_directories("${PROJECT_SOURCE_DIR}/thirdparty/freetype/include")
 include_directories(BEFORE "${PROJECT_BINARY_DIR}/thirdparty/freetype/include")
 
-
 file(GLOB PUBLIC_HEADERS "include/ft2build.h" "include/freetype/*.h")
 file(GLOB PUBLIC_CONFIG_HEADERS "include/freetype/config/*.h")
 file(GLOB PRIVATE_HEADERS "include/freetype/internal/*.h")
@@ -199,15 +181,6 @@ else ()
   set(BASE_SRCS ${BASE_SRCS} src/base/ftdebug.c)
 endif ()
 
-
-if (BUILD_FRAMEWORK)
-  set(BASE_SRCS
-    ${BASE_SRCS}
-    builds/mac/freetype-Info.plist
-  )
-endif ()
-
-
 add_library(mscore_freetype
   ${PUBLIC_HEADERS}
   ${PUBLIC_CONFIG_HEADERS}
@@ -215,10 +188,7 @@ add_library(mscore_freetype
   ${BASE_SRCS}
 )
 
-
 if (MSVC)
   set_target_properties(freetype PROPERTIES
     COMPILE_FLAGS /Fd"$(IntDir)$(TargetName).pdb")
 endif ()
-
-

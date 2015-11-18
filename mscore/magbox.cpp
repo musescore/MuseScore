@@ -105,19 +105,19 @@ double MagBox::getMag(ScoreView* canvas)
       const PageFormat* pf = score->pageFormat();
       switch(MagIdx(currentIndex())) {
             case MagIdx::MAG_PAGE_WIDTH:      // page width
-                  nmag *= cw / (pf->width() * DPI);
+                  nmag *= (cw / (pf->width() * DPI)) / (mscore->physicalDotsPerInch() / DPI);
                   break;
             case MagIdx::MAG_PAGE:     // page
                   {
-                  double mag1 = cw  / (pf->width() * DPI);
-                  double mag2 = ch / (pf->height() * DPI);
+                  double mag1 = (cw  / (pf->width() * DPI) / (mscore->physicalDotsPerInch() / DPI));
+                  double mag2 = (ch / (pf->height() * DPI) / (mscore->physicalDotsPerInch() / DPI));
                   nmag  *= (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
             case MagIdx::MAG_DBL_PAGE:    // double page
                   {
-                  double mag1 = cw / (pf->width()*2*DPI+50.0);
-                  double mag2 = ch / (pf->height() * DPI);
+                  double mag1 = (cw / (pf->width()*2*DPI+50.0)) / (mscore->physicalDotsPerInch() / DPI);
+                  double mag2 = (ch / (pf->height() * DPI)) / (mscore->physicalDotsPerInch() / DPI);
                   nmag  *= (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;

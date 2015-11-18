@@ -1409,7 +1409,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       updateUndoRedo();
 
       if (view->magIdx() == MagIdx::MAG_FREE)
-            mag->setMag(view->mag());
+            mag->setMag(view->lmag());
       else
             mag->setCurrentIndex(int(view->magIdx()));
 
@@ -3003,7 +3003,7 @@ void MuseScore::magTextChanged()
 void MuseScore::incMag()
       {
       if (cv) {
-            qreal _mag = cv->mag() * 1.7;
+            qreal _mag = cv->lmag() * 1.7;
             if (_mag > 16.0)
                   _mag = 16.0;
             cv->setMag(MagIdx::MAG_FREE, _mag);
@@ -3018,7 +3018,7 @@ void MuseScore::incMag()
 void MuseScore::decMag()
       {
       if (cv) {
-            qreal _mag = cv->mag() / 1.7;
+            qreal _mag = cv->lmag() / 1.7;
             if (_mag < 0.05)
                   _mag = 0.05;
             cv->setMag(MagIdx::MAG_FREE, _mag);
@@ -3230,7 +3230,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
                   xml.tag("tab", tab);    // 0 instead of "tab" does not work
                   xml.tag("idx", i);
                   if (v->magIdx() == MagIdx::MAG_FREE)
-                        xml.tag("mag", v->mag());
+                        xml.tag("mag", v->lmag());
                   else
                         xml.tag("magIdx", int(v->magIdx()));
                   xml.tag("x",   v->xoffset() / DPMM);
@@ -3250,7 +3250,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
                         xml.tag("tab", 1);
                         xml.tag("idx", i);
                         if (v->magIdx() == MagIdx::MAG_FREE)
-                              xml.tag("mag", v->mag());
+                              xml.tag("mag", v->lmag());
                         else
                               xml.tag("magIdx", int(v->magIdx()));
                         xml.tag("x",   v->xoffset() / DPMM);
