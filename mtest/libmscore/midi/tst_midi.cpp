@@ -106,6 +106,8 @@ void TestMidi::events_data()
       QTest::newRow("testPedal") <<  "testPedal";
       // multi note tremolo
       QTest::newRow("testMultiNoteTremolo") << "testMultiNoteTremolo";
+      // tempo change inside <measure> mxl tag
+      QTest::newRow("testTempoChangeInsideMeasure") << "testTempoChangeInsideMeasure.xml";
       }
 
 //---------------------------------------------------------
@@ -348,8 +350,16 @@ void TestMidi::midi03()
 void TestMidi::events()
       {
       QFETCH(QString, file);
+      
+      // Handle test cases with other extensions
+      QFileInfo fi(file);
+      QString extension(".mscx");
+      if (!fi.suffix().isEmpty()) {
+        extension = "."+fi.suffix();
+        file = fi.baseName();
+      }
 
-      QString readFile(DIR   + file + ".mscx");
+      QString readFile(DIR   + file + extension);
       QString writeFile(file + "-test.txt");
       QString reference(DIR + file + "-ref.txt");
 
