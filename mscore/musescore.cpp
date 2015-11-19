@@ -1410,8 +1410,12 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
 
       if (view->magIdx() == MagIdx::MAG_FREE)
             mag->setMag(view->lmag());
-      else
+      else {
+            mag->blockSignals(true);
             mag->setCurrentIndex(int(view->magIdx()));
+            mag->blockSignals(false);
+            magChanged(int(view->magIdx()));
+            }
 
       if (cs->parentScore())
             setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->parentScore()->name() + "-" + cs->name());
