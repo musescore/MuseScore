@@ -2049,7 +2049,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
 void ScoreView::zoomStep(qreal step, const QPoint& pos)
       {
-      qreal _mag = mag();
+      qreal _mag = lmag();
 
       _mag *= qPow(1.1, step);
 
