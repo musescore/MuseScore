@@ -663,7 +663,7 @@ ScoreView::ScoreView(QWidget* parent)
 
       setContextMenuPolicy(Qt::DefaultContextMenu);
 
-      double mag  = preferences.mag;
+      double mag  = preferences.mag * (mscore->physicalDotsPerInch() / DPI);
       _matrix     = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
       imatrix     = _matrix.inverted();
       _magIdx     = preferences.mag == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
