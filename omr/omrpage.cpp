@@ -30,6 +30,7 @@
 #include "libmscore/measurebase.h"
 #include "libmscore/box.h"
 #include "libmscore/sym.h"
+#include "libmscore/note.h"
 //#include "pattern.h"
 
 namespace Ms {
@@ -143,42 +144,42 @@ void OmrPage::readBarLines(int pageNo)
                   const QLine& l1 = system->barLines[k];
                   const QLine& l2 = system->barLines[k+1];
                   OmrMeasure m(l1.x1(), l2.x1());
-                  for (int k = 0; k < system->staves().size(); ++k) {
-                        OmrStaff& staff = system->staves()[k];
-                        QList<OmrChord> chords;
-                        int nx   = 0;
-                        int nsym = -1;
-                        OmrChord chord;
-                        foreach(OmrNote* n, staff.notes()) {
-                              int x = n->x();
-                              if (x >= m.x2())
-                                    break;
-                              if (x >= m.x1() && x < m.x2()) {
-                                    if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
-                                          if (!chord.notes.isEmpty()) {
-                                                int sym = chord.notes.front()->sym;
-                                                //if (sym == quartheadSym)
-                                                  //  chord.duration.setType(TDuration::DurationType::V_QUARTER);
-                                                //else if (sym == halfheadSym)
-                                                  //  chord.duration.setType(TDuration::DurationType::V_HALF);
-                                                chords.append(chord);
-                                                chord.notes.clear();
-                                                }
-                                          }
-                                    nx   = x;
-                                    nsym = n->sym;
-                                    chord.notes.append(n);
-                                    }
-                              }
-                        if (!chord.notes.isEmpty()) {
-                              int sym = chord.notes.front()->sym;
-                              //if (sym == quartheadSym)
-                                //  chord.duration.setType(TDuration::DurationType::V_QUARTER);
-                              //else if (sym == halfheadSym)
-                                //  chord.duration.setType(TDuration::DurationType::V_HALF);
-                              chords.append(chord);
-                              }
-                        m.chords().append(chords);
+                  for (int ss = 0; ss < system->staves().size(); ++ss) {
+                        OmrStaff& staff = system->staves()[ss];
+//                        QList<OmrChord> chords;
+//                        int nx   = 0;
+//                        int nsym = -1;
+//                        OmrChord chord;
+//                        foreach(OmrNote* n, staff.notes()) {
+//                              int x = n->x();
+//                              if (x >= m.x2())
+//                                    break;
+//                              if (x >= m.x1() && x < m.x2()) {
+//                                    if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
+//                                          if (!chord.notes.isEmpty()) {
+//                                                int sym = chord.notes.front()->sym;
+//                                                if (sym == NoteHead::Type::HEAD_QUARTER)
+//                                                    chord.duration.setType(TDuration::DurationType::V_QUARTER);
+//                                                else if (sym == NoteHead::Type::HEAD_HALF)
+//                                                    chord.duration.setType(TDuration::DurationType::V_HALF);
+//                                                chords.append(chord);
+//                                                chord.notes.clear();
+//                                                }
+//                                          }
+//                                    nx   = x;
+//                                    nsym = n->sym;
+//                                    chord.notes.append(n);
+//                                    }
+//                              }
+//                        if (!chord.notes.isEmpty()) {
+//                              int sym = chord.notes.front()->sym;
+//                              //if (sym == quartheadSym)
+//                                //  chord.duration.setType(TDuration::DurationType::V_QUARTER);
+//                              //else if (sym == halfheadSym)
+//                                //  chord.duration.setType(TDuration::DurationType::V_HALF);
+//                              chords.append(chord);
+//                              }
+//                        m.chords().append(chords);
                         }
                   system->measures().append(m);
                   }
@@ -188,26 +189,26 @@ void OmrPage::readBarLines(int pageNo)
       //    search clef/keysig
       //--------------------------------------------------
 
-      if (pageNo == 0) {
-            OmrSystem* s = &_systems[0];
-            for (int i = 0; i < s->staves().size(); ++i) {
-                  OmrStaff* staff = &s->staves()[i];
-                  //OmrClef clef = searchClef(s, staff);
-                  //staff->setClef(clef);
-
-                  //searchKeySig(s, staff);
-                  }
-
-
-            //--------------------------------------------------
-            //    search time signature
-            //--------------------------------------------------
-
-            if (!s->staves().isEmpty()) {
-//                  OmrTimesig* ts = searchTimeSig(s);
-//                  s->measures()[0].setTimesig(ts);
-                  }
-            }
+//      if (pageNo == 0) {
+//            OmrSystem* s = &_systems[0];
+//            for (int i = 0; i < s->staves().size(); ++i) {
+//                  OmrStaff* staff = &s->staves()[i];
+//                  //OmrClef clef = searchClef(s, staff);
+//                  //staff->setClef(clef);
+//
+//                  //searchKeySig(s, staff);
+//                  }
+//
+//
+//            //--------------------------------------------------
+//            //    search time signature
+//            //--------------------------------------------------
+//
+//            if (!s->staves().isEmpty()) {
+////                  OmrTimesig* ts = searchTimeSig(s);
+////                  s->measures()[0].setTimesig(ts);
+//                  }
+//            }
       }
 
 //---------------------------------------------------------
@@ -488,6 +489,9 @@ void OmrSystem::searchBarLines()
 //      int i = 0;
       int n = barLines.size();
       for (int i = 0; i < n; ++i) {
+          
+          //if(nbar >= 2) break;//liang debug
+          
             const QLine& l = barLines[i];
             int nx = l.x1();
             if ((nx - x) > spatium) {
