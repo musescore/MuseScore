@@ -256,7 +256,10 @@ void Seq::exit()
 
 void Seq::rewindStart()
       {
-      seek(0);
+      if ((mscore->loop()))
+            seek(cs->repeatList()->tick2utick(cs->loopInTick()));
+      else
+            seek(0);
       }
 
 //---------------------------------------------------------
