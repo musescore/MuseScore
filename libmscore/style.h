@@ -149,6 +149,10 @@ class StyleType {
 
 //---------------------------------------------------------
 //   StyleIdx
+//
+//    Keep in sync with:
+//    *) styleTypes2[] in style.cpp
+//    *) StyleVal2 values2[] in style.cpp
 //---------------------------------------------------------
 
 enum class StyleIdx : unsigned char {
@@ -376,6 +380,7 @@ enum class StyleIdx : unsigned char {
       lyricsDashMinLength,
       lyricsDashMaxLength,
       lyricsDashForce,
+      lyricsDashMaxDistance,
 
       STYLES
       };

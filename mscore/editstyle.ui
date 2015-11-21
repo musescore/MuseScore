@@ -85,6 +85,9 @@
               <property name="text">
                <string>Musical text font:</string>
               </property>
+              <property name="buddy">
+               <cstring>musicalTextFont</cstring>
+              </property>
              </widget>
             </item>
             <item row="1" column="1">
@@ -2320,6 +2323,9 @@
               <property name="indent">
                <number>5</number>
               </property>
+              <property name="buddy">
+               <cstring>barAccidentalDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="13" column="1">
@@ -2358,6 +2364,9 @@
               </property>
               <property name="indent">
                <number>5</number>
+              </property>
+              <property name="buddy">
+               <cstring>multiMeasureRestMargin</cstring>
               </property>
              </widget>
             </item>
@@ -2414,7 +2423,7 @@
                <number>5</number>
               </property>
               <property name="buddy">
-               <cstring>barNoteDistance</cstring>
+               <cstring>barGraceDistance</cstring>
               </property>
              </widget>
             </item>
@@ -3587,9 +3596,12 @@
             <property name="text">
              <string>Max. dash length:</string>
             </property>
+            <property name="buddy">
+             <cstring>lyricsDashMaxLength</cstring>
+            </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QCheckBox" name="lyricsDashForce">
             <property name="text">
              <string>Always force dash</string>
@@ -3611,6 +3623,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
             <property name="suffix">
              <string>sp</string>
             </property>
@@ -3630,6 +3645,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
             <property name="suffix">
              <string>sp</string>
             </property>
@@ -3648,6 +3666,38 @@
            <widget class="QLabel" name="label_93">
             <property name="text">
              <string>Min. dash length:</string>
+            </property>
+            <property name="buddy">
+             <cstring>lyricsDashMinLength</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_94">
+            <property name="text">
+             <string>Max dash distance:</string>
+            </property>
+            <property name="buddy">
+             <cstring>lyricsDashMaxDistance</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="suffix">
+             <string>sp</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>16.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -4983,6 +5033,9 @@
             <property name="text">
              <string>Position:</string>
             </property>
+            <property name="buddy">
+             <cstring>radioFretNumLeft</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="3">
@@ -5017,6 +5070,9 @@
             <property name="text">
              <string>Barré line thickness:</string>
             </property>
+            <property name="buddy">
+             <cstring>barreLineWidth</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
@@ -5039,6 +5095,9 @@
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Scale:</string>
+            </property>
+            <property name="buddy">
+             <cstring>fretMag</cstring>
             </property>
            </widget>
           </item>
@@ -5814,6 +5873,9 @@
                <property name="text">
                 <string>Tuplet bracket thickness:</string>
                </property>
+               <property name="buddy">
+                <cstring>tupletBracketWidth</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -6044,6 +6106,10 @@
   <tabstop>frameSystemDistance</tabstop>
   <tabstop>lastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
+  <tabstop>genCourtesyTimesig</tabstop>
+  <tabstop>genKeysig</tabstop>
+  <tabstop>genCourtesyKeysig</tabstop>
+  <tabstop>genCourtesyClef</tabstop>
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
   <tabstop>headerOddEven</tabstop>
@@ -6083,6 +6149,7 @@
   <tabstop>minMeasureWidth_2</tabstop>
   <tabstop>measureSpacing</tabstop>
   <tabstop>barNoteDistance</tabstop>
+  <tabstop>barGraceDistance</tabstop>
   <tabstop>barAccidentalDistance</tabstop>
   <tabstop>noteBarDistance</tabstop>
   <tabstop>minNoteDistance</tabstop>
@@ -6096,6 +6163,7 @@
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
   <tabstop>showStartBarlineMultiple</tabstop>
+  <tabstop>scaleBarlines</tabstop>
   <tabstop>barWidth</tabstop>
   <tabstop>endBarWidth</tabstop>
   <tabstop>endBarDistance</tabstop>
@@ -6129,6 +6197,10 @@
   <tabstop>smallNoteSize</tabstop>
   <tabstop>graceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
+  <tabstop>lyricsDashMinLength</tabstop>
+  <tabstop>lyricsDashMaxLength</tabstop>
+  <tabstop>lyricsDashMaxDistance</tabstop>
+  <tabstop>lyricsDashForce</tabstop>
   <tabstop>hairpinY</tabstop>
   <tabstop>resetHairpinY</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
@@ -6147,14 +6219,14 @@
   <tabstop>resetVoltaLineStyle</tabstop>
   <tabstop>ottavaY</tabstop>
   <tabstop>resetOttavaY</tabstop>
-  <tabstop>ottavaNumbersOnly</tabstop>
-  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>ottavaHook</tabstop>
   <tabstop>resetOttavaHook</tabstop>
   <tabstop>ottavaLineWidth</tabstop>
   <tabstop>resetOttavaLineWidth</tabstop>
   <tabstop>ottavaLineStyle</tabstop>
   <tabstop>resetOttavaLineStyle</tabstop>
+  <tabstop>ottavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>pedalY</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
@@ -6194,9 +6266,9 @@
   <tabstop>radioFBModern</tabstop>
   <tabstop>radioFBHistoric</tabstop>
   <tabstop>propertyDistanceHead</tabstop>
-  <tabstop>articulationMag</tabstop>
   <tabstop>propertyDistanceStem</tabstop>
   <tabstop>propertyDistance</tabstop>
+  <tabstop>articulationMag</tabstop>
   <tabstop>articulationTable</tabstop>
   <tabstop>accidentalTable</tabstop>
   <tabstop>radioKeySigNatNone</tabstop>

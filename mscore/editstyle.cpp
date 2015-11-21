@@ -444,6 +444,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::lyricsDashMinLength,     lyricsDashMinLength->value());
       lstyle.set(StyleIdx::lyricsDashMaxLength,     lyricsDashMaxLength->value());
       lstyle.set(StyleIdx::lyricsDashForce,         lyricsDashForce->isChecked());
+      lstyle.set(StyleIdx::lyricsDashMaxDistance,   lyricsDashMaxDistance->value());
       lstyle.set(StyleIdx::lastSystemFillLimit,     lastSystemFillThreshold->value() / 100.0);
       lstyle.set(StyleIdx::genClef,                 genClef->isChecked());
       lstyle.set(StyleIdx::genKeysig,               genKeysig->isChecked());
@@ -666,6 +667,7 @@ void EditStyle::setValues()
       lyricsDashMinLength->setValue(lstyle.value(StyleIdx::lyricsDashMinLength).toDouble());
       lyricsDashMaxLength->setValue(lstyle.value(StyleIdx::lyricsDashMaxLength).toDouble());
       lyricsDashForce->setChecked(lstyle.value(StyleIdx::lyricsDashForce).toBool());
+      lyricsDashMaxDistance->setValue(lstyle.value(StyleIdx::lyricsDashMaxDistance).toDouble());
       lastSystemFillThreshold->setValue(lstyle.value(StyleIdx::lastSystemFillLimit).toDouble() * 100.0);
 
       genClef->setChecked(lstyle.value(StyleIdx::genClef).toBool());
