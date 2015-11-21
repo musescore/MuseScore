@@ -130,7 +130,7 @@ bool externalIcons = false;
 bool pluginMode = false;
 static bool startWithNewScore = false;
 double converterDpi = 0;
-double guiScaling = 1.0;
+double guiScaling = 0.0;
 int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
@@ -348,7 +348,14 @@ MuseScore::MuseScore()
       {
       QScreen* screen      = QGuiApplication::primaryScreen();
       _physicalDotsPerInch = screen->physicalDotsPerInch();        // physical resolution
-      _physicalDotsPerInch *= guiScaling;
+      if (guiScaling == 0.0) {
+            // set scale for icons, palette elements, window sizes, etc
+            // the default values are hard coded in pixel sizes and assume ~96 DPI
+            if (qAbs(_physicalDotsPerInch - DPI_DISPLAY) > 6.0)
+                  guiScaling = _physicalDotsPerInch / DPI_DISPLAY;
+            else
+                  guiScaling = 1.0;
+            }
 
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
