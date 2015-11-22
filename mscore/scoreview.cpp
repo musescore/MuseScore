@@ -664,7 +664,7 @@ ScoreView::ScoreView(QWidget* parent)
 
       setContextMenuPolicy(Qt::DefaultContextMenu);
 
-      double mag  = preferences.mag;
+      double mag  = preferences.mag * (mscore->physicalDotsPerInch() / DPI);
       _matrix     = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
       imatrix     = _matrix.inverted();
       _magIdx     = preferences.mag == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
@@ -2049,7 +2049,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
 void ScoreView::zoomStep(qreal step, const QPoint& pos)
       {
-      qreal _mag = mag();
+      qreal _mag = lmag();
 
       _mag *= qPow(1.1, step);
 
