@@ -5897,7 +5897,8 @@ void ScoreView::cmdMoveCR(bool left)
                               break;
                         }
                   ChordRest* cr2 = left ? prevChordRest(cr1) : nextChordRest(cr1);
-                  if (cr2 && cr1->measure() == cr2->measure()) {
+                  if (cr2 && cr1->measure() == cr2->measure() && !cr1->tuplet() && !cr2->tuplet()
+                      && cr1->durationType() == cr2->durationType() && cr1->duration() == cr2->duration()) {
                         if (!cmdActive) {
                               _score->startCmd();
                               cmdActive = true;
