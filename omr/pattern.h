@@ -21,8 +21,11 @@
 #ifndef __PATTERN_H__
 #define __PATTERN_H__
 
+#include "libmscore/score.h"
+
 namespace Ms {
 
+enum class SymId;
 class Sym;
 
 //---------------------------------------------------------
@@ -33,14 +36,14 @@ class Sym;
 class Pattern {
    protected:
       QImage _image;
-      Sym* _sym = 0;
-      int _id;
+      SymId _id;
       QPoint _base;
+    Score *_score;
 
    public:
       Pattern();
       ~Pattern();
-      Pattern(int id, Sym* symbol, double spatium);
+      Pattern(Score *s, SymId id, double spatium);
       Pattern(QImage*, int, int, int, int);
 
       double match(const Pattern*) const;
@@ -51,8 +54,8 @@ class Pattern {
       int w() const       { return _image.width(); }
       int h() const       { return _image.height(); }
       bool dot(int x, int y) const;
-      int id() const      { return _id; }
-      void setId(int val) { _id = val; }
+      SymId id() const      { return _id; }
+      void setId(SymId val) { _id = val; }
       const QPoint& base() const { return _base; }
       void setBase(const QPoint& v) { _base = v; }
       };

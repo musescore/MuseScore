@@ -146,40 +146,40 @@ void OmrPage::readBarLines(int pageNo)
                   OmrMeasure m(l1.x1(), l2.x1());
                   for (int ss = 0; ss < system->staves().size(); ++ss) {
                         OmrStaff& staff = system->staves()[ss];
-//                        QList<OmrChord> chords;
-//                        int nx   = 0;
-//                        int nsym = -1;
-//                        OmrChord chord;
-//                        foreach(OmrNote* n, staff.notes()) {
-//                              int x = n->x();
-//                              if (x >= m.x2())
-//                                    break;
-//                              if (x >= m.x1() && x < m.x2()) {
-//                                    if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
-//                                          if (!chord.notes.isEmpty()) {
-//                                                int sym = chord.notes.front()->sym;
-//                                                if (sym == NoteHead::Type::HEAD_QUARTER)
-//                                                    chord.duration.setType(TDuration::DurationType::V_QUARTER);
-//                                                else if (sym == NoteHead::Type::HEAD_HALF)
-//                                                    chord.duration.setType(TDuration::DurationType::V_HALF);
-//                                                chords.append(chord);
-//                                                chord.notes.clear();
-//                                                }
-//                                          }
-//                                    nx   = x;
-//                                    nsym = n->sym;
-//                                    chord.notes.append(n);
-//                                    }
-//                              }
-//                        if (!chord.notes.isEmpty()) {
-//                              int sym = chord.notes.front()->sym;
-//                              //if (sym == quartheadSym)
-//                                //  chord.duration.setType(TDuration::DurationType::V_QUARTER);
-//                              //else if (sym == halfheadSym)
-//                                //  chord.duration.setType(TDuration::DurationType::V_HALF);
-//                              chords.append(chord);
-//                              }
-//                        m.chords().append(chords);
+                        QList<OmrChord> chords;
+                        int nx   = 0;
+                        int nsym = -1;
+                        OmrChord chord;
+                        foreach(OmrNote* n, staff.notes()) {
+                              int x = n->x();
+                              if (x >= m.x2())
+                                    break;
+                              if (x >= m.x1() && x < m.x2()) {
+                                    if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
+                                          if (!chord.notes.isEmpty()) {
+                                                int sym = chord.notes.front()->sym;
+                                                if (sym == (int)NoteHead::Type::HEAD_QUARTER)
+                                                    chord.duration.setType(TDuration::DurationType::V_QUARTER);
+                                                else if (sym == (int)NoteHead::Type::HEAD_HALF)
+                                                    chord.duration.setType(TDuration::DurationType::V_HALF);
+                                                chords.append(chord);
+                                                chord.notes.clear();
+                                                }
+                                          }
+                                    nx   = x;
+                                    nsym = n->sym;
+                                    chord.notes.append(n);
+                                    }
+                              }
+                        if (!chord.notes.isEmpty()) {
+                              int sym = chord.notes.front()->sym;
+                              if (sym == (int)NoteHead::Type::HEAD_QUARTER)
+                                  chord.duration.setType(TDuration::DurationType::V_QUARTER);
+                              else if (sym == (int)NoteHead::Type::HEAD_HALF)
+                                  chord.duration.setType(TDuration::DurationType::V_HALF);
+                              chords.append(chord);
+                              }
+                        m.chords().append(chords);
                         }
                   system->measures().append(m);
                   }
@@ -474,7 +474,7 @@ void OmrSystem::searchBarLines()
                   }
             }
 
-      //searchNotes();
+      searchNotes();
 
       //
       // remove false positive barlines:
@@ -541,38 +541,38 @@ static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
 //   searchNotes
 //---------------------------------------------------------
 
-//void OmrSystem::searchNotes()
-//      {
-//      for (int i = 0; i < _staves.size(); ++i) {
-//            OmrStaff* r = &_staves[i];
-//            int x1 = r->x();
-//            int x2 = x1 + r->width();
-//
-//            //
-//            // search notes on a range of vertical line position
-//            //
-////            for (int line = -5; line < 14; ++line)
-////                  searchNotes(&r->notes(), x1, x2, r->y(), line);
-//
-//            //
-//            // detect collisions
-//            //
-//            int fuzz = int(_page->spatium()) / 2;
-//            foreach(OmrNote* n, r->notes()) {
-//                  foreach(OmrNote* m, r->notes()) {
-//                        if (m == n)
-//                              continue;
-//                        if (intersectFuzz(*m, *n, fuzz)) {
-//                              if (m->prob > n->prob)
-//                                    r->notes().removeOne(n);
-//                              else
-//                                    r->notes().removeOne(m);
-//                              }
-//                        }
-//                  }
-//            qSort(r->notes().begin(), r->notes().end(), noteCompare);
-//            }
-//      }
+void OmrSystem::searchNotes()
+      {
+      for (int i = 0; i < _staves.size(); ++i) {
+            OmrStaff* r = &_staves[i];
+            int x1 = r->x();
+            int x2 = x1 + r->width();
+
+            //
+            // search notes on a range of vertical line position
+            //
+            for (int line = -5; line < 14; ++line)
+                  searchNotes(&r->notes(), x1, x2, r->y(), line);
+
+            //
+            // detect collisions
+            //
+            int fuzz = int(_page->spatium()) / 2;
+            foreach(OmrNote* n, r->notes()) {
+                  foreach(OmrNote* m, r->notes()) {
+                        if (m == n)
+                              continue;
+                        if (intersectFuzz(*m, *n, fuzz)) {
+                              if (m->prob > n->prob)
+                                    r->notes().removeOne(n);
+                              else
+                                    r->notes().removeOne(m);
+                              }
+                        }
+                  }
+            qSort(r->notes().begin(), r->notes().end(), noteCompare);
+            }
+      }
 
 //---------------------------------------------------------
 //   addText
@@ -1061,59 +1061,59 @@ void OmrPage::getStaffLines()
 //   searchNotes
 //---------------------------------------------------------
 
-//void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
-//      {
-//      double _spatium = _page->spatium();
-//      y += line * _spatium * .5;
-//
-//      Pattern* patternList[2];
-//      patternList[0] = Omr::quartheadPattern;
-//      patternList[1] = Omr::halfheadPattern;
-//
-//      QList<Peak> notePeaks;
-//
-//      for (int k = 0; k < 2; ++k) {
-//            Pattern* pattern = patternList[k];
-//            int hh = pattern->h();
-//            int hw = pattern->w();
-//            bool found = false;
-//            int xx1;
-//            double val;
-//
-//            for (int x = x1; x < (x2 - hw); ++x) {
-//                  double val1 = pattern->match(&_page->image(), x, y - hh/2);
-//                  if (val1 >= noteTH) {
-//                        if (!found || (val1 > val)) {
-//                              xx1 = x;
-//                              val = val1;
-//                              found = true;
-//                              }
-//                        }
-//                  else {
-//                        if (found) {
-//                              notePeaks.append(Peak(xx1, val, k));
-//                              found = false;
-//                              }
-//                        }
-//                  }
-//            }
-//
-//      qSort(notePeaks);
-//      int n = notePeaks.size();
-//      for (int i = 0; i < n; ++i) {
-//            if (notePeaks[i].val < noteTH)
-//                  break;
-//            OmrNote* note = new OmrNote;
-//            int sym = notePeaks[i].sym;
-//            int hh = patternList[sym]->h();
-//            int hw = patternList[sym]->w();
-//            note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
-//            note->line = line;
-//            note->sym  = patternList[sym]->id();
-//            note->prob = notePeaks[i].val;
-//            noteList->append(note);
-//            }
-//      }
+void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
+      {
+      double _spatium = _page->spatium();
+      y += line * _spatium * .5;
+
+      Pattern* patternList[2];
+      patternList[0] = Omr::quartheadPattern;
+      patternList[1] = Omr::halfheadPattern;
+
+      QList<Peak> notePeaks;
+
+      for (int k = 0; k < 2; ++k) {
+            Pattern* pattern = patternList[k];
+            int hh = pattern->h();
+            int hw = pattern->w();
+            bool found = false;
+            int xx1;
+            double val;
+
+            for (int x = x1; x < (x2 - hw); ++x) {
+                  double val1 = pattern->match(&_page->image(), x, y - hh/2);
+                  if (val1 >= noteTH) {
+                        if (!found || (val1 > val)) {
+                              xx1 = x;
+                              val = val1;
+                              found = true;
+                              }
+                        }
+                  else {
+                        if (found) {
+                              notePeaks.append(Peak(xx1, val, k));
+                              found = false;
+                              }
+                        }
+                  }
+            }
+
+      qSort(notePeaks);
+      int n = notePeaks.size();
+      for (int i = 0; i < n; ++i) {
+            if (notePeaks[i].val < noteTH)
+                  break;
+            OmrNote* note = new OmrNote;
+            int sym = notePeaks[i].sym;
+            int hh = patternList[sym]->h();
+            int hw = patternList[sym]->w();
+            note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
+            note->line = line;
+            note->sym  = patternList[sym]->id();
+            note->prob = notePeaks[i].val;
+            noteList->append(note);
+            }
+      }
 
 //---------------------------------------------------------
 //   staffDistance
