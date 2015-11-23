@@ -96,42 +96,42 @@ double Pattern::match(const QImage* img, int col, int row) const
 //    create a Pattern from symbol
 //---------------------------------------------------------
 
-Pattern::Pattern(int id, Sym* symbol, double spatium)
+Pattern::Pattern(Score *s, SymId id, double spatium)
       {
-      _id = id;
-      _sym = symbol;
-      QFont f("MScore");
-      f.setPixelSize(lrint(spatium * 4));
-      QFontMetrics fm(f);
-      QString s;
-      QChar code(_sym->code());
-      QRect r(fm.boundingRect(code));
-      int _w = r.right() - r.left() + 2;
-      int _h = ((r.height() + 1) / 2) * 2;
-      _base = QPoint(-r.left(), -r.top());
+          _score = s;
+          _id = id;
 
-      _image = QImage(_w, _h, QImage::Format_MonoLSB);
-      QVector<QRgb> ct(2);
-      ct[0] = qRgb(255, 255, 255);
-      ct[1] = qRgb(0, 0, 0);
-      _image.setColorTable(ct);
-      _image.fill(0);
-
-      QPainter painter;
-      painter.begin(&_image);
-      painter.setFont(f);
-      painter.drawText(-r.left() + 1, -r.y(), code);
-      painter.end();
-
-      int ww = _w % 32;
-      if (ww == 0)
-            return;
-      uint mask = 0xffffffff << ww;
-      int n = ((_w + 31) / 32) - 1;
-      for (int i = 0; i < _h; ++i) {
-            uint* p = ((uint*)_image.scanLine(i)) + n;
-            *p = ((*p) & ~mask);
-            }
+          QFont f("Bravura");
+          f.setPixelSize(lrint(spatium * 4));
+          QFontMetrics fm(f);
+          QRectF r = _score->scoreFont()->bbox(id, 1);
+          int _w = r.right() - r.left() + 2;
+          int _h = ((r.height() + 1) / 2) * 2;
+          _base = QPoint(-r.left(), -r.top());
+          
+          _image = QImage(_w, _h, QImage::Format_MonoLSB);
+          QVector<QRgb> ct(2);
+          ct[0] = qRgb(255, 255, 255);
+          ct[1] = qRgb(0, 0, 0);
+          _image.setColorTable(ct);
+          _image.fill(0);
+          
+          QPainter painter;
+          painter.begin(&_image);
+          painter.setFont(f);
+          painter.drawText(-r.left() + 1, -r.y(), _score->scoreFont()->toString(id));
+          painter.end();
+          
+          int ww = _w % 32;
+          if (ww == 0)
+              return;
+          uint mask = 0xffffffff << ww;
+          int n = ((_w + 31) / 32) - 1;
+          for (int i = 0; i < _h; ++i) {
+              uint* p = ((uint*)_image.scanLine(i)) + n;
+              *p = ((*p) & ~mask);
+          }
+          
       }
 
 //---------------------------------------------------------
