@@ -412,6 +412,7 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
             vs->addWidget(v);
             stack->addWidget(vs);
             }
+//      v->setMag(magIdx, mag / (mscore->physicalDotsPerInch() / DPI));
       v->setMag(magIdx, mag);
       v->setOffset(xoffset, yoffset);
       }

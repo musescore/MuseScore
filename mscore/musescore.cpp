@@ -154,6 +154,10 @@ const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 extern bool savePositions(Score*, const QString& name, bool segments );
 extern TextPalette* textPalette;
 
+static constexpr double SCALE_MAX  = 16.0;
+static constexpr double SCALE_MIN  = 0.05;
+static constexpr double SCALE_STEP = 1.7;
+
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
@@ -533,11 +537,8 @@ MuseScore::MuseScore()
 
       fileTools->addSeparator();
       mag = new MagBox;
-      mag->setFocusPolicy(Qt::StrongFocus);
-      mag->setAccessibleName(tr("Zoom"));
-      mag->setFixedHeight(preferences.iconHeight + 10);  // hack
-      connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
-      connect(mag->lineEdit(), SIGNAL(editingFinished()), SLOT(magTextChanged()));
+      connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
+      connect(mag, SIGNAL(magTextChanged()), SLOT(magTextChanged()));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
@@ -1332,7 +1333,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   updateInputState(cv->score());
                   }
             cs = cv->score();
-            view->setFocusRect();
+            cv->setFocusRect();
             }
       else
             cs = 0;
@@ -1367,7 +1368,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (!cs) {
             setWindowTitle(MUSESCORE_NAME_VERSION);
             if (_navigator && _navigator->widget()) {
-                  navigator()->setScoreView(view);
+                  navigator()->setScoreView(cv);
                   navigator()->setScore(0);
                   }
             if (_inspector)
@@ -1392,10 +1393,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       selectionChanged(cs->selection().state());
 
       _sstate = STATE_DISABLED; // defeat optimization
-      changeState(view->mscoreState());
+      changeState(cv->mscoreState());
 
-      view->setFocus(Qt::OtherFocusReason);
-      setFocusProxy(view);
+      cv->setFocus(Qt::OtherFocusReason);
+      setFocusProxy(cv);
 
       getAction("file-save")->setEnabled(cs->isSavable());
       getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
@@ -1408,13 +1409,12 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
       updateUndoRedo();
 
-      if (view->magIdx() == MagIdx::MAG_FREE)
+      MagIdx midx = cv->magIdx();
+      if (midx == MagIdx::MAG_FREE)
             mag->setMag(view->lmag());
       else {
-            mag->blockSignals(true);
-            mag->setCurrentIndex(int(view->magIdx()));
-            mag->blockSignals(false);
-            magChanged(int(view->magIdx()));
+            mag->setMagIdx(midx);
+            magChanged(midx);
             }
 
       if (cs->parentScore())
@@ -2969,35 +2969,10 @@ void MuseScore::dirtyChanged(Score* s)
 //   magChanged
 //---------------------------------------------------------
 
-void MuseScore::magChanged(int idx)
+void MuseScore::magChanged(MagIdx idx)
       {
       if (cv)
-            cv->setMag((MagIdx)idx, mag->getMag(cv));
-      }
-
-//---------------------------------------------------------
-//   magTextChanged
-//---------------------------------------------------------
-
-void MuseScore::magTextChanged()
-      {
-      if (!cv || mag->currentText().isEmpty())
-            return;
-
-      QString s = mag->currentText();
-      if (s.right(1) == "%")
-            s = s.left(s.length()-1);
-
-      bool ok;
-      qreal magVal = s.toFloat(&ok);
-      if (ok) {
-            mag->setMag((double)(magVal/100.0));
-            cv->setMag(MagIdx::MAG_FREE, magVal/100.0);
-            }
-
-      //prevent the list from growing
-      if (mag->count()-1 > (int)MagIdx::MAG_FREE)
-            mag->removeItem(mag->count()-1);
+            cv->setMag(idx, mag->getLMag(cv));
       }
 
 //---------------------------------------------------------
@@ -3007,9 +2982,9 @@ void MuseScore::magTextChanged()
 void MuseScore::incMag()
       {
       if (cv) {
-            qreal _mag = cv->lmag() * 1.7;
-            if (_mag > 16.0)
-                  _mag = 16.0;
+            qreal _mag = cv->lmag() * SCALE_STEP;
+            if (_mag > SCALE_MAX)
+                  _mag = SCALE_MAX;
             cv->setMag(MagIdx::MAG_FREE, _mag);
             setMag(_mag);
             }
@@ -3022,9 +2997,9 @@ void MuseScore::incMag()
 void MuseScore::decMag()
       {
       if (cv) {
-            qreal _mag = cv->lmag() / 1.7;
-            if (_mag < 0.05)
-                  _mag = 0.05;
+            qreal _mag = cv->lmag() / SCALE_STEP;
+            if (_mag < SCALE_MIN)
+                  _mag = SCALE_MIN;
             cv->setMag(MagIdx::MAG_FREE, _mag);
             setMag(_mag);
             }
@@ -3032,6 +3007,7 @@ void MuseScore::decMag()
 
 //---------------------------------------------------------
 //   getMag
+//    return physical scale
 //---------------------------------------------------------
 
 double MuseScore::getMag(ScoreView* canvas) const
@@ -3041,6 +3017,7 @@ double MuseScore::getMag(ScoreView* canvas) const
 
 //---------------------------------------------------------
 //   setMag
+//    set logical scale
 //---------------------------------------------------------
 
 void MuseScore::setMag(double d)
@@ -3405,9 +3382,12 @@ bool MuseScore::restoreSession(bool always)
                                     }
                               }
                         else if (tag == "ScoreView") {
-                              double x = .0, y = .0, vmag = .0;
+                              qreal x       = .0;
+                              qreal y       = .0;
+                              qreal vmag    = 1.0;
                               MagIdx magIdx = MagIdx::MAG_FREE;
-                              int tab = 0, idx = 0;
+                              int tab       = 0;
+                              int idx       = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& tag(e.name());
                                     if (tag == "tab")
@@ -3427,8 +3407,6 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              if (magIdx != MagIdx::MAG_FREE)
-                                    vmag = mag->getMag(cv);
                               (tab == 0 ? tab1 : tab2)->initScoreView(idx, vmag, magIdx, x, y);
                               }
                         else if (tag == "tab")
