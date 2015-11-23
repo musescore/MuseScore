@@ -1199,11 +1199,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
 
 void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
-      if (_magIdx == MagIdx::MAG_PAGE_WIDTH || _magIdx == MagIdx::MAG_PAGE || _magIdx == MagIdx::MAG_DBL_PAGE) {
-            double m = mscore->getMag(this);
-            setMag(m);
-            }
-      update();
+      if (_magIdx != MagIdx::MAG_FREE)
+            setMag(mscore->getMag(this));
       }
 
 //---------------------------------------------------------
@@ -2378,10 +2375,11 @@ void ScoreView::setMag(qreal nmag)
                   grip[i] = r.translated(p);
                   }
             }
+      update();
       }
 
 //---------------------------------------------------------
-//   setMagIdx
+//   setMag
 //    mag - logical scale
 //---------------------------------------------------------
 

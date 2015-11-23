@@ -53,28 +53,35 @@ class MagValidator : public QValidator {
 //   MagBox
 //---------------------------------------------------------
 
-class MagBox : public QComboBox {
+class MagBox : protected QComboBox {
       Q_OBJECT
 
       double freeMag;
 
    private slots:
       void indexChanged(int);
+      void textChanged();
 
    signals:
-      void magChanged(int idx);
+      void magChanged(MagIdx);
 
    public:
       MagBox(QWidget* parent = 0);
       void setMag(double);
       void setMagIdx(MagIdx);
-      double getMag(ScoreView*);
+      double getMag(ScoreView*) const;
+      double getLMag(ScoreView*) const;
+      void setEnabled(bool val) { QComboBox::setEnabled(val); }
+      QString currentText() const { return QComboBox::currentText(); }
+      int count() const { return QComboBox::count(); }
+      void removeItem(int i) { QComboBox::removeItem(i); }
       };
 
 
-
-
 } // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::MagIdx)
+
 #endif
 
 
