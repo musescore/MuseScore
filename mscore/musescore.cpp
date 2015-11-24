@@ -347,7 +347,14 @@ MuseScore::MuseScore()
    : QMainWindow()
       {
       QScreen* screen      = QGuiApplication::primaryScreen();
+#if defined(Q_OS_WIN)
+      if (QSysInfo::WindowsVersion <= QSysInfo::WV_WINDOWS7)
+            _physicalDotsPerInch = screen->logicalDotsPerInch() * screen->devicePixelRatio();
+      else
+            _physicalDotsPerInch = screen->physicalDotsPerInch();  // physical resolution
+#else
       _physicalDotsPerInch = screen->physicalDotsPerInch();        // physical resolution
+#endif
       if (guiScaling == 0.0) {
             // set scale for icons, palette elements, window sizes, etc
             // the default values are hard coded in pixel sizes and assume ~96 DPI
