@@ -415,12 +415,12 @@ bool Score::saveFile()
 //                               + name + tr("> to backup <") + backupName + tr("> failed"));
                         }
                   }
-            }
 #ifdef Q_OS_WIN
       QFileInfo fileBackup(dir, backupName);
       QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
       SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
 #endif
+            }
       //
       // step 4
       // rename temp name into file name
