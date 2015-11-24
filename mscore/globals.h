@@ -95,8 +95,8 @@ struct MidiRemote {
 
 extern const char* stateName(ScoreState);
 
-static const qreal DPMM_DISPLAY    = 4;   // 100 DPI
-static const qreal PALETTE_SPATIUM = 1.9 * DPMM_DISPLAY;
+static constexpr qreal DPMM_DISPLAY    = 4;   // 100 DPI
+static constexpr qreal PALETTE_SPATIUM = 1.9 * DPMM_DISPLAY;
 
 extern QPaintDevice* pdev;
 

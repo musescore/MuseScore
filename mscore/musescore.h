@@ -371,6 +371,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QStringList _recentScores;
       QToolButton* _playButton;
 
+      qreal _physicalDotsPerInch;
+
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
@@ -434,8 +436,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void seqStopped();
       void cmdAppendMeasures();
       void cmdInsertMeasures();
-      void magChanged(int);
-      void magTextChanged();
+      void magChanged(MagIdx);
       void showPageSettings();
       void removeTab(int);
       void removeTab();
@@ -699,6 +700,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateInspector();
       void showSynthControl(bool);
       void showMixer(bool);
+
+      qreal physicalDotsPerInch() const { return _physicalDotsPerInch; }
       };
 
 extern MuseScore* mscore;

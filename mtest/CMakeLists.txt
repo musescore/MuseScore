@@ -17,7 +17,7 @@ enable_testing()
 include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
-      ${FREETYPE_INCLUDE_DIRS}
+      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
       )
 
 if (OMR)
@@ -108,6 +108,7 @@ add_executable(
 target_link_libraries(
       mtest
       ${QT_LIBRARIES}
+      mscore_freetype
       )
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")

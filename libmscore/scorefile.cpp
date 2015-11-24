@@ -355,26 +355,6 @@ bool Score::saveFile()
             MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
             return false;
             }
-
-      // if file was already saved in this session
-      // save but don't overwrite backup again
-
-      if (saved()) {
-            try {
-                  if (suffix == "mscx")
-                        saveFile(info);
-                  else
-                        saveCompressedFile(info, false);
-                  }
-            catch (QString s) {
-                  MScore::lastError = s;
-                  return false;
-                  }
-            undo()->setClean();
-            info.refresh();
-            update();
-            return true;
-            }
       //
       // step 1
       // save into temporary file to prevent partially overwriting
@@ -404,38 +384,43 @@ bool Score::saveFile()
             }
       temp.close();
 
-      //
-      // step 2
-      // remove old backup file if exists
-      //
-      QDir dir(info.path());
-      QString backupName = QString(".") + info.fileName() + QString(",");
-      if (dir.exists(backupName)) {
-            if (!dir.remove(backupName)) {
-//                  if (!MScore::noGui)
-//                        QMessageBox::critical(0, tr("MuseScore: Save File"),
-//                           tr("Removing old backup file ") + backupName + tr(" failed"));
-                  }
-            }
-
-      //
-      // step 3
-      // rename old file into backup
-      //
       QString name(info.filePath());
-      if (dir.exists(name)) {
-            if (!dir.rename(name, backupName)) {
-//                  if (!MScore::noGui)
-//                        QMessageBox::critical(0, tr("MuseScore: Save File"),
-//                           tr("Renaming old file <")
-//                            + name + tr("> to backup <") + backupName + tr("> failed"));
+      if (!saved()) {
+            // if file was already saved in this session
+            // save but don't overwrite backup again
+
+            //
+            // step 2
+            // remove old backup file if exists
+            //
+            QDir dir(info.path());
+            QString backupName = QString(".") + info.fileName() + QString(",");
+            if (dir.exists(backupName)) {
+                  if (!dir.remove(backupName)) {
+//                      if (!MScore::noGui)
+//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                               tr("Removing old backup file ") + backupName + tr(" failed"));
+                        }
                   }
-            }
+
+            //
+            // step 3
+            // rename old file into backup
+            //
+            if (dir.exists(name)) {
+                  if (!dir.rename(name, backupName)) {
+//                      if (!MScore::noGui)
+//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                               tr("Renaming old file <")
+//                               + name + tr("> to backup <") + backupName + tr("> failed"));
+                        }
+                  }
 #ifdef Q_OS_WIN
-      QFileInfo fileBackup(dir, backupName);
-      QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
-      SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
+            QFileInfo fileBackup(dir, backupName);
+            QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
+            SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
 #endif
+            }
       //
       // step 4
       // rename temp name into file name
@@ -1060,7 +1045,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "Synthesizer")
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
-                  _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
+                  _style.setSpatium (e.readDouble() * DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
                   setPageNumberOffset(e.readInt());
             else if (tag == "Division")

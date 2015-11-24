@@ -25,8 +25,9 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+#      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
       ${FREETYPE_INCLUDE_DIRS}
+      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
 if (SCRIPT_INTERFACE)
@@ -307,7 +308,6 @@ target_link_libraries(mscore
       qzip
       beatroot
       kqoauth
-      ${FREETYPE_LIBRARIES}
       )
 
 if (MINGW)
@@ -386,11 +386,12 @@ if (MINGW)
       portaudio
       portmidi
       winmm
+      mscore_freetype
       z
       )
 
    if (OMR)
-      target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
+      target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -435,8 +436,6 @@ if (MINGW)
       ${CROSSQT}/bin/icudt53.dll
       ${CROSSQT}/bin/Qt5Help.dll
       ${CROSSQT}/bin/Qt5CLucene.dll
-      $ENV{FREETYPE_DIR}/bin/freetype6.dll
-      $ENV{FREETYPE_DIR}/bin/zlib1.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -477,6 +476,7 @@ else (MINGW)
    target_link_libraries(mscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
+      mscore_freetype
       z
       dl
       pthread
@@ -496,7 +496,7 @@ else (MINGW)
       )
 
    if (OMR)
-      target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)
+      target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)

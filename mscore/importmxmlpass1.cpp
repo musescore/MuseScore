@@ -646,16 +646,16 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
       /*
       qDebug("MusicXml::doCredits()");
       qDebug("page format set (inch) w=%g h=%g tm=%g spatium=%g DPMM=%g DPI=%g",
-             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), MScore::DPMM, MScore::DPI);
+             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = pf->height() * 10 * MScore::DPI / score->spatium();
+      const double ph  = pf->height() * 10 * DPI / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
       /*
-      const double pw  = pf->width() * 10 * MScore::DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * MScore::DPI / score->spatium();
+      const double pw  = pf->width() * 10 * DPI / score->spatium();
+      const double tm  = pf->oddTopMargin() * 10 * DPI / score->spatium();
       const double tov = ph - tm;
       qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
       qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
@@ -737,14 +737,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         // found composer
                         addText2(vbox, score, w->words,
                                  TextStyleType::COMPOSER, AlignmentFlags::RIGHT | AlignmentFlags::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet
                         addText2(vbox, score, w->words,
                                  TextStyleType::POET, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
                   else {
@@ -785,7 +785,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      TextStyleType::TITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
       // add remaining credit-words as subtitles
@@ -794,7 +794,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      TextStyleType::SUBTITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
       // use metadata if no workable credit-words found
@@ -1355,7 +1355,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else
                               skipLogCurrElem();
                         }
-                  double _spatium = MScore::DPMM * (millimeter * 10.0 / tenths);
+                  double _spatium = DPMM * (millimeter * 10.0 / tenths);
                   if (preferences.musicxmlImportLayout)
                         _score->setSpatium(_spatium);
                   }

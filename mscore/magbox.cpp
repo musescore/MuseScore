@@ -18,6 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "preferences.h"
 #include "magbox.h"
 #include "scoreview.h"
 #include "libmscore/page.h"
@@ -27,19 +28,31 @@
 
 namespace Ms {
 
-static MagIdx startMag = MagIdx::MAG_100;
-
 //---------------------------------------------------------
 //   magTable
 //    list of strings shown in QComboBox "MagBox"
 //---------------------------------------------------------
 
-static const char* magTable[] = {
-     "25%", "50%", "75%", "100%", "150%", "200%", "400%", "800%", "1600%",
-      QT_TRANSLATE_NOOP("magTable","Page Width"),
-      QT_TRANSLATE_NOOP("magTable","Whole Page"),
-      QT_TRANSLATE_NOOP("magTable","Two Pages"),
-      ""
+struct MagEntry {
+      const char* txt;
+      MagIdx idx;
+      };
+
+static MagIdx startMag = MagIdx::MAG_100;
+
+static const MagEntry magTable[] = {
+     {  "25%",   MagIdx::MAG_25 },
+     {  "50%",   MagIdx::MAG_50 },
+     {  "75%",   MagIdx::MAG_75 },
+     {  "100%",  MagIdx::MAG_100 },
+     {  "150%",  MagIdx::MAG_150 },
+     {  "200%",  MagIdx::MAG_200 },
+     {  "400%",  MagIdx::MAG_400 },
+     {  "800%",  MagIdx::MAG_800 },
+     {  "1600%", MagIdx::MAG_1600 },
+     {  QT_TRANSLATE_NOOP("magTable","Page Width"), MagIdx::MAG_PAGE_WIDTH },
+     {  QT_TRANSLATE_NOOP("magTable","Whole Page"), MagIdx::MAG_PAGE },
+     {  QT_TRANSLATE_NOOP("magTable","Two Pages"),  MagIdx::MAG_DBL_PAGE },
      };
 
 //---------------------------------------------------------
@@ -56,15 +69,41 @@ MagBox::MagBox(QWidget* parent)
       setWhatsThis(tr("Zoom"));
       setValidator(new MagValidator(this));
 
-      unsigned int n = sizeof(magTable)/sizeof(*magTable) - 1;
-      for (unsigned int i =  0; i < n; ++i) {
-            QString ts(QCoreApplication::translate("magTable", magTable[i]));
-            addItem(ts, i);
-            if (MagIdx(i) == startMag)
+      int i = 0;
+      for (const MagEntry& e : magTable) {
+            QString ts(QCoreApplication::translate("magTable", e.txt));
+            addItem(ts, QVariant::fromValue(e.idx));
+            if (e.idx == startMag)
                   setCurrentIndex(i);
+            ++i;
             }
+      setMaxCount(i+1);
       addItem(QString("%1%").arg(freeMag * 100), int(MagIdx::MAG_FREE));
+      setFocusPolicy(Qt::StrongFocus);
+      setAccessibleName(tr("Zoom"));
+      setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(this, SIGNAL(currentIndexChanged(int)), SLOT(indexChanged(int)));
+      connect(lineEdit(), SIGNAL(returnPressed()), SLOT(textChanged()));
+      }
+
+//---------------------------------------------------------
+//   textChanged
+//---------------------------------------------------------
+
+void MagBox::textChanged()
+      {
+      if (!mscore->currentScoreView() || currentText().isEmpty())
+            return;
+      QString s = currentText();
+      if (s.right(1) == "%")
+            s = s.left(s.length()-1);
+
+      bool ok;
+      qreal magVal = s.toFloat(&ok);
+      if (ok) {
+            setMag((double)(magVal/100.0));
+            emit magChanged(MagIdx::MAG_FREE);
+            }
       }
 
 //---------------------------------------------------------
@@ -73,61 +112,78 @@ MagBox::MagBox(QWidget* parent)
 
 void MagBox::indexChanged(int idx)
       {
-      emit magChanged(idx);
+      emit magChanged(itemData(idx).value<MagIdx>());
       }
 
 //---------------------------------------------------------
-//   txt2mag
+//   getLMag
+//    get logical scale
 //---------------------------------------------------------
 
-double MagBox::getMag(ScoreView* canvas)
+double MagBox::getLMag(ScoreView* canvas) const
       {
-      switch(MagIdx(currentIndex())) {
-            case MagIdx::MAG_25:      return 0.25;
-            case MagIdx::MAG_50:      return 0.5;
-            case MagIdx::MAG_75:      return 0.75;
-            case MagIdx::MAG_100:     return 1.0;
-            case MagIdx::MAG_150:     return 1.5;
-            case MagIdx::MAG_200:     return 2.0;
-            case MagIdx::MAG_400:     return 4.0;
-            case MagIdx::MAG_800:     return 8.0;
-            case MagIdx::MAG_1600:    return 16.0;
-            default:               break;
-            }
+      return getMag(canvas) / (mscore->physicalDotsPerInch() / DPI);
+      }
 
-      QSizeF s(canvas->fsize());
-      double cw      = s.width();
-      double ch      = s.height();
-      double nmag    = canvas->mag();
+//---------------------------------------------------------
+//   getMag
+//    get physical scale
+//---------------------------------------------------------
+
+double MagBox::getMag(ScoreView* canvas) const
+      {
       Score* score   = canvas->score();
       if (score == 0)
             return 1.0;
+
+      MagIdx idx           = MagIdx(currentIndex());
+      qreal pmag           = mscore->physicalDotsPerInch() / DPI;
+      double cw            = canvas->width();
+      double ch            = canvas->height();
       const PageFormat* pf = score->pageFormat();
-      switch(MagIdx(currentIndex())) {
+      double nmag;
+
+      switch (idx) {
+            case MagIdx::MAG_25:      nmag = 0.25 * pmag; break;
+            case MagIdx::MAG_50:      nmag = 0.5  * pmag; break;
+            case MagIdx::MAG_75:      nmag = 0.75 * pmag; break;
+            case MagIdx::MAG_100:     nmag = 1.0  * pmag; break;
+            case MagIdx::MAG_150:     nmag = 1.5  * pmag; break;
+            case MagIdx::MAG_200:     nmag = 2.0  * pmag; break;
+            case MagIdx::MAG_400:     nmag = 4.0  * pmag; break;
+            case MagIdx::MAG_800:     nmag = 8.0  * pmag; break;
+            case MagIdx::MAG_1600:    nmag = 16.0 * pmag; break;
+
             case MagIdx::MAG_PAGE_WIDTH:      // page width
-                  nmag *= cw / (pf->width() * MScore::DPI);
+                  nmag = cw / (pf->width() * DPI);
                   break;
+
             case MagIdx::MAG_PAGE:     // page
                   {
-                  double mag1 = cw  / (pf->width() * MScore::DPI);
-                  double mag2 = ch / (pf->height() * MScore::DPI);
-                  nmag  *= (mag1 > mag2) ? mag2 : mag1;
+                  double mag1 = cw / (pf->width() *  DPI);
+                  double mag2 = ch / (pf->height() * DPI);
+                  nmag  = (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
+
             case MagIdx::MAG_DBL_PAGE:    // double page
                   {
-                  double mag1 = cw / (pf->width()*2*MScore::DPI+50.0);
-                  double mag2 = ch / (pf->height() * MScore::DPI);
-                  nmag  *= (mag1 > mag2) ? mag2 : mag1;
+                  double mag1 = cw / (pf->width() * 2 * DPI + 50);
+                  double mag2 = ch / (pf->height() * DPI);
+                  nmag  = (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
+
             case MagIdx::MAG_FREE:
-                  return freeMag;
+                  nmag = freeMag * pmag;
+                  break;
+
             default:
                   break;
             }
       if (nmag < 0.0001)
             nmag = canvas->mag();
+
       return nmag;
       }
 

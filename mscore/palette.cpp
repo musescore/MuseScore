@@ -746,7 +746,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
       {
       qreal _spatium = gscore->spatium();
       qreal mag = PALETTE_SPATIUM * extraMag / _spatium;
-      gscore->setSpatium(SPATIUM20  * MScore::DPI);
+      gscore->setSpatium(SPATIUM20);
 
       QPainter p(this);
       p.setRenderHint(QPainter::Antialiasing, true);

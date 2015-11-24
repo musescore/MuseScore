@@ -1013,10 +1013,8 @@ qDebug("Lyrics: melisma end segment not implemented");
       // convert font size to raster units, scaling if spatium-dependent
       qreal size = ts.size();
       if (ts.sizeIsSpatiumDependent())
-            size *= _spatium / (SPATIUM20 * PPI);     // <= (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * Mscore::DPI))
-      else
-            size *= MScore::DPI / PPI;
-      qreal y = -size * staffMag * 0.30;              // TODO: make this a style parameter (for now, a conventional percentage of the whole font height)
+            size *= _spatium / SPATIUM20;
+      qreal y = -size * staffMag * 0.30;        // TODO: make this a style parameter (for now, a conventional percentage of the whole font height)
 
       qreal x1 = x + l->pagePos().x();
       qreal x2 = nl->bbox().left() + nl->pagePos().x();

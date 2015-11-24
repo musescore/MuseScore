@@ -664,7 +664,7 @@ ScoreView::ScoreView(QWidget* parent)
 
       setContextMenuPolicy(Qt::DefaultContextMenu);
 
-      double mag  = preferences.mag;
+      double mag  = preferences.mag * (mscore->physicalDotsPerInch() / DPI);
       _matrix     = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
       imatrix     = _matrix.inverted();
       _magIdx     = preferences.mag == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
@@ -1199,11 +1199,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
 
 void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
-      if (_magIdx == MagIdx::MAG_PAGE_WIDTH || _magIdx == MagIdx::MAG_PAGE || _magIdx == MagIdx::MAG_DBL_PAGE) {
-            double m = mscore->getMag(this);
-            setMag(m);
-            }
-      update();
+      if (_magIdx != MagIdx::MAG_FREE)
+            setMag(mscore->getMag(this));
       }
 
 //---------------------------------------------------------
@@ -1372,7 +1369,7 @@ void ScoreView::moveCursor(int tick)
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
-      qreal mag = _spatium / (MScore::DPI * SPATIUM20);
+      qreal mag = _spatium / SPATIUM20;
       double w  = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       double h  = 6 * _spatium;
       //
@@ -1435,7 +1432,7 @@ void ScoreView::moveCursor()
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
       double h;
-      qreal mag               = _spatium / (MScore::DPI * SPATIUM20);
+      qreal mag               = _spatium / SPATIUM20;
       double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       Staff* staff            = _score->staff(staffIdx);
       StaffType* staffType    = staff->staffType();
@@ -1574,7 +1571,7 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score()->spatium();
 
-      qreal mag = _spatium / (MScore::DPI * SPATIUM20);
+      qreal mag = _spatium / SPATIUM20;
       double w  = (_spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag))/3;
       double h  = 6 * _spatium;
       //
@@ -2049,7 +2046,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
 void ScoreView::zoomStep(qreal step, const QPoint& pos)
       {
-      qreal _mag = mag();
+      qreal _mag = lmag();
 
       _mag *= qPow(1.1, step);
 
@@ -2070,7 +2067,7 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
             _mag = 0.05;
 
       mscore->setMag(_mag);
-      setMag(_mag);
+      setMag(_mag * (mscore->physicalDotsPerInch() / DPI));
       _magIdx = MagIdx::MAG_FREE;
 
       QPointF p2 = imatrix.map(pos);
@@ -2354,6 +2351,7 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
 
 //---------------------------------------------------------
 //   setMag
+//    nmag - physical scale
 //---------------------------------------------------------
 
 void ScoreView::setMag(qreal nmag)
@@ -2377,16 +2375,18 @@ void ScoreView::setMag(qreal nmag)
                   grip[i] = r.translated(p);
                   }
             }
+      update();
       }
 
 //---------------------------------------------------------
-//   setMagIdx
+//   setMag
+//    mag - logical scale
 //---------------------------------------------------------
 
 void ScoreView::setMag(MagIdx idx, double mag)
       {
       _magIdx = idx;
-      setMag(mag);
+      setMag(mag * (mscore->physicalDotsPerInch() / DPI));
       emit viewRectChanged();
       update();
       }
@@ -3723,6 +3723,15 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
       if (editObject->isText())
             static_cast<Text*>(editObject)->inputTransition(ie);
+      }
+
+//---------------------------------------------------------
+//   lmag
+//---------------------------------------------------------
+
+qreal ScoreView::lmag() const
+      {
+      return _matrix.m11() / (mscore->physicalDotsPerInch() / DPI);
       }
 
 //---------------------------------------------------------

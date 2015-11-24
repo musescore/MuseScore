@@ -58,6 +58,13 @@ release:
       make -j ${CPUS};                           \
 
 
+#freetype:
+#	cd build.debug; \
+#      mkdir freetype; \
+#      cd freetype; \
+#      cmake ../../thirdparty/freetype; \
+#      make -j ${CPUS}
+
 debug:
 	if test ! -d build.debug; then mkdir build.debug; fi; \
       cd build.debug;                                       \
