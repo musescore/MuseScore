@@ -178,8 +178,8 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
     // NB! Constant (0.022) has to be less than one sample or very freaky stuff can happen
     // (negative tempo etc)
     if (ptick != 0 && // Make sure to set the tempo in the beginning!!
-        (ptick<0 || labs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.022)) {
-      //qWarning() << "Skipping tempo change";
+        (ptick<0 || fabs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.022)) {
+      //qWarning() << "Skipping tempo change "<< t2t[tick]-t2t[0] << tempomap->tick2time(tick);
       ptick = tick;
       continue;
     }
@@ -536,7 +536,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
 
       int firstNonRest = 0, lastNonRest = 0;
 
-      qreal mag = converterDpi / MScore::DPI;
+      qreal mag = converterDpi / DPI;
 
       QString svgname = "";
 
