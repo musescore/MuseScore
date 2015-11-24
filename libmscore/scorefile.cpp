@@ -416,9 +416,9 @@ bool Score::saveFile()
                         }
                   }
 #ifdef Q_OS_WIN
-      QFileInfo fileBackup(dir, backupName);
-      QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
-      SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
+            QFileInfo fileBackup(dir, backupName);
+            QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
+            SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
 #endif
             }
       //
