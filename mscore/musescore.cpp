@@ -538,7 +538,6 @@ MuseScore::MuseScore()
       fileTools->addSeparator();
       mag = new MagBox;
       connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
-      connect(mag, SIGNAL(magTextChanged()), SLOT(magTextChanged()));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
