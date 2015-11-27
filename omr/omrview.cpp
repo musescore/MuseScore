@@ -232,17 +232,38 @@ void OmrView::paintEvent(QPaintEvent* event)
                   if (_showBarlines) {
                         p.setPen(QPen(Qt::blue, 3.0));
                         foreach(const QLineF& l, system.barLines)
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                      
+>>>>>>> e3f6219... fix bugs in text size for pattern match
+=======
+>>>>>>> dc84bba... first version of barline decoding
                             for(int w = 0; w < 10; w++)
                               p.drawLine(l.x1()+w, l.y1(), l.x2()+w, l.y2() ); //add width to barline
                         }
 
                   foreach (const OmrStaff& staff, system.staves()) {
                         foreach (const OmrNote* n, staff.notes()) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e3f6219... fix bugs in text size for pattern match
                             if (n->sym == SymId::noteheadBlack)
                                     p.setPen(QPen(QColor(255, 0, 0), 2.0));
                               else
                                     p.setPen(QPen(QColor(0, 0, 255), 2.0));
                               p.drawRect(*n);
+<<<<<<< HEAD
+=======
+//                              if (n->sym == quartheadSym)
+//                                    p.setPen(QPen(QColor(255, 0, 0), 2.0));
+//                              else
+//                                    p.setPen(QPen(QColor(0, 0, 255), 2.0));
+//                              p.drawRect(*n);
+>>>>>>> 57b9dad... compile omr module
+=======
+>>>>>>> e3f6219... fix bugs in text size for pattern match
                               }
                         }
                   }

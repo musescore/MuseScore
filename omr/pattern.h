@@ -21,11 +21,24 @@
 #ifndef __PATTERN_H__
 #define __PATTERN_H__
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 #include "libmscore/score.h"
 
 namespace Ms {
 
 enum class SymId;
+=======
+namespace Ms {
+
+>>>>>>> 0e4c6b6... add pattern source files
+=======
+#include "libmscore/score.h"
+
+namespace Ms {
+
+enum class SymId;
+>>>>>>> 27d1d6c... debug pattern match
 class Sym;
 
 //---------------------------------------------------------
@@ -36,26 +49,67 @@ class Sym;
 class Pattern {
    protected:
       QImage _image;
+<<<<<<< HEAD
+<<<<<<< HEAD
       SymId _id;
       QPoint _base;
     Score *_score;
+    float **model;
+    int rows;
+    int cols;
+=======
+      Sym* _sym = 0;
+      int _id;
+      QPoint _base;
+>>>>>>> 0e4c6b6... add pattern source files
+=======
+      SymId _id;
+      QPoint _base;
+    Score *_score;
+>>>>>>> 27d1d6c... debug pattern match
 
    public:
       Pattern();
       ~Pattern();
+<<<<<<< HEAD
+<<<<<<< HEAD
       Pattern(Score *s, SymId id, double spatium);
+      Pattern(Score *s, QString name);
+=======
+      Pattern(int id, Sym* symbol, double spatium);
+>>>>>>> 0e4c6b6... add pattern source files
+=======
+      Pattern(Score *s, SymId id, double spatium);
+>>>>>>> 27d1d6c... debug pattern match
       Pattern(QImage*, int, int, int, int);
 
       double match(const Pattern*) const;
       double match(const QImage* img, int col, int row) const;
+<<<<<<< HEAD
+      double match(const QImage* img, int col, int row, double bg_parm) const;
+
+      void dump() const;
+      const QImage* image() const { return &_image; }
+    int w() const       { return cols; /*_image.width();*/ }
+    int h() const       { return rows; /*_image.height();*/ }
+      bool dot(int x, int y) const;
+      SymId id() const      { return _id; }
+      void setId(SymId val) { _id = val; }
+=======
 
       void dump() const;
       const QImage* image() const { return &_image; }
       int w() const       { return _image.width(); }
       int h() const       { return _image.height(); }
       bool dot(int x, int y) const;
+<<<<<<< HEAD
+      int id() const      { return _id; }
+      void setId(int val) { _id = val; }
+>>>>>>> 0e4c6b6... add pattern source files
+=======
       SymId id() const      { return _id; }
       void setId(SymId val) { _id = val; }
+>>>>>>> 27d1d6c... debug pattern match
       const QPoint& base() const { return _base; }
       void setBase(const QPoint& v) { _base = v; }
       };

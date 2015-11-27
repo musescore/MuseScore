@@ -190,12 +190,24 @@ void OmrPanel::setOmrView(OmrView* v)
 void OmrPanel::processClicked()
       {
       if (omrView) {
-            omrView->omr()->process();
+            //omrView->omr()->process();
             omrView->update();
             setOmrView(omrView);    // update values
             }
       }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#include "omrpanel.moc"
+
+<<<<<<< HEAD
+
+>>>>>>> 57b9dad... compile omr module
+=======
+>>>>>>> f6416bf... compile omr module
+=======
+>>>>>>> 04531dc... compile omr module with mupdf
 }
 
 

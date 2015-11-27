@@ -390,10 +390,35 @@ if (MINGW)
       )
 
    if (OMR)
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
       # target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
+	#set(LIB_LIBZ /usr/local/lib/libz.a)
+	#set(LIB_GLFW /usr/local/lib/libglfw.a)
+      #target_link_libraries(mscore omr poppler mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+<<<<<<< HEAD
+      target_link_libraries(mscore omr poppler)
+=======
+      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
+>>>>>>> 57b9dad... compile omr module
+=======
+      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg z)
+>>>>>>> 04531dc... compile omr module with mupdf
+=======
+=======
+=======
+      # target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
+>>>>>>> f6ecc48... re-compilation
+>>>>>>> 5506baf... pick temp
 	set(LIB_LIBZ /usr/local/lib/libz.a)
 	set(LIB_GLFW /usr/local/lib/libglfw.a)
       target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+>>>>>>> 55570c6... activate pdf input and omr panel
+=======
+      target_link_libraries(mscore omr poppler fontconfig freetype lcms2)
+>>>>>>> d065ed4... add progress dialog to the omr process
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -494,10 +519,37 @@ else (MINGW)
       )
 
    if (OMR)
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+      target_link_libraries(mscore omr poppler)
+=======
+      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
+>>>>>>> 57b9dad... compile omr module
+=======
+      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg z)
+>>>>>>> 04531dc... compile omr module with mupdf
+=======
+=======
+=======
       # target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
+<<<<<<< HEAD
+>>>>>>> f6ecc48... re-compilation
+>>>>>>> 5506baf... pick temp
 	set(LIB_LIBZ /usr/local/lib/libz.a)
 	set(LIB_GLFW /usr/local/lib/libglfw.a)
       target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+>>>>>>> 55570c6... activate pdf input and omr panel
+=======
+	#set(LIB_LIBZ /usr/local/lib/libz.a)
+	#set(LIB_GLFW /usr/local/lib/libglfw.a)
+      #target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+=======
+>>>>>>> c974e91... add poppler to 3rd party folder
+      target_link_libraries(mscore omr poppler fontconfig freetype lcms2)
+>>>>>>> d065ed4... add progress dialog to the omr process
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)

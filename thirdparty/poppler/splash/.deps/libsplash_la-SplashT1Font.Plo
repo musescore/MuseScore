@@ -1,0 +1,3 @@
+libsplash_la-SplashT1Font.lo: SplashT1Font.cc ../config.h
+
+../config.h:
