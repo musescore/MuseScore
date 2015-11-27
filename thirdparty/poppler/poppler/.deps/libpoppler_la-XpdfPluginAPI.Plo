@@ -1,0 +1,3 @@
+libpoppler_la-XpdfPluginAPI.lo: XpdfPluginAPI.cc ../config.h
+
+../config.h:

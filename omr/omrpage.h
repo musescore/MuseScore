@@ -26,7 +26,14 @@
 #include "libmscore/fraction.h"
 #include "libmscore/clef.h"
 #include "libmscore/xml.h"
+<<<<<<< HEAD
+<<<<<<< HEAD
 #include "libmscore/sym.h"
+=======
+>>>>>>> 57b9dad... compile omr module
+=======
+#include "libmscore/sym.h"
+>>>>>>> cf58f72... fix new bugs introduced by rebasing
 
 namespace Ms {
 
@@ -162,7 +169,7 @@ class OmrSystem {
       OmrPage* _page;
       QList<OmrStaff>  _staves;
       QList<OmrMeasure>_measures;
-
+    
       void searchNotes(QList<OmrNote*>*, int x1, int x2, int y, int line);
 
    public:
@@ -175,7 +182,12 @@ class OmrSystem {
 
       QList<QLine> barLines;
 
+<<<<<<< HEAD
+      void searchSysBarLines();
+=======
       void searchBarLines();
+>>>>>>> 4615c3e... consider different number of staves in systems
+      float searchBarLinesvar(int n_staff);
       void searchNotes();
       };
 
@@ -187,6 +199,7 @@ class OmrPage {
       Omr* _omr;
       QImage _image;
       double _spatium;
+      double _ratio;
 
       int cropL, cropR;       // crop values in words (32 bit) units
       int cropT, cropB;       // crop values in pixel units
@@ -203,6 +216,7 @@ class OmrPage {
       double skew(const QRect&);
       void deSkew();
       void getStaffLines();
+      void getRatio();
       double xproject2(int y);
       int xproject(const uint* p, int wl);
       void radonTransform(ulong* projection, int w, int n, const QRect&);
@@ -228,19 +242,32 @@ class OmrPage {
 
       const QList<QRect>& slices() const { return _slices;  }
       double spatium() const             { return _spatium; }
+      double ratio() const   {return _ratio;}
       double staffDistance() const;
       double systemDistance() const;
       void readHeader(Score* score);
       void readBarLines(int);
+      float searchBarLines(int start_staff, int end_staff);
+<<<<<<< HEAD
+<<<<<<< HEAD
+      void identifySystems();
+    
+=======
+    void identifySystems();
+=======
+      void identifySystems();
+>>>>>>> 8d0232d... debug skeleton creation
 
+>>>>>>> 4615c3e... consider different number of staves in systems
       const QList<OmrSystem>& systems() const { return _systems; }
-      QList<OmrSystem>& systems() { return _systems; }
+      //QList<OmrSystem>& systems() { return _systems; }
       OmrSystem* system(int idx)  { return &_systems[idx]; }
 
 
       void write(Xml&) const;
       void read(XmlReader&);
       bool dot(int x, int y) const;
+      bool isBlack(int x, int y) const;
       };
 
 }

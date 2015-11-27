@@ -21,7 +21,8 @@
 #ifndef __PDF_H__
 #define __PDF_H__
 
-typedef struct fz_document_s fz_document;
+class PDFDoc;
+class QImageOutputDev;
 
 namespace Ms {
 
@@ -31,8 +32,8 @@ namespace Ms {
 
 class Pdf {
       static int references;
-      fz_document* doc;
-
+      PDFDoc* _doc;
+      QImageOutputDev* imgOut;
    public:
       Pdf();
       bool open(const QString& path);

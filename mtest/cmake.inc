@@ -40,7 +40,11 @@ if (NOT MINGW AND NOT APPLE)
 endif (NOT MINGW AND NOT APPLE)
 
 if (OMR)
+<<<<<<< HEAD
+      target_link_libraries(${TARGET} omr poppler)
+=======
       target_link_libraries(${TARGET} omr mupdf openjpeg jbig2dec jpeg)
+>>>>>>> 57b9dad... compile omr module
       if (OCR)
             target_link_libraries(${TARGET} tesseract_api)
       endif (OCR)

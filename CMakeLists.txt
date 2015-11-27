@@ -106,6 +106,7 @@ option(BUILD_PCH "Build using precompiled headers." OFF)
 
 
 
+
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")
@@ -559,7 +560,23 @@ if (ZERBERUS)
 endif (ZERBERUS)
 
 if (OMR)
-      subdirs (omr)
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+      subdirs (omr thirdparty/poppler)
+=======
+      subdirs (poppler omr)
+>>>>>>> d065ed4... add progress dialog to the omr process
+=======
+      subdirs (omr thirdparty/poppler)
+<<<<<<< HEAD
+>>>>>>> c974e91... add poppler to 3rd party folder
+=======
+      subdirs (omr thirdparty/lcms2)
+>>>>>>> 1b9d32e... update cmake files
+=======
+      subdirs (omr thirdparty/poppler thirdparty/lcms2)
+>>>>>>> bf0472b... update cmake files
 endif (OMR)
 
 if (OSC)
@@ -584,8 +601,31 @@ include_directories(
    ${LAME_INCLUDE_DIR}
 #   ${FREETYPE_INCLUDE_DIRS}
    ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
+<<<<<<< HEAD
+<<<<<<< HEAD
+#   ${PROJECT_SOURCE_DIR}/poppler
 )
 
+if (OMR)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
+endif (OMR)
+
+>>>>>>> add poppler to 3rd party folder
+=======
+   ${PROJECT_SOURCE_DIR}/poppler
+=======
+#   ${PROJECT_SOURCE_DIR}/poppler
+>>>>>>> c974e91... add poppler to 3rd party folder
+)
+
+if (OMR)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/lcms2/include)
+endif (OMR)
+
+>>>>>>> d065ed4... add progress dialog to the omr process
 ##
 ##  Include packaging
 ##
