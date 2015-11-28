@@ -5352,11 +5352,18 @@ void ScoreView::cmdInsertMeasures(int n, Element::Type type)
       _score->startCmd();
       for (int i = 0; i < n; ++i)
             _score->insertMeasure(type, mb);
-
-      // measure may be part of mm rest:
-      if (!_score->styleB(StyleIdx::createMultiMeasureRests) && type == Element::Type::MEASURE)
-            _score->select(mb, SelectType::SINGLE, 0);
       _score->endCmd();
+
+      if (mb->type() == Element::Type::MEASURE) {
+            // re-select the original measure (which may now be covered by an mmrest)
+            // do this after the layout so mmrests are updated
+            Measure* m = _score->tick2measureMM(mb->tick());
+            _score->select(m, SelectType::SINGLE, 0);
+            }
+      else {
+            // original selection was not a measure, just re-select it
+            _score->select(mb, SelectType::SINGLE, 0);
+            }
       }
 
 //---------------------------------------------------------
