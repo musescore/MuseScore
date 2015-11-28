@@ -5401,7 +5401,7 @@ MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
 
       Element* e = _score->selection().element();
       if (e) {
-            if (e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX)
+            if (e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX || e->type() == Element::Type::HBOX)
                   return static_cast<MeasureBase*>(e);
             }
       QMessageBox::warning(0, "MuseScore",

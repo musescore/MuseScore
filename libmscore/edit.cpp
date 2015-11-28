@@ -2668,8 +2668,12 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
                   }
             }
       else {
-            if (!mb->links())
-                  qDebug("searchMeasureBase: no links");
+            if (!mb->links()) {
+                  if (mb->score() == score)
+                        return mb;
+                  else
+                        qDebug("searchMeasureBase: no links");
+                  }
             else {
                   for (ScoreElement* m : *mb->links()) {
                         if (m->score() == score)
@@ -2737,7 +2741,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         }
 
                   Measure* m = static_cast<Measure*>(mb);
-                  Measure* mi = static_cast<Measure*>(im);
+                  Measure* mi = im ? score->tick2measure(im->tick()) : nullptr;
                   m->setTimesig(f);
                   m->setLen(f);
                   ticks = m->ticks();
