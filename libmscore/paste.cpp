@@ -156,6 +156,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               tuplet->setTrack(e.track());
                               tuplet->read(e);
                               int tick = e.tick();
+                              // no paste into local time signature
+                              if (staff(dstStaffIdx)->timeStretch(tick) != Fraction(1, 1)) {
+                                    qDebug("paste into local time signature");
+                                    return false;
+                                    }
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
@@ -174,6 +179,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               cr->read(e);
                               cr->setSelected(false);
                               int tick = e.tick();
+                              // no paste into local time signature
+                              if (staff(dstStaffIdx)->timeStretch(tick) != Fraction(1, 1)) {
+                                    qDebug("paste into local time signature");
+                                    return false;
+                                    }
                               if (cr->isGrace())
                                     graceNotes.push_back(static_cast<Chord*>(cr));
                               else {
