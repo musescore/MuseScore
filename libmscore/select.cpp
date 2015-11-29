@@ -1041,7 +1041,7 @@ static bool checkEnd(Element* e, int endTick)
 //---------------------------------------------------------
 //   canCopy
 //    return false if range selection intersects a tuplet
-//    or a tremolo
+//    or a tremolo, or a local timne signature
 //---------------------------------------------------------
 
 bool Selection::canCopy() const
@@ -1051,7 +1051,8 @@ bool Selection::canCopy() const
 
       int endTick = _endSegment ? _endSegment->tick() : score()->lastSegment()->tick();
 
-      for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx)
+      for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
+
             for (int voice = 0; voice < VOICES; ++voice) {
                   int track = staffIdx * VOICES + voice;
                   if (!canSelectVoice(track))
@@ -1076,6 +1077,14 @@ bool Selection::canCopy() const
                   if (checkEnd(endSegmentSelection->element(track), endTick))
                         return false;
                   }
+
+            // loop through measures on this staff checking for local time signatures
+            for (Measure* m = _startSegment->measure(); m && m->tick() < endTick; m = m->nextMeasure()) {
+                  if (_score->staff(staffIdx)->timeStretch(m->tick()) != Fraction(1, 1))
+                        return false;
+                  }
+
+            }
       return true;
       }
 
