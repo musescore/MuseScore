@@ -2322,6 +2322,13 @@ void Score::cmdFullMeasureRest()
             Segment* s2 = selection().endSegment();
             int stick1 = selection().tickStart();
             int stick2 = selection().tickEnd();
+            if (styleB(StyleIdx::createMultiMeasureRests)) {
+                  // use underlying measures
+                  if (s1 && s1->measure()->isMMRest())
+                        s1 = tick2segment(stick1);
+                  if (s2 && s2->measure()->isMMRest())
+                        s2 = tick2segment(stick2, true);
+                  }
 
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::Type::ChordRest)
@@ -2363,8 +2370,12 @@ void Score::cmdFullMeasureRest()
                               break;
                         }
                   }
-            s1 = tick2segment(stick1);
-            s2 = tick2segment(stick2);
+            // selected range is probably empty now and possibly subsumed by an mmrest
+            // so updating selection requires forcing mmrests to be updated first
+            if (styleB(StyleIdx::createMultiMeasureRests))
+                  createMMRests();
+            s1 = tick2segmentMM(stick1);
+            s2 = tick2segmentMM(stick2, true);
             if (s1 == 0 || s2 == 0)
                   deselectAll();
             else {
