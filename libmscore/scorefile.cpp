@@ -381,6 +381,7 @@ bool Score::saveFile()
       temp.close();
 
       QString name(info.filePath());
+      QDir dir(info.path());
       if (!saved()) {
             // if file was already saved in this session
             // save but don't overwrite backup again
@@ -389,7 +390,6 @@ bool Score::saveFile()
             // step 2
             // remove old backup file if exists
             //
-            QDir dir(info.path());
             QString backupName = QString(".") + info.fileName() + QString(",");
             if (dir.exists(backupName)) {
                   if (!dir.remove(backupName)) {
@@ -417,6 +417,17 @@ bool Score::saveFile()
             SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
 #endif
             }
+      else {
+            // file has previously been saved - remove the old file
+            if (dir.exists(name)) {
+                  if (!dir.remove(name)) {
+//                      if (!MScore::noGui)
+//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                               tr("Removing old file") + name + tr(" failed"));
+                        }
+                  }
+            }
+
       //
       // step 4
       // rename temp name into file name
