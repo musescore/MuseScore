@@ -340,8 +340,10 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
   	    	createSvgCollection(&uz, tScore, prefix, orig_t2t, t0);
   	    }
       }
-      else if (partsinfo.contains("demo")) { // create scrolling of full note
+      else if (partsinfo.contains("demo")) { // create svg of just one excerpt
         Score * tScore = cs;
+        int ind = partsinfo["demo"].toInt();
+        if (ind>0) tScore = thisScore->excerpts()[ind-1]->partScore();
         createSvgCollection(&uz, tScore, "demo/", orig_t2t, t0);
       }
 	}
@@ -559,12 +561,19 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
       
       // Find max system width
       qreal max_w = 0;
+      int nsystems = 0;
       foreach( Page* page, score->pages() )
          foreach( System* sys, *(page->systems()) ) {
-            if (sys->isVbox()) continue; // Skip vboxes like the heading
+            if (!sys->isVbox()) nsystems++; // Skip vboxes like the heading
             qreal cur_w = sys->pageBoundingRect().width();
             if (cur_w>max_w) max_w = cur_w;
         }
+
+      // Stretch the only system to the end by adding a hbox
+      if (nsystems==1) {
+        score->insertMeasure(Element::Type::HBOX,0);
+        score->doLayout();
+      }
 
       foreach( Page* page, score->pages() ) {
          foreach( System* sys, *(page->systems()) ) {
@@ -575,8 +584,8 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
             w = max_w + 2*h_margin; // Make systems uniform width
             h = sys_rect.height() + top_margin + bot_margin;
 
-            if (sys_rect.width()>max_w) w = sys_rect.width(); // Make sure vboxes are not cropped
- 
+            //if (sys_rect.width()>max_w) w = sys_rect.width(); // Make sure vboxes are not cropped
+
             svgname = basename + QString::number(count++)+".svg";
             sobj["img"] = svgname;
             sobj["width"] = w*mag;
