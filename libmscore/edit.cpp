@@ -2061,22 +2061,22 @@ void Score::cmdDeleteSelectedMeasures()
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
 
-            undoRemoveMeasures(is, ie);
+            score->undoRemoveMeasures(is, ie);
 
             // adjust views
-            Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();
-            foreach(MuseScoreView* v, score->viewer)
+            Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : score->firstMeasure();
+            for (MuseScoreView* v : score->viewer)
                   v->adjustCanvasPosition(focusOn, false);
 
             if (createEndBar) {
                   Measure* lastMeasure = score->lastMeasure();
                   if (lastMeasure && lastMeasure->endBarLineType() == BarLineType::NORMAL)
-                        undoChangeEndBarLineType(lastMeasure, BarLineType::END);
+                        score->undoChangeEndBarLineType(lastMeasure, BarLineType::END);
                   }
 
             // insert correct timesig after deletion
             Measure* mBeforeSel = is->prevMeasure();
-            Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
+            Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : score->firstMeasure();
             if (mAfterSel && lastDeletedSig) {
                   bool changed = true;
                   if (mBeforeSel) {
