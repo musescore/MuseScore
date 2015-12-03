@@ -1531,9 +1531,15 @@ Element* Note::drop(const DropData& data)
                         delete e;
                         return 0;
                         }
-                  e->setParent(ch);
+                  // calculate correct transposed tpc
+                  Note* n = static_cast<Note*>(e);
+                  Interval v = part()->instrument(ch->tick())->transpose();
+                  v.flip();
+                  n->setTpc2(Ms::transposeTpc(n->tpc1(), v, true));
+                  // replace this note with new note
+                  n->setParent(ch);
                   score()->undoRemoveElement(this);
-                  score()->undoAddElement(e);
+                  score()->undoAddElement(n);
                   }
                   break;
 
