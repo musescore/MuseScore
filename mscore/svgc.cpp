@@ -340,6 +340,10 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
   	    	createSvgCollection(&uz, tScore, prefix, orig_t2t, t0);
   	    }
       }
+      else if (partsinfo.contains("demo")) { // create scrolling of full note
+        Score * tScore = cs;
+        createSvgCollection(&uz, tScore, "demo/", orig_t2t, t0);
+      }
 	}
   uz.close();
 

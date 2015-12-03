@@ -102,18 +102,16 @@ namespace Ms {
 
    void post_linearize(Score * score) {
       // Remove volta markers
-      for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
-         Spanner* s = p.second;
-         if (s->type() != Element::Type::VOLTA) continue;
-         //qDebug("VOLTA!");
+      auto smap = score->spannerMap().map();
+      for (auto it = smap.cbegin();it != smap.cend();++it) {
+         Spanner* s = (*it).second;
+         if (!s || s->type() != Element::Type::VOLTA) continue;
          score->removeSpanner(s);
       }
 
       for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
          // Remove repeats
          if (m->repeatFlags()!=Repeat::NONE) {
-
-
             m->setRepeatFlags(Repeat::NONE);
             m->setRepeatCount(0);
          }
