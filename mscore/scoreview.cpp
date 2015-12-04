@@ -2972,8 +2972,14 @@ void ScoreView::cmd(const QAction* a)
                   }
             else {
                   _score->startCmd();
-                  foreach(Element* e, _score->selection().elements())
+                  for (Element* e : _score->selection().elements()) {
                         e->reset();
+                        if (e->isSpanner()) {
+                              Spanner* sp = static_cast<Spanner*>(e);
+                              for (SpannerSegment* ss : sp->spannerSegments())
+                                    ss->reset();
+                              }
+                        }
                   _score->endCmd();
                   }
             _score->setLayoutAll(true);
