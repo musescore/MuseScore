@@ -2014,6 +2014,9 @@ void MusicXMLParserPass2::measure(const QString& partId,
       if (_e.attributes().value("implicit") == "yes")
             measure->setIrregular(true);
 
+      // set measure's RepeatFlag to none because musicXML is allowing single measure repeat and no ordering in repeat start and end barlines
+      measure->setRepeatFlag(Repeat::NONE);
+
       Fraction mTime; // current time stamp within measure
       Fraction prevTime; // time stamp within measure previous chord
       Chord* prevChord = 0;       // previous chord
@@ -3094,10 +3097,12 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
       bool visible = true;
       if (determineBarLineType(barStyle, repeat, type, visible)) {
             if (type == BarLineType::START_REPEAT) {
-                  measure->setRepeatFlags(Repeat::START);
+                  // combine start_repeat flag with current state initialized during measure parsing
+                  measure->setRepeatFlag(Repeat::START);
                   }
             else if (type == BarLineType::END_REPEAT) {
-                  measure->setRepeatFlags(Repeat::END);
+                  // combine end_repeat flag with current state initialized during measure parsing
+                  measure->setRepeatFlag(Repeat::END);
                   }
             else {
                   if (loc == "right")
