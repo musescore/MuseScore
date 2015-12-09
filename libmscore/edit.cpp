@@ -2037,18 +2037,34 @@ void Score::cmdDeleteSelectedMeasures()
             }
 
 
-      // get the last deleted timesig in order to restore after deletion
+      // get the last deleted timesig & keysig in order to restore after deletion
       TimeSig* lastDeletedSig = 0;
+      KeySig* lastDeletedKeySig = 0;
+      KeySigEvent lastDeletedKeySigEvent;
+      bool transposeKeySigEvent = false;
       for (MeasureBase* mb = ie;; mb = mb->prev()) {
             if (mb->isMeasure()) {
                   Measure* m = static_cast<Measure*>(mb);
                   Segment* sts = m->findSegment(Segment::Type::TimeSig, m->tick());
-                  if (sts) {
+                  if (sts && !lastDeletedSig)
                         lastDeletedSig = static_cast<TimeSig*>(sts->element(0));
-                        break;
+                  sts = m->findSegment(Segment::Type::KeySig, m->tick());
+                  if (sts && !lastDeletedKeySig) {
+                        lastDeletedKeySig = static_cast<KeySig*>(sts->element(0));
+                        if (lastDeletedKeySig) {
+                              lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
+                              if (!styleB(StyleIdx::concertPitch) && !lastDeletedKeySigEvent.isAtonal() && !lastDeletedKeySigEvent.custom()) {
+                                    // convert to concert pitch
+                                    transposeKeySigEvent = true;
+                                    Interval v = staff(0)->part()->instrument(m->tick())->transpose();
+                                    if (!v.isZero())
+                                          lastDeletedKeySigEvent.setKey(transposeKey(lastDeletedKeySigEvent.key(), v));
+                                    }
+                              }
                         }
+                  if (lastDeletedSig && lastDeletedKeySig)
+                        break;
                   }
-
             if (mb == is)
                   break;
             }
@@ -2093,6 +2109,26 @@ void Score::cmdDeleteSelectedMeasures()
                               nts->setParent(ns);
                               nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
                               score->undoAddElement(nts);
+                              }
+                        }
+                  }
+            // insert correct keysig if necessary
+            if (mAfterSel && !mBeforeSel && lastDeletedKeySig) {
+                  Segment* s = mAfterSel->findSegment(Segment::Type::KeySig, mAfterSel->tick());
+                  if (!s) {
+                        Segment* ns = mAfterSel->undoGetSegment(Segment::Type::KeySig, mAfterSel->tick());
+                        for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                              KeySigEvent nkse = lastDeletedKeySigEvent;
+                              if (transposeKeySigEvent) {
+                                    Interval v = staff(staffIdx)->part()->instrument(0)->transpose();
+                                    v.flip();
+                                    nkse.setKey(transposeKey(nkse.key(), v));
+                                    }
+                              KeySig* nks = new KeySig(score);
+                              nks->setTrack(staffIdx * VOICES);
+                              nks->setParent(ns);
+                              nks->setKeySigEvent(nkse);
+                              score->undoAddElement(nks);
                               }
                         }
                   }
