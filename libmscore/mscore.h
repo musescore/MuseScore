@@ -420,6 +420,10 @@ class MScore : public QObject {
 
       static bool pdfPrinting;
 
+      static qreal verticalPageGap;
+      static qreal horizontalPageGapEven;
+      static qreal horizontalPageGapOdd;
+
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* qml();
 #endif
