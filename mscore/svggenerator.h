@@ -49,6 +49,8 @@
 #include <QtCore/qobjectdefs.h>
 #include <QtCore/qscopedpointer.h>
 
+#include "libmscore/element.h" // for Element class
+
 class SvgGeneratorPrivate;
 
 //---------------------------------------------------------
@@ -99,6 +101,9 @@ public:
 
     void setResolution(int dpi);
     int resolution() const;
+
+    void setElement(const Ms::Element* e);
+
 protected:
     QPaintEngine *paintEngine() const;
     int metric(QPaintDevice::PaintDeviceMetric metric) const;
