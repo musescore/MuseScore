@@ -606,7 +606,6 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
             return 0;
 
       System* s = m->system();
-//      qreal sy1 = 0;
       qreal y   = p.y() - s->canvasPos().y();
 
       int i;
@@ -632,7 +631,6 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
             else
                   sy2 = s->page()->height() - s->pos().y();   // s->height();
             if (y > sy2) {
-//                  sy1 = sy2;
                   i   = ni;
                   continue;
                   }
@@ -643,7 +641,7 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       QPointF pppp = p - m->canvasPos();
       int strack = i * VOICES;
       if (!staff(i))
-            return nullptr;
+            return 0;
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
@@ -990,7 +988,7 @@ int Score::midiChannel(int idx) const
 
 Page* Score::searchPage(const QPointF& p) const
       {
-      foreach(Page* page, pages()) {
+      for (Page* page : pages()) {
             if (page->bbox().translated(page->pos()).contains(p))
                   return page;
             }
