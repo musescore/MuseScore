@@ -1575,6 +1575,12 @@ void Score::doLayout()
       // but then it's used for drag and drop and should be set to new version
       if (_mscVersion <= 114)
             _mscVersion = MSCVERSION;     // for later drag & drop usage
+
+      if (_layoutMode == LayoutMode::SYSTEM) {
+            Page* page = _pages.front();
+            System* system = _systems.back();
+            page->setHeight(system->abbox().bottom());
+            }
       }
 
 //---------------------------------------------------------
@@ -3277,12 +3283,13 @@ Page* Score::getEmptyPage()
       qreal x, y;
       if (MScore::verticalOrientation()) {
             x = 0.0;
-            y = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().y() + page->height() + 5;
+            y = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().y() + page->height() + MScore::verticalPageGap;
             }
       else {
             y = 0.0;
             x = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().x()
-               + page->width() + (((curPage+_pageNumberOffset) & 1) ? 50.0 : 1.0);
+               + page->width()
+               + (((curPage+_pageNumberOffset) & 1) ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven);
             }
       ++curPage;
       page->setPos(x, y);
