@@ -160,11 +160,17 @@ QPointF BarLine::pagePos() const
       qreal yp = y();
       if (system) {
             // get first not hidden staff
-            int staffIdx1 = staffIdx();
+            int startIdx = staffIdx();
+            int endIdx = startIdx + span();
+            int staffIdx1 = startIdx;
             Staff* staff1 = score()->staff(staffIdx1);
             SysStaff* sysStaff1 = system->staff(staffIdx1);
-            while ( staff1 && sysStaff1 && !(sysStaff1->show() && staff1->show()) ) {
-                  staffIdx1++;
+            while (staff1 && sysStaff1 && !(sysStaff1->show() && staff1->show())) {
+                  if (++staffIdx1 >= endIdx) {
+                        // no visible staves spanned; just use first
+                        staffIdx1 = startIdx;
+                        break;
+                        }
                   staff1 = score()->staff(staffIdx1);
                   sysStaff1 = system->staff(staffIdx1);
                   }
