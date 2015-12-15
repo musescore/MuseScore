@@ -49,6 +49,8 @@ class Excerpt : public QObject {
       void read(XmlReader&);
 
       bool operator!=(const Excerpt&) const;
+      bool operator==(const Excerpt&) const;
+
       QString title() const           { return _title; }
       void setTitle(const QString& s) { _title = s;    }
       
