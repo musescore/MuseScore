@@ -1015,7 +1015,7 @@ void Palette::dropEvent(QDropEvent* event)
                   s->load(filePath);
                   e = s;
                   QFileInfo f(filePath);
-                  name = f.baseName();
+                  name = f.completeBaseName();
                   }
             }
       else if (data->hasFormat(mimeSymbolFormat)) {
