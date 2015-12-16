@@ -216,7 +216,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   QString path = mscore->getPaletteFilename(true);
                   if (!path.isEmpty()) {
                         QFileInfo fi(path);
-                        Palette* palette = newPalette(fi.baseName(), slot);
+                        Palette* palette = newPalette(fi.completeBaseName(), slot);
                         palette->read(path);
                         }
                   }
