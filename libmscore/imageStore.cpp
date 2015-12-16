@@ -145,7 +145,7 @@ static void dumpHash(const QByteArray& _hash)
 
 ImageStoreItem* ImageStore::getImage(const QString& path) const
       {
-      QString s = QFileInfo(path).baseName();
+      QString s = QFileInfo(path).completeBaseName();
       if (s.size() != 32) {
             //
             // some limited support for backward compatibility

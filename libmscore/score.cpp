@@ -3926,7 +3926,7 @@ QString Score::title()
             fn = metaTag("workTitle");
 
       if (fn.isEmpty())
-            fn = fileInfo()->baseName();
+            fn = fileInfo()->completeBaseName();
 
       if (fn.isEmpty())
             fn = "Untitled";
