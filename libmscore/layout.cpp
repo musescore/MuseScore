@@ -2741,11 +2741,20 @@ void Score::layoutFingering(Fingering* f)
       {
       if (f == 0)
             return;
-      TextStyleType tst = f->textStyleType();
-      if (tst != TextStyleType::FINGERING && tst != TextStyleType::RH_GUITAR_FINGERING && tst != TextStyleType::STRING_NUMBER)
-            return;
 
-      Note* note   = f->note();
+      Note* note      = f->note();
+      Accidental* acc = note->accidental();
+      qreal accX      = 0.0;
+      if (acc)
+            accX = acc->pos().x();
+
+      TextStyleType tst = f->textStyleType();
+      if (tst != TextStyleType::FINGERING && tst != TextStyleType::RH_GUITAR_FINGERING && tst != TextStyleType::STRING_NUMBER) {
+            // position relative to accidental if present
+            f->setUserXoffset(accX);
+            return;
+            }
+
       Chord* chord = note->chord();
       Staff* staff = chord->staff();
       Part* part   = staff->part();
@@ -2793,7 +2802,8 @@ void Score::layoutFingering(Fingering* f)
                   }
             }
       else {
-            x -= spatium();
+            // position relative to accidental if present
+            x += accX - spatium();
             }
       f->setUserOff(QPointF(x, y));
       }
