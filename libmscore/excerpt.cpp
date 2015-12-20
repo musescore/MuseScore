@@ -106,6 +106,12 @@ void createExcerpt(Excerpt* excerpt)
       QList<Part*>& parts = excerpt->parts();
       QList<int> srcStaves;
 
+      // create title frame for all scores if not already there
+      MeasureBase* measure = oscore->first();
+      if (!measure || (measure->type() != Element::Type::VBOX))
+            measure = oscore->insertMeasure(Element::Type::VBOX, measure);
+      VBox* titleFrameScore = static_cast<VBox*>(measure);
+
       // clone layer:
       for (int i = 0; i < 32; ++i) {
             score->layerTags()[i] = oscore->layerTags()[i];
@@ -139,13 +145,7 @@ void createExcerpt(Excerpt* excerpt)
       //
       // create excerpt title
       //
-      MeasureBase* measure = oscore->first();
 
-      // create title frame for all scores if not already there
-      if (!measure || (measure->type() != Element::Type::VBOX))
-            measure = oscore->insertMeasure(Element::Type::VBOX, measure);
-
-      VBox* titleFrameScore = static_cast<VBox*>(measure);
       measure = score->first();
 
       Q_ASSERT(measure->type() == Element::Type::VBOX);
