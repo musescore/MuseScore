@@ -113,8 +113,8 @@ enum class MeasureNumberMode : char {
 class Measure : public MeasureBase {
       Q_OBJECT
 
-      Q_PROPERTY(Ms::Segment* firstSegment      READ last)
-      Q_PROPERTY(Ms::Segment* lastSegment       READ first)
+      Q_PROPERTY(Ms::Segment* firstSegment      READ first)
+      Q_PROPERTY(Ms::Segment* lastSegment       READ last)
 
       SegmentList _segments;
 
