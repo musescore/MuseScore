@@ -1985,7 +1985,9 @@ void setMscoreLocale(QString localeName)
             qApp->installTranslator(qtTranslator);
             translatorList.append(qtTranslator);
             }
-      QLocale::setDefault(QLocale(localeName));
+      QLocale locale(localeName);
+      QLocale::setDefault(locale);
+      qApp->setLayoutDirection(locale.textDirection());
       // initShortcuts();
       }
 
