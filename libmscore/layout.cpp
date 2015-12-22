@@ -2826,6 +2826,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         curMeasure = curMeasure->prev();
                   else
                         curMeasure = last();
+                  // skip to beginning of mmrest
+                  if (curMeasure && curMeasure->isMeasure() && styleB(StyleIdx::createMultiMeasureRests)) {
+                        Measure* m = static_cast<Measure*>(curMeasure);
+                        while (m && m->mmRestCount() < 0)
+                              m = m->prevMeasure();
+                        if (m && m->hasMMRest())
+                              curMeasure = m->mmRest();
+                        }
                   }
             firstInRow = false;
             }
