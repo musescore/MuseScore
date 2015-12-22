@@ -8322,6 +8322,38 @@
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
+            <Instrument id="contra-guitar">
+                  <longName>Contra Guitar</longName>
+                  <shortName>C Guit.</shortName>
+                  <description>Acoustic Contra Guitar</description>
+                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string open="1">31</string>
+                        <string open="1">32</string>
+                        <string open="1">33</string>
+                        <string open="1">34</string>
+                        <string open="1">35</string>
+                        <string open="1">36</string>
+                        <string open="1">37</string>
+                        <string open="1">38</string>
+                        <string open="1">39</string>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>59</string>
+                        <string>64</string>
+                  </StringData>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>31-83</aPitchRange>
+                  <pPitchRange>31-83</pPitchRange>
+                  <Channel>
+                        <program value="24"/>
+                  </Channel>
+                  <genre>ethnic</genre>
+            </Instrument>
             <Instrument id="guitar-steel">
                   <longName>Acoustic Guitar</longName>
                   <shortName>Guit.</shortName>
