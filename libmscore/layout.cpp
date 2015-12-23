@@ -2289,6 +2289,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
             // collect at least one measure
             if (systemWasNotEmpty && (minWidth + ww > systemWidth)) {
+                  // remove measure from current system if it had been prematurely added
+                  system->measures().removeOne(curMeasure);
                   curMeasure->setSystem(oldSystem);
                   continueFlag = false;
                   break;
