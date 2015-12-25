@@ -338,82 +338,60 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
       rs         = new RepeatSegment;
       rs->tick   = sectionStartMeasure->tick(); // prepare initial repeat segment for start of this section
 
-      Measure* endRepeat  = 0; // measure where the current repeat should stop
-      Measure* continueAt = 0; // measure where the playback should continue after the repeat (To coda)
+      Measure* endGoto    = 0; // measure where the current goto should stop
+      Measure* continueAt = 0; // measure where the playback should continue after the endGoto
       Measure* m          = 0;
-      int loop            = 0; // keeps track of how many times have repeated a :| (Repeat::END)
-      int repeatCount     = 0;
+      int loopEnding      = 1; // which volta endings to enable (previous |: playbackCount())
       bool isGoto         = false;
 
       for (Measure* nm = sectionStartMeasure; nm; ) {
             m = nm;
-            m->setPlaybackCount(m->playbackCount() + 1);
             Repeat flags = m->repeatFlags();
-            bool doJump = false; // process jump after endrepeat
-
-            // during any DC or DS, will take last time through repeat
-            if (isGoto && (flags & Repeat::END))
-                  loop = m->repeatCount() - 1;
 
 //            qDebug("m%d(tick %7d) %p: playbackCount %d loop %d repeatCount %d isGoto %d endRepeat %p continueAt %p flags 0x%x",
 //                   m->no()+1, m->tick(), m, m->playbackCount(), loop, repeatCount, isGoto, endRepeat, continueAt, int(flags));
 
-            if (endRepeat) {
-                  Volta* volta = _score->searchVolta(m->tick());
-                  if (volta && !volta->hasEnding(m->playbackCount())) {
-                        // skip measure
-                        if (rs->tick < m->tick()) {
-                              rs->len = m->tick() - rs->tick;
-                              append(rs);
-                              rs = new RepeatSegment;
-                              }
-                        rs->tick = m->endTick();
+            Volta* volta = _score->searchVolta(m->tick());
+            const bool skipMeasure = volta && !volta->hasEnding(loopEnding);
+            if (skipMeasure) {
+                  if (rs->tick < m->tick()) {
+                        rs->len = m->tick() - rs->tick;
+                        append(rs);
+                        rs = new RepeatSegment;
                         }
-                  else if (flags & Repeat::JUMP) {
-                        doJump = true;
-                        isGoto = false;
-                        }
+                  rs->tick = m->endTick();
                   }
-            else if (flags & Repeat::JUMP) { // Jumps are only accepted outside of other repeats
-                  doJump = true;
-                  }
-                  
+            else if (!isGoto) // don't increase counts during a jump
+                  m->setPlaybackCount(m->playbackCount() + 1);
 
-            if (isGoto && (endRepeat == m)) {
-                  if (continueAt == 0)
+            if (!skipMeasure && (flags & Repeat::START))
+                  loopEnding = m->playbackCount();
+
+            // always match endRepeat marker, ignoring "skipMeasure" from volta
+            if (isGoto && (endGoto == m)) {
+                  isGoto = false;
+                  nm = continueAt;
+                  endGoto = 0;
+                  continueAt = 0;
+                  if (nm == 0)
+                        // jump to "end" of the track - done.
                         break;
                   rs->len = m->endTick() - rs->tick;
                   append(rs);
                   rs       = new RepeatSegment;
-                  rs->tick = continueAt->tick();
-                  nm       = continueAt;
-                  isGoto   = false;
-                  endRepeat = 0;
+                  rs->tick = nm->tick();
                   continue;
                   }
-            else if (flags & Repeat::END) {
-                  if (endRepeat == m) {
-                        ++loop;
-                        if (loop >= repeatCount) {
-                              endRepeat = 0;
-                              loop = 0;
-                              }
-                        else {
-                              nm = jumpToStartRepeat(m);
-                              continue;
-                              }
-                        }
-                  else if (endRepeat == 0) {
-                        if (m->playbackCount() >= m->repeatCount())
-                             break;
-                        endRepeat   = m;
-                        repeatCount = m->repeatCount();
-                        loop        = 1;
+            else if (!skipMeasure && (flags & Repeat::END)) {
+                  // will never repeat during any DC or DS
+                  if (!isGoto && m->playbackCount() < m->repeatCount()) {
+                        // only check *local* repeat counter, not all loop runs
                         nm = jumpToStartRepeat(m);
                         continue;
                         }
                   }
-            if (doJump && !isGoto) {
+            // only jump if we didn't skip, didn't jump due to a repeat
+            if (!skipMeasure && (flags & Repeat::JUMP)) {
                   Jump* s = 0;
                   foreach(Element* e, m->el()) {
                         if (e->type() == Element::Type::JUMP) {
@@ -423,22 +401,20 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                         }
                   // jump only once
                   if (jumps.contains(s)) {
-                        if (endRepeat == _score->searchLabelWithinSectionFirst(s->playUntil(), sectionStartMeasure, sectionEndMeasure))
-                              endRepeat = 0;
-
-                        nm = m->nextMeasure();
-                        if (nm == sectionEndMeasure->nextMeasure())
-                              break;
-                        else
-                              continue;
+                        if (endGoto == _score->searchLabelWithinSectionFirst(s->playUntil(), sectionStartMeasure, sectionEndMeasure)) {
+                              // cancel current jump it it has same "playUntil" label as "s"
+                              isGoto = false;
+                              endGoto = 0;
+                              continueAt = 0;
+                              }
                         }
-                  jumps.append(s);
-                  if (s) {
+                  else if (s) {
+                        jumps.append(s);
                         nm          = _score->searchLabelWithinSectionFirst(s->jumpTo()    , sectionStartMeasure, sectionEndMeasure);
-                        endRepeat   = _score->searchLabelWithinSectionFirst(s->playUntil() , sectionStartMeasure, sectionEndMeasure);
+                        endGoto   = _score->searchLabelWithinSectionFirst(s->playUntil() , sectionStartMeasure, sectionEndMeasure);
                         continueAt  = _score->searchLabelWithinSectionFirst(s->continueAt(), sectionStartMeasure, sectionEndMeasure);
 
-                        if (nm && endRepeat) {
+                        if (nm && endGoto) {
                               isGoto      = true;
                               rs->len = m->endTick() - rs->tick;
                               append(rs);
