@@ -164,14 +164,14 @@
 #include <QTextBrowser>
 
 
-// change Q_ASSERT to NOP if not debugging
+// change Q_ASSERT to NOP if not debugging;
+// the QT definition won't evaluate the condition but still tries to compile it
 
 #ifdef QT_NO_DEBUG
 #undef Q_ASSERT_X
-#define Q_ASSERT_X(a,b,c)
+#define Q_ASSERT_X(cond, where, what) do { } while (false)
 #undef Q_ASSERT
-#define Q_ASSERT(a)
+#define Q_ASSERT(a) do { } while (false)
 #endif
 
 #endif
-
