@@ -42,17 +42,17 @@
               </property>
               <item>
                <property name="text">
+                <string notr="true">Bravura</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string notr="true">Emmentaler</string>
                </property>
               </item>
               <item>
                <property name="text">
                 <string notr="true">Gonville</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true">Bravura</string>
                </property>
               </item>
              </widget>
@@ -89,6 +89,11 @@
             </item>
             <item row="1" column="1">
              <widget class="QComboBox" name="musicalTextFont">
+            <item>
+                <property name="text">
+                    <string>Bravura Text</string>
+                </property>
+            </item>
               <item>
                <property name="text">
                 <string>Emmentaler Text</string>
@@ -97,11 +102,6 @@
               <item>
                <property name="text">
                 <string>Gonville Text</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Bravura Text</string>
                </property>
               </item>
               <item>
