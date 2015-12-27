@@ -674,8 +674,8 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
       PaletteCell* cell = new PaletteCell;
       int idx;
       if (_moreElements) {
-            idx = cells.size()-2;
-            cells.insert(cells.size()-1, cell);
+            cells.insert(cells.size() - 1, cell);
+            idx = cells.size() - 2;
             }
       else {
             cells.append(cell);
