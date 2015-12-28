@@ -11,17 +11,11 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
+include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
+
 # if (SCRIPT_INTERFACE)
       set (LIB_SCRIPT_FILES plugins.cpp)
 # endif (SCRIPT_INTERFACE)
-
-add_custom_command(
-   OUTPUT ${PROJECT_BINARY_DIR}/all.h
-   COMMAND ${CMAKE_COMMAND}
-   ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-   DEPENDS ${PROJECT_SOURCE_DIR}/all.h
-   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-   )
 
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")

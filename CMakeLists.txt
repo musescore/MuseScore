@@ -115,18 +115,20 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
       endif()
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
+# define QT_NO_DEBUG for buildtypes already defining NDEBUG
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DQT_NO_DEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DQT_NO_DEBUG")
+
 if (APPLE)
-   set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++0x -fPIC -stdlib=libc++ -g")
-   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS         ${CMAKE_CXX_FLAGS} "-std=c++0x -fPIC -stdlib=libc++")
 else (APPLE)
    if (MINGW)
       # -mno-ms-bitfields see #22048
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -mno-ms-bitfields -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
-      set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
+      set(CMAKE_CXX_FLAGS         ${CMAKE_CXX_FLAGS} "-std=gnu++0x -mno-ms-bitfields")
+      set(CMAKE_EXE_LINKER_FLAGS  "-Wl,--large-address-aware")
    else (MINGW)
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS         ${CMAKE_CXX_FLAGS} "-std=c++11 -fPIC")
    endif (MINGW)
 endif(APPLE)
 
