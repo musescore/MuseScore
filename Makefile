@@ -19,7 +19,7 @@
 #=============================================================================
 
 REVISION  = `cat mscore/revision.h`
-CPUS      = `grep -c processor /proc/cpuinfo`
+CPUS      = $(shell grep -c processor /proc/cpuinfo)
 # Avoid build errors when processor=0 (as in m68k)
 ifeq ($(CPUS), 0)
   CPUS=1
