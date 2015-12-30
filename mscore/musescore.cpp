@@ -2186,7 +2186,10 @@ static bool processNonGui()
                   }
             else if (fn.endsWith("json")) {
                   rv = mscore->getPartsDescriptions(cs, fn);
-            }
+                  }
+            else if (fn.endsWith("mld")) {
+                  rv = mscore->saveMLData(cs, fn, partsFileName);
+                  }
 
 #ifdef HAS_AUDIOFILE
             else if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))

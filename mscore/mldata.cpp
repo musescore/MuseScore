@@ -83,6 +83,7 @@ namespace Ms {
   
   QString getInstrumentName(Instrument * in);
   QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems);
+  void createAllExcerpts(Score * score);
 
 /*
 void note_row(QTextStream * qts, int tick, float pos, QSet<Note *> * notes, QSet<Note *> * ongoing, TempoMap * tempomap) {
@@ -128,6 +129,8 @@ bool MuseScore::saveMLData(Score * cs, const QString& saveName, const QString& p
     if (partsinfo.contains("scale_tempo"))
       scale_tempo = partsinfo["scale_tempo"].toDouble();
   }
+
+  createAllExcerpts(cs);
 
   //qreal rel_tempo = cs->tempomap()->relTempo();
   cs->tempomap()->setRelTempo(scale_tempo);
