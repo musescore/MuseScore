@@ -28,26 +28,19 @@ static const qreal      TWICE                               = 2.0;
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
+static Lyrics* searchNextLyrics(Lyrics* lyrics)
       {
-      Lyrics* l = 0;
+      Segment* s = lyrics->segment();
       while ((s = s->next1(Segment::Type::ChordRest))) {
-            int strack = staffIdx * VOICES;
-            int etrack = strack + VOICES;
-            // search through all tracks of current staff looking for a lyric in specified verse
-            for (int track = strack; track < etrack; ++track) {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && !cr->lyricsList().isEmpty()) {
-                        // cr with lyrics found, but does it have a syllable in specified verse?
-                        l = cr->lyricsList().value(verse);
-                        if (l)
-                              break;
-                        }
+            ChordRest* cr = s->cr(lyrics->track());
+            if (cr) {
+                  Lyrics* l = cr->lyrics(lyrics->no());
+                  if (l)
+                        // lyrics in same verse and track found
+                        return l;
                   }
-            if (l)
-                  break;
             }
-      return l;
+      return nullptr;
       }
 
 //=========================================================
@@ -705,7 +698,7 @@ void LyricsLine::layout()
 #if defined(USE_FONT_DASH_TICKNESS)
             setLineWidth(Spatium(lyrics()->dashThickness() / spatium()));
 #endif
-            _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no());
+            _nextLyrics = searchNextLyrics(lyrics());
             setTick2(_nextLyrics != nullptr ? _nextLyrics->segment()->tick() : tick());
       }
       if (ticks()) {                // only do layout if some time span
@@ -843,7 +836,7 @@ void LyricsLineSegment::layout()
             rypos() = lyr->y();
       else {
             // use Y position of *next* syllable if there is one on same system
-            Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no());
+            Lyrics* nextLyr = searchNextLyrics(lyr);
             if (nextLyr && nextLyr->segment()->system() == system())
                   rypos() = nextLyr->y();
             else
