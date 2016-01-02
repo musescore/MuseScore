@@ -29,6 +29,7 @@ addons:
     - libegl1-mesa-dev
     - libegl1-mesa
     - ccache
+    - libpulse-dev
 
 sudo: false
 
