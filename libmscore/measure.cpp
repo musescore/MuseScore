@@ -1127,11 +1127,18 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             // replicate time signature
             if (ts) {
                   TimeSig* ots = 0;
+                  bool constructed = false;
                   for (int track = 0; track < staves.size() * VOICES; ++track) {
                         if (ts->element(track)) {
                               ots = static_cast<TimeSig*>(ts->element(track));
                               break;
                               }
+                        }
+                  if (!ots) {
+                        // no time signature found; use measure length to construct one
+                        ots = new TimeSig(score());
+                        ots->setSig(len());
+                        constructed = true;
                         }
                   // do no replicate local time signatures
                   if (ots && !ots->isLocal()) {
@@ -1141,6 +1148,8 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                         timesig->setSig(ots->sig(), ots->timeSigType());
                         timesig->setNeedLayout(true);
                         score()->undoAddElement(timesig);
+                        if (constructed)
+                              delete ots;
                         }
                   }
             }
