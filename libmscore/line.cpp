@@ -550,6 +550,25 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               else if (cr->space().lw() > 0.0)
                                     x = -cr->space().lw();  // account for accidentals, etc
                               }
+                        else if (startSegment() && type() == Element::Type::HAIRPIN) {
+                              // look for dynamic in same track, start 1sp after it
+                              for (Element* e : startSegment()->annotations()) {
+                                    if (e && e->type() == Element::Type::DYNAMIC && e->track() == track()) {
+                                          qreal off = e->pos().x() + e->bbox().right() + sp;
+                                          x = off;
+                                          if (score()->mscVersion() <= 206 && !spannerSegments().isEmpty()) {
+                                                // rebase userOff2 for older scores
+                                                LineSegment* ls = frontSegment();
+                                                QPointF off2 = ls->userOff2();
+                                                if (!off2.isNull() && !ls->readPos().isNull()) {
+                                                      off2.rx() += off;
+                                                      ls->setUserOff2(off2);
+                                                      }
+                                                }
+                                          break;
+                                          }
+                                    }
+                              }
                         }
                   else {
                         cr = static_cast<ChordRest*>(endElement());
@@ -636,7 +655,27 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     else if (currentSeg->measure() == seg->measure()) {
                                           // next chordrest found in same measure;
                                           // end line 1sp to left
-                                          x2 = qMax(x2, seg->x() - sp);
+                                          qreal nextX = seg->x();
+                                          if (type() == Element::Type::HAIRPIN) {
+                                                // for hairpin, check for dynamic in same track
+                                                for (Element* e : seg->annotations()) {
+                                                      if (e && e->type() == Element::Type::DYNAMIC && e->track() == track()) {
+                                                            qreal off = e->pos().x() + e->bbox().left();
+                                                            nextX += off;
+                                                            if (score()->mscVersion() <= 206 && !spannerSegments().isEmpty()) {
+                                                                  // rebase userOff2 for older scores
+                                                                  LineSegment* ls = backSegment();
+                                                                  QPointF off2 = ls->userOff2();
+                                                                  if (!off2.isNull()) {
+                                                                        off2.rx() -= off;
+                                                                        ls->setUserOff2(off2);
+                                                                        }
+                                                                  }
+                                                            break;
+                                                            }
+                                                      }
+                                                }
+                                          x2 = qMax(x2, nextX - sp);
                                           }
                                     else {
                                           // next chordrest is in next measure
