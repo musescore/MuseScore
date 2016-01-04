@@ -97,7 +97,6 @@ public:
       QList<qreal>   _dotPosX;     ///< size = staves
 
       std::vector<Element*> _annotations;
-      QList<Element*> _qmlAnnotations;
 
       QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
 

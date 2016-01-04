@@ -1269,12 +1269,10 @@ QString Segment::accessibleExtraInfo()
 
 QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
       {
-      _qmlAnnotations.clear();
-      for (std::vector<Element*>::iterator it = _annotations.begin();
-           it != _annotations.end(); ++it) {
-            _qmlAnnotations.append(*it);
-            }
-      return QQmlListProperty<Ms::Element>(this, _qmlAnnotations);
+      QList<Element*> qmlAnnotations;
+      foreach (Element* e : _annotations)
+            qmlAnnotations.append(*e);
+      return QQmlListProperty<Ms::Element>(this, qmlAnnotations);
       }
 
 }           // namespace Ms
