@@ -1436,7 +1436,7 @@ void ScoreView::moveCursor()
       qreal mag               = _spatium / SPATIUM20;
       double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       Staff* staff            = _score->staff(staffIdx);
-      double lineDist         = staffType->lineDistance().val() * _spatium;
+      double lineDist         = staff->staffType()->lineDistance().val() * _spatium;
       int lines               = staff->lines();
       int strg                = is.string();
       x                       -= _spatium;

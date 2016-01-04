@@ -413,7 +413,7 @@ void StaffType::setDurationMetrics()
       _durationYOffset = -bb.y() - bb.height()
       // then move up by a default margin and, if marks are above lines, by half the line distance
       // (converted from spatium units to raster units)
-            + ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()/2.0) ) * MScore::DPI*SPATIUM20;
+            + ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()/2.0) ) * SPATIUM20;
       _durationBoxH = bb.height();
       _durationBoxY = bb.y()  + _durationYOffset;
       // keep track of the conditions under which metrics have been computed
