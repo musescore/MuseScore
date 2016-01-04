@@ -45,7 +45,6 @@ class Breath : public Element {
       void setPause(qreal v)           { _pause = v; }
 
       Segment* segment() const         { return (Segment*)parent(); }
-      virtual Space space() const override;
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

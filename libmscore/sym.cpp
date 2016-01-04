@@ -5288,7 +5288,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos)
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
       {
-      if (!sym(id).symList().isEmpty()) {  // is this a compound symbol?
+      if (!sym(id).symList().empty()) {  // is this a compound symbol?
             draw(sym(id).symList(), painter, mag, pos);
             return;
             }
@@ -5384,13 +5384,13 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
-      QList<SymId> d;
+      std::vector<SymId> d;
       for (int i = 0; i < n; ++i)
-            d += id;
+            d.push_back(id);
       draw(d, painter, mag, pos);
       }
 
-void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
       {
       QPointF pos(_pos);
       for (SymId id : ids) {
@@ -5398,7 +5398,7 @@ void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPoi
             pos.rx() += (sym(id).advance() * mag);
             }
       }
-void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
       {
       qreal scale = p->worldTransform().m11();
       draw(ids, p, mag, _pos, scale);
@@ -5652,9 +5652,9 @@ void ScoreFont::load()
       for (const Composed& c : composed) {
             if (!_symbols[int(c.id)].isValid()) {
                   Sym* sym = &_symbols[int(c.id)];
-                  QList<SymId> s;
+                  std::vector<SymId> s;
                   for (SymId id : c.rids)
-                        s += id;
+                        s.push_back(id);
                   sym->setSymList(s);
                   sym->setBbox(bbox(s, 1.0));
                   }
@@ -5781,7 +5781,7 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 
-const QRectF ScoreFont::bbox(const QList<SymId>& s, qreal mag) const
+const QRectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
       {
       QRectF r;
       QPointF pos;
@@ -5792,7 +5792,7 @@ const QRectF ScoreFont::bbox(const QList<SymId>& s, qreal mag) const
       return r;
       }
 
-qreal ScoreFont::width(const QList<SymId>& s, qreal mag) const
+qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
       {
       return bbox(s, mag).width();
       }

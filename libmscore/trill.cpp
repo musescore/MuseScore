@@ -85,12 +85,12 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
       ScoreFont* f = score()->scoreFont();
 
       _symbols.clear();
-      _symbols.append(start);
+      _symbols.push_back(start);
       qreal w1 = f->advance(start, mag);
       qreal w2 = f->advance(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
-           _symbols.append(fill);
+           _symbols.push_back(fill);
       QRectF r(f->bbox(_symbols, mag));
       setbbox(r);
       }
@@ -104,14 +104,14 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
       ScoreFont* f = score()->scoreFont();
 
       _symbols.clear();
-      _symbols.append(start);
-      _symbols.append(end);
+      _symbols.push_back(start);
       qreal w1 = f->bbox(start, mag).width();
       qreal w2 = f->width(fill, mag);
       qreal w3 = f->width(end, mag);
       int n    = lrint((w - w1 - w3) / w2);
       for (int i = 0; i < n; ++i)
-           _symbols.insert(1, fill);
+           _symbols.push_back(fill);
+      _symbols.push_back(end);
       QRectF r(f->bbox(_symbols, mag));
       setbbox(r);
       }

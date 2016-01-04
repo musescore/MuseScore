@@ -517,8 +517,9 @@ QPointF Element::pagePos() const
                   system = static_cast<Measure*>(parent())->system();
             else if (parent()->type() == Element::Type::SYSTEM)
                   system = static_cast<System*>(parent());
-            else
-                  {Q_ASSERT(false);}
+            else {
+                  Q_ASSERT(false);
+                  }
             if (system) {
                   int si = staffIdx();
                   if (type() == Element::Type::CHORD || type() == Element::Type::REST)
@@ -552,8 +553,9 @@ QPointF Element::canvasPos() const
                   system = static_cast<Measure*>(parent())->system();
             else if (parent()->type() == Element::Type::SYSTEM)
                   system = static_cast<System*>(parent());
-            else
-                  {Q_ASSERT(false);}
+            else {
+                  Q_ASSERT(false);
+                  }
             if (system) {
                   int si = staffIdx();
                   if (type() == Element::Type::CHORD || type() == Element::Type::REST)
@@ -607,7 +609,7 @@ qreal Element::canvasX() const
 
 bool Element::contains(const QPointF& p) const
       {
-      return shape().contains(p - pagePos());
+      return outline().contains(p - pagePos());
       }
 
 //---------------------------------------------------------
@@ -624,11 +626,22 @@ bool Element::contains(const QPointF& p) const
   accurate shape for non-rectangular elements.
 */
 
-QPainterPath Element::shape() const
+QPainterPath Element::outline() const
       {
       QPainterPath pp;
       pp.addRect(bbox());
       return pp;
+      }
+
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape Element::shape() const
+      {
+      Shape shape;
+      shape.add(bbox().translated(pos()));
+      return shape;
       }
 
 //---------------------------------------------------------
@@ -643,7 +656,7 @@ QPainterPath Element::shape() const
 
 bool Element::intersects(const QRectF& rr) const
       {
-      return shape().intersects(rr.translated(-pagePos()));
+      return outline().intersects(rr.translated(-pagePos()));
       }
 
 //---------------------------------------------------------
@@ -890,21 +903,22 @@ QPointF StaffLines::canvasPos() const
 
 void StaffLines::layout()
       {
-      StaffType* st = staff() ? staff()->staffType() : 0;
-      qreal _spatium = spatium();
-      if (st) {
+      Staff* s = staff();
+      qreal _spatium;
+      if (s) {
+            _spatium = s->spatium();
+            setMag(s->mag());
+            StaffType* st = s->staffType();
             dist  = st->lineDistance().val() * _spatium;
             lines = st->lines();
+            setColor(s->color());
             }
       else {
+            _spatium = _score->spatium();
             dist  = _spatium;
             lines = 5;
+            setColor(MScore::defaultColor);
             }
-
-//      qDebug("StaffLines::layout:: dist %f st %p", dist, st);
-
-      setColor(staff() ? staff()->color() : MScore::defaultColor);
-
       lw = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
       bbox().setRect(0.0, -lw*.5, width(), lines * dist + lw);
       }
@@ -1369,7 +1383,8 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:
             case Element::Type::MAXTYPE:
-            case Element::Type::INVALID:  break;
+            case Element::Type::INVALID:
+                  break;
             }
       qDebug("cannot create type %d <%s>", int(type), Element::name(type));
       return 0;
@@ -1704,7 +1719,7 @@ void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
       score()->scoreFont()->draw(id, p, magS(), o, n);
       }
 
-void Element::drawSymbols(const QList<SymId>& s, QPainter* p, const QPointF& o) const
+void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPointF& o) const
       {
       score()->scoreFont()->draw(s, p, magS(), o);
       }
@@ -1726,7 +1741,7 @@ qreal Element::symWidth(SymId id) const
       {
       return score()->scoreFont()->width(id, magS());
       }
-qreal Element::symWidth(const QList<SymId>& s) const
+qreal Element::symWidth(const std::vector<SymId>& s) const
       {
       return score()->scoreFont()->width(s, magS());
       }
@@ -1749,7 +1764,7 @@ QRectF Element::symBbox(SymId id) const
       return score()->scoreFont()->bbox(id, magS());
       }
 
-QRectF Element::symBbox(const QList<SymId>& s) const
+QRectF Element::symBbox(const std::vector<SymId>& s) const
       {
       return score()->scoreFont()->bbox(s, magS());
       }
@@ -1809,37 +1824,37 @@ bool Element::symIsValid(SymId id) const
 //   toTimeSigString
 //---------------------------------------------------------
 
-QList<SymId> Element::toTimeSigString(const QString& s) const
+std::vector<SymId> Element::toTimeSigString(const QString& s) const
       {
-      QList<SymId> d;
+      std::vector<SymId> d;
       for (int i = 0; i < s.size(); ++i) {
             switch (s[i].unicode()) {
-                  case 43: d += SymId::timeSigPlusSmall; break; // '+'
-                  case 48: d += SymId::timeSig0; break;         // '0'
-                  case 49: d += SymId::timeSig1; break;         // '1'
-                  case 50: d += SymId::timeSig2; break;         // '2'
-                  case 51: d += SymId::timeSig3; break;         // '3'
-                  case 52: d += SymId::timeSig4; break;         // '4'
-                  case 53: d += SymId::timeSig5; break;         // '5'
-                  case 54: d += SymId::timeSig6; break;         // '6'
-                  case 55: d += SymId::timeSig7; break;         // '7'
-                  case 56: d += SymId::timeSig8; break;         // '8'
-                  case 57: d += SymId::timeSig9; break;         // '9'
-                  case 67: d += SymId::timeSigCommon; break;    // 'C'
-                  case 40: d += SymId::timeSigParensLeftSmall; break;  // '('
-                  case 41: d += SymId::timeSigParensRightSmall; break; // ')'
-                  case 162: d += SymId::timeSigCutCommon; break;    // '¢'
-                  case 59664: d += SymId::mensuralProlation1; break;
+                  case 43: d.push_back(SymId::timeSigPlusSmall); break; // '+'
+                  case 48: d.push_back(SymId::timeSig0); break;         // '0'
+                  case 49: d.push_back(SymId::timeSig1); break;         // '1'
+                  case 50: d.push_back(SymId::timeSig2); break;         // '2'
+                  case 51: d.push_back(SymId::timeSig3); break;         // '3'
+                  case 52: d.push_back(SymId::timeSig4); break;         // '4'
+                  case 53: d.push_back(SymId::timeSig5); break;         // '5'
+                  case 54: d.push_back(SymId::timeSig6); break;         // '6'
+                  case 55: d.push_back(SymId::timeSig7); break;         // '7'
+                  case 56: d.push_back(SymId::timeSig8); break;         // '8'
+                  case 57: d.push_back(SymId::timeSig9); break;         // '9'
+                  case 67: d.push_back(SymId::timeSigCommon); break;    // 'C'
+                  case 40: d.push_back(SymId::timeSigParensLeftSmall); break;  // '('
+                  case 41: d.push_back(SymId::timeSigParensRightSmall); break; // ')'
+                  case 162: d.push_back(SymId::timeSigCutCommon); break;    // '¢'
+                  case 59664: d.push_back(SymId::mensuralProlation1); break;
                   case 79:                                          // 'O'
-                  case 59665: d += SymId::mensuralProlation2; break;
+                  case 59665: d.push_back(SymId::mensuralProlation2); break;
                   case 216:                                        // 'Ø'
-                  case 59666: d += SymId::mensuralProlation3; break;
-                  case 59667: d += SymId::mensuralProlation4; break;
-                  case 59668: d += SymId::mensuralProlation5; break;
-                  case 59670: d += SymId::mensuralProlation7; break;
-                  case 59671: d += SymId::mensuralProlation8; break;
-                  case 59673: d += SymId::mensuralProlation10; break;
-                  case 59674: d += SymId::mensuralProlation11; break;
+                  case 59666: d.push_back(SymId::mensuralProlation3); break;
+                  case 59667: d.push_back(SymId::mensuralProlation4); break;
+                  case 59668: d.push_back(SymId::mensuralProlation5); break;
+                  case 59670: d.push_back(SymId::mensuralProlation7); break;
+                  case 59671: d.push_back(SymId::mensuralProlation8); break;
+                  case 59673: d.push_back(SymId::mensuralProlation10); break;
+                  case 59674: d.push_back(SymId::mensuralProlation11); break;
                   default:  break;  // d += s[i]; break;
                   }
             }

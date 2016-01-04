@@ -18,6 +18,7 @@
 #include "duration.h"
 #include "beam.h"
 #include "segment.h"
+#include "shape.h"
 
 namespace Ms {
 
@@ -71,8 +72,6 @@ class ChordRest : public DurationElement {
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
       CrossMeasure _crossMeasure;         ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
       TDuration _crossMeasureTDur;        ///< the total Duration type of the combined notes
-
-      Space _space;                       // cached value from layout
 
    public:
       ChordRest(Score*);
@@ -146,14 +145,13 @@ class ChordRest : public DurationElement {
       virtual void setTrack(int val) override;
       virtual int tick() const;
       virtual int rtick() const;
-      virtual Space space() const               { return _space; }
 
       const QList<Lyrics*>& lyricsList() const { return _lyricsList; }
       QList<Lyrics*>& lyricsList()             { return _lyricsList; }
       Lyrics* lyrics(int no)                   { return _lyricsList.value(no); }
       virtual void add(Element*);
       virtual void remove(Element*);
-      void removeDeleteBeam(bool beamed = false);
+      void removeDeleteBeam(bool beamed);
 
       CrossMeasure crossMeasure() const            { return _crossMeasure; }
       void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
@@ -176,6 +174,7 @@ class ChordRest : public DurationElement {
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
       virtual QString accessibleExtraInfo() override;
+      virtual Shape shape() const override;
       };
 
 

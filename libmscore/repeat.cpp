@@ -67,7 +67,7 @@ void RepeatMeasure::layout()
       path.addEllipse(QRectF(w * .75 - r, y+h * .75 - r, r * 2.0, r * 2.0 ));
 
       setbbox(path.boundingRect());
-      _space.setRw(width());
+//      _space.setRw(width());
       }
 
 //---------------------------------------------------------

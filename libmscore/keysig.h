@@ -55,7 +55,6 @@ class KeySig : public Element {
 
       Segment* segment() const            { return (Segment*)parent(); }
       Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
-      Space space() const;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )

@@ -44,6 +44,7 @@
 #include "utils.h"
 #include "keysig.h"
 #include "page.h"
+#include "hook.h"
 
 namespace Ms {
 
@@ -99,7 +100,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _up           = cr._up;
       _small        = cr._small;
       _crossMeasure = cr._crossMeasure;
-      _space        = cr._space;
+//      _space        = cr._space;
 
       for (Lyrics* l : cr._lyricsList) {        // make deep copy
             if (l == 0) {
@@ -302,12 +303,8 @@ bool ChordRest::readProperties(XmlReader& e)
             atr->read(e);
             add(atr);
             }
-      else if (tag == "leadingSpace") {
-            qDebug("ChordRest: leadingSpace obsolete"); // _extraLeadingSpace = Spatium(val.toDouble());
-            e.skipCurrentElement();
-            }
-      else if (tag == "trailingSpace") {
-            qDebug("ChordRest: trailingSpace obsolete"); // _extraTrailingSpace = Spatium(val.toDouble());
+      else if (tag == "leadingSpace" || tag == "trailingSpace") {
+            qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
             e.skipCurrentElement();
             }
       else if (tag == "Beam") {
@@ -594,8 +591,7 @@ void ChordRest::layoutArticulations()
       //    place tenuto and staccato
       //
 
-      for (int i = 0; i < n; ++i) {
-            Articulation* a = _articulations.at(i);
+      for (Articulation* a : _articulations) {
             a->layout();
             ArticulationAnchor aa = a->anchor();
 
@@ -679,26 +675,6 @@ void ChordRest::layoutArticulations()
       bool botGap = false;
       bool topGap = false;
 
-#if 0 // TODO-S: optimize
-      for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
-            if (sp->type() != SLUR)
-                  continue;
-            Slur* s = static_cast<Slur*>(sp);
-            if (s->up())
-                  topGap = true;
-            else
-                  botGap = true;
-            }
-      for (Spanner* sp = _spannerBack; sp; sp = sp->next()) {
-            if (sp->type() != SLUR)
-                  continue;
-            Slur* s = static_cast<Slur*>(sp);
-            if (s->up())
-                  topGap = true;
-            else
-                  botGap = true;
-            }
-#endif
       if (botGap)
             chordBotY += _spatium;
       if (topGap)
@@ -724,7 +700,6 @@ void ChordRest::layoutArticulations()
             bool staffLineCT = a->articulationType() == ArticulationType::Tenuto
                                || a->articulationType() == ArticulationType::Staccato;
 
-//            qreal sh = a->bbox().height() * mag();
             bool bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
 
             dy += distance1;
@@ -761,13 +736,7 @@ void ChordRest::layoutArticulations()
       qreal dyTop = staffTopY;
       qreal dyBot = staffBotY;
 
-/*      if ((upPos() - _spatium) < dyTop)
-            dyTop = upPos() - _spatium;
-      if ((downPos() + _spatium) > dyBot)
-            dyBot = downPos() + _spatium;
-  */
-      for (int i = 0; i < n; ++i) {
-            Articulation* a = _articulations.at(i);
+      for (Articulation* a : _articulations) {
             ArticulationAnchor aa = a->anchor();
             if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
                   if (a->up()) {
@@ -1215,8 +1184,26 @@ void ChordRest::removeDeleteBeam(bool beamed)
             if (b->isEmpty())
                   score()->undoRemoveElement(b);
             }
-      if (!beamed && type() == Element::Type::CHORD)
-            static_cast<Chord*>(this)->layoutHook1();
+      if (!beamed && type() == Element::Type::CHORD) {
+            Chord* chord = static_cast<Chord*>(this);
+            int hookIdx  = durationType().hooks();
+
+            if (hookIdx && !(chord->noStem() || measure()->slashStyle(staffIdx()))) {
+                  if (!chord->hook()) {
+                        Hook* hook = new Hook(score());
+                        hook->setParent(chord);
+                        hook->setGenerated(true);
+                        score()->undoAddElement(hook);
+                        }
+                  chord->hook()->setHookType(up() ? hookIdx : -hookIdx);
+                  chord->layoutStem();
+                  return;
+                  }
+            if (chord->hook())
+                  score()->undoRemoveElement(chord->hook());
+            if (chord->stem())
+                  chord->layoutStem();
+            }
       }
 
 //---------------------------------------------------------
@@ -1452,6 +1439,24 @@ QString ChordRest::accessibleExtraInfo()
                   }
             }
       return rez;
+      }
+
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape ChordRest::shape() const
+      {
+      Shape shape;
+      for (Articulation* a : _articulations)
+            shape.add(a->bbox().translated(a->pos()));
+      qreal margin = spatium() * .5;
+      for (Lyrics* l : _lyricsList) {
+            if (!l)
+                  continue;
+            shape.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
+            }
+      return shape;
       }
 }
 

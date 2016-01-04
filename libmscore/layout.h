@@ -15,19 +15,20 @@
 
 namespace Ms {
 
+class Segment;
+
 //---------------------------------------------------------
 //   Spring
 //---------------------------------------------------------
 
 struct Spring {
-      int seg;
+      Segment* seg;
       qreal stretch;
       qreal fix;
-      Spring(int i, qreal s, qreal f) : seg(i), stretch(s), fix(f) {}
+      Spring(Segment* s, qreal str) : seg(s), stretch(str), fix(s->width()) {}
       };
 
 typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
-typedef SpringMap::const_iterator iSpring;
 
 extern qreal sff(qreal x, qreal xMin, const SpringMap& springs);
 

@@ -23,7 +23,7 @@ enum AmbitusControl : char {
       HASLINE,
       LINEWIDTH,
       TOPTPC, BOTTOMTPC, TOPOCTAVE, BOTTOMOCTAVE,
-      LEADINGSPACE, TRAILINGSPACE               // Segment controls
+      LEADINGSPACE                              // Segment controls
       };
 
 //---------------------------------------------------------
@@ -102,7 +102,6 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             { P_ID::FBPARENTHESIS4, 0, 0, r.bottomOctave,  nullptr              },      // recycled property
 
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
 
       mapSignals();

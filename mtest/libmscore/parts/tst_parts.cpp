@@ -398,7 +398,7 @@ void TestParts::undoRedoAddBreath()
 
       score->undo()->undo();
       score->endUndoRedo();
-      score->doLayout();
+//      score->doLayout();
 
       score->undo()->redo();
       score->endUndoRedo();
@@ -463,7 +463,7 @@ void TestParts::undoRedoRemoveBreath()
       Score* score = doRemoveBreath();
       score->undo()->undo();
       score->endUndoRedo();
-      score->doLayout();
+//      score->doLayout();
 
       score->undo()->redo();
       score->endUndoRedo();

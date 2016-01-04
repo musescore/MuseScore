@@ -140,10 +140,10 @@ class Page : public Element {
    public:
       Page(Score*);
       ~Page();
-      virtual Page* clone() const            { return new Page(*this); }
-      virtual Element::Type type() const     { return Element::Type::PAGE; }
-      const QList<System*>* systems() const  { return &_systems;   }
-      QList<System*>* systems()              { return &_systems;   }
+      virtual Page* clone() const           { return new Page(*this); }
+      virtual Element::Type type() const    { return Element::Type::PAGE; }
+      const QList<System*>& systems() const { return _systems;   }
+      QList<System*>& systems()             { return _systems;   }
 
       virtual void layout();
       virtual void write(Xml&) const;

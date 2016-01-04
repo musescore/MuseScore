@@ -124,7 +124,7 @@ class Beam : public Element {
       void setBeamDirection(MScore::Direction d);
       MScore::Direction beamDirection() const     { return _direction; }
 
-      virtual QPainterPath shape() const override;
+      virtual QPainterPath outline() const override;
       virtual bool contains(const QPointF& p) const override;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
@@ -142,7 +142,7 @@ class Beam : public Element {
 
       QPointF beamPos() const;
       void setBeamPos(const QPointF& bp);
-      
+
       qreal beamDist() const              { return _beamDist; }
 
       virtual QVariant getProperty(P_ID propertyId) const override;

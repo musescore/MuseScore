@@ -185,8 +185,8 @@ void MsScoreView::paint(QPainter* p)
 
       Page* page = score->pages()[_currentPage];
       QList<const Element*> el;
-      foreach(System* s, *page->systems()) {
-            foreach(MeasureBase* m, s->measures())
+      for (System* s : page->systems()) {
+            for (MeasureBase* m : s->measures())
                   m->scanElements(&el, collectElements, false);
             }
       page->scanElements(&el, collectElements, false);

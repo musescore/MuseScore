@@ -249,6 +249,10 @@ void Articulation::setArticulationType(ArticulationType idx)
       anchorStyle       = PropertyStyle::STYLED;
       _timeStretch      = articulationList[int(articulationType())].timeStretch;
 
+      // TODO: layout() can be empty?
+      SymId sym = _up ? articulationList[int(_articulationType)].upSym : articulationList[int(_articulationType)].downSym;
+      QRectF b(symBbox(sym));
+      setbbox(b.translated(-0.5 * b.width(), 0.0));
       }
 
 //---------------------------------------------------------

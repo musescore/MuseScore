@@ -237,7 +237,9 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::barGraceDistance,            StyleType("barGraceDistance",        StyleValueType::SPATIUM) },
       { StyleIdx::lyricsDashMinLength,         StyleType("lyricsDashMinLength",     StyleValueType::SPATIUM) },
       { StyleIdx::lyricsDashMaxLength,         StyleType("lyricsDashMaxLegth",      StyleValueType::SPATIUM) },
-      { StyleIdx::lyricsDashForce,             StyleType("lyricsDashForce",         StyleValueType::BOOL)    }
+      { StyleIdx::lyricsDashForce,             StyleType("lyricsDashForce",         StyleValueType::BOOL)    },
+
+      { StyleIdx::minVerticalDistance,         StyleType("minVerticalDistance",     StyleValueType::SPATIUM) }
       };
 
 class StyleTypes {
@@ -449,7 +451,8 @@ StyleData::StyleData()
             { StyleIdx::clefLeftMargin,              QVariant(0.64) },
             { StyleIdx::keysigLeftMargin,            QVariant(0.5) },
             { StyleIdx::timesigLeftMargin,           QVariant(0.5) },
-            { StyleIdx::clefKeyRightMargin,          QVariant(1.75) },
+//            { StyleIdx::clefKeyRightMargin,          QVariant(1.75) },
+            { StyleIdx::clefKeyRightMargin,          QVariant(0.8) },
             { StyleIdx::clefBarlineDistance,         QVariant(0.18) },      // was 0.5
             { StyleIdx::stemWidth,                   QVariant(0.13) },      // 0.09375
             { StyleIdx::shortenStem,                 QVariant(true) },
@@ -457,7 +460,8 @@ StyleData::StyleData()
             { StyleIdx::shortestStem,                QVariant(2.25) },
             { StyleIdx::beginRepeatLeftMargin,       QVariant(1.0) },
             { StyleIdx::minNoteDistance,             QVariant(0.25) },      // 0.4
-            { StyleIdx::barNoteDistance,             QVariant(1.2) },
+//            { StyleIdx::barNoteDistance,             QVariant(1.2) },
+            { StyleIdx::barNoteDistance,             QVariant(0.7) },
             { StyleIdx::barAccidentalDistance,       QVariant(.3) },
             { StyleIdx::multiMeasureRestMargin,      QVariant(1.2) },
             { StyleIdx::noteBarDistance,             QVariant(1.0) },
@@ -603,7 +607,8 @@ StyleData::StyleData()
             { StyleIdx::barGraceDistance,            QVariant(.6) },
             { StyleIdx::lyricsDashMinLength,         QVariant(0.4) },
             { StyleIdx::lyricsDashMaxLength,         QVariant(0.8) },
-            { StyleIdx::lyricsDashForce,             QVariant(true) }
+            { StyleIdx::lyricsDashForce,             QVariant(true) },
+            { StyleIdx::minVerticalDistance,         QVariant(0.5) }
             };
       for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
             _values[int(values2[i].idx)] = values2[i].val;

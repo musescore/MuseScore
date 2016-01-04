@@ -870,8 +870,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (st == BarLineType::NORMAL)
                               break;
 
-                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
-                              pm->setEndBarLineType(st, false, true);
+//TODO                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
+//                              pm->setEndBarLineType(st, false, true);
 
                         if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)

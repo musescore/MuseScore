@@ -1099,9 +1099,9 @@ void Harmony::layout()
 
       if (parent()->type() == Element::Type::FRET_DIAGRAM && parent()->parent()->type() == Element::Type::SEGMENT) {
             qDebug("Harmony %s with fret diagram as parent and segment as grandparent", qPrintable(_textName));
-            MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
-            qreal dist = -(bbox().top());
-            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
+//            MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
+//WS            qreal dist = -(bbox().top());
+//            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
             }
 
       if (textStyle().hasFrame()) {
@@ -1139,7 +1139,7 @@ void Harmony::calculateBoundingRect()
 //   shape
 //---------------------------------------------------------
 
-QPainterPath Harmony::shape() const
+QPainterPath Harmony::outline() const
       {
       QPainterPath pp;
       pp.addRect(bbox());

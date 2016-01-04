@@ -481,14 +481,12 @@ void Score::fixTicks()
       for (Staff* staff : _staves)
             staff->clearTimeSig();
 
-      TimeSigMap* smap = sigmap();
       Fraction sig(fm->len());
-      Fraction nsig(fm->timesig());
 
       if (!parentScore()) {
             tempomap()->clear();
-            smap->clear();
-            smap->add(0, SigEvent(sig,  nsig, 0));
+            _sigmap->clear();
+            _sigmap->add(0, SigEvent(fm->len(),  fm->timesig(), 0));
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -504,77 +502,76 @@ void Score::fixTicks()
             if (m->mmRest())
                   m->mmRest()->moveTicks(diff);
 
-//            if (!parentScore()) {
-                  //
-                  //  implement section break rest
-                  //
-                  if (m->sectionBreak() && m->pause() != 0.0)
-                        setPause(m->tick() + m->ticks(), m->pause());
+            //
+            //  implement section break rest
+            //
+            if (m->sectionBreak() && m->pause() != 0.0)
+                  setPause(m->tick() + m->ticks(), m->pause());
 
-                  //
-                  // implement fermata as a tempo change
-                  //
+            //
+            // implement fermata as a tempo change
+            //
 
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() == Segment::Type::Breath) {
-                              qreal length = 0.0;
-                              int tick = s->tick();
-                              // find longest pause
-                              for (int i = 0, n = ntracks(); i < n; ++i) {
-                                    Element* e = s->element(i);
-                                    if (e && e->type() == Element::Type::BREATH) {
-                                          Breath* b = static_cast<Breath*>(e);
-                                          length = qMax(length, b->pause());
-                                          }
-                                    }
-                              if (length != 0.0)
-                                    setPause(tick, length);
-                              }
-                        else if (s->segmentType() == Segment::Type::TimeSig) {
-                              for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-                                    TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
-                                    if (ts)
-                                          staff(staffIdx)->addTimeSig(ts);
+            for (Segment* s = m->first(); s; s = s->next()) {
+                  if (s->segmentType() == Segment::Type::Breath) {
+                        qreal length = 0.0;
+                        int tick = s->tick();
+                        // find longest pause
+                        for (int i = 0, n = ntracks(); i < n; ++i) {
+                              Element* e = s->element(i);
+                              if (e && e->type() == Element::Type::BREATH) {
+                                    Breath* b = static_cast<Breath*>(e);
+                                    length = qMax(length, b->pause());
                                     }
                               }
-                        else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
-                              foreach (Element* e, s->annotations()) {
-                                    if (e->type() == Element::Type::TEMPO_TEXT) {
-                                          const TempoText* tt = static_cast<const TempoText*>(e);
-                                          setTempo(tt->segment(), tt->tempo());
-                                          }
+                        if (length != 0.0)
+                              setPause(tick, length);
+                        }
+                  else if (s->segmentType() == Segment::Type::TimeSig) {
+                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                              TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
+                              if (ts)
+                                    staff(staffIdx)->addTimeSig(ts);
+                              }
+                        }
+                  else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() == Element::Type::TEMPO_TEXT) {
+                                    const TempoText* tt = static_cast<const TempoText*>(e);
+                                    setTempo(tt->segment(), tt->tempo());
                                     }
-                              qreal stretch = 0.0;
-                              for (int i = 0; i < s->elist().size(); ++i) {
-                                    Element* e = s->elist().at(i);
-                                    if (!e)
-                                          continue;
-                                    ChordRest* cr = static_cast<ChordRest*>(e);
-                                    int nn = cr->articulations().size();
-                                    for (int ii = 0; ii < nn; ++ii)
-                                          stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
-                                    if (stretch != 0.0 && stretch != 1.0) {
-                                          qreal otempo = tempomap()->tempo(cr->tick());
-                                          qreal ntempo = otempo / stretch;
-                                          setTempo(cr->tick(), ntempo);
-                                          int etick = cr->tick() + cr->actualTicks() - 1;
-                                          auto e = tempomap()->find(etick);
-                                          if (e == tempomap()->end())
-                                                setTempo(etick, otempo);
-                                          break;
-                                          }
+                              }
+                        qreal stretch = 0.0;
+                        for (int i = 0; i < s->elist().size(); ++i) {
+                              Element* e = s->elist().at(i);
+                              if (!e)
+                                    continue;
+                              ChordRest* cr = static_cast<ChordRest*>(e);
+                              int nn = cr->articulations().size();
+                              for (int ii = 0; ii < nn; ++ii)
+                                    stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
+                              if (stretch != 0.0 && stretch != 1.0) {
+                                    qreal otempo = tempomap()->tempo(cr->tick());
+                                    qreal ntempo = otempo / stretch;
+                                    setTempo(cr->tick(), ntempo);
+                                    int etick = cr->tick() + cr->actualTicks() - 1;
+                                    auto e = tempomap()->find(etick);
+                                    if (e == tempomap()->end())
+                                          setTempo(etick, otempo);
+                                    break;
                                     }
                               }
                         }
-//                  }
+                  }
 
             // update time signature map
             // create event if measure len and time signature are different
             // even if they are equivalent 4/4 vs 2/2
+
             if (!parentScore() && ((m->len().numerator() != sig.numerator())
                || (m->len().denominator() != sig.denominator()))) {
                   sig = m->len();
-                  smap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
+                  _sigmap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
                   }
 
             tick += measureTicks;
@@ -1215,7 +1212,7 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
       if (page == 0)
             return systems;
       qreal y = pos.y() - page->pos().y();  // transform to page relative
-      const QList<System*>* sl = page->systems();
+      const QList<System*>* sl = &page->systems();
       qreal y2;
       int n = sl->size();
       for (int i = 0; i < n; ++i) {
@@ -1461,7 +1458,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
 bool Score::checkHasMeasures() const
       {
       Page* page = pages().front();
-      const QList<System*>* sl = page->systems();
+      const QList<System*>* sl = &page->systems();
       if (sl == 0 || sl->empty() || sl->front()->measures().empty()) {
             qDebug("first create measure, then repeat operation");
             return false;
@@ -1476,10 +1473,10 @@ bool Score::checkHasMeasures() const
 
 void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
       {
-      foreach(System* system, *systems()) {
+      for (System* system : *systems()) {
             if (system->isVbox())
                   continue;
-            foreach(Bracket* b, system->brackets()) {
+            for (Bracket* b : system->brackets()) {
                   if (b->staffIdx() == staffIdx && b->level() == srcCol)
                         b->setLevel(dstCol);
                   }
@@ -1555,15 +1552,6 @@ Measure* Score::getCreateMeasure(int tick)
 
 void Score::addElement(Element* element)
       {
-      if (MScore::debugMode) {
-            qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
-               this, element, element->name(), element->parent(),
-               element->parent() ? element->parent()->name() : "");
-            }
-
-      if (element->parent() && element->parent()->type() == Element::Type::SEGMENT)
-            static_cast<Segment*>(element->parent())->measure()->setDirty();
-
       Element::Type et = element->type();
       if (et == Element::Type::TREMOLO)
             setLayoutAll(true);
@@ -1700,9 +1688,6 @@ void Score::removeElement(Element* element)
             qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
                this, element, element->name(), parent, parent ? parent->name() : "");
             }
-
-      if (parent && parent->type() == Element::Type::SEGMENT)
-            static_cast<Segment*>(parent)->measure()->setDirty();
 
       // special for MEASURE, HBOX, VBOX
       // their parent is not static
@@ -2443,6 +2428,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Segment* seg = firstMeasure()->getSegment(Segment::Type::Clef, 0);
       clef->setParent(seg);
       undoAddElement(clef);
+      clef->layout();
 
       undoChangeKeySig(ns, 0, s->keySigEvent(0));
 
@@ -2672,11 +2658,13 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                         undoChangeBracketSpan(staff, i, span - (eidx-sidx));
                   }
             int span = staff->barLineSpan();
+#if 0 // TODO
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                   int newSpan = span - (eidx-sidx) + 1;
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
                   undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
                   }
+#endif
             }
       }
 
@@ -2697,12 +2685,14 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                         undoChangeBracketSpan(staff, i, span + (eidx-sidx));
                   }
             int span = staff->barLineSpan();
+#if 0
             if ((sidx >= staffIdx) && (eidx < (staffIdx + span))) {
                   int idx = staffIdx + span - 1;
                   if (idx >= _staves.size())
                         idx = _staves.size() - 1;
                   undoChangeBarLineSpan(staff, span, 0, (_staves[idx]->lines()-1)*2);
                   }
+#endif
             }
       }
 

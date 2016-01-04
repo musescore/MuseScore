@@ -436,10 +436,10 @@ bool TrackList::write(Measure* measure) const
                   }
             else if (e->type() == Element::Type::BAR_LINE) {
                   if (pos.numerator() == 0 && m) {
-                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
-                        Measure* pm = m->prevMeasure();
-                        if (pm)
-                              pm->setEndBarLineType(t,0);
+//                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
+//                        Measure* pm = m->prevMeasure();
+//TODO                        if (pm)
+//                              pm->setEndBarLineType(t,0);
                         }
                   }
             else {

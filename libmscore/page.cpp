@@ -481,7 +481,7 @@ void Page::doRebuildBspTree()
             qreal h = 0.0;
             if (!_systems.isEmpty()) {
                   h = _systems.front()->height();
-                  if (!_systems.front()->measures().isEmpty()) {
+                  if (!_systems.front()->measures().empty()) {
                         MeasureBase* mb = _systems.front()->measures().back();
                         w = mb->x() + mb->width();
                         }

@@ -320,6 +320,7 @@ class InspectorBarLine : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement e;
+      Ui::InspectorSegment s;
       Ui::InspectorBarLine b;
 
       static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];

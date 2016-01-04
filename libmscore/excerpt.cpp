@@ -420,12 +420,12 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nm->setIrregular(m->irregular());
                   nm->setNo(m->no());
                   nm->setNoOffset(m->noOffset());
-                  nm->setBreakMultiMeasureRest(m->getBreakMultiMeasureRest());
-                  nm->setEndBarLineType(
-                     m->endBarLineType(),
-                     m->endBarLineGenerated(),
-                     m->endBarLineVisible(),
-                     m->endBarLineColor());
+                  nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
+//TODO                  nm->setEndBarLineType(
+//                     m->endBarLineType(),
+//                     m->endBarLineGenerated(),
+//                     m->endBarLineVisible(),
+//                     m->endBarLineColor());
 
                   // Fraction ts = nm->len();
                   int tracks = oscore->nstaves() * VOICES;

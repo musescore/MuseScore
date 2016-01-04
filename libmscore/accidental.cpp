@@ -321,8 +321,7 @@ void Accidental::layout()
 
       QRectF r;
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff())
-          || (note() && note()->fixed())) {
+      if ((staff() && staff()->isTabStaff()) || (note() && note()->fixed())) {
             setbbox(r);
             return;
             }

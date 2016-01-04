@@ -87,7 +87,7 @@ class SlurSegment : public SpannerSegment {
       virtual QString subtypeName() const { return name(spanner()->type()); }
 
       void layoutSegment(const QPointF& p1, const QPointF& p2);
-      virtual QPainterPath shape() const { return shapePath; }
+      virtual QPainterPath outline() const { return shapePath; }
       virtual void draw(QPainter*) const;
 
       bool isEdited() const;

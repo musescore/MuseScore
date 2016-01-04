@@ -246,12 +246,8 @@ Note::Note(const Note& n, bool link)
       else
             _tieFor = 0;
       _tieBack  = 0;
-      for (int i = 0; i < MAX_DOTS; ++i) {
-            if (n._dots[i])
-                  add(new NoteDot(*n._dots[i]));
-            else
-                  _dots[i] = 0;
-            }
+      for (NoteDot* dot : n._dots)
+            add(new NoteDot(*dot));
       _lineOffset = n._lineOffset;
       _mark      = n._mark;
       }
@@ -595,10 +591,7 @@ void Note::add(Element* e)
 
       switch(e->type()) {
             case Element::Type::NOTEDOT:
-                  {
-                  NoteDot* dot = static_cast<NoteDot*>(e);
-                  _dots[dot->idx()] = dot;
-                  }
+                  _dots.append(static_cast<NoteDot*>(e));
                   break;
             case Element::Type::SYMBOL:
             case Element::Type::IMAGE:
@@ -644,12 +637,7 @@ void Note::remove(Element* e)
       {
       switch(e->type()) {
             case Element::Type::NOTEDOT:
-                  for (int i = 0; i < MAX_DOTS; ++i) {
-                        if (_dots[i] == e) {
-                              _dots[i] = 0;
-                              break;
-                              }
-                        }
+                  _dots.takeLast();
                   break;
 
             case Element::Type::TEXT:
@@ -775,15 +763,10 @@ void Note::write(Xml& xml) const
       if (_accidental)
             _accidental->write(xml);
       _el.write(xml);
-      int dots = chord() ? chord()->dots() : 0;
-      if (dots) {
-            for (int i = 0; i < dots; ++i) {
-                  if (_dots[i] && (!_dots[i]->userOff().isNull() || !_dots[i]->visible()
-                     || _dots[i]->color() != Qt::black || _dots[i]->visible() != visible())) {
-                        for (int i = 0; i < dots; ++i)
-                              _dots[i]->write(xml);
-                        break;
-                        }
+      for (NoteDot* dot : _dots) {
+            if (!dot->userOff().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
+                  dot->write(xml);
+                  break;
                   }
             }
       if (_tieFor)
@@ -1022,18 +1005,7 @@ void Note::read(XmlReader& e)
             else if (tag == "NoteDot") {
                   NoteDot* dot = new NoteDot(score());
                   dot->read(e);
-                  for (int i = 0; i < MAX_DOTS; ++i) {
-                        if (_dots[i] == 0) {
-                              dot->setIdx(i);
-                              add(dot);
-                              dot = 0;
-                              break;
-                              }
-                        }
-                  if (dot) {
-                        qDebug("Note: too many dots");
-                        delete dot;
-                        }
+                  add(dot);
                   }
             else if (tag == "Events") {
                   _playEvents.clear();    // remove default event
@@ -1179,12 +1151,14 @@ void Note::read(XmlReader& e)
                         _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
                   }
             }
+
       // check consistency of pitch, tpc1, tpc2, and transposition
       // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
       // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
       // including perhaps some we don't know about yet,
       // we will attempt to fix some problems here regardless of version
-      if (staff() && !staff()->isDrumStaff() && !e.pasteMode() && !MScore::testMode) {
+
+      if (!e.pasteMode() && !MScore::testMode) {
             int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
             int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
             int concertPitch = _pitch % 12;
@@ -1668,22 +1642,22 @@ void Note::setDotY(MScore::Direction pos)
 
       // apply to dots
 
-      int dots = chord()->dots();
-      for (int i = 0; i < MAX_DOTS; ++i) {
-            if (i < dots) {
-                  if (_dots[i] == 0) {
-                        NoteDot* dot = new NoteDot(score());
-                        dot->setIdx(i);
-                        dot->setParent(this);
-                        dot->setTrack(track());  // needed to know the staff it belongs to (and detect tablature)
-                        dot->setVisible(visible());
-                        score()->undoAddElement(dot); // move dot to _dots[i]
-                        }
-                  _dots[i]->layout();
-                  _dots[i]->rypos() = y;
-                  }
-            else if (_dots[i])
-                  score()->undoRemoveElement(_dots[i]);
+      int cdots = chord()->dots();
+      int ndots = _dots.size();
+
+      int n = cdots - ndots;
+      for (int i = 0; i < n; ++i) {
+            NoteDot* dot = new NoteDot(score());
+            dot->setParent(this);
+            dot->setTrack(track());  // needed to know the staff it belongs to (and detect tablature)
+            dot->setVisible(visible());
+            score()->undoAddElement(dot);
+            dot->layout();
+            dot->rypos() = y;
+            }
+      if (n < 0) {
+            for (int i = 0; i < -n; ++i)
+                  score()->undoRemoveElement(_dots.back());
             }
       }
 
@@ -1744,12 +1718,11 @@ void Note::layout2()
                   }
             if (layoutDots) {
                   // apply to dots
-                  for (int i = 0; i < dots; ++i) {
-                        NoteDot* dot = _dots[i];
-                        if (dot) {
-                              dot->rxpos() = x + d + dd * i;
-                              _dots[i]->adjustReadPos();
-                              }
+                  qreal xx = x + d;
+                  for (NoteDot* dot : _dots) {
+                        dot->rxpos() = xx;
+                        dot->adjustReadPos();
+                        xx += dd;
                         }
                   }
             }
@@ -1957,10 +1930,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       if (!dragMode && _accidental)
             func(data, _accidental);
       if (chord()) {
-            for (int i = 0; i < chord()->dots(); ++i) {
-                  if (_dots[i])
-                        func(data, _dots[i]);
-                  }
+            for (NoteDot* dot : _dots)
+                  func(data, dot);
             }
       }
 
@@ -1988,10 +1959,8 @@ void Note::setTrack(int val)
             _accidental->setTrack(val);
       if (!chord())     // if note is dragged with shift+ctrl
             return;
-      for (int i = 0; i < chord()->dots(); ++i) {
-            if (_dots[i])
-                  _dots[i]->setTrack(val);
-            }
+      for (NoteDot* dot : _dots)
+            dot->setTrack(val);
       }
 
 //---------------------------------------------------------
@@ -2045,9 +2014,7 @@ int Note::line() const
 void Note::setLine(int n)
       {
       _line = n;
-      int off = 0;
-      if (staff())
-            off = staff()->staffType()->stepOffset();
+      int off = staff() ? staff()->staffType()->stepOffset() : 0;
       rypos() = (_line + off) * spatium() * .5;
       }
 
@@ -2157,6 +2124,7 @@ void Note::updateRelLine(int relLine, bool undoable)
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
       int line = relStep(relLine, clef);
+
       if (line != _line) {
             if (undoable)
                   undoChangeProperty(P_ID::LINE, line);
@@ -2278,7 +2246,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   _tpc[1] = v.toInt();
                   break;
             case P_ID::LINE:
-                  _line = v.toInt();
+                  setLine(v.toInt());
                   break;
             case P_ID::SMALL:
                   setSmall(v.toBool());
@@ -2771,5 +2739,19 @@ void Note::setAccidentalType(AccidentalType type)
       	_score->changeAccidental(this, type);
       }
 
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape Note::shape() const
+      {
+      Shape shape;
+      shape.add(symBbox(noteHead()).translated(pos()));
+      for (NoteDot* dot : _dots)
+            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()+pos()));
+      if (_accidental)
+            shape.add(_accidental->bbox().translated(_accidental->pos() + pos()));
+      return shape;
+      }
 
 }

@@ -87,8 +87,6 @@ class Glissando : public SLine {
       virtual Element::Type type() const override     { return Element::Type::GLISSANDO; }
       virtual LineSegment* createLineSegment() override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual Space space() const override;
-//      virtual void draw(QPainter*) const override;
       virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
@@ -104,8 +102,6 @@ class Glissando : public SLine {
       void setText(const QString& t)      { _text = t;            }
       bool showText() const               { return _showText;     }
       void setShowText(bool v)            { _showText = v;        }
-
-//      void setSize(const QSizeF&);        // was used for palette; no longer used?
 
       void undoSetGlissandoType(Type);
       void undoSetText(const QString&);

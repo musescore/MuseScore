@@ -410,21 +410,6 @@ class ChangeChordNoStem : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeEndBarLineType
-//---------------------------------------------------------
-
-class ChangeEndBarLineType : public UndoCommand {
-      Measure* measure;
-      BarLineType subtype;
-      bool endBarLineGenerated;
-      void flip();
-
-   public:
-      ChangeEndBarLineType(Measure*, BarLineType subtype);
-      UNDO_NAME("ChangeEndBarLineType")
-      };
-
-//---------------------------------------------------------
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 

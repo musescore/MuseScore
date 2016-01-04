@@ -66,6 +66,7 @@ add_library (
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
+      shape.cpp
       )
 
 set_target_properties (

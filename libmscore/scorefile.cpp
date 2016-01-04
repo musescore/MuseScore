@@ -67,9 +67,11 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       Measure* mm = 0;
       if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->type() == Element::Type::MEASURE) {
             mm = static_cast<Measure*>(m);
+#if 0 // TODO
             Segment* s = mm->findSegment(Segment::Type::EndBarLine, mm->endTick());
             if (s == 0)
                   mm->createEndBarLines();
+#endif
             }
 
       if (m->type() == Element::Type::MEASURE || staffIdx == 0)
@@ -1488,9 +1490,9 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         cr->writeTuplet(xml);
                         }
                   if ((segment->segmentType() == Segment::Type::EndBarLine) && (m->mmRestCount() < 0 || m->mmRest())) {
-                        BarLine* bl = static_cast<BarLine*>(e);
-                        bl->setBarLineType(m->endBarLineType());
-                        bl->setVisible(m->endBarLineVisible());
+//                        BarLine* bl = static_cast<BarLine*>(e);
+//TODO                        bl->setBarLineType(m->endBarLineType());
+//                        bl->setVisible(m->endBarLineVisible());
                         }
                   e->write(xml);
                   segment->write(xml);    // write only once

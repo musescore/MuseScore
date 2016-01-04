@@ -113,9 +113,7 @@ void Rest::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
             painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
 
-//            painter->setFont(score()->scoreFont()->font());
-//            QFontMetricsF fm(score()->scoreFont()->font());
-            QList<SymId> s = toTimeSigString(QString("%1").arg(n));
+            std::vector<Ms::SymId> s = toTimeSigString(QString("%1").arg(n));
             y  = -_spatium * 1.5 - staff()->height() *.5;
             qreal x = center(x1, x2);
             x -= symBbox(s).width() * .5;
@@ -332,12 +330,12 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
 
 void Rest::layout()
       {
-      _space.setLw(0.0);
+//      _space.setLw(0.0);
 
       for (Element* e : _el)
             e->layout();
       if (measure() && measure()->isMMRest()) {
-            _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
+//            _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
 
             static const qreal verticalLineWidth = .2;
             qreal _spatium = spatium();
@@ -375,8 +373,8 @@ void Rest::layout()
                   _tabDur->layout();
                   setbbox(_tabDur->bbox());
                   setPos(0.0, 0.0);             // no rest is drawn: reset any position might be set for it
-                  _space.setLw(0.0);
-                  _space.setRw(width());
+//                  _space.setLw(0.0);
+//                  _space.setRw(width());
                   return;
                   }
             // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
@@ -431,10 +429,6 @@ void Rest::layout()
                + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       setbbox(symBbox(_sym));
-      qreal symOffset = bbox().x();
-      if (symOffset < 0.0)
-            _space.setLw(-symOffset);
-      _space.setRw(width() + point(rs) + symOffset);
       }
 
 //---------------------------------------------------------
@@ -873,5 +867,19 @@ bool Rest::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape Rest::shape() const
+      {
+      Shape shape;
+      shape.add(ChordRest::shape());
+      if (parent() && measure() && measure()->isMMRest())
+            shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
+      else
+            shape.add(bbox().translated(pos()));
+      return shape;
+      }
 }
 

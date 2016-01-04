@@ -302,10 +302,10 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             }
 
       if (mef.lastOfPart && !mef.repeatEnd) {
-            currentMeasure->setEndBarLineType(Ms::BarLineType::END, false, true);
+//TODO            currentMeasure->setEndBarLineType(Ms::BarLineType::END, false, true);
             }
       else if (mef.doubleBarLine) {
-            currentMeasure->setEndBarLineType(Ms::BarLineType::DOUBLE, false, true);
+//TODO            currentMeasure->setEndBarLineType(Ms::BarLineType::DOUBLE, false, true);
             }
       // BarLine* barLine = new BarLine(score);
       // bool visible = true;

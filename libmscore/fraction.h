@@ -26,7 +26,7 @@ class Fraction {
       int _denominator;
 
    public:
-      Fraction(int z = 0, int n = 1);
+      Fraction(int z = 0, int n = 1) : _numerator(z), _denominator(n) {}
       int numerator() const      { return _numerator;           }
       int denominator() const    { return _denominator;         }
       int& rnumerator()          { return _numerator;           }

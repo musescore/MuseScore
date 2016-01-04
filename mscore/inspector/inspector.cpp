@@ -476,7 +476,6 @@ InspectorRest::InspectorRest(QWidget* parent)
             { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
             { P_ID::SMALL,          0, 0, r.small,         r.resetSmall         },
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
       mapSignals();
 
@@ -552,7 +551,6 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
             { P_ID::USER_OFF,       0, 0, e.offsetX,        e.resetX             },
             { P_ID::USER_OFF,       1, 0, e.offsetY,        e.resetY             },
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,   s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace,  s.resetTrailingSpace },
             { P_ID::SHOW_COURTESY,  0, 0, t.showCourtesy,   t.resetShowCourtesy  },
 //            { P_ID::TIMESIG,        0, 0, t.timesigZ,       t.resetTimesig       },
 //            { P_ID::TIMESIG,        1, 0, t.timesigN,       t.resetTimesig       },
@@ -589,7 +587,6 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
             { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
             { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
             { P_ID::SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
 //            { P_ID::SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
@@ -738,7 +735,6 @@ InspectorClef::InspectorClef(QWidget* parent)
             { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
             { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
             { P_ID::SHOW_COURTESY,  0, 0, c.showCourtesy,  c.resetShowCourtesy  }
             };
       mapSignals();
@@ -957,6 +953,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             };
 
       e.setupUi(addWidget());
+      s.setupUi(addWidget());
       b.setupUi(addWidget());
 
       for (const char* name : builtinSpanNames)
@@ -969,6 +966,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             { P_ID::VISIBLE,           0, 0, e.visible,  e.resetVisible  },
             { P_ID::USER_OFF,          0, 0, e.offsetX,  e.resetX        },
             { P_ID::USER_OFF,          1, 0, e.offsetY,  e.resetY        },
+            { P_ID::LEADING_SPACE,     0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::SUBTYPE,           0, 0, b.type,     b.resetType     },
             { P_ID::BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
             { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },

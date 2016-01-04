@@ -3126,10 +3126,10 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                   measure->setRepeatFlag(Repeat::END);
                   }
             else {
-                  if (loc == "right")
-                        measure->setEndBarLineType(type, false, visible);
-                  else if (measure->prevMeasure())
-                        measure->prevMeasure()->setEndBarLineType(type, false, visible);
+//TODO                  if (loc == "right")
+//                        measure->setEndBarLineType(type, false, visible);
+//                  else if (measure->prevMeasure())
+//                        measure->prevMeasure()->setEndBarLineType(type, false, visible);
                   }
             }
 

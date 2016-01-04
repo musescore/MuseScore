@@ -1,0 +1,42 @@
+MuseScore Version 3 design goals/changes
+====================================================================
+
+- Optimize horizontal layout by allowing overlapping segments.
+      - Compute an outline (shape) for every Staff/Segment.
+      - Use the outline to compute the minimum distance between Segments.
+            - this also avoids collisions between Lyrics and ChordNames
+
+- Automatically increase vertical space between staves to avoid collisions.
+      - Use the segment shapes to compute the minimum distance between staves.
+
+- Do not allow more than one System on a line. In 2.x a horizontal box splits
+  a line into two systems. In 3.x a horizontal box is handled as a special measure.
+  This simplifies layouting a page a lot.
+
+- System bar lines are moved into measures in a special segment type "BeginBarLine".
+
+- Consider handling Instrument names as special HBox. This may remove some
+  special case handling from layout().
+
+- Do not undo/redo add/removal of "created" elements.
+      - It speeds up doLayout() and consumes less memory.
+
+      ? This should allow to call doLayout() outside of a command.
+            * not possible as user modified elements like precaution symbols
+              and system headers may be modified.
+
+      ? layout of parts after change in one part not necessary
+
+      - incomplete layouts should be possible (layout only up to first page
+        to speed up program start)
+
+      In 2.x all Segments must be on the undo/redo stack to keep the history
+      consistent, This was necessary as Segments were referring to
+      previous/next segments to find the proper insertion point.
+
+      In 3.x  Undo knows were to (re-)insert them by only checking type and tick
+      position.
+
+
+-
+
