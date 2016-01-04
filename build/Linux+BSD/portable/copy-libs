@@ -1,0 +1,175 @@
+#!/bin/sh
+
+# Usage:   copy-libs  $share_path
+
+# This file is designed to run on CentOS 6.7 but may work on other systems.
+
+main() {
+  # Set sources:
+  qt_prefix="$(locateQt)"
+  echo "qt_prefix: $qt_prefix"
+
+  # Set destinations:
+  [ "$1" ] && share_path="$1" || share_path="."
+  lib_dest="$share_path/lib"
+  qt_dest="$lib_dest/qt5"
+  echo "lib_dest: $lib_dest"
+  echo "qt_dest: $qt_dest"
+
+  num_failures=0 # store number of libraries that couldn't be copied
+  getCrossPlatformDependencies
+  getLinuxOnlyDependencies
+
+  if [ "$num_failures" != "0" ]; then
+    echo "Error: $num_failures libraries couldn't be copied."
+    exit 1
+  fi
+}
+
+##########################################################################
+# LINUX EQUIVALENTS OF WINDOWS DEPENDENCIES (see "mscore/CMakeLists.txt")
+##########################################################################
+getCrossPlatformDependencies() {
+  # Non-Qt dependencies (see "mscore/CMakeLists.txt")
+  dest_dir="$lib_dest"
+  #copyLib libgcc_s_dw2-1.so # Assume provided by system
+  #copyLib libstdc++-6.so # Assume provided by system
+  #copyLib libwinpthread-1.so # Assume provided by system
+  #copyLib libogg.so # Assume provided by system
+  #copyLib libsndfile-1.so # Assume provided by system
+  #copyLib libvorbis.so # Assume provided by system
+  #copyLib libvorbisfile.so # Assume provided by system
+  copyLib libportaudio.so.2
+  #copyLib libeay32.so # Assume provided by system
+  #copyLib ssleay32.so # Assume provided by system
+
+  # Qt base dependencies (see "mscore/CMakeLists.txt")
+  dest_dir="$qt_dest/lib"
+  #dest_dir="$lib_dest"
+  copyLib libicudata.so.42 #icudt53.dll # Needed by Ubuntu 12.04
+  copyLib libicui18n.so.42 #libicuin53.so.5 # Needed by Ubuntu 12.04
+  copyLib libicuuc.so.42 #libicuuc53.so.5 # Needed by Ubuntu 12.04
+  copyLib libQt5CLucene.so.5
+  copyLib libQt5Core.so.5
+  copyLib libQt5Gui.so.5
+  copyLib libQt5Help.so.5
+  copyLib libQt5Multimedia.so.5
+  copyLib libQt5MultimediaWidgets.so.5
+  copyLib libQt5Network.so.5
+  copyLib libQt5OpenGL.so.5
+  copyLib libQt5Positioning.so.5
+  copyLib libQt5PrintSupport.so.5
+  copyLib libQt5Qml.so.5
+  copyLib libQt5Quick.so.5
+  copyLib libQt5Sensors.so.5
+  copyLib libQt5Sql.so.5
+  copyLib libQt5Svg.so.5
+  copyLib libQt5WebChannel.so.5
+  copyLib libQt5WebKit.so.5
+  copyLib libQt5WebKitWidgets.so.5
+  copyLib libQt5Widgets.so.5
+  copyLib libQt5XmlPatterns.so.5
+  copyLib libQt5Xml.so.5
+
+  # Qt components (see "mscore/CMakeLists.txt")
+  copyQt plugins/iconengines/libqsvgicon.so
+
+  copyQt plugins/imageformats/libqjpeg.so
+  copyQt plugins/imageformats/libqmng.so
+  copyQt plugins/imageformats/libqsvg.so
+  copyQt plugins/imageformats/libqtiff.so
+
+  copyQt plugins/platforms/libqxcb.so #qwindows.dll
+
+  copyQt plugins/printsupport/libcupsprintersupport.so #windowsprintersupport.dll
+
+  copyQt plugins/sqldrivers/libqsqlite.so
+
+  # recursively copy everything in the Qt QML directory
+  # except some as listed in "mscore/CMakeLists.txt".
+  export -f copy copyQt # make functions available to xargs
+  find "$qt_prefix/qml" \! -type d \
+    | grep -vE "QtGraphicalEffects|QtMultimedia|QtSensors|QtTest|QtWebKit" \
+    | sed "s|$qt_prefix/||" | xargs -n1 -I '%%%' \
+        bash -c "qt_prefix='$qt_prefix' qt_dest='$qt_dest' copyQt %%%"
+}
+
+##########################################################################
+# LINUX-ONLY DEPENDENCIES (no equivalents in "mscore/CMakeLists.txt")
+# Note: always check the oldest distribution first
+##########################################################################
+getLinuxOnlyDependencies() {
+  # Needed by Centos 6.7:
+  dest_dir="$lib_dest"
+  copyLib libjack.so.0
+  copyLib libopenal.so.1
+  dest_dir="$qt_dest/lib"
+  copyLib libQt5Concurrent.so.5
+  copyLib libQt5DBus.so.5
+  copyLib libQt5Designer.so.5
+  copyLib libQt5Location.so.5
+  copyLib libQt5QuickParticles.so.5
+  copyLib libQt5QuickWidgets.so.5
+  copyLib libQt5Test.so.5
+  copyLib libQt5XcbQpa.so.5
+
+  # Needed by Ubuntu 12.04:
+  dest_dir="$lib_dest"
+  copyLib libcrypto.so.10
+  copyLib libjpeg.so.62
+  copyLib libssl.so.10
+  copyLib libtiff.so.3
+
+  # Needed by Fedora 22:
+  copyLib libmng.so.1
+  copyLib libpng12.so.0
+  copyLib libudev.so.0
+  copyLib liblcms.so.1
+}
+
+locateLib() {
+  local path="$(ldconfig -p | grep "$1" | awk '{print $4}')"
+  [ "$path" ] || echo "$1 not found." >&2
+  echo "$path"
+}
+
+locateQt() {
+  local file="plugins/platforms/libqxcb.so"
+  local core_path="$(dirname "$(locateLib "libQt5Core.so.5")")"
+  while [ true ]; do
+    path="$(ls "$core_path/../$file" 2>/dev/null)"
+    [ "$path" ] && break
+    # Some distros package Qt plugins in weird places...
+    path="$(ls "$core_path/qt5/$file" 2>/dev/null)"
+    [ "$path" ] && break
+    path="$(find "$core_path" -name "$(basename "$file")" 2>/dev/null)" && break
+    [ "$path" ] && break
+    # Still not found... Look everywhere except places that might give false
+    # positive. Probably best not enable this as as it might find the wrong Qt.
+    # path="$(locate "$file" | grep -vEm1 "MuseScore|QtCreator")"
+    # [ "$path" ] && break
+    echo "$0: Couldn't find Qt." >&2
+    return 1
+  done
+  for i in {1..3}; do
+    path="$(dirname "$path")"
+  done
+  echo $path
+}
+
+copy() {
+  echo "$0: copying $1 to $dest_dir"
+  mkdir -p "$dest_dir"
+  cp -L -u "$1" -t "$dest_dir" || num_failures="$(($num_failures+1))"
+}
+
+copyLib() {
+  copy "$(locateLib $1)"
+}
+
+copyQt() {
+  dest_dir="$qt_dest/$(dirname "$1")"
+  copy "$qt_prefix/$1"
+}
+
+main "$@"

@@ -441,8 +441,32 @@ if (NOT MINGW AND NOT APPLE)
     #     qt libraries as we used at compile time
     #
     SET(CMAKE_INSTALL_RPATH "${_qt5Core_install_prefix}/lib") # ignored if CMAKE_SKIP_RPATH="TRUE"
+    string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
+    if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
+      # Build portable AppImage as per https://github.com/probonopd/AppImageKit
+      execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# get architecture (strip trailing newline)
+      get_filename_component(PORTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX} PATH)# get path (dirname)
+      get_filename_component(PORTABLE_INSTALL_NAME ${CMAKE_INSTALL_PREFIX} NAME)# strip path (basename)
+      if (NOT MSCORE_UNSTABLE)
+        set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${MUSESCORE_VERSION_FULL}") # append version info.
+      endif (NOT MSCORE_UNSTABLE)
+      set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${ARCH}") # append system architecture.
+      set(CMAKE_INSTALL_PREFIX ${PORTABLE_INSTALL_PATH}/${PORTABLE_INSTALL_NAME}.AppDir) # e.g. "MuseScore-X.Y.Z-x86_64.AppDir"
+      execute_process(COMMAND echo ${CMAKE_INSTALL_PREFIX} OUTPUT_FILE PREFIX.txt)
+      # Prepare portable scripts:
+      configure_file(build/Linux+BSD/portable/AppRun.in          AppRun         @ONLY)
+      configure_file(build/Linux+BSD/portable/portable-utils.in  portable-utils @ONLY)
+      set(SCRIPT_PERMS PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ WORLD_READ)
+      install(PROGRAMS ${PROJECT_BINARY_DIR}/AppRun     DESTINATION .   COMPONENT portable ${SCRIPT_PERMS})
+      install(PROGRAMS ${PROJECT_BINARY_DIR}/portable-utils
+                       build/Linux+BSD/portable/ldd-recursive
+                       build/rm-empty-dirs              DESTINATION bin COMPONENT portable ${SCRIPT_PERMS})
+      install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
+    else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
+      set(MAN_PORTABLE '.\"') # comment out lines in man page that are only relevent to the portable version
+    endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
     # install desktop file (perform variable substitution first)
-    configure_file(build/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
+    configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
     install( FILES ${PROJECT_BINARY_DIR}/mscore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
     # substitute variables within man pages
     set(MAN_NAME mscore)
@@ -450,7 +474,7 @@ if (NOT MINGW AND NOT APPLE)
     set(MAN_EXTENSION .1)
     set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
     set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/${MAN_NAME}${MAN_EXTENSION}.in)
+    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/Linux+BSD/${MAN_NAME}${MAN_EXTENSION}.in)
     set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
     configure_file(${MAN_TARGET} ${MAN_BUILD})
     # compress man pages if gzip is installed (don't on OpenBSD)
@@ -468,7 +492,7 @@ if (NOT MINGW AND NOT APPLE)
             DEPENDS ${MAN_TARGET}
             COMMAND ${GZIP_EXECUTABLE} -9 < ${MAN_TARGET} > ${MAN_BUILD}
             )
-        add_custom_target(manpages
+        add_custom_target(manpages ALL
             DEPENDS ${MAN_BUILD}
             COMMAND echo "Man pages have been compressed ready for installation."
             VERBATIM
@@ -479,7 +503,7 @@ if (NOT MINGW AND NOT APPLE)
         else (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
             message(STATUS "gzip not found (it is optional). Man pages will not be compressed.")
         endif (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-        add_custom_target(manpages
+        add_custom_target(manpages ALL
             COMMAND echo "Man pages will be installed uncompressed."
             VERBATIM
             )
@@ -501,7 +525,7 @@ if (NOT MINGW AND NOT APPLE)
          message(STATUS "ln not found (it is optional). No symlink aliases will be created.")
      endif (LN_EXECUTABLE)
     # add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
-    configure_file(build/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
+    configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: must now run "update-mime-database" to apply changes. This is done in the Makefile.
 endif (NOT MINGW AND NOT APPLE)

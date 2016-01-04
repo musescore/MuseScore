@@ -400,41 +400,43 @@ if (MINGW)
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
+   # Keep dependencies in alphabetical order. Changes made to this list
+   # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
    install( FILES
       ${CROSS}/bin/libgcc_s_dw2-1.dll
       ${CROSS}/bin/libstdc++-6.dll
       ${CROSS}/bin/libwinpthread-1.dll
-      ${CROSS}/lib/portaudio.dll
-      ${CROSS}/lib/libsndfile-1.dll
       ${CROSS}/lib/libogg.dll
+      ${CROSS}/lib/libsndfile-1.dll
       ${CROSS}/lib/libvorbis.dll
       ${CROSS}/lib/libvorbisfile.dll
-      ${CROSS}/opt/bin/ssleay32.dll
+      ${CROSS}/lib/portaudio.dll
       ${CROSS}/opt/bin/libeay32.dll
+      ${CROSS}/opt/bin/ssleay32.dll
+      ${CROSSQT}/bin/icudt53.dll
+      ${CROSSQT}/bin/icuin53.dll
+      ${CROSSQT}/bin/icuuc53.dll
+      ${CROSSQT}/bin/Qt5CLucene.dll
       ${CROSSQT}/bin/Qt5Core.dll
-      ${CROSSQT}/bin/Qt5Widgets.dll
       ${CROSSQT}/bin/Qt5Gui.dll
-      ${CROSSQT}/bin/Qt5Xml.dll
-      ${CROSSQT}/bin/Qt5Svg.dll
+      ${CROSSQT}/bin/Qt5Help.dll
+      ${CROSSQT}/bin/Qt5Multimedia.dll
+      ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
       ${CROSSQT}/bin/Qt5Network.dll
+      ${CROSSQT}/bin/Qt5OpenGL.dll
+      ${CROSSQT}/bin/Qt5Positioning.dll
+      ${CROSSQT}/bin/Qt5PrintSupport.dll
+      ${CROSSQT}/bin/Qt5Qml.dll
+      ${CROSSQT}/bin/Qt5Quick.dll
+      ${CROSSQT}/bin/Qt5Sensors.dll
+      ${CROSSQT}/bin/Qt5Sql.dll
+      ${CROSSQT}/bin/Qt5Svg.dll
       ${CROSSQT}/bin/Qt5WebChannel.dll
       ${CROSSQT}/bin/Qt5WebKit.dll
       ${CROSSQT}/bin/Qt5WebKitWidgets.dll
+      ${CROSSQT}/bin/Qt5Widgets.dll
+      ${CROSSQT}/bin/Qt5Xml.dll
       ${CROSSQT}/bin/Qt5XmlPatterns.dll
-      ${CROSSQT}/bin/Qt5Qml.dll
-      ${CROSSQT}/bin/Qt5Quick.dll
-      ${CROSSQT}/bin/Qt5Sql.dll
-      ${CROSSQT}/bin/Qt5Positioning.dll
-      ${CROSSQT}/bin/Qt5PrintSupport.dll
-      ${CROSSQT}/bin/Qt5OpenGL.dll
-      ${CROSSQT}/bin/Qt5Sensors.dll
-      ${CROSSQT}/bin/Qt5Multimedia.dll
-      ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/icuin53.dll
-      ${CROSSQT}/bin/icuuc53.dll
-      ${CROSSQT}/bin/icudt53.dll
-      ${CROSSQT}/bin/Qt5Help.dll
-      ${CROSSQT}/bin/Qt5CLucene.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -464,12 +466,12 @@ if (MINGW)
     install(DIRECTORY
       ${CROSSQT}/qml
       DESTINATION .
-      REGEX ".*QtWebkit.*" EXCLUDE
-      REGEX ".*QtTest.*" EXCLUDE
-      REGEX ".*QtSensors.*" EXCLUDE
+      REGEX ".*d\\.dll" EXCLUDE
       REGEX ".*QtGraphicalEffects.*" EXCLUDE
       REGEX ".*QtMultimedia.*" EXCLUDE
-      REGEX ".*d\\.dll" EXCLUDE)
+      REGEX ".*QtSensors.*" EXCLUDE
+      REGEX ".*QtTest.*" EXCLUDE
+      REGEX ".*QtWebkit.*" EXCLUDE)
 
 else (MINGW)
    target_link_libraries(mscore
@@ -532,21 +534,26 @@ else (MINGW)
      # install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
      install( TARGETS mscore RUNTIME DESTINATION bin )
      if (LN_EXECUTABLE)
-        add_custom_target(mscore_alias
+        add_custom_target(mscore_alias ALL
             COMMAND echo "Creating symlink alias for mscore executable."
             COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
             COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
             )
         install( FILES ${PROJECT_BINARY_DIR}/mscore/musescore${MSCORE_INSTALL_SUFFIX} DESTINATION bin)
      else (LN_EXECUTABLE)
-        add_custom_target(mscore_alias
+        add_custom_target(mscore_alias ALL
             COMMAND echo "No symlink aliases will be created."
             VERBATIM
             )
      endif (LN_EXECUTABLE)
      # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-     install( FILES   ../assets/musescore-icon-round.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
-     install( FILES   ../assets/musescore-icon-round-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
+     if (MSCORE_UNSTABLE)
+         set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # square icons on development builds
+     else (MSCORE_UNSTABLE)
+         set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # round icons on stable releases
+     endif (MSCORE_UNSTABLE)
+     install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
+     install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
      # install MIME (filetype) icons for each mimetype on Linux
      install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
