@@ -159,7 +159,12 @@ void MScore::init()
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       _globalShare = dir.absolutePath() + "/";
 #else
-      _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
+      // Try relative path (needed for portable AppImage and non-standard installations)
+      QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+      if (dir.exists())
+            _globalShare = dir.absolutePath() + "/";
+      else // Fall back to default location (e.g. if binary has moved relative to share)
+            _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
       selectColor[0].setNamedColor("#1259d0");   //blue
