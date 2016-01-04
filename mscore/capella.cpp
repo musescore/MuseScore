@@ -546,12 +546,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     tuplet      = new Tuplet(score);
                                     Fraction f  = TupletFractionCap(tupletCount,tuplettrp,tupletprol);
                                     tuplet->setRatio(f);
-                                    tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
+                                    tuplet->setBaseLen(d);
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
                                     tuplet->setParent(m);
                                     int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn)); // TODO check if necessary (the MusicXML importer doesn't do this)
+                                    tuplet->setDuration(Fraction::fromTicks(nn));
                                     }
                               }
 
@@ -629,12 +629,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     tuplet      = new Tuplet(score);
                                     Fraction f  = TupletFractionCap(tupletCount,tuplettrp,tupletprol);
                                     tuplet->setRatio(f);
-                                    tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
+                                    tuplet->setBaseLen(d);
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
                                     tuplet->setParent(m);
                                     int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn)); // TODO check if necessary (the MusicXML importer doesn't do this)
+                                    tuplet->setDuration(Fraction::fromTicks(nn));
                                     }
                               qDebug("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
                                      tick, o->count, o->tripartite, o->isProlonging, ticks,

@@ -1119,6 +1119,9 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet, bool& tuplImpl,
                   TDuration td = determineTupletBaseLen(tuplet);
                   // qDebug("stop tuplet %p basetype %d", tuplet, tupletType);
                   tuplet->setBaseLen(td);
+                  Fraction f(normalNotes, td.fraction().denominator());
+                  f.reduce();
+                  tuplet->setDuration(f);
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
                   foreach (DurationElement* de, tuplet->elements()) {
