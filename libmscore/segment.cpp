@@ -1270,8 +1270,8 @@ QString Segment::accessibleExtraInfo()
 QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
       {
       QList<Element*> qmlAnnotations;
-      foreach (Element* e : _annotations)
-            qmlAnnotations.append(*e);
+      for (Element* e : _annotations)
+            qmlAnnotations.append(e);
       return QQmlListProperty<Ms::Element>(this, qmlAnnotations);
       }
 
