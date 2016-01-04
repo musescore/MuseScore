@@ -210,8 +210,6 @@ void UndoStack::beginMacro()
             return;
             }
       curCmd = new UndoCommand();
-      if (MScore::debugMode)
-            qDebug("UndoStack::beginMacro %p, UndoStack %p", curCmd, this);
       }
 
 //---------------------------------------------------------
@@ -220,8 +218,6 @@ void UndoStack::beginMacro()
 
 void UndoStack::endMacro(bool rollback)
       {
-      if (MScore::debugMode)
-            qDebug("UndoStack::endMacro %d", rollback);
       if (curCmd == 0) {
             qDebug("UndoStack:endMacro(): not active");
             return;
@@ -314,8 +310,6 @@ void UndoStack::undo()
       if (curIdx) {
             --curIdx;
             Q_ASSERT(curIdx >= 0);
-            if (MScore::debugMode)
-                  qDebug("--undo index %d", curIdx);
             list[curIdx]->undo();
             }
       }
@@ -327,8 +321,6 @@ void UndoStack::undo()
 void UndoStack::redo()
       {
       if (canRedo()) {
-            if (MScore::debugMode)
-                  qDebug("--redo index %d", curIdx);
             list[curIdx++]->redo();
             }
       }
@@ -600,6 +592,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   clef->setClefType(st);
                   clef->setParent(destSeg);
                   score->undo(new AddElement(clef));
+                  clef->layout();
                   }
             }
       }
@@ -662,24 +655,6 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
             ncr->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue(d));
             ncr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(d.fraction()));
             }
-      }
-
-//---------------------------------------------------------
-//   undoChangeEndBarLineType
-//---------------------------------------------------------
-
-void Score::undoChangeEndBarLineType(Measure* m, BarLineType subtype)
-      {
-      undo(new ChangeEndBarLineType(m, subtype));
-      }
-
-//---------------------------------------------------------
-//   undoChangeBarLineSpan
-//---------------------------------------------------------
-
-void Score::undoChangeBarLineSpan(Staff* staff, int span, int spanFrom, int spanTo)
-      {
-      undo(new ChangeBarLineSpan(staff, span, spanFrom, spanTo));
       }
 
 //---------------------------------------------------------
@@ -1489,7 +1464,6 @@ AddElement::AddElement(Element* e)
 void AddElement::cleanup(bool undo)
       {
       if (!undo) {
-            qDebug("AddElement::cleanup: delete %d %p %s", undo, element, element->name());
             delete element;
             element = 0;
             }
@@ -1541,9 +1515,6 @@ void AddElement::endUndoRedo(bool isUndo) const
 
 void AddElement::undo()
       {
-//      qDebug("AddElement::undo: %s %p parent %s %p", element->name(), element,
-//         element->parent() ? element->parent()->name() : "nil", element->parent());
-
       if (element->type() != Element::Type::TUPLET)
             element->score()->removeElement(element);
       endUndoRedo(true);
@@ -1555,9 +1526,6 @@ void AddElement::undo()
 
 void AddElement::redo()
       {
-//      qDebug("AddElement::redo: %s %p parent %s %p, score %p", element->name(), element,
-//         element->parent() ? element->parent()->name() : "nil", element->parent(), element->score());
-
       if (element->type() != Element::Type::TUPLET)
             element->score()->addElement(element);
       endUndoRedo(false);
@@ -1652,7 +1620,6 @@ RemoveElement::RemoveElement(Element* e)
 void RemoveElement::cleanup(bool undo)
       {
       if (undo) {
-            qDebug("RemoveElement::cleanup: delete %d %s", undo, element->name());
             delete element;
             element = 0;
             }
@@ -1969,10 +1936,6 @@ ChangeElement::ChangeElement(Element* oe, Element* ne)
 
 void ChangeElement::flip()
       {
-//      qDebug("ChangeElement::flip() %s(%p) -> %s(%p) links %d",
-//         oldElement->name(), oldElement, newElement->name(), newElement,
-//         oldElement->links() ? oldElement->links()->size() : -1);
-
       const LinkedElements* links = oldElement->links();
       if (links) {
             oldElement->unlink();
@@ -2072,7 +2035,6 @@ void ChangeKeySig::flip()
 
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
-      keysig->measure()->setDirty();
 
       int tick = keysig->segment()->tick();
 
@@ -2151,27 +2113,6 @@ void ChangeChordNoStem::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeEndBarLineType
-//---------------------------------------------------------
-
-ChangeEndBarLineType::ChangeEndBarLineType(Measure* m, BarLineType st)
-      {
-      measure = m;
-      subtype = st;
-      // the measure endBarLineGenerated flag will depend on the new bar line type:
-      endBarLineGenerated = (st == BarLineType::NORMAL);
-      }
-
-void ChangeEndBarLineType::flip()
-      {
-      BarLineType typ = measure->endBarLineType();
-      bool eblg = measure->endBarLineGenerated();
-      measure->setEndBarLineType(subtype, endBarLineGenerated);
-      subtype = typ;
-      endBarLineGenerated = eblg;
-      }
-
-//---------------------------------------------------------
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 
@@ -2220,7 +2161,6 @@ void ChangeSingleBarLineSpan::flip()
       barLine->setSpan(span);
       barLine->setSpanFrom(spanFrom);
       barLine->setSpanTo(spanTo);
-//      barLine->setCustomSpan(true);     // let setSpan(), setSpanFrom() and setSpanTo() determine if it is custom or not
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
@@ -2233,8 +2173,8 @@ void ChangeSingleBarLineSpan::flip()
             if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::Type::StartRepeatBarLine)
                   meas->setStartRepeatBarLine(true);
             // otherwise redo measure end bar lines
-            else
-                  meas->createEndBarLines();
+//TODO            else
+//                  meas->createEndBarLines();
             }
       barLine->score()->addRefresh(barLine->canvasBoundingRect()); // new area of this bar line needs redraw
       }
@@ -2805,7 +2745,6 @@ void ChangeMStaffProperties::flip()
 
 void Score::undoInsertTime(int tick, int len)
       {
-      qDebug("undoInsertTime %d at %d, spanners %zd", len, tick, _spanner.map().size());
       if (len == 0)
             return;
 
@@ -3191,47 +3130,6 @@ void ChangeNoteEvents::flip()
       chord->setPlayEvents(events);
       events = e;
       */
-      }
-
-//---------------------------------------------------------
-//   undoChangeBarLine
-//---------------------------------------------------------
-
-void Score::undoChangeBarLine(Measure* m, BarLineType barType)
-      {
-      foreach(Score* s, scoreList()) {
-            Measure* measure = s->tick2measure(m->tick());
-            Measure* nm      = m->nextMeasure();
-            Repeat flags = measure->repeatFlags();
-            switch(barType) {
-                  case BarLineType::END:
-                  case BarLineType::NORMAL:
-                  case BarLineType::DOUBLE:
-                  case BarLineType::BROKEN:
-                  case BarLineType::DOTTED:
-                        {
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags) & ~int(Repeat::END));
-                        if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags()) & ~int(Repeat::START));
-                        s->undoChangeEndBarLineType(measure, barType);
-                        measure->setEndBarLineGenerated (false);
-                        }
-                        break;
-                  case BarLineType::START_REPEAT:
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::START));
-                        break;
-                  case BarLineType::END_REPEAT:
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::END));
-                        if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags()) & ~int(Repeat::START));
-                        break;
-                  case BarLineType::END_START_REPEAT:
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::END));
-                        if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags() | Repeat::START));
-                        break;
-                  }
-            }
       }
 
 //---------------------------------------------------------

@@ -90,8 +90,8 @@ class Volta;
 class Xml;
 struct Channel;
 struct Interval;
-struct PageContext;
 struct TEvent;
+struct LayoutContext;
 
 enum class ClefType : signed char;
 enum class SymId;
@@ -328,11 +328,6 @@ class Score : public QObject, public ScoreElement {
       QList<Page*> _pages;          // pages are build from systems
       QList<System*> _systems;      // measures are akkumulated to systems
 
-      // temp values used during doLayout:
-      int curPage;
-      int curSystem;
-      MeasureBase* curMeasure;
-
       UndoStack* _undo;
 
       QQueue<MidiInputEvent> midiInputQueue;
@@ -454,15 +449,13 @@ class Score : public QObject, public ScoreElement {
 
       Page* addPage();
       bool layoutSystem(qreal& minWidth, qreal w, bool, bool);
-      void createMMRests();
+      void createMMRest(Measure*, Measure*, const Fraction&);
       bool layoutSystem1(qreal& minWidth, bool, bool);
       QList<System*> layoutSystemRow(qreal w, bool, bool);
       void addSystemHeader(Measure* m, bool);
-      System* getNextSystem(bool, bool);
+      System* getNextSystem(LayoutContext&);
       bool doReLayout();
 
-      void layoutStage2();
-      void layoutStage3();
       void beamGraceNotes(Chord*, bool);
 
       void hideEmptyStaves(System* system, bool isFirstSystem);
@@ -480,7 +473,6 @@ class Score : public QObject, public ScoreElement {
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick, const Interval&);
       void init();
-      void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m, bool& hasCourtesy);
 
       void selectSingle(Element* e, int staffIdx);
@@ -496,6 +488,10 @@ class Score : public QObject, public ScoreElement {
       void reorderMidiMapping();
       void removeDeletedMidiMapping();
       int updateMidiMapping();
+
+      void getNextMeasure(LayoutContext&);      // get next measure for layout
+      bool collectPage(LayoutContext&);
+      System* collectSystem(LayoutContext&);
 
    protected:
       void createPlayEvents(Chord*);
@@ -572,8 +568,6 @@ class Score : public QObject, public ScoreElement {
       void spellNotelist(QList<Note*>& notes);
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
-      void undoChangeEndBarLineType(Measure*, BarLineType);
-      void undoChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
       void undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
       void undoTransposeHarmony(Harmony*, int, int);
       void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
@@ -590,7 +584,6 @@ class Score : public QObject, public ScoreElement {
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
-      void undoChangeBarLine(Measure* m, BarLineType);
       void undoChangeProperty(ScoreElement*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
       void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       void undoPropertyChanged(ScoreElement*, P_ID, const QVariant& v);
@@ -928,13 +921,11 @@ class Score : public QObject, public ScoreElement {
 
       //@ ??
       Q_INVOKABLE void doLayout();
-      void layoutSystems();
-      void layoutSystems2();
       void layoutLinear();
-      void layoutPages();
+      void layoutPages(LayoutContext&);
       void layoutSystemsUndoRedo();
       void layoutPagesUndoRedo();
-      Page* getEmptyPage();
+      Page* getEmptyPage(LayoutContext&);
 
       void layoutChords1(Segment* segment, int staffIdx);
       qreal layoutChords2(QList<Note*>& notes, bool up);
@@ -1026,7 +1017,7 @@ class Score : public QObject, public ScoreElement {
       int getLinkId() const { return _linkId; }
       QList<Score*> scoreList();
       bool switchLayer(const QString& s);
-      void layoutPage(const PageContext&,  qreal);
+      void layoutPage(Page* page, qreal restHeight);
       //@ appends to the score a named part as last part
       Q_INVOKABLE void appendPart(const QString&);
       //@ appends to the score a number of measures
@@ -1037,7 +1028,7 @@ class Score : public QObject, public ScoreElement {
       //@ creates and returns a cursor to be used to navigate the score
       Q_INVOKABLE Ms::Cursor* newCursor();
 #endif
-      qreal computeMinWidth(Segment* fs, bool firstMeasureInSystem);
+      qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }

@@ -76,7 +76,7 @@ class Rest : public ChordRest {
       qreal mmWidth() const        { return _mmWidth; }
       SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
 
-      int getDotline() const { return dotline; }
+      int getDotline() const   { return dotline; }
       SymId sym() const        { return _sym;    }
       int computeLineOffset();
       bool isFullMeasureRest() const { return durationType() == TDuration::DurationType::V_MEASURE; }
@@ -96,6 +96,7 @@ class Rest : public ChordRest {
 
       virtual QString accessibleInfo() override;
       virtual QString screenReaderInfo() override;
+      Shape shape() const override;
       };
 
 }     // namespace Ms

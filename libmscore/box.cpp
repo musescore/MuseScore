@@ -28,7 +28,6 @@
 
 namespace Ms {
 
-static const qreal BOX_MARGIN = 0.0;
 
 //---------------------------------------------------------
 //   Box
@@ -37,15 +36,6 @@ static const qreal BOX_MARGIN = 0.0;
 Box::Box(Score* score)
    : MeasureBase(score)
       {
-      editMode      = false;
-      _boxWidth     = Spatium(0);
-      _boxHeight    = Spatium(0);
-      _leftMargin   = BOX_MARGIN;
-      _rightMargin  = BOX_MARGIN;
-      _topMargin    = BOX_MARGIN;
-      _bottomMargin = BOX_MARGIN;
-      _topGap       = 0.0;
-      _bottomGap    = 0.0;
       }
 
 //---------------------------------------------------------
@@ -55,9 +45,9 @@ Box::Box(Score* score)
 void Box::layout()
       {
       MeasureBase::layout();
-      foreach (Element* el, _el) {
-            if (el->type() != Element::Type::LAYOUT_BREAK)
-                  el->layout();
+      for (Element* e : el()) {
+            if (e->type() != Element::Type::LAYOUT_BREAK)
+                  e->layout();
             }
       }
 
@@ -194,8 +184,8 @@ void Box::writeProperties(Xml& xml) const
       writeProperty(xml, P_ID::BOTTOM_MARGIN);
 
       Element::writeProperties(xml);
-      foreach (const Element* el, _el)
-            el->write(xml);
+      for (const Element* e : el())
+            e->write(xml);
       }
 
 //---------------------------------------------------------
@@ -300,11 +290,6 @@ bool Box::readProperties(XmlReader& e)
             f->read(e);
             add(f);
             }
-      else if (tag == "LayoutBreak") {
-            LayoutBreak* lb = new LayoutBreak(score());
-            lb->read(e);
-            add(lb);
-            }
       else if (tag == "HBox") {
             HBox* hb = new HBox(score());
             hb->read(e);
@@ -315,7 +300,7 @@ bool Box::readProperties(XmlReader& e)
             vb->read(e);
             add(vb);
             }
-      else if (Element::readProperties(e))
+      else if (MeasureBase::readProperties(e))
             ;
       else
             return false;
@@ -530,11 +515,11 @@ Element* Box::drop(const DropData& data)
             case Element::Type::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
-                  if (_pageBreak || _lineBreak) {
+                  if (pageBreak() || lineBreak()) {
                         if (
-                           (lb->layoutBreakType() == LayoutBreak::Type::PAGE && _pageBreak)
-                           || (lb->layoutBreakType() == LayoutBreak::Type::LINE && _lineBreak)
-                           || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && _sectionBreak)
+                           (lb->layoutBreakType() == LayoutBreak::Type::PAGE && pageBreak())
+                           || (lb->layoutBreakType() == LayoutBreak::Type::LINE && lineBreak())
+                           || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && sectionBreak())
                            ) {
                               //
                               // if break already set
@@ -542,7 +527,7 @@ Element* Box::drop(const DropData& data)
                               delete lb;
                               break;
                               }
-                        foreach (Element* elem, _el) {
+                        for (Element* elem : el()) {
                               if (elem->type() == Element::Type::LAYOUT_BREAK) {
                                     score()->undoChangeElement(elem, e);
                                     break;
@@ -710,7 +695,7 @@ void FBox::add(Element* e)
             qDebug("FBox::add: element not allowed");
             return;
             }
-      _el.push_back(e);
+      el().push_back(e);
       }
 
 }

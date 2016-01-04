@@ -439,21 +439,6 @@ void Ambitus::draw(QPainter* p) const
       }
 
 //---------------------------------------------------------
-//   space
-//---------------------------------------------------------
-
-Space Ambitus::space() const
-      {
-      qreal _spatium = spatium();
-      // reduce left space if there accidentals
-      qreal leftSpace = _spatium *
-            ((_topAccid.accidentalType() != AccidentalType::NONE
-                  || _bottomAccid.accidentalType() != AccidentalType::NONE)
-            ? 0.5 : 0.75);
-      return Space(leftSpace - bbox().x(), width() + bbox().x() + _spatium * 0.5);
-      }
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

@@ -21,6 +21,7 @@
 #include "image.h"
 #include "segment.h"
 #include "tempo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -31,12 +32,6 @@ namespace Ms {
 MeasureBase::MeasureBase(Score* score)
    : Element(score)
       {
-      _prev = 0;
-      _next = 0;
-      _breakHint    = false;
-      _lineBreak    = false;
-      _pageBreak    = false;
-      _sectionBreak = 0;
       }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
@@ -49,8 +44,12 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       _lineBreak    = m._lineBreak;
       _pageBreak    = m._pageBreak;
       _sectionBreak = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
+      _no           = m._no;
+      _noOffset     = m._noOffset;
+      _irregular    = m._irregular;
+      _repeatFlags  = m._repeatFlags;
 
-      foreach(Element* e, m._el)
+      for (Element* e : m._el)
             add(e->clone());
       }
 
@@ -374,6 +373,53 @@ MeasureBase* MeasureBase::nextMM() const
             return static_cast<Measure*>(_next)->mmRest();
             }
       return _next;
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void MeasureBase::writeProperties(Xml& xml) const
+      {
+      Element::writeProperties(xml);
+      for (const Element* e : el())
+            e->write(xml);
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool MeasureBase::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "LayoutBreak") {
+            LayoutBreak* lb = new LayoutBreak(score());
+            lb->read(e);
+            add(lb);
+            }
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   index
+//    for debugging only
+//---------------------------------------------------------
+
+int MeasureBase::index() const
+      {
+      int idx = 0;
+      MeasureBase* m = score()->first();
+      while (m) {
+            if (m == this)
+                  return idx;
+            m = m->next();
+            }
+      return  -1;
       }
 }
 

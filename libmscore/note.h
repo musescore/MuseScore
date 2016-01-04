@@ -22,6 +22,7 @@
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
+#include "shape.h"
 
 class QPainter;
 
@@ -231,7 +232,7 @@ class Note : public Element {
       Tie* _tieFor        { 0 };
       Tie* _tieBack       { 0 };
 
-      QList<NoteDot*> _dots { 0, 0, 0 };
+      QList<NoteDot*> _dots;
 
       NoteEventList _playEvents;
       QList<Spanner*> _spannerFor;
@@ -393,8 +394,12 @@ class Note : public Element {
       void setOffTimeOffset(int v);
 
       int customizeVelocity(int velo) const;
-      NoteDot* dot(int n)                       { return _dots[n];           }
+      NoteDot* dot(int n)                       { return _dots[n];          }
+      const QList<NoteDot*>& dots() const       { return _dots;             }
+      QList<NoteDot*>& dots()                   { return _dots;             }
+
       QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
+
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);
       void updateLine();
@@ -449,6 +454,8 @@ class Note : public Element {
       virtual QString accessibleInfo() override;
       virtual QString screenReaderInfo() override;
       virtual QString accessibleExtraInfo() override;
+
+      virtual Shape shape() const override;
       };
 
 // extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];

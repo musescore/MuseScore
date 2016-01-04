@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>631</width>
-    <height>549</height>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -431,13 +431,6 @@
           </property>
           <property name="text">
            <string notr="true">StartRepeat</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="breakMMRest">
-          <property name="text">
-           <string notr="true">breakMMRest</string>
           </property>
          </widget>
         </item>

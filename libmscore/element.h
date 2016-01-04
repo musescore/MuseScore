@@ -17,6 +17,7 @@
 #include "spatium.h"
 #include "fraction.h"
 #include "scoreElement.h"
+#include "shape.h"
 
 class QPainter;
 
@@ -68,33 +69,6 @@ enum class ElementFlag : char {
 
 typedef QFlags<ElementFlag> ElementFlags;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
-
-//---------------------------------------------------------
-///   \brief Unit of horizontal measure
-//    represent the space used by a Segment
-//---------------------------------------------------------
-
-class Space {
-      qreal _lw { 0.0 };       // space needed to the left
-      qreal _rw { 0.0 };       // space needed to the right
-
-   public:
-      Space() {}
-      Space(qreal a, qreal b) : _lw(a), _rw(b) {}
-      qreal lw() const             { return _lw; }
-      qreal rw() const             { return _rw; }
-      qreal width() const          { return _lw + _rw; }
-      void setLw(qreal e)          { _lw = e; }
-      void setRw(qreal m)          { _rw = m; }
-      void addL(qreal v)           { _lw += v; }
-      void addR(qreal v)           { _rw += v; }
-      void max(const Space& s);
-      Space& operator+=(const Space& s) {
-            _lw += s._lw;
-            _rw += s._rw;
-            return *this;
-            }
-      };
 
 //---------------------------------------------------------
 //   DropData
@@ -393,7 +367,8 @@ class Element : public QObject, public ScoreElement {
       virtual void addbbox(const QRectF& r) const { _bbox |= r;          }
       virtual bool contains(const QPointF& p) const;
       bool intersects(const QRectF& r) const;
-      virtual QPainterPath shape() const;
+      virtual QPainterPath outline() const;
+      virtual Shape shape() const;
       virtual qreal baseLine() const          { return -height();       }
 
       virtual Element::Type type() const = 0;
@@ -462,8 +437,6 @@ class Element : public QObject, public ScoreElement {
       //@ Returns the name of the element type
       virtual Q_INVOKABLE QString _name() const { return QString(name()); }
       void dumpQPointF(const char*) const;
-
-      virtual Space space() const      { return Space(0.0, width()); }
 
       virtual QColor color() const             { return _color; }
       QColor curColor() const;
@@ -564,12 +537,12 @@ class Element : public QObject, public ScoreElement {
 
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF()) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
-      void drawSymbols(const QList<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
+      void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
       qreal symHeight(SymId id) const;
       qreal symWidth(SymId id) const;
-      qreal symWidth(const QList<SymId>&) const;
+      qreal symWidth(const std::vector<SymId>&) const;
       QRectF symBbox(SymId id) const;
-      QRectF symBbox(const QList<SymId>&) const;
+      QRectF symBbox(const std::vector<SymId>&) const;
       QPointF symStemDownNW(SymId id) const;
       QPointF symStemUpSE(SymId id) const;
       QPointF symCutOutNE(SymId id) const;
@@ -577,7 +550,7 @@ class Element : public QObject, public ScoreElement {
       QPointF symCutOutSE(SymId id) const;
       QPointF symCutOutSW(SymId id) const;
       qreal symAdvance(SymId id) const;
-      QList<SymId> toTimeSigString(const QString& s) const;
+      std::vector<SymId> toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
       virtual Element* nextElement();  //< Used for navigation

@@ -511,12 +511,6 @@ bool Part::setProperty(P_ID id, const QVariant& property)
       switch (id) {
             case P_ID::VISIBLE:
                   setShow(property.toBool());
-                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
-                        m->setDirty();
-                        if (m->mmRest())
-                              m->mmRest()->setDirty();
-                        break;
-                        }
                   break;
             case P_ID::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());

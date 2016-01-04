@@ -548,8 +548,8 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // our compromise - left align, but account for accidental
                               if (cr->durationType() == TDuration::DurationType::V_MEASURE && !cr->measure()->hasVoices(cr->staffIdx()))
                                     x = cr->x();            // center for measure rests
-                              else if (cr->space().lw() > 0.0)
-                                    x = -cr->space().lw();  // account for accidentals, etc
+//TODO                              else if (cr->spaceLw > 0.0)
+//                                    x = -cr->spaceLw;  // account for accidentals, etc
                               }
                         }
                   else {
@@ -566,11 +566,11 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     qreal width = 0;
                                     Segment* s = cr->segment();
                                     int n = staffIdx() * VOICES;
-                                    for (int i = 0; i < VOICES; ++i) {
-                                          ChordRest* vcr = static_cast<ChordRest*>(s->element(n + i));
-                                          if (vcr)
-                                                width = qMax(width, vcr->space().rw());
-                                          }
+//TODO                                    for (int i = 0; i < VOICES; ++i) {
+//                                          ChordRest* vcr = static_cast<ChordRest*>(s->element(n + i));
+//                                          if (vcr)
+//                                                width = qMax(width, vcr->space().rw());
+//                                          }
                                     // extend past chord/rest
                                     x = width + sp;
                                     // but don't overlap next chord/rest
@@ -627,7 +627,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // lay out to just before next chordrest on this staff, or barline
                               // tick2 actually tells us the right chordrest to look for
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
-                                    qreal x2 = cr->x() + cr->space().rw();
+                                    qreal x2 = cr->x() /* TODO + cr->space().rw() */;
                                     Segment* currentSeg = static_cast<Segment*>(endElement()->parent());
                                     Segment* seg = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
                                     if (!seg) {

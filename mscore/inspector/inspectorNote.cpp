@@ -89,7 +89,6 @@ InspectorNote::InspectorNote(QWidget* parent)
             { P_ID::STEM_DIRECTION, 0, 1, c.stemDirection, c.resetStemDirection },
 
             { P_ID::LEADING_SPACE,  0, 2, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 2, s.trailingSpace, s.resetTrailingSpace }
             };
 
       mapSignals();
@@ -172,8 +171,6 @@ void InspectorNote::setElement()
       InspectorBase::setElement();
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
-      s.trailingSpace->setEnabled(nograce);
-      s.resetTrailingSpace->setEnabled(nograce && s.trailingSpace->value());
       s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
       }
 

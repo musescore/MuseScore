@@ -212,9 +212,9 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   qDebug("BarLine: bad _span %d", _span);
                   staffIdx2 = score()->nstaves() - 1;
                   }
-            Measure* measure;
+            Measure* measure = 0;
             System* system;
-            SysStaff* sysStaff0 = nullptr;      // top staff for barline in system
+            SysStaff* sysStaff0 = 0;      // top staff for barline in system
             bool systemBarLine;
             if (parent()->type() == Element::Type::SEGMENT) {
                   Segment* segment = static_cast<Segment*>(parent());
@@ -242,35 +242,38 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   int nstaves = score()->nstaves();
                   Staff* staff1 = score()->staff(staffIdx1);
                   Staff* staff2 = score()->staff(staffIdx2);
-                  SysStaff* sysStaff1 = system->staff(staffIdx1);
-                  SysStaff* sysStaff2 = system->staff(staffIdx2);
-                  SysStaff* sysStaff1a = nullptr;     // first staff that is shown, even if it has invisible measures
-                  Measure* nm = measure->nextMeasure();
-                  if (nm && nm->system() != measure->system())
-                        nm = nullptr;
-                  while (span > 0) {
-                        bool show1 = sysStaff1->show() && staff1->show();
-                        // if start staff not shown, reduce span and move one staff down
-                        if (!(show1 && (measure->visible(staffIdx1) || (nm && nm->visible(staffIdx1))))) {
-                              span--;
-                              if (show1 && !sysStaff1a)
-                                    sysStaff1a = sysStaff1;       // use for its y offset
-                              if (staffIdx1 >= nstaves-1)         // running out of staves?
+                  SysStaff* sysStaff1  = 0;
+                  SysStaff* sysStaff1a = 0;     // first staff that is shown, even if it has invisible measures
+                  if (system) {
+                        sysStaff1 = system->staff(staffIdx1);
+                        SysStaff* sysStaff2 = system->staff(staffIdx2);
+                        Measure* nm = measure->nextMeasure();
+                        if (nm && nm->system() != measure->system())
+                              nm = nullptr;
+                        while (span > 0) {
+                              bool show1 = sysStaff1->show() && staff1->show();
+                              // if start staff not shown, reduce span and move one staff down
+                              if (!(show1 && (measure->visible(staffIdx1) || (nm && nm->visible(staffIdx1))))) {
+                                    span--;
+                                    if (show1 && !sysStaff1a)
+                                          sysStaff1a = sysStaff1;       // use for its y offset
+                                    if (staffIdx1 >= nstaves-1)         // running out of staves?
+                                          break;
+                                    sysStaff1 = system->staff(++staffIdx1);
+                                    staff1    = score()->staff(staffIdx1);
+                                    }
+                              // if end staff not shown, reduce span and move one staff up
+                              else if (!(sysStaff2->show() && staff2->show() && (measure->visible(staffIdx2) || (nm && nm->visible(staffIdx2))))) {
+                                    span--;
+                                    if (staffIdx2 == 0)
+                                          break;
+                                    sysStaff2 = system->staff(--staffIdx2);
+                                    staff2    = score()->staff(staffIdx2);
+                                    }
+                              // if both staves shown, exit loop
+                              else
                                     break;
-                              sysStaff1 = system->staff(++staffIdx1);
-                              staff1    = score()->staff(staffIdx1);
                               }
-                        // if end staff not shown, reduce span and move one staff up
-                        else if (!(sysStaff2->show() && staff2->show() && (measure->visible(staffIdx2) || (nm && nm->visible(staffIdx2))))) {
-                              span--;
-                              if (staffIdx2 == 0)
-                                    break;
-                              sysStaff2 = system->staff(--staffIdx2);
-                              staff2    = score()->staff(staffIdx2);
-                              }
-                        // if both staves shown, exit loop
-                        else
-                              break;
                         }
                   // if no longer any span, set 0 length and exit
                   if (span <= 0) {
@@ -568,9 +571,9 @@ void BarLine::read(XmlReader& e)
                         _barLineType = ct;     // set type directly, without triggering setBarLineType() checks
                         }
                   if (parent() && parent()->type() == Element::Type::SEGMENT) {
-                        Measure* m = static_cast<Segment*>(parent())->measure();
-                        if (barLineType() != m->endBarLineType())
-                              _customSubtype = true;
+//                        Measure* m = static_cast<Segment*>(parent())->measure();
+//                        if (barLineType() != m->endBarLineType())
+//                              _customSubtype = true;
                         }
                   }
             else if (tag == "customSubtype")
@@ -601,15 +604,6 @@ void BarLine::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   space
-//---------------------------------------------------------
-
-Space BarLine::space() const
-      {
-      return Space(0.0, width());
       }
 
 //---------------------------------------------------------
@@ -702,7 +696,7 @@ Element* BarLine::drop(const DropData& data)
                         return 0;
                         }
                   }
-            score()->undoChangeBarLine(m, bl->barLineType());
+//TODO            score()->undoChangeBarLine(m, bl->barLineType());
             delete e;
             return 0;
             }
@@ -842,15 +836,16 @@ void BarLine::endEdit()
             if (_span > staff()->barLineSpan()) {
                   int idx2 = idx1 + _span;
                   // set span 0 to all additional staves
-                  for (int idx = idx1 + 1; idx < idx2; ++idx)
+                  for (int idx = idx1 + 1; idx < idx2; ++idx) {
                         // Mensurstrich special case:
                         // if line spans to top line of a stave AND current staff is
                         //    the last spanned staff BUT NOT the last score staff
                         //          keep its bar lines
                         // otherwise remove them
-                        if (_spanTo > 0 || !(idx == idx2-1 && idx != score()->nstaves()-1) )
-                              score()->undoChangeBarLineSpan(score()->staff(idx), 0, 0,
-                                          (score()->staff(idx)->lines()-1)*2);
+//TODO                        if (_spanTo > 0 || !(idx == idx2-1 && idx != score()->nstaves()-1) )
+//                              score()->undoChangeBarLineSpan(score()->staff(idx), 0, 0,
+//                                          (score()->staff(idx)->lines()-1)*2);
+                        }
                   }
             // if now bar lines span fewer staves
             else {
@@ -858,17 +853,17 @@ void BarLine::endEdit()
                   int idx2 = staffIdx() + staff()->barLineSpan();
                   // set standard span for each no-longer-spanned staff
                   for (int idx = idx1; idx < idx2; ++idx) {
-                        Staff* staff = score()->staff(idx);
-                        int lines = staff->lines();
-                        int spanFrom = lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                        int spanTo = lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines - 1) * 2;
-                        score()->undoChangeBarLineSpan(staff, 1, spanFrom, spanTo);
+//                        Staff* staff = score()->staff(idx);
+//                        int lines = staff->lines();
+//                        int spanFrom = lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+//                        int spanTo = lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines - 1) * 2;
+//TODO                        score()->undoChangeBarLineSpan(staff, 1, spanFrom, spanTo);
                         }
                   }
             }
 
       // update span for the staff the edited bar line belongs to
-      score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
+//TODO      score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
       }
 
 //---------------------------------------------------------
@@ -1063,8 +1058,8 @@ void BarLine::layout()
       qreal y1, y2;
       getY(&y1, &y2);
 
-      // if bar line does not belong to a system, has a staff and staff is set to hide bar lines, set null bbox
-      if (parent() && parent()->type() != Element::Type::SYSTEM && staff() && !staff()->staffType()->showBarlines())
+      // if bar line has a staff and staff is set to hide bar lines, set null bbox
+      if (staff() && !staff()->staffType()->showBarlines())
             setbbox(QRectF());
 
       // bar lines not hidden
@@ -1109,7 +1104,7 @@ void BarLine::layout()
             }
 
       // in any case, lay out attached elements
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             e->layout();
             if (e->type() == Element::Type::ARTICULATION) {
                   Articulation* a       = static_cast<Articulation*>(e);
@@ -1132,7 +1127,7 @@ void BarLine::layout()
 //   shape
 //---------------------------------------------------------
 
-QPainterPath BarLine::shape() const
+QPainterPath BarLine::outline() const
       {
       QPainterPath p;
       qreal d = spatium() * .3;
@@ -1176,13 +1171,20 @@ QString BarLine::barLineTypeName(BarLineType t)
 
 void BarLine::setBarLineType(const QString& s)
       {
+      _barLineType = barLineType(s);
+      }
+
+//---------------------------------------------------------
+//   barLineType
+//---------------------------------------------------------
+
+BarLineType BarLine::barLineType(const QString& s)
+      {
       for (unsigned i = 0; i < sizeof(barLineNames)/sizeof(*barLineNames); ++i) {
-            if (barLineNames[i] == s) {
-                  _barLineType = BarLineType(i);
-                  return;
-                  }
+            if (barLineNames[i] == s)
+                  return BarLineType(i);
             }
-      _barLineType = BarLineType::NORMAL;
+      return BarLineType::NORMAL;   // silent default
       }
 
 //---------------------------------------------------------
@@ -1214,8 +1216,8 @@ void BarLine::add(Element* e)
             case Element::Type::ARTICULATION:
                   _el.push_back(e);
                   setGenerated(false);
-                  if (parent() && parent()->parent())
-                        static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);
+//                  if (parent() && parent()->parent())
+//                        static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);
                   break;
             default:
                   qDebug("BarLine::add() not impl. %s", e->name());
@@ -1288,7 +1290,7 @@ void BarLine::updateCustomType()
                               break;
                         case Segment::Type::EndBarLine:
                               // if end-measure bar line, reference type is the measure endBarLinetype
-                              refType = seg->measure()->endBarLineType();
+//TODO                              refType = seg->measure()->endBarLineType();
                               break;
                         default:                      // keep lint happy!
                               break;
@@ -1317,6 +1319,7 @@ void BarLine::updateCustomType()
 
 void BarLine::updateGenerated(bool canBeTrue)
       {
+#if 0 // TODO
       if (!canBeTrue)
             setGenerated(false);
       else {
@@ -1344,6 +1347,7 @@ void BarLine::updateGenerated(bool canBeTrue)
                   && !isNudged()
                   );
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -1399,12 +1403,14 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
 
 QVariant BarLine::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SUBTYPE:
                   // default subtype is the subtype of the measure, if any
-                  if (parent() && parent()->type() == Element::Type::SEGMENT && static_cast<Segment*>(parent())->measure() )
-                      return int(static_cast<Segment*>(parent())->measure()->endBarLineType());
+
+//TODO?                  if (parent() && parent()->type() == Element::Type::SEGMENT && static_cast<Segment*>(parent())->measure() )
+//                      return int(static_cast<Segment*>(parent())->measure()->endBarLineType());
                   return int(BarLineType::NORMAL);
+
             case P_ID::BARLINE_SPAN:
                   // if there is a staff, default span is staff span
                   if (staff())

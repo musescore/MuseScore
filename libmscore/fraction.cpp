@@ -39,15 +39,6 @@ static unsigned lcm(int a, int b)
       }
 
 //---------------------------------------------------------
-//   Fraction
-//---------------------------------------------------------
-
-Fraction::Fraction(int z, int n)
-   : _numerator(z), _denominator(n)
-      {
-      }
-
-//---------------------------------------------------------
 //   reduce
 //---------------------------------------------------------
 
@@ -107,14 +98,12 @@ bool Fraction::operator==(const Fraction& val) const
       {
       const int v = lcm(_denominator, val._denominator);
       return (_numerator * (v / _denominator)) == (val._numerator * (v / val._denominator));
-//      return (_numerator == val._numerator) && (_denominator == val._denominator);
       }
 
 bool Fraction::operator!=(const Fraction& val) const
       {
       const int v = lcm(_denominator, val._denominator);
       return (_numerator * (v / _denominator)) != (val._numerator * (v / val._denominator));
-//      return (_numerator != val._numerator) || (_denominator != val._denominator);
       }
 
 //---------------------------------------------------------

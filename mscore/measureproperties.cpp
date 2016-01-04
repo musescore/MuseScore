@@ -118,7 +118,7 @@ void MeasureProperties::setMeasure(Measure* _m)
       nominalN->setNum(m->timesig().denominator());
 
       irregular->setChecked(m->irregular());
-      breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
+      breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
       int n  = m->repeatCount();
       count->setValue(n);
       count->setEnabled(m->repeatFlags() & Repeat::END);

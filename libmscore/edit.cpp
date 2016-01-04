@@ -454,7 +454,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             Measure* nfm = 0;
             Measure* nlm = 0;
             int tick     = 0;
-            bool endBarGenerated = m1->endBarLineGenerated();
+//            bool endBarGenerated = m1->endBarLineGenerated();
             for (int i = 0; i < nm; ++i) {
                   Measure* m = new Measure(s);
                   m->setPrev(nlm);
@@ -463,14 +463,14 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                   m->setTimesig(ns);
                   m->setLen(ns);
                   m->setTick(tick);
-                  m->setEndBarLineType(BarLineType::NORMAL, endBarGenerated);
+//                  m->setEndBarLineType(BarLineType::NORMAL, endBarGenerated);
                   tick += m->ticks();
                   nlm = m;
                   if (nfm == 0)
                         nfm = m;
                   }
-            nlm->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
-               m2->endBarLineVisible(), m2->endBarLineColor());
+//            nlm->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
+//               m2->endBarLineVisible(), m2->endBarLineColor());
             //
             // insert new calculated measures
             //
@@ -937,12 +937,12 @@ void Score::addPitch(int step, bool addFlag)
                   return;
                   }
             }
-      
+
       pos.segment   = inputState().segment();
       pos.staffIdx  = inputState().track() / VOICES;
       ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(step, clef);
-      
+
       if (inputState().repitchMode())
             repitchNote(pos, !addFlag);
       else
@@ -1853,7 +1853,8 @@ void Score::deleteItem(Element* el)
                         }
                   // if regular measure bar line
                   Segment* seg   = static_cast<Segment*>(bl->parent());
-                  bool normalBar = seg->measure()->endBarLineType() == BarLineType::NORMAL;
+//TODO                  bool normalBar = seg->measure()->endBarLineType() == BarLineType::NORMAL;
+                  bool normalBar = true;
                   int tick       = seg->tick();
                   Segment::Type segType = seg->segmentType();
 
@@ -1868,19 +1869,19 @@ void Score::deleteItem(Element* el)
                               undoChangeProperty(m, P_ID::REPEAT_FLAGS, int(m->repeatFlags()) & ~int(Repeat::START));
                         else if (segType == Segment::Type::EndBarLine) {
                               // if bar line has custom barLineType, change to barLineType of the whole measure
-                              if (bl->customSubtype()) {
-                                    undoChangeProperty(bl, P_ID::SUBTYPE, int(seg->measure()->endBarLineType()));
-                                    }
+//TODO                              if (bl->customSubtype()) {
+//                                    undoChangeProperty(bl, P_ID::SUBTYPE, int(seg->measure()->endBarLineType()));
+//                                    }
                               // otherwise, if whole measure has special end bar line, change to normal
-                              else if (!normalBar) {
+                              /*else*/ if (!normalBar) {
                                     if (m->tick() >= tick)
                                           m = m->prevMeasure();
                                     undoChangeProperty(m, P_ID::REPEAT_FLAGS, int(m->repeatFlags()) & ~int(Repeat::END));
                                     Measure* nm = m->nextMeasure();
                                     if (nm)
                                           undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags()) & ~int(Repeat::START));
-                                    undoChangeEndBarLineType(m, BarLineType::NORMAL);
-                                    m->setEndBarLineGenerated(true);
+//                                    undoChangeEndBarLineType(m, BarLineType::NORMAL);
+//TODO                                    m->setEndBarLineGenerated(true);
                                     }
                               // if bar line has custom span, reset to staff default
                               if (bl->customSpan() && bl->staff()) {
@@ -2040,7 +2041,8 @@ void Score::cmdDeleteSelectedMeasures()
             Measure* iem = static_cast<Measure*>(ie);
             if (iem->isMMRest())
                   ie = iem = iem->mmRestLast();
-            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
+//TODO            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
+            createEndBar = false;
             }
 
 
@@ -2092,9 +2094,9 @@ void Score::cmdDeleteSelectedMeasures()
                   v->adjustCanvasPosition(focusOn, false);
 
             if (createEndBar) {
-                  Measure* lastMeasure = score->lastMeasure();
-                  if (lastMeasure && lastMeasure->endBarLineType() == BarLineType::NORMAL)
-                        score->undoChangeEndBarLineType(lastMeasure, BarLineType::END);
+//                  Measure* lastMeasure = score->lastMeasure();
+//TODO                  if (lastMeasure && lastMeasure->endBarLineType() == BarLineType::NORMAL)
+//                        score->undoChangeEndBarLineType(lastMeasure, BarLineType::END);
                   }
 
             // insert correct timesig after deletion
@@ -2466,8 +2468,8 @@ void Score::cmdFullMeasureRest()
 
       // selected range is probably empty now and possibly subsumed by an mmrest
       // so updating selection requires forcing mmrests to be updated first
-      if (styleB(StyleIdx::createMultiMeasureRests))
-            createMMRests();
+//TODO-ws      if (styleB(StyleIdx::createMultiMeasureRests))
+//            createMMRests();
       s1 = tick2segmentMM(stick1);
       s2 = tick2segmentMM(stick2, true);
       if (selection().isRange() && s1 && s2) {
@@ -2624,12 +2626,12 @@ void Score::colorItem(Element* element)
                   e->setGenerated(false);
                   refresh |= e->abbox();
                   if (e->type() == Element::Type::BAR_LINE) {
-                        Element* ep = e->parent();
-                        if (ep->type() == Element::Type::SEGMENT && static_cast<Segment*>(ep)->segmentType() == Segment::Type::EndBarLine) {
-                              Measure* m = static_cast<Segment*>(ep)->measure();
-                              BarLine* bl = static_cast<BarLine*>(e);
-                              m->setEndBarLineType(bl->barLineType(), false, e->visible(), e->color());
-                              }
+//                        Element* ep = e->parent();
+//                        if (ep->type() == Element::Type::SEGMENT && static_cast<Segment*>(ep)->segmentType() == Segment::Type::EndBarLine) {
+//                              Measure* m = static_cast<Segment*>(ep)->measure();
+//                              BarLine* bl = static_cast<BarLine*>(e);
+//                              m->setEndBarLineType(bl->barLineType(), false, e->visible(), e->color());
+//                              }
                         }
                   }
             }
@@ -2839,15 +2841,16 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             if (type == Element::Type::MEASURE) {
                   if (score == rootScore())
                         omb = static_cast<Measure*>(mb);
-                  bool createEndBar    = false;
+//                  bool createEndBar    = false;
                   if (!measure) {
-                        Measure* lm = score->lastMeasure();
-                        if (lm && lm->endBarLineType() == BarLineType::END) {
+//                        Measure* lm = score->lastMeasure();
+/*TODO                        if (lm && lm->endBarLineType() == BarLineType::END) {
                               createEndBar = true;
                               score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
                               }
                         else if (!lm)
                               createEndBar = true;
+*/
                         }
 
                   Measure* m = static_cast<Measure*>(mb);
@@ -2942,8 +2945,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
-                  if (createEndBar)
-                        m->setEndBarLineType(BarLineType::END, false);
+//                  if (createEndBar)
+//                        m->setEndBarLineType(BarLineType::END, false);
                   }
             else {
                   // a frame, not a measure

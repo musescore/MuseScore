@@ -591,47 +591,6 @@ qreal Chord::maxHeadWidth() const
       }
 
 //---------------------------------------------------------
-//   addLedgerLine
-///   Add a ledger line to a chord.
-///   \arg track      track the ledger line belongs to
-///   \arg line       vertical position of line
-///   \arg visible    whether the line is visible or not
-///   \arg x          start x-position
-///   \arg len        line length
-//---------------------------------------------------------
-
-#if 0
-void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium len)
-      {
-      qreal _spatium = spatium();
-      LedgerLine* h = new LedgerLine(score());
-      h->setParent(this);
-      h->setTrack(track);
-      h->setVisible(visible);
-
-      //
-      // Experimental:
-      //  shorten ledger line to avoid collisions with accidentals
-      //
-
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
-            const Note* n = _notes.at(i);
-            if (n->line() >= (line-1) && n->line() <= (line+1) && n->accidental()) {
-                  x   += _spatium * .25;
-                  len -= Spatium(.25);
-                  break;
-                  }
-            }
-
-      h->setLen(len);
-      h->setPos(x, line * _spatium * .5);
-      h->setNext(_ledgerLines);
-      _ledgerLines = h;
-      }
-#endif
-
-//---------------------------------------------------------
 //   createLedgerLines
 ///   Creates the ledger lines fro a chord
 ///   \arg track      track the ledger line belongs to
@@ -835,13 +794,9 @@ void Chord::computeUp()
       if (_stemDirection != MScore::Direction::AUTO) {
             _up = _stemDirection == MScore::Direction::UP;
             }
-      else if (!parent()) {
+      else if (!parent())
             // hack for palette and drumset editor
-            if (upNote()->line() > 4)
-                  _up = true;
-            else
-                  _up = false;
-            }
+            _up = upNote()->line() > 4;
       else if (_noteType != NoteType::NORMAL) {
             //
             // stem direction for grace notes
@@ -851,9 +806,8 @@ void Chord::computeUp()
             else
                   _up = true;
             }
-      else if (staffMove()) {
+      else if (staffMove())
             _up = staffMove() > 0;
-            }
       else if (measure()->mstaff(staffIdx())->hasVoices) {
             _up = !(track() % 2);
             }
@@ -1189,7 +1143,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //   processSiblings
 //---------------------------------------------------------
 
-void Chord::processSiblings(std::function<void(Element*)> func)
+void Chord::processSiblings(std::function<void(Element*)> func) const
       {
       if (_hook)
             func(_hook);
@@ -1205,10 +1159,10 @@ void Chord::processSiblings(std::function<void(Element*)> func)
             func(ll);
       for (int i = 0; i < _notes.size(); ++i)
             func(_notes.at(i));
-      for (Chord* chord : _graceNotes)
-            func(chord);
       for (Element* e : _el)
             func(e);
+      for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
+            func(chord);
       }
 
 //---------------------------------------------------------
@@ -1258,9 +1212,9 @@ qreal Chord::defaultStemLength() {
                   if (!tab->stemThrough()) {
                         // process stem:
                         return tab->chordStemLength(this) * _spatium;
+                        }
                   }
             }
-      }
       else if (logicalLineDistance != 1.0) {
             // convert to actual distance from top of staff in sp
             ul *= logicalLineDistance;
@@ -1367,7 +1321,7 @@ qreal Chord::defaultStemLength() {
             stemLen *= physicalLineDistance;
 
       return stemLen * _spatium;
-}
+      }
 
 //---------------------------------------------------------
 //   layoutStem1
@@ -1400,34 +1354,6 @@ void Chord::layoutStem1()
             if (_stemSlash)
                   score()->undoRemoveElement(_stemSlash);
             }
-      }
-
-//---------------------------------------------------------
-//   layoutHook1
-///   Layout hook
-//
-//    Called before layout spacing of notes.
-//    Create hook if necessary to get right note width for next
-//    pass.
-//---------------------------------------------------------
-
-void Chord::layoutHook1()
-      {
-      int hookIdx  = durationType().hooks();
-      if (hookIdx && !(_noStem || measure()->slashStyle(staffIdx()))) {
-            if (!_hook) {
-                  Hook* hook = new Hook(score());
-                  hook->setParent(this);
-                  hook->setGenerated(true);
-                  if (score()->mscVersion() <= 114 && _stem && !_stem->visible()) {
-                        hook->setVisible(false);
-                        }
-                  score()->undoAddElement(hook);
-                  }
-            _hook->setHookType(up() ? hookIdx : -hookIdx);
-            }
-      else if (_hook)
-            score()->undoRemoveElement(_hook);
       }
 
 //-----------------------------------------------------------------------------
@@ -1492,17 +1418,13 @@ void Chord::layoutStem()
       //
       // NON-TAB (or TAB with stems through staff)
       //
-      if (segment()) {
-            System* s = segment()->measure()->system();
-            if (s == 0)       //DEBUG
-                  return;
-            }
-
       if (_stem) {
-           _stem->setLen(defaultStemLength());
+            _stem->layout();  //?
+            _stem->setLen(defaultStemLength());
             // if (isGrace())
             //      abort();
             if (_hook) {
+                  _hook->layout();
                   QPointF p(_stem->hookPos());
                   if (up()) {
                         p.ry() -= _hook->bbox().top();
@@ -1630,7 +1552,7 @@ void Chord::layout2()
                   s = nullptr;
             // start from the right (if next segment found, x of it relative to this chord;
             // chord right space otherwise)
-            qreal xOff =  (s != nullptr) ? s->pos().x() - (segment()->pos().x() + pos().x()) : space().rw();
+            qreal xOff =  s ? s->pos().x() - (segment()->pos().x() + pos().x()) : 0.0;    // TODO: space().rw();
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
             xOff -= (s != nullptr && s->segmentType() != Segment::Type::ChordRest)
@@ -1640,9 +1562,9 @@ void Chord::layout2()
             int n = gna.size();
             for (int i = n-1; i >= 0; i--) {
                   Chord* g = gna.value(i);
-                  xOff -= g->space().rw();                  // move to left by grace note left space (incl. grace own width)
+//TODO                  xOff -= g->space().rw();                  // move to left by grace note left space (incl. grace own width)
                   g->rxpos() = xOff;
-                  xOff -= minNoteDist + g->space().lw();    // move to left by grace note right space and inter-grace distance
+//TODO                  xOff -= minNoteDist + g->space().lw();    // move to left by grace note right space and inter-grace distance
                   }
             }
 
@@ -1779,13 +1701,13 @@ void Chord::layoutPitched()
       for (Chord* c : gna)
             c->layoutPitched();
 
-      qreal _spatium  = spatium();
-      qreal dotNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
-      qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
-      qreal minTieLength = score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
+      qreal _spatium         = spatium();
+      qreal dotNoteDistance  = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
+      qreal minNoteDistance  = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
+      qreal minTieLength     = score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
       qreal ledgerLineLength = score()->styleD(StyleIdx::ledgerLineLength) * _spatium;
-      qreal graceMag = score()->styleD(StyleIdx::graceNoteMag);
-      qreal chordX = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
+      qreal graceMag         = score()->styleD(StyleIdx::graceNoteMag);
+      qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -2063,41 +1985,41 @@ void Chord::layoutPitched()
                         // this will be used in calculating its position relative to this chord
                         // it is too late to actually allocate space for this in segment of previous chord
                         // so we will allocate room in left space of this chord
-                        qreal oldR = pc->space().rw();
+                        qreal oldR = pc->_spaceRw;
                         qreal stemX = pc->stemPosX();
                         qreal available = oldR - stemX;
                         qreal newR = stemX + qMax(available, llsp);
                         if (newR > oldR)
-                              pc->_space.setRw(newR);
+                              pc->_spaceRw = newR;
                         }
                   lll = qMax(llsp, lll);
                   }
 
             }
 
-      _space.setLw(lll);
-      _space.setRw(rrr);
+      _spaceLw = lll;
+      _spaceRw = rrr;
 
       if (gnb){
-              qreal xl = -(_space.lw() + minNoteDistance) - chordX;
+              qreal xl = 0.0; // TODO -(_spaceLw + minNoteDistance) - chordX;
               for (int i = gnb-1; i >= 0; --i) {
                     Chord* g = graceNotesBefore.value(i);
-                    xl -= g->space().rw()/* * 1.2*/;
+                    xl -= g->_spaceRw/* * 1.2*/;
                     g->setPos(xl, 0);
-                    xl -= g->space().lw() + minNoteDistance * graceMag;
+                    xl -= g->_spaceLw + minNoteDistance * graceMag;
                     }
-              if (-xl > _space.lw())
-                    _space.setLw(-xl);
+              if (-xl > _spaceLw)
+                    _spaceLw = -xl;
               }
        if (!gna.isEmpty()) {
-            qreal xr = _space.rw();
+            qreal xr = _spaceRw;
             int n = gna.size();
             for (int i = 0; i <= n - 1; i++) {
                   Chord* g = gna.value(i);
-                  xr += g->space().lw() + g->space().rw() + minNoteDistance * graceMag;
+                  xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
                   }
-           if (xr > _space.rw())
-                 _space.setRw(xr);
+           if (xr > _spaceRw)
+                 _spaceRw = xr;
            }
 
       for (Element* e : _el) {
@@ -2108,10 +2030,10 @@ void Chord::layoutPitched()
                   QRectF tbbox = e->bbox().translated(e->pos());
                   qreal lx = tbbox.left() + chordX;
                   qreal rx = tbbox.right() + chordX;
-                  if (-lx > _space.lw())
-                        _space.setLw(-lx);
-                  if (rx > _space.rw())
-                        _space.setRw(rx);
+                  if (-lx > _spaceLw)
+                        _spaceLw = -lx;
+                  if (rx > _spaceRw)
+                        _spaceRw = rx;
                   }
             }
       for (int i = 0; i < _notes.size(); ++i)
@@ -2388,23 +2310,23 @@ void Chord::layoutTablature()
             rrr = qMax(rrr, x);
             }
 
-      _space.setLw(lll);
-      _space.setRw(rrr);
+      _spaceLw = lll;
+      _spaceRw = rrr;
 
       qreal graceMag = score()->styleD(StyleIdx::graceNoteMag);
 
       QList<Chord*> graceNotesBefore = Chord::graceNotesBefore();
       int nb = graceNotesBefore.size();
       if (nb) {
-              qreal xl = -(_space.lw() + minNoteDistance);
+              qreal xl = -(_spaceLw + minNoteDistance);
               for (int i = nb-1; i >= 0; --i) {
                     Chord* c = graceNotesBefore.value(i);
-                    xl -= c->space().rw()/* * 1.2*/;
+                    xl -= c->_spaceRw/* * 1.2*/;
                     c->setPos(xl, 0);
-                    xl -= c->space().lw() + minNoteDistance * graceMag;
+                    xl -= c->_spaceLw + minNoteDistance * graceMag;
                     }
-              if (-xl > _space.lw())
-                    _space.setLw(-xl);
+              if (-xl > _spaceLw)
+                    _spaceLw = -xl;
               }
        QList<Chord*> gna = graceNotesAfter();
        int na = gna.size();
@@ -2421,15 +2343,15 @@ void Chord::layoutTablature()
                  case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }
-           qreal xr = fc * (_space.rw() + minNoteDistance);
+           qreal xr = fc * (_spaceRw + minNoteDistance);
            for (int i = 0; i <= na - 1; i++) {
                  Chord* c = gna.value(i);
-                 xr += c->space().lw() * (i == 0 ? 1.3 : 1);
+                 xr += c->_spaceLw * (i == 0 ? 1.3 : 1);
                  c->setPos(xr, 0);
-                 xr += c->space().rw() + minNoteDistance * graceMag;
+                 xr += c->_spaceRw + minNoteDistance * graceMag;
                  }
-           if (xr > _space.rw())
-                 _space.setRw(xr);
+           if (xr > _spaceRw)
+                 _spaceRw = xr;
            }
       for (Element* e : _el) {
             e->layout();
@@ -2437,10 +2359,10 @@ void Chord::layoutTablature()
                   QRectF tbbox = e->bbox().translated(e->pos());
                   qreal lx = tbbox.left();
                   qreal rx = tbbox.right();
-                  if (-lx > _space.lw())
-                        _space.setLw(-lx);
-                  if (rx > _space.rw())
-                        _space.setRw(rx);
+                  if (-lx > _spaceLw)
+                        _spaceLw = -lx;
+                  if (rx > _spaceRw)
+                        _spaceRw = rx;
                   }
             }
 
@@ -3247,6 +3169,10 @@ Element* Chord::prevElement()
       return ChordRest::prevElement();
       }
 
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
 QString Chord::accessibleExtraInfo()
       {
       QString rez = "";
@@ -3266,9 +3192,6 @@ QString Chord::accessibleExtraInfo()
       if (tremolo() && score()->selectionFilter().canSelect(tremolo()))
             rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
-//      if (glissando() && score()->selectionFilter().canSelect(glissando()))
-//            rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
-
       foreach (Element* e, el()) {
             if (!score()->selectionFilter().canSelect(e)) continue;
             rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -3276,4 +3199,29 @@ QString Chord::accessibleExtraInfo()
 
       return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
       }
+
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape Chord::shape() const
+      {
+      Shape shape;
+      processSiblings([&shape, this] (Element* e) {
+            Shape s = e->shape();
+            // compute distance between grace notes and chord
+            // TODO: distinguish between grace notes before/after
+            if (e->type() == Element::Type::CHORD) {
+                  qreal minNoteDistance  = score()->styleD(StyleIdx::minNoteDistance);
+                  qreal nhw              = score()->noteHeadWidth() * score()->styleD(StyleIdx::graceNoteMag);
+                  qreal dist             = qMax(s.minHorizontalDistance(shape), nhw) + minNoteDistance;
+                  e->rxpos()             = -dist;
+                  s.translate(e->pos());
+                  }
+            shape.add(s);
+            });
+      shape.add(ChordRest::shape());
+      return shape;
+      }
 }
+

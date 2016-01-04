@@ -4681,7 +4681,7 @@ int main(int argc, char* av[])
 
       MuseScoreApplication* app;
       if (MuseScore::unstable()) {
-            app = new MuseScoreApplication("mscore-dev", argc, av);
+            app = new MuseScoreApplication("mscore-dev3", argc, av);
             QCoreApplication::setApplicationName("MuseScoreDevelopment");
             }
       else {

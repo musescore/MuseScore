@@ -131,11 +131,6 @@ class Clef : public Element {
 
       ClefTypeList _clefTypes;
 
-      ClefType    curClefType;      // cached value of clef type (for re-laying out)
-      int         curLines;         // cached value of staff nm. of lines  ( " )
-      qreal       curLineDist;      // cached value of staff line distance ( " )
-      void        layout1();        // lays the element out, using cached values
-
    public:
       Clef(Score*);
       Clef(const Clef&);
@@ -158,7 +153,6 @@ class Clef : public Element {
       virtual bool isEditable() const                    { return false; }
 
       virtual void addElement(Element* e, qreal x, qreal y);
-      virtual Space space() const      { return Space(0.0, bbox().x() * 2.0 + width()); }
 
       bool small() const               { return _small; }
       void setSmall(bool val);

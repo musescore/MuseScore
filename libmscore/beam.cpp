@@ -467,7 +467,7 @@ void Beam::layout()
       QList<ChordRest*> crl;
 
       int n = 0;
-      foreach(ChordRest* cr, _elements) {
+      for (ChordRest* cr : _elements) {
             if (cr->measure()->system() != system) {
                   SpannerSegmentType st;
                   if (n == 0)
@@ -507,10 +507,10 @@ void Beam::layout()
       }
 
 //---------------------------------------------------------
-//   shape
+//   outline
 //---------------------------------------------------------
 
-QPainterPath Beam::shape() const
+QPainterPath Beam::outline() const
       {
       QPainterPath pp;
       qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
@@ -532,7 +532,7 @@ QPainterPath Beam::shape() const
 
 bool Beam::contains(const QPointF& p) const
       {
-      return shape().contains(p - pagePos());
+      return outline().contains(p - pagePos());
       }
 
 //---------------------------------------------------------
@@ -1899,16 +1899,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   continue;
             c->layoutStem1();
             Stem* stem = c->stem();
-#if 0
-            if (!stem) {
-                  // is this ever true? -> yes
-qDebug("create stem in layout beam, track %d", c->track());
-                  stem = new Stem(score());
-                  stem->setParent(c);
-                  score()->undoAddElement(stem);
-//                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
-                  }
-#endif
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
@@ -1935,8 +1925,10 @@ qDebug("create stem in layout beam, track %d", c->track());
                            beamSegments.back()->x2());
                         }
                   }
-            if (stem)
+            if (stem) {
                   stem->setLen(y2 - (by + _pagePos.y()));
+                  stem->rxpos() = c->stemPosX();
+                  }
 
 #if 0       // TODO ??
             if (!tab) {

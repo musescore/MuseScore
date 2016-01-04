@@ -377,6 +377,8 @@ enum class StyleIdx : unsigned char {
       lyricsDashMaxLength,
       lyricsDashForce,
 
+      minVerticalDistance,
+
       STYLES
       };
 

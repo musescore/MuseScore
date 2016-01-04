@@ -229,6 +229,10 @@ void MScore::init()
       StaffType::initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);
+
+#ifdef DEBUG_SHAPES
+      testShapes();
+#endif
       }
 
 //---------------------------------------------------------

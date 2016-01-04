@@ -404,20 +404,25 @@ void Selection::appendFiltered(Element* e)
 
 void Selection::appendChord(Chord* chord)
       {
-      if (chord->beam() && !_el.contains(chord->beam())) _el.append(chord->beam());
-      if (chord->stem()) _el.append(chord->stem());
-      if (chord->hook()) _el.append(chord->hook());
-      if (chord->arpeggio()) appendFiltered(chord->arpeggio());
-//      if (chord->glissando()) appendFiltered(chord->glissando());
-      if (chord->stemSlash()) _el.append(chord->stemSlash());
-      if (chord->tremolo()) appendFiltered(chord->tremolo());
-      foreach(Note* note, chord->notes()) {
+      if (chord->beam() && !_el.contains(chord->beam()))
+            _el.append(chord->beam());
+      if (chord->stem())
+            _el.append(chord->stem());
+      if (chord->hook())
+            _el.append(chord->hook());
+      if (chord->arpeggio())
+            appendFiltered(chord->arpeggio());
+      if (chord->stemSlash())
+            _el.append(chord->stemSlash());
+      if (chord->tremolo())
+            appendFiltered(chord->tremolo());
+      for (Note* note : chord->notes()) {
             _el.append(note);
             if (note->accidental()) _el.append(note->accidental());
             foreach(Element* el, note->el())
                   appendFiltered(el);
-            for (int x = 0; x < MAX_DOTS; x++)
-                  if (note->dot(x) != 0) _el.append(note->dot(x));
+            for (NoteDot* dot : note->dots())
+                  _el.append(dot);
 
             if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
                   if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
@@ -436,7 +441,7 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
-      foreach(Element* e, _el)
+      for (Element* e : _el)
             e->setSelected(false);
       _el.clear();
 
@@ -465,13 +470,7 @@ void Selection::updateSelectedElements()
                         appendFiltered(e);
                         }
                   Element* e = s->element(st);
-                  if (!e)
-                        continue;
-                  if (e->generated())
-                        continue;
-                  if (e->type() == Element::Type::TIMESIG)
-                        continue;
-                  if (e->type() == Element::Type::KEYSIG)
+                  if (!e || e->generated() || e->type() == Element::Type::TIMESIG || e->type() == Element::Type::KEYSIG)
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
@@ -479,7 +478,7 @@ void Selection::updateSelectedElements()
                               if (e)
                                     appendFiltered(e);
                               }
-                        foreach (Articulation* art, cr->articulations())
+                        for (Articulation* art : cr->articulations())
                               appendFiltered(art);
                         }
                   if (e->type() == Element::Type::CHORD) {

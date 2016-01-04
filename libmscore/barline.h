@@ -91,14 +91,13 @@ class BarLine : public Element {
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
-      virtual Space space() const override;
       virtual QPointF pagePos() const override;      ///< position in canvas coordinates
       virtual QPointF canvasPos() const override;    ///< position in canvas coordinates
       virtual void layout() override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-      virtual QPainterPath shape() const override;
+      virtual QPainterPath outline() const override;
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
@@ -114,7 +113,6 @@ class BarLine : public Element {
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
 
-      virtual bool isEditable() const override { return parent()->type() == Element::Type::SEGMENT; }
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
       virtual void editDrag(const EditData&) override;
@@ -136,6 +134,7 @@ class BarLine : public Element {
       void setBarLineType(const QString& s);
       void setBarLineType(BarLineType i) { _barLineType = i;     updateCustomType();      }
       BarLineType barLineType() const    { return _barLineType;  }
+      static BarLineType barLineType(const QString&);
 
       virtual int subtype() const override         { return int(_barLineType); }
       virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }

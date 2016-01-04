@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>194</width>
-    <height>97</height>
+    <width>209</width>
+    <height>64</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,19 +75,6 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Trailing space</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="leadingSpace">
        <property name="sizePolicy">
@@ -98,31 +85,6 @@
        </property>
        <property name="accessibleName">
         <string>Leading space</string>
-       </property>
-       <property name="suffix">
-        <string extracomment="spatium unit">sp</string>
-       </property>
-       <property name="minimum">
-        <double>-10.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>10.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="trailingSpace">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="accessibleName">
-        <string>Trailing space</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -164,19 +126,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetTrailingSpace">
-       <property name="toolTip">
-        <string>Reset value</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset Trailing space value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
@@ -184,8 +133,6 @@
  <tabstops>
   <tabstop>leadingSpace</tabstop>
   <tabstop>resetLeadingSpace</tabstop>
-  <tabstop>trailingSpace</tabstop>
-  <tabstop>resetTrailingSpace</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

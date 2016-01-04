@@ -85,6 +85,9 @@
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 #include "libmscore/xml.h"
+#ifdef SHAPES
+#include "libmscore/shape.h"
+#endif
 
 namespace Ms {
 
@@ -1898,6 +1901,37 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   QPointF pos(page->pos());
                   p.translate(pos);
                   drawElements(p, ell);
+
+
+#ifdef DEBUG_SHAPES
+                  for (const System* system : page->systems()) {
+                        for (const MeasureBase* mb : system->measures()) {
+                              if (mb->type() == Element::Type::MEASURE) {
+                                    const Measure* m = static_cast<const Measure*>(mb);
+                                    for (const Segment* s = m->first(); s; s = s->next()) {
+                                          for (int i = 0; i < score()->nstaves(); ++i) {
+                                                QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
+                                                   system->staffYpage(i));
+                                                p.translate(pt);
+                                                s->shapes().at(i).draw(&p);
+                                                p.translate(-pt);
+                                                }
+                                          for (Element* e : s->annotations()) {
+                                                if (!e)
+                                                      continue;
+                                                QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(), system->pos().y());
+                                                p.translate(pt);
+                                                Shape shape;
+                                                shape.add(e->bbox().translated(e->pos()));
+                                                shape.draw(&p);
+                                                p.translate(-pt);
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+#endif
+
                   p.translate(-pos);
                   r1 -= _matrix.mapRect(pr).toAlignedRect();
                   }
@@ -4063,7 +4097,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
                   showRect.setY(p.y());
                   showRect.setHeight(el->height());
                   }
-            else if (sys->page()->systems()->size() == 1) {
+            else if (sys->page()->systems().size() == 1) {
                   // otherwise, just keep current vertical position if possible
                   // see issue #7724
                   showRect.setY(r.y());
@@ -5569,7 +5603,7 @@ bool ScoreView::searchPage(int n)
             n = _score->npages() - 1;
             }
       const Page* page = _score->pages()[n];
-      foreach (System* s, *page->systems()) {
+      foreach (System* s, page->systems()) {
             if (s->firstMeasure()) {
                   gotoMeasure(s->firstMeasure());
                   break;

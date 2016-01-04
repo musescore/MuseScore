@@ -815,7 +815,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (dotted) {
                                                       // there is at most one dotted note in this guitar pro version
                                                       NoteDot* dot = new NoteDot(score);
-                                                      dot->setIdx(dotted);
+                                                      //dot->setIdx(dotted);
                                                       dot->setParent(note);
                                                       dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
                                                       dot->setVisible(true);

@@ -48,18 +48,17 @@ class RepeatMeasure;
 //---------------------------------------------------------
 
 struct MStaff {
-      qreal distanceUp;
-      qreal distanceDown;
-      Text* _noText;          ///< Measure number text object
-      StaffLines*  lines;
-      Spacer* _vspacerUp;
-      Spacer* _vspacerDown;
-      bool hasVoices;         ///< indicates that MStaff contains more than one voice,
-                              ///< this changes some layout rules
-      bool _visible;
-      bool _slashStyle;
+      Text* _noText        { 0 };         ///< Measure number text object
+      StaffLines*  lines   { 0 };
+      Spacer* _vspacerUp   { 0 };
+      Spacer* _vspacerDown { 0 };
+      bool hasVoices       { false };     ///< indicates that MStaff contains more than one voice,
+                                          ///< this changes some layout rules
+      bool _visible        { true };
+      bool _slashStyle     { false };
 
-      MStaff();
+
+      MStaff()  {}
       ~MStaff();
       MStaff(const MStaff&);
 
@@ -72,25 +71,6 @@ struct MStaff {
       Text* noText() const         { return _noText;     }
       void setNoText(Text* t)      { _noText = t;        }
       };
-
-//---------------------------------------------------------
-//   Repeat
-//---------------------------------------------------------
-
-enum class Repeat : char {
-      NONE    = 0,
-      END     = 1,
-      START   = 2,
-      MEASURE = 4,
-      JUMP    = 8
-      };
-
-constexpr Repeat operator| (Repeat t1, Repeat t2) {
-      return static_cast<Repeat>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (Repeat t1, Repeat t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
 
 //---------------------------------------------------------
 //   MeasureNumberMode
@@ -112,50 +92,36 @@ enum class MeasureNumberMode : char {
 
 class Measure : public MeasureBase {
       Q_OBJECT
+      Q_PROPERTY(Ms::Segment* firstSegment READ first)
+      Q_PROPERTY(Ms::Segment* lastSegment  READ last)
 
-      Q_PROPERTY(Ms::Segment* firstSegment      READ first)
-      Q_PROPERTY(Ms::Segment* lastSegment       READ last)
-
+      QList<MStaff*>  _mstaves;
       SegmentList _segments;
-
-      Fraction _timesig;
-      Fraction _len;          ///< actual length of measure
-
-      int _repeatCount;       ///< end repeat marker und repeat count
-      Repeat _repeatFlags;    ///< or'd Repeat's
-
-      QList<MStaff*>  staves;
-
-      int    _no;             ///< Measure number, counting from zero
-      int    _noOffset;       ///< Offset to measure number
-      MeasureNumberMode _noMode;
+      Measure* _mmRest;       // multi measure rest which replaces a measure range
 
       qreal _userStretch;
 
-      mutable qreal _minWidth1;     ///< minimal measure width, cached value
-      mutable qreal _minWidth2;     ///< minimal measure width, cached value
-
-      bool _irregular;              ///< Irregular measure, do not count
-      bool _breakMultiMeasureRest;  ///< set by user
-      bool _breakMMRest;            ///< set by layout
-
-      BarLineType _endBarLineType;
-      bool        _endBarLineGenerated;
-      bool        _endBarLineVisible;
-      QColor      _endBarLineColor;
-      BarLineType _systemInitialBarLineType;    ///< type used for system bar line, when measure is initial
-
-      int _playbackCount;     // temp. value used in RepeatList
-                              // counts how many times this measure was already played
-
-      Measure* _mmRest;       // multi measure rest which replaces a measure range
       int _mmRestCount;       // > 0 if this is a multi measure rest
                               // 0 if this is the start of a mm rest (_mmRest != 0)
                               // < 0 if this measure is covered by a mm rest
 
+
+      Fraction _timesig;
+      Fraction _len;          ///< actual length of measure
+
+      int _playbackCount;     // temp. value used in RepeatList
+                              // counts how many times this measure was already played
+
+      int _repeatCount;       ///< end repeat marker und repeat count
+
+      MeasureNumberMode _noMode;
+
+      bool _breakMultiMeasureRest;
+
+      BarLineType _systemInitialBarLineType;    ///< type used for system bar line, when measure is initial
+
       void push_back(Segment* e);
       void push_front(Segment* e);
-      void layoutCR0(ChordRest* cr, qreal m, AccidentalState*);
 
    public:
       Measure(Score* = 0);
@@ -179,29 +145,18 @@ class Measure : public MeasureBase {
       virtual void change(Element* o, Element* n) override;
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
-      System* system() const               { return (System*)parent(); }
-      QList<MStaff*>* staffList()          { return &staves;      }
-      MStaff* mstaff(int staffIdx)         { return staves[staffIdx]; }
-      bool hasVoices(int staffIdx) const   { return staves[staffIdx]->hasVoices; }
-      StaffLines* staffLines(int staffIdx) { return staves[staffIdx]->lines; }
-      int no() const                       { return _no;          }
-      bool irregular() const               { return _irregular;   }
-      void setIrregular(bool val)          { _irregular = val;    }
-      int noOffset() const                 { return _noOffset;    }
+      System* system() const                { return (System*)parent(); }
+      QList<MStaff*>& mstaves()             { return _mstaves;      }
+      const QList<MStaff*>& mstaves() const { return _mstaves;      }
+      MStaff* mstaff(int staffIdx)          { return _mstaves[staffIdx]; }
+      bool hasVoices(int staffIdx) const    { return _mstaves[staffIdx]->hasVoices; }
+      StaffLines* staffLines(int staffIdx)  { return _mstaves[staffIdx]->lines; }
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }
 
-      void setNo(int n)                    { _no = n;             }
-      void setNoOffset(int n)              { _noOffset = n;       }
-      virtual qreal distanceUp(int i) const;
-      virtual qreal distanceDown(int i) const;
-
       qreal minWidth1() const;
       qreal minWidth2() const;
-
-      bool systemHeader() const;
-      void setDirty();
 
       Fraction timesig() const             { return _timesig;     }
       void setTimesig(const Fraction& f)   { _timesig = f;        }
@@ -216,14 +171,12 @@ class Measure : public MeasureBase {
       Segment* first(Segment::Type t) const     { return _segments.first(t);      }
 
       Ms::Segment* last() const                 { return _segments.last(); }
-      void remove(Segment* s);
       SegmentList* segments()                   { return &_segments; }
 
       qreal userStretch() const;
       void setUserStretch(qreal v)              { _userStretch = v; }
 
-      void layoutX(qreal stretch);
-      void layoutWidth(qreal width);
+      void stretchMeasure(qreal stretch);
       void layout2();
 
       Chord* findChord(int tick, int track);
@@ -247,7 +200,6 @@ class Measure : public MeasureBase {
 
       void sortStaves(QList<int>& dst);
 
-      void dump() const;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
@@ -259,16 +211,8 @@ class Measure : public MeasureBase {
       Segment* getSegment(Segment::Type st, int tick);
       Segment* findSegment(Segment::Type st, int t);
 
-      bool createEndBarLines();
-
-      void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = QColor());
-      BarLineType endBarLineType() const        { return _endBarLineType; }
-
+      qreal createEndBarLines(bool);
       bool setStartRepeatBarLine(bool);
-      bool endBarLineGenerated() const          { return _endBarLineGenerated; }
-      void setEndBarLineGenerated(bool v)       { _endBarLineGenerated = v;    }
-      bool endBarLineVisible() const            { return _endBarLineVisible;   }
-      QColor endBarLineColor() const            { return _endBarLineColor;     }
       void setSystemInitialBarLineType(BarLineType v) { _systemInitialBarLineType = v;    }
       BarLineType systemInitialBarLineType() const    { return _systemInitialBarLineType; }
 
@@ -277,11 +221,6 @@ class Measure : public MeasureBase {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
       void adjustToLen(Fraction);
-
-      Repeat repeatFlags() const                   { return _repeatFlags; }
-      void setRepeatFlags(Repeat val)              { _repeatFlags = val;  }
-      void setRepeatFlag(Repeat val)               { _repeatFlags = _repeatFlags | val; }
-      void resetRepeatFlag(Repeat val)             { _repeatFlags = Repeat(int(_repeatFlags) & ~int(val)); }
 
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool &error) const;
@@ -295,16 +234,14 @@ class Measure : public MeasureBase {
       bool slashStyle(int staffIdx) const;
       bool isFinalMeasureOfSection() const;
 
-      bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest | _breakMMRest; }
-      bool breakMMRest() const                  { return _breakMMRest; }
-      void setBreakMMRest(bool v)               { _breakMMRest = v;    }
-      bool getBreakMultiMeasureRest() const     { return _breakMultiMeasureRest; }
+      bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest; }
       void setBreakMultiMeasureRest(bool val)   { _breakMultiMeasureRest = val;  }
 
       bool isEmpty() const;
       bool isOnlyRests(int track) const;
 
-      void layoutStage1();
+      void layoutCR0(ChordRest* cr, qreal m, AccidentalState*);
+
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
       QRectF staffabbox(int staffIdx) const;
@@ -326,6 +263,9 @@ class Measure : public MeasureBase {
       Element* nextElementStaff(int staff);
       Element* prevElementStaff(int staff);
       virtual QString accessibleInfo() override;
+
+      void removeSystemHeader();
+      void removeSystemTrailer();
       };
 
 }     // namespace Ms

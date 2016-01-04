@@ -307,8 +307,8 @@ void TimeSig::layout1()
                   _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
-            QList<SymId> ns = toTimeSigString(_numeratorString);
-            QList<SymId> ds = toTimeSigString(_denominatorString);
+            std::vector<SymId> ns = toTimeSigString(_numeratorString);
+            std::vector<SymId> ds = toTimeSigString(_denominatorString);
 
             ScoreFont* font = score()->scoreFont();
             qreal mag = magS();
@@ -361,8 +361,8 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genTimesig())
             return;
       painter->setPen(curColor());
-      QList<SymId> ns = toTimeSigString(_numeratorString);
-      QList<SymId> ds = toTimeSigString(_denominatorString);
+      std::vector<SymId> ns = toTimeSigString(_numeratorString);
+      std::vector<SymId> ds = toTimeSigString(_denominatorString);
 
       drawSymbols(ns, painter, pz);
       drawSymbols(ds, painter, pn);
@@ -370,15 +370,6 @@ void TimeSig::draw(QPainter* painter) const
             drawSymbol(SymId::timeSigParensLeft, painter, pointLargeLeftParen);
             drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen);
             }
-      }
-
-//---------------------------------------------------------
-//   space
-//---------------------------------------------------------
-
-Space TimeSig::space() const
-      {
-      return Space(point(score()->styleS(StyleIdx::timesigLeftMargin)), width());
       }
 
 //---------------------------------------------------------

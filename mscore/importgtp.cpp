@@ -2115,7 +2115,7 @@ void GuitarPro3::read(QFile* fp)
                                     if (dotted) {
                                           NoteDot* dot = new NoteDot(score);
                                           // there is at most one dotted note in this guitar pro version - set 0 index
-                                          dot->setIdx(0);
+                                          // dot->setIdx(0);
                                           dot->setParent(note);
                                           dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
                                           dot->setVisible(true);
@@ -2364,11 +2364,11 @@ Score::FileError importGTP(Score* score, const QString& name)
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure(), ++idx) {
             const GpBar& bar = gp->bars[idx];
-            if (bar.barLine != BarLineType::NORMAL)
-                  m->setEndBarLineType(bar.barLine, false);
+//TODO            if (bar.barLine != BarLineType::NORMAL)
+//                  m->setEndBarLineType(bar.barLine, false);
             }
-      if (score->lastMeasure())
-            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+//TODO      if (score->lastMeasure())
+//            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // create parts (excerpts)

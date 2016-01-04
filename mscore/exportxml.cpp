@@ -1450,8 +1450,11 @@ void ExportMusicXml::barlineRight(Measure* m)
       const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
       const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
-      BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
-      bool visible = m->endBarLineVisible();
+//TODO-WS      BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
+//      bool visible = m->endBarLineVisible();
+      BarLineType bst = BarLineType::NORMAL;
+      bool visible = true;
+
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
       if (!needBarStyle && !volta)
@@ -4496,8 +4499,8 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
                   // Staff layout elements.
                   for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
                         xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                        const double staffDist =
-                              getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
+                        const double staffDist = 0.0;
+//TODO-ws                              getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
                         xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
                         xml.etag();
                         }
@@ -5009,6 +5012,126 @@ void ExportMusicXml::write(QIODevice* dev)
 
                   if (preferences.musicxmlExportLayout)
                         measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
+#if 0 // MERGE
+                  xml.stag(measureTag);
+
+                  // Handle the <print> element.
+                  // When exporting layout and all breaks, a <print> with layout informations
+                  // is generated for the measure types TopSystem, NewSystem and newPage.
+                  // When exporting layout but only manual or no breaks, a <print> with
+                  // layout informations is generated only for the measure type TopSystem,
+                  // as it is assumed the system layout is broken by the importing application
+                  // anyway and is thus useless.
+
+                  int currentSystem = NoSystem;
+                  Measure* previousMeasure = 0;
+
+                  for (MeasureBase* currentMeasureB = m->prev(); currentMeasureB; currentMeasureB = currentMeasureB->prev()) {
+                        if (currentMeasureB->type() == Element::Type::MEASURE) {
+                              previousMeasure = (Measure*) currentMeasureB;
+                              break;
+                              }
+                        }
+
+                  if (!previousMeasure)
+                        currentSystem = TopSystem;
+                  else if (m->parent() && previousMeasure->parent()) {
+                        if (m->parent()->parent() != previousMeasure->parent()->parent())
+                              currentSystem = NewPage;
+                        else if (m->parent() != previousMeasure->parent())
+                              currentSystem = NewSystem;
+                        }
+
+                  bool prevMeasLineBreak = false;
+                  bool prevMeasPageBreak = false;
+                  if (previousMeasure) {
+                        prevMeasLineBreak = previousMeasure->lineBreak();
+                        prevMeasPageBreak = previousMeasure->pageBreak();
+                        }
+
+                  if (currentSystem != NoSystem) {
+
+                        // determine if a new-system or new-page is required
+                        QString newThing; // new-[system|page]="yes" or empty
+                        if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL) {
+                              if (currentSystem == NewSystem)
+                                    newThing = " new-system=\"yes\"";
+                              else if (currentSystem == NewPage)
+                                    newThing = " new-page=\"yes\"";
+                              }
+                        else if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::MANUAL) {
+                              if (currentSystem == NewSystem && prevMeasLineBreak)
+                                    newThing = " new-system=\"yes\"";
+                              else if (currentSystem == NewPage && prevMeasPageBreak)
+                                    newThing = " new-page=\"yes\"";
+                              }
+
+                        // determine if layout information is required
+                        bool doLayout = false;
+                        if (preferences.musicxmlExportLayout) {
+                              if (currentSystem == TopSystem
+                                  || (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL && newThing != "")) {
+                                    doLayout = true;
+                                    }
+                              }
+
+                        if (doLayout) {
+                              xml.stag(QString("print%1").arg(newThing));
+                              const double pageWidth  = getTenthsFromInches(pf->size().width());
+                              const double lm = getTenthsFromInches(pf->oddLeftMargin());
+                              const double rm = getTenthsFromInches(pf->oddRightMargin());
+                              const double tm = getTenthsFromInches(pf->oddTopMargin());
+
+                              // System Layout
+
+                              // For a multi-meaure rest positioning is valid only
+                              // in the replacing measure
+                              // note: for a normal measure, mmRest1 is the measure itself,
+                              // for a multi-meaure rest, it is the replacing measure
+                              const Measure* mmR1 = m->mmRest1();
+                              const System* system = mmR1->system();
+
+                              // Put the system print suggestions only for the first part in a score...
+                              if (idx == 0) {
+
+                                    // Find the right margin of the system.
+                                    double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+                                    double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
+
+                                    xml.stag("system-layout");
+                                    xml.stag("system-margins");
+                                    xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
+                                    xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
+                                    xml.etag();
+
+                                    if (currentSystem == NewPage || currentSystem == TopSystem) {
+                                          const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                                          xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                                          }
+                                    if (currentSystem == NewSystem) {
+                                          // see System::layout2() for the factor 2 * score()->spatium()
+                                          const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
+                                                                                   - previousMeasure->pagePos().y()
+                                                                                   - previousMeasure->bbox().height()
+                                                                                   + 2 * score()->spatium()
+                                                                                   );
+                                          xml.tag("system-distance",
+                                                  QString("%1").arg(QString::number(sysDist,'f',2)));
+                                          }
+
+                                    xml.etag();
+                                    }
+
+                              // Staff layout elements.
+                              for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
+                                    xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
+                                    const double staffDist =
+                                          // getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
+                                          0.0;
+                                    xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
+                                    xml.etag();
+                                    }
+#endif //MERGE
 
                   xml.stag(measureTag);
 

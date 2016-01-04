@@ -665,7 +665,7 @@ void MuseScore::newFile()
                         }
                   }
             }
-      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+//TODO      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // select first rest
@@ -2541,7 +2541,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 
       foreach (Page* page, score->pages()) {
         // 1st pass: StaffLines
-        foreach (System* s, *(page->systems())) {
+        foreach (System* s, page->systems()) {
             for (int i = 0, n = s->staves()->size(); i < n; i++) {
                 if (score->staff(i)->invisible())
                     continue;  // ignore invisible staves

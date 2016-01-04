@@ -448,7 +448,7 @@ void MuseScore::editInstrList()
                         // except for Mensurstrich (barLineTo<=0)
                         // for consistency with Barline::endEdit,
                         // don't special case 1-line staves
-                        s->undoChangeBarLineSpan(staff, 0, 0, (staff->lines() - 1) * 2);
+//TODO                        s->undoChangeBarLineSpan(staff, 0, 0, (staff->lines() - 1) * 2);
                         }
 
                   // update barline span if necessary
@@ -459,7 +459,7 @@ void MuseScore::editInstrList()
                         int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                         int linesTo = rootScore->staff(i + setSpan - 1)->lines();
                         int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
-                        s->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
+//TODO                         s->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
                         }
 
                   // count off one from barline span

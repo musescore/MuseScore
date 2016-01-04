@@ -19,7 +19,7 @@
 #define __SEGMENT_H__
 
 #include "element.h"
-
+#include "shape.h"
 class QPainter;
 
 namespace Ms {
@@ -69,40 +69,44 @@ class Segment : public Element {
 public:
    enum class Type {
          Invalid            = 0x0,
-         Clef               = 0x1,        // type from Clef to TimeSig
-         KeySig             = 0x2,        // need to be in the order in which they
-         Ambitus            = 0x4,        // appear in a measure
-         TimeSig            = 0x8,
-         StartRepeatBarLine = 0x10,
-         BarLine            = 0x20,
-         Breath             = 0x40,
-         ChordRest          = 0x80,
-         EndBarLine         = 0x100,
-         KeySigAnnounce     = 0x200,
-         TimeSigAnnounce    = 0x400,
+         BeginBarLine       = 0x1,
+         Clef               = 0x2,        // type from Clef to TimeSig
+         KeySig             = 0x4,        // need to be in the order in which they
+         Ambitus            = 0x8,        // appear in a measure
+         TimeSig            = 0x10,
+         StartRepeatBarLine = 0x20,
+         BarLine            = 0x40,
+         Breath             = 0x80,
+         ChordRest          = 0x100,
+         EndBarLine         = 0x200,
+         KeySigAnnounce     = 0x400,
+         TimeSigAnnounce    = 0x800,
          All                = -1
          };
 
    private:
-      Segment* _next;               // linked list of segments inside a measure
+      Segment* _next;                     // linked list of segments inside a measure
       Segment* _prev;
 
-      mutable bool empty;           // cached value
-      mutable bool _written { false };        // used for write()
+      mutable bool empty;                 // cached value
+      mutable bool _written { false };    // used for write()
 
       Type _segmentType { Type::Invalid };
       int _tick;
+      int _ticks;
       Spatium _extraLeadingSpace;
-      Spatium _extraTrailingSpace;
-      QList<qreal>   _dotPosX;     ///< size = staves
 
+      QList<qreal>   _dotPosX;            ///< size = staves
       std::vector<Element*> _annotations;
-
-      QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
+      QList<Element*> _elist;             ///< Element storage, size = staves * VOICES.
+      QList<Shape>    _shapes;            // size = staves
 
       void init();
       void checkEmpty() const;
       void checkElement(Element*, int track);
+
+   protected:
+      Element* getElement(int staff);     //??
 
    public:
       Segment(Measure* m = 0);
@@ -179,6 +183,8 @@ public:
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start
       void setRtick(int val)                     { _tick = val; }
+      int ticks() const                          { return _ticks; }
+      void setTicks(int val)                     { _ticks = val; }
 
       bool splitsTuplet() const;
 
@@ -194,8 +200,6 @@ public:
 
       Spatium extraLeadingSpace() const          { return _extraLeadingSpace;  }
       void setExtraLeadingSpace(Spatium v)       { _extraLeadingSpace = v;     }
-      Spatium extraTrailingSpace() const         { return _extraTrailingSpace; }
-      void setExtraTrailingSpace(Spatium v)      { _extraTrailingSpace = v;    }
       bool written() const                       { return _written; }
       void setWritten(bool val)                  { _written = val; }
       virtual void write(Xml&) const;
@@ -213,8 +217,14 @@ public:
       Element* lastInPrevSegments(int activeStaff);   //<
       Element* firstElement(int staff);              //<  These methods are used for navigation
       Element* lastElement(int staff);               //<  for next-element and prev-element
-protected:                                           //
-      Element* getElement(int staff);                //<
+
+      QList<Shape> shapes()              { return _shapes; }
+      const QList<Shape>& shapes() const { return _shapes; }
+      const Shape& shape(int i) const    { return _shapes[i]; }
+      void createShapes();
+      void createShape(int staffIdx);
+      qreal minRight() const;
+      qreal minLeft() const;
       };
 
 constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {

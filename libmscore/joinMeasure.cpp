@@ -38,8 +38,8 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
             undo(new RemoveElement(i.value));
       undoRemoveMeasures(m1, m2);
       Measure* m = new Measure(this);
-      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
-         m2->endBarLineVisible(), m2->endBarLineColor());
+//TODO      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
+//         m2->endBarLineVisible(), m2->endBarLineColor());
 
       m->setTick(m1->tick());
       m->setTimesig(m1->timesig());

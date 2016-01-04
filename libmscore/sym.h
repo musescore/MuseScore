@@ -2526,15 +2526,15 @@ class Sym {
       QPointF _cutOutNW;
       QPointF _cutOutSE;
       QPointF _cutOutSW;
-      QList<SymId> _ids;            // not empty if this is a compound symbol
+      std::vector<SymId> _ids;            // not empty if this is a compound symbol
 
    public:
       Sym() { }
 
       bool isValid() const                       { return _code != -1; }
 
-      void setSymList(const QList<SymId>& sl)    { _ids = sl;        }
-      const QList<SymId>& symList() const        { return _ids;      }
+      void setSymList(const std::vector<SymId>& sl)    { _ids = sl;        }
+      const std::vector<SymId>& symList() const        { return _ids;      }
 
       FT_UInt index() const                      { return _index;    }
       void setIndex(FT_UInt i)                   { _index = i; }
@@ -2647,17 +2647,17 @@ class ScoreFont {
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal scale) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const;
-      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos) const;
-      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
+      void draw(const std::vector<SymId>&, QPainter*, qreal mag, const QPointF& pos) const;
+      void draw(const std::vector<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
       qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }
       qreal width(SymId id, qreal mag) const          { return sym(id).bbox().width() * mag;  }
       qreal advance(SymId id, qreal mag) const        { return sym(id).advance() * mag;  }
-      qreal width(const QList<SymId>&, qreal mag) const;
+      qreal width(const std::vector<SymId>&, qreal mag) const;
 
       const QRectF bbox(SymId id, qreal mag) const;
-      const QRectF bbox(const QList<SymId>& s, qreal mag) const;
+      const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
       QPointF stemDownNW(SymId id, qreal mag) const   { return sym(id).stemDownNW() * mag;   }
       QPointF stemUpSE(SymId id, qreal mag) const     { return sym(id).stemUpSE() * mag;   }
       QPointF cutOutNE(SymId id, qreal mag) const     { return sym(id).cutOutNE() * mag; }
