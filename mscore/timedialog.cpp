@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: timedialog.cpp 4391 2011-06-18 14:28:24Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.

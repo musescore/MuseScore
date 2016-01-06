@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -77,7 +77,7 @@ static void addHeader(QString& out)
 static void addFooter(QString& out)
       {
 /*      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
-             "&copy; 2002-2014 Werner Schweer &amp; others</div>\n"
+             "&copy; 2002-2016 Werner Schweer &amp; others</div>\n"
              "</body>\n"
              "</html>\n";
       */

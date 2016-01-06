@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: exportxml.cpp 5598 2012-04-30 07:20:39Z lvinken $
 //
-//  Copyright (C) 2002-2013 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.

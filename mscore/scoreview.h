@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: scoreview.h 5599 2012-04-30 08:25:44Z lasconic $
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.

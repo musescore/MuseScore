@@ -6,7 +6,7 @@
 //  jackWeakAPI based on code from Stéphane Letz (Grame)
 //  partly based on Julien Pommier (PianoTeq : http://www.pianoteq.com/) code.
 //
-//  Copyright (C) 2002-2007 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //  Copyright (C) 2009 Grame
 
 //  This program is free software; you can redistribute it and/or modify

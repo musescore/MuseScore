@@ -3,7 +3,7 @@
 //  Audio Widget Library
 //  $Id:$
 //
-//  Copyright (C) 2002-2007 by Werner Schweer and others
+//  Copyright (C) 2002-2016 by Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.

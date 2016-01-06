@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id: musescore.cpp 4961 2011-11-11 16:24:17Z lasconic $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.

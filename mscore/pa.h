@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: pa.h 4147 2011-04-07 14:39:44Z wschweer $
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
