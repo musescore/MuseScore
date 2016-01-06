@@ -2552,14 +2552,44 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
         foreach (System* s, *(page->systems())) {
             for (int i = 0, n = s->staves()->size(); i < n; i++) {
                 if (score->staff(i)->invisible())
-                    continue;
-                StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
-          const StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
-                firstSL->bbox().setRight(lastSL->bbox().right()
-                                      +  lastSL->pagePos().x()
-                                      - firstSL->pagePos().x());
-                printer.setElement(firstSL);
-                   paintElement(p, firstSL);
+                    continue;  // ignore invisible staves
+
+                // The goal here is to draw SVG staff lines more efficiently.
+                // MuseScore draws staff lines by measure, but for SVG they can
+                // generally be drawn once for each system. This makes a big
+                // difference for scores that scroll horizontally on a single
+                // page. But there is an exception to this rule:
+                //
+                //   ~ One (or more) invisible measure(s) in a system/staff ~
+                //     In this case the SVG staff lines for the system/staff
+                //     are drawn by measure.
+                //
+                bool byMeasure = false;
+                for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                    if (!static_cast<Measure*>(mb)->visible(i)) {
+                        byMeasure = true;
+                        continue;
+                    }
+                }
+                if (byMeasure) { // Draw visible staff lines by measure
+                    for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                        Measure* m = static_cast<Measure*>(mb);
+                        if (m->visible(i)) {
+                            StaffLines* sl = m->staffLines(i);
+                            printer.setElement(sl);
+                               paintElement(p, sl);
+                        }
+                    }
+                }
+                else { // Draw staff lines once per system
+                    StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
+              const StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
+                    firstSL->bbox().setRight(lastSL->bbox().right()
+                                          +  lastSL->pagePos().x()
+                                          - firstSL->pagePos().x());
+                    printer.setElement(firstSL);
+                       paintElement(p, firstSL);
+                }
             }
         }
         // 2nd pass: the rest of the elements
