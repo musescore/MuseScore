@@ -775,6 +775,8 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
+      if (ext == "svg") mag = 1; // SVG is not scaled, it's scalable.
+
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
 
@@ -796,7 +798,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             // note that clipping is not implemented
             // (as of 4.8)
             SvgGenerator printer;
-            printer.setResolution(int(convDpi));
+            printer.setResolution(DPI);
             printer.setFileName(fn);
             printer.setSize(QSize(w, h));
             printer.setViewBox(QRect(0, 0, w, h));
