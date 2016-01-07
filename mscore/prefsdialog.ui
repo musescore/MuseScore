@@ -177,7 +177,7 @@
              <string>Start empty</string>
             </property>
             <property name="text">
-             <string>&amp;Start empty</string>
+             <string>Start empty</string>
             </property>
            </widget>
           </item>
@@ -195,7 +195,7 @@
                <string>Start with score:</string>
               </property>
               <property name="text">
-               <string>S&amp;tart with score:</string>
+               <string>Start with score:</string>
               </property>
              </widget>
             </item>
@@ -250,7 +250,7 @@
              <string>Continue last session</string>
             </property>
             <property name="text">
-             <string>&amp;Continue last session</string>
+             <string>Continue last session</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -633,7 +633,7 @@
           <string>OSC remote control</string>
          </property>
          <property name="title">
-          <string>OSC Remote Contro&amp;l</string>
+          <string>OSC Remote Control</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -814,7 +814,7 @@
              <string>Background Wallpaper</string>
             </property>
             <property name="text">
-             <string>Wa&amp;llpaper</string>
+             <string>Wallpaper</string>
             </property>
            </widget>
           </item>
@@ -824,7 +824,7 @@
              <string>Background Color</string>
             </property>
             <property name="text">
-             <string>&amp;Color</string>
+             <string>Color</string>
             </property>
            </widget>
           </item>
@@ -1018,7 +1018,7 @@
              <string>Paper Wallpaper</string>
             </property>
             <property name="text">
-             <string>Wall&amp;paper</string>
+             <string>Wallpaper</string>
             </property>
            </widget>
           </item>
@@ -1122,7 +1122,7 @@
           <item row="2" column="1">
            <widget class="QRadioButton" name="pageHorizontal">
             <property name="text">
-             <string>hori&amp;zontal</string>
+             <string>horizontal</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1132,7 +1132,7 @@
           <item row="2" column="2">
            <widget class="QRadioButton" name="pageVertical">
             <property name="text">
-             <string>&amp;vertical</string>
+             <string>vertical</string>
             </property>
            </widget>
           </item>
@@ -1174,7 +1174,7 @@
              <string>Play notes when editing</string>
             </property>
             <property name="title">
-             <string>&amp;Play notes when editing</string>
+             <string>Play notes when editing</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1273,7 +1273,7 @@
           <string>MIDI remote control</string>
          </property>
          <property name="title">
-          <string>MIDI Remote &amp;Control</string>
+          <string>MIDI Remote Control</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2280,7 +2280,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>&amp;PulseAudio</string>
+          <string>PulseAudio</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2420,7 +2420,7 @@
           <string>ALSA audio</string>
          </property>
          <property name="title">
-          <string>A&amp;LSA audio</string>
+          <string>ALSA audio</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2616,7 +2616,7 @@
           <string>JACK audio server</string>
          </property>
          <property name="title">
-          <string>&amp;JACK audio server</string>
+          <string>JACK audio server</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2809,7 +2809,7 @@
              <string>Build in style</string>
             </property>
             <property name="text">
-             <string>Bui&amp;lt in style</string>
+             <string>Built in style</string>
             </property>
            </widget>
           </item>
@@ -3231,7 +3231,7 @@
              <string>Export layout</string>
             </property>
             <property name="title">
-             <string>Export &amp;layout</string>
+             <string>Export layout</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -3243,7 +3243,7 @@
                 <string>Export all system and page breaks</string>
                </property>
                <property name="text">
-                <string>Export all system and &amp;page breaks</string>
+                <string>Export all system and page breaks</string>
                </property>
               </widget>
              </item>
