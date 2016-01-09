@@ -2256,6 +2256,8 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
       for (int i = 1; i < t->elements().size(); ++i)
             if (t->elements().at(0)->duration().ticks() != t->elements().at(i)->duration().ticks())
                   return t->baseLen().ticks();
+      if (t->elements().size() != t->ratio().numerator())
+            return t->baseLen().ticks();
       return 0;
       }
 
