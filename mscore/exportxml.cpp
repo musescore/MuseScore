@@ -2539,6 +2539,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
             if (rightParenthesis && leftParenthesis)
                   noteheadTagname += " parentheses=\"yes\"";
+            if (note->headType() == NoteHead::Type::HEAD_QUARTER)
+                  noteheadTagname += " filled=\"yes\"";
+            else if ((note->headType() == NoteHead::Type::HEAD_HALF) || (note->headType() == NoteHead::Type::HEAD_WHOLE))
+                  noteheadTagname += " filled=\"no\"";
             if (note->headGroup() == NoteHead::Group::HEAD_SLASH)
                   xml.tag(noteheadTagname, "slash");
             else if (note->headGroup() == NoteHead::Group::HEAD_TRIANGLE)
@@ -2566,6 +2570,8 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             else if (note->color() != MScore::defaultColor)
                   xml.tag(noteheadTagname, "normal");
             else if (rightParenthesis && leftParenthesis)
+                  xml.tag(noteheadTagname, "normal");
+            else if (note->headType() != NoteHead::Type::HEAD_AUTO)
                   xml.tag(noteheadTagname, "normal");
 
             // LVIFIX: check move() handling
