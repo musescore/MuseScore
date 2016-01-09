@@ -58,6 +58,7 @@
         <time-modification>
           <actual-notes>1</actual-notes>
           <normal-notes>8</normal-notes>
+          <normal-type>16th</normal-type>
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
@@ -79,6 +80,7 @@
         <time-modification>
           <actual-notes>1</actual-notes>
           <normal-notes>8</normal-notes>
+          <normal-type>16th</normal-type>
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
@@ -100,6 +102,7 @@
         <time-modification>
           <actual-notes>1</actual-notes>
           <normal-notes>4</normal-notes>
+          <normal-type>eighth</normal-type>
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
@@ -120,6 +123,7 @@
         <time-modification>
           <actual-notes>1</actual-notes>
           <normal-notes>4</normal-notes>
+          <normal-type>eighth</normal-type>
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
@@ -142,6 +146,7 @@
         <time-modification>
           <actual-notes>1</actual-notes>
           <normal-notes>2</normal-notes>
+          <normal-type>quarter</normal-type>
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
@@ -161,6 +166,7 @@
         <time-modification>
           <actual-notes>1</actual-notes>
           <normal-notes>2</normal-notes>
+          <normal-type>quarter</normal-type>
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
