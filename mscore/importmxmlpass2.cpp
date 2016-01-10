@@ -4011,6 +4011,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
       QColor noteheadColor = QColor::Invalid;
       bool noteheadParentheses = false;
+      QString noteheadFilled;
       int velocity = round(_e.attributes().value("dynamics").toDouble() * 0.9);
       bool graceSlash = false;
       bool printObject = _e.attributes().value("print-object") != "no";
@@ -4053,6 +4054,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (_e.name() == "notehead") {
                   noteheadColor.setNamedColor(_e.attributes().value("color").toString());
                   noteheadParentheses = _e.attributes().value("parentheses") == "yes";
+                  noteheadFilled = _e.attributes().value("filled").toString();
                   headGroup = convertNotehead(_e.readElementText());
                   }
             else if (_e.name() == "pitch")
@@ -4297,6 +4299,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   s->setParent(note);
                   _score->addElement(s);
                   }
+
+            if (noteheadFilled == "no")
+                  note->setHeadType(NoteHead::Type::HEAD_HALF);
+            else if (noteheadFilled == "yes")
+                  note->setHeadType(NoteHead::Type::HEAD_QUARTER);
 
             if (velocity > 0) {
                   note->setVeloType(Note::ValueType::USER_VAL);
