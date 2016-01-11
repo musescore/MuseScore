@@ -22,11 +22,11 @@ In MuseScore source
 * Add the language mscore_XX.qm in share/locale/CMakeLists.txt
 * Add the language instruments_XX.qm in share/locale/CMakeLists.txt
 
-* Add the language in build/gen-qt-projectfile.bat and build/gen-qt-projectfile
-* Add the language instruments_XX.ts to build/gen-qt-projectfile.bat and build/gen-qt-projectfile
+* Add the language mscore_XX.ts to build/gen-qt-projectfile.bat and build/gen-instruments-projectfile
+* Add the language instruments_XX.ts to build/gen-instruments-projectfile.bat and build/gen-qt-projectfile
 
 * Add the share/locale/mscore_XX.ts file, tx pull can help (`tx pull -t language_code)
-* Add the language instruments_XX.ts in share/locale
+* Add the share/locale/instruments_XX.ts file, see above
 
 
 
