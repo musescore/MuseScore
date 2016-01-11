@@ -65,7 +65,7 @@ bool MP3Exporter::findLibrary()
       if (!mLibPath.isEmpty()) {
             QFileInfo fi(mLibPath);
             path = fi.absolutePath();
-            name = fi.baseName();
+            name = fi.completeBaseName();
             }
       else {
             path = getLibraryPath();
@@ -531,7 +531,7 @@ void MP3Exporter::cancelEncoding()
       else if (beWriteInfoTag) {
          f.flush();
          QFileInfo fi(f);
-         beWriteInfoTag(mGF, qPrintable(fi.baseName()));
+         beWriteInfoTag(mGF, qPrintable(fi.completeBaseName()));
          mGF = NULL;
       }
 #endif

@@ -424,7 +424,7 @@ QList<Workspace*>& Workspace::workspaces()
                   foreach (const QString& entry, pl) {
                         Workspace* p = 0;
                         QFileInfo fi(s + "/" + entry);
-                        QString name(fi.baseName());
+                        QString name(fi.completeBaseName());
                         foreach (Workspace* w, _workspaces) {
                               if (w->name() == name) {
                                     p = w;

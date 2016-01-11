@@ -415,7 +415,7 @@ void PluginCreator::load()
             }
       created = false;
       setState(PCState::CLEAN);
-      setTitle( fi.baseName() );
+      setTitle( fi.completeBaseName() );
       setToolTip(path);
       raise();
       }
@@ -444,7 +444,7 @@ void PluginCreator::savePlugin()
             textEdit->document()->setModified(false);
             created = false;
             setState(PCState::CLEAN);
-            setTitle( fi.baseName() );
+            setTitle( fi.completeBaseName() );
             setToolTip(path);
             }
       else {
