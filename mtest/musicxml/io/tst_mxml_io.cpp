@@ -125,6 +125,7 @@ private slots:
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
+      void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
       void restNotations() { mxmlIoTestRef("testRestNotations"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void restsTypeWhole() { mxmlIoTestRef("testRestsTypeWhole"); }
