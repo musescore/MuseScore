@@ -2578,7 +2578,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT  | STATE_FOTO,
          "plugin-creator",
          QT_TRANSLATE_NOOP("action", "Plugin Creator..."),
          QT_TRANSLATE_NOOP("action", "Plugin creator"),
@@ -2588,7 +2588,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT  | STATE_FOTO,
          "plugin-manager",
          QT_TRANSLATE_NOOP("action", "Plugin Manager..."),
          QT_TRANSLATE_NOOP("action", "Plugin manager"),
