@@ -233,7 +233,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   if (currentTimeSig)
                         newTs->setFrom(currentTimeSig);
                   else
-                        newTs->setSig(_currentTimeSig.numerator(), _currentTimeSig.denominator(), TimeSigType::NORMAL);
+                        newTs->setSig(Fraction(_currentTimeSig.numerator(), _currentTimeSig.denominator()), TimeSigType::NORMAL);
                   newTs->setParent(parent);
                   newTs->setTrack(e->track());
                   newTs->layout();
