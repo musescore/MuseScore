@@ -2094,7 +2094,7 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
 
             static qreal magStart = 1.0;
             if (pinch->state() == Qt::GestureStarted) {
-                  magStart = mag();
+                  magStart = lmag();
                   }
             if (pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {
                   // On Windows, totalScaleFactor() contains the net magnification.
