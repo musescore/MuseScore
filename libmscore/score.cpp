@@ -1942,6 +1942,15 @@ Segment* Score::firstSegment(Segment::Type segType) const
       }
 
 //---------------------------------------------------------
+//   firstSegment Q_INVOKABLE wrapper
+//---------------------------------------------------------
+
+Segment* Score::firstSegment(int segType) const
+      {
+      return firstSegment(static_cast<Segment::Type>(segType));
+      }
+
+//---------------------------------------------------------
 //   firstSegmentMM
 //---------------------------------------------------------
 
