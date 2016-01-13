@@ -565,6 +565,16 @@ void Segment::remove(Element* el)
                   _elist[track] = 0;
                   int staffIdx = el->staffIdx();
                   measure()->checkMultiVoices(staffIdx);
+                  // spanners with this cr as start or end element will need relayout
+                  SpannerMap& smap = score()->spannerMap();
+                  auto spanners = smap.findOverlapping(tick(), tick());
+                  for (auto interval : spanners) {
+                        Spanner* s = interval.value;
+                        if (s->startElement() == el)
+                              s->setStartElement(nullptr);
+                        if (s->endElement() == el)
+                              s->setEndElement(nullptr);
+                        }
                   }
                   break;
 
@@ -1226,9 +1236,8 @@ QString Segment::accessibleExtraInfo()
       QString startSpanners = "";
       QString endSpanners = "";
 
-      std::vector< ::Interval<Spanner*> > spanners = score()->spannerMap().findOverlapping(this->tick(), this->tick());
-      for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
-            ::Interval<Spanner*> interval = *i;
+      auto spanners = score()->spannerMap().findOverlapping(this->tick(), this->tick());
+      for (auto interval : spanners) {
             Spanner* s = interval.value;
             if (!score()->selectionFilter().canSelect(s)) continue;
             if (this->segmentType() == Segment::Type::EndBarLine       ||
