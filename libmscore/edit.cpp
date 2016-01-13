@@ -446,7 +446,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
             int tick1 = m1->tick();
             int tick2 = m2->endTick();
-            for (auto i : s->spannerMap().findContained(tick1, tick2))
+            auto spanners = s->spannerMap().findContained(tick1, tick2);
+            for (auto i : spanners)
                   undo(new RemoveElement(i.value));
             s->undoRemoveMeasures(m1, m2);
 
@@ -2162,7 +2163,8 @@ void Score::cmdDeleteSelection()
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
             int track2  = selection().staffEnd() * VOICES;
-            for (auto i : _spanner.findOverlapping(stick1, stick2 - 1)) {
+            auto spanners = _spanner.findOverlapping(stick1, stick2 - 1);
+            for (auto i : spanners) {
                   Spanner* sp = i.value;
                   if (sp->type() == Element::Type::VOLTA)
                         continue;

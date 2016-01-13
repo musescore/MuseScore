@@ -1497,8 +1497,7 @@ QString BarLine::accessibleExtraInfo()
             int tick = seg->tick();
 
             auto spanners = score()->spannerMap().findOverlapping(tick, tick);
-            for (auto i = spanners.begin(); i < spanners.end(); i++) {
-                  ::Interval<Spanner*> interval = *i;
+            for (auto interval : spanners) {
                   Spanner* s = interval.value;
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA) {

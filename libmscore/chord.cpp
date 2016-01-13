@@ -2759,8 +2759,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
       bool botGap = false;
       bool topGap = false;
 
-      const std::vector< ::Interval<Spanner*> >& si = score()->spannerMap().findOverlapping(tick(), tick());
-      for (::Interval<Spanner*> is : si) {
+      auto si = score()->spannerMap().findOverlapping(tick(), tick());
+      for (auto is : si) {
             Spanner* sp = is.value;
             if ((sp->type() != Element::Type::SLUR) || (sp->tick() != tick() && sp->tick2() != tick()))
                  continue;

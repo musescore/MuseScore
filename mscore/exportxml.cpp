@@ -1368,7 +1368,8 @@ static Volta* findVolta(Measure* m, bool left)
       {
       int stick = m->tick();
       int etick = m->tick() + m->ticks();
-      for (auto i : m->score()->spannerMap().findOverlapping(stick, etick)) {
+      auto spanners = m->score()->spannerMap().findOverlapping(stick, etick);
+      for (auto i : spanners) {
             Spanner* el = i.value;
             if (el->type() != Element::Type::VOLTA)
                   continue;
