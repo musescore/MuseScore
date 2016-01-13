@@ -76,6 +76,7 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void partClicked(QListWidgetItem*);
       void createExcerptClicked(QListWidgetItem*);
       void titleChanged(const QString&);
+      bool isInPartsList(Excerpt* e);
 
    public:
       ExcerptsDialog(Score*, QWidget* parent = 0);

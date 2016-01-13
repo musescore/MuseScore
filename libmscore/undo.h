@@ -926,6 +926,22 @@ class RemoveExcerpt : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   SwapExcerpt
+//---------------------------------------------------------
+
+class SwapExcerpt : public UndoCommand {
+      Score* score;
+      int pos1;
+      int pos2;
+
+   public:
+      SwapExcerpt(Score* s, int p1, int p2) : score(s), pos1(p1), pos2(p2) {}
+      virtual void undo();
+      virtual void redo();
+      UNDO_NAME("SwapExcerpt")
+      };
+
+//---------------------------------------------------------
 //   ChangeBend
 //---------------------------------------------------------
 

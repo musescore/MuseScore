@@ -86,6 +86,21 @@ bool Excerpt::operator!=(const Excerpt& e) const
       }
 
 //---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool Excerpt::operator==(const Excerpt& e) const
+      {
+      if (e._oscore != _oscore)
+            return false;
+      if (e._title != _title)
+            return false;
+      if (e._parts != _parts)
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   localSetScore
 //---------------------------------------------------------
 
