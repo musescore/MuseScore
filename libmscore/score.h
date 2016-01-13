@@ -888,8 +888,9 @@ class Score : public QObject, public ScoreElement {
       Ms::Measure* lastMeasureMM() const;
       MeasureBase* measure(int idx) const;
 
+      Ms::Segment* firstSegment(Segment::Type s) const;
       //@ returns the first segment of the score of the given type (use Segment.Clef, ... enum)
-      Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
+      Q_INVOKABLE Ms::Segment* firstSegment(int segType = static_cast<int>(Segment::Type::All)) const;
       Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* lastSegment() const;
 
