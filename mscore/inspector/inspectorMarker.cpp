@@ -39,6 +39,7 @@ InspectorMarker::InspectorMarker(QWidget* parent)
             };
 
       mapSignals();
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
 //---------------------------------------------------------

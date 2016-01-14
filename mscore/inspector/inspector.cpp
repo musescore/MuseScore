@@ -800,6 +800,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
             { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
             };
       mapSignals();
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
 
@@ -857,6 +858,7 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
             { P_ID::VELOCITY,           0, 0, d.velocity, d.resetVelocity }
             };
       mapSignals();
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
 //---------------------------------------------------------
