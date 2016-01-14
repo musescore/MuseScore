@@ -484,5 +484,23 @@ void InspectorBase::setupLineStyle(QComboBox* cb)
       cb->setItemData(4, int(Qt::DashDotDotLine));
       cb->setItemData(5, int(Qt::CustomDashLine));
       }
+
+//---------------------------------------------------------
+//   resetToStyle
+//---------------------------------------------------------
+
+void InspectorBase::resetToStyle()
+      {
+      Score* score = inspector->element()->score();
+      score->startCmd();
+      for (Element* e : inspector->el()) {
+            Text* text = static_cast<Text*>(e);
+            text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(score->textStyle(text->textStyleType())));
+            // Preserve <sym> tags
+            text->undoChangeProperty(P_ID::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
+            }
+      score->endCmd();
+      }
+
 }
 
