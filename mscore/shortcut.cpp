@@ -2792,7 +2792,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "add-noteline",
-         QT_TRANSLATE_NOOP("action","Note Anchored line"),
+         QT_TRANSLATE_NOOP("action","Note Anchored Line"),
          QT_TRANSLATE_NOOP("action","Note anchored line")
          },
       {
