@@ -388,14 +388,14 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Short Güiro</name>
+          <name>Short Guiro</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="74">
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Long Güiro</name>
+          <name>Long Guiro</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="75">
@@ -1678,14 +1678,14 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Short Güiro</name>
+            <name>Short Guiro</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="74">
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Long Güiro</name>
+            <name>Long Guiro</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="75">
