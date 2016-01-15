@@ -1470,7 +1470,7 @@ void Score::createPlayEvents(Chord* chord)
       int unit = st.swingUnit;
       int ratio = st.swingRatio;
       // Check if swing needs to be applied
-      if (unit) {
+      if (unit && !chord->tuplet()) {
             swingAdjustParams(chord, gateTime, ontime, unit, ratio);
             }
       //
