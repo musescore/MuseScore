@@ -88,7 +88,7 @@ namespace Ms {
 QString checkSafety(Score * score) {
 
 
-  if (score->rootScore()->excerpts().size() > 20) return QString("Too many parts");
+  if (score->rootScore()->excerpts().size() > 60) return QString("Too many parts");
 
   score->repeatList()->unwind();
   if (score->repeatList()->size() > 100) return QString("Too many repeats");
