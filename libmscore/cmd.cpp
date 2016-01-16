@@ -327,6 +327,8 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
 
 //---------------------------------------------------------
 //   expandVoice
+//    fills gaps in voice with rests,
+//    from previous cr (or beginning of measure) to next cr (or end of measure)
 //---------------------------------------------------------
 
 void Score::expandVoice(Segment* s, int track)
@@ -341,6 +343,7 @@ void Score::expandVoice(Segment* s, int track)
             return;
             }
 
+      // find previous segment with cr in this track
       Segment* ps;
       for (ps = s; ps; ps = ps->prev(Segment::Type::ChordRest)) {
             if (ps->element(track))
@@ -349,24 +352,22 @@ void Score::expandVoice(Segment* s, int track)
       if (ps) {
             ChordRest* cr = static_cast<ChordRest*>(ps->element(track));
             int tick = cr->tick() + cr->actualTicks();
-            if (tick == s->tick())
-                  return;
             if (tick > s->tick()) {
+                  // previous cr extends past current segment
                   qDebug("expandVoice: cannot insert element here");
                   return;
                   }
             if (cr->type() == Element::Type::CHORD) {
-                  // since there was nothing in track at original segment,
-                  // and chord at previous segment does not take us up to tick of original segment.
-                  // we have a hole, but it starts *after* this chord
-                  // move ps to start of hole
-                  // don't move ps for holes after rests
-                  // they will be cleaned up when we fill up to s->tick() with rests below
+                  // previous cr ends on or before current segment
+                  // for chords, move ps to just after cr ends
+                  // so we can fill any gap that might exist
+                  // but don't move ps if previous cr is a rest
+                  // this will be combined with any new rests needed to fill up to s->tick() below
                   ps = ps->measure()->undoGetSegment(Segment::Type::ChordRest, tick);
                   }
             }
       //
-      // fill upto s->tick() with rests
+      // fill up to s->tick() with rests
       //
       Measure* m = s->measure();
       int stick  = ps ?  ps->tick() : m->tick();
@@ -375,7 +376,7 @@ void Score::expandVoice(Segment* s, int track)
             setRest(stick, track, Fraction::fromTicks(ticks), false, 0);
 
       //
-      // fill from s->tick() until next chord/rest
+      // fill from s->tick() until next chord/rest in measure
       //
       Segment* ns;
       for (ns = s->next(Segment::Type::ChordRest); ns; ns = ns->next(Segment::Type::ChordRest)) {
