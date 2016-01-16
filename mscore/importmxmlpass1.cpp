@@ -2147,7 +2147,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             }
       else {
             if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
-                  qDebug("ImportMusicXml: time symbol <%s> not recognized with beats=%s and beat-type=%s",
+                  qDebug("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
                          qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));       // TODO
                   return false;
                   }
@@ -2157,6 +2157,14 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             for (int i = 0; i < list.size(); i++)
                   bts += list.at(i).toInt();
             }
+
+      // determine if bts and btp are valid
+      if (bts <= 0 || btp <=0) {
+            qDebug("determineTimeSig: beats=%s and/or beat-type=%s not recognized",
+                   qPrintable(beats), qPrintable(beatType));         // TODO
+            return false;
+            }
+
       return true;
       }
 
