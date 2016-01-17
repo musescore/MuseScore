@@ -2184,11 +2184,13 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations
                   notations.tag(xml);
                   xml.tagE("arpeggiate");
                   break;
-            case ArpeggioType::UP:
+            case ArpeggioType::UP:          // fall through
+            case ArpeggioType::UP_STRAIGHT: // not supported by MusicXML, export as normal arpeggio
                   notations.tag(xml);
                   xml.tagE("arpeggiate direction=\"up\"");
                   break;
-            case ArpeggioType::DOWN:
+            case ArpeggioType::DOWN:          // fall through
+            case ArpeggioType::DOWN_STRAIGHT: // not supported by MusicXML, export as normal arpeggio
                   notations.tag(xml);
                   xml.tagE("arpeggiate direction=\"down\"");
                   break;
