@@ -3392,7 +3392,8 @@ void Measure::layoutX(qreal stretch)
                                     Lyrics* l = cr->lyricsList().at(i);
                                     if (!l || l->isEmpty())
                                           continue;
-                                    lyrics = l;
+                                    if (!lyrics || l->no() > lyrics->no())
+                                          lyrics = l;
                                     QRectF b(l->bbox().translated(l->pos()));
                                     qreal brgt = b.right();
                                     // if lyrics followed by a dash & score style requires the dash in any case,
