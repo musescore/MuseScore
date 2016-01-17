@@ -3351,7 +3351,8 @@ void Measure::layoutX(qreal stretch)
                                     Lyrics* l = cr->lyricsList().at(i);
                                     if (!l || l->isEmpty())
                                           continue;
-                                    lyrics = l;
+                                    if (!lyrics || l->no() > lyrics->no())
+                                          lyrics = l;
                                     QRectF b(l->bbox().translated(l->pos()));
                                     llw = qMax(llw, -(b.left()+lx+cx));
                                     rrw = qMax(rrw, b.right()+rx+cx);
