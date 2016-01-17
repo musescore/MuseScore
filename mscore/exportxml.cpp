@@ -3096,7 +3096,7 @@ static void beatUnit(Xml& xml, const TDuration dur)
 
 static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
-      //qDebug("wordsMetrome('%s')", qPrintable(text->text()));
+      //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
       const QList<TextFragment> list = text->fragmentList();
       QList<TextFragment>       wordsLeft;  // words left of metronome
       bool hasParen;                        // parenthesis
@@ -3164,7 +3164,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       {
       /*
-      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->text()));
+      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->xmlText()));
       */
       attr.doAttr(xml, false);
       xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
@@ -3187,11 +3187,13 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 void ExportMusicXml::words(Text const* const text, int staff)
       {
       /*
-      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f text='%s'",
-             text->userOff().x(), text->userOff().y(), qPrintable(text->text()));
+      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xmlText='%s' plainText='%s'",
+             text->userOff().x(), text->userOff().y(),
+             qPrintable(text->xmlText()),
+             qPrintable(text->plainText()));
       */
 
-      if (text->xmlText() == "") {
+      if (text->plainText() == "") {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -3208,7 +3210,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
-      if (rmk->xmlText() == "") {
+      if (rmk->plainText() == "") {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
