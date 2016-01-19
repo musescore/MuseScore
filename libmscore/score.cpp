@@ -2543,10 +2543,10 @@ void Score::cmdRemoveStaff(int staffIdx)
                         s2 = staff;
                   Score* lscore = staff->score();
                   if (lscore != this) {
-                        undoRemoveStaff(staff);
+                        lscore->undoRemoveStaff(staff);
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
-                              undoRemovePart(staff->part(), pIndex);
+                              lscore->undoRemovePart(staff->part(), pIndex);
                               }
                         }
                   }
