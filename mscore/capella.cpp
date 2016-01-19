@@ -1203,14 +1203,19 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             staff->setBracket(0, cb.curly ? BracketType::BRACE : BracketType::NORMAL);
             staff->setBracketSpan(0, cb.to - cb.from + 1);
             }
-
+      MeasureBase* measure = nullptr;
       foreach(BasicDrawObj* o, cap->backgroundChord->objects) {
             switch (o->type) {
                   case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
                         Text* s = new Text(score);
-                        s->setTextStyleType(TextStyleType::TITLE);
+                        switch (to->textalign()) {
+                              case 0:   s->setTextStyleType(TextStyleType::POET);    break;
+                              case 1:   s->setTextStyleType(TextStyleType::TITLE); break;
+                              case 2:   s->setTextStyleType(TextStyleType::COMPOSER);   break;
+                              default:                                       break;
+                              }
                         QFont f(to->font());
                         s->textStyle().setItalic(f.italic());
                         // s->setUnderline(f.underline());
@@ -1219,9 +1224,11 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
                         QString ss = to->text();
                         s->setPlainText(ss);
-                        MeasureBase* measure = new VBox(score);
-                        measure->setTick(0);
-                        score->addMeasure(measure, score->measures()->first());
+                        if (!measure) {
+                              measure = new VBox(score);
+                              measure->setTick(0);
+                              score->addMeasure(measure, score->measures()->first());
+                              }
                         measure->add(s);
                         // qDebug("page background object type %d (CapellaType::SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
                         }
