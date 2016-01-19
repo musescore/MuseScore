@@ -408,69 +408,70 @@ void MuseScore::editInstrList()
       // check for valid barLineSpan and bracketSpan
       // in all staves
       //
+      for (Score* s : rootScore->scoreList()) {
+            int n = s->nstaves();
+            int curSpan = 0;
+            for (int i = 0; i < n; ++i) {
+                  Staff* staff = s->staff(i);
+                  int span = staff->barLineSpan();
+                  int setSpan = -1;
 
-      int n = rootScore->nstaves();
-      int curSpan = 0;
-      for (int i = 0; i < n; ++i) {
-            Staff* staff = rootScore->staff(i);
-            int span = staff->barLineSpan();
-            int setSpan = -1;
+                  // determine if we need to update barline span
+                  if (curSpan == 0) {
+                        // no current span; this staff must start a new one
+                        if (span == 0) {
+                              // no span; this staff must have been within a span
+                              // update it to a span of 1
+                              setSpan = 1;
+                              }
+                        else if (span > (n - i)) {
+                              // span too big; staves must have been removed
+                              // reduce span to last staff
+                              setSpan = n - i;
+                              }
+                        else if (span > 1 && staff->barLineTo() > 0) {
+                              // TODO: check if span is still valid
+                              // (true if the last staff is the same as it was before this edit)
+                              // the code here fixes https://musescore.org/en/node/41786
+                              // but by forcing an update,
+                              // we lose custom modifications to staff barLineTo
+                              // at least this happens only for span > 1, and not for Mensurstrich (barLineTo<=0)
+                              setSpan = span;   // force update to pick up new barLineTo value
+                              }
+                        else {
+                              // this staff starts a span
+                              curSpan = span;
+                              }
+                        }
+                  else if (span && staff->barLineTo() > 0) {
+                        // within a current span; staff must have span of 0
+                        // except for Mensurstrich (barLineTo<=0)
+                        // for consistency with Barline::endEdit,
+                        // don't special case 1-line staves
+                        s->undoChangeBarLineSpan(staff, 0, 0, (staff->lines() - 1) * 2);
+                        }
 
-            // determine if we need to update barline span
-            if (curSpan == 0) {
-                  // no current span; this staff must start a new one
-                  if (span == 0) {
-                        // no span; this staff must have been within a span
-                        // update it to a span of 1
-                        setSpan = 1;
-                        }
-                  else if (span > (n - i)) {
-                        // span too big; staves must have been removed
-                        // reduce span to last staff
-                        setSpan = n - i;
-                        }
-                  else if (span > 1 && staff->barLineTo() > 0) {
-                        // TODO: check if span is still valid
-                        // (true if the last staff is the same as it was before this edit)
-                        // the code here fixes https://musescore.org/en/node/41786
-                        // but by forcing an update,
-                        // we lose custom modifications to staff barLineTo
-                        // at least this happens only for span > 1, and not for Mensurstrich (barLineTo<=0)
-                        setSpan = span;   // force update to pick up new barLineTo value
-                        }
-                  else {
+                  // update barline span if necessary
+                  if (setSpan > 0) {
                         // this staff starts a span
-                        curSpan = span;
+                        curSpan = setSpan;
+                        // calculate spanFrom and spanTo values
+                        int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                        int linesTo = rootScore->staff(i + setSpan - 1)->lines();
+                        int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
+                        s->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
                         }
-                  }
-            else if (span && staff->barLineTo() > 0) {
-                  // within a current span; staff must have span of 0
-                  // except for Mensurstrich (barLineTo<=0)
-                  // for consistency with Barline::endEdit,
-                  // don't special case 1-line staves
-                  rootScore->undoChangeBarLineSpan(staff, 0, 0, (staff->lines() - 1) * 2);
-                  }
 
-            // update barline span if necessary
-            if (setSpan > 0) {
-                  // this staff starts a span
-                  curSpan = setSpan;
-                  // calculate spanFrom and spanTo values
-                  int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                  int linesTo = rootScore->staff(i + setSpan - 1)->lines();
-                  int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
-                  rootScore->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
-                  }
+                  // count off one from barline span
+                  --curSpan;
 
-            // count off one from barline span
-            --curSpan;
-
-            // update brackets
-            QList<BracketItem> brackets = staff->brackets();
-            int nn = brackets.size();
-            for (int ii = 0; ii < nn; ++ii) {
-                  if ((brackets[ii]._bracket != BracketType::NO_BRACKET) && (brackets[ii]._bracketSpan > (n - i)))
-                        rootScore->undoChangeBracketSpan(staff, ii, n - i);
+                  // update brackets
+                  QList<BracketItem> brackets = staff->brackets();
+                  int nn = brackets.size();
+                  for (int ii = 0; ii < nn; ++ii) {
+                        if ((brackets[ii]._bracket != BracketType::NO_BRACKET) && (brackets[ii]._bracketSpan > (n - i)))
+                              s->undoChangeBracketSpan(staff, ii, n - i);
+                        }
                   }
             }
 
