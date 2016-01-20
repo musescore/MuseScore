@@ -62,6 +62,9 @@ class InspectorBase : public QWidget {
       void mapSignals();
       void setupLineStyle(QComboBox*);
 
+   private slots:
+      void resetToStyle();
+
    public:
       InspectorBase(QWidget* parent);
       virtual void setElement();
