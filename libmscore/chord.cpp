@@ -2279,6 +2279,7 @@ void Chord::layoutTablature()
             qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
             _arpeggio->setHeight(h);
             _arpeggio->setPos(-lll, y);
+            _arpeggio->adjustReadPos();
 
             // handle the special case of _arpeggio->span() > 1
             // in layoutArpeggio2() after page layout has done so we
