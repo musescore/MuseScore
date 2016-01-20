@@ -2272,8 +2272,12 @@ void Score::cmdDeleteSelection()
                   // find location of element to select after deleting notes
                   int tick = -1;
                   int track = -1;
-                  if (!cr && e->type() == Element::Type::NOTE) {
-                        tick = static_cast<Note*>(e)->chord()->tick();
+                  if (!cr) {
+                        if (e->type() == Element::Type::NOTE)
+                              tick = static_cast<Note*>(e)->chord()->tick();
+                        else if (e->type() == Element::Type::REST)
+                              tick = static_cast<Rest*>(e)->tick();
+                        //else tick < 0
                         track = e->track();
                         }
 
