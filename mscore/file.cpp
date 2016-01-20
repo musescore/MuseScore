@@ -2566,7 +2566,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                 for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
                     if (!static_cast<Measure*>(mb)->visible(i)) {
                         byMeasure = true;
-                        continue;
+                        break;
                     }
                 }
                 if (byMeasure) { // Draw visible staff lines by measure
