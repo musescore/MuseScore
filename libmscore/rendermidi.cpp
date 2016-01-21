@@ -915,7 +915,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       int lineR2 = convertLine(lineL2, noteL, noteR);
       // is there another note in this segment on the same line?
       // if so, use its pitch exactly.
-      int halfsteps;
+      int halfsteps = 0;
       int staffIdx = staffL->idx();
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
@@ -940,7 +940,8 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                   }
             if (!done) {
                   if (staffL->isPitchedStaff()) {
-                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
+                        bool error = false;
+                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
                         int acci2 = int(acciv2);
                         // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
                         halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;

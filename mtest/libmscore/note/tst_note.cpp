@@ -43,6 +43,7 @@ class TestNote : public QObject, public MTest
       void tpc();
       void tpcTranspose();
       void tpcTranspose2();
+      void noteLimits();
       };
 
 //---------------------------------------------------------
@@ -442,6 +443,45 @@ void TestNote::tpcTranspose2() {
 
       QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
 
+      }
+
+//---------------------------------------------------------
+///   noteLimits
+//---------------------------------------------------------
+
+void TestNote::noteLimits() {
+      Score* score = readScore(DIR + "empty.mscx");
+      score->doLayout();
+
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+      score->inputState().setNoteEntryMode(true);
+      
+      // over 127 shouldn't crash
+      score->cmdAddPitch(140, false);
+      // below 0 shouldn't crash
+      score->cmdAddPitch(-40, false);
+      
+      // stack chords
+      score->cmdAddPitch(42, false);
+      for (int i = 1; i < 20; i++)
+            score->cmdAddPitch(42 + i * 7, true);
+      
+      // interval below
+      score->cmdAddPitch(42, false);
+      for (int i = 0; i < 20; i++) {
+            QList<Note*> nl = score->selection().noteList();
+            score->cmdAddInterval(-8, nl);
+            }
+      
+      // interval above
+      score->cmdAddPitch(42, false);
+      for (int i = 0; i < 20; i++) {
+            QList<Note*> nl = score->selection().noteList();
+            score->cmdAddInterval(8, nl);
+            }
+      QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
       }
 
 QTEST_MAIN(TestNote)
