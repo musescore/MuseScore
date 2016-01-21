@@ -1007,7 +1007,9 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   }
 
             case StaffGroup::STANDARD: {
-                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
+                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line, error);
+                  if (error)
+                        return nval;
                   int step           = absStep(line, clef);
                   int octave         = step/7;
                   nval.pitch         = step2pitch(step) + octave * 12 + int(acci);
@@ -1304,7 +1306,10 @@ void Score::repitchNote(const Position& p, bool replace)
       ClefType clef   = st->clef(tick);
 
       NoteVal nval;
-      AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line);
+      bool error = false;
+      AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line, error);
+      if (error)
+            return;
       int step   = absStep(p.line, clef);
       int octave = step / 7;
       nval.pitch = step2pitch(step) + octave * 12 + int(acci);

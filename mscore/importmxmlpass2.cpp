@@ -1918,7 +1918,10 @@ static void markUserAccidentals(const int firstStaff,
                         if (alterMap.contains(nt)) {
                               int alter = alterMap.value(nt);
                               int ln  = absStep(nt->tpc(), nt->pitch());
-                              AccidentalVal currAccVal = currAcc.accidentalVal(ln);
+                              bool error = false;
+                              AccidentalVal currAccVal = currAcc.accidentalVal(ln, error);
+                              if (error)
+                                    continue;
                               if ((alter == -1
                                    && currAccVal == AccidentalVal::FLAT
                                    && nt->accidental()->accidentalType() == AccidentalType::FLAT

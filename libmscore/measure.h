@@ -284,7 +284,7 @@ class Measure : public MeasureBase {
       void resetRepeatFlag(Repeat val)             { _repeatFlags = Repeat(int(_repeatFlags) & ~int(val)); }
 
       AccidentalVal findAccidental(Note*) const;
-      AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
+      AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool &error) const;
       void exchangeVoice(int voice1, int voice2, int staffIdx);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;

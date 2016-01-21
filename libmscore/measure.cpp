@@ -402,7 +402,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
 ///   relative staff line.
 //---------------------------------------------------------
 
-AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
+AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &error) const
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
@@ -415,7 +415,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
             if (segment == s && staff->isPitchedStaff()) {
                   ClefType clef = staff->clef(s->tick());
                   int l = relStep(line, clef);
-                  return tversatz.accidentalVal(l);
+                  return tversatz.accidentalVal(l, error);
                   }
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = segment->element(track);

@@ -1781,7 +1781,11 @@ void Note::updateAccidental(AccidentalState* as)
             AccidentalType acci = AccidentalType::NONE;
 
             AccidentalVal accVal = tpc2alter(tpc());
-            if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
+            bool error = false;
+            AccidentalVal relLineAccVal = as->accidentalVal(relLine, error);
+            if (error)
+                  return;
+            if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   if (_tieBack)
                         acci = AccidentalType::NONE;
