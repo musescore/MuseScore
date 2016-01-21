@@ -472,11 +472,7 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
 QImage Score::createThumbnail()
       {
       LayoutMode layoutMode = _layoutMode;
-      if (layoutMode != LayoutMode::PAGE) {
-            startCmd();
-            ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, QVariant(int(LayoutMode::PAGE)));
-            doLayout();
-            }
+      switchToPageMode();
       Page* page = pages().at(0);
       QRectF fr  = page->abbox();
       qreal mag  = 256.0 / qMax(fr.width(), fr.height());

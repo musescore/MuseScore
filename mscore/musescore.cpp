@@ -2161,11 +2161,7 @@ static bool processNonGui()
                         }
                   }
             else if (fn.endsWith(".png")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = mscore->savePng(cs, fn);
                   }
             else if (fn.endsWith(".svg")) {

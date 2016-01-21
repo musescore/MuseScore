@@ -3125,10 +3125,6 @@ void Score::layoutSystems()
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
                   System* system = getNextSystem(false, true);
                   system->setSameLine(false);
-                  foreach(SysStaff* ss, *system->staves())
-                        delete ss;
-                  system->staves()->clear();
-
                   system->setWidth(w);
                   VBox* vbox = static_cast<VBox*>(curMeasure);
                   vbox->setParent(system);
