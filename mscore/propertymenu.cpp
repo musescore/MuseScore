@@ -421,7 +421,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   QString txt  = vp.getText();
                   QList<int> l = vp.getEndings();
                   if (txt != vs->volta()->text())
-                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, txt);
+                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, Xml::xmlString(txt));
                   if (l != vs->volta()->endings())
                         vs->volta()->undoChangeProperty(P_ID::VOLTA_ENDING, QVariant::fromValue(l));
                   }
