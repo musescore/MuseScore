@@ -258,13 +258,18 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorArpeggio(this);
                               break;
                         default:
-                              if (_element->isText())
-                                    if (_element->type() == Element::Type::INSTRUMENT_NAME)
+                              if (_element->isText()) {
+                                    if (_element->type() == Element::Type::INSTRUMENT_NAME) // these are generated
                                           ie = new InspectorEmpty(this);
                                     else
                                           ie = new InspectorText(this);
-                              else
-                                    ie = new InspectorElement(this);
+                                    }
+                              else {
+                                    if (_element->type() == Element::Type::BRACKET) // these are generated
+                                          ie = new InspectorEmpty(this);
+                                    else
+                                          ie = new InspectorElement(this);
+                                    }
                               break;
                         }
                   }
