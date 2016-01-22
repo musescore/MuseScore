@@ -215,6 +215,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             articulationTable->setCellWidget(i, 1, cb);
             }
 
+      dividerLeftSym->addItem( tr("System Divider"),            Sym::symNames[int(SymId::systemDivider)]);
+      dividerLeftSym->addItem( tr("Long System Divider"),       Sym::symNames[int(SymId::systemDividerLong)]);
+      dividerLeftSym->addItem( tr("Extra Long System Divider"), Sym::symNames[int(SymId::systemDividerExtraLong)]);
+      dividerRightSym->addItem(tr("System Divider"),            Sym::symNames[int(SymId::systemDivider)]);
+      dividerRightSym->addItem(tr("Long System Divider"),       Sym::symNames[int(SymId::systemDividerLong)]);
+      dividerRightSym->addItem(tr("Extra Long System Divider"), Sym::symNames[int(SymId::systemDividerExtraLong)]);
+
       // figured bass init
       QList<QString> fbFontNames = FiguredBass::fontNames();
       for (const QString& family: fbFontNames)
@@ -424,8 +431,8 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::repeatBarTips,           showRepeatBarTips->isChecked());
       lstyle.set(StyleIdx::startBarlineSingle,      showStartBarlineSingle->isChecked());
       lstyle.set(StyleIdx::startBarlineMultiple,    showStartBarlineMultiple->isChecked());
-      lstyle.set(StyleIdx::dividerLeftSym,          dividerLeftSym->currentText());
-      lstyle.set(StyleIdx::dividerRightSym,         dividerRightSym->currentText());
+      lstyle.set(StyleIdx::dividerLeftSym,          dividerLeftSym->currentData());
+      lstyle.set(StyleIdx::dividerRightSym,         dividerRightSym->currentData());
 
       lstyle.set(StyleIdx::measureSpacing,          measureSpacing->value());
       lstyle.set(StyleIdx::showMeasureNumber,       showMeasureNumber->isChecked());
@@ -642,8 +649,8 @@ void EditStyle::setValues()
       showRepeatBarTips->setChecked(lstyle.value(StyleIdx::repeatBarTips).toBool());
       showStartBarlineSingle->setChecked(lstyle.value(StyleIdx::startBarlineSingle).toBool());
       showStartBarlineMultiple->setChecked(lstyle.value(StyleIdx::startBarlineMultiple).toBool());
-      dividerLeftSym->setCurrentText(lstyle.value(StyleIdx::dividerLeftSym).toString());
-      dividerRightSym->setCurrentText(lstyle.value(StyleIdx::dividerRightSym).toString());
+      dividerLeftSym->setCurrentIndex(dividerLeftSym->findData(lstyle.value(StyleIdx::dividerLeftSym).toString()));
+      dividerRightSym->setCurrentIndex(dividerRightSym->findData(lstyle.value(StyleIdx::dividerRightSym).toString()));
 
       measureSpacing->setValue(lstyle.value(StyleIdx::measureSpacing).toDouble());
       noteBarDistance->setValue(lstyle.value(StyleIdx::noteBarDistance).toDouble());
@@ -686,7 +693,7 @@ void EditStyle::setValues()
       else if (unit == TDuration(TDuration::DurationType::V_ZERO).name()) {
             SwingOff->setChecked(true);
             swingBox->setEnabled(false);
-      }
+            }
       QString s(lstyle.value(StyleIdx::chordDescriptionFile).toString());
       chordDescriptionFile->setText(s);
       chordsXmlFile->setChecked(lstyle.value(StyleIdx::chordsXmlFile).toBool());
