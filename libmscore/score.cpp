@@ -1165,7 +1165,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   sy2        = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
                   }
             else
-                  sy2 = system->page()->height() - system->pos().y();   // system->height();
+                  sy2 = system->page()->canvasPos().y() + system->page()->height() - system->pos().y();   // system->height();
             if (y < sy2) {
                   sstaff = ss;
                   break;
