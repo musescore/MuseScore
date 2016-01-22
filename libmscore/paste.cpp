@@ -629,7 +629,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     }
                               else if (!harmSegm || harmSegm->tick() > destTick) {
                                     Measure* meas     = tick2measure(destTick);
-                                    harmSegm          = meas ? meas->getSegment(Segment::Type::ChordRest, destTick) : nullptr;
+                                    harmSegm          = meas ? meas->undoGetSegment(Segment::Type::ChordRest, destTick) : nullptr;
                               }
                               if (destTrack >= maxTrack || harmSegm == nullptr) {
                                     qDebug("PasteSymbols: no track or segment for %s", tag.toUtf8().data());
