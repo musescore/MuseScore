@@ -138,15 +138,15 @@ void LineProperties::accept()
             otl->undoChangeProperty(P_ID::END_TEXT_PLACE, int(pt));
 
       if (beginText->text() != otl->beginText())
-            otl->undoChangeProperty(P_ID::BEGIN_TEXT, beginText->text());
+            otl->undoChangeProperty(P_ID::BEGIN_TEXT, Xml::xmlString(beginText->text()));
       else if (otl->beginText().isEmpty())
             otl->setBeginText("");
       if (continueText->text() != otl->continueText())
-            otl->undoChangeProperty(P_ID::CONTINUE_TEXT, continueText->text());
+            otl->undoChangeProperty(P_ID::CONTINUE_TEXT, Xml::xmlString(continueText->text()));
       else if (otl->continueText().isEmpty())
             otl->setContinueText("");
       if (endText->text() != otl->endText())
-            otl->undoChangeProperty(P_ID::END_TEXT, endText->text());
+            otl->undoChangeProperty(P_ID::END_TEXT, Xml::xmlString(endText->text()));
       else if (otl->endText().isEmpty())
             otl->setEndText("");
 
