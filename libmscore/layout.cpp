@@ -1779,7 +1779,7 @@ static bool validMMRestMeasure(Measure* m)
 
 #if 0
       auto l = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      for (::Interval<Spanner*> isp : l) {
+      for (auto isp : l) {
             Spanner* s = isp.value;
             if (s->type() == Element::Type::VOLTA && (s->tick() == m->tick() || s->tick2() == m->endTick()))
                   return false;
@@ -1809,7 +1809,7 @@ static bool breakMultiMeasureRest(Measure* m)
       if (m->breakMultiMeasureRest())
             return true;
       auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      foreach (auto i, sl) {
+      for (auto i : sl) {
             Spanner* s = i.value;
             if (s->type() == Element::Type::VOLTA && (s->tick() == m->tick() || s->tick2() == m->tick()))
                   return true;
@@ -1841,7 +1841,7 @@ static bool breakMultiMeasureRest(Measure* m)
 
       // break for end of volta
       auto l = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      for (::Interval<Spanner*> isp : l) {
+      for (auto isp : l) {
             Spanner* s = isp.value;
             if (s->type() == Element::Type::VOLTA && (s->tick2() == m->endTick()))
                   return false;
