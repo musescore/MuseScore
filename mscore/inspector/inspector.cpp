@@ -259,7 +259,10 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         default:
                               if (_element->isText())
-                                    ie = new InspectorText(this);
+                                    if (_element->type() == Element::Type::INSTRUMENT_NAME)
+                                          ie = new InspectorEmpty(this);
+                                    else
+                                          ie = new InspectorText(this);
                               else
                                     ie = new InspectorElement(this);
                               break;
