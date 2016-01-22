@@ -445,6 +445,10 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   ntpc1 = on->tpc1();
                   ntpc2 = on->tpc2();
                   }
+            if (npitch < 0 || npitch > 127) {
+                  delete note;
+                  return;
+                  }
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
