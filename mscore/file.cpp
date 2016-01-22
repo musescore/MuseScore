@@ -1495,11 +1495,7 @@ void MuseScore::printFile()
             return;
 
       LayoutMode layoutMode = cs->layoutMode();
-      if (layoutMode != LayoutMode::PAGE) {
-            cs->startCmd();
-            cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
-            cs->doLayout();
-            }
+      cs->switchToPageMode();
 
       QPainter p(&printerDev);
       p.setRenderHint(QPainter::Antialiasing, true);
