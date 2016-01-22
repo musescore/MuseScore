@@ -33,7 +33,8 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
 
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
-      for (auto i : _spanner.findContained(tick1, tick2))
+      auto spanners = _spanner.findContained(tick1, tick2);
+      for (auto i : spanners)
             undo(new RemoveElement(i.value));
       undoRemoveMeasures(m1, m2);
       Measure* m = new Measure(this);

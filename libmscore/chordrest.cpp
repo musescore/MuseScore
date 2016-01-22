@@ -1420,8 +1420,7 @@ QString ChordRest::accessibleExtraInfo()
 
             SpannerMap& smap = score()->spannerMap();
             auto spanners = smap.findOverlapping(tick(), tick());
-            for (auto i = spanners.begin(); i < spanners.end(); i++) {
-                  const ::Interval<Spanner*> interval = *i;
+            for (auto interval : spanners) {
                   Spanner* s = interval.value;
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines

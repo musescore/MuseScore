@@ -2486,7 +2486,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         undoRemoveElement(note);
                         Chord* chord = note->chord();
                         if (chord->notes().isEmpty()) {
-                              undoRemoveElement(chord);
                               for (auto sp : spanner()) {
                                     Slur* slur = static_cast<Slur*>(sp.second);
                                     if (slur->type() != Element::Type::SLUR)
@@ -2506,6 +2505,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                                                 }
                                           }
                                     }
+                              undoRemoveElement(chord);
                               }
                         }
                   }
