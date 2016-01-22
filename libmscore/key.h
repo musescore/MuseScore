@@ -102,13 +102,16 @@ class KeySigEvent {
 //---------------------------------------------------------
 
 static const int TIE_CONTEXT = 0x10;
+static const int MIN_ACC_STATE = 0;
+static const int MAX_ACC_STATE = 75;
 
 class AccidentalState {
-      uchar state[75];    // (0 -- 4) | TIE_CONTEXT
+      uchar state[MAX_ACC_STATE];    // (0 -- 4) | TIE_CONTEXT
 
    public:
       AccidentalState() {}
       void init(Key key);
+      AccidentalVal accidentalVal(int line, bool &error) const;
       AccidentalVal accidentalVal(int line) const;
       bool tieContext(int line) const;
       void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false);
