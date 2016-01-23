@@ -496,7 +496,7 @@ QLineF LineSegment::dragAnchor() const
             return QLineF();
       System* s;
       QPointF p = line()->linePos(Grip::START, &s);
-      p += QPointF(s->canvasPos().x(), s->staffYpage(line()->staffIdx()));
+      p += QPointF(s->canvasPos().x(), s->staffCanvasYpage(line()->staffIdx()));
 
       return QLineF(p, canvasPos());
       }
