@@ -1120,6 +1120,16 @@ qreal System::staffYpage(int staffIdx) const
       }
 
 //---------------------------------------------------------
+//   staffCanvasYpage
+//    return canvas coordinates
+//---------------------------------------------------------
+
+qreal System::staffCanvasYpage(int staffIdx) const
+      {
+      return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
