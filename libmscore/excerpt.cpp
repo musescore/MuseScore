@@ -251,7 +251,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 
             ns->setStartElement(0);
             ns->setEndElement(0);
-            if (cr1->links()) {
+            if (cr1 && cr1->links()) {
                   for (ScoreElement* e : *cr1->links()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr == cr1)
@@ -262,7 +262,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
                               }
                         }
                   }
-            if (cr2->links()) {
+            if (cr2 && cr2->links()) {
                   for (ScoreElement* e : *cr2->links()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr == cr2)
