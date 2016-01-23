@@ -1374,8 +1374,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               ottavaValue = currentNode.toElement().text();
                               }
                         currentNode = currentNode.nextSibling();
-                        dotted = 0;
                   }
+                  dotted = 0;
                   if (graceNote)
                         continue;
                   // we have handled the beat - was there a note?
@@ -1835,7 +1835,6 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
 void GuitarPro6::readGpif(QByteArray* data)
       {
-      qDebug() << *data;
       QDomDocument qdomDoc;
       qdomDoc.setContent(*data);
       QDomElement qdomElem = qdomDoc.documentElement();
