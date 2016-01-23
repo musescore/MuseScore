@@ -760,8 +760,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   int whammyOrigin = -1;
                   int whammyMiddle = -1;
                   int whammyEnd = -1;
+                  bool graceNote = false;
                   while (!currentNode.isNull()) {
-                        if (currentNode.nodeName() == "Notes") {
+                        if (currentNode.nodeName() == "GraceNotes") {
+                              graceNote = true;
+                              break;
+                              }
+                        else if (currentNode.nodeName() == "Notes") {
                               noteSpecified = true;
                               auto notesList = currentNode.toElement().text().split(" ");
 
@@ -1371,7 +1376,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                         currentNode = currentNode.nextSibling();
                         dotted = 0;
                   }
-
+                  if (graceNote)
+                        continue;
                   // we have handled the beat - was there a note?
                   if (!noteSpecified) {
                         // add a rest with length of l
@@ -1502,8 +1508,6 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                                     Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                                     if(!segment->cr(staffIdx * VOICES + voiceNum))
                                           segment->add(cr);
-                                    tick += cr->actualTicks();
-                                    staffIdx++;
                                     contentAdded = true;
                                     continue;
                                     }
@@ -1512,6 +1516,15 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               int ticks = readBeats(voice.firstChild().toElement().text(), partInfo, measure, tick, staffIdx, voiceNum, tuplets, measureCounter);
                               if (ticks > 0)
                                     contentAdded = true;
+                              // deal with possible anacrusis
+                              if (measureCounter == 0 && ticks < measure->ticks() && voiceNum == 0) {
+                                    int mticks = measure->ticks();
+                                    measure->setLen(Fraction::fromTicks(ticks));
+                                    int offset = mticks - measure->ticks();
+                                    for (Measure* m = measure->nextMeasure(); m; m = m->nextMeasure()) {
+                                          m->setTick(m->tick() - offset);
+                                          }
+                                    }
                               }
                         }
                   else if (!currentNode.nodeName().compare("XProperties")) {}
@@ -1822,6 +1835,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
 void GuitarPro6::readGpif(QByteArray* data)
       {
+      qDebug() << *data;
       QDomDocument qdomDoc;
       qdomDoc.setContent(*data);
       QDomElement qdomElem = qdomDoc.documentElement();
