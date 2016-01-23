@@ -166,8 +166,8 @@ class GuitarPro {
       static const int LEGATO_SLIDE = 2;
       static const int SLIDE_OUT_DOWN = 4;
       static const int SLIDE_OUT_UP = 8;
-      static const int SLIDE_IN_BELOW = 16;
-      static const int SLIDE_IN_ABOVE = 32;
+      static const int SLIDE_IN_ABOVE = 16;
+      static const int SLIDE_IN_BELOW = 32;
 
       static const int MAX_PITCH = 127;
       static const char* errmsg[];
@@ -367,7 +367,7 @@ class GuitarPro6 : public GuitarPro {
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
       void readDrumNote(Note* note, int element, int variation);
-      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
+      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int startTick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
       void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
       void readTracks(QDomNode* tracks);
       void readMasterBars(GPPartInfo* partInfo);
