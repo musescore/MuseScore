@@ -2380,26 +2380,26 @@ void Score::cmdFullMeasureRest()
             int track1  = selection().staffStart() * VOICES;
             int track2  = selection().staffEnd() * VOICES;
             for (int track = track1; track < track2; ++track) {
-                  int tick  = -1;
+                  // first pass - remove non-initial rests from empty measures/voices
                   for (Segment* s = s1; s != s2; s = s->next1()) {
                         if (!(s->measure()->isOnlyRests(track))) // Don't remove anything from measures that contain notes
                               continue;
                         if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-
-                        if (tick == -1) {
-                              // first ChordRest found:
-                              tick = s->measure()->tick();
+                        // keep first rest of measure as placeholder (replaced in second pass)
+                        // but delete all others
+                        if (s->rtick())
                               removeChordRest(cr, true);
-                              }
-                        else {
-                              removeChordRest(cr, true);
-                              }
                         }
+                  // second pass - replace placeholders with full measure rests
                   for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                        if (!(track % VOICES) && m->isOnlyRests(track)) {
-                              addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                        if (m->isOnlyRests(track)) {
+                              ChordRest* cr = m->findChordRest(m->tick(), track);
+                              if (cr) {
+                                    removeChordRest(cr, true);
+                                    addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                                    }
                               }
                         if (s2 && (m == s2->measure()))
                               break;
