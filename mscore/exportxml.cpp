@@ -2680,7 +2680,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             */
             notations.etag(xml);
             // write lyrics (only for first note)
-            if ((note == nl.front()) && ll)
+            if (!grace && (note == nl.front()) && ll)
                   lyrics(ll, chord->track());
             xml.etag();
             }
