@@ -199,10 +199,31 @@
             <lid>17</lid>
             </ChordLine>
           </Chord>
+        <tick>0</tick>
+        <Rest>
+          <lid>18</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>19</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>20</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>21</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>19</lid>
+          <lid>23</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
@@ -432,10 +453,31 @@
               <lid>17</lid>
               </ChordLine>
             </Chord>
+          <tick>0</tick>
+          <Rest>
+            <lid>18</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>20</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>21</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>19</lid>
+            <lid>23</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
@@ -515,10 +557,31 @@
               <lid>17</lid>
               </ChordLine>
             </Chord>
+          <tick>0</tick>
+          <Rest>
+            <lid>18</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>20</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>21</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>19</lid>
+            <lid>23</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>

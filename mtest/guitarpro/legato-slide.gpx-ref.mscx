@@ -140,7 +140,7 @@
           <lid>6</lid>
           </Dynamic>
         <Slur id="2">
-          <lid>15</lid>
+          <lid>19</lid>
           <track>0</track>
           </Slur>
         <Chord>
@@ -188,6 +188,27 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
+        <tick>0</tick>
+        <Rest>
+          <lid>14</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>15</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>16</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>17</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       </Staff>
     <Score>
@@ -351,7 +372,7 @@
             <lid>6</lid>
             </Dynamic>
           <Slur id="4">
-            <lid>15</lid>
+            <lid>19</lid>
             <track>0</track>
             </Slur>
           <Chord>
@@ -399,6 +420,27 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>14</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>15</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>16</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>17</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -412,7 +454,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Slur id="6">
-            <lid>15</lid>
+            <lid>19</lid>
             <track>4</track>
             </Slur>
           <Chord>
@@ -455,6 +497,27 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>14</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>15</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>16</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>17</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         </Staff>
       <name>S-Gt</name>

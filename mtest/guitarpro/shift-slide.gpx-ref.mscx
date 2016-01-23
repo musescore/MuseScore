@@ -182,6 +182,27 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
+        <tick>0</tick>
+        <Rest>
+          <lid>14</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>15</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>16</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>17</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       </Staff>
     <Score>
@@ -387,6 +408,27 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>14</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>15</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>16</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>17</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -437,6 +479,27 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>14</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>15</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>16</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>17</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         </Staff>
       <name>S-Gt</name>
