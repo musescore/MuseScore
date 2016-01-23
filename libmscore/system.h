@@ -127,6 +127,7 @@ class System : public Element {
       QList<SysStaff*>* staves()             { return &_staves;   }
       const QList<SysStaff*>* staves() const { return &_staves;   }
       qreal staffYpage(int staffIdx) const;
+      qreal staffCanvasYpage(int staffIdx) const;
 #ifdef NDEBUG
       SysStaff* staff(int staffIdx) const    { return _staves[staffIdx]; }
 #else

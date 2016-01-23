@@ -2448,8 +2448,10 @@ QLineF Text::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == Element::Type::SEGMENT)
-            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
+      if (parent()->type() == Element::Type::SEGMENT) {
+            System* system = static_cast<Segment*>(parent())->measure()->system();
+            yp = system->staffCanvasYpage(staffIdx());
+            }
       else
             yp = parent()->canvasPos().y();
       QPointF p1(xp, yp);

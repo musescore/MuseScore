@@ -110,12 +110,14 @@ QLineF FretDiagram::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == Element::Type::SEGMENT)
-            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
+      if (parent()->type() == Element::Type::SEGMENT) {
+            System* system = static_cast<Segment*>(parent())->measure()->system();
+            yp = system->staffCanvasYpage(staffIdx());
+            }
       else
             yp = parent()->canvasPos().y();
       QPointF p1(xp, yp);
-      return QLineF(p1, abbox().topLeft());
+      return QLineF(p1, canvasPos());
 #if 0 // TODOxx
       if (parent()->type() == Element::Type::SEGMENT) {
             Segment* s     = static_cast<Segment*>(parent());
