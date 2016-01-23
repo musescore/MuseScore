@@ -83,7 +83,7 @@ static bool needsStaff(Element* e)
 Palette::Palette(QWidget* parent)
    : QWidget(parent)
       {
-      extraMag      = 1.0;
+      extraMag      = 1.0 * guiScaling;
       currentIdx    = -1;
       dragIdx       = -1;
       selectedIdx   = -1;
