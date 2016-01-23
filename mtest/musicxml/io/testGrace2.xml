@@ -296,5 +296,55 @@
         <type>whole</type>
         </note>
       </measure>
+    <measure number="3">
+      <note>
+        <grace/>
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+          </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>lyric1</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>lyric2</text>
+          </lyric>
+        </note>
+      <note>
+        <grace/>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        </note>
+      </measure>
     </part>
   </score-partwise>
