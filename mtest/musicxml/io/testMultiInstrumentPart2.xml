@@ -139,6 +139,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P1-I2"/>
         <voice>1</voice>
         </note>
       </measure>
@@ -146,6 +147,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P1-I2"/>
         <voice>1</voice>
         </note>
       </measure>
@@ -158,6 +160,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P1-I2"/>
         <voice>1</voice>
         </note>
       </measure>
@@ -165,6 +168,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P1-I2"/>
         <voice>1</voice>
         </note>
       <barline location="right">
