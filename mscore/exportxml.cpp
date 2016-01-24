@@ -4715,15 +4715,22 @@ void ExportMusicXml::write(QIODevice* dev)
                         {
                         // make sure clefs at end of measure get exported at start of next measure
                         Measure* prevMeasure = m->prevMeasure();
+                        Measure* mmR         = m->mmRest(); // the replacing measure in a multi-measure rest
                         int tick             = m->tick();
                         Segment* cs1;
                         Segment* cs2         = m->findSegment(Segment::Type::Clef, tick);
+                        Segment* cs3;
                         Segment* seg         = 0;
 
                         if (prevMeasure)
                               cs1 = prevMeasure->findSegment(Segment::Type::Clef,  tick);
                         else
                               cs1 = 0;
+
+                        if (mmR)
+                              cs3 = mmR->findSegment(Segment::Type::Clef,  tick);
+                        else
+                              cs3 = 0;
 
                         if (cs1 && cs2) {
                               // should only happen at begin of new system
@@ -4732,9 +4739,14 @@ void ExportMusicXml::write(QIODevice* dev)
                               }
                         else if (cs1)
                               seg = cs1;
+                        else if (cs3) {
+                              // happens when the first measure is a multi-measure rest
+                              // containing a generated clef
+                              seg = cs3;
+                              }
                         else
                               seg = cs2;
-                        clefDebug("exportxml: clef segments cs1=%p cs2=%p seg=%p", cs1, cs2, seg);
+                        clefDebug("exportxml: clef segments cs1=%p cs2=%p cs3=%p seg=%p", cs1, cs2, cs3, seg);
 
                         // output attribute at start of measure: clef
                         if (seg) {
