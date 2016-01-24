@@ -109,6 +109,7 @@ private slots:
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
       //void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); } must also fix exportxml.cpp
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
+      //void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); } end repeat missing
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
