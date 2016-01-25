@@ -1117,8 +1117,7 @@ void Palette::write(Xml& xml) const
       xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
       xml.tag("gridWidth", hgrid / guiScaling);
       xml.tag("gridHeight", vgrid / guiScaling);
-      if (extraMag != 1.0)
-            xml.tag("mag", extraMag / guiScaling);
+      xml.tag("mag", extraMag / guiScaling);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 
