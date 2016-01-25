@@ -2184,11 +2184,13 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations
                   notations.tag(xml);
                   xml.tagE("arpeggiate");
                   break;
-            case ArpeggioType::UP:
+            case ArpeggioType::UP:          // fall through
+            case ArpeggioType::UP_STRAIGHT: // not supported by MusicXML, export as normal arpeggio
                   notations.tag(xml);
                   xml.tagE("arpeggiate direction=\"up\"");
                   break;
-            case ArpeggioType::DOWN:
+            case ArpeggioType::DOWN:          // fall through
+            case ArpeggioType::DOWN_STRAIGHT: // not supported by MusicXML, export as normal arpeggio
                   notations.tag(xml);
                   xml.tagE("arpeggiate direction=\"down\"");
                   break;
@@ -2678,7 +2680,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             */
             notations.etag(xml);
             // write lyrics (only for first note)
-            if ((note == nl.front()) && ll)
+            if (!grace && (note == nl.front()) && ll)
                   lyrics(ll, chord->track());
             xml.etag();
             }
@@ -3094,7 +3096,7 @@ static void beatUnit(Xml& xml, const TDuration dur)
 
 static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
-      //qDebug("wordsMetrome('%s')", qPrintable(text->text()));
+      //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
       const QList<TextFragment> list = text->fragmentList();
       QList<TextFragment>       wordsLeft;  // words left of metronome
       bool hasParen;                        // parenthesis
@@ -3162,7 +3164,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       {
       /*
-      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->text()));
+      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->xmlText()));
       */
       attr.doAttr(xml, false);
       xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
@@ -3185,11 +3187,13 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 void ExportMusicXml::words(Text const* const text, int staff)
       {
       /*
-      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f text='%s'",
-             text->userOff().x(), text->userOff().y(), qPrintable(text->text()));
+      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xmlText='%s' plainText='%s'",
+             text->userOff().x(), text->userOff().y(),
+             qPrintable(text->xmlText()),
+             qPrintable(text->plainText()));
       */
 
-      if (text->xmlText() == "") {
+      if (text->plainText() == "") {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -3206,7 +3210,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
-      if (rmk->xmlText() == "") {
+      if (rmk->plainText() == "") {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -4711,15 +4715,22 @@ void ExportMusicXml::write(QIODevice* dev)
                         {
                         // make sure clefs at end of measure get exported at start of next measure
                         Measure* prevMeasure = m->prevMeasure();
+                        Measure* mmR         = m->mmRest(); // the replacing measure in a multi-measure rest
                         int tick             = m->tick();
                         Segment* cs1;
                         Segment* cs2         = m->findSegment(Segment::Type::Clef, tick);
+                        Segment* cs3;
                         Segment* seg         = 0;
 
                         if (prevMeasure)
                               cs1 = prevMeasure->findSegment(Segment::Type::Clef,  tick);
                         else
                               cs1 = 0;
+
+                        if (mmR)
+                              cs3 = mmR->findSegment(Segment::Type::Clef,  tick);
+                        else
+                              cs3 = 0;
 
                         if (cs1 && cs2) {
                               // should only happen at begin of new system
@@ -4728,9 +4739,14 @@ void ExportMusicXml::write(QIODevice* dev)
                               }
                         else if (cs1)
                               seg = cs1;
+                        else if (cs3) {
+                              // happens when the first measure is a multi-measure rest
+                              // containing a generated clef
+                              seg = cs3;
+                              }
                         else
                               seg = cs2;
-                        clefDebug("exportxml: clef segments cs1=%p cs2=%p seg=%p", cs1, cs2, seg);
+                        clefDebug("exportxml: clef segments cs1=%p cs2=%p cs3=%p seg=%p", cs1, cs2, cs3, seg);
 
                         // output attribute at start of measure: clef
                         if (seg) {
