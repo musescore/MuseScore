@@ -1479,7 +1479,8 @@ void MuseScore::printFile()
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
       printerDev.setOutputFormat(QPrinter::NativeFormat);
-      printerDev.setFromTo(1, cs->pages().size());
+      int pages    = cs->pages().size();
+      printerDev.setFromTo(1, pages);
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       printerDev.setOutputFileName("");
@@ -1504,11 +1505,8 @@ void MuseScore::printFile()
 
       p.scale(mag, mag);
 
-      const QList<Page*> pl = cs->pages();
-      int pages    = pl.size();
-      int offset   = cs->pageNumberOffset();
-      int fromPage = printerDev.fromPage() - 1 - offset;
-      int toPage   = printerDev.toPage() - 1 - offset;
+      int fromPage = printerDev.fromPage() - 1;
+      int toPage   = printerDev.toPage() - 1;
       if (fromPage < 0)
             fromPage = 0;
       if ((toPage < 0) || (toPage >= pages))
