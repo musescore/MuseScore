@@ -2359,12 +2359,30 @@ void Score::cmdDeleteSelection()
 
 void Score::cmdFullMeasureRest()
       {
-      if (selection().isRange()) {
-            Segment* s1 = selection().startSegment();
-            Segment* s2 = selection().endSegment();
-            int stick1 = selection().tickStart();
-            int stick2 = selection().tickEnd();
+      Segment* s1 = nullptr;
+      Segment* s2 = nullptr;
+      int stick1 = -1;
+      int stick2 = -1;
+      int track1 = -1;
+      int track2 = -1;
+      Rest* r = nullptr;
 
+      if (inputState().noteEntryMode()) {
+            s1 = inputState().segment();
+            if (!s1 || s1->rtick() != 0)
+                  return;
+            Measure* m = s1->measure();
+            s2 = m->last();
+            stick1 = s1->tick();
+            stick2 = s2->tick();
+            track1 = inputState().track();
+            track2 = track1 + 1;
+            }
+      else if (selection().isRange()) {
+            s1 = selection().startSegment();
+            s2 = selection().endSegment();
+            stick1 = selection().tickStart();
+            stick2 = selection().tickEnd();
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::Type::ChordRest)
                   ss1 = ss1->next1(Segment::Type::ChordRest);
@@ -2372,49 +2390,76 @@ void Score::cmdFullMeasureRest()
                   && (s2 == 0 || (s2->segmentType() == Segment::Type::EndBarLine)
                         || (s2->segmentType() == Segment::Type::TimeSigAnnounce)
                         || (s2->segmentType() == Segment::Type::KeySigAnnounce));
-
             if (!fullMeasure) {
                   return;
+                  }
+            track1 = selection().staffStart() * VOICES;
+            track2 = selection().staffEnd() * VOICES;
+            }
+      else if (selection().cr()) {
+            ChordRest* cr = selection().cr();
+            if (!cr || cr->rtick() != 0)
+                  return;
+            Measure* m = cr->measure();
+            s1 = m->first();
+            s2 = m->last();
+            stick1 = s1->tick();
+            stick2 = s2->tick();
+            track1 = selection().cr()->track();
+            track2 = track1 + 1;
+            }
+      else {
+            return;
             }
 
-            int track1  = selection().staffStart() * VOICES;
-            int track2  = selection().staffEnd() * VOICES;
-            for (int track = track1; track < track2; ++track) {
-                  // first pass - remove non-initial rests from empty measures/voices
-                  for (Segment* s = s1; s != s2; s = s->next1()) {
-                        if (!(s->measure()->isOnlyRests(track))) // Don't remove anything from measures that contain notes
-                              continue;
-                        if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
-                              continue;
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                        // keep first rest of measure as placeholder (replaced in second pass)
-                        // but delete all others
-                        if (s->rtick())
-                              removeChordRest(cr, true);
-                        }
-                  // second pass - replace placeholders with full measure rests
-                  for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                        if (m->isOnlyRests(track)) {
-                              ChordRest* cr = m->findChordRest(m->tick(), track);
-                              if (cr) {
-                                    removeChordRest(cr, true);
-                                    addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
-                                    }
-                              }
-                        if (s2 && (m == s2->measure()))
-                              break;
-                        }
+      for (int track = track1; track < track2; ++track) {
+            if (selection().isRange() && !selectionFilter().canSelectVoice(track))
+                  continue;
+            // first pass - remove non-initial rests from empty measures/voices
+            for (Segment* s = s1; s != s2; s = s->next1()) {
+                  if (!(s->measure()->isOnlyRests(track))) // Don't remove anything from measures that contain notes
+                        continue;
+                  if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
+                        continue;
+                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  // keep first rest of measure as placeholder (replaced in second pass)
+                  // but delete all others
+                  if (s->rtick())
+                        removeChordRest(cr, true);
                   }
-            s1 = tick2segment(stick1);
-            s2 = tick2segment(stick2);
-            if (s1 == 0 || s2 == 0)
-                  deselectAll();
-            else {
-                  _selection.setStartSegment(s1);
-                  _selection.setEndSegment(s2);
-                  _selection.updateSelectedElements();
+            // second pass - replace placeholders with full measure rests
+            for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
+                  if (m->isOnlyRests(track)) {
+                        ChordRest* cr = m->findChordRest(m->tick(), track);
+                        if (cr) {
+                              removeChordRest(cr, true);
+                              r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                              }
+                        else if (inputState().noteEntryMode()) {
+                              // might be no cr at input position
+                              r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                              }
+                        }
+                  if (s2 && (m == s2->measure()))
+                        break;
                   }
             }
+
+      s1 = tick2segment(stick1);
+      s2 = tick2segment(stick2);
+      if (selection().isRange() && s1 && s2) {
+            _selection.setStartSegment(s1);
+            _selection.setEndSegment(s2);
+            _selection.updateSelectedElements();
+            }
+      else if (r) {
+            // note entry mode
+            select(r, SelectType::SINGLE);
+            }
+      else {
+            deselectAll();
+            }
+
       _layoutAll = true;
       }
 

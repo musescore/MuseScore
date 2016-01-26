@@ -1020,7 +1020,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "full-measure-rest",
          QT_TRANSLATE_NOOP("action","Full Measure Rest"),
          QT_TRANSLATE_NOOP("action","Full measure rest"),
