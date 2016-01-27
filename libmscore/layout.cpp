@@ -2161,12 +2161,12 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
                         Segment* s  = m->findSegment(Segment::Type::KeySigAnnounce, tick);
 
                         if (s && s->element(track)) {
-                              wwMax = qMax(wwMax, s->element(track)->width()) + leftMargin;
+                              wwMax = qMax(wwMax, s->element(track)->width() + leftMargin);
                               hasCourtesy = true;
                               }
                         else {
                               nks->layout();
-                              wwMax = qMax(wwMax, nks->width()) + leftMargin;
+                              wwMax = qMax(wwMax, nks->width() + leftMargin);
                               //hasCourtesy = false;
                               }
                         }
