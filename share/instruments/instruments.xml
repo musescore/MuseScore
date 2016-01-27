@@ -3064,6 +3064,25 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="f-trumpet">
+                  <longName>F Trumpet</longName>
+                  <shortName>F Tpt.</shortName>
+                  <description>F Trumpet</description>
+                  <musicXMLid>brass.trumpet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>65-82</aPitchRange>
+                  <pPitchRange>59-91</pPitchRange>
+                  <transposeDiatonic>3</transposeDiatonic>
+                  <transposeChromatic>5</transposeChromatic>
+                  <Channel>
+                        <program value="56"/>
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="eb-trumpet">
                   <longName>E♭ Trumpet</longName>
                   <shortName>E♭ Tpt.</shortName>

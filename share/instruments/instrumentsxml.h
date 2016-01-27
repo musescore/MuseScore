@@ -631,6 +631,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Trumpet in A"),
 //: Piccolo Trumpet in A
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Tpt. A"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "F Trumpet"),
+//: F Trumpet
+QT_TRANSLATE_NOOP("InstrumentsXML", "F Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Trumpet"),
 //: E♭ Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tpt."),
