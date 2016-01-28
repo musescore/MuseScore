@@ -47,9 +47,11 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
 
       virtual void hideEvent(QHideEvent*);
       void apply();
+      void setStaff(Staff*);
       void updateInterval(const Interval&);
       void updateStaffType();
       void updateInstrument();
+      void updateNextPreviousButtons();
 
    protected:
       QString midiCodeToStr(int midiCode);
@@ -68,6 +70,8 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void showClefChanged();
       void showTimeSigChanged();
       void showBarlinesChanged();
+      void gotoNextStaff();
+      void gotoPreviousStaff();
 
    signals:
       void instrumentChanged();
