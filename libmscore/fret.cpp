@@ -589,21 +589,25 @@ void FretDiagram::readMusicXML(XmlReader& e)
 void FretDiagram::writeMusicXML(Xml& xml) const
       {
       qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
+            int _strings = strings();
             xml.stag("frame");
-            xml.tag("frame-strings", strings());
+            xml.tag("frame-strings", _strings);
             xml.tag("frame-frets", frets());
             QString strDots = "'";
             QString strMarker = "'";
             QString strFingering = "'";
-            for (int i = 0; i < strings(); ++i) {
+            for (int i = 0; i < _strings; ++i) {
                   // TODO print frame note
                   if (_dots) strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
                   if (_marker) strMarker += QString("%1'").arg(static_cast<int>(_marker[i]));
                   if (_fingering) strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
                   if (_marker[i] != 88) {
                         xml.stag("frame-note");
-                        xml.tag("string", strings() - i);
-                        xml.tag("fret", _dots[i]);
+                        xml.tag("string", _strings - i);
+                        if (_dots)
+                              xml.tag("fret", _dots[i]);
+                        else
+                              xml.tag("fret", "0");
                         xml.etag();
                         }
                   }
