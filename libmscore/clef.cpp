@@ -184,10 +184,12 @@ void Clef::layout()
             // only if there is a clef change
             if (!bHide && tick > 0 ) {
                   Measure* meas = clefSeg->measure();
+                  // courtesy clef: end of last measure measure of system
+                  bool courtesy = clefSeg->tick() == meas->endTick() && meas->system() && (meas == meas->system()->lastMeasure() || meas->system()->measures().indexOf(meas) == -1);
                   showClef =                    // show this clef if:
-                        // it is not a courtesy clef (not at the end of the last measure of the system)
-                        ((meas->system() && meas != meas->system()->lastMeasure())) || (clefSeg->tick() != meas->endTick())
-                        // if courtesy clef: show if score has courtesy clefs on
+                        // it is not a courtesy clef
+                        !courtesy
+                        // or, if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
                               && !( (meas->repeatFlags() & Repeat::END) || meas->isFinalMeasureOfSection() )
