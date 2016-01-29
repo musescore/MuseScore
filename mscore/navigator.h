@@ -70,6 +70,7 @@ class Navigator : public QWidget {
       ViewRect* viewRect;
       QPoint startMove;
       QTransform matrix;
+      bool _previewOnly;
 
       void rescale();
 
@@ -89,6 +90,7 @@ class Navigator : public QWidget {
       Navigator(NScrollArea* sa, QWidget* parent = 0);
       void setScoreView(ScoreView*);
       void setScore(Score*);
+      void setPreviewOnly(bool b) { _previewOnly = true; }
       Score* score() const { return _score; }
       void setViewRect(const QRectF& r);
       };
