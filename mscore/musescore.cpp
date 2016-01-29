@@ -449,7 +449,6 @@ MuseScore::MuseScore()
 
       mainWindow = new QSplitter;
       mainWindow->setChildrenCollapsible(false);
-      mainWindow->setOrientation(Qt::Vertical);
 
       QWidget* mainScore = new QWidget;
       mainScore->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -463,6 +462,7 @@ MuseScore::MuseScore()
       _navigator = new NScrollArea;
       _navigator->setFocusPolicy(Qt::NoFocus);
       mainWindow->addWidget(_navigator);
+      scorePageLayoutChanged();
       showNavigator(preferences.showNavigator);
 
       mainWindow->setStretchFactor(0, 1);
@@ -2790,6 +2790,7 @@ void MuseScore::readSettings()
       resize(settings.value("size", QSize(1024, 768)).toSize());
       mainWindow->restoreState(settings.value("debuggerSplitter").toByteArray());
       mainWindow->setOpaqueResize(false);
+      scorePageLayoutChanged();
 
       move(settings.value("pos", QPoint(10, 10)).toPoint());
       //for some reason when MuseScore starts maximized the screen-reader
@@ -3508,6 +3509,16 @@ void MuseScore::excerptsChanged(Score* s)
                   tab1->updateExcerpts();
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   scorePageLayoutChanged
+//---------------------------------------------------------
+
+void MuseScore::scorePageLayoutChanged()
+      {
+      if (mainWindow)
+             mainWindow->setOrientation(MScore::verticalOrientation() ? Qt::Horizontal : Qt::Vertical);
       }
 
 //---------------------------------------------------------

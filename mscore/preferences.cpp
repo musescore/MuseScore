@@ -30,7 +30,6 @@
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
 #include "libmscore/sym.h"
-#include "palette.h"
 #include "pa.h"
 #include "pm.h"
 #include "libmscore/page.h"
@@ -1407,7 +1406,9 @@ void PreferenceDialog::apply()
             for (Score* s : mscore->scores()) {
                   s->doLayout();
                   }
-            mscore->currentScoreView()->setOffset(0.0, 0.0);
+            if (mscore->currentScoreView())
+                  mscore->currentScoreView()->setOffset(0.0, 0.0);
+            mscore->scorePageLayoutChanged();
             mscore->update();
             }
 
