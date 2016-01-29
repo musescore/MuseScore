@@ -168,8 +168,16 @@ double MagBox::getMag(ScoreView* canvas) const
 
             case MagIdx::MAG_DBL_PAGE:    // double page
                   {
-                  double mag1 = cw / (pf->width() * 2 * DPI + 50);
-                  double mag2 = ch / (pf->height() * DPI);
+                  double mag1 = 0;
+                  double mag2 = 0;
+                  if (MScore::verticalOrientation()) {
+                        mag1 = ch / (pf->height() * 2 * DPI +  MScore::verticalPageGap);
+                        mag2 = cw / (pf->width() * DPI);
+                        }
+                  else {
+                        mag1 = cw / (pf->width() * 2 * DPI + 50);
+                        mag2 = ch / (pf->height() * DPI);
+                        }
                   nmag  = (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
