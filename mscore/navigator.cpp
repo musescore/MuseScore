@@ -58,8 +58,14 @@ NScrollArea::NScrollArea(QWidget* w)
 
 void NScrollArea::resizeEvent(QResizeEvent* ev)
       {
+      if (widget()) {
+            widget()->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+            widget()->setMinimumSize(0, 0);
+            }
       if (widget() && (ev->size().height() != ev->oldSize().height()))
             widget()->resize(widget()->width(), ev->size().height());
+      if (widget() && (ev->size().width() != ev->oldSize().width()))
+            widget()->resize(ev->size().width(), widget()->height());
       QScrollArea::resizeEvent(ev);
       }
 
@@ -102,6 +108,7 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
       setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
       sa->setWidget(this);
       sa->setWidgetResizable(false);
+      _previewOnly = false;
       }
 
 //---------------------------------------------------------
@@ -164,17 +171,32 @@ void Navigator::setScore(Score* v)
 void Navigator::rescale()
       {
       if (!_score || _score->pages().isEmpty()) {
-            setFixedWidth(0);
+            setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+            setMinimumSize(0, 0);
             return;
             }
       Page* lp          = _score->pages().back();
-      qreal scoreWidth  = lp->x() + lp->width();
-      qreal scoreHeight = lp->height();
 
-      qreal m  = height() / scoreHeight;
+      // reset the layout before setting fix size
+      setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+      setMinimumSize(0, 0);
 
-      setFixedWidth(int(scoreWidth * m));
-      matrix = QTransform(m, 0, 0, m, 0, 0);
+      if (MScore::verticalOrientation() && !_previewOnly) {
+            qreal scoreWidth  = lp->width();
+            qreal scoreHeight = lp->y() + lp->height();
+            qreal m = width() / scoreWidth;
+            setFixedHeight(int(scoreHeight * m));
+            matrix = QTransform(m, 0, 0, m, 0, 0);
+            }
+      else {
+            qreal scoreWidth  = lp->x() + lp->width();
+            qreal scoreHeight = lp->height();
+            if (_previewOnly)
+                  scoreWidth = lp->width() * _score->pages().size();
+            qreal m  = height() / scoreHeight;
+            setFixedWidth(int(scoreWidth * m));
+            matrix = QTransform(m, 0, 0, m, 0, 0);
+            }
       }
 
 //---------------------------------------------------------
@@ -307,9 +329,11 @@ void Navigator::paintEvent(QPaintEvent* ev)
 
       p.setTransform(matrix);
       QRectF fr = matrix.inverted().mapRect(QRectF(r));
-
+      int i = 0;
       foreach (Page* page, _score->pages()) {
             QPointF pos(page->pos());
+            if (_previewOnly)
+                  pos = QPointF(i*page->width(), 0);
             QRectF pr(page->abbox().translated(pos));
             if (pr.right() < fr.left())
                   continue;
@@ -329,6 +353,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
                   p.drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no() + 1 + _score->pageNumberOffset()));
                   }
             p.translate(-pos);
+            i++;
             }
       }
 }
