@@ -107,7 +107,7 @@ private slots:
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
-      //void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); } must also fix exportxml.cpp
+      void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
       //void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); } end repeat missing
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
@@ -133,7 +133,7 @@ private slots:
       void restsTypeWhole() { mxmlIoTestRef("testRestsTypeWhole"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
-      //void slurs2() { mxmlIoTest("testSlurs2"); } OK in DOM parser, fails in pull parser
+      void slurs2() { mxmlIoTest("testSlurs2"); }
       void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
@@ -151,7 +151,7 @@ private slots:
       void tuplets2() { mxmlIoTestRef("testTuplets2"); }
       void tuplets3() { mxmlIoTestRef("testTuplets3"); }
       void tuplets4() { mxmlIoTest("testTuplets4"); }
-      //void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); } correct behaviour to be checked
+      void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
       void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
       void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
@@ -160,8 +160,7 @@ private slots:
       void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
       void volta1() { mxmlIoTest("testVolta1"); }
       void wedge1() { mxmlIoTest("testWedge1"); }
-// wedge2 fails: a spanner changes ticks length
-//      void wedge2() { mxmlIoTest("testWedge2"); }
+      void wedge2() { mxmlIoTest("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
       void words2() { mxmlIoTest("testWords2"); }
       };
