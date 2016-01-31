@@ -133,7 +133,7 @@ private slots:
       void restsTypeWhole() { mxmlIoTestRef("testRestsTypeWhole"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
-      //void slurs2() { mxmlIoTest("testSlurs2"); } OK in DOM parser, fails in pull parser
+      void slurs2() { mxmlIoTest("testSlurs2"); }
       void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }

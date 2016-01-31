@@ -2080,7 +2080,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         if (mTime > mDura)
                               mDura = mTime;
                         }
-                  //qDebug("added note %p gac %d", n, gac);
+                  //qDebug("added note %p chord %p gac %d", n, n ? n->chord() : 0, gac);
                   }
             else if (_e.name() == "forward") {
                   Fraction dura;
@@ -4285,7 +4285,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
                   // append any grace chord after chord to the previous chord
                   Chord* prevChord = measure->findChord(prevSTime.ticks(), msTrack + msVoice);
-                  addGraceChordsAfter(prevChord, gcl, gac);
+                  if (prevChord && prevChord != c)
+                        addGraceChordsAfter(prevChord, gcl, gac);
 
                   // append any grace chord
                   addGraceChordsBefore(c, gcl);
