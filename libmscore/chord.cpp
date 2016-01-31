@@ -3079,8 +3079,10 @@ void Chord::removeMarkings(bool keepTremolo)
             remove(e);
       for (Element* e : articulations())
             remove(e);
-      for (Element* e : lyricsList())
-            remove(e);
+      for (Element* e : lyricsList()) {
+            if (e)
+                  remove(e);
+            }
       for (Element* e : graceNotes())
             remove(e);
       for (Note* n : notes()) {
