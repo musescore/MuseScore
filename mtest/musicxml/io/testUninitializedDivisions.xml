@@ -20,8 +20,8 @@
       <miscellaneous-field name="description">
         Test a file where divisions is initialized too late: in measure 2.
         Neuratron PhotoScore generates this, making it impossible to calculate
-        the duration of the rest in the first measure. This rest will be ignored
-        on initial import, leading to a measure containing only a hidden rest.
+        the duration of the rest in the first measure (based on divisions).
+        The note type and dots will be used to calculate the duration.
         Attributes divisions, key and clef will be moved to measure 1.
         </miscellaneous-field>
       </miscellaneous>
