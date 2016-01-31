@@ -287,7 +287,7 @@ class ExportMusicXml {
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
-      void rest(Rest* chord, int staff);
+      void rest(Rest* chord, int staff, bool useDrumset);
       void clef(int staff, const Clef* clef);
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
@@ -1444,7 +1444,10 @@ void ExportMusicXml::barlineLeft(Measure* m)
 
 void ExportMusicXml::barlineRight(Measure* m)
       {
-      BarLineType bst = m->endBarLineType();
+      const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
+      const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
+      // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
+      BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
       bool visible = m->endBarLineVisible();
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
@@ -2696,8 +2699,12 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::rest(Rest* rest, int staff)
+void ExportMusicXml::rest(Rest* rest, int staff, bool useDrumset)
       {
+      Part* part = rest->score()->staff(rest->track() / VOICES)->part();
+      int partNr = _score->parts().indexOf(part);
+      int instNr = instrMap.value(part->instrument(tick), -1);
+
       static char table2[]  = "CDEFGAB";
 #ifdef DEBUG_TICK
       qDebug("ExportMusicXml::rest() oldtick=%d", tick);
@@ -2753,6 +2760,14 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 #endif
 
       xml.tag("duration", tickLen / div);
+
+      // instrument for multi-instrument or unpitched parts
+      if (!useDrumset) {
+            if (instrMap.size() > 1 && instNr >= 0)
+                  xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, instNr + 1)));
+      }
+      else
+            xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, instNr + 1)));
 
       // for a single-staff part, staff is 0, which needs to be corrected
       // to calculate the correct voice number
@@ -4926,7 +4941,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                           break;
                                           }
                                     case Element::Type::REST:
-                                          rest((Rest*)el, sstaff);
+                                          rest((Rest*)el, sstaff, part->instrument()->useDrumset());
                                           break;
 
                                     case Element::Type::BAR_LINE:
