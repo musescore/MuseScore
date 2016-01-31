@@ -45,10 +45,11 @@
           <line>2</line>
           </clef>
         </attributes>
-      <note print-object="no">
+      <note>
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
+        <type>whole</type>
         </note>
       </measure>
     <measure number="2">
