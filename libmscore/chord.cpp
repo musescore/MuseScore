@@ -493,6 +493,8 @@ void Chord::add(Element* e)
 
 void Chord::remove(Element* e)
       {
+      if (e == nullptr)
+            return;
       switch(e->type()) {
             case Element::Type::NOTE:
                   {
