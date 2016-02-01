@@ -808,16 +808,6 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="bgWallpaperButton">
-            <property name="accessibleName">
-             <string>Background Wallpaper</string>
-            </property>
-            <property name="text">
-             <string>Wallpaper</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="bgColorButton">
             <property name="accessibleName">
@@ -827,48 +817,6 @@
              <string>Color</string>
             </property>
            </widget>
-          </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLineEdit" name="bgWallpaper">
-              <property name="accessibleName">
-               <string>Background wallpaper path</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Insert path to background wallpaper file</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="bgWallpaperSelect">
-              <property name="accessibleName">
-               <string>Choose Background wallpaper file</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Opens a file dialog for selecting the wallpaper file</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout">
@@ -888,22 +836,74 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="Awl::ColorLabel" name="bgColorLabel">
-              <property name="focusPolicy">
-               <enum>Qt::StrongFocus</enum>
-              </property>
+             <widget class="QRadioButton" name="bgWallpaperButton">
               <property name="accessibleName">
-               <string>Select background color</string>
+               <string>Background Wallpaper</string>
               </property>
-              <property name="accessibleDescription">
-               <string>Opens a dialog for selecting the background color</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Box</enum>
+              <property name="text">
+               <string>Wallpaper</string>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="1" column="3">
+           <layout class="QHBoxLayout">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QToolButton" name="bgWallpaperSelect">
+              <property name="accessibleName">
+               <string>Choose Background wallpaper file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the wallpaper file</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="bgWallpaper">
+            <property name="accessibleName">
+             <string>Background wallpaper path</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to background wallpaper file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="Awl::ColorLabel" name="bgColorLabel">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Select background color</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for selecting the background color</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -935,48 +935,6 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLineEdit" name="fgWallpaper">
-              <property name="accessibleName">
-               <string>Paper wallpaper path</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Insert path to paper wallpaper file</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="fgWallpaperSelect">
-              <property name="accessibleName">
-               <string>Choose paper wallpaper file</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Opens a file dialog for selecting the wallpaper file</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout">
             <property name="spacing">
@@ -995,32 +953,48 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="Awl::ColorLabel" name="fgColorLabel">
-              <property name="focusPolicy">
-               <enum>Qt::StrongFocus</enum>
-              </property>
+             <widget class="QRadioButton" name="fgWallpaperButton">
               <property name="accessibleName">
-               <string>Select paper color</string>
+               <string>Paper Wallpaper</string>
               </property>
-              <property name="accessibleDescription">
-               <string>Opens a dialog for selecting the paper color</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Box</enum>
+              <property name="text">
+               <string>Wallpaper</string>
               </property>
              </widget>
             </item>
            </layout>
           </item>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="fgWallpaperButton">
-            <property name="accessibleName">
-             <string>Paper Wallpaper</string>
+          <item row="1" column="2">
+           <layout class="QHBoxLayout">
+            <property name="spacing">
+             <number>6</number>
             </property>
-            <property name="text">
-             <string>Wallpaper</string>
+            <property name="leftMargin">
+             <number>0</number>
             </property>
-           </widget>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QToolButton" name="fgWallpaperSelect">
+              <property name="accessibleName">
+               <string>Choose paper wallpaper file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the wallpaper file</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="fgColorButton">
@@ -1029,6 +1003,58 @@
             </property>
             <property name="text">
              <string>Color</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="Awl::ColorLabel" name="fgColorLabel">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Select paper color</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for selecting the paper color</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="fgWallpaper">
+            <property name="accessibleName">
+             <string>Paper wallpaper path</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to paper wallpaper file</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string>Scroll pages</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_12">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="pageHorizontal">
+            <property name="text">
+             <string>Horizontally</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="pageVertical">
+            <property name="text">
+             <string>Vertically</string>
             </property>
            </widget>
           </item>
@@ -1115,24 +1141,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>Page Orientation:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QRadioButton" name="pageHorizontal">
-            <property name="text">
-             <string>horizontal</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QRadioButton" name="pageVertical">
-            <property name="text">
-             <string>vertical</string>
+             <string>Scroll pages:</string>
             </property>
            </widget>
           </item>
@@ -3606,13 +3615,13 @@
   <tabstop>oscServer</tabstop>
   <tabstop>oscPort</tabstop>
   <tabstop>bgColorButton</tabstop>
-  <tabstop>bgWallpaperButton</tabstop>
   <tabstop>bgColorLabel</tabstop>
+  <tabstop>bgWallpaperButton</tabstop>
   <tabstop>bgWallpaper</tabstop>
   <tabstop>bgWallpaperSelect</tabstop>
   <tabstop>fgColorButton</tabstop>
-  <tabstop>fgWallpaperButton</tabstop>
   <tabstop>fgColorLabel</tabstop>
+  <tabstop>fgWallpaperButton</tabstop>
   <tabstop>fgWallpaper</tabstop>
   <tabstop>fgWallpaperSelect</tabstop>
   <tabstop>enableMidiInput</tabstop>
