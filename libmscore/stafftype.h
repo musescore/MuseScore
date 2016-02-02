@@ -120,7 +120,7 @@ struct TablatureDurationFont {
 
 // ready-made staff types:
 
-enum class StaffTypes : char {
+enum class StaffTypes : signed char {
       STANDARD,
       PERC_1LINE, PERC_3LINE, PERC_5LINE,
       TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,

@@ -269,7 +269,7 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
 
-enum class TextStyleType : char {
+enum class TextStyleType : signed char {
       DEFAULT = 0,
       TITLE,
       SUBTITLE,
