@@ -545,7 +545,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // others say to start the text just to left of notehead
                               // some say to include accidental, others don't
                               // our compromise - left align, but account for accidental
-                              if (cr->durationType() == TDuration::DurationType::V_MEASURE)
+                              if (cr->durationType() == TDuration::DurationType::V_MEASURE && !cr->measure()->hasVoices(cr->staffIdx()))
                                     x = cr->x();            // center for measure rests
                               else if (cr->space().lw() > 0.0)
                                     x = -cr->space().lw();  // account for accidentals, etc
