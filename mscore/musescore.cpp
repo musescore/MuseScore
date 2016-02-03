@@ -980,6 +980,8 @@ MuseScore::MuseScore()
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
+      menuHelp->addSeparator();
+      menuHelp->addAction(tr("Revert to factory settings"), this, SLOT(resetAndRestart()));
 
       //accessibility for menus
       foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
@@ -1102,6 +1104,26 @@ void MuseScore::helpBrowser1() const
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
       help += QString("&utm_source=desktop&utm_medium=menu&utm_content=%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
       QDesktopServices::openUrl(QUrl(help));
+      }
+
+//---------------------------------------------------------
+//   resetAndRestart
+//---------------------------------------------------------
+
+void MuseScore::resetAndRestart()
+      {
+      int ret = QMessageBox::question(0, tr("Are you sure?"),
+                  tr("This will reset all your preferences.\n"
+                   "Custom palettes, custom shortcuts, and the list of recent scores will be deleted. "
+                   "MuseScore will restart with its default settings.\n"
+                   "Reverting will not remove any scores from your computer.\n"
+                   "Are you sure you want to proceed?"),
+                   QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
+      if (ret == QMessageBox::Yes ) {
+             close();
+             QStringList args("-F");
+             QProcess::startDetached(qApp->arguments()[0], args);
+             }
       }
 
 //---------------------------------------------------------
@@ -4770,6 +4792,7 @@ int main(int argc, char* av[])
             QSettings settings;
             QFile::remove(settings.fileName() + ".lock"); //forcibly remove lock
             QFile::remove(settings.fileName());
+            settings.clear();
             }
 
       // create local plugin directory
