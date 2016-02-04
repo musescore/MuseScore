@@ -792,7 +792,7 @@ void LyricsLineSegment::layout()
       bool        endOfSystem       = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
       Lyrics*     lyr, *nextLyr     = nullptr;
-      qreal       fromX, toX;             // start and end point of intra-lyrics room
+      qreal       fromX = 0, toX = 0;             // start and end point of intra-lyrics room
       qreal       sp                = spatium();
       System*     sys;
 

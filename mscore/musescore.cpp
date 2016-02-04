@@ -1488,6 +1488,9 @@ void MuseScore::updateViewModeCombo()
             case LayoutMode::SYSTEM:
                   idx = 2;
                   break;
+            default:
+                  idx = 0;
+                  break;
             }
       viewModeCombo->setCurrentIndex(idx);
       }
