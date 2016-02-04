@@ -1210,7 +1210,7 @@ Element* Segment::lastInPrevSegments(int activeStaff)
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Segment::accessibleExtraInfo()
+QString Segment::accessibleExtraInfo() const
       {
       QString rez = "";
       if (!annotations().empty()) {
@@ -1251,7 +1251,7 @@ QString Segment::accessibleExtraInfo()
             if (s->tick() == tick())
                   startSpanners += tr("Start of ") + s->accessibleInfo();
 
-            Segment* seg = 0;
+            const Segment* seg = 0;
             switch (s->type()) {
                   case Element::Type::VOLTA:
                   case Element::Type::SLUR:

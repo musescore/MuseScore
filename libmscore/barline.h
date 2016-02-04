@@ -51,6 +51,7 @@ static const int UNKNOWN_BARLINE_TO = -6;
 
 struct BarLineTableItem {
       BarLineType type;
+      const char* userName;       // user name, translatable
       const char* name;
       };
 
@@ -128,8 +129,7 @@ class BarLine : public Element {
       const ElementList* el() const      { return &_el; }
 
       static QString userTypeName(BarLineType);
-      static unsigned int barLineTableSize();
-      static BarLineTableItem barLineTableItem(int i);
+      static const BarLineTableItem* barLineTableItem(unsigned);
 
       QString barLineTypeName() const;
       static QString barLineTypeName(BarLineType t);
@@ -154,8 +154,8 @@ class BarLine : public Element {
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
 
-      virtual QString accessibleInfo() override;
-      virtual QString accessibleExtraInfo() override;
+      virtual QString accessibleInfo() const override;
+      virtual QString accessibleExtraInfo() const override;
       };
 }     // namespace Ms
 #endif

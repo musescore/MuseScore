@@ -184,7 +184,7 @@ class Clef : public Element {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
-      QString accessibleInfo() override;
+      QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

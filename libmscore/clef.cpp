@@ -646,7 +646,7 @@ Element* Clef::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Clef::accessibleInfo()
+QString Clef::accessibleInfo() const
       {
       return qApp->translate("clefTable", ClefInfo::name(clefType()));
       }

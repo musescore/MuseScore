@@ -212,7 +212,7 @@ Element* SpannerSegment::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString SpannerSegment::accessibleInfo()
+QString SpannerSegment::accessibleInfo() const
       {
       return spanner()->accessibleInfo();
       }

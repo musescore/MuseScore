@@ -1092,8 +1092,8 @@ class Score : public QObject, public ScoreElement {
       void cmdSlashRhythm();
       void cmdResequenceRehearsalMarks();
 
-      void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
-      QString accessibleInfo()          { return accInfo;          }
+      void setAccessibleInfo(QString s)   { accInfo = s.remove(":").remove(";"); }
+      QString accessibleInfo() const      { return accInfo;          }
 
       QImage createThumbnail();
       QString createRehearsalMarkText(RehearsalMark* current) const;

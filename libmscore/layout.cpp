@@ -106,7 +106,7 @@ ChordRest* Score::searchNote(int tick, int track) const
       ChordRest* ipe = 0;
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
-            ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+            ChordRest* cr = segment->cr(track);
             if (!cr)
                   continue;
             if (cr->tick() == tick)
@@ -152,22 +152,19 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       bool downGrace = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
-            Element* e = segment->element(track);
-            if (e && (e->type() == Element::Type::CHORD)) {
-                  Chord* chord = static_cast<Chord*>(e);
+            Chord* chord = segment->element(track)->castChord();
+            if (chord) {
                   bool hasGraceBefore = false;
                   for (Chord* c : chord->graceNotes()) {
                         if (c->isGraceBefore())
                               hasGraceBefore = true;
-                        // layout grace note noteheads
-                        layoutChords2(c->notes(), c->up());
-                        // layout grace note chords
-                        layoutChords3(c->notes(), staff, 0);
+                        layoutChords2(c->notes(), c->up());       // layout grace note noteheads
+                        layoutChords3(c->notes(), staff, 0);      // layout grace note chords
                         }
                   if (chord->up()) {
                         ++upVoices;
                         upStemNotes.append(chord->notes());
-                        upDots = qMax(upDots, chord->dots());
+                        upDots   = qMax(upDots, chord->dots());
                         maxUpMag = qMax(maxUpMag, chord->mag());
                         if (!upHooks)
                               upHooks = chord->hook();
@@ -509,9 +506,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
             // apply chord offsets
             for (int track = startTrack; track < endTrack; ++track) {
-                  Element* e = segment->element(track);
-                  if (e && (e->type() == Element::Type::CHORD)) {
-                        Chord* chord = static_cast<Chord*>(e);
+                  Chord* chord = segment->element(track)->castChord();
+                  if (chord) {
                         if (chord->up()) {
                               if (upOffset != 0.0) {
                                     chord->rxpos() += upOffset + centerAdjustUp + oversizeUp;
@@ -784,7 +780,6 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             me->x = lx - pnd - acc->width() - acc->bbox().x();
 
       return me->x;
-
       }
 
 //---------------------------------------------------------
@@ -1228,8 +1223,8 @@ void Score::layoutSpanner()
                         for (int i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }
-                  Chord* c = static_cast<Chord*>(segment->element(track));
-                  if (c && c->type() == Element::Type::CHORD) {
+                  Chord* c = segment->element(track)->castChord();
+                  if (c) {
                         c->layoutStem();
                         for (Note* n : c->notes()) {
                               Tie* tie = n->tieFor();
@@ -1293,10 +1288,10 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         continue;
                   switch (el->type()) {
                         case Element::Type::KEYSIG:
-                              keysig = static_cast<KeySig*>(el);
+                              keysig = el->keySig();
                               break;
                         case Element::Type::CLEF:
-                              clef = static_cast<Clef*>(el);
+                              clef = el->clef();
                               clef->setSmall(false);
                               break;
                         default:
@@ -1411,12 +1406,12 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
 
       qreal w = 0.0;
       if (showCourtesy && ns) {
-            TimeSig* ts = static_cast<TimeSig*>(ns->element(0));
+            TimeSig* ts = ns->element(0)->timeSig();
             if (ts && ts->showCourtesySig()) {
                   qreal leftMargin  = point(styleS(StyleIdx::timesigLeftMargin));
                   Segment* s = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
                   if (s && s->element(0)) {
-                        w = static_cast<TimeSig*>(s->element(0))->width() + leftMargin;
+                        w = s->element(0)->timeSig()->width() + leftMargin;
                         hasCourtesy = true;
                         }
                   else {
@@ -1438,7 +1433,7 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
 
-                  KeySig* nks = static_cast<KeySig*>(ns->element(track));
+                  KeySig* nks = ns->element(track)->keySig();
 
                   if (nks && nks->showCourtesy() && !nks->generated()) {
                         Segment* s  = m->findSegment(Segment::Type::KeySigAnnounce, tick);
@@ -1486,7 +1481,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                   foreach(MeasureBase* m, system->measures()) {
                         if (m->type() != Element::Type::MEASURE)
                               continue;
-                        Measure* measure = static_cast<Measure*>(m);
+                        Measure* measure = m->measure();
                         if (!measure->isMeasureRest(staffIdx)) {
                               hideStaff = false;
                               break;
@@ -1500,13 +1495,13 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         for (int i = 0; i < part->nstaves(); ++i) {
                               int st = idx + i;
 
-                              foreach(MeasureBase* mb, system->measures()) {
+                              foreach (MeasureBase* mb, system->measures()) {
                                     if (mb->type() != Element::Type::MEASURE)
                                           continue;
-                                    Measure* m = static_cast<Measure*>(mb);
+                                    Measure* m = mb->measure();
                                     for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                                           for (int voice = 0; voice < VOICES; ++voice) {
-                                                ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
+                                                ChordRest* cr = s->cr(st * VOICES + voice);
                                                 if (cr == 0 || cr->type() == Element::Type::REST)
                                                       continue;
                                                 int staffMove = cr->staffMove();
@@ -2102,7 +2097,6 @@ qreal Score::computeMinWidth(Segment* s)
       qreal _spatium         = spatium();
       qreal clefLeftMargin   = styleS(StyleIdx::clefLeftMargin).val() * _spatium;
       qreal keysigLeftMargin = styleS(StyleIdx::keysigLeftMargin).val() * _spatium;
-      qreal clefKeyMargin    = styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
 
       if (s->segmentType() == Segment::Type::ChordRest)
             x = s->minLeft() + qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);

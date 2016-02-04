@@ -31,9 +31,10 @@ namespace Ms {
 //   harmonyName
 //---------------------------------------------------------
 
-QString Harmony::harmonyName()
+QString Harmony::harmonyName() const
       {
-      determineRootBaseSpelling();
+      // Hack:
+      const_cast<Harmony*>(this)->determineRootBaseSpelling();
 
       HChord hc = descr() ? descr()->chord : HChord();
       QString s, r, e, b;
@@ -376,7 +377,8 @@ void Harmony::read(XmlReader& e)
 //   determineRootBaseSpelling
 //---------------------------------------------------------
 
-void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& baseSpelling, NoteCaseType& baseCase)
+void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
+   NoteSpellingType& baseSpelling, NoteCaseType& baseCase)
       {
       // spelling
       if (score()->styleB(StyleIdx::useStandardNoteNames))
@@ -449,9 +451,10 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
 //---------------------------------------------------------
 
 void Harmony::determineRootBaseSpelling()
-{
-      determineRootBaseSpelling(_rootSpelling, _rootRenderCase, _baseSpelling, _baseRenderCase);
-}
+      {
+      determineRootBaseSpelling(_rootSpelling, _rootRenderCase,
+        _baseSpelling, _baseRenderCase);
+      }
 
 //---------------------------------------------------------
 //   convertNote
@@ -1593,7 +1596,7 @@ const ParsedChord* Harmony::parsedForm()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Harmony::accessibleInfo()
+QString Harmony::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(harmonyName());
       }
@@ -1602,14 +1605,14 @@ QString Harmony::accessibleInfo()
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Harmony::screenReaderInfo()
+QString Harmony::screenReaderInfo() const
       {
       QString rez = Element::accessibleInfo();
       if (_rootTpc != Tpc::TPC_INVALID)
             rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
 
-      if (parsedForm() && !hTextName().isEmpty()) {
-            QString aux = parsedForm()->handle();
+      if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
+            QString aux = const_cast<Harmony*>(this)->parsedForm()->handle();
             aux = aux.replace("#", tr("sharp")).replace("<", "");
             QString extension = "";
 

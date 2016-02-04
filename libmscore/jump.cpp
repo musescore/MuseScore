@@ -232,7 +232,7 @@ Element* Jump::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Jump::accessibleInfo()
+QString Jump::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->jumpTypeUserName());
       }

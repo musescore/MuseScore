@@ -573,7 +573,7 @@ Element* TimeSig::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TimeSig::accessibleInfo()
+QString TimeSig::accessibleInfo() const
       {
       QString timeSigString;
       switch (timeSigType()) {

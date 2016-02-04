@@ -3173,7 +3173,7 @@ Element* Chord::prevElement()
 //   accessibleExtraInfo
 //---------------------------------------------------------
 
-QString Chord::accessibleExtraInfo()
+QString Chord::accessibleExtraInfo() const
       {
       QString rez = "";
 

@@ -300,7 +300,7 @@ class Note : public Element {
       int tpc() const;
       int tpc1() const            { return _tpc[0]; }     // non transposed tpc
       int tpc2() const            { return _tpc[1]; }     // transposed tpc
-      QString tpcUserName(bool explicitAccidental = false);
+      QString tpcUserName(bool explicitAccidental = false) const;
 
       void setTpc(int v);
       void setTpc1(int v)         { _tpc[0] = v; }
@@ -367,7 +367,7 @@ class Note : public Element {
       void setDotsHidden(bool val)              { _dotsHidden = val;  }
 
       NoteType noteType() const;
-      QString  noteTypeUserName();
+      QString  noteTypeUserName() const;
 
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
@@ -451,9 +451,10 @@ class Note : public Element {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
-      virtual QString accessibleInfo() override;
-      virtual QString screenReaderInfo() override;
-      virtual QString accessibleExtraInfo() override;
+
+      virtual QString accessibleInfo() const override;
+      virtual QString screenReaderInfo() const override;
+      virtual QString accessibleExtraInfo() const override;
 
       virtual Shape shape() const override;
       };

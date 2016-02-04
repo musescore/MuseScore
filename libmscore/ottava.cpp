@@ -550,7 +550,7 @@ void Ottava::reset()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Ottava::accessibleInfo()
+QString Ottava::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(ottavaDefault[static_cast<int>(ottavaType())].name);
       }

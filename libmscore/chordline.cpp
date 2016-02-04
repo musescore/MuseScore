@@ -392,7 +392,7 @@ int ChordLine::grips() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString ChordLine::accessibleInfo()
+QString ChordLine::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
       if(chordLineType() != ChordLineType::NOTYPE)

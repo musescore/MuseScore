@@ -41,6 +41,11 @@ class TextStyle;
 class Element;
 class BarLine;
 class Articulation;
+class Marker;
+class Chord;
+class Clef;
+class KeySig;
+class TimeSig;
 
 enum class SymId;
 
@@ -559,22 +564,42 @@ class Element : public QObject, public ScoreElement {
       std::vector<SymId> toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
+      bool concertPitch() const;
+
       virtual Element* nextElement();  //< Used for navigation
       virtual Element* prevElement();  //< next-element and prev-element command
 
-      bool concertPitch() const;
-      virtual QString accessibleInfo();                                  //< used to populate the status bar
-      virtual QString screenReaderInfo()    { return accessibleInfo(); } //< by default returns accessibleInfo, but can be overriden
-                                                                         //  if the screen-reader needs a special string (see note for example)
-      virtual QString accessibleExtraInfo() { return QString();        } //< used to return info that will be appended to accessibleInfo
-                                                                         // and passed only to the screen-reader
+      virtual QString accessibleInfo() const;         //< used to populate the status bar
+      virtual QString screenReaderInfo() const  {     //< by default returns accessibleInfo, but can be overriden
+            return accessibleInfo();
+            }
+                                                       //  if the screen-reader needs a special string (see note for example)
+      virtual QString accessibleExtraInfo() const {    // used to return info that will be appended to accessibleInfo
+            return QString();                          // and passed only to the screen-reader
+            }
+
 
       virtual bool isUserModified() const;
 
-      const BarLine* barLine() const           { Q_ASSERT(type() == Element::Type::BAR_LINE); return (const BarLine*)this; }
-      BarLine* barLine()                       { Q_ASSERT(type() == Element::Type::BAR_LINE); return (BarLine*)this; }
-      const Articulation* articulation() const { Q_ASSERT(type() == Type::ARTICULATION); return (const Articulation*)this; }
-      Articulation* articulation()             { Q_ASSERT(type() == Type::ARTICULATION); return (Articulation*)this; }
+      //---------------------------------------------------
+      // checked type conversions:
+      //---------------------------------------------------
+
+#define CONVERT(a,b,c) \
+      const a* b() const { Q_ASSERT(this == 0 || type() == Element::Type::c); return (const a*)this; } \
+      a* b() { Q_ASSERT(this == 0 || type() == Element::Type::c); return (a*)this; } \
+      a* cast##a() { return (this == 0 || type() == Element::Type::c) ? (a*)this : 0; }
+
+      CONVERT(BarLine,      barLine,      BAR_LINE);
+      CONVERT(Articulation, articulation, ARTICULATION);
+      CONVERT(Marker,       marker,       MARKER);
+      CONVERT(Chord,        chord,        CHORD);
+      CONVERT(Clef,         clef,         CLEF);
+      CONVERT(KeySig,       keySig,       KEYSIG);
+      CONVERT(TimeSig,      timeSig,      TIMESIG);
+      CONVERT(Measure,      measure,      MEASURE);
+
+#undef CONVERT
       };
 
 //---------------------------------------------------------

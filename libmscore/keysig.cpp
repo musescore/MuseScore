@@ -565,7 +565,7 @@ Element* KeySig::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString KeySig::accessibleInfo()
+QString KeySig::accessibleInfo() const
       {
       QString keySigType;
       if (isAtonal())

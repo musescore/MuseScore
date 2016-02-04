@@ -144,10 +144,6 @@ public:
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
       Q_INVOKABLE Ms::Element* elementAt(int track) const;
-      ChordRest* cr(int track) const                    {
-            Q_ASSERT(_segmentType == Type::ChordRest);
-            return (ChordRest*)(_elist.value(track));
-            };
       const QList<Element*>& elist() const { return _elist; }
       QList<Element*>& elist()             { return _elist; }
 
@@ -178,7 +174,6 @@ public:
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
       void fixStaffIdx();
-      bool isChordRest() const                   { return _segmentType == Type::ChordRest; }
       void setTick(int);
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start
@@ -212,7 +207,7 @@ public:
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
 
-      virtual QString accessibleExtraInfo() override;
+      virtual QString accessibleExtraInfo() const override;
       Element* firstInNextSegments(int activeStaff); //<
       Element* lastInPrevSegments(int activeStaff);   //<
       Element* firstElement(int staff);              //<  These methods are used for navigation
@@ -226,6 +221,24 @@ public:
       qreal minRight() const;
       qreal minLeft() const;
       qreal minHorizontalDistance(Segment* ns) const;
+
+      // some helper function
+      ChordRest* cr(int track) const                    {
+            Q_ASSERT(_segmentType == Type::ChordRest);
+            return (ChordRest*)(_elist[track]);
+            };
+      bool isBeginBarLine() const       { return _segmentType == Type::BeginBarLine; }
+      bool isClef() const               { return _segmentType == Type::Clef; }
+      bool isKeySig() const             { return _segmentType == Type::KeySig; }
+      bool isAmbitus() const            { return _segmentType == Type::Ambitus; }
+      bool isTimeSig() const            { return _segmentType == Type::TimeSig; }
+      bool isStartRepeatBarLine() const { return _segmentType == Type::StartRepeatBarLine; }
+      bool isBarLine() const            { return _segmentType == Type::BarLine; }
+      bool isBreath() const             { return _segmentType == Type::Breath; }
+      bool isChordRest() const          { return _segmentType == Type::ChordRest; }
+      bool isEndBarLine() const         { return _segmentType == Type::EndBarLine; }
+      bool isKeySigAnnounce() const     { return _segmentType == Type::KeySigAnnounce; }
+      bool isTimeSigAnnounce() const    { return _segmentType == Type::TimeSigAnnounce; }
       };
 
 constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {

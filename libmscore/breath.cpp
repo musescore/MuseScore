@@ -176,7 +176,7 @@ Element* Breath::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Breath::accessibleInfo()
+QString Breath::accessibleInfo() const
       {
       switch (breathType()) {
             case 2:

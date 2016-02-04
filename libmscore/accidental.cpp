@@ -493,7 +493,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Accidental::accessibleInfo()
+QString Accidental::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental", Accidental::subtypeUserName()));
       }

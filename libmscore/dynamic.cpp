@@ -428,7 +428,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Dynamic::accessibleInfo()
+QString Dynamic::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->dynamicTypeName());
       }

@@ -79,7 +79,7 @@ class KeySig : public Element {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
 
       SymId convertFromOldId(int val) const;
       };
