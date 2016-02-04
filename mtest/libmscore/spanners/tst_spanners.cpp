@@ -394,7 +394,7 @@ void TestSpanners::spanners08()
       score->doLayout();
 
       // verify initial LyricsLine setup
-      System* sys = score->systems()->at(0);
+      System* sys = score->systems().at(0);
       QVERIFY(sys->spannerSegments().size() == 1);
       QVERIFY(score->unmanagedSpanners().size() == 1);
 
@@ -585,7 +585,7 @@ void TestSpanners::spanners13()
       msr->drop(dropData);
       score->endCmd();
       // VERIFY SEGMENTS IN SYSTEMS AND THEN SCORE
-      for (System* sys : *score->systems())
+      for (System* sys : score->systems())
             QVERIFY(sys->spannerSegments().size() == 1);
       QVERIFY(saveCompareScore(score, "lyricsline06.mscx", DIR + "lyricsline06-ref.mscx"));
 

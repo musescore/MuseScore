@@ -102,6 +102,8 @@ class BarLine : public Element {
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
+      Segment* segment() const { return (Segment*)parent(); }
+
       void setCustomSpan(bool val)    { _customSpan = val;    }
       void setCustomSubtype(bool val) { _customSubtype = val; }
       void setSpan(int val);

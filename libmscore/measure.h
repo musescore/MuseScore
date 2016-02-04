@@ -52,11 +52,10 @@ struct MStaff {
       StaffLines*  lines   { 0 };
       Spacer* _vspacerUp   { 0 };
       Spacer* _vspacerDown { 0 };
-      bool hasVoices       { false };     ///< indicates that MStaff contains more than one voice,
+      bool hasVoices      { false };     ///< indicates that MStaff contains more than one voice,
                                           ///< this changes some layout rules
       bool _visible        { true };
       bool _slashStyle     { false };
-
 
       MStaff()  {}
       ~MStaff();
@@ -66,8 +65,10 @@ struct MStaff {
       void setVisible(bool val)    { _visible = val;     }
       bool slashStyle() const      { return _slashStyle; }
       void setSlashStyle(bool val) { _slashStyle = val;  }
+
       void setScore(Score*);
       void setTrack(int);
+
       Text* noText() const         { return _noText;     }
       void setNoText(Text* t)      { _noText = t;        }
       };
@@ -101,13 +102,14 @@ class Measure : public MeasureBase {
 
       qreal _userStretch;
 
+      Fraction _timesig;
+      Fraction _len;          ///< actual length of measure
+
       int _mmRestCount;       // > 0 if this is a multi measure rest
                               // 0 if this is the start of a mm rest (_mmRest != 0)
                               // < 0 if this measure is covered by a mm rest
 
 
-      Fraction _timesig;
-      Fraction _len;          ///< actual length of measure
 
       int _playbackCount;     // temp. value used in RepeatList
                               // counts how many times this measure was already played
@@ -115,10 +117,7 @@ class Measure : public MeasureBase {
       int _repeatCount;       ///< end repeat marker und repeat count
 
       MeasureNumberMode _noMode;
-
       bool _breakMultiMeasureRest;
-
-      BarLineType _systemInitialBarLineType;    ///< type used for system bar line, when measure is initial
 
       void push_back(Segment* e);
       void push_front(Segment* e);
@@ -212,9 +211,7 @@ class Measure : public MeasureBase {
       Segment* findSegment(Segment::Type st, int t);
 
       qreal createEndBarLines(bool);
-      bool setStartRepeatBarLine(bool);
-      void setSystemInitialBarLineType(BarLineType v) { _systemInitialBarLineType = v;    }
-      BarLineType systemInitialBarLineType() const    { return _systemInitialBarLineType; }
+      void setStartRepeatBarLine();
 
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
 

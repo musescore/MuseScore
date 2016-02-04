@@ -299,7 +299,7 @@ void MuseScore::editInstrList()
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
-                              rootScore->systems()->clear();
+                              rootScore->systems().clear();
                               Staff* staff = sli->staff();
                               int sidx = staff->idx();
                               rootScore->cmdRemoveStaff(sidx);

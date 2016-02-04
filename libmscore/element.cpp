@@ -613,7 +613,7 @@ bool Element::contains(const QPointF& p) const
       }
 
 //---------------------------------------------------------
-//   shape
+//   outline
 //---------------------------------------------------------
 
 /**
@@ -1554,6 +1554,24 @@ QVariant Element::propertyDefault(P_ID id) const
                   break;
             }
       return QVariant();
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Element::undoChangeProperty(P_ID id, const QVariant& v)
+      {
+      score()->undoChangeProperty(this, id, v);
+      }
+
+//---------------------------------------------------------
+//   undoResetProperty
+//---------------------------------------------------------
+
+void Element::undoResetProperty(P_ID id)
+      {
+      score()->undoChangeProperty(this, id, propertyDefault(id));
       }
 
 //---------------------------------------------------------

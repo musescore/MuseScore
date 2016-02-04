@@ -38,16 +38,18 @@ MeasureBase::MeasureBase(const MeasureBase& m)
    : Element(m)
       {
       _next         = m._next;
-      _prev         = m._prev;
-      _tick         = m._tick;
-      _breakHint    = m._breakHint;
-      _lineBreak    = m._lineBreak;
-      _pageBreak    = m._pageBreak;
-      _sectionBreak = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
-      _no           = m._no;
-      _noOffset     = m._noOffset;
-      _irregular    = m._irregular;
-      _repeatFlags  = m._repeatFlags;
+      _prev          = m._prev;
+      _tick          = m._tick;
+      _lineBreak     = m._lineBreak;
+      _pageBreak     = m._pageBreak;
+      _sectionBreak  = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
+      _no            = m._no;
+      _noOffset      = m._noOffset;
+      _irregular     = m._irregular;
+      _repeatEnd     = m._repeatEnd;
+      _repeatStart   = m._repeatStart;
+      _repeatMeasure = m._repeatMeasure;
+      _repeatJump    = m._repeatJump;
 
       for (Element* e : m._el)
             add(e->clone());
@@ -311,8 +313,14 @@ MeasureBase* Score::last()  const
 QVariant MeasureBase::getProperty(P_ID id) const
       {
       switch(id) {
-            case P_ID::BREAK_HINT:
-                  return QVariant(_breakHint);
+            case P_ID::REPEAT_END:
+                  return repeatEnd();
+            case P_ID::REPEAT_START:
+                  return repeatStart();
+            case P_ID::REPEAT_MEASURE:
+                  return repeatMeasure();
+            case P_ID::REPEAT_JUMP:
+                  return repeatJump();
             default:
                   return Element::getProperty(id);
             }
@@ -322,22 +330,50 @@ QVariant MeasureBase::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureBase::setProperty(P_ID id, const QVariant& property)
+bool MeasureBase::setProperty(P_ID id, const QVariant& value)
       {
       switch(id) {
-            case P_ID::BREAK_HINT:
-                  _breakHint = property.toBool();
+            case P_ID::REPEAT_END:
+                  setRepeatEnd(value.toBool());
+                  break;
+            case P_ID::REPEAT_START:
+                  setRepeatStart(value.toBool());
+                  break;
+            case P_ID::REPEAT_MEASURE:
+                  setRepeatMeasure(value.toBool());
+                  break;
+            case P_ID::REPEAT_JUMP:
+                  setRepeatJump(value.toBool());
                   break;
             default:
-                  if (!Element::setProperty(id, property))
+                  if (!Element::setProperty(id, value))
                         return false;
                   break;
             }
+      score()->setLayoutAll(true);
       return true;
       }
 
 //---------------------------------------------------------
-//   setProperty
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant MeasureBase::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_ID::REPEAT_END:
+            case P_ID::REPEAT_START:
+            case P_ID::REPEAT_MEASURE:
+            case P_ID::REPEAT_JUMP:
+                  return false;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
+//   undoSetBreak
 //---------------------------------------------------------
 
 void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)

@@ -825,13 +825,42 @@ void Note::read(XmlReader& e)
       if (e.hasAttribute("tpc"))                     // obsolete
             _tpc[0] = e.intAttribute("tpc");
 
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
+
             if (tag == "pitch")
                   _pitch = e.readInt();
             else if (tag == "tpc") {
                   _tpc[0] = e.readInt();
                   _tpc[1] = _tpc[0];
+                  }
+            else if (tag == "track")            // for performance
+                  setTrack(e.readInt());
+            else if (tag == "Accidental") {
+                  // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
+                  // if a userAccidental has some other property set (like for instance offset)
+                  Accidental* a;
+                  if (hasAccidental)            // if the other tag has already been read,
+                        a = _accidental;        // re-use the accidental it constructed
+                  else
+                        a = new Accidental(score());
+                  // the accidental needs to know the properties of the
+                  // track it belongs to (??)
+                  a->setTrack(track());
+                  a->read(e);
+                  if (!hasAccidental)           // only the new accidental, if it has been added previously
+                        add(a);
+                  if (score()->mscVersion() < 117)
+                        hasAccidental = true;   // we now have an accidental
+                  }
+            else if (tag == "Tie") {
+                  Tie* tie = new Tie(score());
+                  tie->setParent(this);
+                  tie->setTrack(track());
+                  tie->read(e);
+                  tie->setStartNote(this);
+                  _tieFor = tie;
                   }
             else if (tag == "tpc2")
                   _tpc[1] = e.readInt();
@@ -892,14 +921,6 @@ void Note::read(XmlReader& e)
                   setProperty(P_ID::VELO_TYPE, Ms::getProperty(P_ID::VELO_TYPE, e));
             else if (tag == "line")
                   _line = e.readInt();
-            else if (tag == "Tie") {
-                  Tie* tie = new Tie(score());
-                  tie->setParent(this);
-                  tie->setTrack(track());
-                  tie->read(e);
-                  tie->setStartNote(this);
-                  _tieFor = tie;
-                  }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
                   f->setTextStyleType(TextStyleType::FINGERING);
@@ -976,23 +997,6 @@ void Note::read(XmlReader& e)
                         _accidental->setRole(AccidentalRole::USER);
                         hasAccidental = true;   // we now have an accidental
                         }
-                  }
-            else if (tag == "Accidental") {
-                  // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
-                  // if a userAccidental has some other property set (like for instance offset)
-                  Accidental* a;
-                  if (hasAccidental)            // if the other tag has already been read,
-                        a = _accidental;        // re-use the accidental it constructed
-                  else
-                        a = new Accidental(score());
-                  // the accidental needs to know the properties of the
-                  // track it belongs to (??)
-                  a->setTrack(track());
-                  a->read(e);
-                  if (!hasAccidental)           // only the new accidental, if it has been added previously
-                        add(a);
-                  if (score()->mscVersion() < 117)
-                        hasAccidental = true;   // we now have an accidental
                   }
             else if (tag == "move")             // obsolete
                   chord()->setStaffMove(e.readInt());

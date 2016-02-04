@@ -2170,8 +2170,8 @@ void ChangeSingleBarLineSpan::flip()
             Segment * segm = (static_cast<Segment*>(barLine->parent()));
             Measure * meas = segm->measure();
             // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
-            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::Type::StartRepeatBarLine)
-                  meas->setStartRepeatBarLine(true);
+//            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::Type::StartRepeatBarLine)
+//                  meas->setStartRepeatBarLine(true);
             // otherwise redo measure end bar lines
 //TODO            else
 //                  meas->createEndBarLines();
@@ -3637,6 +3637,57 @@ void ChangeDrumset::flip()
       Drumset d = *instrument->drumset();
       instrument->setDrumset(&drumset);
       drumset = d;
+      }
+
+//---------------------------------------------------------
+//   undoChangeBarLine
+//---------------------------------------------------------
+
+void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
+      {
+      int tick = measure->tick();
+
+      for (Score* s : scoreList()) {
+            Measure* m  = s->tick2measure(tick);
+            Measure* nm = m->nextMeasure();
+
+            switch (barType) {
+                  case BarLineType::END:
+                  case BarLineType::NORMAL:
+                  case BarLineType::DOUBLE:
+                  case BarLineType::BROKEN:
+                  case BarLineType::DOTTED:
+                        {
+                        s->undoChangeProperty(m, P_ID::REPEAT_END, false);
+                        if (nm)
+                              s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
+                        Segment* segment = m->findSegment(Segment::Type::EndBarLine, m->endTick());
+                        if (segment) {
+                              for (Element* e : segment->elist()) {
+                                    if (e) {
+                                          BarLine* bl = e->barLine();
+                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, int(barType));
+                                          bl->undoChangeProperty(P_ID::GENERATED, false);
+                                          }
+                                    }
+                              }
+                        }
+                        break;
+                  case BarLineType::START_REPEAT:
+                        s->undoChangeProperty(m, P_ID::REPEAT_START, true);
+                        break;
+                  case BarLineType::END_REPEAT:
+                        s->undoChangeProperty(m, P_ID::REPEAT_END, true);
+                        if (nm)
+                              s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
+                        break;
+                  case BarLineType::END_START_REPEAT:
+                        s->undoChangeProperty(m, P_ID::REPEAT_END, true);
+                        if (nm)
+                              s->undoChangeProperty(nm, P_ID::REPEAT_START, true);
+                        break;
+                  }
+            }
       }
 
 }

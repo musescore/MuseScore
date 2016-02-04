@@ -411,7 +411,7 @@ void Beam::layoutGraceNotes()
       qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
       setMag(graceMag);
 
-      foreach (ChordRest* cr, _elements) {
+      for (ChordRest* cr : _elements) {
             c2 = static_cast<Chord*>(cr);
             if (c1 == 0)
                   c1 = c2;
@@ -1924,6 +1924,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                            x2, beamSegments.front()->x1(),
                            beamSegments.back()->x2());
                         }
+                  by = 0;
                   }
             if (stem) {
                   stem->setLen(y2 - (by + _pagePos.y()));

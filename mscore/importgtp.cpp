@@ -759,7 +759,7 @@ void GuitarPro::createMeasures()
                         }
                   }
             readVolta(&bars[i].volta, m);
-            m->setRepeatFlags(bars[i].repeatFlags);
+//TODO-WS            m->setRepeatFlags(bars[i].repeatFlags);
             m->setRepeatCount(bars[i].repeats);       // supported in gp5
 
             // reset the volta sequence if we have an opening repeat
@@ -1877,7 +1877,7 @@ void GuitarPro3::read(QFile* fp)
                   }
 
             readVolta(&bars[i].volta, m);
-            m->setRepeatFlags(bars[i].repeatFlags);
+//TODO-WS            m->setRepeatFlags(bars[i].repeatFlags);
             m->setRepeatCount(bars[i].repeats);
 
             // reset the volta sequence if we have an opening repeat

@@ -419,16 +419,12 @@ Score::~Score()
             delete m;
             m = nm;
             }
-      foreach(Part* p, _parts)
-            delete p;
-      foreach(Staff* staff, _staves)
-            delete staff;
-      foreach(System* s, _systems)
-            delete s;
-      foreach(Page* page, _pages)
-            delete page;
-      foreach(Excerpt* e, _excerpts)
-            delete e;
+      qDeleteAll(_parts);
+      qDeleteAll(_staves);
+      qDeleteAll(_systems);
+      qDeleteAll(_pages);
+      qDeleteAll(_excerpts);
+
       delete _revisions;
       delete _undo;           // this also removes _undoStack from Mscore::_undoGroup
       delete _tempomap;
@@ -1473,14 +1469,8 @@ bool Score::checkHasMeasures() const
 
 void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
       {
-      for (System* system : *systems()) {
-            if (system->isVbox())
-                  continue;
-            for (Bracket* b : system->brackets()) {
-                  if (b->staffIdx() == staffIdx && b->level() == srcCol)
-                        b->setLevel(dstCol);
-                  }
-            }
+      for (System* system : systems())
+            system->moveBracket(staffIdx, srcCol, dstCol);
       }
 
 //---------------------------------------------------------
@@ -1552,6 +1542,13 @@ Measure* Score::getCreateMeasure(int tick)
 
 void Score::addElement(Element* element)
       {
+      Element* parent = element->parent();
+
+      if (MScore::debugMode) {
+            qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
+               this, element, element->name(), parent, parent ? parent->name() : "");
+            }
+
       Element::Type et = element->type();
       if (et == Element::Type::TREMOLO)
             setLayoutAll(true);
@@ -1567,8 +1564,8 @@ void Score::addElement(Element* element)
             return;
             }
 
-      if (element->parent())
-            element->parent()->add(element);
+      if (parent)
+            parent->add(element);
 
       switch(et) {
             case Element::Type::BEAM:
@@ -1655,7 +1652,7 @@ void Score::addElement(Element* element)
             case Element::Type::ARTICULATION:
             case Element::Type::ARPEGGIO:
                   {
-                  Element* cr = element->parent();
+                  Element* cr = parent;
                   if (cr->type() == Element::Type::CHORD)
                         createPlayEvents(static_cast<Chord*>(cr));
                   }
@@ -2779,7 +2776,8 @@ void Score::cmdRemoveStaff(int staffIdx)
 
 void Score::sortStaves(QList<int>& dst)
       {
-      systems()->clear();  //??
+      printf("sortStaves=====clear systems\n");
+      systems().clear();  //??
       _parts.clear();
       Part* curPart = 0;
       QList<Staff*> dl;

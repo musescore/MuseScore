@@ -139,11 +139,10 @@ void System::layoutSystem(qreal xo1)
       {
       if (isVbox())                 // ignore vbox
             return;
-      static const Spatium instrumentNameOffset(1.0);
+
+      static const Spatium instrumentNameOffset(1.0);       // TODO: make style value
 
       int nstaves  = _staves.size();
-      if (nstaves != score()->nstaves())
-            qDebug("System::layout: nstaves %d != %d", nstaves, score()->nstaves());
 
       //---------------------------------------------------
       //  find x position of staves
@@ -160,8 +159,8 @@ void System::layoutSystem(qreal xo1)
       for (int i = 0; i < bracketLevels; ++i)
             bracketWidth[i] = 0.0;
 
-      QList<Bracket*> bl = _brackets;
-      _brackets.clear();
+      QList<Bracket*> bl;
+      bl.swap(_brackets);
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
@@ -201,13 +200,10 @@ void System::layoutSystem(qreal xo1)
                         if (b == 0) {
                               b = new Bracket(score());
                               b->setGenerated(true);
-                              b->setParent(this);
                               b->setTrack(track);
                               b->setLevel(i);
-                              score()->undoAddElement(b);
                               }
-                        else
-                              _brackets.append(b);
+                        add(b);
                         b->setFirstStaff(firstStaff);
                         b->setLastStaff(lastStaff);
                         b->setBracketType(s->bracket(i));
@@ -226,7 +222,7 @@ void System::layoutSystem(qreal xo1)
             }
 
       for (Bracket* b : bl)
-            score()->undoRemoveElement(b);
+            delete b;
 
       //---------------------------------------------------
       //  layout  SysStaff and StaffLines
@@ -648,7 +644,7 @@ void System::add(Element* el)
                   int level    = b->level();
                   if (level == -1) {
                         level = 0;
-                        foreach(Bracket* bb, _brackets) {
+                        for (const Bracket* bb : _brackets) {
                               if (staffIdx >= bb->firstStaff() && staffIdx <= bb->lastStaff())
                                     ++level;
                               }
@@ -712,7 +708,6 @@ void System::remove(Element* el)
                   Bracket* b = static_cast<Bracket*>(el);
                   if (!_brackets.removeOne(b))
                         qDebug("System::remove: bracket not found");
-//                  b->staff()->setBracket(b->level(), NO_BRACKET);
                   }
                   break;
             case Element::Type::MEASURE:
@@ -1214,5 +1209,18 @@ void System::removeGeneratedElements()
             }
       }
 
+//---------------------------------------------------------
+//   moveBracket
+//---------------------------------------------------------
+
+void System::moveBracket(int staffIdx, int srcCol, int dstCol)
+      {
+      if (isVbox())
+            return;
+      for (Bracket* b : _brackets) {
+            if (b->staffIdx() == staffIdx && b->level() == srcCol)
+                  b->setLevel(dstCol);
+            }
+      }
 }
 

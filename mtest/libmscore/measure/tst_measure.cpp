@@ -197,13 +197,13 @@ void TestMeasure::minWidth()
       {
       Score* score = readScore(DIR + "measure-2.mscx");
       score->doLayout();
-      int n = score->systems()->size();
+      int n = score->systems().size();
       int measuresSystem[n];
       for (int i = 0; i < n; ++i)
-            measuresSystem[i] = score->systems()->at(i)->measures().size();
+            measuresSystem[i] = score->systems().at(i)->measures().size();
 
-      Measure* m1 = score->systems()->at(1)->lastMeasure();
-      Measure* m2 = score->systems()->at(2)->firstMeasure();
+      Measure* m1 = score->systems().at(1)->lastMeasure();
+      Measure* m2 = score->systems().at(2)->firstMeasure();
       qreal mw1 = m1->minWidth1();
       qreal mw2 = m2->minWidth1();
 

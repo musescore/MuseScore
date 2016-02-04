@@ -76,12 +76,14 @@ class MeasureBase : public Element {
       LayoutBreak* _sectionBreak { 0 };
 
       int _tick;
-      int    _no            { 0            };    ///< Measure number, counting from zero
-      int    _noOffset      { 0            };    ///< Offset to measure number
-      Repeat _repeatFlags   { Repeat::NONE };    ///< or'd Repeat's
+      int _no                { 0            };    ///< Measure number, counting from zero
+      int _noOffset          { 0            };    ///< Offset to measure number
 
+      bool _repeatEnd        { false };
+      bool _repeatStart      { false };
+      bool _repeatMeasure    { false };
+      bool _repeatJump       { false };
       bool _irregular        { true  };    ///< Irregular measure, do not count
-      bool _breakHint        { false };
       bool _lineBreak        { false };        ///< Forced line break
       bool _pageBreak        { false };        ///< Forced page break
       bool _hasSystemHeader  { false };
@@ -122,7 +124,6 @@ class MeasureBase : public Element {
       System* system() const                 { return (System*)parent(); }
       void setSystem(System* s)              { setParent((Element*)s);   }
 
-      bool breakHint() const                 { return _breakHint;   }
       bool lineBreak() const                 { return _lineBreak; }
       bool pageBreak() const                 { return _pageBreak; }
       LayoutBreak* sectionBreak() const      { return _sectionBreak; }
@@ -147,26 +148,33 @@ class MeasureBase : public Element {
 
       qreal pause() const;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant getProperty(P_ID) const override;
+      virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       void clearElements();
       ElementList takeElements();
 
-      int no() const                    { return _no;          }
-      void setNo(int n)                 { _no = n;             }
-      bool irregular() const            { return _irregular;   }
-      void setIrregular(bool val)       { _irregular = val;    }
-      int noOffset() const              { return _noOffset;    }
-      void setNoOffset(int n)           { _noOffset = n;       }
+      int no() const                     { return _no;          }
+      void setNo(int n)                  { _no = n;             }
+      bool irregular() const             { return _irregular;   }
+      void setIrregular(bool val)        { _irregular = val;    }
+      int noOffset() const               { return _noOffset;    }
+      void setNoOffset(int n)            { _noOffset = n;       }
 
-      bool isMeasure() const            { return type() == Element::Type::MEASURE; }
-      Measure* measure() const          { Q_ASSERT(isMeasure()); return (Measure*)(this); }
+      bool isMeasure() const             { return type() == Element::Type::MEASURE; }
+      Measure* measure() const           { Q_ASSERT(isMeasure()); return (Measure*)(this); }
 
-      Repeat repeatFlags() const        { return _repeatFlags; }
-      void setRepeatFlags(Repeat val)   { _repeatFlags = val;  }
-      void setRepeatFlag(Repeat val)    { _repeatFlags = _repeatFlags | val; }
-      void resetRepeatFlag(Repeat val)  { _repeatFlags = Repeat(int(_repeatFlags) & ~int(val)); }
+      bool repeatEnd() const             { return _repeatEnd;     }
+      bool repeatStart() const           { return _repeatStart;   }
+      bool repeatMeasure() const         { return _repeatMeasure; }
+      bool repeatJump() const            { return _repeatJump;    }
+
+      void setRepeatEnd(bool v)          { _repeatEnd = v;     }
+      void setRepeatStart(bool v)        { _repeatStart = v;   }
+      void setRepeatMeasure(bool v)      { _repeatMeasure = v; }
+      void setRepeatJump(bool v)         { _repeatJump = v;    }
+
 
       bool hasSystemHeader() const       { return _hasSystemHeader;    }
       bool hasSystemTrailer() const      { return _hasSystemTrailer;   }

@@ -593,6 +593,7 @@ class Score : public QObject, public ScoreElement {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
+      void undoChangeBarLine(Measure*, BarLineType);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
@@ -870,7 +871,8 @@ class Score : public QObject, public ScoreElement {
       qreal loHeight() const;
 
       const QList<Page*>& pages() const        { return _pages;                }
-      QList<System*>* systems()                { return &_systems;             }
+      const QList<System*>& systems() const    { return _systems;              }
+      QList<System*> systems()                 { return _systems;              }
 
       MeasureBaseList* measures()             { return &_measures; }
       bool checkHasMeasures() const;

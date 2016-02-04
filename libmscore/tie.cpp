@@ -389,7 +389,7 @@ void Tie::layout()
 
       // p1, p2, s1, s2
 
-      QList<System*>* systems = score()->systems();
+      const QList<System*>& systems = score()->systems();
       setPos(0, 0);
 
       //---------------------------------------------------------
@@ -397,15 +397,15 @@ void Tie::layout()
       //    user offsets (drags) are retained
       //---------------------------------------------------------
 
-      int sysIdx1 = systems->indexOf(sPos.system1);
+      int sysIdx1 = systems.indexOf(sPos.system1);
       if (sysIdx1 == -1) {
             qDebug("system not found");
-            foreach(System* s, *systems)
+            for (System* s : systems)
                   qDebug("   search %p in %p", sPos.system1, s);
             return;
             }
 
-      int sysIdx2     = systems->indexOf(sPos.system2);
+      int sysIdx2     = systems.indexOf(sPos.system2);
       if (sysIdx2 < 0)
             sysIdx2 = sysIdx1;
       unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
@@ -413,7 +413,7 @@ void Tie::layout()
 
       int i = 0;
       for (uint ii = 0; ii < nsegs; ++ii) {
-            System* system = (*systems)[sysIdx1++];
+            System* system = systems[sysIdx1++];
             if (system->isVbox())
                   continue;
             SlurSegment* segment = segmentAt(i);

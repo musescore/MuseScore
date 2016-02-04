@@ -1240,12 +1240,12 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
                   }
             case OVE::BarLineType::RepeatLeft:{
                   bartype = BarLineType::START_REPEAT;
-                  measure->setRepeatFlags(Repeat::START);
+                  measure->setRepeatStart(true);
                   break;
                   }
             case OVE::BarLineType::RepeatRight:{
                   bartype = BarLineType::END_REPEAT;
-                  measure->setRepeatFlags(Repeat::END);
+                  measure->setRepeatEnd(true);
                   break;
                   }
             case OVE::BarLineType::Dashed:{
@@ -1264,7 +1264,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 
       if(measurePtr->getLeftBarline() == OVE::BarLineType::RepeatLeft){
             //bartype = BarLineType::START_REPEAT;
-            measure->setRepeatFlags(measure->repeatFlags()|Repeat::START);
+            measure->setRepeatStart(true);
             }
 
       // rehearsal

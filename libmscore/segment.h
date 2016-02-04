@@ -119,11 +119,11 @@ public:
 
       virtual void setScore(Score*);
 
-      Ms::Segment* next() const           { return _next;   }
+      Ms::Segment* next() const          { return _next;   }
       Segment* next(Type) const;
 
       void setNext(Segment* e)           { _next = e;      }
-      Ms::Segment* prev() const           { return _prev;   }
+      Ms::Segment* prev() const          { return _prev;   }
       Segment* prev(Type) const;
       void setPrev(Segment* e)           { _prev = e;      }
 
@@ -225,6 +225,7 @@ public:
       void createShape(int staffIdx);
       qreal minRight() const;
       qreal minLeft() const;
+      qreal minHorizontalDistance(Segment* ns) const;
       };
 
 constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {
