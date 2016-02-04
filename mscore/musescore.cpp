@@ -981,7 +981,7 @@ MuseScore::MuseScore()
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
       menuHelp->addSeparator();
-      menuHelp->addAction(tr("Revert to factory settings"), this, SLOT(resetAndRestart()));
+      menuHelp->addAction(tr("Revert to Factory Settings"), this, SLOT(resetAndRestart()));
 
       //accessibility for menus
       foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
@@ -1118,7 +1118,7 @@ void MuseScore::resetAndRestart()
                    "MuseScore will restart with its default settings.\n"
                    "Reverting will not remove any scores from your computer.\n"
                    "Are you sure you want to proceed?"),
-                   QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
+                   QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
       if (ret == QMessageBox::Yes ) {
              close();
              QStringList args("-F");
