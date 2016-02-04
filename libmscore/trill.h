@@ -98,7 +98,7 @@ class Trill : public SLine {
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
       QString trillTypeName() const;
-      QString trillTypeUserName();
+      QString trillTypeUserName() const;
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
 
@@ -110,7 +110,7 @@ class Trill : public SLine {
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void setYoff(qreal) override;
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 struct TrillTableItem {

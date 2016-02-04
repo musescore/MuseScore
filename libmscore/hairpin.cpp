@@ -625,7 +625,7 @@ void Hairpin::reset()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Hairpin::accessibleInfo()
+QString Hairpin::accessibleInfo() const
       {
       QString rez = TextLine::accessibleInfo();
       switch (hairpinType()) {

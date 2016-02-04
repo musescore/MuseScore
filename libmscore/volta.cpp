@@ -452,7 +452,7 @@ void Volta::reset()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Volta::accessibleInfo()
+QString Volta::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(text());
       }

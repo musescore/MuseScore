@@ -259,7 +259,7 @@ class Measure : public MeasureBase {
 
       Element* nextElementStaff(int staff);
       Element* prevElementStaff(int staff);
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
 
       void removeSystemHeader();
       void removeSystemTrailer();

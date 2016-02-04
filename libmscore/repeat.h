@@ -41,7 +41,7 @@ class RepeatMeasure : public Rest {
       virtual Fraction duration() const override;
       Fraction actualDuration() const { return Rest::duration(); }
 
-      virtual QString accessibleInfo();
+      virtual QString accessibleInfo() const override;
       };
 
 

@@ -195,7 +195,7 @@ class Accidental : public Element {
       static AccidentalType value2subtype(AccidentalVal);
       static AccidentalType name2subtype(const QString&);
 
-      QString accessibleInfo() override;
+      QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

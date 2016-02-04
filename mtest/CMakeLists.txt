@@ -123,7 +123,7 @@ else (APPLE)
       set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
    else (MINGW)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -fPIE -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2  -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
    endif (MINGW)
 endif(APPLE)
 

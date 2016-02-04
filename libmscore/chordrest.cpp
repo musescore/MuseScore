@@ -1029,7 +1029,7 @@ void ChordRest::setDurationType(TDuration v)
 //   durationUserName
 //---------------------------------------------------------
 
-QString ChordRest::durationUserName()
+QString ChordRest::durationUserName() const
       {
       QString tupletType = "";
       if (tuplet()) {
@@ -1389,7 +1389,7 @@ Element* ChordRest::prevElement()
       return segment()->lastInPrevSegments(staffIdx());
       }
 
-QString ChordRest::accessibleExtraInfo()
+QString ChordRest::accessibleExtraInfo() const
       {
       QString rez = "";
       foreach (Articulation* a, articulations()) {

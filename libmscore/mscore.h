@@ -361,10 +361,24 @@ MS_QML_ENUM(TextStyleType, signed char,\
 //   BarLineType
 //---------------------------------------------------------
 
-enum class BarLineType : char {
-      NORMAL, DOUBLE, START_REPEAT, END_REPEAT,
-      BROKEN, END, END_START_REPEAT, DOTTED
+enum class BarLineType : int {
+      NORMAL           = 1,
+      DOUBLE           = 2,
+      START_REPEAT     = 4,
+      END_REPEAT       = 8,
+      BROKEN           = 0x10,
+      END              = 0x20,
+      END_START_REPEAT = 0x40,
+      DOTTED           = 0x80
       };
+
+constexpr BarLineType operator| (BarLineType t1, BarLineType t2) {
+      return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (BarLineType t1, BarLineType t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
 
 // Icon() subtypes
 enum class IconType : signed char {

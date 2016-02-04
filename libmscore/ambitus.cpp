@@ -709,7 +709,8 @@ Element* Ambitus::prevElement()
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
-QString Ambitus::accessibleInfo()
+
+QString Ambitus::accessibleInfo() const
       {
       return tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::accessibleInfo())\
                                                           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false))\
@@ -722,7 +723,7 @@ QString Ambitus::accessibleInfo()
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Ambitus::screenReaderInfo()
+QString Ambitus::screenReaderInfo() const
       {
       return tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::screenReaderInfo())\
                                                           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, true))\

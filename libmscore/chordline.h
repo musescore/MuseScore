@@ -67,7 +67,7 @@ class ChordLine : public Element {
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override;
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 extern const char* scorelineNames[];

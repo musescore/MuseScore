@@ -1982,7 +1982,7 @@ Element* Element::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Element::accessibleInfo()
+QString Element::accessibleInfo() const
       {
       return userName();
       }

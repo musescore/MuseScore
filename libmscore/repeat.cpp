@@ -85,7 +85,7 @@ Fraction RepeatMeasure::duration() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString RepeatMeasure::accessibleInfo()
+QString RepeatMeasure::accessibleInfo() const
       {
       return Element::accessibleInfo();
       }

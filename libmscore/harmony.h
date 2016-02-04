@@ -120,7 +120,8 @@ class Harmony : public Text {
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
-      void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
+      void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
+         NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
 
       virtual void textChanged() override;
       virtual void layout() override;
@@ -152,7 +153,7 @@ class Harmony : public Text {
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
-      QString harmonyName();
+      QString harmonyName() const;
       void render(const TextStyle* ts = 0);
 
       const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);
@@ -180,8 +181,8 @@ class Harmony : public Text {
       virtual QPainterPath outline() const override;
       void calculateBoundingRect();
 
-      virtual QString accessibleInfo() override;
-      virtual QString screenReaderInfo() override;
+      virtual QString accessibleInfo() const override;
+      virtual QString screenReaderInfo() const override;
       };
 
 

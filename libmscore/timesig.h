@@ -145,7 +145,7 @@ class TimeSig : public Element {
 
       virtual Element* nextElement();
       virtual Element* prevElement();
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

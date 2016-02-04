@@ -97,7 +97,7 @@ void Fingering::reset()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Fingering::accessibleInfo()
+QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
       if (textStyleType() == TextStyleType::STRING_NUMBER) {

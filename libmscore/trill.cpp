@@ -451,7 +451,7 @@ QString Trill::trillTypeName() const
 //   trillTypeName
 //---------------------------------------------------------
 
-QString Trill::trillTypeUserName()
+QString Trill::trillTypeUserName() const
       {
       return qApp->translate("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
       }
@@ -554,7 +554,7 @@ void Trill::setYoff(qreal val)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Trill::accessibleInfo()
+QString Trill::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(trillTypeUserName());
       }

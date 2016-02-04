@@ -105,7 +105,7 @@ void Marker::setMarkerType(Type t)
             setXmlText(txt);
       }
 
-QString Marker::markerTypeUserName()
+QString Marker::markerTypeUserName() const
       {
       return qApp->translate("markerType", markerTypeTable[static_cast<int>(_markerType)].name.toUtf8().constData());
       }
@@ -330,7 +330,7 @@ Element* Marker::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Marker::accessibleInfo()
+QString Marker::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(markerTypeUserName());
       }
