@@ -1426,7 +1426,7 @@ static void ending(Xml& xml, Volta* v, bool left)
 
 void ExportMusicXml::barlineLeft(Measure* m)
       {
-      bool rs = m->repeatFlags() & Repeat::START;
+      bool rs = m->repeatStart();
       Volta* volta = findVolta(m, true);
       if (!rs && !volta) return;
       attr.doAttr(xml, false);

@@ -1500,14 +1500,14 @@ void Slur::layout()
       SlurPos sPos;
       slurPos(&sPos);
 
-      QList<System*>* sl = score()->systems();
-      iSystem is = sl->begin();
-      while (is != sl->end()) {
+      const QList<System*>& sl = score()->systems();
+      ciSystem is = sl.begin();
+      while (is != sl.end()) {
             if (*is == sPos.system1)
                   break;
             ++is;
             }
-      if (is == sl->end())
+      if (is == sl.end())
             qDebug("Slur::layout  first system not found");
       setPos(0, 0);
 
@@ -1517,7 +1517,7 @@ void Slur::layout()
       //---------------------------------------------------------
 
       unsigned nsegs = 1;
-      for (iSystem iis = is; iis != sl->end(); ++iis) {
+      for (ciSystem iis = is; iis != sl.end(); ++iis) {
             if ((*iis)->isVbox())
                   continue;
             if (*iis == sPos.system2)
@@ -1527,7 +1527,7 @@ void Slur::layout()
 
       fixupSegments(nsegs);
 
-      for (int i = 0; is != sl->end(); ++i, ++is) {
+      for (int i = 0; is != sl.end(); ++i, ++is) {
             System* system  = *is;
             if (system->isVbox()) {
                   --i;

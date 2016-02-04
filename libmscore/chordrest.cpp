@@ -1201,7 +1201,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
                   }
             if (chord->hook())
                   score()->undoRemoveElement(chord->hook());
-            if (chord->stem())
+            if (chord->stem() && !chord->isGrace())
                   chord->layoutStem();
             }
       }

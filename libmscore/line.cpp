@@ -796,16 +796,16 @@ void SLine::layout()
       QPointF p1(linePos(Grip::START, &s1));
       QPointF p2(linePos(Grip::END,   &s2));
 
-      QList<System*>* systems = score()->systems();
-      int sysIdx1 = systems->indexOf(s1);
-      int sysIdx2 = systems->indexOf(s2);
+      const QList<System*>& systems = score()->systems();
+      int sysIdx1 = systems.indexOf(s1);
+      int sysIdx2 = systems.indexOf(s2);
       int segmentsNeeded = 0;
 
       if (sysIdx1 == -1 || sysIdx2 == -1)
             return;
 
       for (int i = sysIdx1; i < sysIdx2+1;  ++i) {
-            if (systems->at(i)->isVbox())
+            if (systems.at(i)->isVbox())
                   continue;
             ++segmentsNeeded;
             }
@@ -843,7 +843,7 @@ void SLine::layout()
 
       int segIdx = 0;
       for (int i = sysIdx1; i <= sysIdx2; ++i) {
-            System* system = systems->at(i);
+            System* system = systems.at(i);
             if (system->isVbox())
                   continue;
             LineSegment* lineSegm = segmentAt(segIdx++);

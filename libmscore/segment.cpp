@@ -53,17 +53,18 @@ const char* Segment::subTypeName(Type t)
       {
       switch(t) {
             case Type::Invalid:              return "Invalid";
+            case Type::BeginBarLine:         return "BeginBarLine";
             case Type::Clef:                 return "Clef";
             case Type::KeySig:               return "Key Signature";
             case Type::Ambitus:              return "Ambitus";
             case Type::TimeSig:              return "Time Signature";
             case Type::StartRepeatBarLine:   return "Begin Repeat";
             case Type::BarLine:              return "BarLine";
-            case Type::ChordRest:            return "ChordRest";
             case Type::Breath:               return "Breath";
+            case Type::ChordRest:            return "ChordRest";
             case Type::EndBarLine:           return "EndBarLine";
-            case Type::TimeSigAnnounce:      return "Time Sig Precaution";
             case Type::KeySigAnnounce:       return "Key Sig Precaution";
+            case Type::TimeSigAnnounce:      return "Time Sig Precaution";
             default:
                   return "??";
             }
@@ -444,7 +445,7 @@ void Segment::add(Element* el)
 
       switch (el->type()) {
             case Element::Type::REPEAT_MEASURE:
-                  measure()->setRepeatFlags(measure()->repeatFlags() | Repeat::MEASURE);
+                  measure()->setRepeatMeasure(true);
                   _elist[track] = el;
                   empty = false;
                   break;
@@ -585,7 +586,7 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::REPEAT_MEASURE:
-                  measure()->resetRepeatFlag(Repeat::MEASURE);
+                  measure()->setRepeatMeasure(false);
                   _elist[track] = 0;
                   break;
 
@@ -1112,24 +1113,19 @@ Element* Segment::lastElement(int staff)
 
 Element* Segment::getElement(int staff)
       {
-      if (segmentType() == Segment::Type::ChordRest) {
+      if (segmentType() == Segment::Type::ChordRest)
             return firstElement(staff);
-            }
-      else if (segmentType() == Segment::Type::EndBarLine        ||
-               segmentType() == Segment::Type::BarLine           ||
-               segmentType() == Segment::Type::StartRepeatBarLine) {
+      else if (segmentType() & (Type::EndBarLine | Type::BarLine | Type::StartRepeatBarLine)) {
             for (int i = staff; i >= 0; i--) {
-                  if (!element(i*VOICES))
+                  if (!element(i * VOICES))
                         continue;
                   BarLine* b = static_cast<BarLine*>(element(i*VOICES));
-                  if (i + b->span() - 1 >= staff) {
+                  if (i + b->span() - 1 >= staff)
                         return element(i*VOICES);
-                        }
                   }
             }
-      else {
-            return element(staff*VOICES);
-            }
+      else
+            return element(staff * VOICES);
       return 0;
       }
 
@@ -1290,24 +1286,6 @@ QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
 
 void Segment::createShapes()
       {
-      // restrict barline height to staff
-      if (segmentType() & (Type::BarLine | Type::EndBarLine | Type::StartRepeatBarLine | Type::BeginBarLine)) {
-            qreal w = 0.0;
-            qreal x = 0.0;
-            for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                  Shape& s = _shapes[staffIdx];
-                  s.clear();
-                  BarLine* bl = static_cast<BarLine*>(element(staffIdx * VOICES));
-                  if (bl) {
-                        w = BarLine::layoutWidth(score(), bl->barLineType(), 1.0);
-                        x = bl->x();
-                        s.add(QRectF(x, 0.0, w, spatium() * 4.0));
-                        }
-                  else if (w > 0.0)       // TODO: look at barline span
-                        s.add(QRectF(x, 0.0, w, spatium() * 4.0));
-                  }
-            return;
-            }
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx)
             createShape(staffIdx);
       }
@@ -1320,6 +1298,15 @@ void Segment::createShape(int staffIdx)
       {
       Shape& s = _shapes[staffIdx];
       s.clear();
+
+      if (segmentType() & (Type::BarLine | Type::EndBarLine | Type::StartRepeatBarLine | Type::BeginBarLine)) {
+            BarLine* bl = static_cast<BarLine*>(element(0));
+            if (bl) {
+                  qreal w = BarLine::layoutWidth(score(), bl->barLineType(), 1.0);
+                  s.add(QRectF(bl->x(), 0.0, w, spatium() * 4.0));
+                  }
+            return;
+            }
       for (int voice = 0; voice < VOICES; ++voice) {
             Element* e = element(staffIdx * VOICES + voice);
             if (e && e->visible())
@@ -1351,6 +1338,53 @@ qreal Segment::minLeft() const
       for (const Shape& sh : shapes())
             distance = qMin(distance, sh.left());
       return -distance;
+      }
+
+//---------------------------------------------------------
+//   minHorizontalDistance
+//---------------------------------------------------------
+
+qreal Segment::minHorizontalDistance(Segment* ns) const
+      {
+      Segment::Type st  = segmentType();
+      Segment::Type nst = ns ? ns->segmentType() : Segment::Type::Invalid;
+
+      qreal nhw              = score()->noteHeadWidth();
+      qreal _spatium         = spatium();
+      qreal minNoteDistance  = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
+      qreal nbd              = score()->styleS(StyleIdx::noteBarDistance).val() * _spatium;
+      qreal clefLeftMargin   = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
+      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+
+      qreal w = 0.0;
+      for (int staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
+            qreal d = shape(staffIdx).minHorizontalDistance(ns->shape(staffIdx));
+// printf("%d %s - %s %f\n", staffIdx, subTypeName(), ns->subTypeName(), d);
+            if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
+                  d = qMax(d, minRight()) + nbd;
+            w = qMax(w, d);
+            }
+      if (st == Segment::Type::ChordRest) {
+            if (nst == Segment::Type::EndBarLine)
+                  w = qMax(w, nhw) + nbd;
+            else if (nst == Segment::Type::Clef)
+                  w = qMax(w, clefLeftMargin);
+            else
+                  w = qMax(w, nhw) + minNoteDistance;
+            }
+      else if (st & (Segment::Type::KeySig | Segment::Type::TimeSig))
+            w += clefKeyRightMargin;
+      else if (st == Segment::Type::StartRepeatBarLine)
+            w += nbd;
+      else if (st == Segment::Type::BeginBarLine && nst == Segment::Type::Clef)
+            w += clefLeftMargin;
+      else if (st == Segment::Type::EndBarLine && nst == Segment::Type::KeySigAnnounce)
+            w += clefKeyRightMargin;
+      if (w < 0.0)
+            w = 0.0;
+      if (ns)
+            w += ns->extraLeadingSpace().val() * _spatium;
+      return w;
       }
 
 }           // namespace Ms

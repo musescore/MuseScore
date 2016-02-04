@@ -146,8 +146,6 @@ void Clef::setSelected(bool f)
 
 void Clef::layout()
       {
-      setPos(QPoint());
-
       // determine current number of lines and line distance
       int   lines;
       qreal lineDist;
@@ -181,7 +179,7 @@ void Clef::layout()
                         // if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
-                              && !( (m->repeatFlags() & Repeat::END) || m->isFinalMeasureOfSection() )
+                              && !( m->repeatEnd() || m->isFinalMeasureOfSection() )
                               // AND this clef has courtesy clef turned on
                               && showCourtesy() );
                   }
@@ -316,7 +314,16 @@ void Clef::layout()
             r |= e->bbox().translated(e->pos());
             e->setSelected(selected());
             }
+
+      // clefs are right aligned to Segment
+
+      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+      QPointF off(-r.right() - clefKeyRightMargin, 0);
+      for (Element* e : elements)
+            e->move(off);
+      r.translate(off);
       setbbox(r);
+      setPos(QPointF());
       }
 
 //---------------------------------------------------------

@@ -39,6 +39,9 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
+class BarLine;
+class Articulation;
+
 enum class SymId;
 
 //---------------------------------------------------------
@@ -82,6 +85,7 @@ struct DropData {
       Qt::KeyboardModifiers modifiers;
       Fraction duration;
 
+      bool control() const { return modifiers & Qt::ControlModifier; }
       DropData();
       };
 
@@ -532,6 +536,8 @@ class Element : public QObject, public ScoreElement {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+      void undoChangeProperty(P_ID, const QVariant&);
+      void undoResetProperty(P_ID);
 
       virtual void styleChanged() {}
 
@@ -564,6 +570,11 @@ class Element : public QObject, public ScoreElement {
                                                                          // and passed only to the screen-reader
 
       virtual bool isUserModified() const;
+
+      const BarLine* barLine() const           { Q_ASSERT(type() == Element::Type::BAR_LINE); return (const BarLine*)this; }
+      BarLine* barLine()                       { Q_ASSERT(type() == Element::Type::BAR_LINE); return (BarLine*)this; }
+      const Articulation* articulation() const { Q_ASSERT(type() == Type::ARTICULATION); return (const Articulation*)this; }
+      Articulation* articulation()             { Q_ASSERT(type() == Type::ARTICULATION); return (Articulation*)this; }
       };
 
 //---------------------------------------------------------

@@ -139,7 +139,7 @@ class System : public Element {
       VBox* vbox() const          { return (VBox*)ml[0];       }
       void setVbox(bool v)        { _vbox = v;          }
 
-      QList<Bracket*>& brackets() { return _brackets; }
+      const QList<Bracket*>& brackets() const { return _brackets; }
 
       QList<SpannerSegment*>& spannerSegments()             { return _spannerSegments; }
       const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
@@ -151,6 +151,8 @@ class System : public Element {
       qreal minTop() const;
       qreal minBottom() const;
       void removeGeneratedElements();
+
+      void moveBracket(int staffIdx, int srcCol, int dstCol);
       };
 
 typedef QList<System*>::iterator iSystem;

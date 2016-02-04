@@ -1552,7 +1552,7 @@ void Chord::layout2()
                   s = nullptr;
             // start from the right (if next segment found, x of it relative to this chord;
             // chord right space otherwise)
-            qreal xOff =  s ? s->pos().x() - (segment()->pos().x() + pos().x()) : 0.0;    // TODO: space().rw();
+            qreal xOff =  s ? s->pos().x() - (segment()->pos().x() + pos().x()) : _spaceRw;
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
             xOff -= (s != nullptr && s->segmentType() != Segment::Type::ChordRest)
@@ -1562,9 +1562,9 @@ void Chord::layout2()
             int n = gna.size();
             for (int i = n-1; i >= 0; i--) {
                   Chord* g = gna.value(i);
-//TODO                  xOff -= g->space().rw();                  // move to left by grace note left space (incl. grace own width)
+                  xOff -= g->_spaceRw;                  // move to left by grace note left space (incl. grace own width)
                   g->rxpos() = xOff;
-//TODO                  xOff -= minNoteDist + g->space().lw();    // move to left by grace note right space and inter-grace distance
+                  xOff -= minNoteDist + g->_spaceLw;    // move to left by grace note right space and inter-grace distance
                   }
             }
 
@@ -2001,7 +2001,7 @@ void Chord::layoutPitched()
       _spaceRw = rrr;
 
       if (gnb){
-              qreal xl = 0.0; // TODO -(_spaceLw + minNoteDistance) - chordX;
+              qreal xl = -(_spaceLw + minNoteDistance) - chordX;
               for (int i = gnb-1; i >= 0; --i) {
                     Chord* g = graceNotesBefore.value(i);
                     xl -= g->_spaceRw/* * 1.2*/;
@@ -3211,13 +3211,14 @@ Shape Chord::shape() const
             Shape s = e->shape();
             // compute distance between grace notes and chord
             // TODO: distinguish between grace notes before/after
-            if (e->type() == Element::Type::CHORD) {
+/*            if (e->type() == Element::Type::CHORD) {
                   qreal minNoteDistance  = score()->styleD(StyleIdx::minNoteDistance);
                   qreal nhw              = score()->noteHeadWidth() * score()->styleD(StyleIdx::graceNoteMag);
                   qreal dist             = qMax(s.minHorizontalDistance(shape), nhw) + minNoteDistance;
                   e->rxpos()             = -dist;
                   s.translate(e->pos());
                   }
+            */
             shape.add(s);
             });
       shape.add(ChordRest::shape());

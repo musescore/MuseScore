@@ -760,16 +760,14 @@ void MeasureView::setElement(Element* e)
       mb.pageBreak->setChecked(m->pageBreak());
       mb.sectionBreak->setChecked(m->sectionBreak());
       mb.irregular->setChecked(m->irregular());
-      mb.endRepeat->setValue(m->repeatCount());
-      mb.repeatFlags->setText(QString("0x%1").arg(int(m->repeatFlags()), 6, 16, QChar('0')));
+      mb.repeatCount->setValue(m->repeatCount());
       mb.breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
-//      mb.endBarLineType->setValue(int(m->endBarLineType()));
-//      mb.endBarLineGenerated->setChecked(m->endBarLineGenerated());
-//      mb.endBarLineVisible->setChecked(m->endBarLineVisible());
       mb.mmRestCount->setValue(m->mmRestCount());
       mb.timesig->setText(m->timesig().print());
       mb.len->setText(m->len().print());
       mb.tick->setValue(m->tick());
+      mb.startRepeat->setChecked(m->repeatStart());
+      mb.endRepeat->setChecked(m->repeatEnd());
       mb.sel->clear();
       foreach(const Element* e, m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
@@ -803,11 +801,6 @@ SegmentView::SegmentView()
       {
       sb.setupUi(addWidget());
       sb.segmentType->clear();
-      static std::vector<Segment::Type> segmentTypes = {
-            Segment::Type::Clef,    Segment::Type::KeySig, Segment::Type::TimeSig, Segment::Type::StartRepeatBarLine,
-            Segment::Type::BarLine, Segment::Type::ChordRest, Segment::Type::Breath, Segment::Type::EndBarLine,
-            Segment::Type::TimeSigAnnounce, Segment::Type::KeySigAnnounce
-            };
       connect(sb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)),      SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerFor, SIGNAL(itemClicked(QListWidgetItem*)),  SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerBack, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
@@ -824,12 +817,6 @@ void SegmentView::setElement(Element* e)
 
       Segment* s = (Segment*)e;
       ShowElementBase::setElement(e);
-      int st = int(s->segmentType());
-      int idx;
-      for (idx = 0; idx < 11; ++idx) {
-            if ((1 << idx) == st)
-                  break;
-            }
       int tick = s->tick();
       TimeSigMap* sm = s->score()->sigmap();
 

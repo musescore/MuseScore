@@ -116,6 +116,7 @@ extern Ms::Synthesizer* createZerberus();
 
 namespace Ms {
 
+extern void checkProperties();
 MuseScore* mscore;
 MasterSynthesizer* synti;
 
@@ -4663,12 +4664,18 @@ QFileInfoList MuseScore::recentScores() const
 
 using namespace Ms;
 
+
 //---------------------------------------------------------
 //   main
 //---------------------------------------------------------
 
 int main(int argc, char* av[])
       {
+#ifndef NDEBUG
+      printf("check properties\n");
+      checkProperties();
+#endif
+
       QApplication::setDesktopSettingsAware(true);
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMessageHandler(mscoreMessageHandler);

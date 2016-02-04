@@ -40,8 +40,9 @@ class Shape : QList<QRectF> {
       qreal top() const;
       qreal bottom() const;
 
-      int size() const { return QList<QRectF>::size(); }
-      void clear()     { QList<QRectF>::clear();       }
+      int size() const   { return QList<QRectF>::size(); }
+      bool empty() const { return QList<QRectF>::empty(); }
+      void clear()       { QList<QRectF>::clear();       }
 
 #ifdef DEBUG_SHAPES
       void dump(const char*) const;

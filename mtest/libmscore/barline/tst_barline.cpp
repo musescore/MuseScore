@@ -85,7 +85,7 @@ void TestBarline::barline01()
       qreal height, heightMin, heightMax;
       qreal spatium = score->spatium();
       int sysNo = 0;
-      foreach(System* sys , *score->systems()) {
+      for (System* sys : score->systems()) {
             // check number of the brackets of each system
             sprintf(msg, "Wrong number of brackets in system %d.", sysNo+1);
             QVERIFY2(sys->brackets().count() == 1, msg);

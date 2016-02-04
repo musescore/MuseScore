@@ -415,8 +415,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nm->setTick(m->tick());
                   nm->setLen(m->len());
                   nm->setTimesig(m->timesig());
+
                   nm->setRepeatCount(m->repeatCount());
-                  nm->setRepeatFlags(m->repeatFlags());
+                  nm->setRepeatStart(m->repeatStart());
+                  nm->setRepeatEnd(m->repeatEnd());
+                  nm->setRepeatMeasure(m->repeatMeasure());
+                  nm->setRepeatJump(m->repeatJump());
+
                   nm->setIrregular(m->irregular());
                   nm->setNo(m->no());
                   nm->setNoOffset(m->noOffset());

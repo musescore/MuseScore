@@ -122,16 +122,11 @@ Measure::Measure(Score* s)
             _mstaves.push_back(s);
             }
       setIrregular(false);
-      _noMode                = MeasureNumberMode::AUTO;
-      _userStretch           = 1.0;     // ::style->measureSpacing;
-      _breakMultiMeasureRest = false;
-//      _endBarLineColor       = MScore::defaultColor;
-//      _endBarLineGenerated   = true;
-//      _endBarLineVisible     = true;
-//      _endBarLineType        = BarLineType::NORMAL;
-      _systemInitialBarLineType = BarLineType::NORMAL;
-      _mmRest                = 0;
-      _mmRestCount           = 0;
+      _noMode                   = MeasureNumberMode::AUTO;
+      _userStretch              = 1.0;     // ::style->measureSpacing;
+      _breakMultiMeasureRest    = false;
+      _mmRest                   = 0;
+      _mmRestCount              = 0;
       setFlag(ElementFlag::MOVABLE, true);
       }
 
@@ -142,26 +137,20 @@ Measure::Measure(Score* s)
 Measure::Measure(const Measure& m)
    : MeasureBase(m)
       {
-      _segments              = m._segments.clone();
-      _timesig               = m._timesig;
-      _len                   = m._len;
-      _repeatCount           = m._repeatCount;
+      _segments     = m._segments.clone();
+      _timesig      = m._timesig;
+      _len          = m._len;
+      _repeatCount  = m._repeatCount;
+      _userStretch  = m._userStretch;
 
       _mstaves.reserve(m._mstaves.size());
       for (MStaff* ms : m._mstaves)
             _mstaves.append(new MStaff(*ms));
 
-      _userStretch           = m._userStretch;
-
       _breakMultiMeasureRest = m._breakMultiMeasureRest;
-//      _endBarLineGenerated   = m._endBarLineGenerated;
-//      _endBarLineVisible     = m._endBarLineVisible;
-//      _endBarLineType        = m._endBarLineType;
-      _systemInitialBarLineType = m._systemInitialBarLineType;    // possibly should be reset to NORMAL?
       _mmRest                = m._mmRest;
       _mmRestCount           = m._mmRestCount;
       _playbackCount         = m._playbackCount;
-//      _endBarLineColor       = m._endBarLineColor;
       }
 
 //---------------------------------------------------------
@@ -437,11 +426,8 @@ void Measure::layout2()
       for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
             MStaff* ms = _mstaves.at(staffIdx);
             Text* t = ms->noText();
-            if (t) {
-                  Q_ASSERT(t->score() == score());
-                  Q_ASSERT(t->parent() == this);
+            if (t)
                   t->setTrack(staffIdx * VOICES);
-                  }
             if (smn && ((staffIdx == nn) || nas)) {
                   if (t == 0) {
                         t = new Text(score());
@@ -673,7 +659,7 @@ void Measure::add(Element* e)
                   break;
 
             case Element::Type::JUMP:
-                  setRepeatFlag(Repeat::JUMP);
+                  setRepeatJump(true);
                   // fall through
 
             case Element::Type::MARKER:
@@ -724,7 +710,7 @@ void Measure::remove(Element* e)
                   break;
 
             case Element::Type::JUMP:
-                  resetRepeatFlag(Repeat::JUMP);
+                  setRepeatJump(false);
                   // fall through
 
             case Element::Type::MARKER:
@@ -1274,18 +1260,19 @@ Element* Measure::drop(const DropData& data)
             case Element::Type::BAR_LINE:
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
+
                   // if dropped bar line refers to span rather than to subtype
                   // or if Ctrl key used
-                  if ((bl->spanFrom() != 0 && bl->spanTo() != DEFAULT_BARLINE_TO) || (data.modifiers & Qt::ControlModifier)) {
+                  if ((bl->spanFrom() != 0 && bl->spanTo() != DEFAULT_BARLINE_TO) || data.control()) {
                         // get existing bar line for this staff, and drop the change to it
                         Segment* seg = undoGetSegment(Segment::Type::EndBarLine, tick() + ticks());
                         BarLine* cbl = static_cast<BarLine*>(seg->element(staffIdx * VOICES));
                         if (cbl)
                               cbl->drop(data);
                         }
-                  // if dropped bar line refers to line subtype
                   else {
-//TODO                        score()->undoChangeBarLine(this, bl->barLineType());
+                        // if dropped bar line refers to line subtype
+                        score()->undoChangeBarLine(this, bl->barLineType());
                         delete e;
                         }
                   break;
@@ -1515,16 +1502,16 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       if (_mmRestCount > 0)
             xml.tag("multiMeasureRest", _mmRestCount);
       if (writeSystemElements) {
-            if (repeatFlags() & Repeat::START)
+            if (repeatStart())
                   xml.tagE("startRepeat");
-            if (repeatFlags() & Repeat::END)
+            if (repeatEnd())
                   xml.tag("endRepeat", _repeatCount);
             writeProperty(xml, P_ID::IRREGULAR);
             writeProperty(xml, P_ID::BREAK_MMR);
             writeProperty(xml, P_ID::USER_STRETCH);
             writeProperty(xml, P_ID::NO_OFFSET);
             writeProperty(xml, P_ID::MEASURE_NUMBER_MODE);
-            writeProperty(xml, P_ID::SYSTEM_INITIAL_BARLINE_TYPE);
+//TODO-WS            writeProperty(xml, P_ID::SYSTEM_INITIAL_BARLINE_TYPE);
             }
       qreal _spatium = spatium();
       MStaff* mstaff = _mstaves[staff];
@@ -1642,11 +1629,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                         st = Segment::Type::BarLine;
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
                         st = Segment::Type::StartRepeatBarLine;
+                  else if (e.tick() == tick() && segment == 0)
+                        st = Segment::Type::BeginBarLine;
                   else
                         st = Segment::Type::EndBarLine;
 
-                  segment = getSegment(st, e.tick()); // let the bar line know it belongs to a Segment,
-                  segment->add(barLine);              // before setting its flags
+                  segment = getSegment(st, e.tick());
+                  segment->add(barLine);
+
                   if (st == Segment::Type::EndBarLine) {
 #if 0
                         if (!barLine->customSubtype()) {
@@ -2080,7 +2070,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   _breakMultiMeasureRest = e.readBool();
             else if (tag == "sysInitBarLineType") {
                   const QString& val(e.readElementText());
-                  _systemInitialBarLineType = BarLine::barLineType(val);
+                  BarLine* barLine = new BarLine(score());
+                  barLine->setTrack(e.track());
+                  barLine->setBarLineType(val);
+                  segment = getSegment(Segment::Type::BeginBarLine, tick());
+                  segment->add(barLine);
                   }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());
@@ -2091,12 +2085,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.addTuplet(tuplet);
                   }
             else if (tag == "startRepeat") {
-                  setRepeatFlag(Repeat::START);
+                  setRepeatStart(true);
                   e.readNext();
                   }
             else if (tag == "endRepeat") {
                   _repeatCount = e.readInt();
-                  setRepeatFlag(Repeat::END);
+                  setRepeatEnd(true);
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (_mstaves[staffIdx]->_vspacerDown == 0) {
@@ -2313,9 +2307,9 @@ void Measure::createVoice(int track)
 //    return true if bar line type changed
 //---------------------------------------------------------
 
-bool Measure::setStartRepeatBarLine(bool val)
+void Measure::setStartRepeatBarLine()
       {
-      bool changed    = false;
+      bool val        = repeatStart();
       Segment* s      = findSegment(Segment::Type::StartRepeatBarLine, tick());
       bool customSpan = false;
       int numStaves   = score()->nstaves();
@@ -2323,19 +2317,19 @@ bool Measure::setStartRepeatBarLine(bool val)
       for (int staffIdx = 0; staffIdx < numStaves;) {
             int track    = staffIdx * VOICES;
             Staff* staff = score()->staff(staffIdx);
-            BarLine* bl  = s ? static_cast<BarLine*>(s->element(track)) : nullptr;
+            BarLine* bl  = s ? static_cast<BarLine*>(s->element(track)) : 0;
             int span, spanFrom, spanTo;
             // if there is a bar line and has custom span, take span from it
             if (bl && bl->customSpan()) {
-                  span        = bl->span();
-                  spanFrom    = bl->spanFrom();
-                  spanTo      = bl->spanTo();
-                  customSpan  = bl->customSpan();
+                  span       = bl->span();
+                  spanFrom   = bl->spanFrom();
+                  spanTo     = bl->spanTo();
+                  customSpan = bl->customSpan();
                   }
             else {
-                  span        = staff->barLineSpan();
-                  spanFrom    = staff->barLineFrom();
-                  spanTo      = staff->barLineTo();
+                  span       = staff->barLineSpan();
+                  spanFrom   = staff->barLineFrom();
+                  spanTo     = staff->barLineTo();
                   if (span == 0 && customSpan) {
                         // spanned staves have already been skipped by the loop at the end;
                         // if a staff with span 0 is found and the previous bar line had custom span
@@ -2354,24 +2348,19 @@ bool Measure::setStartRepeatBarLine(bool val)
 
             if (span && val && (bl == 0)) {
                   // no barline were we need one:
-                  if (s == 0) {
-                        if (score()->undoRedo()) {
-                              return false;
-                              }
+                  if (s == 0)
                         s = undoGetSegment(Segment::Type::StartRepeatBarLine, tick());
-                        }
                   bl = new BarLine(score());
-                  bl->setTrack(track);
-                  bl->setParent(s);             // let the bar line know it belongs to a StartRepeatBarLine segment
                   bl->setBarLineType(BarLineType::START_REPEAT);
+                  bl->setGenerated(true);
+                  bl->setTrack(track);
+                  bl->setParent(s);
                   score()->undoAddElement(bl);
-                  changed = true;
                   }
             else if (bl && !val) {
                   // barline were we do not need one:
                   if (!score()->undoRedo())                       // DEBUG
                         score()->undoRemoveElement(bl);
-                  changed = true;
                   }
             if (bl && val && span) {
                   bl->setSpan(span);
@@ -2388,24 +2377,21 @@ bool Measure::setStartRepeatBarLine(bool val)
                   span--;                 // count one span less
             if (s) {
                   for (int i = 1; i < span; ++i) {
-                        BarLine* bl  = static_cast<BarLine*>(s->element(staffIdx * VOICES));
-                        if (bl) {
-                              score()->undoRemoveElement(bl);
-                              changed = true;
-                              }
+                        Element* e  = s->element(staffIdx * VOICES);
+                        if (e)
+                              score()->undoRemoveElement(e->barLine());
                         ++staffIdx;
                         }
                   }
             }
-      if (changed)
+      if (s)
             s->createShapes();
-      return changed;
       }
 
 //---------------------------------------------------------
 //   createEndBarLines
 //    actually creates or modifies barlines
-//    return the width of the created/modified Segment
+//    return the width change for measure
 //---------------------------------------------------------
 
 qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
@@ -2413,12 +2399,13 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       int nstaves  = score()->nstaves();
       Segment* seg = undoGetSegment(Segment::Type::EndBarLine, endTick());
 
-      BarLine* bl = 0;
-      int span    = 0;        // span counter
-      int aspan   = 0;        // actual span
-      bool mensur = false;    // keep note of Mensurstrich case
-      int spanTot = 0;        // to keep track of the target span as we count down
-      int lastIdx = 0;
+      BarLine* bl  = 0;
+      int span     = 0;        // span counter
+      int aspan    = 0;        // actual span
+      bool mensur  = false;    // keep note of Mensurstrich case
+
+      int spanTot;             // to keep track of the target span as we count down
+      int lastIdx;
       int spanFrom = 0;
       int spanTo = 0;
       static const int unknownSpanFrom = 9999;
@@ -2503,7 +2490,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         // adjust subtype, if not fitting
 #if 0 //TODO
                         if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, int(_endBarLineType));
+                              score()->undoChangeProperty(bl, P_ID::BARLINE_TYPE, int(_endBarLineType));
                               bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               }
                         // or clear custom subtype flag if same type as measure
@@ -2568,12 +2555,20 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             }
 
       BarLineType t = nextMeasure() ? BarLineType::NORMAL : BarLineType::END;
-      if (!isLastMeasureInSystem && (repeatFlags() & Repeat::END) && (nextMeasure()->repeatFlags() & Repeat::START))
+
+      bool force = false;
+      if (!isLastMeasureInSystem && repeatEnd() && nextMeasure()->repeatStart()) {
             t = BarLineType::END_START_REPEAT;
-      else if (repeatFlags() & Repeat::END)
+            force = true;
+            }
+      else if (repeatEnd()) {
             t = BarLineType::END_REPEAT;
-      else if (!isLastMeasureInSystem && nextMeasure()->repeatFlags() & Repeat::START)
+            force = true;
+            }
+      else if (!isLastMeasureInSystem && nextMeasure()->repeatStart()) {
             t = BarLineType::START_REPEAT;
+            force = true;
+            }
 
       qreal w = 0.0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -2581,14 +2576,25 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             if (bl) {
                   if (bl->generated())
                         bl->setBarLineType(t);
-                  else
-                        score()->undoChangeProperty(bl, P_ID::SUBTYPE, int(t));
+                  else {
+                        if (force) {
+                              score()->undoChangeProperty(bl, P_ID::BARLINE_TYPE, int(t));
+                              score()->undoChangeProperty(bl, P_ID::GENERATED, true);
+                              }
+                        }
                   bl->layout();
                   w = bl->width();
                   }
             }
       seg->setWidth(w);
       seg->createShapes();
+
+      // fix previous segment width
+      Segment* ps = seg->prev();
+      qreal www   = ps->minHorizontalDistance(seg);
+      w          += www - ps->width();
+      ps->setWidth(www);
+
       return w;
       }
 
@@ -2925,7 +2931,6 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_timesig     = _timesig;
       m->_len         = _len;
       m->_repeatCount = _repeatCount;
-      m->setRepeatFlags(repeatFlags());
 
       foreach(MStaff* ms, _mstaves)
             m->_mstaves.append(new MStaff(*ms));
@@ -2935,11 +2940,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->setIrregular(irregular());
       m->_userStretch           = _userStretch;
       m->_breakMultiMeasureRest = _breakMultiMeasureRest;
-//      m->_endBarLineGenerated   = _endBarLineGenerated;
-//      m->_endBarLineVisible     = _endBarLineVisible;
-//      m->_endBarLineType        = _endBarLineType;
       m->_playbackCount         = _playbackCount;
-//      m->_endBarLineColor       = _endBarLineColor;
 
       m->setTick(tick());
       m->setLineBreak(lineBreak());
@@ -3080,8 +3081,6 @@ QVariant Measure::getProperty(P_ID propertyId) const
                   return QVariant::fromValue(_timesig);
             case P_ID::TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
-            case P_ID::REPEAT_FLAGS:
-                  return int(repeatFlags());
             case P_ID::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
             case P_ID::BREAK_MMR:
@@ -3094,8 +3093,6 @@ QVariant Measure::getProperty(P_ID propertyId) const
                   return noOffset();
             case P_ID::IRREGULAR:
                   return irregular();
-            case P_ID::SYSTEM_INITIAL_BARLINE_TYPE:
-                  return int(systemInitialBarLineType());
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -3113,9 +3110,6 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
                   break;
             case P_ID::TIMESIG_ACTUAL:
                   _len = value.value<Fraction>();
-                  break;
-            case P_ID::REPEAT_FLAGS:
-                  setRepeatFlags(Repeat(value.toInt()));
                   break;
             case P_ID::MEASURE_NUMBER_MODE:
                   setMeasureNumberMode(MeasureNumberMode(value.toInt()));
@@ -3135,9 +3129,6 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             case P_ID::IRREGULAR:
                   setIrregular(value.toBool());
                   break;
-            case P_ID::SYSTEM_INITIAL_BARLINE_TYPE:
-                  setSystemInitialBarLineType(BarLineType(value.toInt()));
-                  break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
@@ -3155,8 +3146,6 @@ QVariant Measure::propertyDefault(P_ID propertyId) const
             case P_ID::TIMESIG_NOMINAL:
             case P_ID::TIMESIG_ACTUAL:
                   return QVariant();
-            case P_ID::REPEAT_FLAGS:
-                  return 0;
             case P_ID::MEASURE_NUMBER_MODE:
                   return int(MeasureNumberMode::AUTO);
             case P_ID::BREAK_MMR:
@@ -3169,12 +3158,10 @@ QVariant Measure::propertyDefault(P_ID propertyId) const
                   return 0;
             case P_ID::IRREGULAR:
                   return false;
-            case P_ID::SYSTEM_INITIAL_BARLINE_TYPE:
-                  return int(BarLineType::NORMAL);
             default:
                   break;
             }
-      return MeasureBase::getProperty(propertyId);
+      return MeasureBase::propertyDefault(propertyId);
       }
 
 //-------------------------------------------------------------------
@@ -3362,11 +3349,11 @@ void Measure::stretchMeasure(qreal stretch)
                         qreal x2 = width();
                         Segment* ss;
                         for (ss = s->next(); ss->next(); ss = ss->next()) {
-                              if (!ss->next() || ss->next()->segmentType() != Segment::Type::ChordRest)
+                              if (ss->next()->segmentType() != Segment::Type::ChordRest)
                                     break;
                               }
-                        if (ss->next())
-                              x2 = ss->next()->pos().x() - ss->next()->minLeft();
+                        if (ss)
+                              x2 = ss->pos().x() - ss->minLeft();
 
                         if (isMMRest()) {
                               //
@@ -3379,6 +3366,8 @@ void Measure::stretchMeasure(qreal stretch)
                               StaffLines* sl = _mstaves[track/VOICES]->lines;
                               qreal x = x1 - s->pos().x() + d;
                               e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
+                              rest->layout();
+                              s->createShape(track/VOICES);
                               }
                         else { // if (rest->isFullMeasureRest()) {
                               //
@@ -3397,9 +3386,8 @@ void Measure::stretchMeasure(qreal stretch)
                         e->setPos(QPointF());
                         e->adjustReadPos();
                         }
-                  else {
+                  else
                         e->adjustReadPos();
-                        }
                   }
             }
       }

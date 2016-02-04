@@ -219,7 +219,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
       score->measures()->add(currentMeasure);
 
       if (mbf.repeatBegin)
-            currentMeasure->setRepeatFlags(Ms::Repeat::START);
+            currentMeasure->setRepeatStart(true);
 
       if (mbf.irregular)
             currentMeasure->setIrregular(true);
@@ -277,7 +277,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       {
       qDebug() << "MsScWriter::endMeasure()";
       if (mef.repeatEnd)
-            currentMeasure->setRepeatFlags(Ms::Repeat::END);
+            currentMeasure->setRepeatEnd(true);
 
       if (mef.endingEnd) {
             if (lastVolta) {

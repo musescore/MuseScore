@@ -36,9 +36,9 @@ struct PropertyData {
 //
 //
 static const PropertyData propertyList[] = {
-      { P_ID::SUBTYPE,             false, "subtype",       P_TYPE::INT   },
+      { P_ID::SUBTYPE,             false,  "subtype",      P_TYPE::INT   },
       { P_ID::SELECTED,            false, "selected",      P_TYPE::BOOL  },
-      { P_ID::GENERATED,           false, "generated",     P_TYPE::BOOL  },
+      { P_ID::GENERATED,           false,  "generated",    P_TYPE::BOOL  },
       { P_ID::COLOR,               false, "color",         P_TYPE::COLOR },
       { P_ID::VISIBLE,             false, "visible",       P_TYPE::BOOL  },
       { P_ID::SMALL,               false, "small",         P_TYPE::BOOL  },
@@ -67,10 +67,12 @@ static const PropertyData propertyList[] = {
       { P_ID::DOT_POSITION,        false, "dotPosition",   P_TYPE::DIRECTION },
       { P_ID::TUNING,              false, "tuning",        P_TYPE::REAL  },
       { P_ID::PAUSE,               false, "pause",         P_TYPE::REAL  },
-      { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT   },
 
+      { P_ID::BARLINE_TYPE,        false, 0,               P_TYPE::INT   },
+      { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_FROM,   false, 0,               P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_TO,     false, 0,               P_TYPE::INT   },
+
       { P_ID::USER_OFF,            false, "userOff",       P_TYPE::POINT },
       { P_ID::FRET,                true,  "fret",          P_TYPE::INT   },
       { P_ID::STRING,              true,  "string",        P_TYPE::INT   },
@@ -119,7 +121,6 @@ static const PropertyData propertyList[] = {
       { P_ID::ACCIDENTAL_BRACKET,  false, "bracket",       P_TYPE::BOOL   },
       { P_ID::NUMERATOR_STRING,    false, "textN",         P_TYPE::STRING },
       { P_ID::DENOMINATOR_STRING,  false, "textD",         P_TYPE::STRING },
-      { P_ID::BREAK_HINT,          false, "breakHint",     P_TYPE::BOOL   },
       { P_ID::FBPREFIX,            false, "prefix",        P_TYPE::INT    },
       { P_ID::FBDIGIT,             false, "digit",         P_TYPE::INT    },
       { P_ID::FBSUFFIX,            false, "suffix",        P_TYPE::INT    },
@@ -152,10 +153,12 @@ static const PropertyData propertyList[] = {
       { P_ID::MARKER_TYPE,         false, 0,               P_TYPE::INT    },
       { P_ID::ARP_USER_LEN1,       false, 0,               P_TYPE::REAL   },
       { P_ID::ARP_USER_LEN2,       false, 0,               P_TYPE::REAL   },
-      { P_ID::REPEAT_FLAGS,        false,  0,              P_TYPE::INT    },
-      { P_ID::END_BARLINE_TYPE,    false, 0,               P_TYPE::INT    },
-      { P_ID::END_BARLINE_VISIBLE, false, 0,               P_TYPE::BOOL   },
-      { P_ID::END_BARLINE_COLOR,   false, 0,               P_TYPE::COLOR  },
+
+      { P_ID::REPEAT_END,          true,  0,               P_TYPE::BOOL   },
+      { P_ID::REPEAT_START,        true,  0,               P_TYPE::BOOL   },
+      { P_ID::REPEAT_MEASURE,      true,  0,               P_TYPE::BOOL   },
+      { P_ID::REPEAT_JUMP,         true,  0,               P_TYPE::BOOL   },
+
       { P_ID::MEASURE_NUMBER_MODE, false, "measureNumberMode", P_TYPE::INT    },
 
       { P_ID::GLISS_TYPE,          false, 0,               P_TYPE::INT    },
@@ -214,7 +217,6 @@ static const PropertyData propertyList[] = {
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
       { P_ID::LINE_VISIBLE,        true,  "lineVisible",           P_TYPE::BOOL },
 
-      { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::BARLINE_TYPE },
       { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
       { P_ID::USE_DRUMSET,         false, "useDrumset",            P_TYPE::BOOL },
       { P_ID::PART_VOLUME,         false, "volume",                P_TYPE::INT },
@@ -407,6 +409,22 @@ QVariant getProperty(P_ID id, XmlReader& e)
             }
       return QVariant();
       }
+
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   checkProperties
+//---------------------------------------------------------
+
+void checkProperties()
+      {
+      int idx = 0;
+      for (const PropertyData& d : propertyList) {
+            Q_ASSERT(int(d.id) == idx);
+            ++idx;
+            }
+      }
+#endif
+
 
 }
 

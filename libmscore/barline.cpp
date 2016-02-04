@@ -642,34 +642,27 @@ Element* BarLine::drop(const DropData& data)
       {
       Element* e = data.element;
       Element::Type type = e->type();
+
       if (type == Element::Type::BAR_LINE) {
-            BarLine* bl = static_cast<BarLine*>(e);
+            BarLine* bl    = e->barLine();      // static_cast<BarLine*>(e);
             BarLineType st = bl->barLineType();
+
             // if no change in subtype or no change in span, do nothing
             if (st == barLineType() && bl->spanFrom() == 0 && bl->spanTo() == DEFAULT_BARLINE_TO) {
                   delete e;
                   return 0;
                   }
-            // system left-side bar line: route type change to first measure of system
-            if (parent()->type() == Element::Type::SYSTEM) {
-                  Measure* m = static_cast<System*>(parent())->firstMeasure();
-                  if (m && m->systemInitialBarLineType() != bl->barLineType())
-                        m->undoChangeProperty(P_ID::SYSTEM_INITIAL_BARLINE_TYPE, int(bl->barLineType()));
-                  delete e;
-                  return 0;
-                  }
-
-            // parent is a segment
-            Measure* m = static_cast<Segment*>(parent())->measure();
             // check if the new property can apply to this single bar line
             bool oldRepeat = (barLineType() == BarLineType::START_REPEAT || barLineType() == BarLineType::END_REPEAT
                         || barLineType() == BarLineType::END_START_REPEAT);
             bool newRepeat = (bl->barLineType() == BarLineType::START_REPEAT || bl->barLineType() == BarLineType::END_REPEAT
                         || bl->barLineType() == BarLineType::END_START_REPEAT);
+
             // if ctrl was used and repeats are not involved,
             // or if drop refers to span rather than subtype =>
             // single bar line drop
-            if (((data.modifiers & Qt::ControlModifier) && !oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
+
+            if ((data.control() && !oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
                   // if drop refers to span, update this bar line span
                   if (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
                         // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
@@ -680,28 +673,67 @@ Element* BarLine::drop(const DropData& data)
                         score()->undoChangeSingleBarLineSpan(this, 1, spanFrom, spanTo);
                         }
                   // if drop refers to subtype, update this bar line subtype
-                  else {
-//                        score()->undoChangeBarLine(m, bl->barLineType());
-                        score()->undoChangeProperty(this, P_ID::SUBTYPE, int(bl->barLineType()));
-                        }
+                  else
+                        undoChangeProperty(P_ID::BARLINE_TYPE, int(bl->barLineType()));
                   delete e;
                   return 0;
                   }
 
-            // drop applies to all bar lines of the measure
-            if (st == BarLineType::START_REPEAT) {
-                  m = m->nextMeasure();
-                  if (m == 0) {
-                        delete e;
-                        return 0;
+            //---------------------------------------------
+            //    Update repeat flags for current measure
+            //    and next measure if this is a EndBarLine.
+            //---------------------------------------------
+
+            if (segment()->segmentType() == Segment::Type::EndBarLine) {
+                  Measure* m  = segment()->measure();
+                  Measure* nm = m->nextMeasure();
+                  switch (st) {
+                        case BarLineType::END_REPEAT:
+                              m->undoChangeProperty(P_ID::REPEAT_END, true);
+                              if (nm && nm->system() == m->system())
+                                    nm->undoChangeProperty(P_ID::REPEAT_START, false);
+                              break;
+                        case BarLineType::START_REPEAT:
+                              m->undoChangeProperty(P_ID::REPEAT_END, false);
+                              if (nm)
+                                    nm->undoChangeProperty(P_ID::REPEAT_START, true);
+                              break;
+                        case BarLineType::END_START_REPEAT:
+                              m->undoChangeProperty(P_ID::REPEAT_END, true);
+                              if (nm)
+                                    nm->undoChangeProperty(P_ID::REPEAT_START, true);
+                              break;
+                        case BarLineType::DOUBLE:
+                        case BarLineType::BROKEN:
+                        case BarLineType::END:
+                        case BarLineType::DOTTED:
+                              for (Element* e : segment()->elist()) {
+                                    if (e)
+                                          e->undoChangeProperty(P_ID::GENERATED, false);
+                                    }
+
+                        case BarLineType::NORMAL:
+                              if (nm && nm->system() == m->system())
+                                    nm->undoChangeProperty(P_ID::REPEAT_START, false);
+                              m->undoChangeProperty(P_ID::REPEAT_END, false);
+                              for (Element* e : segment()->elist()) {
+                                    if (e)
+                                          e->undoChangeProperty(P_ID::BARLINE_TYPE, int(st));
+                                    }
+                              break;
                         }
                   }
-//TODO            score()->undoChangeBarLine(m, bl->barLineType());
+            else if (segment()->segmentType() == Segment::Type::BeginBarLine) {
+                  undoChangeProperty(P_ID::BARLINE_TYPE, int(st));
+                  undoChangeProperty(P_ID::GENERATED, false);
+                  }
+
             delete e;
             return 0;
             }
+
       else if (type == Element::Type::ARTICULATION) {
-            Articulation* atr = static_cast<Articulation*>(e);
+            Articulation* atr = e->articulation();
             atr->setParent(this);
             atr->setTrack(track());
             score()->undoAddElement(atr);
@@ -1216,8 +1248,6 @@ void BarLine::add(Element* e)
             case Element::Type::ARTICULATION:
                   _el.push_back(e);
                   setGenerated(false);
-//                  if (parent() && parent()->parent())
-//                        static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);
                   break;
             default:
                   qDebug("BarLine::add() not impl. %s", e->name());
@@ -1281,8 +1311,7 @@ void BarLine::updateCustomType()
                         case Segment::Type::StartRepeatBarLine:
                               // if a start-repeat segment, ref. type is START_REPEAT
                               // if measure has relevant repeat flag or none if measure hasn't
-                              refType = (seg->measure()->repeatFlags() & Repeat::START) != 0
-                                          ? BarLineType::START_REPEAT : BarLineType(-1);
+                              refType = seg->measure()->repeatStart() ? BarLineType::START_REPEAT : BarLineType(-1);
                               break;
                         case Segment::Type::BarLine:
                               // if a non-end-measure bar line, type is always custom
@@ -1357,7 +1386,7 @@ void BarLine::updateGenerated(bool canBeTrue)
 QVariant BarLine::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_ID::SUBTYPE:
+            case P_ID::BARLINE_TYPE:
                   return int(_barLineType);
             case P_ID::BARLINE_SPAN:
                   return span();
@@ -1378,7 +1407,7 @@ QVariant BarLine::getProperty(P_ID id) const
 bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
       switch(id) {
-            case P_ID::SUBTYPE:
+            case P_ID::BARLINE_TYPE:
                   setBarLineType(BarLineType(v.toInt()));
                   break;
             case P_ID::BARLINE_SPAN:
@@ -1404,11 +1433,9 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
 QVariant BarLine::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SUBTYPE:
-                  // default subtype is the subtype of the measure, if any
-
-//TODO?                  if (parent() && parent()->type() == Element::Type::SEGMENT && static_cast<Segment*>(parent())->measure() )
-//                      return int(static_cast<Segment*>(parent())->measure()->endBarLineType());
+            case P_ID::BARLINE_TYPE:
+                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
+                        return int(BarLineType::END);
                   return int(BarLineType::NORMAL);
 
             case P_ID::BARLINE_SPAN:

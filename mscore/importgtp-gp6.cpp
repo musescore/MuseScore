@@ -1804,9 +1804,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         bool start = !masterBarElement.attributes().namedItem("start").toAttr().value().compare("true");
                         int count = masterBarElement.attributes().namedItem("count").toAttr().value().toInt();
                         if (start)
-                              measure->setRepeatFlags(Repeat::START);
+                              measure->setRepeatStart(true);
                         else
-                              measure->setRepeatFlags(Repeat::END);
+                              measure->setRepeatEnd(true);
                         measure->setRepeatCount(count);
                         }
                   else if (!masterBarElement.nodeName().compare("AlternateEndings")) {

@@ -330,13 +330,9 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
 
 void Rest::layout()
       {
-//      _space.setLw(0.0);
-
       for (Element* e : _el)
             e->layout();
       if (measure() && measure()->isMMRest()) {
-//            _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
-
             static const qreal verticalLineWidth = .2;
             qreal _spatium = spatium();
             qreal h        = _spatium * (2 + verticalLineWidth);
@@ -875,9 +871,9 @@ Shape Rest::shape() const
       {
       Shape shape;
       shape.add(ChordRest::shape());
-      if (parent() && measure() && measure()->isMMRest())
-            shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
-      else
+//      if (parent() && measure() && measure()->isMMRest())
+//            shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
+//      else
             shape.add(bbox().translated(pos()));
       return shape;
       }

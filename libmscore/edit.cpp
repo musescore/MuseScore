@@ -1843,55 +1843,31 @@ void Score::deleteItem(Element* el)
 
             case Element::Type::BAR_LINE:
                   {
-                  BarLine* bl  = static_cast<BarLine*>(el);
-                  // if system initial bar ine, route change to system first measure
-                  if (bl->parent()->type() == Element::Type::SYSTEM) {
-                        Measure* m = static_cast<System*>(bl->parent())->firstMeasure();
-                        if (m && m->systemInitialBarLineType() != BarLineType::NORMAL)
-                              m->undoChangeProperty(P_ID::SYSTEM_INITIAL_BARLINE_TYPE, int(BarLineType::NORMAL));
-                        break;
-                        }
-                  // if regular measure bar line
-                  Segment* seg   = static_cast<Segment*>(bl->parent());
-//TODO                  bool normalBar = seg->measure()->endBarLineType() == BarLineType::NORMAL;
-                  bool normalBar = true;
-                  int tick       = seg->tick();
+                  BarLine* bl           = el->barLine();
+                  Segment* seg          = bl->segment();
+                  Measure* m            = seg->measure();
                   Segment::Type segType = seg->segmentType();
 
-                  if (segType == Segment::Type::BarLine) {
+                  if (segType == Segment::Type::BarLine)
                         undoRemoveElement(el);
-                        break;
-                        }
-
-                  foreach(Score* score, scoreList()) {
-                        Measure* m   = score->tick2measure(tick);
-                        if (segType == Segment::Type::StartRepeatBarLine)
-                              undoChangeProperty(m, P_ID::REPEAT_FLAGS, int(m->repeatFlags()) & ~int(Repeat::START));
-                        else if (segType == Segment::Type::EndBarLine) {
-                              // if bar line has custom barLineType, change to barLineType of the whole measure
-//TODO                              if (bl->customSubtype()) {
-//                                    undoChangeProperty(bl, P_ID::SUBTYPE, int(seg->measure()->endBarLineType()));
-//                                    }
-                              // otherwise, if whole measure has special end bar line, change to normal
-                              /*else*/ if (!normalBar) {
-                                    if (m->tick() >= tick)
-                                          m = m->prevMeasure();
-                                    undoChangeProperty(m, P_ID::REPEAT_FLAGS, int(m->repeatFlags()) & ~int(Repeat::END));
-                                    Measure* nm = m->nextMeasure();
-                                    if (nm)
-                                          undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags()) & ~int(Repeat::START));
-//                                    undoChangeEndBarLineType(m, BarLineType::NORMAL);
-//TODO                                    m->setEndBarLineGenerated(true);
-                                    }
-                              // if bar line has custom span, reset to staff default
-                              if (bl->customSpan() && bl->staff()) {
-                                    Staff* stf = bl->staff();
-                                    undoChangeProperty(bl, P_ID::BARLINE_SPAN,      stf->barLineSpan());
-                                    undoChangeProperty(bl, P_ID::BARLINE_SPAN_FROM, stf->barLineFrom());
-                                    undoChangeProperty(bl, P_ID::BARLINE_SPAN_TO,   stf->barLineTo());
-                                    }
+                  else if (segType == Segment::Type::EndBarLine) {
+                        m->undoResetProperty(P_ID::REPEAT_END);
+                        Measure* nm = m->nextMeasure();
+                        if (nm && m->system() == nm->system())
+                              nm->undoResetProperty(P_ID::REPEAT_START);
+                        for (Element* e : seg->elist()) {
+                              if (!e)
+                                    continue;
+                              BarLine* b = e->barLine();
+                              b->undoChangeProperty(P_ID::GENERATED, true);
+                              b->undoResetProperty(P_ID::BARLINE_TYPE);
+                              b->undoResetProperty(P_ID::BARLINE_SPAN);
+                              b->undoResetProperty(P_ID::BARLINE_SPAN_FROM);
+                              b->undoResetProperty(P_ID::BARLINE_SPAN_TO);
                               }
                         }
+                  else if (segType == Segment::Type::StartRepeatBarLine)
+                        m->undoChangeProperty(P_ID::REPEAT_START, false);
                   }
                   break;
 
