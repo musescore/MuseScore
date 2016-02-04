@@ -789,8 +789,8 @@ LyricsLineSegment::LyricsLineSegment(Score* s)
 
 void LyricsLineSegment::layout()
       {
-      Lyrics*     lyr;
-      System*     sys;
+      Lyrics*     lyr = nullptr;
+      System*     sys = nullptr;
       bool        endOfSystem = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
       qreal       sp                = spatium();

@@ -3443,7 +3443,6 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
 
       Part* part = _pass1.getPart(partId);
       Q_ASSERT(part);
-      int staves = part->nstaves();
 
       // TODO: check error handling for
       // - single staff

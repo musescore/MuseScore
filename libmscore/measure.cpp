@@ -2602,10 +2602,9 @@ bool Measure::createEndBarLines()
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
       bool mensur = false;    // keep note of Mensurstrich case
-      int spanTot;            // to keep track of the target span
-      int spanFrom;
-      int spanTo;
-
+      int spanTot = 0;           // to keep track of the target span as we count down
+      int spanFrom = 0;
+      int spanTo = 0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
             int track    = staffIdx * VOICES;

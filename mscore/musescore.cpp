@@ -822,7 +822,7 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
       menuView->addSeparator();
-      
+
 #ifndef Q_OS_MAC
       a = getAction("fullscreen");
       a->setCheckable(true);
