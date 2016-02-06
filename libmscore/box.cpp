@@ -263,7 +263,7 @@ bool Box::readProperties(XmlReader& e)
             else {
                   t = new Text(score());
                   t->read(e);
-                  if (t->isEmpty()) {
+                  if (t->empty()) {
                         qDebug("read empty text");
                         }
                   else

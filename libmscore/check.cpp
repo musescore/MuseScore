@@ -135,8 +135,7 @@ qDebug("    - insert %d/%d", ff.numerator(), ff.denominator());
                                           break;
                                     Fraction fff = ff / timeStretch;
 
-                                    QList<Duration> dl = toDurationList(fff, true);
-                                    foreach(Duration d, dl) {
+                                    for (const Duration& d, toDurationList(fff, true)) {
                                           Rest* rest = new Rest(this);
                                           rest->setDurationType(d);
                                           rest->setDuration(d.fraction());

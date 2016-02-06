@@ -135,7 +135,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int upVoices = 0, downVoices = 0;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      QList<Note*> upStemNotes, downStemNotes;
+      std::vector<Note*> upStemNotes, downStemNotes;
       qreal nominalWidth = noteHeadWidth() * staff->mag();
       qreal maxUpWidth = 0.0;
       qreal maxDownWidth = 0.0;
@@ -163,7 +163,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         }
                   if (chord->up()) {
                         ++upVoices;
-                        upStemNotes.append(chord->notes());
+                        upStemNotes.insert(upStemNotes.end(), chord->notes().begin(), chord->notes().end());
                         upDots   = qMax(upDots, chord->dots());
                         maxUpMag = qMax(maxUpMag, chord->mag());
                         if (!upHooks)
@@ -173,7 +173,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         }
                   else {
                         ++downVoices;
-                        downStemNotes.append(chord->notes());
+                        downStemNotes.insert(downStemNotes.end(), chord->notes().begin(), chord->notes().end());
                         downDots = qMax(downDots, chord->dots());
                         maxDownMag = qMax(maxDownMag, chord->mag());
                         if (!downHooks)
@@ -283,14 +283,15 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
             if (upVoices && downVoices) {
 
-                  Note* bottomUpNote = upStemNotes.first();
-                  Note* topDownNote = downStemNotes.last();
+                  Note* bottomUpNote = upStemNotes.front();
+                  Note* topDownNote = downStemNotes.back();
                   int separation;
                   if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove())
                         separation = topDownNote->line() - bottomUpNote->line();
                   else
                         separation = 2;   // no conflict
-                  QList<Note*> overlapNotes;
+                  QVector<Note*> overlapNotes;
+                  overlapNotes.reserve(8);
 
                   if (separation == 1) {
                         // second
@@ -530,11 +531,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   }
 
             // layout chords
-            QList<Note*> notes;
+            std::vector<Note*> notes;
             if (upVoices)
-                  notes.append(upStemNotes);
+                  notes.insert(notes.end(), upStemNotes.begin(), upStemNotes.end());
             if (downVoices)
-                  notes.append(downStemNotes);
+                  notes.insert(notes.end(), downStemNotes.begin(), downStemNotes.end());
             if (upVoices + downVoices > 1)
                   qSort(notes.begin(), notes.end(),
                      [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
@@ -557,7 +558,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 //    - return maximum non-mirrored notehead width
 //---------------------------------------------------------
 
-qreal Score::layoutChords2(QList<Note*>& notes, bool up)
+qreal Score::layoutChords2(std::vector<Note*>& notes, bool up)
       {
       int startIdx, endIdx, incIdx;
       qreal maxWidth = 0.0;
@@ -586,7 +587,6 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
       int lmove     = notes[startIdx]->chord()->staffMove();      // staff offset of last note (for cross-staff beaming)
 
       for (int idx = startIdx; idx != endIdx; idx += incIdx) {
-
             Note* note    = notes[idx];                     // current note
             int line      = note->line();                   // line of current note
             Chord* chord  = note->chord();
@@ -635,10 +635,9 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
                   maxWidth = qMax(maxWidth, note->headWidth());
 
             // prepare for next iteration
-            lvisible      = note->visible();
-            lmove         = move;
-            ll            = line;
-
+            lvisible = note->visible();
+            lmove    = move;
+            ll       = line;
             }
 
       return maxWidth;
@@ -734,7 +733,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 //   layoutAccidental
 //---------------------------------------------------------
 
-static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
+static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QVector<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
       {
       qreal lx = colOffset;
       Accidental* acc = me->note->accidental();
@@ -787,15 +786,18 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
 
-void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
+void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segment)
       {
       //---------------------------------------------------
       //    layout accidentals
       //    find column for dots
       //---------------------------------------------------
 
-      QList<Note*> leftNotes; // notes to left of origin
-      QList<AcEl> aclist;     // accidentals
+      QVector<Note*> leftNotes; // notes to left of origin
+      leftNotes.reserve(8);
+      QVector<AcEl> aclist;       // accidentals
+      aclist.reserve(8);
+
       // track columns of octave-separated accidentals
       int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
@@ -963,7 +965,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       if (nAcc == 0)
             return;
 
-      QList<int> umi;
+      QVector<int> umi;
       qreal pd  = point(styleS(StyleIdx::accidentalDistance));
       qreal pnd = point(styleS(StyleIdx::accidentalNoteDistance));
       qreal colOffset = 0.0;
@@ -990,8 +992,8 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
             // compute reasonable column order
             // use zig zag
-            QList<int> column;
-            QList<int> unmatched;
+            QVector<int> column;
+            QVector<int> unmatched;
             int n = nAcc - 1;
             for (int i = 0; i <= n; ++i, --n) {
                   int pc = (aclist[i].line + 700) % 7;
@@ -1054,7 +1056,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         }
                   // if no slot found, then add to list of unmatched accidental indices
                   if (!found)
-                        umi.append(unmatched[i]);
+                        umi.push_back(unmatched[i]);
                   }
             nAcc = umi.size();
             if (nAcc > 1)
@@ -1086,7 +1088,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
       else {
             for (int i = 0; i < nAcc; ++i)
-                  umi.append(i);
+                  umi.push_back(i);
             }
 
       if (nAcc) {
@@ -1149,7 +1151,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       ChordRest* a1    = 0;      // start of (potential) beam
       Beam* beam       = 0;      // current beam
       Beam::Mode bm = Beam::Mode::AUTO;
-      QList<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
+      QVector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
       for (ChordRest* cr : graceNotes) {
             bm = Groups::endBeam(cr);
@@ -1578,22 +1580,7 @@ void Score::connectTies(bool silent)
                   Chord* c = static_cast<Chord*>(s->element(i));
                   if (c == 0 || !c->isChord())
                         continue;
-                  // connect grace note tie to main note in 1.3 scores
-                  if (_mscVersion <= 114) {
-                        for (Chord* gc : c->graceNotes()) {
-                              for (Note* gn : gc->notes()) {
-                                    Tie* tie = gn->tieFor();
-                                    if (tie && !tie->endNote()) {
-                                          for (Note* n : c->notes()) {
-                                                if (n->pitch() == gn->pitch()) {
-                                                      tie->setEndNote(n);
-                                                       n->setTieBack(tie);
-                                                      }
-                                                }
-                                          }
-                                    }
-                              }
-                        }
+
                   for (Note* n : c->notes()) {
                         // connect a tie without end note
                         Tie* tie = n->tieFor();
@@ -2280,14 +2267,16 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
 
       for (Element* e : m->el()) {
             if (e->isMarker())
-                  newList.append(e);
+                  newList.push_back(e);
             }
       for (Element* e : newList) {
             bool found = false;
             for (Element* ee : oldList) {
                   if (ee->type() == e->type()) {
                         mmr->add(ee);
-                        oldList.removeOne(ee);
+                        auto i = std::find(oldList.begin(), oldList.end(), ee);
+                        if (i != oldList.end())
+                              oldList.erase(i);
                         found = true;
                         break;
                         }
@@ -2386,7 +2375,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         }
                   }
             }
-      else if (ns && ns->isEmpty())
+      else if (ns && ns->empty())
             undo(new RemoveElement(ns));
 
       //
@@ -3252,7 +3241,7 @@ void Score::doLayout()
 
 printf("====================doLayout\n");
 
-      if (_staves.isEmpty() || first() == 0) {
+      if (_staves.empty() || first() == 0) {
             // score is empty
             _pages.clear();
 

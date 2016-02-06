@@ -1231,7 +1231,7 @@ void StyleData::save(Xml& xml, bool optimize) const
             }
       for (int i = int(TextStyleType::TEXT_STYLES); i < _textStyles.size(); ++i)
             _textStyles[i].write(xml);
-      if (_customChordList && !_chordList.isEmpty()) {
+      if (_customChordList && !_chordList.empty()) {
             xml.stag("ChordList");
             _chordList.write(xml);
             xml.etag();

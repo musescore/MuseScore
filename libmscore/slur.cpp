@@ -721,7 +721,7 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       //
       // handle special case of tenuto and staccato;
       //
-      const QList<Articulation*>& al = c->articulations();
+      const QVector<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
             if (a->up() == c->up())
@@ -1026,7 +1026,7 @@ void Slur::slurPos(SlurPos* sp)
                         Beam* beam2 = ec->beam();
                         if ((stemPos && (scr->up() == ec->up()))
                            || (beam2
-                             && (!beam2->elements().isEmpty())
+                             && (!beam2->elements().empty())
                              && (beam2->elements().front() != ec)
                              && (ec->up() == _up)
                              && sc && (sc->noteType() == NoteType::NORMAL)
@@ -1426,7 +1426,7 @@ void Slur::layout()
             // possible and needed
             //
             SlurSegment* s;
-            if (spannerSegments().isEmpty()) {
+            if (spannerSegments().empty()) {
                   s = new SlurSegment(score());
                   s->setTrack(track());
                   add(s);
@@ -1564,7 +1564,7 @@ void Slur::layout()
             if (system == sPos.system2)
                   break;
             }
-      setbbox(spannerSegments().isEmpty() ? QRectF() : frontSegment()->bbox());
+      setbbox(spannerSegments().empty() ? QRectF() : frontSegment()->bbox());
       }
 
 //---------------------------------------------------------
@@ -1626,7 +1626,7 @@ void SlurTie::fixupSegments(unsigned nsegs)
       if (nsegs > onsegs) {
             for (unsigned i = onsegs; i < nsegs; ++i) {
                   SlurSegment* s;
-                  if (!delSegments.isEmpty()) {
+                  if (!delSegments.empty()) {
                         s = delSegments.dequeue();
                         }
                   else {

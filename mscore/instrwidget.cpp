@@ -462,7 +462,7 @@ void InstrumentsWidget::genPartList(Score* cs)
                   sli->setPartIdx(s->rstaff());
                   const LinkedStaves* ls = s->linkedStaves();
                   bool bLinked = false;
-                  if (ls && !ls->isEmpty()) {
+                  if (ls && !ls->empty()) {
                         foreach(Staff* ps, ls->staves()) {
                               if (ps != s && ps->score() == s->score()) {
                                     bLinked = true;

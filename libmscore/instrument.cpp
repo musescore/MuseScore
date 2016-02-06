@@ -192,7 +192,7 @@ void Instrument::write(Xml& xml, Part* part) const
       xml.stag("Instrument");
       _longNames.write(xml, "longName");
       _shortNames.write(xml, "shortName");
-//      if (!_trackName.isEmpty())
+//      if (!_trackName.empty())
             xml.tag("trackName", _trackName);
       if (_minPitchP > 0)
             xml.tag("minPitchP", _minPitchP);
@@ -370,7 +370,7 @@ void Instrument::read(XmlReader& e, Part* part)
             else
                   e.unknown();
             }
-      if (_channel.isEmpty()) {      // for backward compatibility
+      if (_channel.empty()) {      // for backward compatibility
             Channel* a = new Channel;
             a->chorus  = chorus;
             a->reverb  = reverb;
@@ -820,7 +820,7 @@ void Instrument::addShortName(const StaffName& f)
 ClefTypeList Instrument::clefType(int staffIdx) const
       {
       if (staffIdx >= _clefType.size()) {
-            if (_clefType.isEmpty())
+            if (_clefType.empty())
                   return ClefTypeList(staffIdx == 1 ? ClefType::F : ClefType::G);
             return _clefType[0];
             }

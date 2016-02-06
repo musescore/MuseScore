@@ -848,7 +848,7 @@ int findKey(MidiTrack* mt, TimeSigMap* sigmap)
       numnotes   = note.size();
       numchords  = 0;
 
-      if (note.isEmpty()) {
+      if (note.empty()) {
             qDebug("Error: No notes in input.");
             return 0;
             }

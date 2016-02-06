@@ -748,14 +748,16 @@ bool Score::dirty() const
 void Score::spell()
       {
       for (int i = 0; i < nstaves(); ++i) {
-            QList<Note*> notes;
+            std::vector<Note*> notes;
             for (Segment* s = firstSegment(); s; s = s->next1()) {
                   int strack = i * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
                         if (e && e->type() == Element::Type::CHORD)
-                              notes.append(static_cast<Chord*>(e)->notes());
+                              notes.insert(notes.end(),
+                                 static_cast<Chord*>(e)->notes().begin(),
+                                 static_cast<Chord*>(e)->notes().end());
                         }
                   }
             spellNotelist(notes);
@@ -765,14 +767,16 @@ void Score::spell()
 void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment)
       {
       for (int i = startStaff; i < endStaff; ++i) {
-            QList<Note*> notes;
+            std::vector<Note*> notes;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next()) {
                   int strack = i * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
                         if (e && e->type() == Element::Type::CHORD)
-                              notes.append(static_cast<Chord*>(e)->notes());
+                              notes.insert(notes.end(),
+                                 static_cast<Chord*>(e)->notes().begin(),
+                                 static_cast<Chord*>(e)->notes().end());
                         }
                   }
             spellNotelist(notes);
@@ -787,10 +791,10 @@ Note* prevNote(Note* n)
       {
       Chord* chord = n->chord();
       Segment* seg = chord->segment();
-      const QList<Note*> nl = chord->notes();
-      int i = nl.indexOf(n);
-      if (i)
-            return nl[i-1];
+      const std::vector<Note*> nl = chord->notes();
+      auto i = std::find(nl.begin(), nl.end(), n);
+      if (i != nl.begin());
+            return *(i-1);
       int staff      = n->staffIdx();
       int startTrack = staff * VOICES + n->voice() - 1;
       int endTrack   = 0;
@@ -815,11 +819,13 @@ Note* prevNote(Note* n)
 Note* nextNote(Note* n)
       {
       Chord* chord = n->chord();
-      const QList<Note*> nl = chord->notes();
-      int i = nl.indexOf(n);
-      ++i;
-      if (i < nl.size())
-            return nl[i];
+      const std::vector<Note*> nl = chord->notes();
+      auto i = std::find(nl.begin(), nl.end(), n);
+      if (i != nl.end()) {
+            ++i;
+            if (i != nl.end())
+                  return *i;
+            }
       Segment* seg   = chord->segment();
       int staff      = n->staffIdx();
       int startTrack = staff * VOICES + n->voice() + 1;
@@ -845,22 +851,22 @@ Note* nextNote(Note* n)
 
 void Score::spell(Note* note)
       {
-      QList<Note*> notes;
+      std::vector<Note*> notes;
 
-      notes.append(note);
+      notes.push_back(note);
       Note* nn = nextNote(note);
-      notes.append(nn);
+      notes.push_back(nn);
       nn = nextNote(nn);
-      notes.append(nn);
+      notes.push_back(nn);
       nn = nextNote(nn);
-      notes.append(nn);
+      notes.push_back(nn);
 
       nn = prevNote(note);
-      notes.prepend(nn);
+      notes.insert(notes.begin(), nn);
       nn = prevNote(nn);
-      notes.prepend(nn);
+      notes.insert(notes.begin(), nn);
       nn = prevNote(nn);
-      notes.prepend(nn);
+      notes.insert(notes.begin(), nn);
 
       int opt = Ms::computeWindow(notes, 0, 7);
       note->setTpc(Ms::tpc(3, note->pitch(), opt));
@@ -1247,7 +1253,7 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
 Measure* Score::searchMeasure(const QPointF& p) const
       {
       QList<System*> systems = searchSystem(p);
-      if (systems.isEmpty())
+      if (systems.empty())
             return 0;
 
       foreach(System* system, systems) {
@@ -2468,7 +2474,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                   for (Note* note : removeNotes) {
                         undoRemoveElement(note);
                         Chord* chord = note->chord();
-                        if (chord->notes().isEmpty()) {
+                        if (chord->notes().empty()) {
                               for (auto sp : spanner()) {
                                     Slur* slur = static_cast<Slur*>(sp.second);
                                     if (slur->type() != Element::Type::SLUR)
@@ -3360,7 +3366,7 @@ void Score::lassoSelectEnd()
       int endStaff          = 0;
       const ChordRest* endCR = 0;
 
-      if (_selection.elements().isEmpty()) {
+      if (_selection.elements().empty()) {
             _selection.setState(SelState::NONE);
             _updateAll = true;
             return;
@@ -3623,7 +3629,7 @@ void Score::appendPart(const QString& name)
             t = &defaultInstrument;
             }
 
-      if (t->channel.isEmpty()) {
+      if (t->channel.empty()) {
             Channel a;
             a.chorus = 0;
             a.reverb = 0;
@@ -4409,7 +4415,7 @@ void Score::changeVoice(int voice)
                   }
             }
 
-      if (!el.isEmpty())
+      if (!el.empty())
             selection().clear();
       for (Element* e : el)
             select(e, SelectType::ADD, -1);

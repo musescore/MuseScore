@@ -495,7 +495,7 @@ class Score : public QObject, public ScoreElement {
 
    protected:
       void createPlayEvents(Chord*);
-      void createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int& ontime);
+      void createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* chord, int& ontime);
 
       SynthesizerState _synthesizerState;
 
@@ -565,7 +565,7 @@ class Score : public QObject, public ScoreElement {
       void undoChangeChordNoStem(Chord* cr, bool noStem);
       void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
       void undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
-      void spellNotelist(QList<Note*>& notes);
+      void spellNotelist(std::vector<Note*>& notes);
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
       void undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
@@ -911,7 +911,7 @@ class Score : public QObject, public ScoreElement {
       Element* selectMove(const QString& cmd);
       Element* move(const QString& cmd);
       void cmdEnterRest(const TDuration& d);
-      void cmdAddInterval(int, const QList<Note*>&);
+      void cmdAddInterval(int, const std::vector<Note*>&);
       void cmdCreateTuplet(ChordRest*, Tuplet*);
       Omr* omr() const                         { return _omr;     }
       void setOmr(Omr* o)                      { _omr = o;        }
@@ -930,8 +930,8 @@ class Score : public QObject, public ScoreElement {
       Page* getEmptyPage(LayoutContext&);
 
       void layoutChords1(Segment* segment, int staffIdx);
-      qreal layoutChords2(QList<Note*>& notes, bool up);
-      void layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment);
+      qreal layoutChords2(std::vector<Note*>& notes, bool up);
+      void layoutChords3(std::vector<Note*>&, Staff*, Segment*);
 
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);

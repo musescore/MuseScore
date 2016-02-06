@@ -114,6 +114,10 @@ bool FileIO::write(const QString& data)
       return true;
       }
 
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
 bool FileIO::remove()
       {
       if (mSource.isEmpty())

@@ -177,7 +177,7 @@ QString BspTree::debug(int index) const
       QString tmp;
       if (node->type == Node::Type::LEAF) {
             QRectF rect = rectForIndex(index);
-            if (!leaves[node->leafIndex].isEmpty()) {
+            if (!leaves[node->leafIndex].empty()) {
                   tmp += QString::fromLatin1("[%1, %2, %3, %4] contains %5 items\n")
                    .arg(rect.left()).arg(rect.top())
                    .arg(rect.width()).arg(rect.height())
@@ -255,7 +255,7 @@ void BspTree::initialize(const QRectF& rect, int depth, int index)
 
 void BspTree::climbTree(BspTreeVisitor* visitor, const QPointF& pos, int index)
       {
-      if (nodes.isEmpty())
+      if (nodes.empty())
             return;
 
       Node* node = &nodes[index];
@@ -286,7 +286,7 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const QPointF& pos, int index)
 
 void BspTree::climbTree(BspTreeVisitor* visitor, const QRectF& rect, int index)
       {
-      if (nodes.isEmpty())
+      if (nodes.empty())
             return;
 
       Node* node = &nodes[index];

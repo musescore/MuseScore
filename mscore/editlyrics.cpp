@@ -29,7 +29,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       int track        = lyrics->track();
       ChordRest* cr    = lyrics->chordRest();
       int verse        = lyrics->no();
-      const QList<Lyrics*>* ll = &lyrics->chordRest()->lyricsList();
+      const QVector<Lyrics*>* ll = &lyrics->chordRest()->lyricsList();
 
       if (up) {
             if (verse == 0)
@@ -107,7 +107,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Lyrics* fromLyrics = 0;
       if (!back) {
             while (segment) {
-                  const QList<Lyrics*>* nll = segment->lyricsList(track);
+                  const QVector<Lyrics*>* nll = segment->lyricsList(track);
                   if (nll) {
                         fromLyrics = nll->value(verse);
                         if (fromLyrics)
@@ -117,7 +117,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   }
             }
 
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
+      const QVector<Lyrics*>* ll = nextSegment->lyricsList(track);
       if (ll == 0) {
             qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
             return;
@@ -215,7 +215,7 @@ void ScoreView::lyricsMinus()
       // we are extending with several dashes
       Lyrics* fromLyrics = 0;
       while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(track);
+            const QVector<Lyrics*>* nll = segment->lyricsList(track);
             if (!nll) {
                   segment = segment->prev1(Segment::Type::ChordRest);
                   continue;
@@ -228,7 +228,7 @@ void ScoreView::lyricsMinus()
 
       _score->startCmd();
 
-      const QList<Lyrics*>*   ll          = nextSegment->lyricsList(track);
+      const QVector<Lyrics*>*   ll        = nextSegment->lyricsList(track);
       Lyrics*                 toLyrics    = ll->value(verse);
       bool newLyrics = (toLyrics == 0);
       if (!toLyrics) {
@@ -304,7 +304,7 @@ void ScoreView::lyricsUnderscore()
       // we are extending with several underscores
       Lyrics* fromLyrics = 0;
       while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(track);
+            const QVector<Lyrics*>* nll = segment->lyricsList(track);
             if (nll) {
                   fromLyrics = nll->value(verse);
                   if (fromLyrics)
@@ -350,7 +350,7 @@ void ScoreView::lyricsUnderscore()
 
       // if a place for a new lyrics has been found, create a lyrics there
 
-      const QList<Lyrics*>*   ll          = nextSegment->lyricsList(track);
+      const QVector<Lyrics*>*   ll        = nextSegment->lyricsList(track);
       Lyrics*                 toLyrics    = ll->value(verse);
       bool newLyrics = (toLyrics == 0);
       if (!toLyrics) {
@@ -434,7 +434,7 @@ void ScoreView::lyricsEndEdit()
       Lyrics* lyrics = static_cast<Lyrics*>(editObject);
 
       // if no text, just remove this lyrics
-      if (lyrics->isEmpty())
+      if (lyrics->empty())
             lyrics->parent()->remove(lyrics);
       // if not empty, make sure this new lyrics does not fall in the middle
       // of an existing melisma from a previous lyrics; in case, shorten it
@@ -447,7 +447,7 @@ void ScoreView::lyricsEndEdit()
             Segment*    prevSegment = lyrics->segment()->prev1(Segment::Type::ChordRest);
             Segment*    segment     = prevSegment;
             while (segment) {
-                  const QList<Lyrics*>* nll = segment->lyricsList(track);
+                  const QVector<Lyrics*>* nll = segment->lyricsList(track);
                   if (nll) {
                         prevLyrics = nll->value(verse);
                         if (prevLyrics)

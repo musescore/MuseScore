@@ -253,7 +253,7 @@ void KeySig::draw(QPainter* p) const
       p->setPen(curColor());
       for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
-      if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().isEmpty()) {
+      if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
             // empty custom or atonal key signature - draw something for palette
             p->setPen(Qt::gray);
             drawSymbol(SymId::timeSigX, p, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
@@ -409,7 +409,7 @@ void KeySig::read(XmlReader& e)
       // for backward compatibility
       if (!_sig.isValid())
             _sig.initFromSubtype(subtype);
-      if (_sig.custom() && _sig.keySymbols().isEmpty())
+      if (_sig.custom() && _sig.keySymbols().empty())
             _sig.setMode(KeyMode::NONE);
       }
 

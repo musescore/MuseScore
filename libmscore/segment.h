@@ -88,7 +88,7 @@ public:
       Segment* _next;                     // linked list of segments inside a measure
       Segment* _prev;
 
-      mutable bool empty;                 // cached value
+      mutable bool _empty;                 // cached value
       mutable bool _written { false };    // used for write()
 
       Type _segmentType { Type::Invalid };
@@ -96,10 +96,10 @@ public:
       int _ticks;
       Spatium _extraLeadingSpace;
 
-      QList<qreal>   _dotPosX;            ///< size = staves
       std::vector<Element*> _annotations;
-      QList<Element*> _elist;             ///< Element storage, size = staves * VOICES.
-      QList<Shape>    _shapes;            // size = staves
+      std::vector<Element*> _elist;       ///< Element storage, size = staves * VOICES.
+      std::vector<Shape>    _shapes;      // size = staves
+      std::vector<qreal>   _dotPosX;            ///< size = staves
 
       void init();
       void checkEmpty() const;
@@ -140,16 +140,18 @@ public:
 
       ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-      Ms::Element* element(int track) const { return _elist.value(track);  }
+      Ms::Element* element(int track) const { return _elist[track];  }
+
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
       Q_INVOKABLE Ms::Element* elementAt(int track) const;
-      const QList<Element*>& elist() const { return _elist; }
-      QList<Element*>& elist()             { return _elist; }
+
+      const std::vector<Element*>& elist() const { return _elist; }
+      std::vector<Element*>& elist()             { return _elist; }
 
       void removeElement(int track);
       void setElement(int track, Element* el);
-      const QList<Lyrics*>* lyricsList(int track) const;
+      const QVector<Lyrics*>* lyricsList(int track) const;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       Measure* measure() const            { return (Measure*)parent(); }
@@ -172,7 +174,7 @@ public:
       void setSegmentType(Type t);
 
       void removeGeneratedElements();
-      bool isEmpty() const                       { return empty; }
+      bool empty() const                       { return _empty; }
       void fixStaffIdx();
       void setTick(int);
       int tick() const;
@@ -213,9 +215,9 @@ public:
       Element* firstElement(int staff);              //<  These methods are used for navigation
       Element* lastElement(int staff);               //<  for next-element and prev-element
 
-      QList<Shape> shapes()              { return _shapes; }
-      const QList<Shape>& shapes() const { return _shapes; }
-      const Shape& shape(int i) const    { return _shapes[i]; }
+      std::vector<Shape> shapes()          { return _shapes; }
+      const std::vector<Shape>& shapes() const { return _shapes; }
+      const Shape& shape(int i) const     { return _shapes[i]; }
       void createShapes();
       void createShape(int staffIdx);
       qreal minRight() const;

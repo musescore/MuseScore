@@ -397,7 +397,7 @@ PasteStatus Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         }
 
                   foreach (Tuplet* tuplet, e.tuplets()) {
-                        if (tuplet->elements().isEmpty()) {
+                        if (tuplet->elements().empty()) {
                               // this should not happen and is a sign of input file corruption
                               qDebug("Measure:pasteStaff(): empty tuplet");
                               delete tuplet;
@@ -496,18 +496,18 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                               c2->removeMarkings(true);
                         int mlen = measure->tick() + measure->ticks() - tick;
                         int len = mlen > rest ? rest : mlen;
-                        QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
+                        std::vector<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
                         TDuration d = dl[0];
                         c2->setDurationType(d);
                         c2->setDuration(d.fraction());
                         rest -= c2->actualTicks();
                         undoAddCR(c2, measure, tick);
 
-                        QList<Note*> nl1 = c->notes();
-                        QList<Note*> nl2 = c2->notes();
+                        std::vector<Note*> nl1 = c->notes();
+                        std::vector<Note*> nl2 = c2->notes();
 
                         if (!firstpart)
-                              for (int i = 0; i < nl1.size(); ++i) {
+                             for (unsigned i = 0; i < nl1.size(); ++i) {
                                     Tie* tie = new Tie(this);
                                     tie->setStartNote(nl1[i]);
                                     tie->setEndNote(nl2[i]);
@@ -536,7 +536,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         measure       = tick2measure(tick);
                         Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                         Fraction len  = rest > mlen ? mlen : rest;
-                        QList<TDuration> dl = toDurationList(len, false);
+                        std::vector<TDuration> dl = toDurationList(len, false);
                         TDuration d = dl[0];
                         r2->setDuration(d.fraction());
                         r2->setDurationType(d);
@@ -548,7 +548,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   }
             else if (cr->type() == Element::Type::REPEAT_MEASURE) {
                   RepeatMeasure* rm = static_cast<RepeatMeasure*>(cr);
-                  QList<TDuration> list = toDurationList(rm->actualDuration(), true);
+                  std::vector<TDuration> list = toDurationList(rm->actualDuration(), true);
                   for (auto dur : list) {
                         Rest* r = new Rest(this, dur);
                         r->setTrack(cr->track());
@@ -558,7 +558,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                               measure       = tick2measure(tick);
                               Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                               Fraction len  = rest > mlen ? mlen : rest;
-                              QList<TDuration> dl = toDurationList(len, false);
+                              std::vector<TDuration> dl = toDurationList(len, false);
                               TDuration d = dl[0];
                               r2->setDuration(d.fraction());
                               r2->setDurationType(d);

@@ -1326,7 +1326,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
       Instrument* instr = chord->part()->instrument(seg->tick());
       int channel  = 0;  // note->subchannel();
 
-      for (int k = 0; k < chord->notes().size(); ++k) {
+      for (unsigned k = 0; k < chord->notes().size(); ++k) {
             NoteEventList* events = &ell[k];
             Note *note = chord->notes()[k];
             Trill *trill;
@@ -1355,7 +1355,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
-      if (chord->notes().isEmpty())
+      if (chord->notes().empty())
             return ell;
 
       int notes = chord->notes().size();
@@ -1385,7 +1385,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
-void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime)
+void Score::createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* chord, int &ontime)
       {
       int n = gnb.size();
       if (n) {
@@ -1466,7 +1466,7 @@ void Score::createPlayEvents(Chord* chord)
 
       int ontime = 0;
 
-      Score::createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
+      createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
 
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;

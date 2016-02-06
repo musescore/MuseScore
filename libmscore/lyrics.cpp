@@ -37,7 +37,7 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
             // search through all tracks of current staff looking for a lyric in specified verse
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && !cr->lyricsList().isEmpty()) {
+                  if (cr && !cr->lyricsList().empty()) {
                         // cr with lyrics found, but does it have a syllable in specified verse?
                         l = cr->lyricsList().value(verse);
                         if (l)
@@ -291,7 +291,7 @@ void Lyrics::layout1()
           return;
 
       ChordRest* cr = chordRest();
-      const QList<Lyrics*>* ll = &(cr->lyricsList());
+      const QVector<Lyrics*>* ll = &(cr->lyricsList());
 
       qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
       int line = ll->indexOf(this);
@@ -419,7 +419,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
 #endif
       QString txt = QApplication::clipboard()->text(mode);
       QStringList sl = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-      if (sl.isEmpty())
+      if (sl.empty())
             return;
 
       QStringList hyph = sl[0].split("-");

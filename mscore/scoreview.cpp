@@ -2901,8 +2901,8 @@ void ScoreView::cmd(const QAction* a)
             cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHTH));
       else if (cmd.startsWith("interval")) {
             int n = cmd.mid(8).toInt();
-            QList<Note*> nl = _score->selection().noteList();
-            if (!nl.isEmpty()) {
+            std::vector<Note*> nl = _score->selection().noteList();
+            if (!nl.empty()) {
                   if (!noteEntryMode())
                         sm->postEvent(new CommandEvent("note-input"));
                   _score->cmdAddInterval(n, nl);
@@ -4308,7 +4308,7 @@ void ScoreView::cmdAddSlur()
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
-                  QList<Note*> nl = _score->selection().noteList(track);
+                  std::vector<Note*> nl = _score->selection().noteList(track);
                   Note* firstNote = 0;
                   Note* lastNote  = 0;
                   for (Note* n : nl) {
@@ -4338,11 +4338,15 @@ void ScoreView::cmdAddSlur()
             mscore->endCmd();
             }
       else {
-            QList<Note*> nl = _score->selection().noteList();
             Note* firstNote = 0;
             Note* lastNote  = 0;
+#if 0
             for (Note* n : nl) {
                   if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick() || (lastNote && n->chord()->parent() == lastNote->chord()))
+#else
+            for (Note* n : _score->selection().noteList()) {
+                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
+#endif
                         firstNote = n;
                   if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick() || (firstNote && firstNote->chord()->parent() == n->chord()))
                         lastNote = n;
@@ -4367,8 +4371,7 @@ void ScoreView::cmdAddNoteLine()
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
-                  QList<Note*> nl = _score->selection().noteList(track);
-                  foreach(Note* n, nl) {
+                  for (Note* n : _score->selection().noteList(track)) {
                         if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
                               firstNote = n;
                         if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
@@ -4377,8 +4380,7 @@ void ScoreView::cmdAddNoteLine()
                   }
             }
       else {
-            QList<Note*> nl = _score->selection().noteList();
-            foreach(Note* n, nl) {
+            for (Note* n : _score->selection().noteList()) {
                   if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
                         firstNote = n;
                   if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
@@ -4756,7 +4758,7 @@ void ScoreView::harmonyEndEdit()
       {
       Harmony* harmony = static_cast<Harmony*>(editObject);
 
-      if (harmony->isEmpty())
+      if (harmony->empty())
             _score->undoRemoveElement(harmony);
       }
 
@@ -5713,7 +5715,7 @@ void ScoreView::figuredBassEndEdit()
       {
       FiguredBass* fb = static_cast<FiguredBass*>(editObject);
 
-      if (fb->isEmpty())
+      if (fb->empty())
             _score->undoRemoveElement(fb);
       }
 

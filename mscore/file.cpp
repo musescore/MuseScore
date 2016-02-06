@@ -630,8 +630,8 @@ void MuseScore::newFile()
                         if (measure->timesig() != measure->len()) {
                               if (!linkedToPrevious)
                                     puRests.clear();
-                              QList<TDuration> dList = toDurationList(measure->len(), false);
-                              if (!dList.isEmpty()) {
+                              std::vector<TDuration> dList = toDurationList(measure->len(), false);
+                              if (!dList.empty()) {
                                     int ltick = tick;
                                     int k = 0;
                                     foreach (TDuration d, dList) {

@@ -113,7 +113,7 @@ void ScoreView::endEdit()
             Text* text = static_cast<Text*>(editObject);
             // remove text if empty
             // dont do this for TBOX
-            if (text->isEmpty() && text->parent() && text->parent()->type() != Element::Type::TBOX)
+            if (text->empty() && text->parent() && text->parent()->type() != Element::Type::TBOX)
                   _score->undoRemoveElement(text);
             }
 

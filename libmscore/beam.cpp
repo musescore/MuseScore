@@ -169,7 +169,7 @@ void Beam::addChordRest(ChordRest* a)
             // insert element in same order as it appears
             // in the score
             //
-            if (a->segment() && !_elements.isEmpty()) {
+            if (a->segment() && !_elements.empty()) {
                   for (int i = 0; i < _elements.size(); ++i) {
                         Segment* s = _elements[i]->segment();
                         if ((s->tick() > a->segment()->tick())
@@ -483,7 +483,7 @@ void Beam::layout()
                   }
             crl.append(cr);
             }
-      if (!crl.isEmpty()) {
+      if (!crl.empty()) {
             SpannerSegmentType st;
             if (n == 0)
                   st = SpannerSegmentType::SINGLE;
@@ -1481,7 +1481,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       if (_distribute)
             score()->respace(&crl);       // fix horizontal spacing of stems
 
-      if (crl.isEmpty())                  // no beamed Elements
+      if (crl.empty())                  // no beamed Elements
             return;
       const ChordRest* c1 = crl.front();       // first chord/rest in beam
       const ChordRest* c2 = crl.back();        // last chord/rest in beam
@@ -1917,7 +1917,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   }
             if (by == -1000000 || by == 1000000) {
-                  if (beamSegments.isEmpty())
+                  if (beamSegments.empty())
                         qDebug("no BeamSegments");
                   else {
                         qDebug("BeamSegment not found: x %f  %f-%f",
@@ -1991,7 +1991,7 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Beam::write(Xml& xml) const
       {
-      if (_elements.isEmpty())
+      if (_elements.empty())
             return;
       xml.stag(QString("Beam id=\"%1\"").arg(_id));
       Element::writeProperties(xml);
@@ -2052,7 +2052,7 @@ void Beam::read(XmlReader& e)
             else if (tag == "growRight")
                   setGrowRight(e.readDouble());
             else if (tag == "y1") {
-                  if (fragments.isEmpty())
+                  if (fragments.empty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
                   int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -2060,7 +2060,7 @@ void Beam::read(XmlReader& e)
                   f->py1[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "y2") {
-                  if (fragments.isEmpty())
+                  if (fragments.empty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
                   int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -2271,7 +2271,7 @@ Element* Beam::drop(const DropData& data)
 
 QPointF Beam::beamPos() const
       {
-      if (fragments.isEmpty())
+      if (fragments.empty())
             return QPointF(0.0, 0.0);
       BeamFragment* f = fragments.back();
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -2285,7 +2285,7 @@ QPointF Beam::beamPos() const
 
 void Beam::setBeamPos(const QPointF& bp)
       {
-      if (fragments.isEmpty())
+      if (fragments.empty())
             fragments.append(new BeamFragment);
       BeamFragment* f = fragments.back();
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;

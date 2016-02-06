@@ -465,7 +465,7 @@ void ChordRest::undoSetSmall(bool val)
 
 void ChordRest::layoutArticulations()
       {
-      if (parent() == 0 || _articulations.isEmpty())
+      if (parent() == 0 || _articulations.empty())
             return;
       qreal _spatium = spatium();
       bool scale     = staff()->scaleNotesToLines();
@@ -1156,7 +1156,7 @@ void ChordRest::remove(Element* e)
                               continue;
                         _lyricsList[i]->removeFromScore();
                         _lyricsList[i] = 0;
-                        while (!_lyricsList.isEmpty() && _lyricsList.back() == 0)
+                        while (!_lyricsList.empty() && _lyricsList.back() == 0)
                               _lyricsList.takeLast();
                         return;
                         }
@@ -1180,7 +1180,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
       if (_beam) {
             Beam* b = _beam;
             _beam->remove(this);
-            if (b->isEmpty())
+            if (b->empty())
                   score()->undoRemoveElement(b);
             }
       if (!beamed && type() == Element::Type::CHORD) {

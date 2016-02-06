@@ -23,14 +23,14 @@ class Segment;
 //   Shape
 //---------------------------------------------------------
 
-class Shape : QList<QRectF> {
+class Shape : std::vector<QRectF> {
    public:
       Shape() {}
       void draw(QPainter*) const;
       void create(int staffIdx, Segment*);
 
-      void add(const Shape& s)            { append(s); }
-      void add(const QRectF& r)           { append(r); }
+      void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
+      void add(const QRectF& r)           { push_back(r); }
       void translate(const QPointF&);
       Shape translated(const QPointF&) const;
       qreal minHorizontalDistance(const Shape&) const;
@@ -40,9 +40,9 @@ class Shape : QList<QRectF> {
       qreal top() const;
       qreal bottom() const;
 
-      int size() const   { return QList<QRectF>::size(); }
-      bool empty() const { return QList<QRectF>::empty(); }
-      void clear()       { QList<QRectF>::clear();       }
+      int size() const   { return std::vector<QRectF>::size(); }
+      bool empty() const { return std::vector<QRectF>::empty(); }
+      void clear()       { std::vector<QRectF>::clear();       }
 
 #ifdef DEBUG_SHAPES
       void dump(const char*) const;

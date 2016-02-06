@@ -145,7 +145,7 @@ Measure::Measure(const Measure& m)
 
       _mstaves.reserve(m._mstaves.size());
       for (MStaff* ms : m._mstaves)
-            _mstaves.append(new MStaff(*ms));
+            _mstaves.push_back(new MStaff(*ms));
 
       _breakMultiMeasureRest = m._breakMultiMeasureRest;
       _mmRest                = m._mmRest;
@@ -413,8 +413,8 @@ void Measure::layout2()
 
       if (!nas) {
             //find first non invisible staff
-            for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-                  MStaff* ms = _mstaves.at(staffIdx);
+            for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
+                  MStaff* ms = _mstaves[staffIdx];
                   SysStaff* s  = system()->staff(staffIdx);
                   Staff* staff = score()->staff(staffIdx);
                   if (ms->visible() && staff->show() && s->show()) {
@@ -423,8 +423,8 @@ void Measure::layout2()
                         }
                   }
             }
-      for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-            MStaff* ms = _mstaves.at(staffIdx);
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
+            MStaff* ms = _mstaves[staffIdx];
             Text* t = ms->noText();
             if (t)
                   t->setTrack(staffIdx * VOICES);
@@ -982,7 +982,7 @@ void MStaff::setTrack(int track)
 
 void Measure::insertMStaff(MStaff* staff, int idx)
       {
-      _mstaves.insert(idx, staff);
+      _mstaves.insert(_mstaves.begin()+idx, staff);
       for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
             _mstaves[staffIdx]->setTrack(staffIdx * VOICES);
       }
@@ -993,7 +993,7 @@ void Measure::insertMStaff(MStaff* staff, int idx)
 
 void Measure::removeMStaff(MStaff* /*staff*/, int idx)
       {
-      _mstaves.removeAt(idx);
+      _mstaves.erase(_mstaves.begin()+idx);
       for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
             _mstaves[staffIdx]->setTrack(staffIdx * VOICES);
       }
@@ -1414,7 +1414,7 @@ void Measure::adjustToLen(Fraction nf)
                         }
                   else {      // if measure value did change, represent with rests actual measure value
                         // convert the measure duration in a list of values (no dots for rests)
-                        QList<TDuration> durList = toDurationList(nf, false, 0);
+                        std::vector<TDuration> durList = toDurationList(nf, false, 0);
 
                         // set the existing rest to the first value of the duration list
                         for (ScoreElement* e : rest->linkList()) {
@@ -1424,7 +1424,7 @@ void Measure::adjustToLen(Fraction nf)
 
                         // add rests for any other duration list value
                         int tickOffset = tick() + durList[0].ticks();
-                        for (int i = 1; i < durList.count(); i++) {
+                        for (int i = 1; i < durList.size(); i++) {
                               Rest* newRest = new Rest(s);
                               newRest->setDurationType(durList.at(i));
                               newRest->setDuration(durList.at(i).fraction());
@@ -1578,7 +1578,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             s->lines->setParent(this);
             s->lines->setTrack(n * VOICES);
             s->lines->setVisible(!staff->invisible());
-            _mstaves.append(s);
+            _mstaves.push_back(s);
             }
 
       // tick is obsolete
@@ -1983,7 +1983,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   // previous versions stored measure number, delete it
                   if ((score()->mscVersion() <= 114) && (t->textStyleType() == TextStyleType::MEASURE_NUMBER))
                         delete t;
-                  else if (t->isEmpty()) {
+                  else if (t->empty()) {
                         qDebug("reading empty text: deleted");
                         delete t;
                         }
@@ -2200,7 +2200,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             }
       foreach (Tuplet* tuplet, e.tuplets()) {
-            if (tuplet->elements().isEmpty()) {
+            if (tuplet->elements().empty()) {
                   // this should not happen and is a sign of input file corruption
                   qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
                      tuplet->id(), tuplet);
@@ -2221,7 +2221,7 @@ bool Measure::visible(int staffIdx) const
             qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
             return false;
             }
-      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
+      if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show()))
             return false;
       if (score()->staff(staffIdx)->cutaway() && isMeasureRest(staffIdx))
             return false;
@@ -2604,7 +2604,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 
 void Measure::sortStaves(QList<int>& dst)
       {
-      QList<MStaff*> ms;
+      std::vector<MStaff*> ms;
       foreach (int idx, dst)
             ms.push_back(_mstaves[idx]);
       _mstaves = ms;
@@ -2782,7 +2782,7 @@ bool Measure::isRepeatMeasure(Staff* staff) const
 //   isEmpty
 //---------------------------------------------------------
 
-bool Measure::isEmpty() const
+bool Measure::empty() const
       {
       if (irregular())
             return false;
@@ -2933,7 +2933,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_repeatCount = _repeatCount;
 
       foreach(MStaff* ms, _mstaves)
-            m->_mstaves.append(new MStaff(*ms));
+            m->_mstaves.push_back(new MStaff(*ms));
 
       m->setNo(no());
       m->setNoOffset(noOffset());

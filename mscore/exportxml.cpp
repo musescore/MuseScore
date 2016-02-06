@@ -286,14 +286,14 @@ class ExportMusicXml {
       int findBracket(const TextLine* tl) const;
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
-      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
+      void chord(Chord* chord, int staff, const QVector<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, const Clef* clef);
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
-      void lyrics(const QList<Lyrics*>* ll, const int trk);
+      void lyrics(const QVector<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(int t);
       void calcDivisions();
@@ -1826,7 +1826,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 //   fermatas
 //---------------------------------------------------------
 
-static void fermatas(const QList<Articulation*>& cra, Xml& xml, Notations& notations)
+static void fermatas(const QVector<Articulation*>& cra, Xml& xml, Notations& notations)
       {
       for (const Articulation* a : cra) {
             ArticulationType at = a->articulationType();
@@ -1858,7 +1858,7 @@ static void fermatas(const QList<Articulation*>& cra, Xml& xml, Notations& notat
 void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                                      TrillHash& trillStart, TrillHash& trillStop)
       {
-      const QList<Articulation*>& na = chord->articulations();
+      const QVector<Articulation*>& na = chord->articulations();
       // first output the fermatas
       fermatas(na, xml, notations);
 
@@ -2338,7 +2338,7 @@ static QString instrId(int partNr, int instrNr)
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const QVector<Lyrics*>* ll, bool useDrumset)
       {
       Part* part = chord->score()->staff(chord->track() / VOICES)->part();
       int partNr = _score->parts().indexOf(part);
@@ -2351,7 +2351,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
       for (Element* e : chord->el())
             qDebug("chord %p el %p", chord, e);
        */
-      QList<Note*> nl = chord->notes();
+      std::vector<Note*> nl = chord->notes();
       bool grace = chord->isGrace();
       int tremCorr = 1; // duration correction for two note tremolo
       if (isTwoNoteTremolo(chord)) tremCorr = 2;
@@ -3570,7 +3570,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 //   lyrics
 //---------------------------------------------------------
 
-void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
+void ExportMusicXml::lyrics(const QVector<Lyrics*>* ll, const int trk)
       {
       for (const Lyrics* l : *ll) {
             if (l && !l->xmlText().isEmpty()) {
@@ -4816,7 +4816,7 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             case Element::Type::CHORD:
                   {
                   Chord* c = static_cast<Chord*>(el);
-                  const QList<Lyrics*>* ll = &c->lyricsList();
+                  const auto ll = &c->lyricsList();
                   // ise grace after
                   if (c) {
                         for (Chord* g : c->graceNotesBefore()) {
@@ -5225,8 +5225,82 @@ void ExportMusicXml::write(QIODevice* dev)
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
 
+#if 0  // MERGE
                               // write element el if necessary
                               writeElement(el, m, sstaff, part->instrument()->useDrumset());
+#else
+                              switch (el->type()) {
+
+                                    case Element::Type::CLEF:
+                                          {
+                                          // output only clef changes, not generated clefs
+                                          // at line beginning
+                                          // also ignore clefs at the start of a measure,
+                                          // these have already been output
+                                          // also ignore clefs at the end of a measure
+                                          // these will be output at the start of the next measure
+                                          Clef* cle = static_cast<Clef*>(el);
+                                          int ti = seg->tick();
+                                          clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
+                                          if (el->generated()) {
+                                                clefDebug("exportxml: generated clef not exported");
+                                                break;
+                                                }
+                                          if (!el->generated() && ti != m->tick() && ti != m->endTick())
+                                                clef(sstaff, cle);
+                                          else {
+                                                clefDebug("exportxml: clef not exported");
+                                                }
+                                          }
+                                          break;
+
+                                    case Element::Type::KEYSIG:
+                                          // ignore
+                                          break;
+
+                                    case Element::Type::TIMESIG:
+                                          // ignore
+                                          break;
+
+                                    case Element::Type::CHORD:
+                                          {
+                                          Chord* c                 = static_cast<Chord*>(el);
+                                          const QVector<Lyrics*>* ll = &c->lyricsList();
+                                          // ise grace after
+                                          if (c) {
+                                                for (Chord* g : c->graceNotesBefore()) {
+                                                      chord(g, sstaff, ll, part->instrument()->useDrumset());
+                                                      }
+                                                chord(c, sstaff, ll, part->instrument()->useDrumset());
+                                                for (Chord* g : c->graceNotesAfter()) {
+                                                      chord(g, sstaff, ll, part->instrument()->useDrumset());
+                                                      }
+                                                }
+                                          break;
+                                          }
+                                    case Element::Type::REST:
+                                          rest((Rest*)el, sstaff);
+                                          break;
+
+                                    case Element::Type::BAR_LINE:
+                                          // Following must be enforced (ref MusicXML barline.dtd):
+                                          // If location is left, it should be the first element in the measure;
+                                          // if location is right, it should be the last element.
+                                          // implementation note: BarLineType::START_REPEAT already written by barlineLeft()
+                                          // any bars left should be "middle"
+                                          // TODO: print barline only if middle
+                                          // if (el->subtype() != BarLineType::START_REPEAT)
+                                          //       bar((BarLine*) el);
+                                          break;
+                                    case Element::Type::BREATH:
+                                          // ignore, already exported as note articulation
+                                          break;
+
+                                    default:
+                                          qDebug("ExportMusicXml::write unknown segment type %s", el->name());
+                                          break;
+                                    }
+#endif // MERGE
 
                               // handle annotations and spanners (directions attached to this note or rest)
                               if (el->isChordRest()) {

@@ -57,7 +57,7 @@ class LinkedStaves {
       const QList<Staff*>& staves() const { return _staves; }
       void add(Staff*);
       void remove(Staff*);
-      bool isEmpty() const { return _staves.isEmpty(); }
+      bool empty() const { return _staves.empty(); }
       };
 
 //---------------------------------------------------------

@@ -271,7 +271,7 @@ Element::~Element()
       {
       if (_links) {
             _links->removeOne(this);
-            if (_links->isEmpty()) {
+            if (_links->empty()) {
                   //DEBUG:
                   score()->links().remove(_links->lid());
                   //
@@ -378,7 +378,7 @@ void Element::change(Element* o, Element* n)
 
 Staff* Element::staff() const
       {
-      if (_track == -1 || score()->staves().isEmpty())
+      if (_track == -1 || score()->staves().empty())
             return 0;
 
       return score()->staff(staffIdx());
@@ -1955,7 +1955,7 @@ Element* Element::prevElement()
                   case Element::Type::CHORD: {
                         Chord* c = static_cast<Chord*>(p);
                         if (!c->isGrace())
-                              return c->notes().first();
+                              return c->notes().front();
                         }
                         break;
                   case Element::Type::SEGMENT: {

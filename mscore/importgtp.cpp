@@ -1087,7 +1087,7 @@ void GuitarPro::restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr
        * users to create empty segments. Here, we create rests and
        * make them invisible so users get the same visual if they are
        * at a valid tick of the score. */
-      if (seg->isEmpty()) {
+      if (seg->empty()) {
             if (tick < measure->first()->tick() + measure->ticks()) {
                   cr = new Rest(score);
                   cr->setTrack(track);
