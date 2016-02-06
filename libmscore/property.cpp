@@ -371,25 +371,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
                         return QVariant(int(Element::Placement::BELOW));
                   }
                   break;
-            case P_TYPE::BARLINE_TYPE: {
-                  bool ok;
-                  const QString& val(e.readElementText());
-                  // In MuseScore 2.0.2 and before, SYSTEM_INITIAL_BARLINE_TYPE
-                  // was stored as a int, so try this first
-                  int ct = val.toInt(&ok);
-                  if (ok)
-                        return QVariant(ct);
-                  else {
-                        for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
-                              if (BarLine::barLineTypeName(BarLineType(i)) == val) {
-                                    ct = i;
-                                    break;
-                                    }
-                              }
-                        return QVariant(ct);
-                        }
-                  }
-                  break;
+            case P_TYPE::BARLINE_TYPE:
+                  return QVariant(int(BarLine::barLineType(e.readElementText())));
+
             case P_TYPE::BEAM_MODE:             // TODO
                   return QVariant(int(0));
 

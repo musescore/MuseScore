@@ -938,14 +938,14 @@ Enabling copying of more element types requires enabling pasting in Score::paste
 //   noteList
 //---------------------------------------------------------
 
-QList<Note*> Selection::noteList(int selTrack) const
+std::vector<Note*> Selection::noteList(int selTrack) const
       {
-      QList<Note*>nl;
+      std::vector<Note*>nl;
 
       if (_state == SelState::LIST) {
             foreach(Element* e, _el) {
                   if (e->type() == Element::Type::NOTE)
-                        nl.append(static_cast<Note*>(e));
+                        nl.push_back(static_cast<Note*>(e));
                   }
             }
       else if (_state == SelState::RANGE) {
@@ -963,9 +963,9 @@ QList<Note*> Selection::noteList(int selTrack) const
                                  || (selTrack != -1 && selTrack != track))
                                     continue;
                               Chord* c = static_cast<Chord*>(e);
-                              nl.append(c->notes());
+                              nl.insert(nl.end(), c->notes().begin(), c->notes().end());
                               for (Chord* g : c->graceNotes()) {
-                                    nl.append(g->notes());
+                                    nl.insert(nl.end(), g->notes().begin(), g->notes().end());
                                     }
                               }
                         }

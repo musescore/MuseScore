@@ -316,13 +316,13 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   //
                   // compute list of durations which will fit l
                   //
-                  QList<TDuration> dList = toDurationList(f, useDots);
-                  if (dList.isEmpty())
+                  std::vector<TDuration> dList = toDurationList(f, useDots);
+                  if (dList.empty())
                         return 0;
 
                   Rest* rest = 0;
                   if (((tick - measure->tick()) % dList[0].ticks()) == 0) {
-                        foreach(TDuration d, dList) {
+                        for (const TDuration& d : dList) {
                               rest = addRest(tick, track, d, tuplet);
                               if (r == 0)
                                     r = rest;
@@ -1091,7 +1091,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             note->setNval(nval);
             lastTiedNote = note;
             if (!addFlag) {
-                  QList<Note*> notes = chord->notes();
+                  std::vector<Note*> notes = chord->notes();
                   // break all ties into current chord
                   // these will exist only if user explicitly moved cursor to a tied-into note
                   // in ordinary use, cursor will autoamtically skip past these during note entry
@@ -1103,8 +1103,8 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   // the tie forward itself will be added later
                   // multi-note chords get reduced to single note chords anyhow since we remove the old notes below
                   // so there will be no way to preserve those ties
-                  if (notes.size() == 1 && notes.first()->tieFor()) {
-                        Note* tn = notes.first()->tieFor()->endNote();
+                  if (notes.size() == 1 && notes.front()->tieFor()) {
+                        Note* tn = notes.front()->tieFor()->endNote();
                         while (tn) {
                               Chord* tc = tn->chord();
                               if (tc->notes().size() != 1) {
@@ -1123,8 +1123,8 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                         }
                   // remove all notes from chord
                   // the new note will be added below
-                  while (!chord->notes().isEmpty())
-                        undoRemoveElement(chord->notes().first());
+                  while (!chord->notes().empty())
+                        undoRemoveElement(chord->notes().front());
                   }
             // add new note to chord
             undoAddElement(note);
@@ -1356,7 +1356,7 @@ void Score::repitchNote(const Position& p, bool replace)
       Note* firstTiedNote = 0;
       Note* lastTiedNote = note;
       if (replace) {
-            QList<Note*> notes = chord->notes();
+            std::vector<Note*> notes = chord->notes();
             // break all ties into current chord
             // these will exist only if user explicitly moved cursor to a tied-into note
             // in ordinary use, cursor will autoamtically skip past these during note entry
@@ -1368,8 +1368,8 @@ void Score::repitchNote(const Position& p, bool replace)
             // the tie forward itself will be added later
             // multi-note chords get reduced to single note chords anyhow since we remove the old notes below
             // so there will be no way to preserve those ties
-            if (notes.size() == 1 && notes.first()->tieFor()) {
-                  Note* tn = notes.first()->tieFor()->endNote();
+            if (notes.size() == 1 && notes.front()->tieFor()) {
+                  Note* tn = notes.front()->tieFor()->endNote();
                   while (tn) {
                         Chord* tc = tn->chord();
                         if (tc->notes().size() != 1) {
@@ -1388,8 +1388,8 @@ void Score::repitchNote(const Position& p, bool replace)
                   }
             // remove all notes from chord
             // the new note will be added below
-            while (!chord->notes().isEmpty())
-                  undoRemoveElement(chord->notes().first());
+            while (!chord->notes().empty())
+                  undoRemoveElement(chord->notes().front());
             }
       // add new note to chord
       undoAddElement(note);
@@ -1419,14 +1419,14 @@ void Score::repitchNote(const Position& p, bool replace)
 
 void Score::cmdAddTie()
       {
-      QList<Note*> noteList;
+      std::vector<Note*> noteList;
       Element* el = selection().element();
       if (el && el->type() == Element::Type::NOTE) {
             Note* n = static_cast<Note*>(el);
             if (noteEntryMode())
                   noteList = n->chord()->notes();
             else
-                  noteList.append(n);
+                  noteList.push_back(n);
             }
       else if (el && el->type() == Element::Type::STEM) {
             Chord* chord = static_cast<Stem*>(el)->chord();
@@ -1434,7 +1434,7 @@ void Score::cmdAddTie()
             }
       else
             noteList = selection().noteList();
-      if (noteList.isEmpty()) {
+      if (noteList.empty()) {
             qDebug("no notes selected");
             return;
             }
@@ -1620,7 +1620,7 @@ void Score::cmdSetBeamMode(Beam::Mode mode)
 void Score::cmdFlip()
       {
       const QList<Element*>& el = selection().elements();
-      if (el.isEmpty()) {
+      if (el.empty()) {
             selectNoteSlurMessage();
             return;
             }
@@ -1798,7 +1798,7 @@ void Score::deleteItem(Element* el)
                   else  {
                         // remove segment if empty
                         Segment* seg = chord->segment();
-                        if (seg->isEmpty())
+                        if (seg->empty())
                               undoRemoveElement(seg);
                         }
                   }
@@ -2288,7 +2288,7 @@ void Score::cmdDeleteSelection()
             // deleteItem modifies selection().elements() list,
             // so we need a local copy:
             QList<Element*> el(selection().elements());
-            if (el.isEmpty())
+            if (el.empty())
                   qDebug("...nothing selected");
 
             // keep track of linked elements that are deleted implicitly
@@ -2492,8 +2492,7 @@ Lyrics* Score::addLyrics()
       else
             return 0;
 
-      QList<Lyrics*> ll = cr->lyricsList();
-      int no = ll.size();
+      int no = cr->lyricsList().size();
       Lyrics* lyrics = new Lyrics(this);
       lyrics->setTrack(cr->track());
       lyrics->setParent(cr);
@@ -2685,7 +2684,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
                   }
             }
       for (Segment* s : segments) {
-            if (s->isEmpty())
+            if (s->empty())
                   undo(new RemoveElement(s));
             }
       if (cr->beam()) {
@@ -2853,7 +2852,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                                           if (pc) {
                                                 pcl.push_back(static_cast<Clef*>(pc));
                                                 undo(new RemoveElement(pc));
-                                                if (ps->isEmpty())
+                                                if (ps->empty())
                                                       undoRemoveElement(ps);
                                                 }
                                           }
@@ -2882,7 +2881,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                                           }
                                     if (ee) {
                                           undo(new RemoveElement(ee));
-                                          if (s->isEmpty())
+                                          if (s->empty())
                                                 undoRemoveElement(s);
                                           }
                                     }

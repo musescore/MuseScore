@@ -139,7 +139,7 @@ class UndoStack {
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
       bool isClean() const          { return cleanIdx == curIdx;   }
-      bool isEmpty() const          { return !canUndo() && !canRedo();  }
+      bool empty() const          { return !canUndo() && !canRedo();  }
       UndoCommand* current() const  { return curCmd;               }
       void undo();
       void redo();

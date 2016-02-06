@@ -49,13 +49,13 @@ QString Harmony::harmonyName() const
             e = _textName;
             e.remove('=');
             }
-      else if (!_degreeList.isEmpty()) {
+      else if (!_degreeList.empty()) {
             hc.add(_degreeList);
             // try to find the chord in chordList
             const ChordDescription* newExtension = 0;
             const ChordList* cl = score()->style()->chordList();
             for (const ChordDescription& cd : *cl) {
-                  if (cd.chord == hc && !cd.names.isEmpty()) {
+                  if (cd.chord == hc && !cd.names.empty()) {
                         newExtension = &cd;
                         break;
                         }
@@ -109,7 +109,7 @@ QString Harmony::baseName()
 
 void Harmony::resolveDegreeList()
       {
-      if (_degreeList.isEmpty())
+      if (_degreeList.empty())
             return;
 
       HChord hc = descr() ? descr()->chord : HChord();
@@ -123,7 +123,7 @@ void Harmony::resolveDegreeList()
       // try to find the chord in chordList
       const ChordList* cl = score()->style()->chordList();
       foreach(const ChordDescription& cd, *cl) {
-            if ((cd.chord == hc) && !cd.names.isEmpty()) {
+            if ((cd.chord == hc) && !cd.names.empty()) {
 qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
                   _id = cd.id;
                   _degreeList.clear();
@@ -690,7 +690,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       if (cd) {
             // descriptor found; use its information
             _id = cd->id;
-            if (!cd->names.isEmpty())
+            if (!cd->names.empty())
                   _textName = cd->names.front();
             }
       else {
@@ -707,7 +707,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
 
 void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
       {
-      if (!textList.isEmpty())
+      if (!textList.empty())
             setXmlText(harmonyName());
       Text::startEdit(view, p);
       layout();
@@ -815,7 +815,7 @@ void Harmony::setHarmony(const QString& s)
 
 qreal Harmony::baseLine() const
       {
-      return (editMode() || textList.isEmpty()) ? Text::baseLine() : 0.0;
+      return (editMode() || textList.empty()) ? Text::baseLine() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -956,7 +956,7 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
 const ChordDescription* Harmony::getDescription()
       {
       const ChordDescription* cd = descr();
-      if (cd && !cd->names.isEmpty())
+      if (cd && !cd->names.empty())
             _textName = cd->names.front();
       else if (_textName != "") {
             cd = generateDescription();
@@ -998,17 +998,6 @@ const ChordDescription* Harmony::generateDescription()
       cd.parsedChords.clear();
       return &*cl->insert(cd.id, cd);
       }
-
-#if 0
-//---------------------------------------------------------
-//   isEmpty
-//---------------------------------------------------------
-
-bool Harmony::isEmpty() const
-      {
-      return textList.isEmpty() && Text::isEmpty();
-      }
-#endif
 
 //---------------------------------------------------------
 //   textChanged
@@ -1122,7 +1111,7 @@ void Harmony::layout()
 
 void Harmony::calculateBoundingRect()
       {
-      if (editMode() || textList.isEmpty()) {
+      if (editMode() || textList.empty()) {
             Text::layout1();
             setbboxtight(bbox());
             }
@@ -1156,7 +1145,7 @@ QPainterPath Harmony::outline() const
 void Harmony::draw(QPainter* painter) const
       {
       // painter->setPen(curColor());
-      if (editMode() || textList.isEmpty()) {
+      if (editMode() || textList.empty()) {
             Text::draw(painter);
             return;
             }
@@ -1297,7 +1286,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
             else if (a.type == RenderAction::RenderActionType::POP) {
-                  if (!stack.isEmpty()) {
+                  if (!stack.empty()) {
                         QPointF pt = stack.pop();
                         x = pt.x();
                         y = pt.y();
@@ -1376,7 +1365,7 @@ void Harmony::render(const TextStyle* st)
                   fontList.append(ff);
                   }
             }
-      if (fontList.isEmpty())
+      if (fontList.empty())
             fontList.append(st->fontPx(spatium()));
 
       foreach(const TextSegment* s, textList)

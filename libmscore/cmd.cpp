@@ -401,7 +401,7 @@ void Score::expandVoice()
 //   cmdAddInterval
 //---------------------------------------------------------
 
-void Score::cmdAddInterval(int val, const QList<Note*>& nl)
+void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
       {
       startCmd();
       for (Note* on : nl) {
@@ -538,13 +538,12 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                      sd.denominator());
                   break;
                   }
-            QList<TDuration> dl = toDurationList(dd, true);
 
             measure = segment->measure();
+            std::vector<TDuration> dl = toDurationList(dd, true);
             int n = dl.size();
             for (int i = 0; i < n; ++i) {
-                  TDuration d = dl[i];
-
+                  const TDuration& d = dl[i];
                   ChordRest* ncr;
                   Note* note = 0;
                   Tie* addTie = 0;
@@ -754,8 +753,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   akkumulated = _sd;
                   Fraction rd = td - sd;
 
-                  QList<TDuration> dList = toDurationList(rd, false);
-                  if (dList.isEmpty())
+                  std::vector<TDuration> dList = toDurationList(rd, false);
+                  if (dList.empty())
                         return akkumulated;
 
                   Fraction f = sd / cr->staff()->timeStretch(cr->tick());
@@ -862,7 +861,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
             Fraction srcF = cr1->duration();
             Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
-            QList<TDuration> dList = toDurationList(dstF, true);
+            std::vector<TDuration> dList = toDurationList(dstF, true);
             int n = dList.size();
             undoChangeChordRestLen(cr1, TDuration(dList[0]));
             if (n > 1) {
@@ -1038,7 +1037,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       //
       // split required len into Measures
       QList<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
-      if (flist.isEmpty())
+      if (flist.empty())
             return;
 
       deselectAll();
@@ -1057,10 +1056,10 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                   Fraction timeStretch = cr1->staff()->timeStretch(cr1->tick());
                   Rest* r = static_cast<Rest*>(cr);
                   if (first) {
-                        QList<TDuration> dList = toDurationList(f2, true);
+                        std::vector<TDuration> dList = toDurationList(f2, true);
                         undoChangeChordRestLen(cr, dList[0]);
                         int tick2 = cr->tick();
-                        for (int i = 1; i < dList.size(); ++i) {
+                        for (unsigned i = 1; i < dList.size(); ++i) {
                               tick2 += dList[i-1].ticks();
                               TDuration d = dList[i];
                               setRest(tick2, track, d.fraction() * timeStretch, (d.dots() > 0), tuplet);
@@ -1076,7 +1075,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                   tick += f2.ticks() * timeStretch.numerator() / timeStretch.denominator();
                   }
             else {
-                  QList<TDuration> dList = toDurationList(f2, true);
+                  std::vector<TDuration> dList = toDurationList(f2, true);
                   Measure* measure = tick2measure(tick);
                   int etick = measure->tick();
                   if (((tick - etick) % dList[0].ticks()) == 0) {
@@ -1733,11 +1732,11 @@ bool Score::processMidiInput()
       {
       if (MScore::debugMode)
           qDebug("processMidiInput");
-      if (midiInputQueue.isEmpty())
+      if (midiInputQueue.empty())
             return false;
 
       bool cmdActive = false;
-      while (!midiInputQueue.isEmpty()) {
+      while (!midiInputQueue.empty()) {
             MidiInputEvent ev = midiInputQueue.dequeue();
             if (MScore::debugMode)
                   qDebug("<-- !noteentry dequeue %i", ev.pitch);
@@ -1820,7 +1819,7 @@ Element* Score::move(const QString& cmd)
 
       // no chord/rest found? look for another type of element
       if (cr == 0) {
-            if (selection().elements().isEmpty())
+            if (selection().elements().empty())
                   return 0;
             // retrieve last element of section list
             Element* el = selection().elements().last();
@@ -2200,9 +2199,9 @@ void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
 
 void Score::cmdMoveLyrics(Lyrics* lyrics, MScore::Direction dir)
       {
-      ChordRest* cr      = lyrics->chordRest();
-      QList<Lyrics*>& ll = cr->lyricsList();
-      int no             = lyrics->no();
+      ChordRest* cr        = lyrics->chordRest();
+      QVector<Lyrics*>& ll = cr->lyricsList();
+      int no               = lyrics->no();
       if (dir == MScore::Direction::UP) {
             if (no) {
                   if (ll[no-1] == 0) {
@@ -2641,7 +2640,7 @@ void Score::cmdExplode()
                   Element* e = s->element(srcTrack);
                   if (e && e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
-                        n = qMax(n, c->notes().size());
+                        n = qMax(n, int(c->notes().size()));
                         }
                   }
             lastStaff = qMin(nstaves(), srcStaff + n);
@@ -2670,7 +2669,7 @@ void Score::cmdExplode()
                   Element* e = s->element(track);
                   if (e && e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
-                        QList<Note*> notes = c->notes();
+                        std::vector<Note*> notes = c->notes();
                         int nnotes = notes.size();
                         // keep note "i" from top, which is backwards from nnotes - 1
                         // reuse notes if there are more instruments than notes

@@ -1243,7 +1243,7 @@ void FiguredBass::endEdit()
       // as the standard text editor keeps inserting spurious HTML formatting and styles
       // retrieve and work only on the plain text
       QString txt = plainText();
-      if(txt.isEmpty()) {                       // if no text, nothing to do
+      if (txt.isEmpty()) {                       // if no text, nothing to do
             setXmlText(txt);                       // clear the stored text: the empty f.b. element will be deleted
             return;
             }
@@ -1572,7 +1572,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
       {
       QString     path;
 
-      if(fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
+      if (fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
 #ifdef Q_OS_IOS
             {
             extern QString resourcePath();
@@ -1698,7 +1698,7 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
                   pItem->readMusicXML(e, parentheses);
                   items.append(*pItem);
                   // add item normalized text
-                  if (!normalizedText.isEmpty())
+                  if (!normalizedText.empty())
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
@@ -1708,7 +1708,7 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
                   }
             }
       setText(normalizedText);                  // this is the text to show while editing
-      bool res = !normalizedText.isEmpty();
+      bool res = !normalizedText.empty();
       return res;
       }
 #endif

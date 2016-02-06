@@ -68,7 +68,7 @@ void TrackList::append(Element* e)
             Fraction d = static_cast<DurationElement*>(e)->duration();
             _duration += d;
 
-            bool accumulateRest = e->type() == Element::Type::REST && !isEmpty()
+            bool accumulateRest = e->type() == Element::Type::REST && !empty()
                && back()->type() == Element::Type::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
@@ -112,7 +112,7 @@ void TrackList::appendGap(const Fraction& d)
       {
       if (d.isZero())
             return;
-      Element* e = isEmpty() ? 0 : back();
+      Element* e = empty() ? 0 : back();
       if (e && (e->type() == Element::Type::REST)) {
             Rest* rest  = static_cast<Rest*>(back());
             Fraction dd = rest->duration();
@@ -362,7 +362,7 @@ bool TrackList::write(Measure* measure) const
                         else {
                               Fraction d = qMin(rest, duration);
                               if (e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE) {
-                                    for (TDuration k : toDurationList(d, false)) {
+                                    for (const TDuration& k : toDurationList(d, false)) {
                                           Rest* r = new Rest(score, k);
                                           Fraction dd(k.fraction());
                                           r->setTrack(_track);
@@ -619,7 +619,7 @@ void ScoreRange::fill(const Fraction& f)
 
 Fraction ScoreRange::duration() const
       {
-      return tracks.isEmpty() ? Fraction() : tracks[0]->duration();
+      return tracks.empty() ? Fraction() : tracks[0]->duration();
       }
 
 }

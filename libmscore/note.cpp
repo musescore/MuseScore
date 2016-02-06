@@ -775,7 +775,7 @@ void Note::write(Xml& xml) const
             int id = xml.spannerId(_tieBack);
             xml.tagE(QString("endSpanner id=\"%1\"").arg(id));
             }
-      if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.isEmpty()) {
+      if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
             xml.stag("Events");
             foreach(const NoteEvent& e, _playEvents)
                   e.write(xml);
@@ -1052,7 +1052,7 @@ void Note::read(XmlReader& e)
                         if (id != -1 &&
                                     // DISABLE if pasting into a staff with linked staves
                                     // because the glissando is not properly cloned into the linked staves
-                                    (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->isEmpty())) {
+                                    (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->empty())) {
                               Spanner* placeholder = new TextLine(score());
                               placeholder->setAnchor(Spanner::Anchor::NOTE);
                               placeholder->setEndElement(this);
@@ -1088,7 +1088,7 @@ void Note::read(XmlReader& e)
                   sp->read(e);
                   // DISABLE pasting of glissandi into staves with other lionked staves
                   // because the glissando is not properly cloned into the linked staves
-                  if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->isEmpty()) {
+                  if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->empty()) {
                         e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
                         delete sp;
                         }
@@ -1765,7 +1765,7 @@ void Note::layout2()
 
 bool Note::dotIsUp() const
       {
-      if (_dots[0] == 0)
+      if (_dots.empty())
             return true;
       if (_userDotPosition == MScore::Direction::AUTO)
             return _dots[0]->y() < spatium() * .1;
@@ -2528,7 +2528,7 @@ QString Note::accessibleExtraInfo() const
       if (accidental()) {
             rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
             }
-      if (!el().isEmpty()) {
+      if (!el().empty()) {
             foreach (Element* e, el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -2540,13 +2540,13 @@ QString Note::accessibleExtraInfo() const
       if (tieBack())
             rez = tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
 
-      if (!spannerFor().isEmpty()) {
+      if (!spannerFor().empty()) {
             foreach (Spanner* s, spannerFor()) {
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
-      if (!spannerBack().isEmpty()) {
+      if (!spannerBack().empty()) {
             foreach (Spanner* s, spannerBack()) {
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
@@ -2610,12 +2610,11 @@ Element* Note::nextElement()
       if (chord()->isGrace())
             return Element::nextElement();
 
-      QList<Note*> notes = chord()->notes();
-      int idx = notes.indexOf(this);
-      if (idx == 0)
+      const std::vector<Note*>& notes = chord()->notes();
+      if (this == notes.front())
             return chord()->nextElement();
-
-      return notes.at(idx - 1);
+      auto i = std::find(notes.begin(), notes.end(), this);
+      return *(i-1);
       }
 
 //---------------------------------------------------------
@@ -2627,12 +2626,11 @@ Element* Note::prevElement()
       if (chord()->isGrace())
             return Element::prevElement();
 
-      QList<Note*> notes = chord()->notes();
-      int idx = notes.indexOf(this);
-      if (idx == notes.size() - 1)
+      const std::vector<Note*>& notes = chord()->notes();
+      if (this == notes.back())
             return chord()->prevElement();
-
-      return notes.at(idx + 1);
+      auto i = std::find(notes.begin(), notes.end(), this);
+      return *++i;
       }
 
 //---------------------------------------------------------

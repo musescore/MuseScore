@@ -64,6 +64,7 @@ class Volta;
 class Jump;
 class StaffText;
 class Ottava;
+class Note;
 
 enum class SymId;
 
@@ -312,6 +313,7 @@ class Element : public QObject, public ScoreElement {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
+
    protected:
       QPointF _startDragPosition;   ///< used during drag
 
@@ -623,6 +625,7 @@ class Element : public QObject, public ScoreElement {
       const a* cast##a() const { return (this == 0 || type() == Element::Type::c) ? (const a*)this : 0; } \
       bool  is##a() { return type() == Element::Type::c; }
 
+      CONVERT(Note,         note,         NOTE);
       CONVERT(BarLine,      barLine,      BAR_LINE);
       CONVERT(Articulation, articulation, ARTICULATION);
       CONVERT(Marker,       marker,       MARKER);
@@ -656,7 +659,10 @@ class Element : public QObject, public ScoreElement {
 //---------------------------------------------------------
 
 // class ElementList : public std::list<Element*> {
-class ElementList : public QList<Element*> {
+// class ElementList : public QList<Element*> {
+// class ElementList : public QVector<Element*> {
+
+class ElementList : public std::vector<Element*> {
    public:
       ElementList() {}
       bool remove(Element*);

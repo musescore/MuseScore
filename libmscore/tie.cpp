@@ -284,7 +284,7 @@ void Tie::calculateDirection()
       Measure* m2 = c2->measure();
 
       if (_slurDirection == MScore::Direction::AUTO) {
-            QList<Note*> notes = c1->notes();
+            std::vector<Note*> notes = c1->notes();
             int n = notes.size();
             if (m1->mstaff(c1->staffIdx())->hasVoices || m2->mstaff(c2->staffIdx())->hasVoices) {
                   // in polyphonic passage, ties go on the stem side

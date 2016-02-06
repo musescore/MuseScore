@@ -81,7 +81,7 @@ void Staff::setBracket(int idx, BracketType val)
       for (int i = _brackets.size(); i <= idx; ++i)
             _brackets.append(BracketItem());
       _brackets[idx]._bracket = val;
-      while (!_brackets.isEmpty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
+      while (!_brackets.empty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
             _brackets.removeLast();
       }
 
@@ -104,7 +104,7 @@ void Staff::setBracketSpan(int idx, int val)
 
 void Staff::addBracket(BracketItem b)
       {
-      if (!_brackets.isEmpty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
+      if (!_brackets.empty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
             _brackets[0] = b;
             }
       else {
@@ -180,7 +180,7 @@ Staff::~Staff()
       {
       if (_linkedStaves) {
             _linkedStaves->remove(this);
-            if (_linkedStaves->isEmpty())
+            if (_linkedStaves->empty())
                   delete _linkedStaves;
             }
       }
@@ -686,7 +686,7 @@ SwingParameters Staff::swing(int tick) const
             swingUnit = 0;
       sp.swingRatio = swingRatio;
       sp.swingUnit = swingUnit;
-      if (_swingList.isEmpty())
+      if (_swingList.empty())
             return sp;
       QMap<int, SwingParameters>::const_iterator i = _swingList.upperBound(tick);
       if (i == _swingList.begin())
@@ -701,7 +701,7 @@ SwingParameters Staff::swing(int tick) const
 
 int Staff::channel(int tick,  int voice) const
       {
-      if (_channelList[voice].isEmpty())
+      if (_channelList[voice].empty())
             return 0;
       QMap<int, int>::const_iterator i = _channelList[voice].upperBound(tick);
       if (i == _channelList[voice].begin())

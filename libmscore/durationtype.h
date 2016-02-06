@@ -70,7 +70,7 @@ class TDuration {
       QString durationTypeUserName() const;
       };
 
-extern QList<TDuration> toDurationList(
+extern std::vector<TDuration> toDurationList(
             Fraction, bool useDots, int maxDots = 2, bool printRestRemains = true);
 
 

@@ -52,7 +52,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
                   cr = static_cast<ChordRest*>(cr->parent());
                   }
             else if (cr->isGraceBefore()) {
-                  QList<Chord*> cl = pc->graceNotesBefore();
+                  QVector<Chord*> cl = pc->graceNotesBefore();
                   auto i = std::find(cl.begin(), cl.end(), c);
                   if (i == cl.end())
                         return 0;   // unable to find self?
@@ -63,7 +63,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
                   return pc;
                   }
             else {
-                  QList<Chord*> cl = pc->graceNotesAfter();
+                  QVector<Chord*> cl = pc->graceNotesAfter();
                   auto i = std::find(cl.begin(), cl.end(), c);
                   if (i == cl.end())
                         return 0;   // unable to find self?
@@ -80,8 +80,8 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
             if (cr->type() == Element::Type::CHORD && !skipGrace) {
                   Chord* c = static_cast<Chord*>(cr);
                   if (!c->graceNotes().empty()) {
-                        QList<Chord*> cl = c->graceNotesAfter();
-                        if (!cl.isEmpty())
+                        QVector<Chord*> cl = c->graceNotesAfter();
+                        if (!cl.empty())
                               return cl.first();
                         }
                   }
@@ -96,8 +96,8 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
                   if (e->type() == Element::Type::CHORD && !skipGrace) {
                         Chord* c = static_cast<Chord*>(e);
                         if (!c->graceNotes().empty()) {
-                              QList<Chord*> cl = c->graceNotesBefore();
-                              if (!cl.isEmpty())
+                              QVector<Chord*> cl = c->graceNotesBefore();
+                              if (!cl.empty())
                                     return cl.first();
                               }
                         }
@@ -130,7 +130,7 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
                   cr = static_cast<ChordRest*>(cr->parent());
                   }
             else if (cr->isGraceBefore()) {
-                  QList<Chord*> cl = pc->graceNotesBefore();
+                  QVector<Chord*> cl = pc->graceNotesBefore();
                   auto i = std::find(cl.begin(), cl.end(), c);
                   if (i == cl.end())
                         return 0;   // unable to find self?
@@ -140,7 +140,7 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
                   cr = pc;
                   }
             else {
-                  QList<Chord*> cl = pc->graceNotesAfter();
+                  QVector<Chord*> cl = pc->graceNotesAfter();
                   auto i = std::find(cl.begin(), cl.end(), c);
                   if (i == cl.end())
                         return 0;   // unable to find self?
@@ -155,8 +155,8 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
             // cr is not a grace note
             if (cr->type() == Element::Type::CHORD && !skipGrace) {
                   Chord* c = static_cast<Chord*>(cr);
-                  QList<Chord*> cl = c->graceNotesBefore();
-                  if (!cl.isEmpty())
+                  QVector<Chord*> cl = c->graceNotesBefore();
+                  if (!cl.empty())
                         return cl.last();
                   }
             }
@@ -167,8 +167,8 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
                   if (e->type() == Element::Type::CHORD && !skipGrace) {
-                        QList<Chord*> cl = static_cast<Chord*>(e)->graceNotesAfter();
-                        if (!cl.isEmpty())
+                        QVector<Chord*> cl = static_cast<Chord*>(e)->graceNotesAfter();
+                        if (!cl.empty())
                               return cl.last();
                         }
                   return e;
@@ -190,15 +190,16 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
 Element* Score::upAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == Element::Type::REST)
+      if (element->isRest())
             re = prevTrack(static_cast<Rest*>(element));
-      else if (element->type() == Element::Type::NOTE) {
-            Chord* chord = static_cast<Note*>(element)->chord();
-            const QList<Note*>& notes = chord->notes();
-            int idx = notes.indexOf(static_cast<Note*>(element));
-            if (idx < notes.size()-1) {
-                  ++idx;
-                  re = notes.value(idx);
+      else if (element->isNote()) {
+            Note* note = element->note();
+            Chord* chord = note->chord();
+            const std::vector<Note*>& notes = chord->notes();
+            auto i = std::find(notes.begin(), notes.end(), note);
+            if (i != notes.end()) {
+                  ++i;
+                  re = i != notes.end() ? *i : 0;
                   }
             else {
                   re = prevTrack(chord);
@@ -232,15 +233,16 @@ Note* Score::upAltCtrl(Note* note) const
 Element* Score::downAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == Element::Type::REST)
+      if (element->isRest())
             re = nextTrack(static_cast<Rest*>(element));
-      else if (element->type() == Element::Type::NOTE) {
-            Chord* chord = static_cast<Note*>(element)->chord();
-            const QList<Note*>& notes = chord->notes();
-            int idx = notes.indexOf(static_cast<Note*>(element));
-            if (idx > 0) {
-                  --idx;
-                  re = notes.value(idx);
+      else if (element->isNote()) {
+            Note* note   = element->note();
+            Chord* chord = note->chord();
+            const std::vector<Note*>& notes = chord->notes();
+            auto i = std::find(notes.begin(), notes.end(), note);
+            if (i != notes.begin()) {
+                  --i;
+                  re = *i;
                   }
             else {
                   re = nextTrack(chord);
@@ -290,7 +292,7 @@ Element* Score::lastElement()
                   }
             if(re){
                   if(re->type() == Element::Type::CHORD){
-                        return static_cast<Chord*>(re)->notes().first();
+                        return static_cast<Chord*>(re)->notes().front();
                         }
                   return re;
                   }

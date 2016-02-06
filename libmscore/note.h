@@ -150,9 +150,9 @@ class Note : public Element {
       Q_OBJECT
       Q_PROPERTY(Ms::Accidental*                accidental        READ accidental)
       Q_PROPERTY(int                            accidentalType    READ qmlAccidentalType  WRITE qmlSetAccidentalType)
-      Q_PROPERTY(QQmlListProperty<Ms::NoteDot>  dots              READ qmlDots)
+//      Q_PROPERTY(QQmlListProperty<Ms::NoteDot>  dots              READ qmlDots)
       Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
-      Q_PROPERTY(QQmlListProperty<Ms::Element>  elements          READ qmlElements)
+//      Q_PROPERTY(QQmlListProperty<Ms::Element>  elements          READ qmlElements)
       Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
       Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
       Q_PROPERTY(Ms::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
@@ -228,15 +228,14 @@ class Note : public Element {
 
       Accidental* _accidental { 0 };
 
-      ElementList _el;        ///< fingering, other text, symbols or images
       Tie* _tieFor        { 0 };
       Tie* _tieBack       { 0 };
 
-      QList<NoteDot*> _dots;
-
+      ElementList _el;        ///< fingering, other text, symbols or images
+      QVector<NoteDot*> _dots;
       NoteEventList _playEvents;
-      QList<Spanner*> _spannerFor;
-      QList<Spanner*> _spannerBack;
+      QVector<Spanner*> _spannerFor;
+      QVector<Spanner*> _spannerBack;
 
       virtual QRectF drag(EditData*) override;
       void endDrag();
@@ -369,7 +368,7 @@ class Note : public Element {
 
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
-      QQmlListProperty<Ms::Element> qmlElements() { return QQmlListProperty<Ms::Element>(this, _el); }
+//TODO      QQmlListProperty<Ms::Element> qmlElements() { return QQmlListProperty<Ms::Element>(this, _el); }
 
       int subchannel() const                    { return _subchannel; }
       void setSubchannel(int val)               { _subchannel = val;  }
@@ -393,10 +392,10 @@ class Note : public Element {
 
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                       { return _dots[n];          }
-      const QList<NoteDot*>& dots() const       { return _dots;             }
-      QList<NoteDot*>& dots()                   { return _dots;             }
+      const QVector<NoteDot*>& dots() const       { return _dots;             }
+      QVector<NoteDot*>& dots()                   { return _dots;             }
 
-      QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
+//TODO      QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
 
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);
@@ -407,8 +406,8 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
-      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
-      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
+      const QVector<Spanner*>& spannerFor() const   { return _spannerFor;         }
+      const QVector<Spanner*>& spannerBack() const  { return _spannerBack;        }
 
       void addSpannerBack(Spanner* e)            { _spannerBack.push_back(e);  }
       bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }

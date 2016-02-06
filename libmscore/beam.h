@@ -106,7 +106,7 @@ class Beam : public Element {
 
       const QList<ChordRest*>& elements() { return _elements;  }
       void clear()                        { _elements.clear(); }
-      bool isEmpty() const                { return _elements.isEmpty(); }
+      bool empty() const                { return _elements.empty(); }
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;

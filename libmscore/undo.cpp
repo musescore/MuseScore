@@ -169,7 +169,7 @@ void UndoCommand::redo()
 
 void UndoCommand::unwind()
       {
-      while (!childList.isEmpty()) {
+      while (!childList.empty()) {
             UndoCommand* c = childList.takeLast();
             c->undo();
             delete c;
@@ -1251,7 +1251,7 @@ void Score::undoAddElement(Element* element)
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
                   // ws: instrument should not be changed here
-                  if (is->instrument()->channel().isEmpty() || is->instrument()->channel(0)->program == -1)
+                  if (is->instrument()->channel().empty() || is->instrument()->channel(0)->program == -1)
                         nis->setInstrument(*staff->part()->instrument(s1->tick()));
                   else if (nis != is)
                         nis->setInstrument(*is->instrument());
@@ -1283,7 +1283,7 @@ void Score::undoAddElement(Element* element)
 
 void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       {
-      Q_ASSERT(cr->type() != Element::Type::CHORD || !(static_cast<Chord*>(cr)->notes()).isEmpty());
+      Q_ASSERT(cr->type() != Element::Type::CHORD || !(static_cast<Chord*>(cr)->notes()).empty());
       Q_ASSERT(cr->isChordRest());
 
       Staff* ostaff = cr->staff();
@@ -1401,7 +1401,7 @@ void Score::undoRemoveElement(Element* element)
                   }
             }
       for (Segment* s : segments) {
-            if (s->isEmpty())
+            if (s->empty())
                   undo(new RemoveElement(s));
             }
       }
@@ -1477,7 +1477,7 @@ static void undoRemoveTuplet(DurationElement* cr)
       {
       if (cr->tuplet()) {
             cr->tuplet()->remove(cr);
-            if (cr->tuplet()->elements().isEmpty())
+            if (cr->tuplet()->elements().empty())
                   undoRemoveTuplet(cr->tuplet());
             }
       }

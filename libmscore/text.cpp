@@ -288,7 +288,7 @@ void TextBlock::layout(Text* t)
                         break;
                   }
             }
-      if (_text.isEmpty()) {
+      if (_text.empty()) {
             QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
             _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
             _lineSpacing = fm.lineSpacing();
@@ -368,7 +368,7 @@ qreal TextBlock::xpos(int column, const Text* t) const
 
 const TextFragment* TextBlock::fragment(int column) const
       {
-      if (_text.isEmpty())
+      if (_text.empty())
             return 0;
       int col = 0;
       auto f = _text.begin();
@@ -493,7 +493,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                   }
             }
       else {
-            if (!_text.isEmpty() && _text.back().format == *cursor->format())
+            if (!_text.empty() && _text.back().format == *cursor->format())
                   _text.back().text.append(s);
             else
                   _text.append(TextFragment(cursor, s));
@@ -533,7 +533,7 @@ void TextBlock::insert(TextCursor* cursor, SymId id)
                   }
             }
       else {
-            if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL)
+            if (!_text.empty() && _text.back().format.type() == CharFormatType::SYMBOL)
                   _text.back().ids.append(id);
             else
                   _text.append(TextFragment(cursor, id));
@@ -577,7 +577,7 @@ void TextBlock::remove(int column)
                               i->text.remove(rcol, 2);
                         if (i->format.type() == CharFormatType::SYMBOL) {
                               i->ids.removeAt(idx);
-                              if (i->ids.isEmpty())
+                              if (i->ids.empty())
                                     _text.erase(i);
                               }
                         else {
@@ -1228,7 +1228,7 @@ void Text::layout1()
       if (!_editMode)
             createLayout();
 
-      if (_layout.isEmpty())
+      if (_layout.empty())
             _layout.append(TextBlock());
 
       QRectF bb;
@@ -1466,7 +1466,7 @@ void Text::genText()
             if (block.eol())
                   _text += QChar::LineFeed;
             }
-      while (!xmlNesting.isEmpty())
+      while (!xmlNesting.empty())
             xmlNesting.popToken();
       }
 
@@ -1518,13 +1518,13 @@ QString Text::plainText(bool noSym) const
 void Text::startEdit(MuseScoreView*, const QPointF& pt)
       {
       setEditMode(true);
-      if (_cursor == nullptr)
+      if (!_cursor)
             _cursor = new TextCursor();
       _cursor->setText(this);
       _cursor->setLine(0);
       _cursor->setColumn(0);
       _cursor->clearSelection();
-      if (_layout.isEmpty())
+      if (_layout.empty())
             layout();
       if (setCursor(pt))
             updateCursorFormat(_cursor);
@@ -3018,7 +3018,7 @@ QList<TextFragment> Text::fragmentList() const
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
                   /* TODO TBD
-                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                  if (f.text.empty())                     // skip empty fragments, not to
                         continue;                           // insert extra HTML formatting
                    */
                   res.append(f);

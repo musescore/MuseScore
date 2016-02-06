@@ -540,7 +540,7 @@ void Seq::recomputeMaxMidiOutPort() {
 void Seq::processMessages()
       {
       for (;;) {
-            if (toSeq.isEmpty())
+            if (toSeq.empty())
                   break;
             SeqMsg msg = toSeq.dequeue();
             switch(msg.id) {
@@ -1378,7 +1378,7 @@ void Seq::heartBeatTimeout()
             sc->setMeter(meterValue[0], meterValue[1], meterPeakValue[0], meterPeakValue[1]);
             }
 
-      while (!fromSeq.isEmpty()) {
+      while (!fromSeq.empty()) {
             SeqMsg msg = fromSeq.dequeue();
             if (msg.id == SeqMsgId::MIDI_INPUT_EVENT) {
                   int type = msg.event.type();

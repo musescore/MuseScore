@@ -34,7 +34,7 @@ void Score::layoutLinear()
             mb->setSystem(system);
             system->measures().append(mb);
             }
-      if (system->measures().isEmpty())
+      if (system->measures().empty())
             return;
       addSystemHeader(firstMeasureMM(), true);
       // also add a system header after a section break

@@ -775,7 +775,7 @@ void SLine::layout()
             // tick and tick2 has no meaning so no layout is
             // possible and needed
             //
-            if (!spannerSegments().isEmpty()) {
+            if (!spannerSegments().empty()) {
                   LineSegment* lineSegm = frontSegment();
                   lineSegm->layout();
                   setbbox(lineSegm->bbox());
@@ -824,7 +824,7 @@ void SLine::layout()
                   int n = segCount - segmentsNeeded;
 //                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
                   for (int i = 0; i < n; ++i) {
-                        if (spannerSegments().isEmpty()) {
+                        if (spannerSegments().empty()) {
                               qDebug("SLine::layout(): no segment %d, %d expected", i, n);
                               break;
                               }
@@ -926,7 +926,7 @@ void SLine::writeProperties(Xml& xml) const
       writeProperty(xml, P_ID::ANCHOR);
       if (score() == gscore) {
             // when used as icon
-            if (!spannerSegments().isEmpty()) {
+            if (!spannerSegments().empty()) {
                   LineSegment* s = frontSegment();
                   xml.tag("length", s->pos2().x());
                   }
@@ -1022,7 +1022,7 @@ bool SLine::readProperties(XmlReader& e)
 
 void SLine::setLen(qreal l)
       {
-      if (spannerSegments().isEmpty())
+      if (spannerSegments().empty())
             add(createLineSegment());
       LineSegment* s = frontSegment();
       s->setPos(QPointF());
@@ -1036,7 +1036,7 @@ void SLine::setLen(qreal l)
 
 const QRectF& SLine::bbox() const
       {
-      if (spannerSegments().isEmpty())
+      if (spannerSegments().empty())
             setbbox(QRectF());
       else
             setbbox(segmentAt(0)->bbox());

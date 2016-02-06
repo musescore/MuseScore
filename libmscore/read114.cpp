@@ -634,7 +634,7 @@ Score::FileError Score::read114(XmlReader& e)
                   else if (s->type() == Element::Type::TEXTLINE) {
                         yo = -5.0 * spatium();
                   }
-                  if (!s->spannerSegments().isEmpty()) {
+                  if (!s->spannerSegments().empty()) {
                         for (SpannerSegment* seg : s->spannerSegments()) {
                               if (!seg->userOff().isNull())
                                     seg->setUserYoffset(seg->userOff().y() - yo);
@@ -762,11 +762,11 @@ Score::FileError Score::read114(XmlReader& e)
       // create excerpts
 
       foreach (Excerpt* excerpt, _excerpts) {
-            if (excerpt->parts().isEmpty()) {         // ignore empty parts
+            if (excerpt->parts().empty()) {         // ignore empty parts
                   _excerpts.removeOne(excerpt);
                   continue;
                   }
-            if (!excerpt->parts().isEmpty()) {
+            if (!excerpt->parts().empty()) {
                   Score* nscore = new Score(this);
                   excerpt->setPartScore(nscore);
                   nscore->setName(excerpt->title());

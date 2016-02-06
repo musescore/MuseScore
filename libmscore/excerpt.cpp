@@ -519,7 +519,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
                                     ChordRest* ncr = static_cast<ChordRest*>(ne);
 
-                                    if (ocr->beam() && !ocr->beam()->isEmpty() && ocr->beam()->elements().front() == ocr) {
+                                    if (ocr->beam() && !ocr->beam()->empty() && ocr->beam()->elements().front() == ocr) {
                                           Beam* nb = ocr->beam()->clone();
                                           nb->clear();
                                           nb->setTrack(track);

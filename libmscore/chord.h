@@ -70,14 +70,14 @@ class Chord : public ChordRest {
             };
 
       Q_PROPERTY(Ms::Beam* beam              READ beam)
-      Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
+//      Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
       Q_PROPERTY(Ms::Hook* hook              READ hook)
-      Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
-      Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
+//      Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
+//      Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(Ms::Stem* stem              READ stem)
       Q_PROPERTY(Ms::StemSlash* stemSlash    READ stemSlash)
 
-      QList<Note*>         _notes;       // sorted to decreasing line step
+      std::vector<Note*>   _notes;       // sorted to decreasing line step
       LedgerLine*          _ledgerLines; // single linked list
 
       Stem*               _stem;
@@ -88,7 +88,7 @@ class Chord : public ChordRest {
       Tremolo*            _tremolo;
       bool                _endsGlissando;///< true if this chord is the ending point of a glissando (needed for layout)
       ElementList         _el;           ///< chordline, slur
-      QList<Chord*>       _graceNotes;
+      QVector<Chord*>     _graceNotes;
       int                 _graceIndex;   ///< if this is a grace note, index in parent list
 
       MScore::Direction  _stemDirection;
@@ -139,11 +139,12 @@ class Chord : public ChordRest {
       void layoutStem();
       void layoutArpeggio2();
 
-      QQmlListProperty<Ms::Note> qmlNotes()       { return QQmlListProperty<Ms::Note>(this, _notes);        }
-      QQmlListProperty<Ms::Lyrics> qmlLyrics()    { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
-      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes);  }
-      QList<Note*>& notes()                       { return _notes; }
-      const QList<Note*>& notes() const           { return _notes; }
+//TODO      QQmlListProperty<Ms::Note> qmlNotes()       { return QQmlListProperty<Ms::Note>(this, _notes);        }
+//TODO      QQmlListProperty<Ms::Lyrics> qmlLyrics()    { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
+//TODO      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes);  }
+
+      std::vector<Note*>& notes()                 { return _notes; }
+      const std::vector<Note*>& notes() const     { return _notes; }
 
       // Chord has at least one Note
       Note* upNote() const;
@@ -167,11 +168,11 @@ class Chord : public ChordRest {
       void setSlash(bool flag, bool stemless);
       void removeMarkings(bool keepTremolo = false);
 
-      const QList<Chord*>& graceNotes() const { return _graceNotes; }
-      QList<Chord*>& graceNotes()             { return _graceNotes; }
+      const QVector<Chord*>& graceNotes() const { return _graceNotes; }
+      QVector<Chord*>& graceNotes()             { return _graceNotes; }
 
-      QList<Chord*> graceNotesBefore() const;
-      QList<Chord*> graceNotesAfter() const;
+      QVector<Chord*> graceNotesBefore() const;
+      QVector<Chord*> graceNotesAfter() const;
 
       int graceIndex() const                        { return _graceIndex; }
       void setGraceIndex(int val)                   { _graceIndex = val;  }

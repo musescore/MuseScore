@@ -479,7 +479,7 @@ void Page::doRebuildBspTree()
       if (score()->layoutMode() == LayoutMode::LINE) {
             qreal w = 0.0;
             qreal h = 0.0;
-            if (!_systems.isEmpty()) {
+            if (!_systems.empty()) {
                   h = _systems.front()->height();
                   if (!_systems.front()->measures().empty()) {
                         MeasureBase* mb = _systems.front()->measures().back();
@@ -702,7 +702,7 @@ QList<System*> Page::searchSystem(const QPointF& pos) const
 Measure* Page::searchMeasure(const QPointF& p) const
       {
       QList<System*> systems = searchSystem(p);
-      if (systems.isEmpty())
+      if (systems.empty())
             return 0;
 
       foreach(System* system, systems) {

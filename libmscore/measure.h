@@ -96,7 +96,7 @@ class Measure : public MeasureBase {
       Q_PROPERTY(Ms::Segment* firstSegment READ first)
       Q_PROPERTY(Ms::Segment* lastSegment  READ last)
 
-      QList<MStaff*>  _mstaves;
+      std::vector<MStaff*>  _mstaves;
       SegmentList _segments;
       Measure* _mmRest;       // multi measure rest which replaces a measure range
 
@@ -145,8 +145,8 @@ class Measure : public MeasureBase {
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       System* system() const                { return (System*)parent(); }
-      QList<MStaff*>& mstaves()             { return _mstaves;      }
-      const QList<MStaff*>& mstaves() const { return _mstaves;      }
+      std::vector<MStaff*>& mstaves()       { return _mstaves;      }
+      const std::vector<MStaff*>& mstaves() const { return _mstaves;      }
       MStaff* mstaff(int staffIdx)          { return _mstaves[staffIdx]; }
       bool hasVoices(int staffIdx) const    { return _mstaves[staffIdx]->hasVoices; }
       StaffLines* staffLines(int staffIdx)  { return _mstaves[staffIdx]->lines; }
@@ -234,7 +234,7 @@ class Measure : public MeasureBase {
       bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest; }
       void setBreakMultiMeasureRest(bool val)   { _breakMultiMeasureRest = val;  }
 
-      bool isEmpty() const;
+      bool empty() const;
       bool isOnlyRests(int track) const;
 
       void layoutCR0(ChordRest* cr, qreal m, AccidentalState*);

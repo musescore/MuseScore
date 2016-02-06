@@ -101,7 +101,7 @@ void Marker::setMarkerType(Type t)
                   qDebug("unknown marker type %d", int(t));
                   break;
             }
-      if (isEmpty() && txt)
+      if (empty() && txt)
             setXmlText(txt);
       }
 
