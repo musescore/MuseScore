@@ -465,6 +465,7 @@ void Segment::add(Element* el)
             case Element::Type::FIGURED_BASS:
                   _annotations.push_back(el);
                   break;
+
             case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
@@ -1312,6 +1313,12 @@ void Segment::createShape(int staffIdx)
             if (e && e->visible())
                   s.add(e->shape());
             }
+      for (Element* e : _annotations) {
+            if (e->staffIdx() == staffIdx) {
+                  printf("annotation %d %s %p %p\n", staffIdx, e->name(), this, e);
+                  s.add(e->shape());
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -1359,7 +1366,6 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
       qreal w = 0.0;
       for (int staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = shape(staffIdx).minHorizontalDistance(ns->shape(staffIdx));
-// printf("%d %s - %s %f\n", staffIdx, subTypeName(), ns->subTypeName(), d);
             if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
                   d = qMax(d, minRight()) + nbd;
             w = qMax(w, d);

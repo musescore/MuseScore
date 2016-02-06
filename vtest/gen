@@ -55,6 +55,9 @@ else
        staff-1 staff-2"
 fi
 
+#####DEBUG
+SRC="line-4 grace-1 breath-1 harmony-1 beams-1 tablature-1 tremolo-1"
+
 DPI=130
 F=vtest.html
 

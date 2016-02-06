@@ -168,7 +168,6 @@ class Harmony : public Text {
 
       void resolveDegreeList();
 
-//      virtual bool isEmpty() const override;
       virtual qreal baseLine() const override;
 
       const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);

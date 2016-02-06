@@ -46,6 +46,24 @@ class Chord;
 class Clef;
 class KeySig;
 class TimeSig;
+class TempoText;
+class Breath;
+class Box;
+class HBox;
+class VBox;
+class TBox;
+class FBox;
+class ChordRest;
+class Slur;
+class Tie;
+class Glissando;
+class SystemDivider;
+class RehearsalMark;
+class Harmony;
+class Volta;
+class Jump;
+class StaffText;
+class Ottava;
 
 enum class SymId;
 
@@ -582,13 +600,28 @@ class Element : public QObject, public ScoreElement {
       virtual bool isUserModified() const;
 
       //---------------------------------------------------
-      // checked type conversions:
+      // checked type conversions & tests
+      //
+      // Example for ChordRest:
+      //
+      //    bool             isChordRest()
+      //    ChordRest*       chordRest()
+      //    const ChordRest* chordRest() const
+      //    ChordRest*       castChordRest()
+      //    const ChordRest* castChordRest() const
       //---------------------------------------------------
+
+      ChordRest* chordRest() {
+            Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST);
+            return (ChordRest*)this;
+            }
 
 #define CONVERT(a,b,c) \
       const a* b() const { Q_ASSERT(this == 0 || type() == Element::Type::c); return (const a*)this; } \
       a* b() { Q_ASSERT(this == 0 || type() == Element::Type::c); return (a*)this; } \
-      a* cast##a() { return (this == 0 || type() == Element::Type::c) ? (a*)this : 0; }
+      a* cast##a() { return (this == 0 || type() == Element::Type::c) ? (a*)this : 0; } \
+      const a* cast##a() const { return (this == 0 || type() == Element::Type::c) ? (const a*)this : 0; } \
+      bool  is##a() { return type() == Element::Type::c; }
 
       CONVERT(BarLine,      barLine,      BAR_LINE);
       CONVERT(Articulation, articulation, ARTICULATION);
@@ -598,6 +631,22 @@ class Element : public QObject, public ScoreElement {
       CONVERT(KeySig,       keySig,       KEYSIG);
       CONVERT(TimeSig,      timeSig,      TIMESIG);
       CONVERT(Measure,      measure,      MEASURE);
+      CONVERT(TempoText,    tempoText,    TEMPO_TEXT);
+      CONVERT(Breath,       breath,       BREATH);
+      CONVERT(HBox,         hBox,         HBOX);
+      CONVERT(VBox,         vBox,         VBOX);
+      CONVERT(TBox,         tBox,         TBOX);
+      CONVERT(FBox,         fBox,         FBOX);
+      CONVERT(Tie,          tie,          TIE);
+      CONVERT(Slur,         slur,         SLUR);
+      CONVERT(Glissando,    glissando,    GLISSANDO);
+      CONVERT(SystemDivider, systemDivider, SYSTEM_DIVIDER);
+      CONVERT(RehearsalMark, rehearsalMark, REHEARSAL_MARK);
+      CONVERT(Harmony,      harmony,      HARMONY);
+      CONVERT(Volta,        volta,        VOLTA);
+      CONVERT(Jump,         jump,         JUMP);
+      CONVERT(StaffText,    staffText,    STAFF_TEXT);
+      CONVERT(Ottava,       ottava,       OTTAVA);
 
 #undef CONVERT
       };
@@ -659,7 +708,7 @@ class Line : public Element {
    protected:
       bool vertical;
 
-   public:
+public:
       Line(Score*);
       Line(Score*, bool vertical);
       Line &operator=(const Line&);

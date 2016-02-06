@@ -560,22 +560,17 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     }
                               else if (cr) {
                                     // lay out just past right edge of all notes for this segment on this staff
-                                    // note: the cheap solution is to simply use segment width,
-                                    // but that would account for notes in other staves unnecessarily
-                                    // and in any event, segment bboxes seem unreliable
-                                    qreal width = 0;
+
                                     Segment* s = cr->segment();
-                                    int n = staffIdx() * VOICES;
-//TODO                                    for (int i = 0; i < VOICES; ++i) {
-//                                          ChordRest* vcr = static_cast<ChordRest*>(s->element(n + i));
-//                                          if (vcr)
-//                                                width = qMax(width, vcr->space().rw());
-//                                          }
-                                    // extend past chord/rest
+                                    qreal width = s->shape(staffIdx()).right();
                                     x = width + sp;
+
+                                    // extend past chord/rest
                                     // but don't overlap next chord/rest
-                                    Segment* ns = s->next();
+
                                     bool crFound = false;
+                                    int n = staffIdx() * VOICES;
+                                    Segment* ns = s->next();
                                     while (ns) {
                                           for (int i = 0; i < VOICES; ++i) {
                                                 if (ns->element(n + i)) {

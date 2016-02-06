@@ -257,8 +257,6 @@ class Note : public Element {
 
       virtual qreal mag() const override;
 
-      QPointF pagePos() const;      ///< position in page coordinates
-      QPointF canvasPos() const;    ///< position in page coordinates
       void layout();
       void layout2();
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);

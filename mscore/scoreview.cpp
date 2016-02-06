@@ -1916,16 +1916,6 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                                 s->shapes().at(i).draw(&p);
                                                 p.translate(-pt);
                                                 }
-                                          for (Element* e : s->annotations()) {
-                                                if (!e)
-                                                      continue;
-                                                QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(), system->pos().y());
-                                                p.translate(pt);
-                                                Shape shape;
-                                                shape.add(e->bbox().translated(e->pos()));
-                                                shape.draw(&p);
-                                                p.translate(-pt);
-                                                }
                                           }
                                     }
                               }

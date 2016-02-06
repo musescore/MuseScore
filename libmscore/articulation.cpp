@@ -404,28 +404,6 @@ QString Articulation::idx2name(int idx)
       }
 
 //---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-QPointF Articulation::pagePos() const
-      {
-      if (parent() == 0)
-            return pos();
-      return parent()->pagePos() + pos();
-      }
-
-//---------------------------------------------------------
-//   canvasPos
-//---------------------------------------------------------
-
-QPointF Articulation::canvasPos() const
-      {
-      if (parent() == 0)
-            return pos();
-      return parent()->canvasPos() + pos();
-      }
-
-//---------------------------------------------------------
 //   Symbol::draw
 //---------------------------------------------------------
 
