@@ -37,6 +37,7 @@ class Spacer : public Element {
 
       SpacerType _spacerType;
       qreal _gap;
+      bool _absolute;
 
       QPainterPath path;
 
@@ -59,7 +60,9 @@ class Spacer : public Element {
       virtual int grips() const override { return 1; }
       virtual void spatiumChanged(qreal, qreal);
       void setGap(qreal sp);
-      qreal gap() const     { return _gap; }
+      qreal gap() const        { return _gap; }
+      void setAbsolute(bool v) { _absolute = v; }
+      bool absolute() const    { return _absolute; }
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
