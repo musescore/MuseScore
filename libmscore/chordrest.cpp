@@ -100,7 +100,6 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _up           = cr._up;
       _small        = cr._small;
       _crossMeasure = cr._crossMeasure;
-//      _space        = cr._space;
 
       for (Lyrics* l : cr._lyricsList) {        // make deep copy
             if (l == 0) {

@@ -232,6 +232,8 @@ private:
       bool isDrumStaff() const         { return staffGroup() == StaffGroup::PERCUSSION; }
 
       VeloList& velocities()           { return _velocities;     }
+      PitchList& pitchOffsets()        { return _pitchOffsets;   }
+
       int pitchOffset(int tick)        { return _pitchOffsets.pitchOffset(tick);   }
       void updateOttava();
 

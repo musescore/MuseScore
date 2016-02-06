@@ -50,7 +50,6 @@ class LineSegment : public SpannerSegment {
       Q_OBJECT
 
    protected:
-//      virtual bool isEditable() const override { return true; } // same as base class!
       virtual void editDrag(const EditData&) override;
       virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s) override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;

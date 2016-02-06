@@ -155,7 +155,6 @@ void Rest::setUserOff(const QPointF& o)
       else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3))
             _sym = SymId::restHalf;
 
-//      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
       Element::setUserOff(o);
       }
 

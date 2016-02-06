@@ -2036,8 +2036,10 @@ void Chord::layoutPitched()
                         _spaceRw = rx;
                   }
             }
-      for (int i = 0; i < _notes.size(); ++i)
-            _notes.at(i)->layout2();
+
+      for (Note* note : _notes)
+            note->layout2();
+
       QRectF bb;
       processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
       setbbox(bb.translated(_spatium*2, 0));
@@ -3208,21 +3210,10 @@ Shape Chord::shape() const
       {
       Shape shape;
       processSiblings([&shape, this] (Element* e) {
-            Shape s = e->shape();
-            // compute distance between grace notes and chord
-            // TODO: distinguish between grace notes before/after
-/*            if (e->type() == Element::Type::CHORD) {
-                  qreal minNoteDistance  = score()->styleD(StyleIdx::minNoteDistance);
-                  qreal nhw              = score()->noteHeadWidth() * score()->styleD(StyleIdx::graceNoteMag);
-                  qreal dist             = qMax(s.minHorizontalDistance(shape), nhw) + minNoteDistance;
-                  e->rxpos()             = -dist;
-                  s.translate(e->pos());
-                  }
-            */
-            shape.add(s);
+            shape.add(e->shape());
             });
-      shape.add(ChordRest::shape());
-      return shape;
+      shape.add(ChordRest::shape());      // add articulation + lyrics
+      return shape.translated(pos());
       }
 }
 

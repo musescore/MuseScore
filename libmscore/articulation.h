@@ -115,9 +115,6 @@ class Articulation : public Element {
 
       QString subtypeUserName() const;
 
-      virtual QPointF pagePos() const override;      ///< position in page coordinates
-      virtual QPointF canvasPos() const override;
-
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
       void setDirection(MScore::Direction d);
