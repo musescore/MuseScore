@@ -1,72 +1,72 @@
-env:
- global:
-   - "ARTIFACTS_AWS_REGION=us-east-1"
-   - "ARTIFACTS_S3_BUCKET=vtest.musescore.org"
-   - secure: "lVj+9BBtJIjW3CwfXstvNyYVn0AkXEwTyiPmp4BprcheP78WIqZNC0uG2RjG9MgyHbZkprE7zRdqR9YPWTitg+XYkkD6+jPHRO+PQFLARuiTAX9yhUO53yQQZC2wMkQ+bFuZsFmz1rfAsPHx3bXeZAMsz+Qnh8D2yIqqV7qxwWw="
-   - secure: "L+66yQZIZJTyIAfrG89ncKIkMAr4+UvaOZMsd420OSdnEH9kpdm5Kws8rG0VVLAtqhfQfi3K9DuC8Ub7IiXqil//h+I9WJ2LHKirWK0m/MkhTFC6hfi0uSnQCX/jud3Keewxf3ovgiKQvIw6VR37UC50YJM9+KhZKtsNYhGAdos="
-
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-4.9
-    - cmake
-    - alsa
-    - libsndfile1
-    - wget
-    - make
-    - ant
-    - curl
-    - libasound2-dev
-    - portaudio19-dev
-    - libsndfile1-dev
-    - zlib1g-dev
-    - libfreetype6-dev
-    - libfontconfig1-dev
-    - lame
-    - libmp3lame-dev
-    - libegl1-mesa-dev
-    - libegl1-mesa
-    - ccache
-    - libpulse-dev
-
+language: cpp
 sudo: false
 
-cache:
-  directories:
-    - $HOME/.ccache
+env:
+  global:
+    - "ARTIFACTS_AWS_REGION=us-east-1"
+    - "ARTIFACTS_S3_BUCKET=vtest.musescore.org"
+    - secure: "lVj+9BBtJIjW3CwfXstvNyYVn0AkXEwTyiPmp4BprcheP78WIqZNC0uG2RjG9MgyHbZkprE7zRdqR9YPWTitg+XYkkD6+jPHRO+PQFLARuiTAX9yhUO53yQQZC2wMkQ#+bFuZsFmz1rfAsPHx3bXeZAMsz+Qnh8D2yIqqV7qxwWw="
+    - secure: "L+66yQZIZJTyIAfrG89ncKIkMAr4+UvaOZMsd420OSdnEH9kpdm5Kws8rG0VVLAtqhfQfi3K9DuC8Ub7IiXqil//h+I9WJ2LHKirWK0m/MkhTFC6hfi0uSnQCX/jud3Keewxf3ovgiKQvIw6VR37UC50YJM9+KhZKtsNYhGAdos="
 
-before_install:
-  - export CC=/usr/bin/gcc-4.9
-  - export CXX=/usr/bin/g++-4.9
-  - "mkdir qt5"
-  - "wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt542.zip"
-  - "unzip -qq qt5.zip -d qt5"
-  - "export PATH=`pwd`/qt5/bin:$PATH"
-  - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
-  - "export QML2_IMPORT_PATH=`pwd`/qt5/qml"
-before_script:
-  #compatibility between ruby travis artefact and GO one
-  - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
-  - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
-  - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
-  - "mkdir $HOME/software"
-  - "export PATH=$PATH:$HOME/bin:$HOME/software/bin"
-  - "make revision"
-  - "make debug CPUS=2 PREFIX=$HOME/software"
-  - "make installdebug CPUS=2 PREFIX=$HOME/software"
-  - "cd build.debug/mtest"
-  - "make -j2"
-script:
-  - "../../build/run_tests.sh"
-after_script:
-  - "export TRAVIS_SHORT_COMMIT=`echo $TRAVIS_COMMIT | cut -c 1-8`"
-  - "export ARTIFACTS_TARGET_PATHS=$TRAVIS_SHORT_COMMIT"
-  - export ARTIFACTS_PATHS=$(ls ../../vtest/html | tr "\n" ":")
-  - "export ARTIFACTS_PERMISSIONS=public-read"
-  - "export TRAVIS_BUILD_DIR=../../vtest/html"
-  - "artifacts upload"
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: "JOB=AppImage"
+  include:
+    # 1st parallel build job - debug build on Ubuntu
+    - env: "JOB=Tests"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+            - cmake
+            - alsa
+            - libsndfile1
+            - wget
+            - make
+            - ant
+            - curl
+            - libasound2-dev
+            - portaudio19-dev
+            - libsndfile1-dev
+            - zlib1g-dev
+            - libfreetype6-dev
+            - libfontconfig1-dev
+            - lame
+            - libmp3lame-dev
+            - libegl1-mesa-dev
+            - libegl1-mesa
+            - ccache
+            - libpulse-dev
+      cache:
+        directories:
+          - $HOME/.ccache
+      before_install:
+        - "source build/travis/job1_Tests/environment.sh"
+      install:
+        - "./build/travis/job1_Tests/install.sh"
+      before_script:
+        - "./build/travis/job1_Tests/before_script.sh"
+      script:
+        - "./build/travis/job1_Tests/run_tests.sh"
+      after_script:
+        - 'ARTIFACTS_PATHS="$(ls vtest/html | tr "\n" ":")" artifacts upload'
+    # 2nd parallel build job - portable Linux AppImage build on CentOS
+    - env: "JOB=AppImage"
+      addons:
+        apt:
+          packages:
+          - bsdtar
+          - curl
+          - zsync
+      services:
+        - docker
+      script:
+        - "./build/travis/job2_AppImage/build.sh --upload-branches master 2.0.3"
+        # AppImages are built on all branches, but only uploaded on those listed
+
 notifications:
   recipients:
     - build@musescore.org
