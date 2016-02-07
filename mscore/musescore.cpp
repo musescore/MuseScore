@@ -821,11 +821,14 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-unprintable"));
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
+     
+#ifndef Q_OS_MAC
       menuView->addSeparator();
       a = getAction("fullscreen");
       a->setCheckable(true);
       a->setChecked(false);
       menuView->addAction(a);
+#endif
 
       //---------------------
       //    Menu Create
