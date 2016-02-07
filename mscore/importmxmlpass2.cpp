@@ -3425,15 +3425,21 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "clef");
 
+      Part* part = _pass1.getPart(partId);
+      Q_ASSERT(part);
+      int staves = part->nstaves();
+
       // TODO: check error handling for
       // - single staff
       // - multi-staff with same clef
       QString strClefno = _e.attributes().value("number").toString();
-      int clefno = 1; // reasonable default
+      int clefno = 1; // default
       if (strClefno != "")
             clefno = strClefno.toInt();
-      if (clefno <= 0) {
-            // conversion error (0) or other issue (<0), assume staff 1
+      if (clefno <= 0 || clefno > part->nstaves()) {
+            // conversion error (0) or other issue, assume staff 1
+            // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
+            // Same fix is required in pass 1 and pass 2
             logError(QString("invalid clef number '%1'").arg(strClefno));
             clefno = 1;
             }
@@ -3519,27 +3525,21 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       else
             qDebug("clef: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);  // TODO
 
-      Part* part = _pass1.getPart(partId);
-      Q_ASSERT(part);
-      int staves = part->nstaves();
-
-      if (clefno < staves) {
-            Clef* clefs = new Clef(_score);
-            clefs->setClefType(clef);
-            int track = _pass1.trackForPart(partId) + clefno * VOICES;
-            clefs->setTrack(track);
-            Segment* s = measure->getSegment(clefs, tick);
-            s->add(clefs);
-            }
+      Clef* clefs = new Clef(_score);
+      clefs->setClefType(clef);
+      int track = _pass1.trackForPart(partId) + clefno * VOICES;
+      clefs->setTrack(track);
+      Segment* s = measure->getSegment(clefs, tick);
+      s->add(clefs);
 
       // set the correct staff type
       // note that this overwrites the staff lines value set in pass 1
       // also note that clef handling should probably done in pass1
-      int staffIdx = _score->staffIdx(part);
+      int staffIdx = _score->staffIdx(part) + clefno;
       int lines = _score->staff(staffIdx)->lines();
       if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
             _score->staff(staffIdx)->setStaffType(StaffType::preset(st));
-            _score->staff(staffIdx)->setLines(lines);
+            _score->staff(staffIdx)->setLines(lines); // preserve previously set staff lines
             _score->staff(staffIdx)->setBarLineTo((lines - 1) * 2);
             }
       }

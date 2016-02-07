@@ -905,6 +905,23 @@ Score::FileError MusicXMLParserPass1::parse()
       }
 
 //---------------------------------------------------------
+//   allStaffGroupsIdentical
+//---------------------------------------------------------
+
+/**
+ Return true if all staves in Part \a p have the same staff group
+ */
+
+static bool allStaffGroupsIdentical(Part const* const p)
+      {
+      for (int i = 1; i < p->nstaves(); ++i) {
+            if (p->staff(0)->staffGroup() != p->staff(i)->staffGroup())
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -999,7 +1016,10 @@ void MusicXMLParserPass1::scorePartwise()
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
                   p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
-                  p->staff(0)->setBarLineSpan(p->nstaves());
+                  if (allStaffGroupsIdentical(p)) {
+                        // span only if the same types
+                        p->staff(0)->setBarLineSpan(p->nstaves());
+                        }
                   }
             }
       }
@@ -2248,22 +2268,22 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
       Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
       logDebugTrace("MusicXMLParserPass1::staffDetails");
 
-      QString number = _e.attributes().value("number").toString();
-      int n = -1;       // invalid
-      if (number != "") {
-            n = number.toInt();
-            if (n <= 0) {
-                  logError(QString("invalid number %1").arg(number));
-                  n = -1;
-                  }
-            else
-                  n--;        // make zero-based
-            }
-
       Part* part = getPart(partId);
       Q_ASSERT(part);
       int staves = part->nstaves();
-      int staffIdx = _score->staffIdx(part);
+
+      QString number = _e.attributes().value("number").toString();
+      int n = 1; // default
+      if (number != "") {
+            n = number.toInt();
+            if (n <= 0 || n > staves) {
+                  logError(QString("invalid staff-details number %1").arg(number));
+                  n = 1;
+                  }
+            }
+      n--;        // make zero-based
+
+      int staffIdx = _score->staffIdx(part) + n;
 
       StringData* t = 0;
       if (_score->staff(staffIdx)->isTabStaff()) {
@@ -2291,12 +2311,7 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
             }
 
       if (staffLines > 0) {
-            if (n == -1) {
-                  for (int i = 0; i < staves; ++i)
-                        setStaffLines(_score, staffIdx+i, staffLines);
-                  }
-            else
-                  setStaffLines(_score, staffIdx, staffLines);
+            setStaffLines(_score, staffIdx, staffLines);
             }
 
       if (t) {
