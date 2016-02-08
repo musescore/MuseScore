@@ -438,7 +438,7 @@ void Segment::add(Element* el)
       int track = el->track();
       Q_ASSERT(track != -1);
       Q_ASSERT(el->score() == score());
-      Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
+      Q_ASSERT(score()->nstaves() * VOICES == int(_elist.size()));
 
       switch (el->type()) {
             case Element::Type::REPEAT_MEASURE:
@@ -991,7 +991,7 @@ void Segment::clearAnnotations()
 
 Ms::Element* Segment::elementAt(int track) const
       {
-      Element* e = track < _elist.size() ? _elist[track] : 0;
+      Element* e = track < int(_elist.size()) ? _elist[track] : 0;
 
 #ifdef SCRIPT_INTERFACE
 // if called from QML/JS, tell QML engine not to garbage collect this object
@@ -1314,10 +1314,8 @@ void Segment::createShape(int staffIdx)
                   s.add(e->shape());
             }
       for (Element* e : _annotations) {
-            if (e->staffIdx() == staffIdx) {
-                  printf("annotation %d %s %p %p\n", staffIdx, e->name(), this, e);
+            if (e->staffIdx() == staffIdx)
                   s.add(e->shape());
-                  }
             }
       }
 

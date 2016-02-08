@@ -43,7 +43,12 @@
             if (e->isChord())
                   ...
 
-        This is shorter and easier to read.
+        This is shorter and easier to read. Similar
+            if ((s.segmentType() == Segment::Type::ChordRest))
+                  ...
+        can be written as
+            if (s.isChordRest())
+                  ...
 
       * Instead of
             Chord* chord = static_cast<Chord*>(e);
@@ -60,4 +65,14 @@
             - use list.push_back(xx) instead of list.append(xx) or
             - use list.empty() instead of list.isEmpty()
             - etc.
+
+      * In iterating a SegmentList instead of
+            for (Segment* s = segments->first(); s; s = s->next())
+                  ...
+
+        you can write
+            for (auto s : segments)
+                  ...
+
+
 

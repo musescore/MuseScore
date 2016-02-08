@@ -359,7 +359,7 @@ void Measure::layout2()
       if (parent() == 0)
             return;
 
-      Q_ASSERT(score()->nstaves() == _mstaves.size());
+      Q_ASSERT(score()->nstaves() == int(_mstaves.size()));
 
       qreal _spatium = spatium();
 
@@ -423,7 +423,7 @@ void Measure::layout2()
                         }
                   }
             }
-      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
+      for (int staffIdx = 0; staffIdx < int(_mstaves.size()); ++staffIdx) {
             MStaff* ms = _mstaves[staffIdx];
             Text* t = ms->noText();
             if (t)
@@ -607,7 +607,7 @@ void Measure::add(Element* e)
 
       switch (type) {
             case Element::Type::TEXT:
-                  if (e->staffIdx() < _mstaves.size())
+                  if (e->staffIdx() < int(_mstaves.size()))
                         _mstaves[e->staffIdx()]->setNoText(static_cast<Text*>(e));
                   break;
 
@@ -936,7 +936,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             if (ts) {
                   TimeSig* ots = 0;
                   bool constructed = false;
-                  for (int track = 0; track < _mstaves.size() * VOICES; ++track) {
+                  for (unsigned track = 0; track < _mstaves.size() * VOICES; ++track) {
                         if (ts->element(track)) {
                               ots = static_cast<TimeSig*>(ts->element(track));
                               break;
@@ -983,7 +983,7 @@ void MStaff::setTrack(int track)
 void Measure::insertMStaff(MStaff* staff, int idx)
       {
       _mstaves.insert(_mstaves.begin()+idx, staff);
-      for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
             _mstaves[staffIdx]->setTrack(staffIdx * VOICES);
       }
 
@@ -994,7 +994,7 @@ void Measure::insertMStaff(MStaff* staff, int idx)
 void Measure::removeMStaff(MStaff* /*staff*/, int idx)
       {
       _mstaves.erase(_mstaves.begin()+idx);
-      for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
             _mstaves[staffIdx]->setTrack(staffIdx * VOICES);
       }
 
@@ -1424,7 +1424,7 @@ void Measure::adjustToLen(Fraction nf)
 
                         // add rests for any other duration list value
                         int tickOffset = tick() + durList[0].ticks();
-                        for (int i = 1; i < durList.size(); i++) {
+                        for (unsigned i = 1; i < durList.size(); i++) {
                               Rest* newRest = new Rest(s);
                               newRest->setDurationType(durList.at(i));
                               newRest->setDuration(durList.at(i).fraction());
@@ -2609,7 +2609,7 @@ void Measure::sortStaves(QList<int>& dst)
             ms.push_back(_mstaves[idx]);
       _mstaves = ms;
 
-      for (int staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
             _mstaves[staffIdx]->lines->setTrack(staffIdx * VOICES);
       for (Segment* s = first(); s; s = s->next())
             s->sortStaves(dst);
@@ -3252,7 +3252,7 @@ QString Measure::accessibleInfo() const
 
 //-----------------------------------------------------------------------------
 //    stretchMeasure
-///   Return width of measure (in MeasureWidth), taking into account \a stretch.
+//    resize width of measure to stretch
 //-----------------------------------------------------------------------------
 
 void Measure::stretchMeasure(qreal stretch)
@@ -3262,11 +3262,11 @@ void Measure::stretchMeasure(qreal stretch)
       int nstaves = _score->nstaves();
       int minTick = 100000;
 
-      for (Segment* s = first(); s; s = s->next()) {
+      for (auto& s : _segments) {
             int nticks;
-            if ((s->segmentType() == Segment::Type::ChordRest)) {
-                  const Segment* nseg = s->next(Segment::Type::ChordRest);
-                  nticks = (nseg ? nseg->rtick() : ticks()) - s->rtick();
+            if (s.isChordRest()) {
+                  const Segment* nseg = s.next(Segment::Type::ChordRest);
+                  nticks = (nseg ? nseg->rtick() : ticks()) - s.rtick();
                   if (nticks) {
                         if (nticks < minTick)
                               minTick = nticks;
@@ -3274,7 +3274,7 @@ void Measure::stretchMeasure(qreal stretch)
                   }
             else
                   nticks = 0;
-            s->setTicks(nticks);
+            s.setTicks(nticks);
             }
 
       //---------------------------------------------------
@@ -3283,23 +3283,24 @@ void Measure::stretchMeasure(qreal stretch)
 
       SpringMap springs;
       qreal minimum = first()->pos().x();
-      for (Segment* s = first(); s; s = s->next()) {
+
+      for (auto& s : _segments) {
             qreal str = 1.0;
             qreal d;
 
-            int t = s->ticks();
+            int t = s.ticks();
             if (t) {
                   if (minTick > 0)
                         // str += .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
                         str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
-                  d = s->width() / str;
+                  d = s.width() / str;
                   }
             else {
                   str = 0.0;              // dont stretch timeSig and key
                   d   = 100000000.0;      // CHECK
                   }
-            springs.insert(std::pair<qreal, Spring>(d, Spring(s, str)));
-            minimum += s->width();
+            springs.insert(std::pair<qreal, Spring>(d, Spring(&s, str)));
+            minimum += s.width();
             }
 
       //---------------------------------------------------
@@ -3308,11 +3309,11 @@ void Measure::stretchMeasure(qreal stretch)
 
       qreal force = sff(stretch, minimum, springs);
 
-      for (auto i = springs.begin(); i != springs.end(); ++i) {
-            qreal stretch = force * i->second.stretch;
-            if (stretch < i->second.fix)
-                  stretch = i->second.fix;
-            i->second.seg->setWidth(stretch);
+      for (auto& i : springs) {
+            qreal stretch = force * i.second.stretch;
+            if (stretch < i.second.fix)
+                  stretch = i.second.fix;
+            i.second.seg->setWidth(stretch);
             }
 
       qreal x = first()->pos().x();

@@ -2093,19 +2093,37 @@ qreal Score::computeMinWidth(Segment* s)
             x = qMax(x, keysigLeftMargin);
       x += s->extraLeadingSpace().val() * _spatium;
 
-      for (;;) {
-            s->rxpos() = x;
-            Segment* ns = s->next();
+      for (Segment* ss = s;;) {
+            ss->rxpos() = x;
+            Segment* ns = ss->next();
             if (!ns) {
-                  qreal w = s->segmentType() == Segment::Type::EndBarLine ? 0.0 : s->minRight();
-                  s->setWidth(w);
+                  qreal w = ss->segmentType() == Segment::Type::EndBarLine ? 0.0 : ss->minRight();
+                  ss->setWidth(w);
                   x += w;
                   break;
                   }
-            qreal w = s->minHorizontalDistance(ns);
-            s->setWidth(w);
+            qreal w = ss->minHorizontalDistance(ns);
+
+            int n = 1;
+            for (Segment* ps = ss;;) {
+                  if (ps == s)
+                        break;
+                  ps = ps->prev();
+                  ++n;
+                  qreal ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+                  if (ww > w) {
+                        // overlap !
+                        // distribute extra space between segments ps - ss;
+                        qreal d = (ww - w) / n;
+                        for (Segment* s = ps; s != ss; s = s->next())
+                              s->setWidth(s->width() + d);
+                        w += d;
+                        break;
+                        }
+                  }
+            ss->setWidth(w);
             x += w;
-            s = ns;
+            ss = ns;
             }
       return x;
       }
