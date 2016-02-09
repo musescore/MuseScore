@@ -816,7 +816,7 @@ Note* prevNote(Note* n)
 //   nextNote
 //---------------------------------------------------------
 
-Note* nextNote(Note* n)
+static Note* nextNote(Note* n)
       {
       Chord* chord = n->chord();
       const std::vector<Note*> nl = chord->notes();

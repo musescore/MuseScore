@@ -83,7 +83,7 @@ class MeasureBase : public Element {
       bool _repeatStart      { false };
       bool _repeatMeasure    { false };
       bool _repeatJump       { false };
-      bool _irregular        { true  };    ///< Irregular measure, do not count
+      bool _irregular        { true  };        ///< Irregular measure, do not count
       bool _lineBreak        { false };        ///< Forced line break
       bool _pageBreak        { false };        ///< Forced page break
       bool _hasSystemHeader  { false };
@@ -130,6 +130,7 @@ class MeasureBase : public Element {
       void setLineBreak(bool v)              { _lineBreak = v;    }
       void setPageBreak(bool v)              { _pageBreak = v;    }
       void setSectionBreak(LayoutBreak* v)   { _sectionBreak = v; }
+
       void undoSetBreak(bool v, LayoutBreak::Type type);
       void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::Type::LINE);}
       void undoSetPageBreak(bool v)          {  undoSetBreak(v, LayoutBreak::Type::PAGE);}

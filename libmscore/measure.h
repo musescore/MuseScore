@@ -195,7 +195,7 @@ class Measure : public MeasureBase {
       void insertStaves(int s, int e);
 
       qreal tick2pos(int) const;
-      Segment* tick2segment(int tick, Segment::Type st = Segment::Type::ChordRest) const;
+      Segment* tick2segment(int tick, Segment::Type st = Segment::Type::ChordRest);
 
       void sortStaves(QList<int>& dst);
 

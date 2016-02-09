@@ -123,7 +123,7 @@ Measure::Measure(Score* s)
             }
       setIrregular(false);
       _noMode                   = MeasureNumberMode::AUTO;
-      _userStretch              = 1.0;     // ::style->measureSpacing;
+      _userStretch              = 1.0;
       _breakMultiMeasureRest    = false;
       _mmRest                   = 0;
       _mmRestCount              = 0;
@@ -356,9 +356,7 @@ qreal Measure::tick2pos(int tck) const
 
 void Measure::layout2()
       {
-      if (parent() == 0)
-            return;
-
+      Q_ASSERT(parent());
       Q_ASSERT(score()->nstaves() == int(_mstaves.size()));
 
       qreal _spatium = spatium();
@@ -495,8 +493,8 @@ Chord* Measure::findChord(int tick, int track)
                   return 0;
             if (seg->tick() == tick) {
                   Element* el = seg->element(track);
-                  if (el && el->type() == Element::Type::CHORD)
-                        return static_cast<Chord*>(el);
+                  if (el->isChord())
+                        return el->chord();
                   }
             }
       return 0;
@@ -509,14 +507,13 @@ Chord* Measure::findChord(int tick, int track)
 
 ChordRest* Measure::findChordRest(int tick, int track)
       {
-      for (Segment* seg = first(); seg; seg = seg->next()) {
-            if (seg->tick() > tick)
+      for (const Segment& seg : _segments) {
+            if (seg.tick() > tick)
                   return 0;
-            if (seg->tick() == tick) {
-                  Element* el = seg->element(track);
-                  if (el && (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST)) {
-                        return (ChordRest*)el;
-                        }
+            if (seg.tick() == tick) {
+                  Element* el = seg.element(track);
+                  if (el->isChordRest())
+                        return el->chordRest();
                   }
             }
       return 0;
@@ -526,15 +523,15 @@ ChordRest* Measure::findChordRest(int tick, int track)
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Measure::tick2segment(int tick, Segment::Type st) const
+Segment* Measure::tick2segment(int tick, Segment::Type st)
       {
-      for (Segment* s = first(); s; s = s->next()) {
-            if (s->tick() == tick) {
-                  if ( (s->segmentType() & st) != 0)
-                        return s;
+      for (Segment& s : _segments) {
+            if (s.tick() == tick) {
+                  if (s.segmentType() & st)
+                        return &s;
                   }
-            if (s->tick() > tick)
-                  return 0;
+            if (s.tick() > tick)
+                  break;
             }
       return 0;
       }
@@ -756,9 +753,8 @@ void Measure::change(Element* o, Element* n)
       {
       if (o->type() == Element::Type::TUPLET) {
             Tuplet* t = static_cast<Tuplet*>(n);
-            foreach(DurationElement* e, t->elements()) {
+            for (DurationElement* e : t->elements())
                   e->setTuplet(t);
-                  }
             }
       else {
             remove(o);
@@ -1174,8 +1170,8 @@ Element* Measure::drop(const DropData& data)
                   Bracket* b = static_cast<Bracket*>(e);
                   int level = 0;
                   int firstStaff = 0;
-                  foreach (Staff* s, score()->staves()) {
-                        foreach (const BracketItem& bi, s->brackets()) {
+                  for (Staff* s : score()->staves()) {
+                        for (const BracketItem& bi : s->brackets()) {
                               int lastStaff = firstStaff + bi._bracketSpan - 1;
                               if (staffIdx >= firstStaff && staffIdx <= lastStaff)
                                     ++level;
@@ -2605,14 +2601,14 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 void Measure::sortStaves(QList<int>& dst)
       {
       std::vector<MStaff*> ms;
-      foreach (int idx, dst)
+      for (int idx : dst)
             ms.push_back(_mstaves[idx]);
       _mstaves = ms;
 
       for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
             _mstaves[staffIdx]->lines->setTrack(staffIdx * VOICES);
-      for (Segment* s = first(); s; s = s->next())
-            s->sortStaves(dst);
+      for (Segment& s : _segments)
+            s.sortStaves(dst);
 
       for (Element* e : el()) {
             if (e->track() == -1 || e->systemFlag())
@@ -2932,7 +2928,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_len         = _len;
       m->_repeatCount = _repeatCount;
 
-      foreach(MStaff* ms, _mstaves)
+      for (MStaff* ms : _mstaves)
             m->_mstaves.push_back(new MStaff(*ms));
 
       m->setNo(no());
