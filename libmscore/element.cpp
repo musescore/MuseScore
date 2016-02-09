@@ -1566,6 +1566,25 @@ void Element::undoChangeProperty(P_ID id, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Element::resetProperty(P_ID id)
+      {
+      setProperty(id, propertyDefault(id));
+      }
+
+//---------------------------------------------------------
+//   custom
+//    check if property is != default
+//---------------------------------------------------------
+
+bool Element::custom(P_ID id) const
+      {
+      return propertyDefault(id) == getProperty(id);
+      }
+
+//---------------------------------------------------------
 //   undoResetProperty
 //---------------------------------------------------------
 
@@ -2026,6 +2045,22 @@ bool Element::prevGrip(Grip* grip) const
 bool Element::isUserModified() const
       {
       return !visible() || !userOff().isNull() || (color() != MScore::defaultColor);
+      }
+
+//---------------------------------------------------------
+//   tick
+//    utility, searches for segment / segment parent
+//---------------------------------------------------------
+
+int Element::tick() const
+      {
+      const Element* e = this;
+      while (e) {
+            if (e->type() == Element::Type::SEGMENT)
+                  return static_cast<const Segment*>(e)->tick();
+            e = e->parent();
+            }
+      return -1;
       }
 
 }

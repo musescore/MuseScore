@@ -2315,12 +2315,11 @@ void Measure::setStartRepeatBarLine()
             Staff* staff = score()->staff(staffIdx);
             BarLine* bl  = s ? static_cast<BarLine*>(s->element(track)) : 0;
             int span, spanFrom, spanTo;
-            // if there is a bar line and has custom span, take span from it
-            if (bl && bl->customSpan()) {
+            // if there is a bar line, take span from it
+            if (bl) {
                   span       = bl->span();
                   spanFrom   = bl->spanFrom();
                   spanTo     = bl->spanTo();
-                  customSpan = bl->customSpan();
                   }
             else {
                   span       = staff->barLineSpan();
@@ -2336,7 +2335,6 @@ void Measure::setStartRepeatBarLine()
                         spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                         spanTo   = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (staffLines-1) * 2;
                         }
-                  customSpan = false;
                   }
             // make sure we do not span more staves than actually exist
             if (staffIdx + span > numStaves)
@@ -2394,7 +2392,6 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       {
       int nstaves  = score()->nstaves();
       Segment* seg = undoGetSegment(Segment::Type::EndBarLine, endTick());
-
       BarLine* bl  = 0;
       int span     = 0;        // span counter
       int aspan    = 0;        // actual span
@@ -2418,26 +2415,23 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             // and forget about any previous bar line
 
             if (span == 0) {
-                  if (cbl && cbl->customSpan()) {     // if there is a bar line and has custom span,
-                        span        = cbl->span();    // get span values from it
-                        spanFrom    = cbl->spanFrom();
-                        spanTo      = cbl->spanTo();
-                        // if bar span values == staff span values, set bar as not custom
-                        if (span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
-                           && spanTo == staff->barLineTo())
-                              cbl->setCustomSpan(false);
+                  if (cbl) {     // if there is a bar line and has custom span,
+                        span     = cbl->span();    // get span values from it
+                        spanFrom = cbl->spanFrom();
+                        spanTo   = cbl->spanTo();
                         }
                   else {                              // otherwise, get from staff
                         span = staff->barLineSpan();
                         // if some span OR last staff (span==0) of a Mensurstrich case, get From/To from staff
                         if (span || mensur) {
-                              spanFrom    = staff->barLineFrom();
-                              spanTo      = staff->barLineTo();
-                              mensur      = false;
+                              spanFrom = staff->barLineFrom();
+                              spanTo   = staff->barLineTo();
+                              mensur   = false;
                               }
                         // but if staff is set to no span, a multi-staff spanning bar line
                         // has been shortened to span less staves and following staves left without bars;
                         // set bar line span values to default
+
                         else if (staff->show()) {
                               span        = 1;
                               spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;

@@ -42,7 +42,6 @@ class Element;
 class BarLine;
 class Articulation;
 class Marker;
-class Chord;
 class Clef;
 class KeySig;
 class TimeSig;
@@ -65,6 +64,8 @@ class Jump;
 class StaffText;
 class Ottava;
 class Note;
+class Chord;
+class Rest;
 class LayoutBreak;
 
 enum class SymId;
@@ -379,7 +380,6 @@ class Element : public QObject, public ScoreElement {
       void scriptSetUserOff(const QPointF& o);
 
       bool isNudged() const                   { return !(_readPos.isNull() && _userOff.isNull()); }
-
       const QPointF& readPos() const          { return _readPos;   }
       void setReadPos(const QPointF& p)       { _readPos = p;      }
       virtual void adjustReadPos();
@@ -403,15 +403,6 @@ class Element : public QObject, public ScoreElement {
 
       virtual Element::Type type() const = 0;
       virtual int subtype() const   { return -1; }  // for select gui
-
-      bool isRest() const      { return type() == Element::Type::REST; }
-      bool isChord() const     { return type() == Element::Type::CHORD; }
-      bool isMeasure() const   { return type() == Element::Type::MEASURE; }
-      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE; }
-
-      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
-      bool isSLine() const;
-      bool isSLineSegment() const;
 
       virtual void draw(QPainter*) const {}
 
@@ -508,7 +499,7 @@ class Element : public QObject, public ScoreElement {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      virtual void reset();
+      virtual void reset();         // reset all properties & position to default
 
       virtual qreal mag() const        { return _mag;   }
       void setMag(qreal val)           { _mag = val;    }
@@ -520,6 +511,8 @@ class Element : public QObject, public ScoreElement {
       virtual bool isSpannerSegment() const    { return false; }
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
+
+      int tick() const;       // utility, searches for segment / segment parent
 
       //
       // check element for consistency; return false if element
@@ -563,7 +556,10 @@ class Element : public QObject, public ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       void undoChangeProperty(P_ID, const QVariant&);
+      void resetProperty(P_ID);
       void undoResetProperty(P_ID);
+      bool custom(P_ID) const;
+      virtual bool isUserModified() const;
 
       virtual void styleChanged() {}
 
@@ -599,34 +595,37 @@ class Element : public QObject, public ScoreElement {
             return QString();                          // and passed only to the screen-reader
             }
 
-
-      virtual bool isUserModified() const;
-
       //---------------------------------------------------
       // checked type conversions & tests
       //
       // Example for ChordRest:
       //
       //    bool             isChordRest()
-      //    ChordRest*       chordRest()
-      //    const ChordRest* chordRest() const
       //    ChordRest*       castChordRest()
       //    const ChordRest* castChordRest() const
+      //    ChordRest*       toChordRest()
+      //    const ChordRest* toChordRest() const
       //---------------------------------------------------
 
       ChordRest* chordRest() {
             Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST);
             return (ChordRest*)this;
             }
+      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE; }
+      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
+      bool isSLine() const;
+      bool isSLineSegment() const;
 
 #define CONVERT(a,b,c) \
-      const a* b() const { Q_ASSERT(this == 0 || type() == Element::Type::c); return (const a*)this; } \
-      a* b() { Q_ASSERT(this == 0 || type() == Element::Type::c); return (a*)this; } \
-      a* cast##a() { return (this == 0 || type() == Element::Type::c) ? (a*)this : 0; } \
-      const a* cast##a() const { return (this == 0 || type() == Element::Type::c) ? (const a*)this : 0; } \
-      bool  is##a() { return type() == Element::Type::c; }
+      const a*   b() const   { Q_ASSERT(this == 0 || type() == Element::Type::c); return (const a*)this; } \
+            a*   b()         { Q_ASSERT(this == 0 || type() == Element::Type::c); return (a*)this; } \
+            a*   to##a()       { return  (this == 0 || type() == Element::Type::c) ? (a*)this : 0; } \
+      const a*   to##a() const { return  (this == 0 || type() == Element::Type::c) ? (const a*)this : 0; } \
+      bool       is##a() const { return type() == Element::Type::c; }
 
       CONVERT(Note,         note,         NOTE);
+      CONVERT(Rest,         rest,         REST);
+//      CONVERT(Chord,        chord,         CHORD);
       CONVERT(BarLine,      barLine,      BAR_LINE);
       CONVERT(Articulation, articulation, ARTICULATION);
       CONVERT(Marker,       marker,       MARKER);
@@ -652,6 +651,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(StaffText,    staffText,    STAFF_TEXT);
       CONVERT(Ottava,       ottava,       OTTAVA);
       CONVERT(LayoutBreak,  layoutBreak,  LAYOUT_BREAK);
+//      CONVERT(Segment,      segment,      SEGMENT);
 
 #undef CONVERT
       };
