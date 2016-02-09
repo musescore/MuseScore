@@ -27,6 +27,7 @@ SpannerMap::SpannerMap()
 
 //---------------------------------------------------------
 //   update
+//   updates the internal lookup tree, not the map itself
 //---------------------------------------------------------
 
 void SpannerMap::update() const
