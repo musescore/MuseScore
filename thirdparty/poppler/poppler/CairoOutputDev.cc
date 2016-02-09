@@ -21,10 +21,14 @@
 // Copyright (C) 2006-2011, 2013, 2014 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2008 Carl Worth <cworth@cworth.org>
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Copyright (C) 2008-2015 Adrian Johnson <ajohnson@redneon.com>
 =======
 // Copyright (C) 2008-2014 Adrian Johnson <ajohnson@redneon.com>
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+// Copyright (C) 2008-2015 Adrian Johnson <ajohnson@redneon.com>
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 // Copyright (C) 2008 Michael Vrable <mvrable@cs.ucsd.edu>
 // Copyright (C) 2008, 2009 Chris Wilson <chris@chris-wilson.co.uk>
 // Copyright (C) 2008, 2012 Hib Eris <hib@hiberis.nl>
@@ -937,6 +941,9 @@ GBool CairoOutputDev::tilingPatternFill(GfxState *state, Gfx *gfxA, Catalog *cat
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
 GBool CairoOutputDev::functionShadedFill(GfxState *state, GfxFunctionShading *shading)
 {
@@ -1038,8 +1045,11 @@ GBool CairoOutputDev::functionShadedFill(GfxState *state, GfxFunctionShading *sh
 }
 #endif /* CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0) */
 
+<<<<<<< HEAD
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 GBool CairoOutputDev::axialShadedFill(GfxState *state, GfxAxialShading *shading, double tMin, double tMax) {
   double x0, y0, x1, y1;
   double dx, dy;
@@ -1072,16 +1082,24 @@ GBool CairoOutputDev::radialShadedFill(GfxState *state, GfxRadialShading *shadin
   double x0, y0, r0, x1, y1, r1;
   double dx, dy, dr;
 <<<<<<< HEAD
+<<<<<<< HEAD
   cairo_matrix_t matrix;
   double scale;
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+  cairo_matrix_t matrix;
+  double scale;
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
   shading->getCoords(&x0, &y0, &r0, &x1, &y1, &r1);
   dx = x1 - x0;
   dy = y1 - y0;
   dr = r1 - r0;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
   // Cairo/pixman do not work well with a very large or small scaled
   // matrix.  See cairo bug #81657.
@@ -1093,6 +1111,7 @@ GBool CairoOutputDev::radialShadedFill(GfxState *state, GfxRadialShading *shadin
 	   + sqrt(matrix.xy * matrix.xy + matrix.yy * matrix.yy)) / 2;
   cairo_matrix_init_scale(&matrix, scale, scale);
 
+<<<<<<< HEAD
   cairo_pattern_destroy(fill_pattern);
   fill_pattern = cairo_pattern_create_radial ((x0 + sMin * dx) * scale,
 					      (y0 + sMin * dy) * scale,
@@ -1110,6 +1129,16 @@ GBool CairoOutputDev::radialShadedFill(GfxState *state, GfxRadialShading *shadin
 					      y0 + sMax * dy,
 					      r0 + sMax * dr);
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+  cairo_pattern_destroy(fill_pattern);
+  fill_pattern = cairo_pattern_create_radial ((x0 + sMin * dx) * scale,
+					      (y0 + sMin * dy) * scale,
+					      (r0 + sMin * dr) * scale,
+					      (x0 + sMax * dx) * scale,
+					      (y0 + sMax * dy) * scale,
+					      (r0 + sMax * dr) * scale);
+  cairo_pattern_set_matrix(fill_pattern, &matrix);
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   if (shading->getExtend0() && shading->getExtend1())
     cairo_pattern_set_extend (fill_pattern, CAIRO_EXTEND_PAD);
   else
@@ -1618,10 +1647,13 @@ void CairoOutputDev::beginTransparencyGroup(GfxState * /*state*/, double * /*bbo
       //printMatrix(&matrix);
       cairo_set_matrix (cairo_shape, &matrix);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     } else {
       cairo_reference (cairo_shape);
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     }
   }
   if (groupColorSpaceStack->next && groupColorSpaceStack->next->knockout) {
@@ -1662,6 +1694,7 @@ void CairoOutputDev::paintTransparencyGroup(GfxState * /*state*/, double * /*bbo
   cairo_save (cairo);
   cairo_set_matrix (cairo, &groupColorSpaceStack->group_matrix);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   if (shape) {
     /* OPERATOR_SOURCE w/ a mask is defined as (src IN mask) ADD (dest OUT mask)
@@ -1685,28 +1718,33 @@ void CairoOutputDev::paintTransparencyGroup(GfxState * /*state*/, double * /*bbo
     //XXX: deal with mask && shape case
     if (shape) {
       cairo_save (cairo);
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
-      /* OPERATOR_SOURCE w/ a mask is defined as (src IN mask) ADD (dest OUT mask)
-       * however our source has already been clipped to mask so we only need to
-       * do ADD and OUT */
+  if (shape) {
+    /* OPERATOR_SOURCE w/ a mask is defined as (src IN mask) ADD (dest OUT mask)
+     * however our source has already been clipped to mask so we only need to
+     * do ADD and OUT */
 
-      /* clear the shape mask */
-      cairo_set_source (cairo, shape);
-      cairo_set_operator (cairo, CAIRO_OPERATOR_DEST_OUT);
-      cairo_paint (cairo);
+    /* clear the shape mask */
+    cairo_set_source (cairo, shape);
+    cairo_set_operator (cairo, CAIRO_OPERATOR_DEST_OUT);
+    cairo_paint (cairo);
+    cairo_set_operator (cairo, CAIRO_OPERATOR_ADD);
+  }
+  cairo_set_source (cairo, group);
 
-      cairo_set_operator (cairo, CAIRO_OPERATOR_ADD);
-      cairo_set_source (cairo, group);
-      cairo_paint (cairo);
-
-      cairo_restore (cairo);
-
+<<<<<<< HEAD
       cairo_pattern_destroy (shape);
       shape = NULL;
     } else {
       cairo_paint_with_alpha (cairo, fill_opacity);
     }
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+  if (!mask) {
+    cairo_paint_with_alpha (cairo, fill_opacity);
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     cairo_status_t status = cairo_status(cairo);
     if (status)
       printf("BAD status: %s\n", cairo_status_to_string(status));
@@ -1727,6 +1765,9 @@ void CairoOutputDev::paintTransparencyGroup(GfxState * /*state*/, double * /*bbo
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   if (shape) {
     if (cairo_shape) {
       cairo_set_source (cairo_shape, shape);
@@ -1737,8 +1778,11 @@ void CairoOutputDev::paintTransparencyGroup(GfxState * /*state*/, double * /*bbo
     shape = NULL;
   }
 
+<<<<<<< HEAD
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   popTransparencyGroup();
   cairo_restore(cairo);
 }

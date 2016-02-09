@@ -56,7 +56,7 @@ void TestScripting::initTestCase()
 
 void TestScripting::read1(const QString& file, const QString& script)
       {
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       MuseScoreCore::mscoreCore->setCurrentScore(score);
 
       QVERIFY(score);

@@ -739,7 +739,7 @@ void MuseScore::newFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->doLayout();
       setCurrentScoreView(appendScore(score));
 
@@ -2079,7 +2079,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             score->setCreated(true); // force save as for imported files
             }
 
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->setSoloMute();
       for (Score* s : score->scoreList()) {
             s->setPlaylistDirty();

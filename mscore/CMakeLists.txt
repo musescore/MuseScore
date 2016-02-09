@@ -399,6 +399,7 @@ if (MINGW)
 	#set(LIB_GLFW /usr/local/lib/libglfw.a)
       #target_link_libraries(mscore omr poppler mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
 <<<<<<< HEAD
+<<<<<<< HEAD
       target_link_libraries(mscore omr poppler)
 =======
       target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
@@ -419,6 +420,9 @@ if (MINGW)
 =======
       target_link_libraries(mscore omr poppler fontconfig freetype lcms2)
 >>>>>>> d065ed4... add progress dialog to the omr process
+=======
+      target_link_libraries(mscore omr poppler)
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -524,6 +528,7 @@ else (MINGW)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       target_link_libraries(mscore omr poppler)
 =======
       target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
@@ -550,6 +555,9 @@ else (MINGW)
 >>>>>>> c974e91... add poppler to 3rd party folder
       target_link_libraries(mscore omr poppler fontconfig freetype lcms2)
 >>>>>>> d065ed4... add progress dialog to the omr process
+=======
+      target_link_libraries(mscore omr poppler)
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)

@@ -974,7 +974,7 @@ bool Score::read(XmlReader& e)
                   _mscoreRevision = e.readInt();
             else if (tag == "Omr") {
 #ifdef OMR
-                  masterScore()->setOMR(new Omr(this));
+                  masterScore()->setOmr(new Omr(this));
                   masterScore()->omr()->read(e);
 #else
                   e.skipCurrentElement();

@@ -153,10 +153,14 @@
 
 /* Define as const if the declaration of iconv() needs const. */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ICONV_CONST
 =======
 #define ICONV_CONST 
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+#define ICONV_CONST
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
@@ -213,10 +217,14 @@
 
 /* Defines if use cms */
 <<<<<<< HEAD
+<<<<<<< HEAD
 //#define USE_CMS 1
 =======
 #define USE_CMS 1
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+//#define USE_CMS 1
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
 /* Use fixed point arithmetic in the Splash backend */
 /* #undef USE_FIXEDPOINT */
@@ -235,6 +243,7 @@
 
 /* Version number of package */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define VERSION "0.40.0"
 
 /* Use fontconfig font configuration backend */
@@ -245,6 +254,12 @@
 /* Use fontconfig font configuration backend */
 #define WITH_FONTCONFIGURATION_FONTCONFIG 1
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+#define VERSION "0.40.0"
+
+/* Use fontconfig font configuration backend */
+//#define WITH_FONTCONFIGURATION_FONTCONFIG 1
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
 /* Use win32 font configuration backend */
 /* #undef WITH_FONTCONFIGURATION_WIN32 */

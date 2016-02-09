@@ -26,10 +26,14 @@
 // Copyright (C) 2009, 2011, 2012, 2014, 2015 William Bader <williambader@hotmail.com>
 // Copyright (C) 2009 Kovid Goyal <kovid@kovidgoyal.net>
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Copyright (C) 2009-2011, 2013-2015 Adrian Johnson <ajohnson@redneon.com>
 =======
 // Copyright (C) 2009-2011, 2013, 2014 Adrian Johnson <ajohnson@redneon.com>
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+// Copyright (C) 2009-2011, 2013-2015 Adrian Johnson <ajohnson@redneon.com>
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 // Copyright (C) 2012, 2014 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2012 Lu Wang <coolwanglu@gmail.com>
 // Copyright (C) 2014 Till Kamppeter <till.kamppeter@gmail.com>
@@ -3767,6 +3771,7 @@ void PSOutputDev::startPage(int pageNum, GfxState *state, XRef *xrefA) {
       }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     if (paperMatch) {
       paperSize = (PSOutPaperSize *)paperSizes->get(pagePaperSize[pageNum]);
@@ -3785,31 +3790,42 @@ void PSOutputDev::startPage(int pageNum, GfxState *state, XRef *xrefA) {
     }
     writePS("pdfStartPage\n");
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     if (rotate == 0) {
       imgWidth2 = imgWidth;
       imgHeight2 = imgHeight;
     } else if (rotate == 90) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       writePS("90 rotate\n");
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
       ty = -imgWidth;
       imgWidth2 = imgHeight;
       imgHeight2 = imgWidth;
     } else if (rotate == 180) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       writePS("180 rotate\n");
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
       imgWidth2 = imgWidth;
       imgHeight2 = imgHeight;
       tx = -imgWidth;
       ty = -imgHeight;
     } else { // rotate == 270
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       writePS("270 rotate\n");
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
       tx = -imgHeight;
       imgWidth2 = imgHeight;
       imgHeight2 = imgWidth;
@@ -3854,6 +3870,9 @@ void PSOutputDev::startPage(int pageNum, GfxState *state, XRef *xrefA) {
     tx += (rotate == 0 || rotate == 180) ? imgLLX : imgLLY;
     ty += (rotate == 0 || rotate == 180) ? imgLLY : -imgLLX;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
     if (paperMatch) {
       paperSize = (PSOutPaperSize *)paperSizes->get(pagePaperSize[pageNum]);
@@ -3907,8 +3926,11 @@ void PSOutputDev::startPage(int pageNum, GfxState *state, XRef *xrefA) {
     writePS("pdfStartPage\n");
     if (rotate)
       writePSFmt("{0:d} rotate\n", rotate);
+<<<<<<< HEAD
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     if (tx != 0 || ty != 0) {
       writePSFmt("{0:.6g} {1:.6g} translate\n", tx, ty);
     }

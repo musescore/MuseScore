@@ -563,6 +563,7 @@ if (OMR)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       subdirs (omr thirdparty/poppler)
 =======
       subdirs (poppler omr)
@@ -577,6 +578,9 @@ if (OMR)
 =======
       subdirs (omr thirdparty/poppler thirdparty/lcms2)
 >>>>>>> bf0472b... update cmake files
+=======
+      subdirs (omr thirdparty/poppler)
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 endif (OMR)
 
 if (OSC)
@@ -622,7 +626,6 @@ endif (OMR)
 if (OMR)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
-   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/lcms2/include)
 endif (OMR)
 
 >>>>>>> d065ed4... add progress dialog to the omr process

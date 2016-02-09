@@ -1,3 +1,0 @@
-libgoo_la-FixedPoint.lo: FixedPoint.cc ../config.h
-
-../config.h:

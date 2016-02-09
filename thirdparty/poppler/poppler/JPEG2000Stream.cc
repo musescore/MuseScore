@@ -10,9 +10,13 @@
 // Copyright 2013, 2014 Adrian Johnson <ajohnson@redneon.com>
 // Copyright 2015 Adam Reichold <adam.reichold@t-online.de>
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Copyright 2015 Jakub Wilk <jwilk@jwilk.net>
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+// Copyright 2015 Jakub Wilk <jwilk@jwilk.net>
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 //
 // Licensed under GPLv2 or later
 //
@@ -257,6 +261,7 @@ void JPXStreamPrivate::init2(unsigned char *buf, int bufLen, OPJ_CODEC_FORMAT fo
 error:
   if (format == CODEC_JP2) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     error(errSyntaxWarning, -1, "Did not succeed opening JPX Stream as JP2, trying as J2K.");
     init2(buf, bufLen, CODEC_J2K);
   } else if (format == CODEC_J2K) {
@@ -266,13 +271,20 @@ error:
     error(errSyntaxError, -1, "Did not succeed opening JPX Stream.");
 =======
     error(errSyntaxWarning, -1, "Did no succeed opening JPX Stream as JP2, trying as J2K.");
+=======
+    error(errSyntaxWarning, -1, "Did not succeed opening JPX Stream as JP2, trying as J2K.");
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     init2(buf, bufLen, CODEC_J2K);
   } else if (format == CODEC_J2K) {
-    error(errSyntaxWarning, -1, "Did no succeed opening JPX Stream as J2K, trying as JPT.");
+    error(errSyntaxWarning, -1, "Did not succeed opening JPX Stream as J2K, trying as JPT.");
     init2(buf, bufLen, CODEC_JPT);
   } else {
+<<<<<<< HEAD
     error(errSyntaxError, -1, "Did no succeed opening JPX Stream.");
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+    error(errSyntaxError, -1, "Did not succeed opening JPX Stream.");
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   }
 }
 #endif

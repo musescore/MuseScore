@@ -5,6 +5,8 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 9dbe81f
 =======
 4d42d45
@@ -27,3 +29,9 @@ d9c0942
 =======
 21738fc
 >>>>>>> c974e91... add poppler to 3rd party folder
+=======
+5771903
+>>>>>>> 55f9f64... update revision.h
+=======
+4e5ff83
+>>>>>>> 28df13d... update masterscore omr

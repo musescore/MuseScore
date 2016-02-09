@@ -135,10 +135,14 @@
 
 // copyright notice
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define popplerCopyright "Copyright 2005-2016 The Poppler Developers - http://poppler.freedesktop.org"
 =======
 #define popplerCopyright "Copyright 2005-2015 The Poppler Developers - http://poppler.freedesktop.org"
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+#define popplerCopyright "Copyright 2005-2016 The Poppler Developers - http://poppler.freedesktop.org"
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 #define xpdfCopyright "Copyright 1996-2011 Glyph & Cog, LLC"
 
 //------------------------------------------------------------------------
