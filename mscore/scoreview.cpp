@@ -699,6 +699,94 @@ ScoreView::ScoreView(QWidget* parent)
       _curLoopOut = new PositionCursor(this);
       _curLoopOut->setType(CursorType::LOOP_OUT);
 
+//---------------------------------------------------------
+//   Note entry context menu
+//---------------------------------------------------------
+
+      entryContxtToolbar = new QToolBar();
+      entryContxtToolbar->setObjectName("entry-tools");
+
+      QToolBar* firstRowBar = new QToolBar();
+      QToolBar* secondRowBar = new QToolBar();
+      QToolBar* thirdRowBar = new QToolBar();
+
+      QWidget* contxtToolbarWdg = new QWidget;
+      QVBoxLayout *contxtToolbarLayout = new QVBoxLayout;
+
+      static const char* row1[] = {
+                 "pad-note-128", "pad-note-64", "pad-note-32", "pad-note-16",
+                 "pad-note-8", "pad-note-4", "pad-note-2", "pad-note-1", "note-breve", "note-longa",
+                 };
+
+      static const char* row2[] = {
+                 "pad-dot", "pad-dotdot", "pad-rest", "",
+                 "sharp2", "sharp", "nat", "flat", "flat2"
+                 };
+
+      static const char* row3[] = {
+                 "note-input", "repitch", "tie", "flip", ""
+                 };
+
+      for (auto s : row1) {
+            if (!*s)
+		          firstRowBar->addSeparator();
+		    else
+		          firstRowBar->addAction(getAction(s));
+		    }
+		
+      for (auto s : row2) {
+		    if (!*s)
+		          secondRowBar->addSeparator();
+		    else
+		          secondRowBar->addAction(getAction(s));
+		    }
+		
+      for (auto s : row3) {
+            if (!*s)
+		          thirdRowBar->addSeparator();
+            else
+                  thirdRowBar->addAction(getAction(s));
+		    }
+
+      contxtToolbarLayout->addWidget(firstRowBar);
+      contxtToolbarLayout->addWidget(secondRowBar);
+      contxtToolbarLayout->addWidget(thirdRowBar);
+      contxtToolbarWdg->setLayout(contxtToolbarLayout);
+
+      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
+
+      QVector<QAction*> actionArray;
+
+      for (int i = 0; i < VOICES; ++i) {
+            QToolButton* tb = new QToolButton(this);
+            if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
+                  tb->setStyleSheet(vbsh);
+            tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
+            QPalette p(tb->palette());
+            p.setColor(QPalette::Base, MScore::selectColor[i]);
+            tb->setPalette(p);
+            QAction* a = getAction(voiceActions[i]);
+            a->setCheckable(true);
+            actionArray.append(a);
+            tb->setDefaultAction(a);
+            tb->setFocusPolicy(Qt::ClickFocus);
+            thirdRowBar->addWidget(tb);
+            }
+
+      entryContxtToolbar->addWidget(contxtToolbarWdg);
+      entryContxtMenu = new QMenu(this);
+      
+      QWidgetAction* noteAction = new QWidgetAction(entryContxtMenu);
+      noteAction->setDefaultWidget(entryContxtToolbar);
+      entryContxtMenu->addAction(noteAction);
+
+      for (int i = 0; i < actionArray.count(); i++) 
+            connect(actionArray[i], SIGNAL(triggered()),  entryContxtMenu, SLOT(close()));
+            
+      connect(firstRowBar, SIGNAL(actionTriggered(QAction*)), entryContxtMenu, SLOT(close()));
+      connect(secondRowBar, SIGNAL(actionTriggered(QAction*)), entryContxtMenu, SLOT(close()));
+      connect(thirdRowBar, SIGNAL(actionTriggered(QAction*)), entryContxtMenu, SLOT(close()));
+
       //---setup state machine-------------------------------------------------
       sm          = new QStateMachine(this);
       QState* stateActive = new QState;
@@ -846,6 +934,7 @@ ScoreView::ScoreView(QWidget* parent)
       //----------------------setup note entry state
       s = states[NOTE_ENTRY];
       s->assignProperty(this, "cursor", QCursor(Qt::UpArrowCursor));
+      s->addTransition(new ContextTransition(this));                          // context menu
       s->addTransition(new CommandTransition("escape", states[NORMAL]));      // ->normal
       s->addTransition(new CommandTransition("note-input", states[NORMAL]));  // ->normal
       connect(s, SIGNAL(entered()), SLOT(startNoteEntry()));
@@ -1007,6 +1096,11 @@ ScoreView::~ScoreView()
 //      genPropertyMenu()/propertyAction() methods
 //---------------------------------------------------------
 
+void ScoreView::noteEntryPopup(const QPoint& pos)
+      {
+      entryContxtMenu->exec(pos);
+      }
+
 void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       {
       // show tuplet properties if number is clicked:
@@ -1047,6 +1141,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addSeparator();
       popup->addAction(tr("Debugger"))->setData("list");
 #endif
+      popup->addSeparator();
+      popup->addAction(getAction("note-input"));
 
       a = popup->exec(pos);
       if (a == 0)
@@ -1140,6 +1236,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
 #ifndef NDEBUG
       popup->addAction(tr("Object Debugger"))->setData("list");
 #endif
+
+      popup->addAction(getAction("note-input"));
+      popup->addSeparator();
 
       a = popup->exec(gpos);
       if (a == 0)
@@ -3437,7 +3536,16 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       QPoint gp = ev->globalPos();
 
       data.startMove = toLogical(ev->pos());
+
+      InputState& is = _score->inputState();
+
       Element* e = elementNear(data.startMove);
+
+      if (is.noteEntryMode()) {
+            noteEntryPopup(gp);
+            return;
+            }
+
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
@@ -3515,13 +3623,15 @@ void ScoreView::dragNoteEntry(QMouseEvent* ev)
 
 void ScoreView::noteEntryButton(QMouseEvent* ev)
       {
-      QPointF p = toLogical(ev->pos());
-      _score->startCmd();
-      _score->putNote(p, ev->modifiers() & Qt::ShiftModifier);
-      _score->endCmd();
-      ChordRest* cr = _score->inputState().cr();
-      if (cr)
-            adjustCanvasPosition(cr, false);
+      if (ev->button() == Qt::LeftButton) {
+            QPointF p = toLogical(ev->pos());
+            _score->startCmd();
+            _score->putNote(p, ev->modifiers() & Qt::ShiftModifier);
+            _score->endCmd();
+            ChordRest* cr = _score->inputState().cr();
+            if (cr)
+                  adjustCanvasPosition(cr, false);
+            }
       }
 
 //---------------------------------------------------------

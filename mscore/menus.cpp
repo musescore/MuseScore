@@ -1317,6 +1317,9 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       lines->addAction(getAction("add-8va"));
       lines->addAction(getAction("add-8vb"));
       lines->addAction(getAction("add-noteline"));
+
+      popup->addAction(getAction("note-input"));
+
       return popup;
       }
 
