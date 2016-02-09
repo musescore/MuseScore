@@ -183,10 +183,14 @@ class OmrSystem {
       QList<QLine> barLines;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       void searchSysBarLines();
 =======
       void searchBarLines();
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+      void searchSysBarLines();
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       float searchBarLinesvar(int n_staff);
       void searchNotes();
       };
@@ -256,9 +260,13 @@ class OmrPage {
     void identifySystems();
 =======
       void identifySystems();
+<<<<<<< HEAD
 >>>>>>> 8d0232d... debug skeleton creation
 
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+    
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       const QList<OmrSystem>& systems() const { return _systems; }
       //QList<OmrSystem>& systems() { return _systems; }
       OmrSystem* system(int idx)  { return &_systems[idx]; }

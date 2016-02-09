@@ -450,7 +450,7 @@ void OmrState::importPdfPage(OmrPage* omrPage)
 //   importPdf
 //---------------------------------------------------------
 
-Score::FileError importPdf(Score* score, const QString& path)
+Score::FileError importPdf(MasterScore* score, const QString& path)
       {
       Omr* omr = new Omr(path, score);
       if (!omr->readPdf()) {
@@ -557,15 +557,24 @@ Score::FileError importPdf(Score* score, const QString& path)
       score->style()->set(StyleIdx::minSystemDistance,   Spatium(omr->systemDistance()));
       score->style()->set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
       score->style()->set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
+<<<<<<< HEAD
 >>>>>>> e3f6219... fix bugs in text size for pattern match
+=======
+          
+          
+          //return Score::FileError::FILE_NO_ERROR;
+>>>>>>> 1c244ad... rescale image according to their spatiums
 
       Part* part   = new Part(score);
           OmrPage* omrPage = omr->pages().front();
-          for (int i = 0; i < omrPage->systems().front().staves().size(); i++) {
-              Staff* staff = new Staff(score);
-              staff->setPart(part);
-              part->insertStaff(staff, -1);
-              score->staves().append(staff);
+         
+          if(omrPage->systems().size() > 0){
+              for (int i = 0; i < omrPage->systems().front().staves().size(); i++) {
+                  Staff* staff = new Staff(score);
+                  staff->setPart(part);
+                  part->insertStaff(staff, -1);
+                  score->staves().append(staff);
+              }
           }
           score->appendPart(part);
     

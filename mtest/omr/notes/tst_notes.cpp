@@ -54,7 +54,7 @@ void TestNotes::initTestCase()
 
 void TestNotes::omrFileTest(QString file)
       {
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       score->doLayout();
       QVERIFY(score);
       savePdf(score, file + ".pdf");

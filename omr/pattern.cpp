@@ -36,11 +36,17 @@ Pattern::Pattern()
 Pattern::~Pattern()
       {
 <<<<<<< HEAD
+<<<<<<< HEAD
 //          for(int i = 0; i < rows; ++i)
 //              delete []model[i];
 //          delete []model;
 =======
 >>>>>>> 0e4c6b6... add pattern source files
+=======
+//          for(int i = 0; i < rows; ++i)
+//              delete []model[i];
+//          delete []model;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       }
 
 //---------------------------------------------------------
@@ -67,11 +73,15 @@ double Pattern::match(const Pattern* a) const
       return 1.0 - (double(k) / (h() * w()));
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     
     double Pattern::match(const QImage* img, int col, int row) const
     {
         return 0.0;
     }
+<<<<<<< HEAD
 
 double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
       {
@@ -120,16 +130,22 @@ double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
 
           return k;
 =======
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
 
-double Pattern::match(const QImage* img, int col, int row) const
+double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
       {
-      int rows      = h();
-      int bytes     = ((w() + 7) / 8) - 1;
-      int shift     = col & 7;
-      int k         = 0;
-      int eshift    = (col + w()) & 7;
+//      int rows      = h();
+//      int bytes     = ((w() + 7) / 8) - 1;
+//      int shift     = col & 7;
+//      int k         = 0;
+//      int eshift    = (col + w()) & 7;
+          double k = 0;
+          if(bg_parm == 0) bg_parm = 1e-10;
+          if(bg_parm == 1) bg_parm = 1-1e-10;
 
       for (int y = 0; y < rows; ++y) {
+<<<<<<< HEAD
             const uchar* p1 = image()->scanLine(y);
             const uchar* p2 = img->scanLine(row + y) + (col/8);
             for (int x = 0; x < bytes; ++x) {
@@ -150,6 +166,42 @@ double Pattern::match(const QImage* img, int col, int row) const
             }
       return 1.0 - (double(k) / (h() * w()));
 >>>>>>> 0e4c6b6... add pattern source files
+=======
+            //const uchar* p1 = image()->scanLine(y);
+            //const uchar* p2 = img->scanLine(row + y) + (col/8);
+          
+          
+          
+          for(int x = 0; x < cols; x++){
+              //const uchar* p = img->scanLine(row + y) + ((col+x) / 32);
+              //bool black = (*p) & (0x1 << ((col+x) % 32));
+              if(col+x >= img->size().width() || row+y >= img->size().height()) continue;
+              QRgb c = img->pixel(col+x, row+y);
+              bool black = (qGray(c) < 100);
+              //if(black)
+                  //printf("here");
+              k += black?(log(model[y][x]) - log(bg_parm)):(log(1.0 - model[y][x]) - log(1-bg_parm));
+          }
+      }
+//            for (int x = 0; x < bytes; ++x) {
+//                  uchar a = *p1++;
+//                  uchar b1 = *p2;
+//                  uchar b2 = *(p2 + 1);
+//                  p2++;
+//                  uchar b  = (b1 >> shift) | (b2 << (7 - shift));
+//                  uchar v = a ^ b;
+//                  k += Omr::bitsSetTable[v];
+//                  }
+//            uchar a = *p1++;
+//            uchar b1 = *p2;
+//            uchar b2 = *(p2 + 1) & (0xff << eshift);
+//            uchar b  = (b1 >> shift) | (b2 << (7 - shift));
+//            uchar v = a ^ b;
+//            k += Omr::bitsSetTable[v];
+//            }
+
+          return k;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       }
 
 //---------------------------------------------------------
@@ -272,8 +324,45 @@ Pattern::Pattern(Score *s, SymId id, double spatium)
           }
           
       }
+    
+    //---------------------------------------------------------
+    //   Pattern
+    //    create a Pattern from symbol name
+    //---------------------------------------------------------
+    
+    Pattern::Pattern(Score *s, QString name)
+    {
+        _score = s;
+        QString filename = "/Users/Hipapa/Projects/Git/MuseScore/omr/solid_note_head.dat";//name + ".dat";
+        
+        QFile f(filename);
+        if(!f.open(QFile::ReadOnly| QIODevice::Text)){
+            rows = 0;
+            cols = 0;
+        }
+        else{
+            QTextStream in(&f);
+            
+            in>>rows>>cols;
+            
+            model = new float*[rows];
+            for(int i = 0; i < rows; i++){
+                model[i] = new float[cols];
+            }
+            for(int i = 0; i < rows; i++){
+                for(int j = 0; j < cols; j++){
+                    in>>model[i][j];
+                }
+            }
+        }
+        f.close();
+    }
 
+<<<<<<< HEAD
 >>>>>>> 0e4c6b6... add pattern source files
+=======
+    
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
 //---------------------------------------------------------
 //   Pattern
 //    create a Pattern from image

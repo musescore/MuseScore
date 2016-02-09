@@ -47,10 +47,14 @@
 namespace Ms {
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     static const double noteTH = 1.0;
 =======
     static const double noteTH = 0.8;
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+    static const double noteTH = 1.0;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     static const double timesigTH = 0.7;
     static const double clefTH = 0.7;
     static const double keysigTH = 0.8;
@@ -107,6 +111,9 @@ namespace Ms {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     //---------------------------------------------------------
     //   isBlack
     //---------------------------------------------------------
@@ -117,8 +124,11 @@ namespace Ms {
         return (qGray(c) < 100);
     }
     
+<<<<<<< HEAD
 =======
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     
     //---------------------------------------------------------
     //   read
@@ -133,12 +143,16 @@ namespace Ms {
         slice();
         getStaffLines();
 <<<<<<< HEAD
+<<<<<<< HEAD
         getRatio();
         //identifySystems();
 //        int numStaves    = staves.size();
 //        int stavesSystem = 2;
 //        int systems      = numStaves / stavesSystem;
 =======
+=======
+        getRatio();
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         //identifySystems();
 <<<<<<< HEAD
         int numStaves    = staves.size();
@@ -397,9 +411,13 @@ namespace Ms {
             }
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 21738fc... debugging omr
+=======
+
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     }
     
     
@@ -409,6 +427,10 @@ namespace Ms {
     
     void OmrPage::readBarLines(int pageNo)
     {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         //QFuture<void> bl = QtConcurrent::run(_systems, &OmrSystem::searchSysBarLines());
         //bl.waitForFinished();
         
@@ -463,7 +485,71 @@ namespace Ms {
                 }
                 system->measures().append(m);
             }
+<<<<<<< HEAD
+=======
+//        QFuture<void> bl = QtConcurrent::map(_systems, &OmrSystem::searchBarLines);
+//        bl.waitForFinished();
+//        
+//        int numStaves    = staves.size();
+//        //int stavesSystem = 2;
+//        //int systems = numStaves / stavesSystem;
+//        int systems = _systems.size();
+//        
+//        for (int i = 0; i < systems; ++i) {
+//            OmrSystem* system = &_systems[i];
+//            int n = system->barLines.size();
+//            for (int k = 0; k < n-1; ++k) {
+//                const QLine& l1 = system->barLines[k];
+//                const QLine& l2 = system->barLines[k+1];
+//                OmrMeasure m(l1.x1(), l2.x1());
+//                for (int ss = 0; ss < system->staves().size(); ++ss) {
+//                    OmrStaff& staff = system->staves()[ss];
+//                    QList<OmrChord> chords;
+//                    int nx   = 0;
+//                    SymId nsym = SymId::noSym;
+//                    OmrChord chord;
+//                    foreach(OmrNote* n, staff.notes()) {
+//                        int x = n->x();
+//                        if (x >= m.x2())
+//                            break;
+//                        if (x >= m.x1() && x < m.x2()) {
+//                            if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
+//                                if (!chord.notes.isEmpty()) {
+//                                    SymId sym = chord.notes.front()->sym;
+//                                    if (sym == SymId::noteheadBlack)
+//                                        chord.duration.setType(TDuration::DurationType::V_QUARTER);
+//                                    else if (sym == SymId::noteheadHalf)
+//                                        chord.duration.setType(TDuration::DurationType::V_HALF);
+//                                    chords.append(chord);
+//                                    chord.notes.clear();
+//                                }
+//                            }
+//                            nx   = x;
+//                            nsym = n->sym;
+//                            chord.notes.append(n);
+//                        }
+//                    }
+//                    if (!chord.notes.isEmpty()) {
+//                        SymId sym = chord.notes.front()->sym;
+//                        if (sym == SymId::noteheadBlack)
+//                            chord.duration.setType(TDuration::DurationType::V_QUARTER);
+//                        else if (sym == SymId::noteheadHalf)
+//                            chord.duration.setType(TDuration::DurationType::V_HALF);
+//                        chords.append(chord);
+//                    }
+//                    m.chords().append(chords);
+//                }
+//                system->measures().append(m);
+//            }
+<<<<<<< HEAD
+>>>>>>> 8713f38... commented out QtConcurrent::map
         }
+=======
+//        }
+>>>>>>> 494c67b... comment out qtconcurrent::map in omr
+=======
+        }
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         
 //        //--------------------------------------------------
 //        //    search clef/keysig
@@ -1489,13 +1575,14 @@ struct BAR_STATE{
     
     
     //---------------------------------------------------------
-    //   searchBarLines
+    //   searchSysBarLines
     //---------------------------------------------------------
     
-    void OmrSystem::searchBarLines()
+    void OmrSystem::searchSysBarLines()
     {
         OmrStaff& r1 = _staves[0];
         OmrStaff& r2 = _staves[_staves.size() - 1];//[1];
+        
         
         int x1  = r1.x();
         int x2  = x1 + r1.width();
@@ -1799,7 +1886,7 @@ struct BAR_STATE{
         
         
         //using note constraints
-        //searchNotes();
+        searchNotes();
         
         int note_constraints[x2-x1];
         memset(note_constraints, 0, sizeof(int) * (x2-x1));
@@ -2174,10 +2261,14 @@ void OmrSystem::searchNotes()
     {
         int wl  = wordsPerLine();
 <<<<<<< HEAD
+<<<<<<< HEAD
         cropT = cropB = cropL = cropR = 0;
 =======
         int cropT = cropB = cropL = cropR = 0;
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+        cropT = cropB = cropL = cropR = 0;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         for (int y = 0; y < height(); ++y) {
             const uint* p = scanLine(y);
             for (int k = 0; k < wl; ++k) {
@@ -2485,9 +2576,13 @@ void OmrSystem::searchNotes()
     void OmrPage::getStaffLines()
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         staves.clear();
 =======
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+        staves.clear();
+>>>>>>> 1c244ad... rescale image according to their spatiums
         int h  = height();
         int wl = wordsPerLine();
         // printf("getStaffLines %d %d  crop %d %d\n", h, wl, cropT, cropB);
@@ -2575,6 +2670,9 @@ void OmrSystem::searchNotes()
     
     //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     //   getRatio
     //---------------------------------------------------------
     
@@ -2592,13 +2690,19 @@ void OmrSystem::searchNotes()
                 else num_white++;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         }
         _ratio = num_black/(num_black + num_white);
     }
     
     //---------------------------------------------------------
+<<<<<<< HEAD
 =======
 >>>>>>> 4615c3e... consider different number of staves in systems
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     //   searchNotes
     //---------------------------------------------------------
     
@@ -2608,11 +2712,15 @@ void OmrSystem::searchNotes()
         y += line * _spatium * .5;
         
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         //Pattern* patternList[2];
         //patternList[0] = Omr::quartheadPattern;
         //patternList[1] = Omr::halfheadPattern;
         
         Pattern* pattern = Omr::quartheadPattern;
+<<<<<<< HEAD
         
         QList<Peak> notePeaks;
         
@@ -2784,15 +2892,59 @@ void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, in
                         val = val1;
                         found = true;
                     }
+=======
+        
+        QList<Peak> notePeaks;
+        
+        int hh = pattern->h();
+        int hw = pattern->w();
+        bool found = false;
+        int xx1;
+        double val;
+        
+        for (int x = x1; x < (x2 - hw); ++x) {
+            double val1 = pattern->match(&_page->image(), x, y - hh/2, _page->ratio());
+            if (val1 >= noteTH) {
+                if (!found || (val1 > val)) {
+                    xx1 = x;
+                    val = val1;
+                    found = true;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
                 }
-                else {
-                    if (found) {
-                        notePeaks.append(Peak(xx1, val, k));
-                        found = false;
-                    }
+            }
+            else {
+                if (found) {
+                    notePeaks.append(Peak(xx1, val, 0));
+                    found = false;
                 }
             }
         }
+        
+//        for (int k = 0; k < 2; ++k) {
+//            Pattern* pattern = patternList[k];
+//            int hh = pattern->h();
+//            int hw = pattern->w();
+//            bool found = false;
+//            int xx1;
+//            double val;
+//            
+//            for (int x = x1; x < (x2 - hw); ++x) {
+//                double val1 = pattern->match(&_page->image(), x, y - hh/2);
+//                if (val1 >= noteTH) {
+//                    if (!found || (val1 > val)) {
+//                        xx1 = x;
+//                        val = val1;
+//                        found = true;
+//                    }
+//                }
+//                else {
+//                    if (found) {
+//                        notePeaks.append(Peak(xx1, val, k));
+//                        found = false;
+//                    }
+//                }
+//            }
+//        }
         
         qSort(notePeaks);
         int n = notePeaks.size();
@@ -2801,11 +2953,11 @@ void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, in
                 break;
             OmrNote* note = new OmrNote;
             int sym = notePeaks[i].sym;
-            int hh = patternList[sym]->h();
-            int hw = patternList[sym]->w();
+            int hh = pattern->h();
+            int hw = pattern->w();
             note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
             note->line = line;
-            note->sym  = patternList[sym]->id();
+            note->sym  = pattern->id();
             note->prob = notePeaks[i].val;
             noteList->append(note);
 <<<<<<< HEAD

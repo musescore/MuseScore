@@ -66,7 +66,13 @@ class Pattern {
       SymId _id;
       QPoint _base;
     Score *_score;
+<<<<<<< HEAD
 >>>>>>> 27d1d6c... debug pattern match
+=======
+    float **model;
+    int rows;
+    int cols;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
 
    public:
       Pattern();
@@ -80,11 +86,16 @@ class Pattern {
 >>>>>>> 0e4c6b6... add pattern source files
 =======
       Pattern(Score *s, SymId id, double spatium);
+<<<<<<< HEAD
 >>>>>>> 27d1d6c... debug pattern match
+=======
+      Pattern(Score *s, QString name);
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       Pattern(QImage*, int, int, int, int);
 
       double match(const Pattern*) const;
       double match(const QImage* img, int col, int row) const;
+<<<<<<< HEAD
 <<<<<<< HEAD
       double match(const QImage* img, int col, int row, double bg_parm) const;
 
@@ -96,11 +107,14 @@ class Pattern {
       SymId id() const      { return _id; }
       void setId(SymId val) { _id = val; }
 =======
+=======
+      double match(const QImage* img, int col, int row, double bg_parm) const;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
 
       void dump() const;
       const QImage* image() const { return &_image; }
-      int w() const       { return _image.width(); }
-      int h() const       { return _image.height(); }
+    int w() const       { return cols; /*_image.width();*/ }
+    int h() const       { return rows; /*_image.height();*/ }
       bool dot(int x, int y) const;
 <<<<<<< HEAD
       int id() const      { return _id; }

@@ -267,9 +267,17 @@ bool Omr::actions(int ID)
             int pages = 0;
             int n = _pages.size();
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
             double spatium_constant = 15.0;
 =======
 >>>>>>> d065ed4... add progress dialog to the omr process
+=======
+            int spatium_constant = 30;
+>>>>>>> 1c244ad... rescale image according to their spatiums
+=======
+            double spatium_constant = 15.0;
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
             
             for (int i = 0; i < n; ++i) {
                 _pages[i]->read();
@@ -277,6 +285,7 @@ bool Omr::actions(int ID)
                 //                sp += _pages[i]->spatium();
                 //                ++pages;
                 //            }
+<<<<<<< HEAD
 <<<<<<< HEAD
                 
                 sp += _pages[i]->spatium();
@@ -301,17 +310,34 @@ bool Omr::actions(int ID)
             //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
             quartheadPattern  = new Pattern(_score, "solid_note_head");
 =======
+=======
+                
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
                 sp += _pages[i]->spatium();
                 ++pages;
+                
+//                //do the rescaling of image here
+                int new_w = _pages[i]->image().width()*spatium_constant/_pages[i]->spatium();
+                int new_h = _pages[i]->image().height()*spatium_constant/_pages[i]->spatium();
+                QImage image = _pages[i]->image().scaled(new_w ,new_h, Qt::KeepAspectRatio);
+                _pages[i]->setImage(image);
+                _pages[i]->read();
                 w  += _pages[i]->width();
             }
-            _spatium = sp / pages;
+            _spatium = spatium_constant; //sp / pages;
             w       /= n;
             _dpmm    = w / 210.0;            // PaperSize A4
             
+            
+            
             // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
+<<<<<<< HEAD
             quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
 >>>>>>> d065ed4... add progress dialog to the omr process
+=======
+            //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
+            quartheadPattern  = new Pattern(_score, "solid_note_head");
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
             halfheadPattern   = new Pattern(_score, SymId::noteheadHalf,  _spatium);
             sharpPattern      = new Pattern(_score, SymId::accidentalSharp, _spatium);
             flatPattern       = new Pattern(_score, SymId::accidentalFlat, _spatium);
@@ -370,6 +396,7 @@ bool Omr::actions(int ID)
             
             
             
+<<<<<<< HEAD
 //            for (int i = 0; i < n; ++i) {
 //
             
@@ -427,6 +454,8 @@ bool Omr::actions(int ID)
 >>>>>>> 4615c3e... consider different number of staves in systems
 =======
 =======
+=======
+>>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
 //            for (int i = 0; i < n; ++i) {
 //                OmrPage* page = _pages[i];
 //                if (!page->systems().isEmpty()) {

@@ -14,10 +14,14 @@
 // under GPL version 2 or later
 //
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Copyright (C) 2006, 2008-2010, 2013-2015 Albert Astals Cid <aacid@kde.org>
 =======
 // Copyright (C) 2006, 2008-2010, 2013, 2014 Albert Astals Cid <aacid@kde.org>
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+// Copyright (C) 2006, 2008-2010, 2013-2015 Albert Astals Cid <aacid@kde.org>
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 // Copyright (C) 2006 Jeff Muizelaar <jeff@infidigm.net>
 // Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
 // Copyright (C) 2011 Andrea Canciani <ranma42@gmail.com>
@@ -582,12 +586,18 @@ ExponentialFunction::ExponentialFunction(Object *funcObj, Dict *dict) {
     }
     n = obj1.arrayGetLength();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     if (unlikely(n > funcMaxOutputs)) {
       error(errSyntaxError, -1, "Function's C0 array is wrong length");
       n = funcMaxOutputs;
     }
+<<<<<<< HEAD
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
     for (i = 0; i < n; ++i) {
       obj1.arrayGet(i, &obj2);
       if (!obj2.isNum()) {

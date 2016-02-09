@@ -41,10 +41,14 @@ endif (NOT MINGW AND NOT APPLE)
 
 if (OMR)
 <<<<<<< HEAD
+<<<<<<< HEAD
       target_link_libraries(${TARGET} omr poppler)
 =======
       target_link_libraries(${TARGET} omr mupdf openjpeg jbig2dec jpeg)
 >>>>>>> 57b9dad... compile omr module
+=======
+      target_link_libraries(${TARGET} omr poppler)
+>>>>>>> 8713f38... commented out QtConcurrent::map
       if (OCR)
             target_link_libraries(${TARGET} tesseract_api)
       endif (OCR)

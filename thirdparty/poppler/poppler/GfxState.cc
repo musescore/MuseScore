@@ -19,10 +19,14 @@
 // Copyright (C) 2006-2015 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2009, 2012 Koji Otani <sho@bbr.jp>
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Copyright (C) 2009, 2011-2015 Thomas Freitag <Thomas.Freitag@alfa.de>
 =======
 // Copyright (C) 2009, 2011-2014 Thomas Freitag <Thomas.Freitag@alfa.de>
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+// Copyright (C) 2009, 2011-2015 Thomas Freitag <Thomas.Freitag@alfa.de>
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 // Copyright (C) 2009 Christian Persch <chpe@gnome.org>
 // Copyright (C) 2010 Paweł Wiejacha <pawel.wiejacha@gmail.com>
 // Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
@@ -32,9 +36,13 @@
 // Copyright (C) 2013 Hib Eris <hib@hiberis.nl>
 // Copyright (C) 2013 Fabio D'Urso <fabiodurso@hotmail.it>
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Copyright (C) 2015 Adrian Johnson <ajohnson@redneon.com>
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+// Copyright (C) 2015 Adrian Johnson <ajohnson@redneon.com>
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -89,6 +97,9 @@ GBool Matrix::invertTo(Matrix *other) const
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 void Matrix::translate(double tx, double ty)
 {
   double x0 = tx*m[0] + ty*m[2] + m[4];
@@ -105,8 +116,11 @@ void Matrix::scale(double sx, double sy)
   m[3] *= sy;
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 void Matrix::transform(double x, double y, double *tx, double *ty) const
 {
   double temp_x, temp_y;
@@ -2892,6 +2906,9 @@ void GfxSeparationColorSpace::getGray(GfxColor *color, GfxGray *gray) {
   int i;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   if (alt->getMode() == csDeviceGray && name->cmp("Black") == 0) {
     *gray = clip01(gfxColorComp1 - color->c[0]);
   } else {
@@ -2901,6 +2918,7 @@ void GfxSeparationColorSpace::getGray(GfxColor *color, GfxGray *gray) {
       color2.c[i] = dblToCol(c[i]);
     }
     alt->getGray(&color2, gray);
+<<<<<<< HEAD
   }
 =======
   x = colToDbl(color->c[0]);
@@ -2910,6 +2928,9 @@ void GfxSeparationColorSpace::getGray(GfxColor *color, GfxGray *gray) {
   }
   alt->getGray(&color2, gray);
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+  }
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 }
 
 void GfxSeparationColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
@@ -2919,6 +2940,9 @@ void GfxSeparationColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
   int i;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   if (alt->getMode() == csDeviceGray && name->cmp("Black") == 0) {
     rgb->r = clip01(gfxColorComp1 - color->c[0]);
     rgb->g = clip01(gfxColorComp1 - color->c[0]);
@@ -2930,6 +2954,7 @@ void GfxSeparationColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
       color2.c[i] = dblToCol(c[i]);
     }
     alt->getRGB(&color2, rgb);
+<<<<<<< HEAD
   }
 =======
   x = colToDbl(color->c[0]);
@@ -2939,6 +2964,9 @@ void GfxSeparationColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
   }
   alt->getRGB(&color2, rgb);
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+  }
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 }
 
 void GfxSeparationColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
@@ -2948,6 +2976,9 @@ void GfxSeparationColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
   int i;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   if (name->cmp("Black") == 0) {
     cmyk->c = 0;
     cmyk->m = 0;
@@ -2975,6 +3006,7 @@ void GfxSeparationColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
       color2.c[i] = dblToCol(c[i]);
     }
     alt->getCMYK(&color2, cmyk);
+<<<<<<< HEAD
   }
 =======
   x = colToDbl(color->c[0]);
@@ -2984,6 +3016,9 @@ void GfxSeparationColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
   }
   alt->getCMYK(&color2, cmyk);
 >>>>>>> b81c4b1... put poppler into thirdparty folder
+=======
+  }
+>>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 }
 
 void GfxSeparationColorSpace::getDeviceN(GfxColor *color, GfxColor *deviceN) {

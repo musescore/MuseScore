@@ -3018,8 +3018,8 @@ void ScoreView::cmd(const QAction* a)
             }
 #ifdef OMR
       else if (cmd == "show-omr") {
-            if (_score->omr())
-                  showOmr(!_score->showOmr());
+            if (_score->masterScore()->omr())
+                  showOmr(!_score->masterScore()->showOmr());
             }
 #endif
       else if (cmd == "split-measure") {
