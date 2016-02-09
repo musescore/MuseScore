@@ -152,7 +152,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       bool downGrace = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
-            Chord* chord = segment->element(track)->castChord();
+            Chord* chord = segment->element(track)->toChord();
             if (chord) {
                   bool hasGraceBefore = false;
                   for (Chord* c : chord->graceNotes()) {
@@ -507,7 +507,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
             // apply chord offsets
             for (int track = startTrack; track < endTrack; ++track) {
-                  Chord* chord = segment->element(track)->castChord();
+                  Chord* chord = segment->element(track)->toChord();
                   if (chord) {
                         if (chord->up()) {
                               if (upOffset != 0.0) {
@@ -1225,7 +1225,7 @@ void Score::layoutSpanner()
                         for (int i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }
-                  Chord* c = segment->element(track)->castChord();
+                  Chord* c = segment->element(track)->toChord();
                   if (c) {
                         c->layoutStem();
                         for (Note* n : c->notes()) {
@@ -2685,7 +2685,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   int tick = s->tick();
                   // find longest pause
                   for (int i = 0, n = ntracks(); i < n; ++i) {
-                        Breath* b = s->element(i)->castBreath();
+                        Breath* b = s->element(i)->toBreath();
                         if (b)
                               length = qMax(length, b->pause());
                         }
@@ -2701,7 +2701,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             else if (!parentScore() && s->isChordRest()) {
                   for (Element* e : s->annotations()) {
-                        TempoText* tt = e->castTempoText();
+                        TempoText* tt = e->toTempoText();
                         if (tt)
                               setTempo(tt->segment(), tt->tempo());
                         e->layout();

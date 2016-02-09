@@ -538,7 +538,7 @@ void Score::fixTicks()
                                     }
                               }
                         qreal stretch = 0.0;
-                        for (int i = 0; i < s->elist().size(); ++i) {
+                        for (unsigned i = 0; i < s->elist().size(); ++i) {
                               Element* e = s->elist().at(i);
                               if (!e)
                                     continue;
@@ -793,7 +793,7 @@ Note* prevNote(Note* n)
       Segment* seg = chord->segment();
       const std::vector<Note*> nl = chord->notes();
       auto i = std::find(nl.begin(), nl.end(), n);
-      if (i != nl.begin());
+      if (i != nl.begin())
             return *(i-1);
       int staff      = n->staffIdx();
       int startTrack = staff * VOICES + n->voice() - 1;
@@ -1700,7 +1700,7 @@ void Score::removeElement(Element* element)
             setLayoutAll(true);
 
       else if (et == Element::Type::MEASURE
-         || (et == Element::Type::HBOX && parent->type() != Element::Type::VBOX)
+         || (et == Element::Type::HBOX && !parent->isVBox())
          || et == Element::Type::VBOX
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
@@ -1717,7 +1717,7 @@ void Score::removeElement(Element* element)
       if (parent)
             parent->remove(element);
 
-      switch(et) {
+      switch (et) {
             case Element::Type::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(element);
@@ -1735,7 +1735,6 @@ void Score::removeElement(Element* element)
             case Element::Type::PEDAL:
             case Element::Type::TEXTLINE:
             case Element::Type::HAIRPIN:
-//            case Element::Type::LYRICSLINE:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   if (et == Element::Type::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
@@ -2660,8 +2659,8 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                   if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span - (eidx-sidx));
                   }
-            int span = staff->barLineSpan();
 #if 0 // TODO
+            int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                   int newSpan = span - (eidx-sidx) + 1;
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
@@ -2687,8 +2686,8 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                   if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span + (eidx-sidx));
                   }
+#if 0 // TODO
             int span = staff->barLineSpan();
-#if 0
             if ((sidx >= staffIdx) && (eidx < (staffIdx + span))) {
                   int idx = staffIdx + span - 1;
                   if (idx >= _staves.size())

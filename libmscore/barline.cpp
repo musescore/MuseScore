@@ -33,7 +33,9 @@ qreal BarLine::yoff2 = 0.0;
 
 bool BarLine::ctrlDrag = false;
 bool BarLine::shiftDrag = false;
-int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
+int  BarLine::_origSpan;
+int BarLine::_origSpanFrom;
+int BarLine::_origSpanTo;
 
 //---------------------------------------------------------
 //   BarLineTable
@@ -131,43 +133,12 @@ BarLine::BarLine(Score* s)
       }
 
 //---------------------------------------------------------
-//   setSpan
-//---------------------------------------------------------
-
-void BarLine::setSpan(int val)
-      {
-      _span = val;
-      updateCustomSpan();
-      }
-
-//---------------------------------------------------------
-//   setSpanFrom
-//---------------------------------------------------------
-
-void BarLine::setSpanFrom(int val)
-      {
-      _spanFrom = val;
-      updateCustomSpan();
-      }
-
-//---------------------------------------------------------
-//   setSpanTo
-//---------------------------------------------------------
-
-void BarLine::setSpanTo(int val)
-      {
-      _spanTo = val;
-      updateCustomSpan();
-      }
-
-//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
 qreal BarLine::mag() const
       {
-      qreal m = staff() ? staff()->mag() : 1.0;
-      return m;
+      return staff() ? staff()->mag() : 1.0;
       }
 
 //---------------------------------------------------------
@@ -200,24 +171,6 @@ QPointF BarLine::pagePos() const
             yp += system->staffYpage(staffIdx1);
             }
       return QPointF(pageX(), yp);
-      }
-
-//---------------------------------------------------------
-//   canvasPos
-//---------------------------------------------------------
-
-QPointF BarLine::canvasPos() const
-      {
-      QPointF p(pagePos());
-      Element* e = parent();
-      while (e) {
-            if (e->type() == Element::Type::PAGE) {
-                  p += e->pos();
-                  break;
-                  }
-            e = e->parent();
-            }
-      return p;
       }
 
 //---------------------------------------------------------
@@ -537,20 +490,18 @@ void BarLine::write(Xml& xml) const
       {
       xml.stag("BarLine");
       xml.tag("subtype", barLineTypeName());
-      if (_customSubtype)
-            xml.tag("customSubtype", _customSubtype);
+
       // if any span value is different from staff's, output all values
-      if (  (staff() && (  _span != staff()->barLineSpan()
-                           || _spanFrom != staff()->barLineFrom()
-                           || _spanTo != staff()->barLineTo()
-                         )
-             )
-            || !staff())            // (palette bar lines have no staff: output all values)
+      // (palette bar lines have no staff: output all values)
+
+      if (!staff()
+         || custom(P_ID::BARLINE_SPAN)
+         || custom(P_ID::BARLINE_SPAN_FROM)
+         || custom(P_ID::BARLINE_SPAN_TO))
             xml.tag(QString("span from=\"%1\" to=\"%2\"").arg(_spanFrom).arg(_spanTo), _span);
-      // if no custom value, output _span only (as in previous code)
       else
             xml.tag("span", _span);
-      foreach(const Element* e, _el)
+      for (const Element* e : _el)
             e->write(xml);
       Element::writeProperties(xml);
       xml.etag();
@@ -562,58 +513,22 @@ void BarLine::write(Xml& xml) const
 
 void BarLine::read(XmlReader& e)
       {
-      // if bar line belongs to a staff, span values default to staff values
-      if (staff()) {
-            _span     = staff()->barLineSpan();
-            _spanFrom = staff()->barLineFrom();
-            _spanTo   = staff()->barLineTo();
-            }
+      resetProperty(P_ID::BARLINE_SPAN);
+      resetProperty(P_ID::BARLINE_SPAN_FROM);
+      resetProperty(P_ID::BARLINE_SPAN_TO);
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "subtype") {
-                  bool ok;
-                  const QString& val(e.readElementText());
-                  int i = val.toInt(&ok);
-                  if (!ok)
-                        setBarLineType(val);
-                  else {
-                        BarLineType ct = BarLineType::NORMAL;
-                        switch (i) {
-                              default:
-                              case  0: ct = BarLineType::NORMAL; break;
-                              case  1: ct = BarLineType::DOUBLE; break;
-                              case  2: ct = BarLineType::START_REPEAT; break;
-                              case  3: ct = BarLineType::END_REPEAT; break;
-                              case  4: ct = BarLineType::BROKEN; break;
-                              case  5: ct = BarLineType::END; break;
-                              case  6: ct = BarLineType::END_START_REPEAT; break;
-                              case  7: ct = BarLineType::DOTTED; break;
-                              }
-                        _barLineType = ct;     // set type directly, without triggering setBarLineType() checks
-                        }
-//                Measure* m = segment()->measure();
-//                if (barLineType() != m->endBarLineType())
-//                      _customSubtype = true;
-                  }
+            if (tag == "subtype")
+                  setBarLineType(e.readElementText());
             else if (tag == "customSubtype")
-                  _customSubtype = e.readInt();
+                  /* _customSubtype =*/ e.readInt();
             else if (tag == "span") {
                   _spanFrom = e.intAttribute("from", _spanFrom);
                   _spanTo   = e.intAttribute("to", _spanTo);
                   _span     = e.readInt();
-
                   if (_spanTo == UNKNOWN_BARLINE_TO)
-                        _spanTo = staff() ? (staff()->lines() - 1) * 2 : 8;
-
-                  // WARNING: following statements assume staff and staff bar line spans are correctly set
-                  // ws: _spanTo can be UNKNOWN_BARLINE_TO
-
-                  if (staff() && (_span != staff()->barLineSpan()
-                     || _spanFrom != staff()->barLineFrom()
-                     || ((staff()->barLineTo() != UNKNOWN_BARLINE_TO) && (_spanTo != staff()->barLineTo())))
-                     ) {
-                        _customSpan = true;
-                        }
+                        resetProperty(P_ID::BARLINE_SPAN_TO);
                   }
             else if (tag == "Articulation") {
                   Articulation* a = new Articulation(score());
@@ -788,9 +703,6 @@ void BarLine::endEdit()
             ctrlDrag = false;
             return;
             }
-      // if bar line has custom span, assume any span edit is local to this bar line
-      if (_customSpan == true)
-            ctrlDrag = true;
       // for mid-measure barlines, edit is local
       bool midMeasure = false;
       if (segment()->isBarLine()) {
@@ -799,8 +711,6 @@ void BarLine::endEdit()
             }
 
       if (ctrlDrag) {                      // if single bar line edit
-            ctrlDrag = false;
-            _customSpan       = true;           // mark bar line as custom spanning
             int newSpan       = _span;          // copy edited span values
             int newSpanFrom   = _spanFrom;
             int newSpanTo     = _spanTo;
@@ -1015,8 +925,7 @@ void BarLine::endEditDrag()
                   if (newSpanTo > maxTo)
                         newSpanTo = maxTo;
                   }
-//            shiftDrag = false;          // NO: a last call to this function is made when exiting editing:
-            }                             // it would find shiftDrag = false and reset extrema to coarse resolution
+            }
 
       else {                              // if coarse dragging
             newSpanFrom = Staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM: 0;
@@ -1164,15 +1073,6 @@ QPainterPath BarLine::outline() const
       }
 
 //---------------------------------------------------------
-//   tick
-//---------------------------------------------------------
-
-int BarLine::tick() const
-      {
-      return segment()->tick();
-      }
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
@@ -1223,93 +1123,6 @@ void BarLine::remove(Element* e)
       }
 
 //---------------------------------------------------------
-//   updateCustomSpan
-//---------------------------------------------------------
-
-void BarLine::updateCustomSpan()
-      {
-      // span is custom if barline belongs to a staff and any of the staff span params is different from barline's
-      // if no staff or same span params as staff, span is not custom
-      Staff* stf = staff();
-      if (!stf)
-            _customSpan = false;
-      else
-            _customSpan = stf->barLineSpan() != _span || stf->barLineFrom() != _spanFrom || stf->barLineTo() != _spanTo;
-      updateGenerated(!_customSpan);
-      }
-
-//---------------------------------------------------------
-//   updateCustomType
-//
-//    Turns off _customSubtype flag if bar line type is the same of the context it is in
-//    (usually the endBarLineType of the measure); turns it on otherwise.
-//---------------------------------------------------------
-
-void BarLine::updateCustomType()
-      {
-      BarLineType refType = BarLineType::NORMAL;
-      if (segment()) {
-            switch (segment()->segmentType()) {
-                  case Segment::Type::StartRepeatBarLine:
-                        // if a start-repeat segment, ref. type is START_REPEAT
-                        // if measure has relevant repeat flag or none if measure hasn't
-                        refType = segment()->measure()->repeatStart() ? BarLineType::START_REPEAT : BarLineType(-1);
-                        break;
-                  case Segment::Type::BarLine:
-                        // if a non-end-measure bar line, type is always custom
-                        refType = BarLineType(-1);           // use an invalid type
-                        break;
-                  case Segment::Type::EndBarLine:
-                        // if end-measure bar line, reference type is the measure endBarLinetype
-//TODO                        refType = seg->measure()->endBarLineType();
-                        break;
-                  default:                      // keep lint happy!
-                        break;
-                  }
-            }
-      _customSubtype = (_barLineType != refType);
-      updateGenerated(!_customSubtype);         // if _customSubType, _generated is surely false
-      }
-
-//---------------------------------------------------------
-//   updateGenerated
-//
-//    Sets the _generated status flag by checking all the bar line properties are at default values.
-//
-//    canBeTrue: optional parameter; if set to false, the _generated flag is unconditionally set to false
-//          without checking the individual properties; to be used when a non-default condition is already known
-//          to speed up the function.
-//---------------------------------------------------------
-
-void BarLine::updateGenerated(bool canBeTrue)
-      {
-#if 0 // TODO
-      if (!canBeTrue)
-            setGenerated(false);
-      else {
-            bool generatedType = !_customSubtype;     // if customSubType, assume not generated
-            if (segment()) {
-                  // if bar line belongs to an EndBarLine segment,
-                  // combine with measure endBarLineGenerated flag
-                  if (segment()->isEndBarLine())
-                        generatedType &= segment()->measure()->endBarLineGenerated();
-                  else
-                        // if any other segment (namely, StartBarLine and BarLine), bar line is not generated
-                        generatedType = false;
-                  }
-            // set to generated only if all properties are non-customized
-            setGenerated(
-                  color()           == MScore::defaultColor
-                  && _visible       == true
-                  && generatedType  == true
-                  && _customSpan    == false
-                  && !isNudged()
-                  );
-            }
-#endif
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -1352,6 +1165,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
             default:
                   return Element::setProperty(id, v);
             }
+      setGenerated(false);
       score()->setLayoutAll(true);
       return true;
       }
@@ -1369,23 +1183,20 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
                   return int(BarLineType::NORMAL);
 
             case P_ID::BARLINE_SPAN:
-                  // if there is a staff, default span is staff span
                   if (staff())
                         return staff()->barLineSpan();
-                  // if no staff, default span is 1
                   return 1;
+
             case P_ID::BARLINE_SPAN_FROM:
-                  // if there is a staff, default From span is staff From span
                   if (staff())
                         return staff()->barLineFrom();
-                  // if no staff, default From is from top
                   return 0;
+
             case P_ID::BARLINE_SPAN_TO:
-                  // if there is a staff, default To span is staff To span
                   if (staff())
                         return staff()->barLineTo();
-                  // if no staff, assume a standard 5-line setup
                   return DEFAULT_BARLINE_TO;
+
             default:
                   break;
             }
@@ -1442,7 +1253,7 @@ QString BarLine::accessibleExtraInfo() const
             }
       Measure* m = seg->measure();
 
-      if (m) {          // always true?
+      if (m) {    // always true?
             //jumps
             for (const Element* e : m->el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;

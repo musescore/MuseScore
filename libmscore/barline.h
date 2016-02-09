@@ -22,13 +22,13 @@ namespace Ms {
 class MuseScoreView;
 class Segment;
 
-static const int DEFAULT_BARLINE_TO      = 4 * 2;
-static const int MIN_BARLINE_FROMTO_DIST = 2;
-static const int MIN_BARLINE_SPAN_FROMTO = -2;
+static const int DEFAULT_BARLINE_TO             = 4 * 2;
+static const int MIN_BARLINE_FROMTO_DIST        = 2;
+static const int MIN_BARLINE_SPAN_FROMTO        = -2;
 
 // bar line span for 1-line staves is special: goes from 2sp above the line to 2sp below the line;
-static const int BARLINE_SPAN_1LINESTAFF_FROM = -4;
-static const int BARLINE_SPAN_1LINESTAFF_TO   = 4;
+static const int BARLINE_SPAN_1LINESTAFF_FROM   = -4;
+static const int BARLINE_SPAN_1LINESTAFF_TO     = 4;
 
 // data for some preset bar line span types
 static const int BARLINE_SPAN_TICK1_FROM        = -1;
@@ -43,7 +43,7 @@ static const int BARLINE_SPAN_SHORT2_TO         = 7;
 // used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
 // fixed once all staves are read
 
-static const int UNKNOWN_BARLINE_TO = -6;
+static const int UNKNOWN_BARLINE_TO             = -6;
 
 //---------------------------------------------------------
 //   BarLineTableItem
@@ -63,10 +63,8 @@ class BarLine : public Element {
       Q_OBJECT
 
       BarLineType _barLineType { BarLineType::NORMAL };
-      bool _customSpan         { false };
-      bool _customSubtype      { false };
-      int _span                { 1 };     // number of staves spanned by the barline
-      int _spanFrom            { 0 };                      // line number on start and end staves
+      int _span                { 1 };           // number of staves spanned by the barline
+      int _spanFrom            { 0 };           // line number on start and end staves
       int _spanTo              { DEFAULT_BARLINE_TO };
 
       // static variables used while dragging
@@ -79,9 +77,6 @@ class BarLine : public Element {
       ElementList _el;        ///< fermata or other articulations
 
       void drawDots(QPainter* painter, qreal x) const;
-      void updateCustomSpan();
-      void updateCustomType();
-      void updateGenerated(bool canBeTrue = true);
 
    public:
       BarLine(Score*);
@@ -93,7 +88,6 @@ class BarLine : public Element {
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
       virtual QPointF pagePos() const override;      ///< position in canvas coordinates
-      virtual QPointF canvasPos() const override;    ///< position in canvas coordinates
       virtual void layout() override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void add(Element*) override;
@@ -103,15 +97,11 @@ class BarLine : public Element {
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
-      Segment* segment() const { return (Segment*)parent(); }
+      Segment* segment() const        { return (Segment*)parent(); }
 
-      void setCustomSpan(bool val)    { _customSpan = val;    }
-      void setCustomSubtype(bool val) { _customSubtype = val; }
-      void setSpan(int val);
-      void setSpanFrom(int val);
-      void setSpanTo(int val);
-      bool customSpan() const         { return _customSpan;   }
-      bool customSubtype() const      { return _customSubtype;}
+      void setSpan(int val)           { _span = val;          }
+      void setSpanFrom(int val)       { _spanFrom = val;      }
+      void setSpanTo(int val)         { _spanTo = val;        }
       int span() const                { return _span;         }
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
@@ -123,8 +113,6 @@ class BarLine : public Element {
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 2; }
 
-      int tick() const;
-
       ElementList* el()                  { return &_el; }
       const ElementList* el() const      { return &_el; }
 
@@ -134,7 +122,7 @@ class BarLine : public Element {
       QString barLineTypeName() const;
       static QString barLineTypeName(BarLineType t);
       void setBarLineType(const QString& s);
-      void setBarLineType(BarLineType i) { _barLineType = i;     updateCustomType();      }
+      void setBarLineType(BarLineType i) { _barLineType = i;     }
       BarLineType barLineType() const    { return _barLineType;  }
       static BarLineType barLineType(const QString&);
 

@@ -1848,7 +1848,7 @@ void Score::deleteItem(Element* el)
                   Measure* m            = seg->measure();
                   Segment::Type segType = seg->segmentType();
 
-                  if (segType == Segment::Type::BarLine)
+                  if (segType & (Segment::Type::BarLine | Segment::Type::BeginBarLine))
                         undoRemoveElement(el);
                   else if (segType == Segment::Type::EndBarLine) {
                         m->undoResetProperty(P_ID::REPEAT_END);

@@ -328,9 +328,12 @@ class InspectorBarLine : public InspectorBase {
       void  blockSpanDataSignals(bool val);
 
    private slots:
-      void spanTypeChanged(int idx);
-      void resetSpanType();
       void manageSpanData();
+      void presetDefaultClicked();
+      void presetTick1Clicked();
+      void presetTick2Clicked();
+      void presetShort1Clicked();
+      void presetShort2Clicked();
 
    public:
       InspectorBarLine(QWidget* parent);
