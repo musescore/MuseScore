@@ -65,6 +65,7 @@ class Jump;
 class StaffText;
 class Ottava;
 class Note;
+class LayoutBreak;
 
 enum class SymId;
 
@@ -650,6 +651,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Jump,         jump,         JUMP);
       CONVERT(StaffText,    staffText,    STAFF_TEXT);
       CONVERT(Ottava,       ottava,       OTTAVA);
+      CONVERT(LayoutBreak,  layoutBreak,  LAYOUT_BREAK);
 
 #undef CONVERT
       };
@@ -657,10 +659,6 @@ class Element : public QObject, public ScoreElement {
 //---------------------------------------------------------
 //   ElementList
 //---------------------------------------------------------
-
-// class ElementList : public std::list<Element*> {
-// class ElementList : public QList<Element*> {
-// class ElementList : public QVector<Element*> {
 
 class ElementList : public std::vector<Element*> {
    public:

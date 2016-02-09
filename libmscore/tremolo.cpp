@@ -116,7 +116,6 @@ void Tremolo::layout()
       qreal _spatium  = spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(StyleIdx::tremoloWidth).val() * .5;
-      // qreal h2  = _spatium * score()->styleS(StyleIdx::tremoloBoxHeight).val()  * .5;
       qreal lw  = _spatium * score()->styleS(StyleIdx::tremoloStrokeWidth).val();
       qreal td  = _spatium * score()->styleS(StyleIdx::tremoloDistance).val();
       path      = QPainterPath();
