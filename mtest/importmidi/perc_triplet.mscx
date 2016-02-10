@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="2.06">
+  <programVersion>2.0.2</programVersion>
+  <programRevision>f51dc11</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -30,15 +34,22 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2016-02-09</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">mid</metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
       </PageList>
     <Part>
       <Staff id="1">
@@ -104,6 +115,7 @@
         <Channel>
           <controller ctrl="0" value="1"/>
           <program value="51"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -114,6 +126,10 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Tempo>
+          <tempo>1.66667</tempo>
+          <text><sym>unicodeNoteQuarterUp</sym> = 100</text>
+          </Tempo>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -136,6 +152,10 @@
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
+          <Number>
+            <style>Tuplet</style>
+            <text>3</text>
+            </Number>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
