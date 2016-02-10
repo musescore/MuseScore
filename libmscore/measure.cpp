@@ -75,6 +75,7 @@
 #include "utils.h"
 #include "volta.h"
 #include "xml.h"
+#include "systemdivider.h"
 
 namespace Ms {
 
@@ -648,10 +649,7 @@ void Measure::add(Element* e)
                               }
                         }
                   seg->setParent(this);
-
                   _segments.insert(seg, s);
-                  if ((seg->segmentType() == Segment::Type::TimeSig) && seg->element(0))
-                        score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                   }
                   break;
 
@@ -1113,9 +1111,6 @@ Element* Measure::drop(const DropData& data)
             staffIdx = 0;
       if (staffIdx < 0)
             return 0;
-#if 0 // yet(?) unused
-      QPointF mrp(data.pos - pagePos());
-#endif
       Staff* staff = score()->staff(staffIdx);
       bool fromPalette = (e->track() == -1);
 
@@ -1507,7 +1502,6 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             writeProperty(xml, P_ID::USER_STRETCH);
             writeProperty(xml, P_ID::NO_OFFSET);
             writeProperty(xml, P_ID::MEASURE_NUMBER_MODE);
-//TODO-WS            writeProperty(xml, P_ID::SYSTEM_INITIAL_BARLINE_TYPE);
             }
       qreal _spatium = spatium();
       MStaff* mstaff = _mstaves[staff];
@@ -2476,26 +2470,14 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         score()->addElement(bl);
                         }
                   else {
-                        // a bar line is there (either existing or newly created):
-                        // adjust subtype, if not fitting
-#if 0 //TODO
-                        if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_ID::BARLINE_TYPE, int(_endBarLineType));
-                              bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
-                              }
-                        // or clear custom subtype flag if same type as measure
-                        if (bl->barLineType() == _endBarLineType && bl->customSubtype()) {
-                              bl->setCustomSubtype(false);
-                              bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
-                              }
-#endif
-
                         // if a bar line exists for this staff (cbl) but
                         // it is not the bar line we are dealing with (bl),
                         // we are extending down the bar line of a staff above (bl)
                         // and the bar line for this staff (cbl) is not needed:
                         // DELETE it
+
                         if (cbl && cbl != bl) {
+
                               // Mensurstrich special case:
                               // if span arrives inside the end staff (spanTo>0) OR
                               //          span is not multi-staff (spanTot<=1) OR
@@ -2504,9 +2486,9 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                               //    remove bar line for this staff
                               // If NONE of the above conditions holds, the staff is the last staff of
                               // a Mensurstrich(-like) span: keep its bar line, as it may span to next staff
-                              if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1) {
+
+                              if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1)
                                     score()->undoRemoveElement(cbl);
-                                    }
                               }
                         }
                   }
@@ -2517,9 +2499,11 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   if (cbl)
                         score()->undoRemoveElement(cbl);
                   }
+
             // if span not counted off AND we have a bar line AND this staff is shown,
             // set bar line span values (this may result in extending down a bar line
             // for a previous staff, if we are counting off a span > 1)
+
             if (span) {
                   if (bl) {
                         ++aspan;
@@ -2564,12 +2548,15 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             BarLine* bl = static_cast<BarLine*>(seg->element(staffIdx * VOICES));
             if (bl) {
+                  // do not change bar line type if bar line is user modified
+                  // and its not a repeat start/end barline
+
                   if (bl->generated())
                         bl->setBarLineType(t);
                   else {
                         if (force) {
-                              score()->undoChangeProperty(bl, P_ID::BARLINE_TYPE, int(t));
-                              score()->undoChangeProperty(bl, P_ID::GENERATED, true);
+                              score()->undoChangeProperty(bl, P_ID::BARLINE_TYPE, QVariant::fromValue(t));
+                              bl->setGenerated(true);
                               }
                         }
                   bl->layout();

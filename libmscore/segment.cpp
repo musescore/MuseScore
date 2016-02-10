@@ -649,7 +649,6 @@ void Segment::remove(Element* el)
             case Element::Type::BREATH:
                   _elist[track] = 0;
                   score()->setPause(tick(), 0);
-                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                   score()->setLayoutAll(true);
                   break;
 

@@ -509,5 +509,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 Q_DECLARE_METATYPE(Ms::MScore::Direction);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
+Q_DECLARE_METATYPE(Ms::TextStyleType);
+Q_DECLARE_METATYPE(Ms::BarLineType);
 
 #endif

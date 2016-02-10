@@ -1566,7 +1566,6 @@ void Score::addElement(Element* element)
          ) {
             setLayoutAll(true);
             measures()->add(static_cast<MeasureBase*>(element));
-            addLayoutFlags(LayoutFlag::FIX_TICKS);
             return;
             }
 
@@ -1663,13 +1662,6 @@ void Score::addElement(Element* element)
                         createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
-            case Element::Type::BREATH:
-                  addLayoutFlags(LayoutFlag::FIX_TICKS);
-                  break;
-            case Element::Type::LAYOUT_BREAK:
-                  if (static_cast<LayoutBreak*>(element)->layoutBreakType() == LayoutBreak::Type::SECTION)
-                        addLayoutFlags(LayoutFlag::FIX_TICKS);
-                  break;
             default:
                   break;
             }
@@ -1706,7 +1698,6 @@ void Score::removeElement(Element* element)
          || et == Element::Type::FBOX
             ) {
             measures()->remove(static_cast<MeasureBase*>(element));
-            addLayoutFlags(LayoutFlag::FIX_TICKS);
             setLayoutAll(true);
             return;
             }
@@ -2218,7 +2209,7 @@ Score* Score::clone()
       Score* score = new Score(style());
       score->read1(r, true);
 
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       score->scanElements(0, elementAdjustReadPos);  //??
       return score;

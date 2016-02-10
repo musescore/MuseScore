@@ -193,9 +193,8 @@ struct Position {
 //---------------------------------------------------------
 
 enum class LayoutFlag : char {
-      FIX_TICKS = 1,
-      FIX_PITCH_VELO = 2,
-      PLAY_EVENTS = 4
+      FIX_PITCH_VELO = 1,
+      PLAY_EVENTS = 2
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
@@ -872,7 +871,7 @@ class Score : public QObject, public ScoreElement {
 
       const QList<Page*>& pages() const        { return _pages;                }
       const QList<System*>& systems() const    { return _systems;              }
-      QList<System*> systems()                 { return _systems;              }
+      QList<System*>& systems()                { return _systems;              }
 
       MeasureBaseList* measures()             { return &_measures; }
       bool checkHasMeasures() const;

@@ -178,7 +178,6 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = 0;
                         score()->setPause(endTick(), 0);
-                        score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                         score()->setLayoutAll(true);
                         break;
                   }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
-    <height>205</height>
+    <width>260</width>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -140,6 +140,13 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="spanTo">
+       <property name="accessibleName">
+        <string>Span to</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="1">
       <widget class="QSpinBox" name="spanFrom">
        <property name="accessibleName">
@@ -153,13 +160,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QSpinBox" name="spanTo">
-       <property name="accessibleName">
-        <string>Span to</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1">
       <widget class="QSpinBox" name="span">
        <property name="accessibleName">
@@ -167,6 +167,19 @@
        </property>
        <property name="minimum">
         <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QToolButton" name="resetSpan">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Span value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -196,19 +209,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetSpan">
-       <property name="toolTip">
-        <string>Reset value</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset Span value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="resetSpanTo">
        <property name="toolTip">
@@ -232,8 +232,26 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="3">
+     <item row="6" column="0" colspan="3">
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="presetShort1">
+         <property name="text">
+          <string>Short 1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="presetShort2">
+         <property name="text">
+          <string>Short 2</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="5" column="0" colspan="3">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QPushButton" name="presetDefault">
          <property name="text">
@@ -252,20 +270,6 @@
         <widget class="QPushButton" name="presetTick2">
          <property name="text">
           <string>Tick 2</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="presetShort1">
-         <property name="text">
-          <string>Short 1</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="presetShort2">
-         <property name="text">
-          <string>Short 2</string>
          </property>
         </widget>
        </item>

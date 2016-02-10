@@ -41,6 +41,7 @@
 #include "spanner.h"
 #include "sym.h"
 #include "spacer.h"
+#include "systemdivider.h"
 
 namespace Ms {
 
@@ -89,9 +90,6 @@ SysStaff::~SysStaff()
 System::System(Score* s)
    : Element(s)
       {
-      _leftMargin  = 0.0;
-      _pageBreak   = false;
-      _vbox        = false;
       }
 
 //---------------------------------------------------------
@@ -102,6 +100,25 @@ System::~System()
       {
       qDeleteAll(_staves);
       qDeleteAll(_brackets);
+      delete _systemDividerLeft;
+      delete _systemDividerRight;
+      }
+
+//---------------------------------------------------------
+///   clear
+///   Clear layout of System
+//---------------------------------------------------------
+
+void System::clear()
+      {
+      ml.clear();
+      for (SpannerSegment* ss : _spannerSegments) {
+            if (ss->system() == this)
+                  ss->setParent(0);       // assume parent() is System
+            }
+      _spannerSegments.clear();
+      _vbox = false;
+      // _systemDividers are reused
       }
 
 //---------------------------------------------------------
@@ -515,24 +532,6 @@ void System::layout2()
       }
 
 //---------------------------------------------------------
-///   clear
-///   Clear layout of System
-//---------------------------------------------------------
-
-void System::clear()
-      {
-      ml.clear();
-      foreach (SpannerSegment* ss, _spannerSegments) {
-            // qDebug("System::clear %s", ss->name());
-            if (ss->system() == this)
-                  ss->setParent(0);       // assume parent() is System
-            }
-      _spannerSegments.clear();
-      _vbox        = false;
-      _pageBreak   = false;
-      }
-
-//---------------------------------------------------------
 //   setInstrumentNames
 //---------------------------------------------------------
 
@@ -684,6 +683,16 @@ void System::add(Element* el)
                   }
                   break;
 
+            case Element::Type::SYSTEM_DIVIDER:
+                  {
+                  SystemDivider* sd = static_cast<SystemDivider*>(el);
+                  if (sd->dividerType() == SystemDivider::Type::LEFT)
+                        _systemDividerLeft = sd;
+                  else
+                        _systemDividerRight = sd;
+                  }
+                  break;
+
             default:
                   qDebug("System::add(%s) not implemented", el->name());
                   break;
@@ -731,6 +740,15 @@ void System::remove(Element* el)
                         Q_ASSERT(score() == el->score());
                         }
                   break;
+            case Element::Type::SYSTEM_DIVIDER:
+                  if (el == _systemDividerLeft)
+                        _systemDividerLeft = 0;
+                  else {
+                        Q_ASSERT(_systemDividerRight == el);
+                        _systemDividerRight = 0;
+                        }
+                  break;
+
             default:
                   qDebug("System::remove(%s) not implemented", el->name());
                   break;
@@ -743,19 +761,8 @@ void System::remove(Element* el)
 
 void System::change(Element* o, Element* n)
       {
-#if 0 // TODO??
-      if (o->type() == Element::Type::VBOX || o->type() == Element::Type::HBOX || o->type() == Element::Type::TBOX || o->type() == Element::Type::FBOX) {
-            auto idx = ml.indexOf((MeasureBase*)o);
-            if (idx != -1)
-                  ml.removeAt(idx);
-            ml.insert(idx, (MeasureBase*)n);
-            score()->measures()->change((MeasureBase*)o, (MeasureBase*)n);
-            }
-      else {
-#endif
-            remove(o);
-            add(n);
-//            }
+      remove(o);
+      add(n);
       }
 
 //---------------------------------------------------------
@@ -838,6 +845,11 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
       for (Bracket* b : _brackets)
             func(data, b);
 
+      if (_systemDividerLeft)
+            func(data, _systemDividerLeft);
+      if (_systemDividerRight)
+            func(data, _systemDividerRight);
+
       int idx = 0;
       for (const SysStaff* st : _staves) {
             if (all || st->show()) {
@@ -911,6 +923,10 @@ qreal System::staffCanvasYpage(int staffIdx) const
 void System::write(Xml& xml) const
       {
       xml.stag("System");
+      if (_systemDividerLeft && _systemDividerLeft->isUserModified())
+            _systemDividerLeft->write(xml);
+      if (_systemDividerRight && _systemDividerRight->isUserModified())
+            _systemDividerRight->write(xml);
       xml.etag();
       }
 
@@ -921,7 +937,14 @@ void System::write(Xml& xml) const
 void System::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            e.unknown();
+            const QStringRef& tag(e.name());
+            if (tag == "SystemDivider") {
+                  SystemDivider* sd = new SystemDivider(score());
+                  sd->read(e);
+                  add(sd);
+                  }
+            else
+                  e.unknown();
             }
       }
 
@@ -959,136 +982,6 @@ Element* System::prevElement()
             re = seg->lastElement(score()->staves().size() - 1);
             }
       return re;
-      }
-
-//---------------------------------------------------------
-//   SystemDivider
-//---------------------------------------------------------
-
-SystemDivider::SystemDivider(Score* s) : Symbol(s)
-      {
-      setSystemFlag(true);
-      setTrack(0);
-      // default value, but not valid until setDividerType()
-      _dividerType = SystemDivider::Type::LEFT;
-      _sym = SymId::systemDivider;
-      }
-
-//---------------------------------------------------------
-//   SystemDivider
-//---------------------------------------------------------
-
-SystemDivider::SystemDivider(const SystemDivider& sd) : Symbol(sd)
-      {
-      _dividerType = sd._dividerType;
-      }
-
-//---------------------------------------------------------
-//   setDividerType
-//---------------------------------------------------------
-
-void SystemDivider::setDividerType(SystemDivider::Type v)
-      {
-      ScoreFont* sf = _score->scoreFont();
-       _dividerType = v;
-       if (v == SystemDivider::Type::LEFT) {
-             SymId symLeft = Sym::name2id(_score->styleSt(StyleIdx::dividerLeftSym));
-             if (!symIsValid(symLeft))
-                   sf = sf->fallbackFont();
-             setSym(symLeft, sf);
-             setXoff(_score->styleD(StyleIdx::dividerLeftX));
-             setYoff(_score->styleD(StyleIdx::dividerLeftY));
-             setAlign(AlignmentFlags::LEFT | AlignmentFlags::VCENTER);
-             }
-       else {
-             SymId symRight = Sym::name2id(_score->styleSt(StyleIdx::dividerRightSym));
-             if (!symIsValid(symRight))
-                   sf = sf->fallbackFont();
-             setSym(symRight, sf);
-             setXoff(_score->styleD(StyleIdx::dividerRightX));
-             setYoff(_score->styleD(StyleIdx::dividerRightY));
-             setAlign(AlignmentFlags::RIGHT | AlignmentFlags::VCENTER);
-             }
-      }
-
-//---------------------------------------------------------
-//   drag
-//---------------------------------------------------------
-
-QRectF SystemDivider::drag(EditData* ed)
-      {
-      setGenerated(false);
-      return Symbol::drag(ed);
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void SystemDivider::layout()
-      {
-      Symbol::layout();
-      // center vertically between systems
-      rypos() -= bbox().y();
-      Measure* m = measure();
-      if (m) {
-            System* s1 = m->system();
-            if (!s1)
-                  return;
-            // rypos() += s1->height() + (s1->distance() + s1->stretchDistance()) * 0.5;
-            rypos() += s1->height();
-            // center horizontally under left/right barline
-            if (dividerType() == SystemDivider::Type::LEFT)
-                  rxpos() -= width() * 0.5;
-            else
-                  rxpos() += m->width() + width() * 0.5;
-            }
-      adjustReadPos();
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void SystemDivider::write(Xml& xml) const
-      {
-      if (dividerType() == SystemDivider::Type::LEFT)
-            xml.stag(QString("SystemDivider type=\"left\""));
-      else
-            xml.stag(QString("SystemDivider type=\"right\""));
-      writeProperties(xml);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void SystemDivider::read(XmlReader& e)
-      {
-      Align a = align() & AlignmentFlags::VMASK;
-      ScoreFont* sf = score()->scoreFont();
-      if (e.attribute("type") == "left") {
-            _dividerType = SystemDivider::Type::LEFT;
-            SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
-            if (!symIsValid(sym))
-                  sf = sf->fallbackFont();
-            setSym(sym, sf);
-            setAlign(a | AlignmentFlags::LEFT);
-            setXoff(score()->styleB(StyleIdx::dividerLeftX));
-            setYoff(score()->styleB(StyleIdx::dividerLeftY));
-            }
-      else {
-            _dividerType = SystemDivider::Type::RIGHT;
-            SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
-            if (!symIsValid(sym))
-                  sf = sf->fallbackFont();
-            setSym(sym, sf);
-            setAlign(a | AlignmentFlags::RIGHT);
-            setXoff(score()->styleB(StyleIdx::dividerRightX));
-            setYoff(score()->styleB(StyleIdx::dividerRightY));
-            }
-      Symbol::read(e);
       }
 
 //---------------------------------------------------------
@@ -1221,6 +1114,15 @@ void System::moveBracket(int staffIdx, int srcCol, int dstCol)
             if (b->staffIdx() == staffIdx && b->level() == srcCol)
                   b->setLevel(dstCol);
             }
+      }
+
+//---------------------------------------------------------
+//   pageBreak
+//---------------------------------------------------------
+
+bool System::pageBreak() const
+      {
+      return  ml.back()->pageBreak();
       }
 }
 

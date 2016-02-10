@@ -69,6 +69,7 @@
 #include "libmscore/bracket.h"
 #include "libmscore/trill.h"
 #include "libmscore/timesig.h"
+#include "libmscore/systemdivider.h"
 
 namespace Ms {
 
@@ -446,10 +447,14 @@ void Debugger::updateList(Score* s)
                   ElementItem* si = new ElementItem(pi, system);
                   for (Bracket* b : system->brackets())
                         new ElementItem(si, b);
+                  if (system->systemDividerLeft())
+                        new ElementItem(si, system->systemDividerLeft());
+                  if (system->systemDividerRight())
+                        new ElementItem(si, system->systemDividerRight());
                   for (SpannerSegment* ss : system->spannerSegments())
                         new ElementItem(si, ss);
-                  foreach(SysStaff* ss, *system->staves()) {
-                        foreach(InstrumentName* in, ss->instrumentNames)
+                  for (SysStaff* ss : *system->staves()) {
+                        for (InstrumentName* in : ss->instrumentNames)
                               new ElementItem(si, in);
                         }
 

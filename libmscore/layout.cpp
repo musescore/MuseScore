@@ -53,6 +53,7 @@
 #include "volta.h"
 #include "breath.h"
 #include "tempotext.h"
+#include "systemdivider.h"
 
 namespace Ms {
 
@@ -1811,6 +1812,34 @@ void Score::doLayoutSystems()
       }
 
 //---------------------------------------------------------
+//   checkDivider
+//---------------------------------------------------------
+
+static void checkDivider(bool left, System* s, qreal sdd)
+      {
+      SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
+      if (s->score()->styleB(left ? StyleIdx::dividerLeft : StyleIdx::dividerRight)) {
+            if (!divider) {
+                  divider = new SystemDivider(s->score());
+                  divider->setDividerType(left ? SystemDivider::Type::LEFT : SystemDivider::Type::RIGHT);
+                  divider->setGenerated(true);
+                  s->add(divider);
+                  }
+            divider->layout();
+            divider->rypos() = divider->height() * .5 + sdd;
+            divider->adjustReadPos();
+            }
+      else if (divider) {
+            if (divider->generated())
+                  s->score()->undoRemoveElement(divider);
+            else {
+                  s->remove(divider);
+                  delete divider;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutPage
 //    gaps - number of gaps to stretch
 //---------------------------------------------------------
@@ -1834,13 +1863,15 @@ void Score::layoutPage(Page* page, qreal restHeight)
                   }
             // remove system dividers
             for (System* s : page->systems()) {
-                  for (MeasureBase* mb : s->measures()) {
-                        if (!mb->isMeasure())
-                              continue;
-                        for (Element* e : mb->el()) {
-                              if (e->isSystemDivider())
-                                    mb->remove(e);
-                              }
+                  SystemDivider* sd = s->systemDividerLeft();
+                  if (sd) {
+                        s->remove(sd);
+                        delete sd;
+                        }
+                  sd = s->systemDividerRight();
+                  if (sd) {
+                        s->remove(sd);
+                        delete sd;
                         }
                   }
             return;
@@ -1862,68 +1893,15 @@ void Score::layoutPage(Page* page, qreal restHeight)
                               offset = 0;
                         }
                   yoff += offset;
+
+                  // add / remove system dividers
+
+                  qreal sdd = (s2->y() + yoff - s1->y() - s1->height()) * .5 + s1->height();
+                  checkDivider(true,  s1, sdd);
+                  checkDivider(false, s1, sdd);
                   }
             s2->rypos() += yoff;
             }
-
-#if 0
-      for (System* system : page->systems()) {
-            system->move(QPointF(0.0, y));
-            if (system->addStretch())
-                  y += system->stretchDistance();
-
-            if (system->isVbox())
-                  continue;
-
-            // add / remove system dividers
-            bool divideLeft = styleB(StyleIdx::dividerLeft);
-            bool divideRight = styleB(StyleIdx::dividerRight);
-            if (system == page->systems().last()) {
-                  // no dividers for last system of page
-                  divideLeft = false;
-                  divideRight = false;
-                  }
-            MeasureBase* first = system->firstMeasure();
-            MeasureBase* last = system->lastMeasure();
-            for (MeasureBase* mb : system->measures()) {
-                  if (!mb->isMeasure())
-                        continue;
-                  SystemDivider* divider1 = nullptr;
-                  SystemDivider* divider2 = nullptr;
-                  for (Element* e : mb->el()) {
-                        if (!e->isSystemDivider())
-                              continue;
-                        SystemDivider* sd = static_cast<SystemDivider*>(e);
-                        if (sd->generated())
-                              mb->remove(sd);
-                        else if (mb == first && divideLeft && sd->dividerType() == SystemDivider::Type::LEFT)
-                              divider1 = sd;
-                        else if (mb == last && divideRight && sd->dividerType() == SystemDivider::Type::RIGHT)
-                              divider2 = sd;
-                        else  // this was non-generated, but no longer applies
-                              mb->remove(sd);
-                        }
-                  if (mb == first && divideLeft) {
-                        if (!divider1) {
-                              divider1 = new SystemDivider(this);
-                              divider1->setGenerated(true);
-                              divider1->setParent(mb);
-                              addElement(divider1);
-                              }
-                        divider1->setDividerType(SystemDivider::Type::LEFT);
-                        }
-                  if (mb == last && divideRight) {
-                        if (!divider2) {
-                              divider2 = new SystemDivider(this);
-                              divider2->setGenerated(true);
-                              divider2->setParent(mb);
-                              addElement(divider2);
-                              }
-                        divider2->setDividerType(SystemDivider::Type::RIGHT);
-                        }
-                  }
-            }
-#endif
       }
 
 //---------------------------------------------------------
@@ -2213,9 +2191,8 @@ System* Score::getNextSystem(LayoutContext& lc)
       {
       bool isVBox = lc.curMeasure->isVBox();
       System* system;
-      if (lc.systemList.empty()) {
+      if (lc.systemList.empty())
             system = new System(this);
-            }
       else {
             system = lc.systemList.takeFirst();
             system->clear();   // remove measures from system
@@ -2972,8 +2949,8 @@ System* Score::collectSystem(LayoutContext& lc)
 
             Element::Type nt = lc.nextMeasure ? lc.nextMeasure->type() : Element::Type::INVALID;
             if (pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
-                  if (_layoutMode != LayoutMode::SYSTEM)
-                        system->setPageBreak(lc.curMeasure->pageBreak());
+//                  if (_layoutMode != LayoutMode::SYSTEM)
+//                        system->setPageBreak(lc.curMeasure->pageBreak());
                   minWidth += ww;
                   getNextMeasure(lc);
                   break;

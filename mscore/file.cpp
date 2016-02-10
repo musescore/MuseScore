@@ -2093,7 +2093,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             s->rebuildMidiMapping();
             s->updateChannel();
             s->setSoloMute();
-            s->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+            s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             }
       score->setSaved(false);
       score->update();

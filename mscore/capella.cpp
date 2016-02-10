@@ -1323,7 +1323,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       score->fixTicks();
       score->setPlaylistDirty();
       score->setLayoutAll(true);
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       }
 
 //---------------------------------------------------------
