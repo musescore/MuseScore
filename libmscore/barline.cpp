@@ -596,7 +596,7 @@ Element* BarLine::drop(const DropData& data)
                         }
                   // if drop refers to subtype, update this bar line subtype
                   else
-                        undoChangeProperty(P_ID::BARLINE_TYPE, int(bl->barLineType()));
+                        undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(bl->barLineType()));
                   delete e;
                   return 0;
                   }
@@ -640,13 +640,13 @@ Element* BarLine::drop(const DropData& data)
                               m->undoChangeProperty(P_ID::REPEAT_END, false);
                               for (Element* e : segment()->elist()) {
                                     if (e)
-                                          e->undoChangeProperty(P_ID::BARLINE_TYPE, int(st));
+                                          e->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
                                     }
                               break;
                         }
                   }
             else if (segment()->isBeginBarLine()) {
-                  undoChangeProperty(P_ID::BARLINE_TYPE, int(st));
+                  undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
                   undoChangeProperty(P_ID::GENERATED, false);
                   }
 
@@ -1130,7 +1130,7 @@ QVariant BarLine::getProperty(P_ID id) const
       {
       switch (id) {
             case P_ID::BARLINE_TYPE:
-                  return int(_barLineType);
+                  return QVariant::fromValue(_barLineType);
             case P_ID::BARLINE_SPAN:
                   return span();
             case P_ID::BARLINE_SPAN_FROM:
@@ -1151,7 +1151,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
             case P_ID::BARLINE_TYPE:
-                  setBarLineType(BarLineType(v.toInt()));
+                  setBarLineType(v.value<BarLineType>());
                   break;
             case P_ID::BARLINE_SPAN:
                   setSpan(v.toInt());
@@ -1179,7 +1179,7 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::BARLINE_TYPE:
                   if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
-                        return int(BarLineType::END);
+                        return QVariant::fromValue(BarLineType::END);
                   return int(BarLineType::NORMAL);
 
             case P_ID::BARLINE_SPAN:

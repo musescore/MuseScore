@@ -2442,7 +2442,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->updateChannel();
 
             pscore->setLayoutAll(true);
-            pscore->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+            pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             pscore->doLayout();
             }
 

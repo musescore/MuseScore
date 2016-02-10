@@ -242,7 +242,6 @@ bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::PAUSE:
                   setPause(v.toDouble());
-                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))

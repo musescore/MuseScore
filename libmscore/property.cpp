@@ -68,7 +68,7 @@ static const PropertyData propertyList[] = {
       { P_ID::TUNING,              false, "tuning",        P_TYPE::REAL  },
       { P_ID::PAUSE,               false, "pause",         P_TYPE::REAL  },
 
-      { P_ID::BARLINE_TYPE,        false, 0,               P_TYPE::INT   },
+      { P_ID::BARLINE_TYPE,        false, 0,               P_TYPE::BARLINE_TYPE },
       { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_FROM,   false, 0,               P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_TO,     false, 0,               P_TYPE::INT   },
@@ -389,6 +389,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::SYMID:
             case P_TYPE::TEXT_STYLE:
             case P_TYPE::INT_LIST:
+            case P_TYPE::BARLINE_TYPE:
                   return QVariant();
             }
       return QVariant();

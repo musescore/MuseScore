@@ -2492,7 +2492,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   setTextStyle(v.value<TextStyle>());
                   break;
             case P_ID::TEXT_STYLE_TYPE:
-                  setTextStyleType(TextStyleType(v.toInt()));
+                  setTextStyleType(v.value<TextStyleType>());
                   setGenerated(false);
                   break;
             case P_ID::TEXT:

@@ -645,7 +645,7 @@ void Page::read(XmlReader& e)
       while (e.readNextStartElement()) {
             if (e.name() == "System") {
                   System* system = new System(score());
-                  score()->systems().append(system);
+                  score()->systems().push_back(system);
                   system->read(e);
                   }
             else

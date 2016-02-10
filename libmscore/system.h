@@ -76,14 +76,16 @@ class SysStaff {
 class System : public Element {
       Q_OBJECT
 
+      SystemDivider*  _systemDividerLeft    { 0 };
+      SystemDivider*  _systemDividerRight   { 0 };
+
       std::vector<MeasureBase*> ml;
       QList<SysStaff*> _staves;
       QList<Bracket*> _brackets;
       QList<SpannerSegment*> _spannerSegments;
 
-      qreal _leftMargin;      ///< left margin for instrument name, brackets etc.
-      bool _pageBreak;
-      bool _vbox;             ///< contains only one VBox in ml
+      qreal _leftMargin   { 0.0    };     ///< left margin for instrument name, brackets etc.
+      bool _vbox          { false  };     ///< contains only one VBox in ml
 
    public:
       System(Score*);
@@ -113,8 +115,7 @@ class System : public Element {
       qreal staffCanvasYpage(int staffIdx) const;
       SysStaff* staff(int staffIdx) const    { return _staves[staffIdx]; }
 
-      bool pageBreak() const                 { return _pageBreak; }
-      void setPageBreak(bool val)            { _pageBreak = val; }
+      bool pageBreak() const;
 
       SysStaff* insertStaff(int);
       void removeStaff(int);
@@ -144,6 +145,9 @@ class System : public Element {
       QList<SpannerSegment*>& spannerSegments()             { return _spannerSegments; }
       const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
 
+      SystemDivider* systemDividerLeft() const  { return _systemDividerLeft; }
+      SystemDivider* systemDividerRight() const { return _systemDividerRight; }
+
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
 
@@ -157,39 +161,6 @@ class System : public Element {
 
 typedef QList<System*>::iterator iSystem;
 typedef QList<System*>::const_iterator ciSystem;
-
-//---------------------------------------------------------
-//   SystemDivider
-//---------------------------------------------------------
-
-class SystemDivider : public Symbol {
-      Q_OBJECT
-      Q_ENUMS(Type)
-
-   public:
-      enum class Type : char { LEFT, RIGHT };
-
-   private:
-      Type _dividerType;
-
-   public:
-      SystemDivider(Score* s = 0);
-      SystemDivider(const SystemDivider&);
-
-      virtual SystemDivider* clone() const override   { return new SystemDivider(*this); }
-      virtual Element::Type type() const override     { return Element::Type::SYSTEM_DIVIDER; }
-
-      Type dividerType() const                        { return _dividerType; }
-      void setDividerType(Type v);
-
-      virtual QRectF drag(EditData*) override;
-      virtual void layout() override;
-      virtual void write(Xml&) const override;
-      virtual void read(XmlReader&) override;
-
-      virtual Segment* segment() const override       { return 0; }
-      Measure* measure() const                        { return (Measure*)parent(); }
-      };
 
 
 }     // namespace Ms

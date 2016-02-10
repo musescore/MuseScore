@@ -65,6 +65,7 @@
             - use list.push_back(xx) instead of list.append(xx) or
             - use list.empty() instead of list.isEmpty()
             - etc.
+            (see https://marcmutz.wordpress.com/effective-qt/containers/)
 
       * In iterating a SegmentList instead of
             for (Segment* s = segments->first(); s; s = s->next())
@@ -73,6 +74,18 @@
         you can write
             for (auto s : segments)
                   ...
+
+
+====================================================================
+      Known Issues
+====================================================================
+
+      * double barline before precautionary time signature is missing
+      * layout issue for horizontal beams
+      * layout of two note tremolo
+      * layout of breath symbols
+      * regressions for tablature
+
 
 
 

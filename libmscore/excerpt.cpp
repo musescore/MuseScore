@@ -180,7 +180,7 @@ void createExcerpt(Excerpt* excerpt)
       //
       // layout score
       //
-      score->addLayoutFlags(LayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO));
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       //
       // handle transposing instruments

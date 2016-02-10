@@ -1962,10 +1962,6 @@ void ChangeElement::flip()
             }
       else if (newElement->type() == Element::Type::DYNAMIC)
             newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-      else if (newElement->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(newElement)->layoutBreakType() == LayoutBreak::Type::SECTION)
-            newElement->score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
-      else if (newElement->type() == Element::Type::BREATH)
-            newElement->score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
       else if (newElement->type() == Element::Type::TEMPO_TEXT) {
             TempoText* t = static_cast<TempoText*>(oldElement);
             score->setTempo(t->segment(), t->tempo());
@@ -2073,7 +2069,6 @@ void ChangeMeasureLen::flip()
             segment->setTick(endTick);
             }
       measure->setLen(len);
-//      measure->score()->addLayoutFlags(LAYOUT_FIX_TICKS); // we need to fix tick immediately!
       measure->score()->fixTicks();
       len = oLen;
       }
@@ -3666,7 +3661,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
                               for (Element* e : segment->elist()) {
                                     if (e) {
                                           BarLine* bl = e->barLine();
-                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, int(barType));
+                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
                                           bl->undoChangeProperty(P_ID::GENERATED, false);
                                           }
                                     }

@@ -83,6 +83,7 @@
 #include "utils.h"
 #include "volta.h"
 #include "xml.h"
+#include "systemdivider.h"
 
 namespace Ms {
 
