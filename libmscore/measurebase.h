@@ -163,9 +163,6 @@ class MeasureBase : public Element {
       int noOffset() const               { return _noOffset;    }
       void setNoOffset(int n)            { _noOffset = n;       }
 
-      bool isMeasure() const             { return type() == Element::Type::MEASURE; }
-      Measure* measure() const           { Q_ASSERT(isMeasure()); return (Measure*)(this); }
-
       bool repeatEnd() const             { return _repeatEnd;     }
       bool repeatStart() const           { return _repeatStart;   }
       bool repeatMeasure() const         { return _repeatMeasure; }
