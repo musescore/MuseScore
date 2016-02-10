@@ -323,7 +323,7 @@ void TestNote::grace()
       // create
       score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division/2);
       Ms::Chord* gc = chord->graceNotes().first();
-      Note* gn = gc->notes().first();
+      Note* gn = gc->notes().front();
 //      Note* n = static_cast<Note*>(writeReadElement(gn));
 //      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
 //      delete n;
@@ -457,28 +457,28 @@ void TestNote::noteLimits() {
       score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
-      
+
       // over 127 shouldn't crash
       score->cmdAddPitch(140, false);
       // below 0 shouldn't crash
       score->cmdAddPitch(-40, false);
-      
+
       // stack chords
       score->cmdAddPitch(42, false);
       for (int i = 1; i < 20; i++)
             score->cmdAddPitch(42 + i * 7, true);
-      
+
       // interval below
       score->cmdAddPitch(42, false);
       for (int i = 0; i < 20; i++) {
-            QList<Note*> nl = score->selection().noteList();
+            std::vector<Note*> nl = score->selection().noteList();
             score->cmdAddInterval(-8, nl);
             }
-      
+
       // interval above
       score->cmdAddPitch(42, false);
       for (int i = 0; i < 20; i++) {
-            QList<Note*> nl = score->selection().noteList();
+            std::vector<Note*> nl = score->selection().noteList();
             score->cmdAddInterval(8, nl);
             }
       QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));

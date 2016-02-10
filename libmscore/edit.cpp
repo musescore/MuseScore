@@ -1843,7 +1843,7 @@ void Score::deleteItem(Element* el)
 
             case Element::Type::BAR_LINE:
                   {
-                  BarLine* bl           = el->barLine();
+                  BarLine* bl           = el->toBarLine();
                   Segment* seg          = bl->segment();
                   Measure* m            = seg->measure();
                   Segment::Type segType = seg->segmentType();
@@ -1858,7 +1858,7 @@ void Score::deleteItem(Element* el)
                         for (Element* e : seg->elist()) {
                               if (!e)
                                     continue;
-                              BarLine* b = e->barLine();
+                              BarLine* b = e->toBarLine();
                               b->undoChangeProperty(P_ID::GENERATED, true);
                               b->undoResetProperty(P_ID::BARLINE_TYPE);
                               b->undoResetProperty(P_ID::BARLINE_SPAN);

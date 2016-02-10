@@ -548,7 +548,7 @@ class Element : public QObject, public ScoreElement {
                   _flags &= ~ElementFlags(ElementFlag::DROP_TARGET);
             }
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
-      bool isSegment() const           { return flag(ElementFlag::SEGMENT);     }
+      bool isSegmentFlag() const           { return flag(ElementFlag::SEGMENT);     }
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
@@ -601,57 +601,54 @@ class Element : public QObject, public ScoreElement {
       // Example for ChordRest:
       //
       //    bool             isChordRest()
-      //    ChordRest*       castChordRest()
-      //    const ChordRest* castChordRest() const
       //    ChordRest*       toChordRest()
       //    const ChordRest* toChordRest() const
       //---------------------------------------------------
 
-      ChordRest* chordRest() {
-            Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST);
+      ChordRest* toChordRest() {
+            Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST
+               || type() == Element::Type::REPEAT_MEASURE);
             return (ChordRest*)this;
             }
-      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE; }
+      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
+            || type() == Element::Type::REPEAT_MEASURE; }
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
       bool isSLine() const;
       bool isSLineSegment() const;
 
-#define CONVERT(a,b,c) \
-      const a*   b() const   { Q_ASSERT(this == 0 || type() == Element::Type::c); return (const a*)this; } \
-            a*   b()         { Q_ASSERT(this == 0 || type() == Element::Type::c); return (a*)this; } \
-            a*   to##a()       { return  (this == 0 || type() == Element::Type::c) ? (a*)this : 0; } \
-      const a*   to##a() const { return  (this == 0 || type() == Element::Type::c) ? (const a*)this : 0; } \
-      bool       is##a() const { return type() == Element::Type::c; }
+#define CONVERT(a,b) \
+      const a* to##a() const { Q_ASSERT(this == 0 || type() == Element::Type::b); return (const a*)this; } \
+            a* to##a()       { Q_ASSERT(this == 0 || type() == Element::Type::b); return (a*)this; } \
+      bool     is##a() const { return type() == Element::Type::b; }
 
-      CONVERT(Note,         note,         NOTE);
-      CONVERT(Rest,         rest,         REST);
-//      CONVERT(Chord,        chord,         CHORD);
-      CONVERT(BarLine,      barLine,      BAR_LINE);
-      CONVERT(Articulation, articulation, ARTICULATION);
-      CONVERT(Marker,       marker,       MARKER);
-      CONVERT(Chord,        chord,        CHORD);
-      CONVERT(Clef,         clef,         CLEF);
-      CONVERT(KeySig,       keySig,       KEYSIG);
-      CONVERT(TimeSig,      timeSig,      TIMESIG);
-      CONVERT(Measure,      measure,      MEASURE);
-      CONVERT(TempoText,    tempoText,    TEMPO_TEXT);
-      CONVERT(Breath,       breath,       BREATH);
-      CONVERT(HBox,         hBox,         HBOX);
-      CONVERT(VBox,         vBox,         VBOX);
-      CONVERT(TBox,         tBox,         TBOX);
-      CONVERT(FBox,         fBox,         FBOX);
-      CONVERT(Tie,          tie,          TIE);
-      CONVERT(Slur,         slur,         SLUR);
-      CONVERT(Glissando,    glissando,    GLISSANDO);
-      CONVERT(SystemDivider, systemDivider, SYSTEM_DIVIDER);
-      CONVERT(RehearsalMark, rehearsalMark, REHEARSAL_MARK);
-      CONVERT(Harmony,      harmony,      HARMONY);
-      CONVERT(Volta,        volta,        VOLTA);
-      CONVERT(Jump,         jump,         JUMP);
-      CONVERT(StaffText,    staffText,    STAFF_TEXT);
-      CONVERT(Ottava,       ottava,       OTTAVA);
-      CONVERT(LayoutBreak,  layoutBreak,  LAYOUT_BREAK);
-//      CONVERT(Segment,      segment,      SEGMENT);
+      CONVERT(Note,          NOTE);
+      CONVERT(Rest,          REST);
+      CONVERT(Chord,         CHORD);
+      CONVERT(BarLine,       BAR_LINE);
+      CONVERT(Articulation,  ARTICULATION);
+      CONVERT(Marker,        MARKER);
+      CONVERT(Clef,          CLEF);
+      CONVERT(KeySig,        KEYSIG);
+      CONVERT(TimeSig,       TIMESIG);
+      CONVERT(Measure,       MEASURE);
+      CONVERT(TempoText,     TEMPO_TEXT);
+      CONVERT(Breath,        BREATH);
+      CONVERT(HBox,          HBOX);
+      CONVERT(VBox,          VBOX);
+      CONVERT(TBox,          TBOX);
+      CONVERT(FBox,          FBOX);
+      CONVERT(Tie,           TIE);
+      CONVERT(Slur,          SLUR);
+      CONVERT(Glissando,     GLISSANDO);
+      CONVERT(SystemDivider, SYSTEM_DIVIDER);
+      CONVERT(RehearsalMark, REHEARSAL_MARK);
+      CONVERT(Harmony,       HARMONY);
+      CONVERT(Volta,         VOLTA);
+      CONVERT(Jump,          JUMP);
+      CONVERT(StaffText,     STAFF_TEXT);
+      CONVERT(Ottava,        OTTAVA);
+      CONVERT(LayoutBreak,   LAYOUT_BREAK);
+      CONVERT(Segment,       SEGMENT);
 
 #undef CONVERT
       };
@@ -764,8 +761,6 @@ extern void collectElements(void* data, Element* e);
 
 
 }     // namespace Ms
-
-
 
 Q_DECLARE_METATYPE(Ms::Element::Type);
 Q_DECLARE_METATYPE(Ms::Element::Placement);

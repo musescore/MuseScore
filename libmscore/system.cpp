@@ -364,8 +364,8 @@ void System::layout2()
                   }
 
             int si2    = ni->first;
-            qreal dist = h + staff->isTop() ? akkoladeDistance : staffDistance;
-            dist += _spatium * 4;
+            qreal dist = h + staff->isTop() ? staffDistance : akkoladeDistance;
+            dist += 4 * _spatium;
 
             for (MeasureBase* mb : ml) {
                   if (mb->type() != Element::Type::MEASURE)
@@ -396,6 +396,7 @@ void System::layout2()
                   sp = m->mstaff(si2)->_vspacerUp;
                   if (sp)
                         dist = qMax(dist, sp->gap());
+
                   }
             ss->bbox().setRect(0.0, y, width(), h);
             y += dist;
@@ -1094,7 +1095,7 @@ void System::removeGeneratedElements()
       for (auto im = fm; im != ml.end(); ++im) {
             if (!(*im)->isMeasure())
                   continue;
-            Measure* m = (*im)->measure();
+            Measure* m = (*im)->toMeasure();
             if (m != *fm && m->hasSystemHeader())
                   m->removeSystemHeader();
             if (m != *lm && m->hasSystemTrailer())

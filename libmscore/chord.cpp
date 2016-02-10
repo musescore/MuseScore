@@ -499,7 +499,7 @@ void Chord::remove(Element* e)
       switch (e->type()) {
             case Element::Type::NOTE:
                   {
-                  Note* note = e->note();
+                  Note* note = e->toNote();
                   auto i = std::find(_notes.begin(), _notes.end(), note);
                   if (i != _notes.end()) {
                         _notes.erase(i);

@@ -182,7 +182,7 @@ void InspectorNote::setElement()
 
 void InspectorNote::dot1Clicked()
       {
-      Note* note = inspector->element()->note();
+      Note* note = inspector->element()->toNote();
       if (note == 0)
             return;
       if (note->dots().size() > 0) {
@@ -199,7 +199,7 @@ void InspectorNote::dot1Clicked()
 
 void InspectorNote::dot2Clicked()
       {
-      Note* note = inspector->element()->note();
+      Note* note = inspector->element()->toNote();
       if (note == 0)
             return;
       if (note->dots().size() > 1) {
@@ -216,7 +216,7 @@ void InspectorNote::dot2Clicked()
 
 void InspectorNote::dot3Clicked()
       {
-      Note* note = inspector->element()->note();
+      Note* note = inspector->element()->toNote();
       if (note == 0)
             return;
       if (note->dots().size() > 2) {

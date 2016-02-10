@@ -567,7 +567,7 @@ Element* BarLine::drop(const DropData& data)
       Element::Type type = e->type();
 
       if (type == Element::Type::BAR_LINE) {
-            BarLine* bl    = e->barLine();
+            BarLine* bl    = e->toBarLine();
             BarLineType st = bl->barLineType();
 
             // if no change in subtype or no change in span, do nothing
@@ -655,7 +655,7 @@ Element* BarLine::drop(const DropData& data)
             }
 
       else if (type == Element::Type::ARTICULATION) {
-            Articulation* atr = e->articulation();
+            Articulation* atr = e->toArticulation();
             atr->setParent(this);
             atr->setTrack(track());
             score()->undoAddElement(atr);
@@ -739,7 +739,7 @@ void BarLine::endEdit()
                                     int lNewSpan = qMin(spannedStaves, lscore->nstaves());
                                     Measure* lm = lscore->tick2measure(m->tick());
                                     Segment* lseg = lm->undoGetSegment(Segment::Type::BarLine, tick());
-                                    BarLine* lbl = lseg->element(0)->barLine();
+                                    BarLine* lbl = lseg->element(0)->toBarLine();
                                     if (lbl) {
                                           // already a barline here
                                           if (lNewSpan > 0) {
@@ -755,7 +755,7 @@ void BarLine::endEdit()
                                           }
                                     else {
                                           // new barline needed
-                                          lbl = linkedClone()->barLine();
+                                          lbl = linkedClone()->toBarLine();
                                           lbl->setSpan(lNewSpan);
                                           lbl->setTrack(lstaff->idx() * VOICES);
                                           lbl->setScore(lscore);
@@ -1044,7 +1044,7 @@ void BarLine::layout()
       for (Element* e : _el) {
             e->layout();
             if (e->type() == Element::Type::ARTICULATION) {
-                  Articulation* a       = e->articulation();
+                  Articulation* a       = e->toArticulation();
                   MScore::Direction dir = a->direction();
                   qreal distance        = 0.5 * spatium();
                   qreal x               = width() * .5;
@@ -1260,7 +1260,7 @@ QString BarLine::accessibleExtraInfo() const
                   if (e->type() == Element::Type::JUMP)
                         rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   if (e->type() == Element::Type::MARKER) {
-                        const Marker* m = e->marker();
+                        const Marker* m = e->toMarker();
                         if (m->markerType() == Marker::Type::FINE)
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         }
@@ -1272,8 +1272,8 @@ QString BarLine::accessibleExtraInfo() const
                   for (const Element* e : nextM->el()) {
                         if (!score()->selectionFilter().canSelect(e))
                               continue;
-                        if (e->type() == Element::Type::MARKER)
-                              if (e->marker()->markerType() == Marker::Type::FINE)
+                        if (e->isMarker())
+                              if (e->toMarker()->markerType() == Marker::Type::FINE)
                                     continue; //added above^
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         }

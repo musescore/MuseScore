@@ -1966,7 +1966,7 @@ void ChangeElement::flip()
             TempoText* t = static_cast<TempoText*>(oldElement);
             score->setTempo(t->segment(), t->tempo());
             }
-      if (newElement->isSegment()) {
+      if (newElement->isSegmentFlag()) {
             SpannerSegment* os = static_cast<SpannerSegment*>(oldElement);
             SpannerSegment* ns = static_cast<SpannerSegment*>(newElement);
             if (os->system())
@@ -2163,7 +2163,7 @@ void ChangeSingleBarLineSpan::flip()
       // re-create bar lines for other staves, if span of this bar line changed
       if (respan && barLine->parent() && barLine->parent()->type() == Element::Type::SEGMENT) {
             Segment * segm = (static_cast<Segment*>(barLine->parent()));
-            Measure * meas = segm->measure();
+//            Measure * meas = segm->toMeasure();
             // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
 //            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::Type::StartRepeatBarLine)
 //                  meas->setStartRepeatBarLine(true);
@@ -3660,7 +3660,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
                         if (segment) {
                               for (Element* e : segment->elist()) {
                                     if (e) {
-                                          BarLine* bl = e->barLine();
+                                          BarLine* bl = e->toBarLine();
                                           bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
                                           bl->undoChangeProperty(P_ID::GENERATED, false);
                                           }

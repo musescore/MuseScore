@@ -495,7 +495,7 @@ Chord* Measure::findChord(int tick, int track)
             if (seg->tick() == tick) {
                   Element* el = seg->element(track);
                   if (el->isChord())
-                        return el->chord();
+                        return el->toChord();
                   }
             }
       return 0;
@@ -514,7 +514,7 @@ ChordRest* Measure::findChordRest(int tick, int track)
             if (seg.tick() == tick) {
                   Element* el = seg.element(track);
                   if (el->isChordRest())
-                        return el->chordRest();
+                        return el->toChordRest();
                   }
             }
       return 0;
@@ -2367,7 +2367,7 @@ void Measure::setStartRepeatBarLine()
                   for (int i = 1; i < span; ++i) {
                         Element* e  = s->element(staffIdx * VOICES);
                         if (e)
-                              score()->undoRemoveElement(e->barLine());
+                              score()->undoRemoveElement(e->toBarLine());
                         ++staffIdx;
                         }
                   }
