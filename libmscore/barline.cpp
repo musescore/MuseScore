@@ -527,8 +527,10 @@ void BarLine::read(XmlReader& e)
                   _spanFrom = e.intAttribute("from", _spanFrom);
                   _spanTo   = e.intAttribute("to", _spanTo);
                   _span     = e.readInt();
-                  if (_spanTo == UNKNOWN_BARLINE_TO)
-                        resetProperty(P_ID::BARLINE_SPAN_TO);
+                  if (_spanTo == UNKNOWN_BARLINE_TO) {
+                        _spanTo = staff() ? (staff()->lines() - 1) * 2 : 8;
+                        // resetProperty(P_ID::BARLINE_SPAN_TO);
+                        }
                   }
             else if (tag == "Articulation") {
                   Articulation* a = new Articulation(score());
