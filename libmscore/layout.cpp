@@ -2241,23 +2241,30 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             mmr = new Measure(this);
             mmr->setLen(len);
             mmr->setTick(m->tick());
+            mmr->setPageBreak(lm->pageBreak());
+            mmr->setLineBreak(lm->lineBreak());
             undo(new ChangeMMRest(m, mmr));
             }
       mmr->setMMRestCount(n);
       mmr->setNo(m->no());
-      mmr->setPageBreak(lm->pageBreak());
-      mmr->setLineBreak(lm->lineBreak());
 
-//      BarLineType t;
-      // End repeats do not set endBarLineGenerated to false because
-      // they can be generated from the repeatFlags. So we need to test it separately.
-//TODO      if (lm->endBarLineGenerated() && !(lm->repeatFlags() & Repeat::END))
-//            t = BarLineType::NORMAL;
-//      else
-//            t = lm->endBarLineType();
-//      mmr->setEndBarLineType(t, false, lm->endBarLineVisible(), lm->endBarLineColor());
+      Segment* ss = lm->findSegment(Segment::Type::EndBarLine, lm->endTick());
+      if (ss) {
+            Segment* ds = mmr->undoGetSegment(Segment::Type::EndBarLine, lm->endTick());
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  Element* e = ss->element(staffIdx * VOICES);
+                  if (e) {
+                        if (!ds->element(staffIdx * VOICES)) {
+                              Element* ee = e->clone();
+                              ee->setParent(ds);
+                              undoAddElement(ee);
+                              }
+                        }
+                  }
+            }
 
-//TODO      mmr->setRepeatFlags(m->repeatFlags() | lm->repeatFlags());
+      mmr->setRepeatStart(m->repeatStart() || lm->repeatStart());
+      mmr->setRepeatEnd(m->repeatEnd() || lm->repeatEnd());
 
       ElementList oldList = mmr->takeElements();
       ElementList newList = lm->el();
@@ -2318,6 +2325,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             }
       else if (ns)
             undo(new RemoveElement(ns));
+
       //
       // check for time signature
       //
@@ -2398,6 +2406,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         }
                   }
             }
+
       for (Element* e : s->annotations()) {
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText()))
                   continue;
@@ -2536,11 +2545,19 @@ static bool breakMultiMeasureRest(Measure* m)
                   }
             }
       if (pm) {
-//TODO            if (pm->endBarLineType() != BarLineType::NORMAL
-//               && pm->endBarLineType() != BarLineType::BROKEN
-//               && pm->endBarLineType() != BarLineType::DOTTED) {
-//                  return true;
-//                  }
+            Segment* s = pm->findSegment(Segment::Type::EndBarLine, pm->endTick());
+            if (s) {
+                  for (int staffIdx = 0; staffIdx < s->score()->nstaves(); ++staffIdx) {
+                        BarLine* bl = s->element(staffIdx * VOICES)->toBarLine();
+                        if (bl) {
+                              BarLineType t = bl->barLineType();
+                              if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED)
+                                    return true;
+                              else
+                                    break;
+                              }
+                        }
+                  }
             if (pm->findSegment(Segment::Type::Clef, m->tick()))
                   return true;
             }
@@ -2886,6 +2903,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   else
                         ww = m->minWidth1();    // without system header
+                  if (ww < minMeasureWidth)
+                        ww = minMeasureWidth;
                   m->setWidth(ww);
 
                   qreal stretch = m->userStretch() * measureSpacing;
@@ -2903,17 +2922,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (!hasCourtesy)
                         ww += cautionaryW;
 
-                  if (ww < minMeasureWidth)
-                        ww = minMeasureWidth;
-
-                  // if measure does not already have courtesy elements,
-                  // add in the amount of space that courtesy elements would take if needed
-                  // (if measure *does* already have courtesy elements, these are included in width already)
-                  if (!hasCourtesy)
-                        ww += cautionaryW;
-
-                  if (ww < minMeasureWidth)
-                        ww = minMeasureWidth;
+//                  if (ww < minMeasureWidth)
+//                        ww = minMeasureWidth;
                   }
 
             // check if lc.curMeasure fits, remove if not
@@ -2952,8 +2962,6 @@ System* Score::collectSystem(LayoutContext& lc)
 
             Element::Type nt = lc.nextMeasure ? lc.nextMeasure->type() : Element::Type::INVALID;
             if (pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
-//                  if (_layoutMode != LayoutMode::SYSTEM)
-//                        system->setPageBreak(lc.curMeasure->pageBreak());
                   minWidth += ww;
                   getNextMeasure(lc);
                   break;
@@ -3095,7 +3103,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (MeasureBase* mb : system->measures()) {
             if (mb->isHBox())
-                  minWidth += point(((Box*)mb)->boxWidth());
+                  minWidth += point(static_cast<Box*>(mb)->boxWidth());
             else if (mb->isMeasure()) {
                   Measure* m    = mb->toMeasure();
                   qreal w       = m->width();
