@@ -140,7 +140,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
                   e.unknown();
             }
       qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %hhd hsh %d cnt %d trp %d ispro %d fullm %d",
-             nDots, noDuration, postGrace, bSmall, invisible, notBlack, t, horizontalShift, count, tripartite, isProlonging, fullm
+             nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, count, tripartite, isProlonging, fullm
              );
       }
 
@@ -191,7 +191,7 @@ void CapClef::readCapx(XmlReader& e)
       else if (clef == "treble") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
       else if (clef == "bass") { form = Form::F; line = ClefLine::L4; oct = Oct::OCT_NULL; }
       else { /* default */ form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
-      qDebug("Clef::read '%s' -> form %hhd line %hhd oct %hhd", qPrintable(clef), form, line, oct);
+      qDebug("Clef::read '%s' -> form %hhd line %hhd oct %hhd", qPrintable(clef), int(form), int(line), int(oct));
       e.readNext();
       }
 
