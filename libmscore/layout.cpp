@@ -2656,7 +2656,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         as.init(staff->key(segment->tick()));
                         ks->layout();
                         }
-                  else if (segment->segmentType() == Segment::Type::ChordRest) {
+                  else if (segment->isChordRest()) {
                         Staff* staff    = score()->staff(staffIdx);
                         qreal staffMag  = staff->mag();
 
@@ -2733,7 +2733,6 @@ void Score::getNextMeasure(LayoutContext& lc)
             _sigmap->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
             }
 
-
       bool crossMeasure = styleB(StyleIdx::crossMeasureValues);
 
       for (int track = 0; track < ntracks(); ++track) {
@@ -2745,11 +2744,34 @@ void Score::getNextMeasure(LayoutContext& lc)
 
             ChordRest* a1    = 0;      // start of (potential) beam
             Beam* beam       = 0;      // current beam
-
             Beam::Mode bm    = Beam::Mode::AUTO;
-            Segment::Type st = Segment::Type::ChordRest;
             ChordRest* prev  = 0;
+            bool checkBeats  = false;
+            Fraction stretch = 1;
             QHash<int, TDuration> beatSubdivision;
+            Segment::Type st = Segment::Type::ChordRest;
+
+            // if this measure is simple meter (actually X/4),
+            // then perform a prepass to determine the subdivision of each beat
+
+            beatSubdivision.clear();
+            TimeSig* ts = stf->timeSig(measure->tick());
+            checkBeats  = false;
+            stretch     = ts ? ts->stretch() : 1;
+
+            if (ts && ts->denominator() == 4) {
+                  checkBeats = true;
+                  for (Segment* s = measure->first(st); s; s = s->next(st)) {
+                        ChordRest* mcr = static_cast<ChordRest*>(s->element(track));
+                        if (mcr == 0)
+                              continue;
+                        int beat = ((mcr->rtick() * stretch.numerator()) / stretch.denominator()) / MScore::division;
+                        if (beatSubdivision.contains(beat))
+                              beatSubdivision[beat] = qMin(beatSubdivision[beat], mcr->durationType());
+                        else
+                              beatSubdivision[beat] = mcr->durationType();
+                        }
+                  }
 
             for (Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
                   ChordRest* cr = segment->cr(track);
@@ -2774,11 +2796,36 @@ void Score::getNextMeasure(LayoutContext& lc)
                         }
 
                   // get defaults from time signature properties
-                  bm   = Groups::endBeam(cr, prev);
+                  bm = Groups::endBeam(cr, prev);
+
+                  // perform additional context-dependent checks
+                  if (bm == Beam::Mode::AUTO) {
+                        // check if we need to break beams according to minimum duration in current / previous beat
+                        if (checkBeats && cr->rtick()) {
+                              int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+                              // check if on the beat
+                              if (tick % MScore::division == 0) {
+                                    int beat = tick / MScore::division;
+                                    // get minimum duration for this & previous beat
+                                    TDuration minDuration = qMin(beatSubdivision[beat], beatSubdivision[beat - 1]);
+                                    // re-calculate beam as if this were the duration of current chordrest
+                                    TDuration saveDuration        = cr->actualDurationType();
+                                    TDuration saveCMDuration      = cr->crossMeasureDurationType();
+                                    CrossMeasure saveCrossMeasVal = cr->crossMeasure();
+                                    cr->setDurationType(minDuration);
+                                    bm = Groups::endBeam(cr, prev);
+                                    cr->setDurationType(saveDuration);
+                                    cr->setCrossMeasure(saveCrossMeasVal);
+                                    cr->setCrossMeasureDurationType(saveCMDuration);
+                                    }
+                              }
+                        }
+
                   prev = cr;
 
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
+
                   if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND)
                         bm = Beam::Mode::NONE;
 
@@ -2846,10 +2893,10 @@ void Score::getNextMeasure(LayoutContext& lc)
                   a1->removeDeleteBeam(false);
             }
 
-      for (Segment* s = measure->first(); s; s = s->next()) {
-            if (s->segmentType() == Segment::Type::EndBarLine)
+      for (Segment& s : measure->segments()) {
+            if (s.segmentType() == Segment::Type::EndBarLine)
                   continue;
-            s->createShapes();
+            s.createShapes();
             }
       lc.tick += measure->ticks();
       }
