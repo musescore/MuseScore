@@ -957,7 +957,7 @@ Element* System::nextElement()
       {
       Measure* m = firstMeasure();
       if (m) {
-            Segment* firstSeg = m->segments()->first();
+            Segment* firstSeg = m->segments().first();
             if (firstSeg)
                   return firstSeg->element(0);
             }

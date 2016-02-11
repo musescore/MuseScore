@@ -170,7 +170,8 @@ class Measure : public MeasureBase {
       Segment* first(Segment::Type t) const     { return _segments.first(t);      }
 
       Ms::Segment* last() const                 { return _segments.last(); }
-      SegmentList* segments()                   { return &_segments; }
+      SegmentList& segments()                   { return _segments; }
+      const SegmentList& segments() const       { return _segments; }
 
       qreal userStretch() const;
       void setUserStretch(qreal v)              { _userStretch = v; }

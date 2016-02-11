@@ -28,7 +28,7 @@ static std::vector<NoteGroup> noteGroups {
             Groups( { { 4, 512}, { 8, 272}, {12, 512}, {16, 273}, {20, 512}, {24, 272}, {28, 512} })
             },
       { Fraction(4,4),
-            Groups( { { 4, 512}, { 8, 272}, {12, 512}, {16, 273}, {20, 512}, {24, 272}, {28, 512} })
+            Groups( { { 4, 0x200}, { 8, 0x110}, {12, 0x200}, {16, 0x111}, {20, 0x200}, {24, 0x110}, {28, 0x200} })
             },
       { Fraction(3,4),
             Groups( { { 4, 512}, { 8, 273}, { 12, 512}, {16, 273}, { 20, 512} })
@@ -72,10 +72,10 @@ Beam::Mode Groups::endBeam(ChordRest* cr, ChordRest* prev)
             return cr->beamMode();
       Q_ASSERT(cr->staff());
 
-      TDuration d = cr->durationType();
-      const Groups& g = cr->staff()->group(cr->tick());
+      TDuration d      = cr->durationType();
+      const Groups& g  = cr->staff()->group(cr->tick());
       Fraction stretch = cr->staff()->timeStretch(cr->tick());
-      int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+      int tick         = (cr->rtick() * stretch.numerator()) / stretch.denominator();
 
       Beam::Mode val = g.beamMode(tick, d.type());
 
@@ -116,10 +116,11 @@ Beam::Mode Groups::beamMode(int tick, TDuration::DurationType d) const
             default:
                   return Beam::Mode::AUTO;
             }
+      const int dm = MScore::division / 8;
       for (const GroupNode& e : *this) {
-            if (e.pos * 60 < tick)
+            if (e.pos * dm < tick)
                   continue;
-            if (e.pos * 60 > tick)
+            if (e.pos * dm > tick)
                   break;
 
             int action = (e.action >> shift) & 0xf;
@@ -152,7 +153,7 @@ const Groups& Groups::endings(const Fraction& f)
       noteGroups.push_back(g);
 
       int pos = 0;
-      switch(f.denominator()) {
+      switch (f.denominator()) {
             case 2:     pos = 16; break;
             case 4:     pos = 8; break;
             case 8:     pos = 4; break;
