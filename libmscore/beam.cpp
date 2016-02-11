@@ -577,6 +577,38 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       int l1 = cl.front()->line();
       int le = cl.back()->line();
 
+
+      // look for a repeating pattern
+      int period = cl.size() - 1;
+      bool found = false;
+      while (period > 0 && !found) {
+            found = true;
+            while (period > 0) {
+                  if (cl[0]->line() == cl[period]->line()) {
+                        break;
+                        }
+                  --period;
+                  }
+            
+            if (period == 0) {
+                  found = false;
+                  break;
+                  }
+            
+            for (int i = period; i < cl.size(); i++) {
+                  if (cl[i]->line() != cl[i % period]->line()) {
+                        --period;
+                        found = false;
+                        break;
+                        }
+                  }
+            }
+      
+      if (found) {
+            return true;
+            }
+
+
       // look for some pattern
       if (cl.size() == 4) {
             int l2 = cl[1]->line();
@@ -596,9 +628,9 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
             if ((l2 > l1) && (l3 > l2) && (l1 == l4) && (l2 == l5) && (l3 == le))
                   return true;
             }
-      //
-      //    concave beams have a slope of 0.0
-      //
+      
+      
+      // concave beams have a slope of 0.0
       bool sameLine = true;
 
       slope = 0.0;
