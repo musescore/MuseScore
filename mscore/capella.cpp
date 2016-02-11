@@ -493,7 +493,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
 
       if (!(cr1 && cr2)) {
             qDebug("first or second anchor for BasicDrawObj not found (tick %d type %hhu track %d first %p second %p)",
-                   tick, o->type, track, cr1, cr2);
+                   tick, int(o->type), track, cr1, cr2);
             return false;
             }
       return true;
@@ -705,7 +705,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               case ClefType::G4:     off = 0; break;
                               case ClefType::F_8VA:  off = -7; break;
                               case ClefType::F_15MA: off = 0; break;
-                              default:          off = 0; qDebug("clefType %hhd not implemented", clef);
+                              default:          off = 0; qDebug("clefType %hhd not implemented", int(clef));
                               }
                         // qDebug("clef %hhd off %d", clef, off);
 
@@ -791,7 +791,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         qDebug("     <Clef>");
                         CapClef* o = static_cast<CapClef*>(no);
                         ClefType nclef = o->clef();
-                        qDebug("%d:%d <Clef> %s line %hhd oct %hhd clef %hhd", tick, staffIdx, o->name(), o->line, o->oct, o->clef());
+                        qDebug("%d:%d <Clef> %s line %hhd oct %hhd clef %hhd", tick, staffIdx, o->name(), int(o->line), int(o->oct), int(o->clef()));
                         if (nclef == ClefType::INVALID)
                               break;
                         // staff(staffIdx)->setClef(tick, nclef);
@@ -1234,7 +1234,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         }
                         break;
                   default:
-                        qDebug("page background object type %hhu", o->type);
+                        qDebug("page background object type %hhu", int(o->type));
                         break;
                   }
             }
@@ -1693,7 +1693,7 @@ QList<BasicDrawObj*> Capella::readDrawObjectArray()
                         }
                         break;
                   default:
-                        qFatal("readDrawObjectArray unsupported type %hhu", type);
+                        qFatal("readDrawObjectArray unsupported type %hhu", int(type));
                         break;
                   }
             }
@@ -1768,7 +1768,7 @@ void BasicDurationalObj::read()
             }
       Q_ASSERT(!(c & 0x80));
       qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %hhd hsh %d cnt %d trp %d ispro %d",
-             nDots, noDuration, postGrace, bSmall, invisible, notBlack, t, horizontalShift, count, tripartite, isProlonging
+             nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, count, tripartite, isProlonging
              );
       }
 
@@ -2158,7 +2158,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       sl->form = Form(clef & 7);
       sl->line = ClefLine((clef >> 3) & 7);
       sl->oct  = Oct((clef >> 6));
-      qDebug("   clef %x  form %hhd, line %hhd, oct %hhd", clef, sl->form, sl->line, sl->oct);
+      qDebug("   clef %x  form %hhd, line %hhd, oct %hhd", clef, int(sl->form), int(sl->line), int(sl->oct));
 
       // Schlagzeuginformation
       unsigned char b   = readByte();
@@ -2271,7 +2271,7 @@ void CapClef::read()
       form            = Form(b & 7);
       line            = ClefLine((b >> 3) & 7);
       oct             = Oct(b >> 6);
-      qDebug("Clef::read form %hhd line %hhd oct %hhd", form, line, oct);
+      qDebug("Clef::read form %hhd line %hhd oct %hhd", int(form), int(line), int(oct));
       }
 
 //---------------------------------------------------------
@@ -2305,7 +2305,7 @@ ClefType CapClef::clefType(Form form, ClefLine line, Oct oct)
             default:
                   if (form == Form::FORM_NULL)
                         return ClefType::INVALID;
-                  qDebug("unknown clef %hhd %hhd %hhd", form, line, oct);
+                  qDebug("unknown clef %hhd %hhd %hhd", int(form), int(line), int(oct));
                   break;
             }
       return ClefType::INVALID;
@@ -2372,7 +2372,7 @@ void CapExplicitBarline::read()
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
       Q_ASSERT(_barMode <= 2);
 
-      qDebug("         Expl.Barline type %hhd mode %d", _type, _barMode);
+      qDebug("         Expl.Barline type %hhd mode %d", int(_type), _barMode);
       }
 
 //---------------------------------------------------------
@@ -2537,7 +2537,7 @@ int BasicDurationalObj::ticks() const
             case TIMESTEP::D256:        len = MScore::division >> 6; break;
             case TIMESTEP::D_BREVE:     len = MScore::division * 8; break;
             default:
-                  qDebug("BasicDurationalObj::ticks: illegal duration value %hhd", t);
+                  qDebug("BasicDurationalObj::ticks: illegal duration value %hhd", int(t));
                   break;
             }
       int slen = len;
