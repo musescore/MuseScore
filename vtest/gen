@@ -55,14 +55,12 @@ else
        staff-1 staff-2 layout-1 layout-2"
 fi
 
-#####DEBUG
-SRC="mmrest-8 mmrest-10 fmrest-6 cross-1 cross-2 grace-1 grace-4\
-      tuplets-2 breath-1 harmony-9 harmony-10 harmony-11 harmony-12\
+#####DEBUG: failed tests
+SRC="mmrest-8 fmrest-6 grace-1 grace-4\
+      breath-1 harmony-12\
       beams-1 beams-2 beams-4 beams-5 beams-6 beams-7 beams-12 beams-13 beams-15\
       user-offset-2 tablature-1 lyrics-5 lyrics-6\
       system-1 system-3 system-4 system-5 tremolo-1"
-
-#SRC="layout-1 layout-2"
 
 DPI=130
 F=vtest.html
