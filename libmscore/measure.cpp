@@ -2528,7 +2528,43 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
             }
 
-      BarLineType t = nextMeasure() ? BarLineType::NORMAL : BarLineType::END;
+      //
+      //  Set flag "hasCourtesyKeySig" if this measure needs a courtesy key sig.
+      //  This flag is later used to set a double end bar line and to actually
+      //  create the courtesy key sig.
+      //
+
+      Measure* nm   = nextMeasure();
+      BarLineType t = nm ? BarLineType::NORMAL : BarLineType::END;
+      bool show     = score()->styleB(StyleIdx::genCourtesyKeysig) && !sectionBreak() && nm;
+
+      setHasCourtesyKeySig(false);
+
+      if (isLastMeasureInSystem && show) {
+            int tick = endTick();
+            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                  int track = staffIdx * VOICES;
+                  Staff* staff = score()->staff(staffIdx);
+
+                  KeySigEvent key1 = staff->keySigEvent(tick - 1);
+                  KeySigEvent key2 = staff->keySigEvent(tick);
+                  if (show && !(key1 == key2)) {
+                        // locate a key sig. in next measure and, if found,
+                        // check if it has court. sig turned off
+                        Segment* s = nm->findSegment(Segment::Type::KeySig, tick);
+                        if (s) {
+                              KeySig* ks = s->element(track)->toKeySig();
+                              if (ks && !ks->showCourtesy())
+                                    show = false;     // this key change has court. sig turned off
+                              }
+                        if (show) {
+                              setHasCourtesyKeySig(true);
+                              t = BarLineType::DOUBLE;
+                              break;
+                              }
+                        }
+                  }
+            }
 
       bool force = false;
       if (!isLastMeasureInSystem && repeatEnd() && nextMeasure()->repeatStart()) {
@@ -2571,6 +2607,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       qreal www   = ps->minHorizontalDistance(seg);
       w          += www - ps->width();
       ps->setWidth(www);
+
+      setWidth(width() + w);
 
       return w;
       }
@@ -3316,7 +3354,7 @@ void Measure::stretchMeasure(qreal stretch)
                         qreal x2 = width();
                         Segment* ss;
                         for (ss = s->next(); ss->next(); ss = ss->next()) {
-                              if (ss->next()->segmentType() != Segment::Type::ChordRest)
+                              if (!ss->next()->isChordRest())
                                     break;
                               }
                         if (ss)
@@ -3403,6 +3441,5 @@ void Measure::removeSystemTrailer()
                   }
             }
       }
-
 }
 

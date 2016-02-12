@@ -126,12 +126,12 @@ qreal Shape::left() const
             if (r.left() < dist)
                   dist = r.left();
             }
-      return dist;
+      return -dist;
       }
 
 //---------------------------------------------------------
 //   right
-//    compute left border
+//    compute right border
 //---------------------------------------------------------
 
 qreal Shape::right() const

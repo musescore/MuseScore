@@ -90,6 +90,7 @@ class MeasureBase : public Element {
       bool _pageBreak        { false };        ///< Forced page break
       bool _hasSystemHeader  { false };
       bool _hasSystemTrailer { false };
+      bool _hasCourtesyKeySig { false };
 
    protected:
 
@@ -180,6 +181,10 @@ class MeasureBase : public Element {
       bool hasSystemTrailer() const      { return _hasSystemTrailer;   }
       void setHasSystemHeader(bool val)  { _hasSystemHeader = val;     }
       void setHasSystemTrailer(bool val) { _hasSystemTrailer = val;    }
+
+      bool hasCourtesyKeySig() const     { return _hasCourtesyKeySig; }
+      void setHasCourtesyKeySig(int val) { _hasCourtesyKeySig = val; }
+
       int index() const;
       };
 

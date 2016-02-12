@@ -131,17 +131,17 @@ void KeySig::layout()
       // OR key sig is CMaj/Amin (in which case they are always shown)
 
       bool naturalsOn = false;
-      Measure* prevMeas = measure() ? measure()->prevMeasure() : nullptr;
+      Measure* prevMeas = measure() ? measure()->prevMeasure() : 0;
 
       // If we're not force hiding naturals (Continuous panel), use score style settings
       if (!_hideNaturals)
           naturalsOn =
-            (prevMeas && prevMeas->sectionBreak() == nullptr
+            (prevMeas && !prevMeas->sectionBreak()
             && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
 
       // Don't repeat naturals if shown in courtesy
-      if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick()) != 0
-          && segment()->segmentType() != Segment::Type::KeySigAnnounce )
+      if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick())
+          && !segment()->isKeySigAnnounce())
             naturalsOn = false;
 
       int coffset = 0;
