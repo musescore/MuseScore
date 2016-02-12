@@ -155,7 +155,6 @@ class Measure : public MeasureBase {
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }
 
       qreal minWidth1() const;
-      qreal minWidth2() const;
 
       Fraction timesig() const             { return _timesig;     }
       void setTimesig(const Fraction& f)   { _timesig = f;        }

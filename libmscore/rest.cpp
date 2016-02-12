@@ -870,9 +870,9 @@ Shape Rest::shape() const
       {
       Shape shape;
       shape.add(ChordRest::shape());
-//      if (parent() && measure() && measure()->isMMRest())
-//            shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
-//      else
+      if (parent() && measure() && measure()->isMMRest())
+            shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
+      else
             shape.add(bbox().translated(pos()));
       return shape;
       }
