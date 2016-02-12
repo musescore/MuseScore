@@ -562,6 +562,9 @@ bool Beam::hasNoSlope()
 //   slopeZero
 //---------------------------------------------------------
 
+int *_kmp;
+size_t _kmpLen;
+
 bool Beam::slopeZero(const QList<ChordRest*>& cl)
       {
       if (hasNoSlope() || cl.size() < 2)
@@ -576,35 +579,39 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
 //            }
       int l1 = cl.front()->line();
       int le = cl.back()->line();
+      
+      // return right away if the line positions of the first
+      // and the last chords are the same
+      if (l1 == le) {
+            return true;
+            }
 
 
       // look for a repeating pattern
-      int period = cl.size() - 1;
-      bool found = false;
-      while (period > 0 && !found) {
-            found = true;
-            while (period > 0) {
-                  if (cl[0]->line() == cl[period]->line()) {
+      if ((size_t) cl.size() > _kmpLen) {
+            _kmp = (int *) realloc(_kmp, cl.size() * sizeof(int));
+            }
+      _kmpLen = cl.size();
+      memset(_kmp, 0, _kmpLen * sizeof(int));
+      
+      for (size_t i = 1; i < _kmpLen; i++) {
+            int k = _kmp[i - 1];
+            while (true) {
+                  if (cl[i]->line() == cl[k]->line()) {
+                        _kmp[i] = k + 1;
                         break;
                         }
-                  --period;
-                  }
-            
-            if (period == 0) {
-                  found = false;
-                  break;
-                  }
-            
-            for (int i = period; i < cl.size(); i++) {
-                  if (cl[i]->line() != cl[i % period]->line()) {
-                        --period;
-                        found = false;
+                  else if (k == 0) {
+                        _kmp[i] = 0;
                         break;
+                        }
+                  else {
+                        k = _kmp[k - 1];
                         }
                   }
             }
       
-      if (found) {
+      if (_kmp[_kmpLen - 1] != 0) {
             return true;
             }
 
@@ -667,7 +674,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
                         }
                   }
             }
-      return l1 == le;
+      return false;
       }
 
 //---------------------------------------------------------
