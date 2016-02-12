@@ -2267,14 +2267,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "breakMultiMeasureRest")
                   _breakMultiMeasureRest = e.readBool();
             else if (tag == "sysInitBarLineType") {
-                  const QString& val(e.readElementText());
-                  _systemInitialBarLineType = BarLineType::NORMAL;
-                  for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
-                        if (BarLine::barLineTypeName(BarLineType(i)) == val) {
-                              _systemInitialBarLineType = BarLineType(i);
-                              break;
-                              }
-                        }
+                  _systemInitialBarLineType = BarLineType(Ms::getProperty(P_ID::SYSTEM_INITIAL_BARLINE_TYPE, e).toInt());
                   }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());

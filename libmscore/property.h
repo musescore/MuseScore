@@ -262,6 +262,7 @@ enum class P_TYPE : char {
       TEXT_STYLE,
       INT_LIST,
       GLISSANDO_STYLE,
+      BARLINE_TYPE,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
