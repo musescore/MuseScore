@@ -513,7 +513,7 @@ void Staff::write(Xml& xml) const
                   xml.tag("barLineSpan", _barLineSpan);
             }
       if (_userDist != 0.0)
-            xml.tag("distOffset", _userDist / spatium());
+            xml.tag("distOffset", _userDist / score()->spatium());
 
       writeProperty(xml, P_ID::MAG);
       writeProperty(xml, P_ID::COLOR);
@@ -598,7 +598,7 @@ void Staff::read(XmlReader& e)
                         _barLineTo = lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2;
                   }
             else if (tag == "distOffset")
-                  _userDist = e.readDouble() * spatium();
+                  _userDist = e.readDouble() * score()->spatium();
             else if (tag == "mag")
                   _userMag = e.readDouble(0.1, 10.0);
             else if (tag == "linkedTo") {
