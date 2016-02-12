@@ -221,6 +221,7 @@ public:
       void createShapes();
       void createShape(int staffIdx);
       qreal minRight() const;
+      qreal minLeft(const Shape&) const;
       qreal minLeft() const;
       qreal minHorizontalDistance(Segment* ns) const;
 

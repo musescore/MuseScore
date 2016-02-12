@@ -2832,18 +2832,7 @@ qreal Measure::minWidth1() const
                   break;
             s = s->next();
             }
-      return score()->computeMinWidth(s);
-      }
-
-//---------------------------------------------------------
-//   minWidth2
-///   return minimum width of measure including system
-///  header if present
-//---------------------------------------------------------
-
-qreal Measure::minWidth2() const
-      {
-      return score()->computeMinWidth(first());
+      return score()->computeMinWidth(s, false);
       }
 
 //---------------------------------------------------------

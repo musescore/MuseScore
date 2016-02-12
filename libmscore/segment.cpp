@@ -1333,15 +1333,26 @@ qreal Segment::minRight() const
 
 //---------------------------------------------------------
 //   minLeft
-//    calculate minimum distance needed to the left
+//    Calculate minimum distance needed to the left shape
+//    sl. Sl is the same for all staves.
 //---------------------------------------------------------
+
+qreal Segment::minLeft(const Shape& sl) const
+      {
+      qreal distance = 0.0;
+      for (const Shape& sh : shapes())
+            distance = qMax(distance, sl.minHorizontalDistance(sh));
+
+      return distance;
+      }
 
 qreal Segment::minLeft() const
       {
       qreal distance = 0.0;
       for (const Shape& sh : shapes())
-            distance = qMin(distance, sh.left());
-      return -distance;
+            distance = qMax(distance, sh.left());
+
+      return distance;
       }
 
 //---------------------------------------------------------

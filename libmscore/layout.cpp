@@ -2058,18 +2058,23 @@ void Score::respace(QList<ChordRest*>* /*elements*/)
 //    set the x position of first segment
 //---------------------------------------------------------
 
-qreal Score::computeMinWidth(Segment* s)
+qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       {
-      qreal x                = s->minLeft();
+      Shape ls;
+      ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));   // simulated bar line
+      if (isFirstMeasureInSystem)
+            ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // left margin
+      qreal x = s->minLeft(ls);
+
       qreal _spatium         = spatium();
       qreal clefLeftMargin   = styleS(StyleIdx::clefLeftMargin).val() * _spatium;
       qreal keysigLeftMargin = styleS(StyleIdx::keysigLeftMargin).val() * _spatium;
 
-      if (s->segmentType() == Segment::Type::ChordRest)
-            x = s->minLeft() + qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
-      else if (s->segmentType() == Segment::Type::Clef)
+      if (s->isChordRest())
+            x = qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
+      else if (s->isClef())
             x = qMax(x, clefLeftMargin);
-      else if (s->segmentType() == Segment::Type::KeySig)
+      else if (s->isKeySig())
             x = qMax(x, keysigLeftMargin);
       x += s->extraLeadingSpace().val() * _spatium;
 
@@ -2084,13 +2089,17 @@ qreal Score::computeMinWidth(Segment* s)
                   }
             qreal w = ss->minHorizontalDistance(ns);
 
+            // look back for colissions with previous segments
             int n = 1;
             for (Segment* ps = ss;;) {
+                  qreal ww;
                   if (ps == s)
-                        break;
-                  ps = ps->prev();
-                  ++n;
-                  qreal ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+                        ww = ns->minLeft(ls) - ss->x();
+                  else {
+                        ps = ps->prev();
+                        ++n;
+                        ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+                        }
                   if (ww > w) {
                         // overlap !
                         // distribute extra space between segments ps - ss;
@@ -2100,6 +2109,8 @@ qreal Score::computeMinWidth(Segment* s)
                         w += d;
                         break;
                         }
+                  if (ps == s)
+                        break;
                   }
             ss->setWidth(w);
             x += w;
@@ -2946,7 +2957,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (!firstMeasure) {
                         firstMeasure = m;
                         addSystemHeader(m, lc.firstSystem);
-                        ww = computeMinWidth(m->first());
+                        ww = computeMinWidth(m->first(), true);
                         }
                   else
                         ww = m->minWidth1();    // without system header
@@ -2968,9 +2979,6 @@ System* Score::collectSystem(LayoutContext& lc)
 
                   if (!hasCourtesy)
                         ww += cautionaryW;
-
-//                  if (ww < minMeasureWidth)
-//                        ww = minMeasureWidth;
                   }
 
             // check if lc.curMeasure fits, remove if not
@@ -3142,7 +3150,7 @@ System* Score::collectSystem(LayoutContext& lc)
             }
       //HACK to layout cautionary elements:
       if (system->lastMeasure() && system->lastMeasure()->hasSystemTrailer())
-            computeMinWidth(system->lastMeasure()->first());
+            computeMinWidth(system->lastMeasure()->first(), false);
 
       minWidth           = system->leftMargin();
       qreal totalWeight  = 0.0;

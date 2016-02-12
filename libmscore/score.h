@@ -1029,7 +1029,7 @@ class Score : public QObject, public ScoreElement {
       //@ creates and returns a cursor to be used to navigate the score
       Q_INVOKABLE Ms::Cursor* newCursor();
 #endif
-      qreal computeMinWidth(Segment* fs);
+      qreal computeMinWidth(Segment* fs, bool isFirstMeasureInSystem);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }

@@ -56,10 +56,10 @@ else
 fi
 
 #####DEBUG: failed tests
-#SRC="mmrest-8 fmrest-6 grace-1 grace-4\
+#SRC="fmrest-6 grace-1 grace-4\
 #      breath-1 harmony-12\
 #      beams-1 beams-2 beams-6 beams-12 beams-15\
-#      user-offset-2 tablature-1 lyrics-5 lyrics-6\
+#      user-offset-2 tablature-1 \
 #      system-1 system-3 system-4 system-5 tremolo-1"
 
 DPI=130
