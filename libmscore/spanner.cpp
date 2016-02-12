@@ -855,13 +855,17 @@ Element* Spanner::prevElement()
 
 //---------------------------------------------------------
 //   setTick
+//   @warning Alters spannerMap - Do not call from within a loop over spannerMap
 //---------------------------------------------------------
 
 void Spanner::setTick(int v)
       {
       _tick = v;
-      if (_score)
-            _score->spannerMap().setDirty();
+      if (_score) {
+            //our starting tick changed, we'd need to occupy a different position in the spannerMap
+            if (_score->spannerMap().removeSpanner(this))
+                  _score->addSpanner(this);
+            }
       }
 
 //---------------------------------------------------------
