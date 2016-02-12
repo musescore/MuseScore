@@ -1313,14 +1313,19 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   keysig->setGenerated(true);
                   Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
                   keysig->setParent(seg);
-                  keysig->layout();
                   undo(new AddElement(keysig));
-                  seg->createShape(staffIdx);
                   }
-            else if (!needKeysig && keysig && keysig->generated())
+            else if (!needKeysig && keysig && keysig->generated()) {
                   undoRemoveElement(keysig);
+                  keysig = 0;
+                  }
             else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
+
+            if (keysig) {
+                  keysig->layout();       // hide naturals may have changed
+                  keysig->segment()->createShape(staffIdx);
+                  }
 
             if (isFirstSystem || styleB(StyleIdx::genClef) || staff->clef(tick) != staff->clef(tick-1)) {
                   ClefTypeList cl = staff->clefType(tick);
@@ -2069,6 +2074,7 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       qreal _spatium         = spatium();
       qreal clefLeftMargin   = styleS(StyleIdx::clefLeftMargin).val() * _spatium;
       qreal keysigLeftMargin = styleS(StyleIdx::keysigLeftMargin).val() * _spatium;
+      qreal timesigLeftMargin = styleS(StyleIdx::timesigLeftMargin).val() * _spatium;
 
       if (s->isChordRest())
             x = qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
@@ -2076,20 +2082,22 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             x = qMax(x, clefLeftMargin);
       else if (s->isKeySig())
             x = qMax(x, keysigLeftMargin);
+      else if (s->isTimeSig())
+            x = qMax(x, timesigLeftMargin);
       x += s->extraLeadingSpace().val() * _spatium;
 
       for (Segment* ss = s;;) {
             ss->rxpos() = x;
             Segment* ns = ss->next();
             if (!ns) {
-                  qreal w = ss->segmentType() == Segment::Type::EndBarLine ? 0.0 : ss->minRight();
+                  qreal w = ss->isEndBarLine() ? 0.0 : ss->minRight();
                   ss->setWidth(w);
                   x += w;
                   break;
                   }
             qreal w = ss->minHorizontalDistance(ns);
 
-            // look back for colissions with previous segments
+            // look back for collisions with previous segments
             int n = 1;
             for (Segment* ps = ss;;) {
                   qreal ww;
@@ -2991,9 +2999,9 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
 
             if (lc.prevMeasure && lc.prevMeasure->isMeasure() && lc.prevMeasure->system() == system) {
-                  qreal v = lc.prevMeasure->toMeasure()->createEndBarLines(false);
-                  lc.prevMeasure->setWidth(lc.prevMeasure->width() + v);
-                  qreal stretch = lc.prevMeasure->toMeasure()->userStretch() * measureSpacing;
+                  Measure* m = lc.prevMeasure->toMeasure();
+                  qreal v    = m->toMeasure()->createEndBarLines(false);
+                  qreal stretch = m->userStretch() * measureSpacing;
                   if (stretch < 1.0)
                         stretch = 1.0;
                   ww += v * stretch;
@@ -3035,10 +3043,8 @@ System* Score::collectSystem(LayoutContext& lc)
             }     // end collect measures for system
 
       if (!system->isVbox()) {
-            if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
-                  qreal v = lc.prevMeasure->toMeasure()->createEndBarLines(true);
-                  lc.prevMeasure->setWidth(lc.prevMeasure->width() + v);
-                  }
+            if (lc.prevMeasure && lc.prevMeasure->isMeasure())
+                  lc.prevMeasure->toMeasure()->createEndBarLines(true);
             system->removeGeneratedElements();
             hideEmptyStaves(system, lc.firstSystem);
             }
@@ -3058,11 +3064,11 @@ System* Score::collectSystem(LayoutContext& lc)
 
       if (m && nm) {
             m->setHasSystemTrailer(false);
-            int tick = m->tick() + m->ticks();
+            int tick = m->endTick();
             bool isFinalMeasureOfSection = m->isFinalMeasureOfSection();
 
             // locate a time sig. in the next measure and, if found,
-            // check if it has cout. sig. turned off
+            // check if it has court. sig. turned off
             TimeSig* ts;
             Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
             bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
@@ -3105,22 +3111,22 @@ System* Score::collectSystem(LayoutContext& lc)
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   int track = staffIdx * VOICES;
                   Staff* staff = _staves[staffIdx];
-                  showCourtesySig = styleB(StyleIdx::genCourtesyKeysig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
 
-                  KeySigEvent key1 = staff->keySigEvent(tick - 1);
-                  KeySigEvent key2 = staff->keySigEvent(tick);
-                  if (showCourtesySig && !(key1 == key2)) {
-                        // locate a key sig. in next measure and, if found,
-                        // check if it has court. sig turned off
-                        s = nm->findSegment(Segment::Type::KeySig, tick);
-                        showCourtesySig = true; // assume this key change has court. sig turned on
-                        if (s) {
-                              KeySig* ks = s->element(track)->toKeySig();
-                              if (ks && !ks->showCourtesy())
-                                    showCourtesySig = false;     // this key change has court. sig turned off
+                  bool show = m->hasCourtesyKeySig();
+                  if (show) {
+                        KeySigEvent key1 = staff->keySigEvent(tick - 1);
+                        KeySigEvent key2 = staff->keySigEvent(tick);
+                        if (!(key1 == key2)) {
+                              // locate a key sig. in next measure and, if found,
+                              // check if it has court. sig turned off
+                              Segment* s = lc.curMeasure->toMeasure()->findSegment(Segment::Type::KeySig, tick);
+                              if (s) {
+                                    KeySig* ks = s->element(staff->idx() * VOICES)->toKeySig();
+                                    if (ks && !ks->showCourtesy())
+                                          show = false;
+                                    }
                               }
-
-                        if (showCourtesySig) {
+                        if (show) {
                               m->setHasSystemTrailer(true);
                               s  = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick);
                               KeySig* ks = s->element(track)->toKeySig();
@@ -3140,17 +3146,17 @@ System* Score::collectSystem(LayoutContext& lc)
                                     }
                               }
                         }
-                  if (!showCourtesySig) {
+                  if (!show) {
                         // remove any existent courtesy key signature
                         Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
                         if (s && s->element(track))
                               undoRemoveElement(s->element(track));
                         }
                   }
+            //HACK to layout cautionary elements:
+            if (m->hasSystemTrailer())
+                  computeMinWidth(m->first(), false);
             }
-      //HACK to layout cautionary elements:
-      if (system->lastMeasure() && system->lastMeasure()->hasSystemTrailer())
-            computeMinWidth(system->lastMeasure()->first(), false);
 
       minWidth           = system->leftMargin();
       qreal totalWeight  = 0.0;

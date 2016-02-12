@@ -773,6 +773,9 @@ void MeasureView::setElement(Element* e)
       mb.tick->setValue(m->tick());
       mb.startRepeat->setChecked(m->repeatStart());
       mb.endRepeat->setChecked(m->repeatEnd());
+      mb.hasSystemHeader->setChecked(m->hasSystemHeader());
+      mb.hasSystemTrailer->setChecked(m->hasSystemTrailer());
+      mb.hasCourtesyKeySig->setChecked(m->hasCourtesyKeySig());
       mb.sel->clear();
       foreach(const Element* e, m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
