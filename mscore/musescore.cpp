@@ -821,9 +821,9 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-unprintable"));
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
-     
-#ifndef Q_OS_MAC
       menuView->addSeparator();
+      
+#ifndef Q_OS_MAC
       a = getAction("fullscreen");
       a->setCheckable(true);
       a->setChecked(false);
