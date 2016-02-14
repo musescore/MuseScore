@@ -263,6 +263,8 @@ void MusicXMLParserPass1::initPartState(const QString& /* partId */)
       {
       _timeSigDura = Fraction(0, 0);       // invalid
       _octaveShifts.clear();
+      _firstInstrSTime = Fraction(0, 1);
+      _firstInstrId = "";
       }
 
 //---------------------------------------------------------
@@ -1903,6 +1905,9 @@ void MusicXMLParserPass1::part()
       allocateVoices(_parts[id].voicelist);
       // calculate the octave shifts
       _parts[id].calcOctaveShifts();
+      // set first instrument for multi-instrument part starting with rest
+      if (_firstInstrId != "" && _firstInstrSTime > Fraction(0, 1))
+            _parts[id]._instrList.setInstrument(_firstInstrId, Fraction(0, 1));
 
       // debug: print results
       /*
@@ -2599,6 +2604,24 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction cTime,
       }
 
 //---------------------------------------------------------
+//   setFirstInstr
+//---------------------------------------------------------
+
+void MusicXMLParserPass1::setFirstInstr(const QString& id, const Fraction stime)
+      {
+      // check for valid arguments
+      if (id == "" || !stime.isValid() || stime < Fraction(0, 1))
+            return;
+
+      // check for no instrument found yet or new earliest start time
+      // note: compare using <= to catch instrument at t=0
+      if (_firstInstrId == "" || stime <= _firstInstrSTime) {
+            _firstInstrId = id;
+            _firstInstrSTime = stime;
+            }
+      }
+
+//---------------------------------------------------------
 //   note
 //---------------------------------------------------------
 
@@ -2683,10 +2706,11 @@ void MusicXMLParserPass1::note(const QString& partId,
       staff--;
 
       // multi-instrument handling
+      setFirstInstr(instrId, sTime);
       QString prevInstrId = _parts[partId]._instrList.instrument(sTime);
       bool mustInsert = instrId != prevInstrId;
       /*
-      qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' insert %d",
+      qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' mustInsert %d",
              qPrintable(sTime.print()),
              sTime.ticks(),
              staff + 1,

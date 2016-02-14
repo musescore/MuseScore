@@ -531,36 +531,52 @@ static QString findDeleteStaffText(Segment* s, int track)
 static void setPartInstruments(Part* part, const QString& partId,
                                Score* score, const MusicXmlInstrList& il, const MusicXMLDrumset& mxmlDrumset)
       {
+      QString prevInstrId;
       for (auto it = il.cbegin(); it != il.cend(); ++it) {
             Fraction f = (*it).first;
-            if (f > Fraction(0, 1)) {
+            if (f == Fraction(0, 1))
+                  prevInstrId = (*it).second;  // instrument id at t = 0
+            else if (f > Fraction(0, 1)) {
                   auto instrId = (*it).second;
-                  int staff = score->staffIdx(part);
-                  int track = staff * VOICES;
-                  //qDebug("setPartInstruments: instrument change: tick %s (%d) track %d instr '%s'",
-                  //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
-                  Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
-                  if (!segment)
-                        qDebug("setPartInstruments: segment for instrument change at tick %d not found", f.ticks());  // TODO
-                  else if (!mxmlDrumset.contains(instrId))
-                        qDebug("setPartInstruments: changed instrument '%s' at tick %d not found in part '%s'",
-                               qPrintable(instrId), f.ticks(), qPrintable(partId));  // TODO
-                  else {
-                        MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
-                        Instrument instr;
-                        // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
-                        instr.channel(0)->program = mxmlInstr.midiProgram;
-                        instr.channel(0)->pan = mxmlInstr.midiPan;
-                        instr.channel(0)->volume = mxmlInstr.midiVolume;
-                        instr.setTrackName(mxmlInstr.name);
-                        InstrumentChange* ic = new InstrumentChange(instr, score);
-                        ic->setTrack(track);
-                        // if there is already a staff text at this tick / track,
-                        // delete it and use its text here instead of "Instrument"
-                        QString text = findDeleteStaffText(segment, track);
-                        ic->setXmlText(text.isEmpty() ? "Instrument" : text);
-                        segment->add(ic);
+                  bool mustInsert = instrId != prevInstrId;
+                  /*
+                  qDebug("setPartInstruments: f %s previd %s id %s mustInsert %d",
+                         qPrintable(f.print()),
+                         qPrintable(prevInstrId),
+                         qPrintable(instrId),
+                         mustInsert);
+                   */
+                  if (mustInsert) {
+                        int staff = score->staffIdx(part);
+                        int track = staff * VOICES;
+                        qDebug("setPartInstruments: instrument change: tick %s (%d) track %d instr '%s'",
+                               qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
+                        Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
+                        if (!segment)
+                              qDebug("setPartInstruments: segment for instrument change at tick %d not found", f.ticks());  // TODO
+                        else if (!mxmlDrumset.contains(instrId))
+                              qDebug("setPartInstruments: changed instrument '%s' at tick %d not found in part '%s'",
+                                     qPrintable(instrId), f.ticks(), qPrintable(partId));  // TODO
+                        else {
+                              MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
+                              Instrument instr;
+                              qDebug("setPartInstruments: instr %p", &instr);
+                              instr.channel(0)->program = mxmlInstr.midiProgram;
+                              instr.channel(0)->pan = mxmlInstr.midiPan;
+                              instr.channel(0)->volume = mxmlInstr.midiVolume;
+                              instr.setTrackName(mxmlInstr.name);
+                              InstrumentChange* ic = new InstrumentChange(instr, score);
+                              ic->setTrack(track);
+                              // if there is already a staff text at this tick / track,
+                              // delete it and use its text here instead of "Instrument"
+                              QString text = findDeleteStaffText(segment, track);
+                              ic->setXmlText(text.isEmpty() ? "Instrument" : text);
+                              segment->add(ic);
+
+                              part->setMidiChannel(mxmlInstr.midiChannel);
+                              }
                         }
+                  prevInstrId = instrId;
                   }
             }
       }
