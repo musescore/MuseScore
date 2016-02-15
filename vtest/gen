@@ -56,11 +56,10 @@ else
 fi
 
 #####DEBUG: failed tests
-SRC="mmrest-5 mmrest-6 grace-1 grace-4\
+SRC="grace-4\
       breath-1 harmony-12\
-      beams-1 beams-2 beams-12 beams-15\
-      user-offset-2 tablature-1 \
-      system-1 system-4 system-5 tremolo-1"
+      user-offset-2 tablature-1 emmentaler-text-2 musejazz-text-2 \
+      system-4 system-5 tremolo-1 hide-1"
 
 DPI=130
 F=vtest.html

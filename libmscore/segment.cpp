@@ -1008,8 +1008,9 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       // bar line visibility depends on spanned staves,
       // not simply on visibility of first staff
-      if (segmentType() == Segment::Type::BarLine || segmentType() == Segment::Type::EndBarLine
-          || segmentType() == Segment::Type::StartRepeatBarLine) {
+
+      if (segmentType() & (Segment::Type::BarLine | Segment::Type::EndBarLine
+         | Segment::Type::StartRepeatBarLine | Segment::Type::BeginBarLine)) {
             for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
                   Element* e = element(staffIdx*VOICES);
                   if (e == 0)             // if no element, skip
@@ -1386,9 +1387,11 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             else
                   w = qMax(w, nhw) + minNoteDistance;
             }
-      else if (st & (Segment::Type::KeySig | Segment::Type::TimeSig | Segment::Type::KeySigAnnounce
-         | Segment::Type::TimeSigAnnounce))
+      else if (st & (Segment::Type::KeySig | Segment::Type::TimeSig | Segment::Type::KeySigAnnounce | Segment::Type::TimeSigAnnounce)) {
+            if (nst == Segment::Type::ChordRest)
+                  w = qMax(w, minRight());
             w += clefKeyRightMargin;
+            }
       else if (st == Segment::Type::StartRepeatBarLine)
             w += nbd;
       else if (st == Segment::Type::BeginBarLine && nst == Segment::Type::Clef)

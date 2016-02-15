@@ -1615,7 +1615,7 @@ void Score::connectTies(bool silent)
                               if (spanner->isGlissando() && !spanner->startElement()) {
                                     Note* initialNote = Glissando::guessInitialNote(n->chord());
                                     n->removeSpannerBack(spanner);
-                                    if (initialNote != nullptr) {
+                                    if (initialNote) {
                                           spanner->setStartElement(initialNote);
                                           spanner->setEndElement(n);
                                           spanner->setTick(initialNote->chord()->tick());
@@ -2077,7 +2077,8 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       qreal timesigLeftMargin = styleS(StyleIdx::timesigLeftMargin).val() * _spatium;
 
       if (s->isChordRest())
-            x = qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
+            // x = qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
+            x += styleS(StyleIdx::barNoteDistance).val() * _spatium;
       else if (s->isClef())
             x = qMax(x, clefLeftMargin);
       else if (s->isKeySig())
@@ -2913,7 +2914,18 @@ void Score::getNextMeasure(LayoutContext& lc)
             }
 
       for (Segment& s : measure->segments()) {
-            if (s.segmentType() == Segment::Type::EndBarLine)
+
+            // DEBUG: relayout grace notes as beaming/flags may have changed
+
+            if (s.isChordRest()) {
+                  for (Element* e : s.elist()) {
+                        if (e && e->isChord()) {
+                              Chord* c = e->toChord();
+                              c->layout();
+                              }
+                        }
+                  }
+            else if (s.isEndBarLine())
                   continue;
             s.createShapes();
             }
@@ -3357,10 +3369,6 @@ printf("====================doLayout\n");
       int tracks = nstaves() * VOICES;
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegmentMM(); segment; segment = segment->next1MM()) {
-//                  if (track == tracks-1) {
-//                        for (Element* e : segment->annotations())
-//                              e->layout();
-//                        }
                   Element* e = segment->element(track);
                   if (!e)
                         continue;
@@ -3387,7 +3395,7 @@ printf("====================doLayout\n");
                                           if (e->isSlur())
                                                 e->layout();
                                           }
-                                    cc->layoutArticulations();
+                                    // cc->layoutArticulations();
                                     }
                               c->layoutArpeggio2();
                               for (Note* n : c->notes()) {

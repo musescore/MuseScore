@@ -108,6 +108,7 @@ class Chord : public ChordRest {
 
       void layoutPitched();
       void layoutTablature();
+      qreal noteHeadWidth() const;
 
    public:
       Chord(Score* s = 0);

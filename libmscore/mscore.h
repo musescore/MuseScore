@@ -252,18 +252,25 @@ enum class SelectType : char {
 //   NoteType
 //---------------------------------------------------------
 
-enum class NoteType : char {
-      NORMAL,
-      ACCIACCATURA,
-      APPOGGIATURA,       // grace notes
-      GRACE4,
-      GRACE16,
-      GRACE32,
-      GRACE8_AFTER,
-      GRACE16_AFTER,
-      GRACE32_AFTER,
-      INVALID
+enum class NoteType : unsigned char {
+      NORMAL        = 0,
+      ACCIACCATURA  = 0x1,
+      APPOGGIATURA  = 0x2,       // grace notes
+      GRACE4        = 0x4,
+      GRACE16       = 0x8,
+      GRACE32       = 0x10,
+      GRACE8_AFTER  = 0x20,
+      GRACE16_AFTER = 0x40,
+      GRACE32_AFTER = 0x80
       };
+
+constexpr NoteType operator| (NoteType t1, NoteType t2) {
+      return static_cast<NoteType>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (NoteType t1, NoteType t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
 
 //---------------------------------------------------------
 //    AccidentalVal

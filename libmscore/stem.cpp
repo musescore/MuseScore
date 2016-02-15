@@ -72,9 +72,9 @@ qreal Stem::lineWidth() const
 
 void Stem::layout()
       {
-      qreal l = _len + _userLen;
+      qreal l   = _len + _userLen;
       qreal _up = up() ? -1.0 : 1.0;
-      l *= _up;
+      l        *= _up;
 
       qreal y1 = 0.0;                           // vertical displacement to match note attach point
       Staff* st = staff();
@@ -96,16 +96,18 @@ void Stem::layout()
             else {                              // non-TAB
                   // move stem start to note attach point
                   Note* n  = up() ? chord()->downNote() : chord()->upNote();
-                  y1 += (up() ? n->stemUpSE().y() : n->stemDownNW().y());
+                  y1      += (up() ? n->stemUpSE().y() : n->stemDownNW().y());
                   rypos() = n->rypos();
                   }
             }
 
+      qreal lw5  = lineWidth() * .5;
+
       line.setLine(0.0, y1, 0.0, l);
+//      line.setLine(-lw5 * _up, y1, -lw5 * _up, l);
 
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
-      qreal lw5  = lineWidth() * .5;
       setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
       adjustReadPos();
       }
@@ -147,7 +149,7 @@ void Stem::draw(QPainter* painter) const
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
-      if (!useTab || !chord())
+      if ( !(useTab && chord()) )
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
@@ -290,7 +292,8 @@ bool Stem::acceptDrop(const DropData& data) const
 Element* Stem::drop(const DropData& data)
       {
       Element* e = data.element;
-      Chord* ch = chord();
+      Chord* ch  = chord();
+
       switch(e->type()) {
             case Element::Type::TREMOLO:
                   e->setParent(ch);

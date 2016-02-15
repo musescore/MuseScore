@@ -661,7 +661,8 @@ qreal Rest::mag() const
 
 int Rest::upLine() const
       {
-      return lrint((pos().y() + bbox().top() + spatium()) * 2 / spatium());
+      qreal _spatium = spatium();
+      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------
@@ -670,7 +671,8 @@ int Rest::upLine() const
 
 int Rest::downLine() const
       {
-      return lrint((pos().y() + bbox().top() + spatium()) * 2 / spatium());
+      qreal _spatium = spatium();
+      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------

@@ -108,7 +108,7 @@ Beam::~Beam()
       //
       // delete all references from chords
       //
-      foreach(ChordRest* cr, _elements)
+      for (ChordRest* cr : _elements)
             cr->setBeam(0);
       qDeleteAll(beamSegments);
       qDeleteAll(fragments);
@@ -143,18 +143,20 @@ QPointF Beam::canvasPos() const
 //   add
 //---------------------------------------------------------
 
-void Beam::add(Element* e) {
+void Beam::add(Element* e)
+      {
       if (e && e->isChordRest())
-            addChordRest(static_cast<ChordRest*>(e));
+            addChordRest(e->toChordRest());
       }
 
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
-void Beam::remove(Element* e) {
+void Beam::remove(Element* e)
+      {
       if (e && e->isChordRest())
-            removeChordRest(static_cast<ChordRest*>(e));
+            removeChordRest(e->toChordRest());
       }
 
 //---------------------------------------------------------
@@ -235,12 +237,12 @@ bool Beam::twoBeamedNotes()
       {
       // if not two elements or elements are not chords or chords have more than 1 note, return failure
       if ((_elements.size() != 2)
-         || (_elements[0]->type() != Element::Type::CHORD)
-         || _elements[1]->type() != Element::Type::CHORD) {
+         || !_elements[0]->isChord()
+         || !_elements[1]->isChord()) {
             return false;
             }
-      const Chord* c1 = static_cast<const Chord*>(_elements[0]);
-      const Chord* c2 = static_cast<const Chord*>(_elements[1]);
+      const Chord* c1 = _elements[0]->toChord();
+      const Chord* c2 = _elements[1]->toChord();
       if (c1->notes().size() != 1 || c2->notes().size() != 1)
             return false;
 
@@ -325,7 +327,7 @@ void Beam::layout1()
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
-            foreach (ChordRest* cr, _elements) {
+            for (ChordRest* cr : _elements) {
                   qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
                   mag = qMax(mag, m);
                   if (cr->type() == Element::Type::CHORD) {
@@ -570,6 +572,9 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       //
       // return true if beam spans a rest
       //
+      if (cl.size() == 2 && (cl.front()->isRest() || cl.back()->isRest()))
+            return true;
+
 //      for(const ChordRest* cr : cl) {
 //            if (cr->type() != Element::Type::CHORD)
 //                  return true;
@@ -1541,7 +1546,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   bool relayoutGrace = false;
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() == Element::Type::REST)
+                        if (c->isRest())
                               continue;
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
@@ -1573,7 +1578,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
                         qreal y;
-                        if (c->type() == Element::Type::REST)
+                        if (c->isRest())
                               continue;   //y = c->pagePos().y();
                         else
                               y  = c->upNote()->pagePos().y();
@@ -1734,7 +1739,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
 
                   qreal stemWidth  = point(score()->styleS(StyleIdx::stemWidth));
-                  qreal x2   = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
+                  qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
                   if ((c2 - c1) > 1) {
@@ -1928,24 +1933,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   }
             if (stem) {
                   stem->setLen(y2 - (by + _pagePos.y()));
-                  stem->rxpos() = c->stemPosX();
+//                  stem->rxpos() = c->stemPosX();
                   }
-
-#if 0       // TODO ??
-            if (!tab) {
-                  bool _up = c->up();
-                  qreal stemWidth5 = stem->lineWidth() * .5;
-                  qreal noteWidth  = c->notes().size() ? c->notes().at(0)->headWidth() :
-                     symbols[score()->symIdx()][quartheadSym].width(magS());
-                  qreal stemX;
-                  if (_up)
-                        stemX = noteWidth - stemWidth5;
-                  else
-                        stemX = stemWidth5;
-                  stem->rxpos() = stemX;
-                  }
-#endif
-
 
             //
             // layout stem slash for acciacatura
@@ -1978,7 +1967,7 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   f->py1[idx] = f->py1[idx] * diff;
                   f->py2[idx] = f->py2[idx] * diff;
                   }

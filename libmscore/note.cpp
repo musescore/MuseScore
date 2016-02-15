@@ -1878,8 +1878,6 @@ QString Note::noteTypeUserName() const
             case NoteType::GRACE16:
             case NoteType::GRACE32:
                   return tr("Grace note before");
-            case NoteType::INVALID:
-                  return tr("Invalid note");
             default:
                   return tr("Note");
             }

@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-#define DEBUG_SHAPES
+// #define DEBUG_SHAPES
 
 class Segment;
 
