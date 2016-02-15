@@ -2617,8 +2617,8 @@ bool Measure::createEndBarLines()
       bool mensur = false;    // keep note of Mensurstrich case
       int spanTot;            // to keep track of the target span as we count down
       int lastIdx;
-      int spanFrom;
-      int spanTo;
+      int spanFrom = 0;
+      int spanTo = 0;
       static const int unknownSpanFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
