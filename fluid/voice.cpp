@@ -441,7 +441,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             _fres = 5;
 
       /* if filter enabled and there is a significant frequency change.. */
-      if ((abs (_fres - last_fres) > 0.01)) {
+      if ((qAbs(_fres - last_fres) > 0.01)) {
                 /* The filter coefficients have to be recalculated (filter
                 * parameters have changed). Recalculation for various reasons is
                 * forced by setting last_fres to -1.  The flag filter_startup

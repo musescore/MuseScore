@@ -28,7 +28,6 @@ class TestPlugins : public QObject, public MTest
       {
       Q_OBJECT
 
-      Score* score;
       QQmlEngine engine;
 
    private slots:
