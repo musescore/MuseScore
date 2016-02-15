@@ -512,8 +512,8 @@ void Glissando::undoSetShowText(bool f)
 Note* Glissando::guessInitialNote(Chord* chord)
       {
       switch (chord->noteType()) {
-            case NoteType::INVALID:
-                  return nullptr;
+//            case NoteType::INVALID:
+//                  return nullptr;
             // for grace notes before, previous chord is previous chord of parent chord
             case NoteType::ACCIACCATURA:
             case NoteType::APPOGGIATURA:
@@ -585,7 +585,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
 //---------------------------------------------------------
 //   STATIC FUNCTIONS: guessFinalNote
 //
-//    Used while dropping a glissando on a note to determine (guess!) the glissando final note from its initial chord.
+//    Used while dropping a glissando on a note to determine (guess!) the glissando final
+//    note from its initial chord.
 //    Returns the top note of next chord of the same instrument,
 //    preferring the chord in the same track as chord, if it exists.
 //
@@ -596,8 +597,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
 Note* Glissando::guessFinalNote(Chord* chord)
       {
       switch (chord->noteType()) {
-            case NoteType::INVALID:
-                  return nullptr;
+//            case NoteType::INVALID:
+//                  return nullptr;
             // for grace notes before, return top note of parent chord
             // TODO : if the grace-before is not the LAST ONE, this still returns the main note
             //    which is probably not correct; however a glissando between two grace notes

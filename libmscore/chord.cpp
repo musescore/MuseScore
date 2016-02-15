@@ -311,6 +311,18 @@ Chord::~Chord()
       }
 
 //---------------------------------------------------------
+//   noteHeadWidth
+//---------------------------------------------------------
+
+qreal Chord::noteHeadWidth() const
+      {
+      qreal nhw = score()->noteHeadWidth();
+      if (_noteType != NoteType::NORMAL)
+            nhw *= score()->styleD(StyleIdx::graceNoteMag);
+      return nhw * mag();
+      }
+
+//---------------------------------------------------------
 //   stemPosX
 //    return Chord coordinates
 //---------------------------------------------------------
@@ -319,15 +331,7 @@ qreal Chord::stemPosX() const
       {
       if (staff() && staff()->isTabStaff())
             return staff()->staffType()->chordStemPosX(this) * spatium();
-
-      if (_up) {
-            qreal nhw = score()->noteHeadWidth();
-            if (_noteType != NoteType::NORMAL)
-                 nhw *= score()->styleD(StyleIdx::graceNoteMag);
-            nhw *= mag();
-            return nhw;
-            }
-      return 0.0;
+      return _up ? noteHeadWidth() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -344,10 +348,7 @@ QPointF Chord::stemPos() const
             return staff()->staffType()->chordStemPos(this) * _spatium + p;
 
       if (_up) {
-            qreal nhw = score()->noteHeadWidth();
-            if (_noteType != NoteType::NORMAL)
-                  nhw *= score()->styleD(StyleIdx::graceNoteMag);
-            nhw    *= mag();
+            qreal nhw = noteHeadWidth();
             p.rx() += nhw;
             p.ry() += downNote()->pos().y();
             }
@@ -359,19 +360,19 @@ QPointF Chord::stemPos() const
 //---------------------------------------------------------
 //   stemPosBeam
 //    return stem position of note on beam side
-//    return canvas coordinates
+//    return page coordinates
 //---------------------------------------------------------
 
 QPointF Chord::stemPosBeam() const
       {
       qreal _spatium = spatium();
       QPointF p(pagePos());
+
       if (staff() && staff()->isTabStaff())
             return staff()->staffType()->chordStemPosBeam(this) * _spatium + p;
+
       if (_up) {
-            qreal nhw = score()->noteHeadWidth();
-            if (_noteType != NoteType::NORMAL)
-                 nhw *= score()->styleD(StyleIdx::graceNoteMag);
+            qreal nhw = noteHeadWidth();
             p.rx() += nhw;
             p.ry() += upNote()->pos().y();
             }
@@ -882,7 +883,6 @@ void Chord::write(Xml& xml) const
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       switch (_noteType) {
-            case NoteType::INVALID:
             case NoteType::NORMAL:
                   break;
             case NoteType::ACCIACCATURA:
@@ -1819,14 +1819,6 @@ void Chord::layoutPitched()
             }
 
       //-----------------------------------------
-      //  stem position
-      //-----------------------------------------
-
-      // Y: only needed if there is an actual stem
-//      if (stem())
-//            stem()->rypos() = (_up ? downNote() : upNote())->rypos();
-
-      //-----------------------------------------
       //  create ledger lines
       //-----------------------------------------
 
@@ -1987,7 +1979,7 @@ void Chord::layoutPitched()
                         // this will be used in calculating its position relative to this chord
                         // it is too late to actually allocate space for this in segment of previous chord
                         // so we will allocate room in left space of this chord
-                        qreal oldR = pc->_spaceRw;
+                        qreal oldR  = pc->_spaceRw;
                         qreal stemX = pc->stemPosX();
                         qreal available = oldR - stemX;
                         qreal newR = stemX + qMax(available, llsp);
@@ -1996,7 +1988,6 @@ void Chord::layoutPitched()
                         }
                   lll = qMax(llsp, lll);
                   }
-
             }
 
       _spaceLw = lll;
@@ -3063,11 +3054,11 @@ QVector<Chord*> Chord::graceNotesBefore() const
       {
       QVector<Chord*> cl;
       for (Chord* c : _graceNotes) {
-               if (c->noteType() == NoteType::ACCIACCATURA
-               || c->noteType() == NoteType::APPOGGIATURA
-               || c->noteType() == NoteType::GRACE4
-               || c->noteType() == NoteType::GRACE16
-               || c->noteType() == NoteType::GRACE32)
+               if (c->noteType() & (NoteType::ACCIACCATURA
+                  | NoteType::APPOGGIATURA
+                  | NoteType::GRACE4
+                  | NoteType::GRACE16
+                  | NoteType::GRACE32))
                   cl.push_back(c);
               }
       return cl;
@@ -3082,9 +3073,7 @@ QVector<Chord*> Chord::graceNotesAfter() const
       QVector<Chord*> cl;
       for (int i = _graceNotes.size() - 1; i >= 0; i--) {
             Chord* c = _graceNotes[i];
-            if (c->noteType() == NoteType::GRACE8_AFTER
-             || c->noteType() == NoteType::GRACE16_AFTER
-             || c->noteType() == NoteType::GRACE32_AFTER)
+            if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER))
                   cl.push_back(c);
             }
       return cl;
@@ -3098,7 +3087,6 @@ void Chord::sortNotes()
       {
       std::sort(notes().begin(), notes().end(),
          [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
-         // [](const Note* a,const Note* b)->bool { return a->pitch() < b->pitch(); }
          );
      }
 
@@ -3109,9 +3097,9 @@ void Chord::sortNotes()
 void Chord::toGraceAfter()
       {
       switch (noteType()) {
-            case NoteType::APPOGGIATURA:  setNoteType(NoteType::GRACE8_AFTER); break;
-            case NoteType::GRACE16:  setNoteType(NoteType::GRACE16_AFTER); break;
-            case NoteType::GRACE32:  setNoteType(NoteType::GRACE32_AFTER); break;
+            case NoteType::APPOGGIATURA:  setNoteType(NoteType::GRACE8_AFTER);  break;
+            case NoteType::GRACE16:       setNoteType(NoteType::GRACE16_AFTER); break;
+            case NoteType::GRACE32:       setNoteType(NoteType::GRACE32_AFTER); break;
             default: break;
             }
       }
