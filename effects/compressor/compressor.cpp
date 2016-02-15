@@ -42,7 +42,7 @@ static const std::vector<ParDescr> pd = {
       { KNEE,      "knee",      false, 1.0,   10.0,  1.0 },
       { GAIN,      "gain",      false, 0.0,   24.0,  0.0 }
       };
-
+#if 0
 //---------------------------------------------------------
 //   cube_interp
 //    Cubic interpolation function
@@ -55,7 +55,7 @@ static inline float cube_interp(const float fr, const float inm1, const float
        fr * (4.0f * inp1 + 2.0f * inm1 - 5.0f * in - inp2 +
        fr * (3.0f * (in - inp1) - inm1 + inp2)));
       }
-
+#endif
 //---------------------------------------------------------
 //   f_max
 //---------------------------------------------------------
@@ -93,7 +93,7 @@ static inline void round_to_zero(volatile float *f)
 
 float db_data[DB_TABLE_SIZE];
 float lin_data[LIN_TABLE_SIZE];
-
+#if 0
 //---------------------------------------------------------
 //   f_db2lin_cube
 //---------------------------------------------------------
@@ -111,7 +111,7 @@ static inline float f_db2lin_cube(float db)
       }
       return cube_interp(ofs, lin_data[base-1], lin_data[base], lin_data[base+1], lin_data[base+2]);
       }
-
+#endif
 //---------------------------------------------------------
 //   f_db2lin_lerp
 //---------------------------------------------------------
@@ -130,7 +130,7 @@ static inline float f_db2lin_lerp(float db)
             }
       return (1.0f - ofs) * lin_data[base] + ofs * lin_data[base+1];
       }
-
+#if 0
 //---------------------------------------------------------
 //   f_lin2db_cube
 //---------------------------------------------------------
@@ -148,7 +148,7 @@ static inline float f_lin2db_cube(float lin)
       }
       return cube_interp(ofs, db_data[base-1], db_data[base], db_data[base+1], db_data[base+2]);
       }
-
+#endif
 //---------------------------------------------------------
 //   f_lin2db_lerp
 //---------------------------------------------------------
