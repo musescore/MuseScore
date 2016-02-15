@@ -1398,6 +1398,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w += clefLeftMargin;
       else if (st == Segment::Type::EndBarLine && nst == Segment::Type::KeySigAnnounce)
             w += clefKeyRightMargin;
+      else if (st == Segment::Type::Breath)
+            w += _spatium * 1.5;
       if (w < 0.0)
             w = 0.0;
       if (ns)

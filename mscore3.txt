@@ -83,9 +83,6 @@
 
       * layout issue for horizontal beams
       * layout of two note tremolo
-      * layout of breath symbols
       * regressions for tablature
       * some scripting interface functions are commented out
-
-
 

@@ -56,9 +56,9 @@ else
 fi
 
 #####DEBUG: failed tests
-SRC="grace-4\
-      breath-1 harmony-12\
-      user-offset-2 tablature-1 emmentaler-text-2 musejazz-text-2 \
+SRC=" \
+      harmony-12\
+      user-offset-2 emmentaler-text-2 musejazz-text-2 \
       system-4 system-5 tremolo-1 hide-1"
 
 DPI=130
