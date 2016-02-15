@@ -107,7 +107,7 @@ private slots:
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
-      //void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); } must also fix exportxml.cpp
+      void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
       //void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); } end repeat missing
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
