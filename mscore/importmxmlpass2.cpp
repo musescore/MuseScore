@@ -531,38 +531,53 @@ static QString findDeleteStaffText(Segment* s, int track)
 static void setPartInstruments(Part* part, const QString& partId,
                                Score* score, const MusicXmlInstrList& il, const MusicXMLDrumset& mxmlDrumset)
       {
+      QString prevInstrId;
       for (auto it = il.cbegin(); it != il.cend(); ++it) {
             Fraction f = (*it).first;
-            if (f > Fraction(0, 1)) {
+            if (f == Fraction(0, 1))
+                  prevInstrId = (*it).second;  // instrument id at t = 0
+            else if (f > Fraction(0, 1)) {
                   auto instrId = (*it).second;
-                  int staff = score->staffIdx(part);
-                  int track = staff * VOICES;
-                  //qDebug("setPartInstruments: instrument change: tick %s (%d) track %d instr '%s'",
-                  //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
-                  Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
-                  if (!segment)
-                        qDebug("setPartInstruments: segment for instrument change at tick %d not found", f.ticks());  // TODO
-                  else if (!mxmlDrumset.contains(instrId))
-                        qDebug("setPartInstruments: changed instrument '%s' at tick %d not found in part '%s'",
-                               qPrintable(instrId), f.ticks(), qPrintable(partId));  // TODO
-                  else {
-                        MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
-                        Instrument instr;
-                        instr.channel(0)->program = mxmlInstr.midiProgram;
-                        instr.channel(0)->pan = mxmlInstr.midiPan;
-                        instr.channel(0)->volume = mxmlInstr.midiVolume;
-                        instr.setTrackName(mxmlInstr.name);
-                        InstrumentChange* ic = new InstrumentChange(instr, score);
-                        ic->setTrack(track);
-                        // if there is already a staff text at this tick / track,
-                        // delete it and use its text here instead of "Instrument"
-                        QString text = findDeleteStaffText(segment, track);
-                        ic->setXmlText(text.isEmpty() ? "Instrument" : text);
-                        segment->add(ic);
+                  bool mustInsert = instrId != prevInstrId;
+                  /*
+                  qDebug("setPartInstruments: f %s previd %s id %s mustInsert %d",
+                         qPrintable(f.print()),
+                         qPrintable(prevInstrId),
+                         qPrintable(instrId),
+                         mustInsert);
+                   */
+                  if (mustInsert) {
+                        int staff = score->staffIdx(part);
+                        int track = staff * VOICES;
+                        qDebug("setPartInstruments: instrument change: tick %s (%d) track %d instr '%s'",
+                               qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
+                        Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
+                        if (!segment)
+                              qDebug("setPartInstruments: segment for instrument change at tick %d not found", f.ticks());  // TODO
+                        else if (!mxmlDrumset.contains(instrId))
+                              qDebug("setPartInstruments: changed instrument '%s' at tick %d not found in part '%s'",
+                                     qPrintable(instrId), f.ticks(), qPrintable(partId));  // TODO
+                        else {
+                              MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
+                              Instrument instr;
+                              qDebug("setPartInstruments: instr %p", &instr);
+                              instr.channel(0)->program = mxmlInstr.midiProgram;
+                              instr.channel(0)->pan = mxmlInstr.midiPan;
+                              instr.channel(0)->volume = mxmlInstr.midiVolume;
+                              instr.setTrackName(mxmlInstr.name);
+                              InstrumentChange* ic = new InstrumentChange(instr, score);
+                              ic->setTrack(track);
+                              // if there is already a staff text at this tick / track,
+                              // delete it and use its text here instead of "Instrument"
+                              QString text = findDeleteStaffText(segment, track);
+                              ic->setXmlText(text.isEmpty() ? "Instrument" : text);
+                              segment->add(ic);
 
-                        int key = part->instruments()->rbegin()->first;
-                        part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
+                              int key = part->instruments()->rbegin()->first;
+                              part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
+                              }
                         }
+                  prevInstrId = instrId;
                   }
             }
       }
@@ -2066,7 +2081,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         if (mTime > mDura)
                               mDura = mTime;
                         }
-                  //qDebug("added note %p gac %d", n, gac);
+                  //qDebug("added note %p chord %p gac %d", n, n ? n->chord() : 0, gac);
                   }
             else if (_e.name() == "forward") {
                   Fraction dura;
@@ -3427,15 +3442,20 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "clef");
 
+      Part* part = _pass1.getPart(partId);
+      Q_ASSERT(part);
+
       // TODO: check error handling for
       // - single staff
       // - multi-staff with same clef
       QString strClefno = _e.attributes().value("number").toString();
-      int clefno = 1; // reasonable default
+      int clefno = 1; // default
       if (strClefno != "")
             clefno = strClefno.toInt();
-      if (clefno <= 0) {
-            // conversion error (0) or other issue (<0), assume staff 1
+      if (clefno <= 0 || clefno > part->nstaves()) {
+            // conversion error (0) or other issue, assume staff 1
+            // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
+            // Same fix is required in pass 1 and pass 2
             logError(QString("invalid clef number '%1'").arg(strClefno));
             clefno = 1;
             }
@@ -3521,27 +3541,21 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       else
             qDebug("clef: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);  // TODO
 
-      Part* part = _pass1.getPart(partId);
-      Q_ASSERT(part);
-      int staves = part->nstaves();
-
-      if (clefno < staves) {
-            Clef* clefs = new Clef(_score);
-            clefs->setClefType(clef);
-            int track = _pass1.trackForPart(partId) + clefno * VOICES;
-            clefs->setTrack(track);
-            Segment* s = measure->getSegment(clefs, tick);
-            s->add(clefs);
-            }
+      Clef* clefs = new Clef(_score);
+      clefs->setClefType(clef);
+      int track = _pass1.trackForPart(partId) + clefno * VOICES;
+      clefs->setTrack(track);
+      Segment* s = measure->getSegment(clefs, tick);
+      s->add(clefs);
 
       // set the correct staff type
       // note that this overwrites the staff lines value set in pass 1
       // also note that clef handling should probably done in pass1
-      int staffIdx = _score->staffIdx(part);
+      int staffIdx = _score->staffIdx(part) + clefno;
       int lines = _score->staff(staffIdx)->lines();
       if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
             _score->staff(staffIdx)->setStaffType(StaffType::preset(st));
-            _score->staff(staffIdx)->setLines(lines);
+            _score->staff(staffIdx)->setLines(lines); // preserve previously set staff lines
             _score->staff(staffIdx)->setBarLineTo((lines - 1) * 2);
             }
       }
@@ -4272,7 +4286,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
                   // append any grace chord after chord to the previous chord
                   Chord* prevChord = measure->findChord(prevSTime.ticks(), msTrack + msVoice);
-                  addGraceChordsAfter(prevChord, gcl, gac);
+                  if (prevChord && prevChord != c)
+                        addGraceChordsAfter(prevChord, gcl, gac);
 
                   // append any grace chord
                   addGraceChordsBefore(c, gcl);

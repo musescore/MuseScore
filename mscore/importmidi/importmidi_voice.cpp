@@ -705,22 +705,22 @@ int findMaxOccupiedVoiceInBar(
             const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
             const std::multimap<ReducedFraction, MidiChord> &chords)
       {
-      const int barIndex = chordIt->second.barIndex;
+      const unsigned int barIndex = chordIt->second.barIndex;
       int maxVoice = 0;
                   // look forward
       for (auto it = chordIt; it != chords.end(); ++it) {
             const MidiChord &chord = it->second;
-            if (chord.barIndex > barIndex + 1)
+            if ((unsigned int) chord.barIndex > barIndex + 1)
                   break;
-            if (chord.barIndex == barIndex && chord.voice > maxVoice)
+            if ((unsigned int) chord.barIndex == barIndex && chord.voice > maxVoice)
                   maxVoice = chord.voice;
             }
                   // look backward
       for (auto it = chordIt; ; ) {
             const MidiChord &chord = it->second;
-            if (chord.barIndex < barIndex - 1)
+            if ((unsigned int) chord.barIndex + 1 < barIndex)
                   break;
-            if (chord.barIndex == barIndex && chord.voice > maxVoice)
+            if ((unsigned int) chord.barIndex == barIndex && chord.voice > maxVoice)
                   maxVoice = chord.voice;
             if (it == chords.begin())
                   break;

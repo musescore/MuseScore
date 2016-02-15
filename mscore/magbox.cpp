@@ -187,6 +187,7 @@ double MagBox::getMag(ScoreView* canvas) const
                   break;
 
             default:
+                  nmag = 0.0;
                   break;
             }
       if (nmag < 0.0001)

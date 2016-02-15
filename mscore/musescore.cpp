@@ -824,10 +824,13 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
       menuView->addSeparator();
+      
+#ifndef Q_OS_MAC
       a = getAction("fullscreen");
       a->setCheckable(true);
       a->setChecked(false);
       menuView->addAction(a);
+#endif
 
       //---------------------
       //    Menu Create
@@ -1484,6 +1487,9 @@ void MuseScore::updateViewModeCombo()
                   break;
             case LayoutMode::SYSTEM:
                   idx = 2;
+                  break;
+            default:
+                  idx = 0;
                   break;
             }
       viewModeCombo->setCurrentIndex(idx);

@@ -263,6 +263,8 @@ void MusicXMLParserPass1::initPartState(const QString& /* partId */)
       {
       _timeSigDura = Fraction(0, 0);       // invalid
       _octaveShifts.clear();
+      _firstInstrSTime = Fraction(0, 1);
+      _firstInstrId = "";
       }
 
 //---------------------------------------------------------
@@ -905,6 +907,23 @@ Score::FileError MusicXMLParserPass1::parse()
       }
 
 //---------------------------------------------------------
+//   allStaffGroupsIdentical
+//---------------------------------------------------------
+
+/**
+ Return true if all staves in Part \a p have the same staff group
+ */
+
+static bool allStaffGroupsIdentical(Part const* const p)
+      {
+      for (int i = 1; i < p->nstaves(); ++i) {
+            if (p->staff(0)->staffGroup() != p->staff(i)->staffGroup())
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -999,7 +1018,10 @@ void MusicXMLParserPass1::scorePartwise()
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
                   p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
-                  p->staff(0)->setBarLineSpan(p->nstaves());
+                  if (allStaffGroupsIdentical(p)) {
+                        // span only if the same types
+                        p->staff(0)->setBarLineSpan(p->nstaves());
+                        }
                   }
             }
       }
@@ -1899,6 +1921,9 @@ void MusicXMLParserPass1::part()
       allocateVoices(_parts[id].voicelist);
       // calculate the octave shifts
       _parts[id].calcOctaveShifts();
+      // set first instrument for multi-instrument part starting with rest
+      if (_firstInstrId != "" && _firstInstrSTime > Fraction(0, 1))
+            _parts[id]._instrList.setInstrument(_firstInstrId, Fraction(0, 1));
 
       // debug: print results
       /*
@@ -2264,22 +2289,22 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
       Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
       logDebugTrace("MusicXMLParserPass1::staffDetails");
 
-      QString number = _e.attributes().value("number").toString();
-      int n = -1;       // invalid
-      if (number != "") {
-            n = number.toInt();
-            if (n <= 0) {
-                  logError(QString("invalid number %1").arg(number));
-                  n = -1;
-                  }
-            else
-                  n--;        // make zero-based
-            }
-
       Part* part = getPart(partId);
       Q_ASSERT(part);
       int staves = part->nstaves();
-      int staffIdx = _score->staffIdx(part);
+
+      QString number = _e.attributes().value("number").toString();
+      int n = 1; // default
+      if (number != "") {
+            n = number.toInt();
+            if (n <= 0 || n > staves) {
+                  logError(QString("invalid staff-details number %1").arg(number));
+                  n = 1;
+                  }
+            }
+      n--;        // make zero-based
+
+      int staffIdx = _score->staffIdx(part) + n;
 
       StringData* t = 0;
       if (_score->staff(staffIdx)->isTabStaff()) {
@@ -2307,12 +2332,7 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
             }
 
       if (staffLines > 0) {
-            if (n == -1) {
-                  for (int i = 0; i < staves; ++i)
-                        setStaffLines(_score, staffIdx+i, staffLines);
-                  }
-            else
-                  setStaffLines(_score, staffIdx, staffLines);
+            setStaffLines(_score, staffIdx, staffLines);
             }
 
       if (t) {
@@ -2600,6 +2620,24 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction cTime,
       }
 
 //---------------------------------------------------------
+//   setFirstInstr
+//---------------------------------------------------------
+
+void MusicXMLParserPass1::setFirstInstr(const QString& id, const Fraction stime)
+      {
+      // check for valid arguments
+      if (id == "" || !stime.isValid() || stime < Fraction(0, 1))
+            return;
+
+      // check for no instrument found yet or new earliest start time
+      // note: compare using <= to catch instrument at t=0
+      if (_firstInstrId == "" || stime <= _firstInstrSTime) {
+            _firstInstrId = id;
+            _firstInstrSTime = stime;
+            }
+      }
+
+//---------------------------------------------------------
 //   note
 //---------------------------------------------------------
 
@@ -2684,10 +2722,11 @@ void MusicXMLParserPass1::note(const QString& partId,
       staff--;
 
       // multi-instrument handling
+      setFirstInstr(instrId, sTime);
       QString prevInstrId = _parts[partId]._instrList.instrument(sTime);
       bool mustInsert = instrId != prevInstrId;
       /*
-      qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' insert %d",
+      qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' mustInsert %d",
              qPrintable(sTime.print()),
              sTime.ticks(),
              staff + 1,
