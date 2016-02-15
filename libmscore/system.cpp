@@ -346,8 +346,8 @@ void System::layout2()
       qreal _spatium            = spatium();
       qreal y                   = 0.0;
       qreal minVerticalDistance = score()->styleS(StyleIdx::minVerticalDistance).val() * _spatium;
-      qreal staffDistance       = score()->styleS(StyleIdx::staffDistance).val() * _spatium;
-      qreal akkoladeDistance    = score()->styleS(StyleIdx::akkoladeDistance).val() * _spatium;
+      qreal staffDistance       = score()->styleS(StyleIdx::staffDistance).val()       * _spatium;
+      qreal akkoladeDistance    = score()->styleS(StyleIdx::akkoladeDistance).val()    * _spatium;
 
       Q_ASSERT(!visibleStaves.empty());
 
@@ -365,7 +365,7 @@ void System::layout2()
 
             int si2    = ni->first;
             qreal dist = h + staff->isTop() ? staffDistance : akkoladeDistance;
-            dist += 4 * _spatium;
+            dist      += staff->height();
 
             for (MeasureBase* mb : ml) {
                   if (mb->type() != Element::Type::MEASURE)
@@ -377,7 +377,8 @@ void System::layout2()
                         Shape s2(s->shape(si2));
                         s2.translate(s->pos());
 
-                        s1.add(QRectF(0.0, _spatium * 4, 1000.0, 0.0));   // bottom staff line
+                        // s1.add(QRectF(0.0, _spatium * 4, 1000.0, 0.0));   // bottom staff line
+                        s1.add(QRectF(0.0, staff->height(), 1000.0, 0.0));   // bottom staff line
                         s2.add(QRectF(0.0, 0.0, 1000.0, 0.0));            // top staff line
 
                         // QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(), system->pos().y());
@@ -392,7 +393,8 @@ void System::layout2()
                         }
                   Spacer* sp = m->mstaff(si1)->_vspacerDown;
                   if (sp)
-                        dist = qMax(dist, _spatium * 4 + sp->gap());
+                        // dist = qMax(dist, _spatium * 4 + sp->gap());
+                        dist = qMax(dist, staff->height() + sp->gap());
                   sp = m->mstaff(si2)->_vspacerUp;
                   if (sp)
                         dist = qMax(dist, sp->gap());
