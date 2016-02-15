@@ -80,7 +80,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       int dstTick = dst->tick();
       bool done = false;
       bool pasted = false;
-      int tickLen, staves = 0;
+      int tickLen = 0, staves = 0;
       while (e.readNextStartElement()) {
             if (done)
                   break;

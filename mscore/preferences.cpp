@@ -53,29 +53,6 @@ extern bool externalStyle;
 static int exportAudioSampleRates[2] = { 44100, 48000 };
 
 //---------------------------------------------------------
-//   PeriodItem
-//---------------------------------------------------------
-
-struct PeriodItem {
-       int time;
-       const char* text;
-       PeriodItem(const int t, const  char* txt) {
-             time = t;
-             text = txt;
-             }
-       };
-
-static PeriodItem updatePeriods[] = {
-      PeriodItem(24,      QT_TRANSLATE_NOOP("preferences","Every Day")),
-      PeriodItem(72,      QT_TRANSLATE_NOOP("preferences","Every 3 Days")),
-      PeriodItem(7*24,    QT_TRANSLATE_NOOP("preferences","Every Week")),
-      PeriodItem(2*7*24,  QT_TRANSLATE_NOOP("preferences","Every 2 Weeks")),
-      PeriodItem(30*24,   QT_TRANSLATE_NOOP("preferences","Every Month")),
-      PeriodItem(2*30*24, QT_TRANSLATE_NOOP("preferences","Every 2 Months")),
-      PeriodItem(-1,      QT_TRANSLATE_NOOP("preferences","Never")),
-      };
-
-//---------------------------------------------------------
 //   Preferences
 //---------------------------------------------------------
 
