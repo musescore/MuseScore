@@ -54,11 +54,9 @@ class SysStaff {
 
       const QRectF& bbox() const    { return _bbox; }
       QRectF& bbox()                { return _bbox; }
-      QRectF& rbb()                 { return _bbox; }
-      qreal right() const           { return _bbox.right(); }
       void setbbox(const QRectF& r) { _bbox = r; }
-      qreal y() const;
-      void setYOff(qreal offset);
+      qreal y() const               { return _bbox.y() + _yOff; }
+      void setYOff(qreal offset)    { _yOff = offset; }
 
       bool show() const             { return _show; }
       void setShow(bool v)          { _show = v; }

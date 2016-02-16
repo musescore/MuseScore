@@ -1404,6 +1404,7 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w = 0.0;
       if (ns)
             w += ns->extraLeadingSpace().val() * _spatium;
+//      printf("minDistance %s-%s %f\n", subTypeName(), ns->subTypeName(), w);
       return w;
       }
 

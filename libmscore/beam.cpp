@@ -1932,8 +1932,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   by = 0;
                   }
             if (stem) {
+                  qreal sw2  = point(score()->styleS(StyleIdx::stemWidth)) * .5;
+                  if (up())
+                        sw2 = -sw2;
                   stem->setLen(y2 - (by + _pagePos.y()));
-//                  stem->rxpos() = c->stemPosX();
+                  stem->rxpos() = c->stemPosX() + sw2;
                   }
 
             //

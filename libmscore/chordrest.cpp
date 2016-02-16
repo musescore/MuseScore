@@ -1183,8 +1183,8 @@ void ChordRest::removeDeleteBeam(bool beamed)
             if (b->empty())
                   score()->undoRemoveElement(b);
             }
-      if (!beamed && type() == Element::Type::CHORD) {
-            Chord* chord = static_cast<Chord*>(this);
+      if (!beamed && isChord()) {
+            Chord* chord = toChord();
             int hookIdx  = durationType().hooks();
 
             if (hookIdx && !(chord->noStem() || measure()->slashStyle(staffIdx()))) {
