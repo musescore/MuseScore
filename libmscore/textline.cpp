@@ -79,6 +79,8 @@ void TextLineSegment::draw(QPainter* painter) const
       QColor color;
       if (selected() && !(score() && score()->printing()))
             color = (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
+      else if (!tl->lineVisible() && !(score() && score()->showInvisible()))
+            color = Qt::transparent;
       else if (!tl->visible() || !tl->lineVisible())
             color = Qt::gray;
       else
@@ -109,7 +111,7 @@ void TextLineSegment::draw(QPainter* painter) const
                   }
             }
 
-      if (tl->lineVisible() || !score()->printing()) {
+      if (tl->lineVisible() || !(score() && score()->printing())) {
             QPen pen(color, textlineLineWidth, tl->lineStyle());
             if (tl->lineStyle() == Qt::CustomDashLine) {
                   bool palette = !(parent() && parent()->parent());     // hack for palette
