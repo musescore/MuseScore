@@ -4771,7 +4771,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -4795,7 +4795,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -4827,7 +4827,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
             </Instrument>
             <Instrument id="military-drum">
@@ -4857,7 +4857,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
             </Instrument>
             <Instrument id="tom-toms">
@@ -4913,7 +4913,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
@@ -4936,7 +4936,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
@@ -4967,7 +4967,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>jazz</genre>
@@ -5007,7 +5007,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>jazz</genre>
@@ -5427,7 +5427,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
@@ -5458,7 +5458,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -5521,7 +5521,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -5545,7 +5545,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                         <controller ctrl="10" value="60"/>
                   </Channel>
                   <genre>common</genre>
@@ -5612,7 +5612,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
-                  <Drum pitch="49">
+                  <Drum pitch="57">
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
@@ -5622,7 +5622,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="48"/>
                   </Channel>
             </Instrument>
             <Instrument id="splash-cymbal">
