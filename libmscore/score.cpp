@@ -1161,11 +1161,11 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   }
 
             if (nstaff) {
-                  qreal s1y2 = ss->bbox().y() + ss->bbox().height();
-                  sy2        = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                  qreal s1y2 = ss->bbox().bottom();
+                  sy2        = system->page()->canvasPos().y() + s1y2 + (nstaff->bbox().y() - s1y2) * .5;
                   }
             else
-                  sy2 = system->page()->canvasPos().y() + system->page()->height() - system->pos().y();   // system->height();
+                  sy2 = system->page()->canvasPos().y() + system->page()->height() - system->pagePos().y();   // system->height();
             if (y < sy2) {
                   sstaff = ss;
                   break;
