@@ -511,21 +511,21 @@ QPointF Element::pagePos() const
             return p;
 
       if (_flags & ElementFlag::ON_STAFF) {
-            System* system = nullptr;
-            if (parent()->type() == Element::Type::SEGMENT)
-                  system = static_cast<Segment*>(parent())->measure()->system();
-            else if (parent()->type() == Element::Type::MEASURE)     // used in measure number
-                  system = static_cast<Measure*>(parent())->system();
-            else if (parent()->type() == Element::Type::SYSTEM)
-                  system = static_cast<System*>(parent());
+            System* system = 0;
+            if (parent()->isSegment())
+                  system = parent()->toSegment()->system();
+            else if (parent()->isMeasure())           // used in measure number
+                  system = parent()->toMeasure()->system();
+            else if (parent()->isSystem())
+                  system = parent()->toSystem();
             else {
                   Q_ASSERT(false);
                   }
             if (system) {
                   int si = staffIdx();
-                  if (type() == Element::Type::CHORD || type() == Element::Type::REST)
-                        si += static_cast<const ChordRest*>(this)->staffMove();
-                  p.ry() += system->staffYpage(si); // system->staff(si)->y() + system->y();
+                  if (isChordRest())
+                        si += toChordRest()->staffMove();
+                  p.ry() += system->staffYpage(si);               // system->staff(si)->y() + system->y();
                   }
             p.rx() = pageX();
             }
@@ -547,30 +547,29 @@ QPointF Element::canvasPos() const
             return p;
 
       if (_flags & ElementFlag::ON_STAFF) {
-            System* system = nullptr;
-            if (parent()->type() == Element::Type::SEGMENT)
-                  system = static_cast<Segment*>(parent())->system();
-            else if (parent()->type() == Element::Type::MEASURE)     // used in measure number
-                  system = static_cast<Measure*>(parent())->system();
-            else if (parent()->type() == Element::Type::SYSTEM)
-                  system = static_cast<System*>(parent());
+            System* system = 0;
+            if (parent()->isSegment())
+                  system = parent()->toSegment()->system();
+            else if (parent()->isMeasure())     // used in measure number
+                  system = parent()->toMeasure()->system();
+            else if (parent()->isSystem())
+                  system = parent()->toSystem();
             else {
                   Q_ASSERT(false);
                   }
             if (system) {
                   int si = staffIdx();
-                  if (type() == Element::Type::CHORD || type() == Element::Type::REST)
-                        si += static_cast<const ChordRest*>(this)->staffMove();
-                  p.ry() += system->staffYpage(si); // system->staff(si)->y() + system->y();
+                  if (isChordRest())
+                        si += toChordRest()->staffMove();
+                  p.ry() += system->staffYpage(si);         // system->staff(si)->y() + system->y();
                   Page* page = system->page();
                   if (page)
                         p.ry() += page->y();
                   }
             p.rx() = canvasX();
             }
-      else {
+      else
             p += parent()->canvasPos();
-            }
       return p;
       }
 

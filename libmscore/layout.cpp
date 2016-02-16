@@ -2066,7 +2066,7 @@ void Score::respace(QList<ChordRest*>* /*elements*/)
 qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       {
       Shape ls;
-      ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));   // simulated bar line
+      ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));            // simulated bar line
       if (isFirstMeasureInSystem)
             ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // left margin
       qreal x = s->minLeft(ls);
@@ -2087,40 +2087,51 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             x = qMax(x, timesigLeftMargin);
       x += s->extraLeadingSpace().val() * _spatium;
 
-      for (Segment* ss = s;;) {
+      for (Segment* ss = s; ss;) {
             ss->rxpos() = x;
             Segment* ns = ss->next();
-            if (!ns) {
-                  qreal w = ss->isEndBarLine() ? 0.0 : ss->minRight();
-                  ss->setWidth(w);
-                  x += w;
-                  break;
-                  }
-            qreal w = ss->minHorizontalDistance(ns);
+            qreal w;
 
-            // look back for collisions with previous segments
-            int n = 1;
-            for (Segment* ps = ss;;) {
-                  qreal ww;
-                  if (ps == s)
-                        ww = ns->minLeft(ls) - ss->x();
-                  else {
-                        ps = ps->prev();
-                        ++n;
-                        ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+            if (ns) {
+                  w = ss->minHorizontalDistance(ns);
+
+                  // look back for collisions with previous segments
+                  int n = 0;
+                  for (Segment* ps = ss;;) {
+                        qreal ww;
+                        if (ps == s)
+                              ww = ns->minLeft(ls) - ss->x();
+                        else {
+                              ps = ps->prev();
+                              ++n;
+                              ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+                              }
+                        if (ww > w) {
+                              // overlap !
+                              // distribute extra space between segments ps - ss;
+printf("overlap %s - %s  %d - %d n=%d +%f\n", ps->subTypeName(), ns->subTypeName(), ss->tick(), ns->tick(), n, ww-w);
+#if 0
+                              qreal d = (ww - w) / n;
+                              qreal xx = ps->x();
+                              for (Segment* s = ps; s != ss;) {
+                                    Segment* ns = s->next();
+                                    qreal ww = s->width() + d;
+                                    s->setWidth(ww);
+                                    xx += ww;
+                                    ns->rxpos() = xx;
+                                    s = ns;
+                                    printf("    ++\n");
+                                    }
+#endif
+                              w = ww;
+                              break;
+                              }
+                        if (ps == s)
+                              break;
                         }
-                  if (ww > w) {
-                        // overlap !
-                        // distribute extra space between segments ps - ss;
-                        qreal d = (ww - w) / n;
-                        for (Segment* s = ps; s != ss; s = s->next())
-                              s->setWidth(s->width() + d);
-                        w += d;
-                        break;
-                        }
-                  if (ps == s)
-                        break;
                   }
+            else
+                  w = ss->isEndBarLine() ? 0.0 : ss->minRight();
             ss->setWidth(w);
             x += w;
             ss = ns;
@@ -2914,14 +2925,14 @@ void Score::getNextMeasure(LayoutContext& lc)
             }
 
       for (Segment& s : measure->segments()) {
-
             // DEBUG: relayout grace notes as beaming/flags may have changed
-
             if (s.isChordRest()) {
                   for (Element* e : s.elist()) {
                         if (e && e->isChord()) {
                               Chord* c = e->toChord();
                               c->layout();
+                              if (c->tremolo())            // debug
+                                    c->tremolo()->layout();
                               }
                         }
                   }
@@ -3170,25 +3181,23 @@ System* Score::collectSystem(LayoutContext& lc)
                   computeMinWidth(m->first(), false);
             }
 
+      system->setWidth(systemWidth);
+      system->layout2();
+
       minWidth           = system->leftMargin();
       qreal totalWeight  = 0.0;
-      qreal totalWeight2 = 0.0;
-
       for (MeasureBase* mb : system->measures()) {
             if (mb->isHBox())
                   minWidth += point(static_cast<Box*>(mb)->boxWidth());
             else if (mb->isMeasure()) {
                   Measure* m    = mb->toMeasure();
-                  qreal w       = m->width();
-                  minWidth     += w;
-                  totalWeight  += m->ticks() * m->userStretch();
-                  totalWeight2 += m->ticks();
+                  minWidth     += m->width();
+                  qreal stretch = m->userStretch();
+                  if (stretch < 1.0)
+                        stretch = 1.0;
+                  totalWeight  += m->ticks() * stretch;
                   }
             }
-
-      bool zeroStretch = totalWeight >= 0.01;
-      if (zeroStretch)
-            totalWeight = totalWeight2;
 
       // stretch incomplete row
       qreal rest;
@@ -3205,18 +3214,13 @@ System* Score::collectSystem(LayoutContext& lc)
             rest /= totalWeight;
             }
 
-      QPointF pos;
-      bool firstM = true;
+      QPointF pos(system->leftMargin(), 0.0);
       for (MeasureBase* mb : system->measures()) {
             qreal ww = 0.0;
             if (mb->isMeasure()) {
-                  if (firstM) {
-                        pos.rx() += system->leftMargin();
-                        firstM = false;
-                        }
                   mb->setPos(pos);
                   Measure* m = mb->toMeasure();
-                  qreal stretch = zeroStretch ? m->userStretch() : 1.0;
+                  qreal stretch = m->userStretch();
                   if (stretch < 1.0)
                         stretch = 1.0;
                   ww  = m->width() + rest * m->ticks() * stretch;
@@ -3234,8 +3238,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             pos.rx() += ww;
             }
-      system->setWidth(systemWidth);
-      system->layout2();
 
       Measure* lm           = system->lastMeasure();
       lc.firstSystem        = lm && lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;

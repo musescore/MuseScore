@@ -46,24 +46,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   y
-//---------------------------------------------------------
-
-qreal SysStaff::y() const
-      {
-      return _bbox.y() + _yOff;
-      }
-
-//---------------------------------------------------------
-//   setYOff
-//---------------------------------------------------------
-
-void SysStaff::setYOff(qreal offset)
-      {
-      _yOff = offset;
-      }
-
-//---------------------------------------------------------
 //   SysStaff
 //---------------------------------------------------------
 
@@ -130,7 +112,7 @@ SysStaff* System::insertStaff(int idx)
       SysStaff* staff = new SysStaff;
       if (idx) {
             // HACK: guess position
-            staff->rbb().setY(_staves[idx-1]->y() + 6 * spatium());
+            staff->bbox().setY(_staves[idx-1]->y() + 6 * spatium());
             }
       _staves.insert(idx, staff);
       return staff;
@@ -334,14 +316,34 @@ void System::layout2()
       setPos(0.0, 0.0);
       QList<std::pair<int,SysStaff*>> visibleStaves;
 
+      int firstStaffIdx        = -1;
+      int lastStaffIdx         = 0;
+      int firstStaffInitialIdx = -1;
+      int lastStaffInitialIdx  = 0;
+      Measure* fm              = firstMeasure();
+
       for (int i = 0; i < _staves.size(); ++i) {
             Staff*    s  = score()->staff(i);
             SysStaff* ss = _staves[i];
-            if (s->show() && ss->show())
+            if (s->show() && ss->show()) {
                   visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
+                  if (firstStaffIdx == -1)
+                        firstStaffIdx = i;
+                  if (i > lastStaffIdx)
+                        lastStaffIdx = i;
+                  if (fm && fm->visible(i)) {
+                        if (firstStaffInitialIdx == -1)
+                              firstStaffInitialIdx = i;
+                        lastStaffInitialIdx = i;
+                        }
+                  }
             else
                   ss->setbbox(QRectF());  // already done in layout() ?
             }
+      if (firstStaffIdx == -1)
+            firstStaffIdx = 0;
+      if (firstStaffInitialIdx == -1)
+            firstStaffInitialIdx = 0;
 
       qreal _spatium            = spatium();
       qreal y                   = 0.0;
@@ -357,9 +359,10 @@ void System::layout2()
             Staff* staff  = score()->staff(si1);
             auto ni       = i + 1;
 
-            qreal h = score()->staff(si1)->height();
+            qreal h = staff->height();
             if (ni == visibleStaves.end()) {
-                  ss->bbox().setRect(0.0, y, width(), h);
+                  ss->setYOff(staff->lines() == 1 ? _spatium * staff->mag() : 0.0);
+                  ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
                   break;
                   }
 
@@ -400,11 +403,11 @@ void System::layout2()
                         dist = qMax(dist, sp->gap());
 
                   }
-            ss->bbox().setRect(0.0, y, width(), h);
+            ss->setYOff(staff->lines() == 1 ? _spatium * staff->mag() : 0.0);
+            ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
             y += dist;
             }
 
-      int lastStaffIdx = visibleStaves.back().first;
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
       setHeight(systemHeight);
 
@@ -420,14 +423,8 @@ void System::layout2()
                   }
             }
 
-      int firstStaffIdx        = visibleStaves.front().first;
-      int firstStaffInitialIdx = firstStaffIdx;  //??
-      int lastStaffInitialIdx = lastStaffIdx;   //??
-
-      BarLine* _barLine = 0;
-      Segment* s = firstMeasure()->first();
-      if (s->segmentType() == Segment::Type::BeginBarLine)
-            _barLine = static_cast<BarLine*>(s->element(0));
+      Segment* s        = firstMeasure()->first();
+      BarLine* _barLine = s->isBeginBarLine() ? s->element(0)->toBarLine() : 0;
 
       if (_barLine) {
             _barLine->setTrack(firstStaffInitialIdx * VOICES);
@@ -436,9 +433,8 @@ void System::layout2()
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
             else
                   _barLine->setSpanFrom(0);
-            int spanTo = (score()->staff(lastStaffInitialIdx)->lines() == 1) ?
-                              BARLINE_SPAN_1LINESTAFF_TO :
-                              (score()->staff(lastStaffInitialIdx)->lines() - 1) * 2;
+            int llines = score()->staff(lastStaffInitialIdx)->lines();
+            int spanTo = llines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (llines - 1) * 2;
             _barLine->setSpanTo(spanTo);
             _barLine->layout();
             }
@@ -468,6 +464,8 @@ void System::layout2()
                   ey = _staves[staffIdx2]->bbox().bottom();
                   }
             b->rypos() = sy;
+//            if (score()->staff(firstStaffInitialIdx)->lines() == 1)   // bbox of one line staff bad?
+//                  b->rypos() -= _spatium;
             b->setHeight(ey - sy);
             b->layout();
             }

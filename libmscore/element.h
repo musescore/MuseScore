@@ -67,6 +67,8 @@ class Note;
 class Chord;
 class Rest;
 class LayoutBreak;
+class Tremolo;
+class System;
 
 enum class SymId;
 
@@ -610,6 +612,11 @@ class Element : public QObject, public ScoreElement {
                || type() == Element::Type::REPEAT_MEASURE);
             return (ChordRest*)this;
             }
+      const ChordRest* toChordRest() const {
+            Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST
+               || type() == Element::Type::REPEAT_MEASURE);
+            return (const ChordRest*)this;
+            }
       bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
             || type() == Element::Type::REPEAT_MEASURE; }
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
@@ -649,6 +656,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Ottava,        OTTAVA);
       CONVERT(LayoutBreak,   LAYOUT_BREAK);
       CONVERT(Segment,       SEGMENT);
+      CONVERT(Tremolo,       TREMOLO);
+      CONVERT(System,        SYSTEM);
 
 #undef CONVERT
       };

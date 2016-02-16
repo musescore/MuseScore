@@ -368,6 +368,7 @@ QPointF Chord::stemPosBeam() const
       qreal _spatium = spatium();
       QPointF p(pagePos());
 
+
       if (staff() && staff()->isTabStaff())
             return staff()->staffType()->chordStemPosBeam(this) * _spatium + p;
 
@@ -378,6 +379,7 @@ QPointF Chord::stemPosBeam() const
             }
       else
             p.ry() += downNote()->pos().y();
+
       return p;
       }
 

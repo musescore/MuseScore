@@ -3385,8 +3385,12 @@ void Measure::stretchMeasure(qreal stretch)
                         }
                   else if (t == Element::Type::REST)
                         e->rxpos() = 0;
-                  else if (t == Element::Type::CHORD)
-                        static_cast<Chord*>(e)->layout2();
+                  else if (t == Element::Type::CHORD) {
+                        Chord* c = e->toChord();
+                        c->layout2();
+                        if (c->tremolo())
+                              c->tremolo()->layout();
+                        }
                   else if (t == Element::Type::BAR_LINE) {
                         e->setPos(QPointF());
                         e->adjustReadPos();
