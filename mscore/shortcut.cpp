@@ -2519,15 +2519,15 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "split-measure",
-         QT_TRANSLATE_NOOP("action","Split Measure"),
-         QT_TRANSLATE_NOOP("action","Split measure")
+         QT_TRANSLATE_NOOP("action","Split Measure before Selected Note"),
+         QT_TRANSLATE_NOOP("action","Split measure before selected note")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "join-measure",
-         QT_TRANSLATE_NOOP("action","Join Measures"),
-         QT_TRANSLATE_NOOP("action","Join measures")
+         QT_TRANSLATE_NOOP("action","Join Selected Measures"),
+         QT_TRANSLATE_NOOP("action","Join selected measures")
          },
       {
          MsWidget::MAIN_WINDOW,
