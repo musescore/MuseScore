@@ -108,7 +108,8 @@ void TextLineSegment::draw(QPainter* painter) const
                   painter->translate(-_endText->pos());
                   }
             }
-
+      if (!tl->lineVisible() && !score()->showInvisible())
+            return;
       if (tl->lineVisible() || !score()->printing()) {
             QPen pen(color, textlineLineWidth, tl->lineStyle());
             if (tl->lineStyle() == Qt::CustomDashLine) {
