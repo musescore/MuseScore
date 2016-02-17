@@ -193,10 +193,6 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -413,10 +409,6 @@
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -496,10 +488,6 @@
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Track 1</name>

@@ -157,10 +157,6 @@
             <subtype>4</subtype>
             </Arpeggio>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -341,10 +337,6 @@
               <subtype>4</subtype>
               </Arpeggio>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -413,10 +405,6 @@
               <subtype>4</subtype>
               </Arpeggio>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Track 1</name>

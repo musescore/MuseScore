@@ -2072,7 +2072,6 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       qreal x = s->minLeft(ls);
 
       qreal _spatium         = spatium();
-      qreal clefLeftMargin   = styleS(StyleIdx::clefLeftMargin).val() * _spatium;
       qreal keysigLeftMargin = styleS(StyleIdx::keysigLeftMargin).val() * _spatium;
       qreal timesigLeftMargin = styleS(StyleIdx::timesigLeftMargin).val() * _spatium;
 
@@ -2080,7 +2079,8 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             // x = qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
             x += styleS(StyleIdx::barNoteDistance).val() * _spatium;
       else if (s->isClef())
-            x = qMax(x, clefLeftMargin);
+            // x = qMax(x, clefLeftMargin);
+            x += styleS(StyleIdx::clefLeftMargin).val() * _spatium;
       else if (s->isKeySig())
             x = qMax(x, keysigLeftMargin);
       else if (s->isTimeSig())
