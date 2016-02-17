@@ -569,7 +569,7 @@ Element* BarLine::drop(const DropData& data)
       Element::Type type = e->type();
 
       if (type == Element::Type::BAR_LINE) {
-            BarLine* bl    = e->toBarLine();
+            BarLine* bl    = toBarLine(e);
             BarLineType st = bl->barLineType();
 
             // if no change in subtype or no change in span, do nothing
@@ -657,7 +657,7 @@ Element* BarLine::drop(const DropData& data)
             }
 
       else if (type == Element::Type::ARTICULATION) {
-            Articulation* atr = e->toArticulation();
+            Articulation* atr = toArticulation(e);
             atr->setParent(this);
             atr->setTrack(track());
             score()->undoAddElement(atr);
@@ -741,7 +741,7 @@ void BarLine::endEdit()
                                     int lNewSpan = qMin(spannedStaves, lscore->nstaves());
                                     Measure* lm = lscore->tick2measure(m->tick());
                                     Segment* lseg = lm->undoGetSegment(Segment::Type::BarLine, tick());
-                                    BarLine* lbl = lseg->element(0)->toBarLine();
+                                    BarLine* lbl = toBarLine(lseg->element(0));
                                     if (lbl) {
                                           // already a barline here
                                           if (lNewSpan > 0) {
@@ -757,7 +757,7 @@ void BarLine::endEdit()
                                           }
                                     else {
                                           // new barline needed
-                                          lbl = linkedClone()->toBarLine();
+                                          lbl = toBarLine(linkedClone());
                                           lbl->setSpan(lNewSpan);
                                           lbl->setTrack(lstaff->idx() * VOICES);
                                           lbl->setScore(lscore);
@@ -1045,8 +1045,8 @@ void BarLine::layout()
       // in any case, lay out attached elements
       for (Element* e : _el) {
             e->layout();
-            if (e->type() == Element::Type::ARTICULATION) {
-                  Articulation* a       = e->toArticulation();
+            if (e->isArticulation()) {
+                  Articulation* a       = toArticulation(e);
                   MScore::Direction dir = a->direction();
                   qreal distance        = 0.5 * spatium();
                   qreal x               = width() * .5;
@@ -1262,7 +1262,7 @@ QString BarLine::accessibleExtraInfo() const
                   if (e->type() == Element::Type::JUMP)
                         rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   if (e->type() == Element::Type::MARKER) {
-                        const Marker* m = e->toMarker();
+                        const Marker* m = toMarker(e);
                         if (m->markerType() == Marker::Type::FINE)
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         }
@@ -1275,7 +1275,7 @@ QString BarLine::accessibleExtraInfo() const
                         if (!score()->selectionFilter().canSelect(e))
                               continue;
                         if (e->isMarker())
-                              if (e->toMarker()->markerType() == Marker::Type::FINE)
+                              if (toMarker(e)->markerType() == Marker::Type::FINE)
                                     continue; //added above^
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         }

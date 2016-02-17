@@ -495,7 +495,7 @@ Chord* Measure::findChord(int tick, int track)
             if (seg->tick() == tick) {
                   Element* el = seg->element(track);
                   if (el->isChord())
-                        return el->toChord();
+                        return toChord(el);
                   }
             }
       return 0;
@@ -514,7 +514,7 @@ ChordRest* Measure::findChordRest(int tick, int track)
             if (seg.tick() == tick) {
                   Element* el = seg.element(track);
                   if (el->isChordRest())
-                        return el->toChordRest();
+                        return toChordRest(el);
                   }
             }
       return 0;
@@ -2367,7 +2367,7 @@ void Measure::setStartRepeatBarLine()
                   for (int i = 1; i < span; ++i) {
                         Element* e  = s->element(staffIdx * VOICES);
                         if (e)
-                              score()->undoRemoveElement(e->toBarLine());
+                              score()->undoRemoveElement(toBarLine(e));
                         ++staffIdx;
                         }
                   }
@@ -2553,7 +2553,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         // check if it has court. sig turned off
                         Segment* s = nm->findSegment(Segment::Type::KeySig, tick);
                         if (s) {
-                              KeySig* ks = s->element(track)->toKeySig();
+                              KeySig* ks = toKeySig(s->element(track));
                               if (ks && !ks->showCourtesy())
                                     show = false;     // this key change has court. sig turned off
                               }
@@ -3383,7 +3383,7 @@ void Measure::stretchMeasure(qreal stretch)
                   else if (t == Element::Type::REST)
                         e->rxpos() = 0;
                   else if (t == Element::Type::CHORD) {
-                        Chord* c = e->toChord();
+                        Chord* c = toChord(e);
                         c->layout2();
                         if (c->tremolo())
                               c->tremolo()->layout();

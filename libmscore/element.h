@@ -598,25 +598,13 @@ class Element : public QObject, public ScoreElement {
             }
 
       //---------------------------------------------------
-      // checked type conversions & tests
+      // check type
       //
       // Example for ChordRest:
       //
       //    bool             isChordRest()
-      //    ChordRest*       toChordRest()
-      //    const ChordRest* toChordRest() const
       //---------------------------------------------------
 
-      ChordRest* toChordRest() {
-            Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST
-               || type() == Element::Type::REPEAT_MEASURE);
-            return (ChordRest*)this;
-            }
-      const ChordRest* toChordRest() const {
-            Q_ASSERT(this == 0 || type() == Element::Type::CHORD || type() == Element::Type::REST
-               || type() == Element::Type::REPEAT_MEASURE);
-            return (const ChordRest*)this;
-            }
       bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
             || type() == Element::Type::REPEAT_MEASURE; }
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
@@ -624,9 +612,7 @@ class Element : public QObject, public ScoreElement {
       bool isSLineSegment() const;
 
 #define CONVERT(a,b) \
-      const a* to##a() const { Q_ASSERT(this == 0 || type() == Element::Type::b); return (const a*)this; } \
-            a* to##a()       { Q_ASSERT(this == 0 || type() == Element::Type::b); return (a*)this; } \
-      bool     is##a() const { return type() == Element::Type::b; }
+      bool is##a() const { return type() == Element::Type::b; }
 
       CONVERT(Note,          NOTE);
       CONVERT(Rest,          REST);
@@ -658,9 +644,63 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Segment,       SEGMENT);
       CONVERT(Tremolo,       TREMOLO);
       CONVERT(System,        SYSTEM);
-
 #undef CONVERT
       };
+
+      //---------------------------------------------------
+      // save casting of Element
+      //
+      // Example for ChordRest:
+      //
+      //    ChordRest* toChordRest(Element* e)
+      //---------------------------------------------------
+
+static inline ChordRest* toChordRest(Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::REPEAT_MEASURE);
+      return (ChordRest*)e;
+      }
+static inline const ChordRest* toChordRest(const Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::REPEAT_MEASURE);
+      return (const ChordRest*)e;
+      }
+
+#define CONVERT(a,b) \
+static inline a* to##a(Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (a*)e; } \
+static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (const a*)e; }
+
+      CONVERT(Note,          NOTE);
+      CONVERT(Rest,          REST);
+      CONVERT(Chord,         CHORD);
+      CONVERT(BarLine,       BAR_LINE);
+      CONVERT(Articulation,  ARTICULATION);
+      CONVERT(Marker,        MARKER);
+      CONVERT(Clef,          CLEF);
+      CONVERT(KeySig,        KEYSIG);
+      CONVERT(TimeSig,       TIMESIG);
+      CONVERT(Measure,       MEASURE);
+      CONVERT(TempoText,     TEMPO_TEXT);
+      CONVERT(Breath,        BREATH);
+      CONVERT(HBox,          HBOX);
+      CONVERT(VBox,          VBOX);
+      CONVERT(TBox,          TBOX);
+      CONVERT(FBox,          FBOX);
+      CONVERT(Tie,           TIE);
+      CONVERT(Slur,          SLUR);
+      CONVERT(Glissando,     GLISSANDO);
+      CONVERT(SystemDivider, SYSTEM_DIVIDER);
+      CONVERT(RehearsalMark, REHEARSAL_MARK);
+      CONVERT(Harmony,       HARMONY);
+      CONVERT(Volta,         VOLTA);
+      CONVERT(Jump,          JUMP);
+      CONVERT(StaffText,     STAFF_TEXT);
+      CONVERT(Ottava,        OTTAVA);
+      CONVERT(LayoutBreak,   LAYOUT_BREAK);
+      CONVERT(Segment,       SEGMENT);
+      CONVERT(Tremolo,       TREMOLO);
+      CONVERT(System,        SYSTEM);
+#undef CONVERT
 
 //---------------------------------------------------------
 //   ElementList

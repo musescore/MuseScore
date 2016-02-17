@@ -50,11 +50,11 @@
             if (s.isChordRest())
                   ...
 
-      * Instead of
+      * Use safer type conversion: instead of
             Chord* chord = static_cast<Chord*>(e);
 
         write
-            Chord* chord = e->toChord();
+            Chord* chord = toChord(e);
 
         This adds an Q_ASSERT to make sure e is really a Chord().
 
@@ -81,8 +81,8 @@
       Known Issues
 ====================================================================
 
-      * layout issue for horizontal beams
-      * layout of two note tremolo
-      * regressions for tablature
+      * tablature not tested, has likely regressions
       * some scripting interface functions are commented out
+      * horizontal layout mode not working
+      * disabled relayout for beamed notes
 

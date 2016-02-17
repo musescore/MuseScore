@@ -424,7 +424,7 @@ void System::layout2()
             }
 
       Segment* s        = firstMeasure()->first();
-      BarLine* _barLine = s->isBeginBarLine() ? s->element(0)->toBarLine() : 0;
+      BarLine* _barLine = s->isBeginBarLine() ? toBarLine(s->element(0)) : 0;
 
       if (_barLine) {
             _barLine->setTrack(firstStaffInitialIdx * VOICES);
@@ -1095,7 +1095,7 @@ void System::removeGeneratedElements()
       for (auto im = fm; im != ml.end(); ++im) {
             if (!(*im)->isMeasure())
                   continue;
-            Measure* m = (*im)->toMeasure();
+            Measure* m = toMeasure(*im);
             if (m != *fm && m->hasSystemHeader())
                   m->removeSystemHeader();
             if (m != *lm && m->hasSystemTrailer())
