@@ -367,7 +367,7 @@ void System::layout2()
                   }
 
             int si2    = ni->first;
-            qreal dist = h + staff->isTop() ? staffDistance : akkoladeDistance;
+            qreal dist = h + (staff->isTop() ? staffDistance : akkoladeDistance);
             dist      += staff->height();
 
             for (MeasureBase* mb : ml) {
