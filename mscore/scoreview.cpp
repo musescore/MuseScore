@@ -4638,12 +4638,9 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
             el = cl[1];
       if (el) {
             _score->select(el, SelectType::SINGLE, 0);
-            if (!noteEntryMode()) {
+            if (!noteEntryMode())
                   sm->postEvent(new CommandEvent("note-input"));
-                  qApp->processEvents();
-                  }
             _score->inputState().setDuration(tuplet->baseLen());
-            mscore->updateInputState(_score);
             }
       }
 
