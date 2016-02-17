@@ -3348,17 +3348,14 @@ void Measure::stretchMeasure(qreal stretch)
                         //    x1 - left measure position of free space
                         //    x2 - right measure position of free space
 
-                        qreal x1 = 0;
-                        if (s->prev())
-                              x1 = s->prev()->minRight() + s->prev()->pos().x();
-                        qreal x2 = width();
-                        Segment* ss;
-                        for (ss = s->next(); ss->next(); ss = ss->next()) {
-                              if (!ss->next()->isChordRest())
+                        Segment* s1 = s->prev() ? s->prev() : 0;
+                        Segment* s2;
+                        for (s2 = s->next(); s2; s2 = s2->next()) {
+                              if (!s2->isChordRest())
                                     break;
                               }
-                        if (ss)
-                              x2 = ss->pos().x() - ss->minLeft();
+                        qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
+                        qreal x2 = s2 ? s2->x() - s2->minLeft() : width();
 
                         if (isMMRest()) {
                               //
@@ -3369,7 +3366,7 @@ void Measure::stretchMeasure(qreal stretch)
 
                               rest->setMMWidth(w);
                               StaffLines* sl = _mstaves[track/VOICES]->lines;
-                              qreal x = x1 - s->pos().x() + d;
+                              qreal x = x1 - s->x() + d;
                               e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
                               rest->layout();
                               s->createShape(track/VOICES);
@@ -3380,7 +3377,7 @@ void Measure::stretchMeasure(qreal stretch)
                               //
                               rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x() - e->bbox().x();
                               rest->adjustReadPos();
-                              s->createShape(track/VOICES);
+                              s->createShape(track/VOICES);  // DEBUG
                               }
                         }
                   else if (t == Element::Type::REST)
