@@ -826,18 +826,19 @@ void Slur::slurPos(SlurPos* sp)
             staffHasStems     = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
             }
 
+      // start and end cr, chord, and note
       ChordRest* scr = startCR();
       ChordRest* ecr = endCR();
       Chord* sc      = 0;
       Note* note1    = 0;
-      if (startCR()->type() == Element::Type::CHORD) {
-            sc = static_cast<Chord*>(startCR());
+      if (scr->type() == Element::Type::CHORD) {
+            sc = static_cast<Chord*>(scr);
             note1 = _up ? sc->upNote() : sc->downNote();
             }
       Chord* ec = 0;
       Note* note2 = 0;
-      if (endCR()->type() == Element::Type::CHORD) {
-            ec   = static_cast<Chord*>(endCR());
+      if (ecr->type() == Element::Type::CHORD) {
+            ec   = static_cast<Chord*>(ecr);
             note2 = _up ? ec->upNote() : ec->downNote();
             }
 
@@ -864,9 +865,11 @@ void Slur::slurPos(SlurPos* sp)
             };
       SlurAnchor sa1 = SlurAnchor::NONE;
       SlurAnchor sa2 = SlurAnchor::NONE;
-      // if slur is 'embedded' between either stem or both (as it might happens with voices)
+      // if slur is 'embedded' between either stem or both (as it might happen with voices)
       // link corresponding slur end to stem position
       if ((scr->up() == ecr->up()) && !scr->beam() && !ecr->beam() && (_up == scr->up())) {
+            // both chords are facing same direction and slur is also in same direction
+            // and no beams
             if (stem1)
                   sa1 = SlurAnchor::STEM;
             if (stem2)
@@ -874,8 +877,8 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
-      qreal hw1 = note1 ? note1->tabHeadWidth(stt) : startCR()->width();      // if stt == 0, tabHeadWidth()
-      qreal hw2 = note2 ? note2->tabHeadWidth(stt) : endCR()->width();        // defaults to headWidth()
+      qreal hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width();      // if stt == 0, tabHeadWidth()
+      qreal hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width();      // defaults to headWidth()
       QPointF pt;
       switch (sa1) {
             case SlurAnchor::STEM:        //sc can't be null
@@ -889,7 +892,7 @@ void Slur::slurPos(SlurPos* sp)
             case SlurAnchor::NONE:
                   break;
             }
-      switch(sa2) {
+      switch (sa2) {
             case SlurAnchor::STEM:        //ec can't be null
                   pt = ec->stemPos() - ec->pagePos() + ec->stem()->p2();
                   if (useTablature)
@@ -910,75 +913,114 @@ void Slur::slurPos(SlurPos* sp)
       // Compute x0, y0 and stemPos
       if (sa1 == SlurAnchor::NONE || sa2 == SlurAnchor::NONE) { // need stemPos if sa2 == SlurAnchor::NONE
             bool stemPos = false;   // p1 starts at chord stem side
+
+            // default positions
             xo = hw1 * .5;
             if (note1)
                   yo = note1->pos().y();
-            else if(_up)
-                  yo = startCR()->bbox().top();
+            else if (_up)
+                  yo = scr->bbox().top();
             else
-                  yo = startCR()->bbox().top() + startCR()->height();
+                  yo = scr->bbox().top() + scr->height();
             yo += _spatium * .9 * __up;
+
+            // adjustments for stem and/or beam
 
             if (stem1) { //sc not null
                   Beam* beam1 = sc->beam();
                   if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+                        // start chord is beamed but not the last chord of beam group
+                        // and slur direction is same as start chord (stem side)
+
+                        // in these cases, layout start of slur to stem
+
                         qreal sh = stem1->height() + _spatium;
                         if (_up)
                               yo = sc->downNote()->pos().y() - sh;
                         else
                               yo = sc->upNote()->pos().y() + sh;
                         xo       = stem1->pos().x();
-                        stemPos  = true;
+
+                        // force end of slur to layout to stem as well,
+                        // if start and end chords have same stem direction
+                        stemPos = true;
                         }
                   else {
+                        // start chord is not beamed or is last chord of beam group
+                        // or slur direction is opposite that of start chord
+
+                        // at this point slur is in default position relative to note on slur side
+                        // but we may need to make further adjustments
+
+                        // if stem and slur are both up
+                        // we need to clear stem horizontally
                         if (sc->up() && _up)
                               xo = hw1 + _spatium * .3;
+
                         //
                         // handle case: stem up   - stem down
                         //              stem down - stem up
                         //
                         if ((sc->up() != ecr->up()) && (sc->up() == _up)) {
-                              Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
-                              Note* n2  = 0;
-                              if(ec)
-                                    n2 = ec->up() ? ec->downNote() : ec->upNote();
-                              qreal yd  = (n2 ? n2->pos().y() : endCR()->pos().y()) - n1->pos().y();
+                              // start and end chord have opposite direction
+                              // and slur direction is same as start chord
+                              // (so slur starts on stem side)
 
+                              // float the start point along the stem to follow direction of movement
+                              // see for example Gould p. 111
+
+                              // get position of note on slur side for start & end chords
+                              Note* n1  = sc->up() ? sc->upNote() : sc->downNote();
+                              Note* n2  = 0;
+                              if (ec)
+                                    n2 = ec->up() ? ec->upNote() : ec->downNote();
+
+                              // differential in note positions
+                              qreal yd  = (n2 ? n2->pos().y() : ecr->pos().y()) - n1->pos().y();
                               yd *= .5;
 
-                              qreal sh = stem1->height();    // limit y move
-                              if (yd > 0.0) {
-                                    if (yd > sh)
-                                          yd = sh;
-                                    }
-                              else {
-                                    if (yd < - sh)
-                                          yd = -sh;
-                                    }
+                              // float along stem according to differential
+                              qreal sh = stem1->height();
+                              if (_up && yd < 0.0)
+                                    yo = qMax(yo + yd, sc->downNote()->pos().y() - sh - _spatium);
+                              else if (!_up && yd > 0.0)
+                                    yo = qMin(yo + yd, sc->upNote()->pos().y() + sh + _spatium);
+
+                              // we may wish to force end to align to stem as well,
+                              // if it is in same direction
+                              // (but it won't be, so this assignment should have no effect)
                               stemPos = true;
-                              if ((_up && (yd < -_spatium)) || (!_up && (yd > _spatium)))
-                                    yo += yd;
                               }
-                        else if (sc->up() != _up)
+                        else if (sc->up() != _up) {
+                              // slur opposite direction from chord
+                              // avoid articulations
                               yo = fixArticulations(yo, sc, __up);
+                              }
                         }
                   }
-            else if (sc && sc->up() != _up)
+            else if (sc && sc->up() != _up) {
+                  // slur opposite direction from chord
+                  // avoid articulations
                   yo = fixArticulations(yo, sc, __up);
+                  }
 
             if (sa1 == SlurAnchor::NONE)
                   sp->p1 += QPointF(xo, yo);
 
             //------p2
             if (sa2 == SlurAnchor::NONE) {
+
+                  // default positions
                   xo = hw2 * .5;
                   if (note2)
                         yo = note2->pos().y();
-                  else if(_up)
+                  else if (_up)
                         yo = endCR()->bbox().top();
                   else
                         yo = endCR()->bbox().top() + endCR()->height();
                   yo += _spatium * .9 * __up;
+
+                  // adjustments for stem and/or beam
 
                   if (stem2) { //ec can't be null
                         Beam* beam2 = ec->beam();
@@ -990,6 +1032,15 @@ void Slur::slurPos(SlurPos* sp)
                              && sc && (sc->noteType() == NoteType::NORMAL)
                              )
                               ) {
+
+                              // slur start was laid out to stem and start and end have same direction
+                              // OR
+                              // end chord is beamed but not the first chord of beam group
+                              // and slur direction is same as end chord (stem side)
+                              // and start chordrest is not a grace chord
+
+                              // in these cases, layout end of slur to stem
+
                               qreal sh = stem2->height() + _spatium;
                               if (_up)
                                     yo = ec->downNote()->pos().y() - sh;
@@ -997,39 +1048,57 @@ void Slur::slurPos(SlurPos* sp)
                                     yo = ec->upNote()->pos().y() + sh;
                               xo = stem2->pos().x();
                               }
-                        else if (!ec->up() && !_up)
-                              xo = -_spatium * .3 + note2->x();
-                        //
-                        // handle case: stem up   - stem down
-                        //              stem down - stem up
-                        //
-                        if ((scr->up() != ec->up()) && (ec->up() == _up)) {
-                              Note* n1 = 0;
-                              if(sc)
-                                    n1 = sc->up() ? sc->downNote() : sc->upNote();
-                              Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                              qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
+                        else
+                              {
+                              // slur was not aligned to stem or start and end have different direction
+                              // AND
+                              // end chord is not beamed or is first chord of beam group
+                              // or slur direction is opposite that of end chord
 
-                              yd *= .5;
+                              // if stem and slur are both down,
+                              // we need to clear stem horizontally
+                              if (!ec->up() && !_up)
+                                    xo = -_spatium * .3 + note2->x();
 
-                              qreal mh = stem2->height();    // limit y move
-                              if (yd > 0.0) {
-                                    if (yd > mh)
-                                          yd = mh;
+                              //
+                              // handle case: stem up   - stem down
+                              //              stem down - stem up
+                              //
+                              if ((scr->up() != ec->up()) && (ec->up() == _up)) {
+                                    // start and end chord have opposite direction
+                                    // and slur direction is same as end chord
+                                    // (so slur end on stem side)
+
+                                    // float the end point along the stem to follow direction of movement
+                                    // see for example Gould p. 111
+
+                                    Note* n1 = 0;
+                                    if (sc)
+                                          n1 = sc->up() ? sc->upNote() : sc->downNote();
+                                    Note* n2 = ec->up() ? ec->upNote() : ec->downNote();
+
+                                    qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
+                                    yd *= .5;
+
+                                    qreal mh = stem2->height();
+                                    if (_up && yd > 0.0)
+                                          yo = qMax(yo - yd, ec->downNote()->pos().y() - mh - _spatium);
+                                    else if (!_up && yd < 0.0)
+                                          yo = qMin(yo - yd, ec->upNote()->pos().y() + mh + _spatium);
                                     }
-                              else {
-                                    if (yd < - mh)
-                                          yd = -mh;
+                              else if (ec->up() != _up) {
+                                    // slur opposite direction from chord
+                                    // avoid articulations
+                                    yo = fixArticulations(yo, ec, __up);
                                     }
 
-                              if ((_up && (yd > _spatium)) || (!_up && (yd < -_spatium)))
-                                    yo -= yd;
                               }
-                        else if (ec->up() != _up)
-                              yo = fixArticulations(yo, ec, __up);
                         }
-                  else if (ec && ec->up() != _up)
+                  else if (ec && ec->up() != _up) {
+                        // slur opposite direction from chord
+                        // avoid articulations
                         yo = fixArticulations(yo, ec, __up);
+                        }
 
                   sp->p2 += QPointF(xo, yo);
                   }
