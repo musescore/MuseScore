@@ -1547,8 +1547,6 @@ void Score::doLayout()
                         sp->layout();
                   }
             }
-      for (Spanner* s : _unmanagedSpanner)
-            s->layout();
 
       if (layoutMode() != LayoutMode::LINE) {
             layoutSystems2();
@@ -1556,6 +1554,9 @@ void Score::doLayout()
             }
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
             m->layout2();
+
+      for (Spanner* s : _unmanagedSpanner)
+            s->layout();
 
       for (auto s : _spanner.map()) {           // DEBUG
             Spanner* sp = s.second;
