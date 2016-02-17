@@ -187,8 +187,8 @@ class Text : public Element {
       Q_PROPERTY(QString text READ xmlText WRITE undoSetText)
 
       QString _text;
-      static QString oldText;      // used to remember original text in edit mode
-      static QString preEdit;
+      QString oldText;      // used to remember original text in edit mode
+      QString preEdit;
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
@@ -197,7 +197,7 @@ class Text : public Element {
       int  hexState                 { -1    };
       TextStyle _textStyle;
 
-      static TextCursor _cursor;       // used during editing
+      TextCursor* _cursor;       // used during editing
 
       QRectF cursorRect() const;
       const TextBlock& curLine() const;
@@ -225,7 +225,7 @@ class Text : public Element {
    public:
       Text(Score* = 0);
       Text(const Text&);
-      ~Text() {}
+      ~Text();
 
       virtual Text* clone() const override         { return new Text(*this); }
       virtual Element::Type type() const override  { return Element::Type::TEXT; }
@@ -303,7 +303,7 @@ class Text : public Element {
 
       QRectF pageRectangle() const;
 
-      TextCursor* cursor() { return &_cursor; }
+      TextCursor* cursor() { return _cursor; }
 
       void setAbove(bool val) {  textStyle().setYoff(val ? -2.0 : 7.0); }
       void dragTo(const QPointF&);
