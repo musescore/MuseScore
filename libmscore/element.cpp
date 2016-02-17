@@ -513,18 +513,18 @@ QPointF Element::pagePos() const
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
             if (parent()->isSegment())
-                  system = parent()->toSegment()->system();
+                  system = toSegment(parent())->system();
             else if (parent()->isMeasure())           // used in measure number
-                  system = parent()->toMeasure()->system();
+                  system = toMeasure(parent())->system();
             else if (parent()->isSystem())
-                  system = parent()->toSystem();
+                  system = toSystem(parent());
             else {
                   Q_ASSERT(false);
                   }
             if (system) {
                   int si = staffIdx();
                   if (isChordRest())
-                        si += toChordRest()->staffMove();
+                        si += toChordRest(this)->staffMove();
                   p.ry() += system->staffYpage(si);               // system->staff(si)->y() + system->y();
                   }
             p.rx() = pageX();
@@ -549,18 +549,18 @@ QPointF Element::canvasPos() const
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
             if (parent()->isSegment())
-                  system = parent()->toSegment()->system();
+                  system = toSegment(parent())->system();
             else if (parent()->isMeasure())     // used in measure number
-                  system = parent()->toMeasure()->system();
+                  system = toMeasure(parent())->system();
             else if (parent()->isSystem())
-                  system = parent()->toSystem();
+                  system = toSystem(parent());
             else {
                   Q_ASSERT(false);
                   }
             if (system) {
                   int si = staffIdx();
                   if (isChordRest())
-                        si += toChordRest()->staffMove();
+                        si += toChordRest(this)->staffMove();
                   p.ry() += system->staffYpage(si);         // system->staff(si)->y() + system->y();
                   Page* page = system->page();
                   if (page)

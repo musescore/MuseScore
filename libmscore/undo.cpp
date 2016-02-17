@@ -2162,8 +2162,8 @@ void ChangeSingleBarLineSpan::flip()
       barLine->layout();                              // update bbox
       // re-create bar lines for other staves, if span of this bar line changed
       if (respan && barLine->parent() && barLine->parent()->type() == Element::Type::SEGMENT) {
-            Segment * segm = (static_cast<Segment*>(barLine->parent()));
-//            Measure * meas = segm->toMeasure();
+//            Segment * segm = (static_cast<Segment*>(barLine->parent()));
+//            Measure * meas = toMeasure(segm);
             // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
 //            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::Type::StartRepeatBarLine)
 //                  meas->setStartRepeatBarLine(true);
@@ -3660,7 +3660,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
                         if (segment) {
                               for (Element* e : segment->elist()) {
                                     if (e) {
-                                          BarLine* bl = e->toBarLine();
+                                          BarLine* bl = toBarLine(e);
                                           bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
                                           bl->undoChangeProperty(P_ID::GENERATED, false);
                                           }

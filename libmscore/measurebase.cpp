@@ -167,7 +167,7 @@ void MeasureBase::add(Element* e)
 void MeasureBase::remove(Element* el)
       {
       if (el->isLayoutBreak()) {
-            LayoutBreak* lb = el->toLayoutBreak();
+            LayoutBreak* lb = toLayoutBreak(el);
             switch (lb->layoutBreakType()) {
                   case LayoutBreak::Type::PAGE:
                         _pageBreak = false;
@@ -405,7 +405,7 @@ MeasureBase* MeasureBase::nextMM() const
          && _next->isMeasure()
          && score()->styleB(StyleIdx::createMultiMeasureRests)
          && static_cast<Measure*>(_next)->hasMMRest()) {
-            return _next->toMeasure()->mmRest();
+            return toMeasure(_next)->mmRest();
             }
       return _next;
       }

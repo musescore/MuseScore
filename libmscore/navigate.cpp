@@ -193,7 +193,7 @@ Element* Score::upAlt(Element* element)
       if (element->isRest())
             re = prevTrack(static_cast<Rest*>(element));
       else if (element->isNote()) {
-            Note* note = element->toNote();
+            Note* note = toNote(element);
             Chord* chord = note->chord();
             const std::vector<Note*>& notes = chord->notes();
             auto i = std::find(notes.begin(), notes.end(), note);
@@ -236,7 +236,7 @@ Element* Score::downAlt(Element* element)
       if (element->isRest())
             re = nextTrack(static_cast<Rest*>(element));
       else if (element->isNote()) {
-            Note* note   = element->toNote();
+            Note* note   = toNote(element);
             Chord* chord = note->chord();
             const std::vector<Note*>& notes = chord->notes();
             auto i = std::find(notes.begin(), notes.end(), note);

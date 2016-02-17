@@ -146,7 +146,7 @@ QPointF Beam::canvasPos() const
 void Beam::add(Element* e)
       {
       if (e && e->isChordRest())
-            addChordRest(e->toChordRest());
+            addChordRest(toChordRest(e));
       }
 
 //---------------------------------------------------------
@@ -156,7 +156,7 @@ void Beam::add(Element* e)
 void Beam::remove(Element* e)
       {
       if (e && e->isChordRest())
-            removeChordRest(e->toChordRest());
+            removeChordRest(toChordRest(e));
       }
 
 //---------------------------------------------------------
@@ -241,8 +241,8 @@ bool Beam::twoBeamedNotes()
          || !_elements[1]->isChord()) {
             return false;
             }
-      const Chord* c1 = _elements[0]->toChord();
-      const Chord* c2 = _elements[1]->toChord();
+      const Chord* c1 = toChord(_elements[0]);
+      const Chord* c2 = toChord(_elements[1]);
       if (c1->notes().size() != 1 || c2->notes().size() != 1)
             return false;
 
