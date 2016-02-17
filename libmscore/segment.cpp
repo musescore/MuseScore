@@ -1387,7 +1387,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             else
                   w = qMax(w, nhw) + minNoteDistance;
             }
-      else if (st & (Segment::Type::KeySig | Segment::Type::TimeSig | Segment::Type::KeySigAnnounce | Segment::Type::TimeSigAnnounce)) {
+      else if (st & (Segment::Type::Clef | Segment::Type::KeySig | Segment::Type::TimeSig
+         | Segment::Type::KeySigAnnounce | Segment::Type::TimeSigAnnounce)) {
             if (nst == Segment::Type::ChordRest)
                   w = qMax(w, minRight());
             w += clefKeyRightMargin;
