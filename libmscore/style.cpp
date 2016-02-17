@@ -460,8 +460,7 @@ StyleData::StyleData()
             { StyleIdx::shortestStem,                QVariant(2.25) },
             { StyleIdx::beginRepeatLeftMargin,       QVariant(1.0) },
             { StyleIdx::minNoteDistance,             QVariant(0.25) },      // 0.4
-//            { StyleIdx::barNoteDistance,             QVariant(1.2) },
-            { StyleIdx::barNoteDistance,             QVariant(0.7) },
+            { StyleIdx::barNoteDistance,             QVariant(1.2) },
             { StyleIdx::barAccidentalDistance,       QVariant(.3) },
             { StyleIdx::multiMeasureRestMargin,      QVariant(1.2) },
             { StyleIdx::noteBarDistance,             QVariant(1.0) },

@@ -2076,7 +2076,6 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       qreal timesigLeftMargin = styleS(StyleIdx::timesigLeftMargin).val() * _spatium;
 
       if (s->isChordRest())
-            // x = qMax(x, styleS(StyleIdx::barNoteDistance).val() * _spatium);
             x += styleS(StyleIdx::barNoteDistance).val() * _spatium;
       else if (s->isClef())
             // x = qMax(x, clefLeftMargin);
