@@ -113,6 +113,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             case P_TYPE::SIZE_MM:
                   val = val.toDouble() / DPMM;
                   break;
+            default:
+                  break;
             }
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());

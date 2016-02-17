@@ -1369,6 +1369,7 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
       qreal _spatium         = spatium();
       qreal minNoteDistance  = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
       qreal nbd              = score()->styleS(StyleIdx::noteBarDistance).val() * _spatium;
+      qreal bnd              = score()->styleS(StyleIdx::barNoteDistance).val() * _spatium;
       qreal clefLeftMargin   = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
       qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
 
@@ -1387,11 +1388,11 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             else
                   w = qMax(w, nhw) + minNoteDistance;
             }
-      else if (st & (Segment::Type::Clef | Segment::Type::KeySig | Segment::Type::TimeSig
-         | Segment::Type::KeySigAnnounce | Segment::Type::TimeSigAnnounce)) {
+      else if (st & (Segment::Type::KeySig | Segment::Type::TimeSig | Segment::Type::KeySigAnnounce | Segment::Type::TimeSigAnnounce)) {
             if (nst == Segment::Type::ChordRest)
-                  w = qMax(w, minRight());
-            w += clefKeyRightMargin;
+                  w = qMax(w, minRight() + bnd);
+            else
+                  w += clefKeyRightMargin;
             }
       else if (st == Segment::Type::StartRepeatBarLine)
             w += nbd;
@@ -1405,7 +1406,7 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w = 0.0;
       if (ns)
             w += ns->extraLeadingSpace().val() * _spatium;
-//      printf("minDistance %s-%s %f\n", subTypeName(), ns->subTypeName(), w);
+//      printf("--minDistance %s-%s %f\n", subTypeName(), ns->subTypeName(), w);
       return w;
       }
 

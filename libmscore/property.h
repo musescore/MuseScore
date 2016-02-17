@@ -26,6 +26,7 @@ enum class PropertyStyle : char {
       NOSTYLE, UNSTYLED, STYLED
       };
 
+#if 0
 //---------------------------------------------------------
 //   Property
 //---------------------------------------------------------
@@ -34,6 +35,7 @@ class Property {
       PropertyStyle _style;
       QVariant _value;
       };
+#endif
 
 //------------------------------------------------------------------------
 //   Element Properties
