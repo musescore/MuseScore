@@ -371,9 +371,18 @@ QVariant getProperty(P_ID id, XmlReader& e)
                         return QVariant(int(Element::Placement::BELOW));
                   }
                   break;
-            case P_TYPE::BARLINE_TYPE:
-                  return QVariant(int(BarLine::barLineType(e.readElementText())));
-
+            case P_TYPE::BARLINE_TYPE: {
+                  bool ok;
+                  const QString& val(e.readElementText());
+                  int ct = val.toInt(&ok);
+                  if (ok)
+                        return QVariant(ct);
+                  else {
+                        BarLineType t = BarLine::barLineType(val);
+                        return QVariant::fromValue(t);
+                        }
+                  }
+                  break;
             case P_TYPE::BEAM_MODE:             // TODO
                   return QVariant(int(0));
 
@@ -389,7 +398,6 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::SYMID:
             case P_TYPE::TEXT_STYLE:
             case P_TYPE::INT_LIST:
-            case P_TYPE::BARLINE_TYPE:
                   return QVariant();
             }
       return QVariant();

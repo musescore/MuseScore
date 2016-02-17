@@ -203,10 +203,6 @@
             </Note>
           </Chord>
         <tick>2400</tick>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -433,10 +429,6 @@
               </Note>
             </Chord>
           <tick>2400</tick>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -513,10 +505,6 @@
               </Note>
             </Chord>
           <tick>2400</tick>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>S-Gt</name>
