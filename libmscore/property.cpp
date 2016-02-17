@@ -16,6 +16,7 @@
 #include "groups.h"
 #include "xml.h"
 #include "note.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -214,7 +215,7 @@ static const PropertyData propertyList[] = {
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
       { P_ID::LINE_VISIBLE,        true,  "lineVisible",           P_TYPE::BOOL },
 
-      { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::INT },
+      { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::BARLINE_TYPE },
       { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
       { P_ID::USE_DRUMSET,         false, "useDrumset",            P_TYPE::BOOL },
       { P_ID::PART_VOLUME,         false, "volume",                P_TYPE::INT },
@@ -367,6 +368,23 @@ QVariant getProperty(P_ID id, XmlReader& e)
                         return QVariant(int(Element::Placement::ABOVE));
                   else if (value == "below")
                         return QVariant(int(Element::Placement::BELOW));
+                  }
+                  break;
+            case P_TYPE::BARLINE_TYPE: {
+                  bool ok;
+                  const QString& val(e.readElementText());
+                  int ct = val.toInt(&ok);
+                  if (ok)
+                        return QVariant(ct);
+                  else {
+                        for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
+                              if (BarLine::barLineTypeName(BarLineType(i)) == val) {
+                                    ct = i;
+                                    break;
+                                    }
+                              }
+                        return QVariant(ct);
+                        }
                   }
                   break;
             case P_TYPE::BEAM_MODE:             // TODO
