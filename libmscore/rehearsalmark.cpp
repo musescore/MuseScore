@@ -31,14 +31,18 @@ void RehearsalMark::layout()
       Text::layout1();
       Segment* s = segment();
       if (s && !s->rtick()) {
-            // rehearsal mark on first chordrest of measure should align over barline
-            rxpos() -= s->x();
-#if 0
-            // if there is a clef, align right after that instead
-            Segment* p = segment()->prev(Segment::Type::Clef);
-            if (p)
-                  rxpos() += p->next()->x();
-#endif
+            // first CR of measure, decide whether to align to barline
+            if (!s->prev()) {
+                  // measure with no clef / keysig / timesig
+                  rxpos() -= s->x();
+                  }
+            else if (textStyle().align() & AlignmentFlags::RIGHT) {
+                  // measure with clef / keysig / timesig, rehearsal mark right aligned
+                  // align left edge of rehearsal to barline if that is further to left
+                  qreal leftX = bbox().x();
+                  qreal barlineX = -s->x();
+                  rxpos() += qMin(leftX, barlineX) + width();
+                  }
             }
       adjustReadPos();
       }
