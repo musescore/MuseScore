@@ -205,7 +205,8 @@ void TextTools::sizeChanged(double value)
 
 void TextTools::fontChanged(const QFont& f)
       {
-      _textElement->setFormat(FormatId::FontFamily, f.family());
+      if (_textElement)
+            _textElement->setFormat(FormatId::FontFamily, f.family());
       if (textPalette)
             textPalette->setFont(f.family());
       updateText();
