@@ -373,6 +373,8 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::BARLINE_TYPE: {
                   bool ok;
                   const QString& val(e.readElementText());
+                  // In MuseScore 2.0.2 and before, SYSTEM_INITIAL_BARLINE_TYPE
+                  // was stored as a int, so try this first
                   int ct = val.toInt(&ok);
                   if (ok)
                         return QVariant(ct);
