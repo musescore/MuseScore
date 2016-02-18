@@ -53,8 +53,15 @@
         </Staff>
       <trackName>N-Gt</trackName>
       <Instrument>
-        <longName>Nylon Guitar</longName>
-        <trackName></trackName>
+        <longName>Classical Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Classical Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
+        <clef>G8vb</clef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -64,7 +71,36 @@
           <string>59</string>
           <string>64</string>
           </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
+          <program value="24"/>
           </Channel>
         </Instrument>
       </Part>
@@ -427,8 +463,15 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Nylon Guitar</longName>
-          <trackName></trackName>
+          <longName>Classical Guitar</longName>
+          <shortName>Guit.</shortName>
+          <trackName>Classical Guitar</trackName>
+          <minPitchP>40</minPitchP>
+          <maxPitchP>83</maxPitchP>
+          <minPitchA>40</minPitchA>
+          <maxPitchA>83</maxPitchA>
+          <instrumentId>pluck.guitar.nylon-string</instrumentId>
+          <clef>G8vb</clef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -438,7 +481,36 @@
             <string>59</string>
             <string>64</string>
             </StringData>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
           <Channel>
+            <program value="24"/>
             </Channel>
           </Instrument>
         </Part>
@@ -448,7 +520,7 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Nylon Guitar</text>
+            <text>Classical Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
