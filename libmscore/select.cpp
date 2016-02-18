@@ -1183,11 +1183,18 @@ void Selection::extendRangeSelection(ChordRest* cr)
 void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
       {
       bool activeIsFirst = false;
+      int activeStaff = _activeTrack / VOICES;
 
       if (staffIdx < _staffStart)
             _staffStart = staffIdx;
       else if (staffIdx >= _staffEnd)
             _staffEnd = staffIdx + 1;
+      else if (_staffEnd - _staffStart > 1) { // at least 2 staff selected
+            if (staffIdx == _staffStart + 1 && activeStaff == _staffStart) // going down
+                  _staffStart = staffIdx;
+            else if (staffIdx == _staffEnd - 2 && activeStaff == _staffEnd - 1) // going up
+                  _staffEnd = staffIdx + 1;
+            }
 
       if (tick < tickStart()) {
             _startSegment = seg;
