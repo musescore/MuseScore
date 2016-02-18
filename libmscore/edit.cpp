@@ -2381,6 +2381,13 @@ void Score::cmdFullMeasureRest()
       else if (selection().isRange()) {
             s1 = selection().startSegment();
             s2 = selection().endSegment();
+            if (styleB(StyleIdx::createMultiMeasureRests)) {
+                   // use underlying measures
+                   if (s1 && s1->measure()->isMMRest())
+                         s1 = tick2segment(stick1);
+                   if (s2 && s2->measure()->isMMRest())
+                         s2 = tick2segment(stick2, true);
+                   }
             stick1 = selection().tickStart();
             stick2 = selection().tickEnd();
             Segment* ss1 = s1;
@@ -2445,8 +2452,12 @@ void Score::cmdFullMeasureRest()
                   }
             }
 
-      s1 = tick2segment(stick1);
-      s2 = tick2segment(stick2);
+      // selected range is probably empty now and possibly subsumed by an mmrest
+      // so updating selection requires forcing mmrests to be updated first
+      if (styleB(StyleIdx::createMultiMeasureRests))
+            createMMRests();
+      s1 = tick2segmentMM(stick1);
+      s2 = tick2segmentMM(stick2, true);
       if (selection().isRange() && s1 && s2) {
             _selection.setStartSegment(s1);
             _selection.setEndSegment(s2);
