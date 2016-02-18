@@ -399,6 +399,8 @@ void GuitarPro6::readTracks(QDomNode* track)
                               part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("voice")));
                         else if (!ref.compare("s-gtr6"))
                               part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("guitar-steel")));
+                        else if (!ref.compare("n-gtr6"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("guitar-nylon")));
                         else if (!ref.compare("snt-lead-ss"))
                               part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("poly-synth")));
                         else if (!ref.compare("f-bass5"))
