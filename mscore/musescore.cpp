@@ -214,6 +214,11 @@ QString getSharePath()
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       return dir.absolutePath() + "/";
 #else
+      // Try relative path (needed for portable AppImage and non-standard installations)
+      QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+      if (dir.exists())
+            return dir.absolutePath() + "/";
+      // Otherwise fall back to default location (e.g. if binary has moved relative to share)
       return QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 #endif
