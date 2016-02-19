@@ -55,6 +55,8 @@ class ChordRest : public DurationElement {
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
 
+      void processSiblings(std::function<void(Element*)> func);
+
    protected:
       QList<Articulation*> _articulations;
       Beam* _beam;
@@ -140,7 +142,7 @@ class ChordRest : public DurationElement {
                                     : _durationType.ticks(); }
       QString durationUserName();
 
-      virtual void setTrack(int val);
+      virtual void setTrack(int val) override;
       virtual int tick() const;
       virtual int rtick() const;
       virtual Space space() const               { return _space; }
@@ -169,6 +171,7 @@ class ChordRest : public DurationElement {
       void writeBeam(Xml& xml);
       Segment* nextSegmentAfterCR(Segment::Type types) const;
 
+      virtual void setScore(Score* s) override;
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
       virtual QString accessibleExtraInfo() override;
