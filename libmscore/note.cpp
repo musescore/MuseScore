@@ -2486,6 +2486,10 @@ void Note::setScore(Score* s)
       Element::setScore(s);
       if (_tieFor)
             _tieFor->setScore(s);
+      if (_accidental)
+            _accidental->setScore(s);
+      for (Element* el : _el)
+            el->setScore(s);
       }
 
 //---------------------------------------------------------

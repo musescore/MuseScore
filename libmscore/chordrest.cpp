@@ -1094,29 +1094,6 @@ QString ChordRest::durationUserName()
       }
 
 //---------------------------------------------------------
-//   setTrack
-//---------------------------------------------------------
-
-void ChordRest::setTrack(int val)
-      {
-      foreach(Articulation* a, _articulations)
-            a->setTrack(val);
-      Element::setTrack(val);
-      if (type() == Element::Type::CHORD) {
-            foreach(Note* n, static_cast<Chord*>(this)->notes())
-                  n->setTrack(val);
-            }
-      if (_beam)
-            _beam->setTrack(val);
-      foreach(Lyrics* l, _lyricsList) {
-            if (l)
-                  l->setTrack(val);
-            }
-      if (tuplet())
-            tuplet()->setTrack(val);
-      }
-
-//---------------------------------------------------------
 //   tick
 //---------------------------------------------------------
 
@@ -1353,6 +1330,45 @@ Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
                   return s;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   setTrack
+//---------------------------------------------------------
+
+void ChordRest::setTrack(int val)
+      {
+      Element::setTrack(val);
+      processSiblings([val] (Element* e) { e->setTrack(val); } );
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void ChordRest::setScore(Score* s)
+      {
+      Element::setScore(s);
+      processSiblings([s] (Element* e) { e->setScore(s); } );
+      }
+
+//---------------------------------------------------------
+//   processSiblings
+//---------------------------------------------------------
+
+void ChordRest::processSiblings(std::function<void(Element*)> func)
+      {
+      if (_beam)
+            func(_beam);
+      for (Articulation* a : _articulations)
+            func(a);
+      if (_tabDur)
+            func(_tabDur);
+      for (Lyrics* l : _lyricsList)
+            if (l)
+                  func(l);
+      if (tuplet())
+            func(tuplet());
       }
 
 //---------------------------------------------------------

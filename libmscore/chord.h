@@ -198,7 +198,7 @@ class Chord : public ChordRest {
       void toGraceAfter();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      virtual void setTrack(int val);
+      virtual void setTrack(int val) override;
 
       void computeUp();
 
