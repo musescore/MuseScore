@@ -2868,6 +2868,23 @@
                         <program value="59"/>
                   </Channel>
             </Instrument>
+            <Instrument id="c-cornet">
+                  <longName>C Cornet</longName>
+                  <shortName>C Cnt.</shortName>
+                  <description>C Cornet</description>
+                  <musicXMLid>brass.cornet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>54-82</aPitchRange>
+                  <pPitchRange>54-85</pPitchRange>
+                  <Channel>
+                        <program value="56"/>
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="bb-cornet">
                   <longName>B♭ Cornet</longName>
                   <shortName>B♭ Cnt.</shortName>
@@ -2887,6 +2904,25 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+            </Instrument>
+            <Instrument id="a-cornet">
+                  <longName>A Cornet</longName>
+                  <shortName>A Cnt.</shortName>
+                  <description>A Cornet</description>
+                  <musicXMLid>brass.cornet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>51-79</aPitchRange>
+                  <pPitchRange>51-84</pPitchRange>
+                  <transposeDiatonic>-2</transposeDiatonic>
+                  <transposeChromatic>-3</transposeChromatic>
+                  <Channel>
+                        <program value="56"/>
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/>
+                  </Channel>
+                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="saxhorn">
                   <longName>Saxhorn</longName>
@@ -3083,6 +3119,25 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="e-trumpet">
+                  <longName>E Trumpet</longName>
+                  <shortName>E Tpt.</shortName>
+                  <description>E Trumpet</description>
+                  <musicXMLid>brass.trumpet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>58-85</aPitchRange>
+                  <pPitchRange>58-88</pPitchRange>
+                  <transposeDiatonic>3</transposeDiatonic>
+                  <transposeChromatic>4</transposeChromatic>
+                  <Channel>
+                        <program value="56"/>
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="eb-trumpet">
                   <longName>E♭ Trumpet</longName>
                   <shortName>E♭ Tpt.</shortName>
@@ -3157,6 +3212,25 @@
                         <program value="59"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="a-trumpet">
+                  <longName>A Trumpet</longName>
+                  <shortName>A Tpt.</shortName>
+                  <description>A Trumpet</description>
+                  <musicXMLid>brass.trumpet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>51-79</aPitchRange>
+                  <pPitchRange>51-84</pPitchRange>
+                  <transposeDiatonic>-2</transposeDiatonic>
+                  <transposeChromatic>-3</transposeChromatic>
+                  <Channel>
+                        <program value="56"/>
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/>
+                  </Channel>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="pocket-trumpet">
