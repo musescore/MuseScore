@@ -795,7 +795,8 @@ void Staff::unlink(Staff* staff)
 
 void LinkedStaves::add(Staff* staff)
       {
-      _staves.append(staff);
+      if (!_staves.contains(staff))
+            _staves.append(staff);
       }
 
 //---------------------------------------------------------
