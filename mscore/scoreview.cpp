@@ -1424,7 +1424,8 @@ void ScoreView::moveCursor()
             }
       double x        = segment->canvasPos().x();
       double y        = system->staffYpage(staffIdx) + system->page()->pos().y();
-      double _spatium = score()->spatium();
+      Staff* staff    = _score->staff(staffIdx);
+      double _spatium = staff->spatium();
       x              -= qMin(segment->pos().x() - score()->styleD(StyleIdx::barNoteDistance) * _spatium, 0.0);
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
@@ -1432,8 +1433,8 @@ void ScoreView::moveCursor()
       double h;
       qreal mag               = _spatium / SPATIUM20;
       double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
-      Staff* staff            = _score->staff(staffIdx);
-      double lineDist         = staff->staffType()->lineDistance().val() * _spatium;
+      StaffType* staffType    = staff->staffType();
+      double lineDist         = staffType->lineDistance().val() * _spatium;
       int lines               = staff->lines();
       int strg                = is.string();
       x                       -= _spatium;
@@ -1962,8 +1963,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   }
             SysStaff* ss2 = system2->staff(lastStaff);
 
-            double y1 = ss1->y() - 2 * _spatium + y;
-            double y2 = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
+            double y1 = ss1->y() - 2 * score()->staff(staffStart)->spatium() + y;
+            double y2 = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium() + y;
 
             // drag vertical start line
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
@@ -2010,8 +2011,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   y   = pt.y();
                   ss1 = system2->staff(staffStart);
                   ss2 = system2->staff(lastStaff);
-                  y1  = ss1->y() - 2 * _spatium + y;
-                  y2  = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
+                  y1  = ss1->y() - 2 * score()->staff(staffStart)->spatium() + y;
+                  y2  = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium() + y;
                   p.drawLine(QLineF(x1, y1, x2, y1).translated(system2->page()->pos()));
                   p.drawLine(QLineF(x1, y2, x2, y2).translated(system2->page()->pos()));
                   s = ns;
