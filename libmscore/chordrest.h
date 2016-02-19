@@ -13,6 +13,7 @@
 #ifndef __CHORDREST_H__
 #define __CHORDREST_H__
 
+#include <functional>
 #include "symbol.h"
 #include "duration.h"
 #include "beam.h"
