@@ -54,20 +54,20 @@ cd "$(dirname "$(readlink -f "${0}")")/../../../.."
 
 yum -y install epel-release
 
-# basic dependencies (present on CentOS LiveCD ISO but needed by Docker image)
-yum -y install wget which automake
+# basic dependencies (needed by Docker image)
+yum -y install git wget which automake
 
 if [ "${OS}" == "CentOS 6" ]; then
-  # Get newer version of git than available by default
+  # Get newer compiler than available by default
   wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-  yum install -y devtoolset-2-git
-  source /opt/rh/devtoolset-2/enable # enable the new version
+  yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
+  source /opt/rh/devtoolset-2/enable # enable new compiler
 else
-  yum -y install git
+  yum -y install gcc gcc-c++ binutils
 fi
 
 # Build AppImageKit now to avoid conflicts with MuseScore's dependencies (LAME)
-[ -d "AppImageKit" ] || git clone -b master --single-branch --depth 1 https://github.com/probonopd/AppImageKit.git
+[ -d "AppImageKit" ] || git clone --depth 1 https://github.com/probonopd/AppImageKit.git
 cd AppImageKit
 ./build.sh
 
@@ -78,18 +78,9 @@ cd ..
 #wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
 yum -y install cmake mesa-libGL-devel pulseaudio-libs-devel alsa-lib-devel jack-audio-connection-kit-devel portaudio-devel libsndfile-devel libvorbis-devel qt5-qtbase-devel qt5-qttools-libs-designercomponents qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtscript-devel qt5-qtwebkit-devel qt5-qtxmlpatterns-devel qt5-qtquick1-devel qt5-qtsvg-devel qt5-qttools-devel qt5-qttools-static qt5-qtmultimedia-devel qt5-qtwebchannel-devel qt5-qtimageformats qt5-qtquickcontrols
 
-if [ "${OS}" == "CentOS 6" ]; then
-  # Get newer compiler than available by default
-  # wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-  yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
-  source /opt/rh/devtoolset-2/enable # enable new compiler
-else
-  yum -y install gcc gcc-c++ binutils
-fi
-
 # Install LAME (get this dependency last because rpmforge and epel-release conflict)
-wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-rpm -ivh rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm || true # don't fail if already installed
+wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.$(arch).rpm
+rpm -ivh rpmforge-release-0.5.3-1.el6.rf.$(arch).rpm || true # don't fail if already installed
 yum -y install lame-devel
 
 ##########################################################################
@@ -97,7 +88,7 @@ yum -y install lame-devel
 ##########################################################################
 
 # If not building on Travis then might need to fetch MuseScore
-[ -d "MuseScore" ] || git clone -b portable-linux-build-on-travis --single-branch --depth 1 https://github.com/shoogle/MuseScore.git
+[ -d "MuseScore" ] || git clone --depth 1 https://github.com/musescore/MuseScore.git
 
 cd MuseScore
 make revision
