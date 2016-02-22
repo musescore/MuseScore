@@ -4,6 +4,8 @@
 # Build portable Linux AppImages and upload them to Bintray. AppImages will
 # always be uploaded unless a list of specific branches is passed in. e.g.:
 #    $   build.sh  --upload-branches  master  my-branch-1  my-branch-2
+# Builds will be for the native architecture (64 bit) unless another is
+# specified for cross-compiling. (e.g. build.sh --32bit)
 
 set -e # exit on error
 set -x # echo commands
@@ -27,17 +29,31 @@ else
   makefile_overrides="" # use Makefile defaults
 fi
 
-# Build MuseScore AppImage inside Docker image
-docker run -i -v "${PWD}:/MuseScore" library/centos:6 \
-   /bin/bash -c "/MuseScore/build/Linux+BSD/portable/Recipe $makefile_overrides"
+# Build AppImage. Are we cross-compiling?
+case "$1" in
+  --32bit )
+    shift
+    # Build MuseScore AppImage inside 32-bit Docker image
+    docker run -i -v "${PWD}:/MuseScore" toopher/centos-i386:centos6 /bin/bash -c \
+      "linux32 --32bit i386 /MuseScore/build/Linux+BSD/portable/Recipe $makefile_overrides"
+    ;;
+  * )
+    [ "$1" == "--64bit" ] && shift || true
+    # Build MuseScore AppImage inside native (64-bit) Docker image
+    docker run -i -v "${PWD}:/MuseScore" library/centos:6 /bin/bash -c \
+      "/MuseScore/build/Linux+BSD/portable/Recipe $makefile_overrides"
+    ;;
+esac
 
 # Should the AppImage be uploaded?
 if [ "$1" == "--upload-branches" ]; then
+  # User passed in list of branchs so only upload those listed
   shift
   for upload_branch in "$@" ; do
     [ "$branch" == "$upload_branch" ] && upload=true || true # bypass `set -e`
   done
 else
+  # No list passed in so upload on every branch
   upload=true
 fi
 
