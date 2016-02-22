@@ -27,6 +27,8 @@
 
 namespace Ms {
 
+extern QString mscoreGlobalShare;
+
 enum class SessionStart : char {
       EMPTY, LAST, NEW, SCORE
       };
@@ -163,8 +165,7 @@ struct Preferences {
       QString myImagesPath;
       QString myTemplatesPath;
       QString myPluginsPath;
-
-      QString sfPath;
+      QString mySoundfontsPath;
 
       bool nativeDialogs;
 

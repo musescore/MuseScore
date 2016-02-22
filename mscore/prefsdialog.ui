@@ -455,7 +455,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="sfPath">
+           <widget class="QLineEdit" name="mySoundfonts">
             <property name="accessibleName">
              <string>SoundFont folders</string>
             </property>
@@ -3593,7 +3593,7 @@
   <tabstop>myTemplatesButton</tabstop>
   <tabstop>myPlugins</tabstop>
   <tabstop>myPluginsButton</tabstop>
-  <tabstop>sfPath</tabstop>
+  <tabstop>mySoundfonts</tabstop>
   <tabstop>mySoundfontsButton</tabstop>
   <tabstop>myImages</tabstop>
   <tabstop>myImagesButton</tabstop>

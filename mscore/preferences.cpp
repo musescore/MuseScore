@@ -176,7 +176,7 @@ void Preferences::init()
       myImagesPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absoluteFilePath();
       myTemplatesPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
       myPluginsPath   = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
-      sfPath          = QString("%1;%2").arg(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath()).arg(QFileInfo(QString("%2/%3").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath());
+      mySoundfontsPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath();
 
       MScore::setNudgeStep(.1);         // cursor key (default 0.1)
       MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
@@ -311,7 +311,7 @@ void Preferences::write()
       s.setValue("myImagesPath", myImagesPath);
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
-      s.setValue("sfPath",  sfPath);
+      s.setValue("mySoundfontsPath", mySoundfontsPath);
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -453,7 +453,7 @@ void Preferences::read()
       myImagesPath     = s.value("myImagesPath",     myImagesPath).toString();
       myTemplatesPath  = s.value("myTemplatesPath",  myTemplatesPath).toString();
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
-      sfPath           = s.value("sfPath",           sfPath).toString();
+      mySoundfontsPath = s.value("mySoundfontsPath", mySoundfontsPath).toString();
 
       //Create directories if they are missing
       QDir dir;
@@ -462,7 +462,7 @@ void Preferences::read()
       dir.mkpath(myImagesPath);
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
-      foreach (QString path, sfPath.split(";"))
+      foreach (QString path, mySoundfontsPath.split(";"))
             dir.mkpath(path);
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
@@ -596,8 +596,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
-
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
+
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
@@ -952,7 +952,7 @@ void PreferenceDialog::updateValues()
       myImages->setText(prefs.myImagesPath);
       myTemplates->setText(prefs.myTemplatesPath);
       myPlugins->setText(prefs.myPluginsPath);
-      sfPath->setText(prefs.sfPath);
+      mySoundfonts->setText(prefs.mySoundfontsPath);
 
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -965,8 +965,6 @@ void PreferenceDialog::updateValues()
       exportAudioSampleRate->setCurrentIndex(idx);
       exportPdfDpi->setValue(prefs.exportPdfDpi);
       pageVertical->setChecked(MScore::verticalOrientation());
-
-      sfChanged = false;
       }
 
 //---------------------------------------------------------
@@ -1357,7 +1355,7 @@ void PreferenceDialog::apply()
       prefs.myImagesPath       = myImages->text();
       prefs.myTemplatesPath    = myTemplates->text();
       prefs.myPluginsPath      = myPlugins->text();
-      prefs.sfPath             = sfPath->text();
+      prefs.mySoundfontsPath = mySoundfonts->text();
 
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
@@ -1680,9 +1678,9 @@ void PreferenceDialog::changeSoundfontPaths()
       {
       PathListDialog pld(this);
       pld.setWindowTitle(tr("SoundFont Folders"));
-      pld.setPath(sfPath->text());
+      pld.setPath(mySoundfonts->text());
       if(pld.exec())
-            sfPath->setText(pld.path());
+            mySoundfonts->setText(pld.path());
       }
 
 //---------------------------------------------------------

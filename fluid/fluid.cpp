@@ -29,7 +29,6 @@
 #include "voice.h"
 
 namespace FluidS {
-using namespace Ms;
 
 /***************************************************************
  *
@@ -892,8 +891,9 @@ QFileInfoList Fluid::sfFiles()
       {
       QFileInfoList l;
 
-      QString path = preferences.sfPath;
-      QStringList pl = path.split(";");
+      QStringList pl = preferences.mySoundfontsPath.split(";");
+      pl.prepend(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath());
+
       foreach (const QString& s, pl) {
             QString ss(s);
             if (!s.isEmpty() && s[0] == '~')
