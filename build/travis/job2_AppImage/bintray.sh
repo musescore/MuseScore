@@ -60,13 +60,13 @@ FILE="$1"
 # MUSESCORE NAMING SCHEME:
 # File:    MuseScore-X.Y.Z-<arch>.AppImage (e.g. MuseScore-2.0.3-x86_64)
 # Version: X.Y.Z
-# Package: MuseScore-Linux
+# Package: MuseScore-Linux-<arch>
 #
 # NIGHTLY NAMING SCHEME:
 # File:    MuseScoreNightly-<datetime>-<branch>-<commit>-<arch>.AppImage
 #    (e.g. MuseScoreNightly-201601151332-master-f53w6dg-x86_64.AppImage)
 # Version: <datetime>-<branch>-<commit> (e.g. 201601151332-master-f53w6dg)
-# Package: MuseScoreNightly-<branch> (e.g. MuseScoreNightly-master)
+# Package: MuseScoreNightly-<branch>-<arch> (e.g. MuseScoreNightly-master-x86_64)
 
 # Read app name from file name (get characters before first dash)
 APPNAME="$(basename "$FILE" | sed -r 's|^([^-]*)-.*$|\1|')"
@@ -93,12 +93,12 @@ case "${ARCH}" in
     ;;
 esac
 
-FILE_UPLOAD_PATH="$ARCH/$(basename "${FILE}")"
+FILE_UPLOAD_PATH="$(basename "${FILE}")"
 
 if [ "${APPNAME}" == "MuseScore" ]; then
   # Upload a new version but don't publish it (invisible until published)
   url_query="" # Don't publish, don't overwrite existing files with same name
-  PCK_NAME="$APPNAME-Linux"
+  PCK_NAME="$APPNAME-Linux-$ARCH"
   BINTRAY_REPO="MuseScore"
   LABELS="[\"music\", \"audio\", \"MIDI\", \"AppImage\"]"
 elif  [ "${APPNAME}" == "MuseScoreNightly" ]; then
@@ -108,7 +108,7 @@ elif  [ "${APPNAME}" == "MuseScoreNightly" ]; then
   # Get Git branch from $VERSION (get characters between first and last dash)
   BRANCH="$(echo $VERSION | sed -r 's|^[^-]*-(.*)-[^-]*$|\1|')"
 
-  PCK_NAME="$APPNAME-$BRANCH"
+  PCK_NAME="$APPNAME-$BRANCH-$ARCH"
   BINTRAY_REPO="nightlies-linux"
   LABELS="[\"nightly\", \"unstable\", \"testing\"]"
 else
@@ -150,7 +150,7 @@ if [ "${APPNAME}" == "MuseScore" ]; then
   DESCRIPTION=$(bsdtar -f "${FILE}" -O -x ./"${DESKTOP}" | grep -e "^Comment=" | sed s/Comment=//g)
 elif [ "${APPNAME}" == "MuseScoreNightly" ]; then
   # Use custom description for nightly builds
-  DESCRIPTION="Automated builds of the $BRANCH development branch for Linux systems. FOR TESTING PURPOSES ONLY!"
+  DESCRIPTION="Automated builds of the $BRANCH development branch for $SYSTEM Linux systems. FOR TESTING PURPOSES ONLY!"
 fi
 
 ICONNAME=$(bsdtar -f "${FILE}" -O -x "${DESKTOP}" | grep -e "^Icon=" | sed s/Icon=//g)
