@@ -506,14 +506,14 @@
   <tabstop>spatiumEntry</tabstop>
   <tabstop>inchButton</tabstop>
   <tabstop>mmButton</tabstop>
-  <tabstop>evenPageTopMargin</tabstop>
-  <tabstop>evenPageLeftMargin</tabstop>
-  <tabstop>evenPageRightMargin</tabstop>
-  <tabstop>evenPageBottomMargin</tabstop>
   <tabstop>oddPageTopMargin</tabstop>
   <tabstop>oddPageLeftMargin</tabstop>
   <tabstop>oddPageRightMargin</tabstop>
   <tabstop>oddPageBottomMargin</tabstop>
+  <tabstop>evenPageTopMargin</tabstop>
+  <tabstop>evenPageLeftMargin</tabstop>
+  <tabstop>evenPageRightMargin</tabstop>
+  <tabstop>evenPageBottomMargin</tabstop>
   <tabstop>pageOffsetEntry</tabstop>
   <tabstop>buttonApplyToAllParts</tabstop>
   <tabstop>buttonApply</tabstop>
