@@ -341,6 +341,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* savePaletteDialog     { 0 };
       QFileDialog* saveDrumsetDialog     { 0 };
       QFileDialog* savePluginDialog      { 0 };
+      QFileDialog* loadScalaDialog       { 0 };
 
       QDialog* editRasterDialog          { 0 };
 
@@ -582,6 +583,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getPluginFilename(bool open);
       QString getPaletteFilename(bool open, const QString& name = "");
       QString getWallpaper(const QString& caption);
+      QString getScalaFilename();
 
       bool hRaster() const { return hRasterAction->isChecked(); }
       bool vRaster() const { return vRasterAction->isChecked(); }

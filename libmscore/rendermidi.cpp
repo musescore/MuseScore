@@ -41,6 +41,7 @@
 #include "dynamic.h"
 #include "navigate.h"
 #include "pedal.h"
+#include "scale.h"
 #include "staff.h"
 #include "hairpin.h"
 #include "bend.h"
@@ -156,11 +157,29 @@ void Score::updateChannel()
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
    int velo, int onTime, int offTime)
       {
+      static const int centsPerSemitone = 100;
+
       if (!note->play())
             return;
       velo = note->customizeVelocity(velo);
+
+      Score* score = note->score();
+      Q_ASSERT(score != nullptr);
+      Score* rootScore = score->rootScore();
+      Q_ASSERT(rootScore != nullptr);
+
+      // Set tuning of note based on scale of score
+      // If tuning is out of [-2 * centsPerSemiton, 2 * centsPerSemiton] range
+      // adjust pitch to reduce tuning to under [-centsPerSemiton, centsPerSemitone] range
+      double scaleTuning = rootScore->scale().getTuning(note);
+      if (fabs(scaleTuning) > 2 * centsPerSemitone) {
+            int step = (int)scaleTuning / centsPerSemitone;
+            pitch += step;
+            scaleTuning -= step * centsPerSemitone;
+            }
+
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
-      ev.setTuning(note->tuning());
+      ev.setTuning(scaleTuning + note->tuning());
       ev.setNote(note);
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);

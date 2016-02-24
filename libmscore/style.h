@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "spatium.h"
 #include "articulation.h"
+#include "libmscore/scale.h"
 
 namespace Ms {
 
@@ -428,6 +429,8 @@ class MStyle {
       void setSpatium(qreal v);
       ArticulationAnchor articulationAnchor(int id) const;
       void setArticulationAnchor(int id, ArticulationAnchor val);
+      Scale scale() const;
+      void setScale(Scale val);
 
       static StyleValueType valueType(const StyleIdx t);
       };

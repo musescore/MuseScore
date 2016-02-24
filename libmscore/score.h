@@ -25,6 +25,7 @@
 #include "mscoreview.h"
 #include "segment.h"
 #include "ottava.h"
+#include "scale.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
 #include <set>
@@ -1112,6 +1113,9 @@ class Score : public QObject, public ScoreElement {
       bool checkClefs();
 
       void switchToPageMode();
+
+      void setScale(Scale val) { _style.setScale(val); }
+      Scale scale() const { return _style.scale(); }
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;

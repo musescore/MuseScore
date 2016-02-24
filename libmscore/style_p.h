@@ -21,6 +21,7 @@
 #include "articulation.h"
 #include "page.h"
 #include "chordlist.h"
+#include "libmscore/scale.h"
 
 namespace Ms {
 
@@ -96,6 +97,7 @@ class StyleData : public QSharedData {
       qreal _spatium;
       ArticulationAnchor _articulationAnchor[int(ArticulationType::ARTICULATIONS)];
       MScore::OrnamentStyle _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+      Scale _scale;
     
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
@@ -129,6 +131,8 @@ class StyleData : public QSharedData {
       void setArticulationAnchor(int id, ArticulationAnchor val) { _articulationAnchor[id] = val;  }
       MScore::OrnamentStyle ornamentStyle()                      { return _ornamentStyle ; }
       void setOrnamentStyle(MScore::OrnamentStyle val)           { _ornamentStyle = val; }
+      void setScale(Scale val)                                   { _scale = val; }
+      Scale scale() const                                        { return _scale; }
     
       friend class TextStyle;
       };

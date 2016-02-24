@@ -988,6 +988,57 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
       }
 
 //---------------------------------------------------------
+//   getScalaFilename
+//---------------------------------------------------------
+
+QString MuseScore::getScalaFilename()
+      {
+      QFileInfo myScores(preferences.myScoresPath);
+      if (myScores.isRelative())
+            myScores.setFile(QDir::home(), preferences.myScoresPath);
+      QString defaultPath = myScores.absoluteFilePath();
+
+      if (preferences.nativeDialogs) {
+            QString fn;
+            fn = QFileDialog::getOpenFileName(
+                                              this, tr("MuseScore: Load Scala file"),
+                                              defaultPath,
+                                              tr("Scala File (*.scl)")
+                                              );
+            return fn;
+            }
+
+      QFileDialog* dialog;
+      QList<QUrl> urls;
+      QString home = QDir::homePath();
+      urls.append(QUrl::fromLocalFile(home));
+      urls.append(QUrl::fromLocalFile(defaultPath));
+      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
+
+      if (loadScalaDialog == 0) {
+            loadScalaDialog = new QFileDialog(this);
+            loadScalaDialog->setFileMode(QFileDialog::ExistingFile);
+            loadScalaDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+            loadScalaDialog->setWindowTitle(tr("MuseScore: Load Scala file"));
+            loadScalaDialog->setNameFilter(tr("Scala File (*.scl)"));
+            loadScalaDialog->setDirectory(defaultPath);
+
+            restoreDialogState("loadScalaDialog", loadScalaDialog);
+            loadScalaDialog->setAcceptMode(QFileDialog::AcceptOpen);
+            }
+      dialog = loadScalaDialog;
+
+      // setup side bar urls
+      dialog->setSidebarUrls(urls);
+
+      if (dialog->exec()) {
+            QStringList result = dialog->selectedFiles();
+            return result.front();
+            }
+      return QString();
+      }
+
+//---------------------------------------------------------
 //   getChordStyleFilename
 //---------------------------------------------------------
 

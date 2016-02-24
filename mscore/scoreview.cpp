@@ -65,6 +65,7 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/rest.h"
+#include "libmscore/scale.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/shadownote.h"
@@ -3061,6 +3062,21 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "copy-lyrics-to-clipboard") {
             cmdCopyLyricsToClipboard();
             }
+      else if (cmd == "tune_to_scale") {
+            QString name = mscore->getScalaFilename();
+            if (!name.isEmpty()) {
+                  _score->startCmd();
+                  Scale s;
+                  if (!s.loadScalaFile(name)) {
+                        QMessageBox::critical(this,
+                                              tr("MuseScore: Load Scala File"), MScore::lastError);
+                        }
+                  else {
+                        _score->setScale(s);
+                        }
+                  _score->endCmd();
+                  }
+            }
 
       // STATE_HARMONY_FIGBASS_EDIT actions
 
@@ -5990,6 +6006,5 @@ void ScoreView::updateContinuousPanel()
       if (_score->layoutMode() == LayoutMode::LINE)
             update();
       }
-
 }
 

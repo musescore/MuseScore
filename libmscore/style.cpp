@@ -1676,4 +1676,22 @@ void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
       return d->setArticulationAnchor(id, val);
       }
 
+//---------------------------------------------------------
+//   scale
+//---------------------------------------------------------
+
+Scale MStyle::scale() const
+      {
+      return d->scale();
+      }
+
+//---------------------------------------------------------
+//   setScale
+//---------------------------------------------------------
+
+void MStyle::setScale(Scale val)
+      {
+      d->setScale(val);
+      }
+
 }

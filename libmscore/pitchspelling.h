@@ -36,9 +36,13 @@ enum Tpc : signed char {
       TPC_MAX = TPC_B_SS
       };
 
+const int   TPC_NUM_OF              = (TPC_MAX - TPC_MIN + 1);
 const int   TPC_DELTA_SEMITONE      = 7;  // the delta in tpc value to go 1 semitone up or down
 const int   TPC_DELTA_ENHARMONIC    = 12; // the delta in tpc value to reach the next (or prev) enharmonic spelling
-//const int   TPC_FIRST_STEP          = 3;  // the step of the first valid tpc (= F = step 3)
+const int   TPC_FLAT_TO_WHITE_ABOVE = 7;  // the delta in tpc value to reach the white key above from a flat
+const int   TPC_FLAT_TO_WHITE_BELOW = 5;  // the delta in tpc value to reach the white key below from a flat
+const int   TPC_FIRST_STEP          = 3;  // the step of the first valid tpc (= F = step 3)
+const int   PITCH_DELTA_FIFTH       = 7;  // how many semitones there are in a 5th
 const int   PITCH_DELTA_OCTAVE      = 12; // the delta in pitch value to go 1 octave up or down
 const int   STEP_DELTA_OCTAVE       = 7;  // the number of steps in an octave
 //const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (= a fifth = 4 steps)
