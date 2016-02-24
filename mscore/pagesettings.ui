@@ -315,11 +315,11 @@
      <item>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="title">
-        <string>Even Page Margins</string>
+        <string>Odd Page Margins</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="1" column="0" colspan="2">
-         <widget class="QDoubleSpinBox" name="evenPageLeftMargin">
+         <widget class="QDoubleSpinBox" name="oddPageLeftMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -332,7 +332,7 @@
          </widget>
         </item>
         <item row="1" column="3" colspan="2">
-         <widget class="QDoubleSpinBox" name="evenPageRightMargin">
+         <widget class="QDoubleSpinBox" name="oddPageRightMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -345,7 +345,7 @@
          </widget>
         </item>
         <item row="2" column="1" colspan="3">
-         <widget class="QDoubleSpinBox" name="evenPageBottomMargin">
+         <widget class="QDoubleSpinBox" name="oddPageBottomMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -374,7 +374,7 @@
          </spacer>
         </item>
         <item row="0" column="1" colspan="3">
-         <widget class="QDoubleSpinBox" name="evenPageTopMargin">
+         <widget class="QDoubleSpinBox" name="oddPageTopMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -392,11 +392,11 @@
      <item>
       <widget class="QGroupBox" name="groupBox_4">
        <property name="title">
-        <string>Odd Page Margins</string>
+        <string>Even Page Margins</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="3" colspan="2">
-         <widget class="QDoubleSpinBox" name="oddPageRightMargin">
+         <widget class="QDoubleSpinBox" name="evenPageRightMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -409,7 +409,7 @@
          </widget>
         </item>
         <item row="2" column="1" colspan="3">
-         <widget class="QDoubleSpinBox" name="oddPageBottomMargin">
+         <widget class="QDoubleSpinBox" name="evenPageBottomMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -422,7 +422,7 @@
          </widget>
         </item>
         <item row="1" column="0" colspan="2">
-         <widget class="QDoubleSpinBox" name="oddPageLeftMargin">
+         <widget class="QDoubleSpinBox" name="evenPageLeftMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -451,7 +451,7 @@
          </spacer>
         </item>
         <item row="0" column="1" colspan="3">
-         <widget class="QDoubleSpinBox" name="oddPageTopMargin">
+         <widget class="QDoubleSpinBox" name="evenPageTopMargin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -506,14 +506,14 @@
   <tabstop>spatiumEntry</tabstop>
   <tabstop>inchButton</tabstop>
   <tabstop>mmButton</tabstop>
-  <tabstop>evenPageTopMargin</tabstop>
-  <tabstop>evenPageLeftMargin</tabstop>
-  <tabstop>evenPageRightMargin</tabstop>
-  <tabstop>evenPageBottomMargin</tabstop>
   <tabstop>oddPageTopMargin</tabstop>
   <tabstop>oddPageLeftMargin</tabstop>
   <tabstop>oddPageRightMargin</tabstop>
   <tabstop>oddPageBottomMargin</tabstop>
+  <tabstop>evenPageTopMargin</tabstop>
+  <tabstop>evenPageLeftMargin</tabstop>
+  <tabstop>evenPageRightMargin</tabstop>
+  <tabstop>evenPageBottomMargin</tabstop>
   <tabstop>pageOffsetEntry</tabstop>
   <tabstop>buttonApplyToAllParts</tabstop>
   <tabstop>buttonApply</tabstop>
