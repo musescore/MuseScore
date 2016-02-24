@@ -69,6 +69,7 @@ class Part;
 class RepeatList;
 class Rest;
 class Revisions;
+class Scale;
 class ScoreFont;
 class Segment;
 class Selection;
@@ -1107,6 +1108,7 @@ class Score : public QObject, public ScoreElement {
       //@ ??
       Q_INVOKABLE void cropPage(qreal margins);
       bool sanityCheck(const QString& name = nullptr);
+      void tuneToScale(const Scale& s);
 
       bool checkKeys();
       bool checkClefs();

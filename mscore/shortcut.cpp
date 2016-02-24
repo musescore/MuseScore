@@ -3298,6 +3298,17 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+            MsWidget::SCORE_TAB,
+            STATE_NORMAL,
+            "tune_to_scale",
+            QT_TRANSLATE_NOOP("action","Tune to scale"),
+            QT_TRANSLATE_NOOP("action","Tune to scale"),
+            0,
+            Icons::fileOpen_ICON,
+            Qt::WindowShortcut,
+            ShortcutFlags::A_CMD
+            },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
          "startcenter",

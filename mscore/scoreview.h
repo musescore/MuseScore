@@ -53,6 +53,7 @@ class Tuplet;
 class FretDiagram;
 class Bend;
 class TremoloBar;
+class Scale;
 
 enum class Grip : signed char;
 enum class POS : char;
@@ -418,6 +419,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void cmdAddRemoveBreaks();
       void cmdCopyLyricsToClipboard();
+      void cmdTuneToScale(const Scale& s);
 
       ScoreState mscoreState() const;
       void setCursorVisible(bool v);
