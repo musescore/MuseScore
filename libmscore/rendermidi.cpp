@@ -41,6 +41,7 @@
 #include "dynamic.h"
 #include "navigate.h"
 #include "pedal.h"
+#include "scale.h"
 #include "staff.h"
 #include "hairpin.h"
 #include "bend.h"
@@ -154,13 +155,23 @@ void Score::updateChannel()
 //---------------------------------------------------------
 
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
-   int velo, int onTime, int offTime)
+   int velo, int onTime, int offTime, const Scale& s)
       {
+      static const int centsPerSemitone = 100;
+
       if (!note->play())
             return;
       velo = note->customizeVelocity(velo);
+
+      double scaleTuning = s.getTuning(note);
+      if (fabs(scaleTuning) > 2 * centsPerSemitone) {
+            int step = (int)scaleTuning / centsPerSemitone;
+            pitch += step;
+            scaleTuning -= step * centsPerSemitone;
+            }
+
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
-      ev.setTuning(note->tuning());
+      ev.setTuning(scaleTuning + note->tuning());
       ev.setNote(note);
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
@@ -171,7 +182,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset)
+static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset, const Scale& s)
       {
       if (!note->play() || note->hidden())      // do not play overlapping notes
             return;
@@ -204,7 +215,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                               }
                         else {
                               // recurse
-                              collectNote(events, channel, n, velo, tickOffset);
+                              collectNote(events, channel, n, velo, tickOffset, s);
                               break;
                               }
                         if (n->tieFor() && n != n->tieFor()->endNote())
@@ -238,7 +249,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             int off = on + (ticks * e.len())/1000 - 1;
             if (tieFor && i == nels - 1)
                   off += tieLen;
-            playNote(events, note, channel, p, velo, on, off);
+            playNote(events, note, channel, p, velo, on, off, s);
             }
 
       // Bends
@@ -327,7 +338,7 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
 //   collectMeasureEvents
 //---------------------------------------------------------
 
-static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset)
+static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset, const Scale& s)
       {
       int firstStaffIdx = staff->idx();
       int nextStaffIdx  = firstStaffIdx + 1;
@@ -360,11 +371,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   for (Chord* c : chord->graceNotesBefore()) {
                         for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset);
+                              collectNote(events, channel, note, velocity, tickOffset, s);
                         }
 
                   foreach (const Note* note, chord->notes())
-                        collectNote(events, channel, note, velocity, tickOffset);
+                        collectNote(events, channel, note, velocity, tickOffset, s);
 
 #if 0
                   // TODO: add support for grace notes after - see createPlayEvents()
@@ -372,7 +383,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   chord->getGraceNotesAfter(&gna);
                   for (Chord* c : gna) {
                         for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset);
+                              collectNote(events, channel, note, velocity, tickOffset, s);
                         }
 #endif
 
@@ -615,11 +626,11 @@ void Score::renderStaff(EventMap* events, Staff* staff)
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   if (lastMeasure && m->isRepeatMeasure(staff)) {
                         int offset = m->tick() - lastMeasure->tick();
-                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset, _scale);
                         }
                   else {
                         lastMeasure = m;
-                        collectMeasureEvents(events, lastMeasure, staff, tickOffset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset, _scale);
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;

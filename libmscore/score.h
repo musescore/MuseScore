@@ -25,6 +25,7 @@
 #include "mscoreview.h"
 #include "segment.h"
 #include "ottava.h"
+#include "scale.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
 #include <set>
@@ -69,6 +70,7 @@ class Part;
 class RepeatList;
 class Rest;
 class Revisions;
+class Scale;
 class ScoreFont;
 class Segment;
 class Selection;
@@ -416,6 +418,8 @@ class Score : public QObject, public ScoreElement {
       qreal _noteHeadWidth;
       QString accInfo;             ///< information used by the screen-reader
       int _midiPortCount;          // A count of JACK/ALSA midi out ports. Stored in a root score
+
+      Scale _scale;
 
       //------------------
 
@@ -1112,6 +1116,9 @@ class Score : public QObject, public ScoreElement {
       bool checkClefs();
 
       void switchToPageMode();
+
+      void setScale(Scale s) { _scale = s; }
+      Scale getScale() { return _scale; }
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
