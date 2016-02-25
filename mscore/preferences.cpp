@@ -1138,7 +1138,9 @@ void PreferenceDialog::selectInstrumentList1()
          this,
          tr("Choose Instrument List"),
          instrumentList1->text(),
-         tr("Instrument List (*.xml)")
+         tr("Instrument List (*.xml)"),
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (!s.isNull())
             instrumentList1->setText(s);
@@ -1154,7 +1156,9 @@ void PreferenceDialog::selectInstrumentList2()
          this,
          tr("Choose Instrument List"),
          instrumentList2->text(),
-         tr("Instrument List (*.xml)")
+         tr("Instrument List (*.xml)"),
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (!s.isNull())
             instrumentList2->setText(s);
@@ -1170,7 +1174,9 @@ void PreferenceDialog::selectStartWith()
          this,
          tr("Choose Starting Score"),
          sessionScore->text(),
-         tr("MuseScore Files (*.mscz *.mscx);;All (*)")
+         tr("MuseScore Files (*.mscz *.mscx);;All (*)"),
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (!s.isNull())
             sessionScore->setText(s);
@@ -1595,7 +1601,8 @@ void PreferenceDialog::selectScoresDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Score Folder"),
-         myScores->text()
+         myScores->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myScores->setText(s);
@@ -1610,7 +1617,8 @@ void PreferenceDialog::selectStylesDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Style Folder"),
-         myStyles->text()
+         myStyles->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myStyles->setText(s);
@@ -1625,7 +1633,8 @@ void PreferenceDialog::selectTemplatesDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Template Folder"),
-         myTemplates->text()
+         myTemplates->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myTemplates->setText(s);
@@ -1640,7 +1649,8 @@ void PreferenceDialog::selectPluginsDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Plugin Folder"),
-         myPlugins->text()
+         myPlugins->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myPlugins->setText(s);
@@ -1655,7 +1665,8 @@ void PreferenceDialog::selectImagesDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Image Folder"),
-         myImages->text()
+         myImages->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myImages->setText(s);
