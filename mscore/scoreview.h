@@ -53,6 +53,7 @@ class Tuplet;
 class FretDiagram;
 class Bend;
 class TremoloBar;
+class Scale;
 
 enum class Grip : signed char;
 enum class POS : char;
