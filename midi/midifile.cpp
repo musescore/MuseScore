@@ -795,7 +795,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType *mt)
                                           // 3 - DRUM 2
                                           // 4 - DRUM 3
                                           // 5 - DRUM 4
-                                          if (buffer[6] != 0) {
+                                          if (buffer[6] != 0 && buffer[4] == ev.channel()) {
                                                 _drumTrack = true;
                                                 }
                                           ev.setType(ME_INVALID);
