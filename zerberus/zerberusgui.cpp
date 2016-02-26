@@ -135,8 +135,9 @@ QFileInfoList Zerberus::sfzFiles()
       {
       QFileInfoList l;
 
-      QString path = Ms::preferences.sfPath;
-      QStringList pl = path.split(";");
+      QStringList pl = Ms::preferences.mySoundfontsPath.split(";");
+      pl.prepend(QFileInfo(QString("%1%2").arg(Ms::mscoreGlobalShare).arg("sound")).absoluteFilePath());
+
       foreach (const QString& s, pl) {
             QString ss(s);
             if (!s.isEmpty() && s[0] == '~')
@@ -272,5 +273,3 @@ void ZerberusGui::synthesizerChanged()
             files->addItem(item);
             }
       }
-
-

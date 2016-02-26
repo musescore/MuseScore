@@ -1975,7 +1975,7 @@ void importSoundfont(QString name)
             QWidget::tr("Do you want to install the SoundFont %1?").arg(info.fileName()),
              QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
       if (ret == QMessageBox::Yes) {
-            QStringList pl = preferences.sfPath.split(";");
+            QStringList pl = preferences.mySoundfontsPath.split(";");
             QString destPath;
             for (QString s : pl) {
                   QFileInfo dest(s);
