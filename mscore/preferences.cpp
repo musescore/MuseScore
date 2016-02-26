@@ -1392,6 +1392,8 @@ void PreferenceDialog::apply()
             MScore::setVerticalOrientation(pageVertical->isChecked());
             for (Score* s : mscore->scores()) {
                   s->doLayout();
+                  for (Score* ss : s->scoreList())
+                        ss->doLayout();
                   }
             if (mscore->currentScoreView())
                   mscore->currentScoreView()->setOffset(0.0, 0.0);
