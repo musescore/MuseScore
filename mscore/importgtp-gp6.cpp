@@ -1313,8 +1313,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     }
                                     else if (currentNode.nodeName() == "AugmentationDot") {
                                           dotted = currentNode.attributes().namedItem("count").toAttr().value().toInt();
+                                          Fraction tmp = l;
                                           for (int count = 1; count <= dotted; count++)
-                                                l = l + (l / pow(2, count));
+                                                l = l + (tmp / pow(2, count));
                                     }
                                     else if (currentNode.nodeName() == "PrimaryTuplet") {
                                           tupletSet = true;
@@ -1836,6 +1837,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
 void GuitarPro6::readGpif(QByteArray* data)
       {
+      //qDebug() << QString(*data);
       QDomDocument qdomDoc;
       qdomDoc.setContent(*data);
       QDomElement qdomElem = qdomDoc.documentElement();
