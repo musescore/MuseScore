@@ -41,7 +41,6 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       Preferences prefs;
 
       void apply();
-      bool sfChanged;
       void updateSCListView();
       void setUseMidiOutput(bool);
       void updateValues();
