@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Usage:   copy-libs  $share_path
 
@@ -18,7 +18,15 @@ main() {
 
   num_failures=0 # store number of libraries that couldn't be copied
   getCrossPlatformDependencies
-  getLinuxOnlyDependencies
+
+  # get linux-specific dependencies, based on which distro is making the AppImage
+  if [ "$(grep "CentOS release 6" /etc/*release*)" ]; then
+    building_on_CentOS_6
+  else
+    echo "${0}: Warning: Not running on a supported build system!" >&2
+    # Try to fetch all dependencies, just in case
+    building_on_CentOS_6
+  fi
 
   if [ "$num_failures" != "0" ]; then
     echo "Error: $num_failures libraries couldn't be copied."
@@ -96,9 +104,10 @@ getCrossPlatformDependencies() {
 
 ##########################################################################
 # LINUX-ONLY DEPENDENCIES (no equivalents in "mscore/CMakeLists.txt")
-# Note: always check the oldest distribution first
+# These differ depending on the distribution used to build the AppImage.
+# Note: always check the oldest supported distribution first
 ##########################################################################
-getLinuxOnlyDependencies() {
+building_on_CentOS_6() {
   # Needed by Centos 6.7:
   dest_dir="$lib_dest"
   copyLib libjack.so.0
@@ -128,7 +137,17 @@ getLinuxOnlyDependencies() {
 }
 
 locateLib() {
-  local path="$(ldconfig -p | grep "$1" | awk '{print $4}')"
+  # First search $LD_LIBRARY_PATH
+  declare -a dir_array
+  IFS=':' read -ra dir_array <<< "${LD_LIBRARY_PATH}"
+  for d in "${dir_array[@]}"; do
+    if [ -e "$d/$1" ]; then
+      echo "$d/$1"
+      return
+    fi
+  done
+  # If it wasn't found then search library cache
+  local path="$(ldconfig -p | awk '{print $4}' | grep "$1" | head -n1)"
   [ "$path" ] || echo "$1 not found." >&2
   echo "$path"
 }
