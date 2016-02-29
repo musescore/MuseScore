@@ -2151,6 +2151,12 @@ void Score::cmdDeleteSelection()
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
 
+            // delete content from measures underlying mmrests
+            if (s1 && s1->measure() && s1->measure()->isMMRest())
+                  s1 = s1->measure()->mmRestFirst()->first();
+            if (s2 && s2->measure() && s2->measure()->isMMRest())
+                  s2 = s2->measure()->mmRestLast()->last();
+
             int stick1 = selection().tickStart();
             int stick2 = selection().tickEnd();
 
