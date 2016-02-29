@@ -50,6 +50,7 @@ QT5_WRAP_UI (ui_headers
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
+      scalesdialog.ui editnotesdialog.ui editfifthsdialog.ui
 
       importmidi/importmidi_panel.ui
 
@@ -247,6 +248,7 @@ add_executable ( ${ExecutableName}
       fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
+      scalesdialog.cpp editnotesdialog.cpp editfifthsdialog.cpp
       inspector/inspector.cpp dragelement.cpp svggenerator.cpp
       inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
       inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp

@@ -28,6 +28,7 @@
 #include "musescore.h"
 #include "navigator.h"
 #include "preferences.h"
+#include "scalesdialog.h"
 #include "scoretab.h"
 #include "seq.h"
 #include "splitstaff.h"
@@ -3063,19 +3064,16 @@ void ScoreView::cmd(const QAction* a)
             cmdCopyLyricsToClipboard();
             }
       else if (cmd == "tune_to_scale") {
-            QString name = mscore->getScalaFilename();
-            if (!name.isEmpty()) {
-                  _score->startCmd();
-                  Scale s;
-                  if (!s.loadScalaFile(name)) {
-                        QMessageBox::critical(this,
-                                              tr("MuseScore: Load Scala File"), MScore::lastError);
-                        }
-                  else {
-                        _score->setScale(s);
-                        }
-                  _score->endCmd();
-                  }
+            _score->startCmd();
+            ScalesDialog dialog(_score->scale(), mscore);
+            dialog.setModal(true);
+            dialog.exec();
+
+            Scale s = dialog.getScale();
+            s.computeTunings();
+            _score->setScale(s);
+
+            _score->endCmd();
             }
 
       // STATE_HARMONY_FIGBASS_EDIT actions
