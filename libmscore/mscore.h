@@ -110,6 +110,7 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
 //    parameters. Those should be from the correct storageType and static_casts should
 //    be applied when necessary.
 //---------------------------------------------------------
+
 #define MS_QML_ENUM(name, storageType, ...)\
       enum class name : storageType {\
             __VA_ARGS__\
@@ -123,6 +124,33 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
             };\
       };
 
+//---------------------------------------------------------
+//   Direction
+//---------------------------------------------------------
+
+class Direction  {
+      Q_GADGET
+      Q_ENUMS(E)
+      int val;
+
+   public:
+      Direction()                                {}
+      constexpr Direction(const int v) : val(v)  {}
+      Direction(const Direction& v) : val(v.val) {}
+      Direction(const QString&);
+
+      // automatic conversions
+      constexpr operator int() const           { return val; }
+      operator QVariant() const                { return QVariant::fromValue(*this); }
+
+      bool operator==(const Direction d) const { return val == d.val; }
+      bool operator==(const int d) const       { return val == d; }
+
+      const char* toString() const;
+      static void fillComboBox(QComboBox*);
+
+      enum E { AUTO, UP, DOWN };
+      };
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -419,11 +447,10 @@ class MScore : public QObject {
 #endif
 
    public:
-      enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
       enum class OrnamentStyle : char { DEFAULT, BAROQUE};
       enum class GlissandoStyle : char { CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC };
-      Q_ENUMS(Direction DirectionH OrnamentStyle GlissandoStyle)
+      Q_ENUMS(DirectionH OrnamentStyle GlissandoStyle)
 
       static void init();
 
@@ -514,7 +541,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MScore::Direction);
+Q_DECLARE_METATYPE(Ms::Direction);
+//Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
+Q_DECLARE_METATYPE(Ms::Direction::E);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 Q_DECLARE_METATYPE(Ms::TextStyleType);
 Q_DECLARE_METATYPE(Ms::BarLineType);

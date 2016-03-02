@@ -350,9 +350,9 @@ void BarLine::draw(QPainter* painter) const
       if (y2-y1 < 0.1)
             return;
 
-      qreal _spatium = score()->styleB(StyleIdx::scaleBarlines) ? spatium() : score()->spatium();
+      qreal _mag = score()->styleB(StyleIdx::scaleBarlines) ? staff()->mag() : 1.0;
 
-      qreal lw = score()->styleS(StyleIdx::barWidth).val() * _spatium;
+      qreal lw = score()->styleP(StyleIdx::barWidth) * _mag;
 
       QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
@@ -374,8 +374,8 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::END:
                   {
-                  qreal lw2 = score()->styleS(StyleIdx::endBarWidth).val() * _spatium;
-                  qreal d   = score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                  qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * _mag;
+                  qreal d   = score()->styleP(StyleIdx::endBarDistance) * _mag;
 
                   painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   pen.setWidthF(lw2);
@@ -387,8 +387,8 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::DOUBLE:
                   {
-                  lw      = score()->styleS(StyleIdx::doubleBarWidth).val() * _spatium;
-                  qreal d = score()->styleS(StyleIdx::doubleBarDistance).val() * _spatium;
+                  lw      = score()->styleP(StyleIdx::doubleBarWidth) * _mag;
+                  qreal d = score()->styleP(StyleIdx::doubleBarDistance) * _mag;
 
                   pen.setWidthF(lw);
                   painter->setPen(pen);
@@ -401,8 +401,8 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::START_REPEAT:
                   {
-                  qreal lw2 = score()->styleS(StyleIdx::endBarWidth).val() * _spatium;
-                  qreal d1  = score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                  qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * _mag;
+                  qreal d1  = score()->styleP(StyleIdx::endBarDistance) * _mag;
 
                   qreal x2   =  lw2 * .5;                               // thick line (lw2)
                   qreal x1   =  lw2 + d1 + lw * .5;                     // thin line (lw)
@@ -425,8 +425,8 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::END_REPEAT:
                   {
-                  qreal lw2  = score()->styleS(StyleIdx::endBarWidth).val() * _spatium;
-                  qreal d1   = score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                  qreal lw2  = score()->styleP(StyleIdx::endBarWidth) * _mag;
+                  qreal d1   = score()->styleP(StyleIdx::endBarDistance) * _mag;
                   qreal dotw = symWidth(SymId::repeatDot);
                   qreal x1   =  dotw + d1 + lw * .5;
                   qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;
@@ -448,8 +448,8 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::END_START_REPEAT:
                   {
-                  qreal lw2  = score()->styleS(StyleIdx::endBarWidth).val() * _spatium;
-                  qreal d1   = score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                  qreal lw2  = score()->styleP(StyleIdx::endBarWidth) * _mag;
+                  qreal d1   = score()->styleP(StyleIdx::endBarDistance) * _mag;
                   qreal dotw = symWidth(SymId::repeatDot);
 
                   qreal x1   =  dotw + d1 + lw * .5;                                // thin bar
@@ -554,7 +554,7 @@ bool BarLine::acceptDrop(const DropData& data) const
       else {
             return (type == Element::Type::ARTICULATION
                && segment()
-               && segment()->isEndBarLine());
+               && segment()->isEndBarLineType());
             }
       return false;
       }
@@ -608,7 +608,7 @@ Element* BarLine::drop(const DropData& data)
             //    and next measure if this is a EndBarLine.
             //---------------------------------------------
 
-            if (segment()->isEndBarLine()) {
+            if (segment()->isEndBarLineType()) {
                   Measure* m  = segment()->measure();
                   Measure* nm = m->nextMeasure();
                   switch (st) {
@@ -647,7 +647,7 @@ Element* BarLine::drop(const DropData& data)
                               break;
                         }
                   }
-            else if (segment()->isBeginBarLine()) {
+            else if (segment()->isBeginBarLineType()) {
                   undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
                   undoChangeProperty(P_ID::GENERATED, false);
                   }
@@ -673,7 +673,7 @@ Element* BarLine::drop(const DropData& data)
 void BarLine::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
       *defaultGrip = Grip::END;
-      qreal lw = point(score()->styleS(StyleIdx::barWidth));
+      qreal lw = score()->styleP(StyleIdx::barWidth) * staff()->mag();
       qreal y1, y2;
       getY(&y1, &y2);
       grip[0].translate(QPointF(lw * .5, y1) + pagePos());
@@ -950,33 +950,32 @@ void BarLine::endEditDrag()
 
 qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       {
-      qreal _spatium = score->spatium();
-      if (score->styleB(StyleIdx::scaleBarlines))
-            _spatium *= mag;
-      qreal dw = score->styleS(StyleIdx::barWidth).val() * _spatium;
+      if (!score->styleB(StyleIdx::scaleBarlines))
+            mag = 0.0;
+      qreal dw = score->styleP(StyleIdx::barWidth) * mag;
 
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, mag);
       switch(type) {
             case BarLineType::DOUBLE:
-                  dw  = (score->styleS(StyleIdx::doubleBarWidth) * 2
-                     + score->styleS(StyleIdx::doubleBarDistance)).val() * _spatium;
+                  dw  = (score->styleP(StyleIdx::doubleBarWidth) * 2
+                     + score->styleP(StyleIdx::doubleBarDistance)) * mag;
                   break;
             case BarLineType::START_REPEAT:
-                  dw += dotwidth + (score->styleS(StyleIdx::endBarWidth)
-                     + 2 * score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
+                  dw += dotwidth + (score->styleP(StyleIdx::endBarWidth)
+                     + 2 * score->styleP(StyleIdx::endBarDistance)) * mag;
                   break;
             case BarLineType::END_REPEAT:
-                  dw += dotwidth + (score->styleS(StyleIdx::endBarWidth)
-                     + 2 * score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
+                  dw += dotwidth + (score->styleP(StyleIdx::endBarWidth)
+                     + 2 * score->styleP(StyleIdx::endBarDistance)) * mag;
                   break;
             case BarLineType::END:
-                  dw += (score->styleS(StyleIdx::endBarWidth)
-                     + score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
+                  dw += (score->styleP(StyleIdx::endBarWidth)
+                     + score->styleP(StyleIdx::endBarDistance)) * mag;
                   break;
             case  BarLineType::END_START_REPEAT:
-                  dw += 2 * dotwidth + (score->styleS(StyleIdx::barWidth)
-                     + score->styleS(StyleIdx::endBarWidth)
-                     + 4 * score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
+                  dw += 2 * dotwidth + (score->styleP(StyleIdx::barWidth)
+                     + score->styleP(StyleIdx::endBarWidth)
+                     + 4 * score->styleP(StyleIdx::endBarDistance)) * mag;
                   break;
             case BarLineType::BROKEN:
             case BarLineType::NORMAL:
@@ -1022,9 +1021,9 @@ void BarLine::layout()
 
                         case BarLineType::END_START_REPEAT:
                               {
-                              qreal lw   = point(score()->styleS(StyleIdx::barWidth));
-                              qreal lw2  = point(score()->styleS(StyleIdx::endBarWidth));
-                              qreal d1   = point(score()->styleS(StyleIdx::endBarDistance));
+                              qreal lw   = score()->styleP(StyleIdx::barWidth);
+                              qreal lw2  = score()->styleP(StyleIdx::endBarWidth);
+                              qreal d1   = score()->styleP(StyleIdx::endBarDistance);
                               qreal dotw = symWidth(SymId::repeatDot);
                               qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
                               qreal w1 = symBbox(SymId::reversedBracketTop).width();
@@ -1047,10 +1046,10 @@ void BarLine::layout()
             e->layout();
             if (e->isArticulation()) {
                   Articulation* a       = toArticulation(e);
-                  MScore::Direction dir = a->direction();
+                  Direction dir = a->direction();
                   qreal distance        = 0.5 * spatium();
                   qreal x               = width() * .5;
-                  if (dir == MScore::Direction::DOWN) {
+                  if (dir == Direction::DOWN) {
                         qreal botY = y2 + distance;
                         a->setPos(QPointF(x, botY));
                         }
@@ -1168,7 +1167,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
                   return Element::setProperty(id, v);
             }
       setGenerated(false);
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

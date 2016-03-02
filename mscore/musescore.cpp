@@ -22,7 +22,7 @@
 #include "preferences.h"
 #include "prefsdialog.h"
 #include "icons.h"
-#include "textstyle.h"
+#include "textstyledialog.h"
 #include "libmscore/xml.h"
 #include "seq.h"
 #include "libmscore/tempo.h"
@@ -396,7 +396,6 @@ MuseScore::MuseScore()
                   lang = "en";
 
             QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
-            qDebug("init Help from: <%s>", qPrintable(s));
             _helpEngine = new QHelpEngine(s, this);
             if (!_helpEngine->setupData()) {
                   qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
@@ -831,7 +830,7 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
       menuView->addSeparator();
-      
+
 #ifndef Q_OS_MAC
       a = getAction("fullscreen");
       a->setCheckable(true);
@@ -1169,8 +1168,8 @@ void MuseScore::selectScore(QAction* action)
       if (!a.isEmpty()) {
             if (a == "clear-recent") {
                   _recentScores.clear();
-                  if (startcenter)
-                        startcenter->updateRecentScores();
+//                  if (startcenter)
+//TODO                        startcenter->updateRecentScores();
                   }
             else {
                   Score* score = readScore(a);
@@ -1262,8 +1261,8 @@ void MuseScore::addRecentScore(Score* score)
       addRecentScore(path);
       path = score->fileInfo()->absoluteFilePath();
       addRecentScore(path);
-      if (startcenter)
-            startcenter->updateRecentScores();
+//TODO      if (startcenter)
+//            startcenter->updateRecentScores();
       }
 
 void MuseScore::addRecentScore(const QString& scorePath)
@@ -2135,7 +2134,7 @@ static bool processNonGui()
                               cs->style()->load(&f);
                         }
                   cs->startCmd();
-                  cs->setLayoutAll(true);
+                  cs->setLayoutAll();
                   cs->endCmd();
                   cs->switchToPageMode();
                   mscore->pluginTriggered(0);
@@ -2822,8 +2821,8 @@ void MuseScore::writeSettings()
             pianorollEditor->writeSettings();
       if (drumrollEditor)
             drumrollEditor->writeSettings();
-      if (startcenter)
-            startcenter->writeSettings(settings);
+//TODO      if (startcenter)
+//            startcenter->writeSettings(settings);
       }
 
 //---------------------------------------------------------
@@ -3164,8 +3163,8 @@ void MuseScore::handleMessage(const QString& message)
       {
       if (message.isEmpty())
             return;
-      if (startcenter)
-            showStartcenter(false);
+//TODO      if (startcenter)
+//            showStartcenter(false);
       ((QtSingleApplication*)(qApp))->activateWindow();
       Score* score = readScore(message);
       if (score) {
@@ -3497,7 +3496,7 @@ void MuseScore::splitWindow(bool horizontal)
             if (!scoreList.isEmpty()) {
                   tab2->setCurrentIndex(0);
                   Score* s = scoreList[0];
-                  s->setLayoutAll(true);
+                  s->setLayoutAll();
                   s->end();
                   setCurrentView(1, 0);
                   }
@@ -3694,7 +3693,7 @@ void MuseScore::midiNoteReceived(int pitch, bool ctrl, int vel)
 void MuseScore::switchLayer(const QString& s)
       {
       if (cs->switchLayer(s)) {
-            cs->setLayoutAll(true);
+            cs->setLayoutAll();
             cs->update();
             }
       }
@@ -4194,8 +4193,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             undoRedo(false);
       else if (cmd == "toggle-palette")
             showPalette(a->isChecked());
-      else if (cmd == "startcenter")
-            showStartcenter(a->isChecked());
+//TODO      else if (cmd == "startcenter")
+//            showStartcenter(a->isChecked());
       else if (cmd == "inspector")
             showInspector(a->isChecked());
 #ifdef OMR
@@ -4672,7 +4671,6 @@ using namespace Ms;
 int main(int argc, char* av[])
       {
 #ifndef NDEBUG
-      printf("check properties\n");
       checkProperties();
 #endif
 

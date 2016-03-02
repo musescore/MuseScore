@@ -421,15 +421,10 @@ void Score::undoChangeElement(Element* oldElement, Element* newElement)
 
 void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
       {
-      const LinkedElements* l = note->links();
-      if (l) {
-            for (ScoreElement* e : *l) {
-                  Note* n = static_cast<Note*>(e);
-                  undo()->push(new ChangePitch(n, pitch, tpc1, tpc2));
-                  }
+      for (ScoreElement* e : note->linkList()) {
+            Note* n = static_cast<Note*>(e);
+            undo()->push(new ChangePitch(n, pitch, tpc1, tpc2));
             }
-      else
-            undo()->push(new ChangePitch(note, pitch, tpc1, tpc2));
       }
 
 //---------------------------------------------------------
@@ -1501,7 +1496,7 @@ static void undoAddTuplet(DurationElement* cr)
 
 void AddElement::endUndoRedo(bool isUndo) const
       {
-      if (element->isChordRest()) {
+      if (element->isChordRest1()) {
             if (isUndo)
                   undoRemoveTuplet(static_cast<ChordRest*>(element));
             else
@@ -1556,7 +1551,7 @@ RemoveElement::RemoveElement(Element* e)
       element = e;
 
       Score* score = element->score();
-      if (element->isChordRest()) {
+      if (element->isChordRest1()) {
 #if 0
             // do not delete pending slur in note entry mode
             Slur* pendingSlur = 0;
@@ -1589,8 +1584,8 @@ RemoveElement::RemoveElement(Element* e)
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().size() <= 1)
                   score->undo(new RemoveElement(cr->tuplet()));
-            if (e->type() == Element::Type::CHORD) {
-                  Chord* chord = static_cast<Chord*>(e);
+            if (e->isChord()) {
+                  Chord* chord = toChord(e);
                   // remove tremolo between 2 notes
                   if (chord->tremolo()) {
                         Tremolo* tremolo = chord->tremolo();
@@ -1633,9 +1628,9 @@ void RemoveElement::undo()
       {
       if (element->type() != Element::Type::TUPLET)
             element->score()->addElement(element);
-      if (element->isChordRest()) {
-            if (element->type() == Element::Type::CHORD) {
-                  Chord* chord = static_cast<Chord*>(element);
+      if (element->isChordRest1()) {
+            if (element->isChord()) {
+                  Chord* chord = toChord(element);
                   foreach(Note* note, chord->notes()) {
                         if (note->tieBack())
                               note->tieBack()->setEndNote(note);
@@ -1655,11 +1650,11 @@ void RemoveElement::redo()
       {
       if (element->type() != Element::Type::TUPLET)
             element->score()->removeElement(element);
-      if (element->isChordRest()) {
-            undoRemoveTuplet(static_cast<ChordRest*>(element));
-            if (element->type() == Element::Type::CHORD) {
-                  Chord* chord = static_cast<Chord*>(element);
-                  foreach(Note* note, chord->notes()) {
+      if (element->isChordRest1()) {
+            undoRemoveTuplet(toChordRest(element));
+            if (element->isChord()) {
+                  Chord* chord = toChord(element);
+                  for (Note* note : chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote()) {
                               note->tieFor()->endNote()->setTieBack(0);
                               }
@@ -1702,7 +1697,7 @@ void ChangeConcertPitch::flip()
       {
       int oval = int(score->styleB(StyleIdx::concertPitch));
       score->style()->set(StyleIdx::concertPitch, val);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       val = oval;
       }
 
@@ -1866,6 +1861,8 @@ ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc1, int _tpc2)
 
 void ChangePitch::flip()
       {
+      printf("ChangePitch::flip: layout mode %d\n", int(note->score()->updateMode()));
+
       int f_pitch = note->pitch();
       int f_tpc1  = note->tpc1();
       int f_tpc2  = note->tpc2();
@@ -1879,7 +1876,7 @@ void ChangePitch::flip()
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
 
-      note->score()->setLayoutAll(true);
+      note->score()->setLayout(note->tick());
       }
 
 //---------------------------------------------------------
@@ -1921,7 +1918,7 @@ void ChangeFretting::flip()
       fret  = f_fret;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
-      note->score()->setLayoutAll(true);
+      note->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1975,7 +1972,7 @@ void ChangeElement::flip()
                   ns->system()->add(ns);
             }
       qSwap(oldElement, newElement);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2040,7 +2037,7 @@ void ChangeKeySig::flip()
 
       showCourtesy = sc;
       ks           = oe;
-      keysig->score()->setLayoutAll(true);
+      keysig->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2131,7 +2128,7 @@ void ChangeBarLineSpan::flip()
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
       // all bar lines of this staff across the whole score needs to be re-laid out and re-drawn
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2235,7 +2232,7 @@ void ChangeInstrumentShort::flip()
       QList<StaffName> s = part->shortNames(tick);
       part->setShortNames(text, tick);
       text = s;
-      part->score()->setLayoutAll(true);
+      part->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2254,7 +2251,7 @@ void ChangeInstrumentLong::flip()
       QList<StaffName> s = part->longNames(tick);
       part->setLongNames(text, tick);
       text = s;
-      part->score()->setLayoutAll(true);
+      part->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2273,7 +2270,7 @@ void ChangeBracketSpan::flip()
       int oSpan  = staff->bracketSpan(column);
       staff->setBracketSpan(column, span);
       span = oSpan;
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2292,7 +2289,7 @@ void ChangeBracketType::flip()
       bracket->setBracketType(type);
       type = oType;
       bracket->staff()->setBracket(bracket->level(), bracket->bracketType());
-      bracket->staff()->score()->setLayoutAll(true);
+      bracket->staff()->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2333,7 +2330,7 @@ void EditText::undoRedo()
       QString s = text->xmlText();
       text->setXmlText(oldText);
       oldText = s;
-      text->score()->setLayoutAll(true);
+      text->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2417,7 +2414,7 @@ void ChangePageFormat::flip()
             score->spatiumChanged(os, spatium);
             }
       score->setPageNumberOffset(pageOffset);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
 
       pf->copy(f);
       spatium = os;
@@ -2488,7 +2485,7 @@ void ChangeStaff::flip()
                   mstaff->lines->setVisible(!staff->invisible());
                   }
             }
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       staff->score()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty();
 
@@ -2508,7 +2505,7 @@ void ChangeStaffType::flip()
       staffType = st;
 
       Score* score = staff->score();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->scanElements(0, notifyTimeSigs);
       }
 
@@ -2542,7 +2539,7 @@ void ChangePart::flip()
       // check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 
-      score->setLayoutAll(true);
+      score->setLayoutAll();
 
       partName   = s;
       instrument = oi;
@@ -2585,7 +2582,7 @@ void ChangeTextStyle::flip()
       QString s(style.name());
       score->scanElements(&s, updateTextStyle);
       style = os;
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2642,12 +2639,9 @@ void ChangeStyle::flip()
             score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
             score->scanElements(0, updateTimeSigs);
             }
-      if (score->style()->spatium() != style.spatium())
-            score->spatiumChanged(score->style()->spatium(), style.spatium());
-
       score->setStyle(style);
       score->scanElements(0, updateTextStyle2);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
 
       style = tmp;
       }
@@ -2660,7 +2654,7 @@ void ChangeStyleVal::flip()
       {
       QVariant v = score->style(idx);
       score->style()->set(idx, value);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       value = v;
       }
 
@@ -2681,12 +2675,12 @@ void ChangeChordStaffMove::flip()
             for (ScoreElement* e : *l) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   cr->setStaffMove(staffMove);
-                  cr->score()->setLayoutAll(true);
+                  cr->score()->setLayoutAll();
                   }
             }
       else {
             chordRest->setStaffMove(staffMove);
-            chordRest->score()->setLayoutAll(true);
+            chordRest->score()->setLayoutAll();
             }
       staffMove = v;
       }
@@ -2931,7 +2925,7 @@ void InsertRemoveMeasures::insertMeasures()
                   key->staff()->setKey(key->segment()->tick(), key->keySigEvent());
             }
 
-      score->setLayoutAll(true);
+      score->setLayoutAll();
 
       //
       // connect ties
@@ -2992,14 +2986,14 @@ void InsertRemoveMeasures::removeMeasures()
                   }
 
             score->insertTime(tick1, -(tick2 - tick1));
-            score->setLayoutAll(true);
+            score->setLayoutAll();
             for (Spanner* sp : score->unmanagedSpanners())
                   if ( (sp->tick() >= tick1 && sp->tick() < tick2)
                               || (sp->tick2() >= tick1 && sp->tick2() < tick2) )
                         sp->removeUnmanaged();
             score->connectTies(true);   // ??
             }
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -3149,7 +3143,7 @@ void ChangeInstrument::flip()
 
       is->score()->rebuildMidiMapping();
       is->score()->setInstrumentsChanged(true);
-      is->score()->setLayoutAll(true);
+      is->score()->setLayoutAll();
       instrument = oi;
       }
 
@@ -3166,7 +3160,7 @@ void SwapCR::flip()
       Element* cr = s1->element(track);
       s1->setElement(track, s2->element(track));
       s2->setElement(track, cr);
-      cr1->score()->setLayoutAll(true);
+      cr1->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -3195,7 +3189,7 @@ void ChangeClefType::flip()
       clef->staff()->setClef(clef);
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
-      clef->score()->setLayoutAll(true);
+      clef->score()->setLayoutAll();
 
       concertClef     = ocl;
       transposingClef = otc;
@@ -3215,7 +3209,7 @@ void MoveStaff::flip()
       part->insertStaff(staff, rstaff);
       part = oldPart;
       rstaff = idx;
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -3238,7 +3232,7 @@ void ChangeStaffUserDist::flip()
       qreal v = staff->userDist();
       staff->setUserDist(dist);
       dist = v;
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -3352,27 +3346,27 @@ void AddBracket::redo()
       {
       staff->setBracket(level, type);
       staff->setBracketSpan(level, span);
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 void AddBracket::undo()
       {
       staff->setBracket(level, BracketType::NO_BRACKET);
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 
 void RemoveBracket::redo()
       {
       staff->setBracket(level, BracketType::NO_BRACKET);
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 void RemoveBracket::undo()
       {
       staff->setBracket(level, type);
       staff->setBracketSpan(level, span);
-      staff->score()->setLayoutAll(true);
+      staff->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -3452,7 +3446,7 @@ void ChangeSpannerElements::flip()
             static_cast<Note*>(startElement)->setTieFor(0);
             tie->startNote()->setTieFor(tie);
             }
-      spanner->score()->setLayoutAll(true);
+      spanner->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------

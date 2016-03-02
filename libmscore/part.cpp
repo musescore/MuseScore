@@ -534,7 +534,7 @@ bool Part::setProperty(P_ID id, const QVariant& property)
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

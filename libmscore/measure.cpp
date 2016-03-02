@@ -2667,7 +2667,7 @@ void Measure::checkMultiVoices(int staffIdx)
       int etrack = staffIdx * VOICES + VOICES;
       _mstaves[staffIdx]->hasVoices = false;
       for (Segment* s = first(); s; s = s->next()) {
-            if (s->segmentType() != Segment::Type::ChordRest)
+            if (s->isChordRestType())
                   continue;
             for (int track = strack; track < etrack; ++track) {
                   Element* e = s->element(track);
@@ -3136,7 +3136,7 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -3268,7 +3268,7 @@ void Measure::stretchMeasure(qreal stretch)
 
       for (auto& s : _segments) {
             int nticks;
-            if (s.isChordRest()) {
+            if (s.isChordRestType()) {
                   const Segment* nseg = s.next(Segment::Type::ChordRest);
                   nticks = (nseg ? nseg->rtick() : ticks()) - s.rtick();
                   if (nticks) {
@@ -3351,7 +3351,7 @@ void Measure::stretchMeasure(qreal stretch)
                         Segment* s1 = s->prev() ? s->prev() : 0;
                         Segment* s2;
                         for (s2 = s->next(); s2; s2 = s2->next()) {
-                              if (!s2->isChordRest())
+                              if (!s2->isChordRestType())
                                     break;
                               }
                         qreal x1 = s1 ? s1->x() + s1->minRight() : 0;

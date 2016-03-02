@@ -164,11 +164,11 @@ set(_qt_modules
   Qml
   Quick
   QuickWidgets
-  WebKit
-  WebKitWidgets
   Sql
   OpenGL
   Help
+  WebEngine
+  WebEngineWidgets
 )
 
 foreach(_module ${_qt_modules})
@@ -181,9 +181,6 @@ endforeach()
 
 list(APPEND QT_QTCORE_LIBRARIES ${Qt5Concurrent_LIBRARIES})
 list(APPEND QT_QTCORE_LIBRARY ${Qt5Concurrent_LIBRARIES})
-
-list(APPEND QT_QTWEBKIT_LIBRARIES ${Qt5WebKitWidgets_LIBRARIES})
-list(APPEND QT_QTWEBKIT_LIBRARY ${Qt5WebKitWidgets_LIBRARIES})
 
 set(QT_QTDECLARATIVE_LIBRARIES ${Qt5Quick1_LIBRARIES})
 set(QT_QTDECLARATIVE_LIBRARY ${Qt5Quick1_LIBRARIES})

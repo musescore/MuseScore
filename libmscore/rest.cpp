@@ -242,7 +242,7 @@ Element* Rest::drop(const DropData& data)
                   {
                   Chord* c              = static_cast<Chord*>(e);
                   Note* n               = c->upNote();
-                  MScore::Direction dir = c->stemDirection();
+                  Direction dir = c->stemDirection();
                   // score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
@@ -856,7 +856,7 @@ bool Rest::setProperty(P_ID propertyId, const QVariant& v)
                   layout();
                   score()->addRefresh(canvasBoundingRect());
                   if (beam())
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                   break;
             default:
                   return ChordRest::setProperty(propertyId, v);

@@ -65,7 +65,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -184,7 +184,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
             ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -274,7 +274,7 @@ void ScoreView::lyricsMinus()
       adjustCanvasPosition(toLyrics, false);
       ((Lyrics*)editObject)->selectAll();
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -343,7 +343,7 @@ void ScoreView::lyricsUnderscore()
             if (fromLyrics)
                   _score->select(fromLyrics, SelectType::SINGLE, 0);
             //_score->update();
-            _score->setLayoutAll(true);
+            _score->setLayoutAll();
             _score->endCmd();
             return;
             }
@@ -391,7 +391,7 @@ void ScoreView::lyricsUnderscore()
       adjustCanvasPosition(toLyrics, false);
       ((Lyrics*)editObject)->selectAll();
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       //_score->update();
       _score->endCmd();
       }
@@ -421,7 +421,7 @@ void ScoreView::lyricsReturn()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(lyrics, false);
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 

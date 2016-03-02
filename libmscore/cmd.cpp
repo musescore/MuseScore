@@ -78,6 +78,47 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void CmdState::reset()
+      {
+      refresh             = QRectF();     ///< area to update, canvas coordinates
+      layoutFlags         = LayoutFlag::NO_FLAGS;
+      _updateMode         = UpdateMode::DoNothing;
+      _playNote           = false;        ///< play selected note after command
+      _playChord          = false;        ///< play whole chord for the selected note
+      _excerptsChanged    = false;
+      _instrumentsChanged = false;
+      _selectionChanged   = false;
+      _startTick          = -1;
+      _endTick            = -1;
+      }
+
+//---------------------------------------------------------
+//   setTick
+//---------------------------------------------------------
+
+void CmdState::setTick(int t)
+      {
+      if (_startTick == -1 || t < _startTick)
+            _startTick = t;
+      if (_endTick == -1 || t > _endTick)
+            _endTick = t;
+      setUpdateMode(UpdateMode::LayoutTick);
+      }
+
+//---------------------------------------------------------
+//   setUpdateMode
+//---------------------------------------------------------
+
+void CmdState::setUpdateMode(UpdateMode m)
+      {
+      if (int(m) > int(_updateMode))
+            _updateMode = m;
+      }
+
+//---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
 ///   and starting a user-visble undo.
@@ -87,8 +128,8 @@ void Score::startCmd()
       {
       if (MScore::debugMode)
             qDebug("===startCmd()");
-      _layoutAll = true;      ///< do a complete relayout
-      _playNote = false;
+
+      _cmdState.reset();
 
       // Start collecting low-level undo operations for a
       // user-visible undo action.
@@ -111,27 +152,35 @@ void Score::startCmd()
 void Score::endCmd(bool rollback)
       {
       if (!undo()->active()) {
-            // if (MScore::debugMode)
-                  qDebug("Score::endCmd(): no cmd active");
+            qDebug("Score::endCmd(): no cmd active");
             end();
             return;
             }
 
       if (rollback) {
-            setLayoutAll(true);
+            setLayoutAll();
             undo()->current()->unwind();
             }
 
-      for (Score* s : scoreList()) {
-            if (s->layoutAll()) {
-                  s->_updateAll  = true;
-                  s->doLayout();
-                  if (s != this)
-                        s->deselectAll();
-                  }
-            const InputState& is = s->inputState();
-            if (is.noteEntryMode() && is.segment())
-                  s->setPlayPos(is.segment()->tick());
+      switch (_cmdState.updateMode()) {
+            case UpdateMode::DoNothing:
+            case UpdateMode::Update:
+            case UpdateMode::UpdateAll:
+                  break;
+            case UpdateMode::LayoutTick:
+                  doLayoutRange(_cmdState.startTick(), _cmdState.endTick());
+                  setUpdateAll();
+                  break;
+            case UpdateMode::LayoutAll:
+                  doLayout();
+                  setUpdateAll();
+                  setUpdateAll();
+                  break;
+            }
+
+      const InputState& is = inputState();
+      if (is.noteEntryMode() && is.segment()) {
+            setPlayPos(is.segment()->tick());
             }
       if (_playlistDirty) {
             emit playlistChanged();
@@ -170,8 +219,8 @@ void Score::end()
 void Score::update()
       {
       for (Score* s : scoreList()) {
-            if (s->layoutAll()) {
-                  s->setUpdateAll(true);
+            if (s->_cmdState.layoutAll()) {
+                  s->setUpdateAll();
                   s->doLayout();
                   }
             if (s != this)
@@ -186,19 +235,17 @@ void Score::update()
 
 void Score::end1()
       {
-      if (_updateAll) {
+      if (_cmdState.updateAll()) {
             for (MuseScoreView* v : viewer)
                   v->updateAll();
             }
       else {
             // update a little more:
             qreal d = spatium() * .5;
-            refresh.adjust(-d, -d, 2 * d, 2 * d);
+            _cmdState.refresh.adjust(-d, -d, 2 * d, 2 * d);
             for (MuseScoreView* v : viewer)
-                  v->dataChanged(refresh);
+                  v->dataChanged(_cmdState.refresh);
             }
-      refresh    = QRectF();
-      _updateAll = false;
       }
 
 //---------------------------------------------------------
@@ -210,11 +257,11 @@ void Score::endUndoRedo()
       {
       updateSelection();
       for (Score* score : scoreList()) {
-            if (score->layoutAll()) {
+            if (score->_cmdState.layoutAll()) {
                   score->setUndoRedo(true);
                   score->doLayout();
                   score->setUndoRedo(false);
-                  score->setUpdateAll(true);
+                  score->setUpdateAll();
                   }
             const InputState& is = score->inputState();
             if (is.noteEntryMode() && is.segment())
@@ -453,11 +500,11 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
-            _playNote = true;
+            _cmdState._playNote = true;
 
             select(note, SelectType::SINGLE, 0);
             }
-      setLayoutAll(true);
+      setLayoutAll();
       _is.moveToNextInputPos();
       endCmd();
       }
@@ -516,7 +563,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 //---------------------------------------------------------
 
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
-   MScore::Direction stemDirection)
+   Direction stemDirection)
       {
       Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
 
@@ -580,7 +627,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   undoAddCR(ncr, measure, tick);
                   if (addTie)
                         undoAddElement(addTie);
-                  _playNote = true;
+                  _cmdState._playNote = true;
                   segment = ncr->segment();
                   tick += ncr->actualTicks();
                   }
@@ -635,7 +682,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                                     }
                               }
                         }
-                  setLayoutAll(true);
+                  setLayoutAll();
                   }
             select(nr, SelectType::SINGLE, 0);
             }
@@ -659,7 +706,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
       Q_ASSERT(_sd.numerator());
 
       Measure* measure = segment->measure();
-      setLayoutAll(true);
+      setLayoutAll();
       Fraction akkumulated;
       Fraction sd = _sd;
 
@@ -1206,10 +1253,8 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 void Score::upDown(bool up, UpDownMode mode)
       {
       QList<Note*> el = selection().uniqueNotes();
-      if (el.empty())
-            return;
 
-      foreach (Note* oNote, el) {
+      for (Note* oNote : el) {
             int tick     = oNote->chord()->tick();
             Staff* staff = oNote->staff();
             Part* part   = staff->part();
@@ -1287,7 +1332,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         }
                         break;
                   case StaffGroup::STANDARD:
-                        switch(mode) {
+                        switch (mode) {
                               case UpDownMode::OCTAVE:
                                     if (up) {
                                           if (pitch < 116)
@@ -1344,15 +1389,12 @@ void Score::upDown(bool up, UpDownMode mode)
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
                   // remove accidental if present to make sure
                   // user added accidentals are removed here.
-                  if (oNote->links()) {
-                        for (ScoreElement* e : *oNote->links()) {
-                              Note* ln = static_cast<Note*>(e);
-                              if (ln->accidental())
-                                    undoRemoveElement(ln->accidental());
-                              }
+                  auto l = oNote->linkList();
+                  for (ScoreElement* e : l) {
+                        Note* ln = static_cast<Note*>(e);
+                        if (ln->accidental())
+                              undo(new RemoveElement(ln->accidental()));
                         }
-                  else if (oNote->accidental())
-                        undoRemoveElement(oNote->accidental());
                   undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
                   }
 
@@ -1375,7 +1417,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
 
             // play new note with velocity 80 for 0.3 sec:
-            _playNote = true;
+            _cmdState._playNote = true;
             }
 
       _selection.clear();
@@ -1606,7 +1648,7 @@ void Score::resetUserStretch()
             if (m == m2)
                   break;
             }
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1685,7 +1727,7 @@ void Score::cmdAddStretch(qreal val)
                   stretch = 0;
             m->undoChangeProperty(P_ID::USER_STRETCH, stretch);
             }
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1719,9 +1761,7 @@ void Score::cmdResetBeamMode()
                         }
                   }
             }
-      _layoutAll = true;
-      if (noSelection)
-            deselectAll();
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1780,7 +1820,7 @@ bool Score::processMidiInput()
                   }
             }
       if (cmdActive) {
-            _layoutAll = true;
+            setLayoutAll();
             endCmd();
             //after relayout
             Element* e = inputState().cr();
@@ -1877,7 +1917,7 @@ Element* Score::move(const QString& cmd)
                   // if chord, go to topmost note
                   if (trg->type() == Element::Type::CHORD)
                         trg = static_cast<Chord*>(trg)->upNote();
-                  _playNote = true;
+                  _cmdState._playNote = true;
                   select(trg, SelectType::SINGLE, 0);
                   return trg;
                   }
@@ -1993,7 +2033,7 @@ Element* Score::move(const QString& cmd)
       if (el) {
             if (el->type() == Element::Type::CHORD)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
-            _playNote = true;
+            _cmdState._playNote = true;
             if (noteEntryMode()) {
                   // if cursor moved into a gap, selection cannot follow
                   // only select & play el if it was not already selected (does not normally happen)
@@ -2001,7 +2041,7 @@ Element* Score::move(const QString& cmd)
                   if (cr || !el->selected())
                         select(el, SelectType::SINGLE, 0);
                   else
-                        _playNote = false;
+                        _cmdState._playNote = false;
                   for (MuseScoreView* view : viewer)
                         view->moveCursor();
                   }
@@ -2183,12 +2223,12 @@ void Score::cmdAddBracket()
 //   cmdMoveRest
 //---------------------------------------------------------
 
-void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
+void Score::cmdMoveRest(Rest* rest, Direction dir)
       {
       QPointF pos(rest->userOff());
-      if (dir == MScore::Direction::UP)
+      if (dir == Direction::UP)
             pos.ry() -= spatium();
-      else if (dir == MScore::Direction::DOWN)
+      else if (dir == Direction::DOWN)
             pos.ry() += spatium();
       undoChangeProperty(rest, P_ID::USER_OFF, pos);
       }
@@ -2197,12 +2237,12 @@ void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
 //   cmdMoveLyrics
 //---------------------------------------------------------
 
-void Score::cmdMoveLyrics(Lyrics* lyrics, MScore::Direction dir)
+void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       {
       ChordRest* cr        = lyrics->chordRest();
       QVector<Lyrics*>& ll = cr->lyricsList();
       int no               = lyrics->no();
-      if (dir == MScore::Direction::UP) {
+      if (dir == Direction::UP) {
             if (no) {
                   if (ll[no-1] == 0) {
                         ll[no-1] = ll[no];
@@ -2240,22 +2280,22 @@ void Score::cmd(const QAction* a)
       //
       Element* el = selection().element();
       if (cmd == "pitch-up") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
-            else if (el && el->type() == Element::Type::REST)
-                  cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::UP);
-            else if (el && el->type() == Element::Type::LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::Direction::UP);
+            else if (el && el->isRest())
+                  cmdMoveRest(toRest(el), Direction::UP);
+            else if (el && el->isLyrics())
+                  cmdMoveLyrics(toLyrics(el), Direction::UP);
             else
                   upDown(true, UpDownMode::CHROMATIC);
             }
       else if (cmd == "pitch-down") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
-            else if (el && el->type() == Element::Type::REST)
-                  cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::DOWN);
-            else if (el && el->type() == Element::Type::LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::Direction::DOWN);
+            else if (el && el->isRest())
+                  cmdMoveRest(toRest(el), Direction::DOWN);
+            else if (el && el->isLyrics())
+                  cmdMoveLyrics(toLyrics(el), Direction::DOWN);
             else
                   upDown(false, UpDownMode::CHROMATIC);
             }
@@ -2281,13 +2321,13 @@ void Score::cmd(const QAction* a)
             cmdDeleteSelectedMeasures();
             }
       else if (cmd == "pitch-up-octave") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
             else
                   upDown(true, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-down-octave") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
             else
                   upDown(false, UpDownMode::OCTAVE);
@@ -2475,10 +2515,8 @@ void Score::cmd(const QAction* a)
             cmdDoubleDuration();
       else if (cmd == "half-duration")
             cmdHalfDuration();
-      else if (cmd == "") {               //Midi note received only?
-            if (!noteEntryMode())
-                  setLayoutAll(false);
-            }
+      else if (cmd == "")               //Midi note received only?
+                  ;
       else if (cmd == "add-audio")
             addAudioTrack();
       else if (cmd == "transpose-up")
@@ -2657,7 +2695,7 @@ void Score::cmdExplode()
             if (cr) {
                   XmlReader e(srcSelection.mimeData());
                   e.setPasteMode(true);
-                  if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteStatus::PS_NO_ERROR)
+                  if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR)
                         qDebug("explode: paste failed");
                   }
             }
@@ -2689,7 +2727,7 @@ void Score::cmdExplode()
       select(startMeasure, SelectType::RANGE, srcStaff);
       select(endMeasure, SelectType::RANGE, lastStaff - 1);
 
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2794,7 +2832,7 @@ void Score::cmdImplode()
       select(startMeasure, SelectType::RANGE, dstStaff);
       select(endMeasure, SelectType::RANGE, dstStaff);
 
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2912,7 +2950,7 @@ void Score::cmdSlashFill()
             select(firstSlash, SelectType::RANGE);
             select(lastSlash, SelectType::RANGE);
             }
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2957,7 +2995,7 @@ void Score::cmdSlashRhythm()
                         c->setSlash(!c->slash(), false);
                   }
             }
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------

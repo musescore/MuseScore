@@ -73,7 +73,6 @@ void ScoreView::startEdit()
       {
       if (editObject->type() == Element::Type::TBOX)
             editObject = static_cast<TBox*>(editObject)->text();
-      _score->setLayoutAll(false);
       curElement  = 0;
       setFocus();
       if (!_score->undo()->active())
@@ -192,7 +191,6 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             }
       data.delta = data.pos - data.lastPos;
 
-      _score->setLayoutAll(false);
       score()->addRefresh(editObject->canvasBoundingRect());
       if (editObject->isText()) {
             Text* text = static_cast<Text*>(editObject);

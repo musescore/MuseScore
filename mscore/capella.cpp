@@ -657,10 +657,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         chord->setTrack(track);
                         switch (o->stemDir) {
                               case ChordObj::StemDir::DOWN:
-                                    chord->setStemDirection(MScore::Direction::DOWN);
+                                    chord->setStemDirection(Direction::DOWN);
                                     break;
                               case ChordObj::StemDir::UP:
-                                    chord->setStemDirection(MScore::Direction::UP);
+                                    chord->setStemDirection(Direction::UP);
                                     break;
                               case ChordObj::StemDir::NONE:
                                     chord->setNoStem(true);
@@ -1322,7 +1322,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       score->connectTies();
       score->fixTicks();
       score->setPlaylistDirty();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       }
 

@@ -47,111 +47,201 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = s;
 
-      styleWidgets = {
-            { StyleIdx::staffUpperBorder,        staffUpperBorder       },
-            { StyleIdx::staffLowerBorder,        staffLowerBorder       },
-            { StyleIdx::staffDistance,           staffDistance          },
-            { StyleIdx::akkoladeDistance,        akkoladeDistance       },
-            { StyleIdx::minSystemDistance,       minSystemDistance      },
-            { StyleIdx::maxSystemDistance,       maxSystemDistance      },
-            { StyleIdx::lyricsDistance,          lyricsDistance         },
-            { StyleIdx::lyricsMinBottomDistance, lyricsMinBottomDistance },
-            { StyleIdx::systemFrameDistance,     systemFrameDistance    },
-            { StyleIdx::frameSystemDistance,     frameSystemDistance    },
-            { StyleIdx::minMeasureWidth,         minMeasureWidth_2      },
-            { StyleIdx::barWidth,                barWidth               },
-            { StyleIdx::endBarWidth,             endBarWidth            },
-            { StyleIdx::endBarDistance,          endBarDistance         },
-            { StyleIdx::doubleBarWidth,          doubleBarWidth         },
-            { StyleIdx::doubleBarDistance,       doubleBarDistance      },
-            { StyleIdx::barGraceDistance,        barGraceDistance       },
-
-            { StyleIdx::useStandardNoteNames,    useStandardNoteNames   },
-            { StyleIdx::useGermanNoteNames,      useGermanNoteNames     },
-            { StyleIdx::useFullGermanNoteNames,  useFullGermanNoteNames },
-            { StyleIdx::useSolfeggioNoteNames,   useSolfeggioNoteNames  },
-            { StyleIdx::useFrenchNoteNames,      useFrenchNoteNames     },
-            { StyleIdx::automaticCapitalization, automaticCapitalization },
-
-            { StyleIdx::lowerCaseMinorChords,    lowerCaseMinorChords    },
-            { StyleIdx::lowerCaseBassNotes,      lowerCaseBassNotes      },
-            { StyleIdx::allCapsNoteNames,        allCapsNoteNames        },
-            { StyleIdx::concertPitch,            concertPitch            },
-            { StyleIdx::createMultiMeasureRests, multiMeasureRests       },
-            { StyleIdx::minEmptyMeasures,        minEmptyMeasures        },
-            { StyleIdx::minMMRestWidth,          minMeasureWidth         },
-            { StyleIdx::hideEmptyStaves,         hideEmptyStaves         },
-            { StyleIdx::dontHideStavesInFirstSystem, dontHideStavesInFirstSystem             },
-            { StyleIdx::hideInstrumentNameIfOneInstrument, hideInstrumentNameIfOneInstrument },
-            { StyleIdx::accidentalNoteDistance,  accidentalNoteDistance  },
-            { StyleIdx::accidentalDistance,      accidentalDistance      },
-
-            { StyleIdx::minNoteDistance,         minNoteDistance         },
-            { StyleIdx::barNoteDistance,         barNoteDistance         },
-            { StyleIdx::barAccidentalDistance,   barAccidentalDistance   },
-            { StyleIdx::multiMeasureRestMargin,  multiMeasureRestMargin  },
-            { StyleIdx::noteBarDistance,         noteBarDistance         },
-            { StyleIdx::clefLeftMargin,          clefLeftMargin          },
-            { StyleIdx::keysigLeftMargin,        keysigLeftMargin        },
-            { StyleIdx::timesigLeftMargin,       timesigLeftMargin       },
-            { StyleIdx::clefKeyRightMargin,      clefKeyRightMargin      },
-            { StyleIdx::clefBarlineDistance,     clefBarlineDistance     },
-            { StyleIdx::staffLineWidth,          staffLineWidth          },
-            { StyleIdx::beamWidth,               beamWidth               },
-            { StyleIdx::beamMinLen,              beamMinLen              },
-            { StyleIdx::hairpinY,                hairpinY                },
-            { StyleIdx::hairpinLineWidth,        hairpinLineWidth        },
-            { StyleIdx::hairpinHeight,           hairpinHeight           },
-            { StyleIdx::hairpinContHeight,       hairpinContinueHeight   },
-            { StyleIdx::dotNoteDistance,         noteDotDistance         },
-            { StyleIdx::dotDotDistance,          dotDotDistance          },
-            { StyleIdx::stemWidth,               stemWidth               },
-            { StyleIdx::ledgerLineWidth,         ledgerLineWidth         },
-            { StyleIdx::ledgerLineLength,        ledgerLineLength        },
-            { StyleIdx::shortStemProgression,    shortStemProgression    },
-            { StyleIdx::shortestStem,            shortestStem            },
-            { StyleIdx::ArpeggioNoteDistance,    arpeggioNoteDistance    },
-            { StyleIdx::ArpeggioLineWidth,       arpeggioLineWidth       },
-            { StyleIdx::ArpeggioHookLen,         arpeggioHookLen         },
-            { StyleIdx::SlurEndWidth,            slurEndLineWidth        },
-            { StyleIdx::SlurMidWidth,            slurMidLineWidth        },
-            { StyleIdx::SlurDottedWidth,         slurDottedLineWidth     },
-            { StyleIdx::MinTieLength,            minTieLength            },
-            { StyleIdx::bracketWidth,            bracketWidth            },
-            { StyleIdx::bracketDistance,         bracketDistance         },
-            { StyleIdx::akkoladeWidth,           akkoladeWidth           },
-            { StyleIdx::akkoladeBarDistance,     akkoladeBarDistance     },
-            { StyleIdx::dividerLeft,             dividerLeft             },
-            { StyleIdx::dividerLeftX,            dividerLeftX            },
-            { StyleIdx::dividerLeftY,            dividerLeftY            },
-            { StyleIdx::dividerRight,            dividerRight            },
-            { StyleIdx::dividerRightX,           dividerRightX           },
-            { StyleIdx::dividerRightY,           dividerRightY           },
-            { StyleIdx::propertyDistanceHead,    propertyDistanceHead    },
-            { StyleIdx::propertyDistanceStem,    propertyDistanceStem    },
-            { StyleIdx::propertyDistance,        propertyDistance        },
-            { StyleIdx::voltaY,                  voltaY                  },
-            { StyleIdx::voltaHook,               voltaHook               },
-            { StyleIdx::voltaLineWidth,          voltaLineWidth          },
-            { StyleIdx::ottavaY,                 ottavaY                 },
-            { StyleIdx::ottavaHook,              ottavaHook              },
-            { StyleIdx::ottavaLineWidth,         ottavaLineWidth         },
-            { StyleIdx::pedalY,                  pedalY                  },
-            { StyleIdx::pedalLineWidth,          pedalLineWidth          },
-            { StyleIdx::trillY,                  trillY                  },
-            { StyleIdx::harmonyY,                harmonyY                },
-            { StyleIdx::harmonyFretDist,         harmonyFretDist         },
-            { StyleIdx::minHarmonyDistance,      minHarmonyDistance      },
-            { StyleIdx::maxHarmonyBarDistance,   maxHarmonyBarDistance   },
-            { StyleIdx::tupletVHeadDistance,     tupletVHeadDistance     },
-            { StyleIdx::tupletVStemDistance,     tupletVStemDistance     },
-            { StyleIdx::tupletStemLeftDistance,  tupletStemLeftDistance  },
-            { StyleIdx::tupletStemRightDistance, tupletStemRightDistance },
-            { StyleIdx::tupletNoteLeftDistance,  tupletNoteLeftDistance  },
-            { StyleIdx::tupletNoteRightDistance, tupletNoteRightDistance },
-            { StyleIdx::tupletBracketWidth,      tupletBracketWidth },
-
+      const char* styles[] = {
+            QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dashed"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dotted"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dotted"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dot-dotted")
             };
+      int data = 1;
+      voltaLineStyle->clear();
+      ottavaLineStyle->clear();
+      pedalLineStyle->clear();
+      for (const char* p : styles) {
+            QString trs = qApp->translate("EditStyleBase", p);
+            voltaLineStyle->addItem(trs, data);
+            ottavaLineStyle->addItem(trs, data);
+            pedalLineStyle->addItem(trs, data);
+            ++data;
+            }
+
+      styleWidgets = {
+      { StyleIdx::voltaLineStyle,         false, voltaLineStyle,           resetVoltaLineStyle },
+      { StyleIdx::ottavaLineStyle,        false, ottavaLineStyle,          resetOttavaLineStyle },
+      { StyleIdx::pedalLineStyle,         false, pedalLineStyle,           resetPedalLineStyle },
+
+      { StyleIdx::staffUpperBorder,        false, staffUpperBorder,        0 },
+      { StyleIdx::staffLowerBorder,        false, staffLowerBorder,        0 },
+      { StyleIdx::staffDistance,           false, staffDistance,           0 },
+      { StyleIdx::akkoladeDistance,        false, akkoladeDistance,        0 },
+      { StyleIdx::minSystemDistance,       false, minSystemDistance,       0 },
+      { StyleIdx::maxSystemDistance,       false, maxSystemDistance,       0 },
+      { StyleIdx::lyricsDistance,          false, lyricsDistance,          0 },
+      { StyleIdx::lyricsMinBottomDistance, false, lyricsMinBottomDistance, 0 },
+      { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     0 },
+      { StyleIdx::frameSystemDistance,     false, frameSystemDistance,     0 },
+      { StyleIdx::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
+      { StyleIdx::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
+
+      { StyleIdx::barWidth,                false, barWidth,                0 },
+      { StyleIdx::endBarWidth,             false, endBarWidth,             0 },
+      { StyleIdx::endBarDistance,          false, endBarDistance,          0 },
+      { StyleIdx::doubleBarWidth,          false, doubleBarWidth,          0 },
+      { StyleIdx::doubleBarDistance,       false, doubleBarDistance,       0 },
+      { StyleIdx::barGraceDistance,        false, barGraceDistance,        resetBarGraceDistance },
+      { StyleIdx::useStandardNoteNames,    false, useStandardNoteNames,    0 },
+      { StyleIdx::useGermanNoteNames,      false, useGermanNoteNames,      0 },
+      { StyleIdx::useFullGermanNoteNames,  false, useFullGermanNoteNames,  0 },
+      { StyleIdx::useSolfeggioNoteNames,   false, useSolfeggioNoteNames,   0 },
+      { StyleIdx::useFrenchNoteNames,      false, useFrenchNoteNames,      0 },
+      { StyleIdx::automaticCapitalization, false, automaticCapitalization, 0 },
+
+      { StyleIdx::lowerCaseMinorChords,    false, lowerCaseMinorChords,    0 },
+
+      { StyleIdx::lowerCaseBassNotes,      false, lowerCaseBassNotes,      0 },
+      { StyleIdx::allCapsNoteNames,        false, allCapsNoteNames,        0 },
+      { StyleIdx::concertPitch,            false, concertPitch,            0 },
+      { StyleIdx::createMultiMeasureRests, false, multiMeasureRests,       0 },
+      { StyleIdx::minEmptyMeasures,        false, minEmptyMeasures,        0 },
+      { StyleIdx::minMMRestWidth,          false, minMeasureWidth,         0 },
+      { StyleIdx::hideEmptyStaves,         false, hideEmptyStaves,         0 },
+      { StyleIdx::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem,             0 },
+      { StyleIdx::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
+      { StyleIdx::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
+      { StyleIdx::accidentalDistance,      false, accidentalDistance,      0 },
+
+      { StyleIdx::minNoteDistance,         false, minNoteDistance,         resetMinNoteDistance },
+      { StyleIdx::barNoteDistance,         false, barNoteDistance,         resetBarNoteDistance },
+      { StyleIdx::barAccidentalDistance,   false, barAccidentalDistance,   resetBarAccidentalDistance },
+      { StyleIdx::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
+      { StyleIdx::noteBarDistance,         false, noteBarDistance,         resetNoteBarDistance },
+      { StyleIdx::clefLeftMargin,          false, clefLeftMargin,          resetClefLeftMargin },
+      { StyleIdx::keysigLeftMargin,        false, keysigLeftMargin,        resetKeysigLeftMargin },
+      { StyleIdx::timesigLeftMargin,       false, timesigLeftMargin,       resetTimesigLeftMargin },
+      { StyleIdx::clefKeyRightMargin,      false, clefKeyRightMargin,      resetClefKeyRightMargin },
+      { StyleIdx::clefKeyDistance,         false, clefKeyDistance,         resetClefKeyDistance },
+      { StyleIdx::clefTimesigDistance,     false, clefTimesigDistance,     resetClefTimesigDistance },
+      { StyleIdx::keyTimesigDistance,      false, keyTimesigDistance,      resetKeyTimesigDistance },
+
+
+      { StyleIdx::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
+      { StyleIdx::staffLineWidth,          false, staffLineWidth,          resetStaffLineWidth },
+      { StyleIdx::beamWidth,               false, beamWidth,               0 },
+      { StyleIdx::beamMinLen,              false, beamMinLen,              0 },
+      { StyleIdx::hairpinY,                false, hairpinY,                resetHairpinY },
+      { StyleIdx::hairpinLineWidth,        false, hairpinLineWidth,        resetHairpinLineWidth },
+      { StyleIdx::hairpinHeight,           false, hairpinHeight,           resetHairpinHeight },
+      { StyleIdx::hairpinContHeight,       false, hairpinContinueHeight,   resetHairpinContinueHeight },
+      { StyleIdx::dotNoteDistance,         false, noteDotDistance,         0 },
+      { StyleIdx::dotDotDistance,          false, dotDotDistance,          0 },
+      { StyleIdx::stemWidth,               false, stemWidth,               0 },
+      { StyleIdx::ledgerLineWidth,         false, ledgerLineWidth,         0 },
+      { StyleIdx::ledgerLineLength,        false, ledgerLineLength,        0 },
+      { StyleIdx::shortStemProgression,    false, shortStemProgression,    0 },
+      { StyleIdx::shortestStem,            false, shortestStem,            0 },
+      { StyleIdx::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
+      { StyleIdx::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
+      { StyleIdx::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
+      { StyleIdx::SlurEndWidth,            false, slurEndLineWidth,        0 },
+      { StyleIdx::SlurMidWidth,            false, slurMidLineWidth,        0 },
+      { StyleIdx::SlurDottedWidth,         false, slurDottedLineWidth,     0 },
+      { StyleIdx::MinTieLength,            false, minTieLength,            0 },
+      { StyleIdx::bracketWidth,            false, bracketWidth,            0 },
+      { StyleIdx::bracketDistance,         false, bracketDistance,         0 },
+      { StyleIdx::akkoladeWidth,           false, akkoladeWidth,           0 },
+      { StyleIdx::akkoladeBarDistance,     false, akkoladeBarDistance,     0 },
+      { StyleIdx::dividerLeft,             false, dividerLeft,             0 },
+      { StyleIdx::dividerLeftX,            false, dividerLeftX,            0 },
+      { StyleIdx::dividerLeftY,            false, dividerLeftY,            0 },
+      { StyleIdx::dividerRight,            false, dividerRight,            0 },
+      { StyleIdx::dividerRightX,           false, dividerRightX,           0 },
+      { StyleIdx::dividerRightY,           false, dividerRightY,           0 },
+      { StyleIdx::propertyDistanceHead,    false, propertyDistanceHead,    0 },
+      { StyleIdx::propertyDistanceStem,    false, propertyDistanceStem,    0 },
+      { StyleIdx::propertyDistance,        false, propertyDistance,        0 },
+      { StyleIdx::voltaY,                  false, voltaY,                  resetVoltaY },
+      { StyleIdx::voltaHook,               false, voltaHook,               resetVoltaHook },
+      { StyleIdx::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
+      { StyleIdx::ottavaY,                 false, ottavaY,                 resetOttavaY },
+      { StyleIdx::ottavaHook,              false, ottavaHook,              resetOttavaHook },
+      { StyleIdx::ottavaLineWidth,         false, ottavaLineWidth,         resetOttavaLineWidth },
+      { StyleIdx::pedalY,                  false, pedalY,                  0 },
+      { StyleIdx::pedalLineWidth,          false, pedalLineWidth,          0 },
+      { StyleIdx::trillY,                  false, trillY,                  0 },
+      { StyleIdx::harmonyY,                false, harmonyY,                0 },
+      { StyleIdx::harmonyFretDist,         false, harmonyFretDist,         0 },
+      { StyleIdx::minHarmonyDistance,      false, minHarmonyDistance,      0 },
+      { StyleIdx::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
+      { StyleIdx::tupletVHeadDistance,     false, tupletVHeadDistance,     0 },
+      { StyleIdx::tupletVStemDistance,     false, tupletVStemDistance,     0 },
+      { StyleIdx::tupletStemLeftDistance,  false, tupletStemLeftDistance,  0 },
+      { StyleIdx::tupletStemRightDistance, false, tupletStemRightDistance, 0 },
+      { StyleIdx::tupletNoteLeftDistance,  false, tupletNoteLeftDistance,  0 },
+      { StyleIdx::tupletNoteRightDistance, false, tupletNoteRightDistance, 0 },
+      { StyleIdx::tupletBracketWidth,      false, tupletBracketWidth,      0 },
+      { StyleIdx::lyricsLineHeight,        true,  lyricsLineHeight,             0 },
+      { StyleIdx::repeatBarTips,           false, showRepeatBarTips,            0 },
+      { StyleIdx::startBarlineSingle,      false, showStartBarlineSingle,       0 },
+      { StyleIdx::startBarlineMultiple,    false, showStartBarlineMultiple,     0 },
+      { StyleIdx::dividerLeftSym,          false, dividerLeftSym,               0 },
+      { StyleIdx::dividerRightSym,         false, dividerRightSym,              0 },
+      { StyleIdx::showMeasureNumber,       false, showMeasureNumber,            0 },
+      { StyleIdx::showMeasureNumberOne,    false, showFirstMeasureNumber,       0 },
+      { StyleIdx::measureNumberInterval,   false, intervalMeasureNumber,        0 },
+      { StyleIdx::measureNumberSystem,     false, showEverySystemMeasureNumber, 0 },
+      { StyleIdx::measureNumberAllStaffs,  false, showAllStaffsMeasureNumber,   0 },
+      { StyleIdx::beamDistance,            true,  beamDistance,                 0 },
+      { StyleIdx::beamNoSlope,             false, beamNoSlope,                  0 },
+      { StyleIdx::graceNoteMag,            true,  graceNoteSize,                0 },
+      { StyleIdx::smallStaffMag,           true,  smallStaffSize,               0 },
+      { StyleIdx::smallNoteMag,            true,  smallNoteSize,                0 },
+      { StyleIdx::smallClefMag,            true,  smallClefSize,                0 },
+      { StyleIdx::lyricsDashMinLength,     false, lyricsDashMinLength,          0 },
+      { StyleIdx::lyricsDashMaxLength,     false, lyricsDashMaxLength,          0 },
+      { StyleIdx::lyricsDashForce,         false, lyricsDashForce,              0 },
+      { StyleIdx::lastSystemFillLimit,     true,  lastSystemFillThreshold,      0 },
+      { StyleIdx::genClef,                 false, genClef,                      0 },
+      { StyleIdx::genKeysig,               false, genKeysig,                    0 },
+      { StyleIdx::genCourtesyTimesig,      false, genCourtesyTimesig,           0 },
+      { StyleIdx::genCourtesyKeysig,       false, genCourtesyKeysig,            0 },
+      { StyleIdx::genCourtesyClef,         false, genCourtesyClef,              0 },
+      { StyleIdx::swingRatio,              false, swingBox,                     0 },
+      { StyleIdx::chordsXmlFile,           false, chordsXmlFile,                0 },
+      { StyleIdx::dotMag,                  true,  dotMag,                       0 },
+      { StyleIdx::articulationMag,         true,  articulationMag,              0 },
+      { StyleIdx::shortenStem,             false, shortenStem,                  0 },
+      { StyleIdx::showHeader,              false, showHeader,                   0 },
+      { StyleIdx::headerFirstPage,         false, showHeaderFirstPage,          0 },
+      { StyleIdx::headerOddEven,           false, headerOddEven,                0 },
+      { StyleIdx::evenHeaderL,             false, evenHeaderL,                  0 },
+      { StyleIdx::evenHeaderC,             false, evenHeaderC,                  0 },
+      { StyleIdx::evenHeaderR,             false, evenHeaderR,                  0 },
+      { StyleIdx::oddHeaderL,              false, oddHeaderL,                   0 },
+      { StyleIdx::oddHeaderC,              false, oddHeaderC,                   0 },
+      { StyleIdx::oddHeaderR,              false, oddHeaderR,                   0 },
+      { StyleIdx::showFooter,              false, showFooter,                   0 },
+      { StyleIdx::footerFirstPage,         false, showFooterFirstPage,          0 },
+      { StyleIdx::footerOddEven,           false, footerOddEven,                0 },
+      { StyleIdx::evenFooterL,             false, evenFooterL,                  0 },
+      { StyleIdx::evenFooterC,             false, evenFooterC,                  0 },
+      { StyleIdx::evenFooterR,             false, evenFooterR,                  0 },
+      { StyleIdx::oddFooterL,              false, oddFooterL,                   0 },
+      { StyleIdx::oddFooterC,              false, oddFooterC,                   0 },
+      { StyleIdx::oddFooterR,              false, oddFooterR,                   0 },
+
+      { StyleIdx::ottavaNumbersOnly,       false, ottavaNumbersOnly,            resetOttavaNumbersOnly },
+      { StyleIdx::capoPosition,            false, capoPosition,                 0 },
+      { StyleIdx::fretNumMag,              true,  fretNumMag,                   0 },
+      { StyleIdx::fretY,                   false, fretY,                        0 },
+      { StyleIdx::tupletMaxSlope,          false, tupletMaxSlope,               0 },
+      { StyleIdx::tupletOufOfStaff,        false, tupletOutOfStaff,             0 },
+      { StyleIdx::barreLineWidth,          false, barreLineWidth,               0 },
+      { StyleIdx::fretMag,                 false, fretMag,                      0 },
+      { StyleIdx::scaleBarlines,           false, scaleBarlines,                0 },
+      { StyleIdx::crossMeasureValues,      false, crossMeasureValues,           0 },
+      };
+
 
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
@@ -298,26 +388,35 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(lyricsDashMinLength, SIGNAL(valueChanged(double)), SLOT(lyricsDashMinLengthValueChanged(double)));
       connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)), SLOT(lyricsDashMaxLengthValueChanged(double)));
 
-      QSignalMapper* mapper = new QSignalMapper(this);
+      QSignalMapper* mapper  = new QSignalMapper(this);     // reset style signals
+      QSignalMapper* mapper2 = new QSignalMapper(this);     // value change signals
 
-#define CR(W, ID) connect(W, SIGNAL(clicked()), mapper, SLOT(map())); mapper->setMapping(W, int(ID));
-      CR(resetVoltaY,                StyleIdx::voltaY);
-      CR(resetVoltaHook,             StyleIdx::voltaHook);
-      CR(resetVoltaLineWidth,        StyleIdx::voltaLineWidth);
-      CR(resetVoltaLineStyle,        StyleIdx::voltaLineStyle);
+      for (const StyleWidget& sw : styleWidgets) {
+            const char* type = MStyle::valueType(sw.idx);
 
-      CR(resetOttavaY,               StyleIdx::ottavaY);
-      CR(resetOttavaHook,            StyleIdx::ottavaHook);
-      CR(resetOttavaLineWidth,       StyleIdx::ottavaLineWidth);
-      CR(resetOttavaLineStyle,       StyleIdx::ottavaLineStyle);
-      CR(resetOttavaNumbersOnly,     StyleIdx::ottavaNumbersOnly);
+            if (!strcmp("Direction", type)) {
+                  QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                  Direction::fillComboBox(cb);
+                  }
+            if (sw.reset) {
+                  sw.reset->setIcon(*icons[int(Icons::reset_ICON)]);
+                  sw.reset->setToolTip(tr("reset to default"));
+                  connect(sw.reset, SIGNAL(clicked()), mapper, SLOT(map()));
+                  mapper->setMapping(sw.reset, int(sw.idx));
+                  }
+            if (qobject_cast<QSpinBox*>(sw.widget))
+                  connect(qobject_cast<QSpinBox*>(sw.widget), SIGNAL(valueChanged(int)), mapper2, SLOT(map()));
+            else if (qobject_cast<QDoubleSpinBox*>(sw.widget))
+                  connect(qobject_cast<QDoubleSpinBox*>(sw.widget), SIGNAL(valueChanged(double)), mapper2, SLOT(map()));
+            else if (qobject_cast<QComboBox*>(sw.widget))
+                  connect(qobject_cast<QComboBox*>(sw.widget), SIGNAL(currentIndexChanged(int)), mapper2, SLOT(map()));
 
-      CR(resetHairpinY,              StyleIdx::hairpinY);
-      CR(resetHairpinLineWidth,      StyleIdx::hairpinLineWidth);
-      CR(resetHairpinHeight,         StyleIdx::hairpinHeight);
-      CR(resetHairpinContinueHeight, StyleIdx::hairpinContHeight);
-#undef CR
+            mapper2->setMapping(sw.widget, int(sw.idx));
+            }
+
       connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
+      connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
+
       resize(904, 577); // override designer values
       }
 
@@ -338,7 +437,7 @@ void EditStyle::buttonClicked(QAbstractButton* b)
             case QDialogButtonBox::Cancel:
                   if(cs->undo() && cs->undo()->current()) {
                         cs->undo()->current()->unwind();
-                        cs->setLayoutAll(true);
+                        cs->setLayoutAll();
                         }
                   done(0);
                   break;
@@ -390,74 +489,83 @@ void EditStyle::applyToAllParts()
       }
 
 //---------------------------------------------------------
+//   getValue
+//---------------------------------------------------------
+
+void EditStyle::getValue(StyleIdx idx)
+      {
+      const StyleWidget& sw = styleWidget(idx);
+      const char* type = MStyle::valueType(sw.idx);
+
+      if (!strcmp("Ms::Spatium", type)) {
+            QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
+            lstyle.set(sw.idx, QVariant(Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0))));
+            }
+
+      else if (!strcmp("double", type)) {
+            if (sw.showPercent)
+                  lstyle.set(sw.idx, qobject_cast<QSpinBox*>(sw.widget)->value() * 0.01);
+            else
+                  lstyle.set(sw.idx, qobject_cast<QDoubleSpinBox*>(sw.widget)->value());
+            }
+      else if (!strcmp("bool", type)) {
+                  if (qobject_cast<QCheckBox*>(sw.widget))
+                        lstyle.set(sw.idx, qobject_cast<QCheckBox*>(sw.widget)->isChecked());
+                  else if (qobject_cast<QGroupBox*>(sw.widget))
+                        lstyle.set(sw.idx, qobject_cast<QGroupBox*>(sw.widget)->isChecked());
+                  else if (qobject_cast<QRadioButton*>(sw.widget))
+                        lstyle.set(sw.idx, qobject_cast<QRadioButton*>(sw.widget)->isChecked());
+                  else
+                        qFatal("unhandled bool");
+            }
+      else if (!strcmp("int", type)) {
+            if (qobject_cast<QComboBox*>(sw.widget)) {
+                  QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                  lstyle.set(sw.idx, cb->currentData().toInt());
+                  }
+            else if (qobject_cast<QSpinBox*>(sw.widget))
+                  lstyle.set(sw.idx, qobject_cast<QSpinBox*>(sw.widget)->value() / (sw.showPercent ? 100 : 1));
+            else
+                  abort();
+            }
+      else if (!strcmp("QString", type)) {
+            QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+            if (cb) {
+                  printf("%s DIRECTION===widget %s %s\n", MStyle::valueName(sw.idx),
+                  qPrintable(sw.widget->objectName()),
+                  sw.widget->metaObject()->className());
+                        ;
+                  }
+            else {
+                  QTextEdit* te = qobject_cast<QTextEdit*>(sw.widget);
+                  if (!te)
+                        abort();
+                  lstyle.set(sw.idx, te->toPlainText());
+                  }
+            }
+      else if (!strcmp("Ms::Direction", type)) {
+            QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+            if (cb)
+                  lstyle.set(sw.idx, Direction(cb->currentIndex()));
+            else
+                  abort();
+            }
+      else {
+            qFatal("EditStyle::getValue: unhandled type <%s>", type);
+            }
+      }
+
+//---------------------------------------------------------
 //   getValues
 //---------------------------------------------------------
 
 void EditStyle::getValues()
       {
-      for (const StyleWidget sw : styleWidgets) {
-            StyleValueType svt = MStyle::valueType(sw.idx);
-            switch (svt) {
-                  case StyleValueType::SPATIUM:
-                        lstyle.set(sw.idx, Spatium(qobject_cast<QDoubleSpinBox*>(sw.widget)->value()));
-                        break;
-                  case StyleValueType::DOUBLE:
-                        lstyle.set(sw.idx, qobject_cast<QDoubleSpinBox*>(sw.widget)->value());
-                        break;
-                  case StyleValueType::BOOL:
-                        if (qobject_cast<QCheckBox*>(sw.widget))
-                              lstyle.set(sw.idx, qobject_cast<QCheckBox*>(sw.widget)->isChecked());
-                        else if (qobject_cast<QGroupBox*>(sw.widget))
-                              lstyle.set(sw.idx, qobject_cast<QGroupBox*>(sw.widget)->isChecked());
-                        else if (qobject_cast<QRadioButton*>(sw.widget))
-                              lstyle.set(sw.idx, qobject_cast<QRadioButton*>(sw.widget)->isChecked());
-                        else
-                              qFatal("unhandled bool");
-                        break;
-                  case StyleValueType::INT:
-                        lstyle.set(sw.idx, qobject_cast<QSpinBox*>(sw.widget)->value());
-                        break;
-                  case StyleValueType::DIRECTION:
-                  case StyleValueType::STRING:
-                        abort();
-                        break;
-                  };
-            }
+      for (const StyleWidget& sw : styleWidgets)
+            getValue(sw.idx);
 
       //TODO: convert the rest:
 
-      lstyle.set(StyleIdx::lyricsLineHeight,        Spatium(lyricsLineHeight->value() * .01));
-
-      lstyle.set(StyleIdx::repeatBarTips,           showRepeatBarTips->isChecked());
-      lstyle.set(StyleIdx::startBarlineSingle,      showStartBarlineSingle->isChecked());
-      lstyle.set(StyleIdx::startBarlineMultiple,    showStartBarlineMultiple->isChecked());
-      lstyle.set(StyleIdx::dividerLeftSym,          dividerLeftSym->currentData());
-      lstyle.set(StyleIdx::dividerRightSym,         dividerRightSym->currentData());
-
-      lstyle.set(StyleIdx::measureSpacing,          measureSpacing->value());
-      lstyle.set(StyleIdx::showMeasureNumber,       showMeasureNumber->isChecked());
-      lstyle.set(StyleIdx::showMeasureNumberOne,    showFirstMeasureNumber->isChecked());
-      lstyle.set(StyleIdx::measureNumberInterval,   intervalMeasureNumber->value());
-      lstyle.set(StyleIdx::measureNumberSystem,     showEverySystemMeasureNumber->isChecked());
-      lstyle.set(StyleIdx::measureNumberAllStaffs,  showAllStaffsMeasureNumber->isChecked());
-
-      lstyle.set(StyleIdx::beamDistance,            beamDistance->value() / 100.0);
-      lstyle.set(StyleIdx::beamNoSlope,             beamNoSlope->isChecked());
-
-      lstyle.set(StyleIdx::graceNoteMag,            graceNoteSize->value() / 100.0);
-      lstyle.set(StyleIdx::smallStaffMag,           smallStaffSize->value() / 100.0);
-      lstyle.set(StyleIdx::smallNoteMag,            smallNoteSize->value() / 100.0);
-      lstyle.set(StyleIdx::smallClefMag,            smallClefSize->value() / 100.0);
-      lstyle.set(StyleIdx::lyricsDashMinLength,     lyricsDashMinLength->value());
-      lstyle.set(StyleIdx::lyricsDashMaxLength,     lyricsDashMaxLength->value());
-      lstyle.set(StyleIdx::lyricsDashForce,         lyricsDashForce->isChecked());
-      lstyle.set(StyleIdx::lastSystemFillLimit,     lastSystemFillThreshold->value() / 100.0);
-      lstyle.set(StyleIdx::genClef,                 genClef->isChecked());
-      lstyle.set(StyleIdx::genKeysig,               genKeysig->isChecked());
-      lstyle.set(StyleIdx::genCourtesyTimesig,      genCourtesyTimesig->isChecked());
-      lstyle.set(StyleIdx::genCourtesyKeysig,       genCourtesyKeysig->isChecked());
-      lstyle.set(StyleIdx::genCourtesyClef,         genCourtesyClef->isChecked());
-      lstyle.set(StyleIdx::swingRatio,              swingBox->value());
       if (swingEighth->isChecked())
             lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_EIGHTH).name()));
       else if (swingSixteenth->isChecked())
@@ -473,7 +581,6 @@ void EditStyle::getValues()
             lstyle.set(StyleIdx::chordStyle, QString("custom"));
             customChords = true;
             }
-      lstyle.set(StyleIdx::chordsXmlFile, chordsXmlFile->isChecked());
       if (lstyle.value(StyleIdx::chordDescriptionFile).toString() != chordDescriptionFile->text()) {
             ChordList* cl = new ChordList();
             if (lstyle.value(StyleIdx::chordsXmlFile).toBool())
@@ -483,17 +590,9 @@ void EditStyle::getValues()
             lstyle.set(StyleIdx::chordDescriptionFile, chordDescriptionFile->text());
             }
 
-      lstyle.set(StyleIdx::useStandardNoteNames,    useStandardNoteNames->isChecked());
-      lstyle.set(StyleIdx::useGermanNoteNames,      useGermanNoteNames->isChecked());
-      lstyle.set(StyleIdx::useFullGermanNoteNames,  useFullGermanNoteNames->isChecked());
-      lstyle.set(StyleIdx::useSolfeggioNoteNames,   useSolfeggioNoteNames->isChecked());
-      lstyle.set(StyleIdx::useFrenchNoteNames,      useFrenchNoteNames->isChecked());
-      lstyle.set(StyleIdx::automaticCapitalization, automaticCapitalization->isChecked());
 
-      lstyle.set(StyleIdx::dotMag,                  dotMag->value() / 100.0);
-      lstyle.set(StyleIdx::articulationMag,         articulationMag->value() / 100.0);
+      lstyle.set(StyleIdx::tabClef, int(clefTab1->isChecked() ? ClefType::TAB : ClefType::TAB2));
 
-      lstyle.set(StyleIdx::shortenStem,             shortenStem->isChecked());
 
       int idx1 = musicalSymbolFont->itemData(musicalSymbolFont->currentIndex()).toInt();
       lstyle.set(StyleIdx::MusicalSymbolFont, ScoreFont::scoreFonts().at(idx1).name());
@@ -501,31 +600,11 @@ void EditStyle::getValues()
       QString tf = musicalTextFont->itemData(musicalTextFont->currentIndex()).toString();
       lstyle.set(StyleIdx::MusicalTextFont, tf);
 
-      lstyle.set(StyleIdx::showHeader,      showHeader->isChecked());
-      lstyle.set(StyleIdx::headerFirstPage, showHeaderFirstPage->isChecked());
-      lstyle.set(StyleIdx::headerOddEven,   headerOddEven->isChecked());
-
       Text t(cs);
       t.setTextStyleType(TextStyleType::HEADER);
-
-      lstyle.set(StyleIdx::evenHeaderL, evenHeaderL->toPlainText());
-      lstyle.set(StyleIdx::evenHeaderC, evenHeaderC->toPlainText());
-      lstyle.set(StyleIdx::evenHeaderR, evenHeaderR->toPlainText());
-      lstyle.set(StyleIdx::oddHeaderL,  oddHeaderL->toPlainText());
-      lstyle.set(StyleIdx::oddHeaderC,  oddHeaderC->toPlainText());
-      lstyle.set(StyleIdx::oddHeaderR,  oddHeaderR->toPlainText());
-
-      lstyle.set(StyleIdx::showFooter,      showFooter->isChecked());
-      lstyle.set(StyleIdx::footerFirstPage, showFooterFirstPage->isChecked());
-      lstyle.set(StyleIdx::footerOddEven,   footerOddEven->isChecked());
-
       t.setTextStyleType(TextStyleType::FOOTER);
-      lstyle.set(StyleIdx::evenFooterL, evenFooterL->toPlainText());
-      lstyle.set(StyleIdx::evenFooterC, evenFooterC->toPlainText());
-      lstyle.set(StyleIdx::evenFooterR, evenFooterR->toPlainText());
-      lstyle.set(StyleIdx::oddFooterL,  oddFooterL->toPlainText());
-      lstyle.set(StyleIdx::oddFooterC,  oddFooterC->toPlainText());
-      lstyle.set(StyleIdx::oddFooterR,  oddFooterR->toPlainText());
+
+      lstyle.set(StyleIdx::fretNumPos,              radioFretNumLeft->isChecked() ? 0 : 1);
 
       // figured bass
       int         idx = comboFBFont->currentIndex();
@@ -558,55 +637,9 @@ void EditStyle::getValues()
             lstyle.setArticulationAnchor(i, ArticulationAnchor(cb->itemData(cb->currentIndex()).toInt()));
             }
 
-
-      lstyle.set(StyleIdx::voltaLineStyle,          voltaLineStyle->currentIndex() + 1);
-      lstyle.set(StyleIdx::ottavaLineStyle,         ottavaLineStyle->currentIndex() + 1);
-      lstyle.set(StyleIdx::ottavaNumbersOnly,       ottavaNumbersOnly->isChecked());
-
-      lstyle.set(StyleIdx::pedalLineStyle,          pedalLineStyle->currentIndex() + 1);
-
-      lstyle.set(StyleIdx::capoPosition,            capoPosition->value());
-
-      lstyle.set(StyleIdx::fretNumMag,              fretNumMag->value()*0.01);
-      lstyle.set(StyleIdx::fretNumPos,              radioFretNumLeft->isChecked() ? 0 : 1);
-      lstyle.set(StyleIdx::fretY,                   fretY->value());
-
-      lstyle.set(StyleIdx::tabClef, int(clefTab1->isChecked() ? ClefType::TAB : ClefType::TAB2));
-
-      lstyle.set(StyleIdx::crossMeasureValues,      crossMeasureValues->isChecked());
-      lstyle.set(StyleIdx::keySigNaturals,          radioKeySigNatNone->isChecked() ? int(KeySigNatural::NONE) :
+      lstyle.set(StyleIdx::keySigNaturals,  radioKeySigNatNone->isChecked() ? int(KeySigNatural::NONE) :
                   (radioKeySigNatBefore->isChecked() ? int(KeySigNatural::BEFORE) : int(KeySigNatural::AFTER)) );
 
-      lstyle.set(StyleIdx::tupletMaxSlope,           tupletMaxSlope->value());
-      lstyle.set(StyleIdx::tupletOufOfStaff,         tupletOutOfStaff->isChecked());
-
-      lstyle.set(StyleIdx::barreLineWidth,           barreLineWidth->value());
-      lstyle.set(StyleIdx::fretMag,                  fretMag->value());
-      lstyle.set(StyleIdx::scaleBarlines,            scaleBarlines->isChecked());
-      }
-
-//---------------------------------------------------------
-//   setHeaderText
-//---------------------------------------------------------
-
-void EditStyle::setHeaderText(StyleIdx idx, QTextEdit* te)
-      {
-      QString s = lstyle.value(idx).toString();
-//      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::HEADER));
-//      te->setHtml(s);
-      te->setPlainText(s);
-      }
-
-//---------------------------------------------------------
-//   setFooterText
-//---------------------------------------------------------
-
-void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
-      {
-      QString s = lstyle.value(idx).toString();
-//      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::FOOTER));
-//      te->setHtml(s);
-      te->setPlainText(s);
       }
 
 //---------------------------------------------------------
@@ -615,73 +648,72 @@ void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
 
 void EditStyle::setValues()
       {
-      for (const StyleWidget sw : styleWidgets) {
-            StyleValueType svt = MStyle::valueType(sw.idx);
-            switch (svt) {
-                  case StyleValueType::SPATIUM:
-                  case StyleValueType::DOUBLE:
+      for (const StyleWidget& sw : styleWidgets) {
+            const char* type = MStyle::valueType(sw.idx);
+            if (sw.reset)
+                  sw.reset->setEnabled(!lstyle.isDefault(sw.idx));
+
+            if (!strcmp("Ms::Spatium", type)) {
+                  if (sw.showPercent)
+                        qobject_cast<QSpinBox*>(sw.widget)->setValue(int(lstyle.value(sw.idx).value<Spatium>().val() * 100.0));
+                  else
+                        qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).value<Spatium>().val());
+                  }
+            else if (!strcmp("double", type)) {
+                  if (sw.showPercent)
+                        qobject_cast<QSpinBox*>(sw.widget)->setValue(int(lstyle.value(sw.idx).toDouble() * 100.0));
+                  else
                         qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).toDouble());
-                        break;
-                  case StyleValueType::BOOL:
-                        if (qobject_cast<QCheckBox*>(sw.widget))
-                              qobject_cast<QCheckBox*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                        else if (qobject_cast<QGroupBox*>(sw.widget))
-                              qobject_cast<QGroupBox*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                        else if (qobject_cast<QRadioButton*>(sw.widget))
-                              qobject_cast<QRadioButton*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                        else
-                              qFatal("unhandled bool");
-                        break;
-                  case StyleValueType::INT:
-                        qobject_cast<QSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).toInt());
-                        break;
-                  case StyleValueType::DIRECTION:
-                  case StyleValueType::STRING:
+                  }
+            else if (!strcmp("bool", type)) {
+                  if (qobject_cast<QCheckBox*>(sw.widget))
+                        qobject_cast<QCheckBox*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
+                  else if (qobject_cast<QGroupBox*>(sw.widget))
+                        qobject_cast<QGroupBox*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
+                  else if (qobject_cast<QRadioButton*>(sw.widget))
+                        qobject_cast<QRadioButton*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
+                  else
+                        qFatal("unhandled bool");
+                  }
+            else if (!strcmp("int", type)) {
+                  if (qobject_cast<QComboBox*>(sw.widget)) {
+                        QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                        cb->setCurrentIndex(cb->findData(lstyle.value(sw.idx)));
+                        }
+                  else if (qobject_cast<QSpinBox*>(sw.widget)) {
+                        qobject_cast<QSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).toInt()
+                           * (sw.showPercent ? 100 : 1));
+                        }
+                  else
                         abort();
-                        break;
-                  };
+                  }
+            else if (!strcmp("QString", type)) {
+                  QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                  if (cb)
+                        ;
+                  else {
+                        QTextEdit* te = qobject_cast<QTextEdit*>(sw.widget);
+                        if (!te)
+                              abort();
+                        te->setPlainText(lstyle.value(sw.idx).toString());
+                        }
+                  }
+            else if (!strcmp("Ms::Direction", type)) {
+                        QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                        if (cb)
+                              cb->setCurrentIndex(int(lstyle.value(sw.idx).value<Direction>()));
+                        else
+                              abort();
+                  }
+            else {
+                  qFatal("EditStyle::setValues: unhandled type <%s>", type);
+                  }
             }
 
       //TODO: convert the rest:
 
-      lyricsLineHeight->setValue(lstyle.value(StyleIdx::lyricsLineHeight).toDouble() * 100.0);
-
-      showRepeatBarTips->setChecked(lstyle.value(StyleIdx::repeatBarTips).toBool());
-      showStartBarlineSingle->setChecked(lstyle.value(StyleIdx::startBarlineSingle).toBool());
-      showStartBarlineMultiple->setChecked(lstyle.value(StyleIdx::startBarlineMultiple).toBool());
-      dividerLeftSym->setCurrentIndex(dividerLeftSym->findData(lstyle.value(StyleIdx::dividerLeftSym).toString()));
-      dividerRightSym->setCurrentIndex(dividerRightSym->findData(lstyle.value(StyleIdx::dividerRightSym).toString()));
-
-      measureSpacing->setValue(lstyle.value(StyleIdx::measureSpacing).toDouble());
-      noteBarDistance->setValue(lstyle.value(StyleIdx::noteBarDistance).toDouble());
-
-      showMeasureNumber->setChecked(lstyle.value(StyleIdx::showMeasureNumber).toBool());
-      showFirstMeasureNumber->setChecked(lstyle.value(StyleIdx::showMeasureNumberOne).toBool());
-      intervalMeasureNumber->setValue(lstyle.value(StyleIdx::measureNumberInterval).toInt());
-      showIntervalMeasureNumber->setChecked(!lstyle.value(StyleIdx::measureNumberSystem).toBool());
-      showAllStaffsMeasureNumber->setChecked(lstyle.value(StyleIdx::measureNumberAllStaffs).toBool());
-      showEverySystemMeasureNumber->setChecked(lstyle.value(StyleIdx::measureNumberSystem).toBool());
-
-      beamDistance->setValue(lstyle.value(StyleIdx::beamDistance).toDouble() * 100.0);
-
-      beamNoSlope->setChecked(lstyle.value(StyleIdx::beamNoSlope).toBool());
-
-      graceNoteSize->setValue(lstyle.value(StyleIdx::graceNoteMag).toDouble() * 100.0);
-      smallStaffSize->setValue(lstyle.value(StyleIdx::smallStaffMag).toDouble() * 100.0);
-      smallNoteSize->setValue(lstyle.value(StyleIdx::smallNoteMag).toDouble() * 100.0);
-      smallClefSize->setValue(lstyle.value(StyleIdx::smallClefMag).toDouble() * 100.0);
-      lyricsDashMinLength->setValue(lstyle.value(StyleIdx::lyricsDashMinLength).toDouble());
-      lyricsDashMaxLength->setValue(lstyle.value(StyleIdx::lyricsDashMaxLength).toDouble());
-      lyricsDashForce->setChecked(lstyle.value(StyleIdx::lyricsDashForce).toBool());
-      lastSystemFillThreshold->setValue(lstyle.value(StyleIdx::lastSystemFillLimit).toDouble() * 100.0);
-
-      genClef->setChecked(lstyle.value(StyleIdx::genClef).toBool());
-      genKeysig->setChecked(lstyle.value(StyleIdx::genKeysig).toBool());
-      genCourtesyTimesig->setChecked(lstyle.value(StyleIdx::genCourtesyTimesig).toBool());
-      genCourtesyKeysig->setChecked(lstyle.value(StyleIdx::genCourtesyKeysig).toBool());
-      genCourtesyClef->setChecked(lstyle.value(StyleIdx::genCourtesyClef).toBool());
-      swingBox->setValue(lstyle.value(StyleIdx::swingRatio).toInt());
       QString unit(lstyle.value(StyleIdx::swingUnit).toString());
+
       if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
             swingEighth->setChecked(true);
             swingBox->setEnabled(true);
@@ -696,7 +728,6 @@ void EditStyle::setValues()
             }
       QString s(lstyle.value(StyleIdx::chordDescriptionFile).toString());
       chordDescriptionFile->setText(s);
-      chordsXmlFile->setChecked(lstyle.value(StyleIdx::chordsXmlFile).toBool());
       QString cstyle(lstyle.value(StyleIdx::chordStyle).toString());
       if (cstyle == "std") {
             chordsStandard->setChecked(true);
@@ -710,19 +741,8 @@ void EditStyle::setValues()
             chordsCustom->setChecked(true);
             chordDescriptionGroup->setEnabled(true);
             }
-      useStandardNoteNames->setChecked(lstyle.value(StyleIdx::useStandardNoteNames).toBool());
-      useGermanNoteNames->setChecked(lstyle.value(StyleIdx::useGermanNoteNames).toBool());
-      useFullGermanNoteNames->setChecked(lstyle.value(StyleIdx::useFullGermanNoteNames).toBool());
-      useSolfeggioNoteNames->setChecked(lstyle.value(StyleIdx::useSolfeggioNoteNames).toBool());
-      useFrenchNoteNames->setChecked(lstyle.value(StyleIdx::useFrenchNoteNames).toBool());
-      automaticCapitalization->setChecked(lstyle.value(StyleIdx::automaticCapitalization).toBool());
+
       dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
-
-      dotMag->setValue(lstyle.value(StyleIdx::dotMag).toDouble() * 100.0);
-
-      articulationMag->setValue(lstyle.value(StyleIdx::articulationMag).toDouble() * 100.0);
-
-      shortenStem->setChecked(lstyle.value(StyleIdx::shortenStem).toBool());
 
       // figured bass
       for(int i = 0; i < comboFBFont->count(); i++)
@@ -774,57 +794,19 @@ void EditStyle::setValues()
       idx = musicalTextFont->findData(tfont);
       musicalTextFont->setCurrentIndex(idx);
 
-      showHeader->setChecked(lstyle.value(StyleIdx::showHeader).toBool());
-      showHeaderFirstPage->setChecked(lstyle.value(StyleIdx::headerFirstPage).toBool());
-      headerOddEven->setChecked(lstyle.value(StyleIdx::headerOddEven).toBool());
       toggleHeaderOddEven(lstyle.value(StyleIdx::headerOddEven).toBool());
 
-      setHeaderText(StyleIdx::evenHeaderL, evenHeaderL);
-      setHeaderText(StyleIdx::evenHeaderC, evenHeaderC);
-      setHeaderText(StyleIdx::evenHeaderR, evenHeaderR);
-      setHeaderText(StyleIdx::oddHeaderL, oddHeaderL);
-      setHeaderText(StyleIdx::oddHeaderC, oddHeaderC);
-      setHeaderText(StyleIdx::oddHeaderR, oddHeaderR);
-
-      showFooter->setChecked(lstyle.value(StyleIdx::showFooter).toBool());
-      showFooterFirstPage->setChecked(lstyle.value(StyleIdx::footerFirstPage).toBool());
-      footerOddEven->setChecked(lstyle.value(StyleIdx::footerOddEven).toBool());
       toggleFooterOddEven(lstyle.value(StyleIdx::footerOddEven).toBool());
 
-      setFooterText(StyleIdx::evenFooterL, evenFooterL);
-      setFooterText(StyleIdx::evenFooterC, evenFooterC);
-      setFooterText(StyleIdx::evenFooterR, evenFooterR);
-      setFooterText(StyleIdx::oddFooterL, oddFooterL);
-      setFooterText(StyleIdx::oddFooterC, oddFooterC);
-      setFooterText(StyleIdx::oddFooterR, oddFooterR);
-
-      voltaLineStyle->setCurrentIndex(lstyle.value(StyleIdx::voltaLineStyle).toInt()-1);
-
-      ottavaLineStyle->setCurrentIndex(lstyle.value(StyleIdx::ottavaLineStyle).toInt()-1);
-      ottavaNumbersOnly->setChecked(lstyle.value(StyleIdx::ottavaNumbersOnly).toBool());
-
-      capoPosition->setValue(lstyle.value(StyleIdx::capoPosition).toInt());
-      fretNumMag->setValue(lstyle.value(StyleIdx::fretNumMag).toDouble()*100.0);
       radioFretNumLeft->setChecked(lstyle.value(StyleIdx::fretNumPos).toInt() == 0);
       radioFretNumRight->setChecked(lstyle.value(StyleIdx::fretNumPos).toInt() == 1);
-      fretY->setValue(lstyle.value(StyleIdx::fretY).toDouble());
-      pedalLineStyle->setCurrentIndex(lstyle.value(StyleIdx::pedalLineStyle).toInt()-1);
 
       clefTab1->setChecked(lstyle.value(StyleIdx::tabClef).toInt() == int(ClefType::TAB));
       clefTab2->setChecked(lstyle.value(StyleIdx::tabClef).toInt() == int(ClefType::TAB2));
 
-      crossMeasureValues->setChecked(lstyle.value(StyleIdx::crossMeasureValues).toBool());
-
       radioKeySigNatNone->setChecked  (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::NONE));
       radioKeySigNatBefore->setChecked(lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::BEFORE));
       radioKeySigNatAfter->setChecked (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::AFTER));
-
-      tupletMaxSlope->setValue(lstyle.value(StyleIdx::tupletMaxSlope).toDouble());
-      tupletOutOfStaff->setChecked(lstyle.value(StyleIdx::tupletOufOfStaff).toBool());
-
-      barreLineWidth->setValue(lstyle.value(StyleIdx::barreLineWidth).toDouble());
-      fretMag->setValue(lstyle.value(StyleIdx::fretMag).toDouble());
-      scaleBarlines->setChecked(lstyle.value(StyleIdx::scaleBarlines).toBool());
       }
 
 //---------------------------------------------------------
@@ -957,18 +939,41 @@ void EditStyle::setPage(int row)
       }
 
 //---------------------------------------------------------
+//   styleWidget
+//---------------------------------------------------------
+
+const StyleWidget& EditStyle::styleWidget(StyleIdx idx) const
+      {
+      for (const StyleWidget& sw : styleWidgets) {
+            if (sw.idx == idx)
+                  return sw;
+            }
+      __builtin_unreachable();
+      }
+
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void EditStyle::valueChanged(int i)
+      {
+      StyleIdx idx = (StyleIdx)i;
+      getValue(idx);
+
+      const StyleWidget& sw = styleWidget(idx);
+      if (sw.reset)
+            sw.reset->setEnabled(!lstyle.isDefault(idx));
+      }
+
+//---------------------------------------------------------
 //   resetStyleValue
 //---------------------------------------------------------
 
 void EditStyle::resetStyleValue(int i)
       {
       StyleIdx id = (StyleIdx)i;
-      qDebug("Reset %d dirty: %d", i, lstyle.value(id) != MScore::defaultStyle()->value(id));
-//      if (lstyle.value(id) != MScore::defaultStyle()->value(id)) {
-            lstyle.set(id, MScore::defaultStyle()->value(id));
-//            }
+      lstyle.set(id, MScore::defaultStyle()->value(id));
       setValues();
       }
-
 }
 

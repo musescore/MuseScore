@@ -108,19 +108,19 @@ void TestNote::note()
       delete n;
 
    // dot position
-      note->setUserDotPosition(MScore::Direction::UP);
+      note->setUserDotPosition(Direction::UP);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
       delete n;
 
-      note->setUserDotPosition(MScore::Direction::DOWN);
+      note->setUserDotPosition(Direction::DOWN);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
       delete n;
 
-      note->setUserDotPosition(MScore::Direction::AUTO);
+      note->setUserDotPosition(Direction::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
       delete n;
   // headGroup
       for (int i = 0; i < int (NoteHead::Group::HEAD_GROUPS); ++i) {
@@ -229,19 +229,19 @@ void TestNote::note()
       delete n;
 
    // dot position
-      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::UP));
+      note->setProperty(P_ID::DOT_POSITION, QVariant::fromValue(Direction(Direction::UP)));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::DOWN));
+      note->setProperty(P_ID::DOT_POSITION, QVariant::fromValue(Direction(Direction::DOWN)));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::AUTO));
+      note->setProperty(P_ID::DOT_POSITION, QVariant::fromValue(Direction(Direction::AUTO)));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
       delete n;
 
   // headGroup

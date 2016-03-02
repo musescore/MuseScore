@@ -428,7 +428,7 @@ void InspectorBase::resetClicked(int i)
 void InspectorBase::mapSignals()
       {
       int i = 0;
-      foreach (const InspectorItem& ii, iList) {
+      for (const InspectorItem& ii : iList) {
             QToolButton* resetButton = ii.r;
             if (resetButton) {
                   connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));

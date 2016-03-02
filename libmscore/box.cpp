@@ -125,7 +125,7 @@ void Box::editDrag(const EditData& ed)
                   int n = lrint(_boxWidth.val() / hRaster);
                   _boxWidth = Spatium(hRaster * n);
                   }
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
             }
       layout();
       }
@@ -382,7 +382,7 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return MeasureBase::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -612,7 +612,7 @@ QRectF HBox::drag(EditData* data)
 
 void HBox::endEditDrag()
       {
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       score()->update();
       }
 

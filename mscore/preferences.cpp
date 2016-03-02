@@ -291,7 +291,7 @@ void Preferences::write()
       s.setValue("paperHeight", MScore::defaultStyle()->pageFormat()->height());
 
       s.setValue("twosided",    MScore::defaultStyle()->pageFormat()->twosided());
-      s.setValue("spatium",     MScore::defaultStyle()->spatium() / DPI);
+      s.setValue("spatium",     MScore::defaultStyle()->value(StyleIdx::spatium).toDouble() / DPI);
 
       s.setValue("mag", mag);
       s.setValue("showMidiControls", showMidiControls);

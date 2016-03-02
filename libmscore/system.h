@@ -83,7 +83,6 @@ class System : public Element {
       QList<SpannerSegment*> _spannerSegments;
 
       qreal _leftMargin   { 0.0    };     ///< left margin for instrument name, brackets etc.
-      bool _vbox          { false  };     ///< contains only one VBox in ml
 
    public:
       System(Score*);
@@ -134,9 +133,8 @@ class System : public Element {
       MeasureBase* nextMeasure(const MeasureBase*) const;
 
       qreal leftMargin() const    { return _leftMargin; }
-      bool isVbox() const         { return _vbox;       }
-      VBox* vbox() const          { return (VBox*)ml[0];       }
-      void setVbox(bool v)        { _vbox = v;          }
+//      bool isVbox() const;
+      VBox* vbox() const;
 
       const QList<Bracket*>& brackets() const { return _brackets; }
 

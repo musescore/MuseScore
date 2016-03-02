@@ -359,8 +359,8 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       note->setTrack(chord->track());
       note->setNval(noteVal);
       undoAddElement(note);
-      _playNote = true;
-      _playChord = true;
+      _cmdState._playNote = true;
+      _cmdState._playChord = true;
       select(note, SelectType::SINGLE, 0);
       if (!chord->staff()->isTabStaff())
             _is.moveToNextInputPos();
@@ -1057,7 +1057,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       expandVoice();
 
       // insert note
-      MScore::Direction stemDirection = MScore::Direction::AUTO;
+      Direction stemDirection = Direction::AUTO;
       int track               = _is.track();
       if (_is.drumNote() != -1) {
             nval.pitch        = _is.drumNote();
@@ -1143,7 +1143,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
             if (seg) {
                   note = static_cast<Chord*>(seg->element(track))->upNote();
-                  setLayoutAll(true);
+                  setLayoutAll();
                   }
             }
 
@@ -1170,7 +1170,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   }
             else
                   qDebug("addPitch: cannot find slur note");
-            setLayoutAll(true);
+            setLayoutAll();
             }
       if (_is.repitchMode()) {
             // move cursor to next note, but skip tied notes (they were already repitched above)
@@ -1212,7 +1212,7 @@ void Score::putNote(const Position& p, bool replace)
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
 
-      MScore::Direction stemDirection = MScore::Direction::AUTO;
+      Direction stemDirection = Direction::AUTO;
       bool error;
       NoteVal nval = noteValForPosition(p, error);
       if (error)
@@ -1393,8 +1393,8 @@ void Score::repitchNote(const Position& p, bool replace)
             }
       // add new note to chord
       undoAddElement(note);
-      _playNote = true;
-      _playChord = true;
+      _cmdState._playNote = true;
+      _cmdState._playChord = true;
       // recreate tie forward if there is a note to tie to
       // one-sided ties will not be recreated
       if (firstTiedNote) {
@@ -1610,7 +1610,7 @@ void Score::cmdSetBeamMode(Beam::Mode mode)
       if (cr == 0)
             return;
       cr->setBeamMode(mode);
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1639,19 +1639,19 @@ void Score::cmdFlip()
                         else
                               continue;
                   else {
-                        MScore::Direction dir = chord->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                        Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
                         undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
                         }
                   }
 
             if (e->type() == Element::Type::BEAM) {
                   Beam* beam = static_cast<Beam*>(e);
-                  MScore::Direction dir = beam->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                  Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(beam, P_ID::STEM_DIRECTION, int(dir));
                   }
             else if (e->type() == Element::Type::SLUR_SEGMENT) {
                   SlurTie* slur = static_cast<SlurSegment*>(e)->slurTie();
-                  MScore::Direction dir = slur->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                  Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(slur, P_ID::SLUR_DIRECTION, int(dir));
                   }
             else if (e->type() == Element::Type::HAIRPIN_SEGMENT) {
@@ -1682,19 +1682,19 @@ void Score::cmdFlip()
                               undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
                         }
                   else {
-                        MScore::Direction d = a->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                        Direction d = a->up() ? Direction::DOWN : Direction::UP;
                         undoChangeProperty(a, P_ID::DIRECTION, int(d));
                         }
                   //return;   // no layoutAll
                   }
             else if (e->type() == Element::Type::TUPLET) {
                   Tuplet* tuplet = static_cast<Tuplet*>(e);
-                  MScore::Direction d = tuplet->isUp() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                  Direction d = tuplet->isUp() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(tuplet, P_ID::DIRECTION, int(d));
                   }
             else if (e->type() == Element::Type::NOTEDOT) {
                   Note* note = static_cast<Note*>(e->parent());
-                  MScore::Direction d = note->dotIsUp() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                  Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(note, P_ID::DOT_POSITION, int(d));
                   // undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
                   }
@@ -1708,7 +1708,7 @@ void Score::cmdFlip()
                   undoChangeProperty(e, P_ID::PLACEMENT, int(p));
                   }
             }
-      _layoutAll = true;      // must be set in undo/redo
+      setLayoutAll();         // must be set in undo/redo
       }
 
 //---------------------------------------------------------
@@ -2145,10 +2145,10 @@ void Score::cmdDeleteSelection()
             int stick2 = selection().tickEnd();
 
             Segment* ss1 = s1;
-            if (ss1->segmentType() != Segment::Type::ChordRest)
+            if (!ss1->isChordRestType())
                   ss1 = ss1->next1(Segment::Type::ChordRest);
             bool fullMeasure = ss1 && (ss1->measure()->first(Segment::Type::ChordRest) == ss1)
-                  && (s2 == 0 || (s2->segmentType() == Segment::Type::EndBarLine));
+                  && (s2 == 0 || s2->isEndBarLineType());
 
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
@@ -2192,14 +2192,14 @@ void Score::cmdDeleteSelection()
                         Element* e = s->element(track);
                         if (!e)
                               continue;
-                        if (s->segmentType() != Segment::Type::ChordRest) {
+                        if (!s->isChordRestType()) {
                               // do not delete TimeSig/KeySig,
                               // it doesn't make sense to do it, except on full system
                               if (s->segmentType() != Segment::Type::TimeSig && s->segmentType() != Segment::Type::KeySig)
                                     undoRemoveElement(e);
                               continue;
                               }
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         if (tick == -1) {
                               // first ChordRest found:
                               int offset = cr->tick() - s->measure()->tick();
@@ -2340,7 +2340,7 @@ void Score::cmdDeleteSelection()
                   select(cr, SelectType::SINGLE);
             }
 
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2461,7 +2461,7 @@ void Score::cmdFullMeasureRest()
             deselectAll();
             }
 
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 
@@ -2581,7 +2581,7 @@ qDebug("tuplet note duration %s  actualNotes %d  ticks %d track %d tuplet track 
             rest->setDuration(tuplet->baseLen().fraction());
             undoAddCR(rest, measure, tick);
             }
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2599,7 +2599,7 @@ void Score::colorItem(Element* element)
             if (e->color() != c) {
                   undoChangeProperty(e, P_ID::COLOR, c);
                   e->setGenerated(false);
-                  refresh |= e->abbox();
+                  _cmdState.refresh |= e->abbox();
                   if (e->type() == Element::Type::BAR_LINE) {
 //                        Element* ep = e->parent();
 //                        if (ep->type() == Element::Type::SEGMENT && static_cast<Segment*>(ep)->segmentType() == Segment::Type::EndBarLine) {
@@ -2658,7 +2658,7 @@ void Score::cmdEnterRest(const TDuration& d)
 
       int track = _is.track();
       NoteVal nval;
-      setNoteRest(_is.segment(), track, nval, d.fraction(), MScore::Direction::AUTO);
+      setNoteRest(_is.segment(), track, nval, d.fraction(), Direction::AUTO);
       _is.moveToNextInputPos();
       _is.setRest(false);  // continue with normal note entry
       endCmd();

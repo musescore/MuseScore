@@ -222,7 +222,7 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             }
       setGenerated(false);
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return rv;
       }
 

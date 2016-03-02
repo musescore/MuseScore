@@ -207,7 +207,7 @@ void LayerManager:: accept()
                   l.tags |= 1;
             layer.append(l);
             }
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       if (enableExperimental)
       	mscore->updateLayer();

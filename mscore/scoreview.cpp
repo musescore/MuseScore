@@ -1192,7 +1192,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             im.exec();
             }
       if (_score->undo()->active()) {
-            _score->setLayoutAll(true);
+            _score->setLayoutAll();
             _score->endCmd();
             }
       }
@@ -1431,8 +1431,8 @@ void ScoreView::moveCursor()
       double x        = segment->canvasPos().x();
       double y        = system->staffYpage(staffIdx) + system->page()->pos().y();
       Staff* staff    = _score->staff(staffIdx);
-      double _spatium = staff->spatium();
-      x              -= qMin(segment->pos().x() - score()->styleD(StyleIdx::barNoteDistance) * _spatium, 0.0);
+      double _spatium = score()->spatium();
+      x              -= qMin(segment->pos().x() - score()->styleP(StyleIdx::barNoteDistance), 0.0);
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
@@ -1618,9 +1618,9 @@ void ScoreView::setShadowNote(const QPointF& p)
             }
       // in any empty measure, pos will be right next to barline
       // so pad this by barNoteDistance
-      qreal sp = score()->staff(pos.staffIdx)->spatium();
+      qreal mag = score()->staff(pos.staffIdx)->mag();
       qreal relX = pos.pos.x() - pos.segment->measure()->canvasPos().x();
-      pos.pos.rx() -= qMin(relX - score()->styleD(StyleIdx::barNoteDistance) * sp, 0.0);
+      pos.pos.rx() -= qMin(relX - score()->styleP(StyleIdx::barNoteDistance) * mag, 0.0);
 
       shadowNote->setVisible(true);
       Staff* staff      = score()->staff(pos.staffIdx);
@@ -2574,23 +2574,23 @@ void ScoreView::normalPaste()
       _score->startCmd();
 
       const QMimeData* ms = QApplication::clipboard()->mimeData();
-      PasteStatus status = _score->cmdPaste(ms,this);
+      PasteState status = _score->cmdPaste(ms,this);
       switch (status) {
-            case PasteStatus::NO_DEST:
+            case PasteState::NO_DEST:
                   errorMessage->showMessage(tr("No destination to paste"), "pasteDestination");
                   break;
-            case PasteStatus::DEST_TUPLET:
+            case PasteState::DEST_TUPLET:
                   errorMessage->showMessage(tr("Cannot paste into tuplet"), "pasteTuplet");
                   break;
-            case PasteStatus::TUPLET_CROSSES_BAR:
+            case PasteState::TUPLET_CROSSES_BAR:
                   errorMessage->showMessage(tr("Tuplet cannot cross barlines"), "tupletCrossBar");
                   _score->undo()->current()->unwind();
                   break;
-            case PasteStatus::DEST_LOCAL_TIME_SIGNATURE:
+            case PasteState::DEST_LOCAL_TIME_SIGNATURE:
                   errorMessage->showMessage(tr("Cannot paste in local time signature"), "pasteLocalTimeSig");
                   _score->undo()->current()->unwind();
                   break;
-            case PasteStatus::DEST_TREMOLO:
+            case PasteState::DEST_TREMOLO:
                   errorMessage->showMessage(tr("Cannot paste in tremolo"), "pasteTremolo");
                   _score->undo()->current()->unwind();
                   break;
@@ -2639,7 +2639,7 @@ void ScoreView::cmd(const QAction* a)
                   sm->postEvent(new CommandEvent("note-input"));
             Lyrics* lyrics = _score->addLyrics();
             if (lyrics) {
-                  _score->setLayoutAll(true);
+                  _score->setLayoutAll();
                   startEdit(lyrics);
                   return;     // no endCmd()
                   }
@@ -2649,7 +2649,7 @@ void ScoreView::cmd(const QAction* a)
                   sm->postEvent(new CommandEvent("note-input"));
             FiguredBass* fb = _score->addFiguredBass();
             if (fb) {
-                  _score->setLayoutAll(true);
+                  _score->setLayoutAll();
                   startEdit(fb);
                   return;     // no endCmd()
                   }
@@ -2732,7 +2732,6 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
             if (e && e->isEditable()) {
-                  _score->setLayoutAll(false);
                   startEdit(e);
                   }
             }
@@ -3015,7 +3014,7 @@ void ScoreView::cmd(const QAction* a)
                         }
                   _score->endCmd();
                   }
-            _score->setLayoutAll(true);
+            _score->setLayoutAll();
             }
 #ifdef OMR
       else if (cmd == "show-omr") {
@@ -3457,7 +3456,7 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
             }
       else {
             QMenu* popup = mscore->genCreateMenu();
-            _score->setLayoutAll(true);
+            _score->setLayoutAll();
             _score->end();
             popup->popup(gp);
             }
@@ -3566,7 +3565,7 @@ void ScoreView::select(QMouseEvent* ev)
                               }
                         else if (ev->type() == QEvent::MouseButtonRelease) {
                               score()->deselect(curElement);
-                              _score->setUpdateAll(true);   //DEBUG
+                              _score->setUpdateAll();   //DEBUG
                               mscore->endCmd();
                               }
                         return;
@@ -3599,7 +3598,7 @@ void ScoreView::select(QMouseEvent* ev)
             }
       else
             curElement = 0;
-      _score->setUpdateAll(true);   //DEBUG
+      _score->setUpdateAll();   //DEBUG
       mscore->endCmd();
       }
 
@@ -4281,7 +4280,6 @@ bool ScoreView::event(QEvent* event)
 void ScoreView::startUndoRedo()
       {
       // exit edit mode
-      _score->setLayoutAll(false);
       if (sm->configuration().contains(states[EDIT]))
             sm->postEvent(new CommandEvent("escape"));
       }
@@ -4738,7 +4736,7 @@ void ScoreView::changeVoice(int voice)
             if (is->segment()) { // can be null for eg repeatMeasure
                   is->setSegment(is->segment()->measure()->first(Segment::Type::ChordRest));
                   moveCursor();
-                  score()->setUpdateAll(true);
+                  score()->setUpdateAll();
                   score()->end();
                   mscore->setPos(is->segment()->tick());
                   }
@@ -4799,7 +4797,7 @@ void ScoreView::modifyElement(Element* el)
                   delete el;
                   return;
             }
-      cs->setLayoutAll(true);
+      cs->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -4868,7 +4866,7 @@ void ScoreView::harmonyTab(bool back)
       adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -4966,7 +4964,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -5037,7 +5035,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -5278,7 +5276,7 @@ void ScoreView::cmdAddChordName()
 
       _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony);
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       _score->update();
       }
 
@@ -5535,12 +5533,12 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  if (_score->pasteStaff(xml, cr->segment(), cr->staffIdx()) != PasteStatus::PS_NO_ERROR) {
+                  if (_score->pasteStaff(xml, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR) {
                         qDebug("cmdRepeatSelection: paste fails");
                         _score->endCmd(true);   // rollback
                         }
                   else {
-                        _score->setLayoutAll(true);
+                        _score->setLayoutAll();
                         _score->endCmd();
                         }
                   }
@@ -5571,7 +5569,7 @@ void ScoreView::selectMeasure(int n)
             _score->selection().setState(SelState::RANGE);
             _score->addRefresh(measure->canvasBoundingRect());
             adjustCanvasPosition(measure, true);
-            _score->setUpdateAll(true);
+            _score->setUpdateAll();
             _score->end();
             break;
             }
@@ -5686,7 +5684,7 @@ void ScoreView::gotoMeasure(Measure* measure)
             if (track != tracks)
                   break;
             }
-      _score->setUpdateAll(true);
+      _score->setUpdateAll();
       _score->end();
       }
 
@@ -5793,7 +5791,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
@@ -5849,7 +5847,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       }
 
 //---------------------------------------------------------

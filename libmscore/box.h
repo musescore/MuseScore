@@ -23,9 +23,7 @@ class QPainter;
 
 namespace Ms {
 
-class BarLine;
 class MuseScoreView;
-class Text;
 
 static constexpr qreal BOX_MARGIN = 0.0;
 

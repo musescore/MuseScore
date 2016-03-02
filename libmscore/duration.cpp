@@ -156,7 +156,7 @@ bool DurationElement::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::DURATION: {
                   Fraction f(v.value<Fraction>());
                   setDuration(f);
-                  score()->setLayoutAll(true);
+                  score()->setLayoutAll();
                   }
                   break;
             default:

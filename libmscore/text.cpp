@@ -1839,7 +1839,7 @@ void Text::editInsertText(const QString& s)
             System* system = tbox->system();
             system->setHeight(tbox->height());
             score()->doLayoutPages();
-            score()->setUpdateAll(true);
+            score()->setUpdateAll();
             }
       else {
             static const qreal w = 2.0; // 8.0 / view->matrix().m11();
@@ -2092,7 +2092,7 @@ bool Text::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
                   }
             }
       _cursor->setColumn(curLine().column(pt.x(), this));
-      score()->setUpdateAll(true);
+      score()->setUpdateAll();
       if (mode == QTextCursor::MoveAnchor)
             _cursor->clearSelection();
       if (_cursor->hasSelection())
@@ -2232,8 +2232,6 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
 //   readProperties
 //---------------------------------------------------------
 
-extern QString convertOldTextStyleNames(const QString&);
-
 bool Text::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
@@ -2292,8 +2290,6 @@ bool Text::readProperties(XmlReader& e)
                   //st = TextStyleType(i);
                   }
             else {
-                  if (score()->mscVersion() <= 124)
-                        val = convertOldTextStyleNames(val);
                   st = score()->style()->textStyleType(val);
                   }
             setTextStyleType(st);
@@ -2335,7 +2331,7 @@ bool Text::readProperties(XmlReader& e)
 void Text::textStyleChanged()
       {
       setTextStyle(score()->textStyle(_styleIndex));
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2502,7 +2498,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return rv;
       }
 
@@ -2619,9 +2615,9 @@ void Text::paste()
           insertText(token);
           }
       layoutEdit();
-      bool lo = type() == Element::Type::INSTRUMENT_NAME;
-      score()->setLayoutAll(lo);
       score()->setUpdateAll();
+      if (type() == Element::Type::INSTRUMENT_NAME)
+            score()->setLayoutAll();
       score()->end();
       }
 
@@ -2653,7 +2649,7 @@ void Text::layoutEdit()
             System* system = tbox->system();
             system->setHeight(tbox->height());
             score()->doLayoutPages();
-            score()->setUpdateAll(true);
+            score()->setUpdateAll();
             }
       else {
             static const qreal w = 2.0; // 8.0 / view->matrix().m11();

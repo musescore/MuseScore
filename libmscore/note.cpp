@@ -627,6 +627,7 @@ void Note::add(Element* e)
                   qDebug("Note::add() not impl. %s", e->name());
                   break;
             }
+      score()->setLayout(tick());
       }
 
 //---------------------------------------------------------
@@ -675,6 +676,7 @@ void Note::remove(Element* e)
                   qDebug("Note::remove() not impl. %s", e->name());
                   break;
             }
+      score()->setLayout(tick());
       }
 
 //---------------------------------------------------------
@@ -1201,7 +1203,7 @@ QRectF Note::drag(EditData* data)
       bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
       _lineOffset = lrint(data->delta.y() / step);
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return bb.translated(chord()->pagePos());
       }
 
@@ -1561,7 +1563,7 @@ Element* Note::drop(const DropData& data)
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  MScore::Direction dir = c->stemDirection();
+                  Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
                   score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
@@ -1602,7 +1604,7 @@ void Note::addBracket()
 //   setDotY
 //---------------------------------------------------------
 
-void Note::setDotY(MScore::Direction pos)
+void Note::setDotY(Direction pos)
       {
       bool onLine = false;
       qreal y = 0;
@@ -1629,17 +1631,17 @@ void Note::setDotY(MScore::Direction pos)
       bool oddVoice = voice() & 1;
       if (onLine) {
             // displace dots by half spatium up or down according to voice
-            if (pos == MScore::Direction::AUTO)
+            if (pos == Direction::AUTO)
                   y = oddVoice ? 0.5 : -0.5;
-            else if (pos == MScore::Direction::UP)
+            else if (pos == Direction::UP)
                   y = -0.5;
             else
                   y = 0.5;
             }
       else {
-            if (pos == MScore::Direction::UP && !oddVoice)
+            if (pos == Direction::UP && !oddVoice)
                   y -= 1.0;
-            else if (pos == MScore::Direction::DOWN && oddVoice)
+            else if (pos == Direction::DOWN && oddVoice)
                   y += 1.0;
             }
       y *= spatium() * staff()->lineDistance();
@@ -1709,7 +1711,7 @@ void Note::layout2()
                         // with TAB's, dot Y is not calculated during layoutChords3(),
                         // as layoutChords3() is not even called for TAB's;
                         // setDotY() actually also manages creation/deletion of NoteDot's
-                        setDotY(MScore::Direction::AUTO);
+                        setDotY(Direction::AUTO);
 
                         // use TAB default note-to-dot spacing
                         dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
@@ -1767,10 +1769,10 @@ bool Note::dotIsUp() const
       {
       if (_dots.empty())
             return true;
-      if (_userDotPosition == MScore::Direction::AUTO)
+      if (_userDotPosition == Direction::AUTO)
             return _dots[0]->y() < spatium() * .1;
       else
-            return (_userDotPosition == MScore::Direction::UP);
+            return (_userDotPosition == Direction::UP);
       }
 
 //---------------------------------------------------------
@@ -1944,7 +1946,7 @@ void Note::reset()
       {
       score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_ID::USER_OFF, QPointF());
-      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
+      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, int(Direction::AUTO));
       }
 
 //---------------------------------------------------------
@@ -2073,7 +2075,7 @@ void Note::endEdit()
       if (ch->notes().size() == 1) {
             score()->undoChangeProperty(ch, P_ID::USER_OFF, ch->userOff() + userOff());
             setUserOff(QPointF());
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
             }
       }
 
@@ -2169,7 +2171,7 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_ID::MIRROR_HEAD:
                   return int(userMirror());
             case P_ID::DOT_POSITION:
-                  return int(userDotPosition());
+                  return QVariant::fromValue(userDotPosition());
             case P_ID::HEAD_GROUP:
                   return int(headGroup());
             case P_ID::VELO_OFFSET:
@@ -2228,7 +2230,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setUserMirror(MScore::DirectionH(v.toInt()));
                   break;
             case P_ID::DOT_POSITION:
-                  setUserDotPosition(MScore::Direction(v.toInt()));
+                  setUserDotPosition(v.value<Direction>());
                   break;
             case P_ID::HEAD_GROUP:
                   setHeadGroup(NoteHead::Group(v.toInt()));
@@ -2283,7 +2285,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -2372,7 +2374,7 @@ void Note::undoSetUserMirror(MScore::DirectionH val)
 //   undoSetUserDotPosition
 //---------------------------------------------------------
 
-void Note::undoSetUserDotPosition(MScore::Direction val)
+void Note::undoSetUserDotPosition(Direction val)
       {
       undoChangeProperty(P_ID::DOT_POSITION, int(val));
       }
@@ -2417,7 +2419,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_ID::MIRROR_HEAD:
                   return int(MScore::DirectionH::AUTO);
             case P_ID::DOT_POSITION:
-                  return int(MScore::Direction::AUTO);
+                  return QVariant::fromValue(Direction(Direction::AUTO));
             case P_ID::HEAD_GROUP:
                   return int(NoteHead::Group::HEAD_NORMAL);
             case P_ID::VELO_OFFSET:

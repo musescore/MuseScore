@@ -172,13 +172,13 @@ class Note : public Element {
       Q_PROPERTY(int                            tpc1              READ tpc1               WRITE undoSetTpc1)
       Q_PROPERTY(int                            tpc2              READ tpc2               WRITE undoSetTpc2)
       Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
-      Q_PROPERTY(Ms::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
+//TODO-WS      Q_PROPERTY(Ms::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
       Q_PROPERTY(Ms::MScore::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
       Q_PROPERTY(int                            veloOffset        READ veloOffset         WRITE undoSetVeloOffset)
       Q_PROPERTY(Ms::Note::ValueType            veloType          READ veloType           WRITE undoSetVeloType)
 
       Q_ENUMS(ValueType)
-      Q_ENUMS(Ms::MScore::Direction)
+//TODO-WS      Q_ENUMS(Ms::MScore::Direction)
       Q_ENUMS(Ms::MScore::DirectionH)
 
    public:
@@ -204,7 +204,7 @@ class Note : public Element {
       bool _fixed         { false };      // for slash notation
 
       MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };    ///< user override of mirror
-      MScore::Direction _userDotPosition { MScore::Direction::AUTO }; ///< user override of dot position
+      Direction _userDotPosition { Direction::AUTO }; ///< user override of dot position
 
       NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
       NoteHead::Type  _headType  { NoteHead::Type::HEAD_AUTO    };
@@ -376,8 +376,8 @@ class Note : public Element {
       MScore::DirectionH userMirror() const             { return _userMirror; }
       void setUserMirror(MScore::DirectionH d)          { _userMirror = d; }
 
-      MScore::Direction userDotPosition() const         { return _userDotPosition; }
-      void setUserDotPosition(MScore::Direction d)      { _userDotPosition = d;    }
+      Direction userDotPosition() const         { return _userDotPosition; }
+      void setUserDotPosition(Direction d)      { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
       void reset();
@@ -428,7 +428,7 @@ class Note : public Element {
       void undoSetOnTimeUserOffset(int);
       void undoSetOffTimeUserOffset(int);
       void undoSetUserMirror(MScore::DirectionH);
-      void undoSetUserDotPosition(MScore::Direction);
+      void undoSetUserDotPosition(Direction);
       void undoSetHeadGroup(NoteHead::Group);
       void undoSetHeadType(NoteHead::Type);
 
@@ -439,7 +439,7 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s) override;
-      void setDotY(MScore::Direction);
+      void setDotY(Direction);
 
       void addBracket();
 

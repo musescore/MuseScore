@@ -113,7 +113,7 @@ bool SpannerSegment::setProperty(P_ID id, const QVariant& v)
                  return spanner()->setProperty(id, v);
             case P_ID::USER_OFF2:
                   _userOff2 = v.toPointF();
-                  score()->setLayoutAll(true);
+                  score()->setLayoutAll();
                   break;
             default:
                   return Element::setProperty(id, v);
@@ -493,7 +493,7 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -855,17 +855,18 @@ Element* Spanner::prevElement()
 
 //---------------------------------------------------------
 //   setTick
-//   @warning Alters spannerMap - Do not call from within a loop over spannerMap
+//   //no: @warning Alters spannerMap - Do not call from within a loop over spannerMap
 //---------------------------------------------------------
 
 void Spanner::setTick(int v)
       {
       _tick = v;
-      if (_score) {
-            //our starting tick changed, we'd need to occupy a different position in the spannerMap
-            if (_score->spannerMap().removeSpanner(this))
-                  _score->addSpanner(this);
-            }
+// WS: this is a low level function and should have no side effects
+//      if (_score) {
+//our starting tick changed, we'd need to occupy a different position in the spannerMap
+//            if (_score->spannerMap().removeSpanner(this))
+//                  _score->addSpanner(this);
+//            }
       }
 
 //---------------------------------------------------------

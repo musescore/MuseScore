@@ -1861,7 +1861,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScore::Direction sd, Beam*& beam)
+static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam)
       {
       if (!cr) return;
       // create a new beam
@@ -4037,7 +4037,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       QString voice;
       AccidentalType accType = AccidentalType::NONE; // set based on alter value (can be microtonal)
       Accidental* acc = 0;                               // created based on accidental element
-      MScore::Direction stemDir = MScore::Direction::AUTO;
+      Direction stemDir = Direction::AUTO;
       bool noStem = false;
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
       QColor noteheadColor = QColor::Invalid;
@@ -4386,11 +4386,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
                   // the drum palette cannot handle stem direction AUTO,
                   // overrule if necessary
-                  if (stemDir == MScore::Direction::AUTO) {
+                  if (stemDir == Direction::AUTO) {
                         if (line > 4)
-                              stemDir = MScore::Direction::DOWN;
+                              stemDir = Direction::DOWN;
                         else
-                              stemDir = MScore::Direction::UP;
+                              stemDir = Direction::UP;
                         }
 
                   /*
@@ -5376,9 +5376,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               newSlur->setStartElement(cr);
                               QString pl = _e.attributes().value("placement").toString();
                               if (pl == "above")
-                                    newSlur->setSlurDirection(MScore::Direction::UP);
+                                    newSlur->setSlurDirection(Direction::UP);
                               else if (pl == "below")
-                                    newSlur->setSlurDirection(MScore::Direction::DOWN);
+                                    newSlur->setSlurDirection(Direction::DOWN);
                               newSlur->setTrack(track);
                               newSlur->setTrack2(track);
                               _slur[slurNo].start(newSlur);
@@ -5433,9 +5433,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               _tie->setTrack(track);
                               QString tiedOrientation = _e.attributes().value("orientation").toString();
                               if (tiedOrientation == "over")
-                                    _tie->setSlurDirection(MScore::Direction::UP);
+                                    _tie->setSlurDirection(Direction::UP);
                               else if (tiedOrientation == "under")
-                                    _tie->setSlurDirection(MScore::Direction::DOWN);
+                                    _tie->setSlurDirection(Direction::DOWN);
                               else if (tiedOrientation == "auto")
                                     ;  // ignore
                               else if (tiedOrientation == "")
@@ -5818,20 +5818,20 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
  Parse the /score-partwise/part/measure/note/stem node.
  */
 
-void MusicXMLParserPass2::stem(MScore::Direction& sd, bool& nost)
+void MusicXMLParserPass2::stem(Direction& sd, bool& nost)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "stem");
 
       // defaults
-      sd = MScore::Direction::AUTO;
+      sd = Direction::AUTO;
       nost = false;
 
       QString s = _e.readElementText();
 
       if (s == "up")
-            sd = MScore::Direction::UP;
+            sd = Direction::UP;
       else if (s == "down")
-            sd = MScore::Direction::DOWN;
+            sd = Direction::DOWN;
       else if (s == "none")
             nost = true;
       else if (s == "double")

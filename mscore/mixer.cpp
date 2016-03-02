@@ -323,7 +323,7 @@ void PartEdit::patchChanged(int n, bool syncControls)
       if (score) {
             score->startCmd();
             score->undo(new ChangePatch(score, channel, p));
-            score->setLayoutAll(true);
+            score->setLayoutAll();
             score->endCmd();
             }
       channel->updateInitList();
@@ -476,7 +476,7 @@ void PartEdit::drumsetToggled(bool val, bool syncControls)
             return;
             }
       score->undo(new ChangePatch(score, channel, p));
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       sync(syncControls);
       }
@@ -663,7 +663,7 @@ void PartEdit::midiChannelChanged(int)
 
                   part->score()->setSoloMute();
                   part->score()->setInstrumentsChanged(true);
-                  part->score()->setLayoutAll(true);
+                  part->score()->setLayoutAll();
                   break;
                   }
             }
@@ -674,7 +674,7 @@ void PartEdit::midiChannelChanged(int)
             part->score()->midiMapping(channel->channel)->channel = newChannel % 16;
             part->score()->midiMapping(channel->channel)->port    = newChannel / 16;
             part->score()->setInstrumentsChanged(true);
-            part->score()->setLayoutAll(true);
+            part->score()->setLayoutAll();
             seq->initInstruments();
             }
       else {

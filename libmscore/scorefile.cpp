@@ -65,7 +65,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       // special case multi measure rest
       //
       Measure* mm = 0;
-      if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->type() == Element::Type::MEASURE) {
+      if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->isMeasure()) {
             mm = static_cast<Measure*>(m);
 #if 0 // TODO
             Segment* s = mm->findSegment(Segment::Type::EndBarLine, mm->endTick());
@@ -74,7 +74,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
 #endif
             }
 
-      if (m->type() == Element::Type::MEASURE || staffIdx == 0)
+      if (m->isMeasure() || staffIdx == 0)
             m->write(xml, staffIdx, writeSystemElements);
 
       if (mm && mm->mmRest()) {
@@ -82,7 +82,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
             xml.tag("tick", mm->tick() + mm->ticks());         // rewind tick
             }
 
-      if (m->type() == Element::Type::MEASURE)
+      if (m->isMeasure())
             xml.curTick = m->tick() + m->ticks();
       }
 
@@ -910,8 +910,6 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                               return FileError::FILE_TOO_OLD;
                         }
 
-                  if (_mscVersion <= 114)
-                        return read114(e);
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "programVersion") {
@@ -1054,7 +1052,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "Synthesizer")
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
-                  _style.setSpatium (e.readDouble() * DPMM); // obsolete, moved to Style
+                  _style.set(StyleIdx::spatium, e.readDouble() * DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
                   setPageNumberOffset(e.readInt());
             else if (tag == "Division")
@@ -1068,13 +1066,13 @@ bool Score::read(XmlReader& e)
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
             else if (tag == "Style") {
-                  qreal sp = _style.spatium();
+                  qreal sp = _style.value(StyleIdx::spatium).toDouble();
                   _style.load(e);
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
-                        _style.setSpatium(sp);
+                        _style.set(StyleIdx::spatium, sp);
                         }
                   _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
                   }
@@ -1489,11 +1487,11 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
-                  if ((segment->segmentType() == Segment::Type::EndBarLine) && (m->mmRestCount() < 0 || m->mmRest())) {
+//                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
 //                        BarLine* bl = static_cast<BarLine*>(e);
 //TODO                        bl->setBarLineType(m->endBarLineType());
 //                        bl->setVisible(m->endBarLineVisible());
-                        }
+//                        }
                   e->write(xml);
                   segment->write(xml);    // write only once
                   }

@@ -93,7 +93,7 @@ public:
       bool hasPart(const QString& id) const;
       Part* getPart(const QString& id) const { return _partMap.value(id); }
       MusicXMLDrumset getDrumset(const QString& id) const { return _drumsets.value(id); }
-      void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const MScore::Direction sd);
+      void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const Direction sd);
       MusicXmlInstrList getInstrList(const QString id) const;
       Fraction getMeasureStart(const int i) const;
       int octaveShift(const QString& id, const int staff, const Fraction f) const;

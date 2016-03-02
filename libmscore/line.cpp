@@ -367,7 +367,7 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
       if (ls)
             _score->undoRemoveElement(ls);
 
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       return true;
       }
 
@@ -800,7 +800,7 @@ void SLine::layout()
             return;
 
       for (int i = sysIdx1; i < sysIdx2+1;  ++i) {
-            if (systems.at(i)->isVbox())
+            if (systems.at(i)->vbox())
                   continue;
             ++segmentsNeeded;
             }
@@ -839,7 +839,7 @@ void SLine::layout()
       int segIdx = 0;
       for (int i = sysIdx1; i <= sysIdx2; ++i) {
             System* system = systems.at(i);
-            if (system->isVbox())
+            if (system->vbox())
                   continue;
             LineSegment* lineSegm = segmentAt(segIdx++);
             lineSegm->setTrack(track());       // DEBUG

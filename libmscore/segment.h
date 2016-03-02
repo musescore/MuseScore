@@ -230,24 +230,25 @@ public:
             Q_ASSERT(_segmentType == Type::ChordRest);
             return (ChordRest*)(_elist[track]);
             };
-      bool isBeginBarLine() const       { return _segmentType == Type::BeginBarLine; }
-      bool isClef() const               { return _segmentType == Type::Clef; }
-      bool isKeySig() const             { return _segmentType == Type::KeySig; }
-      bool isAmbitus() const            { return _segmentType == Type::Ambitus; }
-      bool isTimeSig() const            { return _segmentType == Type::TimeSig; }
-      bool isStartRepeatBarLine() const { return _segmentType == Type::StartRepeatBarLine; }
-      bool isBarLine() const            { return _segmentType == Type::BarLine; }
-      bool isBreath() const             { return _segmentType == Type::Breath; }
-      bool isChordRest() const          { return _segmentType == Type::ChordRest; }
-      bool isEndBarLine() const         { return _segmentType == Type::EndBarLine; }
-      bool isKeySigAnnounce() const     { return _segmentType == Type::KeySigAnnounce; }
-      bool isTimeSigAnnounce() const    { return _segmentType == Type::TimeSigAnnounce; }
+      bool isType(const Segment::Type t) const { return static_cast<int>(_segmentType) & static_cast<int>(t); }
+      bool isBeginBarLineType() const       { return _segmentType == Type::BeginBarLine; }
+      bool isClefType() const               { return _segmentType == Type::Clef; }
+      bool isKeySigType() const             { return _segmentType == Type::KeySig; }
+      bool isAmbitusType() const            { return _segmentType == Type::Ambitus; }
+      bool isTimeSigType() const            { return _segmentType == Type::TimeSig; }
+      bool isStartRepeatBarLineType() const { return _segmentType == Type::StartRepeatBarLine; }
+      bool isBarLineType() const            { return _segmentType == Type::BarLine; }
+      bool isBreathType() const             { return _segmentType == Type::Breath; }
+      bool isChordRestType() const          { return _segmentType == Type::ChordRest; }
+      bool isEndBarLineType() const         { return _segmentType == Type::EndBarLine; }
+      bool isKeySigAnnounceType() const     { return _segmentType == Type::KeySigAnnounce; }
+      bool isTimeSigAnnounceType() const    { return _segmentType == Type::TimeSigAnnounce; }
       };
 
-constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {
+constexpr Segment::Type operator| (const Segment::Type t1, const Segment::Type t2) {
       return static_cast<Segment::Type>(static_cast<int>(t1) | static_cast<int>(t2));
       }
-constexpr bool operator& (Segment::Type t1, Segment::Type t2) {
+constexpr bool operator& (const Segment::Type t1, const Segment::Type t2) {
       return static_cast<int>(t1) & static_cast<int>(t2);
       }
 

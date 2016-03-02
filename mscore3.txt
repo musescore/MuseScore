@@ -31,6 +31,8 @@
       In 3.x  Undo knows were to (re-)insert Segments by only checking type and tick
       position.
 
+- remove pre 2.0 compatibility
+
 
 ====================================================================
       Programming Style Changes in MuseScore 3
@@ -47,7 +49,7 @@
             if ((s.segmentType() == Segment::Type::ChordRest))
                   ...
         can be written as
-            if (s.isChordRest())
+            if (s.isChordRestType())
                   ...
 
       * Use safer type conversion: instead of
@@ -75,6 +77,20 @@
         you can write
             for (Segment& s : segments)
                   ...
+
+      * enums
+        Some scoped enums can be replaced by classes. Example:
+
+            class Direction {
+                  ...
+               public:
+                  enum _Direction { AUTO, UP, DOWN };
+                  ...
+                  };
+
+        Goal is to allow
+            - allow type conversion (to QVariant for example)
+            - add conversion to/from string for use in Xml::read(...)/Xml::write(xxx)
 
 
 ====================================================================

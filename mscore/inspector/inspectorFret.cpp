@@ -51,7 +51,7 @@ void InspectorFretDiagram::propertiesClicked()
       Score* score = fd->score();
       score->startCmd();
       mscore->currentScoreView()->editFretDiagram(fd);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       }
 

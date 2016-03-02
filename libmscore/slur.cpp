@@ -152,7 +152,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
       Slur* sl = static_cast<Slur*>(slurTie());
 
       if (key == Qt::Key_X) {
-            sl->setSlurDirection(sl->up() ? MScore::Direction::DOWN : MScore::Direction::UP);
+            sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
             sl->layout();
             return true;
             }
@@ -261,7 +261,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
             score()->endCmd();
             score()->startCmd();
             viewer->startEdit(newSegment, curGrip);
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
             }
       }
 
@@ -691,7 +691,7 @@ bool SlurSegment::isEdited() const
 SlurTie::SlurTie(Score* s)
    : Spanner(s)
       {
-      _slurDirection = MScore::Direction::AUTO;
+      _slurDirection = Direction::AUTO;
       _up            = true;
       _lineType      = 0;     // default is solid
       }
@@ -1117,7 +1117,7 @@ void SlurTie::writeProperties(Xml& xml) const
       int idx = 0;
       foreach(const SpannerSegment* ss, spannerSegments())
             ((SlurSegment*)ss)->writeSlur(xml, idx++);
-      if (_slurDirection != MScore::Direction::AUTO)
+      if (_slurDirection != Direction::AUTO)
             xml.tag("up", int(_slurDirection));
       if (_lineType)
             xml.tag("lineType", _lineType);
@@ -1147,7 +1147,7 @@ bool SlurTie::readProperties(XmlReader& e)
                   segment->SpannerSegment::setVisible(segment->visible());
             }
       else if (tag == "up")
-            _slurDirection = MScore::Direction(e.readInt());
+            _slurDirection = Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (!Element::readProperties(e))
@@ -1168,7 +1168,7 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(MScore::Direction d)
+void SlurTie::undoSetSlurDirection(Direction d)
       {
       score()->undoChangeProperty(this, P_ID::SLUR_DIRECTION, int(d));
       }
@@ -1204,11 +1204,11 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_ID::SLUR_DIRECTION: setSlurDirection(MScore::Direction(v.toInt())); break;
+            case P_ID::SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -1222,7 +1222,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
             case P_ID::LINE_TYPE:
                   return 0;
             case P_ID::SLUR_DIRECTION:
-                  return int(MScore::Direction::AUTO);
+                  return int(Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
             }
@@ -1276,7 +1276,7 @@ bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return SpannerSegment::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -1450,13 +1450,13 @@ void Slur::layout()
             setTick2(tick());
             }
       switch (_slurDirection) {
-            case MScore::Direction::UP:
+            case Direction::UP:
                   _up = true;
                   break;
-            case MScore::Direction::DOWN:
+            case Direction::DOWN:
                   _up = false;
                   break;
-            case MScore::Direction::AUTO:
+            case Direction::AUTO:
                   {
                   //
                   // assumption:
@@ -1518,7 +1518,7 @@ void Slur::layout()
 
       unsigned nsegs = 1;
       for (ciSystem iis = is; iis != sl.end(); ++iis) {
-            if ((*iis)->isVbox())
+            if ((*iis)->vbox())
                   continue;
             if (*iis == sPos.system2)
                   break;
@@ -1529,7 +1529,7 @@ void Slur::layout()
 
       for (int i = 0; is != sl.end(); ++i, ++is) {
             System* system  = *is;
-            if (system->isVbox()) {
+            if (system->vbox()) {
                   --i;
                   continue;
                   }
@@ -1725,7 +1725,7 @@ void SlurTie::endEdit()
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF3, o.o[2]);
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF4, o.o[3]);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 }

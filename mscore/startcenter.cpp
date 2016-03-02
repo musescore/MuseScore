@@ -24,7 +24,7 @@ namespace Ms {
 
 void MuseScore::showStartcenter(bool val)
       {
-      QAction* a = getAction("startcenter");
+/*      QAction* a = getAction("startcenter");
       if (val && startcenter == nullptr) {
             startcenter = new Startcenter;
             startcenter->addAction(a);
@@ -33,8 +33,24 @@ void MuseScore::showStartcenter(bool val)
             connect(startcenter, SIGNAL(rejected()), a, SLOT(toggle()));
             }
       startcenter->setVisible(val);
+      */
       }
 
+//---------------------------------------------------------
+//   MyNetworkAccessManager
+//---------------------------------------------------------
+
+QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
+                                          const QNetworkRequest & req,
+                                          QIODevice * outgoingData)
+      {
+      QNetworkRequest new_req(req);
+      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
+      return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
+      }
+
+
+#if 0 // TODO: port to QWebEngine
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
@@ -156,24 +172,11 @@ void Startcenter::readSettings(QSettings& settings)
       }
 
 //---------------------------------------------------------
-//   MyNetworkAccessManager
-//---------------------------------------------------------
-
-QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
-                                          const QNetworkRequest & req,
-                                          QIODevice * outgoingData)
-      {
-      QNetworkRequest new_req(req);
-      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
-      return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
-      }
-
-//---------------------------------------------------------
 //   MyWebView
 //---------------------------------------------------------
 
 MyWebView::MyWebView(QWidget *parent):
-   QWebView(parent)
+   QWebEngineView(parent)
       {
       page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
       QNetworkAccessManager* networkManager = new MyNetworkAccessManager(this);
@@ -362,6 +365,6 @@ void CookieJar::save()
             }
       file.close();
       }
-
+#endif
 }
 

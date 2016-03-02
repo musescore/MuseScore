@@ -144,7 +144,6 @@ private:
       int rstaff() const;
       int idx() const;
       void read(XmlReader&);
-      void read114(XmlReader&);
       void write(Xml& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
@@ -262,6 +261,8 @@ private:
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+      BracketType innerBracket() const;
 
 #ifndef NDEBUG
       void dumpClefs(const char* title) const;

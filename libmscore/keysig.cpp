@@ -141,7 +141,7 @@ void KeySig::layout()
 
       // Don't repeat naturals if shown in courtesy
       if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick())
-          && !segment()->isKeySigAnnounce())
+          && !segment()->isKeySigAnnounceType())
             naturalsOn = false;
 
       int coffset = 0;
@@ -525,7 +525,7 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       setGenerated(false);
       return true;
       }

@@ -25,7 +25,7 @@ void MuseScore::showUploadScoreDialog()
       {
       if (!currentScore())
             return;
-      if (!currentScore()->sanityCheck()) {
+      if (!currentScore()->sanityCheck(QString())) {
             QMessageBox msgBox;
             msgBox.setWindowTitle(QObject::tr("MuseScore: Upload Error"));
             msgBox.setText(tr("This score cannot be saved online. Please fix the corrupted measures and try again."));

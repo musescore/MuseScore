@@ -333,9 +333,15 @@ Score* MuseScore::readScore(const QString& name)
       Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
             if (readScoreError(name, rv, true)) {
-                  delete score;
-                  score = new Score(MScore::baseStyle());
-                  rv = Ms::readScore(score, name, true);
+                  if (rv != Score::FileError::FILE_CORRUPTED) {
+                        // dont read file again if corrupted
+                        // the check routine may try to fix it
+                        delete score;
+                        score = new Score(MScore::baseStyle());
+                        rv = Ms::readScore(score, name, true);
+                        }
+                  else
+                        rv = Score::FileError::FILE_NO_ERROR;
                   }
             else {
                   delete score;
@@ -2087,18 +2093,18 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             score->setCreated(true); // force save as for imported files
             }
 
-      score->setLayoutAll(true);
       for (Score* s : score->scoreList()) {
             s->setPlaylistDirty();
             s->rebuildMidiMapping();
             s->updateChannel();
             s->setSoloMute();
             s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
+            s->setLayoutAll();
             }
       score->setSaved(false);
       score->update();
       if (!ignoreVersionError && !MScore::noGui)
-            if (!score->sanityCheck())
+            if (!score->sanityCheck(QString()))
                   return Score::FileError::FILE_CORRUPTED;
       return Score::FileError::FILE_NO_ERROR;
       }

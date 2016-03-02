@@ -489,7 +489,7 @@ void MuseScore::editInstrList()
       for(Score* s: toDelete)
             rootScore->undo(new RemoveExcerpt(s));
 
-      rootScore->setLayoutAll(true);
+      rootScore->setLayoutAll();
       rootScore->endCmd();
       rootScore->rebuildMidiMapping();
       seq->initInstruments();

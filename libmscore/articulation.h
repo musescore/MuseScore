@@ -70,7 +70,7 @@ class Articulation : public Element {
       Q_OBJECT
 
       ArticulationType _articulationType;
-      MScore::Direction _direction;
+      Direction _direction;
       QString _channelName;
 
       ArticulationAnchor _anchor;
@@ -117,8 +117,8 @@ class Articulation : public Element {
 
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
-      void setDirection(MScore::Direction d);
-      MScore::Direction direction() const   { return _direction; }
+      void setDirection(Direction d);
+      Direction direction() const   { return _direction; }
 
       ChordRest* chordRest() const;
       Segment* segment() const;

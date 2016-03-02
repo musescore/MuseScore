@@ -343,7 +343,7 @@ void Seq::stop()
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
-            cs->setLayoutAll(false);
+            cs->setLayoutAll();
             cs->setUpdateAll();
             cs->end();
             }

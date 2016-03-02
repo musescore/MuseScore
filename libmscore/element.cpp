@@ -512,7 +512,7 @@ QPointF Element::pagePos() const
 
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
-            if (parent()->isSegment())
+            if (parent()->type() == Element::Type::SEGMENT)
                   system = toSegment(parent())->system();
             else if (parent()->isMeasure())           // used in measure number
                   system = toMeasure(parent())->system();
@@ -548,7 +548,7 @@ QPointF Element::canvasPos() const
 
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
-            if (parent()->isSegment())
+            if (parent()->type() == Element::Type::SEGMENT)
                   system = toSegment(parent())->system();
             else if (parent()->isMeasure())     // used in measure number
                   system = toMeasure(parent())->system();
@@ -1581,7 +1581,7 @@ void Element::resetProperty(P_ID id)
 
 bool Element::custom(P_ID id) const
       {
-      return propertyDefault(id) == getProperty(id);
+      return propertyDefault(id) != getProperty(id);
       }
 
 //---------------------------------------------------------
@@ -1591,6 +1591,15 @@ bool Element::custom(P_ID id) const
 void Element::undoResetProperty(P_ID id)
       {
       score()->undoChangeProperty(this, id, propertyDefault(id));
+      }
+
+//---------------------------------------------------------
+//   readProperty
+//---------------------------------------------------------
+
+void Element::readProperty(XmlReader& e, P_ID id)
+      {
+      setProperty(id, Ms::getProperty(id, e));
       }
 
 //---------------------------------------------------------

@@ -162,7 +162,7 @@ void ScoreView::endDrag()
                   e->score()->undoPropertyChanged(e, P_ID::USER_OFF, e->startDragPosition());
                   }
             }
-      _score->setLayoutAll(true);
+      _score->setLayoutAll();
       dragElement = 0;
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();

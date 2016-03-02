@@ -40,7 +40,7 @@ Tuplet::Tuplet(Score* s)
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      _direction    = MScore::Direction::AUTO;
+      _direction    = Direction::AUTO;
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -137,13 +137,13 @@ void Tuplet::layout()
       //
       // find out main direction
       //
-      if (_direction == MScore::Direction::AUTO) {
+      if (_direction == Direction::AUTO) {
             int up = 1;
             foreach (const DurationElement* e, _elements) {
                   if (e->type() == Element::Type::CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
-                        if (c->stemDirection() != MScore::Direction::AUTO)
-                              up += c->stemDirection() == MScore::Direction::UP ? 1000 : -1000;
+                        if (c->stemDirection() != Direction::AUTO)
+                              up += c->stemDirection() == Direction::UP ? 1000 : -1000;
                         else
                               up += c->up() ? 1 : -1;
                         }
@@ -154,7 +154,7 @@ void Tuplet::layout()
             _isUp = up > 0;
             }
       else
-            _isUp = _direction == MScore::Direction::UP;
+            _isUp = _direction == Direction::UP;
 
       const DurationElement* cr1 = _elements.front();
       while (cr1->type() == Element::Type::TUPLET) {
@@ -652,7 +652,7 @@ void Tuplet::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
+                  readProperty(e, P_ID::DIRECTION);
             else if (tag == "numberType")
                   _numberType = NumberType(e.readInt());
             else if (tag == "bracketType")
@@ -797,7 +797,7 @@ void Tuplet::editDrag(const EditData& ed)
             _p2 += ed.delta;
       setGenerated(false);
       layout();
-      score()->setUpdateAll(true);
+      score()->setUpdateAll();
       }
 
 //---------------------------------------------------------
@@ -890,7 +890,7 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_ID::DIRECTION:
-                  return int(_direction);
+                  return _direction;
             case P_ID::NUMBER_TYPE:
                   return int(_numberType);
             case P_ID::BRACKET_TYPE:
@@ -918,7 +918,7 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_ID::DIRECTION:
-                  setDirection(MScore::Direction(v.toInt()));
+                  setDirection(v.value<Direction>());
                   break;
             case P_ID::NUMBER_TYPE:
                   setNumberType(NumberType(v.toInt()));
@@ -942,7 +942,7 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
                   return DurationElement::setProperty(propertyId, v);
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -954,7 +954,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::DIRECTION:
-                  return int(MScore::Direction::AUTO);
+                  return QVariant(Direction::AUTO);
             case P_ID::NUMBER_TYPE:
                   return int(Tuplet::NumberType::SHOW_NUMBER);
             case P_ID::BRACKET_TYPE:

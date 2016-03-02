@@ -26,7 +26,7 @@
 #include "lineproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
-#include "textstyle.h"
+#include "textstyledialog.h"
 #include "textproperties.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
@@ -514,7 +514,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         ss->staff()->part()->setInstrument(ss->instrument(), ss->segment()->tick());
                         score()->rebuildMidiMapping();
                         seq->initInstruments();
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         }
                   else
                         qDebug("no template selected?");
