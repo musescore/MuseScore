@@ -499,7 +499,7 @@ Palette* MuseScore::newTremoloPalette()
 Palette* MuseScore::newNoteHeadsPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Note Heads"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Noteheads"));
       sp->setMag(1.3);
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
