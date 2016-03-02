@@ -297,7 +297,7 @@ Element* Stem::drop(const DropData& data)
       switch(e->type()) {
             case Element::Type::TREMOLO:
                   e->setParent(ch);
-                  score()->setLayoutAll(true);
+                  score()->setLayoutAll();
                   score()->undoAddElement(e);
                   return e;
             default:
@@ -335,7 +335,6 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       layout();
       score()->addRefresh(canvasBoundingRect());
-      score()->setLayoutAll(false);       //DEBUG
       return true;
       }
 

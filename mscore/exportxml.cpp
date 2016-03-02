@@ -580,7 +580,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, Xml& xml)
       tagName += slurTieLineStyle(s); // define line type
       tagName += color2xml(s);
       tagName += QString(" type=\"start\"%1")
-            .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "");
+            .arg(s->slurDirection() == Direction::UP ? " placement=\"above\"" : "");
 
       if (i >= 0) {
             // remove from list and print start

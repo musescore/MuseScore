@@ -400,7 +400,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
       if (name == 0)
             return;
 
-      switch(propertyType(id)) {
+      switch (propertyType(id)) {
             case P_TYPE::BOOL:
             case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
@@ -440,16 +440,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                              }
                   break;
             case P_TYPE::DIRECTION:
-                  switch (MScore::Direction(data.toInt())) {
-                        case MScore::Direction::UP:
-                              tag(name, QVariant("up"));
-                              break;
-                        case MScore::Direction::DOWN:
-                              tag(name, QVariant("down"));
-                              break;
-                        case MScore::Direction::AUTO:
-                              break;
-                        }
+                  tag(name, data.value<Direction>().toString());
                   break;
             case P_TYPE::DIRECTION_H:
                   switch (MScore::DirectionH(data.toInt())) {

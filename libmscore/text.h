@@ -14,7 +14,7 @@
 #define __SIMPLETEXT_H__
 
 #include "element.h"
-#include "style.h"
+#include "textstyle.h"
 #include "elementlayout.h"
 
 namespace Ms {

@@ -156,7 +156,7 @@ bool Lasso::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setUpdateAll(true);
+      score()->setUpdateAll();
       return true;
       }
 

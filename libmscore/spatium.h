@@ -59,6 +59,7 @@ class Spatium {
             return *this;
             }
       Spatium operator-() const { return Spatium(-_val); }
+      operator QVariant() const { return QVariant::fromValue(*this); }
       };
 
 inline Spatium operator+(const Spatium& a, const Spatium& b)
@@ -103,8 +104,9 @@ inline Spatium operator*(qreal a, const Spatium& b)
       r *= a;
       return r;
       }
-
-
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Spatium);
+
 #endif
 

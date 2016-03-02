@@ -325,7 +325,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
             }
       // layout();
       // score()->addRefresh(pageBoundingRect());
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

@@ -121,6 +121,34 @@ void Staff::addBracket(BracketItem b)
       }
 
 //---------------------------------------------------------
+//   innerBracket
+//    Return type inner bracket.
+//    The bracket type determines the staff distance.
+//---------------------------------------------------------
+
+BracketType Staff::innerBracket() const
+      {
+      int staffIdx = idx();
+
+      BracketType t = BracketType::NO_BRACKET;
+      int level = 1000;
+      for (int i = 0; i < score()->nstaves(); ++i) {
+            Staff* staff = score()->staff(i);
+            for (int k = 0; k < staff->brackets().size(); ++k) {
+                  const BracketItem& bi = staff->brackets()[k];
+                  if (bi._bracket != BracketType::NO_BRACKET) {
+                        if (i < staffIdx && ((i + bi._bracketSpan) > staffIdx) && k < level) {
+                              t = bi._bracket;
+                              level = k;
+                              break;
+                              }
+                        }
+                  }
+            }
+      return t;
+      }
+
+//---------------------------------------------------------
 //   cleanupBrackets
 //---------------------------------------------------------
 
@@ -1220,7 +1248,7 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
                   qDebug("Staff::setProperty: unhandled id");
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

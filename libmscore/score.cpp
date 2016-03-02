@@ -290,15 +290,7 @@ void Score::init()
       _mscVersion             = MSCVERSION;
       _created                = false;
 
-      _updateAll              = true;
-      _layoutAll              = true;
-      layoutFlags             = 0;
       _undoRedo               = false;
-      _playNote               = false;
-      _playChord              = false;
-      _excerptsChanged        = false;
-      _instrumentsChanged     = false;
-      _selectionChanged       = false;
 
       keyState                = 0;
       _showInvisible          = true;
@@ -380,9 +372,8 @@ Score::Score(Score* parent)
 
             // but borrow defaultStyle page layout settings
             const PageFormat* pf = MScore::defaultStyle()->pageFormat();
-            qreal sp = MScore::defaultStyle()->spatium();
             _style.setPageFormat(*pf);
-            _style.setSpatium(sp);
+            _style.set(StyleIdx::spatium, MScore::defaultStyle()->value(StyleIdx::spatium));
 
             // and force some style settings that just make sense for parts
             _style.set(StyleIdx::concertPitch, false);
@@ -695,7 +686,7 @@ void Score::setShowInvisible(bool v)
       {
       _showInvisible = v;
       rebuildBspTree();
-      _updateAll = true;
+      setUpdateAll();
       end();
       }
 
@@ -706,7 +697,7 @@ void Score::setShowInvisible(bool v)
 void Score::setShowUnprintable(bool v)
       {
       _showUnprintable = v;
-      _updateAll      = true;
+      setUpdateAll();
       end();
       }
 
@@ -717,7 +708,7 @@ void Score::setShowUnprintable(bool v)
 void Score::setShowFrames(bool v)
       {
       _showFrames = v;
-      _updateAll  = true;
+      setUpdateAll();
       end();
       }
 
@@ -728,7 +719,7 @@ void Score::setShowFrames(bool v)
 void Score::setShowPageborders(bool v)
       {
       _showPageborders = v;
-      _updateAll = true;
+      setUpdateAll();
       end();
       }
 
@@ -1504,11 +1495,6 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
       }
 
-void Score::setSpatium(qreal v)
-      {
-      style()->setSpatium(v);
-      }
-
 //---------------------------------------------------------
 //   getCreateMeasure
 //    - return Measure for tick
@@ -1550,21 +1536,19 @@ void Score::addElement(Element* element)
       {
       Element* parent = element->parent();
 
-      if (MScore::debugMode) {
-            qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
-               this, element, element->name(), parent, parent ? parent->name() : "");
-            }
+//      qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
+//         this, element, element->name(), parent, parent ? parent->name() : "");
 
       Element::Type et = element->type();
       if (et == Element::Type::TREMOLO)
-            setLayoutAll(true);
+            setLayoutAll();
       else if (et == Element::Type::MEASURE
          || (et == Element::Type::HBOX && element->parent()->type() != Element::Type::VBOX)
          || et == Element::Type::VBOX
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
          ) {
-            setLayoutAll(true);
+            setLayoutAll();
             measures()->add(static_cast<MeasureBase*>(element));
             return;
             }
@@ -1611,14 +1595,14 @@ void Score::addElement(Element* element)
                         if (ss->system())
                               ss->system()->add(ss);
                         }
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   o->staff()->updateOttava();
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::Type::DYNAMIC:
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1642,7 +1626,7 @@ void Score::addElement(Element* element)
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
                   rebuildMidiMapping();
-                  _instrumentsChanged = true;
+                  _cmdState._instrumentsChanged = true;
                   }
                   break;
 
@@ -1665,7 +1649,7 @@ void Score::addElement(Element* element)
             default:
                   break;
             }
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1679,17 +1663,15 @@ void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
 
-      if (MScore::debugMode) {
-            qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
-               this, element, element->name(), parent, parent ? parent->name() : "");
-            }
+//      qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
+//         this, element, element->name(), parent, parent ? parent->name() : "");
 
       // special for MEASURE, HBOX, VBOX
       // their parent is not static
 
       Element::Type et = element->type();
       if (et == Element::Type::TREMOLO)
-            setLayoutAll(true);
+            setLayoutAll();
 
       else if (et == Element::Type::MEASURE
          || (et == Element::Type::HBOX && !parent->isVBox())
@@ -1698,7 +1680,7 @@ void Score::removeElement(Element* element)
          || et == Element::Type::FBOX
             ) {
             measures()->remove(static_cast<MeasureBase*>(element));
-            setLayoutAll(true);
+            setLayoutAll();
             return;
             }
 
@@ -1747,13 +1729,13 @@ void Score::removeElement(Element* element)
                               ss->system()->remove(ss);
                         }
                   o->staff()->updateOttava();
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::Type::DYNAMIC:
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1789,7 +1771,7 @@ void Score::removeElement(Element* element)
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
                   rebuildMidiMapping();
-                  _instrumentsChanged = true;
+                  _cmdState._instrumentsChanged = true;
                   }
                   break;
 
@@ -1806,7 +1788,7 @@ void Score::removeElement(Element* element)
             default:
                   break;
             }
-      setLayoutAll(true);
+//      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1828,10 +1810,7 @@ Measure* Score::firstMeasure() const
 
 Measure* Score::firstMeasureMM() const
       {
-      MeasureBase* mb = _measures.first();
-      while (mb && mb->type() != Element::Type::MEASURE)
-            mb = mb->next();
-      Measure* m = static_cast<Measure*>(mb);
+      Measure* m = firstMeasure();
       if (m && styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest())
             return m->mmRest();
       return m;
@@ -2229,10 +2208,10 @@ void Score::setSynthesizerState(const SynthesizerState& s)
 //   setLayoutAll
 //---------------------------------------------------------
 
-void Score::setLayoutAll(bool val)
+void Score::setLayoutAll()
       {
-      foreach(Score* score, scoreList())
-            score->_layoutAll = val;
+      for (Score* score : scoreList())
+            score->_cmdState.setUpdateMode(UpdateMode::LayoutAll);
       }
 
 //---------------------------------------------------------
@@ -2392,7 +2371,7 @@ bool Score::appendScore(Score* score)
                   }
             addElement(ns);
             }
-      setLayoutAll(true);
+      setLayoutAll();
       return true;
       }
 
@@ -2426,7 +2405,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       undoChangeKeySig(ns, 0, s->keySigEvent(0));
 
       rebuildMidiMapping();
-      _instrumentsChanged = true;
+      _cmdState._instrumentsChanged = true;
       doLayout();
 
       //
@@ -2962,7 +2941,7 @@ void Score::padToggle(Pad n)
 
 void Score::deselect(Element* el)
       {
-      refresh |= el->abbox();
+      _cmdState.refresh |= el->abbox();
       _selection.remove(el);
       setSelectionChanged(true);
       }
@@ -3004,14 +2983,14 @@ void Score::selectSingle(Element* e, int staffIdx)
       deselectAll();
       if (e == 0) {
             selState = SelState::NONE;
-            _updateAll = true;
+            setUpdateAll();
             }
       else {
             if (e->type() == Element::Type::MEASURE) {
                   select(e, SelectType::RANGE, staffIdx);
                   return;
                   }
-            refresh |= e->abbox();
+            _cmdState.refresh |= e->abbox();
             _selection.add(e);
             _is.setTrack(e->track());
             selState = SelState::LIST;
@@ -3055,12 +3034,12 @@ void Score::selectAdd(Element* e)
                   select(0, SelectType::SINGLE, 0);
                   return;
                   }
-            _updateAll = true;
+            setUpdateAll();
             selState = SelState::RANGE;
             _selection.updateSelectedElements();
             }
       else { // None or List
-            refresh |= e->abbox();
+            _cmdState.refresh |= e->abbox();
             if (_selection.elements().contains(e))
                   _selection.remove(e);
             else {
@@ -3358,7 +3337,7 @@ void Score::lassoSelectEnd()
 
       if (_selection.elements().empty()) {
             _selection.setState(SelState::NONE);
-            _updateAll = true;
+            setUpdateAll();
             return;
             }
       _selection.setState(SelState::LIST);
@@ -3391,7 +3370,7 @@ void Score::lassoSelectEnd()
                   _selection.setState(SelState::RANGE);
             _selection.updateSelectedElements();
             }
-      _updateAll = true;
+      setUpdateAll();
       }
 
 //---------------------------------------------------------
@@ -3507,7 +3486,7 @@ void Score::cmdSelectAll()
       Measure* last = lastMeasureMM();
       selectRange(first, 0);
       selectRange(last, nstaves() - 1);
-      setUpdateAll(true);
+      setUpdateAll();
       end();
       }
 
@@ -4409,7 +4388,7 @@ void Score::changeVoice(int voice)
             selection().clear();
       for (Element* e : el)
             select(e, SelectType::ADD, -1);
-      setLayoutAll(true);
+      setLayoutAll();
       endCmd();
       }
 
@@ -4490,7 +4469,7 @@ bool Score::setProperty(P_ID id, const QVariant& v)
                   qDebug("Score::setProperty: unhandled id");
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -4508,5 +4487,16 @@ QVariant Score::propertyDefault(P_ID id) const
             }
       }
 
+//---------------------------------------------------------
+//   setStyle
+//---------------------------------------------------------
+
+void Score::setStyle(const MStyle& s)
+      {
+      if (style()->value(StyleIdx::spatium) != s.value(StyleIdx::spatium))
+            spatiumChanged(style()->value(StyleIdx::spatium).toDouble(), s.value(StyleIdx::spatium).toDouble());
+      _style = s;
+//      _style.precomputeValues();
+      }
 }
 

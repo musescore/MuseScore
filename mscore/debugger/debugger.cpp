@@ -21,7 +21,7 @@
 #include "debugger.h"
 #include "musescore.h"
 #include "icons.h"
-#include "textstyle.h"
+// #include "textstyle.h"
 #include "globals.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"
@@ -1062,7 +1062,7 @@ void ChordDebug::upChanged(bool val)
 void ChordDebug::beamModeChanged(int n)
       {
       ((Chord*)element())->setBeamMode(Beam::Mode(n));
-      element()->score()->setLayoutAll(true);
+      element()->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1071,7 +1071,7 @@ void ChordDebug::beamModeChanged(int n)
 
 void ChordDebug::directionChanged(int val)
       {
-      ((Chord*)element())->setStemDirection(MScore::Direction(val));
+      ((Chord*)element())->setStemDirection(Direction(val));
       }
 
 //---------------------------------------------------------

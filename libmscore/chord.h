@@ -57,6 +57,7 @@ enum class PlayEventType : char    {
 //   @P notes       array[Note]     the list of notes (read only)
 //   @P stem        Stem            the stem of the chord if any (read only)
 //   @P stemSlash   StemSlash       the stem slash of the chord (acciaccatura) if any (read only)
+//   @P stemDirection Direction       the stem slash of the chord (acciaccatura) if any (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
@@ -76,6 +77,7 @@ class Chord : public ChordRest {
 //      Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(Ms::Stem* stem              READ stem)
       Q_PROPERTY(Ms::StemSlash* stemSlash    READ stemSlash)
+      Q_PROPERTY(int stemDirection    READ stemDirection)
 
       std::vector<Note*>   _notes;       // sorted to decreasing line step
       LedgerLine*          _ledgerLines; // single linked list
@@ -91,7 +93,7 @@ class Chord : public ChordRest {
       QVector<Chord*>     _graceNotes;
       int                 _graceIndex;   ///< if this is a grace note, index in parent list
 
-      MScore::Direction  _stemDirection;
+      Direction          _stemDirection;
       NoteType           _noteType;      ///< mark grace notes: acciaccatura and appoggiatura
       bool               _noStem;
       PlayEventType      _playEventType; ///< play events were modified by user
@@ -129,8 +131,8 @@ class Chord : public ChordRest {
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
 
-      void setStemDirection(MScore::Direction d) { _stemDirection = d; }
-      MScore::Direction stemDirection() const    { return _stemDirection; }
+      void setStemDirection(Direction d) { _stemDirection = d; }
+      Direction stemDirection() const    { return _stemDirection; }
 
       LedgerLine* ledgerLines()                  { return _ledgerLines; }
 
@@ -140,7 +142,7 @@ class Chord : public ChordRest {
       void layoutStem();
       void layoutArpeggio2();
 
-//TODO      QQmlListProperty<Ms::Note> qmlNotes()       { return QQmlListProperty<Ms::Note>(this, _notes);        }
+//TODO      QQmlListProperty<Ms::Note> qmlNotes()       { return QQmlListProperty<Ms::Notes>(this, _notes); }
 //TODO      QQmlListProperty<Ms::Lyrics> qmlLyrics()    { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
 //TODO      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes);  }
 

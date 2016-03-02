@@ -230,7 +230,7 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
 Articulation::Articulation(Score* s)
    : Element(s)
       {
-      _direction = MScore::Direction::AUTO;
+      _direction = Direction::AUTO;
       _up = true;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setArticulationType(ArticulationType::Fermata);
@@ -275,7 +275,7 @@ void Articulation::read(XmlReader& e)
                   anchorStyle = PropertyStyle::UNSTYLED;
                   }
             else if (tag == "direction")
-                  setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
+                  readProperty(e, P_ID::DIRECTION);
             else if ( tag == "ornamentStyle")
                   setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
             else if ( tag == "play")
@@ -381,7 +381,7 @@ void Articulation::setSubtype(const QString& s)
             for (i = 0; i < n; ++i) {
                   if (s == al[i].name) {
                         _up = al[i].up;
-                        _direction = (_up ? MScore::Direction::UP : MScore::Direction::DOWN);
+                        _direction = (_up ? Direction::UP : Direction::DOWN);
                         st  = int(al[i].type);
                         break;
                         }
@@ -508,11 +508,11 @@ void Articulation::layout()
 //   setDirection
 //---------------------------------------------------------
 
-void Articulation::setDirection(MScore::Direction d)
+void Articulation::setDirection(Direction d)
       {
       _direction = d;
-      if (d != MScore::Direction::AUTO)
-            _up = (d == MScore::Direction::UP);
+      if (d != Direction::AUTO)
+            _up = (d == Direction::UP);
       }
 
 //---------------------------------------------------------
@@ -521,8 +521,8 @@ void Articulation::setDirection(MScore::Direction d)
 
 void Articulation::reset()
       {
-      if (_direction != MScore::Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::DIRECTION, int(MScore::Direction::AUTO));
+      if (_direction != Direction::AUTO)
+            score()->undoChangeProperty(this, P_ID::DIRECTION, int(Direction::AUTO));
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ID::ARTICULATION_ANCHOR, int(a));
@@ -549,7 +549,7 @@ QLineF Articulation::dragAnchor() const
 QVariant Articulation::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::DIRECTION:           return int(direction());
+            case P_ID::DIRECTION:           return direction();
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
             case P_ID::TIME_STRETCH:        return timeStretch();
             case P_ID::ORNAMENT_STYLE:      return int(ornamentStyle());
@@ -568,7 +568,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch (propertyId) {
             case P_ID::DIRECTION:
-                  setDirection(MScore::Direction(v.toInt()));
+                  setDirection(Direction(v.value<Direction>()));
                   break;
             case P_ID::ARTICULATION_ANCHOR:
                   anchorStyle = PropertyStyle::UNSTYLED;
@@ -588,7 +588,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
                   setUserOff(v.toPointF());
                   if (_articulationType == ArticulationType::Tenuto) {
                         // moving a tenuto may move slurs:
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         }
                   return true;
             default:
@@ -602,7 +602,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
             static_cast<BarLine*>(parent())->layout();
 
       score()->addRefresh(canvasBoundingRect());
-      score()->setLayoutAll(false);       // DEBUG
+      score()->setLayoutAll();       // DEBUG
       canvasBoundingRectChanged();        // rebuild bsp tree
       return true;
       }
@@ -615,7 +615,7 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_ID::DIRECTION:
-                  return int(MScore::Direction::AUTO);
+                  return QVariant(Direction::AUTO);
 
             case P_ID::ARTICULATION_ANCHOR:
                   return int(score()->style()->articulationAnchor(int(_articulationType)));

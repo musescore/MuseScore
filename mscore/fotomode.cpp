@@ -442,7 +442,6 @@ void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       {
       QPointF p     = toLogical(ev->pos());
       QPointF delta = p - data.startMove;
-      _score->setLayoutAll(false);
       score()->addRefresh(_foto->abbox());
       EditData ed;
       ed.curGrip = curGrip;
@@ -543,7 +542,6 @@ void ScoreView::doDragFotoRect(QMouseEvent* ev)
       {
       QPointF p(toLogical(ev->pos()));
       QPointF delta = p - data.startMove;
-      _score->setLayoutAll(false);
       score()->addRefresh(_foto->abbox());
       _foto->setRect(_foto->rect().translated(delta));
       score()->addRefresh(_foto->abbox());

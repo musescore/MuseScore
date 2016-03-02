@@ -176,13 +176,20 @@ bool Score::sanityCheck(const QString& name)
             Fraction mLen = m->len();
             int endStaff = staves().size();
             for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
+                  Rest* fmrest0 = 0;      // full measure rest in voice 0
                   Fraction voices[VOICES] = {};
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                         for (int v = 0; v < VOICES; ++v) {
-                              ChordRest* cr = static_cast<ChordRest*>(s->element(staffIdx* VOICES + v));
+                              ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
                               if (cr == 0)
                                     continue;
                               voices[v] += cr->actualFraction();
+                              if (v == 0 && cr->isRest()) {
+                                    Rest* r = toRest(cr);
+                                    if (r->durationType().isMeasure()) {
+                                          fmrest0 = r;
+                                          }
+                                    }
                               }
                         }
                   if (voices[0] != mLen) {
@@ -190,6 +197,13 @@ bool Score::sanityCheck(const QString& name)
                         qDebug() << msg;
                         error += QString("%1\n").arg(msg);
                         result = false;
+                        // try to fix a bad full measure rest
+                        if (fmrest0) {
+                              // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
+                              fmrest0->setDuration(mLen);
+                              if (fmrest0->actualFraction() != mLen)
+                                    printf("whoo???\n");
+                              }
                         }
                   for (int v = 1; v < VOICES; ++v) {
                         if (voices[v] > mLen) {

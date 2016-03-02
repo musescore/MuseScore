@@ -42,6 +42,7 @@ class TDuration {
       DurationType type() const             { return _val; }
       bool isValid() const                  { return _val != DurationType::V_INVALID; }
       bool isZero() const                   { return _val == DurationType::V_ZERO; }
+      bool isMeasure() const                { return _val == DurationType::V_MEASURE; }
       void setVal(int tick);
       void setType(DurationType t);
       void setType(const QString&);

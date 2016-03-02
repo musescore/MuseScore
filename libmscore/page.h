@@ -144,6 +144,7 @@ class Page : public Element {
       virtual Element::Type type() const    { return Element::Type::PAGE; }
       const QList<System*>& systems() const { return _systems;   }
       QList<System*>& systems()             { return _systems;   }
+      System* system(int idx)               { return _systems[idx];   }
 
       virtual void layout();
       virtual void write(Xml&) const;

@@ -69,6 +69,7 @@ class Rest;
 class LayoutBreak;
 class Tremolo;
 class System;
+class Lyrics;
 
 enum class SymId;
 
@@ -561,6 +562,7 @@ class Element : public QObject, public ScoreElement {
       void resetProperty(P_ID);
       void undoResetProperty(P_ID);
       bool custom(P_ID) const;
+      void readProperty(XmlReader&, P_ID);
       virtual bool isUserModified() const;
 
       virtual void styleChanged() {}
@@ -604,15 +606,19 @@ class Element : public QObject, public ScoreElement {
       //
       //    bool             isChordRest()
       //---------------------------------------------------
+      // DEBUG: check to catch old (now renamed) ambitious Segment->isChordRest() calls
+      //    (which check the subtype)
 
-      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
+      bool isChordRest() const { Q_ASSERT(type() != Element::Type::SEGMENT); return type() == Element::Type::REST || type() == Element::Type::CHORD
+            || type() == Element::Type::REPEAT_MEASURE; }
+      bool isChordRest1() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
             || type() == Element::Type::REPEAT_MEASURE; }
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
       bool isSLine() const;
       bool isSLineSegment() const;
 
 #define CONVERT(a,b) \
-      bool is##a() const { return type() == Element::Type::b; }
+      bool is##a() const { Q_ASSERT(type() != Element::Type::SEGMENT); return type() == Element::Type::b; }
 
       CONVERT(Note,          NOTE);
       CONVERT(Rest,          REST);
@@ -644,11 +650,12 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Segment,       SEGMENT);
       CONVERT(Tremolo,       TREMOLO);
       CONVERT(System,        SYSTEM);
+      CONVERT(Lyrics,        LYRICS);
 #undef CONVERT
       };
 
       //---------------------------------------------------
-      // save casting of Element
+      // safe casting of Element
       //
       // Example for ChordRest:
       //
@@ -700,6 +707,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Segment,       SEGMENT);
       CONVERT(Tremolo,       TREMOLO);
       CONVERT(System,        SYSTEM);
+      CONVERT(Lyrics,        LYRICS);
 #undef CONVERT
 
 //---------------------------------------------------------

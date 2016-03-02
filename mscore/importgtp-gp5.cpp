@@ -279,9 +279,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == ARPEGGIO_DOWN)
-                  chord->setStemDirection(MScore::Direction::DOWN);
+                  chord->setStemDirection(Direction::DOWN);
             else if (rr == ARPEGGIO_UP)
-                  chord->setStemDirection(MScore::Direction::UP);
+                  chord->setStemDirection(Direction::UP);
             }
       int r = readChar();
       if (r & 0x8) {

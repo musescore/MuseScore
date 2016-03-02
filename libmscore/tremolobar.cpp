@@ -197,7 +197,7 @@ bool TremoloBar::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

@@ -22,7 +22,7 @@
 #define __TEXTPROP_H__
 
 #include "ui_textproperties.h"
-#include "libmscore/style.h"
+#include "libmscore/textstyle.h"
 
 namespace Ms {
 

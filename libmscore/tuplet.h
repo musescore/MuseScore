@@ -51,7 +51,7 @@ class Tuplet : public DurationElement {
       Fraction _ratio;
       TDuration _baseLen;      // 1/8 for a triplet of 1/8
 
-      MScore::Direction _direction;
+      Direction _direction;
       bool _isUp;
 
       QPointF p1, p2;
@@ -112,8 +112,8 @@ class Tuplet : public DurationElement {
 
       virtual void dump() const;
 
-      void setDirection(MScore::Direction d)       { _direction = d; }
-      MScore::Direction direction() const          { return _direction; }
+      void setDirection(Direction d)       { _direction = d; }
+      Direction direction() const          { return _direction; }
       bool isUp() const                    { return _isUp; }
       virtual int tick() const             { return _tick; }
       void setTick(int val)                { _tick = val; }

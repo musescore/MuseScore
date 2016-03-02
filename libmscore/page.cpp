@@ -810,8 +810,8 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
 QList<const Element*> Page::elements()
       {
       QList<const Element*> el;
-      foreach (System* s, _systems) {
-            foreach(MeasureBase* m, s->measures())
+      for (System* s :_systems) {
+            for (MeasureBase* m : s->measures())
                   m->scanElements(&el, collectElements, false);
             }
       scanElements(&el, collectElements, false);

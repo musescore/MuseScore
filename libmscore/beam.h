@@ -37,7 +37,7 @@ class Beam : public Element {
 
       QList<ChordRest*> _elements;        // must be sorted by tick
       QList<QLineF*> beamSegments;
-      MScore::Direction _direction;
+      Direction _direction;
 
       bool _up;
       bool _distribute;                   // equal spacing of elements
@@ -121,8 +121,8 @@ class Beam : public Element {
       bool noSlope() const                { return _noSlope; }
       void setNoSlope(bool val)           { _noSlope = val; }
 
-      void setBeamDirection(MScore::Direction d);
-      MScore::Direction beamDirection() const     { return _direction; }
+      void setBeamDirection(Direction d);
+      Direction beamDirection() const     { return _direction; }
 
       virtual QPainterPath outline() const override;
       virtual bool contains(const QPointF& p) const override;

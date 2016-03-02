@@ -302,37 +302,27 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
             case P_TYPE::GLISSANDO_STYLE: {
-                QString value(e.readElementText());
-                if ( value == "whitekeys")
-                    return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
-                else if ( value == "blackkeys")
-                    return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
-                else if ( value == "diatonic")
-                    return QVariant(int(MScore::GlissandoStyle::DIATONIC));
-                else // e.g., normally "Chromatic"
-                    return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
-            }
-              break;
-            case P_TYPE::ORNAMENT_STYLE:
-                  {
-                      QString value(e.readElementText());
-                      if ( value == "baroque")
-                          return QVariant(int(MScore::OrnamentStyle::BAROQUE));
-
-                      return QVariant(int(MScore::OrnamentStyle::DEFAULT));
-                  }
-                  break; // break is really not necessary because of the default return
-            case P_TYPE::DIRECTION:
-                  {
                   QString value(e.readElementText());
-                  if (value == "up")
-                        return QVariant(int(MScore::Direction::UP));
-                  else if (value == "down")
-                        return QVariant(int(MScore::Direction::DOWN));
-                  else if (value == "auto")
-                        return QVariant(int(MScore::Direction::AUTO));
+                  if ( value == "whitekeys")
+                        return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
+                  else if ( value == "blackkeys")
+                        return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
+                  else if ( value == "diatonic")
+                        return QVariant(int(MScore::GlissandoStyle::DIATONIC));
+                  else // e.g., normally "Chromatic"
+                        return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
                   }
                   break;
+            case P_TYPE::ORNAMENT_STYLE: {
+                  QString value(e.readElementText());
+                  if ( value == "baroque")
+                        return QVariant(int(MScore::OrnamentStyle::BAROQUE));
+                  return QVariant(int(MScore::OrnamentStyle::DEFAULT));
+                  }
+
+            case P_TYPE::DIRECTION:
+                  return QVariant::fromValue(Direction(e.readElementText()));
+
             case P_TYPE::DIRECTION_H:
                   {
                   QString value(e.readElementText());

@@ -463,7 +463,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
             }
 
       layout();
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       score()->end();
       txt = sl.join(" ");
 
@@ -539,7 +539,7 @@ void Lyrics::setNo(int n)
 void Lyrics::endEdit()
       {
       Text::endEdit();
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -589,7 +589,7 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -768,7 +768,7 @@ bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -854,7 +854,7 @@ void LyricsLineSegment::layout()
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
-            qreal offsetX = score()->styleD(StyleIdx::minNoteDistance) * sp;
+            qreal offsetX = score()->styleP(StyleIdx::minNoteDistance) * mag();
             // if final segment, extend slightly after the chord, otherwise shorten it
             rxpos2() +=
                   (spannerSegmentType() == SpannerSegmentType::BEGIN ||
@@ -868,7 +868,7 @@ void LyricsLineSegment::layout()
             _dashLength = lyr->dashLength();
 #else
             rypos()     -= lyr->bbox().height() * Lyrics::LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength = score()->styleS(StyleIdx::lyricsDashMaxLength).val() * sp;  // and dash length
+            _dashLength = score()->styleP(StyleIdx::lyricsDashMaxLength) * mag();  // and dash length
 #endif
             qreal len         = pos2().x();
             qreal minDashLen  = score()->styleS(StyleIdx::lyricsDashMinLength).val() * sp;

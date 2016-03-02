@@ -765,7 +765,7 @@ void Harmony::endEdit()
                         }
                   }
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------

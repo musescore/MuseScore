@@ -595,7 +595,7 @@ void Score::transposeSemitone(int step)
             }
       else {
             deselectAll();
-            setLayoutAll(true);
+            setLayoutAll();
             endCmd(false);
             }
       }

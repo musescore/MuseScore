@@ -378,7 +378,7 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

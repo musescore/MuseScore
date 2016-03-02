@@ -660,7 +660,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             }
       if (rv)
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
       return rv;
       }
 

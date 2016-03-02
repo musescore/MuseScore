@@ -677,7 +677,7 @@ void InspectorBend::propertiesClicked()
       Score* score = b->score();
       score->startCmd();
       mscore->currentScoreView()->editBendProperties(b);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       }
 
@@ -714,7 +714,7 @@ void InspectorTremoloBar::propertiesClicked()
       Score* score = b->score();
       score->startCmd();
       mscore->currentScoreView()->editBendProperties(b);
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       }
 

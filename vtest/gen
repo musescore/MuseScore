@@ -56,10 +56,19 @@ else
 fi
 
 #####DEBUG: failed tests
-#SRC=" \
-#      harmony-12\
-#      user-offset-2 emmentaler-text-2 musejazz-text-2 \
-#      system-4"
+SRC=" \
+      emmentaler-8 bravura-8 gonville-8
+      emmentaler-10
+      emmentaler-text-2
+      musejazz-text-2
+      line-2
+      chord-layout-15
+      accidental-2
+      grace-1
+      grace-2
+      harmony-12\
+      user-offset-2 \
+      system-4"
 
 DPI=130
 F=vtest.html

@@ -423,6 +423,7 @@ void Segment::checkElement(Element* el, int track)
             qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
                el->name(), _elist[track]->name(),
                qPrintable(score()->sigmap()->pos(tick())), tick(), track, score());
+            // abort();
             }
       }
 
@@ -649,7 +650,7 @@ void Segment::remove(Element* el)
             case Element::Type::BREATH:
                   _elist[track] = 0;
                   score()->setPause(tick(), 0);
-                  score()->setLayoutAll(true);
+                  score()->setLayoutAll();
                   break;
 
             default:
@@ -1365,48 +1366,48 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
       Segment::Type st  = segmentType();
       Segment::Type nst = ns ? ns->segmentType() : Segment::Type::Invalid;
 
-      qreal nhw              = score()->noteHeadWidth();
-      qreal _spatium         = spatium();
-      qreal minNoteDistance  = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
-      qreal nbd              = score()->styleS(StyleIdx::noteBarDistance).val() * _spatium;
-      qreal bnd              = score()->styleS(StyleIdx::barNoteDistance).val() * _spatium;
-      qreal clefLeftMargin   = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
-      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
-
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = shape(staffIdx).minHorizontalDistance(ns->shape(staffIdx));
             if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
-                  d = qMax(d, minRight()) + nbd;
+                  d = qMax(d, minRight()) + score()->styleP(StyleIdx::noteBarDistance);
             w = qMax(w, d);
             }
+
       if (st == Segment::Type::ChordRest) {
             if (nst == Segment::Type::EndBarLine)
-                  w = qMax(w, nhw) + nbd;
+                  w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::noteBarDistance);
             else if (nst == Segment::Type::Clef)
-                  w = qMax(w, clefLeftMargin);
+                  w = qMax(w, score()->styleP(StyleIdx::clefLeftMargin));
             else
-                  w = qMax(w, nhw) + minNoteDistance;
+                  w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
             }
-      else if (st & (Segment::Type::KeySig | Segment::Type::TimeSig | Segment::Type::KeySigAnnounce | Segment::Type::TimeSigAnnounce)) {
-            if (nst == Segment::Type::ChordRest)
-                  w = qMax(w, minRight() + bnd);
-            else
-                  w += clefKeyRightMargin;
+      else if (st == Segment::Type::Clef && nst == Segment::Type::KeySig)
+            w += score()->styleP(StyleIdx::clefKeyDistance);
+      else if (st == Segment::Type::Clef && nst == Segment::Type::TimeSig)
+            w += score()->styleP(StyleIdx::clefTimesigDistance);
+      else if (st == Segment::Type::KeySig && nst == Segment::Type::TimeSig)
+            w += score()->styleP(StyleIdx::keyTimesigDistance);
+      else if (st != Segment::Type::ChordRest && nst == Segment::Type::ChordRest) {
+//            printf("%s - %s w %f minLeft %f spatium %f noteDist %f\n",
+//                  subTypeName(), ns->subTypeName(), w, ns->minLeft(), spatium(), score()->styleP(StyleIdx::barNoteDistance));
+            qreal d = score()->styleP(StyleIdx::barNoteDistance) - ns->minLeft() * .7;
+            if (d < spatium())
+                  d = spatium();
+            w = qMax(w, minRight()) + d;
             }
       else if (st == Segment::Type::StartRepeatBarLine)
-            w += nbd;
+            w += score()->styleP(StyleIdx::noteBarDistance);
       else if (st == Segment::Type::BeginBarLine && nst == Segment::Type::Clef)
-            w += clefLeftMargin;
+            w += score()->styleP(StyleIdx::clefLeftMargin);
       else if (st == Segment::Type::EndBarLine && nst == Segment::Type::KeySigAnnounce)
-            w += clefKeyRightMargin;
+            w += score()->styleP(StyleIdx::clefKeyRightMargin);
       else if (st == Segment::Type::Breath)
-            w += _spatium * 1.5;
+            w += spatium() * 1.5;
       if (w < 0.0)
             w = 0.0;
       if (ns)
-            w += ns->extraLeadingSpace().val() * _spatium;
-//      printf("--minDistance %s-%s %f\n", subTypeName(), ns->subTypeName(), w);
+            w += ns->extraLeadingSpace().val() * spatium();
       return w;
       }
 

@@ -262,7 +262,7 @@ enum class P_TYPE : char {
       STRING,
       SCALE,
       COLOR,
-      DIRECTION,      // enum class MScore::Direction
+      DIRECTION,      // enum class Direction
       DIRECTION_H,    // enum class MScore::DirectionH
       ORNAMENT_STYLE, // enum class MScore::OrnamentStyle
       TDURATION,

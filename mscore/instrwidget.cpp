@@ -1031,7 +1031,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
             staffIdx = nstaffIdx;
             }
 
-      cs->setLayoutAll(true);
+      cs->setLayoutAll();
       }
 
 //---------------------------------------------------------

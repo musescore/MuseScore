@@ -152,7 +152,7 @@ void MeasureBase::add(Element* e)
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         break;
                   }
             }
@@ -178,7 +178,7 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = 0;
                         score()->setPause(endTick(), 0);
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         break;
                   }
             }
@@ -349,7 +349,7 @@ bool MeasureBase::setProperty(P_ID id, const QVariant& value)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

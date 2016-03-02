@@ -502,8 +502,6 @@ void Glissando::undoSetShowText(bool f)
 //    of the same instrument, preferring the chord in the same track as chord, if it exists.
 //
 //    CANNOT be called if the final chord and/or its segment do not exist yet in the score
-//    (i.e. while reading the chord itself): for this reason, Score::read114() calls it
-//    during Score::connectTies(), once everything have been read in.
 //
 //    Parameter:  chord: the chord this glissando ends into
 //    Returns:    the top note in a suitable previous chord or nullptr if none found.
@@ -722,7 +720,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

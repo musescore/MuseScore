@@ -234,7 +234,7 @@ void createExcerpt(Excerpt* excerpt)
       score->rebuildMidiMapping();
       score->updateChannel();
 
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->doLayout();
       }
 

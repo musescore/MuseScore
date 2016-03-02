@@ -283,7 +283,7 @@ void Tie::calculateDirection()
       Measure* m1 = c1->measure();
       Measure* m2 = c2->measure();
 
-      if (_slurDirection == MScore::Direction::AUTO) {
+      if (_slurDirection == Direction::AUTO) {
             std::vector<Note*> notes = c1->notes();
             int n = notes.size();
             if (m1->mstaff(c1->staffIdx())->hasVoices || m2->mstaff(c2->staffIdx())->hasVoices) {
@@ -334,7 +334,7 @@ void Tie::calculateDirection()
                   }
             }
       else
-            _up = _slurDirection == MScore::Direction::UP ? true : false;
+            _up = _slurDirection == Direction::UP ? true : false;
       }
 
 //---------------------------------------------------------
@@ -352,7 +352,7 @@ void Tie::layout()
                   return;
                   }
             Chord* c1 = startNote()->chord();
-            if (_slurDirection == MScore::Direction::AUTO) {
+            if (_slurDirection == Direction::AUTO) {
                   if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
                         // in polyphonic passage, ties go on the stem side
                         _up = c1->up();
@@ -361,7 +361,7 @@ void Tie::layout()
                         _up = !c1->up();
                   }
             else
-                  _up = _slurDirection == MScore::Direction::UP ? true : false;
+                  _up = _slurDirection == Direction::UP ? true : false;
             fixupSegments(1);
             SlurSegment* segment = segmentAt(0);
             segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
@@ -414,7 +414,7 @@ void Tie::layout()
       int i = 0;
       for (uint ii = 0; ii < nsegs; ++ii) {
             System* system = systems[sysIdx1++];
-            if (system->isVbox())
+            if (system->vbox())
                   continue;
             SlurSegment* segment = segmentAt(i);
             segment->setSystem(system);
@@ -462,7 +462,7 @@ void Tie::endEdit()
             score()->undo()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
             }
       SlurTie::endEdit();
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
