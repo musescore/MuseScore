@@ -1692,20 +1692,18 @@ void Score::cmdAddStretch(qreal val)
 
 void Score::cmdResetBeamMode()
       {
-      if (!selection().isRange()) {
+      bool noSelection = selection().isNone();
+      if (noSelection)
+            cmdSelectAll();
+      else if (!selection().isRange()) {
             qDebug("no system or staff selected");
             return;
             }
-      int startTick = selection().tickStart();
+
       int endTick   = selection().tickEnd();
 
-      Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-            if (seg->tick() < startTick)
-                  continue;
-            if (seg->tick() >= endTick)
-                  break;
-            for (int track = 0; track < nstaves() * VOICES; ++track) {
+      for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(Segment::Type::ChordRest)) {
+            for (int track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0)
                         continue;
@@ -1720,6 +1718,8 @@ void Score::cmdResetBeamMode()
                   }
             }
       _layoutAll = true;
+      if (noSelection)
+            deselectAll();
       }
 
 //---------------------------------------------------------
