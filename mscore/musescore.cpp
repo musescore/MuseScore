@@ -1071,6 +1071,8 @@ QString MuseScore::getLocaleISOCode() const
             lang = QLocale::system().name();
       else
             lang = localeName;
+      //in case when lang is like "ja_JP"
+      lang = lang.split("_")[0];
       return lang;
       }
 
