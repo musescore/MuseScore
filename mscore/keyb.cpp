@@ -80,7 +80,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
 
       switch(key) {
             case Qt::Key_Space:
-                  if (!(modifiers & (CONTROL_MODIFIER|Qt::ShiftModifier))) {
+                  if (!(modifiers & (CONTROL_MODIFIER | Qt::ShiftModifier))) {
                         // TODO: shift+tab events are filtered by qt
                         lyricsTab(modifiers & Qt::ShiftModifier, true, false);
                         }
