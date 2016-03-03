@@ -57,7 +57,7 @@ QAccessibleInterface* AccessibleScoreView::ScoreViewFactory(const QString &class
       {
           QAccessibleInterface *iface = 0;
           if (classname == QLatin1String("Ms::ScoreView") && object && object->isWidgetType()){
-                qDebug("Creating interface for ScoreView object");
+//                qDebug("Creating interface for ScoreView object");
                 iface = static_cast<QAccessibleInterface*>(new AccessibleScoreView(static_cast<ScoreView*>(object)));
                 }
 

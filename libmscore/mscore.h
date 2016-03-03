@@ -162,7 +162,6 @@ enum class ArticulationType : char {
       Longfermata,
       Verylongfermata,
       Sforzatoaccent,
-//      Espressivo,
       Staccato,
       Staccatissimo,
       Tenuto,
@@ -196,10 +195,6 @@ enum class ArticulationType : char {
       Schleifer,
       Snappizzicato,
       ARTICULATIONS_PROPER,
-//      Tapping,
-//      Slapping,
-//      Popping,
-      // Fingerings
       ThumbPosition = ARTICULATIONS_PROPER,
       LuteFingThumb,
       LuteFingFirst,
@@ -207,7 +202,6 @@ enum class ArticulationType : char {
       LuteFingThird,
       ARTICULATIONS
       };
-
 
 //---------------------------------------------------------
 //   BracketType

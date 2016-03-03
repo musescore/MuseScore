@@ -219,9 +219,20 @@ void Score::end()
 void Score::update()
       {
       for (Score* s : scoreList()) {
-            if (s->_cmdState.layoutAll()) {
-                  s->setUpdateAll();
-                  s->doLayout();
+            switch (s->_cmdState.updateMode()) {
+                  case UpdateMode::DoNothing:
+                  case UpdateMode::Update:
+                  case UpdateMode::UpdateAll:
+                        break;
+                  case UpdateMode::LayoutTick:
+                        s->doLayoutRange(_cmdState.startTick(), _cmdState.endTick());
+                        s->setUpdateAll();
+                        break;
+                  case UpdateMode::LayoutAll:
+                        s->doLayout();
+                        s->setUpdateAll();
+                        s->setUpdateAll();
+                        break;
                   }
             if (s != this)
                   s->deselectAll();

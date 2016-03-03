@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: editstyle.cpp 5637 2012-05-16 14:23:09Z wschweer $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2010 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "libmscore/score.h"
@@ -46,6 +38,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = s;
+      buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
+      buttonApplyToAllParts->setEnabled(cs->parentScore());
+      setModal(true);
 
       const char* styles[] = {
             QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
@@ -67,6 +62,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             }
 
       styleWidgets = {
+      //   idx --- showPercent --- widget --- resetButton
       { StyleIdx::voltaLineStyle,         false, voltaLineStyle,           resetVoltaLineStyle },
       { StyleIdx::ottavaLineStyle,        false, ottavaLineStyle,          resetOttavaLineStyle },
       { StyleIdx::pedalLineStyle,         false, pedalLineStyle,           resetPedalLineStyle },
@@ -123,7 +119,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::clefKeyDistance,         false, clefKeyDistance,         resetClefKeyDistance },
       { StyleIdx::clefTimesigDistance,     false, clefTimesigDistance,     resetClefTimesigDistance },
       { StyleIdx::keyTimesigDistance,      false, keyTimesigDistance,      resetKeyTimesigDistance },
-
 
       { StyleIdx::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
       { StyleIdx::staffLineWidth,          false, staffLineWidth,          resetStaffLineWidth },
@@ -240,35 +235,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::fretMag,                 false, fretMag,                      0 },
       { StyleIdx::scaleBarlines,           false, scaleBarlines,                0 },
       { StyleIdx::crossMeasureValues,      false, crossMeasureValues,           0 },
+
+      { StyleIdx::MusicalSymbolFont,       false, musicalSymbolFont,            0 },
+      { StyleIdx::MusicalTextFont,         false, musicalTextFont,              0 },
       };
 
 
-      buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
-      buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
-
-      lstyle = *s->style();
-      setModal(true);
-
       const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
       chordDescriptionFileButton->setIcon(editIcon);
-      const QIcon &resetIcon = *icons[int(Icons::reset_ICON)];
-      resetHairpinY->setIcon(resetIcon);
-      resetHairpinLineWidth->setIcon(resetIcon);
-      resetHairpinHeight->setIcon(resetIcon);
-      resetHairpinContinueHeight->setIcon(resetIcon);
-      resetVoltaY->setIcon(resetIcon);
-      resetVoltaHook->setIcon(resetIcon);
-      resetVoltaLineWidth->setIcon(resetIcon);
-      resetVoltaLineStyle->setIcon(resetIcon);
-      resetOttavaY->setIcon(resetIcon);
-      resetOttavaHook->setIcon(resetIcon);
-      resetOttavaLineWidth->setIcon(resetIcon);
-      resetOttavaLineStyle->setIcon(resetIcon);
-      resetOttavaNumbersOnly->setIcon(resetIcon);
 
       pageList->setCurrentRow(0);
 
-      //articulationTable->verticalHeader()->setVisible(false); // can get disabled in ui file
       articulationTable->setSelectionBehavior(QAbstractItemView::SelectRows);
       QStringList headers;
       headers << tr("Symbol") << tr("Anchor");
@@ -282,10 +259,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       musicalSymbolFont->clear();
       int idx = 0;
       for (auto i : ScoreFont::scoreFonts()) {
-            musicalSymbolFont->addItem(i.name(), idx);
+            musicalSymbolFont->addItem(i.name(), i.name());
             ++idx;
             }
 
+      anchorMapper  = new QSignalMapper(this);
       for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             ArticulationInfo* ai = &Articulation::articulationList[i];
 
@@ -302,8 +280,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             cb->addItem(tr("Chord Automatic"), int(ArticulationAnchor::CHORD));
             cb->addItem(tr("Above Chord"), int(ArticulationAnchor::TOP_CHORD));
             cb->addItem(tr("Below Chord"), int(ArticulationAnchor::BOTTOM_CHORD));
+
+            connect(cb, SIGNAL(currentIndexChanged(int)), anchorMapper, SLOT(map()));
+            anchorMapper->setMapping(cb, i);
             articulationTable->setCellWidget(i, 1, cb);
             }
+      connect(anchorMapper, SIGNAL(mapped(int)), SLOT(anchorChanged(int)));
 
       dividerLeftSym->addItem( tr("System Divider"),            Sym::symNames[int(SymId::systemDivider)]);
       dividerLeftSym->addItem( tr("Long System Divider"),       Sym::symNames[int(SymId::systemDividerLong)]);
@@ -374,19 +356,20 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       toolTipHeaderFooter += QString("</table></body></html>");
       showHeader->setToolTip(toolTipHeaderFooter);
       showFooter->setToolTip(toolTipHeaderFooter);
-      connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
-      connect(headerOddEven, SIGNAL(toggled(bool)), SLOT(toggleHeaderOddEven(bool)));
-      connect(footerOddEven, SIGNAL(toggled(bool)), SLOT(toggleFooterOddEven(bool)));
-      connect(chordDescriptionFileButton, SIGNAL(clicked()), SLOT(selectChordDescriptionFile()));
-      connect(chordsStandard, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
-      connect(chordsJazz, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
-      connect(chordsCustom, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
-      connect(SwingOff, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
-      connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
-      connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
-      connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
-      connect(lyricsDashMinLength, SIGNAL(valueChanged(double)), SLOT(lyricsDashMinLengthValueChanged(double)));
-      connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)), SLOT(lyricsDashMaxLengthValueChanged(double)));
+
+      connect(buttonBox,           SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+      connect(headerOddEven,       SIGNAL(toggled(bool)),             SLOT(toggleHeaderOddEven(bool)));
+      connect(footerOddEven,       SIGNAL(toggled(bool)),             SLOT(toggleFooterOddEven(bool)));
+      connect(chordDescriptionFileButton, SIGNAL(clicked()),          SLOT(selectChordDescriptionFile()));
+      connect(chordsStandard,      SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordsJazz,          SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordsCustom,        SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(SwingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
+      connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
+      connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
+      connect(hideEmptyStaves,     SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
+      connect(lyricsDashMinLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMinLengthValueChanged(double)));
+      connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMaxLengthValueChanged(double)));
 
       QSignalMapper* mapper  = new QSignalMapper(this);     // reset style signals
       QSignalMapper* mapper2 = new QSignalMapper(this);     // value change signals
@@ -410,14 +393,29 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   connect(qobject_cast<QDoubleSpinBox*>(sw.widget), SIGNAL(valueChanged(double)), mapper2, SLOT(map()));
             else if (qobject_cast<QComboBox*>(sw.widget))
                   connect(qobject_cast<QComboBox*>(sw.widget), SIGNAL(currentIndexChanged(int)), mapper2, SLOT(map()));
+            else if (qobject_cast<QRadioButton*>(sw.widget))
+                  connect(qobject_cast<QRadioButton*>(sw.widget), SIGNAL(toggled(bool)), mapper2, SLOT(map()));
+            else if (qobject_cast<QGroupBox*>(sw.widget))
+                  connect(qobject_cast<QGroupBox*>(sw.widget), SIGNAL(toggled(bool)), mapper2, SLOT(map()));
+            else if (qobject_cast<QCheckBox*>(sw.widget))
+                  connect(qobject_cast<QCheckBox*>(sw.widget), SIGNAL(stateChanged(int)), mapper2, SLOT(map()));
+            else if (qobject_cast<QTextEdit*>(sw.widget))
+                  connect(qobject_cast<QTextEdit*>(sw.widget), SIGNAL(textChanged()), mapper2, SLOT(map()));
+            else {
+                  qFatal("unhandled gui widget type %s valueType %s",
+                     sw.widget->metaObject()->className(),
+                     MStyle::valueName(sw.idx)
+                  );
+                  }
 
             mapper2->setMapping(sw.widget, int(sw.idx));
             }
 
-      connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
+      connect(mapper,  SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
       connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
 
       resize(904, 577); // override designer values
+      cs->startCmd();
       }
 
 //---------------------------------------------------------
@@ -427,18 +425,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 void EditStyle::buttonClicked(QAbstractButton* b)
       {
       switch (buttonBox->standardButton(b)) {
-            case QDialogButtonBox::Apply:
-                  apply();
-                  break;
             case QDialogButtonBox::Ok:
-                  apply();
+                  cs->endCmd(false);
                   done(1);
                   break;
             case QDialogButtonBox::Cancel:
-                  if(cs->undo() && cs->undo()->current()) {
-                        cs->undo()->current()->unwind();
-                        cs->setLayoutAll();
-                        }
+                  cs->endCmd(true);
                   done(0);
                   break;
             case QDialogButtonBox::NoButton:
@@ -464,182 +456,88 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
       }
 
 //---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void EditStyle::apply()
-      {
-      getValues();
-      cs->deselectAll();
-      cs->undo(new ChangeStyle(cs, lstyle));
-      cs->update();
-      }
-
-//---------------------------------------------------------
 //   applyToAllParts
 //---------------------------------------------------------
 
 void EditStyle::applyToAllParts()
       {
-      getValues();
+//      getValues();
       for (Excerpt* e : cs->rootScore()->excerpts()) {
-            e->partScore()->undo(new ChangeStyle(e->partScore(), lstyle));
+            e->partScore()->undo(new ChangeStyle(e->partScore(), *cs->style()));
             e->partScore()->update();
             }
       }
 
 //---------------------------------------------------------
 //   getValue
+//    return current gui value
 //---------------------------------------------------------
 
-void EditStyle::getValue(StyleIdx idx)
+QVariant EditStyle::getValue(StyleIdx idx)
       {
       const StyleWidget& sw = styleWidget(idx);
       const char* type = MStyle::valueType(sw.idx);
 
+      printf("getValue widget %s value %s\n",
+         sw.widget->metaObject()->className(),
+         MStyle::valueName(sw.idx));
+
       if (!strcmp("Ms::Spatium", type)) {
             QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
-            lstyle.set(sw.idx, QVariant(Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0))));
+            return QVariant(Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0)));
             }
 
       else if (!strcmp("double", type)) {
             if (sw.showPercent)
-                  lstyle.set(sw.idx, qobject_cast<QSpinBox*>(sw.widget)->value() * 0.01);
+                  return qobject_cast<QSpinBox*>(sw.widget)->value() * 0.01;
             else
-                  lstyle.set(sw.idx, qobject_cast<QDoubleSpinBox*>(sw.widget)->value());
+                  return qobject_cast<QDoubleSpinBox*>(sw.widget)->value();
             }
       else if (!strcmp("bool", type)) {
-                  if (qobject_cast<QCheckBox*>(sw.widget))
-                        lstyle.set(sw.idx, qobject_cast<QCheckBox*>(sw.widget)->isChecked());
-                  else if (qobject_cast<QGroupBox*>(sw.widget))
-                        lstyle.set(sw.idx, qobject_cast<QGroupBox*>(sw.widget)->isChecked());
-                  else if (qobject_cast<QRadioButton*>(sw.widget))
-                        lstyle.set(sw.idx, qobject_cast<QRadioButton*>(sw.widget)->isChecked());
-                  else
-                        qFatal("unhandled bool");
+            if (qobject_cast<QCheckBox*>(sw.widget))
+                  return qobject_cast<QCheckBox*>(sw.widget)->isChecked();
+            else if (qobject_cast<QGroupBox*>(sw.widget))
+                  return qobject_cast<QGroupBox*>(sw.widget)->isChecked();
+            else if (qobject_cast<QRadioButton*>(sw.widget))
+                  return qobject_cast<QRadioButton*>(sw.widget)->isChecked();
+            else
+                  qFatal("unhandled bool");
             }
       else if (!strcmp("int", type)) {
             if (qobject_cast<QComboBox*>(sw.widget)) {
                   QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
-                  lstyle.set(sw.idx, cb->currentData().toInt());
+                  return cb->currentData().toInt();
                   }
             else if (qobject_cast<QSpinBox*>(sw.widget))
-                  lstyle.set(sw.idx, qobject_cast<QSpinBox*>(sw.widget)->value() / (sw.showPercent ? 100 : 1));
+                  return qobject_cast<QSpinBox*>(sw.widget)->value() / (sw.showPercent ? 100 : 1);
             else
-                  abort();
+                  qFatal("unhandled int");
             }
       else if (!strcmp("QString", type)) {
-            QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
-            if (cb) {
-                  printf("%s DIRECTION===widget %s %s\n", MStyle::valueName(sw.idx),
-                  qPrintable(sw.widget->objectName()),
-                  sw.widget->metaObject()->className());
-                        ;
+            if (qobject_cast<QComboBox*>(sw.widget)) {
+                  QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                  return cb->currentData().toString();
                   }
-            else {
+            if (qobject_cast<QTextEdit*>(sw.widget)) {
                   QTextEdit* te = qobject_cast<QTextEdit*>(sw.widget);
-                  if (!te)
-                        abort();
-                  lstyle.set(sw.idx, te->toPlainText());
+                  return te->toPlainText();
                   }
+            qFatal("getValue: unhandled widget type %s valueType %s",
+               sw.widget->metaObject()->className(),
+               MStyle::valueName(idx));
+
             }
       else if (!strcmp("Ms::Direction", type)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             if (cb)
-                  lstyle.set(sw.idx, Direction(cb->currentIndex()));
+                  return Direction(cb->currentIndex());
             else
-                  abort();
+                  qFatal("unhandled Direction");
             }
       else {
             qFatal("EditStyle::getValue: unhandled type <%s>", type);
             }
-      }
-
-//---------------------------------------------------------
-//   getValues
-//---------------------------------------------------------
-
-void EditStyle::getValues()
-      {
-      for (const StyleWidget& sw : styleWidgets)
-            getValue(sw.idx);
-
-      //TODO: convert the rest:
-
-      if (swingEighth->isChecked())
-            lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_EIGHTH).name()));
-      else if (swingSixteenth->isChecked())
-            lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_16TH).name()));
-      else if (SwingOff->isChecked())
-            lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_ZERO).name()));
-      bool customChords = false;
-      if (chordsStandard->isChecked())
-            lstyle.set(StyleIdx::chordStyle, QString("std"));
-      else if (chordsJazz->isChecked())
-            lstyle.set(StyleIdx::chordStyle, QString("jazz"));
-      else {
-            lstyle.set(StyleIdx::chordStyle, QString("custom"));
-            customChords = true;
-            }
-      if (lstyle.value(StyleIdx::chordDescriptionFile).toString() != chordDescriptionFile->text()) {
-            ChordList* cl = new ChordList();
-            if (lstyle.value(StyleIdx::chordsXmlFile).toBool())
-                  cl->read("chords.xml");
-            cl->read(chordDescriptionFile->text());
-            lstyle.setChordList(cl, customChords);
-            lstyle.set(StyleIdx::chordDescriptionFile, chordDescriptionFile->text());
-            }
-
-
-      lstyle.set(StyleIdx::tabClef, int(clefTab1->isChecked() ? ClefType::TAB : ClefType::TAB2));
-
-
-      int idx1 = musicalSymbolFont->itemData(musicalSymbolFont->currentIndex()).toInt();
-      lstyle.set(StyleIdx::MusicalSymbolFont, ScoreFont::scoreFonts().at(idx1).name());
-
-      QString tf = musicalTextFont->itemData(musicalTextFont->currentIndex()).toString();
-      lstyle.set(StyleIdx::MusicalTextFont, tf);
-
-      Text t(cs);
-      t.setTextStyleType(TextStyleType::HEADER);
-      t.setTextStyleType(TextStyleType::FOOTER);
-
-      lstyle.set(StyleIdx::fretNumPos,              radioFretNumLeft->isChecked() ? 0 : 1);
-
-      // figured bass
-      int         idx = comboFBFont->currentIndex();
-      QString     family;
-      if(FiguredBass::fontData(idx, &family, 0, 0, 0))
-            lstyle.set(StyleIdx::figuredBassFontFamily, family);
-      qreal size = doubleSpinFBSize->value();
-      qreal vPos = doubleSpinFBVertPos->value();
-      lstyle.set(StyleIdx::figuredBassFontSize,   size);
-      lstyle.set(StyleIdx::figuredBassYOffset,    vPos);
-      lstyle.set(StyleIdx::figuredBassLineHeight, ((double)spinFBLineHeight->value()) / 100.0);
-      lstyle.set(StyleIdx::figuredBassAlignment,  radioFBTop->isChecked() ? 0 : 1);
-      lstyle.set(StyleIdx::figuredBassStyle,      radioFBModern->isChecked() ? 0 : 1);
-      // copy to text style data relevant to it (LineHeight and Style are not in text style);
-      // offsetType is necessarily OFFSET_SPATIUM
-      const TextStyle fbOld = lstyle.textStyle(TextStyleType::FIGURED_BASS);
-      if (family != fbOld.family() || size != fbOld.size()
-         || vPos != fbOld.offset().y() || fbOld.offsetType() != OffsetType::SPATIUM)
-            {
-            TextStyle fbNew(fbOld);
-            fbNew.setFamily(family);
-            fbNew.setSize(size);
-            fbNew.setYoff(vPos);
-            fbNew.setOffsetType(OffsetType::SPATIUM);
-            lstyle.setTextStyle(fbNew);
-            }
-
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
-            QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
-            lstyle.setArticulationAnchor(i, ArticulationAnchor(cb->itemData(cb->currentIndex()).toInt()));
-            }
-
-      lstyle.set(StyleIdx::keySigNaturals,  radioKeySigNatNone->isChecked() ? int(KeySigNatural::NONE) :
-                  (radioKeySigNatBefore->isChecked() ? int(KeySigNatural::BEFORE) : int(KeySigNatural::AFTER)) );
-
+      return QVariant();
       }
 
 //---------------------------------------------------------
@@ -648,6 +546,9 @@ void EditStyle::getValues()
 
 void EditStyle::setValues()
       {
+      anchorMapper->blockSignals(true);
+
+      const MStyle& lstyle = *cs->style();
       for (const StyleWidget& sw : styleWidgets) {
             const char* type = MStyle::valueType(sw.idx);
             if (sw.reset)
@@ -807,6 +708,8 @@ void EditStyle::setValues()
       radioKeySigNatNone->setChecked  (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::NONE));
       radioKeySigNatBefore->setChecked(lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::BEFORE));
       radioKeySigNatAfter->setChecked (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::AFTER));
+
+      anchorMapper->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -821,22 +724,28 @@ void EditStyle::selectChordDescriptionFile()
       chordDescriptionFile->setText(fn);
       }
 
+//---------------------------------------------------------
+//   setSwingParams
+//---------------------------------------------------------
+
 void EditStyle::setSwingParams(bool checked)
       {
-      if( !checked)
+      if (!checked)
             return;
+      QVariant val;
       if (SwingOff->isChecked()) {
-            lstyle.set(StyleIdx::swingUnit, TDuration(TDuration::DurationType::V_ZERO).name());
+            val = TDuration(TDuration::DurationType::V_ZERO).name();
             swingBox->setEnabled(false);
             }
       else if (swingEighth->isChecked()) {
-            lstyle.set(StyleIdx::swingUnit, TDuration(TDuration::DurationType::V_EIGHTH).name());
+            val = TDuration(TDuration::DurationType::V_EIGHTH).name();
             swingBox->setEnabled(true);
             }
       else if (swingSixteenth->isChecked()) {
-            lstyle.set(StyleIdx::swingUnit, TDuration(TDuration::DurationType::V_16TH).name());
+            val = TDuration(TDuration::DurationType::V_16TH).name();
             swingBox->setEnabled(true);
             }
+      cs->undo(new ChangeStyleVal(cs, StyleIdx::swingUnit, val));
       }
 
 //---------------------------------------------------------
@@ -847,24 +756,26 @@ void EditStyle::setChordStyle(bool checked)
       {
       if (!checked)
             return;
+      QVariant val;
       if (chordsStandard->isChecked()) {
-            lstyle.set(StyleIdx::chordStyle, QString("std"));
+            val = QString("std");
             chordDescriptionFile->setText("chords_std.xml");
-            lstyle.set(StyleIdx::chordsXmlFile, false);
+            cs->undo(new ChangeStyleVal(cs, StyleIdx::chordsXmlFile, false));
             chordsXmlFile->setChecked(false);
             chordDescriptionGroup->setEnabled(false);
             }
       else if (chordsJazz->isChecked()) {
-            lstyle.set(StyleIdx::chordStyle, QString("jazz"));
+            val = QString("jazz");
             chordDescriptionFile->setText("chords_jazz.xml");
-            lstyle.set(StyleIdx::chordsXmlFile, false);
+            cs->undo(new ChangeStyleVal(cs, StyleIdx::chordsXmlFile, false));
             chordsXmlFile->setChecked(false);
             chordDescriptionGroup->setEnabled(false);
             }
       else {
-            lstyle.set(StyleIdx::chordStyle, QString("custom"));
+            val = QString("custom");
             chordDescriptionGroup->setEnabled(true);
             }
+      cs->undo(new ChangeStyleVal(cs, StyleIdx::chordStyle, val));
       }
 
 //---------------------------------------------------------
@@ -958,11 +869,15 @@ const StyleWidget& EditStyle::styleWidget(StyleIdx idx) const
 void EditStyle::valueChanged(int i)
       {
       StyleIdx idx = (StyleIdx)i;
-      getValue(idx);
+      QVariant val = getValue(idx);
+      cs->undo(new ChangeStyleVal(cs, idx, val));
+      cs->update();
+
+// printf("valueChanged <%s>\n", qPrintable(val.toString()));
 
       const StyleWidget& sw = styleWidget(idx);
       if (sw.reset)
-            sw.reset->setEnabled(!lstyle.isDefault(idx));
+            sw.reset->setEnabled(!cs->style()->isDefault(idx));
       }
 
 //---------------------------------------------------------
@@ -971,9 +886,24 @@ void EditStyle::valueChanged(int i)
 
 void EditStyle::resetStyleValue(int i)
       {
-      StyleIdx id = (StyleIdx)i;
-      lstyle.set(id, MScore::defaultStyle()->value(id));
+      StyleIdx idx = (StyleIdx)i;
+      cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle()->value(idx)));
+      cs->update();
       setValues();
       }
+
+//---------------------------------------------------------
+//   anchorChanged
+//---------------------------------------------------------
+
+void EditStyle::anchorChanged(int i)
+      {
+      QComboBox* cb = qobject_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
+      int val = cb->currentData().toInt();
+      StyleIdx idx = StyleIdx(int(StyleIdx::fermataAnchor) + i);
+      cs->undo(new ChangeStyleVal(cs, idx, QVariant(val)));
+      cs->update();
+      }
+
 }
 

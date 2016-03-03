@@ -350,7 +350,7 @@ void BarLine::draw(QPainter* painter) const
       if (y2-y1 < 0.1)
             return;
 
-      qreal _mag = score()->styleB(StyleIdx::scaleBarlines) ? staff()->mag() : 1.0;
+      qreal _mag = (score()->styleB(StyleIdx::scaleBarlines) && staff()) ? staff()->mag() : 1.0;
 
       qreal lw = score()->styleP(StyleIdx::barWidth) * _mag;
 

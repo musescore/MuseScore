@@ -1267,7 +1267,7 @@ void Text::layout1()
             }
 
       if (textStyle().align() & AlignmentFlags::BOTTOM)
-            yoff += h-bb.bottom();
+            yoff += h - bb.bottom();
       else if (textStyle().align() & AlignmentFlags::VCENTER)
             yoff +=  (h - (bb.top() + bb.bottom())) * .5;
       else if (textStyle().align() & AlignmentFlags::BASELINE)
