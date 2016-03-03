@@ -53,7 +53,7 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
 struct ArticulationInfo {
       SymId upSym;
       SymId downSym;
-      QString name;           // as stored in score files
+      const char* name;           // as stored in score files
       QString description;    // user-visible, translatable, name
       qreal timeStretch;      // for fermata
       MScore::OrnamentStyle ornamentStyle; // or ornaments such as trill

@@ -2620,7 +2620,7 @@ static void updateTimeSigs(void*, Element* e)
             }
       }
 
-static void updateTextStyle2(void*, Element* e)
+static void updateStyle(void*, Element* e)
       {
       e->styleChanged();
       }
@@ -2640,7 +2640,7 @@ void ChangeStyle::flip()
             score->scanElements(0, updateTimeSigs);
             }
       score->setStyle(style);
-      score->scanElements(0, updateTextStyle2);
+      score->scanElements(0, updateStyle);
       score->setLayoutAll();
 
       style = tmp;
@@ -2654,6 +2654,7 @@ void ChangeStyleVal::flip()
       {
       QVariant v = score->style(idx);
       score->style()->set(idx, value);
+      score->scanElements(0, updateStyle);
       score->setLayoutAll();
       value = v;
       }

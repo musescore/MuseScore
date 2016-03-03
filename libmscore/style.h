@@ -265,6 +265,49 @@ enum class StyleIdx : unsigned char {
       ornamentStyle,
       spatium,
 
+      fermataAnchor,
+      shortfermataAnchor,
+      longfermataAnchor,
+      verylongfermataAnchor,
+      sforzatoAnchor,
+      staccatoAnchor,
+      staccatissimoAnchor,
+      tenutoAnchor,
+      portatoAnchor,
+      marcatoAnchor,
+      fadeinAnchor,
+      fadeoutAnchor,
+      volumeswellAnchor,
+      wigglesawtoothAnchor,
+      wigglesawtoothwideAnchor,
+      wigglevibratolargefasterAnchor,
+      wigglevibratolargeslowestAnchor,
+      ouvertAnchor,
+      plusstopAnchor,
+      upbowAnchor,
+      downbowAnchor,
+      reverseturnAnchor,
+      turnAnchor,
+      trillAnchor,
+      prallAnchor,
+      mordentAnchor,
+      prallprallAnchor,
+      prallmordentAnchor,
+      upprallAnchor,
+      downprallAnchor,
+      upmordentAnchor,
+      downmordentAnchor,
+      pralldownAnchor,
+      prallupAnchor,
+      lineprallAnchor,
+      schleiferAnchor,
+      snappizzicatoAnchor,
+      thumbAnchor,
+      lutefingeringthumbAnchor,
+      lutefingering1stAnchor,
+      lutefingering2ndAnchor,
+      lutefingering3rdAnchor,
+
       STYLES
       };
 
@@ -280,7 +323,6 @@ class MStyle {
       QList<TextStyle> _textStyles;
       PageFormat _pageFormat;
 
-      ArticulationAnchor _articulationAnchor[int(ArticulationType::ARTICULATIONS)];
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
       void precomputeValues();
@@ -289,7 +331,7 @@ class MStyle {
       MStyle();
       MStyle(const MStyle&);
       MStyle& operator=(const MStyle&);
-      ~MStyle();
+      // ~MStyle() {}
 
       bool isDefault(StyleIdx idx) const;
       const ChordDescription* chordDescription(int id) const;
@@ -320,7 +362,7 @@ class MStyle {
       void setPageFormat(const PageFormat& pf);
 
       ArticulationAnchor articulationAnchor(int id) const;
-      void setArticulationAnchor(int id, ArticulationAnchor val);
+//      void setArticulationAnchor(int id, ArticulationAnchor val);
 
       static const char* valueType(const StyleIdx);
       static const char* valueName(const StyleIdx);

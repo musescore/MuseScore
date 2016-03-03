@@ -265,7 +265,50 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { StyleIdx::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
       { StyleIdx::ornamentStyle,           "ornamentStyle",           int(MScore::OrnamentStyle::DEFAULT) },
-      { StyleIdx::spatium,                 "spatium",                 SPATIUM20 }
+      { StyleIdx::spatium,                 "spatium",                 SPATIUM20 },
+
+      { StyleIdx::fermataAnchor,                   "fermataAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::shortfermataAnchor,              "shortfermataAnchor",              int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::longfermataAnchor,               "longfermataAnchor",               int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::verylongfermataAnchor,           "verylongfermataAnchor",           int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::sforzatoAnchor,                  "sforzatoAnchor",                  int(ArticulationAnchor::CHORD) },
+      { StyleIdx::staccatoAnchor,                  "staccatoAnchor",                  int(ArticulationAnchor::CHORD) },
+      { StyleIdx::staccatissimoAnchor,             "staccatissimoAnchor",             int(ArticulationAnchor::CHORD) },
+      { StyleIdx::tenutoAnchor,                    "tenutoAnchor",                    int(ArticulationAnchor::CHORD) },
+      { StyleIdx::portatoAnchor,                   "portatoAnchor",                   int(ArticulationAnchor::CHORD) },
+      { StyleIdx::marcatoAnchor,                   "marcatoAnchor",                   int(ArticulationAnchor::CHORD) },
+      { StyleIdx::fadeinAnchor,                    "fadeinAnchor",                    int(ArticulationAnchor::CHORD) },
+      { StyleIdx::fadeoutAnchor,                   "fadeoutAnchor",                   int(ArticulationAnchor::CHORD) },
+      { StyleIdx::volumeswellAnchor,               "volumeswellAnchor",               int(ArticulationAnchor::CHORD) },
+      { StyleIdx::wigglesawtoothAnchor,            "wigglesawtoothAnchor",            int(ArticulationAnchor::CHORD) },
+      { StyleIdx::wigglesawtoothwideAnchor,        "wigglesawtoothwideAnchor",        int(ArticulationAnchor::CHORD) },
+      { StyleIdx::wigglevibratolargefasterAnchor,  "wigglevibratolargefasterAnchor",  int(ArticulationAnchor::CHORD) },
+      { StyleIdx::wigglevibratolargeslowestAnchor, "wigglevibratolargeslowestAnchor", int(ArticulationAnchor::CHORD) },
+      { StyleIdx::ouvertAnchor,                    "ouvertAnchor",                    int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::plusstopAnchor,                  "plusstopAnchor",                  int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::upbowAnchor,                     "upbowAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::downbowAnchor,                   "downbowAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::reverseturnAnchor,               "reverseturnAnchor",               int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::turnAnchor,                      "turnAnchor",                      int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::trillAnchor,                     "trillAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::prallAnchor,                     "prallAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::mordentAnchor,                   "mordentAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::prallprallAnchor,                "prallprallAnchor",                int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::prallmordentAnchor,              "prallmordentAnchor",              int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::upprallAnchor,                   "upprallAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::downprallAnchor,                 "downprallAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::upmordentAnchor,                 "upmordentAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::downmordentAnchor,               "downmordentAnchor",               int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::pralldownAnchor,                 "pralldownAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::prallupAnchor,                   "prallupAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::lineprallAnchor,                 "lineprallAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::schleiferAnchor,                 "schleiferAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::snappizzicatoAnchor,             "snappizzicatoAnchor",             int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::thumbAnchor,                     "thumbAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::lutefingeringthumbAnchor,        "lutefingeringthumbAnchor",        int(ArticulationAnchor::BOTTOM_CHORD) },
+      { StyleIdx::lutefingering1stAnchor,          "lutefingering1stAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
+      { StyleIdx::lutefingering2ndAnchor,          "lutefingering2ndAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
+      { StyleIdx::lutefingering3rdAnchor,          "lutefingering3rdAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) }
       };
 
 //---------------------------------------------------------
@@ -432,58 +475,10 @@ MStyle::MStyle()
    : _values(int(StyleIdx::STYLES)), _precomputedValues(int(StyleIdx::STYLES))
       {
       _customChordList = false;
-
       for (const StyleType& t : styleTypes)
             _values[t.idx()] = t.defaultValue();
-
-      _articulationAnchor[int(ArticulationType::Fermata)]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Longfermata)]     = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Verylongfermata)] = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Sforzatoaccent)]  = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::Staccato)]        = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::Staccatissimo)]   = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::Tenuto)]          = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::Portato)]         = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::Marcato)]         = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::FadeIn)]          = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::FadeOut)]         = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::VolumeSwell)]     = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::WiggleSawtooth)]  = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::WiggleSawtoothWide)]        = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::WiggleVibratoLargeFaster)]  = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::WiggleVibratoLargeSlowest)] = ArticulationAnchor::CHORD;
-      _articulationAnchor[int(ArticulationType::Ouvert)]          = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Plusstop)]        = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Upbow)]           = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Downbow)]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Reverseturn)]     = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Turn)]            = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Trill)]           = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Prall)]           = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Mordent)]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::PrallPrall)]      = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::PrallMordent)]    = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::UpPrall)]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::DownPrall)]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::UpMordent)]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::DownMordent)]     = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::PrallDown)]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::PrallUp)]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::LinePrall)]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Schleifer)]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Snappizzicato)]   = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::ThumbPosition)]   = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::LuteFingThumb)]   = ArticulationAnchor::BOTTOM_CHORD;
-      _articulationAnchor[int(ArticulationType::LuteFingFirst)]   = ArticulationAnchor::BOTTOM_CHORD;
-      _articulationAnchor[int(ArticulationType::LuteFingSecond)]  = ArticulationAnchor::BOTTOM_CHORD;
-      _articulationAnchor[int(ArticulationType::LuteFingThird)]   = ArticulationAnchor::BOTTOM_CHORD;
       precomputeValues();
       };
-
-MStyle::~MStyle()
-      {
-      }
 
 //---------------------------------------------------------
 //   precomputeValues
@@ -540,8 +535,6 @@ MStyle::MStyle(const MStyle& s)
       _chordList       = s._chordList;
       _textStyles      = s._textStyles;
       _pageFormat.copy(s._pageFormat);
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i)
-            _articulationAnchor[i] = s._articulationAnchor[i];
       _customChordList = s._customChordList;
       }
 
@@ -551,8 +544,6 @@ MStyle& MStyle::operator=(const MStyle& s)
       _chordList       = s._chordList;
       _textStyles      = s._textStyles;
       _pageFormat.copy(s._pageFormat);
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i)
-            _articulationAnchor[i] = s._articulationAnchor[i];
       _customChordList = s._customChordList;
       return *this;
       }
@@ -718,11 +709,10 @@ void MStyle::load(XmlReader& e)
 
                   QString val(e.readElementText());
 
-                  int i;
-                  for (i = 0; i < int(StyleIdx::STYLES); ++i) {
-                        StyleIdx idx = static_cast<StyleIdx>(i);
-                        if (styleTypes[i].name() == tag) {
-                              const char* type = styleTypes[i].valueType();
+                  for (const StyleType& t : styleTypes) {
+                        StyleIdx idx = t.styleIdx();
+                        if (t.name() == tag) {
+                              const char* type = t.valueType();
                               if (!strcmp("Ms::Spatium", type))
                                     set(idx, QVariant(Spatium(val.toDouble())));
                               else if (!strcmp("double", type))
@@ -737,39 +727,6 @@ void MStyle::load(XmlReader& e)
                                     set(idx, QVariant(val));
                               else
                                     qFatal("MStyle::load: unhandled type %s", type);
-                              }
-                        }
-                  if (i >= int(StyleIdx::STYLES)) {
-                        if (tag == "oddHeader" || tag == "evenHeader"
-                           || tag == "oddFooter" || tag == "evenFooter"
-                           || tag == "headerStyled" || tag == "footerStyled"
-                           || tag == "beamMinSlope" || tag == "beamMaxSlope"
-                            || tag == "stemDir1" || tag == "stemDir2" || tag == "stemDir3" || tag == "stemDir4"
-                           ) {
-                              ;     // obsolete
-                              }
-                        else {
-                              int idx2;
-                              for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
-                                    ArticulationInfo& ai =  Articulation::articulationList[idx2];
-                                    // deal with obsolete tags from 1.14 format
-                                    if (tag == "SforzatoaccentAnchor")
-                                          tag = "SforzatoAnchor";
-                                    if (tag == "SnappizzicatorAnchor")
-                                          tag = "SnappizzicatoAnchor";
-                                    else if (tag == "EspressivoAnchor")
-                                          break;
-                                    if (QString::compare(tag, ai.name + "Anchor",  Qt::CaseInsensitive) == 0
-                                       || QString::compare(tag, "U" + ai.name + "Anchor", Qt::CaseInsensitive) == 0
-                                       || QString::compare(tag, "D" + ai.name + "Anchor", Qt::CaseInsensitive) == 0
-                                       ) {
-                                          _articulationAnchor[idx2] = ArticulationAnchor(val.toInt());
-                                          break;
-                                          }
-
-                                    }
-                              if (idx2 >= int(ArticulationType::ARTICULATIONS))
-                                    continue;
                               }
                         }
                   }
@@ -831,7 +788,6 @@ void MStyle::save(Xml& xml, bool optimize)
             StyleIdx idx = st.styleIdx();
             if (optimize && isDefault(idx))
                   continue;
-
             const char* type = st.valueType();
             if (!strcmp("Ms::Spatium", type))
                   xml.tag(st.name(), value(idx).value<Spatium>().val());
@@ -846,7 +802,7 @@ void MStyle::save(Xml& xml, bool optimize)
             else if (!strcmp("QString", type))
                   xml.tag(st.name(), value(idx).toString());
             else
-                  abort();
+                  qFatal("bad style type");
             }
       for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i) {
             if (!optimize || _textStyles[i] != MScore::baseStyle()->textStyle(TextStyleType(i)))
@@ -858,12 +814,6 @@ void MStyle::save(Xml& xml, bool optimize)
             xml.stag("ChordList");
             _chordList.write(xml);
             xml.etag();
-            }
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
-            if (optimize && _articulationAnchor[i] == MScore::baseStyle()->articulationAnchor(i))
-                  continue;
-            const ArticulationInfo& ai = Articulation::articulationList[i];
-            xml.tag(ai.name + "Anchor", int(_articulationAnchor[i]));
             }
       if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
             _pageFormat.write(xml);
@@ -886,16 +836,17 @@ void MStyle::setPageFormat(const PageFormat& pf)
 
 ArticulationAnchor MStyle::articulationAnchor(int id) const
       {
-      return _articulationAnchor[id];
+      StyleIdx sid = StyleIdx(int(StyleIdx::fermataAnchor) + id);
+      return ArticulationAnchor(value(sid).toInt());
       }
 
 //---------------------------------------------------------
 //   setArticulationAnchor
 //---------------------------------------------------------
 
-void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
-      {
-      _articulationAnchor[id] = val;
-      }
+// void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
+//      {
+//      _articulationAnchor[id] = val;
+//      }
 
 }

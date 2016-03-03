@@ -50,11 +50,6 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             "sforzato", QT_TRANSLATE_NOOP("articulation", "Sforzato"),
             1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-// <> not available in smufl?
-//      { SymId::esprSym, SymId::esprSym             ,
-//            "espressivo", QT_TRANSLATE_NOOP("articulation", "Espressivo"),
-//            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
-//            },
       { SymId::articStaccatoAbove, SymId::articStaccatoBelow,
             "staccato", QT_TRANSLATE_NOOP("articulation", "Staccato"),
             1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
@@ -184,21 +179,6 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 
-#if 0
-      { SymId::letterTSym, SymId::letterTSym,
-            "tapping", QT_TRANSLATE_NOOP("articulation", "Tapping"),
-            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
-            },
-      { SymId::letterSSym, SymId::letterSSym,
-            "slapping", QT_TRANSLATE_NOOP("articulation", "Slapping"),
-            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
-            },
-      { SymId::letterPSym, SymId::letterPSym,
-            "popping", QT_TRANSLATE_NOOP("articulation", "Popping"),
-            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
-            },
-#endif
-
       // Fingerings
 
       { SymId::stringsThumbPosition, SymId::stringsThumbPosition,
@@ -306,8 +286,7 @@ void Articulation::write(Xml& xml) const
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, P_ID::DIRECTION);
       xml.tag("subtype", subtypeName());
-      if (_timeStretch != 1.0)
-            xml.tag("timeStretch", _timeStretch);
+      writeProperty(xml, P_ID::TIME_STRETCH);
       writeProperty(xml, P_ID::PLAY);
       writeProperty(xml, P_ID::ORNAMENT_STYLE);
       Element::writeProperties(xml);
@@ -626,8 +605,10 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
             case P_ID::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
+
             case P_ID::PLAY:
                   return true;
+
             default:
                   break;
             }

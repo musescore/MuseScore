@@ -49,17 +49,14 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       Score* cs;
       QPushButton* buttonApplyToAllParts;
-      MStyle lstyle;    // local copy of style
-
       QButtonGroup* stemGroups[VOICES];
-
       QVector<StyleWidget> styleWidgets;
+      QSignalMapper* anchorMapper;
 
-      void getValue(StyleIdx idx);
-      void getValues();
+      QVariant getValue(StyleIdx idx);
+//      void getValues();
       void setValues();
 
-      void apply();
       void applyToAllParts();
       const StyleWidget& styleWidget(StyleIdx) const;
 
@@ -70,10 +67,11 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
       void setSwingParams(bool);
-      void lyricsDashMinLengthValueChanged(double val);
-      void lyricsDashMaxLengthValueChanged(double val);
-      void resetStyleValue(int i);
-      void valueChanged(int i);
+      void lyricsDashMinLengthValueChanged(double);
+      void lyricsDashMaxLengthValueChanged(double);
+      void resetStyleValue(int);
+      void valueChanged(int);
+      void anchorChanged(int);
 
       void on_comboFBFont_currentIndexChanged(int index);
 
