@@ -22,14 +22,26 @@ EditNotesDialog::EditNotesDialog(Scale scale, QWidget *parent) :
       QString* originalNotes = scale.getOriginalNotes();
       for (int i = 0; i < TPC_NUM_OF; ++i)
             this->notes[i] = originalNotes[i];
+      validator = new QFractionValidator(this);
+      validator->setStoringMode(this->storingMode);
+      noteEdited = false;
+
+      float aNoteValue = scale.convertNoteValue(notes[TPC_A - TPC_MIN], TPC_A, storingMode, false);
+      reference = (aNoteValue == 0);
 
       initLabelsArray();
       initNoteValuesArray();
       showData();
 
-      connect(ui->comboScale, SIGNAL(currentIndexChanged(int)), this, SLOT(showNotes()));
+      connect(ui->checkShowAllNotes, SIGNAL(stateChanged(int)), this, SLOT(showNotes()));
       connect(ui->comboStoringMode, SIGNAL(currentIndexChanged(int)), this, SLOT(showNotes()));
       connect(ui->comboReference, SIGNAL(currentIndexChanged(int)), this, SLOT(showNotes()));
+
+      for (int i = 0; i < TPC_NUM_OF; ++i)
+            connect(noteValues[i], SIGNAL(editingFinished()), this, SLOT(noteChanged()));
+
+      if (scale.getNbNotes() == Scale::NB_ALL_NOTES)
+            ui->checkShowAllNotes->setEnabled(false);
       }
 
 //---------------------------------------------------------
@@ -47,25 +59,28 @@ EditNotesDialog::~EditNotesDialog()
 
 void EditNotesDialog::accept()
       {
-      updateNotes();
-      ScaleParams from, to;
-      for (int i = 0; i < TPC_NUM_OF; ++i) {
-            from.notes[i] = notes[i];
-            to.notes[i] = "";
+      if (noteEdited) {
+            updateNotes();
+            ScaleParams from, to;
+            for (int i = 0; i < TPC_NUM_OF; ++i) {
+                  from.notes[i] = notes[i];
+                  to.notes[i] = "";
+                  }
+            from.nbNotes = scale.getNbNotes();
+            from.storingMode = storingMode;
+            from.storeFifths = false;
+            from.reference = reference;
+
+            to.nbNotes = from.nbNotes;
+            to.storingMode = Scale::ABSOLUTE_CENTS;
+            to.storeFifths = false;
+            to.reference = reference;
+
+            Scale::recomputeNotes(from, to);
+            scale = Scale(to);
             }
-      from.nbNotes = scale.getNbNotes();
-      from.storingMode = storingMode;
-      from.storeFifths = false;
-      from.aTuning = scale.getAtuning();
-
-      to.nbNotes = from.nbNotes;
-      to.storingMode = Scale::ABSOLUTE_CENTS;
-      to.storeFifths = false;
-      to.aTuning = "";
-
-      Scale::recomputeNotes(from, to);
-
-      scale = Scale(to);
+      else
+            scale = originalScale;
       QDialog::accept();
       }
 
@@ -85,13 +100,14 @@ void EditNotesDialog::reject()
 
 void EditNotesDialog::showData()
       {
-      for (int index = 0; index < Scale::NB_SCALES; ++index)
-            if (COMBO_SCALE_OPTIONS[index] == scale.getNbNotes())
-                  ui->comboScale->setCurrentIndex(index);
+      if (scale.getNbNotes() != originalScale.getNbNotes())
+            ui->checkShowAllNotes->setCheckState(Qt::Checked);
+      else
+            ui->checkShowAllNotes->setCheckState(Qt::Unchecked);
 
       ui->comboStoringMode->setCurrentIndex(storingMode);
 
-      int aNoteValue = scale.convertNoteValue(notes[TPC_A - TPC_MIN], TPC_A, storingMode, false);
+      float aNoteValue = scale.convertNoteValue(notes[TPC_A - TPC_MIN], TPC_A, storingMode, false);
       ui->comboReference->setCurrentIndex(aNoteValue == 0);
 
       showNotes();
@@ -103,18 +119,17 @@ void EditNotesDialog::showData()
 
 bool EditNotesDialog::combosChanged()
       {
-      if (COMBO_SCALE_OPTIONS[ui->comboScale->currentIndex()] != scale.getNbNotes())
+      bool showAllNotes = ui->checkShowAllNotes->checkState() == Qt::Checked;
+      if (showAllNotes != (scale.getNbNotes() != originalScale.getNbNotes()))
             return true;
 
       if (ui->comboStoringMode->currentIndex() != storingMode)
             return true;
 
-      if (scale.getStoreFifths())
+      float aNoteValue = scale.convertNoteValue(notes[TPC_A - TPC_MIN], TPC_A, storingMode, false);
+      if (ui->comboReference->currentIndex() != (aNoteValue == 0)) {
             return true;
-
-      int aNoteValue = scale.convertNoteValue(notes[TPC_A - TPC_MIN], TPC_A, storingMode, false);
-      if (ui->comboReference->currentIndex() != (aNoteValue == 0))
-            return true;
+            }
 
       return false;
       }
@@ -127,6 +142,7 @@ void EditNotesDialog::showNotes()
       {
       updateNotes();
       if (combosChanged()) {
+            validator->setStoringMode(ui->comboStoringMode->currentIndex());
             ScaleParams from, to;
             for (int i = 0; i < TPC_NUM_OF; ++i) {
                   from.notes[i] = notes[i];
@@ -134,13 +150,16 @@ void EditNotesDialog::showNotes()
                   }
             from.nbNotes = scale.getNbNotes();
             from.storingMode = storingMode;
-            from.storeFifths = scale.getStoreFifths();
-            from.aTuning = scale.getAtuning();
+            from.storeFifths = false;
+            from.reference = reference;
 
-            to.nbNotes = COMBO_SCALE_OPTIONS[ui->comboScale->currentIndex()];
+            if (ui->checkShowAllNotes->checkState() == Qt::Checked)
+                  to.nbNotes = Scale::NB_ALL_NOTES;
+            else
+                  to.nbNotes = originalScale.getNbNotes();
             to.storingMode = ui->comboStoringMode->currentIndex();
             to.storeFifths = false;
-            to.aTuning = "";
+            to.reference = ui->comboReference->currentIndex();
 
             Scale::recomputeNotes(from, to);
 
@@ -149,6 +168,7 @@ void EditNotesDialog::showNotes()
                   notes[i] = to.notes[i];
                   }
             storingMode = to.storingMode;
+            reference = ui->comboReference->currentIndex();
             }
 
       for (int tpc = scale.getMinTpc(); tpc <= scale.getMaxTpc(); ++tpc)
@@ -169,9 +189,19 @@ void EditNotesDialog::showNotes()
 
 void EditNotesDialog::updateNotes()
       {
-      for (int tpc = scale.getMinTpc(); tpc <= scale.getMaxTpc(); ++tpc)
+      for (int tpc = scale.getMinTpc(); tpc <= scale.getMaxTpc(); ++tpc) {
             if (!noteValues[tpc - TPC_MIN]->text().isEmpty())
                   notes[tpc - TPC_MIN] = noteValues[tpc - TPC_MIN]->text();
+            }
+      }
+
+//---------------------------------------------------------
+//   noteChanged
+//---------------------------------------------------------
+
+void EditNotesDialog::noteChanged()
+      {
+      noteEdited = true;
       }
 
 //---------------------------------------------------------
@@ -219,6 +249,9 @@ void EditNotesDialog::initNoteValuesArray()
       noteValues[TPC_A_SS - TPC_MIN] = ui->lineAss;
       noteValues[TPC_E_SS - TPC_MIN] = ui->lineEss;
       noteValues[TPC_B_SS - TPC_MIN] = ui->lineBss;
+
+      for (int i = 0; i < TPC_NUM_OF; ++i)
+            noteValues[i]->setValidator(validator);
       }
 
 //---------------------------------------------------------

@@ -2,6 +2,7 @@
 #define EDITNOTESDIALOG_H
 
 #include <QDialog>
+#include "qfractionvalidator.h"
 #include "libmscore/scale.h"
 
 namespace Ui {
@@ -17,6 +18,7 @@ private slots:
       void accept();
       void reject();
       void showNotes();
+      void noteChanged();
 
 public:
       explicit EditNotesDialog(Scale scale, QWidget *parent = 0);
@@ -38,8 +40,10 @@ private:
 
       static const int     COMBO_SCALE_OPTIONS[Scale::NB_SCALES];
 
-      int storingMode;
+      bool noteEdited;
+      int storingMode, reference;
       QString notes[TPC_NUM_OF];
+      QFractionValidator* validator;
 };
 
 }

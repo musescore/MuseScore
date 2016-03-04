@@ -20,9 +20,7 @@ private slots:
       void updateScaleName();
       void restoreDefaults();
       void importScalaFile();
-      void aFreqClicked();
-      void aCentsClicked();
-      void updateAtuning();
+      void updatePitches();
 
 public:
       explicit ScalesDialog(Scale scale, QWidget *parent = 0);
@@ -32,7 +30,6 @@ public:
 
 private:
       void showData();
-      void showAtuning();
       void showScaleName();
 
       MuseScore* mscore;

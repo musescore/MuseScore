@@ -24,7 +24,6 @@ namespace Ms {
 
 struct ScaleParams {
       QString notes[TPC_NUM_OF];
-      QString aTuning;
       int     nbNotes;
       int     storingMode;
       int     reference;
@@ -44,15 +43,16 @@ public:
       static constexpr int            DELTA_CENTS = 1;
       static constexpr int            ABSOLUTE_FREQUENCY = 2;
 
-      static constexpr int            A_REFRENCE = 0;
-      static constexpr int            C_REFERENCE = 1;
-      static constexpr int            NO_REFERENCE = 2;
+      static constexpr int            C_REFERENCE = 0;
+      static constexpr int            A_REFERENCE = 1;
 
       static constexpr int            NB_ONLY_NOTES = 7;
       static constexpr int            NB_ALL_SEMITONES = 12;
       static constexpr int            NB_BOTH_ACCIDENTALS = 17;
       static constexpr int            NB_ALL_SINGLE_ACCIDENTALS = 21;
       static constexpr int            NB_ALL_NOTES = 35;
+
+      static constexpr float          ERR = 0.1;
 
       static void  recomputeNotes(const ScaleParams& from, ScaleParams& to);
       static int   getStandardNoteValue(int tpc);
@@ -64,15 +64,11 @@ public:
       bool    loadScalaFile(const QString&);
       float*  getComputedTunings() { return computedTunings; }
 
-      void     computeTunings(int storingMode = ABSOLUTE_CENTS, bool storeFifths = false,
-                              bool skipAtuning = false);
+      void     computeTunings(int storingMode = ABSOLUTE_CENTS, bool storeFifths = false);
       int      getTuning(const Note* note) const;
 
       QString  getName() { return name; }
       void     setName(QString name) { this->name = name; }
-
-      QString  getAtuning() { return aTuning; }
-      void     setAtuning(QString aTuning) { this->aTuning = aTuning; }
 
       int      getNbNotes() { return maxTpc - minTpc + 1; }
       QString* getOriginalNotes() { return originalNotes; }
@@ -82,13 +78,13 @@ public:
       float    convertValue(QString value, int mode);
       float    convertNoteValue(QString noteValue, int tpc, int mode,
                                 bool storeFifths, float prevValue = 0);
-      bool     getStoreFifths() { return storeFifths; }
-      void     setStoreFifths(bool storeFifths) { this->storeFifths = storeFifths; }
       int      prevNote(int tpc);
+
+      void     setUpdatePitches(bool val) { updatePitches = val; }
+      bool     getUpdatePitches() { return updatePitches; }
 
 private:
       QString  originalNotes[TPC_NUM_OF];   // the strings originaly in the source
-      QString  aTuning;
       float    computedTunings[TPC_NUM_OF]; // the tuning of each TPC as delta from 12EDO note
       QString  name;                        // human readable name of the scale
       // all TPC_NUM_OF items of computedNotes are always filled up
@@ -96,7 +92,7 @@ private:
       // data in this range through enharmony. Having these two fields is mostly useful for the editor.
       int      minTpc;                      // the min tpc for which there are meaningful data
       int      maxTpc;                      // the max tpc for which there are meaningful data
-      bool     storeFifths;
+      bool     updatePitches;
 
       QString  getNextScalaLine(QTextStream& in);
       void     clear();

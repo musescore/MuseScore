@@ -172,7 +172,8 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       // If tuning is out of [-2 * centsPerSemiton, 2 * centsPerSemiton] range
       // adjust pitch to reduce tuning to under [-centsPerSemiton, centsPerSemitone] range
       double scaleTuning = rootScore->scale().getTuning(note);
-      if (fabs(scaleTuning) > 2 * centsPerSemitone) {
+      if (rootScore->scale().getUpdatePitches() &&
+          fabs(scaleTuning) > 2 * centsPerSemitone) {
             int step = (int)scaleTuning / centsPerSemitone;
             pitch += step;
             scaleTuning -= step * centsPerSemitone;

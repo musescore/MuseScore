@@ -16,7 +16,8 @@ class EditFifthsDialog : public QDialog {
 private slots:
       void accept();
       void reject();
-      void showDeltas();
+      void showDeltas(bool initialization = false);
+      void noteChanged();
 
 public:
       explicit EditFifthsDialog(Scale scale, QWidget *parent = 0);
@@ -25,7 +26,7 @@ public:
       Scale getScale() { return scale; }
 
 private:
-      void showData();
+      void showData(bool initialization = false);
       bool combosChanged();
       void initNotesArray();
       void updateDeltas();
@@ -39,6 +40,7 @@ private:
       static const int COMBO_SCALE_OPTIONS[Scale::NB_SCALES];
       static const std::map<int, QString> LABEL_STRINGS;
 
+      bool noteEdited;
       int storingMode;
       QString notes[TPC_NUM_OF];
 };

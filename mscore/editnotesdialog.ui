@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>714</width>
-    <height>293</height>
+    <width>715</width>
+    <height>297</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>531</width>
+     <width>691</width>
      <height>20</height>
     </rect>
    </property>
@@ -797,35 +797,6 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QComboBox" name="comboScale">
-      <item>
-       <property name="text">
-        <string>Diatonic only (7 keys)</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Chromatic (12 keys)</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Simple enharmony (17 keys)</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Simple enharmony (21 keys)</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Full enharmony (35 keys)</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item>
      <widget class="QComboBox" name="comboStoringMode">
       <item>
        <property name="text">
@@ -856,6 +827,13 @@
         <string>A as reference</string>
        </property>
       </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="checkShowAllNotes">
+      <property name="text">
+       <string>Show all notes</string>
+      </property>
      </widget>
     </item>
     <item>

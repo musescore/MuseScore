@@ -44,9 +44,8 @@ const int Scale::ABSOLUTE_CENTS;
 const int Scale::DELTA_CENTS;
 const int Scale::ABSOLUTE_FREQUENCY;
 
-const int Scale::A_REFRENCE;
+const int Scale::A_REFERENCE;
 const int Scale::C_REFERENCE;
-const int Scale::NO_REFERENCE;
 
 const int Scale::NB_ONLY_NOTES;
 const int Scale::NB_ALL_SEMITONES;
@@ -74,8 +73,7 @@ Scale::Scale()
       maxTpc = 33;
       for (int tpc = minTpc; tpc <= maxTpc; ++tpc)
             originalNotes[tpc - TPC_MIN] = QString::number(STANDARD_NOTES[tpc - TPC_MIN]);
-      storeFifths = false;
-      aTuning = "440/440";
+      updatePitches = false;
       }
 
 //---------------------------------------------------------
@@ -90,9 +88,8 @@ Scale::Scale(const ScaleParams& params)
       maxTpc = minMax.second;
       for (int tpc = minTpc; tpc <= maxTpc; ++tpc)
             originalNotes[tpc - TPC_MIN] = params.notes[tpc - TPC_MIN];
-      storeFifths = params.storeFifths;
-      aTuning = params.aTuning;
-      computeTunings(params.storingMode, params.storeFifths, true);
+      computeTunings(params.storingMode, params.storeFifths);
+      updatePitches = false;
       }
 
 //---------------------------------------------------------
@@ -119,8 +116,6 @@ void Scale::clear()
       memset(computedTunings, 0, sizeof(computedTunings));
       minTpc = TPC_MAX;
       maxTpc = TPC_MIN;
-      aTuning = "440/440";
-      storeFifths = false;
       for (int tpc = TPC_MIN; tpc <= TPC_MAX; ++tpc)
             originalNotes[tpc - TPC_MIN] = "";
       }
@@ -167,6 +162,8 @@ bool Scale::loadScalaFile(const QString& fn)
             if (tpc < minTpc)      minTpc = tpc;      // keep note of tpc range
             if (tpc > maxTpc)      maxTpc = tpc;
             }
+      computeTunings();
+
       return true;
       }
 
@@ -176,25 +173,23 @@ bool Scale::loadScalaFile(const QString& fn)
 
 float Scale::convertValue(QString value, int mode)
       {
-      float floatValue;
-      if (mode == ABSOLUTE_CENTS) {
-            if (value.contains('/')) {
+      float floatValue = 0;
+      if (value.contains('/')) {
+            if (mode == ABSOLUTE_CENTS || mode == ABSOLUTE_FREQUENCY) {
                   QStringList values = value.split('/');
+                  if (values[1].toDouble() == 0)
+                        values[1] = "1";
                   floatValue = 1200 * log(values[0].toDouble() / values[1].toDouble()) / log(2);
                   }
-            else {
-                  floatValue = value.toDouble();
-                  }
             }
-      else if (mode == DELTA_CENTS) {
+      else if (mode == ABSOLUTE_CENTS)
             floatValue = value.toDouble();
-            }
-      else if (mode == ABSOLUTE_FREQUENCY) {
+      else if (mode == DELTA_CENTS)
+            floatValue = value.toDouble();
+      else if (mode == ABSOLUTE_FREQUENCY)
             floatValue = 1200 * log(value.toDouble()) / log(2);
-            }
-      else {
+      else
             return 0;
-            }
 
       return floatValue;
       }
@@ -236,11 +231,16 @@ int Scale::getStandardNoteValue(int tpc)
 //   computeTunings
 //---------------------------------------------------------
 
-void Scale::computeTunings(int mode, bool storeFifths, bool skipAtuning)
+void Scale::computeTunings(int mode, bool storeFifths)
       {
       memset(computedTunings, 0, sizeof(computedTunings));
       // read each line with a value for line
       for (int tpc = minTpc; tpc <= maxTpc; ++tpc) {
+            if (storeFifths && tpc == minTpc) {
+                  computedTunings[0] = 0;
+                  continue;
+                  }
+
             QString pitchLine = originalNotes[tpc - TPC_MIN];
             float prevValue = (tpc - TPC_MIN == 0) ? 0 : computedTunings[prevNote(tpc) - TPC_MIN];
             float value = convertNoteValue(pitchLine, tpc, mode, storeFifths, prevValue);
@@ -269,17 +269,12 @@ void Scale::computeTunings(int mode, bool storeFifths, bool skipAtuning)
       for (int i=TPC_G_S + 1; i<= TPC_MAX; i++)
             computedTunings[i-TPC_MIN] = computedTunings[i-TPC_DELTA_ENHARMONIC-TPC_MIN];
 
-      if (skipAtuning)
-            return;
-
       // shift everything to have a correct A
-      float delta = computedTunings[TPC_A - TPC_MIN] - convertValue(aTuning, ABSOLUTE_CENTS);
-      if (delta != 0)
+      float delta = computedTunings[TPC_A - TPC_MIN];
+      if (delta != 0) {
             for (int i = 0; i < TPC_NUM_OF; i++)
                   computedTunings[i] -= delta;
-
-      if (computedTunings[TPC_A - TPC_MIN] != 0)
-            aTuning = QString::number(-delta);
+            }
       }
 
 //---------------------------------------------------------
@@ -333,20 +328,27 @@ pair<int, int> Scale::computeMinMaxTpc(int nbNotes)
 
 void Scale::recomputeNotes(const ScaleParams& from, ScaleParams& to)
       {
+      bool storeFractions = false;
+      if (from.storeFifths == false && to.storeFifths == false &&
+          from.reference == to.reference &&
+          from.storingMode != Scale::DELTA_CENTS &&
+          to.storingMode != Scale::DELTA_CENTS) {
+            storeFractions = true;
+            }
+
       Scale sFrom(from);
       float* computedTunings = sFrom.getComputedTunings();
 
       float delta = 0;
       if (to.reference == C_REFERENCE)
             delta = computedTunings[TPC_C - TPC_MIN];
-      else if (to.reference == A_REFRENCE)
+      else if (to.reference == A_REFERENCE)
             delta = computedTunings[TPC_A - TPC_MIN];
 
       if (delta != 0) {
             for (int i = 0; i < TPC_NUM_OF; i++)
                   computedTunings[i] = computedTunings[i] - delta;
             }
-      to.aTuning = sFrom.getAtuning();
 
       // Add back the standard note values
       for (int tpc = TPC_MIN; tpc <= TPC_MAX; ++tpc)
@@ -360,6 +362,11 @@ void Scale::recomputeNotes(const ScaleParams& from, ScaleParams& to)
 
       if (!to.storeFifths) {
             for (int tpc = minTpc; tpc <= maxTpc; ++tpc) {
+                  if (storeFractions && from.notes[tpc - TPC_MIN].contains('/')) {
+                        to.notes[tpc - TPC_MIN] = from.notes[tpc - TPC_MIN];
+                        continue;
+                        }
+
                   float value = computedTunings[tpc - TPC_MIN];
                   if (to.storingMode == ABSOLUTE_CENTS)
                         to.notes[tpc - TPC_MIN] = QString::number(value);

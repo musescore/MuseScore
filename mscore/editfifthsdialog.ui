@@ -29,41 +29,6 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboScale">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>70</y>
-     <width>171</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>Diatonic only (7 keys)</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Chromatic (12 keys)</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Simple Enharmony (17 keys)</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Simple Enharmony (21 keys)</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Full Enharmony (35 keys)</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QLabel" name="editFifthsLabel">
    <property name="geometry">
     <rect>
@@ -75,19 +40,6 @@
    </property>
    <property name="text">
     <string>Edit scale as fifths:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>40</y>
-     <width>171</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Number of notes for scale:</string>
    </property>
   </widget>
   <widget class="QScrollArea" name="scrollArea">
@@ -117,7 +69,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>110</y>
+     <y>30</y>
      <width>171</width>
      <height>16</height>
     </rect>
@@ -130,7 +82,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>130</y>
+     <y>50</y>
      <width>171</width>
      <height>26</height>
     </rect>
@@ -150,6 +102,19 @@
      <string>interval as frequency ratio</string>
     </property>
    </item>
+  </widget>
+  <widget class="QCheckBox" name="checkShowAllNotes">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>90</y>
+     <width>121</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show all notes</string>
+   </property>
   </widget>
  </widget>
  <resources/>

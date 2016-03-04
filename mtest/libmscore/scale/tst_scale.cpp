@@ -135,7 +135,7 @@ void TestScale::testScale(int nbNotes,
       from.storeFifths = false;
       to.storingMode = Scale::DELTA_CENTS;
       to.storeFifths = false;
-      to.reference = Scale::A_REFRENCE;
+      to.reference = Scale::A_REFERENCE;
       testConversion(scale, from, to, expectedTunings);
 
       // DELTA_CENTS -> ABSOLUTE_CENTS note pitch
@@ -149,7 +149,7 @@ void TestScale::testScale(int nbNotes,
       testConversion(scale, from, to, expectedTunings);
 
       // C_REFERENCE -> A_REFERENCE ABSOLUTE_CENTS note pitch
-      to.reference = Scale::A_REFRENCE;
+      to.reference = Scale::A_REFERENCE;
       testConversion(scale, from, to, expectedTunings);
 
       // ABSOLUTE_CENTS -> ABSOLUTE_CENTS note pitch -> fifths
@@ -206,19 +206,17 @@ void TestScale::testConversion(Scale& scale,
             from.notes[i] = originalNotes[i];
             to.notes[i] = "";
             }
-      from.aTuning = scale.getAtuning();
 
       Scale::recomputeNotes(from, to);
       scale = Scale(to);
       scale.computeTunings(to.storingMode, to.storeFifths);
       float* computedTunings = scale.getComputedTunings();
-      float aTuning = scale.convertValue(scale.getAtuning(), Scale::ABSOLUTE_CENTS);
 
       for (int index = 0; index < TPC_NUM_OF; ++index) {
-            if (fabs(computedTunings[index] - aTuning - expectedTunings[index]) >= err)
-                  qDebug() << "failed on index " << index << " tune " << computedTunings[index] << " a tuning " << aTuning << " expected " << expectedTunings[index]
-                        << " abs value " << fabs(computedTunings[index] - aTuning - expectedTunings[index]);
-            QVERIFY(fabs(computedTunings[index] - aTuning - expectedTunings[index]) < err);
+            if (fabs(computedTunings[index] - expectedTunings[index]) >= err)
+                  qDebug() << "failed on index " << index << " tune " << computedTunings[index] << " expected " << expectedTunings[index]
+                        << " abs value " << fabs(computedTunings[index] - expectedTunings[index]);
+            QVERIFY(fabs(computedTunings[index] - expectedTunings[index]) < err);
             }
       }
 

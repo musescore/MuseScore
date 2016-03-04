@@ -23,14 +23,8 @@ ScalesDialog::ScalesDialog(Scale scale, QWidget *parent) :
       connect(ui->pushEditNotes, SIGNAL(clicked()), this, SLOT(editAsNotes()));
       connect(ui->pushRestore, SIGNAL(clicked()), this, SLOT(restoreDefaults()));
       connect(ui->pushImport, SIGNAL(clicked()), this, SLOT(importScalaFile()));
-
-      connect(ui->radioAFreq, SIGNAL(clicked()), this, SLOT(aFreqClicked()));
-      connect(ui->radioACent, SIGNAL(clicked()), this, SLOT(aCentsClicked()));
-
       connect(ui->scaleName, SIGNAL(editingFinished()), this, SLOT(updateScaleName()));
-      connect(ui->lineCents, SIGNAL(editingFinished()), this, SLOT(updateAtuning()));
-      connect(ui->lineFreqFrom, SIGNAL(editingFinished()), this, SLOT(updateAtuning()));
-      connect(ui->lineFreqTo, SIGNAL(editingFinished()), this, SLOT(updateAtuning()));
+      connect(ui->checkUpdatePitches, SIGNAL(stateChanged()), this, SLOT(updatePitches()));
       }
 
 //---------------------------------------------------------
@@ -76,51 +70,10 @@ void ScalesDialog::editAsNotes()
 void ScalesDialog::showData()
       {
       showScaleName();
-      showAtuning();
-      }
-
-//---------------------------------------------------------
-//   showAtuning
-//---------------------------------------------------------
-
-void ScalesDialog::showAtuning()
-      {
-      QString Atuning = scale.getAtuning();
-      if (Atuning.contains('/')) {
-            QStringList values = Atuning.split('/');
-            ui->radioAFreq->setChecked(true);
-            ui->radioACent->setChecked(false);
-            ui->lineCents->setEnabled(false);
-            ui->lineFreqFrom->setEnabled(true);
-            ui->lineFreqTo->setEnabled(true);
-
-            ui->lineFreqFrom->setText(values[0]);
-            ui->lineFreqTo->setText(values[1]);
-            ui->lineCents->setText("0");
-            }
-      else {
-            ui->radioAFreq->setChecked(false);
-            ui->radioACent->setChecked(true);
-            ui->lineCents->setEnabled(true);
-            ui->lineFreqFrom->setEnabled(false);
-            ui->lineFreqTo->setEnabled(false);
-
-            ui->lineFreqFrom->setText("440");
-            ui->lineFreqTo->setText("440");
-            ui->lineCents->setText(Atuning);
-            }
-      }
-
-//---------------------------------------------------------
-//   updateAtuning
-//---------------------------------------------------------
-
-void ScalesDialog::updateAtuning()
-      {
-      if (ui->radioAFreq->isDown())
-            scale.setAtuning(ui->lineFreqFrom->text() + "/" + ui->lineFreqTo->text());
+      if (scale.getUpdatePitches())
+            ui->checkUpdatePitches->setCheckState(Qt::Checked);
       else
-            scale.setAtuning(ui->lineCents->text());
+            ui->checkUpdatePitches->setCheckState(Qt::Unchecked);
       }
 
 //---------------------------------------------------------
@@ -172,27 +125,12 @@ void ScalesDialog::importScalaFile()
       }
 
 //---------------------------------------------------------
-//   aFreqClicked
+//   updatePitches
 //---------------------------------------------------------
 
-void ScalesDialog::aFreqClicked()
+void ScalesDialog::updatePitches()
       {
-      if (ui->lineFreqFrom->isEnabled())
-            return;
-      scale.setAtuning(QString("440/440"));
-      showAtuning();
-      }
-
-//---------------------------------------------------------
-//   aCentsClicked
-//---------------------------------------------------------
-
-void ScalesDialog::aCentsClicked()
-      {
-      if (ui->lineCents->isEnabled())
-            return;
-      scale.setAtuning(QString("0"));
-      showAtuning();
+      scale.setUpdatePitches(ui->checkUpdatePitches->checkState() == Qt::Checked);
       }
 
 };
