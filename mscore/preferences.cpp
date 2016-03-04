@@ -843,6 +843,10 @@ void PreferenceDialog::updateValues()
                   }
             }
       language->blockSignals(false);
+      
+      // clear filterShortcuts
+      filterShortcuts->clear();
+
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -990,7 +994,7 @@ void PreferenceDialog::portaudioApiActivated(int)  {}
 #endif
 
 //---------------------------------------------------------
-//   ShortcutITem
+//   ShortcutItem
 //---------------------------------------------------------
 
 bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
@@ -1076,17 +1080,17 @@ void PreferenceDialog::clearShortcutClicked()
 //--------------------------------------------------------
 
 void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
-    {
-    QTreeWidgetItem *item;
-    for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
-        item = shortcutList->topLevelItem(i);
+      {
+      QTreeWidgetItem *item;
+      for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
+          item = shortcutList->topLevelItem(i);
 
-        if(item->text(0).toLower().contains(query.toLower()))
-            item->setHidden(false);
-        else
-            item->setHidden(true);
-        }
-    }
+          if(item->text(0).toLower().contains(query.toLower()))
+              item->setHidden(false);
+          else
+              item->setHidden(true);
+          }
+      }
 
 //---------------------------------------------------------
 //   selectFgWallpaper
