@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class Key;
+enum class Key : signed char;
 struct MidiTimeSig;
 
 namespace Meter {
