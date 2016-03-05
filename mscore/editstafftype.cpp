@@ -58,7 +58,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
                   templateCombo->addItem(t.name(), idx);
             idx++;
             }
-      templateCombo->setCurrentIndex(-1);
+      templateCombo->setCurrentIndex(0);
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
