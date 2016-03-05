@@ -303,7 +303,6 @@ target_link_libraries(mscore
       effects
       vorbisfile
       libmscore
-      xmlstream
       qzip
       beatroot
       kqoauth

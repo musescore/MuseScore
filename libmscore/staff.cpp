@@ -135,7 +135,7 @@ BracketType Staff::innerBracket() const
       for (int i = 0; i < score()->nstaves(); ++i) {
             Staff* staff = score()->staff(i);
             for (int k = 0; k < staff->brackets().size(); ++k) {
-                  const BracketItem& bi = staff->brackets()[k];
+                  const BracketItem& bi = staff->brackets().at(k);
                   if (bi._bracket != BracketType::NO_BRACKET) {
                         if (i < staffIdx && ((i + bi._bracketSpan) > staffIdx) && k < level) {
                               t = bi._bracket;

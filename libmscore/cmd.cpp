@@ -101,6 +101,8 @@ void CmdState::reset()
 
 void CmdState::setTick(int t)
       {
+      if (_updateMode == UpdateMode::LayoutAll)
+            return;
       if (_startTick == -1 || t < _startTick)
             _startTick = t;
       if (_endTick == -1 || t > _endTick)
