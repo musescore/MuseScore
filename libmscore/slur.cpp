@@ -1112,10 +1112,10 @@ void Slur::slurPos(SlurPos* sp)
 void SlurTie::writeProperties(Xml& xml) const
       {
       Element::writeProperties(xml);
-      if(track() != track2() && track2() != -1)
+      if (track() != track2() && track2() != -1)
             xml.tag("track2", track2());
       int idx = 0;
-      foreach(const SpannerSegment* ss, spannerSegments())
+      for (const SpannerSegment* ss : spannerSegments())
             ((SlurSegment*)ss)->writeSlur(xml, idx++);
       if (_slurDirection != Direction::AUTO)
             xml.tag("up", int(_slurDirection));

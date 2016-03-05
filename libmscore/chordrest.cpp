@@ -208,13 +208,17 @@ void ChordRest::writeProperties(Xml& xml) const
          || (actualDurationType().fraction() != duration())))
             xml.fTag("duration", duration());
 
-      foreach(const Articulation* a, _articulations)
+      for (const Articulation* a : _articulations)
             a->write(xml);
 
+#ifndef NDEBUG
       if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
-
-      foreach(Lyrics* lyrics, _lyricsList) {
+#else
+      if (_beam && !_beam->generated())
+            xml.tag("Beam", _beam->id());
+#endif
+      for (Lyrics* lyrics : _lyricsList) {
             if (lyrics)
                   lyrics->write(xml);
             }

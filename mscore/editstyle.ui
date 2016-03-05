@@ -1833,16 +1833,6 @@
             <property name="verticalSpacing">
              <number>0</number>
             </property>
-            <item row="13" column="0">
-             <widget class="QLabel" name="label_108">
-              <property name="text">
-               <string>Clef to time signature distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_11">
               <property name="sizePolicy">
@@ -1868,6 +1858,16 @@
               </property>
               <property name="buddy">
                <cstring>measureSpacing</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_108">
+              <property name="text">
+               <string>Clef to time signature distance:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -2250,7 +2250,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="0">
+            <item row="17" column="0">
              <widget class="QLabel" name="label">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -2297,7 +2297,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="1">
+            <item row="17" column="1">
              <widget class="QDoubleSpinBox" name="staffLineWidth">
               <property name="suffix">
                <string extracomment="spatium unit">sp</string>
@@ -2323,7 +2323,7 @@
               </property>
              </widget>
             </item>
-            <item row="15" column="0">
+            <item row="16" column="0">
              <widget class="QLabel" name="label_103">
               <property name="text">
                <string>Multimeasure rest margin:</string>
@@ -2336,7 +2336,7 @@
               </property>
              </widget>
             </item>
-            <item row="15" column="1">
+            <item row="16" column="1">
              <widget class="QDoubleSpinBox" name="multiMeasureRestMargin">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2525,7 +2525,7 @@
               </property>
              </widget>
             </item>
-            <item row="15" column="2">
+            <item row="16" column="2">
              <widget class="QToolButton" name="resetMultiMeasureRestMargin">
               <property name="text">
                <string>...</string>
@@ -2536,7 +2536,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="2">
+            <item row="17" column="2">
              <widget class="QToolButton" name="resetStaffLineWidth">
               <property name="text">
                <string>...</string>
@@ -2621,6 +2621,37 @@
             </item>
             <item row="14" column="2">
              <widget class="QToolButton" name="resetKeyTimesigDistance">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0">
+             <widget class="QLabel" name="label_110">
+              <property name="text">
+               <string>Key to barline distance:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="1">
+             <widget class="QDoubleSpinBox" name="keyBarlineDistance">
+              <property name="suffix">
+               <string extracomment="spatium unit">sp</string>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="2">
+             <widget class="QToolButton" name="resetKeyBarlineDistance">
               <property name="text">
                <string>...</string>
               </property>

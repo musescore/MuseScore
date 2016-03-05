@@ -1392,6 +1392,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w += score()->styleP(StyleIdx::clefTimesigDistance);
       else if (st == Segment::Type::KeySig && nst == Segment::Type::TimeSig)
             w += score()->styleP(StyleIdx::keyTimesigDistance);
+      else if (st == Segment::Type::KeySig && nst == Segment::Type::StartRepeatBarLine)
+            w += score()->styleP(StyleIdx::keyBarlineDistance);
       else if (st != Segment::Type::ChordRest && nst == Segment::Type::ChordRest) {
 //            printf("%s - %s w %f minLeft %f spatium %f noteDist %f\n",
 //                  subTypeName(), ns->subTypeName(), w, ns->minLeft(), spatium(), score()->styleP(StyleIdx::barNoteDistance));
@@ -1410,12 +1412,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w += spatium() * 1.5;
       if (w < 0.0)
             w = 0.0;
-      if (ns) {
-            qreal ls = ns->extraLeadingSpace().val() * spatium();
-            if (ls != 0.0)
-                  printf("extra space %f\n", ls);
+      if (ns)
             w += ns->extraLeadingSpace().val() * spatium();
-            }
       return w;
       }
 
