@@ -1078,6 +1078,8 @@ void StyleData::load(XmlReader& e)
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
                   set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));
+            else if (tag == "Scale")
+                  _scale.read(e);
             else {
                   if (tag == "stemDir") {
                         int voice = e.attribute("voice", "1").toInt() - 1;
@@ -1231,6 +1233,7 @@ void StyleData::save(Xml& xml, bool optimize) const
             _chordList.write(xml);
             xml.etag();
             }
+      _scale.write(xml);
       for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             if (optimize && _articulationAnchor[i] == MScore::baseStyle()->articulationAnchor(i))
                   continue;

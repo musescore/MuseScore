@@ -13,6 +13,7 @@
 #include "scale.h"
 #include "mscore.h"
 #include "note.h"
+#include "xml.h"
 #include <set>
 
 using namespace std;
@@ -151,7 +152,7 @@ bool Scale::loadScalaFile(const QString& fn)
       // read each line with a value for line
       for (int i = 0; i < nbNotes; ++i) {
             int tpc = TPCS[tpcItem][i];
-            originalNotes[tpc - TPC_MIN] = getNextScalaLine(in);
+            originalNotes[tpc - TPC_MIN] = getNextScalaLine(in).trimmed();
             if (originalNotes[tpc - TPC_MIN].contains('/')) {
                   QStringList values = originalNotes[tpc - TPC_MIN].split('/');
                   if (values.size() != 2 || values[1].toDouble() == 0) {
@@ -405,4 +406,73 @@ int Scale::getTuning(const Note* note) const
       Q_ASSERT(tpc >= TPC_MIN || tpc <= TPC_MAX);
       return computedTunings[tpc - TPC_MIN];
       }
+
+//---------------------------------------------------------
+//   load
+//---------------------------------------------------------
+
+void Scale::read(XmlReader& e)
+      {
+      clear();
+
+      name = e.attribute("name");
+      minTpc = e.intAttribute("minTpc");
+      maxTpc = e.intAttribute("maxTpc");
+      updatePitches = (bool)e.intAttribute("updatePitches");
+
+      int tpc = TPC_MIN;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "note") {
+                  if (e.hasAttribute("original"))
+                        originalNotes[tpc - TPC_MIN] = e.attribute("original");
+
+                  computedTunings[tpc - TPC_MIN] = e.readDouble();
+                  ++tpc;
+                  }
+            }
+
+      if (tpc != TPC_MAX + 1) {
+            qDebug() << "Failed to read scale data from file!";
+            clear();
+            }
+
+      for (tpc = minTpc; tpc <= maxTpc; ++tpc) {
+            if (originalNotes[tpc - TPC_MIN] == "") {
+                  qDebug() << "Original notes are missing!";
+                  originalNotes[tpc - TPC_MIN] =
+                        QString::number(computedTunings[tpc - TPC_MIN] +
+                              getStandardNoteValue(tpc));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   save
+//---------------------------------------------------------
+
+void Scale::write(Xml& xml) const
+      {
+      bool defaultScale = true;
+      for (int i = 0; i < TPC_NUM_OF; ++i) {
+            if (computedTunings[i] != 0)
+                  defaultScale = false;
+            }
+      if (defaultScale)
+            return;
+
+      QString startTag = QString("Scale name=\"%1\" minTpc=\"%2\" maxTpc=\"%3\" updatePitches=\"%4\"")
+                         .arg(name).arg(minTpc).arg(maxTpc).arg(updatePitches);
+      xml.stag(startTag);
+
+      for (int i = 0; i < TPC_NUM_OF; ++i) {
+            QString noteTag = "note";
+            if (originalNotes[i] != "")
+                  noteTag = QString("note original=\"%1\"").arg(originalNotes[i]);
+            xml.tag(noteTag, (double)computedTunings[i]);
+            }
+
+      xml.etag();
+      }
+
 }

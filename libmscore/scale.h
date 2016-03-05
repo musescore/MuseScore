@@ -83,6 +83,9 @@ public:
       void     setUpdatePitches(bool val) { updatePitches = val; }
       bool     getUpdatePitches() { return updatePitches; }
 
+      void read(XmlReader& e);
+      void write(Xml& xml) const;
+
 private:
       QString  originalNotes[TPC_NUM_OF];   // the strings originaly in the source
       float    computedTunings[TPC_NUM_OF]; // the tuning of each TPC as delta from 12EDO note
