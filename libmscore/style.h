@@ -84,6 +84,7 @@ enum class StyleIdx : unsigned char {
 /**/      clefKeyDistance,
 /**/      clefTimesigDistance,
 /**/      keyTimesigDistance,
+      keyBarlineDistance,
 
       clefBarlineDistance,
       stemWidth,
