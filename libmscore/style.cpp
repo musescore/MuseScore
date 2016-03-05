@@ -714,7 +714,7 @@ void MStyle::load(XmlReader& e)
                         if (t.name() == tag) {
                               const char* type = t.valueType();
                               if (!strcmp("Ms::Spatium", type))
-                                    set(idx, QVariant(Spatium(val.toDouble())));
+                                    set(idx, Spatium(val.toDouble()));
                               else if (!strcmp("double", type))
                                     set(idx, QVariant(val.toDouble()));
                               else if (!strcmp("bool", type))

@@ -1084,7 +1084,7 @@ QVariant SLine::getProperty(P_ID id) const
             case P_ID::LINE_COLOR:
                   return _lineColor;
             case P_ID::LINE_WIDTH:
-                  return _lineWidth.val();
+                  return _lineWidth;
             case P_ID::LINE_STYLE:
                   return QVariant(int(_lineStyle));
             default:
@@ -1106,7 +1106,7 @@ bool SLine::setProperty(P_ID id, const QVariant& v)
                   _lineColor = v.value<QColor>();
                   break;
             case P_ID::LINE_WIDTH:
-                  _lineWidth = Spatium(v.toDouble());
+                  _lineWidth = v.value<Spatium>();
                   break;
             case P_ID::LINE_STYLE:
                   _lineStyle = Qt::PenStyle(v.toInt());
@@ -1129,7 +1129,7 @@ QVariant SLine::propertyDefault(P_ID id) const
             case P_ID::LINE_COLOR:
                   return MScore::defaultColor;
             case P_ID::LINE_WIDTH:
-                  return 0.15;
+                  return Spatium(0.15);
             case P_ID::LINE_STYLE:
                   return int(Qt::SolidLine);
             default:

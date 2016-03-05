@@ -564,9 +564,18 @@ void Xml::tag(const QString& name, QVariant data)
                   *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
                   }
                   break;
-            default:
-                  qDebug("Xml::tag: unsupported type %d", data.type());
-                  // abort();
+            default: {
+                  const char* type = data.typeName();
+                  if (strcmp(type, "Ms::Spatium") == 0) {
+                        *this << "<" << name << ">";
+                        *this << data.value<Spatium>().val();
+                        *this << "</" << ename << ">\n";
+                        }
+                  else {
+                        qDebug("Xml::tag: unsupported type %d %s", data.type(), type);
+                        // abort();
+                        }
+                  }
                   break;
             }
       }

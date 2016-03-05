@@ -863,9 +863,9 @@ QVariant TextLine::getProperty(P_ID id) const
             case P_ID::END_HOOK:
                   return _endHook;
             case P_ID::BEGIN_HOOK_HEIGHT:
-                  return _beginHookHeight.val();
+                  return _beginHookHeight;
             case P_ID::END_HOOK_HEIGHT:
-                  return _endHookHeight.val();
+                  return _endHookHeight;
             case P_ID::BEGIN_HOOK_TYPE:
                   return int(_beginHookType);
             case P_ID::END_HOOK_TYPE:
@@ -906,10 +906,10 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
                   _endHook = v.toBool();
                   break;
             case P_ID::BEGIN_HOOK_HEIGHT:
-                  _beginHookHeight = Spatium(v.toDouble());
+                  _beginHookHeight = v.value<Spatium>();
                   break;
             case P_ID::END_HOOK_HEIGHT:
-                  _endHookHeight = Spatium(v.toDouble());
+                  _endHookHeight = v.value<Spatium>();
                   break;
             case P_ID::BEGIN_HOOK_TYPE:
                   _beginHookType = HookType(v.toInt());
@@ -951,7 +951,7 @@ QVariant TextLine::propertyDefault(P_ID id) const
                   return false;
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return 1.5;
+                  return Spatium(1.5);
             case P_ID::BEGIN_HOOK_TYPE:
             case P_ID::END_HOOK_TYPE:
                   return int(HookType::HOOK_90);
