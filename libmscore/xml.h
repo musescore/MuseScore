@@ -13,7 +13,6 @@
 #ifndef __XML_H__
 #define __XML_H__
 
-#include "thirdparty/xmlstream/xmlstream.h"
 #include "stafftype.h"
 #include "interval.h"
 #include "element.h"
@@ -42,7 +41,7 @@ struct SpannerValues {
 //   XmlReader
 //---------------------------------------------------------
 
-class XmlReader : public XmlStreamReader {
+class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
       // Score read context (for read optimizations):
@@ -62,10 +61,10 @@ class XmlReader : public XmlStreamReader {
       QList<QList<std::pair<int, ClefType>>> _clefs;   // for 1.3 scores
 
    public:
-      XmlReader(QFile* f) : XmlStreamReader(f), docName(f->fileName()) {}
-      XmlReader(const QByteArray& d, const QString& s = QString()) : XmlStreamReader(d), docName(s)  {}
-      XmlReader(QIODevice* d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
-      XmlReader(const QString& d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
+      XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
+      XmlReader(const QByteArray& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s)  {}
+      XmlReader(QIODevice* d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
+      XmlReader(const QString& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
 
       void unknown();
 

@@ -3092,7 +3092,7 @@ bool Text::validateText(QString& s)
       XmlReader xml(ss);
       while (xml.readNextStartElement())
             ; // qDebug("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
-      if (xml.error() == XmlStreamReader::NoError) {
+      if (xml.error() == QXmlStreamReader::NoError) {
             s = d;
             return true;
             }

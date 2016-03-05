@@ -1176,7 +1176,7 @@ bool Score::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (e.error() != XmlStreamReader::NoError) {
+      if (e.error() != QXmlStreamReader::NoError) {
             qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
