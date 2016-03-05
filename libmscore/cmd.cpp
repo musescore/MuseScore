@@ -2936,6 +2936,7 @@ void Score::cmdSlashRhythm()
                         }
                   else
                         r->setAccent(!r->accent());
+                  r->measure()->checkMultiVoices(r->staffIdx());
                   continue;
                   }
             else if (e->type() == Element::Type::NOTE) {
@@ -2956,6 +2957,7 @@ void Score::cmdSlashRhythm()
                         }
                   else
                         c->setSlash(!c->slash(), false);
+                  c->measure()->checkMultiVoices(c->staffIdx());
                   }
             }
       setLayoutAll(true);

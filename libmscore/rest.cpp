@@ -445,6 +445,12 @@ int Rest::computeLineOffset()
       {
       Segment* s = segment();
       bool offsetVoices = s && measure() && measure()->mstaff(staffIdx())->hasVoices;
+
+      // always offset rests in accent notation
+      if (accent()) {
+            offsetVoices = true;
+      }
+
       if (offsetVoices && voice() == 0) {
             // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
             Element* e = s->element(track() + 1);

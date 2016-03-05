@@ -2847,15 +2847,21 @@ void Measure::checkMultiVoices(int staffIdx)
                         bool v;
                         if (e->type() == Element::Type::CHORD) {
                               v = false;
-                              // consider chord visible if any note is visible
                               Chord* c = static_cast<Chord*>(e);
-                              for (Note* n : c->notes()) {
-                                    if (n->visible()) {
-                                          v = true;
-                                          break;
+                              // voices 3/4 in slash notation don't count as visible
+                              if (!(c->voice() >= 2 && c->slash())) {
+                                    // consider chord visible if any note is visible
+                                    for (Note* n : c->notes()) {
+                                          if (n->visible()) {
+                                                v = true;
+                                                break;
+                                                }
                                           }
                                     }
                               }
+                        else if (e->type() == Element::Type::REST &&
+                                 static_cast<Rest*>(e)->accent())
+                              v = false;
                         else
                               v = e->visible();
                         if (v) {
