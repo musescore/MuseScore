@@ -856,7 +856,8 @@ void Segment::read(XmlReader& e)
 QVariant Segment::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::LEADING_SPACE:   return extraLeadingSpace().val();
+            case P_ID::LEADING_SPACE:
+                  return extraLeadingSpace();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -869,7 +870,7 @@ QVariant Segment::getProperty(P_ID propertyId) const
 QVariant Segment::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::LEADING_SPACE:   return 0.0;
+            case P_ID::LEADING_SPACE:   return Spatium(0.0);
             default:
                   return Element::getProperty(propertyId);
             }
@@ -882,7 +883,10 @@ QVariant Segment::propertyDefault(P_ID propertyId) const
 bool Segment::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::LEADING_SPACE: setExtraLeadingSpace(Spatium(v.toDouble())); break;
+            case P_ID::LEADING_SPACE:
+                  setExtraLeadingSpace(v.value<Spatium>());
+                  score()->setLayout(tick());
+                  break;
             default:
                   return Element::setProperty(propertyId, v);
             }
@@ -1406,8 +1410,12 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w += spatium() * 1.5;
       if (w < 0.0)
             w = 0.0;
-      if (ns)
+      if (ns) {
+            qreal ls = ns->extraLeadingSpace().val() * spatium();
+            if (ls != 0.0)
+                  printf("extra space %f\n", ls);
             w += ns->extraLeadingSpace().val() * spatium();
+            }
       return w;
       }
 

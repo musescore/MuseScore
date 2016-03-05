@@ -55,6 +55,7 @@
 #include "stemslash.h"
 #include "fraction.h"
 #include "excerpt.h"
+#include "spatium.h"
 
 namespace Ms {
 
@@ -152,12 +153,20 @@ void Direction::fillComboBox(QComboBox* cb)
       cb->addItem(qApp->translate("Direction", "down"), int(DOWN));
       }
 
+static Spatium doubleToSpatium(double d)       { return Spatium(d); }
+
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
 void MScore::init()
       {
+      if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble))
+            qFatal("registerConverter Spatium::toDouble failed");
+      if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
+            qFatal("registerConverter douobleToSpatium failed");
+
+
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Element::Type>     ("ElementType");
       qRegisterMetaType<Note::ValueType>   ("ValueType");

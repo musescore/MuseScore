@@ -393,7 +393,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
                   return 0;
 
             case P_ID::LINE_WIDTH:
-                  return score()->styleS(StyleIdx::ottavaLineWidth).val();
+                  return score()->style(StyleIdx::ottavaLineWidth);
 
             case P_ID::LINE_STYLE:
                   return int(score()->styleI(StyleIdx::ottavaLineStyle));
@@ -402,7 +402,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
                   return int(ottavaDefault[int(_ottavaType)].place);
 
             case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleS(StyleIdx::ottavaHook).val() * ottavaDefault[int(_ottavaType)].hookDirection;
+                  return score()->style(StyleIdx::ottavaHook).value<Spatium>() * ottavaDefault[int(_ottavaType)].hookDirection;
 
             case P_ID::NUMBERS_ONLY:
                   return score()->styleB(StyleIdx::ottavaNumbersOnly);
@@ -488,7 +488,7 @@ void Ottava::resetProperty(P_ID id)
                   return;
 
             case P_ID::LINE_WIDTH:
-                  setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
+                  setLineWidth(score()->style(StyleIdx::ottavaLineWidth).value<Spatium>());
                   lineWidthStyle = PropertyStyle::STYLED;
                   break;
 

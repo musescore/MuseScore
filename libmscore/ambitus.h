@@ -32,7 +32,7 @@ class Ambitus : public Element {
       NoteHead::Type      _noteHeadType;
       MScore::DirectionH  _dir;
       bool  _hasLine;
-      qreal _lineWidth;                     // in spatium
+      Spatium _lineWidth;
       Accidental  _topAccid, _bottomAccid;
       int   _topPitch, _bottomPitch;
       int   _topTpc, _bottomTpc;
@@ -55,7 +55,7 @@ class Ambitus : public Element {
       NoteHead::Type noteHeadType() const             { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
-      qreal lineWidth() const                         { return _lineWidth;    }
+      Spatium lineWidth() const                       { return _lineWidth;    }
       int topOctave() const                           { return _topPitch / 12;}
       int bottomOctave() const                        { return _bottomPitch / 12;}
       int topPitch() const                            { return _topPitch;     }
@@ -67,7 +67,7 @@ class Ambitus : public Element {
       void setNoteHeadType (NoteHead::Type val)       { _noteHeadType  = val; }
       void setDirection    (MScore::DirectionH val)   { _dir = val;           }
       void setHasLine      (bool val)                 { _hasLine = val;       }
-      void setLineWidth    (qreal val)                { _lineWidth = val;     }
+      void setLineWidth    (Spatium val)              { _lineWidth = val;     }
       void setTopPitch     (int val);
       void setBottomPitch  (int val);
       void setTopTpc       (int val);

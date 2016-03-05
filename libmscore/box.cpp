@@ -327,9 +327,9 @@ QVariant Box::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_ID::BOX_HEIGHT:
-                  return _boxHeight.val();
+                  return _boxHeight;
             case P_ID::BOX_WIDTH:
-                  return _boxWidth.val();
+                  return _boxWidth;
             case P_ID::TOP_GAP:
                   return _topGap;
             case P_ID::BOTTOM_GAP:
@@ -356,10 +356,10 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_ID::BOX_HEIGHT:
-                  _boxHeight = Spatium(v.toDouble());
+                  _boxHeight = v.value<Spatium>();
                   break;
             case P_ID::BOX_WIDTH:
-                  _boxWidth = Spatium(v.toDouble());
+                  _boxWidth = v.value<Spatium>();
                   break;
             case P_ID::TOP_GAP:
                   _topGap = v.toDouble();
@@ -395,6 +395,8 @@ QVariant Box::propertyDefault(P_ID id) const
       switch(id) {
             case P_ID::BOX_HEIGHT:
             case P_ID::BOX_WIDTH:
+                  return Spatium(0.0);
+
             case P_ID::TOP_GAP:
             case P_ID::BOTTOM_GAP:
                   return 0.0;
