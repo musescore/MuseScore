@@ -53,7 +53,6 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
         <bracket type="0" span="3"/>
         <barLineSpan>3</barLineSpan>
         </Staff>
@@ -89,7 +88,6 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>
@@ -125,7 +123,6 @@
       </Part>
     <Part>
       <Staff id="3">
-        <type>0</type>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>

@@ -1608,13 +1608,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(e.track());
                   barLine->read(e);
-                  Segment::Type st;
 
                   //
-                  //  SegStartRepeatBarLine: always at the beginning tick of a measure
-                  //  SegBarLine:            in the middle of a measure, has no semantic
-                  //  SegEndBarLine:         at the end tick of a measure
+                  //  StartRepeatBarLine: always at the beginning tick of a measure, always BarLineType::START_REPEAT
+                  //  BarLine:            in the middle of a measure, has no semantic
+                  //  EndBarLine:         at the end tick of a measure
+                  //  BeginBarLine:       first segment of a measure
 
+                  Segment::Type st;
                   if ((e.tick() != tick()) && (e.tick() != endTick()))
                         st = Segment::Type::BarLine;
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
@@ -1623,28 +1624,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         st = Segment::Type::BeginBarLine;
                   else
                         st = Segment::Type::EndBarLine;
-
                   segment = getSegment(st, e.tick());
                   segment->add(barLine);
-
-                  if (st == Segment::Type::EndBarLine) {
-#if 0
-                        if (!barLine->customSubtype()) {
-                              BarLineType blt = barLine->barLineType();
-                              // Measure::_endBarLineGenerated is true if the bar line is of a type which can
-                              // be reconstructed from measure flags
-                              bool endBarLineGenerated = (blt == BarLineType::NORMAL || blt == BarLineType::END_REPEAT
-                                    || blt == BarLineType::END_START_REPEAT || blt == BarLineType::START_REPEAT);
-                              setEndBarLineType(blt, endBarLineGenerated, true);
-                              }
-                        if (!barLine->customSpan()) {
-                              Staff* staff = score()->staff(staffIdx);
-                              barLine->setSpan(staff->barLineSpan());
-                              barLine->setSpanFrom(staff->barLineFrom());
-                              barLine->setSpanTo(staff->barLineTo());
-                              }
-#endif
-                        }
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
@@ -2310,10 +2291,11 @@ void Measure::setStartRepeatBarLine()
             BarLine* bl  = s ? static_cast<BarLine*>(s->element(track)) : 0;
             int span, spanFrom, spanTo;
             // if there is a bar line, take span from it
-            if (bl) {
+            if (bl && bl->customSpan()) {     // if there is a bar line and has custom span,
                   span       = bl->span();
                   spanFrom   = bl->spanFrom();
                   spanTo     = bl->spanTo();
+                  customSpan = true;
                   }
             else {
                   span       = staff->barLineSpan();
@@ -2334,7 +2316,7 @@ void Measure::setStartRepeatBarLine()
             if (staffIdx + span > numStaves)
                   span = numStaves - staffIdx;
 
-            if (span && val && (bl == 0)) {
+            if (span && val && !bl) {
                   // no barline were we need one:
                   if (s == 0)
                         s = undoGetSegment(Segment::Type::StartRepeatBarLine, tick());
@@ -2403,14 +2385,14 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             int staffLines = staff->lines();
 
             // get existing bar line for this staff, if any
-            BarLine* cbl = static_cast<BarLine*>(seg->element(track));
+            BarLine* cbl = toBarLine(seg->element(track));
 
             // if span counter has been counted off, get new span values
             // and forget about any previous bar line
 
             if (span == 0) {
-                  if (cbl) {     // if there is a bar line and has custom span,
-                        span     = cbl->span();    // get span values from it
+                  if (cbl && cbl->customSpan()) {     // if there is a bar line and has custom span,
+                        span     = cbl->span();       // get span values from it
                         spanFrom = cbl->spanFrom();
                         spanTo   = cbl->spanTo();
                         }

@@ -134,22 +134,24 @@ class Direction  {
       int val;
 
    public:
+      enum E { AUTO, UP, DOWN };
+
       Direction()                                {}
       constexpr Direction(const int v) : val(v)  {}
       Direction(const Direction& v) : val(v.val) {}
       Direction(const QString&);
 
       // automatic conversions
-      constexpr operator int() const           { return val; }
       operator QVariant() const                { return QVariant::fromValue(*this); }
+//      explicit constexpr operator int() const  { return val; }
+      constexpr operator int() const  { return val; }
 
       bool operator==(const Direction d) const { return val == d.val; }
-      bool operator==(const int d) const       { return val == d; }
+      bool operator==(const E d) const         { return val == d; }
+      bool operator!=(const E d) const         { return val != d; }
 
       const char* toString() const;
       static void fillComboBox(QComboBox*);
-
-      enum E { AUTO, UP, DOWN };
       };
 
 //---------------------------------------------------------

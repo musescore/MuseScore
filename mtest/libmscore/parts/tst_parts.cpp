@@ -425,7 +425,7 @@ Score* TestParts::doRemoveBreath()
       score->select(b);
       score->startCmd();
       score->cmdDeleteSelection();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       return score;
       }
@@ -564,7 +564,7 @@ Score* TestParts::doRemoveFingering()
 
       score->startCmd();
       score->cmdDeleteSelection();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       return score;
       }
@@ -700,7 +700,7 @@ Score* TestParts::doRemoveSymbol()
 
       score->startCmd();
       score->cmdDeleteSelection();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       return score;
       }
@@ -837,7 +837,7 @@ Score* TestParts::doRemoveChordline()
 
       score->startCmd();
       score->cmdDeleteSelection();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       return score;
       }
@@ -974,7 +974,7 @@ Score* TestParts::doRemoveImage()
 
       score->startCmd();
       score->cmdDeleteSelection();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       return score;
       }

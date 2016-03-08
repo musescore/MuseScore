@@ -266,7 +266,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { StyleIdx::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
       { StyleIdx::ornamentStyle,           "ornamentStyle",           int(MScore::OrnamentStyle::DEFAULT) },
-      { StyleIdx::spatium,                 "spatium",                 SPATIUM20 },
+      { StyleIdx::spatium,                 "Spatium",                 SPATIUM20 },
 
       { StyleIdx::fermataAnchor,                   "fermataAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::shortfermataAnchor,              "shortfermataAnchor",              int(ArticulationAnchor::TOP_STAFF) },
@@ -787,6 +787,8 @@ void MStyle::save(Xml& xml, bool optimize)
 
       for (const StyleType& st : styleTypes) {
             StyleIdx idx = st.styleIdx();
+            if (idx == StyleIdx::spatium)       // special handling for spatium
+                  continue;
             if (optimize && isDefault(idx))
                   continue;
             const char* type = st.valueType();

@@ -10,6 +10,8 @@
 - Automatically increase vertical space between staves to avoid collisions.
       - Use the segment shapes to compute the minimum distance between staves.
 
+- Implement a way to (re-)layout only the modified part of the score.
+
 - Do not allow more than one System on a line. In 2.x a horizontal box splits
   a line into two systems. In 3.x a horizontal box is handled as a special measure.
   This simplifies page layout a lot.

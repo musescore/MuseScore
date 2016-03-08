@@ -122,7 +122,7 @@ void TestOveIO::oveReadTest(const char* file)
       QVERIFY(score);
       score->doLayout();
       score->connectTies();
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->update();
       QVERIFY(saveCompareScore(score, QString("%1.ove.mscx").arg(file),
                                DIR + QString("%1.ove-ref.mscx").arg(file)));

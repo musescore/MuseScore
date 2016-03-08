@@ -141,9 +141,9 @@ class Spanner : public Element {
       virtual Element::Type type() const = 0;
       virtual void setScore(Score* s) override;
 
-      int tick() const         { return _tick;          }
-      int tick2() const        { return _tick + _ticks; }
-      int ticks() const        { return _ticks;         }
+      virtual int tick() const override { return _tick;          }
+      int tick2() const                 { return _tick + _ticks; }
+      int ticks() const                 { return _ticks;         }
 
       void setTick(int v);
       void setTick2(int v);

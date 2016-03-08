@@ -177,8 +177,8 @@ public:
       bool empty() const                       { return _empty; }
       void fixStaffIdx();
       void setTick(int);
-      int tick() const;
-      int rtick() const                          { return _tick; } // tickposition relative to measure start
+      virtual int tick() const override;
+      virtual int rtick() const override         { return _tick; } // tickposition relative to measure start
       void setRtick(int val)                     { _tick = val; }
       int ticks() const                          { return _ticks; }
       void setTicks(int val)                     { _ticks = val; }

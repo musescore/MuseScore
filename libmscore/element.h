@@ -515,7 +515,8 @@ class Element : public QObject, public ScoreElement {
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-      int tick() const;       // utility, searches for segment / segment parent
+      virtual int tick() const;       // utility, searches for segment / segment parent
+      virtual int rtick() const;      // utility, searches for segment / segment parent
 
       //
       // check element for consistency; return false if element
@@ -618,7 +619,7 @@ class Element : public QObject, public ScoreElement {
       bool isSLineSegment() const;
 
 #define CONVERT(a,b) \
-      bool is##a() const { Q_ASSERT(type() != Element::Type::SEGMENT); return type() == Element::Type::b; }
+      bool is##a() const { return type() == Element::Type::b; }
 
       CONVERT(Note,          NOTE);
       CONVERT(Rest,          REST);

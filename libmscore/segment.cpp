@@ -657,6 +657,7 @@ void Segment::remove(Element* el)
                   qFatal("Segment::remove() unknown %s", el->name());
 
             }
+      score()->setLayout(tick());
       checkEmpty();
       }
 

@@ -3504,7 +3504,7 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-printf("doLayoutRange %d-%d  systems %d\n", stick, etick, _systems.size());
+qDebug("doLayoutRange==== %d-%d  systems %d", stick, etick, _systems.size());
 
       LayoutContext lc;
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());

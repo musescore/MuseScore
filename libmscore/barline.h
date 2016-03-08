@@ -66,6 +66,7 @@ class BarLine : public Element {
       int _span                { 1 };           // number of staves spanned by the barline
       int _spanFrom            { 0 };           // line number on start and end staves
       int _spanTo              { DEFAULT_BARLINE_TO };
+      bool _customSpan         { false };
 
       // static variables used while dragging
       static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
@@ -105,6 +106,8 @@ class BarLine : public Element {
       int span() const                { return _span;         }
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
+      bool customSpan() const         { return _customSpan;   }
+      void setCustomSpan(bool v)      { _customSpan = v;     }
 
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
@@ -128,6 +131,7 @@ class BarLine : public Element {
 
       virtual int subtype() const override         { return int(_barLineType); }
       virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
+
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
