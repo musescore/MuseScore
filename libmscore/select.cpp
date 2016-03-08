@@ -505,9 +505,12 @@ void Selection::updateSelectedElements()
             if (sp->type() == Element::Type::VOLTA)
                   continue;
             if (sp->type() == Element::Type::SLUR) {
-                if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
-                      if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
-                        appendFiltered(sp); // slur with start or end in range selection
+                  // ignore if start & end elements not calculated yet
+                  if (!sp->startElement() || !sp->endElement())
+                        continue;
+                  if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
+                        if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
+                              appendFiltered(sp);     // slur with start or end in range selection
             }
             else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
                   appendFiltered(sp); // spanner with start and end in range selection
