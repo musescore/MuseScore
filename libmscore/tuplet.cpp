@@ -619,6 +619,10 @@ void Tuplet::write(Xml& xml) const
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
 
+      printf("Tuplet::write %d %d\n",
+         int(getProperty(P_ID::DIRECTION).value<Direction>()),
+         int(propertyDefault(P_ID::DIRECTION).value<Direction>())
+         );
       writeProperty(xml, P_ID::DIRECTION);
       writeProperty(xml, P_ID::NUMBER_TYPE);
       writeProperty(xml, P_ID::BRACKET_TYPE);
@@ -888,7 +892,7 @@ Fraction Tuplet::elementsDuration()
 
 QVariant Tuplet::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
                   return _direction;
             case P_ID::NUMBER_TYPE:
@@ -916,7 +920,7 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
 bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
                   setDirection(v.value<Direction>());
                   break;
@@ -954,7 +958,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::DIRECTION:
-                  return QVariant(Direction::AUTO);
+                  return Direction(Direction::AUTO);
             case P_ID::NUMBER_TYPE:
                   return int(Tuplet::NumberType::SHOW_NUMBER);
             case P_ID::BRACKET_TYPE:

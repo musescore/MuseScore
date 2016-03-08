@@ -72,9 +72,8 @@ void TestMeasure::initTestCase()
 void TestMeasure::insertMeasureMiddle()
       {
       Score* score = readScore(DIR + "measure-1.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
+      for (Score* s : score->scoreList())
+            s->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
@@ -91,9 +90,8 @@ void TestMeasure::insertMeasureMiddle()
 void TestMeasure::insertMeasureBegin()
       {
       Score* score = readScore(DIR + "measure-1.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
+      for (Score* s : score->scoreList())
+            s->doLayout();
 
       Measure* m = score->firstMeasure();
       score->startCmd();
@@ -110,13 +108,15 @@ void TestMeasure::insertMeasureBegin()
 void TestMeasure::insertMeasureEnd()
       {
       Score* score = readScore(DIR + "measure-1.mscx");
-      score->doLayout();
-      for (Excerpt* e : score->excerpts())
-            e->partScore()->doLayout();
+      for (Score* s : score->scoreList())
+            s->doLayout();
 
       score->startCmd();
       score->insertMeasure(Element::Type::MEASURE, 0);
       score->endCmd();
+
+      for (Score* s : score->scoreList())
+            s->doLayout();
 
       QVERIFY(saveCompareScore(score, "measure-3.mscx", DIR + "measure-3-ref.mscx"));
       delete score;
@@ -129,7 +129,8 @@ void TestMeasure::insertMeasureEnd()
 void TestMeasure::insertBfClefChange()
       {
       Score* score = readScore(DIR + "measure-insert_bf_clef.mscx");
-      score->doLayout();
+      for (Score* s : score->scoreList())
+            s->doLayout();
       // 4th measure
       Measure* m = score->firstMeasure()->nextMeasure();
       m = m->nextMeasure()->nextMeasure();
@@ -155,7 +156,6 @@ void TestMeasure::insertBfClefChange()
       delete score;
       }
 
-
 //---------------------------------------------------------
 ///   insertBfKeyChange
 //---------------------------------------------------------
@@ -163,7 +163,8 @@ void TestMeasure::insertBfClefChange()
 void TestMeasure::insertBfKeyChange()
       {
       Score* score = readScore(DIR + "measure-insert_bf_key.mscx");
-      score->doLayout();
+      for (Score* s : score->scoreList())
+            s->doLayout();
       // 4th measure
       Measure* m = score->firstMeasure()->nextMeasure();
       m = m->nextMeasure()->nextMeasure();
@@ -196,7 +197,8 @@ void TestMeasure::insertBfKeyChange()
 void TestMeasure::minWidth()
       {
       Score* score = readScore(DIR + "measure-2.mscx");
-      score->doLayout();
+      for (Score* s : score->scoreList())
+            s->doLayout();
       int n = score->systems().size();
       int measuresSystem[n];
       for (int i = 0; i < n; ++i)
@@ -221,6 +223,7 @@ void TestMeasure::minWidth()
 //            QCOMPARE(measuresSystem[i], score->systems()->at(i)->measures().size());
 //            }
       }
+
 //---------------------------------------------------------
 ///   spanner_a
 //

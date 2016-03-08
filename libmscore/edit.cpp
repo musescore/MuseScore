@@ -2781,6 +2781,7 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
 
 MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool createEmptyMeasures)
       {
+      setLayoutAll();
       int tick;
       int ticks = 0;
       if (measure) {
@@ -2816,17 +2817,6 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             if (type == Element::Type::MEASURE) {
                   if (score == rootScore())
                         omb = static_cast<Measure*>(mb);
-//                  bool createEndBar    = false;
-                  if (!measure) {
-//                        Measure* lm = score->lastMeasure();
-/*TODO                        if (lm && lm->endBarLineType() == BarLineType::END) {
-                              createEndBar = true;
-                              score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
-                              }
-                        else if (!lm)
-                              createEndBar = true;
-*/
-                        }
 
                   Measure* m = static_cast<Measure*>(mb);
                   Measure* mi = im ? score->tick2measure(im->tick()) : nullptr;
@@ -2843,14 +2833,14 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   // remove clef, time and key signatures
                   //
                   if (mi) {
-                        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                               Measure* pm = mi->prevMeasure();
                               if (pm) {
                                     Segment* ps = pm->findSegment(Segment::Type::Clef, tick);
                                     if (ps) {
                                           Element* pc = ps->element(staffIdx * VOICES);
                                           if (pc) {
-                                                pcl.push_back(static_cast<Clef*>(pc));
+                                                pcl.push_back(toClef(pc));
                                                 undo(new RemoveElement(pc));
                                                 if (ps->empty())
                                                       undoRemoveElement(ps);
@@ -2862,22 +2852,20 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                                     if (!e)
                                           continue;
                                     Element* ee = 0;
-                                    if (e->type() == Element::Type::KEYSIG) {
-                                          KeySig* ks = static_cast<KeySig*>(e);
+                                    if (e->isKeySig()) {
+                                          KeySig* ks = toKeySig(e);
                                           ksl.push_back(ks);
                                           ee = e;
                                           }
-                                    else if (e->type() == Element::Type::TIMESIG) {
-                                          TimeSig* ts = static_cast<TimeSig*>(e);
+                                    else if (e->isTimeSig()) {
+                                          TimeSig* ts = toTimeSig(e);
                                           tsl.push_back(ts);
                                           ee = e;
                                           }
-                                    if (tick == 0) {
-                                          if (e->type() == Element::Type::CLEF) {
-                                                Clef* clef = static_cast<Clef*>(e);
-                                                cl.push_back(clef);
-                                                ee = e;
-                                                }
+                                    if (tick == 0 && e->isClef()) {
+                                          Clef* clef = toClef(e);
+                                          cl.push_back(clef);
+                                          ee = e;
                                           }
                                     if (ee) {
                                           undo(new RemoveElement(ee));

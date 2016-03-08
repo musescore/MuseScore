@@ -494,7 +494,7 @@ Chord* Measure::findChord(int tick, int track)
                   return 0;
             if (seg->tick() == tick) {
                   Element* el = seg->element(track);
-                  if (el->isChord())
+                  if (el && el->isChord())
                         return toChord(el);
                   }
             }
