@@ -87,10 +87,11 @@ void TestKeySig::keysig()
 
       // remove key signature in measure 2
       Segment* s = m2->first();
-      while (!(s->segmentType() & (Segment::Type::KeySig)))
+      while (!(s->isKeySigType()))
             s = s->next();
-      Element* e=s->element(0);
+      Element* e = s->element(0);
       score->startCmd();
+printf("****** undoRemove %s\n", e->name());
       score->undoRemoveElement(e);
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile3, reference3));

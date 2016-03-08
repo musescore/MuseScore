@@ -494,10 +494,7 @@ void BarLine::write(Xml& xml) const
       // if any span value is different from staff's, output all values
       // (palette bar lines have no staff: output all values)
 
-      if (!staff()
-         || custom(P_ID::BARLINE_SPAN)
-         || custom(P_ID::BARLINE_SPAN_FROM)
-         || custom(P_ID::BARLINE_SPAN_TO))
+      if (!staff() || customSpan())
             xml.tag(QString("span from=\"%1\" to=\"%2\"").arg(_spanFrom).arg(_spanTo), _span);
       else
             xml.tag("span", _span);
@@ -521,16 +518,14 @@ void BarLine::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   setBarLineType(e.readElementText());
-            else if (tag == "customSubtype")
-                  /* _customSubtype =*/ e.readInt();
+            else if (tag == "customSubtype")                      // obsolete
+                  e.readInt();
             else if (tag == "span") {
-                  _spanFrom = e.intAttribute("from", _spanFrom);
-                  _spanTo   = e.intAttribute("to", _spanTo);
-                  _span     = e.readInt();
-                  if (_spanTo == UNKNOWN_BARLINE_TO) {
-                        _spanTo = staff() ? (staff()->lines() - 1) * 2 : 8;
-                        // resetProperty(P_ID::BARLINE_SPAN_TO);
-                        }
+                  _spanFrom   = e.intAttribute("from", _spanFrom);
+                  _spanTo     = e.intAttribute("to", _spanTo);
+                  _span       = e.readInt();
+                  _customSpan = !staff() || custom(P_ID::BARLINE_SPAN)
+                                 || custom(P_ID::BARLINE_SPAN_FROM) || custom(P_ID::BARLINE_SPAN_TO);
                   }
             else if (tag == "Articulation") {
                   Articulation* a = new Articulation(score());
@@ -705,6 +700,9 @@ void BarLine::endEdit()
             ctrlDrag = false;
             return;
             }
+      // if bar line has custom span, assume any span edit is local to this bar line
+      if (_customSpan)
+            ctrlDrag = true;
       // for mid-measure barlines, edit is local
       bool midMeasure = false;
       if (segment()->isBarLine()) {
@@ -712,13 +710,14 @@ void BarLine::endEdit()
             midMeasure = true;
             }
 
-      if (ctrlDrag) {                      // if single bar line edit
+      if (ctrlDrag) {                           // if single bar line edit
             int newSpan       = _span;          // copy edited span values
             int newSpanFrom   = _spanFrom;
             int newSpanTo     = _spanTo;
             _span             = _origSpan;      // restore original span values
             _spanFrom         = _origSpanFrom;
             _spanTo           = _origSpanTo;
+            _customSpan       = true;
             // for mid-measure barline in root score, update parts
             if (midMeasure && score()->parentScore() == nullptr && score()->excerpts().size() > 0) {
                   int currIdx = staffIdx();

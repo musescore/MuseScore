@@ -202,10 +202,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

@@ -164,6 +164,8 @@ void Score::endCmd(bool rollback)
             undo()->current()->unwind();
             }
 
+printf("Score::endCmd state %d tick %d %d\n", int(_cmdState.updateMode()), _cmdState.startTick(), _cmdState.endTick());
+
       switch (_cmdState.updateMode()) {
             case UpdateMode::DoNothing:
             case UpdateMode::Update:

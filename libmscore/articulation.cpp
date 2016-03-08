@@ -284,6 +284,12 @@ void Articulation::write(Xml& xml) const
       xml.stag("Articulation");
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
+      printf("Articulation write %d %d\n",
+            int(propertyDefault(P_ID::DIRECTION).value<Direction>()),
+            int(getProperty(P_ID::DIRECTION).value<Direction>())
+            );
+
+
       writeProperty(xml, P_ID::DIRECTION);
       xml.tag("subtype", subtypeName());
       writeProperty(xml, P_ID::TIME_STRETCH);
@@ -527,7 +533,7 @@ QLineF Articulation::dragAnchor() const
 
 QVariant Articulation::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:           return direction();
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
             case P_ID::TIME_STRETCH:        return timeStretch();
@@ -592,9 +598,9 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Articulation::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
-                  return QVariant(Direction::AUTO);
+                  return Direction(Direction::AUTO);
 
             case P_ID::ARTICULATION_ANCHOR:
                   return int(score()->style()->articulationAnchor(int(_articulationType)));

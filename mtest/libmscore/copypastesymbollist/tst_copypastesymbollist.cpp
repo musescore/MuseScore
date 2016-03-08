@@ -89,11 +89,11 @@ void TestCopyPasteSymbolList::copypastecommon(Score* score, const char* name)
             return;
             }
 
-      PasteStatus status = score->cmdPaste(ms,0);
+      PasteState status = score->cmdPaste(ms,0);
       switch (status) {
-            case PasteStatus::NO_DEST:
+            case PasteState::NO_DEST:
                   qDebug("no destination chord"); return;
-            case PasteStatus::DEST_TUPLET:
+            case PasteState::DEST_TUPLET:
                   qDebug("cannot paste mid-tuplet"); return;
             default: ;
       }

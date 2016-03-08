@@ -143,8 +143,6 @@ class ChordRest : public DurationElement {
       QString durationUserName() const;
 
       virtual void setTrack(int val) override;
-      virtual int tick() const;
-      virtual int rtick() const;
 
       const QVector<Lyrics*>& lyricsList() const { return _lyricsList; }
       QVector<Lyrics*>& lyricsList()             { return _lyricsList; }

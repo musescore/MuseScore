@@ -2145,30 +2145,19 @@ ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, i
 
 void ChangeSingleBarLineSpan::flip()
       {
-      barLine->score()->addRefresh(barLine->canvasBoundingRect()); // area of this bar line needs redraw
       int nspan         = barLine->span();
-      bool respan = (span != nspan);
       int nspanFrom     = barLine->spanFrom();
       int nspanTo       = barLine->spanTo();
+
       barLine->setSpan(span);
       barLine->setSpanFrom(spanFrom);
       barLine->setSpanTo(spanTo);
-      span        = nspan;
-      spanFrom    = nspanFrom;
-      spanTo      = nspanTo;
-      barLine->layout();                              // update bbox
-      // re-create bar lines for other staves, if span of this bar line changed
-      if (respan && barLine->parent() && barLine->parent()->type() == Element::Type::SEGMENT) {
-//            Segment * segm = (static_cast<Segment*>(barLine->parent()));
-//            Measure * meas = toMeasure(segm);
-            // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
-//            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::Type::StartRepeatBarLine)
-//                  meas->setStartRepeatBarLine(true);
-            // otherwise redo measure end bar lines
-//TODO            else
-//                  meas->createEndBarLines();
-            }
-      barLine->score()->addRefresh(barLine->canvasBoundingRect()); // new area of this bar line needs redraw
+
+      span              = nspan;
+      spanFrom          = nspanFrom;
+      spanTo            = nspanTo;
+      barLine->score()->setLayout(barLine->tick());
+      barLine->setCustomSpan(true);
       }
 
 //---------------------------------------------------------

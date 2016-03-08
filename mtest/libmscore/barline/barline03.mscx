@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="2.07">
+  <programVersion>2.1.0</programVersion>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -30,9 +34,11 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2016-03-07</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -48,12 +54,13 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
-        <longName pos="0">Violin</longName>
-        <shortName pos="0">Vln.</shortName>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -77,24 +84,28 @@
           </Articulation>
         <Channel>
           <program value="40"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
-        <longName pos="0">Violin</longName>
-        <shortName pos="0">Vln.</shortName>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -118,24 +129,28 @@
           </Articulation>
         <Channel>
           <program value="40"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Part>
       <Staff id="3">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Viola</trackName>
       <Instrument>
-        <longName pos="0">Viola</longName>
-        <shortName pos="0">Vla.</shortName>
+        <longName>Viola</longName>
+        <shortName>Vla.</shortName>
         <trackName>Viola</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -159,24 +174,28 @@
           </Articulation>
         <Channel>
           <program value="41"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Part>
       <Staff id="4">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Violoncello</trackName>
       <Instrument>
-        <longName pos="0">Violoncello</longName>
-        <shortName pos="0">Vlc.</shortName>
+        <longName>Violoncello</longName>
+        <shortName>Vlc.</shortName>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>
@@ -200,12 +219,15 @@
           </Articulation>
         <Channel>
           <program value="42"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -215,45 +237,28 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <textN></textN>
-          <textD></textD>
           <showCourtesySig>0</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <LayoutBreak>
@@ -264,55 +269,31 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <startRepeat/>
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -321,99 +302,58 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <textN></textN>
-          <textD></textD>
           <showCourtesySig>0</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="3">
@@ -422,99 +362,58 @@
           <concertClefType>C3</concertClefType>
           <transposingClefType>C3</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <textN></textN>
-          <textD></textD>
           <showCourtesySig>0</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="4">
@@ -523,99 +422,58 @@
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <textN></textN>
-          <textD></textD>
           <showCourtesySig>0</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

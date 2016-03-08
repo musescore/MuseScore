@@ -2065,8 +2065,24 @@ int Element::tick() const
       {
       const Element* e = this;
       while (e) {
-            if (e->type() == Element::Type::SEGMENT)
-                  return static_cast<const Segment*>(e)->tick();
+            if (e->isSegment())
+                  return toSegment(e)->tick();
+            e = e->parent();
+            }
+      return -1;
+      }
+
+//---------------------------------------------------------
+//   rtick
+//    utility, searches for segment / segment parent
+//---------------------------------------------------------
+
+int Element::rtick() const
+      {
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->rtick();
             e = e->parent();
             }
       return -1;
