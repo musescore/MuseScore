@@ -146,6 +146,10 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Chord>
@@ -176,6 +180,10 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <Slur id="4">

@@ -2314,8 +2314,8 @@ void Beam::setUserModified(bool val)
 
 QVariant Beam::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
-            case P_ID::STEM_DIRECTION: return int(beamDirection());
+      switch (propertyId) {
+            case P_ID::STEM_DIRECTION: return beamDirection();
             case P_ID::DISTRIBUTE:     return distribute();
             case P_ID::GROW_LEFT:      return growLeft();
             case P_ID::GROW_RIGHT:     return growRight();
@@ -2333,9 +2333,9 @@ QVariant Beam::getProperty(P_ID propertyId) const
 
 bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::STEM_DIRECTION:
-                  setBeamDirection(Direction(v.toInt()));
+                  setBeamDirection(v.value<Direction>());
                   break;
             case P_ID::DISTRIBUTE:
                   setDistribute(v.toBool());
@@ -2373,8 +2373,8 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Beam::propertyDefault(P_ID id) const
       {
-      switch(id) {
-            case P_ID::STEM_DIRECTION: return int(Direction::AUTO);
+      switch (id) {
+            case P_ID::STEM_DIRECTION: return Direction(Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;

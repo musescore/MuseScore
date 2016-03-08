@@ -176,10 +176,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <Slur id="3">
@@ -1034,10 +1030,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       <Measure number="11">
         <KeySig>
@@ -1919,10 +1911,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">

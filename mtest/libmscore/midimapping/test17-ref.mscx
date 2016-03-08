@@ -559,10 +559,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>8</lid>
@@ -619,10 +615,6 @@
             <string>3</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>19</lid>
@@ -679,10 +671,6 @@
             <string>2</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>29</lid>
@@ -739,10 +727,6 @@
             <string>1</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>39</lid>
@@ -797,10 +781,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>49</lid>
@@ -991,10 +971,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>8</lid>
@@ -1035,10 +1011,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>8</lid>
@@ -1231,10 +1203,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>19</lid>
@@ -1275,10 +1243,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>19</lid>
@@ -1471,10 +1435,6 @@
               <string>2</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>29</lid>
@@ -1515,10 +1475,6 @@
               <string>2</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>29</lid>
@@ -1711,10 +1667,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>39</lid>
@@ -1755,10 +1707,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>39</lid>
@@ -2094,10 +2042,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>49</lid>

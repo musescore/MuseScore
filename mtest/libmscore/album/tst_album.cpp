@@ -31,7 +31,6 @@ class TestAlbum : public QObject, public MTest
       void album01();
       void album_78521();
       void album_76101();
-
       };
 
 //---------------------------------------------------------

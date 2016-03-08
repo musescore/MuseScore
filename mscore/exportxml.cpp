@@ -5211,7 +5211,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                     annotations(this, xml, strack, etrack, st, sstaff, seg);
                                     // look for more harmony
                                     for (Segment* seg1 = seg->next(); seg1; seg1 = seg1->next()) {
-                                          if (seg1->isChordRest()) {
+                                          if (seg1->isChordRestType()) {
                                                 Element* el1 = seg1->element(st);
                                                 if (el1) // found a ChordRest, next harmony will be attach to this one
                                                       break;

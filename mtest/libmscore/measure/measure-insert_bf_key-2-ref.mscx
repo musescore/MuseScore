@@ -127,10 +127,6 @@
             <tpc>12</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <KeySig>
@@ -167,10 +163,6 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

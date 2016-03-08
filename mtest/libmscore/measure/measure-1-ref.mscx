@@ -225,11 +225,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          <lid>9</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -324,11 +319,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>19</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -523,11 +513,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>2</span>
-            <lid>9</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -714,11 +699,6 @@
             <duration z="8" n="4"/>
             </Rest>
           <tick>4800</tick>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
-          </Measure>
         <tick>960</tick>
         <Measure number="2">
           <Rest>
@@ -747,11 +727,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>19</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Flute</name>

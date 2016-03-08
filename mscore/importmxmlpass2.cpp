@@ -358,7 +358,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
                   Element* el = s->element(track);
                   if (el) {
                         // qDebug(" el[%d] %p", track, el);
-                        if (s->isChordRest()) {
+                        if (s->isChordRestType()) {
                               ChordRest* cr  = static_cast<ChordRest*>(el);
                               int crTick     = cr->tick();
                               int crLen      = cr->globalDuration().ticks();

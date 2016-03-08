@@ -74,6 +74,10 @@ void TestTranspose::undoTranspose()
       delete score;
       }
 
+//---------------------------------------------------------
+//   undoDiatonicTranspose
+//---------------------------------------------------------
+
 void TestTranspose::undoDiatonicTranspose()
       {
       QString readFile(DIR + "undoDiatonicTranspose.mscx");
@@ -83,6 +87,7 @@ void TestTranspose::undoDiatonicTranspose()
       QString reference2(DIR  + "undoDiatonicTranspose02-ref.mscx");
 
       Score* score = readScore(readFile);
+      score->doLayout();
 
       // select all
       score->cmdSelectAll();
