@@ -121,6 +121,7 @@ building_on_CentOS_6() {
   copyLib libQt5QuickWidgets.so.5
   copyLib libQt5Test.so.5
   copyLib libQt5XcbQpa.so.5
+  copyQt plugins/xcbglintegrations/libqxcb-glx-integration.so # Needed by plugins which open a window
 
   # Needed by Ubuntu 12.04:
   dest_dir="$lib_dest"
