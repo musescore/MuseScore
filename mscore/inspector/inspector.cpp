@@ -69,11 +69,10 @@ void MuseScore::showInspector(bool visible)
             connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::RightDockWidgetArea, _inspector);
             }
-      if (visible) {
-            updateInspector();
-            }
       if (_inspector)
             _inspector->setVisible(visible);
+      if (visible)
+            updateInspector();
       }
 
 //---------------------------------------------------------
