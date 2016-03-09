@@ -388,7 +388,7 @@ MuseScore::MuseScore()
 
       if (!converterMode && !pluginMode) {
             _loginManager = new LoginManager(this);
-
+#if 0
             // initialize help engine
             QString lang = mscore->getLocaleISOCode();
             if (lang == "en_US")    // HACK
@@ -402,6 +402,7 @@ MuseScore::MuseScore()
                   delete _helpEngine;
                   _helpEngine = 0;
                   }
+#endif
             }
 
       _positionLabel = new QLabel;
