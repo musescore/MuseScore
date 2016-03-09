@@ -489,7 +489,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
             if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            bool createKey = tickStart == 0;
+            bool createKey = tickStart <= 0;    // 0 and -1 are both valid values to indicate start of score
             for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
