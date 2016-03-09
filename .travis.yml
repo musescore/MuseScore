@@ -7,9 +7,6 @@ env:
     - "ARTIFACTS_S3_BUCKET=vtest.musescore.org"
     - secure: "lVj+9BBtJIjW3CwfXstvNyYVn0AkXEwTyiPmp4BprcheP78WIqZNC0uG2RjG9MgyHbZkprE7zRdqR9YPWTitg+XYkkD6+jPHRO+PQFLARuiTAX9yhUO53yQQZC2wMkQ#+bFuZsFmz1rfAsPHx3bXeZAMsz+Qnh8D2yIqqV7qxwWw="
     - secure: "L+66yQZIZJTyIAfrG89ncKIkMAr4+UvaOZMsd420OSdnEH9kpdm5Kws8rG0VVLAtqhfQfi3K9DuC8Ub7IiXqil//h+I9WJ2LHKirWK0m/MkhTFC6hfi0uSnQCX/jud3Keewxf3ovgiKQvIw6VR37UC50YJM9+KhZKtsNYhGAdos="
-    # Branches for uploads of Linux nightly builds & stable release AppImages
-    - "APPIMAGE_UPLOAD_BRANCHES=\"master 2.0.3\""
-    # AppImages are built on all branches, but only uploaded on those listed
 
 matrix:
   fast_finish: true
@@ -84,13 +81,13 @@ matrix:
 
 notifications:
   recipients:
-    - build@musescore.org
+    - $NOTIFICATION_EMAIL
   email:
     on_success: change
     on_failure: always
   irc:
     channels:
-      - "irc.freenode.net#musescore"
+      - $NOTIFICATION_IRC
     on_success: change
     on_failure: change
   webhooks:
