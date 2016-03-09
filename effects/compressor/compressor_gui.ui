@@ -470,7 +470,7 @@
    <item row="0" column="3">
     <widget class="Awl::Knob" name="threshold" native="true">
      <property name="toolTip">
-      <string>Threshhold level (dB)</string>
+      <string>Threshold level (dB)</string>
      </property>
      <property name="whatsThis">
       <string>The point at which the compressor will start to kick in.</string>
