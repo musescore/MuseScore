@@ -189,7 +189,7 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
 
     tempomap->setTempo(ptick,tempo);
  
-    //qWarning() << "Change" << tempo << tempomap->tempo(ptick) << tick << ptick << t2t[tick]-t2t[0] << tempomap->tick2time(tick);
+    qWarning() << "Change" << tempo << tempomap->tempo(ptick) << tick << ptick << t2t[tick]-t2t[0] << tempomap->tick2time(tick);
 
     ptick = tick;
   }
@@ -296,6 +296,8 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
           int tick = ticks[i].toInt();
           tick2time[tick] = times[i].toDouble();
           orig_t2t[tick] = t0 + cs->tempomap()->tick2time(tick);
+
+          qWarning() << "MAP" << tick << times[i].toDouble();
         }
 
       }
@@ -313,6 +315,11 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
       QJsonObject atracks = partsinfo["audiotracks"].toObject();
       stretchAudio(cs, tick2time);
 
+      Measure* lastm = cs->lastMeasure();
+      int total_ticks = lastm->tick()+lastm->ticks();
+
+      qWarning() << "SVC: TICKS TIME" << total_ticks <<  cs->tempomap()->tick2time(total_ticks);
+      
       foreach ( QString key, atracks.keys()) {
         // Synthesize the described track
         QJsonObject atobj = atracks[key].toObject();
@@ -419,7 +426,9 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
 
       int total_ticks = lastm->tick()+lastm->ticks();
       qts["total_ticks"] = total_ticks;
-      qts["total_time"] = score->tempomap()->tick2time(total_ticks);
+      qts["total_time"] = t0 + score->tempomap()->tick2time(total_ticks);
+      qts["meta_version"] = 2;
+
       score->setPrinting(true);
 
       LayoutMode layout_mode = score->layoutMode();
