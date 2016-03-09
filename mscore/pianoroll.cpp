@@ -351,6 +351,8 @@ void PianorollEditor::selectionChanged()
                         }
                   }
             }
+      for (MuseScoreView* view : score()->getViewer())
+            view->updateAll();
       startTimer(0);    // delayed update
       }
 
