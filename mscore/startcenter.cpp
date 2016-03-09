@@ -259,6 +259,8 @@ void MyWebView::link(const QUrl& url)
       QFileInfo fi(path);
       if (fi.suffix() == "mscz" || fi.suffix() == "xml" || fi.suffix() == "mxl") {
             mscore->loadFile(url);
+            QAction* a = getAction("startcenter");
+            a->setChecked(false);
             mscore->showStartcenter(false);
             }
       else
