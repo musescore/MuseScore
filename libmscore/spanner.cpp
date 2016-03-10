@@ -862,10 +862,10 @@ void Spanner::setTick(int v)
       {
       _tick = v;
 // WS: this is a low level function and should have no side effects
-//      if (_score) {
+//      if (score()) {
 //our starting tick changed, we'd need to occupy a different position in the spannerMap
-//            if (_score->spannerMap().removeSpanner(this))
-//                  _score->addSpanner(this);
+//            if (score()->spannerMap().removeSpanner(this))
+//                  score()->addSpanner(this);
 //            }
       }
 
@@ -876,8 +876,8 @@ void Spanner::setTick(int v)
 void Spanner::setTick2(int v)
       {
       _ticks = v - _tick;
-      if (_score)
-            _score->spannerMap().setDirty();
+      if (score())
+            score()->spannerMap().setDirty();
       }
 
 //---------------------------------------------------------
@@ -887,8 +887,8 @@ void Spanner::setTick2(int v)
 void Spanner::setTicks(int v)
       {
       _ticks = v;
-      if (_score)
-            _score->spannerMap().setDirty();
+      if (score())
+            score()->spannerMap().setDirty();
       }
 
 }

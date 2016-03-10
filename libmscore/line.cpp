@@ -346,7 +346,7 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                   }
       }
 
-      _score->doLayout();     // needed to compute multi measure rests
+      score()->doLayout();     // needed to compute multi measure rests
 
 //      l->layout();
 
@@ -365,9 +365,9 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
       if (nls && (nls != this))
             sv->changeEditElement(nls);
       if (ls)
-            _score->undoRemoveElement(ls);
+            score()->undoRemoveElement(ls);
 
-      _score->setLayoutAll();
+      score()->setLayoutAll();
       return true;
       }
 

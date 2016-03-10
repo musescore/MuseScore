@@ -155,7 +155,7 @@ void TestGuitarPro::initTestCase()
 
 void TestGuitarPro::gpReadTest(const char* file, const char* ext)
       {
-      Score* score = readScore(DIR + file + "." + ext);
+      MasterScore* score = readScore(DIR + file + "." + ext);
       QVERIFY(score);
 
       score->doLayout();

@@ -65,9 +65,9 @@ void Part::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score);
+                  Staff* staff = new Staff(score());
                   staff->setPart(this);
-                  _score->staves().push_back(staff);
+                  score()->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read(e);
                   }
@@ -79,7 +79,7 @@ void Part::read(XmlReader& e)
                   // adjust drumset line numbers for pre-2.1 scores
                   Drumset* ds = instr->drumset();
                   int lld = s ? qRound(s->logicalLineDistance()) : 1;
-                  if (_score->mscVersion() < 207 && ds && lld > 1) {
+                  if (score()->mscVersion() < 207 && ds && lld > 1) {
                         for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
                               ds->drum(i).line /= lld;
                         }
@@ -140,13 +140,13 @@ void Part::setStaves(int n)
             qDebug("Part::setStaves(): remove staves not implemented!");
             return;
             }
-      int staffIdx = _score->staffIdx(this) + ns;
+      int staffIdx = score()->staffIdx(this) + ns;
       for (int i = ns; i < n; ++i) {
-            Staff* staff = new Staff(_score);
+            Staff* staff = new Staff(score());
             staff->setPart(this);
             _staves.push_back(staff);
-            _score->staves().insert(staffIdx, staff);
-            for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
+            score()->staves().insert(staffIdx, staff);
+            for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
                   m->insertStaff(staff, staffIdx);
                   if (m->hasMMRest())
                         m->mmRest()->insertStaff(staff, staffIdx);

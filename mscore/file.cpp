@@ -100,7 +100,7 @@ extern Score::FileError importBB(Score*, const QString& name);
 extern Score::FileError importCapella(Score*, const QString& name);
 extern Score::FileError importCapXml(Score*, const QString& name);
 
-extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
+extern Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError);
 
 extern void importSoundfont(QString name);
 
@@ -243,7 +243,7 @@ bool MuseScore::checkDirty(Score* s)
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
             if (n == QMessageBox::Save) {
-                  if (s->isSavable()) {
+                  if (s->masterScore()->isSavable()) {
                         if (!saveFile(s))
                               return true;
                         }
@@ -307,7 +307,7 @@ Score* MuseScore::openScore(const QString& fn)
       QFileInfo fi(fn);
       QString path = fi.canonicalFilePath();
       for (Score* s : scoreList) {
-            if (s->fileInfo()->canonicalFilePath() == path)
+            if (s->masterScore()->fileInfo()->canonicalFilePath() == path)
                   return 0;
             }
 
@@ -323,12 +323,12 @@ Score* MuseScore::openScore(const QString& fn)
 //   readScore
 //---------------------------------------------------------
 
-Score* MuseScore::readScore(const QString& name)
+MasterScore* MuseScore::readScore(const QString& name)
       {
       if (name.isEmpty())
             return 0;
 
-      Score* score = new Score(MScore::baseStyle());  // start with built-in style
+      MasterScore* score = new MasterScore(MScore::baseStyle());  // start with built-in style
       setMidiReopenInProgress(name);
       Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
@@ -337,7 +337,7 @@ Score* MuseScore::readScore(const QString& name)
                         // dont read file again if corrupted
                         // the check routine may try to fix it
                         delete score;
-                        score = new Score(MScore::baseStyle());
+                        score = new MasterScore(MScore::baseStyle());
                         rv = Ms::readScore(score, name, true);
                         }
                   else
@@ -373,7 +373,7 @@ Score* MuseScore::readScore(const QString& name)
 
 bool MuseScore::saveFile()
       {
-      return saveFile(cs->rootScore());
+      return saveFile(cs->masterScore());
       }
 
 //---------------------------------------------------------
@@ -388,7 +388,7 @@ bool MuseScore::saveFile(Score* score)
       if (score == 0)
             return false;
       if (score->created()) {
-            QString fn = score->fileInfo()->fileName();
+            QString fn = score->masterScore()->fileInfo()->fileName();
             Text* t = score->getText(TextStyleType::TITLE);
             if (t)
                   fn = t->plainText(true);
@@ -412,18 +412,18 @@ bool MuseScore::saveFile(Score* score)
             fn = mscore->getSaveScoreName(tr("MuseScore: Save Score"), fname, filter);
             if (fn.isEmpty())
                   return false;
-            score->fileInfo()->setFile(fn);
+            score->masterScore()->fileInfo()->setFile(fn);
 
-            mscore->lastSaveDirectory = score->fileInfo()->absolutePath();
+            mscore->lastSaveDirectory = score->masterScore()->fileInfo()->absolutePath();
 
-            if (!score->saveFile()) {
+            if (!score->masterScore()->saveFile()) {
                   QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
                   return false;
                   }
             addRecentScore(score);
             writeSessionFile(false);
             }
-      else if (!score->saveFile()) {
+      else if (!score->masterScore()->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
             return false;
             }
@@ -504,19 +504,19 @@ void MuseScore::newFile()
       if (pickupMeasure)
             measures += 1;
 
-      Score* score;
+      MasterScore* score;
       QString tp = newWizard->templatePath();
 
       QList<Excerpt*> excerpts;
       if (!newWizard->emptyScore()) {
-            Score* tscore = new Score(MScore::defaultStyle());
+            MasterScore* tscore = new MasterScore(MScore::defaultStyle());
             Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete tscore;
                   return;
                   }
-            score = new Score(tscore->style());
+            score = new MasterScore(tscore->style());
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
@@ -564,11 +564,11 @@ void MuseScore::newFile()
             delete tscore;
             }
       else {
-            score = new Score(MScore::defaultStyle());
+            score = new MasterScore(MScore::defaultStyle());
             newWizard->createInstruments(score);
             }
       score->setCreated(true);
-      score->fileInfo()->setFile(createDefaultName());
+      score->masterScore()->fileInfo()->setFile(createDefaultName());
 
       if (!score->style()->chordList()->loaded()) {
             if (score->style()->value(StyleIdx::chordsXmlFile).toBool())
@@ -576,7 +576,7 @@ void MuseScore::newFile()
             score->style()->chordList()->read(score->style()->value(StyleIdx::chordDescriptionFile).toString());
             }
       if (!newWizard->title().isEmpty())
-            score->fileInfo()->setFile(newWizard->title());
+            score->masterScore()->fileInfo()->setFile(newWizard->title());
 
       score->sigmap()->add(0, timesig);
 
@@ -758,7 +758,7 @@ void MuseScore::newFile()
       setCurrentScoreView(appendScore(score));
 
       for (Excerpt* x : excerpts) {
-            Score* xs = new Score(score);
+            Score* xs = new Score(static_cast<MasterScore*>(score));
             xs->setName(x->title());
             xs->style()->set(StyleIdx::createMultiMeasureRests, true);
             x->setPartScore(xs);
@@ -1493,7 +1493,7 @@ void MuseScore::printFile()
 #else
       // when setting this on windows platform, pd.exec() does not
       // show dialog
-      printerDev.setOutputFileName(cs->fileInfo()->path() + "/" + cs->name() + ".pdf");
+      printerDev.setOutputFileName(cs->masterScore()->fileInfo()->path() + "/" + cs->name() + ".pdf");
 #endif
 
       QPrintDialog pd(&printerDev, 0);
@@ -1581,15 +1581,15 @@ void MuseScore::exportFile()
       QString name;
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
-            if (cs->parentScore())
-                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+            if (!cs->isMaster())
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name()));
             else
                   name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
             }
       else
 #endif
-      if (cs->parentScore())
-            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name())).arg(saveFormat);
+      if (!cs->isMaster())
+            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name())).arg(saveFormat);
       else
             name = QString("%1/%2.%3").arg(saveDirectory).arg(cs->name()).arg(saveFormat);
 
@@ -1659,7 +1659,7 @@ bool MuseScore::exportParts()
       if (saveFormat.isEmpty())
             saveFormat = "pdf";
 
-      QString scoreName = cs->parentScore() ? cs->parentScore()->name() : cs->name();
+      QString scoreName = cs->isMaster() ? cs->name() : cs->masterScore()->name();
       QString name;
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
@@ -1686,7 +1686,7 @@ bool MuseScore::exportParts()
             return false;
             }
 
-      Score* thisScore = cs->rootScore();
+      Score* thisScore = cs->masterScore();
       bool overwrite = false;
       bool noToAll = false;
       QString confirmReplaceTitle = tr("Confirm Replace");
@@ -1772,8 +1772,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = true;
             // store new file and path into score fileInfo
             // to have it accessible to resources
-            QString originalScoreFName(cs->fileInfo()->canonicalFilePath());
-            cs->fileInfo()->setFile(fn);
+            QString originalScoreFName(cs->masterScore()->fileInfo()->canonicalFilePath());
+            cs->masterScore()->fileInfo()->setFile(fn);
             try {
                   if (ext == "mscz")
                         cs->saveCompressedFile(fi, false);
@@ -1784,12 +1784,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   rv = false;
                   QMessageBox::critical(this, tr("MuseScore: Save As"), s);
                   }
-            cs->fileInfo()->setFile(originalScoreFName);          // restore original file name
+            cs->masterScore()->fileInfo()->setFile(originalScoreFName);          // restore original file name
 
             if (rv && !saveCopy) {
-                  cs->fileInfo()->setFile(fn);
+                  cs->masterScore()->fileInfo()->setFile(fn);
                   setWindowTitle("MuseScore: " + cs->name());
-                  cs->undo()->setClean();
+                  cs->undoStack()->setClean();
                   dirtyChanged(cs);
                   cs->setCreated(false);
                   addRecentScore(cs);
@@ -2013,7 +2013,7 @@ void importSoundfont(QString name)
 ///   Import file \a name
 //---------------------------------------------------------
 
-Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
+Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError)
       {
       QFileInfo info(name);
       QString suffix  = info.suffix().toLower();
@@ -2022,7 +2022,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
-            if (score && score->fileInfo()->path().startsWith(":/"))
+            if (score && score->masterScore()->fileInfo()->path().startsWith(":/"))
                   score->setCreated(true);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
@@ -2142,15 +2142,15 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
       QString name;
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
-            if (cs->parentScore())
-                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+            if (!cs->isMaster())
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name()));
             else
                   name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
             }
       else
 #endif
-      if (cs->parentScore())
-            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+      if (!cs->isMaster())
+            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name()));
       else
             name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
 
@@ -2631,7 +2631,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 
 static QPixmap createThumbnail(const QString& name)
       {
-      Score* score = new Score;
+      MasterScore* score = new MasterScore;
       Score::FileError error = readScore(score, name, true);
       if (error != Score::FileError::FILE_NO_ERROR)
             return QPixmap();

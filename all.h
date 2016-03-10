@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <map>
+#include <set>
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>

@@ -66,7 +66,7 @@ void TestKeySig::keysig()
       QString reference6(DIR  + "keysig.mscx");        // orig
 
       // read file
-      Score* score = readScore(DIR + "keysig.mscx");
+      MasterScore* score = readScore(DIR + "keysig.mscx");
       Measure* m2 = score->firstMeasure()->nextMeasure();
 
       // add a key signature (D major) in measure 2
@@ -97,15 +97,15 @@ printf("****** undoRemove %s\n", e->name());
       QVERIFY(saveCompareScore(score, writeFile3, reference3));
 
       // undo remove
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile4, reference4));
 
       // undo change
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile5, reference5));
 
       // undo add
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile6, reference6));
 
       delete score;
@@ -119,7 +119,7 @@ printf("****** undoRemove %s\n", e->name());
 
 void TestKeySig::keysig_78216()
       {
-      Score* score = readScore(DIR + "keysig_78216.mscx");
+      MasterScore* score = readScore(DIR + "keysig_78216.mscx");
       score->doLayout();
 
       Measure* m1 = score->firstMeasure();
@@ -134,7 +134,7 @@ void TestKeySig::keysig_78216()
 
 void TestKeySig::concertPitch()
       {
-      Score* score = readScore(DIR + "concert-pitch.mscx");
+      MasterScore* score = readScore(DIR + "concert-pitch.mscx");
       score->doLayout();
       score->cmdConcertPitchChanged(true, true);
       QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", DIR + "concert-pitch-01-ref.mscx"));

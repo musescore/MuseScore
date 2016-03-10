@@ -495,7 +495,7 @@ void Selection::updateSelectedElements()
       int stick = startSegment()->tick();
       int etick = tickEnd();
 
-      for (auto i = score()->spanner().begin(); i != score()->spanner().end(); ++i) {
+      for (auto i = _score->spanner().begin(); i != _score->spanner().end(); ++i) {
             Spanner* sp = (*i).second;
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
@@ -688,7 +688,7 @@ QByteArray Selection::staffMimeData() const
 
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
 
-            Staff* staff = score()->staff(staffIdx);
+            Staff* staff = _score->staff(staffIdx);
             Part* part = staff->part();
             Interval interval = part->instrument(seg1->tick())->transpose();
             if (interval.chromatic)
@@ -702,7 +702,7 @@ QByteArray Selection::staffMimeData() const
                         xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
                         }
                   }
-            score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
+            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }
 
@@ -1051,7 +1051,7 @@ bool Selection::canCopy() const
       if (_state != SelState::RANGE)
             return true;
 
-      int endTick = _endSegment ? _endSegment->tick() : score()->lastSegment()->tick();
+      int endTick = _endSegment ? _endSegment->tick() : _score->lastSegment()->tick();
 
       for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
 
@@ -1101,7 +1101,7 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
             return false;
       *m1 = startSegment()->measure();
       Segment* s2 = endSegment();
-      *m2 = s2 ? s2->measure() : score()->lastMeasure();
+      *m2 = s2 ? s2->measure() : _score->lastMeasure();
       if (*m1 == *m2)
             return true;
       // if selection extends to last segment of a measure,

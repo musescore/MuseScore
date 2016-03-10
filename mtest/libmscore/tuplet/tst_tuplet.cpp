@@ -101,7 +101,7 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
 
 void TestTuplet::tuplet(const char* p1, const char* p2)
       {
-      Score* score = readScore(DIR + p1);
+      MasterScore* score = readScore(DIR + p1);
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();

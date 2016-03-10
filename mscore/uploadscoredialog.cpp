@@ -108,7 +108,7 @@ void UploadScoreDialog::upload(int nid)
            QMessageBox::critical(this, tr("Missing title"), tr("Please provide a title"));
            return;
            }
-     Score* score = mscore->currentScore()->rootScore();
+     Score* score = mscore->currentScore()->masterScore();
      QString path = QDir::tempPath() + "/temp.mscz";
      if(mscore->saveAs(score, true, path, "mscz")) {
            QString licenseString = license->currentData().toString();
@@ -124,7 +124,7 @@ void UploadScoreDialog::upload(int nid)
 void UploadScoreDialog::uploadSuccess(const QString& url)
       {
       setVisible(false);
-      Score* score = mscore->currentScore()->rootScore();
+      Score* score = mscore->currentScore()->masterScore();
       QMap<QString, QString>  metatags = score->metaTags();
       metatags.insert("source", url);
       score->startCmd();
@@ -156,7 +156,7 @@ void UploadScoreDialog::uploadError(const QString& error)
 void UploadScoreDialog::display()
       {
       lblUsername->setText(_loginManager->userName());
-      QString source = mscore->currentScore()->rootScore()->metaTag("source");
+      QString source = mscore->currentScore()->masterScore()->metaTag("source");
       if (!source.isEmpty()) {
             QStringList sl = source.split("/");
             if (sl.length() > 0) {

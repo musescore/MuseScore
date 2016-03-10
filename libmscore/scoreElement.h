@@ -18,6 +18,7 @@
 namespace Ms {
 
 class Score;
+class MasterScore;
 class Xml;
 class ScoreElement;
 
@@ -40,14 +41,16 @@ class LinkedElements : public QList<ScoreElement*> {
 //---------------------------------------------------------
 
 class ScoreElement {
-   protected:
       Score* _score;
+
+   protected:
       LinkedElements* _links = 0;
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
       ScoreElement(const ScoreElement& se) { _score = se._score; }
       Score* score() const                 { return _score;      }
+      MasterScore* masterScore() const;
       virtual void setScore(Score* s)      { _score = s;         }
 
       virtual QVariant getProperty(P_ID) const = 0;

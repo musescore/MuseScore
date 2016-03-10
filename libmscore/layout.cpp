@@ -2689,11 +2689,11 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       Measure* measure = toMeasure(lc.curMeasure);
       measure->moveTicks(lc.tick - measure->tick());
-      if (!parentScore() && lc.prevMeasure) {
+      if (isMaster() && lc.prevMeasure) {
             lc.sig = measure->len();
             tempomap()->clear();
-            _sigmap->clear();
-            _sigmap->add(0, SigEvent(lc.sig,  measure->timesig(), 0));
+            sigmap()->clear();
+            sigmap()->add(0, SigEvent(lc.sig,  measure->timesig(), 0));
             }
 
       //
@@ -2757,7 +2757,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               staff(staffIdx)->addTimeSig(ts);
                         }
                   }
-            else if (!parentScore() && s->isChordRestType()) {
+            else if (isMaster() && s->isChordRestType()) {
                   for (Element* e : s->annotations()) {
                         if (e->isTempoText()) {
                               TempoText* tt = toTempoText(e);
@@ -2790,9 +2790,9 @@ void Score::getNextMeasure(LayoutContext& lc)
       // create event if measure len and time signature are different
       // even if they are equivalent 4/4 vs 2/2
 
-      if (!parentScore() && !measure->len().identical(lc.sig)) {
+      if (isMaster() && !measure->len().identical(lc.sig)) {
             lc.sig = measure->len();
-            _sigmap->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
+            sigmap()->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
             }
 
       bool crossMeasure = styleB(StyleIdx::crossMeasureValues);
@@ -3440,7 +3440,7 @@ void Score::doLayout()
       {
       LayoutContext lc;
 
-      printf("doLayout====\n");
+//      printf("doLayout====\n");
 
       if (_staves.empty() || first() == 0) {
             // score is empty

@@ -31,7 +31,7 @@ using namespace Ms;
 class TestMidiMapping : public QObject, public MTest
       {
       Q_OBJECT
-        
+
       void testReadWrite(const char* f1);
       void testReadChangeWrite(const char* f1, const char* ref, int p);                   // delete part p
       void testReadChangeWrite2(const char* f1, const char* ref);                         // delete last measure
@@ -84,14 +84,14 @@ void TestMidiMapping::initTestCase()
 
 void TestMidiMapping::testReadWrite(const char* f1)
       {
-      Score* score = readScore(DIR + f1);
+      MasterScore* score = readScore(DIR + f1);
       score->doLayout();
       QVERIFY(score);
       score->rebuildMidiMapping();
       QVERIFY(saveCompareScore(score, f1, DIR + QString(f1)));
       delete score;
       }
-    
+
 //---------------------------------------------------------
 //   testReadChangeWrite
 //   read file; delete part p; write and compare
@@ -99,7 +99,7 @@ void TestMidiMapping::testReadWrite(const char* f1)
 
 void TestMidiMapping::testReadChangeWrite(const char* f1, const char* ref, int p)
       {
-      Score* score = readScore(DIR + f1 +QString(".mscx"));
+      MasterScore* score = readScore(DIR + f1 +QString(".mscx"));
       score->doLayout();
       QVERIFY(score);
       score->rebuildMidiMapping();
@@ -116,7 +116,7 @@ void TestMidiMapping::testReadChangeWrite(const char* f1, const char* ref, int p
 
 void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
       {
-      Score* score = readScore(DIR + f1 +QString(".mscx"));
+      MasterScore* score = readScore(DIR + f1 +QString(".mscx"));
       score->doLayout();
       QVERIFY(score);
       score->rebuildMidiMapping();
@@ -136,7 +136,7 @@ void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
 
 void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, int p1, int p2)
       {
-      Score* score = readScore(DIR + f1+QString(".mscx"));
+      MasterScore* score = readScore(DIR + f1+QString(".mscx"));
       score->doLayout();
       QVERIFY(score);
       score->rebuildMidiMapping();
@@ -158,7 +158,7 @@ void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, 
       QVERIFY(saveCompareScore(score, f1+QString("_changed3.mscx"), DIR + ref));
       delete score;
       }
-    
+
 //---------------------------------------------------------
 //   testReadWriteMusicXML
 //   read a MusicXML file, write to a new file and verify both files are identical
@@ -169,7 +169,7 @@ void TestMidiMapping::testReadWriteMusicXML(const char* file, const char* ref)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       score->rebuildMidiMapping();
       score->doLayout();
@@ -185,11 +185,11 @@ void TestMidiMapping::testReadWriteMusicXML(const char* file, const char* ref)
 
 void TestMidiMapping::testReadWriteOther(const char* f1, const char* ref)
       {
-      Score* score;
+      MasterScore* score;
       auto qf = QFileInfo(f1);
 
       if (qf.suffix() == "mid") {
-            score = new Score(mscore->baseStyle());
+            score = new MasterScore(mscore->baseStyle());
             QString fullPath = QString(root +"/"+ DIR + f1);
             QCOMPARE(importMidi(score,  fullPath), Score::FileError::FILE_NO_ERROR);
             }

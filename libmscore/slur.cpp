@@ -1684,7 +1684,7 @@ void SlurTie::endEdit()
                   for (ScoreElement* e : linkList()) {
                         Spanner* spanner = static_cast<Spanner*>(e);
                         if (spanner == this)
-                              score()->undo()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
+                              score()->undoStack()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
                         else {
                               Element* se = 0;
                               Element* ee = 0;

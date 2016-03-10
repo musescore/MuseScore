@@ -481,7 +481,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
       if (!fill.isZero())
             undoInsertTime(lm->endTick(), fill.ticks());
 
-      if (!range.write(rootScore(), fm->tick()))
+      if (!range.write(masterScore(), fm->tick()))
             qFatal("Cannot write measures");
       connectTies(true);
 
@@ -548,7 +548,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       LayoutBreak* sectionBreak = nullptr;
 
       // disable local time sig modifications in linked staves
-      if (staffIdx != -1 && rootScore()->excerpts().size() > 0) {
+      if (staffIdx != -1 && excerpts().size() > 0) {
             warnLocalTimeSig();
             return false;
             }
@@ -752,7 +752,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   }
             }
       else {
-            Score* score = rootScore();
+            Score* score = masterScore();
             Measure* fm  = score->tick2measure(tick);
 
             //
@@ -772,7 +772,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         for (int i = 0; i < nstaves(); ++i) {
                               if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
                                     if (!score->rewriteMeasures(fm, ns, i)) {
-                                          undo()->current()->unwind();
+                                          undoStack()->current()->unwind();
                                           return;
                                           }
                                     }
@@ -786,7 +786,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             // this means, however, that the rewrite cannot depend on the time signatures being in place
             if (fm) {
                   if (!score->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
-                        undo()->current()->unwind();
+                        undoStack()->current()->unwind();
                         return;
                         }
                   }
@@ -847,7 +847,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
-      if (ts->isLocal() && rootScore()->excerpts().size() > 0) {
+      if (ts->isLocal() && excerpts().size() > 0) {
             warnLocalTimeSig();
             return;
             }
@@ -873,7 +873,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
 
       if (!rewriteMeasures(m, ns, -1)) {
-            undo()->current()->unwind();
+            undoStack()->current()->unwind();
             }
       else {
             m = tick2measure(tick);       // old m may have been replaced
@@ -2815,7 +2815,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   omb = mb;
 
             if (type == Element::Type::MEASURE) {
-                  if (score == rootScore())
+                  if (isMaster())
                         omb = static_cast<Measure*>(mb);
 
                   Measure* m = static_cast<Measure*>(mb);
@@ -2913,7 +2913,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   }
             else {
                   // a frame, not a measure
-                  if (score == rootScore())
+                  if (isMaster())
                         rmb = mb;
                   else if (rmb && mb != rmb) {
                         mb->linkTo(rmb);
@@ -2931,7 +2931,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             //
             // fill measure with rest
             //
-            Score* _root = rootScore();
+            Score* _root = masterScore();
             for (int staffIdx = 0; staffIdx < _root->nstaves(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   int tick = omb->tick();

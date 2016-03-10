@@ -73,7 +73,7 @@
 
 namespace Ms {
 
-Score* gscore;                 ///< system score, used for palettes etc.
+MasterScore* gscore;                 ///< system score, used for palettes etc.
 
 bool scriptDebug     = false;
 bool noSeq           = false;
@@ -243,80 +243,18 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 
 void Score::init()
       {
-      _linkId         = 0;
-      _currentLayer   = 0;
-      _playMode       = PlayMode::SYNTHESIZER;
       Layer l;
       l.name          = "default";
       l.tags          = 1;
       _layer.append(l);
       _layerTags[0]   = "default";
 
-      if (!_parentScore) {
-#if defined(Q_OS_WIN)
-            _metaTags.insert("platform", "Microsoft Windows");
-#elif defined(Q_OS_MAC)
-            _metaTags.insert("platform", "Apple Macintosh");
-#elif defined(Q_OS_LINUX)
-            _metaTags.insert("platform", "Linux");
-#else
-            _metaTags.insert("platform", "Unknown");
-#endif
-            _metaTags.insert("movementNumber", "");
-            _metaTags.insert("movementTitle", "");
-            _metaTags.insert("workNumber", "");
-            _metaTags.insert("workTitle", "");
-            _metaTags.insert("arranger", "");
-            _metaTags.insert("composer", "");
-            _metaTags.insert("lyricist", "");
-            _metaTags.insert("poet", "");
-            _metaTags.insert("translator", "");
-            _metaTags.insert("source", "");
-            _metaTags.insert("copyright", "");
-            _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
-            _undo       = new UndoStack();
-            _repeatList = new RepeatList(this);
-            }
-      else {
-            _undo = 0;
-            _repeatList = 0;
-            }
-
-      _revisions = new Revisions;
       _scoreFont = ScoreFont::fontFactory("emmentaler");
 
-      _pageNumberOffset = 0;
-
-      _mscVersion             = MSCVERSION;
-      _created                = false;
-
-      _undoRedo               = false;
-
-      keyState                = 0;
-      _showInvisible          = true;
-      _showUnprintable        = true;
-      _showFrames             = true;
-      _showPageborders        = false;
-      _showInstrumentNames    = true;
-      _showVBox               = true;
-
-      _printing               = false;
-      _playlistDirty          = true;
-      _autosaveDirty          = true;
-      _saved                  = false;
       _pos[int(POS::CURRENT)] = 0;
       _pos[int(POS::LEFT)]    = 0;
       _pos[int(POS::RIGHT)]   = 0;
       _fileDivision           = MScore::division;
-      _defaultsRead           = false;
-      _omr                    = 0;
-      _audio                  = 0;
-      _showOmr                = false;
-      _sigmap                 = 0;
-      _tempomap               = 0;
-      _layoutMode             = LayoutMode::PAGE;
-      _noteHeadWidth          = 0.0;      // set in doLayout()
-      _midiPortCount          = 0;
       }
 
 //---------------------------------------------------------
@@ -326,44 +264,17 @@ void Score::init()
 Score::Score()
    : QObject(0), ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
-      _parentScore = 0;
+      _masterScore = 0;
       init();
-      _tempomap = new TempoMap;
-      _sigmap   = new TimeSigMap();
       _style    = *(MScore::defaultStyle());
       accInfo = tr("No selection");
       _midiMapping.clear();
       }
 
-Score::Score(const MStyle* s)
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
+Score::Score(MasterScore* parent)
+   : Score{}
       {
-      _parentScore = 0;
-      init();
-      _tempomap = new TempoMap;
-      _sigmap   = new TimeSigMap();
-      _style    = *s;
-      accInfo = tr("No selection");
-      _midiMapping.clear();
-      }
-
-//
-//  a linked score shares some properties with parentScore():
-//    _undo
-//    _sigmap
-//    _tempomap
-//    _repeatList
-//    _links
-//    _staffTypes
-//    _metaTags
-//
-
-Score::Score(Score* parent)
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
-      {
-      _parentScore = parent;
-      init();
-
+      _masterScore = parent;
       if (MScore::defaultStyleForParts())
             _style = *MScore::defaultStyleForParts();
       else {
@@ -381,18 +292,13 @@ Score::Score(Score* parent)
             _style.set(StyleIdx::dividerLeft, false);
             _style.set(StyleIdx::dividerRight, false);
             }
-
       _synthesizerState = parent->_synthesizerState;
-      accInfo = tr("No selection");
       }
 
-Score::Score(Score* parent, const MStyle* s)
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
+Score::Score(MasterScore* parent, const MStyle* s)
+   : Score{parent}
       {
-      _parentScore = parent;
-      init();
-      _style    = *s;
-      accInfo = tr("No selection");
+      _style  = *s;
       }
 
 //---------------------------------------------------------
@@ -414,13 +320,6 @@ Score::~Score()
       qDeleteAll(_staves);
       qDeleteAll(_systems);
       qDeleteAll(_pages);
-      qDeleteAll(_excerpts);
-
-      delete _revisions;
-      delete _undo;           // this also removes _undoStack from Mscore::_undoGroup
-      delete _tempomap;
-      delete _sigmap;
-      delete _repeatList;
       }
 
 //---------------------------------------------------------
@@ -470,10 +369,10 @@ void Score::fixTicks()
 
       Fraction sig(fm->len());
 
-      if (!parentScore()) {
+      if (isMaster()) {
             tempomap()->clear();
-            _sigmap->clear();
-            _sigmap->add(0, SigEvent(fm->len(),  fm->timesig(), 0));
+            sigmap()->clear();
+            sigmap()->add(0, SigEvent(fm->len(),  fm->timesig(), 0));
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -521,7 +420,7 @@ void Score::fixTicks()
                                     staff(staffIdx)->addTimeSig(ts);
                               }
                         }
-                  else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
+                  else if (isMaster() && (s->segmentType() == Segment::Type::ChordRest)) {
                         foreach (Element* e, s->annotations()) {
                               if (e->type() == Element::Type::TEMPO_TEXT) {
                                     const TempoText* tt = static_cast<const TempoText*>(e);
@@ -555,10 +454,10 @@ void Score::fixTicks()
             // create event if measure len and time signature are different
             // even if they are equivalent 4/4 vs 2/2
 
-            if (!parentScore() && ((m->len().numerator() != sig.numerator())
+            if (isMaster() && ((m->len().numerator() != sig.numerator())
                || (m->len().denominator() != sig.denominator()))) {
                   sig = m->len();
-                  _sigmap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
+                  sigmap()->add(tick, SigEvent(sig, m->timesig(),  m->no()));
                   }
 
             tick += measureTicks;
@@ -729,7 +628,7 @@ void Score::setShowPageborders(bool v)
 
 bool Score::dirty() const
       {
-      return !undo()->isClean();
+      return !undoStack()->isClean();
       }
 
 //---------------------------------------------------------
@@ -861,16 +760,6 @@ void Score::spell(Note* note)
 
       int opt = Ms::computeWindow(notes, 0, 7);
       note->setTpc(Ms::tpc(3, note->pitch(), opt));
-      }
-
-//---------------------------------------------------------
-//   isSavable
-//---------------------------------------------------------
-
-bool Score::isSavable() const
-      {
-      // TODO: check if file can be created if it does not exist
-      return info.isWritable() || !info.exists();
       }
 
 //---------------------------------------------------------
@@ -1139,8 +1028,9 @@ void Score::checkMidiMapping()
 //   midiPortCount
 //---------------------------------------------------------
 
-int Score::midiPortCount() const {
-      const Score* root = rootScore();
+int Score::midiPortCount() const
+      {
+      const Score* root = masterScore();
       if (this == root)
             return _midiPortCount;
       else
@@ -1151,8 +1041,9 @@ int Score::midiPortCount() const {
 //   setMidiPortCount
 //---------------------------------------------------------
 
-void Score::setMidiPortCount(int maxport) {
-      Score* root = rootScore();
+void Score::setMidiPortCount(int maxport)
+      {
+      Score* root = masterScore();
       if (this == root)
             _midiPortCount = maxport;
       else
@@ -1509,7 +1400,7 @@ Measure* Score::getCreateMeasure(int tick)
             int lastTick  = last ? (last->tick()+last->ticks()) : 0;
             while (tick >= lastTick) {
                   Measure* m = new Measure(this);
-                  Fraction ts = _sigmap->timesig(lastTick).timesig();
+                  Fraction ts = sigmap()->timesig(lastTick).timesig();
 // qDebug("getCreateMeasure %d  %d/%d", tick, ts.numerator(), ts.denominator());
                   m->setTick(lastTick);
                   m->setTimesig(ts);
@@ -2030,81 +1921,6 @@ Text* Score::getText(TextStyleType subtype)
       }
 
 //---------------------------------------------------------
-//   rootScore
-//---------------------------------------------------------
-
-Score* Score::rootScore()
-      {
-      Score* score = this;
-      while (score->parentScore())
-            score = parentScore();
-      return score;
-      }
-
-const Score* Score::rootScore() const
-      {
-      const Score* score = this;
-      while (score->parentScore())
-            score = parentScore();
-      return score;
-      }
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
-
-UndoStack* Score::undo() const
-      {
-      return rootScore()->_undo;
-      }
-
-//---------------------------------------------------------
-//   repeatList
-//---------------------------------------------------------
-
-RepeatList* Score::repeatList()  const
-      {
-      return rootScore()->_repeatList;
-      }
-
-//---------------------------------------------------------
-//   links
-//---------------------------------------------------------
-
-QMap<int, LinkedElements*>& Score::links()
-      {
-      return rootScore()->_elinks;
-      }
-
-//---------------------------------------------------------
-//   setTempomap
-//---------------------------------------------------------
-
-void Score::setTempomap(TempoMap* tm)
-      {
-      delete _tempomap;
-      _tempomap = tm;
-      }
-
-//---------------------------------------------------------
-//   tempomap
-//---------------------------------------------------------
-
-TempoMap* Score::tempomap() const
-      {
-      return rootScore()->_tempomap;
-      }
-
-//---------------------------------------------------------
-//   sigmap
-//---------------------------------------------------------
-
-TimeSigMap* Score::sigmap() const
-      {
-      return rootScore()->_sigmap;
-      }
-
-//---------------------------------------------------------
 //   metaTag
 //---------------------------------------------------------
 
@@ -2112,7 +1928,7 @@ QString Score::metaTag(const QString& s) const
       {
       if (_metaTags.contains(s))
             return _metaTags.value(s);
-      return rootScore()->_metaTags.value(s);
+      return _masterScore->_metaTags.value(s);
       }
 
 //---------------------------------------------------------
@@ -2133,7 +1949,7 @@ void Score::addExcerpt(Score* score)
       Excerpt* ex = new Excerpt(this);
       ex->setPartScore(score);
       excerpts().append(ex);
-      ex->setTitle(score->name());
+      ex->setTitle(masterScore()->name());
       for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
@@ -2171,7 +1987,7 @@ void Score::removeExcerpt(Score* score)
 //   clone
 //---------------------------------------------------------
 
-Score* Score::clone()
+MasterScore* MasterScore::clone()
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
@@ -2185,7 +2001,7 @@ Score* Score::clone()
       buffer.close();
 
       XmlReader r(buffer.buffer());
-      Score* score = new Score(style());
+      MasterScore* score = new MasterScore(style());
       score->read1(r, true);
 
       score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
@@ -2212,19 +2028,6 @@ void Score::setLayoutAll()
       {
       for (Score* score : scoreList())
             score->_cmdState.setUpdateMode(UpdateMode::LayoutAll);
-      }
-
-//---------------------------------------------------------
-//   removeOmr
-//---------------------------------------------------------
-
-void Score::removeOmr()
-      {
-      _showOmr = false;
-#ifdef OMR
-      delete _omr;
-      _omr = 0;
-#endif
       }
 
 //---------------------------------------------------------
@@ -3528,7 +3331,7 @@ void Score::cmdSelectSection()
 
 void Score::undo(UndoCommand* cmd) const
       {
-      undo()->push(cmd);
+      undoStack()->push(cmd);
       }
 
 //---------------------------------------------------------
@@ -3537,13 +3340,13 @@ void Score::undo(UndoCommand* cmd) const
 
 int Score::linkId()
       {
-      return (rootScore()->_linkId)++;
+      return (masterScore()->_linkId)++;
       }
 
 // val is a used link id
 void Score::linkId(int val)
       {
-      Score* s = rootScore();
+      Score* s = masterScore();
       if (val >= s->_linkId)
             s->_linkId = val + 1;   // update unused link id
       }
@@ -3557,7 +3360,7 @@ void Score::linkId(int val)
 QList<Score*> Score::scoreList()
       {
       QList<Score*> scores;
-      Score* root = rootScore();
+      Score* root = masterScore();
       scores.append(root);
       for (const Excerpt* ex : root->excerpts()) {
             if (ex->partScore())
@@ -3869,18 +3672,6 @@ void Score::setSoloMute()
       }
 
 //---------------------------------------------------------
-//   setName
-//---------------------------------------------------------
-
-void Score::setName(QString s)
-      {
-      s.replace('/', '_');    // for sanity
-      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
-            s += ".mscz";
-      info.setFile(s);
-      }
-
-//---------------------------------------------------------
 //   setImportedFilePath
 //---------------------------------------------------------
 
@@ -3904,7 +3695,7 @@ QString Score::title()
             fn = metaTag("workTitle");
 
       if (fn.isEmpty())
-            fn = fileInfo()->completeBaseName();
+            fn = masterScore()->fileInfo()->completeBaseName();
 
       if (fn.isEmpty())
             fn = "Untitled";
@@ -4496,7 +4287,110 @@ void Score::setStyle(const MStyle& s)
       if (style()->value(StyleIdx::spatium) != s.value(StyleIdx::spatium))
             spatiumChanged(style()->value(StyleIdx::spatium).toDouble(), s.value(StyleIdx::spatium).toDouble());
       _style = s;
-//      _style.precomputeValues();
       }
+
+//---------------------------------------------------------
+//   MasterScore
+//---------------------------------------------------------
+
+MasterScore::MasterScore()
+   : Score()
+      {
+      _tempomap    = new TempoMap;
+      _sigmap      = new TimeSigMap();
+      _undo        = new UndoStack();
+      _repeatList  = new RepeatList(this);
+      _revisions   = new Revisions;
+      setMasterScore(this);
+
+      _undoRedo    = false;
+      _omr         = 0;
+      _showOmr     = false;
+
+#if defined(Q_OS_WIN)
+      metaTags().insert("platform", "Microsoft Windows");
+#elif defined(Q_OS_MAC)
+      metaTags().insert("platform", "Apple Macintosh");
+#elif defined(Q_OS_LINUX)
+      metaTags().insert("platform", "Linux");
+#else
+      metaTags().insert("platform", "Unknown");
+#endif
+      metaTags().insert("movementNumber", "");
+      metaTags().insert("movementTitle", "");
+      metaTags().insert("workNumber", "");
+      metaTags().insert("workTitle", "");
+      metaTags().insert("arranger", "");
+      metaTags().insert("composer", "");
+      metaTags().insert("lyricist", "");
+      metaTags().insert("poet", "");
+      metaTags().insert("translator", "");
+      metaTags().insert("source", "");
+      metaTags().insert("copyright", "");
+      metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+      }
+
+MasterScore::MasterScore(const MStyle* s)
+   : MasterScore{}
+      {
+      setStyle(*s);
+      }
+
+MasterScore::~MasterScore()
+      {
+      delete _revisions;
+      delete _repeatList;
+      delete _undo;
+      delete _sigmap;
+      delete _tempomap;
+      qDeleteAll(_excerpts);
+      }
+
+//---------------------------------------------------------
+//   isSavable
+//---------------------------------------------------------
+
+bool MasterScore::isSavable() const
+      {
+      // TODO: check if file can be created if it does not exist
+      return info.isWritable() || !info.exists();
+      }
+
+//---------------------------------------------------------
+//   setTempomap
+//---------------------------------------------------------
+
+void MasterScore::setTempomap(TempoMap* tm)
+      {
+      delete _tempomap;
+      _tempomap = tm;
+      }
+
+//---------------------------------------------------------
+//   setName
+//---------------------------------------------------------
+
+void MasterScore::setName(const QString& ss)
+      {
+      QString s(ss);
+      s.replace('/', '_');    // for sanity
+      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
+            s += ".mscz";
+      info.setFile(s);
+      }
+
+//---------------------------------------------------------
+//   removeOmr
+//---------------------------------------------------------
+
+void MasterScore::removeOmr()
+      {
+      _showOmr = false;
+#ifdef OMR
+      delete _omr;
+#endif
+      _omr = 0;
+      }
+
 }
 

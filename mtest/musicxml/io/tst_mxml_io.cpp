@@ -234,7 +234,7 @@ void TestMxmlIO::mxmlIoTest(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -253,7 +253,7 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -272,7 +272,7 @@ void TestMxmlIO::mxmlMscxExportTestRef(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlExportLayout = false;
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -291,7 +291,7 @@ void TestMxmlIO::mxmlReadTestCompr(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".mxl");
+      MasterScore* score = readScore(DIR + file + ".mxl");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -312,7 +312,7 @@ void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();

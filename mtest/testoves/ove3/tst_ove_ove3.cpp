@@ -118,7 +118,7 @@ void TestOveIO::initTestCase()
 void TestOveIO::oveReadTest(const char* file)
       {
       preferences.importCharsetOve = "GBK";
-      Score* score = readScore(DIR + file + ".ove");
+      MasterScore* score = readScore(DIR + file + ".ove");
       QVERIFY(score);
       score->doLayout();
       score->connectTies();

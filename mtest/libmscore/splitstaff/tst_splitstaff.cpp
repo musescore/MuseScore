@@ -56,7 +56,7 @@ void TestSplitStaff::initTestCase()
 
 void TestSplitStaff::splitstaff(int idx, int staffIdx)
       {
-      Score* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
+      MasterScore* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
       score->doLayout();
       score->splitStaff(staffIdx, 60);
       score->doLayout();

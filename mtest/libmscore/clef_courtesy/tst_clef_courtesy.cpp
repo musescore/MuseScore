@@ -54,7 +54,7 @@ void TestClefCourtesy::initTestCase()
 
 void TestClefCourtesy::clef_courtesy01()
       {
-      Score* score = readScore(DIR + "clef_courtesy01.mscx");
+      MasterScore* score = readScore(DIR + "clef_courtesy01.mscx");
       score->doLayout();
 
       // 'go' to 4th measure
@@ -111,7 +111,7 @@ void TestClefCourtesy::clef_courtesy01()
 
 void TestClefCourtesy::clef_courtesy02()
       {
-      Score* score = readScore(DIR + "clef_courtesy02.mscx");
+      MasterScore* score = readScore(DIR + "clef_courtesy02.mscx");
       score->doLayout();
 
       // 'go' to 4th measure
@@ -169,7 +169,7 @@ void TestClefCourtesy::clef_courtesy02()
 
 void TestClefCourtesy::clef_courtesy03()
       {
-      Score* score = readScore(DIR + "clef_courtesy03.mscx");
+      MasterScore* score = readScore(DIR + "clef_courtesy03.mscx");
       score->doLayout();
 
       Measure* m1 = score->firstMeasure();
@@ -204,7 +204,7 @@ void TestClefCourtesy::clef_courtesy03()
 
 void TestClefCourtesy::clef_courtesy_78196()
       {
-      Score* score = readScore(DIR + "clef_courtesy_78196.mscx");
+      MasterScore* score = readScore(DIR + "clef_courtesy_78196.mscx");
       score->doLayout();
 
       Measure* m1 = score->firstMeasure();

@@ -380,19 +380,19 @@ void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
             foreach (ScoreElement* ee, *e->links()) {
                   if (ee == e) {
                         if (ee->getProperty(t) != st)
-                              undo()->push1(new ChangeProperty(ee, t, st));
+                              undoStack()->push1(new ChangeProperty(ee, t, st));
                         }
                   else {
                         // property in linked element has not changed yet
                         // push() calls redo() to change it
                         if (ee->getProperty(t) != e->getProperty(t))
-                              undo()->push(new ChangeProperty(ee, t, e->getProperty(t)));
+                              undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t)));
                         }
                   }
             }
       else {
             if (e->getProperty(t) != st) {
-                  undo()->push1(new ChangeProperty(e, t, st));
+                  undoStack()->push1(new ChangeProperty(e, t, st));
                   }
             }
       }
@@ -400,7 +400,7 @@ void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
 void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)
       {
       if (e->getProperty(t) != st)
-            undo()->push1(new ChangeProperty(e, t, st));
+            undoStack()->push1(new ChangeProperty(e, t, st));
       }
 
 //---------------------------------------------------------
@@ -423,7 +423,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
       {
       for (ScoreElement* e : note->linkList()) {
             Note* n = static_cast<Note*>(e);
-            undo()->push(new ChangePitch(n, pitch, tpc1, tpc2));
+            undoStack()->push(new ChangePitch(n, pitch, tpc1, tpc2));
             }
       }
 
@@ -442,11 +442,11 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
       if (l) {
             for (ScoreElement* e : *l) {
                   Note* n = static_cast<Note*>(e);
-                  undo()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
+                  undoStack()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
                   }
             }
       else
-            undo()->push(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
+            undoStack()->push(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
       }
 
 //---------------------------------------------------------
@@ -3020,8 +3020,8 @@ void ChangeDuration::flip()
 
 void AddExcerpt::undo()
       {
-      score->parentScore()->removeExcerpt(score);
-      score->parentScore()->setExcerptsChanged(true);
+      score->masterScore()->removeExcerpt(score);
+      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3030,8 +3030,8 @@ void AddExcerpt::undo()
 
 void AddExcerpt::redo()
       {
-      score->parentScore()->addExcerpt(score);
-      score->parentScore()->setExcerptsChanged(true);
+      score->masterScore()->addExcerpt(score);
+      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3040,8 +3040,8 @@ void AddExcerpt::redo()
 
 void RemoveExcerpt::undo()
       {
-      score->parentScore()->addExcerpt(score);
-      score->parentScore()->setExcerptsChanged(true);
+      score->masterScore()->addExcerpt(score);
+      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3050,8 +3050,8 @@ void RemoveExcerpt::undo()
 
 void RemoveExcerpt::redo()
       {
-      score->parentScore()->removeExcerpt(score);
-      score->parentScore()->setExcerptsChanged(true);
+      score->masterScore()->removeExcerpt(score);
+      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------

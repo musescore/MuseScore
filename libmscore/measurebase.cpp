@@ -378,17 +378,17 @@ QVariant MeasureBase::propertyDefault(P_ID propertyId) const
 void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
       {
       if (v) {
-            LayoutBreak* lb = new LayoutBreak(_score);
+            LayoutBreak* lb = new LayoutBreak(score());
             lb->setLayoutBreakType(type);
             lb->setTrack(-1);       // this are system elements
             lb->setParent(this);
-            _score->undoAddElement(lb);
+            score()->undoAddElement(lb);
             }
       else {
             // remove line break
             for (Element* e : el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
-                        _score->undoRemoveElement(e);
+                        score()->undoRemoveElement(e);
                         break;
                         }
                   }

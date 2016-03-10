@@ -39,7 +39,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = s;
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
-      buttonApplyToAllParts->setEnabled(cs->parentScore());
+      buttonApplyToAllParts->setEnabled(!cs->isMaster());
       setModal(true);
 
       const char* styles[] = {
@@ -342,8 +342,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + tr("Available meta data tags and their current values:")
             + QString("</p><table>");
       // show all tags for current score/part, see also Score::init()
-      if (cs->parentScore()) {
-            QMapIterator<QString, QString> j(cs->parentScore()->metaTags());
+      if (!cs->isMaster()) {
+            QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
             while (j.hasNext()) {
                   j.next();
                   toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
@@ -463,7 +463,7 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 void EditStyle::applyToAllParts()
       {
 //      getValues();
-      for (Excerpt* e : cs->rootScore()->excerpts()) {
+      for (Excerpt* e : cs->masterScore()->excerpts()) {
             e->partScore()->undo(new ChangeStyle(e->partScore(), *cs->style()));
             e->partScore()->update();
             }

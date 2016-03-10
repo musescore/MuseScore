@@ -34,8 +34,8 @@ using namespace Ms;
 class TestInstrumentChange : public QObject, public MTest {
       Q_OBJECT
 
-      Score* test_pre(const char* p);
-      void test_post(Score* score, const char* p);
+      MasterScore* test_pre(const char* p);
+      void test_post(MasterScore* score, const char* p);
 
    private slots:
       void initTestCase();
@@ -59,15 +59,15 @@ void TestInstrumentChange::initTestCase()
 //   chordsymbol
 //---------------------------------------------------------
 
-Score* TestInstrumentChange::test_pre(const char* p)
+MasterScore* TestInstrumentChange::test_pre(const char* p)
       {
       QString p1 = DIR + p + ".mscx";
-      Score* score = readScore(p1);
+      MasterScore* score = readScore(p1);
       score->doLayout();
       return score;
       }
 
-void TestInstrumentChange::test_post(Score* score, const char* p)
+void TestInstrumentChange::test_post(MasterScore* score, const char* p)
       {
       QString p1 = p;
       p1 += "-test.mscx";
@@ -78,7 +78,7 @@ void TestInstrumentChange::test_post(Score* score, const char* p)
 
 void TestInstrumentChange::testAdd()
       {
-      Score* score = test_pre("add");
+      MasterScore* score = test_pre("add");
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = new InstrumentChange(score);
@@ -92,7 +92,7 @@ void TestInstrumentChange::testAdd()
 
 void TestInstrumentChange::testDelete()
       {
-      Score* score = test_pre("delete");
+      MasterScore* score = test_pre("delete");
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
@@ -103,7 +103,7 @@ void TestInstrumentChange::testDelete()
 
 void TestInstrumentChange::testChange()
       {
-      Score* score = test_pre("change");
+      MasterScore* score = test_pre("change");
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
@@ -119,7 +119,7 @@ void TestInstrumentChange::testChange()
 
 void TestInstrumentChange::testMixer()
       {
-      Score* score = test_pre("mixer");
+      MasterScore* score = test_pre("mixer");
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
@@ -141,7 +141,7 @@ void TestInstrumentChange::testMixer()
 
 void TestInstrumentChange::testCopy()
       {
-      Score* score = test_pre("copy");
+      MasterScore* score = test_pre("copy");
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);

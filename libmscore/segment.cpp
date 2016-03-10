@@ -1017,12 +1017,12 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
       if (segmentType() & (Segment::Type::BarLine | Segment::Type::EndBarLine
          | Segment::Type::StartRepeatBarLine | Segment::Type::BeginBarLine)) {
-            for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
+            for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   Element* e = element(staffIdx*VOICES);
                   if (e == 0)             // if no element, skip
                         continue;
                   // if staff not visible
-                  if (!all && !(/*measure()->visible(staffIdx) && */_score->staff(staffIdx)->show())) {
+                  if (!all && !(/*measure()->visible(staffIdx) && */score()->staff(staffIdx)->show())) {
                         // if bar line spans just this staff...
                         if (static_cast<BarLine*>(e)->span() <= 1
                             // ...or span another staff but without entering INTO it...
@@ -1034,9 +1034,9 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   }
             }
       else
-            for (int track = 0; track < _score->nstaves() * VOICES; ++track) {
+            for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
                   int staffIdx = track/VOICES;
-                  if (!all && !(measure()->visible(staffIdx) && _score->staff(staffIdx)->show())) {
+                  if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
                         track += VOICES - 1;
                         continue;
                         }

@@ -225,7 +225,7 @@ void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 qreal Element::spatium() const
       {
       Staff* s = staff();
-      return s ? s->spatium() : _score->spatium();
+      return s ? s->spatium() : score()->spatium();
       }
 
 //---------------------------------------------------------
@@ -234,7 +234,7 @@ qreal Element::spatium() const
 
 qreal Element::magS() const
       {
-      return mag() * (_score->spatium() / SPATIUM20);
+      return mag() * (score()->spatium() / SPATIUM20);
       }
 
 //---------------------------------------------------------
@@ -717,7 +717,7 @@ bool Element::readProperties(XmlReader& e)
             int id = e.readInt();
             _links = score()->links().value(id);
             if (!_links) {
-                  if (score()->parentScore())   // DEBUG
+                  if (!score()->isMaster())   // DEBUG
                         qDebug("---link %d not found (%d)", id, score()->links().size());
                   _links = new LinkedElements(score(), id);
                   score()->links().insert(id, _links);
@@ -914,7 +914,7 @@ void StaffLines::layout()
             setColor(s->color());
             }
       else {
-            _spatium = _score->spatium();
+            _spatium = score()->spatium();
             dist  = _spatium;
             lines = 5;
             setColor(MScore::defaultColor);

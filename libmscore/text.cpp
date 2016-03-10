@@ -1570,7 +1570,7 @@ void Text::endEdit()
                         // these can differ (eg, for chord symbols in transposing parts)
 
                         QString undoText = (e == this) ? oldText : static_cast<Text*>(e)->_text;
-                        score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, undoText));
+                        score()->undoStack()->push1(new ChangeProperty(e, P_ID::TEXT, undoText));
                         }
 
                   // because we are pushing each individual linked element's old text to the undo stack,

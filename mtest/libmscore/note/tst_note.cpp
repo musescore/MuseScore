@@ -315,7 +315,7 @@ void TestNote::note()
 
 void TestNote::grace()
       {
-      Score* score = readScore(DIR + "grace.mscx");
+      MasterScore* score = readScore(DIR + "grace.mscx");
       score->doLayout();
       Ms::Chord* chord = score->firstMeasure()->findChord(0, 0);
       Note* note = chord->upNote();
@@ -360,7 +360,6 @@ void TestNote::grace()
 //      delete c;
 
       QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
-
       }
 
 //---------------------------------------------------------
@@ -370,7 +369,7 @@ void TestNote::grace()
 
 void TestNote::tpc()
       {
-      Score* score = readScore(DIR + "tpc.mscx");
+      MasterScore* score = readScore(DIR + "tpc.mscx");
       score->doLayout();
 
       score->inputState().setTrack(0);
@@ -400,7 +399,7 @@ void TestNote::tpc()
 
 void TestNote::tpcTranspose()
       {
-      Score* score = readScore(DIR + "tpc-transpose.mscx");
+      MasterScore* score = readScore(DIR + "tpc-transpose.mscx");
       score->doLayout();
 
       score->startCmd();
@@ -428,8 +427,9 @@ void TestNote::tpcTranspose()
 ///   more tests of note tpc values & transposition
 //---------------------------------------------------------
 
-void TestNote::tpcTranspose2() {
-      Score* score = readScore(DIR + "tpc-transpose2.mscx");
+void TestNote::tpcTranspose2()
+      {
+      MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
       score->doLayout();
 
       score->inputState().setTrack(0);
@@ -449,8 +449,9 @@ void TestNote::tpcTranspose2() {
 ///   noteLimits
 //---------------------------------------------------------
 
-void TestNote::noteLimits() {
-      Score* score = readScore(DIR + "empty.mscx");
+void TestNote::noteLimits()
+      {
+      MasterScore* score = readScore(DIR + "empty.mscx");
       score->doLayout();
 
       score->inputState().setTrack(0);

@@ -42,7 +42,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
 
       cs = score;
       buttonApplyToAllParts = bb->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
-      buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
+      buttonApplyToAllParts->setEnabled(!cs->isMaster());
 
       styles = cs->style()->textStyles();
       tp->setScore(true, cs);
@@ -132,8 +132,8 @@ void TextStyleDialog::buttonClicked(QAbstractButton* b)
                   done(1);
                   break;
             case QDialogButtonBox::Cancel:
-                  if (cs->undo()->current()) {
-                        cs->undo()->current()->unwind();
+                  if (cs->undoStack()->current()) {
+                        cs->undoStack()->current()->unwind();
                         cs->setLayoutAll();
                         }
                   done(0);
@@ -185,7 +185,7 @@ void TextStyleDialog::applyToScore(Score* s)
 void TextStyleDialog::applyToAllParts()
       {
       saveStyle(current);     // update local copy of style list
-      QList<Excerpt*>& el = cs->rootScore()->excerpts();
+      QList<Excerpt*>& el = cs->masterScore()->excerpts();
       for (Excerpt* e : el)
             applyToScore(e->partScore());
       }

@@ -459,7 +459,7 @@ void Tie::startEdit(MuseScoreView* v, const QPointF& p)
 void Tie::endEdit()
       {
       if (editStartNote != startNote() || editEndNote != endNote()) {
-            score()->undo()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
+            score()->undoStack()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
             }
       SlurTie::endEdit();
       score()->setLayoutAll();

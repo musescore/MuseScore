@@ -208,22 +208,22 @@ void Page::draw(QPainter* painter) const
       // draw header/footer
       //
 
-      int n = no() + 1 + _score->pageNumberOffset();
+      int n = no() + 1 + score()->pageNumberOffset();
       painter->setPen(curColor());
 
       QString s1, s2, s3;
 
-      if (_score->styleB(StyleIdx::showHeader) && (no() || _score->styleB(StyleIdx::headerFirstPage))) {
-            bool odd = (n & 1) || !_score->styleB(StyleIdx::headerOddEven);
+      if (score()->styleB(StyleIdx::showHeader) && (no() || score()->styleB(StyleIdx::headerFirstPage))) {
+            bool odd = (n & 1) || !score()->styleB(StyleIdx::headerOddEven);
             if (odd) {
-                  s1 = _score->styleSt(StyleIdx::oddHeaderL);
-                  s2 = _score->styleSt(StyleIdx::oddHeaderC);
-                  s3 = _score->styleSt(StyleIdx::oddHeaderR);
+                  s1 = score()->styleSt(StyleIdx::oddHeaderL);
+                  s2 = score()->styleSt(StyleIdx::oddHeaderC);
+                  s3 = score()->styleSt(StyleIdx::oddHeaderR);
                   }
             else {
-                  s1 = _score->styleSt(StyleIdx::evenHeaderL);
-                  s2 = _score->styleSt(StyleIdx::evenHeaderC);
-                  s3 = _score->styleSt(StyleIdx::evenHeaderR);
+                  s1 = score()->styleSt(StyleIdx::evenHeaderL);
+                  s2 = score()->styleSt(StyleIdx::evenHeaderC);
+                  s3 = score()->styleSt(StyleIdx::evenHeaderR);
                   }
 
             drawHeaderFooter(painter, 0, s1);
@@ -231,17 +231,17 @@ void Page::draw(QPainter* painter) const
             drawHeaderFooter(painter, 2, s3);
             }
 
-      if (_score->styleB(StyleIdx::showFooter) && (no() || _score->styleB(StyleIdx::footerFirstPage))) {
-            bool odd = (n & 1) || !_score->styleB(StyleIdx::footerOddEven);
+      if (score()->styleB(StyleIdx::showFooter) && (no() || score()->styleB(StyleIdx::footerFirstPage))) {
+            bool odd = (n & 1) || !score()->styleB(StyleIdx::footerOddEven);
             if (odd) {
-                  s1 = _score->styleSt(StyleIdx::oddFooterL);
-                  s2 = _score->styleSt(StyleIdx::oddFooterC);
-                  s3 = _score->styleSt(StyleIdx::oddFooterR);
+                  s1 = score()->styleSt(StyleIdx::oddFooterL);
+                  s2 = score()->styleSt(StyleIdx::oddFooterC);
+                  s3 = score()->styleSt(StyleIdx::oddFooterR);
                   }
             else {
-                  s1 = _score->styleSt(StyleIdx::evenFooterL);
-                  s2 = _score->styleSt(StyleIdx::evenFooterC);
-                  s3 = _score->styleSt(StyleIdx::evenFooterR);
+                  s1 = score()->styleSt(StyleIdx::evenFooterL);
+                  s2 = score()->styleSt(StyleIdx::evenFooterC);
+                  s3 = score()->styleSt(StyleIdx::evenFooterR);
                   }
 
             drawHeaderFooter(painter, 3, s1);
@@ -537,51 +537,51 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
                         case 'N': // on page 1 only if there are multiple pages
-                              if ( (_score->npages() + _score->pageNumberOffset()) > 1 ) // FALLTHROUGH
+                              if ( (score()->npages() + score()->pageNumberOffset()) > 1 ) // FALLTHROUGH
                         case 'P': // on all pages
                               {
-                              int no = _no + 1 + _score->pageNumberOffset();
+                              int no = _no + 1 + score()->pageNumberOffset();
                               if (no > 0 )
                                     d += QString("%1").arg(no);
                               }
                               break;
                         case 'n':
-                              d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
+                              d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
                               break;
                         case 'f':
-                              d += _score->rootScore()->name().toHtmlEscaped();
+                              d += masterScore()->name().toHtmlEscaped();
                               break;
                         case 'F':
-                              d += _score->rootScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
+                              d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'D':
                               {
-                              QString creationDate = _score->metaTag("creationDate");
+                              QString creationDate = score()->metaTag("creationDate");
                               if (creationDate.isNull())
-                                    d += _score->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+                                    d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
                               else
                                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
                               }
                               break;
                         case 'm':
-                              if ( _score->dirty() )
+                              if ( score()->dirty() )
                                     d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
                               else
-                                    d += _score->rootScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                                    d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'M':
-                              if ( _score->dirty() )
+                              if ( score()->dirty() )
                                     d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                               else
-                                    d += _score->rootScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                                    d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH
                         case 'c':
-                              d += _score->metaTag("copyright").toHtmlEscaped();
+                              d += score()->metaTag("copyright").toHtmlEscaped();
                               break;
                         case '$':
                               d += '$';
@@ -596,7 +596,7 @@ QString Page::replaceTextMacros(const QString& s) const
                                     tag += s[k];
                                     }
                               if (k != n) {       // found ':' ?
-                                    d += _score->metaTag(tag).toHtmlEscaped();
+                                    d += score()->metaTag(tag).toHtmlEscaped();
                                     i = k-1;
                                     }
                               }
@@ -620,7 +620,7 @@ QString Page::replaceTextMacros(const QString& s) const
 
 bool Page::isOdd() const
       {
-      return (_no + 1 + _score->pageNumberOffset()) & 1;
+      return (_no + 1 + score()->pageNumberOffset()) & 1;
       }
 
 //---------------------------------------------------------
@@ -824,7 +824,7 @@ QList<const Element*> Page::elements()
 
 qreal Page::tm() const
       {
-      const PageFormat* pf = _score->pageFormat();
+      const PageFormat* pf = score()->pageFormat();
       return ((!pf->twosided() || isOdd()) ? pf->oddTopMargin() : pf->evenTopMargin()) * DPI;
       }
 
@@ -834,7 +834,7 @@ qreal Page::tm() const
 
 qreal Page::bm() const
       {
-      const PageFormat* pf = _score->pageFormat();
+      const PageFormat* pf = score()->pageFormat();
       return ((!pf->twosided() || isOdd()) ? pf->oddBottomMargin() : pf->evenBottomMargin()) * DPI;
       }
 
@@ -844,7 +844,7 @@ qreal Page::bm() const
 
 qreal Page::lm() const
       {
-      const PageFormat* pf = _score->pageFormat();
+      const PageFormat* pf = score()->pageFormat();
       return ((!pf->twosided() || isOdd()) ? pf->oddLeftMargin() : pf->evenLeftMargin()) * DPI;
       }
 
@@ -854,7 +854,7 @@ qreal Page::lm() const
 
 qreal Page::rm() const
       {
-      const PageFormat* pf = _score->pageFormat();
+      const PageFormat* pf = score()->pageFormat();
       return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * DPI;
       }
 
