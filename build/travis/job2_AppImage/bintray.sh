@@ -41,9 +41,9 @@ if [ $(env | grep TRAVIS_PULL_REQUEST ) ] ; then
 fi
 
 BINTRAY_USER=$BINTRAY_USER # env
-BINTRAY_REPO_OWNER=$BINTRAY_USER # same as BINTRAY_USER, since uploading to repo owned by user
 BINTRAY_API_KEY=$BINTRAY_API_KEY # env
 
+BINTRAY_REPO_OWNER="musescore"
 WEBSITE_URL="http://musescore.org"
 ISSUE_TRACKER_URL="https://musescore.org/project/issues"
 VCS_URL="https://github.com/musescore/MuseScore.git" # Mandatory for packages in free Bintray repos
