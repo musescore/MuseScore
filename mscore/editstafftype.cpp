@@ -21,7 +21,7 @@
 
 namespace Ms {
 
-extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
+extern Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError);
 
 const char* g_groupNames[STAFF_GROUP_MAX] = {
       QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
@@ -71,7 +71,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       durFontName->setCurrentIndex(0);
 
       // load a sample tabulature score in preview
-      Score* sc = new Score(MScore::defaultStyle());
+      MasterScore* sc = new MasterScore(MScore::defaultStyle());
       if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR)
             preview->setScore(sc);
 

@@ -47,7 +47,7 @@ namespace Ms {
 
 int Staff::idx() const
       {
-      return _score->staffIdx(this);
+      return score()->staffIdx(this);
       }
 
 //---------------------------------------------------------
@@ -111,7 +111,7 @@ void Staff::addBracket(BracketItem b)
             //
             // create new bracket level
             //
-            foreach(Staff* s, _score->staves()) {
+            foreach(Staff* s, score()->staves()) {
                   if (s == this)
                         s->_brackets.append(b);
                   else
@@ -155,7 +155,7 @@ BracketType Staff::innerBracket() const
 void Staff::cleanupBrackets()
       {
       int index = idx();
-      int n = _score->nstaves();
+      int n = score()->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
             if (_brackets[i]._bracket == BracketType::NO_BRACKET)
                   continue;
@@ -477,9 +477,7 @@ void Staff::write(Xml& xml) const
       int idx = score()->staffIdx(this);
       xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
       if (linkedStaves()) {
-            Score* s = score();
-            if (s->parentScore())
-                  s = s->parentScore();
+            Score* s = masterScore();
             foreach(Staff* staff, linkedStaves()->staves()) {
                   if ((staff->score() == s) && (staff != this))
                         xml.tag("linkedTo", s->staffIdx(staff) + 1);
@@ -605,7 +603,7 @@ void Staff::read(XmlReader& e)
             else if (tag == "hideSystemBarLine")
                   _hideSystemBarLine = e.readInt();
             else if (tag == "keylist")
-                  _keys.read(e, _score);
+                  _keys.read(e, score());
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket     = BracketType(e.intAttribute("type", -1));
@@ -641,10 +639,10 @@ void Staff::read(XmlReader& e)
             else if (tag == "linkedTo") {
                   int v = e.readInt() - 1;
                   //
-                  // if this is an excerpt, link staff to parentScore()
+                  // if this is an excerpt, link staff to masterScore()
                   //
-                  if (score()->parentScore()) {
-                        Staff* st = score()->parentScore()->staff(v);
+                  if (!score()->isMaster()) {
+                        Staff* st = masterScore()->staff(v);
                         if (st)
                               linkTo(st);
                         else {
@@ -683,7 +681,7 @@ qreal Staff::height() const
 
 qreal Staff::spatium() const
       {
-      return _score->spatium() * mag();
+      return score()->spatium() * mag();
       }
 
 //---------------------------------------------------------
@@ -1128,7 +1126,7 @@ void Staff::insertTime(int tick, int len)
       // check if there is a clef at the end of measure
       // before tick
       Clef* clef = 0;
-      Measure* m = _score->tick2measure(tick);
+      Measure* m = score()->tick2measure(tick);
       if (m && (m->tick() == tick) && (m->prevMeasure())) {
             m = m->prevMeasure();
             Segment* s = m->findSegment(Segment::Type::Clef, tick);

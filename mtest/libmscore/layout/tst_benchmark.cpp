@@ -31,7 +31,7 @@ class TestBenchmark : public QObject, public MTest
       {
       Q_OBJECT
 
-      Score* score;
+      MasterScore* score;
       void beam(const char* path);
 
    private slots:
@@ -57,7 +57,7 @@ void TestBenchmark::initTestCase()
 void TestBenchmark::benchmark3()
       {
       QString path = root + "/" + DIR + "goldberg.mscx";
-      score = new Score(mscore->baseStyle());
+      score = new MasterScore(mscore->baseStyle());
       score->setName(path);
       MScore::testMode = true;
       QBENCHMARK {

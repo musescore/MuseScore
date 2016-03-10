@@ -44,7 +44,7 @@ void ScoreElement::undoChangeProperty(P_ID id, const QVariant& val)
 void ScoreElement::undoPushProperty(P_ID id)
       {
       QVariant val = getProperty(id);
-      score()->undo()->push1(new ChangeProperty(this, id, val));
+      score()->undoStack()->push1(new ChangeProperty(this, id, val));
       }
 
 //---------------------------------------------------------
@@ -151,5 +151,13 @@ void LinkedElements::setLid(Score* score, int id)
       score->linkId(id);
       }
 
+//---------------------------------------------------------
+//   masterScore
+//---------------------------------------------------------
+
+MasterScore* ScoreElement::masterScore() const
+      {
+      return _score->masterScore();
+      }
 }
 

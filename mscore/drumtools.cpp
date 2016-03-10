@@ -158,7 +158,7 @@ void DrumTools::editDrumset()
             _score->startCmd();
             _score->undo(new ChangeDrumset(staff->part()->instrument(), eds.drumset()));
             mscore->updateDrumTools(eds.drumset());
-            if (_score->undo()->active()) {
+            if (_score->undoStack()->active()) {
                   _score->setLayoutAll();
                   _score->endCmd();
                   }

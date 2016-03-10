@@ -719,7 +719,7 @@ void BarLine::endEdit()
             _spanTo           = _origSpanTo;
             _customSpan       = true;
             // for mid-measure barline in root score, update parts
-            if (midMeasure && score()->parentScore() == nullptr && score()->excerpts().size() > 0) {
+            if (midMeasure && score()->isMaster() && score()->excerpts().size() > 0) {
                   int currIdx = staffIdx();
                   Measure* m = segment()->measure();
                   // change linked barlines as necessary

@@ -111,7 +111,7 @@ Measure::Measure(Score* s)
       {
       _repeatCount           = 2;
 
-      int n = _score->nstaves();
+      int n = score()->nstaves();
       _mstaves.reserve(n);
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
             MStaff* s    = new MStaff;
@@ -720,7 +720,7 @@ void Measure::remove(Element* e)
             case Element::Type::REST:
             case Element::Type::TIMESIG:
                   for (Segment* segment = first(); segment; segment = segment->next()) {
-                        int staves = _score->nstaves();
+                        int staves = score()->nstaves();
                         int tracks = staves * VOICES;
                         for (int track = 0; track < tracks; ++track) {
                               Element* ee = segment->element(track);
@@ -842,14 +842,14 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
                   Element* el = s->element(track);
                   if (el) {
                         el->undoUnlink();
-                        _score->undo(new RemoveElement(el));
+                        score()->undo(new RemoveElement(el));
                         }
                   }
             foreach (Element* e, s->annotations()) {
                   int staffIdx = e->staffIdx();
                   if ((staffIdx >= sStaff) && (staffIdx < eStaff) && !e->systemFlag()) {
                         e->undoUnlink();
-                        _score->undo(new RemoveElement(e));
+                        score()->undo(new RemoveElement(e));
                         }
                   }
             }
@@ -859,20 +859,20 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
             int staffIdx = e->staffIdx();
             if (staffIdx >= sStaff && (staffIdx < eStaff) && !e->systemFlag()) {
                   e->undoUnlink();
-                  _score->undo(new RemoveElement(e));
+                  score()->undo(new RemoveElement(e));
                   }
             }
 
-      _score->undo(new RemoveStaves(this, sStaff, eStaff));
+      score()->undo(new RemoveStaves(this, sStaff, eStaff));
 
       for (int i = eStaff - 1; i >= sStaff; --i) {
             MStaff* ms = *(_mstaves.begin()+i);
             Text* t = ms->noText();
             if (t) {
 //                  t->undoUnlink();
-//                  _score->undo(new RemoveElement(t));
+//                  score()->undo(new RemoveElement(t));
                   }
-            _score->undo(new RemoveMStaff(this, ms, i));
+            score()->undo(new RemoveMStaff(this, ms, i));
             }
 
       // barLine
@@ -885,18 +885,18 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
 
 void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
       {
-      _score->undo(new InsertStaves(this, sStaff, eStaff));
+      score()->undo(new InsertStaves(this, sStaff, eStaff));
 
       Segment* ts = findSegment(Segment::Type::TimeSig, tick());
 
       for (int i = sStaff; i < eStaff; ++i) {
-            Staff* staff = _score->staff(i);
+            Staff* staff = score()->staff(i);
             MStaff* ms   = new MStaff;
             ms->lines    = new StaffLines(score());
             ms->lines->setTrack(i * VOICES);
             ms->lines->setParent(this);
             ms->lines->setVisible(!staff->invisible());
-            _score->undo(new InsertMStaff(this, ms, i));
+            score()->undo(new InsertMStaff(this, ms, i));
             }
 
       if (!createRest && !ts)
@@ -907,11 +907,11 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
 
       QList<int> sl;
       for (int staffIdx = sStaff; staffIdx < eStaff; ++staffIdx) {
-            Staff* s = _score->staff(staffIdx);
+            Staff* s = score()->staff(staffIdx);
             if (s->linkedStaves()) {
                   bool alreadyInList = false;
                   for (int idx : sl) {
-                        if (s->linkedStaves()->staves().contains(_score->staff(idx))) {
+                        if (s->linkedStaves()->staves().contains(score()->staff(idx))) {
                               alreadyInList = true;
                               break;
                               }
@@ -1039,7 +1039,7 @@ bool Measure::acceptDrop(const DropData& data) const
 
       int staffIdx;
       Segment* seg;
-      if (_score->pos2measure(pos, &staffIdx, 0, &seg, 0) == nullptr)
+      if (score()->pos2measure(pos, &staffIdx, 0, &seg, 0) == nullptr)
             return false;
 
       QRectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
@@ -1105,7 +1105,7 @@ Element* Measure::drop(const DropData& data)
       Element* e = data.element;
       int staffIdx = -1;
       Segment* seg;
-      _score->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
+      score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
 
       if (e->systemFlag())
             staffIdx = 0;
@@ -1313,7 +1313,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       //
       // see also cmdDeleteSelection()
       //
-      _score->select(0, SelectType::SINGLE, 0);
+      score()->select(0, SelectType::SINGLE, 0);
       for (Segment* s = first(); s; s = s->next()) {
             if (s->segmentType() & Segment::Type::ChordRest) {
                   int strack = staffIdx * VOICES;
@@ -1321,7 +1321,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
                   for (int track = strack; track < etrack; ++track) {
                         Element* el = s->element(track);
                         if (el)
-                              _score->undoRemoveElement(el);
+                              score()->undoRemoveElement(el);
                         }
                   }
             }
@@ -1329,15 +1329,15 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       // add repeat measure
       //
       Segment* seg = undoGetSegment(Segment::Type::ChordRest, tick());
-      RepeatMeasure* rm = new RepeatMeasure(_score);
+      RepeatMeasure* rm = new RepeatMeasure(score());
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
       rm->setDurationType(TDuration::DurationType::V_MEASURE);
-      rm->setDuration(stretchedLen(_score->staff(staffIdx)));
-      _score->undoAddCR(rm, this, tick());
+      rm->setDuration(stretchedLen(score()->staff(staffIdx)));
+      score()->undoAddCR(rm, this, tick());
       for (Element* e : el()) {
             if (e->type() == Element::Type::SLUR && e->staffIdx() == staffIdx)
-                  _score->undoRemoveElement(e);
+                  score()->undoRemoveElement(e);
             }
       return rm;
       }
@@ -1373,7 +1373,7 @@ void Measure::adjustToLen(Fraction nf)
                         }
                   }
             }
-      Score* s      = score()->rootScore();
+      Score* s      = score()->masterScore();
       Measure* m    = this;
       QList<int> sl = s->uniqueStaves();
 
@@ -3245,7 +3245,7 @@ void Measure::stretchMeasure(qreal stretch)
       {
       bbox().setWidth(stretch);
 
-      int nstaves = _score->nstaves();
+      int nstaves = score()->nstaves();
       int minTick = 100000;
 
       for (auto& s : _segments) {

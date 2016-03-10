@@ -35,8 +35,8 @@ using namespace Ms;
 class TestChordSymbol : public QObject, public MTest {
       Q_OBJECT
 
-      Score* test_pre(const char* p);
-      void test_post(Score* score, const char* p);
+      MasterScore* test_pre(const char* p);
+      void test_post(MasterScore* score, const char* p);
 
    private slots:
       void initTestCase();
@@ -62,15 +62,15 @@ void TestChordSymbol::initTestCase()
 //   chordsymbol
 //---------------------------------------------------------
 
-Score* TestChordSymbol::test_pre(const char* p)
+MasterScore* TestChordSymbol::test_pre(const char* p)
       {
       QString p1 = DIR + p + ".mscx";
-      Score* score = readScore(p1);
+      MasterScore* score = readScore(p1);
       score->doLayout();
       return score;
       }
 
-void TestChordSymbol::test_post(Score* score, const char* p)
+void TestChordSymbol::test_post(MasterScore* score, const char* p)
       {
       QString p1 = p;
       p1 += "-test.mscx";
@@ -81,7 +81,7 @@ void TestChordSymbol::test_post(Score* score, const char* p)
 
 void TestChordSymbol::testExtend()
       {
-      Score* score = test_pre("extend");
+      MasterScore* score = test_pre("extend");
       Measure* m = score->firstMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       ChordRest* cr = s->cr(0);
@@ -92,7 +92,7 @@ void TestChordSymbol::testExtend()
 
 void TestChordSymbol::testClear()
       {
-      Score* score = test_pre("clear");
+      MasterScore* score = test_pre("clear");
       Measure* m = score->firstMeasure();
       score->select(m, SelectType::SINGLE, 0);
       score->cmdDeleteSelection();
@@ -102,7 +102,7 @@ void TestChordSymbol::testClear()
 
 void TestChordSymbol::testAddLink()
       {
-      Score* score = test_pre("add-link");
+      MasterScore* score = test_pre("add-link");
       Segment* seg = score->firstSegment(Segment::Type::ChordRest);
       ChordRest* cr = seg->cr(0);
       Harmony* harmony = new Harmony(score);
@@ -116,7 +116,7 @@ void TestChordSymbol::testAddLink()
 
 void TestChordSymbol::testAddPart()
       {
-      Score* score = test_pre("add-part");
+      MasterScore* score = test_pre("add-part");
       Segment* seg = score->firstSegment(Segment::Type::ChordRest);
       ChordRest* cr = seg->cr(0);
       Harmony* harmony = new Harmony(score);
@@ -130,7 +130,7 @@ void TestChordSymbol::testAddPart()
 
 void TestChordSymbol::testNoSystem()
       {
-      Score* score = test_pre("no-system");
+      MasterScore* score = test_pre("no-system");
 
       //
       // create first part
@@ -139,7 +139,7 @@ void TestChordSymbol::testNoSystem()
       parts.append(score->parts().at(0));
 
       Score* nscore = new Score(score);
-      score->undo(new AddExcerpt(nscore));
+      score->Score::undo(new AddExcerpt(nscore));
 
       {
       Excerpt ex(score);
@@ -159,7 +159,7 @@ void TestChordSymbol::testNoSystem()
       parts.clear();
       parts.append(score->parts().at(1));
       nscore = new Score(score);
-      score->undo(new AddExcerpt(nscore));
+      score->Score::undo(new AddExcerpt(nscore));
       {
       Excerpt ex(score);
       ex.setTitle(parts.front()->longName());
@@ -178,7 +178,7 @@ void TestChordSymbol::testNoSystem()
 
 void TestChordSymbol::testTranspose()
       {
-      Score* score = test_pre("transpose");
+      MasterScore* score = test_pre("transpose");
       score->startCmd();
       score->cmdSelectAll();
       score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
@@ -188,7 +188,7 @@ void TestChordSymbol::testTranspose()
 
 void TestChordSymbol::testTransposePart()
       {
-      Score* score = test_pre("transpose-part");
+      MasterScore* score = test_pre("transpose-part");
       score->startCmd();
       score->cmdSelectAll();
       score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);

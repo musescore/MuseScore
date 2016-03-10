@@ -309,17 +309,17 @@ void Image::write(Xml& xml) const
       {
       // attempt to convert the _linkPath to a path relative to the score
       //
-      // TODO : on Save As, _score->fileInfo() still contains the old path and fname
+      // TODO : on Save As, score()->fileInfo() still contains the old path and fname
       //          if the Save As path is different, image relative path will be wrong!
       //
       QString relativeFilePath= QString();
       if (!_linkPath.isEmpty() && _linkIsValid) {
             QFileInfo fi(_linkPath);
-            // _score->fileInfo()->canonicalPath() would be better
+            // score()->fileInfo()->canonicalPath() would be better
             // but we are saving under a temp file name and the 'final' file
             // might not exist yet, so canonicalFilePath() may return only "/"
             // OTOH, the score 'final' file name is practically always canonical, at this point
-            QString scorePath = _score->fileInfo()->absolutePath();
+            QString scorePath = score()->masterScore()->fileInfo()->absolutePath();
             QString imgFPath  = fi.canonicalFilePath();
             // if imgFPath is in (or below) the directory of scorePath
             if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
@@ -438,7 +438,7 @@ bool Image::load(const QString& ss)
       // if file path is relative, prepend score path
       QFileInfo fi(path);
       if (fi.isRelative()) {
-            path.prepend(_score->fileInfo()->absolutePath() + "/");
+            path.prepend(score()->masterScore()->fileInfo()->absolutePath() + "/");
             fi.setFile(path);
             }
 

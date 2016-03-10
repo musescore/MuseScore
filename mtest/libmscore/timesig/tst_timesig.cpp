@@ -45,7 +45,7 @@ class TestTimesig : public QObject, public MTest
 
 void TestTimesig::timesig01()
       {
-      Score* score = readScore(DIR + "timesig01.mscx");
+      MasterScore* score = readScore(DIR + "timesig01.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
@@ -66,7 +66,7 @@ void TestTimesig::timesig01()
 
 void TestTimesig::timesig02()
       {
-      Score* score = readScore(DIR + "timesig-02.mscx");
+      MasterScore* score = readScore(DIR + "timesig-02.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure();
       TimeSig* ts = new TimeSig(score);
@@ -93,7 +93,7 @@ void TestTimesig::timesig02()
 
 void TestTimesig::timesig03()
       {
-      Score* score = readScore(DIR + "timesig-03.mscx");
+      MasterScore* score = readScore(DIR + "timesig-03.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
@@ -114,7 +114,7 @@ void TestTimesig::timesig03()
 
 void TestTimesig::timesig04()
       {
-      Score* score = readScore(DIR + "timesig-04.mscx");
+      MasterScore* score = readScore(DIR + "timesig-04.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
@@ -136,7 +136,7 @@ void TestTimesig::timesig04()
 
 void TestTimesig::timesig_78216()
       {
-      Score* score = readScore(DIR + "timesig_78216.mscx");
+      MasterScore* score = readScore(DIR + "timesig_78216.mscx");
       score->doLayout();
 
       Measure* m1 = score->firstMeasure();

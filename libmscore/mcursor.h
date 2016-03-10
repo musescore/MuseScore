@@ -18,6 +18,7 @@
 
 namespace Ms {
 
+class MasterScore;
 class Score;
 class TDuration;
 class Fraction;
@@ -30,7 +31,7 @@ enum class Key;
 //---------------------------------------------------------
 
 class MCursor {
-      Score* _score;
+      MasterScore* _score;
       int _tick;
       int _track;
       Fraction _sig;
@@ -48,8 +49,8 @@ class MCursor {
       TimeSig* addTimeSig(const Fraction&);
 
       void move(int track, int tick);
-      Score* score() const    { return _score; }
-      void setScore(Score* s) { _score = s;    }
+      MasterScore* score() const    { return _score; }
+      void setScore(MasterScore* s) { _score = s;    }
       void setTimeSig(Fraction f) { _sig = f; }
       };
 

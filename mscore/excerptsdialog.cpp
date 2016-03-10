@@ -65,9 +65,7 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
-      score = s;
-      if (score->parentScore())
-            score = score->parentScore();
+      score = s->masterScore();
 
       foreach(Excerpt* e, score->excerpts()) {
             ExcerptItem* ei = new ExcerptItem(e);
@@ -315,7 +313,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       if (e->parts().isEmpty())
             return;
 
-      Score* nscore = new Score(e->oscore());
+      Score* nscore = new Score(static_cast<MasterScore*>(e->oscore()));
       e->setPartScore(nscore);
 
       nscore->setName(e->title()); // needed before AddExcerpt

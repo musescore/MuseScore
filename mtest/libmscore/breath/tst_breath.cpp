@@ -56,7 +56,7 @@ void TestBreath::breath()
       QString writeFile2("breath02-test.mscx");
       QString reference2(DIR  + "breath02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // do
@@ -75,7 +75,7 @@ void TestBreath::breath()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;

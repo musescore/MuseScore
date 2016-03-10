@@ -202,9 +202,7 @@ void ScoreTab::setCurrent(int n)
       stack->setCurrentWidget(vs);
       clearTab2();
       if (v) {
-            Score* score = v->score();
-            if (score->parentScore())
-                  score = score->parentScore();
+            Score* score = v->score()->masterScore();
             QList<Excerpt*>& excerpts = score->excerpts();
             if (!excerpts.isEmpty()) {
                   tab2->blockSignals(true);
@@ -239,7 +237,7 @@ void ScoreTab::updateExcerpts()
       ScoreView* v = view(idx);
       if (!v)
             return;
-      Score* score = v->score()->rootScore();
+      Score* score = v->score()->masterScore();
       clearTab2();
       //delete all scoreviews for parts, especially for the deleted ones
       int n = stack->count() - 1;
@@ -247,7 +245,7 @@ void ScoreTab::updateExcerpts()
             QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
             ScoreView* sview = static_cast<ScoreView*>(vs->widget(0));
 
-            if (sview->score() != score && sview->score()->rootScore() == score) {
+            if (sview->score() != score && sview->score()->masterScore() == score) {
                   stack->takeAt(i);
                   sview->deleteLater();
                   }

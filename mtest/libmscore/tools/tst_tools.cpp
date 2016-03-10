@@ -68,7 +68,7 @@ void TestTools::undoAddLineBreaks()
       QString writeFile2("undoAddLineBreaks02-test.mscx");
       QString reference2(DIR  + "undoAddLineBreaks02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -83,7 +83,7 @@ void TestTools::undoAddLineBreaks()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -101,7 +101,7 @@ void TestTools::undoLockLineBreaks()
       QString writeFile2("undoLockLineBreaks02-test.mscx");
       QString reference2(DIR  + "undoLockLineBreaks02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -116,7 +116,7 @@ void TestTools::undoLockLineBreaks()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -134,7 +134,7 @@ void TestTools::undoRemoveLineBreaks()
       QString writeFile2("undoRemoveLineBreaks02-test.mscx");
       QString reference2(DIR  + "undoRemoveLineBreaks02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -149,7 +149,7 @@ void TestTools::undoRemoveLineBreaks()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -167,7 +167,7 @@ void TestTools::undoExplode()
       QString writeFile2("undoExplode02-test.mscx");
       QString reference2(DIR  + "undoExplode02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -182,7 +182,7 @@ void TestTools::undoExplode()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -196,7 +196,7 @@ void TestTools::undoImplode()
       QString writeFile2("undoImplode02-test.mscx");
       QString reference2(DIR  + "undoImplode02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -211,7 +211,7 @@ void TestTools::undoImplode()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -225,7 +225,7 @@ void TestTools::undoImplodeVoice()
       QString writeFile2("undoImplodeVoice02-test.mscx");
       QString reference2(DIR  + "undoImplodeVoice02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -240,7 +240,7 @@ void TestTools::undoImplodeVoice()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -254,7 +254,7 @@ void TestTools::undoSlashFill()
       QString writeFile2("undoSlashFill02-test.mscx");
       QString reference2(DIR  + "undoSlashFill02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select
@@ -268,7 +268,7 @@ void TestTools::undoSlashFill()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -282,7 +282,7 @@ void TestTools::undoSlashRhythm()
       QString writeFile2("undoSlashRhythm02-test.mscx");
       QString reference2(DIR  + "undoSlashRhythm02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // select all
@@ -297,7 +297,7 @@ void TestTools::undoSlashRhythm()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -311,7 +311,7 @@ void TestTools::undoResequenceAlpha()
       QString writeFile2("undoResequenceAlpha02-test.mscx");
       QString reference2(DIR  + "undoResequenceAlpha02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // do
@@ -321,7 +321,7 @@ void TestTools::undoResequenceAlpha()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -335,7 +335,7 @@ void TestTools::undoResequenceNumeric()
       QString writeFile2("undoResequenceNumeric02-test.mscx");
       QString reference2(DIR  + "undoResequenceNumeric02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // do
@@ -345,7 +345,7 @@ void TestTools::undoResequenceNumeric()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -359,7 +359,7 @@ void TestTools::undoResequenceMeasure()
       QString writeFile2("undoResequenceMeasure02-test.mscx");
       QString reference2(DIR  + "undoResequenceMeasure02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // do
@@ -369,7 +369,7 @@ void TestTools::undoResequenceMeasure()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -383,7 +383,7 @@ void TestTools::undoResequencePart()
       QString writeFile2("undoResequencePart02-test.mscx");
       QString reference2(DIR  + "undoResequencePart02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // do
@@ -393,7 +393,7 @@ void TestTools::undoResequencePart()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -407,7 +407,7 @@ void TestTools::undoChangeVoice()
       QString writeFile2("undoChangeVoice02-test.mscx");
       QString reference2(DIR  + "undoChangeVoice02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
 
       // do
@@ -425,7 +425,7 @@ void TestTools::undoChangeVoice()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;

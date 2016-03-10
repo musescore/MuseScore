@@ -136,12 +136,12 @@ void Score::startCmd()
       // Start collecting low-level undo operations for a
       // user-visible undo action.
 
-      if (undo()->active()) {
+      if (undoStack()->active()) {
             // if (MScore::debugMode)
             qDebug("Score::startCmd(): cmd already active");
             return;
             }
-      undo()->beginMacro();
+      undoStack()->beginMacro();
       undo(new SaveState(this));
       }
 
@@ -153,7 +153,7 @@ void Score::startCmd()
 
 void Score::endCmd(bool rollback)
       {
-      if (!undo()->active()) {
+      if (!undoStack()->active()) {
             qDebug("Score::endCmd(): no cmd active");
             end();
             return;
@@ -161,10 +161,10 @@ void Score::endCmd(bool rollback)
 
       if (rollback) {
             setLayoutAll();
-            undo()->current()->unwind();
+            undoStack()->current()->unwind();
             }
 
-printf("Score::endCmd state %d tick %d %d\n", int(_cmdState.updateMode()), _cmdState.startTick(), _cmdState.endTick());
+// printf("Score::endCmd state %d tick %d %d\n", int(_cmdState.updateMode()), _cmdState.startTick(), _cmdState.endTick());
 
       switch (_cmdState.updateMode()) {
             case UpdateMode::DoNothing:
@@ -192,14 +192,14 @@ printf("Score::endCmd state %d tick %d %d\n", int(_cmdState.updateMode()), _cmdS
             }
 
       if (MScore::debugMode)
-            qDebug("===endCmd() %d", undo()->current()->childCount());
-      bool noUndo = (undo()->current()->childCount() <= 1);       // nothing to undo?
-      undo()->endMacro(noUndo);
+            qDebug("===endCmd() %d", undoStack()->current()->childCount());
+      bool noUndo = undoStack()->current()->childCount() <= 1;       // nothing to undo?
+      undoStack()->endMacro(noUndo);
       end();      // DEBUG
 
       if (dirty()) {
-            rootScore()->_playlistDirty = true;  // TODO: flag individual operations
-            rootScore()->_autosaveDirty = true;
+            masterScore()->_playlistDirty = true;  // TODO: flag individual operations
+            masterScore()->_autosaveDirty = true;
             }
       MuseScoreCore::mscoreCore->endCmd();
       }
@@ -273,9 +273,9 @@ void Score::endUndoRedo()
       updateSelection();
       for (Score* score : scoreList()) {
             if (score->_cmdState.layoutAll()) {
-                  score->setUndoRedo(true);
+                  score->masterScore()->setUndoRedo(true);
                   score->doLayout();
-                  score->setUndoRedo(false);
+                  score->masterScore()->setUndoRedo(false);
                   score->setUpdateAll();
                   }
             const InputState& is = score->inputState();

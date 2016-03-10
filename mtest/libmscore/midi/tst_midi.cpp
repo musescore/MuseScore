@@ -244,7 +244,7 @@ void TestMidi::midi01()
       c.saveScore();
       saveMidi(score, "test1.mid");
 
-      Score* score2 = new Score(mscore->baseStyle());
+      MasterScore* score2 = new MasterScore(mscore->baseStyle());
       score2->setName("test1b");
       QCOMPARE(importMidi(score2, "test1.mid"), Score::FileError::FILE_NO_ERROR);
 
@@ -284,7 +284,7 @@ void TestMidi::midi02()
       c.saveScore();
       saveMidi(score, "test2.mid");
 
-      Score* score2 = new Score(mscore->baseStyle());
+      MasterScore* score2 = new MasterScore(mscore->baseStyle());
       score2->setName("test2b");
 
       QCOMPARE(importMidi(score2, "test2.mid"), Score::FileError::FILE_NO_ERROR);
@@ -326,7 +326,7 @@ void TestMidi::midi03()
       c.saveScore();
       saveMidi(score, "test3.mid");
 
-      Score* score2 = new Score(mscore->baseStyle());
+      MasterScore* score2 = new MasterScore(mscore->baseStyle());
       score2->setName("test3b");
       QCOMPARE(importMidi(score2, "test3.mid"), Score::FileError::FILE_NO_ERROR);
 
@@ -391,7 +391,7 @@ void TestMidi::midiExportTestRef(const QString& file)
       {
       MScore::debugMode = true;
       preferences.midiExportRPNs = true;
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       score->doLayout();
       score->rebuildMidiMapping();

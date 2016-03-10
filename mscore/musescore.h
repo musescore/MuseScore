@@ -48,6 +48,7 @@ class PlayPanel;
 class Mixer;
 class Debugger;
 class MeasureListEditor;
+class MasterScore;
 class Score;
 class Tuplet;
 class PageSettings;
@@ -607,7 +608,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePdf(QList<Score*> cs, const QString& saveName);
 
 
-      Score* readScore(const QString& name);
+      MasterScore* readScore(const QString& name);
 
       bool saveAs(Score*, bool saveCopy = false);
       bool saveSelection(Score*);

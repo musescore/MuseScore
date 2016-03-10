@@ -2705,8 +2705,8 @@ AccidentalType Note::accidentalType() const
 
 void Note::setAccidentalType(AccidentalType type)
       {
-      if (_score)
-      	_score->changeAccidental(this, type);
+      if (score())
+      	score()->changeAccidental(this, type);
       }
 
 //---------------------------------------------------------

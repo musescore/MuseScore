@@ -1043,8 +1043,8 @@ Element* System::prevElement()
 qreal System::minDistance(System* s2) const
       {
       const qreal _spatium            = spatium();
-      const qreal systemFrameDistance = _score->styleP(StyleIdx::systemFrameDistance);
-      const qreal frameSystemDistance = _score->styleP(StyleIdx::frameSystemDistance);
+      const qreal systemFrameDistance = score()->styleP(StyleIdx::systemFrameDistance);
+      const qreal frameSystemDistance = score()->styleP(StyleIdx::frameSystemDistance);
 
       if (vbox() && !s2->vbox())
             return qMax(frameSystemDistance, -s2->minTop());

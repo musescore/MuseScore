@@ -118,7 +118,7 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
       {
       if (msc->currentScore())
             msc->currentScore()->endCmd();
-      Score* score = new Score(MScore::defaultStyle());
+      MasterScore* score = new MasterScore(MScore::defaultStyle());
       score->setName(name);
       score->appendPart(part);
       score->appendMeasures(measures);

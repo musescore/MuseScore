@@ -98,7 +98,7 @@ bool DurationElement::readProperties(XmlReader& e)
                   }
             if (t) {
                   setTuplet(t);
-                  if (!score()->undo()->active())     // HACK, also added in Undo::AddElement()
+                  if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
                         t->add(this);
                   }
             return true;

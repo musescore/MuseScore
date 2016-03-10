@@ -75,7 +75,7 @@ void ScoreView::startEdit()
             editObject = static_cast<TBox*>(editObject)->text();
       curElement  = 0;
       setFocus();
-      if (!_score->undo()->active())
+      if (!_score->undoStack()->active())
             _score->startCmd();
       editObject->startEdit(this, data.startMove);
       curGrip = Grip::NO_GRIP;

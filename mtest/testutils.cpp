@@ -57,7 +57,7 @@ bool debugMode = false;
 QString revision;
 bool enableTestMode;
 
-Score* score;
+MasterScore* score;
 MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[0];
@@ -119,7 +119,7 @@ MTest::MTest()
 //   readScore
 //---------------------------------------------------------
 
-Score* MTest::readScore(const QString& name)
+MasterScore* MTest::readScore(const QString& name)
       {
       QString path = root + "/" + name;
       return readCreatedScore(path);
@@ -129,9 +129,9 @@ Score* MTest::readScore(const QString& name)
 //   readCreatedScore
 //---------------------------------------------------------
 
-Score* MTest::readCreatedScore(const QString& name)
+MasterScore* MTest::readCreatedScore(const QString& name)
       {
-      Score* score = new Score(mscore->baseStyle());
+      MasterScore* score = new MasterScore(mscore->baseStyle());
       QFileInfo fi(name);
       score->setName(fi.completeBaseName());
 //      MScore::testMode = true;
@@ -174,11 +174,11 @@ Score* MTest::readCreatedScore(const QString& name)
 //   saveScore
 //---------------------------------------------------------
 
-bool MTest::saveScore(Score* score, const QString& name) const
+bool MTest::saveScore(MasterScore* score, const QString& name) const
       {
       QFileInfo fi(name);
 //      MScore::testMode = true;
-      return score->saveFile(fi);
+      return score->Score::saveFile(fi);
       }
 
 //---------------------------------------------------------
@@ -212,7 +212,7 @@ qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << c
 //   saveCompareScore
 //---------------------------------------------------------
 
-bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith) const
+bool MTest::saveCompareScore(MasterScore* score, const QString& saveName, const QString& compareWith) const
       {
       if (!saveScore(score, saveName))
             return false;
@@ -223,7 +223,7 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
 //   saveCompareMusicXMLScore
 //---------------------------------------------------------
 
-bool MTest::saveCompareMusicXmlScore(Score* score, const QString& saveName, const QString& compareWith)
+bool MTest::saveCompareMusicXmlScore(MasterScore* score, const QString& saveName, const QString& compareWith)
       {
       saveMusicXml(score, saveName);
       return compareFiles(saveName, compareWith);
@@ -233,7 +233,7 @@ bool MTest::saveCompareMusicXmlScore(Score* score, const QString& saveName, cons
 //   savePdf
 //---------------------------------------------------------
 
-bool MTest::savePdf(Score* cs, const QString& saveName)
+bool MTest::savePdf(MasterScore* cs, const QString& saveName)
       {
       QPrinter printerDev(QPrinter::HighResolution);
       const PageFormat* pf = cs->pageFormat();
@@ -282,7 +282,7 @@ bool MTest::savePdf(Score* cs, const QString& saveName)
 //   saveMusicXml
 //---------------------------------------------------------
 
-bool MTest::saveMusicXml(Score* score, const QString& saveName)
+bool MTest::saveMusicXml(MasterScore* score, const QString& saveName)
       {
       return saveXml(score, saveName);
       }

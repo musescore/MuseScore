@@ -2374,7 +2374,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       // create parts (excerpts)
       //
       foreach(Part* part, score->parts()) {
-            Score* pscore = new Score(score);
+            Score* pscore = new Score(static_cast<MasterScore*>(score));
             pscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
             QList<int> stavesMap;

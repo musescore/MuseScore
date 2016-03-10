@@ -56,7 +56,7 @@ MediaDialog::MediaDialog(QWidget* /*parent*/)
 
 void MediaDialog::setScore(Score* s)
       {
-      score = s;
+      score = s->masterScore();
       Omr* omr = score->omr();
       if (omr) {
             scanFile->setText(omr->path());
