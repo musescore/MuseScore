@@ -93,9 +93,9 @@ void Score::updateSwing()
 //   updateChannel
 //---------------------------------------------------------
 
-void Score::updateChannel()
+void MasterScore::updateChannel()
       {
-      foreach(Staff* s, _staves) {
+      for (Staff* s : staves()) {
             for (int i = 0; i < VOICES; ++i)
                   s->channelList(i)->clear();
             }
@@ -105,7 +105,7 @@ void Score::updateChannel()
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             foreach(const Element* e, s->annotations()) {
                   if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
-                        Staff* staff = _staves[e->staffIdx()];
+                        Staff* staff = Score::staff(e->staffIdx());
                         for (int voice = 0; voice < VOICES; ++voice)
                               staff->channelList(voice)->insert(s->tick(), 0);
                         continue;
@@ -117,7 +117,7 @@ void Score::updateChannel()
                         QString an(st->channelName(voice));
                         if (an.isEmpty())
                               continue;
-                        Staff* staff = _staves[st->staffIdx()];
+                        Staff* staff = Score::staff(st->staffIdx());
                         int a = staff->part()->instrument(s->tick())->channelIdx(an);
                         if (a != -1)
                               staff->channelList(voice)->insert(s->tick(), a);
@@ -126,7 +126,7 @@ void Score::updateChannel()
             }
 
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
-            foreach(Staff* st, _staves) {
+            for (Staff* st : staves()) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
@@ -1584,7 +1584,7 @@ void Score::renderMidi(EventMap* events)
 
       updateRepeatList(MScore::playRepeats);
       _foundPlayPosAfterRepeats = false;
-      updateChannel();
+      masterScore()->updateChannel();
       updateVelo();
 
       // create note & other events

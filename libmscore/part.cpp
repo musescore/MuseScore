@@ -298,7 +298,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return score()->midiChannel(instrument()->channel(0)->channel);
+      return masterScore()->midiChannel(instrument()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -307,7 +307,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return score()->midiPort(instrument()->channel(0)->channel);
+      return masterScore()->midiPort(instrument()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -334,21 +334,21 @@ void Part::setMidiChannel(int ch, int port, int tick)
                   mm.channel = ch;
             if (port != -1)
                   mm.port = port;
-            channel->channel = score()->midiMapping()->size();
-            score()->midiMapping()->append(mm);
+            channel->channel = masterScore()->midiMapping()->size();
+            masterScore()->midiMapping()->append(mm);
             }
       else {
             // Update existing mapping
-            if (channel->channel >= score()->midiMapping()->size()) {
+            if (channel->channel >= masterScore()->midiMapping()->size()) {
                   qDebug()<<"Can't' set midi channel: midiMapping is empty!";
                   return;
                   }
 
             if (ch != -1)
-                  score()->midiMapping(channel->channel)->channel = ch;
+                  masterScore()->midiMapping(channel->channel)->channel = ch;
             if (port != -1)
-                  score()->midiMapping(channel->channel)->port = port;
-            score()->midiMapping(channel->channel)->part = this;
+                  masterScore()->midiMapping(channel->channel)->port = port;
+            masterScore()->midiMapping(channel->channel)->part = this;
             }
       }
 

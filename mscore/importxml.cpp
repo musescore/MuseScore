@@ -247,7 +247,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
  Import MusicXML file \a name into the Score.
  */
 
-Score::FileError importMusicXml(Score* score, const QString& name)
+Score::FileError importMusicXml(MasterScore* score, const QString& name)
       {
       qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
 
@@ -275,7 +275,7 @@ Score::FileError importMusicXml(Score* score, const QString& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Score::FileError importCompressedMusicXml(Score* score, const QString& name)
+Score::FileError importCompressedMusicXml(MasterScore* score, const QString& name)
       {
       qDebug("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
 

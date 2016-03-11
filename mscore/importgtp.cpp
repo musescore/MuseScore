@@ -2242,7 +2242,7 @@ void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
 //   importGTP
 //---------------------------------------------------------
 
-Score::FileError importGTP(Score* score, const QString& name)
+Score::FileError importGTP(MasterScore* score, const QString& name)
       {
       QFile fp(name);
       if(!fp.exists())
@@ -2438,13 +2438,13 @@ Score::FileError importGTP(Score* score, const QString& name)
             // layout score
             //
             pscore->setPlaylistDirty();
-            pscore->rebuildMidiMapping();
-            pscore->updateChannel();
 
             pscore->setLayoutAll();
             pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             pscore->doLayout();
             }
+      score->rebuildMidiMapping();
+      score->updateChannel();
 
 //      album
 //      copyright

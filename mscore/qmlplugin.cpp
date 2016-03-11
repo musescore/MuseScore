@@ -50,10 +50,12 @@ Score* QmlPlugin::curScore() const
 //   scores
 //---------------------------------------------------------
 
+#if 0 // TODO-ws
 QQmlListProperty<Score> QmlPlugin::scores()
       {
       return QQmlListProperty<Score>(this, msc->scores());
       }
+#endif
 
 //---------------------------------------------------------
 //   writeScore

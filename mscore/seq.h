@@ -33,6 +33,7 @@ class QTimer;
 namespace Ms {
 
 class Note;
+class MasterScore;
 class Score;
 class Painter;
 class Measure;
@@ -105,7 +106,7 @@ class Seq : public QObject, public Sequencer {
 
       mutable QMutex mutex;
 
-      Score* cs;
+      MasterScore* cs;
       ScoreView* cv;
       bool running;                       // true if sequencer is available
       Transport state;                    // STOP, PLAY, STARTING=3
@@ -221,7 +222,7 @@ class Seq : public QObject, public Sequencer {
       void setController(int, int, int);
       virtual void sendEvent(const NPlayEvent&);
       void setScoreView(ScoreView*);
-      Score* score() const   { return cs; }
+      MasterScore* score() const   { return cs; }
       ScoreView* viewer() const { return cv; }
       void initInstruments(bool realTime = false);
 

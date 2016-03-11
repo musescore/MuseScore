@@ -5088,7 +5088,7 @@ void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
       ev.velocity = velocity;
 
 qDebug("midiNoteReceived %d chord %d", pitch, chord);
-      score()->enqueueMidiEvent(ev);
+      score()->masterScore()->enqueueMidiEvent(ev);
       if (!score()->undoStack()->active())
             cmd(0);
       }

@@ -237,6 +237,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
             e->setParent(nb);
       }
 
+#if 0
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
@@ -256,6 +257,7 @@ void Score::init()
       _pos[int(POS::RIGHT)]   = 0;
       _fileDivision           = MScore::division;
       }
+#endif
 
 //---------------------------------------------------------
 //   Score
@@ -265,10 +267,21 @@ Score::Score()
    : QObject(0), ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _masterScore = 0;
-      init();
+//      init();
+      Layer l;
+      l.name          = "default";
+      l.tags          = 1;
+      _layer.append(l);
+      _layerTags[0]   = "default";
+
+      _scoreFont = ScoreFont::fontFactory("emmentaler");
+
+      _pos[int(POS::CURRENT)] = 0;
+      _pos[int(POS::LEFT)]    = 0;
+      _pos[int(POS::RIGHT)]   = 0;
+      _fileDivision           = MScore::division;
       _style    = *(MScore::defaultStyle());
       accInfo = tr("No selection");
-      _midiMapping.clear();
       }
 
 Score::Score(MasterScore* parent)
@@ -307,7 +320,6 @@ Score::Score(MasterScore* parent, const MStyle* s)
 
 Score::~Score()
       {
-      _midiPortCount = 0;
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
       // deselectAll();
@@ -772,303 +784,6 @@ void Score::appendPart(Part* p)
       }
 
 //---------------------------------------------------------
-//   getNextFreeMidiMapping
-//---------------------------------------------------------
-
-int Score::getNextFreeMidiMapping(int p, int ch)
-      {
-      if (ch != -1 && p != -1)
-            return p*16+ch;
-
-      else if (ch != -1 && p == -1) {
-            for (int port = 0;; port++) {
-                  if (!occupiedMidiChannels.contains(port*16+ch)) {
-                        occupiedMidiChannels.insert(port*16+ch);
-                        return port*16+ch;
-                        }
-                  }
-            }
-      else if (ch == -1 && p != -1) {
-            for (int channel = 0; channel < 16; channel++) {
-                  if (channel != 9 && !occupiedMidiChannels.contains(p*16+channel)) {
-                        occupiedMidiChannels.insert(p*16+channel);
-                        return p*16+channel;
-                        }
-                  }
-            }
-
-      for (;;searchMidiMappingFrom++) {
-            if (searchMidiMappingFrom % 16 != 9 && !occupiedMidiChannels.contains(searchMidiMappingFrom)) {
-                  occupiedMidiChannels.insert(searchMidiMappingFrom);
-                  return searchMidiMappingFrom;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   getNextFreeDrumMidiMapping
-//---------------------------------------------------------
-
-int Score::getNextFreeDrumMidiMapping()
-      {
-      for (int i = 0;; i++) {
-            if (!occupiedMidiChannels.contains(i*16+9)) {
-                  occupiedMidiChannels.insert(i*16+9);
-                  return i*16+9;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   reorderMidiMapping
-//   Set mappings in order you see in Add->Instruments
-//---------------------------------------------------------
-
-void Score::reorderMidiMapping()
-      {
-      int sequenceNumber = 0;
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  for (Channel* channel : instr->channel()) {
-                        if (!(_midiMapping[sequenceNumber].part == part
-                              && _midiMapping[sequenceNumber].articulation == channel)) {
-                              int shouldBe = channel->channel;
-                              _midiMapping.swap(sequenceNumber, shouldBe);
-                              _midiMapping[sequenceNumber].articulation->channel = sequenceNumber;
-                              channel->channel = sequenceNumber;
-                              _midiMapping[shouldBe].articulation->channel = shouldBe;
-                              }
-                        sequenceNumber++;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   removeDeletedMidiMapping
-//   Remove mappings to deleted instruments
-//---------------------------------------------------------
-
-void Score::removeDeletedMidiMapping()
-      {
-      int removeOffset = 0;
-      int mappingSize = _midiMapping.size();
-      for (int index = 0; index < mappingSize; index++) {
-            Part* p = midiMapping(index)->part;
-            if (!_parts.contains(p)) {
-                  removeOffset++;
-                  continue;
-                  }
-            // Not all channels could exist
-            bool channelExists = false;
-            const InstrumentList* il = p->instruments();
-            for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
-                  const Instrument* instr = i->second;
-                  channelExists = (_midiMapping[index].articulation->channel != -1 && instr->channel().contains(_midiMapping[index].articulation)
-                      && !(_midiMapping[index].port == -1 && _midiMapping[index].channel == -1));
-                  if (channelExists)
-                        break;
-                  }
-            if (!channelExists) {
-                  removeOffset++;
-                  continue;
-                  }
-            // Let's do a left shift by 'removeOffset' items if necessary
-            if (index != 0 && removeOffset != 0) {
-                  _midiMapping[index-removeOffset] = _midiMapping[index];
-                  _midiMapping[index-removeOffset].articulation->channel -= removeOffset;
-                  }
-            }
-      // We have 'removeOffset' deleted instruments, let's remove their mappings
-      for (int index = 0; index < removeOffset; index++)
-            _midiMapping.removeLast();
-      }
-
-//---------------------------------------------------------
-//   updateMidiMapping
-//   Add mappings to new instruments and repair existing ones
-//---------------------------------------------------------
-
-int Score::updateMidiMapping()
-      {
-      int maxport = 0;
-      occupiedMidiChannels.clear();
-      searchMidiMappingFrom = 0;
-      occupiedMidiChannels.reserve(_midiMapping.size()); // Bringing down the complexity of insertion to amortized O(1)
-
-      for(MidiMapping mm :_midiMapping) {
-            if (mm.port == -1 || mm.channel == -1)
-                  continue;
-            occupiedMidiChannels.insert((int)(mm.port)*16+(int)mm.channel);
-            if (maxport < mm.port)
-                  maxport = mm.port;
-            }
-
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  bool drum = instr->useDrumset();
-                  for (Channel* channel : instr->channel()) {
-                        bool channelExists = false;
-                        for (MidiMapping mapping: _midiMapping) {
-                              if (channel == mapping.articulation && channel->channel != -1) {
-                                    channelExists = true;
-                                    break;
-                                    }
-                              }
-                        // Channel could already exist, but have unassigned port or channel. Repair and continue
-                        if (channelExists) {
-                              if (_midiMapping[channel->channel].port == -1) {
-                                    int nm = getNextFreeMidiMapping(-1, _midiMapping[channel->channel].channel);
-                                    _midiMapping[channel->channel].port = nm / 16;
-                                    }
-                              else if (_midiMapping[channel->channel].channel == -1) {
-                                    if (drum) {
-                                          _midiMapping[channel->channel].port = getNextFreeDrumMidiMapping() / 16;
-                                          _midiMapping[channel->channel].channel = 9;
-                                          continue;
-                                          }
-                                    int nm = getNextFreeMidiMapping(_midiMapping[channel->channel].port);
-                                    _midiMapping[channel->channel].port    = nm / 16;
-                                    _midiMapping[channel->channel].channel = nm % 16;
-                                    }
-                              continue;
-                              }
-
-                        MidiMapping mm;
-                        if (drum) {
-                              mm.port = getNextFreeDrumMidiMapping() / 16;
-                              mm.channel = 9;
-                              }
-                        else {
-                              int nm = getNextFreeMidiMapping();
-                              mm.port    = nm / 16;
-                              mm.channel = nm % 16;
-                              }
-
-                        if (mm.port > maxport)
-                              maxport = mm.port;
-
-                        mm.part         = part;
-                        mm.articulation = channel;
-
-                        _midiMapping.append(mm);
-                        channel->channel = _midiMapping.size()-1;
-                        }
-                  }
-            }
-      return maxport;
-      }
-
-//---------------------------------------------------------
-//   rebuildMidiMapping
-//---------------------------------------------------------
-
-void Score::rebuildMidiMapping()
-      {
-      removeDeletedMidiMapping();
-      int maxport = updateMidiMapping();
-      reorderMidiMapping();
-      setMidiPortCount(maxport);
-      }
-
-//---------------------------------------------------------
-//   checkMidiMapping
-//   midi mapping is simple if all ports and channels
-//   don't decrease and don't have 'holes' except drum tracks
-//---------------------------------------------------------
-
-void Score::checkMidiMapping()
-      {
-      isSimpleMidiMaping = true;
-      rebuildMidiMapping();
-
-      QList<bool> drum;
-      drum.reserve(_midiMapping.size());
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  for (int j = 0; j < instr->channel().size(); ++j)
-                        drum.append(instr->useDrumset());
-                  }
-            }
-      int lastChannel  = -1; // port*16+channel
-      int lastDrumPort = -1;
-      int index = 0;
-      for (MidiMapping m : _midiMapping) {
-            if (index >= drum.size())
-                  break;
-            if (drum[index]) {
-                  lastDrumPort++;
-                  if (m.port != lastDrumPort) {
-                        isSimpleMidiMaping = false;
-                        return;
-                        }
-                  }
-            else {
-                  lastChannel++;
-                  if (lastChannel % 16 == 9)
-                        lastChannel++;
-                  int p = lastChannel / 16;
-                  int c = lastChannel % 16;
-                  if (m.port != p || m.channel != c) {
-                        isSimpleMidiMaping = false;
-                        return;
-                        }
-                  }
-            index++;
-            }
-      }
-
-//---------------------------------------------------------
-//   midiPortCount
-//---------------------------------------------------------
-
-int Score::midiPortCount() const
-      {
-      const Score* root = masterScore();
-      if (this == root)
-            return _midiPortCount;
-      else
-            return root->midiPortCount();
-      }
-
-//---------------------------------------------------------
-//   setMidiPortCount
-//---------------------------------------------------------
-
-void Score::setMidiPortCount(int maxport)
-      {
-      Score* root = masterScore();
-      if (this == root)
-            _midiPortCount = maxport;
-      else
-            root->setMidiPortCount(maxport);
-      }
-
-//---------------------------------------------------------
-//   midiPort
-//---------------------------------------------------------
-
-int Score::midiPort(int idx) const
-      {
-      return _midiMapping[idx].port;
-      }
-
-//---------------------------------------------------------
-//   midiChannel
-//---------------------------------------------------------
-
-int Score::midiChannel(int idx) const
-      {
-      return _midiMapping[idx].channel;
-      }
-
-//---------------------------------------------------------
 //   searchPage
 //    p is in canvas coordinates
 //---------------------------------------------------------
@@ -1516,7 +1231,7 @@ void Score::addElement(Element* element)
                   Interval oldV = ic->part()->instrument(tickStart)->transpose();
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
-                  rebuildMidiMapping();
+                  masterScore()->rebuildMidiMapping();
                   _cmdState._instrumentsChanged = true;
                   }
                   break;
@@ -1661,7 +1376,7 @@ void Score::removeElement(Element* element)
                   Interval oldV = ic->part()->instrument(tickStart)->transpose();
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
-                  rebuildMidiMapping();
+                  masterScore()->rebuildMidiMapping();
                   _cmdState._instrumentsChanged = true;
                   }
                   break;
@@ -1944,17 +1659,17 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void Score::addExcerpt(Score* score)
+void MasterScore::addExcerpt(Score* score)
       {
       Excerpt* ex = new Excerpt(this);
       ex->setPartScore(score);
       excerpts().append(ex);
-      ex->setTitle(masterScore()->name());
+      ex->setTitle(score->name());
       for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
                   continue;
-            foreach(Staff* ps, ls->staves()) {
+            for (Staff* ps : ls->staves()) {
                   if (ps->score() == this) {
                         ex->parts().append(ps->part());
                         break;
@@ -2207,7 +1922,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
       undoChangeKeySig(ns, 0, s->keySigEvent(0));
 
-      rebuildMidiMapping();
+      masterScore()->rebuildMidiMapping();
       _cmdState._instrumentsChanged = true;
       doLayout();
 
@@ -3429,7 +3144,7 @@ void Score::appendPart(const QString& name)
       part->staves()->front()->setBarLineSpan(part->nstaves());
       undoInsertPart(part, n);
       fixTicks();
-      rebuildMidiMapping();
+      masterScore()->rebuildMidiMapping();
       }
 
 //---------------------------------------------------------
@@ -3655,7 +3370,7 @@ ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
 //   called once at opening file, adds soloMute marks
 //---------------------------------------------------------
 
-void Score::setSoloMute()
+void MasterScore::setSoloMute()
       {
       for (int i = 0; i < _midiMapping.size(); i++) {
             Channel* b = _midiMapping[i].articulation;
@@ -4353,7 +4068,7 @@ MasterScore::~MasterScore()
 bool MasterScore::isSavable() const
       {
       // TODO: check if file can be created if it does not exist
-      return info.isWritable() || !info.exists();
+      return fileInfo()->isWritable() || !fileInfo()->exists();
       }
 
 //---------------------------------------------------------
@@ -4370,7 +4085,7 @@ void MasterScore::setTempomap(TempoMap* tm)
 //   setName
 //---------------------------------------------------------
 
-void MasterScore::setName(const QString& ss)
+void Score::setName(const QString& ss)
       {
       QString s(ss);
       s.replace('/', '_');    // for sanity

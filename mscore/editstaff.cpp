@@ -336,7 +336,7 @@ void EditStaff::apply()
             }
 
       score->update();
-      score->updateChannel();
+      score->masterScore()->updateChannel();
       }
 
 //---------------------------------------------------------

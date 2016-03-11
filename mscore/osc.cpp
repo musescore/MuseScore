@@ -266,12 +266,12 @@ void MuseScore::oscVolume(int val)
 
 void MuseScore::oscVolChannel(double val)
       {
-      if(!cs)
+      if (!cs)
             return;
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(4).toInt() - 1;
-      QList<MidiMapping>* mms = cs->midiMapping();
+      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
       if( i >= 0 && i < mms->size()) {
             MidiMapping mm = mms->at(i);
             Channel* channel = mm.articulation;
@@ -289,13 +289,13 @@ void MuseScore::oscVolChannel(double val)
 
 void MuseScore::oscPanChannel(double val)
       {
-      if(!cs)
+      if (!cs)
             return;
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(4).toInt() - 1;
-      QList<MidiMapping>* mms = cs->midiMapping();
-      if( i >= 0 && i < mms->size()) {
+      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
+      if (i >= 0 && i < mms->size()) {
             MidiMapping mm = mms->at(i);
             Channel* channel = mm.articulation;
             int iv = lrint((val + 1) * 64);
@@ -312,13 +312,13 @@ void MuseScore::oscPanChannel(double val)
 
 void MuseScore::oscMuteChannel(double val)
       {
-      if(!cs)
+      if (!cs)
             return;
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(5).toInt() - 1;
-      QList<MidiMapping>* mms = cs->midiMapping();
-      if( i >= 0 && i < mms->size()) {
+      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
+      if (i >= 0 && i < mms->size()) {
             MidiMapping mm = mms->at(i);
             Channel* channel = mm.articulation;
             channel->mute = (val==0.0f ? false : true);

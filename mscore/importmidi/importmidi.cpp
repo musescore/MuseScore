@@ -1168,7 +1168,7 @@ void loadMidiData(MidiFile &mf)
       mf.setMidiType(mt);
       }
 
-Score::FileError importMidi(Score *score, const QString &name)
+Score::FileError importMidi(MasterScore *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FileError::FILE_NOT_FOUND;

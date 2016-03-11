@@ -117,7 +117,7 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
 
       xml.stag("Score");
-      switch(_layoutMode) {
+      switch (_layoutMode) {
             case LayoutMode::PAGE:
             case LayoutMode::FLOAT:
             case LayoutMode::SYSTEM:
@@ -131,7 +131,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       if (_omr && xml.writeOmr)
             _omr->write(xml);
 #endif
-      if (masterScore()->showOmr() && xml.writeOmr)
+      if (isMaster() && masterScore()->showOmr() && xml.writeOmr)
             xml.tag("showOmr", masterScore()->showOmr());
       if (_audio && xml.writeOmr) {
             xml.tag("playMode", int(_playMode));
@@ -161,10 +161,10 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       _style.save(xml, true);      // save only differences to buildin style
 
-      xml.tag("showInvisible", _showInvisible);
+      xml.tag("showInvisible",   _showInvisible);
       xml.tag("showUnprintable", _showUnprintable);
-      xml.tag("showFrames", _showFrames);
-      xml.tag("showMargins", _showPageborders);
+      xml.tag("showFrames",      _showFrames);
+      xml.tag("showMargins",     _showPageborders);
 
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
@@ -210,8 +210,8 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
 
       // Let's decide: write midi mapping to a file or not
-      checkMidiMapping();
-      foreach(const Part* part, _parts) {
+      masterScore()->checkMidiMapping();
+      for (const Part* part : _parts) {
             if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves())))
                   part->write(xml);
             }
@@ -231,13 +231,15 @@ void Score::write(Xml& xml, bool selectionOnly)
                   }
             }
       xml.curTrack = -1;
-      if (!selectionOnly) {
-            for (const Excerpt* excerpt : excerpts()) {
-                  if (excerpt->partScore() != this)
-                        excerpt->partScore()->write(xml, false);       // recursion
+      if (isMaster()) {
+            if (!selectionOnly) {
+                  for (const Excerpt* excerpt : excerpts()) {
+                        if (excerpt->partScore() != this)
+                              excerpt->partScore()->write(xml, false);       // recursion
+                        }
                   }
             }
-      if (!isMaster())
+      else
             xml.tag("name", masterScore()->name());
       xml.etag();
 
@@ -1077,9 +1079,15 @@ bool Score::read(XmlReader& e)
                   if (MScore::noExcerpts)
                         e.skipCurrentElement();
                   else {
-                        Excerpt* ex = new Excerpt(this);
-                        ex->read(e);
-                        excerpts().append(ex);
+                        if (isMaster()) {
+                              Excerpt* ex = new Excerpt(static_cast<MasterScore*>(this));
+                              ex->read(e);
+                              excerpts().append(ex);
+                              }
+                        else {
+                              qDebug("Score::read(): part cannot have parts");
+                              e.skipCurrentElement();
+                              }
                         }
                   }
             else if (tag == "Beam") {
@@ -1092,9 +1100,10 @@ bool Score::read(XmlReader& e)
                    if (MScore::noExcerpts)
                         e.skipCurrentElement();
                   else {
-                        Score* s = new Score(static_cast<MasterScore*>(this), MScore::baseStyle());
+                        MasterScore* m = masterScore();
+                        Score* s = new Score(m, MScore::baseStyle());
                         s->read(e);
-                        addExcerpt(s);
+                        m->addExcerpt(s);
                         }
                   }
             else if (tag == "PageList") {
@@ -1204,8 +1213,8 @@ bool Score::read(XmlReader& e)
             masterScore()->setShowOmr(false);
 
       fixTicks();
-      rebuildMidiMapping();
-      updateChannel();
+      masterScore()->rebuildMidiMapping();
+      masterScore()->updateChannel();
       createPlayEvents();
       setExcerptsChanged(false);
       return true;

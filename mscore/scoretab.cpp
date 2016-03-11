@@ -37,7 +37,7 @@ namespace Ms {
 //   ScoreTab
 //---------------------------------------------------------
 
-ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
+ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
    : QWidget(parent)
       {
       mainWindow = static_cast<MuseScore*>(parent);
@@ -309,7 +309,7 @@ void ScoreTab::setExcerpt(int n)
 
 void ScoreTab::insertTab(Score* s)
       {
-      int idx = scoreList->indexOf(s);
+      int idx = scoreList->indexOf(s->masterScore());
       tab->blockSignals(true);
       tab->insertTab(idx, s->name().replace("&","&&"));
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
