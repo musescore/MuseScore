@@ -1861,8 +1861,6 @@ ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc1, int _tpc2)
 
 void ChangePitch::flip()
       {
-      printf("ChangePitch::flip: layout mode %d\n", int(note->score()->updateMode()));
-
       int f_pitch = note->pitch();
       int f_tpc1  = note->tpc1();
       int f_tpc2  = note->tpc2();
@@ -2475,7 +2473,7 @@ void ChangeStaff::flip()
                   }
             }
       staff->score()->setLayoutAll();
-      staff->score()->rebuildMidiMapping();
+      staff->masterScore()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty();
 
       score->scanElements(0, notifyTimeSigs);
@@ -2521,7 +2519,7 @@ void ChangePart::flip()
       part->setPartName(partName);
 
       Score* score = part->score();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->setInstrumentsChanged(true);
       score->setPlaylistDirty();
 
@@ -3131,7 +3129,7 @@ void ChangeInstrument::flip()
             tickEnd = i->first;
       is->score()->transpositionChanged(is->staff()->part(), oi->transpose(), tickStart, tickEnd);
 
-      is->score()->rebuildMidiMapping();
+      is->masterScore()->rebuildMidiMapping();
       is->score()->setInstrumentsChanged(true);
       is->score()->setLayoutAll();
       instrument = oi;

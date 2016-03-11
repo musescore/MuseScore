@@ -85,25 +85,10 @@
 #include "libmscore/mscore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
-extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
 
 namespace Ms {
 
-extern Score::FileError importMidi(Score*, const QString& name);
-extern Score::FileError importGTP(Score*, const QString& name);
-extern Score::FileError importBww(Score*, const QString& path);
-extern Score::FileError importMusicXml(Score*, const QString&);
-extern Score::FileError importCompressedMusicXml(Score*, const QString&);
-extern Score::FileError importMuseData(Score*, const QString& name);
-extern Score::FileError importLilypond(Score*, const QString& name);
-extern Score::FileError importBB(Score*, const QString& name);
-extern Score::FileError importCapella(Score*, const QString& name);
-extern Score::FileError importCapXml(Score*, const QString& name);
-
-extern Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError);
-
 extern void importSoundfont(QString name);
-
 extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
 
@@ -311,7 +296,7 @@ Score* MuseScore::openScore(const QString& fn)
                   return 0;
             }
 
-      Score* score = readScore(fn);
+      MasterScore* score = readScore(fn);
       if (score) {
             setCurrentScoreView(appendScore(score));
             writeSessionFile(false);
@@ -429,7 +414,7 @@ bool MuseScore::saveFile(Score* score)
             }
       score->setCreated(false);
       setWindowTitle("MuseScore: " + score->name());
-      int idx = scoreList.indexOf(score);
+      int idx = scoreList.indexOf(score->masterScore());
       tab1->setTabText(idx, score->name());
       if (tab2)
             tab2->setTabText(idx, score->name());
@@ -2032,11 +2017,11 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             return Score::FileError::FILE_IGNORE_ERROR;
             }
       else {
-            // typedef Score::FileError (*ImportFunction)(Score*, const QString&);
+            // typedef Score::FileError (*ImportFunction)(MasterScore*, const QString&);
             struct ImportDef {
                   const char* extension;
                   // ImportFunction importF;
-                  Score::FileError (*importF)(Score*, const QString&);
+                  Score::FileError (*importF)(MasterScore*, const QString&);
                   };
             static const ImportDef imports[] = {
                   { "xml",  &importMusicXml           },
@@ -2093,14 +2078,14 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             score->setCreated(true); // force save as for imported files
             }
 
+      score->rebuildMidiMapping();
+      score->setSoloMute();
       for (Score* s : score->scoreList()) {
             s->setPlaylistDirty();
-            s->rebuildMidiMapping();
-            s->updateChannel();
-            s->setSoloMute();
             s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             s->setLayoutAll();
             }
+      score->updateChannel();
       score->setSaved(false);
       score->update();
       if (!ignoreVersionError && !MScore::noGui)

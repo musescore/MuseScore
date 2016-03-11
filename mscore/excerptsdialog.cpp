@@ -58,7 +58,7 @@ PartItem::PartItem(Part* p, QListWidget* parent)
 //   ExcerptsDialog
 //---------------------------------------------------------
 
-ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
+ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
@@ -67,11 +67,11 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
 
       score = s->masterScore();
 
-      foreach(Excerpt* e, score->excerpts()) {
+      for (Excerpt* e : score->excerpts()) {
             ExcerptItem* ei = new ExcerptItem(e);
             excerptList->addItem(ei);
             }
-      foreach(Part* p, score->parts()) {
+      for (Part* p : score->parts()) {
             PartItem* item = new PartItem(p);
             partList->addItem(item);
             }
@@ -109,7 +109,7 @@ void MuseScore::startExcerptsDialog()
       {
       if (cs == 0)
             return;
-      ExcerptsDialog ed(cs, 0);
+      ExcerptsDialog ed(cs->masterScore(), 0);
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("PartEditor");

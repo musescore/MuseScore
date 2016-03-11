@@ -183,7 +183,7 @@ void MuseScore::editInstrList()
             instrList->done(0);
             return;
             }
-      Score* masterScore = cs->masterScore();
+      MasterScore* masterScore = cs->masterScore();
       instrList->genPartList(masterScore);
       masterScore->startCmd();
       masterScore->deselectAll();

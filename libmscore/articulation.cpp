@@ -284,12 +284,6 @@ void Articulation::write(Xml& xml) const
       xml.stag("Articulation");
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
-      printf("Articulation write %d %d\n",
-            int(propertyDefault(P_ID::DIRECTION).value<Direction>()),
-            int(getProperty(P_ID::DIRECTION).value<Direction>())
-            );
-
-
       writeProperty(xml, P_ID::DIRECTION);
       xml.tag("subtype", subtypeName());
       writeProperty(xml, P_ID::TIME_STRETCH);

@@ -36,7 +36,9 @@ const char* tests[] = {
       "libmscore/beam/tst_beam",
 //      "libmscore/spanners/tst_spanners",
 //      "libmscore/clef_courtesy/tst_clef_courtesy",
+
 //      "libmscore/midimapping/tst_midimapping",      // probably ok
+
       "libmscore/layout/tst_benchmark",
 //      "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/instrumentchange/tst_instrumentchange",

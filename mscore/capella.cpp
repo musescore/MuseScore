@@ -2642,7 +2642,7 @@ void Capella::read(QFile* fp)
 //   importCapella
 //---------------------------------------------------------
 
-Score::FileError importCapella(Score* score, const QString& name)
+Score::FileError importCapella(MasterScore* score, const QString& name)
       {
       QFile fp(name);
       if(!fp.exists())

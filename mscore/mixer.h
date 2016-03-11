@@ -69,7 +69,7 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
 class Mixer : public QScrollArea
       {
       Q_OBJECT
-      Score*       cs;
+      MasterScore* cs;
       QScrollArea* sa;
       QVBoxLayout* vb;
       EnablePlayForWidget* enablePlay;
@@ -91,7 +91,7 @@ class Mixer : public QScrollArea
 
    public:
       Mixer(QWidget* parent);
-      void updateAll(Score*);
+      void updateAll(MasterScore*);
       PartEdit* partEdit(int index);
       void writeSettings();
       };

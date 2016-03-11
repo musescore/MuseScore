@@ -15,6 +15,7 @@
 
 namespace Ms {
 
+class MasterScore;
 class Score;
 
 //---------------------------------------------------------
@@ -25,7 +26,7 @@ class MuseScoreCore
       {
    protected:
       Score* cs  { 0 };              // current score
-      QList<Score*> scoreList;
+      QList<MasterScore*> scoreList;
 
    public:
       static MuseScoreCore* mscoreCore;
@@ -38,10 +39,10 @@ class MuseScoreCore
       virtual void cmd(QAction* /*a*/) {}
       virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
-      virtual int appendScore(Score* s)               { scoreList.append(s); return 0;  }
+      virtual int appendScore(MasterScore* s)               { scoreList.append(s); return 0;  }
       virtual void endCmd() {}
       virtual Score* openScore(const QString& /*fn*/) { return 0;}
-      QList<Score*>& scores()                         { return scoreList; }
+      QList<MasterScore*>& scores()                         { return scoreList; }
       };
 
 

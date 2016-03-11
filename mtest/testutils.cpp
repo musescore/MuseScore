@@ -38,7 +38,7 @@ inline void initMyResources() {
       Q_INIT_RESOURCE(musescorefonts_Free);
 }
 
-extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
+extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
 namespace Ms {
 
@@ -46,12 +46,12 @@ namespace Ms {
 extern Score::FileError importPdf(Score*, const QString&);
 #endif
 
-extern Score::FileError importBB(Score*, const QString&);
-extern Score::FileError importCapella(Score*, const QString&);
-extern Score::FileError importCapXml(Score*, const QString&);
-extern Score::FileError importCompressedMusicXml(Score*, const QString&);
-extern Score::FileError importMusicXml(Score*, const QString&);
-extern Score::FileError importGTP(Score*, const QString&);
+extern Score::FileError importBB(MasterScore*, const QString&);
+extern Score::FileError importCapella(MasterScore*, const QString&);
+extern Score::FileError importCapXml(MasterScore*, const QString&);
+extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
+extern Score::FileError importMusicXml(MasterScore*, const QString&);
+extern Score::FileError importGTP(MasterScore*, const QString&);
 extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
 QString revision;

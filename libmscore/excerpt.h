@@ -15,6 +15,7 @@
 
 namespace Ms {
 
+class MasterScore;
 class Score;
 class Part;
 class Xml;
@@ -32,17 +33,18 @@ class Excerpt : public QObject {
       Q_PROPERTY(Ms::Score*  partScore  READ partScore)
       Q_PROPERTY(QString     title      READ title)
 
-      Score* _oscore;               // main score
-      Score* _partScore  { 0 };
+      MasterScore* _oscore;
+      Score* _partScore           { 0 };
       QString _title;
       QList<Part*> _parts;
 
    public:
-      Excerpt(Score* s = 0)                { _oscore = s;       }
+      Excerpt(MasterScore* s = 0)          { _oscore = s;       }
 
       QList<Part*>& parts()                { return _parts;     }
       void setParts(const QList<Part*>& p) { _parts = p;        }
-      Score* oscore() const                { return _oscore;    }
+      MasterScore* oscore() const          { return _oscore;    }
+
       void setPartScore(Score* s)          { _partScore = s;    }
       Score* partScore() const             { return _partScore; }
 
@@ -53,8 +55,8 @@ class Excerpt : public QObject {
 
       QString title() const           { return _title; }
       void setTitle(const QString& s) { _title = s;    }
-      
-      static QList<Excerpt*> createAllExcerpt(Score* score);
+
+      static QList<Excerpt*> createAllExcerpt(MasterScore* score);
       static QString createName(const QString& partName, QList<Excerpt*>);
       };
 

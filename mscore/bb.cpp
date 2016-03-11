@@ -374,7 +374,7 @@ bool BBFile::read(const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError importBB(Score* score, const QString& name)
+Score::FileError importBB(MasterScore* score, const QString& name)
       {
       BBFile bb;
       if(!QFileInfo(name).exists())

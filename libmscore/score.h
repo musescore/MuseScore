@@ -326,7 +326,7 @@ class Score : public QObject, public ScoreElement {
       Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
       Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
       Q_PROPERTY(int                            lyricCount        READ lyricCount)
-//TODO      Q_PROPERTY(QString                        name              READ name           WRITE setName)
+      Q_PROPERTY(QString                        name              READ name           WRITE setName)
       Q_PROPERTY(int                            nmeasures         READ nmeasures)
       Q_PROPERTY(int                            npages            READ npages)
       Q_PROPERTY(int                            nstaves           READ nstaves)
@@ -360,7 +360,6 @@ class Score : public QObject, public ScoreElement {
 
       QString _mscoreVersion;
       int _mscoreRevision;
-      QString _name;
 
       QString _layerTags[32];
       QString _layerTagComments[32];
@@ -381,13 +380,6 @@ class Score : public QObject, public ScoreElement {
       QList<System*> _systems;      // measures are akkumulated to systems
 
 
-      QQueue<MidiInputEvent> midiInputQueue;
-      QList<MidiMapping> _midiMapping;
-      bool isSimpleMidiMaping; // midi mapping is simple if all ports and channels
-                               // don't decrease and don't have gaps
-      QSet<int> occupiedMidiChannels;     // each entry is port*16+channel, port range: 0-inf, channel: 0-15
-      unsigned int searchMidiMappingFrom; // makes getting next free MIDI mapping faster
-
 
       InputState _is;
       MStyle _style;
@@ -398,19 +390,19 @@ class Score : public QObject, public ScoreElement {
 
       CmdState _cmdState;     // modified during cmd processing
 
-      bool _showInvisible { true};
-      bool _showUnprintable { true};
-      bool _showFrames      { true};
-      bool _showPageborders { false };
-      bool _showInstrumentNames { true};
-      bool _showVBox { true};
-
-      bool _printing { false};   ///< True if we are drawing to a printer
-      bool _playlistDirty { true};
-      bool _autosaveDirty { true};
-      bool _saved { false};      ///< True if project was already saved; only on first
-                        ///< save a backup file will be created, subsequent
-                        ///< saves will not overwrite the backup file.
+      bool _showInvisible       { true  };
+      bool _showUnprintable     { true  };
+      bool _showFrames          { true  };
+      bool _showPageborders     { false };
+      bool _showInstrumentNames { true  };
+      bool _showVBox            { true  };
+      bool _printing            { false };      ///< True if we are drawing to a printer
+      bool _playlistDirty       { true  };
+      bool _autosaveDirty       { true  };
+      bool _saved               { false };      ///< True if project was already saved; only on first
+                                                ///< save a backup file will be created, subsequent
+                                                ///< saves will not overwrite the backup file.
+      bool _defaultsRead        { false };      ///< defaults were read at MusicXML import, allow export of defaults in convertermode
 
 
       Qt::KeyboardModifiers keyState { 0 };
@@ -428,16 +420,14 @@ class Score : public QObject, public ScoreElement {
 
       QMap<QString, QString> _metaTags;
 
-      bool _defaultsRead { false};            ///< defaults were read at MusicXML import, allow export of defaults in convertermode
 
       Selection _selection;
       SelectionFilter _selectionFilter;
       Audio* _audio { 0 };
       PlayMode _playMode { PlayMode::SYNTHESIZER };
 
-      qreal _noteHeadWidth { 0.0 };
-      QString accInfo;             ///< information used by the screen-reader
-      int _midiPortCount { 0 };          // A count of JACK/ALSA midi out ports. Stored in a root score
+      qreal _noteHeadWidth { 0.0 };       // cached value
+      QString accInfo;                    ///< information used by the screen-reader
 
       //------------------
 
@@ -460,16 +450,12 @@ class Score : public QObject, public ScoreElement {
       void cmdInsertClef(ClefType);
       void cmdAddGrace(NoteType, int);
       void cmdExchangeVoice(int, int);
-
       void removeChordRest(ChordRest* cr, bool clearSegment);
       void cmdMoveRest(Rest*, Direction);
       void cmdMoveLyrics(Lyrics*, Direction);
-
       void cmdHalfDuration();
       void cmdDoubleDuration();
-
       void cmdAddBracket();
-
       void resetUserStretch();
 
       Page* addPage();
@@ -496,7 +482,7 @@ class Score : public QObject, public ScoreElement {
       void addAudioTrack();
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick, const Interval&);
-      void init();
+//      void init();
       qreal cautionaryWidth(Measure* m, bool& hasCourtesy);
 
       void selectSingle(Element* e, int staffIdx);
@@ -505,15 +491,13 @@ class Score : public QObject, public ScoreElement {
 
       QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
 
-      void reorderMidiMapping();
-      void removeDeletedMidiMapping();
-      int updateMidiMapping();
 
       void getNextMeasure(LayoutContext&);      // get next measure for layout
       bool collectPage(LayoutContext&);
       System* collectSystem(LayoutContext&);
 
    protected:
+      QFileInfo info;
       int _fileDivision; ///< division of current loading *.msc file
       LayoutMode _layoutMode { LayoutMode::PAGE };
       SynthesizerState _synthesizerState;
@@ -820,21 +804,8 @@ class Score : public QObject, public ScoreElement {
 
       void addLyrics(int tick, int staffIdx, const QString&);
 
-      int midiPort(int idx) const;
-      int midiChannel(int idx) const;
-      QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
-      MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
-      void rebuildMidiMapping();
-      void checkMidiMapping();
-      bool exportMidiMapping() { return !isSimpleMidiMaping; }
-      int getNextFreeMidiMapping(int p = -1, int ch = -1);
-      int getNextFreeDrumMidiMapping();
-      void updateChannel();
       void updateSwing();
       void createPlayEvents();
-
-      int midiPortCount() const;
-      void setMidiPortCount(int);
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 
@@ -928,7 +899,6 @@ class Score : public QObject, public ScoreElement {
       void cmdAddInterval(int, const std::vector<Note*>&);
       void cmdCreateTuplet(ChordRest*, Tuplet*);
       void removeAudio();
-      void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue.enqueue(ev); }
 
       void doLayout();
       void doLayoutRange(int, int);
@@ -952,7 +922,6 @@ class Score : public QObject, public ScoreElement {
       Volta* searchVolta(int tick) const;
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
-      void addExcerpt(Score*);
       void removeExcerpt(Score*);
       void createRevision();
       void writeSegments(Xml& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
@@ -1000,7 +969,6 @@ class Score : public QObject, public ScoreElement {
       void setInstrumentsChanged(bool val)  { _cmdState._instrumentsChanged = val; }
       bool selectionChanged() const         { return _cmdState._selectionChanged; }
       void setSelectionChanged(bool val)    { _cmdState._selectionChanged = val;  }
-      void setSoloMute();
 
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm)     { _layoutMode = lm;   }
@@ -1112,13 +1080,17 @@ class Score : public QObject, public ScoreElement {
 
       void switchToPageMode();
 
+      QFileInfo* fileInfo()               { return &info; }
+      const QFileInfo* fileInfo() const   { return &info; }
+      QString name() const                { return info.completeBaseName(); }
+      void setName(const QString& s);
+
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       virtual inline bool undoRedo() const;
-      virtual QString name() const           { return _name; }
-      virtual void setName(const QString& s) { _name = s; }
+      virtual inline QQueue<MidiInputEvent> midiInputQueue();
 
       friend class ChangeSynthesizerState;
       friend class Chord;
@@ -1141,11 +1113,20 @@ class MasterScore : public Score {
       Omr* _omr;
       bool _showOmr;
 
-      bool _undoRedo;         ///< true if in processing a undo/redo
-      QFileInfo info;
+      bool _undoRedo;               ///< true if in processing a undo/redo
+      int _midiPortCount { 0 };     // A count of JACK/ALSA midi out ports
+      QQueue<MidiInputEvent> _midiInputQueue;
+      QList<MidiMapping> _midiMapping;
+      bool isSimpleMidiMaping; // midi mapping is simple if all ports and channels
+                               // don't decrease and don't have gaps
+      QSet<int> occupiedMidiChannels;     // each entry is port*16+channel, port range: 0-inf, channel: 0-15
+      unsigned int searchMidiMappingFrom; // makes getting next free MIDI mapping faster
 
       QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QQmlListProperty<Ms::Excerpt>(this, _excerpts); }
       void parseVersion(const QString&);
+      void reorderMidiMapping();
+      void removeDeletedMidiMapping();
+      int updateMidiMapping();
 
    public:
       MasterScore();
@@ -1164,13 +1145,12 @@ class MasterScore : public Score {
       virtual QList<Excerpt*>& excerpts() override             { return _excerpts;   }
       virtual const QList<Excerpt*>& excerpts() const override { return _excerpts;   }
       virtual QMap<int, LinkedElements*>& links() override     { return _elinks;     }
+      virtual QQueue<MidiInputEvent> midiInputQueue() override { return _midiInputQueue; }
 
       Revisions* revisions()                 { return _revisions; }
-      QFileInfo* fileInfo()                  { return &info; }
-      virtual QString name() const override  { return info.completeBaseName(); }
+
       bool isSavable() const;
       void setTempomap(TempoMap* tm);
-      virtual void setName(const QString& s);
 
       bool saveFile();
       FileError read1(XmlReader&, bool ignoreVersionError);
@@ -1185,16 +1165,34 @@ class MasterScore : public Score {
       void removeOmr();
       bool showOmr() const                     { return _showOmr; }
       void setShowOmr(bool v)                  { _showOmr = v;    }
+
+      int midiPortCount() const                { return _midiPortCount;            }
+      void setMidiPortCount(int val)           { _midiPortCount = val;             }
+      QList<MidiMapping>* midiMapping()        { return &_midiMapping;             }
+      MidiMapping* midiMapping(int channel)    { return &_midiMapping[channel];    }
+      int midiPort(int idx) const              { return _midiMapping[idx].port;    }
+      int midiChannel(int idx) const           { return _midiMapping[idx].channel; }
+      void rebuildMidiMapping();
+      void checkMidiMapping();
+      bool exportMidiMapping()                 { return !isSimpleMidiMaping; }
+      int getNextFreeMidiMapping(int p = -1, int ch = -1);
+      int getNextFreeDrumMidiMapping();
+      void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
+      void updateChannel();
+      void setSoloMute();
+
+      void addExcerpt(Score*);
       };
 
-inline bool Score::undoRedo() const               { return _masterScore->undoRedo();   }
-inline UndoStack* Score::undoStack() const        { return _masterScore->undoStack();  }
-inline RepeatList* Score::repeatList()  const     { return _masterScore->repeatList(); }
-inline QMap<int, LinkedElements*>& Score::links() { return _masterScore->links();      }
-inline TempoMap* Score::tempomap() const          { return _masterScore->tempomap();   }
-inline TimeSigMap* Score::sigmap() const          { return _masterScore->sigmap();     }
-inline QList<Excerpt*>& Score::excerpts()         { return _masterScore->excerpts();   }
-inline const QList<Excerpt*>& Score::excerpts() const { return _masterScore->excerpts(); }
+inline bool Score::undoRedo() const                   { return _masterScore->undoRedo();       }
+inline UndoStack* Score::undoStack() const            { return _masterScore->undoStack();      }
+inline RepeatList* Score::repeatList()  const         { return _masterScore->repeatList();     }
+inline QMap<int, LinkedElements*>& Score::links()     { return _masterScore->links();          }
+inline TempoMap* Score::tempomap() const              { return _masterScore->tempomap();       }
+inline TimeSigMap* Score::sigmap() const              { return _masterScore->sigmap();         }
+inline QList<Excerpt*>& Score::excerpts()             { return _masterScore->excerpts();       }
+inline const QList<Excerpt*>& Score::excerpts() const { return _masterScore->excerpts();       }
+inline QQueue<MidiInputEvent> Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
 
 extern MasterScore* gscore;
 extern void fixTicks();

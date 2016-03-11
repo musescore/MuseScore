@@ -32,7 +32,7 @@
 #define DIR QString("libmscore/midi/")
 
 namespace Ms {
-      extern Score::FileError importMidi(Score*, const QString&);
+      extern Score::FileError importMidi(MasterScore*, const QString&);
       }
 
 using namespace Ms;
@@ -237,7 +237,7 @@ void TestMidi::midi01()
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(63, TDuration(TDuration::DurationType::V_QUARTER));
-      Score* score = c.score();
+      MasterScore* score = c.score();
 
       score->doLayout();
       score->rebuildMidiMapping();
@@ -277,7 +277,7 @@ void TestMidi::midi02()
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
-      Score* score = c.score();
+      MasterScore* score = c.score();
 
       score->doLayout();
       score->rebuildMidiMapping();
@@ -319,7 +319,7 @@ void TestMidi::midi03()
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(63, TDuration(TDuration::DurationType::V_QUARTER));
-      Score* score = c.score();
+      MasterScore* score = c.score();
 
       score->doLayout();
       score->rebuildMidiMapping();
@@ -353,7 +353,7 @@ void TestMidi::events()
       QString writeFile(file + "-test.txt");
       QString reference(DIR + file + "-ref.txt");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
       score->doLayout();
       EventMap events;
       score->renderMidi(&events);

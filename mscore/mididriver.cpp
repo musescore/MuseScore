@@ -457,7 +457,7 @@ void AlsaMidiDriver::read()
 
 void AlsaMidiDriver::write(const Event& e)
       {
-      Score* cs = mscore->currentScore();
+      MasterScore* cs = mscore->currentScore()->masterScore();
       int port  = cs->midiPort(e.channel());
       int chn   = cs->midiChannel(e.channel());
       int a     = e.dataA();

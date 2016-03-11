@@ -2458,7 +2458,8 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
       }
 
 //////////////////////////////////////////////////////////////////////////
-Score::FileError importOve(Score* score, const QString& name) {
+
+Score::FileError importOve(MasterScore* score, const QString& name) {
       OVE::IOVEStreamLoader* oveLoader = OVE::createOveStreamLoader();
       OVE::OveSong oveSong;
 
@@ -2489,3 +2490,4 @@ Score::FileError importOve(Score* score, const QString& name) {
 
       return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
       }
+

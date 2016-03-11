@@ -527,7 +527,7 @@ namespace Ms {
 //   importBww
 //---------------------------------------------------------
 
-Score::FileError importBww(Score* score, const QString& path)
+Score::FileError importBww(MasterScore* score, const QString& path)
       {
       qDebug("Score::importBww(%s)", qPrintable(path));
 

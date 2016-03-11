@@ -115,8 +115,8 @@ static void localSetScore(void* score, Element* element)
 
 void createExcerpt(Excerpt* excerpt)
       {
-      Score* oscore = excerpt->oscore();
-      Score* score  = excerpt->partScore();
+      MasterScore* oscore = excerpt->oscore();
+      Score* score        = excerpt->partScore();
 
       QList<Part*>& parts = excerpt->parts();
       QList<int> srcStaves;
@@ -231,8 +231,8 @@ void createExcerpt(Excerpt* excerpt)
       // layout score
       //
       score->setPlaylistDirty();
-      score->rebuildMidiMapping();
-      score->updateChannel();
+      oscore->rebuildMidiMapping();
+      oscore->updateChannel();
 
       score->setLayoutAll();
       score->doLayout();
@@ -1017,7 +1017,12 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
             }
       }
 
-QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
+//---------------------------------------------------------
+//   createAllExcerpt
+//---------------------------------------------------------
+
+QList<Excerpt*> Excerpt::createAllExcerpt(MasterScore *score)
+      {
       QList<Excerpt*> all;
       for (Part* part : score->parts()) {
             if (part->show()) {
@@ -1031,7 +1036,12 @@ QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
       return all;
       }
 
-QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList) {
+//---------------------------------------------------------
+//   createName
+//---------------------------------------------------------
+
+QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList)
+      {
       QString n = partName.simplified();
       QString name;
       int count = excerptList.count();

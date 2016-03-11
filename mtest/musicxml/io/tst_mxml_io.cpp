@@ -185,7 +185,7 @@ static void fixupScore(Score* score)
       {
 //      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
       score->connectTies();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->setCreated(false);
       score->setSaved(false);
 
