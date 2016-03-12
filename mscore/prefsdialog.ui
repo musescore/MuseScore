@@ -51,6 +51,26 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="importPrefs">
+       <property name="accessibleName">
+        <string>Import preferences</string>
+       </property>
+       <property name="text">
+        <string>Import...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exportPrefs">
+       <property name="accessibleName">
+        <string>Export preferences</string>
+       </property>
+       <property name="text">
+        <string>Export...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

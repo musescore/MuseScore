@@ -61,6 +61,8 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void defineShortcutClicked();
       void portaudioApiActivated(int idx);
       void resetAllValues();
+      void importPrefsClicked();
+      void exportPrefsClicked();
       void styleFileButtonClicked();
       void recordButtonClicked(int);
       void midiRemoteControlClearClicked();

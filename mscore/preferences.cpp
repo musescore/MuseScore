@@ -204,9 +204,19 @@ void Preferences::init()
 
 void Preferences::write()
       {
-      dirty = false;
       QSettings s;
+      write(s, false);
+      }
 
+void Preferences::write(QString filename)
+      {
+      QSettings s(filename, QSettings::IniFormat);
+      write(s, true);
+      }
+
+void Preferences::write(QSettings& s, bool prefsOnly)
+      {
+      dirty = false;
       s.setValue("bgUseColor",         bgUseColor);
       s.setValue("fgUseColor",         fgUseColor);
       s.setValue("bgWallpaper",        bgWallpaper);
@@ -344,10 +354,12 @@ void Preferences::write()
 //      s.setValue("pos", playPanelPos);
 //      s.endGroup();
 
-      writePluginList();
-      if (Shortcut::dirty)
-            Shortcut::save();
-      Shortcut::dirty = false;
+      if(!prefsOnly) {
+            writePluginList();
+            if (Shortcut::dirty)
+                  Shortcut::save();
+            Shortcut::dirty = false;
+            }
       }
 
 //---------------------------------------------------------
@@ -357,7 +369,17 @@ void Preferences::write()
 void Preferences::read()
       {
       QSettings s;
+      read(s);
+      }
 
+void Preferences::read(QString filename)
+      {
+      QSettings s(filename, QSettings::IniFormat);
+      read(s);
+      }
+
+void Preferences::read(QSettings& s)
+      {
       bgUseColor              = s.value("bgUseColor", bgUseColor).toBool();
       fgUseColor              = s.value("fgUseColor", fgUseColor).toBool();
       bgWallpaper             = s.value("bgWallpaper", bgWallpaper).toString();
@@ -617,6 +639,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
+      connect(importPrefs, SIGNAL(clicked()), SLOT(importPrefsClicked()));
+      connect(exportPrefs, SIGNAL(clicked()), SLOT(exportPrefsClicked()));
       connect(filterShortcuts, SIGNAL(textChanged(const QString&)), SLOT(filterShortcutsTextChanged(const QString &)));
       connect(printShortcuts, SIGNAL(clicked()), SLOT(printShortcutsClicked()));
 
@@ -1519,6 +1543,36 @@ void PreferenceDialog::resetAllValues()
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
+      }
+
+//---------------------------------------------------------
+//   Import preferences from a file
+//---------------------------------------------------------
+
+void PreferenceDialog::importPrefsClicked()
+      {
+      QString fn = QFileDialog::getOpenFileName(this, tr("Import Preferences"), "MuseScore2.ini", tr("Preferences file (*.ini)"));
+      if(fn.isEmpty())
+            return;
+
+      prefs.read(fn);
+      prefs.dirty = true;
+      updateValues();
+      }
+
+//---------------------------------------------------------
+//   Export preferences to a file
+//---------------------------------------------------------
+
+void PreferenceDialog::exportPrefsClicked()
+      {
+      QString fn = QFileDialog::getSaveFileName(this, tr("Export Preferences"), "MuseScore2.ini", tr("Preferences file (*.ini)"));
+      if(fn.isEmpty())
+            return;
+
+      bool wasDirty = prefs.dirty;
+      prefs.write(fn);
+      prefs.dirty = wasDirty;
       }
 
 //---------------------------------------------------------

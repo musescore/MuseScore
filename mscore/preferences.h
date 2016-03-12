@@ -186,7 +186,11 @@ struct Preferences {
 
       Preferences();
       void write();
+      void write(QString filename);
+      void write(QSettings& s, bool prefsOnly);
       void read();
+      void read(QString filename);
+      void read(QSettings& s);
       void init();
       bool readDefaultStyle();
       };
