@@ -327,7 +327,7 @@ void PianoTools::heartBeat(QList<const Ms::Note *> notes)
       {
       QSet<int> pitches;
       for (const Note* note : notes) {
-          pitches.insert(note->pitch());
+          pitches.insert(note->ppitch());
           }
       _piano->pressKeys(pitches);
       }
