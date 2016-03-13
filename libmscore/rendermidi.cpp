@@ -1553,11 +1553,7 @@ int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOf
             initialPause = msrTicks - numOfClicks * clickTicks;
             lastPause   = clickTicks;
             }
-/*
-      // MIN_CLICKS: be sure to have at least MIN_CLICKS clicks: if less, add full measures
-      while (numOfClicks < MIN_CLICKS)
-            numOfClicks += numerator;
-*/
+
       // click-clack-clack triplets
       if (triplets)
             numerator = 3;
