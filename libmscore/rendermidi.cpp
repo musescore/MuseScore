@@ -1542,6 +1542,7 @@ int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOf
       int numOfClicks = numerator;                          // default to a full measure of 'clicks'
       int lastPause   = clickTicks;                         // the number of ticks to wait after the last 'click'
       int initialPause = 0;
+      int anacrusisClickOffset = 0;
       // if not at the beginning of a measure, add clicks for the initial measure part
       if (msrTick < playPos) {
             numOfClicks = msrTicks / clickTicks;
@@ -1550,6 +1551,7 @@ int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOf
       // or if measure not complete (anacrusis), add clicks for the missing measure part
       else if (msrTicks < clickTicks * numerator) {
             numOfClicks = msrTicks / clickTicks;
+            anacrusisClickOffset = denominator - numOfClicks;
             initialPause = msrTicks - numOfClicks * clickTicks;
             lastPause   = clickTicks;
             }
@@ -1563,10 +1565,11 @@ int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOf
             int missingTicks = (clickTicks * numerator) - msrTicks;
             numOfClicks = (missingTicks / clickTicks) + 1;
             lastPause = missingTicks - ((numOfClicks - 1) * clickTicks);
+            anacrusisClickOffset = 0;
             }
       for (int i = 0; i < numOfClicks; i++) {
             tick = (countIn ? 0 : m->tick()) + initialPause + i * clickTicks + tickOffset;
-            event.setType((i % numerator) == 0 ? ME_TICK1 : ME_TICK2);
+            event.setType(((i + anacrusisClickOffset) % numerator) == 0 ? ME_TICK1 : ME_TICK2);
             events->insert(std::pair<int,NPlayEvent>(tick, event));
             }
       return tick + lastPause;
