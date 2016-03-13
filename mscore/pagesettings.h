@@ -54,7 +54,6 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void done(int val);
 
       void twosidedToggled(bool);
-      void landscapeToggled(bool);
       void otmChanged(double val);
       void obmChanged(double val);
       void olmChanged(double val);
@@ -67,8 +66,10 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void pageHeightChanged(double);
       void pageWidthChanged(double);
       void pageOffsetChanged(int val);
+      void on_PortraitButton_clicked();
+      void on_LandscapeButton_clicked();
 
-   public:
+public:
       PageSettings(QWidget* parent = 0);
       ~PageSettings();
       void setScore(Score*);

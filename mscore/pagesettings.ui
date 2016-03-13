@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>496</width>
     <height>520</height>
    </rect>
   </property>
@@ -85,6 +85,19 @@
         <string>Page Size</string>
        </property>
        <layout class="QGridLayout">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Width:</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+          <property name="buddy">
+           <cstring>pageWidth</cstring>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
          <widget class="QDoubleSpinBox" name="pageWidth">
           <property name="sizePolicy">
@@ -98,30 +111,10 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QDoubleSpinBox" name="pageHeight">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximum">
-           <double>2000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0" colspan="2">
+        <item row="5" column="0" colspan="2">
          <widget class="QCheckBox" name="twosided">
           <property name="text">
            <string>Two sided</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <widget class="QCheckBox" name="landscape">
-          <property name="text">
-           <string>Landscape</string>
           </property>
          </widget>
         </item>
@@ -138,21 +131,35 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Width:</string>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="pageHeight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-          <property name="buddy">
-           <cstring>pageWidth</cstring>
+          <property name="maximum">
+           <double>2000.000000000000000</double>
           </property>
          </widget>
         </item>
         <item row="0" column="0" colspan="2">
          <widget class="QComboBox" name="pageGroup"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QRadioButton" name="PortraitButton">
+          <property name="text">
+           <string>Portrait</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QRadioButton" name="LandscapeButton">
+          <property name="text">
+           <string>Landscape</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -501,7 +508,6 @@
   <tabstop>pageGroup</tabstop>
   <tabstop>pageWidth</tabstop>
   <tabstop>pageHeight</tabstop>
-  <tabstop>landscape</tabstop>
   <tabstop>twosided</tabstop>
   <tabstop>spatiumEntry</tabstop>
   <tabstop>inchButton</tabstop>
