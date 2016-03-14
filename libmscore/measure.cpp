@@ -2907,6 +2907,13 @@ bool Measure::isMeasureRest(int staffIdx) const
                   if (e && e->type() != Element::Type::REST)
                         return false;
                   }
+            for (Element* a : s->annotations()) {
+                  if (!a || a->systemFlag())
+                        continue;
+                  int atrack = a->track();
+                  if (atrack >= strack && atrack < etrack)
+                        return false;
+                  }
             }
       return true;
       }
