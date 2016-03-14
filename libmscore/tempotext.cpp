@@ -172,7 +172,7 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
-      QString s = plainText();
+      QString s = xmlText();
       s.replace(",", ".");
       for (const TempoPattern& pa : tp) {
             QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*");
@@ -180,12 +180,12 @@ void TempoText::textChanged()
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
                         qreal nt = qreal(sl[1].toDouble()) * pa.f;
-                        if (nt != _tempo) {
+                        //if (nt != _tempo) {
                               setTempo(qreal(sl[1].toDouble()) * pa.f);
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
                               score()->setPlaylistDirty();
-                              }
+                         //     }
                         break;
                         }
                   }
