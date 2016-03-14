@@ -58,7 +58,8 @@ PageSettings::PageSettings(QWidget* parent)
       connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
       connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
       connect(buttonOk,             SIGNAL(clicked()),            SLOT(ok()));
-      connect(landscape,            SIGNAL(toggled(bool)),        SLOT(landscapeToggled(bool)));
+      connect(PortraitButton,       SIGNAL(clicked(bool)),        SLOT(on_PortraitButton_clicked()));
+      connect(LandscapeButton,      SIGNAL(clicked(bool)),        SLOT(on_LandscapeButton_clicked()));
       connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));
       connect(pageHeight,           SIGNAL(valueChanged(double)), SLOT(pageHeightChanged(double)));
       connect(pageWidth,            SIGNAL(valueChanged(double)), SLOT(pageWidthChanged(double)));
@@ -243,7 +244,7 @@ void PageSettings::updateValues()
             evenPageLeftMargin->setValue(oddPageLeftMargin->value());
             }
 
-      landscape->setChecked(pf->width() > pf->height());
+
       twosided->setChecked(pf->twosided());
 
       pageOffsetEntry->setValue(sc->pageNumberOffset() + 1);
@@ -272,21 +273,32 @@ void PageSettings::mmClicked()
       }
 
 //---------------------------------------------------------
-//   landscapeToggled
+//   landscape/Portrait RadioButtons
 //---------------------------------------------------------
+void Ms::PageSettings::on_PortraitButton_clicked()
+{
+    PageFormat pf;
+    pf.copy(*preview->score()->pageFormat());
+    double f  = mmUnit ? 1.0/INCH : 1.0;
+    pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
+    preview->score()->setPageFormat(pf);
+    updateValues();
+    updatePreview(0);
 
-void PageSettings::landscapeToggled(bool flag)
-      {
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
-      if (flag ^ (pf.width() > pf.height()))
-            pf.setSize(QSizeF(pf.height(), pf.width()));
-      double f  = mmUnit ? 1.0/INCH : 1.0;
-      pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
-      preview->score()->setPageFormat(pf);
-      updateValues();
-      updatePreview(0);
-      }
+}
+
+void Ms::PageSettings::on_LandscapeButton_clicked()
+{
+    PageFormat pf;
+    pf.setSize(QSizeF(pf.height(), pf.width()));
+    double f  = mmUnit ? 1.0/INCH : 1.0;
+    pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
+    preview->score()->setPageFormat(pf);
+    updateValues();
+    updatePreview(0);
+
+}
+
 
 //---------------------------------------------------------
 //   twosidedToggled
@@ -641,4 +653,5 @@ void PageSettings::updatePreview(int val)
       preview->layoutChanged();
       }
 }
+
 
