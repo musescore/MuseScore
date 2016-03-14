@@ -96,7 +96,7 @@ class Staff : public QObject, public ScoreElement {
       Q_OBJECT
 
 public:
-      enum class HideMode { AUTO, ALWAYS, NEVER };
+      enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
 
 private:
       Part* _part       { 0 };

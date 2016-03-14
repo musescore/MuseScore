@@ -862,6 +862,11 @@
               <string>Never</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Instrument</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
