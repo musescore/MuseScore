@@ -21,6 +21,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "sym.h"
 #include "system.h"
 #include "textline.h"
 #include "utils.h"
@@ -693,7 +694,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         qreal _spatium = spatium();
 
                         m = endMeasure();
-                        x = m->pos().x() + m->bbox().right();
+                        // back up to barline (skip courtesy elements)
+                        Segment* seg = m->last();
+                        while (seg && seg->segmentType() != Segment::Type::EndBarLine)
+                              seg = seg->prev();
+                        qreal mwidth = seg ? seg->x() : m->bbox().right();
+                        x = m->pos().x() + mwidth;
                         if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                               //find the actual measure where the volta should stop
                               Measure* sm = startMeasure();
@@ -704,14 +710,31 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     m = m->nextMeasureMM();
                               x = m->pos().x() + m->bbox().right();
                               }
-                        Segment* seg = m->last();
-                        if (seg->segmentType() == Segment::Type::EndBarLine) {
+                        // align to barline
+                        if (seg && seg->segmentType() == Segment::Type::EndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == Element::Type::BAR_LINE) {
-                                    if (static_cast<BarLine*>(e)->barLineType() == BarLineType::START_REPEAT)
-                                          x -= e->width() - _spatium * .5;
-                                    else
-                                          x -= _spatium * .5;
+                                    BarLineType blt = static_cast<BarLine*>(e)->barLineType();
+                                    switch (blt) {
+                                          case BarLineType::END_REPEAT:
+                                          case BarLineType::END_START_REPEAT:
+                                                // skip dots
+                                                x += symWidth(SymId::repeatDot);
+                                                x += score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                                                // fall through
+                                          case BarLineType::DOUBLE:
+                                                // center on leftmost (thinner) barline
+                                                x += score()->styleS(StyleIdx::doubleBarWidth).val() * _spatium * 0.5;
+                                                break;
+                                          case BarLineType::START_REPEAT:
+                                                // center on leftmost (thicker) barline
+                                                x += score()->styleS(StyleIdx::endBarWidth).val() * _spatium * 0.5;
+                                                break;
+                                          default:
+                                                // center on barline
+                                                x += score()->styleS(StyleIdx::barWidth).val() * _spatium * 0.5;
+                                                break;
+                                          }
                                     }
                               }
                         }
