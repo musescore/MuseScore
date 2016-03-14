@@ -1083,7 +1083,7 @@ bool Selection::canCopy() const
 
             // loop through measures on this staff checking for local time signatures
             for (Measure* m = _startSegment->measure(); m && m->tick() < endTick; m = m->nextMeasure()) {
-                  if (_score->staff(staffIdx)->timeStretch(m->tick()) != Fraction(1, 1))
+                  if (_score->staff(staffIdx)->isLocalTimeSignature(m->tick()))
                         return false;
                   }
 
