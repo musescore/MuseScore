@@ -2552,6 +2552,14 @@ void ScoreView::normalPaste()
                   errorMessage->showMessage(tr("Tuplet cannot cross barlines"), "tupletCrossBar");
                   _score->undo()->current()->unwind();
                   break;
+            case PasteStatus::DEST_LOCAL_TIME_SIGNATURE:
+                  errorMessage->showMessage(tr("Cannot paste in local time signature"), "pasteLocalTimeSig");
+                  _score->undo()->current()->unwind();
+                  break;
+            case PasteStatus::DEST_TREMOLO:
+                  errorMessage->showMessage(tr("Cannot paste in tremolo"), "pasteTremolo");
+                  _score->undo()->current()->unwind();
+                  break;
             default:
                   ;
            }
@@ -5449,7 +5457,7 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  if (!_score->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+                  if (_score->pasteStaff(xml, cr->segment(), cr->staffIdx()) != PasteStatus::PS_NO_ERROR) {
                         qDebug("cmdRepeatSelection: paste fails");
                         _score->endCmd(true);   // rollback
                         }

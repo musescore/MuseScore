@@ -224,7 +224,9 @@ enum class PasteStatus : char {
       NO_DEST,
       DEST_TUPLET,
       DEST_NO_CR,
-      TUPLET_CROSSES_BAR
+      TUPLET_CROSSES_BAR,
+      DEST_LOCAL_TIME_SIGNATURE,
+      DEST_TREMOLO
       };
 
 //---------------------------------------------------------
@@ -781,7 +783,7 @@ class Score : public QObject, public ScoreElement {
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       PasteStatus cmdPaste(const QMimeData* ms, MuseScoreView* view);
-      bool pasteStaff(XmlReader&, Segment* dst, int staffIdx);
+      PasteStatus pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
