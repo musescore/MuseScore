@@ -2088,8 +2088,13 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-info",
+<<<<<<< HEAD
          QT_TRANSLATE_NOOP("action","Info..."),
          QT_TRANSLATE_NOOP("action","Edit score info"),
+=======
+         QT_TRANSLATE_NOOP("action","Score Properties..."),
+         QT_TRANSLATE_NOOP("action","Edit score properties"),
+>>>>>>> dd99df5... fix #92166:renamed info to score properties
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
