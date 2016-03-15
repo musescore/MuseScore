@@ -2899,6 +2899,46 @@ QString Text::convertToHtml(const QString& s, const TextStyle& st)
       }
 
 //---------------------------------------------------------
+//   tagEscape
+//---------------------------------------------------------
+
+QString Text::tagEscape(QString s)
+      {
+      QStringList tags = { "sym", "b", "i", "u", "sub", "sup" };
+      for (QString tag : tags) {
+            QString openTag = "<" + tag + ">";
+            QString openProxy = "!!" + tag + "!!";
+            QString closeTag = "</" + tag + ">";
+            QString closeProxy = "!!/" + tag + "!!";
+            s.replace(openTag, openProxy);
+            s.replace(closeTag, closeProxy);
+            }
+      s = Xml::xmlString(s);
+      for (QString tag : tags) {
+            QString openTag = "<" + tag + ">";
+            QString openProxy = "!!" + tag + "!!";
+            QString closeTag = "</" + tag + ">";
+            QString closeProxy = "!!/" + tag + "!!";
+            s.replace(openProxy, openTag);
+            s.replace(closeProxy, closeTag);
+            }
+      return s;
+      }
+
+//---------------------------------------------------------
+//   unEscape
+//---------------------------------------------------------
+
+QString Text::unEscape(QString s)
+      {
+      s.replace("&lt;", "<");
+      s.replace("&gt;", ">");
+      s.replace("&amp;", "&");
+      s.replace("&quot;", "\"");
+      return s;
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
