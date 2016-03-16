@@ -1640,7 +1640,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
          "toggle-palette",
          QT_TRANSLATE_NOOP("action","Palettes"),
-         0,
+         QT_TRANSLATE_NOOP("action","Palettes"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
