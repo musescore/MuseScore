@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InspectorOttava</class>
+ <widget class="QWidget" name="InspectorOttava">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>252</width>
+    <height>110</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="accessibleName">
+   <string>Ottava Inspector</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="elementName">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ottava</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QToolButton" name="resetOttavaType">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Type value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Placement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="ottavaType">
+       <property name="accessibleName">
+        <string>Type</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>8va</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>8vb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>15ma</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>15mb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>22ma</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>22mb</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="placement">
+       <property name="accessibleName">
+        <string>Placement</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Above</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Below</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QToolButton" name="resetPlacement">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Placement value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QCheckBox" name="numbersOnly">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Numbers only</string>
+       </property>
+       <property name="text">
+        <string>Numbers only</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QToolButton" name="resetNumbersOnly">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Numbers only value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>ottavaType</tabstop>
+  <tabstop>resetOttavaType</tabstop>
+  <tabstop>placement</tabstop>
+  <tabstop>resetPlacement</tabstop>
+  <tabstop>numbersOnly</tabstop>
+  <tabstop>resetNumbersOnly</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/chordsymbol/add-part-test.mscx add-part-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/add-link-test.mscx add-link-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/clear-test.mscx    clear-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/extend-test.mscx   extend-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/no-system-test.mscx   no-system-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-part-test.mscx   transpose-part-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-test.mscx   transpose-ref.mscx
+
+

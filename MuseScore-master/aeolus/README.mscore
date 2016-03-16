@@ -1,0 +1,12 @@
+The real Aeolus can be found at
+
+      http://www.kokkinizita.net/linuxaudio/
+
+The code in this directory is heavily modified and contains
+basically only the aeolus synthesizer engine, modified to fit
+into the MuseScore framework.
+
+All bugs are most likely introduced by me and if you
+find one please dont bother Fons Adriaensen with it.
+
+

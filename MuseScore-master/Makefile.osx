@@ -1,0 +1,90 @@
+#=============================================================================
+#  Mscore
+#  Linux Music Score Editor
+#  $Id:$
+#
+#  Copyright (C) 2002-2007 by Werner Schweer and others
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#=============================================================================
+
+REVISION  = `cat mscore/revision.h`
+VERSION   = "2.1b-${REVISION}"
+#VERSION = 2.1.0
+PREFIX=../applebuild
+
+XCODEPROJ = mscore.xcodeproj
+
+release:
+	mkdir build.release;                               \
+    cd build.release;                                  \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
+          .. -G Xcode; 			       \
+    xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
+	xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD;     \
+
+
+debug: xcode
+	mkdir build.debug;                         \
+    cd build.debug;                            \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
+          .. -G Xcode; 			       \
+    xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
+    xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD;       \
+
+xcode:
+	mkdir build.xcode;              \
+    cd build.xcode;                                  \
+    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+          .. -G Xcode;                         \
+    xcodebuild -project ${XCODEPROJ} -target lrelease; 
+
+lupdate:
+	cd build.release;xcodebuild -project ${XCODEPROJ} -target lupdate;
+
+lrelease:
+	cd build.release;xcodebuild -project ${XCODEPROJ} -target lrelease;
+
+revision:
+	@git rev-parse --short HEAD > mscore/revision.h
+
+version:
+	@echo ${VERSION}
+
+install:
+	cd build.release;   \
+	xcodebuild -project ${XCODEPROJ} -configuration Release -target install_plugins_manual; \
+	xcodebuild -project ${XCODEPROJ} -configuration Release -target install;
+
+installdebug:
+	cd build.debug; \
+	xcodebuild -project ${XCODEPROJ} -configuration Debug -target install_plugins_manual; \
+	xcodebuild -project ${XCODEPROJ} -configuration Debug -target install;
+
+package:
+	build/package_mac;
+
+#
+# clean out of source build
+#
+clean:
+	-rm -rf build.release build.debug build.xcode
+	-rm -rf applebuild
+
+#
+# generate code documentation
+#
+doxy:
+	doxygen build.debug/Doxyfile
+doxylib:
+	doxygen build.debug/Doxyfile-LibMscore

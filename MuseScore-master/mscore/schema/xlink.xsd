@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.w3.org/1999/xlink" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<xs:annotation>
+		<xs:documentation>MusicXML™ XLink module
+
+Version 3.0
+
+Copyright © 2004-2011 Recordare LLC.
+http://www.recordare.com/
+
+This MusicXML™ work is being provided by the copyright holder under the MusicXML Public License Version 3.0, available from:
+
+	http://www.recordare.com/dtds/license.html
+	
+This is the W3C XML Schema (XSD) version of the MusicXML 3.0 language. Validation is tightened by moving MusicXML definitions from comments into schema data types and definitions. Character entities and other entity usages that are not supported in W3C XML Schema have also been removed. However, the features of W3C XML Schema make it easier to define variations of the MusicXML format, either via extension or restriction.
+	
+This schema module defines the subset of XLink attributes that are supported in the MusicXML schema. All definitions here are in the XLink namespace.</xs:documentation>
+	</xs:annotation>
+	
+	<xs:attribute name="href" type="xs:anyURI"/>
+
+	<xs:attribute name="type">
+		<xs:simpleType>
+			<xs:restriction base="xs:NMTOKEN">
+				<xs:enumeration value="simple"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	
+	<xs:attribute name="role" type="xs:token"/>
+
+	<xs:attribute name="title" type="xs:token"/>
+	
+	<xs:attribute name="show">
+		<xs:simpleType>
+			<xs:restriction base="xs:NMTOKEN">
+				<xs:enumeration value="new"/>
+				<xs:enumeration value="replace"/>
+				<xs:enumeration value="embed"/>
+				<xs:enumeration value="other"/>
+				<xs:enumeration value="none"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+
+	<xs:attribute name="actuate">
+		<xs:simpleType>
+			<xs:restriction base="xs:NMTOKEN">
+				<xs:enumeration value="onRequest"/>
+				<xs:enumeration value="onLoad"/>
+				<xs:enumeration value="other"/>
+				<xs:enumeration value="none"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+</xs:schema>

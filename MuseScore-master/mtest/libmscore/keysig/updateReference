@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/keysig/keysig01-test.mscx keysig01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/keysig/keysig02-test.mscx keysig02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/keysig/keysig03-test.mscx keysig.mscx
+
+cp ../../../build.debug/mtest/libmscore/keysig/concert-pitch-01-test.mscx concert-pitch-01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/keysig/concert-pitch-02-test.mscx concert-pitch-02-ref.mscx

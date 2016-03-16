@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# simple standalone iotest for MusicXML import
+# run in mtest/musicxml/io directory as "./iotest"
+
+# Linux
+#MSCORE=../../../build.debug/mscore/mscore
+# OS X terminal build
+#MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+
+echo "----------------------------------------------"
+echo "Regression Tests for MuseScore MusicXML import"
+echo "----------------------------------------------"
+echo
+$MSCORE -v
+echo
+
+
+musicxml_files=`cat tst_mxml_io.cpp | grep "{ mxmlIoTest" | awk -F\" '{print $2}' | sort`
+testcount=0
+failures=0
+
+rwtestXml() {
+      echo -n "testing load/save $1";
+      $MSCORE $1 -d -o mops.xml &> /dev/null
+      if diff -q $1 mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            #echo "+++++++++DIFF++++++++++++++"
+            #diff $1 mops.xml
+            #echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestXmlRef() {
+      echo -n "testing load/save $1";
+      REF=`basename $1 .xml`_ref.xml
+      $MSCORE $1 -d -o mops.xml &> /dev/null
+      if diff -q $REF mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            #echo "+++++++++DIFF++++++++++++++"
+            #diff $REF mops.xml
+            #echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestAllXml() {
+      for f in $musicxml_files; do
+            if [ -f ${f}_ref.xml ]; then
+                  # reference file exists, test against it
+                  rwtestXmlRef ${f}.xml
+            else
+                  # reference file does not exist: use regular test
+                  rwtestXml ${f}.xml
+            fi
+      done
+      }
+
+usage() {
+      echo "usage: $0"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 0 ]; then
+      rwtestAllXml
+else
+      usage
+fi
+
+echo
+echo "$testcount test(s), $failures failure(s)"

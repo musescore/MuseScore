@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <page-layout>
+        <page-height>1584</page-height>
+        <page-width>1224</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>90.1417</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>90.1417</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>9</lid>
+        </VBox>
+      <Measure number="1">
+        <TimeSig>
+          <lid>1</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Harmony>
+          <root>17</root>
+          <name>7</name>
+          <lid>2</lid>
+          </Harmony>
+        <Chord>
+          <lid>3</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>4</lid>
+            <Accidental>
+              <subtype>sharp</subtype>
+              </Accidental>
+            <pitch>73</pitch>
+            <tpc>21</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <Harmony>
+          <root>16</root>
+          <lid>5</lid>
+          </Harmony>
+        <Chord>
+          <lid>6</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>7</lid>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>8</lid>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1584</page-height>
+          <page-width>1224</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>90.1417</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>90.1417</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Flute</trackName>
+        <Instrument>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          <trackName>Flute</trackName>
+          <minPitchP>59</minPitchP>
+          <maxPitchP>98</maxPitchP>
+          <minPitchA>60</minPitchA>
+          <maxPitchA>93</maxPitchA>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>95</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="73"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>9</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Flute</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>1</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Harmony>
+            <root>17</root>
+            <name>7</name>
+            <lid>2</lid>
+            </Harmony>
+          <Chord>
+            <lid>3</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>4</lid>
+              <Accidental>
+                <subtype>sharp</subtype>
+                </Accidental>
+              <pitch>73</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Harmony>
+            <root>16</root>
+            <lid>5</lid>
+            </Harmony>
+          <Chord>
+            <lid>6</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>7</lid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>8</lid>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <name>Flute</name>
+      </Score>
+    </Score>
+  </museScore>

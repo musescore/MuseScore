@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for a in join01 join02 join03 join04 join05 join06 join07; do
+      cp ../../../build.debug/mtest/libmscore/join/$a.mscx $a-ref.mscx
+      done
+
+

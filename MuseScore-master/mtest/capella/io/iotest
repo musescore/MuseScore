@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# simple standalone iotest for Capella import
+# run mtest/capella/io directory as "./iotest"
+# note that the debug build must be used with the -t option to get the beams right in the .mscx files
+
+MSCORE=../../../build.debug/mscore/mscore
+
+echo "---------------------------------------------"
+echo "Regression Tests for MuseScore Capella import"
+echo "---------------------------------------------"
+echo
+$MSCORE -v
+echo
+
+capfiles=`cat tst_capella_io.cpp | grep "{ capReadTest" | awk -F\" '{print $2}' | sort`
+capxfiles=`cat tst_capella_io.cpp | grep "{ capxReadTest" | awk -F\" '{print $2}' | sort`
+testcount=0
+failures=0
+
+captest() {
+      echo -n "testing load/save $1$2";
+      $MSCORE -t $1$2 -o  mops.mscx &> /dev/null
+      if diff -q $1$2-ref.mscx mops.mscx &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $1$2-ref.mscx mops.mscx
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.mscx
+      testcount=$(($testcount+1))
+      }
+
+echo "Capella files ..."
+for f in $capfiles; do
+      captest ${f} .cap
+done
+
+echo "CapellaXML files ..."
+for f in $capxfiles; do
+      captest ${f} .capx
+done
+
+echo
+echo "$testcount test(s), $failures failure(s)"

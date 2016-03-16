@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+   <qresource>
+      <file alias="/freeverb/freeverb.qml">freeverb.qml</file>
+      </qresource>
+   </RCC>
+

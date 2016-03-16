@@ -1,0 +1,18 @@
+#!/bin/bash
+
+P=../../../build.debug
+#P=../../../../MuseScore-build
+
+cp $P/mtest/libmscore/measure/measure-1.mscx measure-1-ref.mscx
+cp $P/mtest/libmscore/measure/measure-2.mscx measure-2-ref.mscx
+cp $P/mtest/libmscore/measure/measure-3.mscx measure-3-ref.mscx
+cp $P/mtest/libmscore/measure/measure-4.mscx measure-4-ref.mscx
+cp $P/mtest/libmscore/measure/measure-5.mscx measure-5-ref.mscx
+cp $P/mtest/libmscore/measure/measure-6.mscx measure-6-ref.mscx
+cp $P/mtest/libmscore/measure/measure-7.mscx measure-7-ref.mscx
+cp $P/mtest/libmscore/measure/measure-8.mscx measure-8-ref.mscx
+cp $P/mtest/libmscore/measure/measure-9.mscx measure-9-ref.mscx
+cp $P/mtest/libmscore/measure/measure-insert_bf_key.mscx measure-insert_bf_key-ref.mscx
+cp $P/mtest/libmscore/measure/measure-insert_bf_key_undo.mscx measure-insert_bf_key.mscx
+cp $P/mtest/libmscore/measure/measure-insert_bf_clef.mscx measure-insert_bf_clef-ref.mscx
+cp $P/mtest/libmscore/measure/measure-insert_bf_clef_undo.mscx measure-insert_bf_clef.mscx

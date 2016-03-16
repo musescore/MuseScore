@@ -1,0 +1,93 @@
+1.  Overview
+
+    This is RTF to HTML converter version 0.1.0.
+    Copyright (C) 2003 Valentin Lavrinenko, vlavrinenko@users.sourceforge.net
+    
+    Its primary purpose is using by developers to add rtf to html 
+    converting functionality to their projects, although, end users 
+    can also find it useful.
+
+    The main effort was made on processing the tables correctly, and it
+    seems successful - all other programs I've seen do tables processing
+    much worse. Moreover, at the moment, I haven't seen any file that
+    displays correctly in MS Word, but crashes this program.
+    
+    For further information, go to
+    http://www.sourceforge.net/projects/rtf2html
+
+
+2.  Copying
+
+    Distributed under LGPL license - see COPYING.LESSER, it must be 
+    in the archive.
+
+
+3.  Compiling
+
+    - Under UNIX:
+      Just ./configure && make && make install. The program seems
+      to work much (about 2 times) faster when compiled with STLPort
+      STL implementation than with the GNU one. So, you may use
+      --with-stlport configure option if you have it installed.
+
+    - Under MS Windows:
+      Use MSYS/MinGW, use it the same way as in UNIX.
+      No makefiles for other Win compilers are included yet, so,
+      write it yourself, if you want - it isn't that hard.
+      BCC is no longer supported!
+
+4.  Installation
+
+    No binary distribution for Unix/Linux is provided - just
+    compile the program from source (see above). You can, however,
+    download a binary package for MS Windows from the project page,
+    http://www.sf.net/projects/rtf2html.
+
+5.  Usage
+
+    5.1 Command-line options
+
+        rtf2html -v|--version
+
+	prints the current version.
+
+	rtf2html -h|--help
+
+	prints the help.
+    
+        rtf2html [<rtf file> [<html file>]].
+    
+        Converts the file. If either of files is not specified, 
+	the corresponding std descriptor (stdin or stdout) is used.
+
+    5.2 Supported features
+
+        This version supports the following:
+        - Character formatting: bold, italic, underline, sub- and superscripts.
+         NOTE: underlining is displayed only as solid.
+        - Paragraph formatting: horizontal alignment, indentation, margins.
+        - Table formatting: arbitrary cell spans, cell sizings, borders, 
+          vertical alignment in cells.
+         NOTE: borders are displayed correctly only under IE 5+ and only 
+               as solid.
+        - Page formatting: page width, left margin.
+        - Hexadecimal character codes (Cyrillic letters would come out in 
+          win1251)
+        - Font faces and sizes.
+        - Foreground and background colors, highlighting.
+    
+    5.3 Unsupported features
+
+        This version DOES NOT support the following:
+	- Character sets.
+	- Hyperlinks.
+        - Images.
+        - Different stuff like macros, embedded OLE objects, etc.
+
+
+6.  Compiling notes.
+
+    The source was compiled with 
+    - gcc 3.3 under ALT Linux Master 2.4 on i386
+    - gcc 3.4.2 (MinGW) under Win2k
+    

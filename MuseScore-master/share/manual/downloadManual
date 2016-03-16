@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir $1
+cd $1
+#
+# -p requisites
+# -k
+wget http://musescore.org/$1/print/book/export/html/51 --force-html \
+   --no-directories --content-disposition -p -k --adjust-extension
+mv 51.html manual.html
+

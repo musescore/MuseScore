@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>1.3</programVersion>
+  <programRevision> 5701</programRevision>
+  <Spatium>1.764</Spatium>
+  <Division>480</Division>
+  <Style>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="even">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-margins type="odd">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-offset>0</page-offset>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <Instrument>
+      <minPitchP>59</minPitchP>
+      <maxPitchP>98</maxPitchP>
+      <minPitchA>60</minPitchA>
+      <maxPitchA>93</maxPitchA>
+      <trackName>Flute</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="73"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <offset x="-1" y="0"/>
+          <pos x="-1" y="1.5"/>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Rest>
+        <durationType>quarter</durationType>
+        </Rest>
+      <Rest>
+        <durationType>half</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <offset x="1" y="0"/>
+          <pos x="1" y="1.5"/>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Note>
+          <pitch>79</pitch>
+          <tpc>15</tpc>
+          </Note>
+        </Chord>
+      <Rest>
+        <durationType>quarter</durationType>
+        </Rest>
+      <Rest>
+        <durationType>half</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>69</pitch>
+          <tpc>17</tpc>
+          </Note>
+        <Note>
+          <offset x="1" y="0"/>
+          <pos x="1" y="1.5"/>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        </Chord>
+      <Rest>
+        <durationType>quarter</durationType>
+        </Rest>
+      <Rest>
+        <durationType>half</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Note>
+          <offset x="1" y="0"/>
+          <pos x="1" y="-0.5"/>
+          <pitch>79</pitch>
+          <tpc>15</tpc>
+          </Note>
+        </Chord>
+      <Rest>
+        <durationType>quarter</durationType>
+        </Rest>
+      <Rest>
+        <durationType>half</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Note>
+          <offset x="0" y="-2"/>
+          <pos x="0" y="-2.5"/>
+          <pitch>79</pitch>
+          <tpc>15</tpc>
+          </Note>
+        </Chord>
+      <Rest>
+        <durationType>quarter</durationType>
+        </Rest>
+      <Rest>
+        <durationType>half</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Chord>
+        <durationType>quarter</durationType>
+        <Stem>
+          <offset x="-0.447035" y="0"/>
+          <pos x="0.617965" y="-3.31219"/>
+          <userLen>0.2</userLen>
+          </Stem>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Note>
+          <offset x="1" y="-3"/>
+          <pos x="1" y="-3.5"/>
+          <pitch>79</pitch>
+          <tpc>15</tpc>
+          </Note>
+        </Chord>
+      <Rest>
+        <durationType>quarter</durationType>
+        </Rest>
+      <Rest>
+        <durationType>half</durationType>
+        </Rest>
+      <BarLine>
+        <subtype>5</subtype>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>

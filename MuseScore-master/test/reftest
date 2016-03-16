@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# Linux
+#MSCORE=../../build/mscore/mscore
+# OS X terminal build
+#MSCORE=../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+MSCORE=../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+
+echo "-------------------------------------------------"
+echo "Generate / Compare Regression Tests for MuseScore"
+echo "-------------------------------------------------"
+echo
+$MSCORE -v
+echo
+
+testcount=0
+failures=0
+
+# test xml file against reference file
+# $1 filename
+# $2 directory
+# $3 reference directory
+
+rwtestXmlRef() {
+      echo -n "testing load/save $1";
+      REF=$3/$1
+      $MSCORE $2/$1 -d -o mops.xml &> /dev/null
+      if diff -q $REF mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $REF mops.xml
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+generateRefs() {
+      echo generateRefs $1 $2
+      for f in `ls $1/*.xml | grep -v _ref | sort`; do
+            r=`basename $f`
+            echo "generating reference file $r"
+            $MSCORE $1/$r -d -o $2/$r &> /dev/null
+      done
+      }
+
+compareWithRefs() {
+      for f in `ls $1/*.xml | grep -v _ref | sort`; do
+            r=`basename $f`
+            if [ -s $2/$r ]; then
+                  # reference file exists and has a size greater than zero,
+                  # test against it
+                  # echo "testing file $r"
+                  rwtestXmlRef $r $1 $2
+            else
+                  # reference file does not exist: skip this file
+                  echo "skipping file $r"
+            fi
+      done
+      }
+
+usage() {
+      echo "usage: $0 [gen | cmp] indir outdir"
+      echo "gen runs all xml files in indir through MuseScore and generates reference files in outdir"
+      echo "cmp runs all xml files in indir through MuseScore and compares with reference files in outdir"
+      echo "indir and outdir must be different directories"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 3 ]; then
+      if [ "$2" == "$3" ]; then
+            usage
+      elif [ "$1" == "gen" ]; then
+            generateRefs $2 $3
+      elif [ "$1" == "cmp" ]; then
+            compareWithRefs $2 $3
+      else
+            usage
+      fi
+else
+      usage
+fi
+
+echo
+echo "$testcount test(s), $failures failure(s)"
