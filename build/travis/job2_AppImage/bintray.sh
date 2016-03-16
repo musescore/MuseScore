@@ -65,7 +65,7 @@ FILE="$1"
 # Version: X.Y.Z
 # Package: MuseScore-Linux-<arch>
 #
-# NIGHTLY NAMING SCHEME: (For developer builds replace "Nightly" with "Developer")
+# NIGHTLY NAMING SCHEME: (For developer builds replace "Nightly" with "Dev")
 # File:    MuseScoreNightly-<datetime>-<branch>-<commit>-<arch>.AppImage
 #    (e.g. MuseScoreNightly-201601151332-master-f53w6dg-x86_64.AppImage)
 # Version: <datetime>-<branch>-<commit> (e.g. 201601151332-master-f53w6dg)
@@ -154,6 +154,13 @@ else
   # Use custom description for nightly/development builds
   DESCRIPTION="Automated builds of the $BRANCH development branch. FOR TESTING PURPOSES ONLY!"
 fi
+# Add installation instructions to the description (same for all types of build)
+DESCRIPTION="${APPNAME} Portable AppImages for $SYSTEM Linux systems.
+
+${DESCRIPTION}
+
+Simply download the .AppImage file, give it execute permission, and then run it!
+More instructions at https://musescore.org/handbook/install-linux"
 
 ICONNAME=$(bsdtar -f "${FILE}" -O -x "${DESKTOP}" | grep -e "^Icon=" | sed s/Icon=//g)
 
@@ -263,6 +270,18 @@ echo ""
 echo "Uploading ${FILE}..."
 ${CURL} -T ${FILE} "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/${FILE_UPLOAD_PATH}?${url_query}" \
   || { echo "$0: Error: AppImage upload failed!" >&2 ; exit 1 ;}
+
+# Update version information *after* AppImage upload (don't want to create an empty version if upload fails)
+echo ""
+echo "Updating version information for ${VERSION}..."
+    data="{
+    \"desc\": \"${DESCRIPTION}\",
+    \"vcs_tag\": \"${COMMIT:-v$VERSION}\"
+    }"
+${CURL} -X PATCH -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}
+echo ""
+echo "Setting attributes for package ${PCK_NAME}..."
+${CURL} -X POST -d "${ATTRIBUTES}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}/attributes
 
 if [ "${APPNAME}" != "MuseScore" ] && [ $(env | grep TRAVIS_JOB_ID ) ] ; then
   echo ""
