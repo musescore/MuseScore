@@ -3,7 +3,7 @@
   <language code="af" name="Afrikaans" />
   <language code="ar" name="العربية" />
   <language code="ast" name="Asturianu" />
-  <language code="be" name="Беларуская мова" />  
+  <language code="be" name="Беларуская мова" />
   <language code="bg" name="български" />
   <language code="ca" name="Català" />
   <language code="ca@valencia" name="Valencià" />
@@ -21,7 +21,8 @@
   <language code="fa" name="فارسی" />
   <language code="fi" name="Finnish" />
   <language code="fo" name="Faeroese" />
-  <language code="fr" name="Français"  />
+  <language code="fr" name="Français" />
+  <language code="ga" name="Gaeilge" />
   <language code="gl" name="Galego" />
   <language code="he" name="עברית" />
   <language code="hi_IN" name="Hindi" />
@@ -47,7 +48,7 @@
   <language code="sr_RS" name="Српски" />
   <language code="sk" name="Slovenčina" />
   <language code="sl" name="Slovenščina" />
-  <language code="sv" name="Svenska" /> 
+  <language code="sv" name="Svenska" />
   <language code="th" name="ภาษาไทย" />
   <language code="tr" name="Türkçe" />
   <language code="uk" name="Українська" />
