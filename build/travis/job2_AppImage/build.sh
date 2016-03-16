@@ -19,13 +19,21 @@ revision="$(echo "$TRAVIS_COMMIT" | cut -c 1-7)"
 [ "$revision" ] || revision="$(make revision && cat mscore/revision.h)"
 
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
-then # Build is marked UNSTABLE inside CMakeLists.txt so create a nightly build
-  makefile_overrides="PREFIX='MuseScoreNightly-$date-$branch-$revision' \
-                      SUFFIX='-portable-nightly' \
-                      LABEL='Portable Nightly Build'"
-  cp -f build/travis/job2_AppImage/splash-nightly.png mscore/data/splash.png
+then # Build is marked UNSTABLE inside CMakeLists.txt
+  if [ "${BINTRAY_REPO_OWNER}" == "musescore" ]
+  then # This is a nightly build
+    makefile_overrides="PREFIX='MuseScoreNightly-$date-$branch-$revision' \
+                        SUFFIX='-portable-nightly' \
+                        LABEL='Portable Nightly Build'"
+    cp -f build/travis/job2_AppImage/splash-nightly.png mscore/data/splash.png
+  else
+    # This is someone developing on their own fork
+    makefile_overrides="PREFIX='MuseScoreDev-$date-$branch-$revision' \
+                        SUFFIX='-portable-dev' \
+                        LABEL='Unofficial Developer Build'"
+  fi
 else
-  # Build is STABLE so create an official release!
+  # Build is STABLE so create a stable release!
   makefile_overrides="" # use Makefile defaults
 fi
 
