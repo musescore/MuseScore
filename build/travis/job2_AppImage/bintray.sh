@@ -40,21 +40,22 @@ if [ $(env | grep TRAVIS_PULL_REQUEST ) ] ; then
   fi
 fi
 
-BINTRAY_USER=$BINTRAY_USER # env
-BINTRAY_API_KEY=$BINTRAY_API_KEY # env
+BINTRAY_USER="${BINTRAY_USER:?Environment variable missing/empty!}" # env
+BINTRAY_API_KEY="${BINTRAY_API_KEY:?Environment variable missing/empty!}" # env
 
-BINTRAY_REPO_OWNER=$BINTRAY_REPO_OWNER #env
-[ "$BINTRAY_REPO_OWNER" ] || BINTRAY_REPO_OWNER="musescore"
+BINTRAY_REPO_OWNER="${BINTRAY_REPO_OWNER:-$BINTRAY_USER}" # env, or use BINTRAY_USER as default
+[ "${BINTRAY_REPO_OWNER}" == "musescore" ] && TRUSTED="true" || TRUSTED="false"
 
 WEBSITE_URL="http://musescore.org"
 ISSUE_TRACKER_URL="https://musescore.org/project/issues"
-VCS_URL="https://github.com/musescore/MuseScore.git" # Mandatory for packages in free Bintray repos
+GITHUB_REPO="musescore/MuseScore"
+VCS_URL="https://github.com/${GITHUB_REPO}.git" # Mandatory for packages in free Bintray repos
 LICENSE="GPL-2.0"
 
 API="https://api.bintray.com"
-FILE="$1"
 
-[ -f "$FILE" ] || { echo "Please provide a valid path to a file" >&2 ; exit 1 ;}
+FILE="$1"
+[ -f "$FILE" ] || { echo "$0: Please provide a valid path to a file" >&2 ; exit 1 ;}
 
 # GENERAL NAMING SCHEME FOR APPIMAGES:
 # File: <appName>-<version>-<arch>.AppImage
@@ -64,7 +65,7 @@ FILE="$1"
 # Version: X.Y.Z
 # Package: MuseScore-Linux-<arch>
 #
-# NIGHTLY NAMING SCHEME:
+# NIGHTLY NAMING SCHEME: (For developer builds replace "Nightly" with "Developer")
 # File:    MuseScoreNightly-<datetime>-<branch>-<commit>-<arch>.AppImage
 #    (e.g. MuseScoreNightly-201601151332-master-f53w6dg-x86_64.AppImage)
 # Version: <datetime>-<branch>-<commit> (e.g. 201601151332-master-f53w6dg)
@@ -81,16 +82,16 @@ ARCH="$(basename "$FILE" | sed -r 's|^.*-([^-]*)\.AppImage$|\1|')"
 
 case "${ARCH}" in
   x86_64|amd64 )
-    SYSTEM="64 bit (${ARCH})"
+    SYSTEM="${ARCH} (64 bit Intel/AMD)"
     ;;
-  i686|i386 )
-    SYSTEM="32 bit (${ARCH})"
+  i686|i386|i[345678]86 )
+    SYSTEM="${ARCH} (32 bit Intel/AMD)"
     ;;
   *[Aa][Rr][Mm]* )
-    SYSTEM="ARM (${ARCH})"
+    SYSTEM="${ARCH} (32 bit ARM)"
     ;;
   * )
-    echo "Error: unrecognised architecture '${ARCH}'"
+    echo "Error: unrecognised architecture '${ARCH}'" >&2
     exit 1
     ;;
 esac
@@ -101,31 +102,30 @@ if [ "${APPNAME}" == "MuseScore" ]; then
   # Upload a new version but don't publish it (invisible until published)
   url_query="" # Don't publish, don't overwrite existing files with same name
   PCK_NAME="$APPNAME-Linux-$ARCH"
-  BINTRAY_REPO="MuseScore"
+  BINTRAY_REPO="${BINTRAY_REPO:-MuseScore}" # env, or use "MuseScore"
   LABELS="[\"music\", \"audio\", \"MIDI\", \"AppImage\"]"
-elif  [ "${APPNAME}" == "MuseScoreNightly" ]; then
-  # Upload and publish a new nightly build (visible to users immediately)
+  [ "${TRUSTED}" == "true" ] && MATURITY="Official" || MATURITY="Stable"
+else
+  # Upload and publish a new development/nightly build (visible to users immediately)
   url_query="publish=1&override=1" # Automatically publish, overwrite exiting
 
   # Get Git branch from $VERSION (get characters between first and last dash)
   BRANCH="$(echo $VERSION | sed -r 's|^[^-]*-(.*)-[^-]*$|\1|')"
 
+  # Get Git commit from $VERSION (get characters after last dash)
+  COMMIT="$(echo $VERSION | sed -r 's|^.*-([^-]*)$|\1|')"
+
   PCK_NAME="$APPNAME-$BRANCH-$ARCH"
-  BINTRAY_REPO="nightlies-linux"
-  LABELS="[\"nightly\", \"unstable\", \"testing\"]"
-else
-  echo "Error: AppName not recognised." >&2
-  exit 1
-fi
+  BINTRAY_REPO="${BINTRAY_REPO:-MuseScoreDevelopment}" # env, or use "MuseScoreDevelopment"
+  LABELS="unofficial"
 
-if [ ! $(env | grep BINTRAY_USER ) ] ; then
-  echo "Environment variable \$BINTRAY_USER missing"
-  exit 1
-fi
+  if [ "${APPNAME}" == "MuseScoreNightly" ]; then
+    BINTRAY_REPO="nightlies-linux" # nightlies use a different repo
+    LABELS="nightly"
+  fi
 
-if [ ! $(env | grep BINTRAY_API_KEY ) ] ; then
-  echo "Environment variable \$BINTRAY_API_KEY missing"
-  exit 1
+  LABELS="[\"${LABELS}\", \"unstable\", \"testing\"]"
+  [ "${TRUSTED}" == "true" ] && MATURITY="Development" || MATURITY="Experimental"
 fi
 
 CURL="curl -u${BINTRAY_USER}:${BINTRAY_API_KEY} -H Content-Type:application/json -H Accept:application/json"
@@ -148,11 +148,11 @@ echo "* DESKTOP $DESKTOP"
 #fi
 
 if [ "${APPNAME}" == "MuseScore" ]; then
-  # Get description from desktop file
-  DESCRIPTION=$(bsdtar -f "${FILE}" -O -x ./"${DESKTOP}" | grep -e "^Comment=" | sed s/Comment=//g)
-elif [ "${APPNAME}" == "MuseScoreNightly" ]; then
-  # Use custom description for nightly builds
-  DESCRIPTION="Automated builds of the $BRANCH development branch for $SYSTEM Linux systems. FOR TESTING PURPOSES ONLY!"
+  # Get description from desktop file (source file: build/Linux+BSD/mscore.desktop.in)
+  DESCRIPTION="$(bsdtar -f "${FILE}" -O -x ./"${DESKTOP}" | grep -e "^Comment=" | sed s/Comment=//g)!"
+else
+  # Use custom description for nightly/development builds
+  DESCRIPTION="Automated builds of the $BRANCH development branch. FOR TESTING PURPOSES ONLY!"
 fi
 
 ICONNAME=$(bsdtar -f "${FILE}" -O -x "${DESKTOP}" | grep -e "^Icon=" | sed s/Icon=//g)
@@ -213,7 +213,7 @@ fi
 
 echo ""
 echo "Creating package ${PCK_NAME}..."
-    data="{
+  data="{
     \"name\": \"${PCK_NAME}\",
     \"desc\": \"${DESCRIPTION}\",
     \"desc_url\": \"auto\",
@@ -221,9 +221,22 @@ echo "Creating package ${PCK_NAME}..."
     \"vcs_url\": [\"${VCS_URL}\"],
     \"issue_tracker_url\": [\"${ISSUE_TRACKER_URL}\"],
     \"licenses\": [\"${LICENSE}\"],
-    \"labels\": ${LABELS}
+    \"labels\": ${LABELS},
+    \"maturity\": \"${MATURITY}\"
     }"
-${CURL} -X POST -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}
+  ATTRIBUTES="[
+    {\"name\": \"Platform\", \"values\": [\"Linux\"], \"type\": \"string\"},
+    {\"name\": \"Architecture\", \"values\": [\"${SYSTEM}\"], \"type\": \"string\"}
+    ]"
+${CURL} -X POST -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO} && new_package="true"
+if [ "$new_package" == "true" ]; then
+  # Only set package attributes if a new package was created
+  echo ""
+  echo "Setting attributes for package ${PCK_NAME}..."
+  ${CURL} -X POST -d "${ATTRIBUTES}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/attributes
+fi
+
+echo ""
 
 if [ $(which zsyncmake) ] ; then
   echo ""
@@ -240,17 +253,18 @@ if [ $(which zsyncmake) ] ; then
   echo "Uploading zsync file for ${FILE}..."
   # Workaround for:
   # https://github.com/probonopd/zsync-curl/issues/1
-  zsyncmake -u http://dl.bintray.com/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/"${FILE_UPLOAD_PATH}" ${FILE} -o ${FILE}.zsync
-  ${CURL} -T ${FILE}.zsync "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/"${FILE_UPLOAD_PATH}".zsync?${url_query}"
+  zsyncmake -u "http://dl.bintray.com/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${FILE_UPLOAD_PATH}" ${FILE} -o ${FILE}.zsync
+  ${CURL} -T ${FILE}.zsync "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/${FILE_UPLOAD_PATH}.zsync?${url_query}"
 else
   echo "zsyncmake not found, skipping zsync file generation and upload"
 fi
 
 echo ""
 echo "Uploading ${FILE}..."
-${CURL} -T ${FILE} "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/"${FILE_UPLOAD_PATH}"?${url_query}"
+${CURL} -T ${FILE} "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/${FILE_UPLOAD_PATH}?${url_query}" \
+  || { echo "$0: Error: AppImage upload failed!" >&2 ; exit 1 ;}
 
-if [ "${APPNAME}" == "MuseScoreNightly" ] && [ $(env | grep TRAVIS_JOB_ID ) ] ; then
+if [ "${APPNAME}" != "MuseScore" ] && [ $(env | grep TRAVIS_JOB_ID ) ] ; then
   echo ""
   echo "Adding Travis CI log to release notes..."
   BUILD_LOG="https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true"
