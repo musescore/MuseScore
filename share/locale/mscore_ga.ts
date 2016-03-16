@@ -18788,6 +18788,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1642"/>
+        <location filename="../../mscore/shortcut.cpp" line="1643"/>
         <source>Palettes</source>
         <translation type="unfinished"/>
     </message>
@@ -19248,12 +19249,12 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2091"/>
-        <source>Info...</source>
+        <source>Score Properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2092"/>
-        <source>Edit score info</source>
+        <source>Edit score properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
