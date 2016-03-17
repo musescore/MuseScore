@@ -6,14 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1150</width>
-    <height>739</height>
+    <width>780</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MuseScore: Edit Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_11">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetNoConstraint</enum>
+   </property>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
@@ -32,10 +35,13 @@
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
            <layout class="QGridLayout" name="gridLayout">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
             <item row="0" column="1">
              <widget class="QComboBox" name="musicalSymbolFont">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -89,6 +95,12 @@
             </item>
             <item row="1" column="1">
              <widget class="QComboBox" name="musicalTextFont">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <item>
                <property name="text">
                 <string>Bravura Text</string>
@@ -115,6 +127,12 @@
           </item>
           <item>
            <widget class="QCheckBox" name="concertPitch">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Display in concert pitch</string>
             </property>
@@ -137,6 +155,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
               <layout class="QFormLayout" name="formLayout_3">
+               <property name="sizeConstraint">
+                <enum>QLayout::SetNoConstraint</enum>
+               </property>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_15">
                  <property name="text">
@@ -193,6 +214,12 @@
           </item>
           <item>
            <widget class="QCheckBox" name="hideEmptyStaves">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Hide empty staves</string>
             </property>
@@ -200,6 +227,12 @@
           </item>
           <item>
            <widget class="QCheckBox" name="dontHideStavesInFirstSystem">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Don't hide empty staves in first system</string>
             </property>
@@ -207,6 +240,12 @@
           </item>
           <item>
            <widget class="QCheckBox" name="crossMeasureValues">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Display note values across measure bar (EXPERIMENTAL, early music only!)</string>
             </property>
@@ -214,6 +253,12 @@
           </item>
           <item>
            <widget class="QCheckBox" name="hideInstrumentNameIfOneInstrument">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Hide instrument name if there is only 1 instrument</string>
             </property>
@@ -246,6 +291,9 @@
                <property name="spacing">
                 <number>10</number>
                </property>
+               <property name="sizeConstraint">
+                <enum>QLayout::SetNoConstraint</enum>
+               </property>
                <property name="bottomMargin">
                 <number>10</number>
                </property>
@@ -258,6 +306,12 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="SwingOff">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>Off</string>
                  </property>
@@ -268,6 +322,12 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="swingEighth">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>Eighth Note</string>
                  </property>
@@ -275,6 +335,12 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="swingSixteenth">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>Sixteenth Note</string>
                  </property>
@@ -284,6 +350,9 @@
                 <spacer name="zontalSpacer_16">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -297,6 +366,9 @@
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <property name="sizeConstraint">
+                <enum>QLayout::SetNoConstraint</enum>
+               </property>
                <property name="bottomMargin">
                 <number>30</number>
                </property>
@@ -310,7 +382,7 @@
                <item>
                 <widget class="QSpinBox" name="swingBox">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -5829,7 +5901,7 @@
    <item row="0" column="0">
     <widget class="QListWidget" name="pageList">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -5969,7 +6041,7 @@
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>

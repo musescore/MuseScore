@@ -25,6 +25,7 @@
 #include "globals.h"
 #include "libmscore/style.h"
 
+
 namespace Ms {
 
 class Score;
@@ -48,7 +49,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       Score* cs;
       QPushButton* buttonApplyToAllParts;
       MStyle lstyle;    // local copy of style
-
+	  
       QButtonGroup* stemGroups[VOICES];
 
       QVector<StyleWidget> styleWidgets;
@@ -60,6 +61,9 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       void apply();
       void applyToAllParts();
+	  
+	  void writeSettings();
+      void readSettings();
 
    private slots:
       void selectChordDescriptionFile();
@@ -73,6 +77,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void resetStyleValue(int i);
 
       void on_comboFBFont_currentIndexChanged(int index);
+	  void closeEvent( QCloseEvent* );
 
 public:
       static const int PAGE_NOTE = 6;
