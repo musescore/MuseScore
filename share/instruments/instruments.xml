@@ -2281,8 +2281,8 @@
                   <musicXMLid>wind.pipes.bagpipes</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-81</aPitchRange>
-                  <pPitchRange>67-81</pPitchRange>
+                  <aPitchRange>65-79</aPitchRange>
+                  <pPitchRange>65-79</pPitchRange>
                   <transposeDiatonic>-1</transposeDiatonic>
                   <transposeChromatic>-2</transposeChromatic>
                   <Channel>
