@@ -59,6 +59,7 @@ class Excerpt : public QObject {
       };
 
 extern void createExcerpt(Excerpt*);
+extern void deleteExcerpt(Excerpt*);
 extern void cloneStaves(Score* oscore, Score* score, const QList<int>& map);
 extern void cloneStaff(Staff* ostaff, Staff* nstaff);
 extern void cloneStaff2(Staff* ostaff, Staff* nstaff, int stick, int etick);
