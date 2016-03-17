@@ -1494,19 +1494,13 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               voiceNum +=1;
                               if (currentVoice.toInt() == - 1) {
                                     if (contentAdded) continue;
-                                    Fraction l = Fraction(1,1);
+                                    Fraction l = measure->len();
                                     // add a rest with length of l
                                     ChordRest* cr = new Rest(score);
                                     cr->setTrack(staffIdx * VOICES + voiceNum);
                                     TDuration d(l);
                                     cr->setDuration(l);
-                                    if (cr->type() == Element::Type::REST && l >= measure->len()) {
-                                          cr->setDurationType(TDuration::DurationType::V_MEASURE);
-                                          cr->setDuration(measure->len());
-                                          }
-                                    else
-                                          cr->setDurationType(d);
-
+                                    cr->setDurationType(TDuration::DurationType::V_MEASURE);
                                     Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                                     if(!segment->cr(staffIdx * VOICES + voiceNum))
                                           segment->add(cr);
