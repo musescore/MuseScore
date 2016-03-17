@@ -3,13 +3,13 @@
 
 cd build.debug/mtest
 
-xvfb-run ctest -j2 --output-on-failure
+xvfb-run -a ctest -j2 --output-on-failure
 
 PROC_RET=$?
 
 if [ "$PROC_RET" -ne 0 ]; then
   killall Xvfb
-  xvfb-run ./mtest
+  xvfb-run -a ./mtest
 fi
 
 # Searching for merge conflicts, by searching for the begin/end markers.
