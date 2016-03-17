@@ -228,6 +228,48 @@ void createExcerpt(Excerpt* excerpt)
       score->doLayout();
       }
 
+void deleteExcerpt(Excerpt* excerpt)
+      {
+      Score* oscore = excerpt->oscore();
+      Score* partScore  = excerpt->partScore();
+      // unlink the staves in the excerpt
+      for (Staff* s : partScore->staves()) {
+            Staff* staff = nullptr;
+            // find staff in the main score
+            for (Staff* s2 : s->linkedStaves()->staves()) {
+                  if (s2->primaryStaff()) {
+                        staff = s2;
+                        break;
+                        }
+                  }
+            if (staff) {
+                  int staffIdx = partScore->staffIdx(s);
+                  // unlink the spanners
+                  for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
+                        Spanner* s = i->second;
+                        if (s->staffIdx() == staffIdx)
+                              s->undoUnlink();
+                        }
+                  int sTrack = staffIdx * VOICES;
+                  int eTrack = sTrack + VOICES;
+                  // unlink elements and annotation
+                  for (Segment* s = partScore->firstSegmentMM(); s; s = s->next1MM()) {
+                        for (int track = eTrack - 1; track >= sTrack; --track) {
+                              Element* el = s->element(track);
+                              if (el)
+                                    el->undoUnlink();
+                              }
+                        for (Element* e : s->annotations()) {
+                              if (e->staffIdx() == staffIdx)
+                                    e->undoUnlink();
+                              }
+                        }
+                  // unlink the staff
+                  oscore->undo(new UnlinkStaff(staff, s));
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   cloneSpanner
 //---------------------------------------------------------
