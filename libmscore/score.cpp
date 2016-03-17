@@ -2543,14 +2543,14 @@ void Score::cmdRemoveStaff(int staffIdx)
                   Score* lscore = staff->score();
                   if (lscore != this) {
                         lscore->undoRemoveStaff(staff);
-                        s->score()->undo(new UnlinkStaff(s, staff));
+                        s->score()->undo(new UnlinkStaff(staff, s));
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
                               lscore->undoRemovePart(staff->part(), pIndex);
                               }
                         }
                   else // linked staff in the same score
-                       s->score()->undo(new UnlinkStaff(s, staff));
+                       s->score()->undo(new UnlinkStaff(staff, s));
                   }
             }
       }

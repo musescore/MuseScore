@@ -426,7 +426,7 @@ void ExcerptsDialog::accept()
                                                 }
                                           }
                                     // unlink the staff
-                                    score->undo(new UnlinkStaff(s, staff));
+                                    score->undo(new UnlinkStaff(staff, s));
                                     }
                               }
                         // remove the excerpt
