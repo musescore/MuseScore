@@ -381,6 +381,43 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       if (!s1->rtick())
             s1 = s1->measure()->first();
       Segment* s2 = _selection.endSegment();
+
+      // create missing C key signatures at beginning of staves and link if transposing keys and chromatically
+      if (s1->tick() <= 0 && trKeys && mode != TransposeMode::DIATONICALLY) {
+            for (Staff* stf : sl) {
+                  KeySig* lks = 0;
+                  for (Staff* staff : stf->staffList()) {
+                        Score* score = staff->score();
+                        Segment* s   = score->firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
+                        int staffIdx = staff->idx();
+                        int track    = staffIdx * VOICES;
+                        KeySig* ks   = static_cast<KeySig*>(s->element(track));
+                        if (ks) {
+                              if (lks) {
+                                    if (!lks->linkList().contains(ks))
+                                          lks->linkTo(ks);
+                                    }
+                              else {
+                                    lks = ks;
+                                    }
+                              }
+                        else {
+                              KeySigEvent nkey;
+                              nkey.setKey(Key::C);
+                              KeySig* nks = new KeySig(score);
+                              nks->setParent(s);
+                              nks->setTrack(track);
+                              nks->setKeySigEvent(nkey);
+                              undo(new AddElement(nks));
+                              if (lks)
+                                    lks->linkTo(nks);
+                              else
+                                    lks = nks;
+                              }
+                        }
+                  }
+            }
+
       for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
             for (int st : tracks) {
                   if (staff(st/VOICES)->staffType()->group() == StaffGroup::PERCUSSION)
@@ -450,28 +487,6 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   }
             }
-      //
-      // create missing key signatures
-      //
-      if (trKeys && (mode != TransposeMode::DIATONICALLY) && (s1->tick() == 0)) {
-//            Segment* seg = firstMeasure()->findSegment(Segment::Type::KeySig, 0);
-            Key nKey = transposeKey(Key::C, interval);
-//            if (seg == 0) {
-                  for (int st : tracks) {
-                        if (st % VOICES)
-                              continue;
-                        Segment* seg = firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
-                        KeySig* ks = static_cast<KeySig*>(seg->element(st));
-                        if (!ks) {
-                              ks = new KeySig(this);
-                              ks->setTrack(st);
-                              ks->setKey(nKey);
-                              ks->setParent(seg);
-                              undoAddElement(ks);
-                              }
-                        }
-                  }
-//            }
       return true;
       }
 
