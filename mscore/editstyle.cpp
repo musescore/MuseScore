@@ -329,7 +329,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 void EditStyle::buttonClicked(QAbstractButton* b)
       {
       writeSettings();
-	  
       switch (buttonBox->standardButton(b)) {
             case QDialogButtonBox::Apply:
                   apply();

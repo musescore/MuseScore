@@ -25,7 +25,6 @@
 #include "globals.h"
 #include "libmscore/style.h"
 
-
 namespace Ms {
 
 class Score;
