@@ -503,6 +503,7 @@ bool Box::acceptDrop(const DropData& data) const
             case Element::Type::ICON:
                   switch(static_cast<Icon*>(data.element)->iconType()) {
                         case IconType::VFRAME:
+                        case IconType::HFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:
                         case IconType::MEASURE:
@@ -571,6 +572,9 @@ Element* Box::drop(const DropData& data)
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::VFRAME:
                               score()->insertMeasure(Element::Type::VBOX, this);
+                              break;
+                        case IconType::HFRAME:
+                              score()->insertMeasure(Element::Type::HBOX, this);
                               break;
                         case IconType::TFRAME:
                               score()->insertMeasure(Element::Type::TBOX, this);

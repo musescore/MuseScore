@@ -1386,8 +1386,8 @@ void Score::layoutStage3()
 
 //---------------------------------------------------------
 //   layout
-//    - measures are akkumulated into systems
-//    - systems are akkumulated into pages
+//    - measures are accumulated into systems
+//    - systems are accumulated into pages
 //   already existent systems and pages are reused
 //---------------------------------------------------------
 
@@ -2299,6 +2299,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
             system->measures().append(curMeasure);
 
+            Element::Type ct = curMeasure->type();
             Element::Type nt;
             if (_showVBox)
                   nt = curMeasure->nextMM() ? curMeasure->nextMM()->type() : Element::Type::INVALID;
@@ -2319,6 +2320,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             if (continueFlag
                || pbreak
                || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)
+               || (ct == Element::Type::VBOX || ct == Element::Type::TBOX || ct == Element::Type::FBOX)
                ) {
                   if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());

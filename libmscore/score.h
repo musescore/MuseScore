@@ -326,7 +326,7 @@ class Score : public QObject, public ScoreElement {
       // generated objects during layout:
       //
       QList<Page*> _pages;          // pages are build from systems
-      QList<System*> _systems;      // measures are akkumulated to systems
+      QList<System*> _systems;      // measures are accumulated to systems
 
       // temp values used during doLayout:
       int curPage;

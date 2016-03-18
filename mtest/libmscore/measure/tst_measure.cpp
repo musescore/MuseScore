@@ -54,6 +54,12 @@ class TestMeasure : public QObject, public MTest
       void spanner_C();
       void spanner_D();
       void minWidth();
+      void insertHBoxBeforeHBox();
+      void insertVBoxBeforeHBox();
+      void insertMeasureBeforeHBox();
+      void insertHBoxBeforeVBox();
+      void insertVBoxBeforeVBox();
+      void insertMeasureBeforeVBox();
       };
 
 //---------------------------------------------------------
@@ -361,8 +367,120 @@ void TestMeasure::spanner_D()
       delete score;
       }
 
+//---------------------------------------------------------
+///   insert-HBox-before-HBox
+//---------------------------------------------------------
+
+void TestMeasure::insertHBoxBeforeHBox()
+      {
+      Score* score = readScore(DIR + "measure_78636_HMHMH.mscx");
+      score->doLayout();
+      for (MeasureBase* m = score->first(); m; m=m->next()) {
+            if (m->type() == Element::Type::HBOX) {
+                  score->startCmd();
+                  score->insertMeasure(Element::Type::HBOX, m);
+                  score->endCmd();
+                  }
+            }
+      QVERIFY(saveCompareScore(score, "measure_78636_HHMHHMHH-try.mscx", DIR + "measure_78636_HHMHHMHH-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   insert-VBox-before-HBox
+//---------------------------------------------------------
+
+void TestMeasure::insertVBoxBeforeHBox()
+      {
+      Score* score = readScore(DIR + "measure_78636_HMHMH.mscx");
+      score->doLayout();
+      for (MeasureBase* m = score->first(); m; m=m->next()) {
+            if (m->type() == Element::Type::HBOX) {
+                  score->startCmd();
+                  score->insertMeasure(Element::Type::VBOX, m);
+                  score->endCmd();
+                  }
+            }
+      QVERIFY(saveCompareScore(score, "measure_78636_VHMVHMVH-try.mscx", DIR + "measure_78636_VHMVHMVH-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   insert-Measure-before-HBox
+//---------------------------------------------------------
+
+void TestMeasure::insertMeasureBeforeHBox()
+      {
+      Score* score = readScore(DIR + "measure_78636_HMHMH.mscx");
+      score->doLayout();
+      for (MeasureBase* m = score->first(); m; m=m->next()) {
+            if (m->type() == Element::Type::HBOX) {
+                  score->startCmd();
+                  score->insertMeasure(Element::Type::MEASURE, m);
+                  score->endCmd();
+                  }
+            }
+      QVERIFY(saveCompareScore(score, "measure_78636_MHMMHMMH-try.mscx", DIR + "measure_78636_MHMMHMMH-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   insert-HBox-before-VBox
+//---------------------------------------------------------
+
+void TestMeasure::insertHBoxBeforeVBox()
+      {
+      Score* score = readScore(DIR + "measure_78636_VMVMV.mscx");
+      score->doLayout();
+      for (MeasureBase* m = score->first(); m; m=m->next()) {
+            if (m->type() == Element::Type::VBOX) {
+                  score->startCmd();
+                  score->insertMeasure(Element::Type::HBOX, m);
+                  score->endCmd();
+                  }
+            }
+      QVERIFY(saveCompareScore(score, "measure_78636_HVMHVMHV-try.mscx", DIR + "measure_78636_HVMHVMHV-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   insert-VBox-before-VBox
+//---------------------------------------------------------
+
+void TestMeasure::insertVBoxBeforeVBox()
+      {
+      Score* score = readScore(DIR + "measure_78636_VMVMV.mscx");
+      score->doLayout();
+      for (MeasureBase* m = score->first(); m; m=m->next()) {
+            if (m->type() == Element::Type::VBOX) {
+                  score->startCmd();
+                  score->insertMeasure(Element::Type::VBOX, m);
+                  score->endCmd();
+                  }
+            }
+      QVERIFY(saveCompareScore(score, "measure_78636_VVMVVMVV-try.mscx", DIR + "measure_78636_VVMVVMVV-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   insert-Measure-before-VBox
+//---------------------------------------------------------
+
+void TestMeasure::insertMeasureBeforeVBox()
+      {
+      Score* score = readScore(DIR + "measure_78636_VMVMV.mscx");
+      score->doLayout();
+      for (MeasureBase* m = score->first(); m; m=m->next()) {
+            if (m->type() == Element::Type::VBOX) {
+                  score->startCmd();
+                  score->insertMeasure(Element::Type::MEASURE, m);
+                  score->endCmd();
+                  }
+            }
+      QVERIFY(saveCompareScore(score, "measure_78636_MVMMVMMV-try.mscx", DIR + "measure_78636_MVMMVMMV-ref.mscx"));
+      delete score;
+      }
 
 QTEST_MAIN(TestMeasure)
-
 #include "tst_measure.moc"
 
