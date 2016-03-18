@@ -2096,12 +2096,12 @@ void Note::updateRelLine(int relLine, bool undoable)
                   chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
             }
 
-      Staff* s = score()->staff(staffIdx() + chord()->staffMove());
+      Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
-      int line = relStep(relLine, clef);
+      int line      = relStep(relLine, clef);
 
       if (line != _line) {
-            if (undoable)
+            if (undoable && _line != INVALID_LINE)
                   undoChangeProperty(P_ID::LINE, line);
             else
                   setLine(line);

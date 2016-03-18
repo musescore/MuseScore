@@ -68,7 +68,9 @@ SRC=" \
       grace-2
       harmony-12\
       user-offset-2 \
-      system-4"
+      "
+#      layout-1 layout-2
+#      system-4"
 
 DPI=130
 F=vtest.html

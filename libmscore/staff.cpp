@@ -290,6 +290,7 @@ void Staff::dumpTimeSigs(const char* title) const
 
 void Staff::setClef(Clef* clef)
       {
+//      qDebug("Staff::setClef generated %d", clef->generated());
       if (clef->generated())
             return;
       int tick = clef->segment()->tick();
@@ -309,6 +310,7 @@ void Staff::setClef(Clef* clef)
 
 void Staff::removeClef(Clef* clef)
       {
+//      qDebug("Staff::removeClef generated %d", clef->generated());
       if (clef->generated())
             return;
       int tick = clef->segment()->tick();

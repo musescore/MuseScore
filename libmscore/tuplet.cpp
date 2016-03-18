@@ -618,11 +618,6 @@ void Tuplet::write(Xml& xml) const
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
-
-      printf("Tuplet::write %d %d\n",
-         int(getProperty(P_ID::DIRECTION).value<Direction>()),
-         int(propertyDefault(P_ID::DIRECTION).value<Direction>())
-         );
       writeProperty(xml, P_ID::DIRECTION);
       writeProperty(xml, P_ID::NUMBER_TYPE);
       writeProperty(xml, P_ID::BRACKET_TYPE);

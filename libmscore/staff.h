@@ -139,6 +139,8 @@ private:
       void initFromStaffType(const StaffType* staffType);
       void init(const Staff*);
 
+      virtual const char* name() const override { return "Staff"; }
+
       bool isTop() const;
       QString partName() const;
       int rstaff() const;

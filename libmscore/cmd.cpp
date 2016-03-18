@@ -83,14 +83,14 @@ namespace Ms {
 
 void CmdState::reset()
       {
-      refresh             = QRectF();     ///< area to update, canvas coordinates
+//      refresh             = QRectF();     ///< area to update, canvas coordinates
       layoutFlags         = LayoutFlag::NO_FLAGS;
       _updateMode         = UpdateMode::DoNothing;
-      _playNote           = false;        ///< play selected note after command
-      _playChord          = false;        ///< play whole chord for the selected note
+//      _playNote           = false;        ///< play selected note after command
+//      _playChord          = false;        ///< play whole chord for the selected note
       _excerptsChanged    = false;
       _instrumentsChanged = false;
-      _selectionChanged   = false;
+//      _selectionChanged   = false;
       _startTick          = -1;
       _endTick            = -1;
       }
@@ -107,7 +107,7 @@ void CmdState::setTick(int t)
             _startTick = t;
       if (_endTick == -1 || t > _endTick)
             _endTick = t;
-      setUpdateMode(UpdateMode::LayoutTick);
+      setUpdateMode(UpdateMode::LayoutRange);
       }
 
 //---------------------------------------------------------
@@ -131,7 +131,7 @@ void Score::startCmd()
       if (MScore::debugMode)
             qDebug("===startCmd()");
 
-      _cmdState.reset();
+      cmdState().reset();
 
       // Start collecting low-level undo operations for a
       // user-visible undo action.
@@ -155,7 +155,7 @@ void Score::endCmd(bool rollback)
       {
       if (!undoStack()->active()) {
             qDebug("Score::endCmd(): no cmd active");
-            end();
+            update();
             return;
             }
 
@@ -164,22 +164,49 @@ void Score::endCmd(bool rollback)
             undoStack()->current()->unwind();
             }
 
-// printf("Score::endCmd state %d tick %d %d\n", int(_cmdState.updateMode()), _cmdState.startTick(), _cmdState.endTick());
+      update();
 
-      switch (_cmdState.updateMode()) {
-            case UpdateMode::DoNothing:
-            case UpdateMode::Update:
-            case UpdateMode::UpdateAll:
-                  break;
-            case UpdateMode::LayoutTick:
-                  doLayoutRange(_cmdState.startTick(), _cmdState.endTick());
-                  setUpdateAll();
-                  break;
-            case UpdateMode::LayoutAll:
-                  doLayout();
-                  setUpdateAll();
-                  setUpdateAll();
-                  break;
+      if (MScore::debugMode)
+            qDebug("===endCmd() %d", undoStack()->current()->childCount());
+      bool noUndo = undoStack()->current()->childCount() <= 1;       // nothing to undo?
+      undoStack()->endMacro(noUndo);
+
+      if (dirty()) {
+            masterScore()->_playlistDirty = true;  // TODO: flag individual operations
+            masterScore()->_autosaveDirty = true;
+            }
+      MuseScoreCore::mscoreCore->endCmd();
+      }
+
+//---------------------------------------------------------
+//   update
+//    layout & update
+//---------------------------------------------------------
+
+void Score::update()
+      {
+      CmdState& cs = cmdState();
+      if (cs.layoutAll()) {
+            for (Score* s : scoreList())
+                  s->doLayout();
+            }
+      else if (cs.layoutRange()) {
+            for (Score* s : scoreList())
+                  s->doLayoutRange(cs.startTick(), cs.endTick());
+            }
+      else if (cs.updateAll()) {
+            for (Score* s : scoreList()) {
+                  for (MuseScoreView* v : s->viewer)
+                        v->updateAll();
+                  }
+            }
+      else if (cs.updateRange()) {
+            // updateRange updates only current score
+            qreal d = spatium() * .5;
+            _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
+            for (MuseScoreView* v : viewer)
+                  v->dataChanged(_updateState.refresh);
+            _updateState.refresh = QRectF();
             }
 
       const InputState& is = inputState();
@@ -190,77 +217,7 @@ void Score::endCmd(bool rollback)
             emit playlistChanged();
             _playlistDirty = false;
             }
-
-      if (MScore::debugMode)
-            qDebug("===endCmd() %d", undoStack()->current()->childCount());
-      bool noUndo = undoStack()->current()->childCount() <= 1;       // nothing to undo?
-      undoStack()->endMacro(noUndo);
-      end();      // DEBUG
-
-      if (dirty()) {
-            masterScore()->_playlistDirty = true;  // TODO: flag individual operations
-            masterScore()->_autosaveDirty = true;
-            }
-      MuseScoreCore::mscoreCore->endCmd();
-      }
-
-//---------------------------------------------------------
-//   end
-///   Update the redraw area.
-//---------------------------------------------------------
-
-void Score::end()
-      {
-      for (Score* s : scoreList())
-            s->end1();
-      }
-
-//---------------------------------------------------------
-//   update
-//    layout & update
-//---------------------------------------------------------
-
-void Score::update()
-      {
-      for (Score* s : scoreList()) {
-            switch (s->_cmdState.updateMode()) {
-                  case UpdateMode::DoNothing:
-                  case UpdateMode::Update:
-                  case UpdateMode::UpdateAll:
-                        break;
-                  case UpdateMode::LayoutTick:
-                        s->doLayoutRange(_cmdState.startTick(), _cmdState.endTick());
-                        s->setUpdateAll();
-                        break;
-                  case UpdateMode::LayoutAll:
-                        s->doLayout();
-                        s->setUpdateAll();
-                        s->setUpdateAll();
-                        break;
-                  }
-            if (s != this)
-                  s->deselectAll();
-            s->end1();
-            }
-      }
-
-//---------------------------------------------------------
-//   end1
-//---------------------------------------------------------
-
-void Score::end1()
-      {
-      if (_cmdState.updateAll()) {
-            for (MuseScoreView* v : viewer)
-                  v->updateAll();
-            }
-      else {
-            // update a little more:
-            qreal d = spatium() * .5;
-            _cmdState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : viewer)
-                  v->dataChanged(_cmdState.refresh);
-            }
+      cmdState().reset();
       }
 
 //---------------------------------------------------------
@@ -270,23 +227,8 @@ void Score::end1()
 
 void Score::endUndoRedo()
       {
+      update();
       updateSelection();
-      for (Score* score : scoreList()) {
-            if (score->_cmdState.layoutAll()) {
-                  score->masterScore()->setUndoRedo(true);
-                  score->doLayout();
-                  score->masterScore()->setUndoRedo(false);
-                  score->setUpdateAll();
-                  }
-            const InputState& is = score->inputState();
-            if (is.noteEntryMode() && is.segment())
-                  score->setPlayPos(is.segment()->tick());
-            if (_playlistDirty) {
-                  emit playlistChanged();
-                  _playlistDirty = false;
-                  }
-            }
-      end();
       }
 
 //---------------------------------------------------------
@@ -515,7 +457,7 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
-            _cmdState._playNote = true;
+            setPlayNote(true);
 
             select(note, SelectType::SINGLE, 0);
             }
@@ -642,7 +584,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   undoAddCR(ncr, measure, tick);
                   if (addTie)
                         undoAddElement(addTie);
-                  _cmdState._playNote = true;
+                  setPlayNote(true);
                   segment = ncr->segment();
                   tick += ncr->actualTicks();
                   }
@@ -1432,7 +1374,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
 
             // play new note with velocity 80 for 0.3 sec:
-            _cmdState._playNote = true;
+            setPlayNote(true);
             }
 
       _selection.clear();
@@ -1932,7 +1874,7 @@ Element* Score::move(const QString& cmd)
                   // if chord, go to topmost note
                   if (trg->type() == Element::Type::CHORD)
                         trg = static_cast<Chord*>(trg)->upNote();
-                  _cmdState._playNote = true;
+                  setPlayNote(true);
                   select(trg, SelectType::SINGLE, 0);
                   return trg;
                   }
@@ -2048,7 +1990,7 @@ Element* Score::move(const QString& cmd)
       if (el) {
             if (el->type() == Element::Type::CHORD)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
-            _cmdState._playNote = true;
+            setPlayNote(true);
             if (noteEntryMode()) {
                   // if cursor moved into a gap, selection cannot follow
                   // only select & play el if it was not already selected (does not normally happen)
@@ -2056,7 +1998,7 @@ Element* Score::move(const QString& cmd)
                   if (cr || !el->selected())
                         select(el, SelectType::SINGLE, 0);
                   else
-                        _cmdState._playNote = false;
+                        setPlayNote(false);
                   for (MuseScoreView* view : viewer)
                         view->moveCursor();
                   }

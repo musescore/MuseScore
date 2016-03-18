@@ -1,5 +1,6 @@
 ====================================================================
-      MuseScore Version 3 design goals/changes
+      Remarks for MuseScore Version 3
+      design goals/changes
 ====================================================================
 
 - Optimize horizontal layout by allowing overlapping segments.
@@ -9,8 +10,11 @@
 
 - Automatically increase vertical space between staves to avoid collisions.
       - Use the segment shapes to compute the minimum distance between staves.
+        Use the minimum distance if its bigger than the style distance;
 
 - Implement a way to (re-)layout only the modified part of the score.
+  A reorganization of layout is needed for this. Layout should work in one pass in
+  an incremental way.
 
 - Do not allow more than one System on a line. In 2.x a horizontal box splits
   a line into two systems. In 3.x a horizontal box is handled as a special measure.
@@ -21,17 +25,15 @@
 - Do not undo/redo add/removal of "created" elements.
       - It speeds up doLayout() and consumes less memory.
 
-      ? layout of parts after change in one part not necessary
-
-      - incomplete layouts should be possible (layout only up to first page
-        to speed up program start)
-
-      In 2.x all Segments must be on the undo/redo stack to keep the history
+      In 2.x all Segments changes must be on the undo/redo stack to keep the history
       consistent, This was necessary as Segments were referring to
       previous/next segments to find the proper insertion point.
 
       In 3.x  Undo knows were to (re-)insert Segments by only checking type and tick
       position.
+
+- evaluate the possibility of implementing "Continuous View" as a real "view" change
+  without changing the score (no undo/redo change)
 
 - remove pre 2.0 compatibility
 
@@ -70,7 +72,14 @@
             - use list.empty() instead of list.isEmpty()
             - etc.
 
-      (see https://marcmutz.wordpress.com/effective-qt/containers/)
+        (see https://marcmutz.wordpress.com/effective-qt/containers/)
+
+        Caution when replacing Qt container with stl container as the semantic
+        may be different. Especially in a "for (xxx : yyy)" loop the Qt container
+        is copied (copy on write) and the stl container not. That meauns that you can modify a
+        Qt container (inserting/deleting elements) in this for loop. This will usually not
+        work for a stl container.
+
 
       * In iterating a SegmentList instead of
             for (Segment* s = segments->first(); s; s = s->next())
@@ -93,6 +102,53 @@
         Goal is to allow
             - allow type conversion (to QVariant for example)
             - add conversion to/from string for use in Xml::read(...)/Xml::write(xxx)
+            - export to qml scripting
+
+        Drawbacks:
+            - forward declaration is not possible as for c++11 "enum class"
+            - the enum _Direction is a different type than Direction; which sometimes
+              require a static_cast
+
+        This is somehow experimental.
+
+      * debug messages
+            - use qWarning(), qCritical() and qFatal()
+            - if debug messages are used, it should be possible to switch them off and they
+              should be removed in release mode
+            - don't use qDebug(), instead use a log category and call qCDebug(logCategory, ...)
+              (see undo.h undo.cpp for example usage)
+              TODO: check if they can be removed in system mode
+
+
+====================================================================
+      some rules
+====================================================================
+
+      Layout
+
+      - After loading a score, the score data can only be modified in a "undo" function during editing.
+        The score is "dirty" if there is an undo stack entry.
+
+      - Flags/data which describe what kind of relayout/update the score needs are collected in
+        Score->CmdState. They can only be set in an "undo" function.
+
+      Score File
+
+      - "created" elements are not written out into the score file. For example bar lines are usually created
+        by layout. They are marked as created and therefore do not appear in the score file.
+
+      - Element properties are only written if they differ from their default value which usually is the
+        style value if they are styled.
+
+====================================================================
+      implementation details
+====================================================================
+
+      * why do we need to layout MasterScore and all parts?
+
+            Layout can remove elements which are user modified for example spanner segments.
+            This needs to be undoable. Layout cannot be delayed bc. we then cannot associate
+            any changes to the proper command frame in the undo stack.
 
 
 ====================================================================

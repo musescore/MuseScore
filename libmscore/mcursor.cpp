@@ -171,7 +171,7 @@ void MCursor::addPart(const QString& instrument)
 
 void MCursor::saveScore()
       {
-      QFile fp(_score->name() + ".mscx");
+      QFile fp(_score->fileInfo()->completeBaseName() + ".mscx");
       if (!fp.open(QIODevice::WriteOnly)) {
             qFatal("Open <%s> failed", qPrintable(fp.fileName()));
             }

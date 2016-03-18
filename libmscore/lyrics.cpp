@@ -464,7 +464,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
 
       layout();
       score()->setLayoutAll();
-      score()->end();
+      score()->update();
       txt = sl.join(" ");
 
       QApplication::clipboard()->setText(txt, mode);

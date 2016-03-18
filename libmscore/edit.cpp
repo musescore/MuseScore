@@ -359,8 +359,8 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       note->setTrack(chord->track());
       note->setNval(noteVal);
       undoAddElement(note);
-      _cmdState._playNote = true;
-      _cmdState._playChord = true;
+      setPlayNote(true);
+      setPlayChord(true);
       select(note, SelectType::SINGLE, 0);
       if (!chord->staff()->isTabStaff())
             _is.moveToNextInputPos();
@@ -1393,8 +1393,8 @@ void Score::repitchNote(const Position& p, bool replace)
             }
       // add new note to chord
       undoAddElement(note);
-      _cmdState._playNote = true;
-      _cmdState._playChord = true;
+      setPlayNote(true);
+      setPlayChord(true);
       // recreate tie forward if there is a note to tie to
       // one-sided ties will not be recreated
       if (firstTiedNote) {
@@ -2599,7 +2599,7 @@ void Score::colorItem(Element* element)
             if (e->color() != c) {
                   undoChangeProperty(e, P_ID::COLOR, c);
                   e->setGenerated(false);
-                  _cmdState.refresh |= e->abbox();
+                  addRefresh(e->abbox());
                   if (e->type() == Element::Type::BAR_LINE) {
 //                        Element* ep = e->parent();
 //                        if (ep->type() == Element::Type::SEGMENT && static_cast<Segment*>(ep)->segmentType() == Segment::Type::EndBarLine) {

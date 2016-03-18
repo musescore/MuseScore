@@ -1286,13 +1286,13 @@ void MuseScore::updateTabNames()
       for (int i = 0; i < tab1->count(); ++i) {
             ScoreView* view = tab1->view(i);
             if (view)
-                  tab1->setTabText(i, view->score()->name());
+                  tab1->setTabText(i, view->score()->fileInfo()->completeBaseName());
             }
       if (tab2) {
             for (int i = 0; i < tab2->count(); ++i) {
                   ScoreView* view = tab2->view(i);
                   if (view)
-                        tab2->setTabText(i, view->score()->name());
+                        tab2->setTabText(i, view->score()->fileInfo()->completeBaseName());
                   }
             }
       }
@@ -1462,9 +1462,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
 
       if (!cs->isMaster())
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->name() + "-" + cs->name());
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->fileInfo()->completeBaseName()
+               + "-" + cs->fileInfo()->completeBaseName());
       else
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->name());
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->fileInfo()->completeBaseName());
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(StyleIdx::concertPitch));
@@ -3003,7 +3004,7 @@ void MuseScore::dirtyChanged(Score* s)
             qDebug("score not in list");
             return;
             }
-      QString label(score->masterScore()->name());
+      QString label(score->fileInfo()->completeBaseName());
       if (score->dirty())
             label += "*";
       tab1->setTabText(idx, label);
@@ -4051,7 +4052,7 @@ void MuseScore::endCmd()
                   excerptsChanged(cs->masterScore());
                   cs->masterScore()->setExcerptsChanged(false);
                   }
-            if (cs->instrumentsChanged()) {
+            if (cs->masterScore()->instrumentsChanged()) {
                   if (!noSeq && (seq && seq->isRunning()))
                         seq->initInstruments();
                   instrumentChanged();                // update mixer

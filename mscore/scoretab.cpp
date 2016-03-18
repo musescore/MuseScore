@@ -206,9 +206,9 @@ void ScoreTab::setCurrent(int n)
             QList<Excerpt*>& excerpts = score->excerpts();
             if (!excerpts.isEmpty()) {
                   tab2->blockSignals(true);
-                  tab2->addTab(score->name().replace("&","&&"));
+                  tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&"));
                   foreach(const Excerpt* excerpt, excerpts) {
-                        tab2->addTab(excerpt->partScore()->name().replace("&","&&"));
+                        tab2->addTab(excerpt->partScore()->fileInfo()->completeBaseName().replace("&","&&"));
                         }
                   tab2->setCurrentIndex(tsv->part);
                   tab2->blockSignals(false);
@@ -254,9 +254,9 @@ void ScoreTab::updateExcerpts()
       QList<Excerpt*>& excerpts = score->excerpts();
       if (!excerpts.isEmpty()) {
             tab2->blockSignals(true);
-            tab2->addTab(score->name().replace("&","&&"));
+            tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&"));
             foreach(const Excerpt* excerpt, excerpts)
-                  tab2->addTab(excerpt->partScore()->name().replace("&","&&"));
+                  tab2->addTab(excerpt->partScore()->fileInfo()->completeBaseName().replace("&","&&"));
             tab2->blockSignals(false);
             tab2->setVisible(true);
 
@@ -311,7 +311,7 @@ void ScoreTab::insertTab(Score* s)
       {
       int idx = scoreList->indexOf(s->masterScore());
       tab->blockSignals(true);
-      tab->insertTab(idx, s->name().replace("&","&&"));
+      tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&"));
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
       tab->blockSignals(false);
       }

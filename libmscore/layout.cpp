@@ -1289,8 +1289,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest/StartRepeatBarLine
-//                  if (seg->isType(Segment::Type::ChordRest | Segment::Type::StartRepeatBarLine))
-//                        break;
+                  if (seg->isType(Segment::Type::ChordRest | Segment::Type::StartRepeatBarLine))
+                        break;
                   Element* el = seg->element(strack);
                   if (!el)
                         continue;
@@ -1331,7 +1331,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   keysig->segment()->createShape(staffIdx);
                   }
 
-            if (isFirstSystem || styleB(StyleIdx::genClef) || staff->clef(tick) != staff->clef(tick-1)) {
+            if (isFirstSystem || styleB(StyleIdx::genClef)) {
                   ClefTypeList cl = staff->clefType(tick);
                   if (!clef) {
                         //
@@ -1349,7 +1349,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->layout();
                         s->createShape(staffIdx);
                         }
-                  else if (clef->generated()) {
+                  else {
                         if (cl != clef->clefTypeList()) {
                               undo(new ChangeClefType(clef, cl._concertClef, cl._transposingClef));
                               clef->layout();
@@ -1358,9 +1358,10 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         }
                   }
             else {
-                  if (clef && clef->generated()) {
+                  if (clef) {
                         undo(new RemoveElement(clef));
-                        clef->segment()->createShape(staffIdx);
+                        if (clef->segment())
+                              clef->segment()->createShape(staffIdx);
                         }
                   }
             ++staffIdx;
@@ -2108,9 +2109,11 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             if (ns) {
                   w = ss->minHorizontalDistance(ns);
 
+#if 1
                   // look back for collisions with previous segments
-#if 0
-                  int n = 0;
+                  // this is time consuming (ca. +5%) and probably requires more optimization
+
+                  int n = 1;
                   for (Segment* ps = ss;;) {
                         qreal ww;
                         if (ps == s)
@@ -2124,13 +2127,15 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                         if (ww > w) {
                               // overlap !
                               // distribute extra space between segments ps - ss;
-#if 0
-printf("overlap %s - %s  %d - %d n=%d +%f\n", ps->subTypeName(), ns->subTypeName(), ss->tick(), ns->tick(), n, ww-w);
+                              // only ChordRest segments get more space
+                              // TODO: is there a special case n == 0 ?
+
+// printf("overlap %s(%d) - %s(%d)  n=%d +%f\n", ps->subTypeName(), ps->tick(), ns->subTypeName(), ns->tick(), n, ww-w);
                               qreal d = (ww - w) / n;
                               qreal xx = ps->x();
                               for (Segment* s = ps; s != ss;) {
                                     Segment* ns = s->next();
-                                    qreal ww = s->width();
+                                    qreal ww    = s->width();
                                     if (s->isChordRestType()) {
                                           ww += d;
                                           s->setWidth(ww);
@@ -2138,10 +2143,9 @@ printf("overlap %s - %s  %d - %d n=%d +%f\n", ps->subTypeName(), ns->subTypeName
                                     xx += ww;
                                     ns->rxpos() = xx;
                                     s = ns;
-                                    printf("    ++\n");
                                     }
-#endif
-                              w = ww;
+                              w += d;
+                              x = xx;
                               break;
                               }
                         if (ps == s)
@@ -3173,7 +3177,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (!(key1 == key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
-//??                              Segment* s = toMeasure(lc.curMeasure)->findSegment(Segment::Type::KeySig, tick);
                               Segment* s = m->findSegment(Segment::Type::KeySig, tick);
                               if (s) {
                                     KeySig* ks = toKeySig(s->element(staff->idx() * VOICES));
@@ -3342,7 +3345,7 @@ bool Score::collectPage(LayoutContext& lc)
             }
 
       int stick = -1;
-      int etick ;
+      int etick = -1;
       int tracks = nstaves() * VOICES;
       for (System* s : page->systems()) {
             for (MeasureBase* mb : s->measures()) {
@@ -3405,15 +3408,17 @@ bool Score::collectPage(LayoutContext& lc)
       for (Staff* staff : _staves)
             staff->pitchOffsets().clear();
 
-      for (auto s : _spanner.map()) {
-            Spanner* sp = s.second;
-            if (sp->tick() >= etick || sp->tick2() < stick)
-                 continue;
-            if (sp->isOttava() && sp->ticks() == 0) {
-                  sp->setTick2(lastMeasure()->endTick());
-                  sp->staff()->updateOttava();
+      if (etick != -1) {
+            for (auto s : _spanner.map()) {
+                  Spanner* sp = s.second;
+                  if (sp->tick() >= etick || sp->tick2() < stick)
+                       continue;
+                  if (sp->isOttava() && sp->ticks() == 0) {
+                        sp->setTick2(lastMeasure()->endTick());
+                        sp->staff()->updateOttava();
+                        }
+                  sp->layout();
                   }
-            sp->layout();
             }
 
 #if 0
@@ -3440,7 +3445,7 @@ void Score::doLayout()
       {
       LayoutContext lc;
 
-//      printf("doLayout====\n");
+      qDebug("===doLayout");
 
       if (_staves.empty() || first() == 0) {
             // score is empty
@@ -3459,9 +3464,9 @@ void Score::doLayout()
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
-      if (_cmdState.layoutFlags & LayoutFlag::FIX_PITCH_VELO)
+      if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)
             updateVelo();
-      if (_cmdState.layoutFlags & LayoutFlag::PLAY_EVENTS)
+      if (cmdState().layoutFlags & LayoutFlag::PLAY_EVENTS)
             createPlayEvents();
 
       //---------------------------------------------------
@@ -3504,15 +3509,15 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-qDebug("doLayoutRange==== %d-%d  systems %d", stick, etick, _systems.size());
+qDebug("===doLayoutRange %d-%d  systems %d", stick, etick, _systems.size());
 
       LayoutContext lc;
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
-      if (_cmdState.layoutFlags & LayoutFlag::FIX_PITCH_VELO)
+      if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)
             updateVelo();
-      if (_cmdState.layoutFlags & LayoutFlag::PLAY_EVENTS)
+      if (cmdState().layoutFlags & LayoutFlag::PLAY_EVENTS)
             createPlayEvents();
 
       //---------------------------------------------------
@@ -3520,6 +3525,9 @@ qDebug("doLayoutRange==== %d-%d  systems %d", stick, etick, _systems.size());
       //---------------------------------------------------
 
       Measure* m = tick2measure(stick);
+      // start layout one measure earlier to handle clefs and cautionary elements
+      if (m->prevMeasure())
+            m = m->prevMeasure();
       Page* p    = m->system()->page();
       System* s  = p->systems().front();
 
@@ -3548,15 +3556,19 @@ qDebug("doLayoutRange==== %d-%d  systems %d", stick, etick, _systems.size());
 
       while (collectPage(lc)) {
             printf("   ...collectPage %d\n", lc.curPage);
-            if (!lc.pageChanged)
+            if (!lc.curSystem || (!lc.pageChanged && lc.curSystem->endTick() >= etick))
                   break;
             }
+      if (!lc.curSystem) {
+            while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
+                  _pages.takeLast();
+            }
+
       _systems.append(lc.systemList);
       printf("   ==== systems %d\n", _systems.size());
 
       for (MuseScoreView* v : viewer)
             v->layoutChanged();
       }
-
 
 }

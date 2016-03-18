@@ -55,6 +55,7 @@ class ScoreElement {
 
       virtual QVariant getProperty(P_ID) const = 0;
       virtual bool setProperty(P_ID, const QVariant&) = 0;
+      virtual const char* name() const = 0;
 
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);

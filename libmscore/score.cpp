@@ -598,7 +598,7 @@ void Score::setShowInvisible(bool v)
       _showInvisible = v;
       rebuildBspTree();
       setUpdateAll();
-      end();
+      update();
       }
 
 //---------------------------------------------------------
@@ -609,7 +609,7 @@ void Score::setShowUnprintable(bool v)
       {
       _showUnprintable = v;
       setUpdateAll();
-      end();
+      update();
       }
 
 //---------------------------------------------------------
@@ -620,7 +620,7 @@ void Score::setShowFrames(bool v)
       {
       _showFrames = v;
       setUpdateAll();
-      end();
+      update();
       }
 
 //---------------------------------------------------------
@@ -631,7 +631,7 @@ void Score::setShowPageborders(bool v)
       {
       _showPageborders = v;
       setUpdateAll();
-      end();
+      update();
       }
 
 //---------------------------------------------------------
@@ -1201,14 +1201,14 @@ void Score::addElement(Element* element)
                         if (ss->system())
                               ss->system()->add(ss);
                         }
-                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   o->staff()->updateOttava();
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::Type::DYNAMIC:
-                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1232,7 +1232,7 @@ void Score::addElement(Element* element)
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
                   masterScore()->rebuildMidiMapping();
-                  _cmdState._instrumentsChanged = true;
+                  cmdState()._instrumentsChanged = true;
                   }
                   break;
 
@@ -1335,13 +1335,13 @@ void Score::removeElement(Element* element)
                               ss->system()->remove(ss);
                         }
                   o->staff()->updateOttava();
-                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::Type::DYNAMIC:
-                  _cmdState.layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1377,7 +1377,7 @@ void Score::removeElement(Element* element)
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
                   masterScore()->rebuildMidiMapping();
-                  _cmdState._instrumentsChanged = true;
+                  cmdState()._instrumentsChanged = true;
                   }
                   break;
 
@@ -1664,7 +1664,7 @@ void MasterScore::addExcerpt(Score* score)
       Excerpt* ex = new Excerpt(this);
       ex->setPartScore(score);
       excerpts().append(ex);
-      ex->setTitle(score->name());
+      ex->setTitle(score->fileInfo()->completeBaseName());
       for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
@@ -1733,16 +1733,6 @@ void Score::setSynthesizerState(const SynthesizerState& s)
       {
       // TODO: make undoable
       _synthesizerState = s;
-      }
-
-//---------------------------------------------------------
-//   setLayoutAll
-//---------------------------------------------------------
-
-void Score::setLayoutAll()
-      {
-      for (Score* score : scoreList())
-            score->_cmdState.setUpdateMode(UpdateMode::LayoutAll);
       }
 
 //---------------------------------------------------------
@@ -1923,7 +1913,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       undoChangeKeySig(ns, 0, s->keySigEvent(0));
 
       masterScore()->rebuildMidiMapping();
-      _cmdState._instrumentsChanged = true;
+      cmdState()._instrumentsChanged = true;
       doLayout();
 
       //
@@ -2459,7 +2449,7 @@ void Score::padToggle(Pad n)
 
 void Score::deselect(Element* el)
       {
-      _cmdState.refresh |= el->abbox();
+      addRefresh(el->abbox());
       _selection.remove(el);
       setSelectionChanged(true);
       }
@@ -2508,7 +2498,7 @@ void Score::selectSingle(Element* e, int staffIdx)
                   select(e, SelectType::RANGE, staffIdx);
                   return;
                   }
-            _cmdState.refresh |= e->abbox();
+            addRefresh(e->abbox());
             _selection.add(e);
             _is.setTrack(e->track());
             selState = SelState::LIST;
@@ -2557,7 +2547,7 @@ void Score::selectAdd(Element* e)
             _selection.updateSelectedElements();
             }
       else { // None or List
-            _cmdState.refresh |= e->abbox();
+            addRefresh(e->abbox());
             if (_selection.elements().contains(e))
                   _selection.remove(e);
             else {
@@ -4107,5 +4097,14 @@ void MasterScore::removeOmr()
       _omr = 0;
       }
 
+//---------------------------------------------------------
+//   addRefresh
+//---------------------------------------------------------
+
+void Score::addRefresh(const QRectF& r)
+      {
+      _updateState.refresh |= r;
+      cmdState().setUpdateMode(UpdateMode::Update);
+      }
 }
 

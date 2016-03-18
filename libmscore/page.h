@@ -173,6 +173,7 @@ class Page : public Element {
          Segment**, QPointF* offset) const;
       QList<const Element*> elements();         ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
+      int endTick() const;
       };
 
 extern const PaperSize paperSizes[];

@@ -224,7 +224,7 @@ bool MuseScore::checkDirty(Score* s)
       if (s->dirty() || s->created()) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Save changes to the score \"%1\"\n"
-               "before closing?").arg(s->name()),
+               "before closing?").arg(s->fileInfo()->completeBaseName()),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
             if (n == QMessageBox::Save) {
@@ -413,11 +413,11 @@ bool MuseScore::saveFile(Score* score)
             return false;
             }
       score->setCreated(false);
-      setWindowTitle("MuseScore: " + score->name());
+      setWindowTitle("MuseScore: " + score->fileInfo()->completeBaseName());
       int idx = scoreList.indexOf(score->masterScore());
-      tab1->setTabText(idx, score->name());
+      tab1->setTabText(idx, score->fileInfo()->completeBaseName());
       if (tab2)
-            tab2->setTabText(idx, score->name());
+            tab2->setTabText(idx, score->fileInfo()->completeBaseName());
       QString tmp = score->tmpName();
       if (!tmp.isEmpty()) {
             QFile f(tmp);
@@ -445,7 +445,7 @@ QString MuseScore::createDefaultName() const
             else
                   tmpName = QString("%1-%2").arg(name).arg(n);
             foreach(Score* s, scoreList) {
-                  if (s->name() == tmpName) {
+                  if (s->fileInfo()->completeBaseName() == tmpName) {
                         nameExists = true;
                         break;
                         }
@@ -1468,7 +1468,7 @@ void MuseScore::printFile()
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
-      printerDev.setDocName(cs->name());
+      printerDev.setDocName(cs->fileInfo()->completeBaseName());
       printerDev.setOutputFormat(QPrinter::NativeFormat);
       int pages    = cs->pages().size();
       printerDev.setFromTo(1, pages);
@@ -1478,7 +1478,7 @@ void MuseScore::printFile()
 #else
       // when setting this on windows platform, pd.exec() does not
       // show dialog
-      printerDev.setOutputFileName(cs->masterScore()->fileInfo()->path() + "/" + cs->name() + ".pdf");
+      printerDev.setOutputFileName(cs->masterScore()->fileInfo()->path() + "/" + cs->fileInfo()->completeBaseName() + ".pdf");
 #endif
 
       QPrintDialog pd(&printerDev, 0);
@@ -1567,16 +1567,16 @@ void MuseScore::exportFile()
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
             if (!cs->isMaster())
-                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name()));
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->name()));
             else
-                  name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+                  name = QString("%1/%2").arg(saveDirectory).arg(cs->fileInfo()->completeBaseName());
             }
       else
 #endif
       if (!cs->isMaster())
-            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name())).arg(saveFormat);
+            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->fileInfo()->completeBaseName())).arg(saveFormat);
       else
-            name = QString("%1/%2.%3").arg(saveDirectory).arg(cs->name()).arg(saveFormat);
+            name = QString("%1/%2.%3").arg(saveDirectory).arg(cs->fileInfo()->completeBaseName()).arg(saveFormat);
 
       int idx = fl.indexOf(QRegExp(".+\\(\\*\\." + saveFormat + "\\)"), Qt::CaseInsensitive);
       if (idx != -1)
@@ -1644,7 +1644,7 @@ bool MuseScore::exportParts()
       if (saveFormat.isEmpty())
             saveFormat = "pdf";
 
-      QString scoreName = cs->isMaster() ? cs->name() : cs->masterScore()->name();
+      QString scoreName = (cs->isMaster() ? cs : cs->masterScore())->fileInfo()->completeBaseName();
       QString name;
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
@@ -1680,7 +1680,7 @@ bool MuseScore::exportParts()
       QString skipMessage = tr("Skip");
       foreach (Excerpt* e, thisScore->excerpts())  {
             Score* pScore = e->partScore();
-            QString partfn = fi.absolutePath() + QDir::separator() + fi.completeBaseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
+            QString partfn = fi.absolutePath() + QDir::separator() + fi.completeBaseName() + "-" + createDefaultFileName(pScore->fileInfo()->completeBaseName()) + "." + ext;
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
                   if(noToAll)
@@ -1773,7 +1773,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
 
             if (rv && !saveCopy) {
                   cs->masterScore()->fileInfo()->setFile(fn);
-                  setWindowTitle("MuseScore: " + cs->name());
+                  setWindowTitle("MuseScore: " + cs->fileInfo()->completeBaseName());
                   cs->undoStack()->setClean();
                   dirtyChanged(cs);
                   cs->setCreated(false);
@@ -1872,7 +1872,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       printerDev.setCreator("MuseScore Version: " VERSION);
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
-      printerDev.setTitle(cs->name());
+      printerDev.setTitle(cs->fileInfo()->completeBaseName());
 
       QPainter p;
       if (!p.begin(&printerDev))
@@ -1912,7 +1912,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
-      printerDev.setDocName(firstScore->name());
+      printerDev.setDocName(firstScore->fileInfo()->completeBaseName());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
@@ -2088,6 +2088,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       score->updateChannel();
       score->setSaved(false);
       score->update();
+
       if (!ignoreVersionError && !MScore::noGui)
             if (!score->sanityCheck(QString()))
                   return Score::FileError::FILE_CORRUPTED;
@@ -2128,16 +2129,16 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
             if (!cs->isMaster())
-                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name()));
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->fileInfo()->completeBaseName()));
             else
-                  name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+                  name = QString("%1/%2").arg(saveDirectory).arg(cs->fileInfo()->completeBaseName());
             }
       else
 #endif
       if (!cs->isMaster())
-            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(cs->masterScore()->name()).arg(createDefaultFileName(cs->name()));
+            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->fileInfo()->completeBaseName()));
       else
-            name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
+            name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->fileInfo()->completeBaseName());
 
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter);
@@ -2181,7 +2182,7 @@ bool MuseScore::saveSelection(Score* cs)
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.myScoresPath;
 
-      QString name   = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
+      QString name   = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->fileInfo()->completeBaseName());
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())

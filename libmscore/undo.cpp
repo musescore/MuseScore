@@ -75,6 +75,12 @@
 #include "utils.h"
 #include "glissando.h"
 
+#ifdef QT_NO_DEBUG
+Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+#else
+Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
+#endif
+
 namespace Ms {
 
 extern Measure* tick2measure(int tick);
@@ -139,8 +145,8 @@ void UndoCommand::undo()
       {
       int n = childList.size();
       for (int i = n-1; i >= 0; --i) {
-#ifdef DEBUG_UNDO
-            qDebug("   undo<%s> %p", childList[i]->name(), childList[i]);
+#ifndef QT_NO_DEBUG
+            qCDebug(undoRedo) << "   undo<" << childList[i]->name() << ">";
 #endif
             childList[i]->undo();
             }
@@ -155,8 +161,8 @@ void UndoCommand::redo()
       {
       int n = childList.size();
       for (int i = 0; i < n; ++i) {
-#ifdef DEBUG_UNDO
-            qDebug("   redo<%s> %p", childList[i]->name(), childList[i]);
+#ifndef QT_NO_DEBUG
+            qCDebug(undoRedo) << "   redo<" << childList[i]->name() << ">";
 #endif
             childList[i]->redo();
             }
@@ -206,7 +212,7 @@ UndoStack::~UndoStack()
 void UndoStack::beginMacro()
       {
       if (curCmd) {
-            qDebug("UndoStack:beginMacro(): already active");
+            qWarning("UndoStack:beginMacro(): already active");
             return;
             }
       curCmd = new UndoCommand();
@@ -219,7 +225,7 @@ void UndoStack::beginMacro()
 void UndoStack::endMacro(bool rollback)
       {
       if (curCmd == 0) {
-            qDebug("UndoStack:endMacro(): not active");
+            qWarning("UndoStack:endMacro(): not active");
             return;
             }
       if (rollback)
@@ -245,19 +251,19 @@ void UndoStack::push(UndoCommand* cmd)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            // qDebug("UndoStack:push(): no active command, UndoStack %p", this);
+            // qWarning("UndoStack:push(): no active command, UndoStack %p", this);
 
             cmd->redo();
             delete cmd;
             return;
             }
-#ifdef DEBUG_UNDO
+#ifndef QT_NO_DEBUG
       if (!strcmp(cmd->name(), "ChangeProperty")) {
             ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
-            qDebug("UndoStack::push <%s> %p id %d", cmd->name(), cmd, int(cp->getId()));
+            qCDebug(undoRedo, "UndoStack::push <%s> id %s", cmd->name(), propertyName(cp->getId()));
             }
       else {
-            qDebug("UndoStack::push <%s> %p", cmd->name(), cmd);
+            qCDebug(undoRedo, "UndoStack::push <%s>", cmd->name());
             }
 #endif
       curCmd->appendChild(cmd);
@@ -273,7 +279,7 @@ void UndoStack::push1(UndoCommand* cmd)
       if (curCmd)
             curCmd->appendChild(cmd);
       else
-            qDebug("UndoStack:push1(): no active command, UndoStack %p", this);
+            qWarning("UndoStack:push1(): no active command, UndoStack %p", this);
       }
 
 //---------------------------------------------------------
@@ -283,7 +289,7 @@ void UndoStack::push1(UndoCommand* cmd)
 void UndoStack::pop()
       {
       if (!curCmd) {
-            qDebug("UndoStack:pop(): no active command");
+            qWarning("UndoStack:pop(): no active command");
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
@@ -463,7 +469,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             Score* score = staff->score();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {
-                  qDebug("measure for tick %d not found!", tick);
+                  qWarning("measure for tick %d not found!", tick);
                   continue;
                   }
             Segment* s   = measure->undoGetSegment(Segment::Type::KeySig, tick);
@@ -516,7 +522,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
             int tick     = seg->tick();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {
-                  qDebug("measure for tick %d not found!", tick);
+                  qWarning("measure for tick %d not found!", tick);
                   continue;
                   }
 
@@ -1058,7 +1064,7 @@ void Score::undoAddElement(Element* element)
                         }
                   Segment* seg = m->findSegment(st, tick);
                   if (seg == 0) {
-                        qDebug("undoAddSegment: segment not found");
+                        qWarning("undoAddSegment: segment not found");
                         break;
                         }
                   Articulation* na = static_cast<Articulation*>(ne);
@@ -1087,7 +1093,7 @@ void Score::undoAddElement(Element* element)
                   Measure* m       = score->tick2measure(tick);
                   Segment* seg     = m->findSegment(Segment::Type::ChordRest, tick);
                   if (seg == 0) {
-                        qDebug("undoAddSegment: segment not found");
+                        qWarning("undoAddSegment: segment not found");
                         break;
                         }
                   int ntrack    = staffIdx * VOICES + element->voice();
@@ -1268,7 +1274,7 @@ void Score::undoAddElement(Element* element)
                   undo(new AddElement(nbreath));
                   }
             else
-                  qDebug("undoAddElement: unhandled: <%s>", element->name());
+                  qWarning("undoAddElement: unhandled: <%s>", element->name());
             }
       }
 
@@ -1370,7 +1376,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                                           }
                                     }
                               if (nt == 0)
-                                    qDebug("linked tuplet not found");
+                                    qWarning("linked tuplet not found");
                               }
                         newcr->setTuplet(nt);
                         }
@@ -1530,7 +1536,7 @@ void AddElement::redo()
 //   name
 //---------------------------------------------------------
 
-#ifdef DEBUG_UNDO
+#ifndef QT_NO_DEBUG
 const char* AddElement::name() const
       {
       static char buffer[64];
@@ -1552,35 +1558,6 @@ RemoveElement::RemoveElement(Element* e)
 
       Score* score = element->score();
       if (element->isChordRest1()) {
-#if 0
-            // do not delete pending slur in note entry mode
-            Slur* pendingSlur = 0;
-            for (Score* sc : score->scoreList()) {
-                  if (sc->noteEntryMode()) {
-                        pendingSlur = sc->inputState().slur();
-                        break;
-                        }
-                  }
-            // remove any slurs pointing to this chor/rest
-            QList<Spanner*> sl;
-            int tick = static_cast<ChordRest*>(element)->tick();
-            for (auto i : score->spanner()) {     // TODO: dont search whole list
-                  Spanner* s = i.second;
-                  if (pendingSlur && pendingSlur->linkList().contains(s)) {
-                        if (s->startElement() == e)
-                              s->setStartElement(nullptr);
-                        else if (s->endElement() == e)
-                              s->setEndElement(nullptr);
-                        continue;
-                        }
-                  if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e))
-                        sl.append(s);
-                  else if ((s->tick() == tick) && (s->track() == element->track()))
-                        sl.append(s);
-                  }
-            for (auto s : sl)       // actually remove scheduled spanners
-                  score->undo(new RemoveElement(s));
-#endif
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().size() <= 1)
                   score->undo(new RemoveElement(cr->tuplet()));
@@ -1667,14 +1644,14 @@ void RemoveElement::redo()
 //   name
 //---------------------------------------------------------
 
-#ifdef DEBUG_UNDO
+#ifndef QT_NO_DEBUG
 const char* RemoveElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Rem: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
+            snprintf(buffer, 64, "Remove: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
       else
-            snprintf(buffer, 64, "Rem: %s", element->name());
+            snprintf(buffer, 64, "Remove: %s", element->name());
       return buffer;
       }
 #endif
@@ -2338,7 +2315,7 @@ void ChangePatch::flip()
       patch            = op;
 
       if (MScore::seq == 0) {
-            qDebug("ChangePatch: no seq");
+            qWarning("ChangePatch: no seq");
             return;
             }
 
@@ -3229,16 +3206,9 @@ void ChangeStaffUserDist::flip()
 
 void ChangeProperty::flip()
       {
-#ifdef DEBUG_UNDO
-      qDebug()
-            << "ChangeProperty::flip(): "
-            << propertyName(id)
-            << " "
-            << element->getProperty(id)
-            << " -> "
-            << property
-            ;
-#endif
+// #ifndef QT_NO_DEBUG
+      qCDebug(undoRedo) << "ChangeProperty::flip():" << element->name() << propertyName(id) << element->getProperty(id) << "->" << property;
+// #endif
       if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
             static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 
@@ -3405,11 +3375,11 @@ void ChangeSpannerElements::flip()
                         }
                   // if current spanner, just use stored start and end elements
                   else {
-                        newStartNote      = static_cast<Note*>(startElement);
-                        newEndNote        = static_cast<Note*>(endElement);
+                        newStartNote = static_cast<Note*>(startElement);
+                        newEndNote   = static_cast<Note*>(endElement);
                         }
                   // update spanner's start and end notes
-                  if (newStartNote != nullptr && newEndNote != nullptr) {
+                  if (newStartNote && newEndNote) {
                         oldStartNote->removeSpannerFor(sp);
                         oldEndNote->removeSpannerBack(sp);
                         sp->setNoteSpan(newStartNote, newEndNote);
@@ -3494,18 +3464,16 @@ void ChangeNoteEvent::flip()
       }
 
 //---------------------------------------------------------
-//   Link
+//   LinkUnlink
 //---------------------------------------------------------
 
-void Link::redo()
+void LinkUnlink::doLink()
       {
-      if (MScore::debugMode)
-            qDebug("Link:redo() link %p (e) to %p (le)", e, le);
-      Q_ASSERT(le != nullptr);
+      Q_ASSERT(le);
       e->linkTo(le);
       }
 
-void Link::undo()
+void LinkUnlink::doUnlink()
       {
       // find appropriate target element to unlink
       // use current le if valid; pick something else in link list if not but that shouldn't happen!
@@ -3514,7 +3482,7 @@ void Link::undo()
             // don't use current le if null or if it is no longer linked (shouldn't happen)
             if (le && !l->contains(le)) {
                   le = nullptr;
-                  qDebug("Link::undo(): current le %p no longer linked", le);
+                  qWarning("doUnlink(): current le %p no longer linked", le);
                   }
             if (!le) {
                   // shouldn't happen
@@ -3529,50 +3497,12 @@ void Link::undo()
                   }
             }
       else
-            qDebug("Link::undo(): current element %p has no links", e);
-
-      if (MScore::debugMode)
-            qDebug("Link::undo(): unlink %p (le) from %p (e)", le, e);
+            qWarning("doUnlink(): current element %p has no links", e);
 
       if (le)
             le->unlink();
       else
-            qDebug("Link::undo(): nothing found to unlink");
-      }
-
-//---------------------------------------------------------
-//   Unlink
-//---------------------------------------------------------
-
-void Unlink::redo()
-      {
-      // Q_ASSERT(le == nullptr);
-
-      // find appropriate target element to unlink
-      // use current le if valid; pick something else in link list if not
-      // do unlink e if we wanted to unlink it in the first place (redo)
-      const LinkedElements* l = e->links();
-      if (l != nullptr) {
-            // find something other than current element (e) in link list, so we can link again on undo
-            for (ScoreElement* ee : *l) {
-                  if (e != ee) {
-                        le = ee;
-                        break;
-                        }
-                  }
-            if (e)
-                  e->unlink();
-            }
-      else
-            qDebug("doUnlink(): current element %p has no links", e);
-      }
-
-void Unlink::undo()
-      {
-      if (MScore::debugMode)
-            qDebug("LinkUnlink: link %p (e) to %p (le)", e, le);
-      Q_ASSERT(le != nullptr);
-      e->linkTo(le);
+            qWarning("doUnlink(): nothing found to unlink");
       }
 
 void LinkStaff::redo()   { s1->linkTo(s2); }
