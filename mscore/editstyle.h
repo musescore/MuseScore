@@ -44,27 +44,27 @@ struct StyleWidget {
 
 class EditStyle : public QDialog, private Ui::EditStyleBase {
       Q_OBJECT
-
+      
       Score* cs;
       QPushButton* buttonApplyToAllParts;
       MStyle lstyle;    // local copy of style
-	  
+      
       QButtonGroup* stemGroups[VOICES];
-
+      
       QVector<StyleWidget> styleWidgets;
-
+      
       void getValues();
       void setValues();
       void setHeaderText(StyleIdx idx, QTextEdit* te);
       void setFooterText(StyleIdx idx, QTextEdit* te);
-
+      
       void apply();
       void applyToAllParts();
-	  
-	  void writeSettings();
+      
+      void writeSettings();
       void readSettings();
-
-   private slots:
+      
+private slots:
       void selectChordDescriptionFile();
       void setChordStyle(bool);
       void toggleHeaderOddEven(bool);
@@ -74,10 +74,10 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void lyricsDashMinLengthValueChanged(double val);
       void lyricsDashMaxLengthValueChanged(double val);
       void resetStyleValue(int i);
-
+      
       void on_comboFBFont_currentIndexChanged(int index);
-	  void closeEvent( QCloseEvent* );
-
+      void closeEvent( QCloseEvent* );
+      
 public:
       static const int PAGE_NOTE = 6;
       EditStyle(Score*, QWidget*);
