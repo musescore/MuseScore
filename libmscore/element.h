@@ -454,7 +454,7 @@ class Element : public QObject, public ScoreElement {
 
       // debug functions
       virtual void dump() const;
-      const char* name() const;
+      virtual const char* name() const override;
       virtual Q_INVOKABLE QString subtypeName() const;
       //@ Returns the human-readable name of the element type
       virtual Q_INVOKABLE QString userName() const;

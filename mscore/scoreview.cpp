@@ -4277,6 +4277,7 @@ bool ScoreView::event(QEvent* event)
 
 void ScoreView::startUndoRedo()
       {
+//      _score->initCmd();
       // exit edit mode
       if (sm->configuration().contains(states[EDIT]))
             sm->postEvent(new CommandEvent("escape"));

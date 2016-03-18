@@ -24,7 +24,7 @@ const char* tests[] = {
       "libmscore/keysig/tst_keysig",
       "libmscore/barline/tst_barline",
       "libmscore/clef/tst_clef",
-//      "libmscore/timesig/tst_timesig",
+/**/      "libmscore/timesig/tst_timesig",
       "libmscore/repeat/tst_repeat",
       "libmscore/dynamic/tst_dynamic",
       "libmscore/breath/tst_breath",
@@ -52,7 +52,7 @@ const char* tests[] = {
 //      "libmscore/earlymusic/tst_earlymusic",
 
 //      "libmscore/midi/tst_midi",
-//      "libmscore/tools/tst_tools",
+      "libmscore/tools/tst_tools",
 //      "libmscore/splitstaff/tst_splitstaff",
 //      "libmscore/split/tst_split",
       "libmscore/plugins/tst_plugins",

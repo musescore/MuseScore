@@ -112,6 +112,8 @@ struct NoteVal {
       NoteVal(int p) : pitch(p) {}
       };
 
+static const int INVALID_LINE = -10000;
+
 //---------------------------------------------------------------------------------------
 //   @@ Note
 ///    Graphic representation of a note.
@@ -215,7 +217,7 @@ class Note : public Element {
       char _onTimeType     { 0 };    // compatibility only 1 - user, 2 - offset
 
       int _subchannel     { 0  };   ///< articulation
-      int _line           { 0  };   ///< y-Position; 0 - top line.
+      int _line           { INVALID_LINE  };   ///< y-Position; 0 - top line.
       int _fret           { -1 };   ///< for tablature view
       int _string         { -1 };
       mutable int _tpc[2] { Tpc::TPC_INVALID, Tpc::TPC_INVALID }; ///< tonal pitch class  (concert/transposing)

@@ -549,7 +549,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
                               break;
                         case 'f':
-                              d += masterScore()->name().toHtmlEscaped();
+                              d += masterScore()->fileInfo()->completeBaseName().toHtmlEscaped();
                               break;
                         case 'F':
                               d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
@@ -889,5 +889,13 @@ QRectF Page::tbbox()
             return abbox();
       }
 
+//---------------------------------------------------------
+//   endTick
+//---------------------------------------------------------
+
+int Page::endTick() const
+      {
+      return _systems.empty() ? -1 : _systems.back()->measures().back()->endTick();
+      }
 }
 

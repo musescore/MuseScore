@@ -243,7 +243,7 @@ enum class UpdateMode {
       DoNothing,
       Update,           // do screen refresh of QRectF "refresh"
       UpdateAll,        // do complete screen refresh
-      LayoutTick,       // do partial layout for tick range
+      LayoutRange,      // do partial layout for tick range
       LayoutAll,        // do complete layout
       };
 
@@ -261,29 +261,35 @@ class CmdState {
       int _endTick;              // end tick for mode LayoutTick
 
    public:
-      QRectF refresh;         ///< area to update, canvas coordinates
       LayoutFlags layoutFlags;
-
-      bool _playNote;         ///< play selected note after command
-      bool _playChord;        ///< play whole chord for the selected note
 
       bool _excerptsChanged;
       bool _instrumentsChanged;
-      bool _selectionChanged;
 
       void reset();
       UpdateMode updateMode() const { return _updateMode; }
       void setUpdateMode(UpdateMode m);
-      bool layoutAll() const { return _updateMode == UpdateMode::LayoutAll; }
-      bool updateAll() const { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
+      bool layoutAll() const   { return _updateMode == UpdateMode::LayoutAll; }
+      bool layoutRange() const { return _updateMode == UpdateMode::LayoutRange; }
+      bool updateAll() const   { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
+      bool updateRange() const { return _updateMode == UpdateMode::Update; }
       void setTick(int t);
       int startTick() const { return _startTick; }
       int endTick() const   { return _endTick; }
       };
 
+class UpdateState {
+   public:
+      QRectF refresh;               ///< area to update, canvas coordinates
+      bool _playNote   { false };   ///< play selected note after command
+      bool _playChord  { false };   ///< play whole chord for the selected note
+      bool _selectionChanged { false };
+      };
+
+
 class MasterScore;
 
-//---------------------------------------------------------
+//---------------------------------------------------------------------------------------
 //   @@ Score
 //   @P composer        string            composer of the score (read only)
 //   @P duration        int               duration of score in seconds (read only)
@@ -309,13 +315,15 @@ class MasterScore;
 //   @P poet            string            poet of the score (read only)
 //   @P subtitle        string            subtitle of the score (read only)
 //   @P title           string            title of the score (read only)
-//---------------------------------------------------------
+//
+//    a Score has always an associated MasterScore
+//---------------------------------------------------------------------------------------
 
 class Score : public QObject, public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(QString                        composer          READ composer)
       Q_PROPERTY(int                            duration          READ duration)
-//TODO      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
+//TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
       Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
       Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
@@ -326,7 +334,7 @@ class Score : public QObject, public ScoreElement {
       Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
       Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
       Q_PROPERTY(int                            lyricCount        READ lyricCount)
-      Q_PROPERTY(QString                        name              READ name           WRITE setName)
+//TODO-ws      Q_PROPERTY(QString                        name              READ name           WRITE setName)
       Q_PROPERTY(int                            nmeasures         READ nmeasures)
       Q_PROPERTY(int                            npages            READ npages)
       Q_PROPERTY(int                            nstaves           READ nstaves)
@@ -373,22 +381,21 @@ class Score : public QObject, public ScoreElement {
       SpannerMap _spanner;
       std::set<Spanner*> _unmanagedSpanner;
 
+      UpdateState _updateState;
+
       //
       // generated objects during layout:
       //
       QList<Page*> _pages;          // pages are build from systems
       QList<System*> _systems;      // measures are akkumulated to systems
 
-
-
       InputState _is;
       MStyle _style;
 
-      bool _created { false };          ///< file is never saved, has generated name
-      QString _tmpName;       ///< auto saved with this name if not empty
-      QString _importedFilePath;    // file from which the score was imported, or empty
+      bool _created { false };            ///< file is never saved, has generated name
+      QString _tmpName;                   ///< auto saved with this name if not empty
+      QString _importedFilePath;          // file from which the score was imported, or empty
 
-      CmdState _cmdState;     // modified during cmd processing
 
       bool _showInvisible       { true  };
       bool _showUnprintable     { true  };
@@ -405,12 +412,11 @@ class Score : public QObject, public ScoreElement {
       bool _defaultsRead        { false };      ///< defaults were read at MusicXML import, allow export of defaults in convertermode
 
 
-      Qt::KeyboardModifiers keyState { 0 };
 
       QList<Part*> _parts;
       QList<Staff*> _staves;
 
-      int _pos[3];            ///< 0 - current, 1 - left loop, 2 - right loop
+      int _pos[3];                    ///< 0 - current, 1 - left loop, 2 - right loop
 
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
@@ -482,7 +488,6 @@ class Score : public QObject, public ScoreElement {
       void addAudioTrack();
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick, const Interval&);
-//      void init();
       qreal cautionaryWidth(Measure* m, bool& hasCourtesy);
 
       void selectSingle(Element* e, int staffIdx);
@@ -490,7 +495,6 @@ class Score : public QObject, public ScoreElement {
       void selectRange(Element* e, int staffIdx);
 
       QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
-
 
       void getNextMeasure(LayoutContext&);      // get next measure for layout
       bool collectPage(LayoutContext&);
@@ -520,6 +524,7 @@ class Score : public QObject, public ScoreElement {
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
 
+      virtual const char* name() const override { return "Score"; }
 
       void rebuildBspTree();
       bool noStaves() const         { return _staves.empty(); }
@@ -646,24 +651,31 @@ class Score : public QObject, public ScoreElement {
       void repitchNote(const Position& pos, bool replace);
       void cmdAddPitch(int pitch, bool addFlag);
 
-      //@ to be used at least once by plugins of type "dialog" before score modifications to make them undoable
-      Q_INVOKABLE void startCmd();        // start undoable command
-      //@ to be used at least once by plugins of type "dialog" after score modifications to make them undoable
-      Q_INVOKABLE void endCmd(bool rollback = false);          // end undoable command
-      void end();             // layout & update canvas
-      void end1();
+      void startCmd();                          // start undoable command
+      void endCmd(bool rollback = false);       // end undoable command
       void update();
+      void end() { update(); }
 
       void cmdRemoveTimeSig(TimeSig*);
       void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
 
-      void setUpdateAll()           { _cmdState.setUpdateMode(UpdateMode::UpdateAll);   }
-      void setLayoutAll();
-      void setLayout(int t)          { _cmdState.setTick(t); }
-      UpdateMode updateMode() const  { return _cmdState.updateMode(); }
+      virtual inline void setUpdateAll();
+      virtual inline void setLayoutAll();
+      virtual inline void setLayout(int);
+      virtual inline CmdState& cmdState();
+      virtual inline void addLayoutFlags(LayoutFlags);
+      virtual inline void setExcerptsChanged(bool);
+      virtual inline void setInstrumentsChanged(bool);
 
-      void addRefresh(const QRectF& r) { _cmdState.refresh |= r;     }
-      const QRectF& getRefresh() const { return _cmdState.refresh;     }
+      bool playNote() const                 { return _updateState._playNote; }
+      void setPlayNote(bool v)              { _updateState._playNote = v;    }
+      bool playChord() const                { return _updateState._playChord; }
+      void setPlayChord(bool v)             { _updateState._playChord = v;    }
+      bool selectionChanged() const         { return _updateState._selectionChanged; }
+      void setSelectionChanged(bool val)    { _updateState._selectionChanged = val;  }
+
+      void addRefresh(const QRectF&);
+//      const QRectF& getRefresh() const      { return _updateState.refresh;     }
 
       void changeVoice(int);
 
@@ -916,7 +928,6 @@ class Score : public QObject, public ScoreElement {
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
 
-      void addLayoutFlags(LayoutFlags val)               { _cmdState.layoutFlags |= val; }
       void updateHairpin(Hairpin*);       // add/modify hairpin to pitchOffset list
       void removeHairpin(Hairpin*);       // remove hairpin from pitchOffset list
       Volta* searchVolta(int tick) const;
@@ -959,16 +970,6 @@ class Score : public QObject, public ScoreElement {
       void addViewer(MuseScoreView* v)      { viewer.append(v);    }
       void removeViewer(MuseScoreView* v)   { viewer.removeAll(v); }
       const QList<MuseScoreView*>& getViewer() const { return viewer;       }
-      bool playNote() const                 { return _cmdState._playNote; }
-      void setPlayNote(bool v)              { _cmdState._playNote = v;    }
-      bool playChord() const                { return _cmdState._playChord; }
-      void setPlayChord(bool v)             { _cmdState._playChord = v;    }
-      bool excerptsChanged() const          { return _cmdState._excerptsChanged; }
-      void setExcerptsChanged(bool val)     { _cmdState._excerptsChanged = val; }
-      bool instrumentsChanged() const       { return _cmdState._instrumentsChanged; }
-      void setInstrumentsChanged(bool val)  { _cmdState._instrumentsChanged = val; }
-      bool selectionChanged() const         { return _cmdState._selectionChanged; }
-      void setSelectionChanged(bool val)    { _cmdState._selectionChanged = val;  }
 
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm)     { _layoutMode = lm;   }
@@ -1082,7 +1083,7 @@ class Score : public QObject, public ScoreElement {
 
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }
-      QString name() const                { return info.completeBaseName(); }
+//      QString name() const                { return info.completeBaseName(); }
       void setName(const QString& s);
 
       virtual QVariant getProperty(P_ID) const override;
@@ -1109,6 +1110,8 @@ class MasterScore : public Score {
       QList<Excerpt*> _excerpts;
       Revisions* _revisions;
       QMap<int, LinkedElements*> _elinks;
+
+      CmdState _cmdState;     // modified during cmd processing
 
       Omr* _omr;
       bool _showOmr;
@@ -1147,7 +1150,20 @@ class MasterScore : public Score {
       virtual QMap<int, LinkedElements*>& links() override     { return _elinks;     }
       virtual QQueue<MidiInputEvent> midiInputQueue() override { return _midiInputQueue; }
 
-      Revisions* revisions()                 { return _revisions; }
+      virtual void setUpdateAll() override                  { _cmdState.setUpdateMode(UpdateMode::UpdateAll);  }
+      virtual void setLayoutAll() override                  { _cmdState.setUpdateMode(UpdateMode::LayoutAll);  }
+      virtual void setLayout(int t) override                { _cmdState.setTick(t); }
+      virtual CmdState& cmdState() override                 { return _cmdState; }
+      virtual void addLayoutFlags(LayoutFlags val) override { _cmdState.layoutFlags |= val; }
+      virtual void setExcerptsChanged(bool val) override    { _cmdState._excerptsChanged = val; }
+      virtual void setInstrumentsChanged(bool val) override { _cmdState._instrumentsChanged = val; }
+
+      bool excerptsChanged() const          { return _cmdState._excerptsChanged; }
+      bool instrumentsChanged() const       { return _cmdState._instrumentsChanged; }
+
+//      UpdateMode updateMode() const         { return _cmdState.updateMode(); }
+
+      Revisions* revisions()                { return _revisions; }
 
       bool isSavable() const;
       void setTempomap(TempoMap* tm);
@@ -1193,6 +1209,13 @@ inline TimeSigMap* Score::sigmap() const              { return _masterScore->sig
 inline QList<Excerpt*>& Score::excerpts()             { return _masterScore->excerpts();       }
 inline const QList<Excerpt*>& Score::excerpts() const { return _masterScore->excerpts();       }
 inline QQueue<MidiInputEvent> Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
+inline void Score::setUpdateAll()                     { _masterScore->setUpdateAll();          }
+inline void Score::setLayoutAll()                     { _masterScore->setLayoutAll();          }
+inline void Score::setLayout(int tick)                { _masterScore->setLayout(tick);         }
+inline CmdState& Score::cmdState()                    { return _masterScore->cmdState();       }
+inline void Score::addLayoutFlags(LayoutFlags f)      { _masterScore->addLayoutFlags(f);       }
+inline void Score::setExcerptsChanged(bool val)       { setExcerptsChanged(val);               }
+inline void Score::setInstrumentsChanged(bool v)      { setInstrumentsChanged(v);              }
 
 extern MasterScore* gscore;
 extern void fixTicks();

@@ -1171,5 +1171,14 @@ bool System::pageBreak() const
       {
       return  ml.back()->pageBreak();
       }
+
+//---------------------------------------------------------
+//   endTick
+//---------------------------------------------------------
+
+int System::endTick() const
+      {
+      return measures().back()->endTick();
+      }
 }
 

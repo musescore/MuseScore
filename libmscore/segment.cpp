@@ -636,10 +636,8 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::CLEF:
-                  if (!el->generated()) {
-                        el->staff()->removeClef(static_cast<Clef*>(el));
-                        updateNoteLines(this, el->track());
-                        }
+                  el->staff()->removeClef(static_cast<Clef*>(el));
+                  // updateNoteLines(this, el->track());
                   // fall through
 
             case Element::Type::BAR_LINE:
@@ -1374,8 +1372,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = shape(staffIdx).minHorizontalDistance(ns->shape(staffIdx));
-            if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
-                  d = qMax(d, minRight()) + score()->styleP(StyleIdx::noteBarDistance);
+//            if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
+//                  d = qMax(d, minRight()) + score()->styleP(StyleIdx::noteBarDistance);
             w = qMax(w, d);
             }
 
@@ -1415,6 +1413,7 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w = 0.0;
       if (ns)
             w += ns->extraLeadingSpace().val() * spatium();
+//      qDebug("minHDist %f %s %s", w, subTypeName(), ns ? ns->subTypeName() : "-0-");
       return w;
       }
 

@@ -31,10 +31,9 @@
 #include <math.h>
 
 #include <QtGui>
+#include <QLoggingCategory>
 #include <QModelIndex>
 
-// #include <QWebView>
-// #include <QWebFrame>
 #include <QWebEngineView>
 
 #include <QtXml>
