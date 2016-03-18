@@ -123,6 +123,7 @@ class ChordRest : public DurationElement {
 
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
+      virtual int vStaffIdx() const override    { return staffIdx() + _staffMove;  }
 
       void layoutArticulations();
 

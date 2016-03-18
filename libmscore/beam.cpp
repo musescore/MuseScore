@@ -485,6 +485,7 @@ void Beam::layout()
                   }
             crl.append(cr);
             }
+      setbbox(QRectF());
       if (!crl.empty()) {
             SpannerSegmentType st;
             if (n == 0)
@@ -494,17 +495,22 @@ void Beam::layout()
             if (fragments.size() < (n+1))
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);
-            }
 
-      setbbox(QRectF());
-      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach(const QLineF* bs, beamSegments) {
-            QPolygonF a(4);
-            a[0] = QPointF(bs->x1(), bs->y1()-lw2);
-            a[1] = QPointF(bs->x2(), bs->y2()-lw2);
-            a[2] = QPointF(bs->x2(), bs->y2()+lw2);
-            a[3] = QPointF(bs->x1(), bs->y1()+lw2);
-            addbbox(a.boundingRect());
+            qreal lw2      = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+            ChordRest* cr  = crl.front();
+            Shape& s       = cr->segment()->shape(cr->staffIdx());
+            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+
+            for (const QLineF* bs : beamSegments) {
+                  QPolygonF a(4);
+                  a[0] = QPointF(bs->x1(), bs->y1());
+                  a[1] = QPointF(bs->x2(), bs->y2());
+                  a[2] = QPointF(bs->x2(), bs->y2());
+                  a[3] = QPointF(bs->x1(), bs->y1());
+                  QRectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
+                  s.add(r.translated(-offset));
+                  addbbox(r);
+                  }
             }
       }
 
@@ -515,8 +521,8 @@ void Beam::layout()
 QPainterPath Beam::outline() const
       {
       QPainterPath pp;
-      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach(const QLineF* bs, beamSegments) {
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+      for (const QLineF* bs : beamSegments) {
             QPolygonF a(5);
             a[0] = QPointF(bs->x1(), bs->y1()-lw2);
             a[1] = QPointF(bs->x2(), bs->y2()-lw2);
@@ -1932,11 +1938,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   by = 0;
                   }
             if (stem) {
+                  Shape& shape = cr->segment()->shape(cr->staffIdx());
+                  shape.remove(stem->shape());
                   qreal sw2  = point(score()->styleS(StyleIdx::stemWidth)) * .5;
                   if (up())
                         sw2 = -sw2;
                   stem->setLen(y2 - (by + _pagePos.y()));
                   stem->rxpos() = c->stemPosX() + sw2;
+                  shape.add(stem->shape());
                   }
 
             //
@@ -2362,7 +2371,10 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      if (!_elements.empty()) {
+            score()->setLayout(_elements.front()->tick());
+            score()->setLayout(_elements.back()->tick());
+            }
       setGenerated(false);
       return true;
       }

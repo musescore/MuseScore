@@ -410,34 +410,31 @@ void System::layout2()
                   if (!mb->isMeasure())
                         continue;
                   Measure* m = toMeasure(mb);
+                  Shape s1, s2;
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        Shape s1(s->shape(si1));
-                        s1.translate(s->pos());
-                        Shape s2(s->shape(si2));
-                        s2.translate(s->pos());
+                        s1.add(s->shape(si1).translated(s->pos()));
+                        s2.add(s->shape(si2).translated(s->pos()));
 
-                        // s1.add(QRectF(0.0, _spatium * 4, 1000.0, 0.0));   // bottom staff line
-                        s1.add(QRectF(0.0, staff->height(), 1000.0, 0.0));   // bottom staff line
-                        s2.add(QRectF(0.0, 0.0, 1000.0, 0.0));            // top staff line
-
-                        // QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(), system->pos().y());
                         for (Element* e : s->annotations()) {
                               if (e->staffIdx() == si1)
                                     s1.add(e->bbox().translated(e->pos() + s->pos()));
                               else if (e->staffIdx() == si2)
                                     s2.add(e->bbox().translated(e->pos() + s->pos()));
                               }
-                        qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
-                        dist    = qMax(dist, d);
                         }
+
+                  s1.add(QRectF(0.0, staff->height(), 1000.0, 0.0));    // bottom staff line
+                  s2.add(QRectF(0.0, 0.0, 1000.0, 0.0));                // top staff line
+
+                  qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
+                  dist    = qMax(dist, d);
+
                   Spacer* sp = m->mstaff(si1)->_vspacerDown;
                   if (sp)
-                        // dist = qMax(dist, _spatium * 4 + sp->gap());
                         dist = qMax(dist, staff->height() + sp->gap());
                   sp = m->mstaff(si2)->_vspacerUp;
                   if (sp)
                         dist = qMax(dist, sp->gap());
-
                   }
             ss->setYOff(staff->lines() == 1 ? _spatium * staff->mag() : 0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);

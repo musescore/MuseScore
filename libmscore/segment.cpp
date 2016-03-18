@@ -1312,11 +1312,25 @@ void Segment::createShape(int staffIdx)
                   }
             return;
             }
+#if 0
       for (int voice = 0; voice < VOICES; ++voice) {
             Element* e = element(staffIdx * VOICES + voice);
-            if (e && e->visible())
+            if (e && e->visible()) {
+                  if (e->isChordRest()) {
+                        ChordRest* cr = toChordRest(e);
+                        int si = cr->vStaffIdx();
+                        _shapes[si].add(e->shape());
+                        }
+                  else
+                        s.add(e->shape());
+                  }
+            }
+#endif
+      for (Element* e : _elist) {
+            if (e && e->vStaffIdx() == staffIdx)
                   s.add(e->shape());
             }
+
       for (Element* e : _annotations) {
             if (e->staffIdx() == staffIdx)
                   s.add(e->shape());

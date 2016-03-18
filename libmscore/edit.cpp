@@ -1647,12 +1647,12 @@ void Score::cmdFlip()
             if (e->type() == Element::Type::BEAM) {
                   Beam* beam = static_cast<Beam*>(e);
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(beam, P_ID::STEM_DIRECTION, int(dir));
+                  undoChangeProperty(beam, P_ID::STEM_DIRECTION, dir);
                   }
             else if (e->type() == Element::Type::SLUR_SEGMENT) {
                   SlurTie* slur = static_cast<SlurSegment*>(e)->slurTie();
                   Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(slur, P_ID::SLUR_DIRECTION, int(dir));
+                  undoChangeProperty(slur, P_ID::SLUR_DIRECTION, dir);
                   }
             else if (e->type() == Element::Type::HAIRPIN_SEGMENT) {
                   Hairpin* h = static_cast<HairpinSegment*>(e)->hairpin();
@@ -1708,7 +1708,6 @@ void Score::cmdFlip()
                   undoChangeProperty(e, P_ID::PLACEMENT, int(p));
                   }
             }
-      setLayoutAll();         // must be set in undo/redo
       }
 
 //---------------------------------------------------------

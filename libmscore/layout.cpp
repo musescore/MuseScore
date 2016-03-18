@@ -3217,7 +3217,6 @@ System* Score::collectSystem(LayoutContext& lc)
             }
 
       system->setWidth(systemWidth);
-      system->layout2();
 
       minWidth           = system->leftMargin();
       qreal totalWeight  = 0.0;
@@ -3273,6 +3272,22 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             pos.rx() += ww;
             }
+
+      // layout beams and update the segment shape
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            for (Segment* s = toMeasure(mb)->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                  for (Element* e : s->elist()) {
+                        if (e && e->isChordRest()) {
+                              ChordRest* cr = toChordRest(e);
+                              if (cr->beam() && !cr->beam()->cross() && cr->beam()->elements().front() == cr)
+                                    cr->beam()->layout();
+                              }
+                        }
+                  }
+            }
+      system->layout2();
 
       Measure* lm           = system->lastMeasure();
       lc.firstSystem        = lm && lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
@@ -3364,7 +3379,7 @@ bool Score::collectPage(LayoutContext& lc)
                                     if (!staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
-                                    if (cr->beam() && cr->beam()->elements().front() == cr)
+                                    if (cr->beam() && cr->beam()->cross() && cr->beam()->elements().front() == cr)     // layout cross staff beams
                                           cr->beam()->layout();
 
                                     if (cr->isChord()) {

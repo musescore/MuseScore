@@ -172,6 +172,26 @@ qreal Shape::bottom() const
       return dist;
       }
 
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void Shape::remove(const QRectF& r)
+      {
+      for (auto i = begin(); i != end(); ++i) {
+            if (*i == r) {
+                  erase(i);
+                  return;
+                  }
+            }
+      qWarning("Shape::remove: QRectF not found in Shape");
+      }
+
+void Shape::remove(const Shape& s)
+      {
+      for (const QRectF& r : s)
+            remove(r);
+      }
 
 #ifdef DEBUG_SHAPES
 

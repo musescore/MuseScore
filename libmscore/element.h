@@ -439,6 +439,7 @@ class Element : public QObject, public ScoreElement {
       virtual int z() const                   { return int(type()) * 100; }  // stacking order
 
       int staffIdx() const                    { return _track >> 2;        }
+      virtual int vStaffIdx() const           { return staffIdx();         }
       int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) * VOICES + v; }
       Staff* staff() const;

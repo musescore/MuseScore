@@ -218,6 +218,7 @@ public:
       std::vector<Shape> shapes()          { return _shapes; }
       const std::vector<Shape>& shapes() const { return _shapes; }
       const Shape& shape(int i) const     { return _shapes[i]; }
+      Shape& shape(int i)                 { return _shapes[i]; }
       void createShapes();
       void createShape(int staffIdx);
       qreal minRight() const;
