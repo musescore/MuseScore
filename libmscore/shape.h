@@ -31,6 +31,8 @@ class Shape : std::vector<QRectF> {
 
       void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
       void add(const QRectF& r)           { push_back(r); }
+      void remove(const QRectF&);
+      void remove(const Shape&);
       void translate(const QPointF&);
       Shape translated(const QPointF&) const;
       qreal minHorizontalDistance(const Shape&) const;

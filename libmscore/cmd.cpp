@@ -194,7 +194,7 @@ void Score::update()
             for (Score* s : scoreList())
                   s->doLayoutRange(cs.startTick(), cs.endTick());
             }
-      else if (cs.updateAll()) {
+      if (cs.updateAll()) {
             for (Score* s : scoreList()) {
                   for (MuseScoreView* v : s->viewer)
                         v->updateAll();
