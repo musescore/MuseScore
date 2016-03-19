@@ -710,7 +710,7 @@ void Note::draw(QPainter* painter) const
                   QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
                   // we do not know which viewer did this draw() call
                   // so update all:
-                  foreach(MuseScoreView* view, score()->getViewer())
+                  for (MuseScoreView* view : score()->getViewer())
                         view->drawBackground(painter, bb);
 
                   if (fretConflict() && !score()->printing()) {          //on fret conflict, draw on red background
@@ -779,7 +779,7 @@ void Note::write(Xml& xml) const
             }
       if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
             xml.stag("Events");
-            foreach(const NoteEvent& e, _playEvents)
+            for (const NoteEvent& e : _playEvents)
                   e.write(xml);
             xml.etag();
             }
@@ -803,9 +803,9 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_ID::FIXED);
       writeProperty(xml, P_ID::FIXED_LINE);
 
-      foreach (Spanner* e, _spannerFor)
+      for (Spanner* e : _spannerFor)
             e->write(xml);
-      foreach (Spanner* e, _spannerBack)
+      for (Spanner* e : _spannerBack)
             xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(e)));
 
       xml.etag();
@@ -1425,13 +1425,11 @@ Element* Note::drop(const DropData& data)
 
                   if (group != _headGroup) {
                         if (links()) {
-                              foreach(ScoreElement* e, *links()) {
+                              for (ScoreElement* e : *links()) {
                                     e->score()->undoChangeProperty(e, P_ID::HEAD_GROUP, int(group));
                                     Note* note = static_cast<Note*>(e);
-                                    if (note->staff() && note->staff()->isTabStaff()
-                                       && group == NoteHead::Group::HEAD_CROSS) {
+                                    if (note->staff() && note->staff()->isTabStaff() && group == NoteHead::Group::HEAD_CROSS)
                                           e->score()->undoChangeProperty(e, P_ID::GHOST, true);
-                                          }
                                     }
                               }
                         else
@@ -1443,7 +1441,7 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::ICON:
                   {
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (static_cast<Icon*>(e)->iconType()) {
                         case IconType::ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division/2);
                               break;
@@ -1919,7 +1917,7 @@ void Note::setTrack(int val)
       Element::setTrack(val);
       if (_tieFor) {
             _tieFor->setTrack(val);
-            foreach(SpannerSegment* seg, _tieFor->spannerSegments())
+            for (SpannerSegment* seg : _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
       for (Spanner* s : _spannerFor) {
@@ -1928,7 +1926,7 @@ void Note::setTrack(int val)
       for (Spanner* s : _spannerBack) {
             s->setTrack2(val);
             }
-      foreach (Element* e, _el)
+      for (Element* e : _el)
             e->setTrack(val);
       if (_accidental)
             _accidental->setTrack(val);
@@ -2529,7 +2527,7 @@ QString Note::accessibleExtraInfo() const
             rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
             }
       if (!el().empty()) {
-            foreach (Element* e, el()) {
+            for (Element* e : el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -2541,14 +2539,16 @@ QString Note::accessibleExtraInfo() const
             rez = tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
 
       if (!spannerFor().empty()) {
-            foreach (Spanner* s, spannerFor()) {
-                  if (!score()->selectionFilter().canSelect(s)) continue;
+            for (Spanner* s : spannerFor()) {
+                  if (!score()->selectionFilter().canSelect(s))
+                        continue;
                   rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       if (!spannerBack().empty()) {
-            foreach (Spanner* s, spannerBack()) {
-                  if (!score()->selectionFilter().canSelect(s)) continue;
+            for (Spanner* s : spannerBack()) {
+                  if (!score()->selectionFilter().canSelect(s))
+                        continue;
                   rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
@@ -2639,14 +2639,14 @@ Element* Note::prevElement()
 
 Note* Note::lastTiedNote() const
       {
-      QList<Note*> notes;
+      std::vector<Note*> notes;
       Note* note = const_cast<Note*>(this);
-      notes.append(note);
+      notes.push_back(note);
       while (note->tieFor()) {
-            if (notes.contains(note->tieFor()->endNote()))
+            if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())
                   break;
             note = note->tieFor()->endNote();
-            notes.append(note);
+            notes.push_back(note);
             }
       return note;
       }
@@ -2659,14 +2659,14 @@ Note* Note::lastTiedNote() const
 
 Note* Note::firstTiedNote() const
       {
-      QList<Note*> notes;
+      std::vector<Note*> notes;
       Note* note = const_cast<Note*>(this);
-      notes.append(note);
+      notes.push_back(note);
       while (note->tieBack()) {
-            if (notes.contains(note->tieBack()->startNote()))
+            if (std::find(notes.begin(), notes.end(), note->tieBack()->startNote()) != notes.end())
                   break;
             note = note->tieBack()->startNote();
-            notes.append(note);
+            notes.push_back(note);
             }
       return note;
       }
@@ -2675,17 +2675,17 @@ Note* Note::firstTiedNote() const
 //   tiedNotes
 //---------------------------------------------------------
 
-QList<Note*> Note::tiedNotes() const
+std::vector<Note*> Note::tiedNotes() const
       {
-      QList<Note*> notes;
+      std::vector<Note*> notes;
       Note* note = firstTiedNote();
 
-      notes.append(note);
+      notes.push_back(note);
       while (note->tieFor()) {
-            if (notes.contains(note->tieFor()->endNote()))
+            if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())
                   break;
             note = note->tieFor()->endNote();
-            notes.append(note);
+            notes.push_back(note);
             }
       return notes;
       }

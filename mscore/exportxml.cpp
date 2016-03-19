@@ -2279,7 +2279,7 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
 
 static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
       {
-      const QList<ChordRest*>& elements = b->elements();
+      const auto& elements = b->elements();
       int idx = elements.indexOf(cr);
       if (idx == -1) {
             qDebug("Beam::writeMusicXml(): cannot find ChordRest");
