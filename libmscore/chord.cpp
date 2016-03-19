@@ -1192,7 +1192,8 @@ void Chord::setScore(Score* s)
 ///   Get the default stem length for this chord
 //-----------------------------------------------------------------------------
 
-qreal Chord::defaultStemLength() {
+qreal Chord::defaultStemLength()
+      {
       qreal _spatium = spatium();
       Note* downnote;
       int dl, ul;
@@ -1231,8 +1232,8 @@ qreal Chord::defaultStemLength() {
       if (hookIdx >= 2 || _tremolo)
             shortenStem = false;
 
-      Spatium progression(score()->styleS(StyleIdx::shortStemProgression));
-      qreal shortest(score()->styleS(StyleIdx::shortestStem).val());
+      Spatium progression = score()->styleS(StyleIdx::shortStemProgression);
+      qreal shortest      = score()->styleS(StyleIdx::shortestStem).val();
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
       switch(hookIdx) {
@@ -2659,7 +2660,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             else {                              // otherwise, compute horizontal position as if there were a stem
                   pos.rx() = stemPosX();
                   if (!_up)
-                        pos.rx() += point(score()->styleS(StyleIdx::stemWidth));
+                        pos.rx() += score()->styleP(StyleIdx::stemWidth);
                   }
             a->layout();
 
@@ -2806,7 +2807,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             y = stem()->hookPos().y() + pos().y();    // vert. pos. of end of stem
 
             if (beam()) {                       // if there is a beam, stem end is further away
-                  qreal bw = score()->styleS(StyleIdx::beamWidth).val() * _spatium;
+                  qreal bw = score()->styleP(StyleIdx::beamWidth);
                   y += up() ? -bw : bw;
                   }
             if (up())                           // if up chord, top is topmost between staff top and stem end
@@ -2839,9 +2840,14 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
       qreal dist;                               // distance between occupied area and articulation
       switch(st) {
-            case ArticulationType::Marcato:        dist = 1.0 * _spatium; break;
-            case ArticulationType::Sforzatoaccent: dist = 1.5 * _spatium; break;
-            default: dist = score()->styleS(StyleIdx::propertyDistance).val() * _spatium;
+            case ArticulationType::Marcato:
+                  dist = 1.0 * _spatium;
+                  break;
+            case ArticulationType::Sforzatoaccent:
+                  dist = 1.5 * _spatium;
+                  break;
+            default:
+                  dist = score()->styleP(StyleIdx::propertyDistance);
             }
 
       if (aa == ArticulationAnchor::CHORD || aa == ArticulationAnchor::TOP_CHORD || aa == ArticulationAnchor::BOTTOM_CHORD) {

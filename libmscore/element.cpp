@@ -521,12 +521,8 @@ QPointF Element::pagePos() const
             else {
                   Q_ASSERT(false);
                   }
-            if (system) {
-                  int si = staffIdx();
-                  if (isChordRest())
-                        si += toChordRest(this)->staffMove();
-                  p.ry() += system->staffYpage(si);               // system->staff(si)->y() + system->y();
-                  }
+            if (system)
+                  p.ry() += system->staffYpage(vStaffIdx());      // system->staff(si)->y() + system->y();
             p.rx() = pageX();
             }
       else {
@@ -558,10 +554,7 @@ QPointF Element::canvasPos() const
                   Q_ASSERT(false);
                   }
             if (system) {
-                  int si = staffIdx();
-                  if (isChordRest())
-                        si += toChordRest(this)->staffMove();
-                  p.ry() += system->staffYpage(si);         // system->staff(si)->y() + system->y();
+                  p.ry() += system->staffYpage(vStaffIdx());      // system->staff(si)->y() + system->y();
                   Page* page = system->page();
                   if (page)
                         p.ry() += page->y();

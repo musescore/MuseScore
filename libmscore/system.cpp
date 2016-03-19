@@ -436,6 +436,7 @@ void System::layout2()
                   if (sp)
                         dist = qMax(dist, sp->gap());
                   }
+
             ss->setYOff(staff->lines() == 1 ? _spatium * staff->mag() : 0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
             y += dist;
@@ -1039,7 +1040,6 @@ Element* System::prevElement()
 
 qreal System::minDistance(System* s2) const
       {
-      const qreal _spatium            = spatium();
       const qreal systemFrameDistance = score()->styleP(StyleIdx::systemFrameDistance);
       const qreal frameSystemDistance = score()->styleP(StyleIdx::frameSystemDistance);
 
@@ -1059,17 +1059,18 @@ qreal System::minDistance(System* s2) const
             qreal bx1 = mb1->x();
             qreal bx2 = mb1->x() + mb1->width();
             for (MeasureBase* mb2 : s2->measures()) {
-                  if (mb1->type() != Element::Type::MEASURE || mb2->type() != Element::Type::MEASURE)
+                  if (!(mb1->isMeasure() && mb2->isMeasure()))
                         continue;
-                  Measure* m1 = static_cast<Measure*>(mb1);
-                  Measure* m2 = static_cast<Measure*>(mb2);
+                  Measure* m1 = toMeasure(mb1);
+                  Measure* m2 = toMeasure(mb2);
                   qreal ax1 = mb2->x();
-                  if (ax1 > bx2)
+                  if (ax1 >= bx2)
                         break;
                   qreal ax2 = mb2->x() + mb2->width();
                   if (ax2 < bx1)
                         continue;
-                  if ((ax1 >= bx1 && ax1 < bx2) || (ax2 >= bx1 && ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2)) {
+//                  if ((ax1 >= bx1 && ax1 < bx2) || (ax2 >= bx1 && ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2)) {
+                  if ((ax1 >= bx1) || (ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2)) {
                         Shape s1;
                         Shape s2;
                         for (Segment* s = m1->first(); s; s = s->next())
@@ -1079,15 +1080,16 @@ qreal System::minDistance(System* s2) const
                         s1.translate(QPointF(m1->x(), lastStaffY));
                         s2.translate(QPointF(m2->x(), 0.0));
 
-                        s1.add(QRectF(0.0, height(), 100000.0, 0.0));   // bottom staff line
-                        s2.add(QRectF(0.0, 0.0,      100000.0, 0.0));   // top staff line
+                        s1.add(QRectF(0.0, height(), 1000000.0, 0.0));   // simulated bottom staff line
+                        s2.add(QRectF(0.0, 0.0,      1000000.0, 0.0));   // simulated top staff line
 
                         qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
                         dist = qMax(dist, d);
                         }
                   }
             }
-      return qMax(score()->styleS(StyleIdx::minSystemDistance).val() * _spatium, dist - height());
+
+      return qMax(score()->styleP(StyleIdx::minSystemDistance), dist - height());
       }
 
 //---------------------------------------------------------

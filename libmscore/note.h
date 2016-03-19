@@ -348,7 +348,6 @@ class Note : public Element {
       void setTieBack(Tie* t)         { _tieBack = t;    }
       Note* firstTiedNote() const;
       Note* lastTiedNote() const;
-      QList<Note*> tiedNotes() const;
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }
@@ -456,6 +455,7 @@ class Note : public Element {
       virtual QString accessibleExtraInfo() const override;
 
       virtual Shape shape() const override;
+      std::vector<Note*> tiedNotes() const;
       };
 
 // extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];

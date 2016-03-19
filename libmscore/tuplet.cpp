@@ -202,12 +202,12 @@ void Tuplet::layout()
       //
       qreal maxSlope = score()->styleD(StyleIdx::tupletMaxSlope);
       bool outOfStaff = score()->styleB(StyleIdx::tupletOufOfStaff);
-      qreal vHeadDistance = score()->styleS(StyleIdx::tupletVHeadDistance).val() * _spatium;
-      qreal vStemDistance = score()->styleS(StyleIdx::tupletVStemDistance).val() * _spatium;
-      qreal stemLeft = score()->styleS(StyleIdx::tupletStemLeftDistance).val() * _spatium;
-      qreal stemRight = score()->styleS(StyleIdx::tupletStemRightDistance).val() * _spatium;
-      qreal noteLeft = score()->styleS(StyleIdx::tupletNoteLeftDistance).val() * _spatium;
-      qreal noteRight = score()->styleS(StyleIdx::tupletNoteRightDistance).val() * _spatium;
+      qreal vHeadDistance = score()->styleP(StyleIdx::tupletVHeadDistance);
+      qreal vStemDistance = score()->styleP(StyleIdx::tupletVStemDistance);
+      qreal stemLeft = score()->styleP(StyleIdx::tupletStemLeftDistance);
+      qreal stemRight = score()->styleP(StyleIdx::tupletStemRightDistance);
+      qreal noteLeft = score()->styleP(StyleIdx::tupletNoteLeftDistance);
+      qreal noteRight = score()->styleP(StyleIdx::tupletNoteRightDistance);
 
       int move = 0;
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -240,7 +240,7 @@ void Tuplet::layout()
       qreal beamAdjust = 0.0;
       if (cr1->beam() && cr1->beam() == cr2->beam()) {
             followBeam = true;
-            beamAdjust = point(score()->styleS(StyleIdx::beamWidth)) * 0.5 * mag();
+            beamAdjust = score()->styleP(StyleIdx::beamWidth) * 0.5 * mag();
             }
 
       if (_isUp) {
@@ -587,7 +587,7 @@ void Tuplet::draw(QPainter* painter) const
             painter->translate(-pos);
             }
       if (_hasBracket) {
-            painter->setPen(QPen(color, spatium() * score()->styleS(StyleIdx::tupletBracketWidth).val()));
+            painter->setPen(QPen(color, mag() * score()->styleP(StyleIdx::tupletBracketWidth)));
             if (!_number)
                   painter->drawPolyline(bracketL, 4);
             else {
