@@ -3202,7 +3202,8 @@ Shape Chord::shape() const
       {
       Shape shape;
       processSiblings([&shape, this] (Element* e) {
-            shape.add(e->shape());
+            if (!(e->isStem() && beam()))
+                  shape.add(e->shape());
             });
       shape.add(ChordRest::shape());      // add articulation + lyrics
       return shape.translated(pos());
