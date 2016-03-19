@@ -58,7 +58,8 @@ PageSettings::PageSettings(QWidget* parent)
       connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
       connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
       connect(buttonOk,             SIGNAL(clicked()),            SLOT(ok()));
-      connect(landscape,            SIGNAL(toggled(bool)),        SLOT(landscapeToggled(bool)));
+      connect(portraitButton,       SIGNAL(clicked()),            SLOT(portraitClicked()));
+      connect(landscapeButton,      SIGNAL(clicked()),            SLOT(landscapeClicked()));
       connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));
       connect(pageHeight,           SIGNAL(valueChanged(double)), SLOT(pageHeightChanged(double)));
       connect(pageWidth,            SIGNAL(valueChanged(double)), SLOT(pageWidthChanged(double)));
@@ -241,7 +242,6 @@ void PageSettings::updateValues()
             evenPageLeftMargin->setValue(oddPageLeftMargin->value());
             }
 
-      landscape->setChecked(pf->width() > pf->height());
       twosided->setChecked(pf->twosided());
 
       pageOffsetEntry->setValue(sc->pageNumberOffset() + 1);
@@ -270,15 +270,27 @@ void PageSettings::mmClicked()
       }
 
 //---------------------------------------------------------
-//   landscapeToggled
+//   portraitClicked
 //---------------------------------------------------------
 
-void PageSettings::landscapeToggled(bool flag)
+void Ms::PageSettings::portraitClicked()
       {
       PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
-      if (flag ^ (pf.width() > pf.height()))
-            pf.setSize(QSizeF(pf.height(), pf.width()));
+      double f  = mmUnit ? 1.0/INCH : 1.0;
+      pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
+      preview->score()->setPageFormat(pf);
+      updateValues();
+      updatePreview(0);
+      }
+
+//---------------------------------------------------------
+//   landscapeClicked
+//---------------------------------------------------------
+
+void Ms::PageSettings::landscapeClicked()
+      {
+      PageFormat pf;
+      pf.setSize(QSizeF(pf.height(), pf.width()));
       double f  = mmUnit ? 1.0/INCH : 1.0;
       pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
       preview->score()->setPageFormat(pf);
