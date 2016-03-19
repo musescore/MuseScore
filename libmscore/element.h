@@ -70,6 +70,7 @@ class LayoutBreak;
 class Tremolo;
 class System;
 class Lyrics;
+class Stem;
 
 enum class SymId;
 
@@ -653,6 +654,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Tremolo,       TREMOLO);
       CONVERT(System,        SYSTEM);
       CONVERT(Lyrics,        LYRICS);
+      CONVERT(Stem,          STEM);
 #undef CONVERT
       };
 
@@ -710,6 +712,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Tremolo,       TREMOLO);
       CONVERT(System,        SYSTEM);
       CONVERT(Lyrics,        LYRICS);
+      CONVERT(Stem,          STEM);
 #undef CONVERT
 
 //---------------------------------------------------------

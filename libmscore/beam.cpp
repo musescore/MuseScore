@@ -1905,23 +1905,21 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //  calculate stem length
       //
       for (ChordRest* cr : crl) {
-            Chord* c = static_cast<Chord*>(cr);
-            if (c->type() != Element::Type::CHORD)
+            Chord* c = toChord(cr);
+            if (!c->isChord())
                   continue;
             c->layoutStem1();
-            Stem* stem = c->stem();
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
             QPointF stemPos(c->stemPos());
-            qreal x2 = stemPos.x() - _pagePos.x();
-            qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
-            qreal y2 = stemPos.y();
-
+            qreal x2   = stemPos.x() - _pagePos.x();
+            qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
+            qreal y2   = stemPos.y();
             qreal fuzz = _spatium * .1;
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
-            foreach (const QLineF* l, beamSegments) {
+            for (const QLineF* l : beamSegments) {
                   if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                         qreal y = (x2 - l->x1()) * slope + l->y1();
                         by = y2 < y1 ? qMax(by, y) : qMin(by, y);
@@ -1937,33 +1935,20 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   by = 0;
                   }
+            Stem* stem = c->stem();
             if (stem) {
-                  Shape& shape = cr->segment()->shape(cr->staffIdx());
-                  shape.remove(stem->shape());
                   qreal sw2  = point(score()->styleS(StyleIdx::stemWidth)) * .5;
-                  if (up())
+                  if (cr->up())
                         sw2 = -sw2;
                   stem->setLen(y2 - (by + _pagePos.y()));
                   stem->rxpos() = c->stemPosX() + sw2;
+                  Shape& shape = cr->segment()->shape(cr->vStaffIdx());
                   shape.add(stem->shape());
                   }
 
-            //
-            // layout stem slash for acciacatura
-            //
-            if ((c == crl.front()) && c->noteType() == NoteType::ACCIACCATURA) {
-                  StemSlash* stemSlash = c->stemSlash();
-                  // if (!stemSlash)
-                  //      c->add(new StemSlash(score()));
-                  if (stemSlash)
-                        stemSlash->layout();
-                  }
-#if 0
-            else {
-                  if (c->stemSlash())
-                        c->remove(c->stemSlash());
-                  }
-#endif
+            StemSlash* stemSlash = c->stemSlash();
+            if (stemSlash)
+                  stemSlash->layout();
             Tremolo* tremolo = c->tremolo();
             if (tremolo)
                   tremolo->layout();
