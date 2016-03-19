@@ -810,7 +810,7 @@ HTML_FOOTER            = @CMAKE_CURRENT_SOURCE_DIR@/build/doxygen/footer.html
 # the style sheet file to the HTML output directory, so don't put your own
 # stylesheet in the HTML output directory as well, or it will be erased!
 
-HTML_STYLESHEET        = @CMAKE_CURRENT_SOURCE_DIR@/doxygen/customdoxygen.css
+HTML_STYLESHEET        = @CMAKE_CURRENT_SOURCE_DIR@/build/doxygen/customdoxygen.css
 
 # If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes,
 # files or namespaces will be aligned in HTML using tables. If set to
