@@ -111,17 +111,10 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="2">
+        <item row="5" column="0" colspan="2">
          <widget class="QCheckBox" name="twosided">
           <property name="text">
            <string>Two sided</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <widget class="QCheckBox" name="landscape">
-          <property name="text">
-           <string>Landscape</string>
           </property>
          </widget>
         </item>
@@ -138,6 +131,9 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QComboBox" name="pageGroup"/>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
@@ -151,8 +147,19 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QComboBox" name="pageGroup"/>
+        <item row="3" column="0">
+         <widget class="QRadioButton" name="portraitButton">
+          <property name="text">
+           <string>Portrait</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QRadioButton" name="landscapeButton">
+          <property name="text">
+           <string>Landscape</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -501,11 +508,12 @@
   <tabstop>pageGroup</tabstop>
   <tabstop>pageWidth</tabstop>
   <tabstop>pageHeight</tabstop>
-  <tabstop>landscape</tabstop>
   <tabstop>twosided</tabstop>
   <tabstop>spatiumEntry</tabstop>
   <tabstop>inchButton</tabstop>
   <tabstop>mmButton</tabstop>
+  <tabstop>portraitButton</tabstop>
+  <tabstop>landscapeButton</tabstop>
   <tabstop>oddPageTopMargin</tabstop>
   <tabstop>oddPageLeftMargin</tabstop>
   <tabstop>oddPageRightMargin</tabstop>
