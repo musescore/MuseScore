@@ -4578,6 +4578,58 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
       }
 
 //---------------------------------------------------------
+//  findPitchesUsed
+//---------------------------------------------------------
+
+/**
+ Find the set of pitches actually used in a part.
+ */
+
+typedef QSet<int> pitchSet;       // the set of pitches used
+
+static void addChordPitchesToSet(const Chord* c, pitchSet& set)
+      {
+      for (const Note* note : c->notes()) {
+            qDebug("chord %p note %p pitch %d", c, note, note->pitch() + 1);
+            set.insert(note->pitch());
+            }
+      }
+
+static void findPitchesUsed(const Part* part, pitchSet& set)
+      {
+      int strack = part->startTrack();
+      int etrack = part->endTrack();
+
+      // loop over all chords in the part
+      for (const MeasureBase* mb = part->score()->measures()->first(); mb; mb = mb->next()) {
+            if (mb->type() != Element::Type::MEASURE)
+                  continue;
+            const Measure* m = static_cast<const Measure*>(mb);
+            for (int st = strack; st < etrack; ++st) {
+                  for (Segment* seg = m->first(); seg; seg = seg->next()) {
+                        const Element* el = seg->element(st);
+                        if (!el)
+                              continue;
+                        if (el->type() == Element::Type::CHORD)
+                              {
+                              // add grace and non-grace note pitches to the result set
+                              const Chord* c = static_cast<const Chord*>(el);
+                              if (c) {
+                                    for (const Chord* g : c->graceNotesBefore()) {
+                                          addChordPitchesToSet(g, set);
+                                          }
+                                    addChordPitchesToSet(c, set);
+                                    for (const Chord* g : c->graceNotesAfter()) {
+                                          addChordPitchesToSet(g, set);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //  partList
 //---------------------------------------------------------
 
@@ -4652,10 +4704,14 @@ static void partList(Xml& xml, Score* score, const QList<Part*>& il, MxmlInstrum
 
             if (part->instrument()->useDrumset()) {
                   const Drumset* drumset = part->instrument()->drumset();
+                  pitchSet pitches;
+                  findPitchesUsed(part, pitches);
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
                               scoreInstrument(xml, idx + 1, i + 1, di.name);
+                        else if (pitches.contains(i))
+                              scoreInstrument(xml, idx + 1, i + 1, QString("Instrument %1").arg(i + 1));
                         }
                   int midiPort = part->midiPort() + 1;
                   if (midiPort >= 1 && midiPort <= 16)
@@ -4663,7 +4719,7 @@ static void partList(Xml& xml, Score* score, const QList<Part*>& il, MxmlInstrum
 
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
-                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
+                        if (di.notehead != NoteHead::Group::HEAD_INVALID || pitches.contains(i))
                               midiInstrument(xml, idx + 1, i + 1, part->instrument(), score, i + 1);
                         }
                   }
