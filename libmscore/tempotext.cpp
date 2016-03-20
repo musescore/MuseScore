@@ -197,6 +197,7 @@ void TempoText::textChanged()
                               setTempo(qreal(sl[1].toDouble()) * pa.f);
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
+                              score()->fixTicks();
                               score()->setPlaylistDirty();
                               }
                         break;
@@ -260,6 +261,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::TEMPO:
                   setTempo(v.toDouble());
                   score()->setTempo(segment(), _tempo);
+                  score()->fixTicks();
                   break;
             case P_ID::TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
