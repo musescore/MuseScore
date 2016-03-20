@@ -304,6 +304,9 @@ class ExportMusicXml {
                            TrillHash& trillStart, TrillHash& trillStop);
       void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
                              TrillHash& trillStart, TrillHash& trillStop);
+      void print(Measure* m, int idx, int staffCount, int staves);
+      void findAndExportClef(Measure* m, const int staves, const int strack, const int etrack);
+      void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
 
 public:
       ExportMusicXml(Score* s)
@@ -4366,6 +4369,492 @@ static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrum
       }
 
 //---------------------------------------------------------
+//  print
+//---------------------------------------------------------
+
+/**
+ Handle the <print> element.
+ When exporting layout and all breaks, a <print> with layout informations
+ is generated for the measure types TopSystem, NewSystem and newPage.
+ When exporting layout but only manual or no breaks, a <print> with
+ layout informations is generated only for the measure type TopSystem,
+ as it is assumed the system layout is broken by the importing application
+ anyway and is thus useless.
+ */
+
+void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
+      {
+      int currentSystem = NoSystem;
+      Measure* previousMeasure = 0;
+
+      for (MeasureBase* currentMeasureB = m->prev(); currentMeasureB; currentMeasureB = currentMeasureB->prev()) {
+            if (currentMeasureB->type() == Element::Type::MEASURE) {
+                  previousMeasure = (Measure*) currentMeasureB;
+                  break;
+                  }
+            }
+
+      if (!previousMeasure)
+            currentSystem = TopSystem;
+      else if (m->parent() && previousMeasure->parent()) {
+            if (m->parent()->parent() != previousMeasure->parent()->parent())
+                  currentSystem = NewPage;
+            else if (m->parent() != previousMeasure->parent())
+                  currentSystem = NewSystem;
+            }
+
+      bool prevMeasLineBreak = false;
+      bool prevMeasPageBreak = false;
+      if (previousMeasure) {
+            prevMeasLineBreak = previousMeasure->lineBreak();
+            prevMeasPageBreak = previousMeasure->pageBreak();
+            }
+
+      if (currentSystem != NoSystem) {
+
+            // determine if a new-system or new-page is required
+            QString newThing;       // new-[system|page]="yes" or empty
+            if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL) {
+                  if (currentSystem == NewSystem)
+                        newThing = " new-system=\"yes\"";
+                  else if (currentSystem == NewPage)
+                        newThing = " new-page=\"yes\"";
+                  }
+            else if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::MANUAL) {
+                  if (currentSystem == NewSystem && prevMeasLineBreak)
+                        newThing = " new-system=\"yes\"";
+                  else if (currentSystem == NewPage && prevMeasPageBreak)
+                        newThing = " new-page=\"yes\"";
+                  }
+
+            // determine if layout information is required
+            bool doLayout = false;
+            if (preferences.musicxmlExportLayout) {
+                  if (currentSystem == TopSystem
+                      || (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL && newThing != "")) {
+                        doLayout = true;
+                        }
+                  }
+
+            if (doLayout) {
+                  xml.stag(QString("print%1").arg(newThing));
+                  const PageFormat* pf = score()->pageFormat();
+                  const double pageWidth  = getTenthsFromInches(pf->size().width());
+                  const double lm = getTenthsFromInches(pf->oddLeftMargin());
+                  const double rm = getTenthsFromInches(pf->oddRightMargin());
+                  const double tm = getTenthsFromInches(pf->oddTopMargin());
+
+                  // System Layout
+
+                  // For a multi-meaure rest positioning is valid only
+                  // in the replacing measure
+                  // note: for a normal measure, mmRest1 is the measure itself,
+                  // for a multi-meaure rest, it is the replacing measure
+                  const Measure* mmR1 = m->mmRest1();
+                  const System* system = mmR1->system();
+
+                  // Put the system print suggestions only for the first part in a score...
+                  if (idx == 0) {
+
+                        // Find the right margin of the system.
+                        double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+                        double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
+
+                        xml.stag("system-layout");
+                        xml.stag("system-margins");
+                        xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
+                        xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
+                        xml.etag();
+
+                        if (currentSystem == NewPage || currentSystem == TopSystem) {
+                              const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                              xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                              }
+                        if (currentSystem == NewSystem) {
+                              // see System::layout2() for the factor 2 * score()->spatium()
+                              const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
+                                                                       - previousMeasure->pagePos().y()
+                                                                       - previousMeasure->bbox().height()
+                                                                       + 2 * score()->spatium()
+                                                                       );
+                              xml.tag("system-distance",
+                                      QString("%1").arg(QString::number(sysDist,'f',2)));
+                              }
+
+                        xml.etag();
+                        }
+
+                  // Staff layout elements.
+                  for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
+                        xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
+                        const double staffDist =
+                              getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
+                        xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
+                        xml.etag();
+                        }
+
+                  xml.etag();
+                  }
+            else {
+                  // !doLayout
+                  if (newThing != "")
+                        xml.tagE(QString("print%1").arg(newThing));
+                  }
+
+            } // if (currentSystem ...
+
+      }
+
+//---------------------------------------------------------
+//  findAndExportClef
+//---------------------------------------------------------
+
+/**
+ Make sure clefs at end of measure get exported at start of next measure.
+ */
+
+void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int strack, const int etrack)
+      {
+      Measure* prevMeasure = m->prevMeasure();
+      Measure* mmR         = m->mmRest();       // the replacing measure in a multi-measure rest
+      int tick             = m->tick();
+      Segment* cs1;
+      Segment* cs2         = m->findSegment(Segment::Type::Clef, tick);
+      Segment* cs3;
+      Segment* seg         = 0;
+
+      if (prevMeasure)
+            cs1 = prevMeasure->findSegment(Segment::Type::Clef,  tick);
+      else
+            cs1 = 0;
+
+      if (mmR)
+            cs3 = mmR->findSegment(Segment::Type::Clef,  tick);
+      else
+            cs3 = 0;
+
+      if (cs1 && cs2) {
+            // should only happen at begin of new system
+            // when previous system ends with a non-generated clef
+            seg = cs1;
+            }
+      else if (cs1)
+            seg = cs1;
+      else if (cs3) {
+            // happens when the first measure is a multi-measure rest
+            // containing a generated clef
+            seg = cs3;
+            }
+      else
+            seg = cs2;
+      clefDebug("exportxml: clef segments cs1=%p cs2=%p cs3=%p seg=%p", cs1, cs2, cs3, seg);
+
+      // output attribute at start of measure: clef
+      if (seg) {
+            for (int st = strack; st < etrack; st += VOICES) {
+                  // sstaff - xml staff number, counting from 1 for this
+                  // instrument
+                  // special number 0 -> dont show staff number in
+                  // xml output (because there is only one staff)
+
+                  int sstaff = (staves > 1) ? st - strack + VOICES : 0;
+                  sstaff /= VOICES;
+
+                  Clef* cle = static_cast<Clef*>(seg->element(st));
+                  if (cle) {
+                        clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
+                        // output only clef changes, not generated clefs at line beginning
+                        // exception: at tick=0, export clef anyway
+                        if (tick == 0 || !cle->generated()) {
+                              clefDebug("exportxml: clef exported");
+                              clef(sstaff, cle);
+                              }
+                        else {
+                              clefDebug("exportxml: clef not exported");
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//  partList
+//---------------------------------------------------------
+
+/**
+ Write the part list to \a xml.
+ */
+
+static void partList(Xml& xml, Score* score, const QList<Part*>& il, MxmlInstrumentMap& instrMap)
+      {
+      xml.stag("part-list");
+      int staffCount = 0;                             // count sum of # staves in parts
+      int partGroupEnd[MAX_PART_GROUPS];              // staff where part group ends (bracketSpan is in staves, not parts)
+      for (int i = 0; i < MAX_PART_GROUPS; i++)
+            partGroupEnd[i] = -1;
+      for (int idx = 0; idx < il.size(); ++idx) {
+            Part* part = il.at(idx);
+            bool bracketFound = false;
+            // handle brackets
+            for (int i = 0; i < part->nstaves(); i++) {
+                  Staff* st = part->staff(i);
+                  if (st) {
+                        for (int j = 0; j < st->bracketLevels(); j++) {
+                              if (st->bracket(j) != BracketType::NO_BRACKET) {
+                                    bracketFound = true;
+                                    if (i == 0) {
+                                          // OK, found bracket in first staff of part
+                                          // filter out implicit brackets
+                                          if (!(st->bracketSpan(j) == part->nstaves()
+                                                && st->bracket(j) == BracketType::BRACE)) {
+                                                // add others
+                                                int number = findPartGroupNumber(partGroupEnd);
+                                                if (number < MAX_PART_GROUPS) {
+                                                      partGroupStart(xml, number + 1, st->bracket(j));
+                                                      partGroupEnd[number] = staffCount + st->bracketSpan(j);
+                                                      }
+                                                }
+                                          }
+                                    else {
+                                          // bracket in other staff not supported in MusicXML
+                                          qDebug("bracket starting in staff %d not supported", i + 1);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            // handle bracket none
+            if (!bracketFound && part->nstaves() > 1) {
+                  int number = findPartGroupNumber(partGroupEnd);
+                  if (number < MAX_PART_GROUPS) {
+                        partGroupStart(xml, number + 1, BracketType::NO_BRACKET);
+                        partGroupEnd[number] = idx + part->nstaves();
+                        }
+                  }
+
+            xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
+            initInstrMap(instrMap, part->instruments(), score);
+            // by default export the parts long name as part-name
+            if (part->longName() != "")
+                  xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
+            else {
+                  if (part->partName() != "") {
+                        // use the track name if no part long name
+                        // to prevent an empty track name on import
+                        xml.tag("part-name print-object=\"no\"", MScoreTextToMXML::toPlainText(part->partName()));
+                        }
+                  else
+                        // part-name is required
+                        xml.tag("part-name", "");
+                  }
+            if (!part->shortName().isEmpty())
+                  xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
+
+            if (part->instrument()->useDrumset()) {
+                  const Drumset* drumset = part->instrument()->drumset();
+                  for (int i = 0; i < 128; ++i) {
+                        DrumInstrument di = drumset->drum(i);
+                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
+                              scoreInstrument(xml, idx + 1, i + 1, di.name);
+                        }
+                  int midiPort = part->midiPort() + 1;
+                  if (midiPort >= 1 && midiPort <= 16)
+                        xml.tag(QString("midi-device port=\"%1\"").arg(midiPort), "");
+
+                  for (int i = 0; i < 128; ++i) {
+                        DrumInstrument di = drumset->drum(i);
+                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
+                              midiInstrument(xml, idx + 1, i + 1, part->instrument(), score, i + 1);
+                        }
+                  }
+            else {
+                  MxmlReverseInstrumentMap rim;
+                  initReverseInstrMap(rim, instrMap);
+                  for (int instNr : rim.keys()) {
+                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
+                        }
+                  for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
+                        int instNr = ii.key();
+                        int midiPort = part->midiPort() + 1;
+                        if (ii.value()->channel().size() > 0)
+                              midiPort = score->midiMapping(ii.value()->channel(0)->channel)->port + 1;
+                        if (midiPort >= 1 && midiPort <= 16)
+                              xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
+                        else
+                              xml.tag(QString("midi-device %1").arg(instrId(idx+1, instNr + 1)), "");
+                        midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), score);
+                        }
+                  }
+
+            xml.etag();
+            staffCount += part->nstaves();
+            for (int i = MAX_PART_GROUPS - 1; i >= 0; i--) {
+                  int end = partGroupEnd[i];
+                  if (end >= 0) {
+                        if (staffCount >= end) {
+                              xml.tagE(QString("part-group type=\"stop\" number=\"%1\"").arg(i + 1));
+                              partGroupEnd[i] = -1;
+                              }
+                        }
+                  }
+            }
+      xml.etag();
+
+      }
+
+//---------------------------------------------------------
+//  writeElement
+//---------------------------------------------------------
+
+/**
+ Write \a el.
+ */
+
+void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset)
+      {
+      switch (el->type()) {
+
+            case Element::Type::CLEF:
+                  {
+                  // output only clef changes, not generated clefs
+                  // at line beginning
+                  // also ignore clefs at the start of a measure,
+                  // these have already been output
+                  // also ignore clefs at the end of a measure
+                  // these will be output at the start of the next measure
+                  const Clef* cle = static_cast<const Clef*>(el);
+                  int ti = cle->segment()->tick();
+                  clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
+                  if (el->generated()) {
+                        clefDebug("exportxml: generated clef not exported");
+                        break;
+                        }
+                  if (!el->generated() && ti != m->tick() && ti != m->endTick())
+                        clef(sstaff, cle);
+                  else {
+                        clefDebug("exportxml: clef not exported");
+                        }
+                  }
+                  break;
+
+            case Element::Type::KEYSIG:
+                  // ignore
+                  break;
+
+            case Element::Type::TIMESIG:
+                  // ignore
+                  break;
+
+            case Element::Type::CHORD:
+                  {
+                  Chord* c = static_cast<Chord*>(el);
+                  const QList<Lyrics*>* ll = &c->lyricsList();
+                  // ise grace after
+                  if (c) {
+                        for (Chord* g : c->graceNotesBefore()) {
+                              chord(g, sstaff, ll, useDrumset);
+                              }
+                        chord(c, sstaff, ll, useDrumset);
+                        for (Chord* g : c->graceNotesAfter()) {
+                              chord(g, sstaff, ll, useDrumset);
+                              }
+                        }
+                  break;
+                  }
+            case Element::Type::REST:
+                  rest((Rest*)el, sstaff);
+                  break;
+
+            case Element::Type::BAR_LINE:
+                  // Following must be enforced (ref MusicXML barline.dtd):
+                  // If location is left, it should be the first element in the measure;
+                  // if location is right, it should be the last element.
+                  // implementation note: BarLineType::START_REPEAT already written by barlineLeft()
+                  // any bars left should be "middle"
+                  // TODO: print barline only if middle
+                  // if (el->subtype() != BarLineType::START_REPEAT)
+                  //       bar((BarLine*) el);
+                  break;
+            case Element::Type::BREATH:
+                  // ignore, already exported as note articulation
+                  break;
+
+            default:
+                  qDebug("ExportMusicXml::write unknown segment type %s", el->name());
+                  break;
+            }
+
+      }
+
+//---------------------------------------------------------
+//  writeStaffDetails
+//---------------------------------------------------------
+
+/**
+ Write the staff details for \a part to \a xml.
+ */
+
+static void writeStaffDetails(Xml& xml, const Part* part)
+      {
+      const Instrument* instrument = part->instrument();
+      int staves = part->nstaves();
+
+      // staff details
+      // TODO: decide how to handle linked regular / TAB staff
+      //       currently exported as a two staff part ...
+      for (int i = 0; i < staves; i++) {
+            Staff* st = part->staff(i);
+            if (st->lines() != 5 || st->isTabStaff()) {
+                  if (staves > 1)
+                        xml.stag(QString("staff-details number=\"%1\"").arg(i+1));
+                  else
+                        xml.stag("staff-details");
+                  xml.tag("staff-lines", st->lines());
+                  if (st->isTabStaff() && instrument->stringData()) {
+                        QList<instrString> l = instrument->stringData()->stringList();
+                        for (int i = 0; i < l.size(); i++) {
+                              char step  = ' ';
+                              int alter  = 0;
+                              int octave = 0;
+                              midipitch2xml(l.at(i).pitch, step, alter, octave);
+                              xml.stag(QString("staff-tuning line=\"%1\"").arg(i+1));
+                              xml.tag("tuning-step", QString("%1").arg(step));
+                              if (alter)
+                                    xml.tag("tuning-alter", alter);
+                              xml.tag("tuning-octave", octave);
+                              xml.etag();
+                              }
+                        }
+                  xml.etag();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//  writeInstrumentDetails
+//---------------------------------------------------------
+
+/**
+ Write the instrument details for \a part to \a xml.
+ */
+
+static void writeInstrumentDetails(Xml& xml, const Part* part)
+      {
+      const Instrument* instrument = part->instrument();
+
+      // instrument details
+      if (instrument->transpose().chromatic) {        // TODO: tick
+            xml.stag("transpose");
+            xml.tag("diatonic",  instrument->transpose().diatonic % 7);
+            xml.tag("chromatic", instrument->transpose().chromatic % 12);
+            int octaveChange = instrument->transpose().chromatic / 12;
+            if (octaveChange != 0)
+                  xml.tag("octave-change", octaveChange);
+            xml.etag();
+            }
+      }
+
+//---------------------------------------------------------
 //  write
 //---------------------------------------------------------
 
@@ -4411,121 +4900,10 @@ void ExportMusicXml::write(QIODevice* dev)
             credits(xml);
             }
 
-      xml.stag("part-list");
       const QList<Part*>& il = _score->parts();
-      int staffCount = 0;                       // count sum of # staves in parts
-      int partGroupEnd[MAX_PART_GROUPS];        // staff where part group ends (bracketSpan is in staves, not parts)
-      for (int i = 0; i < MAX_PART_GROUPS; i++)
-            partGroupEnd[i] = -1;
-      for (int idx = 0; idx < il.size(); ++idx) {
-            Part* part = il.at(idx);
-            bool bracketFound = false;
-            // handle brackets
-            for (int i = 0; i < part->nstaves(); i++) {
-                  Staff* st = part->staff(i);
-                  if (st) {
-                        for (int j = 0; j < st->bracketLevels(); j++) {
-                              if (st->bracket(j) != BracketType::NO_BRACKET) {
-                                    bracketFound = true;
-                                    if (i == 0) {
-                                          // OK, found bracket in first staff of part
-                                          // filter out implicit brackets
-                                          if (!(st->bracketSpan(j) == part->nstaves()
-                                                && st->bracket(j) == BracketType::BRACE)) {
-                                                // add others
-                                                int number = findPartGroupNumber(partGroupEnd);
-                                                if (number < MAX_PART_GROUPS) {
-                                                      partGroupStart(xml, number + 1, st->bracket(j));
-                                                      partGroupEnd[number] = staffCount + st->bracketSpan(j);
-                                                      }
-                                                }
-                                          }
-                                    else {
-                                          // bracket in other staff not supported in MusicXML
-                                          qDebug("bracket starting in staff %d not supported", i + 1);
-                                          }
-                                    }
-                              }
-                        }
-                  }
-            // handle bracket none
-            if (!bracketFound && part->nstaves() > 1) {
-                  int number = findPartGroupNumber(partGroupEnd);
-                  if (number < MAX_PART_GROUPS) {
-                        partGroupStart(xml, number + 1, BracketType::NO_BRACKET);
-                        partGroupEnd[number] = idx + part->nstaves();
-                        }
-                  }
+      partList(xml, _score, il, instrMap);
 
-            xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            initInstrMap(instrMap, part->instruments(), _score);
-            // by default export the parts long name as part-name
-            if (part->longName() != "")
-                  xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
-            else {
-                  if (part->partName() != "") {
-                        // use the track name if no part long name
-                        // to prevent an empty track name on import
-                        xml.tag("part-name print-object=\"no\"", MScoreTextToMXML::toPlainText(part->partName()));
-                        }
-                  else
-                        // part-name is required
-                        xml.tag("part-name", "");
-                  }
-            if (!part->shortName().isEmpty())
-                  xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
-
-            if (part->instrument()->useDrumset()) {
-                  const Drumset* drumset = part->instrument()->drumset();
-                  for (int i = 0; i < 128; ++i) {
-                        DrumInstrument di = drumset->drum(i);
-                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
-                              scoreInstrument(xml, idx + 1, i + 1, di.name);
-                        }
-                  int midiPort = part->midiPort() + 1;
-                  if (midiPort >= 1 && midiPort <= 16)
-                        xml.tag(QString("midi-device port=\"%1\"").arg(midiPort), "");
-
-                  for (int i = 0; i < 128; ++i) {
-                        DrumInstrument di = drumset->drum(i);
-                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
-                              midiInstrument(xml, idx + 1, i + 1, part->instrument(), _score, i + 1);
-                        }
-                  }
-            else {
-                  MxmlReverseInstrumentMap rim;
-                  initReverseInstrMap(rim, instrMap);
-                  for (int instNr : rim.keys()) {
-                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
-                        }
-                  for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
-                        int instNr = ii.key();
-                        int midiPort = part->midiPort() + 1;
-                        if (ii.value()->channel().size() > 0)
-                              midiPort = score()->midiMapping(ii.value()->channel(0)->channel)->port + 1;
-                        if (midiPort >= 1 && midiPort <= 16)
-                              xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
-                        else
-                              xml.tag(QString("midi-device %1").arg(instrId(idx+1, instNr + 1)), "");
-                        midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
-                        }
-                  }
-
-            xml.etag();
-            staffCount += part->nstaves();
-            for (int i = MAX_PART_GROUPS - 1; i >= 0; i--) {
-                  int end = partGroupEnd[i];
-                  if (end >= 0) {
-                        if (staffCount >= end) {
-                              xml.tagE(QString("part-group type=\"stop\" number=\"%1\"").arg(i + 1));
-                              partGroupEnd[i] = -1;
-                              }
-                        }
-                  }
-            }
-      xml.etag();
-
-      staffCount = 0;
+      int staffCount = 0;
 
       for (int idx = 0; idx < il.size(); ++idx) {
             Part* part = il.at(idx);
@@ -4550,7 +4928,6 @@ void ExportMusicXml::write(QIODevice* dev)
                   if (mb->type() != Element::Type::MEASURE)
                         continue;
                   Measure* m = static_cast<Measure*>(mb);
-                  const PageFormat* pf = _score->pageFormat();
 
 
                   // pickup and other irregular measures need special care
@@ -4563,135 +4940,14 @@ void ExportMusicXml::write(QIODevice* dev)
                         measureTag += QString("\"X%1\" implicit=\"yes\"").arg(irregularMeasureNo++);
                   else
                         measureTag += QString("\"%1\"").arg(measureNo++);
+                  const bool isFirstActualMeasure = (irregularMeasureNo + measureNo + pickupMeasureNo) == 4;
+
                   if (preferences.musicxmlExportLayout)
                         measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
+
                   xml.stag(measureTag);
 
-                  // Handle the <print> element.
-                  // When exporting layout and all breaks, a <print> with layout informations
-                  // is generated for the measure types TopSystem, NewSystem and newPage.
-                  // When exporting layout but only manual or no breaks, a <print> with
-                  // layout informations is generated only for the measure type TopSystem,
-                  // as it is assumed the system layout is broken by the importing application
-                  // anyway and is thus useless.
-
-                  int currentSystem = NoSystem;
-                  Measure* previousMeasure = 0;
-
-                  for (MeasureBase* currentMeasureB = m->prev(); currentMeasureB; currentMeasureB = currentMeasureB->prev()) {
-                        if (currentMeasureB->type() == Element::Type::MEASURE) {
-                              previousMeasure = (Measure*) currentMeasureB;
-                              break;
-                              }
-                        }
-
-                  if (!previousMeasure)
-                        currentSystem = TopSystem;
-                  else if (m->parent() && previousMeasure->parent()) {
-                        if (m->parent()->parent() != previousMeasure->parent()->parent())
-                              currentSystem = NewPage;
-                        else if (m->parent() != previousMeasure->parent())
-                              currentSystem = NewSystem;
-                        }
-
-                  bool prevMeasLineBreak = false;
-                  bool prevMeasPageBreak = false;
-                  if (previousMeasure) {
-                        prevMeasLineBreak = previousMeasure->lineBreak();
-                        prevMeasPageBreak = previousMeasure->pageBreak();
-                        }
-
-                  if (currentSystem != NoSystem) {
-
-                        // determine if a new-system or new-page is required
-                        QString newThing; // new-[system|page]="yes" or empty
-                        if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL) {
-                              if (currentSystem == NewSystem)
-                                    newThing = " new-system=\"yes\"";
-                              else if (currentSystem == NewPage)
-                                    newThing = " new-page=\"yes\"";
-                              }
-                        else if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::MANUAL) {
-                              if (currentSystem == NewSystem && prevMeasLineBreak)
-                                    newThing = " new-system=\"yes\"";
-                              else if (currentSystem == NewPage && prevMeasPageBreak)
-                                    newThing = " new-page=\"yes\"";
-                              }
-
-                        // determine if layout information is required
-                        bool doLayout = false;
-                        if (preferences.musicxmlExportLayout) {
-                              if (currentSystem == TopSystem
-                                  || (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL && newThing != "")) {
-                                    doLayout = true;
-                                    }
-                              }
-
-                        if (doLayout) {
-                              xml.stag(QString("print%1").arg(newThing));
-                              const double pageWidth  = getTenthsFromInches(pf->size().width());
-                              const double lm = getTenthsFromInches(pf->oddLeftMargin());
-                              const double rm = getTenthsFromInches(pf->oddRightMargin());
-                              const double tm = getTenthsFromInches(pf->oddTopMargin());
-
-                              // System Layout
-
-                              // For a multi-meaure rest positioning is valid only
-                              // in the replacing measure
-                              // note: for a normal measure, mmRest1 is the measure itself,
-                              // for a multi-meaure rest, it is the replacing measure
-                              const Measure* mmR1 = m->mmRest1();
-                              const System* system = mmR1->system();
-
-                              // Put the system print suggestions only for the first part in a score...
-                              if (idx == 0) {
-
-                                    // Find the right margin of the system.
-                                    double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                                    double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
-
-                                    xml.stag("system-layout");
-                                    xml.stag("system-margins");
-                                    xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
-                                    xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
-                                    xml.etag();
-
-                                    if (currentSystem == NewPage || currentSystem == TopSystem) {
-                                          const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                                          xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
-                                          }
-                                    if (currentSystem == NewSystem) {
-                                          // see System::layout2() for the factor 2 * score()->spatium()
-                                          const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                                                   - previousMeasure->pagePos().y()
-                                                                                   - previousMeasure->bbox().height()
-                                                                                   + 2 * score()->spatium()
-                                                                                   );
-                                          xml.tag("system-distance",
-                                                  QString("%1").arg(QString::number(sysDist,'f',2)));
-                                          }
-
-                                    xml.etag();
-                                    }
-
-                              // Staff layout elements.
-                              for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
-                                    xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                                    const double staffDist =
-                                          getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
-                                    xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
-                                    xml.etag();
-                                    }
-
-                              xml.etag();
-                              }
-                        else {
-                              // !doLayout
-                              if (newThing != "")
-                                    xml.tagE(QString("print%1").arg(newThing));
-                              }
-
-                        } // if (currentSystem ...
+                  print(m, idx, staffCount, staves);
 
                   attr.start();
 
@@ -4701,127 +4957,29 @@ void ExportMusicXml::write(QIODevice* dev)
                   barlineLeft(m);
 
                   // output attributes with the first actual measure (pickup or regular)
-                  if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
+                  if (isFirstActualMeasure) {
                         attr.doAttr(xml, true);
                         xml.tag("divisions", MScore::division / div);
                         }
+
                   // output attributes at start of measure: key, time
                   keysigTimesig(m, part);
+
                   // output attributes with the first actual measure (pickup or regular) only
-                  if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
+                  if (isFirstActualMeasure) {
                         if (staves > 1)
                               xml.tag("staves", staves);
                         if (instrMap.size() > 1)
                               xml.tag("instruments", instrMap.size());
                         }
 
-                        {
-                        // make sure clefs at end of measure get exported at start of next measure
-                        Measure* prevMeasure = m->prevMeasure();
-                        Measure* mmR         = m->mmRest(); // the replacing measure in a multi-measure rest
-                        int tick             = m->tick();
-                        Segment* cs1;
-                        Segment* cs2         = m->findSegment(Segment::Type::Clef, tick);
-                        Segment* cs3;
-                        Segment* seg         = 0;
-
-                        if (prevMeasure)
-                              cs1 = prevMeasure->findSegment(Segment::Type::Clef,  tick);
-                        else
-                              cs1 = 0;
-
-                        if (mmR)
-                              cs3 = mmR->findSegment(Segment::Type::Clef,  tick);
-                        else
-                              cs3 = 0;
-
-                        if (cs1 && cs2) {
-                              // should only happen at begin of new system
-                              // when previous system ends with a non-generated clef
-                              seg = cs1;
-                              }
-                        else if (cs1)
-                              seg = cs1;
-                        else if (cs3) {
-                              // happens when the first measure is a multi-measure rest
-                              // containing a generated clef
-                              seg = cs3;
-                              }
-                        else
-                              seg = cs2;
-                        clefDebug("exportxml: clef segments cs1=%p cs2=%p cs3=%p seg=%p", cs1, cs2, cs3, seg);
-
-                        // output attribute at start of measure: clef
-                        if (seg) {
-                              for (int st = strack; st < etrack; st += VOICES) {
-                                    // sstaff - xml staff number, counting from 1 for this
-                                    // instrument
-                                    // special number 0 -> dont show staff number in
-                                    // xml output (because there is only one staff)
-
-                                    int sstaff = (staves > 1) ? st - strack + VOICES : 0;
-                                    sstaff /= VOICES;
-
-                                    Clef* cle = static_cast<Clef*>(seg->element(st));
-                                    if (cle) {
-                                          clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
-                                          // output only clef changes, not generated clefs at line beginning
-                                          // exception: at tick=0, export clef anyway
-                                          if (tick == 0 || !cle->generated()) {
-                                                clefDebug("exportxml: clef exported");
-                                                clef(sstaff, cle);
-                                                }
-                                          else {
-                                                clefDebug("exportxml: clef not exported");
-                                                }
-                                          }
-                                    }
-                              }
-                        }
+                  // make sure clefs at end of measure get exported at start of next measure
+                  findAndExportClef(m, staves, strack, etrack);
 
                   // output attributes with the first actual measure (pickup or regular) only
-                  if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
-                        const Instrument* instrument = part->instrument();
-
-                        // staff details
-                        // TODO: decide how to handle linked regular / TAB staff
-                        //       currently exported as a two staff part ...
-                        for (int i = 0; i < staves; i++) {
-                              Staff* st = part->staff(i);
-                              if (st->lines() != 5 || st->isTabStaff()) {
-                                    if (staves > 1)
-                                          xml.stag(QString("staff-details number=\"%1\"").arg(i+1));
-                                    else
-                                          xml.stag("staff-details");
-                                    xml.tag("staff-lines", st->lines());
-                                    if (st->isTabStaff() && instrument->stringData()) {
-                                          QList<instrString> l = instrument->stringData()->stringList();
-                                          for (int i = 0; i < l.size(); i++) {
-                                                char step  = ' ';
-                                                int alter  = 0;
-                                                int octave = 0;
-                                                midipitch2xml(l.at(i).pitch, step, alter, octave);
-                                                xml.stag(QString("staff-tuning line=\"%1\"").arg(i+1));
-                                                xml.tag("tuning-step", QString("%1").arg(step));
-                                                if (alter)
-                                                      xml.tag("tuning-alter", alter);
-                                                xml.tag("tuning-octave", octave);
-                                                xml.etag();
-                                                }
-                                          }
-                                    xml.etag();
-                                    }
-                              }
-                        // instrument details
-                        if (instrument->transpose().chromatic) {
-                              xml.stag("transpose");
-                              xml.tag("diatonic",  instrument->transpose().diatonic % 7);
-                              xml.tag("chromatic", instrument->transpose().chromatic % 12);
-                              int octaveChange = instrument->transpose().chromatic / 12;
-                              if (octaveChange != 0)
-                                    xml.tag("octave-change", octaveChange);
-                              xml.etag();
-                              }
+                  if (isFirstActualMeasure) {
+                        writeStaffDetails(xml, part);
+                        writeInstrumentDetails(xml, part);
                         }
 
                   // output attribute at start of measure: measure-style
@@ -4879,77 +5037,8 @@ void ExportMusicXml::write(QIODevice* dev)
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
 
-                              switch (el->type()) {
-
-                                    case Element::Type::CLEF:
-                                          {
-                                          // output only clef changes, not generated clefs
-                                          // at line beginning
-                                          // also ignore clefs at the start of a measure,
-                                          // these have already been output
-                                          // also ignore clefs at the end of a measure
-                                          // these will be output at the start of the next measure
-                                          Clef* cle = static_cast<Clef*>(el);
-                                          int ti = seg->tick();
-                                          clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
-                                          if (el->generated()) {
-                                                clefDebug("exportxml: generated clef not exported");
-                                                break;
-                                                }
-                                          if (!el->generated() && ti != m->tick() && ti != m->endTick())
-                                                clef(sstaff, cle);
-                                          else {
-                                                clefDebug("exportxml: clef not exported");
-                                                }
-                                          }
-                                          break;
-
-                                    case Element::Type::KEYSIG:
-                                          // ignore
-                                          break;
-
-                                    case Element::Type::TIMESIG:
-                                          // ignore
-                                          break;
-
-                                    case Element::Type::CHORD:
-                                          {
-                                          Chord* c                 = static_cast<Chord*>(el);
-                                          const QList<Lyrics*>* ll = &c->lyricsList();
-                                          // ise grace after
-                                          if (c) {
-                                                for (Chord* g : c->graceNotesBefore()) {
-                                                      chord(g, sstaff, ll, part->instrument()->useDrumset());
-                                                      }
-                                                chord(c, sstaff, ll, part->instrument()->useDrumset());
-                                                for (Chord* g : c->graceNotesAfter()) {
-                                                      chord(g, sstaff, ll, part->instrument()->useDrumset());
-                                                      }
-                                                }
-                                          break;
-                                          }
-                                    case Element::Type::REST:
-                                          rest((Rest*)el, sstaff);
-                                          break;
-
-                                    case Element::Type::BAR_LINE:
-                                          // Following must be enforced (ref MusicXML barline.dtd):
-                                          // If location is left, it should be the first element in the measure;
-                                          // if location is right, it should be the last element.
-                                          // implementation note: BarLineType::START_REPEAT already written by barlineLeft()
-                                          // any bars left should be "middle"
-                                          // TODO: print barline only if middle
-                                          // if (el->subtype() != BarLineType::START_REPEAT)
-                                          //       bar((BarLine*) el);
-                                          break;
-                                    case Element::Type::BREATH:
-                                          // ignore, already exported as note articulation
-                                          break;
-
-                                    default:
-                                          qDebug("ExportMusicXml::write unknown segment type %s", el->name());
-                                          break;
-                                    }
+                              // write element el if necessary
+                              writeElement(el, m, sstaff, part->instrument()->useDrumset());
 
                               // handle annotations and spanners (directions attached to this note or rest)
                               if (el->isChordRest()) {
