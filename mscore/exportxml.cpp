@@ -112,7 +112,7 @@ namespace Ms {
 #ifdef DEBUG_CLEF
 #define clefDebug(...) qDebug(__VA_ARGS__)
 #else
-#define clefDebug(...) ;
+#define clefDebug(...) {}
 #endif
 
 //---------------------------------------------------------
