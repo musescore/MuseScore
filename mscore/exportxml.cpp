@@ -2643,7 +2643,16 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                                     xml.tag("fingering", t);
                               }
                         else if (f->textStyleType() == TextStyleType::STRING_NUMBER) {
-                              xml.tag("string", t);
+                              bool ok;
+                              int i = t.toInt(&ok);
+                              if (ok) {
+                                    if (i == 0)
+                                          xml.tagE("open-string");
+                                    else if (i > 0)
+                                          xml.tag("string", t);
+                                    }
+                              if (!ok || i < 0)
+                                    qDebug("invalid string number '%s'", qPrintable(t));
                               }
                         else
                               qDebug("unknown fingering style");
