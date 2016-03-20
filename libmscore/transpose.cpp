@@ -272,7 +272,17 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               break;
                               }
                         }
-                  interval = keydiff2Interval(key, trKey, direction);
+                  if (key != trKey) {
+                        interval = keydiff2Interval(key, trKey, direction);
+                        }
+                  else {      //same key, which direction?
+                        if (direction == TransposeDirection::UP)
+                              interval = Interval(12);
+                        else if (direction == TransposeDirection::DOWN)
+                              interval = Interval(-12);
+                        else  //don't do anything for same key and closest direction
+                              return true;
+                        }
                   }
             else {
                   interval = intervalList[transposeInterval];
