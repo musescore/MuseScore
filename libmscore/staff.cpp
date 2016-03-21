@@ -844,11 +844,11 @@ void Staff::unlink(Staff* staff)
       if (!_linkedStaves->staves().contains(staff))
             return;
       _linkedStaves->remove(staff);
-      if (_linkedStaves->staves().size() <= 1) {
-            delete _linkedStaves;
-            _linkedStaves = 0;
-            }
-      staff->_linkedStaves = 0;
+      //if (_linkedStaves->staves().size() <= 1) {
+      //      delete _linkedStaves;
+      //      _linkedStaves = 0;
+      //      }
+      //staff->_linkedStaves = 0;
       }
 
 //---------------------------------------------------------
