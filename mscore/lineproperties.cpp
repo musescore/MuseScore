@@ -54,9 +54,9 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       otl = l;
       tl  = l->clone();
 
-      beginText->setText(otl->beginText());
-      continueText->setText(otl->continueText());
-      endText->setText(otl->endText());
+      beginText->setText(Text::unEscape(otl->beginText()));
+      continueText->setText(Text::unEscape(otl->continueText()));
+      endText->setText(Text::unEscape(otl->endText()));
 
       setTextPlace(otl->beginTextPlace(),    beginTextPlace);
       setTextPlace(otl->continueTextPlace(), continueTextPlace);
@@ -138,15 +138,15 @@ void LineProperties::accept()
             otl->undoChangeProperty(P_ID::END_TEXT_PLACE, int(pt));
 
       if (beginText->text() != otl->beginText())
-            otl->undoChangeProperty(P_ID::BEGIN_TEXT, Xml::xmlString(beginText->text()));
+            otl->undoChangeProperty(P_ID::BEGIN_TEXT, Text::tagEscape(beginText->text()));
       else if (otl->beginText().isEmpty())
             otl->setBeginText("");
       if (continueText->text() != otl->continueText())
-            otl->undoChangeProperty(P_ID::CONTINUE_TEXT, Xml::xmlString(continueText->text()));
+            otl->undoChangeProperty(P_ID::CONTINUE_TEXT, Text::tagEscape(continueText->text()));
       else if (otl->continueText().isEmpty())
             otl->setContinueText("");
       if (endText->text() != otl->endText())
-            otl->undoChangeProperty(P_ID::END_TEXT, Xml::xmlString(endText->text()));
+            otl->undoChangeProperty(P_ID::END_TEXT, Text::tagEscape(endText->text()));
       else if (otl->endText().isEmpty())
             otl->setEndText("");
 
