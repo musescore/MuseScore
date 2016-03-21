@@ -414,14 +414,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "v-props") {
             VoltaSegment* vs = static_cast<VoltaSegment*>(e);
             VoltaProperties vp;
-            vp.setText(vs->volta()->text());
+            vp.setText(Text::unEscape(vs->volta()->text()));
             vp.setEndings(vs->volta()->endings());
             int rv = vp.exec();
             if (rv) {
                   QString txt  = vp.getText();
                   QList<int> l = vp.getEndings();
                   if (txt != vs->volta()->text())
-                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, Xml::xmlString(txt));
+                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, Text::tagEscape(txt));
                   if (l != vs->volta()->endings())
                         vs->volta()->undoChangeProperty(P_ID::VOLTA_ENDING, QVariant::fromValue(l));
                   }
