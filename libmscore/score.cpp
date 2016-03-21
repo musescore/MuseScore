@@ -2537,21 +2537,25 @@ void Score::cmdRemoveStaff(int staffIdx)
       // remove linked staff and measures in linked staves in excerpts
       // unlink staff in the same score
       if (s->linkedStaves()) {
-            for (Staff* staff : s->linkedStaves()->staves()) {
+            Staff* sameScoreLinkedStaff = nullptr;
+            auto staves = s->linkedStaves()->staves();
+            for (Staff* staff : staves) {
                   if (staff == s)
                         continue;
                   Score* lscore = staff->score();
                   if (lscore != this) {
                         lscore->undoRemoveStaff(staff);
-                        s->score()->undo(new UnlinkStaff(staff, s));
+                        s->score()->undo(new UnlinkStaff(s, staff));
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
                               lscore->undoRemovePart(staff->part(), pIndex);
                               }
                         }
                   else // linked staff in the same score
-                       s->score()->undo(new UnlinkStaff(staff, s));
+                       sameScoreLinkedStaff = staff;
                   }
+            if (sameScoreLinkedStaff)
+                  s->score()->undo(new UnlinkStaff(sameScoreLinkedStaff, s)); // once should be enough
             }
       }
 
