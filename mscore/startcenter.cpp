@@ -115,10 +115,6 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
-      if (fil.size() == 0) {
-            QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
-            fil.prepend(gettingStartedScore);
-            }
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
