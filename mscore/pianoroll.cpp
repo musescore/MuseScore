@@ -331,7 +331,6 @@ void PianorollEditor::updateSelection()
 
 void PianorollEditor::selectionChanged()
       {
-      updateSelection();
       QList<QGraphicsItem*> items = gv->scene()->selectedItems();
       if (items.size() == 1) {
             QGraphicsItem* item = items[0];
@@ -347,23 +346,21 @@ void PianorollEditor::selectionChanged()
             for (QGraphicsItem* item : items) {
                   if (item->type() == PianoItemType) {
                         Note* note = static_cast<PianoItem*>(item)->note();
-                        _score->select(note, SelectType::ADD, 0);
+                        if (!note->selected())
+                              _score->select(note, SelectType::ADD, 0);
                         }
                   }
             }
       for (MuseScoreView* view : score()->getViewer())
             view->updateAll();
-      startTimer(0);    // delayed update
-      }
 
-//---------------------------------------------------------
-//   timerEvent
-//---------------------------------------------------------
+      gv->scene()->blockSignals(true);
+      for (QGraphicsItem* item : gv->scene()->items())
+            if (item->type() == PianoItemType)
+                item->setSelected(static_cast<PianoItem*>(item)->note()->selected());
+      gv->scene()->blockSignals(false);
 
-void PianorollEditor::timerEvent(QTimerEvent* event)
-      {
-      killTimer(event->timerId());
-      gv->updateNotes();
+      gv->scene()->update();
       updateSelection();
       }
 
