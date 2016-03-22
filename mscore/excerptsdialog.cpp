@@ -395,7 +395,7 @@ void ExcerptsDialog::accept()
 
                         deleteExcerpt(e);
                         // remove the excerpt
-                        score->undo(new RemoveExcerpt(e->partScore()));
+                        score->undo(new RemoveExcerpt(partScore));
                         }
                   }
             else
