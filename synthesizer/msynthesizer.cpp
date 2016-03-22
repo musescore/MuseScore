@@ -31,7 +31,7 @@ extern QString dataPath;
 static SynthesizerState defaultState = {
       { "master", {
             { 0, "Zita1" },
-            { 2, "0.1"   },
+            { 2, "1.0"   },
             { 3, "440"   }
             },
             },
