@@ -117,15 +117,21 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addWidget(new QLabel(tr("Pitch:")));
       pitch = new Awl::PitchEdit;
       pitch->setReadOnly(true);
+      if(pitch->specialValueText().isNull()) {
+          pitch->setMinimum(pitch->minimum()-1);
+          pitch->setSpecialValueText("--");
+      }
       tb->addWidget(pitch);
 
       tb->addWidget(new QLabel(tr("OnTime:")));
       tb->addWidget((onTime = new QSpinBox));
       onTime->setRange(-2000, 2000);
+      onTime->setSpecialValueText("--");
 
       tb->addWidget(new QLabel(tr("Len:")));
       tb->addWidget((tickLen = new QSpinBox));
-      tickLen->setRange(-2000, 2000);
+      tickLen->setRange(-1, 2000);
+      tickLen->setSpecialValueText("--");
 
       //-------------
       qreal xmag = .1;
@@ -316,6 +322,37 @@ void PianorollEditor::updateSelection()
                   updateVelocity(note);
                   }
             }
+      else {
+            // just not showing multiple velocity values
+            velocity->setValue(velocity->minimum());
+
+            // set spinbox's value if values of items are unified, otherwise display the special value text
+            auto lambdaSetValue = [&items](QSpinBox* spinbox, int (*itemValue)(PianoItem*)) -> void {
+                PianoItem* prev = nullptr;
+                int lastValue = 0; // this requires items.size() > 0, otherwise it may behaves weird.
+                for(auto item : items) {
+                    PianoItem* pi = static_cast<PianoItem*>(item);
+                    if (pi->type() == PianoItemType) {
+                        int value = itemValue(pi);
+                        if(prev == nullptr)
+                            lastValue = value;
+                        else if(lastValue != value) // values not unified
+                        {
+                            spinbox->setValue(spinbox->minimum()); // this gets spinbox to display "--"
+                            return; // just quit
+                        }
+                        prev = pi;
+                    }
+                }
+                // values unified
+                spinbox->setValue(lastValue);
+            };
+
+            lambdaSetValue(pitch, [](PianoItem* item){return item->note()->pitch();});
+            lambdaSetValue(onTime, [](PianoItem* item){return item->event()->ontime();});
+            lambdaSetValue(tickLen, [](PianoItem* item){return item->event()->len();});
+
+      }
       bool b = items.size() != 0;
       velocity->setEnabled(b);
       pitch->setEnabled(b);
@@ -710,23 +747,33 @@ void PianorollEditor::posChanged(POS pos, unsigned tick)
 
 void PianorollEditor::onTimeChanged(int val)
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
-      if (items.size() != 1)
-            return;
-      QGraphicsItem* item = items[0];
-      if (item->type() != PianoItemType)
-            return;
-      PianoItem* pi = static_cast<PianoItem*>(item);
-      Note* note       = pi->note();
-      NoteEvent* event = pi->event();
-      if (event->ontime() == val)
+      if(val == onTime->minimum())
             return;
 
-      NoteEvent ne = *event;
-      ne.setOntime(val);
-      _score->startCmd();
-      _score->undo(new ChangeNoteEvent(note, event, ne));
-      _score->endCmd();
+      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      bool cmdValid=false;
+
+      for(auto item : items) {
+            if (item->type() != PianoItemType)
+                continue;
+            PianoItem* pi = static_cast<PianoItem*>(item);
+            Note* note       = pi->note();
+            NoteEvent* event = pi->event();
+            if (event->ontime() == val)
+                continue;
+            if(!cmdValid)
+            {
+                _score->startCmd();
+                cmdValid = true;
+            }
+            NoteEvent ne = *event;
+            ne.setOntime(val);
+            _score->undo(new ChangeNoteEvent(note, event, ne));
+      }
+
+      if(cmdValid)
+            _score->endCmd();
+
       }
 
 //---------------------------------------------------------
@@ -735,23 +782,32 @@ void PianorollEditor::onTimeChanged(int val)
 
 void PianorollEditor::tickLenChanged(int val)
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
-      if (items.size() != 1)
-            return;
-      QGraphicsItem* item = items[0];
-      if (item->type() != PianoItemType)
-            return;
-      PianoItem* pi = static_cast<PianoItem*>(item);
-      Note* note       = pi->note();
-      NoteEvent* event = pi->event();
-      if (event->len() == val)
+      if(val == tickLen->minimum())
             return;
 
-      NoteEvent ne = *event;
-      ne.setLen(val);
-      _score->startCmd();
-      _score->undo(new ChangeNoteEvent(note, event, ne));
-      _score->endCmd();
+      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      bool cmdValid=false;
+
+      for(auto item : items) {
+            if (item->type() != PianoItemType)
+                continue;
+            PianoItem* pi = static_cast<PianoItem*>(item);
+            Note* note       = pi->note();
+            NoteEvent* event = pi->event();
+            if (event->len() == val)
+                continue;
+            if(!cmdValid){
+                _score->startCmd();
+                cmdValid = true;
+            }
+            NoteEvent ne = *event;
+            ne.setLen(val);
+            _score->undo(new ChangeNoteEvent(note, event, ne));
+      }
+
+      if(cmdValid)
+            _score->endCmd();
+
       }
 
 }
