@@ -768,7 +768,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
                         foreach(TDuration d, dList) {
-                              qDebug("    reinstate at %d, %d", tick, d.ticks());
+                              qDebug("reinstate at %d, %d", tick, d.ticks());
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
                                     Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
@@ -824,7 +824,7 @@ bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[V
       {
       Segment* seg = tick2segment(baseTick, true, Segment::Type::ChordRest);
       if (!seg) {
-            qDebug("1:makeGap1: no segment to paste at tick %d", baseTick);
+            qDebug("no segment to paste at tick %d", baseTick);
             return false;
             }
       int strack = staffIdx * VOICES;
@@ -853,7 +853,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Segment* seg1 = seg->prev(Segment::Type::ChordRest);
             for (;;) {
                   if (seg1 == 0) {
-                        qDebug("1:makeGapVoice: no segment before tick %d", tick);
+                        qDebug("no segment before tick %d", tick);
                         // this happens only for voices other than voice 1
                         expandVoice(seg, track);
                         return makeGapVoice(seg,track,len,tick);
@@ -900,7 +900,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             for (;;) {
                   seg1 = seg1->next1(Segment::Type::ChordRest);
                   if (seg1 == 0) {
-                        qDebug("2:makeGapVoice: no segment");
+                        qDebug("no segment");
                         return false;
                         }
                   if (seg1->element(track)) {
@@ -912,12 +912,12 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
 
       for (;;) {
             if (!cr) {
-                  qDebug("3:makeGapVoice: cannot make gap");
+                  qDebug("cannot make gap");
                   return false;
                   }
             Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
             if (l.isZero()) {
-                  qDebug("4:makeGapVoice: makeGap returns zero gap");
+                  qDebug("returns zero gap");
                   return false;
                   }
             len -= l;

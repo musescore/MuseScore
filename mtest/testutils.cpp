@@ -40,6 +40,8 @@ inline void initMyResources() {
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
+Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+
 namespace Ms {
 
 #ifdef OMR
@@ -63,7 +65,7 @@ QString dataPath;
 QIcon* icons[0];
 QString mscoreGlobalShare;
 
-// MuseScoreCore* MuseScoreCore::mscoreCore;
+
 
 //---------------------------------------------------------
 //   Preferences
@@ -317,6 +319,7 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 void MTest::initMTest()
       {
+      qSetMessagePattern("%{function}: %{message}");
       initMyResources();
 //      DPI  = 120;
 //      PDPI = 120;

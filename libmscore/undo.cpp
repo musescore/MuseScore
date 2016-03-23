@@ -75,12 +75,6 @@
 #include "utils.h"
 #include "glissando.h"
 
-#ifdef QT_NO_DEBUG
-Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
-#else
-Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
-#endif
-
 namespace Ms {
 
 extern Measure* tick2measure(int tick);
