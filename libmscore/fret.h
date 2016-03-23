@@ -83,6 +83,8 @@ class FretDiagram : public Element {
       virtual void draw(QPainter*) const override;
       virtual FretDiagram* clone() const override { return new FretDiagram(*this); }
 
+      static FretDiagram* fromString(Score* score, const QString &s);
+
       virtual Element::Type type() const override { return Element::Type::FRET_DIAGRAM; }
       virtual void layout() override;
       virtual void write(Xml& xml) const override;
