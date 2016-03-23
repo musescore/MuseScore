@@ -2306,6 +2306,8 @@ static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext &conte
      case QtFatalMsg: // set your breakpoint here, if you want to catch the abort
          cerr << "Fatal: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          abort();
+     default:
+         break;
          }
      }
 #endif
