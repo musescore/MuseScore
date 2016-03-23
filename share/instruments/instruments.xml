@@ -832,7 +832,7 @@
             </Instrument>
             <Instrument id="tin-whistle">
                   <longName>Tin Whistle</longName>
-                  <shortName>Tin. Wh.</shortName>
+                  <shortName>Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
                   <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
                   <clef>G8va</clef>
@@ -845,7 +845,7 @@
             </Instrument>
             <Instrument id="bflat-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
-                  <shortName>B♭ Tin. Wh.</shortName>
+                  <shortName>B♭ Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
                   <musicXMLid>wind.flutes.whistle.tin.bflat</musicXMLid>
                   <clef>G8va</clef>
@@ -858,7 +858,7 @@
             </Instrument>
             <Instrument id="d-tin-whistle">
                   <longName>Tin Whistle</longName>
-                  <shortName>Tin. Wh.</shortName>
+                  <shortName>Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
                   <musicXMLid>wind.flutes.whistle.tin.d</musicXMLid>
                   <clef>G8va</clef>
