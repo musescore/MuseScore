@@ -81,6 +81,47 @@ FretDiagram::~FretDiagram()
       }
 
 //---------------------------------------------------------
+//   fromString
+///  Create diagram from string like "XO-123"
+///  Always assume barre on the first visible fret
+//---------------------------------------------------------
+
+FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
+      {
+      FretDiagram* fd = new FretDiagram(score);
+      fd->setStrings(s.size());
+      fd->setFrets(4);
+      int offset = 0;
+      int barreString = -1;
+      for (int i = 0; i < s.size(); i++) {
+            QChar c = s.at(i);
+            if (c == 'X' or c == 'O')
+                  fd->setMarker(i, c.toAscii());
+            else if (c == '-' && barreString == -1) {
+                  fd->setBarre(1);
+                  barreString = i;
+                  }
+            else {
+                  int fret = c.digitValue();
+                  if (fret != -1) {
+                        fd->setDot(i, fret);
+                        if (fret - 3 > 0 && offset < fret - 3)
+                            offset = fret - 3;
+                        }
+                  }
+            }
+      if (offset > 0) {
+            fd->setOffset(offset);
+            for (int i = 0; i < fd->strings(); i++)
+                  if (fd->dot(i))
+                        fd->setDot(i, fd->dot(i) - offset);
+            }
+      if (barreString >= 0)
+            fd->setDot(barreString, 1);
+      return fd;
+      }
+
+//---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
 
@@ -232,14 +273,14 @@ void FretDiagram::draw(QPainter* painter) const
       painter->setPen(pen);
       painter->setBrush(QBrush(QColor(painter->pen().color())));
       qreal x2 = (_strings-1) * stringDist;
-      painter->drawLine(QLineF(-lw1*.5, 0.0, x2+lw1*.5, 0.0));
+      painter->drawLine(QLineF(-lw1 * .5, 0.0, x2 + lw1 * .5, 0.0));
 
       pen.setWidthF(lw1);
       painter->setPen(pen);
-      qreal y2 = (_frets+1) * fretDist - fretDist*.5;
+      qreal y2 = (_frets+1) * fretDist - fretDist * .5;
       for (int i = 0; i < _strings; ++i) {
             qreal x = stringDist * i;
-            painter->drawLine(QLineF(x, _fretOffset ? -_spatium*.2 : 0.0, x, y2));
+            painter->drawLine(QLineF(x, _fretOffset ? -_spatium * .2 : 0.0, x, y2));
             }
       for (int i = 1; i <= _frets; ++i) {
             qreal y = fretDist * i;
@@ -250,7 +291,7 @@ void FretDiagram::draw(QPainter* painter) const
       qreal dotd = stringDist * .6;
 
       for (int i = 0; i < _strings; ++i) {
-            if (_dots && _dots[i]) {
+            if (_dots && _dots[i] && _dots[i] != _barre) {
                   int fret = _dots[i] - 1;
                   qreal x = stringDist * i - dotd * .5;
                   qreal y = fretDist * fret + fretDist * .5 - dotd * .5;
@@ -259,7 +300,7 @@ void FretDiagram::draw(QPainter* painter) const
             if (_marker && _marker[i]) {
                   qreal x = stringDist * i;
                   qreal y = -fretDist * .3 - fm.ascent();
-                  painter->drawText(QRectF(x, y, .0,.0),
+                  painter->drawText(QRectF(x, y, .0, .0),
                      Qt::AlignHCenter|Qt::TextDontClip, QChar(_marker[i]));
                   }
             }
@@ -284,9 +325,9 @@ void FretDiagram::draw(QPainter* painter) const
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(StyleIdx::fretNumMag);
             QFont scaledFont(font);
-            scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
+            scaledFont.setPixelSize(font.pixelSize() * fretNumMag * _userMag);
             painter->setFont(scaledFont);
-            if ( score()->styleI(StyleIdx::fretNumPos) == 0 )
+            if (score()->styleI(StyleIdx::fretNumPos) == 0)
                   painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
                      Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                      QString("%1").arg(_fretOffset+1));
@@ -310,7 +351,7 @@ void FretDiagram::layout()
       stringDist      = _spatium * .7;
       fretDist        = _spatium * .8;
 
-      qreal w = stringDist * (_strings-1);
+      qreal w = stringDist * (_strings - 1);
       qreal h = _frets * fretDist + fretDist * .5;
       qreal y = 0.0;
       qreal dotd = stringDist * .6;
