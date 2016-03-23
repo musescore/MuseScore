@@ -855,7 +855,8 @@ ScoreView::ScoreView(QWidget* parent)
       cl = new QEventTransition(this, QEvent::MouseButtonRelease);
       cl->setTargetState(states[NORMAL]);
       s->addTransition(cl);
-      connect(s, SIGNAL(entered()), SLOT(deselectAll()));
+      connect(s, SIGNAL(entered()), SLOT(startScoreViewDrag()));
+      connect(s, SIGNAL(exited()), SLOT(endScoreViewDrag()));
       s->addTransition(new DragTransition(this));
 
       //----------------------setup play state
@@ -3439,6 +3440,9 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
       if (dx == 0 && dy == 0)
             return;
 
+      // mouse was moved, so don't clear the selection
+      scoreViewDragging = true;
+
       constraintCanvas(&dx, &dy);
 
       _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
@@ -3677,6 +3681,29 @@ void ScoreView::endLasso()
       _score->lassoSelectEnd();
       _score->end();
       mscore->endCmd();
+      }
+
+//---------------------------------------------------------
+//   startScoreViewDrag
+//
+//   reset flag
+//---------------------------------------------------------
+
+void ScoreView::startScoreViewDrag()
+      {
+      scoreViewDragging = false;
+      }
+
+//---------------------------------------------------------
+//   endScoreViewDrag
+//
+//   call deselectAll() if the mouse was not moved
+//---------------------------------------------------------
+
+void ScoreView::endScoreViewDrag()
+      {
+      if (!scoreViewDragging)
+            deselectAll();
       }
 
 //---------------------------------------------------------
