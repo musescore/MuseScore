@@ -1877,7 +1877,7 @@ void ChordObj::read()
             char c           = cap->readChar();
             bool bit7        = c & 0x80;
             bool bit6        = c & 0x40;
-            n.pitch          = c;
+            n.pitch          = (signed char) c;
             if (bit7 != bit6) {
                   n.explAlteration = 2;
                   n.pitch ^= 0x80;
