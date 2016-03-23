@@ -131,7 +131,7 @@ void GuitarPro::read(void* p, qint64 len)
 
 int GuitarPro::readChar()
       {
-      char c;
+      signed char c;
       read(&c, 1);
       return c;
       }
