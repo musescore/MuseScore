@@ -2647,8 +2647,9 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       lc.measureNo += lc.curMeasure->noOffset();
       lc.curMeasure->setNo(lc.measureNo);
-      if (!lc.curMeasure->irregular())      // dont count measure
+      if (!lc.curMeasure->irregular())          // dont count measure
             ++lc.measureNo;
+      int mno = lc.measureNo;
 
       if (lc.curMeasure->isMeasure() && score()->styleB(StyleIdx::createMultiMeasureRests)) {
             Measure* m = toMeasure(lc.curMeasure);
@@ -2657,16 +2658,23 @@ void Score::getNextMeasure(LayoutContext& lc)
             int n       = 0;
             Fraction len;
 
+            lc.measureNo = m->no();
+
             while (validMMRestMeasure(nm)) {
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
                   if (breakMultiMeasureRest(nm) && n)
                         break;
+                  lc.measureNo += nm->noOffset();
+                  nm->setNo(lc.measureNo);
+                  if (!nm->irregular())          // dont count measure
+                        ++lc.measureNo;
                   ++n;
                   len += nm->len();
                   lm = nm;
                   nm = toMeasure(mb);
                   if (!nm || !nm->isMeasure())
                         break;
+
                   }
             if (n >= styleI(StyleIdx::minEmptyMeasures)) {
                   createMMRest(m, lm, len);
@@ -2677,10 +2685,13 @@ void Score::getNextMeasure(LayoutContext& lc)
                   if (m->mmRest())
                         undo(new ChangeMMRest(m, 0));
                   m->setMMRestCount(0);
+                  lc.measureNo = mno;
                   }
             }
-      if (lc.curMeasure->sectionBreak() && lc.curMeasure->sectionBreak()->startWithMeasureOne())
-            lc.measureNo = 0;
+      else if (lc.curMeasure->isMeasure() && toMeasure(lc.curMeasure)->isMMRest()) {
+            qDebug("mmrest: no %d += %d", lc.measureNo, toMeasure(lc.curMeasure)->mmRestCount());
+            lc.measureNo += toMeasure(lc.curMeasure)->mmRestCount() - 1;
+            }
 
       if (!lc.curMeasure->isMeasure()) {
             lc.curMeasure->setTick(lc.tick);
@@ -3460,7 +3471,7 @@ void Score::doLayout()
       {
       LayoutContext lc;
 
-      qDebug("===doLayout");
+      qDebug();
 
       if (_staves.empty() || first() == 0) {
             // score is empty
@@ -3524,7 +3535,7 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-qDebug("===doLayoutRange %d-%d  systems %d", stick, etick, _systems.size());
+qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
 
       LayoutContext lc;
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());

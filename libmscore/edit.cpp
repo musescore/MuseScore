@@ -238,7 +238,7 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
 
 ChordRest* Score::addClone(ChordRest* cr, int tick, const TDuration& d)
       {
-qDebug("addClone %s at %d %s", cr->name(), tick, qPrintable(d.fraction().print()));
+qDebug(" %s at %d %s", cr->name(), tick, qPrintable(d.fraction().print()));
       ChordRest* newcr;
       // change a RepeatMeasure() into an Rest()
       if (cr->type() == Element::Type::REPEAT_MEASURE)

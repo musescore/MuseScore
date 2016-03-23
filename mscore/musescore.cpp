@@ -114,6 +114,12 @@ extern Ms::Synthesizer* createAeolus();
 extern Ms::Synthesizer* createZerberus();
 #endif
 
+#ifdef QT_NO_DEBUG
+      Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+#else
+      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
+#endif
+
 namespace Ms {
 
 extern void checkProperties();
@@ -4673,6 +4679,7 @@ using namespace Ms;
 int main(int argc, char* av[])
       {
 #ifndef NDEBUG
+      qSetMessagePattern("%{file}:%{function}: %{message}");
       checkProperties();
 #endif
 

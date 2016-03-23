@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -21,6 +20,8 @@
 #define DIR QString("libmscore/tools/")
 
 using namespace Ms;
+
+// Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
 
 //---------------------------------------------------------
 //   TestTools

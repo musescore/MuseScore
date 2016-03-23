@@ -1214,8 +1214,8 @@ inline void Score::setLayoutAll()                     { _masterScore->setLayoutA
 inline void Score::setLayout(int tick)                { _masterScore->setLayout(tick);         }
 inline CmdState& Score::cmdState()                    { return _masterScore->cmdState();       }
 inline void Score::addLayoutFlags(LayoutFlags f)      { _masterScore->addLayoutFlags(f);       }
-inline void Score::setExcerptsChanged(bool val)       { setExcerptsChanged(val);               }
-inline void Score::setInstrumentsChanged(bool v)      { setInstrumentsChanged(v);              }
+inline void Score::setExcerptsChanged(bool val)       { _masterScore->setExcerptsChanged(val);  }
+inline void Score::setInstrumentsChanged(bool v)      { _masterScore->setInstrumentsChanged(v); }
 
 extern MasterScore* gscore;
 extern void fixTicks();

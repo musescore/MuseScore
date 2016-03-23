@@ -63,12 +63,11 @@ void TestBenchmark::benchmark3()
       QBENCHMARK {
             score->loadMsc(path, false);
             }
-//      Ms::dumpTags();
       }
 
 void TestBenchmark::benchmark1()
       {
-      score = readScore(DIR + "goldberg.mscx");
+      // score = readScore(DIR + "goldberg.mscx");
       QBENCHMARK {                        // cold run
             score->doLayout();
             }
@@ -76,7 +75,7 @@ void TestBenchmark::benchmark1()
 
 void TestBenchmark::benchmark2()
       {
-      score->doLayout();
+//      score->doLayout();
       QBENCHMARK {                        // warm run
             score->doLayout();
             }
