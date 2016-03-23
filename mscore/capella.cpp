@@ -1992,7 +1992,7 @@ unsigned Capella::readUnsigned()
 
 int Capella::readInt()
       {
-      char c;
+      signed char c;
       read(&c, 1);
       if (c == -128) {
             short s;
