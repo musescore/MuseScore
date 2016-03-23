@@ -171,13 +171,13 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Slide Whistle"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Sl. Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Whistle"),
 //: Tin Whistle
-QT_TRANSLATE_NOOP("InstrumentsXML", "Tin. Wh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tin Whistle"),
 //: B♭ Tin Whistle
-QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tin. Wh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tin Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Whistle"),
 //: Tin Whistle
-QT_TRANSLATE_NOOP("InstrumentsXML", "Tin. Wh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Oboe"),
 //: Piccolo Oboe
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Ob."),
