@@ -693,23 +693,23 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   else {
                         qreal _spatium = spatium();
 
-                        m = endMeasure();
+                        if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
+                              // find the actual measure where the volta should stop
+                              m = startMeasure();
+                              if (m->hasMMRest())
+                                    m = m->mmRest();
+                              while (m->nextMeasureMM() && (m->endTick() < tick2()))
+                                    m = m->nextMeasureMM();
+                              }
+                        else {
+                              m = endMeasure();
+                              }
                         // back up to barline (skip courtesy elements)
                         Segment* seg = m->last();
                         while (seg && seg->segmentType() != Segment::Type::EndBarLine)
                               seg = seg->prev();
                         qreal mwidth = seg ? seg->x() : m->bbox().right();
                         x = m->pos().x() + mwidth;
-                        if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
-                              //find the actual measure where the volta should stop
-                              Measure* sm = startMeasure();
-                              Measure* m = sm;
-                              if (sm->hasMMRest())
-                                    m = sm->mmRest();
-                              while (m->nextMeasureMM() && (m->endTick() < tick2()))
-                                    m = m->nextMeasureMM();
-                              x = m->pos().x() + m->bbox().right();
-                              }
                         // align to barline
                         if (seg && seg->segmentType() == Segment::Type::EndBarLine) {
                               Element* e = seg->element(0);
