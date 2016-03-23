@@ -570,7 +570,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
    public:
       enum class StemDir : signed char { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
       BeamMode beamMode;
-      char notationStave;
+      signed char notationStave;
       char dStemLength;
       unsigned char nTremoloBars;
       unsigned articulation;

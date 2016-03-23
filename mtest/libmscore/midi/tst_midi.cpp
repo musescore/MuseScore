@@ -133,7 +133,7 @@ bool compareElements(Element* e1, Element* e2)
             KeySig* ks1 = static_cast<KeySig*>(e1);
             KeySig* ks2 = static_cast<KeySig*>(e2);
             if (ks1->key() != ks2->key()) {
-                  qDebug("      key signature %d  !=  %d", ks1->key(), ks2->key());
+                  qDebug("      key signature %d  !=  %d", int(ks1->key()), int(ks2->key()));
                   return false;
                   }
             }
