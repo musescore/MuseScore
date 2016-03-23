@@ -555,7 +555,7 @@ struct Verse {
       };
 
 struct CNote {
-      char pitch;
+      signed char pitch;
       int explAlteration;     // 1 force, 2 suppress
       int headType;
       int alteration;
