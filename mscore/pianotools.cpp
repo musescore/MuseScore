@@ -19,6 +19,7 @@
 //=============================================================================
 
 #include "pianotools.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -287,8 +288,11 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
       {
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setPen(QPen(Qt::black, .8));
-      if (_pressed)
-            p->setBrush(QColor(255, 255, 128));
+      if (_pressed) {
+            QColor c(preferences.pianoHlColor);
+            c.setAlpha(180);
+            p->setBrush(c);
+            }
       else
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
