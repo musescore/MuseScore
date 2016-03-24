@@ -574,7 +574,7 @@ void TextBlock::remove(int column)
             for (const QChar& c : i->text) {
                   if (col == column) {
                         if (c.isSurrogate())
-                              i->text.remove(rcol, 1);
+                              i->text.remove(rcol, 2);
                         if (i->format.type() == CharFormatType::SYMBOL) {
                               i->ids.removeAt(idx);
                               if (i->ids.isEmpty())
@@ -2714,6 +2714,8 @@ Element* Text::drop(const DropData& data)
                         if (code & 0xffff0000) {
                               insert(_cursor, QChar::highSurrogate(code));
                               insert(_cursor, QChar::lowSurrogate(code));
+                              _cursor->setColumn(_cursor->column() - 1);
+                              _cursor->setSelectColumn(_cursor->column());
                               }
                         else
                               insert(_cursor, QChar(code));
