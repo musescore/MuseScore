@@ -85,11 +85,7 @@ enum class PlayEventType : char;
 
 // #define DEBUG_UNDO
 
-#ifndef QT_NO_DEBUG
 #define UNDO_NAME(a)  virtual const char* name() const override { return a; }
-#else
-#define UNDO_NAME(a)
-#endif
 
 enum class LayoutMode : char;
 
@@ -112,9 +108,9 @@ class UndoCommand {
       int childCount() const             { return childList.size();     }
       void unwind();
       virtual void cleanup(bool undo);
-#ifndef QT_NO_DEBUG
+// #ifndef QT_NO_DEBUG
       virtual const char* name() const { return "UndoCommand"; }
-#endif
+// #endif
       };
 
 //---------------------------------------------------------
@@ -561,9 +557,7 @@ class AddElement : public UndoCommand {
       virtual void undo();
       virtual void redo();
       virtual void cleanup(bool);
-#ifndef QT_NO_DEBUG
       virtual const char* name() const override;
-#endif
       };
 
 //---------------------------------------------------------
@@ -578,9 +572,7 @@ class RemoveElement : public UndoCommand {
       virtual void undo();
       virtual void redo();
       virtual void cleanup(bool);
-#ifndef QT_NO_DEBUG
       virtual const char* name() const override;
-#endif
       };
 
 //---------------------------------------------------------

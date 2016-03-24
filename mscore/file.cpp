@@ -97,21 +97,21 @@ extern MasterSynthesizer* synti;
 //---------------------------------------------------------
 
 static void paintElement(QPainter& p, const Element* e)
-{
-    QPointF pos(e->pagePos());
-    p.translate(pos);
-    e->draw(&p);
-    p.translate(-pos);
-}
+      {
+      QPointF pos(e->pagePos());
+      p.translate(pos);
+      e->draw(&p);
+      p.translate(-pos);
+      }
 
-static void paintElements(QPainter& p, const QList<const Element*>& el)
-{
-    foreach (const Element* e, el) {
-        if (!e->visible())
-            continue;
-        paintElement(p, e);
-    }
-}
+static void paintElements(QPainter& p, const QList<Element*>& el)
+      {
+      for (Element* e : el) {
+            if (!e->visible())
+                  continue;
+            paintElement(p, e);
+            }
+      }
 
 //---------------------------------------------------------
 //   createDefaultFileName
@@ -2337,7 +2337,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             if (trimMargin >= 0)
                   p.translate(-r.topLeft());
 
-            QList<const Element*> pel = page->elements();
+            QList<Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
             paintElements(p, pel);
 
@@ -2577,7 +2577,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             }
         }
         // 2nd pass: the rest of the elements
-        QList<const Element*> pel = page->elements();
+        QList<Element*> pel = page->elements();
         qStableSort(pel.begin(), pel.end(), elementLessThan);
 
         Element::Type eType;

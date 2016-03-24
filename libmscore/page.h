@@ -153,7 +153,7 @@ class Page : public Element {
       void appendSystem(System* s);
 
       int no() const                     { return _no;        }
-      void setNo(int n);
+      void setNo(int n)                  { _no = n;           }
       bool isOdd() const;
       qreal tm() const;            // margins in pixel
       qreal bm() const;
@@ -171,7 +171,7 @@ class Page : public Element {
       Measure* searchMeasure(const QPointF& p) const;
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
-      QList<const Element*> elements();         ///< list of visible elements
+      QList<Element*> elements();               ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
       int endTick() const;
       };

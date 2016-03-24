@@ -6041,6 +6041,7 @@ void ScoreView::cmdAddRemoveBreaks()
       if (noSelection)
              _score->deselectAll();
       }
+
 //---------------------------------------------------------
 //   cmdCopyLyricsToClipboard
 ///   Copy the score lyrics into clipboard

@@ -75,6 +75,8 @@
 #include "utils.h"
 #include "glissando.h"
 
+//      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
+
 namespace Ms {
 
 extern Measure* tick2measure(int tick);
@@ -139,9 +141,7 @@ void UndoCommand::undo()
       {
       int n = childList.size();
       for (int i = n-1; i >= 0; --i) {
-#ifndef QT_NO_DEBUG
-            qCDebug(undoRedo) << "   undo<" << childList[i]->name() << ">";
-#endif
+            qCDebug(undoRedo) << "<" << childList[i]->name() << ">";
             childList[i]->undo();
             }
       flip();
@@ -155,9 +155,7 @@ void UndoCommand::redo()
       {
       int n = childList.size();
       for (int i = 0; i < n; ++i) {
-#ifndef QT_NO_DEBUG
-            qCDebug(undoRedo) << "   redo<" << childList[i]->name() << ">";
-#endif
+            qCDebug(undoRedo) << "<" << childList[i]->name() << ">";
             childList[i]->redo();
             }
       flip();
@@ -307,6 +305,7 @@ void UndoStack::setClean()
 
 void UndoStack::undo()
       {
+      qCDebug(undoRedo) << "===";
       if (curIdx) {
             --curIdx;
             Q_ASSERT(curIdx >= 0);
@@ -320,6 +319,7 @@ void UndoStack::undo()
 
 void UndoStack::redo()
       {
+      qCDebug(undoRedo) << "===";
       if (canRedo()) {
             list[curIdx++]->redo();
             }
@@ -1530,17 +1530,16 @@ void AddElement::redo()
 //   name
 //---------------------------------------------------------
 
-#ifndef QT_NO_DEBUG
 const char* AddElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Add: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
+            snprintf(buffer, 64, "Add: %s <%s> %p", element->name(),
+               qPrintable(static_cast<Text*>(element)->plainText()), element);
       else
-            snprintf(buffer, 64, "Add: %s", element->name());
+            snprintf(buffer, 64, "Add: <%s> %p", element->name(), element);
       return buffer;
       }
-#endif
 
 //---------------------------------------------------------
 //   RemoveElement
@@ -1638,17 +1637,16 @@ void RemoveElement::redo()
 //   name
 //---------------------------------------------------------
 
-#ifndef QT_NO_DEBUG
 const char* RemoveElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Remove: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
+            snprintf(buffer, 64, "Remove: %s <%s> %p", element->name(),
+               qPrintable(static_cast<Text*>(element)->plainText()), element);
       else
-            snprintf(buffer, 64, "Remove: %s", element->name());
+            snprintf(buffer, 64, "Remove: %s %p", element->name(), element);
       return buffer;
       }
-#endif
 
 //---------------------------------------------------------
 //   ChangeConcertPitch

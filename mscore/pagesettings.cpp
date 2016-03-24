@@ -635,7 +635,7 @@ void PageSettings::updatePreview(int val)
                   preview->score()->doLayout();
                   break;
             case 1:
-                  preview->score()->doLayoutPages();
+//TODO-ws                  preview->score()->doLayoutPages();
                   break;
             }
       preview->layoutChanged();
