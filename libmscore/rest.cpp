@@ -60,7 +60,7 @@ Rest::Rest(const Rest& r, bool link)
    : ChordRest(r, link)
       {
       if (link)
-            linkTo((Rest*)&r);      // HACK!
+            score()->undo(new Link(const_cast<Rest*>(&r), this));
       _sym     = r._sym;
       dotline  = r.dotline;
       _mmWidth = r._mmWidth;
