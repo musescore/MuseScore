@@ -90,6 +90,7 @@ struct Preferences {
       QColor fgColor;
       int iconHeight, iconWidth;
       QColor dropColor;
+      QColor pianoHlColor;
       bool enableMidiInput;
       bool playNotes;         // play notes on click
       bool playChordOnAddNote;

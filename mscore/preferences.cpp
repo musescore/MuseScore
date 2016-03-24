@@ -75,6 +75,7 @@ void Preferences::init()
       bgWallpaper        = QString();
       fgWallpaper        = ":/data/paper5.png";
       fgColor.setNamedColor("#f9f9f9");
+      pianoHlColor.setNamedColor("#1259d0");
       iconHeight         = 24;
       iconWidth          = 28;
 
@@ -221,6 +222,7 @@ void Preferences::write()
       s.setValue("selectColor4",       MScore::selectColor[3]);
       s.setValue("dropColor",          MScore::dropColor);
       s.setValue("defaultColor",       MScore::defaultColor);
+      s.setValue("pianoHlColor",       pianoHlColor);
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
       s.setValue("playChordOnAddNote", playChordOnAddNote);
@@ -372,6 +374,7 @@ void Preferences::read()
 
       MScore::defaultColor    = s.value("defaultColor", MScore::defaultColor).value<QColor>();
       MScore::dropColor       = s.value("dropColor",    MScore::dropColor).value<QColor>();
+      pianoHlColor            = s.value("pianoHlColor", pianoHlColor).value<QColor>();
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
