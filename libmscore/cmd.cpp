@@ -2991,6 +2991,10 @@ void Score::cmdResequenceRehearsalMarks()
 
 //---------------------------------------------------------
 //   addRemoveBreaks
+//    interval lock
+//    0        false    remove all linebreaks
+//    > 0      false    add linebreak every interval measure
+//    d.c.     true     add linebreak at every system end
 //---------------------------------------------------------
 
 void Score::addRemoveBreaks(int interval, bool lock)
@@ -3023,7 +3027,6 @@ void Score::addRemoveBreaks(int interval, bool lock)
                   if (mm->system() && mm->system()->lastMeasure() == mm)
                         m->undoSetLineBreak(true);
                   }
-
             else {
                   if (interval == 0) {
                         // remove line break if present

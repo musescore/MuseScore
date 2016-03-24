@@ -1838,7 +1838,7 @@ void Text::editInsertText(const QString& s)
             tbox->layout();
             System* system = tbox->system();
             system->setHeight(tbox->height());
-            score()->doLayoutPages();
+//TODO-ws            score()->doLayoutPages();
             score()->setUpdateAll();
             }
       else {
@@ -2648,7 +2648,7 @@ void Text::layoutEdit()
             tbox->layout();
             System* system = tbox->system();
             system->setHeight(tbox->height());
-            score()->doLayoutPages();
+//TODO-ws            score()->doLayoutPages();
             score()->setUpdateAll();
             }
       else {

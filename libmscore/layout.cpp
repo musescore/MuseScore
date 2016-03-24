@@ -88,6 +88,8 @@ struct LayoutContext {
       MeasureBase* curMeasure  { 0 };
       MeasureBase* nextMeasure { 0 };
       int measureNo            { 0 };
+      bool rangeLayout         { false };
+      int endTick;
       };
 
 //---------------------------------------------------------
@@ -1306,7 +1308,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-// printf("addSystemHeader tick %d track %d clef %p keysig %p\n", tick, strack, clef, keysig);
             if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom() || keyIdx.isAtonal())) {
                   //
                   // create missing key signature
@@ -1736,6 +1737,7 @@ void Score::layoutFingering(Fingering* f)
       f->setUserOff(QPointF(x, y));
       }
 
+#if 0
 //---------------------------------------------------------
 //   layoutPages
 //    create list of pages
@@ -1803,7 +1805,9 @@ void Score::layoutPages(LayoutContext& lc)
       while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
             _pages.takeLast();
       }
+#endif
 
+#if 0
 //---------------------------------------------------------
 //   doLayoutSystems
 //    layout staves in a system
@@ -1829,6 +1833,7 @@ void Score::doLayoutSystems()
       for (MuseScoreView* v : viewer)
             v->layoutChanged();
       }
+#endif
 
 //---------------------------------------------------------
 //   checkDivider
@@ -1860,11 +1865,13 @@ static void checkDivider(bool left, System* s, qreal sdd)
 
 //---------------------------------------------------------
 //   layoutPage
-//    gaps - number of gaps to stretch
+//    restHeight - vertical space which has to be distributed
+//                 between systems
 //---------------------------------------------------------
 
-void Score::layoutPage(Page* page, qreal restHeight)
+static void layoutPage(Page* page, qreal restHeight)
       {
+      Score* score = page->score();
       int gaps = 0;
       int nsystems = page->systems().size();
       for (int i = 0; i < nsystems - 1; ++i) {
@@ -1874,8 +1881,8 @@ void Score::layoutPage(Page* page, qreal restHeight)
                   continue;
             ++gaps;
             }
-      if (!gaps || MScore::layoutDebug || layoutMode() == LayoutMode::SYSTEM) {
-            if (_layoutMode == LayoutMode::FLOAT) {
+      if (!gaps || MScore::layoutDebug || score->layoutMode() == LayoutMode::SYSTEM) {
+            if (score->layoutMode() == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   for (System* system : page->systems())
                         system->move(QPointF(0.0, y));
@@ -1896,7 +1903,7 @@ void Score::layoutPage(Page* page, qreal restHeight)
             return;
             }
 
-      const qreal maxDistance = styleP(StyleIdx::maxSystemDistance);
+      const qreal maxDistance = score->styleP(StyleIdx::maxSystemDistance);
       qreal stretch = restHeight / gaps;
 
       qreal yoff = 0;
@@ -1928,6 +1935,7 @@ void Score::layoutPage(Page* page, qreal restHeight)
 //    small wrapper for layoutPages()
 //---------------------------------------------------------
 
+#if 0
 void Score::doLayoutPages()
       {
       LayoutContext lc;
@@ -1941,6 +1949,7 @@ void Score::doLayoutPages()
       foreach(MuseScoreView* v, viewer)
             v->layoutChanged();
       }
+#endif
 
 //---------------------------------------------------------
 //   sff
@@ -2245,6 +2254,7 @@ Page* Score::getEmptyPage(LayoutContext& lc)
       ++lc.curPage;
       page->setPos(x, y);
       page->systems().clear();
+
       return page;
       }
 
@@ -3306,6 +3316,68 @@ System* Score::collectSystem(LayoutContext& lc)
       lc.systemChanged      = lc.systemOldMeasure != (system->measures().empty() ? 0 : system->measures().back());
       return system;
       }
+#if 0
+//---------------------------------------------------------
+//   relayoutPage
+//---------------------------------------------------------
+
+static void relayoutPage(Page* page)
+      {
+      qreal y         = page->tm();
+      qreal ey        = page->height() - page->bm();
+      Score* score    = page->score();
+      const qreal slb = score->styleP(StyleIdx::staffLowerBorder);
+      const qreal sub = score->styleP(StyleIdx::staffUpperBorder);
+
+      QList<System*>& sl = page->systems();
+
+      auto li = sl.begin();
+
+      System* s1 = 0;
+      System* s2 = *li++;
+
+      for (;;) {
+            //
+            // calculate distance to previous system
+            //
+            qreal distance;
+            if (s1)
+                  distance = s1->minDistance(s2);
+            else {
+                  // this is the first system on page
+                  VBox* vbox = s2->vbox();
+                  distance = vbox ? vbox->topGap() : sub;
+                  distance = qMax(distance, -s2->minTop());
+                  }
+            y += distance;
+            s2->setPos(page->lm(), y);
+            y += s2->height();
+
+            //
+            //  check for page break or if next system will fit on page
+            //
+            if (li != sl.end()) {
+                  System* s3 = *li++;
+
+                  qreal dist = s2->minDistance(s3) + s3->height();
+                  VBox* vbox = s3->vbox();
+                  if (vbox)
+                        dist += vbox->bottomGap();
+                  else
+                        dist += qMax(s3->minBottom(), slb);
+                  s1 = s2;    // current system becomes previous
+                  s2 = s3;    // next system becomes current
+                  }
+            else {
+                  VBox* vbox = s2->vbox();
+                  qreal dist = vbox ? vbox->bottomGap() : qMax(s2->minBottom(), slb);
+                  layoutPage(page, ey - (y + dist));
+                  break;
+                  }
+            }
+      page->rebuildBspTree();
+      }
+#endif
 
 //---------------------------------------------------------
 //   collectPage
@@ -3347,7 +3419,17 @@ bool Score::collectPage(LayoutContext& lc)
             //
             //  check for page break or if next system will fit on page
             //
-            collectSystem(lc);
+            if (lc.rangeLayout && lc.endTick <= lc.curSystem->endTick()) {
+                  // take next system unchanged
+                  System* s    = lc.systemList.empty() ? 0 : lc.systemList.takeFirst();
+                  lc.curSystem = s;
+                  if (s) {
+                        lc.systemOldMeasure = lc.curSystem->measures().empty() ? 0 : lc.curSystem->measures().back();
+                        _systems.append(lc.curSystem);
+                        }
+                  }
+            else
+                  collectSystem(lc);
             System* s3     = lc.curSystem;
             bool breakPage = !s3 || (breakPages && s2->pageBreak());
 
@@ -3361,6 +3443,7 @@ bool Score::collectPage(LayoutContext& lc)
                   breakPage  = (y + dist) >= ey;
                   }
             if (breakPage) {
+                  // dont use currentSystem
                   VBox* vbox = s2->vbox();
                   qreal dist = vbox ? vbox->bottomGap() : qMax(s2->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
@@ -3515,7 +3598,7 @@ void Score::doLayout()
       while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
             _pages.takeLast();
 
-      for (auto s : _spanner.map()) {
+      for (auto s : _spanner.map()) {     // TODO: this invalidates the bsp tree
             Spanner* sp = s.second;
             if (sp->isSlur())
                   sp->layout();
@@ -3535,9 +3618,11 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
+      qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
 
       LayoutContext lc;
+      lc.rangeLayout = true;
+      lc.endTick     = etick;
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
@@ -3581,7 +3666,6 @@ qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
       //---------------------------------------------------
 
       while (collectPage(lc)) {
-            printf("   ...collectPage %d\n", lc.curPage);
             if (!lc.curSystem || (!lc.pageChanged && lc.curSystem->endTick() >= etick))
                   break;
             }
@@ -3591,7 +3675,6 @@ qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
             }
 
       _systems.append(lc.systemList);
-      printf("   ==== systems %d\n", _systems.size());
 
       for (MuseScoreView* v : viewer)
             v->layoutChanged();

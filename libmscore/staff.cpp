@@ -530,8 +530,9 @@ void Staff::write(Xml& xml) const
       else {                                    // if some bar line, default is the default for span target staff
             int targetStaffIdx = idx + _barLineSpan - 1;
             if (targetStaffIdx >= score()->nstaves()) {
-                  qFatal("bad _barLineSpan %d for staff %d (nstaves %d)",
+                  qInfo("bad _barLineSpan %d for staff %d (nstaves %d)",
                      _barLineSpan, idx, score()->nstaves());
+                  targetStaffIdx = score()->nstaves() - 1;
                   }
             int targetStaffLines = score()->staff(targetStaffIdx)->lines();
             defaultLineTo = (targetStaffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (targetStaffLines-1) * 2);

@@ -701,7 +701,7 @@ void Measure::remove(Element* e)
                   break;
 
             case Element::Type::SEGMENT:
-                  _segments.remove(static_cast<Segment*>(e));
+                  _segments.remove(toSegment(e));
                   break;
 
             case Element::Type::JUMP:

@@ -178,15 +178,6 @@ void Page::appendSystem(System* s)
       }
 
 //---------------------------------------------------------
-//   setNo
-//---------------------------------------------------------
-
-void Page::setNo(int n)
-      {
-      _no = n;
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -468,12 +459,7 @@ void PageFormat::write(Xml& xml) const
 #ifdef USE_BSP
 void Page::doRebuildBspTree()
       {
-      QList<Element*> el;
-      for (System* s : _systems) {
-            for (MeasureBase* m : s->measures())
-                  m->scanElements(&el, collectElements, false);
-            }
-      scanElements(&el, collectElements, false);
+      QList<Element*> el(elements());
 
       int n = el.size();
       if (score()->layoutMode() == LayoutMode::LINE) {
@@ -490,8 +476,8 @@ void Page::doRebuildBspTree()
             }
       else
             bspTree.initialize(abbox(), n);
-      for (int i = 0; i < n; ++i)
-            bspTree.insert(el.at(i));
+      for (Element* e : el)
+            bspTree.insert(e);
       bspTreeValid = true;
       }
 #endif
@@ -807,9 +793,9 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
 //   elements
 //---------------------------------------------------------
 
-QList<const Element*> Page::elements()
+QList<Element*> Page::elements()
       {
-      QList<const Element*> el;
+      QList<Element*> el;
       for (System* s :_systems) {
             for (MeasureBase* m : s->measures())
                   m->scanElements(&el, collectElements, false);
@@ -869,8 +855,8 @@ QRectF Page::tbbox()
       qreal x2 = 0.0;
       qreal y1 = height();
       qreal y2 = 0.0;
-      const QList<const Element*> el = elements();
-      for (const Element* e : el) {
+      const QList<Element*> el = elements();
+      for (Element* e : el) {
             if (e == this || !e->isPrintable())
                   continue;
             QRectF ebbox = e->pageBoundingRect();

@@ -1142,7 +1142,7 @@ void Score::addElement(Element* element)
       {
       Element* parent = element->parent();
 
-//      qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
+//      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
 
       Element::Type et = element->type();
@@ -1269,7 +1269,7 @@ void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
 
-//      qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
+//      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
 
       // special for MEASURE, HBOX, VBOX
