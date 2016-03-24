@@ -283,8 +283,10 @@ echo ""
 echo "Setting attributes for package ${PCK_NAME}..."
 ${CURL} -X POST -d "${ATTRIBUTES}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}/attributes
 
-if [ "${APPNAME}" != "MuseScore" ] && [ $(env | grep TRAVIS_JOB_ID ) ] ; then
+if [ "${APPNAME}" != "MuseScore" ]; then
   echo ""
+
+  if [ $(env | grep TRAVIS_JOB_ID ) ]; then
   echo "Adding Travis CI log to release notes..."
   BUILD_LOG="https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true"
       data='{
@@ -294,7 +296,15 @@ if [ "${APPNAME}" != "MuseScore" ] && [ $(env | grep TRAVIS_JOB_ID ) ] ; then
     }
   }'
   ${CURL} -X POST -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}/release_notes
+  echo ""
+  fi
+
+  # Delete older versions of non-release packages (nightlies and dev. builds)
+  HERE="$(dirname "$(readlink -f "${0}")")"
+  "${HERE}/bintray-tidy.sh" archive "${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}"
 fi
+
+
 
 # Seemingly this works only after the second time running this script - thus disabling for now (FIXME)
 # echo ""
