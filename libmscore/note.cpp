@@ -198,7 +198,7 @@ Note::Note(const Note& n, bool link)
    : Element(n)
       {
       if (link)
-            score()->undo(new Link(this, const_cast<Note*>(&n)));
+            score()->undo(new Link(const_cast<Note*>(&n), this));
       _subchannel        = n._subchannel;
       _line              = n._line;
       _fret              = n._fret;
@@ -233,7 +233,7 @@ Note::Note(const Note& n, bool link)
             Element* ce = e->clone();
             add(ce);
             if (link)
-                  score()->undo(new Link(ce, const_cast<Element*>(e)));
+                  score()->undo(new Link(const_cast<Element*>(e), ce));
             }
 
       _playEvents = n._playEvents;
