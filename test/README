@@ -1,0 +1,180 @@
+-------------------------------------------------
+      Scripts
+-------------------------------------------------
+
+iotest      read *.msc files, save files and compare
+rendertest  renders misc *.xml files with lilypond and mscore
+            and puts up *.html pages
+
+All MusicXml files starting with a number are from Reinhold Kainhofer from
+the Lilypond project (used in rendertest)
+I did some changes to the files to better fit for MuseScore:
+      12b-Tuplets-Finale
+            commented out "<rights>Public domain</rights>" which expands each
+            score snippet to full page
+
+-------------------------------------------------
+      *.mscz files
+-------------------------------------------------
+accidentals3.mscz
+      accidentals positioning in chords     
+aeolus.mscx
+      test aeolus synthesizer
+arpeggio.mscz
+      arpeggio up down
+beam1.mscz
+
+chordlist.mscx
+
+crossbeams.mscx
+
+fractional_beams.mscz
+
+harmony.mscx
+
+mmrest.mcsz
+
+noteheads.mscz
+
+
+repeat1.mscz
+      two measures barline repeat
+repeat2.mscz
+      single measure barline repeat
+repeat3.mscz
+      two measure repeat, single barline, at start
+repeat4.mscz
+      2 nested repeat barline, Playback  123-234-234567
+repeat5.mscz  
+      3 nested repeat barline, Playback  123-23-234-23456
+repeat6.mscz
+      Simple volta - 123 2456
+repeat7.mscz
+      DC al fine
+repeat9.mscz
+      DS al coda
+repeat10.mscz
+      3 voltas Playback 123-24-256
+repeat11.mscz
+      3 voltas and end, spanning 2 measures Playback 1234 125678 12 9 10 12 11 12
+repeat12.mscz
+      DS al coda, voltas after To coda, DS on start repeat
+repeat13.mscz
+      Segno, 2 voltas, DS 
+
+slur1.mscx
+
+slur3.mscz
+
+tab.mscx
+
+test3.mscx
+
+testsmall.mscx    
+
+
+-------------------------------------------------
+      *.msc Testfiles
+-------------------------------------------------
+
+test1.msc
+      single staff, single voice, c-scale
+
+test3.msc
+      displaced note heads
+
+test7.msc
+      - piano and trumpet staff
+      - flat symbol in instrument name
+      - title with bold and italic text
+      - start repeat / end repeat
+      - prima volta / seconda volta
+
+tuplets.msc
+      - triplet
+
+slur2.msc
+      slur spanning two systems
+
+testKeysig2.msc
+testTimesig2.msc
+
+testsmall.msc
+      - small note, chord, rest, hook, stem
+      - small staff
+            - small chord in small staff
+
+coda.msc
+      - horizontal frame
+      - coda1, coda2
+
+Repeat1.msc
+Repeat2.msc       currently broken due to changes in repeat handling
+
+
+-------------------------------------------------
+      MIDI Testfiles
+-------------------------------------------------
+
+midi1.mid	single track, single voice
+midi2.mid	single track, simple chords
+midi3.mid   single track, rests
+midi4.mid   single track, overlapping notes
+
+-------------------------------------------------
+      MusicXML testfiles
+-------------------------------------------------
+
+testAccidentals1.xml     accidentals sharp, flat, double sharp, double flat and natural
+testAccidentals2.xml     all supported accidentals including editorial
+testBarStyles.xml        bar styles light-light, light-heavy, heavy-light plus repeats
+testDCalCoda.xml         a single da capo al coda
+testDCalFine.xml         a single da capo al fine
+testDalSegno.xml         a single dal segno
+testDirections1.xml      all supported direction types
+testDynamics1.xml        the "dynamics" directions from ppp to fff
+testDynamics2.xml        dynamics in a multi-part (voice and a piano) score
+testHarmony1.xml         several (simple) harmony elements
+testHarmony2.xml         several (more complex) harmony elements
+testHello.xml            Recordare's "Hello World"
+testHello.mxl            Recordare's "Hello World" (compressed MusicXML)
+testImplicitMeasure1.xml pickup measure
+testKeysig1.xml          change keysig from none to G major
+testLines1.xml           ottava, pedal and trill lines
+testMetaData.xml         meta-data plus regular text such as title and composer
+testMultiMeasureRest.xml two multi-measure rests and a normal rest measure
+testNotesAttributes1.xml most note attributes supported by MusicXML import/export
+testNotesAttributes2.xml most note attributes supported by MusicXML import/export
+testNotesRests1.xml      all note and rest types, including some dotted
+testSystemBrackets1.xml  system brackets (single staff parts)
+testSystemBrackets2.xml  system brackets in a two piano piece
+testTimesig1.xml         all supported simple time signatures
+testTimesig3.xml         the more difficult time signatures
+testTremolo.xml          tremolo
+testVoicePiano1.xml      score with both a voice and a piano part
+testVolta1.xml           simple (one-measure) volta's
+testWedge1.xml           crescendo and diminuendo wedges
+testWords1.xml           the "words" direction
+test98.xml               9/8 time signature with dottet rests
+
+-------------------------------------------------
+      MuseData
+      http://www.musedata.org
+-------------------------------------------------
+
+bach-1046-1.md          MuseData import testfile
+teleman.md
+mozart-k581.md
+
+-------------------------------------------------
+      Lilypond
+-------------------------------------------------
+
+l1.ly - l7.ly           simple notes
+
+-------------------------------------------------
+      Band in a Box
+-------------------------------------------------
+
+chords1.SGU             list of bb chords
+

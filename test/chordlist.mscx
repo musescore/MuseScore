@@ -1,0 +1,2325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.11">
+  <Mag>1.00487</Mag>
+  <xoff>0.211667</xoff>
+  <yoff>0.211667</yoff>
+  <Spatium>1.76389</Spatium>
+  <Division>480</Division>
+  <Style>
+    <akkoladeDistance>5.5</akkoladeDistance>
+    <systemDistance>9.2</systemDistance>
+    <frameSystemDistance>7</frameSystemDistance>
+    <bracketDistance>0.3</bracketDistance>
+    <minNoteDistance>0.5</minNoteDistance>
+    <measureSpacing>1.3</measureSpacing>
+    <ledgerLineWidth>0.08</ledgerLineWidth>
+    <dotNoteDistance>0.5</dotNoteDistance>
+    <pageFillLimit>0.7</pageFillLimit>
+    <lastSystemFillLimit>0</lastSystemFillLimit>
+    <smallNoteMag>0.7</smallNoteMag>
+    <graceNoteMag>0.7</graceNoteMag>
+    <smallStaffMag>0.7</smallStaffMag>
+    <genClef>0</genClef>
+    <genKeysig>0</genKeysig>
+    <chordDescriptionFile>jazzchords.xml</chordDescriptionFile>
+    <gateTime>70</gateTime>
+    <staccatoGateTime>40</staccatoGateTime>
+    <slurGateTime>90</slurGateTime>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="both">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="2"/>
+      </Staff>
+    <trackName>Violin</trackName>
+    <Instrument>
+      <Channel name="normal">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="40"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="60"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <VBox>
+      <height>6.4</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      <Text>
+        <subtype>Title</subtype>
+        <style>2</style>
+        <text>Chord List</text>
+        </Text>
+      </VBox>
+    <Measure number="1">
+      <Harmony>
+        <root>14</root>
+        <extension>2</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.108" y="8.39999"/>
+        <style>23</style>
+        <text>2:Maj</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Harmony>
+        <root>14</root>
+        <extension>3</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>3:5b</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Harmony>
+        <root>14</root>
+        <extension>4</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.096" y="8.39999"/>
+        <style>23</style>
+        <text>4:aug</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Harmony>
+        <root>14</root>
+        <extension>5</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>5:6</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Harmony>
+        <root>14</root>
+        <extension>6</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>6:Maj7</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Harmony>
+        <root>14</root>
+        <extension>7</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.192" y="8.39999"/>
+        <style>23</style>
+        <text>7:Maj9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>8</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>8:Maj9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Harmony>
+        <root>14</root>
+        <extension>9</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>9:Maj13#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="9">
+      <Harmony>
+        <root>14</root>
+        <extension>10</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>10:Maj13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="10">
+      <Harmony>
+        <root>14</root>
+        <extension>12</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>12:+</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="11">
+      <Harmony>
+        <root>14</root>
+        <extension>13</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>13:Maj7#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="12">
+      <Harmony>
+        <root>14</root>
+        <extension>14</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>14:69</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="13">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>15</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>15:2</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="14">
+      <Harmony>
+        <root>14</root>
+        <extension>16</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>16:m</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="15">
+      <Harmony>
+        <root>14</root>
+        <extension>17</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>17:maug</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="16">
+      <Harmony>
+        <root>14</root>
+        <extension>18</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>18:mMaj7</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="17">
+      <Harmony>
+        <root>14</root>
+        <extension>19</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>19:m7</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="18">
+      <Harmony>
+        <root>14</root>
+        <extension>20</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>20:m9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="19">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>21</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>21:m11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="20">
+      <Harmony>
+        <root>14</root>
+        <extension>22</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>22:m13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="21">
+      <Harmony>
+        <root>14</root>
+        <extension>23</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>23:m6</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="22">
+      <Harmony>
+        <root>14</root>
+        <extension>24</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>24:m#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="23">
+      <Harmony>
+        <root>14</root>
+        <extension>25</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>25:m7#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="24">
+      <Harmony>
+        <root>14</root>
+        <extension>26</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>26:69</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="25">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>28</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>28:Maj7Lyd</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="26">
+      <Harmony>
+        <root>14</root>
+        <extension>29</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.144" y="8.39999"/>
+        <style>23</style>
+        <text>29:Maj7b5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="27">
+      <Harmony>
+        <root>14</root>
+        <extension>32</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>32:m7b5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="28">
+      <Harmony>
+        <root>14</root>
+        <extension>33</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>33:dim</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="29">
+      <Harmony>
+        <root>14</root>
+        <extension>34</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>34:m9b5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="30">
+      <Harmony>
+        <root>14</root>
+        <extension>40</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>40:5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="31">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>56</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>56:7+</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="32">
+      <Harmony>
+        <root>14</root>
+        <extension>57</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>57:9+</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="33">
+      <Harmony>
+        <root>14</root>
+        <extension>58</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>58:13+</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="34">
+      <Harmony>
+        <root>14</root>
+        <extension>59</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>59:(blues)</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="35">
+      <Harmony>
+        <root>14</root>
+        <extension>60</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>60:7(Blues)</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="36">
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>64:7</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="37">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>65</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>65:13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="38">
+      <Harmony>
+        <root>14</root>
+        <extension>66</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>66:7b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="39">
+      <Harmony>
+        <root>14</root>
+        <extension>67</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>67:7#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="40">
+      <Harmony>
+        <root>14</root>
+        <extension>68</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>68:13#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="41">
+      <Harmony>
+        <root>14</root>
+        <extension>69</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>69:7#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="42">
+      <Harmony>
+        <root>14</root>
+        <extension>70</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>70:9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="43">
+      <Harmony>
+        <root>14</root>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>1919</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>80640</tick>
+        <style>23</style>
+        <text>71:9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="44">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>73</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>73:9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="45">
+      <Harmony>
+        <root>14</root>
+        <extension>68</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>74:13#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="46">
+      <Harmony>
+        <root>14</root>
+        <extension>75</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>75:9#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="47">
+      <Harmony>
+        <root>14</root>
+        <extension>77</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>77:13b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="48">
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>78:7b9b13</text>
+        </StaffText>
+      <Harmony>
+        <root>14</root>
+        <extension>78</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="49">
+      <Harmony>
+        <root>14</root>
+        <extension>79</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>79:7b9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="50">
+      <Harmony>
+        <root>14</root>
+        <extension>80</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>94080</tick>
+        <style>23</style>
+        <text>80:13b9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="51">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>81</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>81:7b9#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="52">
+      <Harmony>
+        <root>14</root>
+        <extension>82</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>82:7#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="53">
+      <Harmony>
+        <root>14</root>
+        <extension>83</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>83:13#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="54">
+      <Harmony>
+        <root>14</root>
+        <extension>84</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>84:7#9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="55">
+      <Harmony>
+        <root>14</root>
+        <extension>73</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>85:9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="56">
+      <Harmony>
+        <root>14</root>
+        <extension>86</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <tick>105600</tick>
+        <style>23</style>
+        <text>86:13#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="57">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>87</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>87:7#9#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="58">
+      <Harmony>
+        <root>14</root>
+        <extension>88</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>88:7b5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="59">
+      <Harmony>
+        <root>14</root>
+        <extension>76</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>76:7b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="60">
+      <Harmony>
+        <root>14</root>
+        <extension>89</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>89:13b5</text>
+        </StaffText>
+      <Rest>
+        <offset x="0.358256" y="0"/>
+        </Rest>
+      </Measure>
+    <Measure number="61">
+      <Harmony>
+        <root>14</root>
+        <extension>90</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>90:7b5b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="62">
+      <Harmony>
+        <root>14</root>
+        <extension>91</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>117120</tick>
+        <style>23</style>
+        <text>91:9b5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="63">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>92</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>92:9b5b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="64">
+      <Harmony>
+        <root>14</root>
+        <extension>93</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>93:7b5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="65">
+      <Harmony>
+        <root>14</root>
+        <extension>94</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>94:13b5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="66">
+      <Harmony>
+        <root>14</root>
+        <extension>95</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>95:7b5b9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="67">
+      <Harmony>
+        <root>14</root>
+        <extension>96</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>96:7b5#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="68">
+      <Harmony>
+        <root>14</root>
+        <extension>97</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>128640</tick>
+        <style>23</style>
+        <text>97:13b5#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="69">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>98</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>98:7b5#9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="70">
+      <Harmony>
+        <root>14</root>
+        <extension>99</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>99:7#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="71">
+      <Harmony>
+        <root>14</root>
+        <extension>100</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>100:13#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="72">
+      <Harmony>
+        <root>14</root>
+        <extension>101</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>101:7#5#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="73">
+      <Harmony>
+        <root>14</root>
+        <extension>102</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>102:13#5#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="74">
+      <Harmony>
+        <root>14</root>
+        <extension>103</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>140160</tick>
+        <style>23</style>
+        <text>103:9#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="75">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>104</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>104:9#5#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="76">
+      <Harmony>
+        <root>14</root>
+        <extension>105</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>105:7#5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="77">
+      <Harmony>
+        <root>14</root>
+        <extension>106</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>106:13#5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="78">
+      <Harmony>
+        <root>14</root>
+        <extension>107</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>107:7#5b9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="79">
+      <Harmony>
+        <root>14</root>
+        <extension>108</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>108:13#5b9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="80">
+      <Harmony>
+        <root>14</root>
+        <extension>109</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>151680</tick>
+        <style>23</style>
+        <text>109:7#5#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="81">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>110</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>110:13#5#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="82">
+      <Harmony>
+        <root>14</root>
+        <extension>111</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>111:7#5#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="83">
+      <Harmony>
+        <root>14</root>
+        <extension>110</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>112:13#5#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="84">
+      <Harmony>
+        <root>14</root>
+        <extension>113</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>113:7alt</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="85">
+      <Harmony>
+        <root>14</root>
+        <extension>129</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>129:13sus</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="86">
+      <Harmony>
+        <root>14</root>
+        <extension>132</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>163200</tick>
+        <style>23</style>
+        <text>132:13sus#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="87">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>134</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>134:9sus</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="88">
+      <Harmony>
+        <root>14</root>
+        <extension>135</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>135:9susb13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="89">
+      <Harmony>
+        <root>14</root>
+        <extension>136</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>136:9sus#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="90">
+      <Harmony>
+        <root>14</root>
+        <extension>132</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>13sus#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="91">
+      <Harmony>
+        <root>14</root>
+        <extension>138</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.06" y="8.39999"/>
+        <style>23</style>
+        <text>138:9sus#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="92">
+      <Harmony>
+        <root>14</root>
+        <extension>128</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <tick>174720</tick>
+        <style>23</style>
+        <text>128:7sus</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="93">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>152</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>152:7susb5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="94">
+      <Harmony>
+        <root>14</root>
+        <extension>160</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>160:7susb5#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="95">
+      <Harmony>
+        <root>14</root>
+        <extension>162</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>162:7susb5#9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="96">
+      <Harmony>
+        <root>14</root>
+        <extension>157</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>157:7susb5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="97">
+      <Harmony>
+        <root>14</root>
+        <extension>159</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>159:7susb5b9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="98">
+      <Harmony>
+        <root>14</root>
+        <extension>154</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.06" y="8.39999"/>
+        <tick>186240</tick>
+        <style>23</style>
+        <text>154:7susb5b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="99">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>163</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.0360001" y="8.39999"/>
+        <style>23</style>
+        <text>163:7sus#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="100">
+      <Harmony>
+        <root>14</root>
+        <extension>169</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.144" y="8.39999"/>
+        <style>23</style>
+        <text>169:7sus#5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="101">
+      <Harmony>
+        <root>14</root>
+        <extension>171</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.144" y="8.39999"/>
+        <style>23</style>
+        <text>171:7sus#5b9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="102">
+      <Harmony>
+        <root>14</root>
+        <extension>173</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>173:7sus#5#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="103">
+      <Harmony>
+        <root>14</root>
+        <extension>175</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>175:7sus#5#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="104">
+      <Harmony>
+        <root>14</root>
+        <extension>165</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>197760</tick>
+        <style>23</style>
+        <text>165:7sus#5#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="105">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>140</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>140:7susb9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="106">
+      <Harmony>
+        <root>14</root>
+        <extension>146</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>146:7sus#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="107">
+      <Harmony>
+        <root>14</root>
+        <extension>143</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>143:7susb9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="108">
+      <Harmony>
+        <root>14</root>
+        <extension>145</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>145:7susb9#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="109">
+      <Harmony>
+        <root>14</root>
+        <extension>142</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.405674" y="8.63883"/>
+        <style>23</style>
+        <text>142:7susb9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="110">
+      <Harmony>
+        <root>14</root>
+        <extension>151</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>209280</tick>
+        <style>23</style>
+        <text>151:7sus#9#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="111">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>148</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>148:7sus#9b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="112">
+      <Harmony>
+        <root>14</root>
+        <extension>131</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>131:7sus#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="113">
+      <Harmony>
+        <root>14</root>
+        <extension>133</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>133:7sus#11b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="114">
+      <Harmony>
+        <root>14</root>
+        <extension>130</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>130:7susb13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="115">
+      <Harmony>
+        <root>14</root>
+        <extension>141</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>141:13susb9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="116">
+      <Harmony>
+        <root>14</root>
+        <extension>144</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>220800</tick>
+        <style>23</style>
+        <text>144:13susb9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="117">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>147</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>147:13sus#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="118">
+      <Harmony>
+        <root>14</root>
+        <extension>136</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>149:9sus#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="119">
+      <Harmony>
+        <root>14</root>
+        <extension>150</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>150:13sus#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="120">
+      <Harmony>
+        <root>14</root>
+        <extension>153</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>153:13susb5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="121">
+      <Harmony>
+        <root>14</root>
+        <extension>155</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>155:9susb5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="122">
+      <Harmony>
+        <root>14</root>
+        <extension>156</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.144" y="8.39999"/>
+        <tick>232320</tick>
+        <style>23</style>
+        <text>156:9susb5b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="123">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>158</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>158:13susb5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="124">
+      <Harmony>
+        <root>14</root>
+        <extension>161</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>161:13susb5#9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="125">
+      <Harmony>
+        <root>14</root>
+        <extension>164</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>164:13sus#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="126">
+      <Harmony>
+        <root>14</root>
+        <extension>166</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>166:13sus#5#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="127">
+      <Harmony>
+        <root>14</root>
+        <extension>167</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>167:9sus#5</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="128">
+      <Harmony>
+        <root>14</root>
+        <extension>168</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <tick>243840</tick>
+        <style>23</style>
+        <text>168:9sus#5#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="129">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>170</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>170:13sus#5b9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="130">
+      <Harmony>
+        <root>14</root>
+        <extension>172</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>172:13sus#5b9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="131">
+      <Harmony>
+        <root>14</root>
+        <extension>174</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>174:13sus#5#9#11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="132">
+      <Harmony>
+        <root>14</root>
+        <extension>177</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>177:4</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="133">
+      <Harmony>
+        <root>14</root>
+        <extension>184</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>184:sus</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="134">
+      <Harmony>
+        <root>14</root>
+        <extension>185</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <tick>255360</tick>
+        <style>23</style>
+        <text>185:dim7</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="135">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>186</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>186:sus2</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="136">
+      <Harmony>
+        <root>14</root>
+        <extension>187</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>187:mb3b13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="137">
+      <Harmony>
+        <root>21</root>
+        <extension>65</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>188:#13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="138">
+      <Harmony>
+        <style>24</style>
+        <text>c#11#13</text>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>189:#11#13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="139">
+      <Harmony>
+        <root>14</root>
+        <extension>190</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>190:add#13</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="140">
+      <Harmony>
+        <root>14</root>
+        <extension>191</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        <tick>-7677</tick>
+        </LayoutBreak>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.168" y="8.39999"/>
+        <tick>266880</tick>
+        <style>23</style>
+        <text>191:6add9</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="141">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>192</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>192:sus4</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="142">
+      <Harmony>
+        <root>14</root>
+        <extension>193</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>193:11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="143">
+      <Harmony>
+        <root>14</root>
+        <extension>194</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>194:Maj11</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="144">
+      <Harmony>
+        <root>14</root>
+        <extension>195</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.132" y="8.39999"/>
+        <style>23</style>
+        <text>195:Tristan</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="145">
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.144" y="8.39999"/>
+        <style>23</style>
+        <text>64:7</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="146">
+      <Harmony>
+        <root>14</root>
+        <extension>128</extension>
+        </Harmony>
+      <StaffText>
+        <subtype>Staff</subtype>
+        <offset x="0.12" y="8.39999"/>
+        <style>23</style>
+        <text>128:7sus4</text>
+        </StaffText>
+      <Rest>
+        </Rest>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>

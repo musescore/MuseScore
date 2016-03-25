@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.10">
+  <Mag>0.778083</Mag>
+  <xoff>15.4448</xoff>
+  <yoff>-16.8669</yoff>
+  <Spatium>1.76389</Spatium>
+  <Division>480</Division>
+  <Style>
+    <staffUpperBorder>7</staffUpperBorder>
+    <staffLowerBorder>7</staffLowerBorder>
+    <staffDistance>6.5</staffDistance>
+    <akkoladeDistance>5.5</akkoladeDistance>
+    <systemDistance>9.25</systemDistance>
+    <lyricsDistance>2</lyricsDistance>
+    <lyricsMinBottomDistance>2</lyricsMinBottomDistance>
+    <systemFrameDistance>7</systemFrameDistance>
+    <frameSystemDistance>7</frameSystemDistance>
+    <minMeasureWidth>4</minMeasureWidth>
+    <barWidth>0.16</barWidth>
+    <doubleBarWidth>0.16</doubleBarWidth>
+    <endBarWidth>0.3</endBarWidth>
+    <doubleBarDistance>0.3</doubleBarDistance>
+    <endBarDistance>0.3</endBarDistance>
+    <bracketWidth>0.35</bracketWidth>
+    <bracketDistance>0.3</bracketDistance>
+    <clefLeftMargin>0.5</clefLeftMargin>
+    <keysigLeftMargin>0.5</keysigLeftMargin>
+    <timesigLeftMargin>0.5</timesigLeftMargin>
+    <clefKeyRightMargin>1.75</clefKeyRightMargin>
+    <stemWidth>0.13</stemWidth>
+    <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
+    <minNoteDistance>0.5</minNoteDistance>
+    <measureSpacing>1.3</measureSpacing>
+    <barNoteDistance>1.5</barNoteDistance>
+    <noteBarDistance>1</noteBarDistance>
+    <staffLineWidth>0.08</staffLineWidth>
+    <ledgerLineWidth>0.08</ledgerLineWidth>
+    <akkoladeWidth>1.6</akkoladeWidth>
+    <prefixDistance>0.13</prefixDistance>
+    <prefixNoteDistance>0.22</prefixNoteDistance>
+    <beamWidth>0.48</beamWidth>
+    <beamDistance>0.5</beamDistance>
+    <beamMinLen>1.25</beamMinLen>
+    <beamMinSlope>0.1</beamMinSlope>
+    <beamMaxSlope>0.5</beamMaxSlope>
+    <maxBeamTicks>480</maxBeamTicks>
+    <dotNoteDistance>0.5</dotNoteDistance>
+    <dotRestDistance>0.25</dotRestDistance>
+    <dotDotDistance>0.5</dotDotDistance>
+    <propertyDistanceHead>0.5</propertyDistanceHead>
+    <propertyDistanceStem>0.5</propertyDistanceStem>
+    <propertyDistance>0.25</propertyDistance>
+    <pageFillLimit>0.7</pageFillLimit>
+    <lastSystemFillLimit>0.5</lastSystemFillLimit>
+    <hairpinHeight>1.2</hairpinHeight>
+    <hairpinContHeight>0.5</hairpinContHeight>
+    <hairpinWidth>0.13</hairpinWidth>
+    <showPageNumber>1</showPageNumber>
+    <showPageNumberOne>0</showPageNumberOne>
+    <pageNumberOddEven>1</pageNumberOddEven>
+    <showMeasureNumber>1</showMeasureNumber>
+    <showMeasureNumberOne>0</showMeasureNumberOne>
+    <measureNumberInterval>5</measureNumberInterval>
+    <measureNumberAllStaffs>0</measureNumberAllStaffs>
+    <measureNumberSystem>1</measureNumberSystem>
+    <graceNoteMag>0.7</graceNoteMag>
+    <smallStaffMag>0.7</smallStaffMag>
+    <smallNoteMag>0.7</smallNoteMag>
+    <smallClefMag>0.8</smallClefMag>
+    <genClef>1</genClef>
+    <genKeysig>1</genKeysig>
+    <minEmptyMeasures>2</minEmptyMeasures>
+    <minMMRestWidth>4</minMMRestWidth>
+    <gateTime>70</gateTime>
+    <tenutoGateTime>100</tenutoGateTime>
+    <staccatoGateTime>40</staccatoGateTime>
+    <slurGateTime>90</slurGateTime>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="both">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="2"/>
+      </Staff>
+    <trackName>Guitar</trackName>
+    <Instrument>
+      <Channel name="normal">
+        <program value="24"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="60"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <HairPin>
+    <track>0</track>
+    <tick2>1440</tick2>
+    <diagonal>0</diagonal>
+    <Segment>
+      <off1 x="0.2496" y="-0.0946263"/>
+      <off2 x="0.0564201" y="0"/>
+      </Segment>
+    </HairPin>
+  <Volta>
+    <subtype>1</subtype>
+    <track>0</track>
+    <tick>1920</tick>
+    <tick2>3840</tick2>
+    <diagonal>0</diagonal>
+    <Segment>
+      <off1 x="-0.0585906" y="-0.969"/>
+      <off2 x="0" y="0"/>
+      </Segment>
+    <text>1.</text>
+    <endings>1</endings>
+    </Volta>
+  <Ottava>
+    <endHookHeight>1.5</endHookHeight>
+    <lineWidth>0.15</lineWidth>
+    <lineStyle>1</lineStyle>
+    <lineColor r="0" g="0" b="0"/>
+    <track>0</track>
+    <tick>5760</tick>
+    <tick2>7680</tick2>
+    <diagonal>0</diagonal>
+    <Segment>
+      <off1 x="-2.03587" y="-4.04886"/>
+      <off2 x="0" y="0"/>
+      </Segment>
+    <beginText>
+      <subtype>TextLine</subtype>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">8va</p></body></html>
+        </html-data>
+      </beginText>
+    <continueText>
+      <subtype>TextLine</subtype>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">(8va)</p></body></html>
+        </html-data>
+      </continueText>
+    </Ottava>
+  <Ottava>
+    <endHookHeight>1.5</endHookHeight>
+    <lineWidth>0.15</lineWidth>
+    <lineStyle>1</lineStyle>
+    <lineColor r="0" g="0" b="0"/>
+    <subtype>2</subtype>
+    <track>0</track>
+    <tick>17280</tick>
+    <tick2>20160</tick2>
+    <diagonal>0</diagonal>
+    <Segment>
+      <off1 x="0" y="-2.42083"/>
+      <off2 x="0" y="0"/>
+      </Segment>
+    <Segment>
+      <off1 x="0.141275" y="-3.55103"/>
+      <off2 x="0" y="0"/>
+      </Segment>
+    <beginText>
+      <subtype>TextLine</subtype>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">8vb</p></body></html>
+        </html-data>
+      </beginText>
+    <continueText>
+      <subtype>TextLine</subtype>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">(8vb)</p></body></html>
+        </html-data>
+      </continueText>
+    </Ottava>
+  <Staff id="1">
+    <VBox>
+      <height>10</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      <Text>
+        <subtype>Title</subtype>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-weight:400; font-style:normal;">
+<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:24pt;">Lines</p></body></html>
+          </html-data>
+        </Text>
+      </VBox>
+    <Measure number="1">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      </Measure>
+    <Measure number="2">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="3">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="74" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="4">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="69" tpc="17"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      </Measure>
+    <Measure number="5">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      </Measure>
+    <Measure number="6">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="7">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="8">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="9">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="10">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="11">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="12">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="13">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="14">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="15">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="67" tpc="15"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="72" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="71" tpc="19"/>
+        </Chord>
+      </Measure>
+    <Measure number="16">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="17">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="18">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="19">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="20">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="21">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="22">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="23">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="24">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="25">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="26">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="27">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="28">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="29">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="30">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="31">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="32">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="33">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="34">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    <Measure number="35">
+      <Rest>
+        <ticklen>0</ticklen>
+        </Rest>
+      </Measure>
+    </Staff>
+  <cursorTrack>-1</cursorTrack>
+  </museScore>

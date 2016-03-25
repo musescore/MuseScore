@@ -1,0 +1,13 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+   <qresource>
+      <file alias="/zita1/Rotary.qml">Rotary.qml</file>
+      <file alias="/zita1/eq1sect.png">eq1sect.png</file>
+      <file alias="/zita1/eq2sect.png">eq2sect.png</file>
+      <file alias="/zita1/mixsect.png">mixsect.png</file>
+      <file alias="/zita1/redzita.png">redzita.png</file>
+      <file alias="/zita1/revsect.png">revsect.png</file>
+      </qresource>
+   </RCC>
+
+

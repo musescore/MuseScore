@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# simple standalone iotest for BWW import
+# run in mtest/bww/io directory as "./iotest"
+
+# Linux
+#MSCORE=../../../build.debug/mscore/mscore
+# OS X terminal build
+#MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+
+echo "----------------------------------------------"
+echo "Regression Tests for MuseScore BWW import"
+echo "----------------------------------------------"
+echo
+$MSCORE -v
+echo
+
+
+bww_files=`cat tst_bww_io.cpp | grep "{ bwwIoTest" | awk -F\" '{print $2}' | sort`
+testcount=0
+failures=0
+
+rwtestBww() {
+      echo -n "testing load/save $1.bww";
+      $MSCORE $1.bww -d -o mops.xml &> /dev/null
+      if diff -q $1.xml mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $1.xml mops.xml
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestAllBww() {
+      for f in $bww_files; do
+            rwtestBww $f
+      done
+      }
+
+usage() {
+      echo "usage: $0"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 0 ]; then
+      rwtestAllBww
+else
+      usage
+fi
+
+echo
+echo "$testcount test(s), $failures failure(s)"

@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.11">
+
+<!--
+=====================================================================
+    MuseScore
+    Linux Music Score Editor
+    $Id: mscore.cpp 1850 2009-05-25 07:44:35Z wschweer $
+
+    Copyright (C) 2009 Werner Schweer and others
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+=====================================================================
+    This file describes, how chord symbols are rendered
+    in MuseScore
+=====================================================================
+-->
+
+<!--
+      Part I: font list
+            associate symbols (code points) with names
+      If no font family is given or font family is "default" then the
+      configured text style font family is used.
+-->
+
+  <font id="0">   <!-- use chord name text style font -->
+    <sym class="note" name="a"/>
+    <sym class="note" name="b"/>
+    <sym class="note" name="c"/>
+    <sym class="note" name="d"/>
+    <sym class="note" name="e"/>
+    <sym class="note" name="f"/>
+    <sym class="note" name="g"/>
+    <sym class="note" name="h"/>
+
+  <!-- delete code parameter to render German chords with "es" and "is" -->
+    <sym code="0x266d" class="accidental" name="es"/>
+    <sym code="0x266d" class="accidental" name="s"/>
+    <sym code="0x266f" class="accidental" name="is"/>
+
+    </font>
+
+  <font id="1" family="FreeSerif">
+    <mag>1.2</mag>
+    <sym code="0x266d" name="b"/>   <!-- use symbols for accidentals -->
+    <sym code="0x266f" name="#"/>
+    </font>
+
+
+<!--
+      Part II: chord list
+
+         id       internal chord number
+         render   this is a script which contains render commands
+                  commands:
+                        xxx         draw symbol name xxx
+                        m:x:y       add x:y (point?) to current position
+                        :push
+                        :pop
+                        :n          root or base note
+                        :a          accidental
+-->
+
+  <renderRoot>:n m:0:-1 :a m:.5:1</renderRoot>
+  <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
+
+  <chord id="1">
+    <name></name>
+    <render></render>
+    </chord>
+  <chord id="2">
+    <render>Maj</render>
+    </chord>
+  <chord id="3">
+    <render>5 b</render>
+    </chord>
+  <chord id="4">
+    <render>+</render>
+    </chord>
+  <chord id="5">
+    <render>6</render>
+    </chord>
+  <chord id="6">
+    <render>Maj 7</render>
+    </chord>
+  <chord id="7">
+    <render>Maj 9</render>
+    </chord>
+  <chord id="8">
+    <render>Maj 9 # 11</render>
+    </chord>
+  <chord id="9">
+    <render>Maj 13 # 11</render>
+    </chord>
+  <chord id="10">
+    <render>Maj 13</render>
+    </chord>
+  <chord id="11">
+    <render>Maj 9 (no 3)</render>
+    </chord>
+  <chord id="12">
+    <render>+</render>
+    </chord>
+  <chord id="13">
+    <render>Maj 7 # 5</render>
+    </chord>
+  <chord id="14">
+    <render>69</render>
+    </chord>
+  <chord id="15">
+    <render>2</render>
+    </chord>
+  <chord id="16">
+    <render>m</render>
+    </chord>
+  <chord id="17">
+    <render>m+</render>
+    </chord>
+  <chord id="18">
+    <render>m Maj 7</render>
+    </chord>
+  <chord id="19">
+    <render>m7</render>
+    </chord>
+  <chord id="20">
+    <render>m9</render>
+    </chord>
+  <chord id="21">
+    <render>m11</render>
+    </chord>
+  <chord id="22">
+    <render>m13</render>
+    </chord>
+  <chord id="23">
+    <render>m6</render>
+    </chord>
+  <chord id="24">
+    <render>m # 5</render>
+    </chord>
+  <chord id="25">
+    <render>m 7 # 5</render>
+    </chord>
+  <chord id="26">
+    <render>m69</render>
+    </chord>
+  <chord id="27">
+    <render>Lyd</render>
+    </chord>
+  <chord id="28">
+    <render>Maj 7 Lyd</render>
+    </chord>
+  <chord id="29">
+    <render>Maj 7 b 5</render>
+    </chord>
+  <chord id="32">
+    <render>m7 b 5</render>
+    </chord>
+  <chord id="33">
+    <render>dim</render>
+    </chord>
+  <chord id="34">
+    <render>m9 b 5</render>
+    </chord>
+  <chord id="40">
+    <render>5</render>
+    </chord>
+  <chord id="56">
+    <render>7+</render>
+    </chord>
+  <chord id="57">
+    <render>9+</render>
+    </chord>
+  <chord id="58">
+    <render>13+</render>
+    </chord>
+  <chord id="59">
+    <render>(blues)</render>
+    </chord>
+  <chord id="60">
+    <render>7(blues)</render>
+    </chord>
+  <chord id="64">
+    <render>7</render>
+    </chord>
+  <chord id="65">
+    <render>13</render>
+    </chord>
+  <chord id="66">
+    <render>7 b 13</render>
+    </chord>
+  <chord id="67">
+    <render>7 # 11</render>
+    </chord>
+  <chord id="68">
+    <render>13 # 11</render>
+    </chord>
+  <chord id="69">
+    <render>7 # 11 b 13</render>
+    </chord>
+  <chord id="70">
+    <render>9</render>
+    </chord>
+  <chord id="72">
+    <render>9 b 13</render>
+    </chord>
+  <chord id="73">
+    <render>9 # 11</render>
+    </chord>
+  <chord id="74">
+    <render>13 # 11</render>
+    </chord>
+  <chord id="75">
+    <render>9 # 11 b 13</render>
+    </chord>
+  <chord id="76">
+    <render>7 b 9</render>
+    </chord>
+  <chord id="77">
+    <render>13 b 9</render>
+    </chord>
+  <chord id="78">
+    <render>7 b 9 b 13</render>
+    </chord>
+  <chord id="79">
+    <render>7 b 9 # 11</render>
+    </chord>
+  <chord id="80">
+    <render>13 b 9 # 11</render>
+    </chord>
+  <chord id="81">
+    <render>7 b 9 # 11 b 13</render>
+    </chord>
+  <chord id="82">
+    <render>7 # 9</render>
+    </chord>
+  <chord id="83">
+    <render>13 # 9</render>
+    </chord>
+  <chord id="84">
+    <render>7 # 9 b 13</render>
+    </chord>
+  <chord id="85">
+    <render>9 # 11</render>
+    </chord>
+  <chord id="86">
+    <render>13 # 9 # 11</render>
+    </chord>
+  <chord id="87">
+    <render>7 # 9 # 11 b 13</render>
+    </chord>
+  <chord id="88">
+    <render>7 b 5</render>
+    </chord>
+  <chord id="89">
+    <render>13 b 5</render>
+    </chord>
+  <chord id="90">
+    <render>7 b 5 b 13</render>
+    </chord>
+  <chord id="91">
+    <render>9 b 5</render>
+    </chord>
+  <chord id="92">
+    <render>9 b 5 b 13</render>
+    </chord>
+  <chord id="93">
+    <render>7 b 5 b 9</render>
+    </chord>
+  <chord id="94">
+    <render>13 b 5 b 9</render>
+    </chord>
+  <chord id="95">
+    <render>7 b 5 b 9 b 13</render>
+    </chord>
+  <chord id="96">
+    <render>7 b 5 # 9</render>
+    </chord>
+  <chord id="97">
+    <render>13 b 5 # 9</render>
+    </chord>
+  <chord id="98">
+    <render>7 b 5 # 9 b 13</render>
+    </chord>
+  <chord id="99">
+    <render>7 # 5</render>
+    </chord>
+  <chord id="100">
+    <render>13 # 5</render>
+    </chord>
+  <chord id="101">
+    <render>7 # 5 # 11</render>
+    </chord>
+  <chord id="102">
+    <render>13 # 5 # 11</render>
+    </chord>
+  <chord id="103">
+    <render>9 # 5</render>
+    </chord>
+  <chord id="104">
+    <render>9 # 5 # 11</render>
+    </chord>
+  <chord id="105">
+    <render>7 # 5 b 9</render>
+    </chord>
+  <chord id="106">
+    <render>13 # 5 b 9</render>
+    </chord>
+  <chord id="107">
+    <render>7 # 5 b 9 # 11</render>
+    </chord>
+  <chord id="108">
+    <render>13 # 5 b 9 # 11</render>
+    </chord>
+  <chord id="109">
+    <render>7 # 5 # 9</render>
+    </chord>
+  <chord id="110">
+    <render>13 # 5 # 9 # 11</render>
+    </chord>
+  <chord id="111">
+    <render>7 # 5 # 9 # 11</render>
+    </chord>
+  <chord id="112">
+    <render>13 # 5 # 9 # 11</render>
+    </chord>
+  <chord id="113">
+    <render>7 alt</render>
+    </chord>
+  <chord id="128">
+    <render>7 sus</render>
+    </chord>
+  <chord id="129">
+    <render>13 sus</render>
+    </chord>
+  <chord id="130">
+    <render>7 sus b 13</render>
+    </chord>
+  <chord id="131">
+    <render>7 sus # 11</render>
+    </chord>
+  <chord id="132">
+    <render>13 sus # 11</render>
+    </chord>
+  <chord id="133">
+    <render>7 sus # 11 b 13</render>
+    </chord>
+  <chord id="134">
+    <render>9 sus</render>
+    </chord>
+  <chord id="135">
+    <render>9 sus b 13</render>
+    </chord>
+  <chord id="136">
+    <render>9 sus # 11</render>
+    </chord>
+  <chord id="137">
+    <render>13 sus # 11</render>
+    </chord>
+  <chord id="138">
+    <render>13 sus # 11</render>
+    </chord>
+  <chord id="139">
+    <render>9 sus # 11 b 13</render>
+    </chord>
+  <chord id="140">
+    <render>7 sus b 9</render>
+    </chord>
+  <chord id="141">
+    <render>13 sus b 9</render>
+    </chord>
+  <chord id="142">
+    <render>7 sus b 9 b 13</render>
+    </chord>
+  <chord id="143">
+    <render>7 sus b 9 # 11</render>
+    </chord>
+  <chord id="144">
+    <render>13 sus b 9 # 11</render>
+    </chord>
+  <chord id="145">
+    <render>7 sus b 9 # 11 b 13</render>
+    </chord>
+  <chord id="146">
+    <render>7 sus # 9</render>
+    </chord>
+  <chord id="147">
+    <render>13 sus # 9</render>
+    </chord>
+  <chord id="148">
+    <render>7 sus # 9 b 13</render>
+    </chord>
+  <chord id="149">
+    <render>9 sus # 11</render>
+    </chord>
+  <chord id="150">
+    <render>13 sus # 9 # 11</render>
+    </chord>
+  <chord id="151">
+    <render>7 sus # 9 # 11 b 13</render>
+    </chord>
+  <chord id="152">
+    <render>7 sus b 5</render>
+    </chord>
+  <chord id="153">
+    <render>13 sus b 5</render>
+    </chord>
+  <chord id="154">
+    <render>7 sus b 5 b 13</render>
+    </chord>
+  <chord id="155">
+    <render>9 sus b 5</render>
+    </chord>
+  <chord id="156">
+    <render>9 sus b 5 b 13</render>
+    </chord>
+  <chord id="157">
+    <render>7 sus b 5 b 9</render>
+    </chord>
+  <chord id="158">
+    <render>13 sus b 5 b 9</render>
+    </chord>
+  <chord id="159">
+    <render>7 sus b 5 b 9 b 13</render>
+    </chord>
+  <chord id="160">
+    <render>7 sus b 5 # 9</render>
+    </chord>
+  <chord id="161">
+    <render>13 sus b 5 # 9</render>
+    </chord>
+  <chord id="162">
+    <render>7 sus b 5 # 9 b 13</render>
+    </chord>
+  <chord id="163">
+    <render>7 sus # 5</render>
+    </chord>
+  <chord id="164">
+    <render>13 sus # 5</render>
+    </chord>
+  <chord id="165">
+    <render>7 sus # 5 # 11</render>
+    </chord>
+  <chord id="166">
+    <render>13 sus # 5 # 11</render>
+    </chord>
+  <chord id="167">
+    <render>9 sus # 5</render>
+    </chord>
+  <chord id="168">
+    <render>9 sus # 5 # 11</render>
+    </chord>
+  <chord id="169">
+    <render>7 sus # 5 b 9</render>
+    </chord>
+  <chord id="170">
+    <render>13 sus # 5 b 9</render>
+    </chord>
+  <chord id="171">
+    <render>7 sus # 5 b 9 # 11</render>
+    </chord>
+  <chord id="172">
+    <render>13 sus # 5 b 9 # 11</render>
+    </chord>
+  <chord id="173">
+    <render>7 sus # 5 # 9</render>
+    </chord>
+  <chord id="174">
+    <render>13 sus # 5 # 9 # 11</render>
+    </chord>
+  <chord id="175">
+    <render>7 sus # 5 # 9 # 11</render>
+    </chord>
+  <chord id="176">
+    <render>13 sus # 5 # 9 # 11</render>
+    </chord>
+  <chord id="177">
+    <render>4</render>
+    </chord>
+  <chord id="184">
+    <render>sus</render>
+    </chord>
+  <chord id="185">
+    <render>dim 7</render>
+    </chord>
+  <chord id="186">
+    <render>sus 2</render>
+    </chord>
+  <chord id="187">
+    <render>m add b 13</render>
+    </chord>
+  <chord id="188">
+    <render># 13</render>
+    </chord>
+  <chord id="189">
+    <render>add # 11 # 13</render>
+    </chord>
+  <chord id="190">
+    <render>add # 13</render>
+    </chord>
+  <chord id="191">
+    <render>6 add 9</render>
+    </chord>
+  <chord id="192">
+    <render>sus 4</render>
+    </chord>
+  <chord id="193">
+    <render>11</render>
+    </chord>
+  <chord id="194">
+    <render>Maj 11</render>
+    </chord>
+  <chord id="195">
+    <render>Tristan</render>
+    </chord>
+  <chord id="196">
+    <render>m 7 add 11</render>
+    </chord>
+  <chord id="197">
+    <render>Maj 7 add 13</render>
+    </chord>
+  <chord id="198">
+    <render>m add 9</render>
+    </chord>
+  <chord id="199">
+    <render>m 9 Maj 7</render>
+    </chord>
+  <chord id="200">
+    <render>5</render>
+    </chord>
+  <chord id="201">
+    <render>m 11 b 5</render>
+    </chord>
+  <chord id="202">
+    <render>dim 7 add # 7</render>
+    </chord>
+  <chord id="203">
+    <render># 5 9</render>
+    </chord>
+  <chord id="204">
+    <render>omit 5</render>
+    </chord>
+  <chord id="205">
+    <render>aug 7</render>
+    </chord>
+  <chord id="206">
+    <render>aug 9</render>
+    </chord>
+  <chord id="207">
+    <render>aug 13</render>
+    </chord>
+  <chord id="210">
+    <render>Maj 7 # 11</render>
+    </chord>
+  <chord id="211">
+    <render>Maj 9 # 5</render>
+    </chord>
+  <chord id="212">
+    <render>Maj 7 # 9</render>
+    </chord>
+  <chord id="213">
+    <render>add 2</render>
+    </chord>
+  <chord id="214">
+    <render>add 9</render>
+    </chord>
+  <chord id="215">
+    <render>sus b 9 </render>
+    </chord>
+  <chord id="216">
+    <render>Maj 7 sus</render>
+    </chord>
+  <chord id="217">
+    <render>Maj 9 sus</render>
+    </chord>
+  <chord id="220">
+    <render>m 7 b 9</render>
+    </chord>
+  <chord id="221">
+    <render>m 7 b 13</render>
+    </chord>
+  <chord id="222">
+    <render>Phryg</render>
+    </chord>
+  <chord id="223">
+    <render>m add 2 </render>
+    </chord>
+  <chord id="230">
+    <render>7 b 9 # 9</render>
+    </chord>
+  <chord id="240">
+    <render>sus # 4</render>
+    </chord>
+  <chord id="241">
+    <render>Maj 7 b 13</render>
+    </chord>
+
+  </museScore>

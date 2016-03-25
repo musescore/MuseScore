@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/transpose/undoTranspose01-test.mscx undoTranspose01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/transpose/undoTranspose02-test.mscx undoTranspose02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/transpose/undoDiatonicTranspose01-test.mscx undoDiatonicTranspose01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/transpose/undoDiatonicTranspose02-test.mscx undoDiatonicTranspose02-ref.mscx
+
+

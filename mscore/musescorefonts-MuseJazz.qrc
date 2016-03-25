@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>
+	    </qresource>
+</RCC>

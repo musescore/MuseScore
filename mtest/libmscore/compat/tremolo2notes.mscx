@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>1.3</programVersion>
+  <programRevision> 5701</programRevision>
+  <Spatium>1.764</Spatium>
+  <Division>480</Division>
+  <Style>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="even">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-margins type="odd">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-offset>0</page-offset>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <Instrument>
+      <minPitchP>59</minPitchP>
+      <maxPitchP>98</maxPitchP>
+      <minPitchA>60</minPitchA>
+      <maxPitchA>93</maxPitchA>
+      <trackName>Flute</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="73"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <tick>960</tick>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Tremolo>
+          <subtype>3</subtype>
+          </Tremolo>
+        </Chord>
+      <BarLine>
+        <tick>1920</tick>
+        </BarLine>
+      </Measure>
+    <Measure number="2">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <tick>2880</tick>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Tremolo>
+          <subtype>4</subtype>
+          </Tremolo>
+        </Chord>
+      <BarLine>
+        <tick>3840</tick>
+        </BarLine>
+      </Measure>
+    <Measure number="3">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <tick>4800</tick>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Tremolo>
+          <subtype>5</subtype>
+          </Tremolo>
+        </Chord>
+      <BarLine>
+        <subtype>5</subtype>
+        <tick>5760</tick>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>
