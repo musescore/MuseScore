@@ -44,8 +44,12 @@ LoginDialog::LoginDialog(LoginManager* loginManager)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       _loginManager = loginManager;
-      createAccountLabel->setText(tr("<a href=\"%1\">Create an account</a>").arg("https://musescore.com/user/register"));
-      forgotPasswordLabel->setText(tr("<a href=\"%1\">Forgot password?</a>").arg("https://musescore.com/user/password"));
+      createAccountLabel->setText(tr("%1Create an account%2")
+                                  .arg("<a href=\"https://musescore.com/user/register\">")
+                                  .arg("</a>"));
+      forgotPasswordLabel->setText(tr("%1Forgot password?%2")
+                                   .arg("<a href=\"https://musescore.com/user/password\">")
+                                   .arg("</a>"));
       connect(_loginManager, SIGNAL(loginSuccess()), this, SLOT(onLoginSuccess()));
       connect(_loginManager, SIGNAL(loginError(const QString&)), this, SLOT(onLoginError(const QString&)));
       }

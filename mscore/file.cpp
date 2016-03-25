@@ -176,15 +176,16 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             case Score::FileError::FILE_NO_ROOTFILE:
                   break;
             case Score::FileError::FILE_TOO_OLD:
-                  msg += QObject::tr("It was last saved with version 0.9.5 or older.<br>"
-                         "You can convert this score by opening and then saving with"
-                         " MuseScore version 1.x</a>");
+                  msg += QObject::tr("It was last saved with version 0.9.5 or older.\n"
+                                     "You can convert this score by opening and then\n"
+                                     "saving with MuseScore version 1.x");
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_TOO_NEW:
-                  msg += QObject::tr("This score was saved using a newer version of MuseScore.<br>\n"
-                         "Visit the <a href=\"http://musescore.org\">MuseScore website</a>"
-                         " to obtain the latest version.");
+                  msg += QObject::tr("This score was saved using a newer version of MuseScore.\n"
+                                     "Visit the %1MuseScore website%2 to obtain the latest version.")
+                              .arg("<a href=\"http://musescore.org\">")
+                              .arg("</a>");
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_NOT_FOUND:
@@ -208,7 +209,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             }
       QMessageBox msgBox;
       msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
-      msgBox.setText(msg);
+      msgBox.setText(msg.replace("\n", "<br/>"));
       msgBox.setDetailedText(detailedMsg);
       msgBox.setTextFormat(Qt::RichText);
       if (canIgnore && ask)  {

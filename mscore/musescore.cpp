@@ -2936,13 +2936,24 @@ AboutBoxDialog::AboutBoxDialog()
             ":/data/musescore-logo-transbg-m.png" : ":/data/musescore_logo_full.png"));
 
       if (MuseScore::unstable())
-            versionLabel->setText(tr("Unstable Prerelease for Version: ") + VERSION);
+            versionLabel->setText(tr("Unstable Prerelease for Version: %1").arg(VERSION));
       else
-            versionLabel->setText(tr("Version: ") + VERSION);
+            versionLabel->setText(tr("Version: %1").arg(VERSION));
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
+
+      copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>")
+                              .arg(tr(   "Visit %1www.musescore.org%2 for new versions and more information.\n"
+                                         "Support MuseScore with your %3donation%4.\n\n"
+                                         "Copyright &copy; 1999-2016 Werner Schweer and Others.\n"
+                                         "Published under the GNU General Public License.")
+                                   .arg("<a href=\"http://www.musescore.org/\">")
+                                   .arg("</a>")
+                                   .arg("<a href=\"http://www.musescore.org/donate\">")
+                                   .arg("</a>")
+                                   .replace("\n","<br/>")));
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
       }
 
@@ -2964,6 +2975,13 @@ AboutMusicXMLBoxDialog::AboutMusicXMLBoxDialog()
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      label->setText(QString("<span style=\"font-size:10pt;\">%1<br/></span>")
+                     .arg(tr(   "MusicXML is an open file format for exchanging digital sheet music,\n"
+                                "supported by many applications. MusicXML is copyright &copy; MakeMusic, Inc.\n"
+                                "All rights reserved. For more information, see: %1MusicXML.com%2.")
+                          .arg("<a href=\"http://www.musicxml.com\">")
+                          .arg("</a>")
+                          .replace("\n","<br/>")));
       }
 
 //---------------------------------------------------------
