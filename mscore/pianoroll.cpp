@@ -206,10 +206,12 @@ PianorollEditor::PianorollEditor(QWidget* parent)
             }
 
       QActionGroup* ag = new QActionGroup(this);
-      QAction* a = new QAction(this);
-      a->setData("delete");
-      a->setShortcut(Qt::Key_Delete);
-      ag->addAction(a);
+      ag->addAction(getAction("delete"));
+      ag->addAction(getAction("pitch-up"));
+      ag->addAction(getAction("pitch-down"));
+      ag->addAction(getAction("pitch-up-octave"));
+      ag->addAction(getAction("pitch-down-octave"));
+
       addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
       setXpos(0);
@@ -510,16 +512,13 @@ void PianorollEditor::moveLocator(int i, const Pos& pos)
 void PianorollEditor::cmd(QAction* a)
       {
       score()->startCmd();
-      if (a->data() == "delete") {
-            QList<QGraphicsItem*> items = gv->items();
-            foreach(QGraphicsItem* item, items) {
-                  if (item->type() == PianoItemType) {
-                        Note* note = static_cast<PianoItem*>(item)->note();
-                        score()->deleteItem(note);
-                        }
-                  }
-            }
 
+      if (a->data() == "delete") {
+            _score->cmdDeleteSelection();
+            }
+      else {
+            _score->cmd(a);
+            }
       gv->setStaff(staff, locator);
       score()->endCmd();
       }
