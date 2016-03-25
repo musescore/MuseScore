@@ -93,8 +93,6 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
             _tickStart = i->first;
 #endif
 
-      // hide string data controls if instrument has no strings
-      stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
       // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
       invisible->setChecked(staff->invisible());
@@ -193,7 +191,9 @@ void EditStaff::updateInstrument()
       minPitchP->setText(midiCodeToStr(_minPitchP));
       maxPitchP->setText(midiCodeToStr(_maxPitchP));
 
+      // only show string data controls if instrument has strings
       int numStr = instrument.stringData() ? instrument.stringData()->strings() : 0;
+      stringDataFrame->setVisible(numStr > 0);
       numOfStrings->setText(QString::number(numStr));
       }
 
