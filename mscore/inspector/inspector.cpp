@@ -54,6 +54,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/bend.h"
 #include "libmscore/tremolobar.h"
+#include "libmscore/slur.h"
 
 namespace Ms {
 
@@ -902,6 +903,35 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       {
       e.setupUi(addWidget());
       s.setupUi(addWidget());
+
+      Inspector* inspector = static_cast<Inspector*>(parent);
+
+      if (inspector != nullptr) {
+            Element* e = inspector->element();
+            bool sameType = true;
+            int subtype = static_cast<int>(Element::Type::INVALID);
+
+            if (e->type() == Element::Type::SLUR_SEGMENT)
+                  subtype = static_cast<int>(static_cast<SlurSegment*>(e)->spanner()->type());
+
+            for (const auto& ee : inspector->el()) {
+                  if (ee->type() != Element::Type::SLUR_SEGMENT) {
+                        sameType = false;
+                        break;
+                        }
+                  if (static_cast<int>(static_cast<SlurSegment*>(ee)->spanner()->type()) != subtype) {
+                        sameType = false;
+                        break;
+                        }
+                  }
+
+            if (!sameType)
+                  s.elementName->setText("Slur/Tie");
+            else if (subtype == static_cast<int>(Element::Type::SLUR))
+                  s.elementName->setText(tr("Slur"));
+            else if (subtype == static_cast<int>(Element::Type::TIE))
+                  s.elementName->setText(tr("Tie"));
+            }
 
       iList = {
             { P_ID::COLOR,           0, 0, e.color,         e.resetColor         },
