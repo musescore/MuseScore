@@ -681,7 +681,7 @@ static QString decodeEntities( const QString& src )
  Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
  */
 
-static QString nextPartOfFormattedString(QXmlStreamReader& e)
+static QString nextPartOfFormattedString(QXmlStreamReader& e, bool convert2Syms = true)
       {
       //QString lang       = e.attribute(QString("xml:lang"), "it");
       QString fontWeight = e.attributes().value("font-weight").toString();
@@ -694,7 +694,11 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
       QString txt        = e.readElementText();
       // replace HTML entities
       txt = decodeEntities(txt);
-      QString syms       = text2syms(txt);
+      QString syms;
+      if (convert2Syms)
+        syms             = text2syms(txt);
+      else
+        syms             = txt;
 
       QString importedtext;
 
@@ -5230,7 +5234,8 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                    formattedText += " ";
                    else
                    */
-                  formattedText += nextPartOfFormattedString(_e);
+                  // Don't convert text to musical symbols
+                  formattedText += nextPartOfFormattedString(_e, false);
                   }
             else if (_e.name() == "extend") {
                   hasExtend = true;
@@ -5251,7 +5256,8 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                         qDebug("unknown syllabic %s", qPrintable(syll));  // TODO
                   }
             else if (_e.name() == "text")
-                  formattedText += nextPartOfFormattedString(_e);
+                  // Don't convert text to musical symbols
+                  formattedText += nextPartOfFormattedString(_e, false);
             else
                   skipLogCurrElem();
             }
