@@ -89,7 +89,7 @@ class MasterSynthesizer;
 class Driver;
 class Seq;
 class ImportMidiPanel;
-class Startcenter;
+//class Startcenter;
 class HelpBrowser;
 
 struct PluginDescription;
@@ -319,7 +319,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool _fullscreen                   { false };
       QList<LanguageItem> _languages;
 
-      Startcenter* startcenter             { 0 };
+//      Startcenter* startcenter             { 0 };
       QWidget* loginDialog                 { 0 };
       UploadScoreDialog* uploadScoreDialog { 0 };
       LoginManager* _loginManager        { 0 };
@@ -680,7 +680,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
 
-      Q_INVOKABLE void showStartcenter(bool);
+//      Q_INVOKABLE void showStartcenter(bool);
       void showPlayPanel(bool);
 
       QFileInfoList recentScores() const;

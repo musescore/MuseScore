@@ -413,9 +413,9 @@ if (MINGW)
       ${CROSS}/lib/portaudio.dll
       ${CROSS}/opt/bin/libeay32.dll
       ${CROSS}/opt/bin/ssleay32.dll
-      ${CROSSQT}/bin/icudt53.dll
-      ${CROSSQT}/bin/icuin53.dll
-      ${CROSSQT}/bin/icuuc53.dll
+      ${CROSSQT}/bin/icudt54.dll
+      ${CROSSQT}/bin/icuin54.dll
+      ${CROSSQT}/bin/icuuc54.dll
       ${CROSSQT}/bin/Qt5CLucene.dll
       ${CROSSQT}/bin/Qt5Core.dll
       ${CROSSQT}/bin/Qt5Gui.dll
@@ -432,8 +432,6 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5Svg.dll
       ${CROSSQT}/bin/Qt5WebChannel.dll
-      ${CROSSQT}/bin/Qt5WebKit.dll
-      ${CROSSQT}/bin/Qt5WebKitWidgets.dll
       ${CROSSQT}/bin/Qt5Widgets.dll
       ${CROSSQT}/bin/Qt5Xml.dll
       ${CROSSQT}/bin/Qt5XmlPatterns.dll
@@ -446,7 +444,6 @@ if (MINGW)
 
     install(FILES
       ${CROSSQT}/plugins/imageformats/qjpeg.dll
-      ${CROSSQT}/plugins/imageformats/qmng.dll
       ${CROSSQT}/plugins/imageformats/qsvg.dll
       ${CROSSQT}/plugins/imageformats/qtiff.dll
       DESTINATION bin/imageformats)

@@ -1168,8 +1168,10 @@ void MuseScore::selectScore(QAction* action)
       if (!a.isEmpty()) {
             if (a == "clear-recent") {
                   _recentScores.clear();
+#if 0
                   if (startcenter)
                         startcenter->updateRecentScores();
+#endif
                   }
             else {
                   Score* score = readScore(a);
@@ -1261,8 +1263,10 @@ void MuseScore::addRecentScore(Score* score)
       addRecentScore(path);
       path = score->fileInfo()->absoluteFilePath();
       addRecentScore(path);
+#if 0
       if (startcenter)
             startcenter->updateRecentScores();
+#endif
       }
 
 void MuseScore::addRecentScore(const QString& scorePath)
@@ -2295,17 +2299,23 @@ static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext &conte
 
      switch (type) {
      case QtDebugMsg:
-         cerr << "Debug: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         cerr << "Debug: "    << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtWarningMsg:
-         cerr << "Warning: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         cerr << "Warning: "  << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
-     case QtCriticalMsg:
+     case QtCriticalMsg:  // same as QtSystemMsg
          cerr << "Critical: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtFatalMsg: // set your breakpoint here, if you want to catch the abort
-         cerr << "Fatal: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         cerr << "Fatal: "    << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          abort();
+         break;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
+     case QtInfoMsg:
+         cerr << "Info: "     << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         break;
+#endif
          }
      }
 #endif
@@ -2821,8 +2831,10 @@ void MuseScore::writeSettings()
             pianorollEditor->writeSettings();
       if (drumrollEditor)
             drumrollEditor->writeSettings();
+#if 0
       if (startcenter)
             startcenter->writeSettings(settings);
+#endif
       }
 
 //---------------------------------------------------------
@@ -3163,8 +3175,10 @@ void MuseScore::handleMessage(const QString& message)
       {
       if (message.isEmpty())
             return;
+#if 0
       if (startcenter)
             showStartcenter(false);
+#endif
       ((QtSingleApplication*)(qApp))->activateWindow();
       Score* score = readScore(message);
       if (score) {
@@ -4168,8 +4182,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             undoRedo(false);
       else if (cmd == "toggle-palette")
             showPalette(a->isChecked());
+#if 0
       else if (cmd == "startcenter")
             showStartcenter(a->isChecked());
+#endif
       else if (cmd == "inspector")
             showInspector(a->isChecked());
 #ifdef OMR
@@ -5148,8 +5164,10 @@ int main(int argc, char* av[])
             timer->start(500);
 #else
 
+#if 0
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
+#endif
 #endif
             }
 
