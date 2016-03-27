@@ -292,7 +292,7 @@ class ExportMusicXml {
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
-      void barlineRight(Measure* m);
+      void barlineRight(Measure* m, int strack);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(int t);
@@ -1445,13 +1445,18 @@ void ExportMusicXml::barlineLeft(Measure* m)
 //   barlineRight -- search for and handle barline right
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineRight(Measure* m)
+void ExportMusicXml::barlineRight(Measure* m, int strack)
       {
       const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
       const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
       BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
       bool visible = m->endBarLineVisible();
+      Segment* lastSegment= m->last();
+      Element* el = lastSegment->element(strack);
+      BarLine* bl =  static_cast<BarLine*>(el);
+      if(bl->customSubtype())
+            bst= bl->barLineType();
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
       if (!needBarStyle && !volta)
@@ -4839,62 +4844,6 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
                   // TODO: print barline only if middle
                   // if (el->subtype() != BarLineType::START_REPEAT)
                   //       bar((BarLine*) el);
-
-                  if(el->parent()==m->last()){
-                      const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
-                      const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
-                      // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
-                      BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
-                      BarLine* bl =  static_cast<BarLine*>(el);
-                      if(bl->customSubtype())
-                          bst= bl->barLineType();
-                      bool visible = m->endBarLineVisible();
-                      bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
-                      Measure* temp= const_cast<Measure*>(m);
-                      Volta* volta = findVolta(temp, false);
-
-                      if (!needBarStyle && !volta)
-                            break;
-                      xml.stag(QString("barline location=\"right\""));
-                      if (needBarStyle) {
-                            if (!visible) {
-                                  xml.tag("bar-style", QString("none"));
-                                  } else {
-                                  switch (bst) {
-                                        case BarLineType::DOUBLE:
-                                              xml.tag("bar-style", QString("light-light"));
-                                              break;
-                                        case BarLineType::END_REPEAT:
-                                              xml.tag("bar-style", QString("light-heavy"));
-                                              break;
-                                        case BarLineType::BROKEN:
-                                              xml.tag("bar-style", QString("dashed"));
-                                              break;
-                                        case BarLineType::DOTTED:
-                                              xml.tag("bar-style", QString("dotted"));
-                                              break;
-                                        case BarLineType::END:
-                                        case BarLineType::END_START_REPEAT:
-                                              xml.tag("bar-style", QString("light-heavy"));
-                                              break;
-                                        default:
-                                              qDebug("ExportMusicXml::bar(): bar subtype %d not supported", int(bst));
-                                              break;
-                                        }
-                                  }
-                            }
-                      if (volta)
-                            ending(xml, volta, false);
-                      if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
-                            {
-                            if (m->repeatCount() > 2) {
-                                  xml.tagE(QString("repeat direction=\"backward\" times=\"%1\"").arg(m->repeatCount()));
-                                  } else {
-                                  xml.tagE("repeat direction=\"backward\"");
-                                  }
-                            }
-                      xml.etag();
-                  }
                   break;
             case Element::Type::BREATH:
                   // ignore, already exported as note articulation
@@ -5158,7 +5107,6 @@ void ExportMusicXml::write(QIODevice* dev)
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
 
-
                               // write element el if necessary
                               writeElement(el, m, sstaff, part->instrument()->useDrumset());
 
@@ -5180,8 +5128,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         repeatAtMeasureStop(xml, m, strack, etrack, strack);
                   // note: don't use "m->repeatFlags() & Repeat::END" here, because more
                   // barline types need to be handled besides repeat end ("light-heavy")
-                  //barlineRight(m);
-
+                  barlineRight(m,strack);
                   xml.etag();
                   }
             staffCount += staves;
@@ -5449,5 +5396,3 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       }
 
 }
-
-
