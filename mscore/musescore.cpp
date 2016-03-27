@@ -3988,6 +3988,31 @@ void MuseScore::endCmd()
             updateUndoRedo();
             dirtyChanged(cs);
             Element* e = cs->selection().element();
+
+            // For multiple notes selected check if they all have same pitch and tuning
+            bool samePitch = true;
+            int pitch = 0;
+            float tuning = 0;
+            for (int i = 0; i < cs->selection().elements().size(); ++i) {
+                  const auto& element = cs->selection().elements()[i];
+                  if (element->type() != Element::Type::NOTE) {
+                        samePitch = false;
+                        break;
+                        }
+
+                  const auto& note = static_cast<Note*>(element);
+                  if (i == 0) {
+                        pitch = note->ppitch();
+                        tuning = note->tuning();
+                        }
+                  else if (note->ppitch() != pitch || fabs(tuning - note->tuning()) > 0.01) {
+                        samePitch = false;
+                        break;
+                        }
+                  }
+            if (samePitch && !cs->selection().elements().empty())
+                  e = cs->selection().elements()[0];
+
             if (e && (cs->playNote() || cs->playChord())) {
                   if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == Element::Type::NOTE)
                         play(static_cast<Note*>(e)->chord());
