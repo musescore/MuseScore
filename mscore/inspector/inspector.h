@@ -41,6 +41,7 @@
 #include "ui_inspector_text.h"
 #include "ui_inspector_fret.h"
 #include "ui_inspector_tremolo.h"
+#include "ui_inspector_caesura.h"
 
 namespace Ms {
 
@@ -374,6 +375,20 @@ class InspectorSlur : public InspectorBase {
 
    public:
       InspectorSlur(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorCaesura
+//---------------------------------------------------------
+
+class InspectorCaesura : public InspectorBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorCaesura c;
+
+   public:
+      InspectorCaesura(QWidget* parent);
       };
 
 //---------------------------------------------------------
