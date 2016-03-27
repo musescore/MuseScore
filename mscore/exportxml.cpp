@@ -292,7 +292,7 @@ class ExportMusicXml {
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
-      void barlineRight(Measure* m);
+      void barlineRight(Measure* m, int strack);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(int t);
@@ -1445,37 +1445,58 @@ void ExportMusicXml::barlineLeft(Measure* m)
 //   barlineRight -- search for and handle barline right
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineRight(Measure* m)
+void ExportMusicXml::barlineRight(Measure* m, int strack)
       {
       const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
+      bool isMMRest = mmR1->isMMRest();
       const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
       BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
       bool visible = m->endBarLineVisible();
+      if (!isMMRest) {
+            Segment* lastSegment = m->last();
+            Element* el = lastSegment->element(strack);
+            if (el && (el->type() == Element::Type::BAR_LINE)) {
+                  BarLine* bl = static_cast<BarLine*>(el);
+                  if(bl && bl->customSubtype())
+                        bst = bl->barLineType();
+                  }
+            }
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
       if (!needBarStyle && !volta)
             return;
-      xml.stag(QString("barline location=\"right\""));
+      bool barlineAttributeSet = false;
+      //xml.stag(QString("barline location=\"right\""));
       if (needBarStyle) {
             if (!visible) {
                   xml.tag("bar-style", QString("none"));
                   } else {
                   switch (bst) {
                         case BarLineType::DOUBLE:
+                              xml.stag(QString("barline location=\"right\""));
+                              barlineAttributeSet = true;
                               xml.tag("bar-style", QString("light-light"));
                               break;
                         case BarLineType::END_REPEAT:
+                              xml.stag(QString("barline location=\"right\""));
+                              barlineAttributeSet = true;
                               xml.tag("bar-style", QString("light-heavy"));
                               break;
                         case BarLineType::BROKEN:
+                              xml.stag(QString("barline location=\"right\""));
+                              barlineAttributeSet = true;
                               xml.tag("bar-style", QString("dashed"));
                               break;
                         case BarLineType::DOTTED:
+                              xml.stag(QString("barline location=\"right\""));
+                              barlineAttributeSet = true;
                               xml.tag("bar-style", QString("dotted"));
                               break;
                         case BarLineType::END:
                         case BarLineType::END_START_REPEAT:
+                              xml.stag(QString("barline location=\"right\""));
+                              barlineAttributeSet = true;
                               xml.tag("bar-style", QString("light-heavy"));
                               break;
                         default:
@@ -1484,8 +1505,13 @@ void ExportMusicXml::barlineRight(Measure* m)
                         }
                   }
             }
-      if (volta)
+      if (volta) {
+            if (barlineAttributeSet == false) {
+                  xml.stag(QString("barline location=\"right\""));
+                  barlineAttributeSet = true;
+                  }
             ending(xml, volta, false);
+            }
       if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
             {
             if (m->repeatCount() > 2) {
@@ -1494,7 +1520,8 @@ void ExportMusicXml::barlineRight(Measure* m)
                   xml.tagE("repeat direction=\"backward\"");
                   }
             }
-      xml.etag();
+      if (barlineAttributeSet == true)
+            xml.etag();
       }
 
 //---------------------------------------------------------
@@ -5123,7 +5150,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         repeatAtMeasureStop(xml, m, strack, etrack, strack);
                   // note: don't use "m->repeatFlags() & Repeat::END" here, because more
                   // barline types need to be handled besides repeat end ("light-heavy")
-                  barlineRight(m);
+                  barlineRight(m, strack);
                   xml.etag();
                   }
             staffCount += staves;
@@ -5391,4 +5418,3 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       }
 
 }
-
