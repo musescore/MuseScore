@@ -1022,7 +1022,14 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       QMenu* popup = new QMenu(this);
       popup->setSeparatorsCollapsible(false);
       QAction* a = popup->addSeparator();
-      a->setText(obj->userName());
+      
+      // Set Slur or Tie according to the selected object
+      if (obj->type() != Element::Type::SLUR_SEGMENT)
+            a->setText(obj->userName());
+      else if (static_cast<SlurSegment*>(obj)->spanner()->type() == Element::Type::SLUR)
+            a->setText(tr("Slur"));
+      else if (static_cast<SlurSegment*>(obj)->spanner()->type() == Element::Type::TIE)
+            a->setText(tr("Tie"));
 
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
