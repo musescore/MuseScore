@@ -54,6 +54,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/bend.h"
 #include "libmscore/tremolobar.h"
+#include "libmscore/breath.h"
 
 namespace Ms {
 
@@ -150,6 +151,7 @@ void Inspector::setElements(const QList<Element*>& l)
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
             else if (_element) {
+                  Breath* breath;
                   switch(_element->type()) {
                         case Element::Type::FBOX:
                         case Element::Type::VBOX:
@@ -255,6 +257,13 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::Type::ARPEGGIO:
                               ie = new InspectorArpeggio(this);
+                              break;
+                        case Element::Type::BREATH:
+                              breath = static_cast<Breath*>(_element);
+                              if (breath->breathType() > 1)
+                                    ie = new InspectorCaesura(this);
+                              else
+                                    ie = new InspectorElement(this);
                               break;
                         default:
                               if (_element->isText()) {
@@ -1178,6 +1187,25 @@ void InspectorBarLine::blockSpanDataSignals(bool val)
       b.spanFrom->blockSignals(val);
       b.spanTo->blockSignals(val);
       b.spanType->blockSignals(val);
+      }
+
+//---------------------------------------------------------
+//   InspectorRest
+//---------------------------------------------------------
+
+InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      c.setupUi(addWidget());
+
+      iList = {
+            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
+            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
+            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+            { P_ID::PAUSE,          0, 0, c.pause,         c.resetPause         }
+            };
+      mapSignals();
       }
 
 }
