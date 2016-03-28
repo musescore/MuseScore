@@ -2149,7 +2149,7 @@ void Chord::layoutTablature()
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
       int   ledgerLines = 0;
-      qreal llY;
+      qreal llY         = 0.0;
 
       int   numOfNotes  = _notes.size();
       qreal minY        = 1000.0;               // just a very large value
