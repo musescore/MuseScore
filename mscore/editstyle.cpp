@@ -319,6 +319,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 #undef CR
       connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
       resize(904, 577); // override designer values
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -327,6 +328,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
 void EditStyle::buttonClicked(QAbstractButton* b)
       {
+      writeSettings();
       switch (buttonBox->standardButton(b)) {
             case QDialogButtonBox::Apply:
                   apply();
@@ -970,5 +972,39 @@ void EditStyle::resetStyleValue(int i)
       setValues();
       }
 
+//---------------------------------------------------------
+//   closeEvent
+//---------------------------------------------------------
+
+void EditStyle::closeEvent( QCloseEvent* )
+      {
+      writeSettings();
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void EditStyle::writeSettings()
+      {
+      QSettings settings( "museScore", "editStyle" );
+      settings.beginGroup( "EditStyle" );
+      settings.setValue( "pos", pos() );
+      settings.setValue( "size", size() );
+      settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void EditStyle::readSettings()
+      {
+      QSettings settings( "museScore", "editStyle" );
+      settings.beginGroup( "EditStyle" );
+      move(settings.value( "pos", pos() ).toPoint());
+      resize(settings.value( "size", size() ).toSize());
+      settings.endGroup();
+      }
 }
 
