@@ -6272,67 +6272,67 @@
                   <drumset>1</drumset>
                   <Drum pitch="52">
                         <head>1</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Rim Shot</name>
                   </Drum>
                   <Drum pitch="50">
                         <head>0</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Battery Snare</name>
                   </Drum>
                   <Drum pitch="48">
                         <head>2</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Buzz</name>
                   </Drum>
                   <Drum pitch="53">
                         <head>1</head>
-                        <line>3</line>
+                        <line>-1</line>
                         <voice>0</voice>
                         <name>Rim Click</name>
                   </Drum>
                   <Drum pitch="55">
                         <head>1</head>
-                        <line>2</line>
+                        <line>-2</line>
                         <voice>0</voice>
                         <name>Stick Click</name>
                   </Drum>
                   <Drum pitch="60">
                         <head>3</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Visual (BS,X-Over,Etc)</name>
                   </Drum>
                   <Drum pitch="57">
                         <head>4</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Stick Shot</name>
                   </Drum>
                   <Drum pitch="59">
                         <head>5</head>
-                        <line>5</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Shell</name>
                   </Drum>
                   <Drum pitch="72">
                         <head>1</head>
-                        <line>1</line>
+                        <line>-3</line>
                         <voice>2</voice>
                         <name>Ride Cymbal</name>
                   </Drum>
                   <Drum pitch="74">
                         <head>6</head>
-                        <line>1</line>
+                        <line>-3</line>
                         <voice>2</voice>
                         <name>Open High Hat</name>
                   </Drum>
                   <Drum pitch="76">
                         <head>1</head>
-                        <line>1</line>
+                        <line>-3</line>
                         <voice>2</voice>
                         <name>Closed High Hat</name>
                   </Drum>
@@ -6596,79 +6596,79 @@
                   <drumset>1</drumset>
                   <Drum pitch="72">
                         <head>0</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Full Crash</name>
                   </Drum>
                   <Drum pitch="74">
                         <head>0</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Half Crash</name>
                   </Drum>
                   <Drum pitch="76">
                         <head>1</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>High Hat</name>
                   </Drum>
                   <Drum pitch="77">
                         <head>2</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Sizzle</name>
                   </Drum>
                   <Drum pitch="79">
                         <head>0</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Crash-Choke</name>
                   </Drum>
                   <Drum pitch="81">
                         <head>7</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Normal Tap</name>
                   </Drum>
                   <Drum pitch="83">
                         <head>7</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Normal Tap-Choke</name>
                   </Drum>
                   <Drum pitch="84">
                         <head>7</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Bell Tap</name>
                   </Drum>
                   <Drum pitch="86">
                         <head>7</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Bell Tap-Choke</name>
                   </Drum>
                   <Drum pitch="88">
                         <head>7</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Muted Tap</name>
                   </Drum>
                   <Drum pitch="89">
                         <head>2</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Smash</name>
                   </Drum>
                   <Drum pitch="91">
                         <head>2</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Zing</name>
                   </Drum>
                   <Drum pitch="93">
                         <head>2</head>
-                        <line>4</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Roll</name>
                   </Drum>
