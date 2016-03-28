@@ -4248,7 +4248,7 @@ void ScoreView::cmdAddSlur()
                   QList<Note*> nl = _score->selection().noteList(track);
                   Note* firstNote = 0;
                   Note* lastNote  = 0;
-                  foreach(Note* n, nl) {
+                  for (Note* n : nl) {
                         if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
                               firstNote = n;
                         if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
@@ -4278,10 +4278,10 @@ void ScoreView::cmdAddSlur()
             QList<Note*> nl = _score->selection().noteList();
             Note* firstNote = 0;
             Note* lastNote  = 0;
-            foreach(Note* n, nl) {
-                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
+            for (Note* n : nl) {
+                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick() || (lastNote && n->chord()->parent() == lastNote->chord()))
                         firstNote = n;
-                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
+                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick() || (firstNote && firstNote->chord()->parent() == n->chord()))
                         lastNote = n;
                   }
             if (!firstNote)
