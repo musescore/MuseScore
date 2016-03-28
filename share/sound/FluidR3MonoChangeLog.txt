@@ -1,3 +1,4 @@
+Version 2.305  Fix Orchestral Drumset Decay/Release Envelopes
 Version 2.304  Fix Orchestral Drumset keymapping issues
 Version 2.303  Apply pitch shift fix to Marching Cymbals
 Version 2.302  Apply pitch shift fix to Marching Snare
