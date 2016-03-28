@@ -292,7 +292,7 @@ class ExportMusicXml {
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
-      void barlineRight(Measure* m);
+      void barlineRight(Measure* m, int strack);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(int t);
@@ -1445,13 +1445,18 @@ void ExportMusicXml::barlineLeft(Measure* m)
 //   barlineRight -- search for and handle barline right
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineRight(Measure* m)
+void ExportMusicXml::barlineRight(Measure* m, int strack)
       {
       const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
       const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
       BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
       bool visible = m->endBarLineVisible();
+      Segment* lastSegment= m->last();
+      Element* el = lastSegment->element(strack);
+      BarLine* bl =  static_cast<BarLine*>(el);
+      if(bl->customSubtype())
+            bst= bl->barLineType();
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
       if (!needBarStyle && !volta)
@@ -5123,7 +5128,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         repeatAtMeasureStop(xml, m, strack, etrack, strack);
                   // note: don't use "m->repeatFlags() & Repeat::END" here, because more
                   // barline types need to be handled besides repeat end ("light-heavy")
-                  barlineRight(m);
+                  barlineRight(m,strack);
                   xml.etag();
                   }
             staffCount += staves;
@@ -5391,4 +5396,3 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       }
 
 }
-
