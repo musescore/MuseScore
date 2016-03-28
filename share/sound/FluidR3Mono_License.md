@@ -1,7 +1,7 @@
 FluidR3Mono_GM.sf3
 ---
 
-Current version: 2.304 12th March 2016
+Current version: 2.305 27th March 2016
 
 Original Stereo version by Frank Wen Copyright © 2000-2002
 
