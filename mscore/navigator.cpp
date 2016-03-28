@@ -44,8 +44,6 @@ void MuseScore::showNavigator(bool visible)
 NScrollArea::NScrollArea(QWidget* w)
    : QScrollArea(w)
       {
-      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       setMinimumHeight(40);
@@ -274,8 +272,14 @@ void Navigator::mouseMoveEvent(QMouseEvent* ev)
       viewRect->setGeometry(r);
 
       emit viewRectMoved(matrix.inverted().mapRect(r));
-      int x = delta.x() > 0 ? r.x() + r.width() : r.x();
-      scrollArea->ensureVisible(x, height()/2, 0, 0);
+      if (MScore::verticalOrientation() && !_previewOnly) {
+            int y = delta.y() > 0 ? r.y() + r.height() : r.y();
+            scrollArea->ensureVisible(width()/2, y, 0, 0);
+            }
+      else {
+            int x = delta.x() > 0 ? r.x() + r.width() : r.x();
+            scrollArea->ensureVisible(x, height()/2, 0, 0);
+            }
       }
 
 //---------------------------------------------------------
@@ -285,7 +289,10 @@ void Navigator::mouseMoveEvent(QMouseEvent* ev)
 void Navigator::setViewRect(const QRectF& _viewRect)
       {
       viewRect->setGeometry(matrix.mapRect(_viewRect).toRect());
-      scrollArea->ensureVisible(viewRect->x(), 0);
+      if (MScore::verticalOrientation() && !_previewOnly)
+            scrollArea->ensureVisible(0, viewRect->y() + viewRect->height() / 2);
+      else
+            scrollArea->ensureVisible(viewRect->x(), 0);
       }
 
 //---------------------------------------------------------
