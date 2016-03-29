@@ -1829,6 +1829,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "instrument-change-text",
+         QT_TRANSLATE_NOOP("action","Instrument Change"),
+         QT_TRANSLATE_NOOP("action","Add instrument change")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "picture",
          QT_TRANSLATE_NOOP("action","Picture"),
          QT_TRANSLATE_NOOP("action","Add picture")
