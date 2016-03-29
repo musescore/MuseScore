@@ -233,6 +233,9 @@ class ZitaReverb : public Effect
       static float _tdiff1 [8];
       static float _tdelay [8];
 
+      int _fragm;
+      int _nsamp;
+
       void prepare(int n);
 
    public:
