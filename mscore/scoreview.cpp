@@ -38,6 +38,7 @@
 #include "libmscore/trill.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/image.h"
+#include "libmscore/instrchange.h"
 #include "libmscore/part.h"
 #include "libmscore/icon.h"
 #include "editdrumset.h"
@@ -2695,6 +2696,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::STAFF);
       else if (cmd == "rehearsalmark-text")
             cmdAddText(TEXT::REHEARSAL_MARK);
+      else if (cmd == "instrument-change-text")
+            cmdAddText(TEXT::INSTRUMENT_CHANGE);
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5306,6 +5309,17 @@ void ScoreView::cmdAddText(TEXT type)
                         s->setTrack(cr->track());
                         s->setTextStyleType(TextStyleType::STAFF);
                         }
+                  s->setParent(cr->segment());
+                  }
+                  break;
+            case TEXT::INSTRUMENT_CHANGE:
+                  {
+                  ChordRest* cr = _score->getSelectedChordRest();
+                  if (!cr)
+                        break;
+                  s = new InstrumentChange(_score);
+                  s->setTrack(cr->track());
+                  s->setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
                   s->setParent(cr->segment());
                   }
                   break;
