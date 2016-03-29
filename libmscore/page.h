@@ -160,8 +160,8 @@ class Page : public Element {
       qreal lm() const;
       qreal rm() const;
 
-      virtual void draw(QPainter*) const;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void draw(QPainter*) const override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       QList<Element*> items(const QRectF& r);
       QList<Element*> items(const QPointF& p);

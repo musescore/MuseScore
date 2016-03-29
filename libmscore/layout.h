@@ -28,6 +28,33 @@ struct Spring {
       Spring(Segment* s, qreal str) : seg(s), stretch(str), fix(s->width()) {}
       };
 
+//---------------------------------------------------------
+//   LayoutContext
+//    temp values used during layout
+//---------------------------------------------------------
+
+struct LayoutContext {
+      bool startWithLongNames  { true };
+      bool firstSystem         { true };
+      int curPage              { 0 };      // index in Score->_pages
+      int tick                 { 0 };
+      Fraction sig;
+
+      QList<System*> systemList;          // reusable systems
+      System* curSystem        { 0 };
+      MeasureBase* systemOldMeasure;
+      System* pageOldSystem    { 0 };
+      bool systemChanged       { false };
+      bool pageChanged         { false };
+
+      MeasureBase* prevMeasure { 0 };
+      MeasureBase* curMeasure  { 0 };
+      MeasureBase* nextMeasure { 0 };
+      int measureNo            { 0 };
+      bool rangeLayout         { false };
+      int endTick;
+      };
+
 typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
 
 extern qreal sff(qreal x, qreal xMin, const SpringMap& springs);

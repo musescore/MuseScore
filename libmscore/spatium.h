@@ -26,9 +26,10 @@ class Spatium {
       qreal _val;
 
    public:
-      Spatium()                       { _val = 0.0; }
+      constexpr Spatium() : _val(0.0) {}
       explicit Spatium(qreal v)       { _val = v; }
-      qreal val() const               { return _val; }
+
+      constexpr qreal val() const     { return _val; }
 
       bool operator>(const Spatium& a) const  { return _val > a._val; }
       bool operator<(const Spatium& a) const  { return _val < a._val; }

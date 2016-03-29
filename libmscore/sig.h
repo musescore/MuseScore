@@ -35,7 +35,7 @@ class SigEvent {
       int read(XmlReader&, int fileDivision);
       void write(Xml&, int) const;
 
-      SigEvent() : _timesig(0, 0) {}       ///< default SigEvent is invalid
+      constexpr SigEvent() : _bar(0) {}       ///< default SigEvent is invalid
       SigEvent(const Fraction& s, int bar = 0)
          : _timesig(s), _nominal(s), _bar(bar) {}
       SigEvent(const Fraction& s, const Fraction& ss, int bar = 0)
