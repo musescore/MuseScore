@@ -66,33 +66,6 @@ namespace Ms {
 #endif
 
 //---------------------------------------------------------
-//   LayoutContext
-//    temp values used during layout
-//---------------------------------------------------------
-
-struct LayoutContext {
-      bool startWithLongNames  { true };
-      bool firstSystem         { true };
-      int curPage              { 0 };      // index in Score->_pages
-      int tick                 { 0 };
-      Fraction sig;
-
-      QList<System*> systemList;          // reusable systems
-      System* curSystem        { 0 };
-      MeasureBase* systemOldMeasure;
-      System* pageOldSystem    { 0 };
-      bool systemChanged       { false };
-      bool pageChanged         { false };
-
-      MeasureBase* prevMeasure { 0 };
-      MeasureBase* curMeasure  { 0 };
-      MeasureBase* nextMeasure { 0 };
-      int measureNo            { 0 };
-      bool rangeLayout         { false };
-      int endTick;
-      };
-
-//---------------------------------------------------------
 //   rebuildBspTree
 //---------------------------------------------------------
 
@@ -3070,6 +3043,7 @@ System* Score::collectSystem(LayoutContext& lc)
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure
 
+
             if ((system->measures().size() > 1) && (minWidth + ww > systemWidth)) {
                   system->measures().pop_back();
                   lc.curMeasure->setSystem(oldSystem);
@@ -3316,6 +3290,7 @@ System* Score::collectSystem(LayoutContext& lc)
       lc.systemChanged      = lc.systemOldMeasure != (system->measures().empty() ? 0 : system->measures().back());
       return system;
       }
+
 #if 0
 //---------------------------------------------------------
 //   relayoutPage
@@ -3552,8 +3527,6 @@ bool Score::collectPage(LayoutContext& lc)
 
 void Score::doLayout()
       {
-      LayoutContext lc;
-
       qDebug();
 
       if (_staves.empty() || first() == 0) {
@@ -3566,7 +3539,6 @@ void Score::doLayout()
             page->setPos(0.0, 0.0);
             page->rebuildBspTree();
             qDebug("layout: empty score");
-            setLayoutAll();
             return;
             }
 
@@ -3578,21 +3550,19 @@ void Score::doLayout()
       if (cmdState().layoutFlags & LayoutFlag::PLAY_EVENTS)
             createPlayEvents();
 
-      //---------------------------------------------------
-      //    initialize layout context lc
-      //---------------------------------------------------
-
+      LayoutContext lc;
       _systems.swap(lc.systemList);
       getNextMeasure(lc);
       getNextMeasure(lc);
-      collectSystem(lc);
 
-      //---------------------------------------------------
-      //    layout score
-      //---------------------------------------------------
-
-      while (collectPage(lc))
-            ;
+      if (_layoutMode == LayoutMode::LINE) {
+            layoutLinear(lc);
+            }
+      else {
+            collectSystem(lc);
+            while (collectPage(lc))
+                  ;
+            }
 
       // TODO: remove remaining systems from lc.systemList
       while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
@@ -3619,8 +3589,16 @@ void Score::doLayout()
 void Score::doLayoutRange(int stick, int etick)
       {
       qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
-
       LayoutContext lc;
+
+      if (_layoutMode == LayoutMode::LINE) {
+            _systems.swap(lc.systemList);
+            getNextMeasure(lc);
+            getNextMeasure(lc);
+            layoutLinear(lc);
+            return;
+            }
+
       lc.rangeLayout = true;
       lc.endTick     = etick;
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());

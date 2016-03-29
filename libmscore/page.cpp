@@ -278,8 +278,11 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
 
 void Page::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      for (System* s :_systems)
+      for (System* s :_systems) {
+            for (MeasureBase* m : s->measures())
+                  m->scanElements(data, func, false);
             s->scanElements(data, func, all);
+            }
       func(data, this);
       }
 
@@ -452,16 +455,31 @@ void PageFormat::write(Xml& xml) const
       xml.etag();
       }
 
+#ifdef USE_BSP
+//---------------------------------------------------------
+//   bspInsert
+//---------------------------------------------------------
+
+static void bspInsert(void* bspTree, Element* e)
+      {
+      ((BspTree*) bspTree)->insert(e);
+      }
+
+static void countElements(void* data, Element* e)
+      {
+      ++(*(int*)data);
+      }
+
 //---------------------------------------------------------
 //   doRebuildBspTree
 //---------------------------------------------------------
 
-#ifdef USE_BSP
 void Page::doRebuildBspTree()
       {
-      QList<Element*> el(elements());
+      int n = 0;
+      scanElements(&n, countElements, false);
 
-      int n = el.size();
+      QRectF r;
       if (score()->layoutMode() == LayoutMode::LINE) {
             qreal w = 0.0;
             qreal h = 0.0;
@@ -472,12 +490,13 @@ void Page::doRebuildBspTree()
                         w = mb->x() + mb->width();
                         }
                   }
-            bspTree.initialize(QRectF(0.0, 0.0, w, h), n);
+            r = QRectF(0.0, 0.0, w, h);
             }
       else
-            bspTree.initialize(abbox(), n);
-      for (Element* e : el)
-            bspTree.insert(e);
+            r = abbox();
+
+      bspTree.initialize(r, n);
+      scanElements(&bspTree, &bspInsert, false);
       bspTreeValid = true;
       }
 #endif
@@ -796,10 +815,6 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
 QList<Element*> Page::elements()
       {
       QList<Element*> el;
-      for (System* s :_systems) {
-            for (MeasureBase* m : s->measures())
-                  m->scanElements(&el, collectElements, false);
-            }
       scanElements(&el, collectElements, false);
       return el;
       }

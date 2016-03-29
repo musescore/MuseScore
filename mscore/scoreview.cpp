@@ -1896,12 +1896,12 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         continue;
                   if (pr.left() > fr.right())
                         break;
+
                   QList<Element*> ell = page->items(fr.translated(-page->pos()));
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
                   p.translate(pos);
                   drawElements(p, ell);
-
 
 #ifdef DEBUG_SHAPES
                   for (const System* system : page->systems()) {

@@ -1,24 +1,80 @@
-#if 0
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2002-2016 Werner Schweer
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
+
+#include "accidental.h"
+#include "barline.h"
+#include "beam.h"
+#include "box.h"
+#include "chord.h"
+#include "clef.h"
+#include "element.h"
+#include "fingering.h"
+#include "glissando.h"
+#include "harmony.h"
+#include "key.h"
+#include "keysig.h"
+#include "layoutbreak.h"
+#include "layout.h"
+#include "lyrics.h"
+#include "marker.h"
+#include "measure.h"
+#include "mscore.h"
+#include "notedot.h"
+#include "note.h"
+#include "ottava.h"
+#include "page.h"
+#include "part.h"
+#include "repeat.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stem.h"
+#include "style.h"
+#include "sym.h"
+#include "system.h"
+#include "text.h"
+#include "tie.h"
+#include "timesig.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
+#include "breath.h"
+#include "tempotext.h"
+#include "systemdivider.h"
+
+namespace Ms {
+
 //---------------------------------------------------------
 //   layoutLinear
 //---------------------------------------------------------
 
-void Score::layoutLinear()
+void Score::layoutLinear(LayoutContext& lc)
       {
-      curMeasure     = first();
-      System* system = getNextSystem(lc, false);
+      System* system = getNextSystem(lc);
       system->setInstrumentNames(true);
-      qreal xo = 0;
 
-      Measure* fm = firstMeasure();
-      for (MeasureBase* m = first(); m != fm ; m = m->next()) {
-            if (m->type() == Element::Type::HBOX)
-                  xo += point(static_cast<Box*>(m)->boxWidth());
-            }
-
+      qreal xo;
+      if (lc.curMeasure->isHBox())
+            xo = point(toHBox(lc.curMeasure)->boxWidth());
+      else
+            xo = 0;
       system->layoutSystem(xo);
+
       system->setPos(0.0, spatium() * 10.0);
-      Page* page = getEmptyPage();
+      Page* page = getEmptyPage(lc);
       page->appendSystem(system);
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -32,7 +88,7 @@ void Score::layoutLinear()
                         mb = m->mmRest();
                   }
             mb->setSystem(system);
-            system->measures().append(mb);
+            system->measures().push_back(mb);
             }
       if (system->measures().empty())
             return;
@@ -42,44 +98,36 @@ void Score::layoutLinear()
             if (m->sectionBreak() && m->nextMeasureMM())
                   addSystemHeader(m->nextMeasureMM(), true);
             }
-      removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
+//TODO      removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
 
       QPointF pos(0.0, 0.0);
       bool isFirstMeasure = true;
       foreach (MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::Type::MEASURE) {
-                  if (isFirstMeasure)
-                        pos.rx() += system->leftMargin();
-                  Measure* m = static_cast<Measure*>(mb);
+                  Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = m->nextMeasure();
-                  if (m->repeatFlags() & Repeat::END) {
-                        if (nm && (nm->repeatFlags() & Repeat::START))
-                              m->setEndBarLineType(BarLineType::END_START_REPEAT, m->endBarLineGenerated());
-                        else
-                              m->setEndBarLineType(BarLineType::END_REPEAT, m->endBarLineGenerated());
-                        }
-                  else if (nm && (nm->repeatFlags() & Repeat::START))
-                        m->setEndBarLineType(BarLineType::START_REPEAT, m->endBarLineGenerated());
-                  m->createEndBarLines();
+                  m->createEndBarLines(nm == 0);
                   if (isFirstMeasure) {
+                        pos.rx() += system->leftMargin();
                         // width with header
-                        qreal w2 = computeMinWidth(m->first());
+                        qreal w2 = computeMinWidth(m->first(), isFirstMeasure);
                         // width *completely* excluding header
                         // minWidth1() includes the initial key / time signatures since they are considered non-generated
                         Segment* s = m->first();
                         while (s && s->segmentType() != Segment::Type::ChordRest)
                               s = s->next();
-                        qreal w1 = s ? computeMinWidth(s) : m->minWidth1();
+                        qreal w1 = s ? computeMinWidth(s, false) : m->minWidth1();
                         w = (w2 - w1) + w1 * styleD(StyleIdx::linearStretch);
                         }
                   else {
+                        m->removeSystemHeader();
                         w = m->minWidth1() * styleD(StyleIdx::linearStretch);
                         }
                   qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
                   if (w < minMeasureWidth)
                         w = minMeasureWidth;
-                  m->layoutWidth(w);
+                  m->stretchMeasure(w);
                   isFirstMeasure = false;
                   }
             else {
@@ -94,10 +142,9 @@ void Score::layoutLinear()
       page->setWidth(pos.x());
       system->layout2();
       page->setHeight(system->height() + 20 * spatium());
-
-      while (_pages.size() > 1)
-            _pages.takeLast();
+      page->rebuildBspTree();
       }
-#endif
+
+} // namespace Ms
 
 
