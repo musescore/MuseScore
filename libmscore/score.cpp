@@ -1953,7 +1953,7 @@ void Score::addExcerpt(Score* score)
       ex->setPartScore(score);
       excerpts().append(ex);
       ex->setTitle(score->name());
-      foreach(Staff* s, score->staves()) {
+      for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
                   continue;
@@ -1973,7 +1973,7 @@ void Score::addExcerpt(Score* score)
 
 void Score::removeExcerpt(Score* score)
       {
-      foreach (Excerpt* ex, excerpts()) {
+      for (Excerpt* ex : excerpts()) {
             if (ex->partScore() == score) {
                   if (excerpts().removeOne(ex)) {
                         delete ex;
@@ -2534,23 +2534,28 @@ void Score::cmdRemoveStaff(int staffIdx)
 
       undoRemoveStaff(s);
 
-      // remove linked staff and measures in linked staves in excerps
-      // should be done earlier for the main staff
-      Staff* s2 = 0;
+      // remove linked staff and measures in linked staves in excerpts
+      // unlink staff in the same score
       if (s->linkedStaves()) {
-            for (Staff* staff : s->linkedStaves()->staves()) {
-                  if (staff != s)
-                        s2 = staff;
+            Staff* sameScoreLinkedStaff = nullptr;
+            auto staves = s->linkedStaves()->staves();
+            for (Staff* staff : staves) {
+                  if (staff == s)
+                        continue;
                   Score* lscore = staff->score();
                   if (lscore != this) {
                         lscore->undoRemoveStaff(staff);
+                        s->score()->undo(new UnlinkStaff(s, staff));
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
                               lscore->undoRemovePart(staff->part(), pIndex);
                               }
                         }
+                  else // linked staff in the same score
+                       sameScoreLinkedStaff = staff;
                   }
-            s->score()->undo(new UnlinkStaff(s2, s));
+            if (sameScoreLinkedStaff)
+                  s->score()->undo(new UnlinkStaff(sameScoreLinkedStaff, s)); // once should be enough
             }
       }
 

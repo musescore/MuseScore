@@ -3605,55 +3605,85 @@ void ChangeNoteEvent::flip()
       }
 
 //---------------------------------------------------------
-//   LinkUnlink
+//   Link
 //---------------------------------------------------------
 
-void LinkUnlink::doLink()
+void Link::redo()
       {
       if (MScore::debugMode)
-            qDebug("LinkUnlink: link %p (e) to %p (le)", e, le);
+            qDebug("Link:redo() link %p (e) to %p (le)", e, le);
       Q_ASSERT(le != nullptr);
-
       e->linkTo(le);
-      // this is commented out so we don't give up on target element le too soon
-      // it might turn out to be useful on a subsequent unlink or it might not
-      // but we will make that determination in doUnlink
-      //le = nullptr;
       }
 
-void LinkUnlink::doUnlink()
+void Link::undo()
       {
-      // Q_ASSERT(le == nullptr);
-
       // find appropriate target element to unlink
-      // use current le if valid; pick something else in link list if not
+      // use current le if valid; pick something else in link list if not but that shouldn't happen!
       const LinkedElements* l = e->links();
       if (l != nullptr) {
-            // don't use current le if null or if it is no longer linked
+            // don't use current le if null or if it is no longer linked (shouldn't happen)
             if (le && !l->contains(le)) {
                   le = nullptr;
-                  qDebug("doUnlink(): current le %p no longer linked", le);
+                  qDebug("Link::undo(): current le %p no longer linked", le);
                   }
             if (!le) {
-                  // find something other than current element (e) in link list
+                  // shouldn't happen
+                  // find something other than current element (e) in link list, so we can link if asked to redo
                   for (ScoreElement* ee : *l) {
                         if (e != ee) {
                               le = ee;
                               break;
                               }
                         }
+                  qDebug("Link::undo(): current le was null... we picked a new one le %p", le);
                   }
             }
       else
-            qDebug("doUnlink(): current element %p has no links", e);
+            qDebug("Link::undo(): current element %p has no links", e);
 
       if (MScore::debugMode)
-            qDebug("LinkUnlink: unlink %p (le) from %p (e)", le, e);
+            qDebug("Link::undo(): unlink %p (le) from %p (e)", le, e);
 
       if (le)
             le->unlink();
       else
-            qDebug("doUnlink(): nothing found to unlink");
+            qDebug("Link::undo(): nothing found to unlink");
+      }
+
+//---------------------------------------------------------
+//   Unlink
+//---------------------------------------------------------
+
+void Unlink::redo()
+      {
+      // Q_ASSERT(le == nullptr);
+
+      // find appropriate target element to unlink
+      // use current le if valid; pick something else in link list if not
+      // do unlink e if we wanted to unlink it in the first place (redo)
+      const LinkedElements* l = e->links();
+      if (l != nullptr) {
+            // find something other than current element (e) in link list, so we can link again on undo
+            for (ScoreElement* ee : *l) {
+                  if (e != ee) {
+                        le = ee;
+                        break;
+                        }
+                  }
+            if (e)
+                  e->unlink();
+            }
+      else
+            qDebug("doUnlink(): current element %p has no links", e);
+      }
+
+void Unlink::undo()
+      {
+      if (MScore::debugMode)
+            qDebug("LinkUnlink: link %p (e) to %p (le)", e, le);
+      Q_ASSERT(le != nullptr);
+      e->linkTo(le);
       }
 
 void LinkStaff::redo()   { s1->linkTo(s2); }

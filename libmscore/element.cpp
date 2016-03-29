@@ -326,7 +326,7 @@ Element::Element(const Element& e)
 Element* Element::linkedClone()
       {
       Element* e = clone();
-      score()->undo(new Link(this, e));
+      score()->undo(new Link(e, this));
       return e;
       }
 

@@ -780,7 +780,8 @@ void Staff::unlink(Staff* staff)
       {
       if (!_linkedStaves)
             return;
-      Q_ASSERT(_linkedStaves->staves().contains(staff));
+      if (!_linkedStaves->staves().contains(staff))
+            return;
       _linkedStaves->remove(staff);
       if (_linkedStaves->staves().size() <= 1) {
             delete _linkedStaves;
@@ -795,7 +796,8 @@ void Staff::unlink(Staff* staff)
 
 void LinkedStaves::add(Staff* staff)
       {
-      _staves.append(staff);
+      if (!_staves.contains(staff))
+            _staves.append(staff);
       }
 
 //---------------------------------------------------------

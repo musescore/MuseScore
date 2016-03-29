@@ -385,6 +385,7 @@ void ExcerptsDialog::accept()
             if (!isInPartsList(e)) {
                   // Delete it because not in the list anymore
                   if (e->partScore()) {
+                        Score* partScore = e->partScore();
                         qDebug() << " - Deleting parts : " << ExcerptItem(e).excerpt()->title();
 
                         // Swap Excerpts to the end before deleting, so if undoing, the part will be reordered
@@ -392,7 +393,9 @@ void ExcerptsDialog::accept()
                         if ((lastPos > 0) && (pos != lastPos))
                               score->undo(new SwapExcerpt(score, pos, lastPos));
 
-                        score->undo(new RemoveExcerpt(e->partScore()));
+                        deleteExcerpt(e);
+                        // remove the excerpt
+                        score->undo(new RemoveExcerpt(partScore));
                         }
                   }
             else
