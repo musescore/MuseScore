@@ -653,6 +653,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         if (!map.contains(staffIdx))
                              --span;
                         }
+                  if (dstStaffIdx + span > n)
+                        span = n - dstStaffIdx - 1;
                   dstStaff->setBarLineSpan(span);
                   int idx = 0;
                   foreach(BracketItem bi, srcStaff->brackets()) {

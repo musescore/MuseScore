@@ -291,11 +291,12 @@ void ExcerptsDialog::partClicked(QListWidgetItem* item)
 
       PartItem* pi = static_cast<PartItem*>(item);
       if (item->checkState() == Qt::Checked) {
-            foreach(Part* p, excerpt->parts()) {
-                  if (p == pi->part())
-                        return;
+            excerpt->parts().clear();
+            for (int i = 0; i < partList->count(); i++) {
+                  PartItem* pii = static_cast<PartItem*>(partList->item(i));
+                  if (pii->checkState() == Qt::Checked)
+                        excerpt->parts().append(pii->part());
                   }
-            excerpt->parts().append(pi->part());
            }
       else {
             excerpt->parts().removeOne(pi->part());
