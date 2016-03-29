@@ -2,7 +2,7 @@ import QtQuick 2.1
 import MuseScore 1.0
 
 MuseScore {
-      version:  "2.0"
+      version:  "2.1"
       description: "Create random score."
       menuPath: "Plugins.random"
       requiresScore: false
@@ -20,7 +20,7 @@ MuseScore {
             }
 
       onRun: {
-            var measures    = 18;
+            var measures    = 18; //in 4/4 default time signature
             var numerator   = 3;
             var denominator = 4;
             var octaves     = 2;
@@ -41,18 +41,16 @@ MuseScore {
             cursor.add(ts);
 
             cursor.rewind(0);
-            cursor.setDuration(1, denominator);
 
-            var realMeasures = Math.floor((measures + numerator - 1) / numerator);
+            var realMeasures = Math.ceil(measures * denominator / numerator);
             console.log(realMeasures);
-            var notes = realMeasures * numerator;
+            var notes = realMeasures * 4; //number of 1/4th notes
 
             for (var i = 0; i < notes; ++i) {
 
                 if (Math.random() < 0.5) {
                     cursor.setDuration(1, 8);
                     addNote(key, cursor);
-                    cursor.next();
                     addNote(key, cursor);
                     }
                 else {
@@ -60,7 +58,6 @@ MuseScore {
                     addNote(key, cursor);
                     }
 
-                cursor.next();
                 }
             Qt.quit();
             }
