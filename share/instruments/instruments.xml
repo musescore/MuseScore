@@ -3475,7 +3475,7 @@
                   <shortName>Bu.</shortName>
                   <description>Bugle</description>
                   <musicXMLid>brass.bugle</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>67-79</aPitchRange>
                   <pPitchRange>60-84</pPitchRange>
@@ -3488,7 +3488,7 @@
                   <shortName>Sop. Bu.</shortName>
                   <description>Soprano Bugle</description>
                   <musicXMLid>brass.bugle.soprano</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>67-79</aPitchRange>
                   <pPitchRange>60-84</pPitchRange>
@@ -3501,7 +3501,7 @@
                   <shortName>Alt. Bu.</shortName>
                   <description>Alto Bugle</description>
                   <musicXMLid>brass.bugle.alto</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>62-74</aPitchRange>
                   <pPitchRange>55-79</pPitchRange>
@@ -3514,10 +3514,12 @@
                   <shortName>Bar. Bu.</shortName>
                   <description>Bugle</description>
                   <musicXMLid>brass.bugle.baritone</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-62</aPitchRange>
                   <pPitchRange>43-67</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="58"/>
                   </Channel>
@@ -3574,8 +3576,10 @@
                   <shortName>Euph. Bu.</shortName>
                   <description>Euphonium Bugle</description>
                   <musicXMLid>brass.bugle.euphonium-bugle</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <aPitchRange>50-62</aPitchRange>
                   <pPitchRange>43-67</pPitchRange>
                   <Channel>
@@ -3587,7 +3591,7 @@
                   <shortName>Mel. Bu.</shortName>
                   <description>Bugle</description>
                   <musicXMLid>brass.bugle.mellophone-bugle</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>41-77</aPitchRange>
                   <pPitchRange>36-81</pPitchRange>
@@ -3600,10 +3604,12 @@
                   <shortName>Con. Bu.</shortName>
                   <description>Contrabass Bugle</description>
                   <musicXMLid>brass.bugle.contrabass</musicXMLid>
-                  <clef>C</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-55</aPitchRange>
                   <pPitchRange>36-60</pPitchRange>
+                  <transposeDiatonic>-14</transposeDiatonic>
+                  <transposeChromatic>-24</transposeChromatic>
                   <Channel>
                         <program value="58"/>
                   </Channel>
