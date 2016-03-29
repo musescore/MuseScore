@@ -2018,11 +2018,9 @@ void Beam::write(Xml& xml) const
                   xml.etag();
                   }
             }
-#ifndef NDEBUG
-      //
+
       // this info is used for regression testing
       // l1/l2 is the beam position of the layout engine
-      //
       if (MScore::testMode) {
             qreal _spatium4 = spatium() * .25;
             foreach(BeamFragment* f, fragments) {
@@ -2030,7 +2028,7 @@ void Beam::write(Xml& xml) const
                   xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
                   }
             }
-#endif
+
       xml.etag();
       }
 
