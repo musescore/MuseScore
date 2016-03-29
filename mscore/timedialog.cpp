@@ -195,11 +195,11 @@ void TimeDialog::paletteChanged(int idx)
       Groups g = e->groups();
       if (g.empty())
             g = Groups::endings(sig);
-      groups->setSig(sig, g);
       zNominal->setValue(sig.numerator());
       nNominal->setCurrentIndex(denominator2Idx(sig.denominator()));
       zText->setText(e->numeratorString());
       nText->setText(e->denominatorString());
+      groups->setSig(sig, g);
       }
 
 }
