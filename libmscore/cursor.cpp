@@ -159,6 +159,7 @@ void Cursor::addNote(int pitch)
       {
       NoteVal nval(pitch);
       _score->addPitch(nval, false);
+      _segment = _score->inputState().segment();
       }
 
 //---------------------------------------------------------

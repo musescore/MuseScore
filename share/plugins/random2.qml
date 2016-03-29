@@ -4,7 +4,7 @@ import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 MuseScore {
-      version:  "2.0"
+      version:  "2.1"
       description: "Create random score."
       menuPath: "Plugins.random2"
       requiresScore: false
@@ -12,8 +12,6 @@ MuseScore {
       dockArea:   "left"
       width:  150
       height: 75
-
-      property variant octaves : 2;
 
       onRun: { }
 
@@ -23,7 +21,7 @@ MuseScore {
             var keyo = [ 0, 7, 2, 4 ];
 
             var idx    = Math.random() * 6;
-            var octave = Math.floor(Math.random() * 2);
+            var octave = Math.floor(Math.random() * octaves.value);
             var pitch  = cdur[Math.floor(idx)] + octave * 12 + 60;
             var pitch  = pitch + keyo[key];
             console.log("Add note pitch "+pitch);
@@ -31,14 +29,14 @@ MuseScore {
             }
 
       function createScore() {
-            var measures    = 18;
+            var measures    = 18; //in 4/4 default time signature
             var numerator   = 3;
             var denominator = 4;
-            var key         = 3;
+            var key         = 2; //index in keyo from addNote function above
 
             var score = newScore("Random2.mscz", "piano", measures);
 
-            score.startCmd()
+            score.startCmd();
             score.addText("title", "==Random2==");
             score.addText("subtitle", "Another subtitle");
 
@@ -51,32 +49,32 @@ MuseScore {
             ts.setSig(numerator, denominator);
             cursor.add(ts);
 
-            cursor.rewind(0);
-            cursor.setDuration(1, denominator);
-
-            var realMeasures = Math.floor((measures * 2 + numerator - 1) / numerator);
+            var realMeasures = Math.ceil(measures * denominator / numerator);
             console.log(realMeasures);
-            var notes = realMeasures * numerator;
+            var notes = realMeasures * 4; //number of 1/4th notes
 
-            for (var i = 0; i < notes; ++i) {
-                if (Math.random() < 0.5) {
-                    console.log("Adding two notes at ", i);
-                    cursor.setDuration(1, 8);
-                    addNote(key, cursor);
-                    cursor.next();
-                    addNote(key, cursor);
-                    }
-                else {
-                    console.log("Adding note at ", i);
-                    cursor.setDuration(1, 4);
-                    addNote(key, cursor);
-                    }
-
-                cursor.next();
-                }
-            score.endCmd()
+            for (var staff = 0; staff < 2; ++staff) { //piano has two staves to fill
+                  cursor.track = staff * 4; //4 voice tracks per staff
+                  cursor.rewind(0); //go to the start of the score
+                  //add notes
+                  for (var i = 0; i < notes; ++i) {
+                        if (Math.random() < 0.4) {
+                              console.log("Adding two notes at ", i);
+                              cursor.setDuration(1, 8);
+                              addNote(key, cursor);
+                              addNote(key, cursor);
+                              }
+                        else {
+                              console.log("Adding note at ", i);
+                              cursor.setDuration(1, 4);
+                              addNote(key, cursor);
+                              }
+                        } //done adding notes to this staff
+                  }
+            score.endCmd();
             Qt.quit();
             }
+
     GridLayout {
         anchors.fill: parent
         columns: 2
@@ -89,12 +87,13 @@ MuseScore {
             }
 
         SpinBox {
+            id: octaves
             minimumValue: 1
             maximumValue: 3
             stepSize:     1
             Layout.fillWidth: true
             Layout.preferredHeight: 25
-
+            value: 1
             }
 
         Button {
