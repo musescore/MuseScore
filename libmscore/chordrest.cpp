@@ -210,13 +210,10 @@ void ChordRest::writeProperties(Xml& xml) const
 
       foreach(const Articulation* a, _articulations)
             a->write(xml);
-#ifndef NDEBUG
+
       if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
-#else
-      if (_beam && !_beam->generated())
-            xml.tag("Beam", _beam->id());
-#endif
+
       foreach(Lyrics* lyrics, _lyricsList) {
             if (lyrics)
                   lyrics->write(xml);
@@ -1325,17 +1322,10 @@ bool ChordRest::isGraceAfter() const
 void ChordRest::writeBeam(Xml& xml)
       {
       Beam* b = beam();
-#ifndef NDEBUG
       if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
             b->setId(xml.beamId++);
             b->write(xml);
             }
-#else
-      if (b && !b->generated() && b->elements().front() == this) {
-            b->setId(xml.beamId++);
-            b->write(xml);
-            }
-#endif
       }
 
 //---------------------------------------------------------

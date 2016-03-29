@@ -176,7 +176,7 @@ MidiOperations::TimeSigNumerator fractionNumeratorToUserValue(int n)
       else if (n == 21)
             numerator = MidiOperations::TimeSigNumerator::_21;
       else
-            Q_ASSERT_X(false, "Meter::fractionNumeratorToUserValue", "Unknown numerator");
+            {Q_ASSERT_X(false, "Meter::fractionNumeratorToUserValue", "Unknown numerator");}
 
       return numerator;
       }
@@ -196,7 +196,7 @@ MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z)
       else if (z == 32)
             denominator = MidiOperations::TimeSigDenominator::_32;
       else
-            Q_ASSERT_X(false, "Meter::fractionDenominatorToUserValue", "Unknown denominator");
+            {Q_ASSERT_X(false, "Meter::fractionDenominatorToUserValue", "Unknown denominator");}
 
       return denominator;
       }
