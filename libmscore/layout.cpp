@@ -2241,6 +2241,10 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   }
             else if (curMeasure->type() == Element::Type::MEASURE) {
                   Measure* m = static_cast<Measure*>(curMeasure);
+                  if (m->isMMRest()) { // make sure that measures below mm rest have no system
+                        for (Measure* mi = m->mmRestFirst(); mi != m->mmRestLast(); mi = mi->nextMeasure())
+                              mi->setSystem(nullptr);
+                        }
                   m->createEndBarLines();       // TODO: type not set right here
                   if (isFirstMeasure) {
                         firstMeasure = m;
