@@ -47,7 +47,7 @@ include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
 #include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
-include (UsePkgConfig1)
+include (UsePkgConfig1) #defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 include (TargetDoc)
 include (FindPulseAudio)
 include (GetCompilerVersion)
@@ -209,7 +209,7 @@ SET(QT_USE_QTHELP        TRUE)
 ##
 
 ##if (APPLE)
-##      PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+##      PKGCONFIG1 (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
 ##      if (FREETYPE_INCLUDE_DIRS)
 ##          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
 ##          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
@@ -226,11 +226,11 @@ SET(QT_USE_QTHELP        TRUE)
 ##
 
 if (BUILD_ALSA)
-      PKGCONFIG (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
+      PKGCONFIG1 (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
       if (NOT ALSA_INCDIR)
             message(SEND_ERROR "Error: ALSA support requested (BUILD_ALSA=${BUILD_ALSA}), but ALSA >= 1.0.0 was not found.")
       else (NOT ALSA_INCDIR)
-            message("ALSA >= 1.0.0 found. ALSA support enabled.")
+            message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}") 
             set (USE_ALSA 1)
       endif (NOT ALSA_INCDIR)
 else (BUILD_ALSA)
@@ -316,7 +316,7 @@ IF(BUILD_JACK)
            ENDIF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
            MESSAGE("jack support enabled.")
      ELSE(MINGW)
-           PKGCONFIG(jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
+           PKGCONFIG1 (jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
            IF(JACK_INCDIR)
                  MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} found. jack support enabled.")
                  SET(USE_JACK 1)
@@ -339,9 +339,9 @@ if (BUILD_PORTAUDIO)
         set ( USE_PORTAUDIO 1 )
         set ( USE_PORTMIDI  1 )
     else (MINGW)
-        PKGCONFIG (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
+        PKGCONFIG1 (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
         if (PORTAUDIO_INCDIR)
-              message(STATUS "Portaudio found. Portaudio support enabled. ${PORTAUDIO_INCDIR} ${PORTAUDIO_LIBDIR} ${PORTAUDIO_LIB}")
+              message(STATUS "Portaudio found. Portaudio support enabled. INCDIR ${PORTAUDIO_INCDIR}, LIBDIR ${PORTAUDIO_LIBDIR}, LIB ${PORTAUDIO_LIB}")
               set ( USE_PORTAUDIO 1 )
         else (PORTAUDIO_INCDIR)
               message(SEND_ERROR "Error: Portaudio support requested (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}), but portaudio-2.0 Version 19 was not found (package portaudio19-dev)")
@@ -363,7 +363,7 @@ if (APPLE)
       ## libvorbis
       ##
 
-      PKGCONFIG (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
+      PKGCONFIG1 (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
       if (VORBIS_INCDIR)
           message("libvorbis detected ${VORBIS_INCDIR} ${VORBIS_LIBDIR} ${VORBIS_LIB}")
       else (VORBIS_INCDIR)
@@ -375,7 +375,7 @@ if (APPLE)
       ## libogg
       ##
 
-      PKGCONFIG (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
+      PKGCONFIG1 (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
       if (OGG_INCDIR)
           message("libogg detected ${OGG_INCDIR} ${OGG_LIBDIR} ${OGG_LIB}")
       else (OGG_INCDIR)
@@ -388,7 +388,7 @@ if (APPLE)
       ## libsndfile
       ##
 
-      PKGCONFIG (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
+      PKGCONFIG1 (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
       if (SNDFILE_INCDIR)
           message("libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
       else (SNDFILE_INCDIR)
@@ -444,7 +444,9 @@ if (NOT MINGW AND NOT APPLE)
     string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
     if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
       # Build portable AppImage as per https://github.com/probonopd/AppImageKit
-      execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# get architecture (strip trailing newline)
+      if (NOT DEFINED ARCH)
+        execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# get architecture (strip trailing newline)
+      endif (NOT DEFINED ARCH)
       get_filename_component(PORTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX} PATH)# get path (dirname)
       get_filename_component(PORTABLE_INSTALL_NAME ${CMAKE_INSTALL_PREFIX} NAME)# strip path (basename)
       if (NOT MSCORE_UNSTABLE)
