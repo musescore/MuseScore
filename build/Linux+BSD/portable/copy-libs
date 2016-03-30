@@ -20,7 +20,9 @@ main() {
   getCrossPlatformDependencies
 
   # get linux-specific dependencies, based on which distro is making the AppImage
-  if [ "$(grep "CentOS release 6" /etc/*release*)" ]; then
+  if [ "$(grep "Debian GNU/Linux 8 (jessie)" /etc/*release*)" ]; then
+    building_on_Debian_Jessie # aka "Debian 8"
+  elif [ "$(grep "CentOS release 6" /etc/*release*)" ]; then
     building_on_CentOS_6
   else
     echo "${0}: Warning: Not running on a supported build system!" >&2
@@ -54,9 +56,12 @@ getCrossPlatformDependencies() {
   # Qt base dependencies (see "mscore/CMakeLists.txt")
   dest_dir="$qt_dest/lib"
   #dest_dir="$lib_dest"
-  copyLib libicudata.so.42 #icudt53.dll # Needed by Ubuntu 12.04
-  copyLib libicui18n.so.42 #libicuin53.so.5 # Needed by Ubuntu 12.04
-  copyLib libicuuc.so.42 #libicuuc53.so.5 # Needed by Ubuntu 12.04
+
+  #icudata, icui18n, & icuuc have version numbers .52 when build on jessie, .42 on centos.
+  copyLib libicudata.so #icudt53.dll # Needed by Ubuntu 12.04
+  copyLib libicui18n.so #libicuin53.so.5 # Needed by Ubuntu 12.04
+  copyLib libicuuc.so #libicuuc53.so.5 # Needed by Ubuntu 12.04
+
   copyLib libQt5CLucene.so.5
   copyLib libQt5Core.so.5
   copyLib libQt5Gui.so.5
@@ -72,7 +77,7 @@ getCrossPlatformDependencies() {
   copyLib libQt5Sensors.so.5
   copyLib libQt5Sql.so.5
   copyLib libQt5Svg.so.5
-  copyLib libQt5WebChannel.so.5
+  #copyLib libQt5WebChannel.so.5  # Not present on Debian, and apparently not needed
   copyLib libQt5WebKit.so.5
   copyLib libQt5WebKitWidgets.so.5
   copyLib libQt5Widgets.so.5
@@ -102,6 +107,128 @@ getCrossPlatformDependencies() {
         bash -c "qt_prefix='$qt_prefix' qt_dest='$qt_dest' copyQt %%%"
 }
 
+########################################################
+# copy libs specific if building on Debian 8 "Jessie"
+########################################################
+building_on_Debian_Jessie() {
+  dest_dir="$lib_dest"
+  copyLib libasound.so.2
+  copyLib libcups.so.2
+  copyLib libdbus-1.so && mv "$dest_dir/libdbus-1.so" "$dest_dir/libdbus-1.so.3" #renamed to .3 because didn't exist in arm, and don't want x86-64 fallback version
+  copyLib libEGL.so.1
+  copyLib libfontconfig.so.1
+  copyLib libfreetype.so.6
+  copyLib libGLESv2.so.2
+  copyLib libglib-2.0.so && mv "$dest_dir/libglib-2.0.so" "$dest_dir/libglib-2.0.so.0" #renamed to .0 cause didn't have
+  copyLib libgobject-2.0.so.0
+  copyLib libgstapp-0.10.so.0
+  copyLib libgstbase-0.10.so.0
+  copyLib libgstinterfaces-0.10.so.0
+  copyLib libgstpbutils-0.10.so.0
+  copyLib libgstreamer-0.10.so.0
+  copyLib libgstvideo-0.10.so.0
+  copyLib libharfbuzz.so.0
+  copyLib libICE.so.6
+  copyLib liblcms2.so.2
+  copyLib libogg.so.0
+  copyLib libSM.so.6
+  copyLib libsndfile.so.1
+  copyLib libsqlite3.so.0
+  copyLib libtiff.so.5
+  copyLib libvorbis.so.0
+  copyLib libvorbisfile.so.3
+  copyLib libwebp.so.5
+  copyLib libX11-xcb.so.1
+  copyLib libX11.so.6
+  copyLib libxcb-icccm.so.4
+  copyLib libxcb-image.so.0
+  copyLib libxcb-keysyms.so.1
+  copyLib libxcb-randr.so.0
+  copyLib libxcb-render-util.so.0
+  copyLib libxcb-render.so.0
+  copyLib libxcb-shape.so.0
+  copyLib libxcb-shm.so.0
+  copyLib libxcb-sync.so.1
+  copyLib libxcb-xfixes.so.0
+  copyLib libxcb-xkb.so.1
+  copyLib libxcb.so.1
+  copyLib libXi.so.6
+  copyLib libxkbcommon-x11.so.0
+  copyLib libxkbcommon.so.0
+  copyLib libxml2.so.2
+  copyLib libxslt.so.1
+
+  #2nd round of dependencies
+  copyLib libavahi-client.so.3
+  copyLib libavahi-common.so.3
+  copyLib libdrm.so.2
+  copyLib libexpat.so && mv "$dest_dir/libexpat.so" "$dest_dir/libexpat.so.1" #renamed to .1 cause didn't have
+  copyLib libffi.so.6
+  copyLib libFLAC.so.8
+  copyLib libgbm.so.1
+  copyLib libglapi.so.0
+  copyLib libgmodule-2.0.so.0
+  copyLib libgnutls-deb0.so.28
+  copyLib libgraphite2.so.3
+  copyLib libgssapi_krb5.so.2
+  copyLib libgthread-2.0.so.0
+  copyLib libjbig.so.0
+  copyLib libjson-c.so && mv "$dest_dir/libjson-c.so" "$dest_dir/libjson-c.so.2" #renamed to .2 cause didn't have
+  copyLib liborc-0.4.so.0
+  copyLib libvorbisenc.so.2
+  copyLib libwayland-client.so.0
+  copyLib libwayland-server.so.0
+  copyLib libXau.so.6
+  copyLib libxcb-dri2.so.0
+  copyLib libxcb-util.so.0
+  copyLib libXdmcp.so.6
+  copyLib libXext.so.6
+
+  #3rd round of dependencies
+  copyLib libasyncns.so.0
+  copyLib libgmp.so.10
+  copyLib libhogweed.so.2
+  copyLib libjack.so.0
+  copyLib libjpeg.so.62
+  copyLib libk5crypto.so.3
+  copyLib libkeyutils.so && mv "$dest_dir/libkeyutils.so" "$dest_dir/libkeyutils.so.1" #renamed to .1 cause didn't have
+  copyLib libkrb5.so.3
+  copyLib libkrb5support.so.0
+  copyLib libmng.so.1
+  copyLib libnettle.so.4
+  copyLib libp11-kit.so.0
+  copyLib libpng12.so.0
+
+  copyLib libtasn1.so.6
+  copyLib libwrap.so.0
+  copyLib libXtst.so.6
+  dest_dir="$qt_dest/lib"
+  copyLib libQt5Concurrent.so.5
+  copyLib libQt5DBus.so.5
+  copyLib libQt5Designer.so.5
+  copyLib libQt5QuickWidgets.so.5
+  copyLib libQt5Test.so.5
+
+  #jessie doesn't seem to have the following, although in sid this is provided by libqt5gui5
+  #copyLib libQt5XcbQpa.so.5
+  #copyQt plugins/xcbglintegrations/libqxcb-glx-integration.so # Needed by plugins which open a window
+
+  #needed by Arch Linux
+  dest_dir="$lib_dest"
+  copyLib libpcre.so.3
+
+  # needed if don't have pulseaudio installed (e.g. in a minimal chroot on Android)
+  copyLib libpulse.so.0
+  copyLib libpulsecommon-5.0.so
+
+  # If AppImage is run with alsa, then will complain:
+  # "Cannot open shared library /usr/lib/arm-linux-gnueabihf/alsa-lib/libasound_module_pcm_pulse.so"
+  # but cannot seem to figure out how to get the AppImage, so exclude for now, hopefully figure out later.
+  #dest_dir="$lib_dest/alsa-lib"
+  #copyLib libasound_module_pcm_pulse.so #can add, but if mscore run without alsa, will complain missing
+}
+
+
 ##########################################################################
 # LINUX-ONLY DEPENDENCIES (no equivalents in "mscore/CMakeLists.txt")
 # These differ depending on the distribution used to build the AppImage.
@@ -116,8 +243,6 @@ building_on_CentOS_6() {
   copyLib libQt5Concurrent.so.5
   copyLib libQt5DBus.so.5
   copyLib libQt5Designer.so.5
-  copyLib libQt5Location.so.5
-  copyLib libQt5QuickParticles.so.5
   copyLib libQt5QuickWidgets.so.5
   copyLib libQt5Test.so.5
   copyLib libQt5XcbQpa.so.5
@@ -135,6 +260,12 @@ building_on_CentOS_6() {
   copyLib libpng12.so.0
   copyLib libudev.so.0
   copyLib liblcms.so.1
+
+  # Needed if don't have pulseaudio installed. Ignoring, since only advanced distros
+  # like Arch, Gentoo, Debian minimal, servers, etc. don't have pulse installed.
+  #copyLib libpulse.so.0
+  #copyLib libpulsecommon-8.0.so
+  #copyLib libasound_module_pcm_pulse.so  # found in /usr/lib64/alsa-lib/
 }
 
 locateLib() {
@@ -145,6 +276,12 @@ locateLib() {
     if [ -e "$d/$1" ]; then
       echo "$d/$1"
       return
+    else
+      path="$(ls "$d/$1."* | grep -Em1 "$1.[0-9]+")" 
+      if [ "$path" ]; then
+        echo "$path"
+        return
+      fi
     fi
   done
   # If it wasn't found then search library cache
