@@ -39,7 +39,7 @@ TimeSig::TimeSig(Score* s)
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType      = TimeSigType::NORMAL;
       _largeParentheses = false;
-      _needLayout = true;
+      _needLayout       = true;
       }
 
 //---------------------------------------------------------

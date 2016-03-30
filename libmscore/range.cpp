@@ -137,6 +137,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
       int tick = fs->tick();
       int gap  = 0;
       const Segment* s;
+
       for (s = fs; s && (s != es); s = s->next1()) {
             Element* e = s->element(_track);
             if (!e || e->generated()) {

@@ -64,7 +64,7 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # for debugging the make system uncomment next line:
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set (CMAKE_AUTOMOC    TRUE)
 set(MSCORE_UNSTABLE   TRUE)          # mark as unstable
@@ -155,7 +155,7 @@ else (APPLE)
       set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
       set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
    else (MINGW)
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -g")
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -g -Wall -Wextra")
       set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG -DQT_NO_DEBUG_OUTPUT")
    endif (MINGW)
 endif(APPLE)

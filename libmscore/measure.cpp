@@ -1922,7 +1922,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
                         // ignore empty key signature
                         qDebug("remove keysig c at tick 0");
-                        delete ks;
+                        if (ks->links()) {
+                              if (ks->links()->size() == 1)
+                                    e.linkIds().remove(ks->links()->lid());
+                              }
                         }
                   else {
                         // if key sig not at beginning of measure => courtesy key sig
@@ -1951,19 +1954,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Text* t = new StaffText(score());
                   t->setTrack(e.track());
                   t->read(e);
-                  // previous versions stored measure number, delete it
-                  if ((score()->mscVersion() <= 114) && (t->textStyleType() == TextStyleType::MEASURE_NUMBER))
-                        delete t;
-                  else if (t->empty()) {
+                  if (t->empty()) {
                         qDebug("reading empty text: deleted");
-                        delete t;
-                        }
-                  else if ((score()->mscVersion() <= 114) && t->textStyleType() == TextStyleType::REHEARSAL_MARK) {
-                        RehearsalMark* rh = new RehearsalMark(score());
-                        rh->setXmlText(t->xmlText());
-                        rh->setTrack(t->track());
-                        segment = getSegment(Segment::Type::ChordRest, e.tick());
-                        segment->add(rh);
                         delete t;
                         }
                   else {

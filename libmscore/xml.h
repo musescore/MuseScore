@@ -26,6 +26,7 @@ class Spanner;
 class Beam;
 class Tuplet;
 class Measure;
+class LinkedElements;
 
 //---------------------------------------------------------
 //   SpannerValues
@@ -59,6 +60,7 @@ class XmlReader : public QXmlStreamReader {
       void htmlToString(int level, QString*);
       Interval _transpose;
       QList<QList<std::pair<int, ClefType>>> _clefs;   // for 1.3 scores
+      QMap<int, LinkedElements*> _elinks;
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
@@ -127,6 +129,8 @@ class XmlReader : public QXmlStreamReader {
       void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
 
       QList<std::pair<int, ClefType>>& clefs(int idx);
+
+      QMap<int, LinkedElements*>& linkIds() { return _elinks;     }
       };
 
 //---------------------------------------------------------

@@ -32,6 +32,7 @@ class LinkedElements : public QList<ScoreElement*> {
    public:
       LinkedElements(Score*);
       LinkedElements(Score*, int id);
+
       void setLid(Score*, int val);
       int lid() const   { return _lid;    }
       };
@@ -44,11 +45,13 @@ class ScoreElement {
       Score* _score;
 
    protected:
-      LinkedElements* _links = 0;
+      LinkedElements* _links { 0 };
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
-      ScoreElement(const ScoreElement& se) { _score = se._score; }
+      ScoreElement(const ScoreElement& se);
+      virtual ~ScoreElement();
+
       Score* score() const                 { return _score;      }
       MasterScore* masterScore() const;
       virtual void setScore(Score* s)      { _score = s;         }

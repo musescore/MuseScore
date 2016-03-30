@@ -265,23 +265,6 @@ QString Element::userName() const
       }
 
 //---------------------------------------------------------
-//   ~Element
-//---------------------------------------------------------
-
-Element::~Element()
-      {
-      if (_links) {
-            _links->removeOne(this);
-            if (_links->empty()) {
-                  //DEBUG:
-                  score()->links().remove(_links->lid());
-                  //
-                  delete _links;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   Element
 //---------------------------------------------------------
 
@@ -708,16 +691,16 @@ bool Element::readProperties(XmlReader& e)
             _userOff = e.readPoint();
       else if (tag == "lid") {
             int id = e.readInt();
-            _links = score()->links().value(id);
+            _links = e.linkIds().value(id);
             if (!_links) {
                   if (!score()->isMaster())   // DEBUG
-                        qDebug("---link %d not found (%d)", id, score()->links().size());
+                        qDebug("---link %d not found (%d)", id, e.linkIds().size());
                   _links = new LinkedElements(score(), id);
-                  score()->links().insert(id, _links);
+                  e.linkIds().insert(id, _links);
                   }
 #ifndef NDEBUG
             else {
-                  foreach(ScoreElement* eee, *_links) {
+                  for (ScoreElement* eee : *_links) {
                         Element* ee = static_cast<Element*>(eee);
                         if (ee->type() != type()) {
                               qFatal("link %s(%d) type mismatch %s linked to %s",
