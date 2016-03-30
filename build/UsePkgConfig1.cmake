@@ -1,18 +1,18 @@
 # - pkg-config module for CMake
 #
-# Defines the following macros:
+# Defines the following macro:
 #
-# PKGCONFIG(package includedir libdir linkflags cflags)
+# PKGCONFIG1(package includedir libdir linkflags cflags)
 #
-# Calling PKGCONFIG will fill the desired information into the 4 given arguments,
-# e.g. PKGCONFIG(libart-2.0 LIBART_INCLUDE_DIR LIBART_LINK_DIR LIBART_LINK_FLAGS LIBART_CFLAGS)
+# Calling PKGCONFIG1 will fill the desired information into the 4 given arguments,
+# e.g. PKGCONFIG1(libart-2.0 LIBART_INCLUDE_DIR LIBART_LINK_DIR LIBART_LINK_FLAGS LIBART_CFLAGS)
 # if pkg-config was NOT found or the specified software package doesn't exist, the
 # variable will be empty when the function returns, otherwise they will contain the respective information
 #
 
-FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS /usr/bin /usr/local/bin )
+FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS ${PATH} /usr/bin /usr/local/bin )
 
-MACRO(PKGCONFIG _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
+MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 # reset the variables at the beginning
   SET(${_include_DIR})
   SET(${_link_DIR})
@@ -40,6 +40,6 @@ MACRO(PKGCONFIG _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 
   ENDIF(PKGCONFIG_EXECUTABLE)
 
-ENDMACRO(PKGCONFIG _include_DIR _link_DIR _link_FLAGS _cflags)
+ENDMACRO(PKGCONFIG1 _include_DIR _link_DIR _link_FLAGS _cflags)
 
 MARK_AS_ADVANCED(PKGCONFIG_EXECUTABLE)
