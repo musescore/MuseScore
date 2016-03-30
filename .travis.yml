@@ -11,8 +11,9 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    - env: "JOB=AppImage_64bit"
-    - env: "JOB=AppImage_32bit"
+            - env: "JOB=AppImage_x86_64"
+            - env: "JOB=AppImage_i686"
+            - env: "JOB=AppImage_armhf"
   include:
     # 1st parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
@@ -54,8 +55,9 @@ matrix:
         - "./build/travis/job1_Tests/run_tests.sh"
       after_script:
         - 'ARTIFACTS_PATHS="$(ls vtest/html | tr "\n" ":")" artifacts upload'
-    # 2nd parallel build job - portable Linux AppImage 64-bit build on CentOS
-    - env: "JOB=AppImage_64bit"
+
+    # 2nd parallel build job - portable Linux AppImage 64-bit x86 build on CentOS
+    - env: "JOB=AppImage_x86_64"
       addons:
         apt:
           packages:
@@ -65,9 +67,10 @@ matrix:
       services:
         - docker
       script:
-        - "./build/travis/job2_AppImage/build.sh --upload-branches $APPIMAGE_UPLOAD_BRANCHES"
-    # 3rd parallel build job - portable Linux AppImage 32-bit build on CentOS
-    - env: "JOB=AppImage_32bit"
+        - "[[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]] && ./build/travis/job2_AppImage/build.sh --x86_64 --upload-branches $APPIMAGE_UPLOAD_BRANCHES || true"
+
+    # 3rd parallel build job - portable Linux AppImage 32-bit x86 build on CentOS
+    - env: "JOB=AppImage_i686"
       addons:
         apt:
           packages:
@@ -77,7 +80,22 @@ matrix:
       services:
         - docker
       script:
-        - "./build/travis/job2_AppImage/build.sh --32bit --upload-branches $APPIMAGE_UPLOAD_BRANCHES"
+        - "[[ $APPIMAGE_BUILD_ARCHS == *i686* ]] && ./build/travis/job2_AppImage/build.sh --i686 --upload-branches $APPIMAGE_UPLOAD_BRANCHES || true"
+
+    # 4th parallel build job - portable Linux AppImage armhf build on Debian crosscompiler
+    - env: "JOB=AppImage_armhf"
+      addons:
+        apt:
+          packages:
+          - bsdtar
+          - curl
+          - zsync
+      services:
+        - docker
+      before_script:
+        - "sudo ./build/travis/job2_AppImage/set-binfmt-misc.sh"
+      script:
+        - "[[ $APPIMAGE_BUILD_ARCHS == *armhf* ]] && ./build/travis/job2_AppImage/build.sh --armhf --upload-branches $APPIMAGE_UPLOAD_BRANCHES || true"
 
 notifications:
   recipients:
