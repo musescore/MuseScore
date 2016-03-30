@@ -24,13 +24,15 @@ const char* tests[] = {
       "libmscore/keysig/tst_keysig",
       "libmscore/barline/tst_barline",
       "libmscore/clef/tst_clef",
-//fail      "libmscore/timesig/tst_timesig",
-      "libmscore/repeat/tst_repeat",
+      "libmscore/timesig/tst_timesig",
+
+      "libmscore/repeat/tst_repeat",                  //FAIL
+
       "libmscore/dynamic/tst_dynamic",
       "libmscore/breath/tst_breath",
       "libmscore/tuplet/tst_tuplet",
       "libmscore/hairpin/tst_hairpin",
-//      "libmscore/chordsymbol/tst_chordsymbol",
+/**/      "libmscore/chordsymbol/tst_chordsymbol",
       "libmscore/text/tst_text",
 //      "libmscore/measure/tst_measure",
       "libmscore/beam/tst_beam",
@@ -52,7 +54,7 @@ const char* tests[] = {
 //      "libmscore/earlymusic/tst_earlymusic",
 
 //      "libmscore/midi/tst_midi",
-      "libmscore/tools/tst_tools",
+      "libmscore/tools/tst_tools",              // FAIL but probably ok
 //      "libmscore/splitstaff/tst_splitstaff",
 //      "libmscore/split/tst_split",
       "libmscore/plugins/tst_plugins",

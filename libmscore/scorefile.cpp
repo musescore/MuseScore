@@ -895,8 +895,6 @@ void MasterScore::parseVersion(const QString& val)
 
 Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
       {
-      links().clear();
-
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   const QString& version = e.attribute("version");
@@ -938,10 +936,9 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
             }
 
       int id = 1;
-      for (LinkedElements* le : links())
+      for (LinkedElements* le : e.linkIds())
             le->setLid(this, id++);
 
-      links().clear();
       for (Staff* s : staves())
             s->updateOttava();
 

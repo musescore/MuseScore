@@ -99,7 +99,7 @@ class HBox : public Box {
 
    public:
       HBox(Score* score);
-      ~HBox() {}
+      virtual ~HBox() {}
       virtual HBox* clone() const override        { return new HBox(*this); }
       virtual Element::Type type() const override { return Element::Type::HBOX;       }
 
@@ -121,7 +121,7 @@ class VBox : public Box {
 
    public:
       VBox(Score* score);
-      ~VBox() {}
+      virtual ~VBox() {}
       virtual VBox* clone() const override        { return new VBox(*this); }
       virtual Element::Type type() const override { return Element::Type::VBOX;       }
 
@@ -141,7 +141,7 @@ class FBox : public VBox {
 
    public:
       FBox(Score* score) : VBox(score) {}
-      ~FBox() {}
+      virtual ~FBox() {}
       virtual FBox* clone() const override        { return new FBox(*this); }
       virtual Element::Type type() const override { return Element::Type::FBOX;       }
 

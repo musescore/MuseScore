@@ -132,10 +132,10 @@ void MeasureBase::add(Element* e)
       {
       e->setParent(this);
       if (e->type() == Element::Type::LAYOUT_BREAK) {
-            LayoutBreak* b = static_cast<LayoutBreak*>(e);
+            LayoutBreak* b = toLayoutBreak(e);
 #ifndef NDEBUG
             foreach (Element* ee, _el) {
-                  if (ee->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
+                  if (ee->isLayoutBreak() && toLayoutBreak(ee)->layoutBreakType() == b->layoutBreakType()) {
                         if (MScore::debugMode)
                               qDebug("warning: layout break already set");
                         return;
@@ -387,11 +387,12 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
       else {
             // remove line break
             for (Element* e : el()) {
-                  if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
+                  if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == type) {
                         score()->undoRemoveElement(e);
-                        break;
+                        return;
                         }
                   }
+            qDebug("no break found");
             }
       }
 

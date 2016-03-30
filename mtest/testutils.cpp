@@ -169,6 +169,8 @@ MasterScore* MTest::readCreatedScore(const QString& name)
             delete score;
             return 0;
             }
+      for (Score* s : score->scoreList())
+            s->doLayout();
       return score;
       }
 

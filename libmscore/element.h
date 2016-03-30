@@ -326,7 +326,8 @@ class Element : public QObject, public ScoreElement {
    public:
       Element(Score* s = 0);
       Element(const Element&);
-      virtual ~Element();
+      virtual ~Element() {}
+
       Element &operator=(const Element&) = delete;
       //@ create a copy of the element
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;

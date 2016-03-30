@@ -98,7 +98,6 @@ void Score::layoutLinear(LayoutContext& lc)
             if (m->sectionBreak() && m->nextMeasureMM())
                   addSystemHeader(m->nextMeasureMM(), true);
             }
-//TODO      removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
 
       QPointF pos(0.0, 0.0);
       bool isFirstMeasure = true;

@@ -47,12 +47,15 @@ void TestTimesig::timesig01()
       {
       MasterScore* score = readScore(DIR + "timesig01.mscx");
       QVERIFY(score);
-      Measure* m = score->firstMeasure()->nextMeasure();
+      Measure* m  = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
       ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-      score->cmdAddTimeSig(m, 0, ts, false);
-      score->doLayout();
+      score->startCmd();
+      int staffIdx = 0;
+      bool local   = false;
+      score->cmdAddTimeSig(m, staffIdx, ts, local);
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "timesig01.mscx", DIR + "timesig01-ref.mscx"));
       delete score;
