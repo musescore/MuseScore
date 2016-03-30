@@ -71,6 +71,7 @@ TimeDialog::TimeDialog(QWidget* parent)
       for (int i = 0; i < sp->size(); ++i)      // cells can be changed
             sp->setCellReadOnly(i, false);
 
+      sp->element(2)->layout();
       sp->setSelected(2);
       paletteChanged(2);
       }
@@ -93,6 +94,7 @@ void TimeDialog::addClicked()
             }
       // extend palette:
       sp->append(ts, "");
+      sp->setSelected(sp->size() - 1);
       _dirty = true;
       }
 
