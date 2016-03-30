@@ -42,6 +42,16 @@ if(POLICY CMP0020)
       cmake_policy(SET CMP0020 OLD)
 endif(POLICY CMP0020)
 
+# silently ignore non-existent dependencies (mops1, mops2)
+if(POLICY CMP0046)
+      cmake_policy(SET CMP0046 OLD)
+endif(POLICY CMP0046)
+
+# ignore MACOSX_RPATH is not specified for awlplugin
+if(POLICY CMP0042)
+      cmake_policy(SET CMP0042 OLD)
+endif(POLICY CMP0042)
+
 include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
@@ -230,7 +240,7 @@ if (BUILD_ALSA)
       if (NOT ALSA_INCDIR)
             message(SEND_ERROR "Error: ALSA support requested (BUILD_ALSA=${BUILD_ALSA}), but ALSA >= 1.0.0 was not found.")
       else (NOT ALSA_INCDIR)
-            message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}") 
+            message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}")
             set (USE_ALSA 1)
       endif (NOT ALSA_INCDIR)
 else (BUILD_ALSA)
