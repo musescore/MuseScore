@@ -647,6 +647,8 @@ int System::y2staff(qreal y) const
 
 void System::add(Element* el)
       {
+      if (!el)
+            return;
 // qDebug("%p System::add: %p %s", this, el, el->name());
 
       el->setParent(this);
