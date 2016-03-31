@@ -2746,7 +2746,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
       {
       if (mb == 0)
-            return nullptr;
+            return 0;
       if (mb->isMeasure()) {
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   if (m->tick() == mb->tick())
@@ -2801,8 +2801,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
       for (Score* score : scoreList())
             ml.append(pair<Score*, MeasureBase*>(score, searchMeasureBase(score, measure)));
 
-      MeasureBase* omb = nullptr;   // measure base in "this" score
-      MeasureBase* rmb = nullptr;   // measure base in root score (for linking)
+      MeasureBase* omb = 0;   // measure base in "this" score
+      MeasureBase* rmb = 0;   // measure base in root score (for linking)
 
       for (pair<Score*, MeasureBase*> p : ml) {
             Score* score    = p.first;
@@ -2818,7 +2818,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         omb = static_cast<Measure*>(mb);
 
                   Measure* m = static_cast<Measure*>(mb);
-                  Measure* mi = im ? score->tick2measure(im->tick()) : nullptr;
+                  Measure* mi = im ? score->tick2measure(im->tick()) : 0;
+
                   m->setTimesig(f);
                   m->setLen(f);
                   ticks = m->ticks();
@@ -2931,17 +2932,21 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             // fill measure with rest
             //
             Score* _root = masterScore();
+            MeasureBase* rootMeasure = searchMeasureBase(_root, omb);
+
+            Q_ASSERT(_root == rootMeasure->score());
+
             for (int staffIdx = 0; staffIdx < _root->nstaves(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   int tick = omb->tick();
-                  Segment* s = static_cast<Measure*>(omb)->findSegment(Segment::Type::ChordRest, tick);
+                  Segment* s = toMeasure(rootMeasure)->findSegment(Segment::Type::ChordRest, tick);
                   if (s == 0 || s->element(track) == 0) {
                         // add rest to this staff and to all the staves linked to it
                         Rest* rest = new Rest(_root, TDuration(TDuration::DurationType::V_MEASURE));
                         Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
                         rest->setDuration(static_cast<Measure*>(omb)->len() * timeStretch);
                         rest->setTrack(track);
-                        undoAddCR(rest, static_cast<Measure*>(omb), tick);
+                        undoAddCR(rest, toMeasure(rootMeasure), tick);
                         }
                   }
             }

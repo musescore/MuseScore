@@ -72,13 +72,12 @@ void TestMeasure::initTestCase()
 void TestMeasure::insertMeasureMiddle()
       {
       MasterScore* score = readScore(DIR + "measure-1.mscx");
-      for (Score* s : score->scoreList())
-            s->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
       score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
+
       QVERIFY(saveCompareScore(score, "measure-1.mscx", DIR + "measure-1-ref.mscx"));
       delete score;
       }
