@@ -142,6 +142,9 @@ void MScore::init()
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");
+
+      //classed enumerations
+      qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
 #endif
 
 //      DPMM = DPI / INCH;       // dots/mm
@@ -351,6 +354,9 @@ QQmlEngine* MScore::qml()
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
+
+            //classed enumerations
+            qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();

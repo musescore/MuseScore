@@ -14,9 +14,11 @@
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/mscore.h"
+#include "libmscore/musescoreCore.h"
+#include "libmscore/undo.h"
 #include "mscore/qmlplugin.h"
 
-#define DIR QString("/libmscore/plugins/")
+#define DIR QString("libmscore/plugins/")
 
 using namespace Ms;
 
@@ -29,12 +31,36 @@ class TestPlugins : public QObject, public MTest
       Q_OBJECT
 
       QQmlEngine engine;
+      QQmlEngine* MsQmlEngine;
+
+      QmlPlugin* loadPlugin(QString path);
 
    private slots:
       void initTestCase();
       void plugins01();
       void plugins02();
+      void testTextStyle();
       };
+
+//---------------------------------------------------------
+///   loadPlugin
+///   Loads the qml plugin located at path
+///   Returns pointer to the plugin or nullptr upon failure
+///   Note: ensure to cleanup the returned pointer
+//---------------------------------------------------------
+QmlPlugin* TestPlugins::loadPlugin(QString path)
+      {
+      QQmlComponent component(MsQmlEngine);
+      component.loadUrl(QUrl::fromLocalFile(path));
+      QObject* obj = component.create();
+      if (obj == 0) {
+            foreach(QQmlError e, component.errors())
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+            return nullptr;
+            }
+
+      return qobject_cast<QmlPlugin*>(obj);
+      }
 
 //---------------------------------------------------------
 //   initTestCase
@@ -45,6 +71,7 @@ void TestPlugins::initTestCase()
       initMTest();
       qmlRegisterType<MScore>    ("MuseScore", 1, 0, "MScore");
       qmlRegisterType<QmlPlugin> ("MuseScore", 1, 0, "MuseScore");
+      MsQmlEngine = Ms::MScore::qml();
       }
 
 //---------------------------------------------------------
@@ -54,7 +81,7 @@ void TestPlugins::initTestCase()
 
 void TestPlugins::plugins01()
       {
-      QString path = root + DIR + "plugins01.qml";
+      QString path = root + "/" + DIR + "plugins01.qml";
       QQmlComponent component(&engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();
@@ -80,7 +107,7 @@ void TestPlugins::plugins01()
 
 void TestPlugins::plugins02()
       {
-      QString path = root + DIR + "plugins02.qml";
+      QString path = root + "/" + DIR + "plugins02.qml";
       QQmlComponent component(&engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();
@@ -97,6 +124,26 @@ void TestPlugins::plugins02()
             QCOMPARE(height, 75.0);
             }
       delete object;
+      }
+
+//---------------------------------------------------------
+///   testTextStyle
+///   Reading and writing of a text style through the plugin framework
+//---------------------------------------------------------
+
+void TestPlugins::testTextStyle()
+      {
+      QmlPlugin* item = loadPlugin(root + "/" + DIR + "testTextStyle.qml");
+      QVERIFY(item != nullptr);
+
+      Score* score = readScore(DIR + "testTextStyle.mscx");
+      MuseScoreCore::mscoreCore->setCurrentScore(score);
+      item->runPlugin();
+      QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test.mscx", DIR + "testTextStyle-ref.mscx"));
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test2.mscx", DIR + "testTextStyle.mscx"));
+
+      delete item;
       }
 
 QTEST_MAIN(TestPlugins)
