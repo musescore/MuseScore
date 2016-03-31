@@ -457,7 +457,18 @@ ChordRest* Articulation::chordRest() const
 Segment* Articulation::segment() const
       {
       ChordRest* cr = chordRest();
-      return static_cast<Segment*>(cr ? cr->parent() : 0);
+      if (!cr)
+            return nullptr;
+
+      Segment* s = nullptr;
+      if (cr->isGrace()) {
+            if (cr->parent())
+                  s = static_cast<Segment*>(cr->parent()->parent());
+            }
+      else
+            s = static_cast<Segment*>(cr->parent());
+
+      return s;
       }
 
 Measure* Articulation::measure() const
