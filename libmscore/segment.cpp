@@ -434,6 +434,7 @@ void Segment::checkElement(Element* el, int track)
 void Segment::add(Element* el)
       {
 //      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
+
       el->setParent(this);
 
       int track = el->track();

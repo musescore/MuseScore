@@ -1292,11 +1292,11 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 
             Q_ASSERT(seg->segmentType() == segmentType);
 
-            ChordRest* newcr = (staff == ostaff) ? cr : static_cast<ChordRest*>(cr->linkedClone());
+            ChordRest* newcr = (staff == ostaff) ? cr : toChordRest(cr->linkedClone());
             newcr->setScore(score);
             int staffIdx = score->staffIdx(staff);
 
-            int ntrack   = staffIdx * VOICES + cr->voice();
+            int ntrack = staffIdx * VOICES + cr->voice();
             newcr->setTrack(ntrack);
             newcr->setParent(seg);
 

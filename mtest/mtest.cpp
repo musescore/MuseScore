@@ -34,7 +34,7 @@ const char* tests[] = {
       "libmscore/hairpin/tst_hairpin",
 /**/      "libmscore/chordsymbol/tst_chordsymbol",
       "libmscore/text/tst_text",
-//      "libmscore/measure/tst_measure",
+/**/      "libmscore/measure/tst_measure",
       "libmscore/beam/tst_beam",
 //      "libmscore/spanners/tst_spanners",
 //      "libmscore/clef_courtesy/tst_clef_courtesy",
@@ -44,7 +44,7 @@ const char* tests[] = {
       "libmscore/layout/tst_benchmark",
 //      "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/instrumentchange/tst_instrumentchange",
-//      "libmscore/join/tst_join",
+      "libmscore/join/tst_join",
       "libmscore/transpose/tst_transpose",
       "libmscore/copypaste/tst_copypaste",
 
