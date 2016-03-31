@@ -1854,6 +1854,7 @@ static void layoutPage(Page* page, qreal restHeight)
                   continue;
             ++gaps;
             }
+
       if (!gaps || MScore::layoutDebug || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
@@ -1884,13 +1885,14 @@ static void layoutPage(Page* page, qreal restHeight)
             System* s1 = page->systems().at(i);
             System* s2 = page->systems().at(i+1);
             if (!(s1->vbox() || s2->vbox())) {
-                  qreal dist   = s2->y() - (s1->y() + s1->height());
+                  qreal dist   = (s2->y() + yoff) - (s1->y() + s1->height());
                   qreal offset = stretch;
                   if (dist + stretch > maxDistance) {       // limit stretch
                         offset = maxDistance - dist;
                         if (offset < 0)
                               offset = 0;
                         }
+
                   yoff += offset;
 
                   // add / remove system dividers
