@@ -2159,12 +2159,12 @@ bool MgStyle::drawPanelScrollAreaCornerPrimitive( const QStyleOption*, QPainter*
       // disable painting of PE_PanelScrollAreaCorner
       // the default implementation fills the rect with the window background color
       // which does not work for windows that have gradients.
-      // unfortunately, this does not work when scrollbars are children of QWebView,
+      // unfortunately, this does not work when scrollbars are children of QWebEngineView,
       // in which case, false is returned, in order to fall back to the parent style implementation
       if(!widget)
             widget = QApplication::activeWindow();
 
-      return !( widget && widget->inherits( "QWebView" ) );
+      return !( widget && widget->inherits( "QWebEngineView" ) );
       }
 
 bool MgStyle::drawIndicatorBranchPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* ) const {

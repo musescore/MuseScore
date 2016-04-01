@@ -18,6 +18,8 @@
 
 namespace Ms {
 
+
+#if 0 // TODO: port to QWebEngine
 //---------------------------------------------------------
 //   showStartcenter
 //---------------------------------------------------------
@@ -59,8 +61,8 @@ Startcenter::Startcenter()
             }
 
       if (enableExperimental)
-            QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
+            QWebEngineSettings::globalSettings()->setAttribute(QWebEngineSettings::DeveloperExtrasEnabled, true);
+      QWebEngineSettings::globalSettings()->setAttribute(QWebEngineSettings::PluginsEnabled, false);
       recentPage->setBoldTitle(false);
       updateRecentScores();
       }
@@ -173,9 +175,9 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
 //---------------------------------------------------------
 
 MyWebView::MyWebView(QWidget *parent):
-   QWebView(parent)
+   QWebEngineView(parent)
       {
-      page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+      page()->setLinkDelegationPolicy(QWebEnginePage::DelegateAllLinks);
       QNetworkAccessManager* networkManager = new MyNetworkAccessManager(this);
 #ifndef QT_NO_OPENSSL
       connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(ignoreSSLErrors(QNetworkReply*,QList<QSslError>)));
@@ -184,7 +186,7 @@ MyWebView::MyWebView(QWidget *parent):
       connect(this, SIGNAL(loadFinished(bool)), SLOT(stopBusy(bool)));
       connect(this, SIGNAL(linkClicked(const QUrl&)), SLOT(link(const QUrl&)));
 
-      QWebFrame* frame = page()->mainFrame();
+      QWebEngineFrame* frame = page()->mainFrame();
       connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(addToJavascript()));
 
       page()->setNetworkAccessManager(networkManager);
@@ -269,7 +271,7 @@ void MyWebView::link(const QUrl& url)
 
 void MyWebView::addToJavascript()
       {
-      QWebFrame* frame = page()->mainFrame();
+      QWebEngineFrame* frame = page()->mainFrame();
       frame->addToJavaScriptWindowObject("mscore", mscore);
       }
 
@@ -362,6 +364,6 @@ void CookieJar::save()
             }
       file.close();
       }
-
+#endif
 }
 

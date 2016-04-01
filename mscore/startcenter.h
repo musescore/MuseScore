@@ -17,6 +17,7 @@
 
 namespace Ms {
 
+#if 0
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
@@ -38,7 +39,7 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 //   MyWebView
 //---------------------------------------------------------
 
-class MyWebView: public QWebView
+class MyWebView: public QWebEngineView
       {
       Q_OBJECT
 
@@ -103,7 +104,7 @@ class Startcenter : public QDialog, public Ui::Startcenter
       void writeSettings(QSettings&);
       void readSettings(QSettings&);
       };
-
+#endif
 }
 #endif
 

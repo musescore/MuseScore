@@ -50,7 +50,6 @@ set (QT_mingw_LIBRARIES
     QtCore4
     QtXml4
     QtNetwork4
-    QtWebKit4
     QtXmlPatterns4
     QtDeclarative4
     )

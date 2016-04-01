@@ -32,8 +32,7 @@
 #include <QtGui>
 #include <QModelIndex>
 
-#include <QWebView>
-#include <QWebFrame>
+//#include <QWebEngineView>
 
 #include <QtXml>
 #include <QAbstractMessageHandler>
