@@ -418,6 +418,13 @@ void Hairpin::read(XmlReader& e)
             if (!_continueText)
                   setContinueText(cresc ? "(cresc.)" : "(dim.)");
             }
+
+      // see issue #10412
+      if (lineStyle() == Qt::CustomDashLine) {
+            QString sv = score()->mscoreVersion();
+            if (sv == "2.0.2" || sv == "2.0.1" || sv == "2.0.0")
+                  _useTextLine = true;
+            }
       }
 
 //---------------------------------------------------------
