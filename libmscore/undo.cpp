@@ -2924,20 +2924,20 @@ void InsertRemoveMeasures::removeMeasures()
       int tick2 = lm->endTick();
       score->measures()->remove(fm, lm);
       score->fixTicks();
-      if (fm->type() == Element::Type::MEASURE) {
+      if (fm->isMeasure()) {
             score->setPlaylistDirty();
 
             // check if there is a clef at the end of last measure
             // remove clef from staff cleflist
 
-            if (lm->type() == Element::Type::MEASURE) {
-                  Measure* m = static_cast<Measure*>(lm);
+            if (lm->isMeasure()) {
+                  Measure* m = toMeasure(lm);
                   Segment* s = m->findSegment(Segment::Type::Clef, tick2);
                   if (s) {
-                        for (int staffIdx = 0; staffIdx <= score->nstaves(); ++staffIdx) {
-                              Clef* clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
+                        for (Element* e : s->elist()) {
+                              Clef* clef = toClef(e);
                               if (clef)
-                                    score->staff(staffIdx)->removeClef(clef);
+                                    score->staff(clef->staffIdx())->removeClef(clef);
                               }
                         }
                   }

@@ -1659,8 +1659,7 @@ QPointF Chord::pagePos() const
             System* system = pc->segment()->system();
             if (!system)
                   return p;
-            int csi = staffIdx() + staffMove();
-            p.ry() += system->staffYpage(csi);
+            p.ry() += system->staffYpage(vStaffIdx());
             return p;
             }
       return Element::pagePos();

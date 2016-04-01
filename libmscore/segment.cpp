@@ -1384,12 +1384,15 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
       Segment::Type st  = segmentType();
       Segment::Type nst = ns ? ns->segmentType() : Segment::Type::Invalid;
 
+//      printf("minHDist %s - %s\n", subTypeName(), ns->subTypeName());
+
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = shape(staffIdx).minHorizontalDistance(ns->shape(staffIdx));
 //            if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
 //                  d = qMax(d, minRight()) + score()->styleP(StyleIdx::noteBarDistance);
             w = qMax(w, d);
+//            printf("    %d: %f -> %f\n", staffIdx, d, w);
             }
 
       if (st == Segment::Type::ChordRest) {
@@ -1428,7 +1431,7 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             w = 0.0;
       if (ns)
             w += ns->extraLeadingSpace().val() * spatium();
-//      qDebug("minHDist %f %s %s", w, subTypeName(), ns ? ns->subTypeName() : "-0-");
+//      printf("  == %f %s %s\n", w, subTypeName(), ns ? ns->subTypeName() : "-0-");
       return w;
       }
 

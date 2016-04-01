@@ -99,7 +99,7 @@ public:
       std::vector<Element*> _annotations;
       std::vector<Element*> _elist;       ///< Element storage, size = staves * VOICES.
       std::vector<Shape>    _shapes;      // size = staves
-      std::vector<qreal>   _dotPosX;            ///< size = staves
+      std::vector<qreal>   _dotPosX;      ///< size = staves
 
       void init();
       void checkEmpty() const;

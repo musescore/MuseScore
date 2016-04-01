@@ -505,7 +505,7 @@ void Beam::layout()
 
             qreal lw2      = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
             ChordRest* cr  = crl.front();
-            Shape& s       = cr->segment()->shape(staffIdx());
+//            Shape& s       = cr->segment()->shape(staffIdx());
             QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
 
             for (const QLineF* bs : beamSegments) {
@@ -515,7 +515,7 @@ void Beam::layout()
                   a[2] = QPointF(bs->x2(), bs->y2());
                   a[3] = QPointF(bs->x1(), bs->y1());
                   QRectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
-                  s.add(r.translated(-offset));
+//TODO                  s.add(r.translated(-offset));
                   addbbox(r);
                   }
             }
@@ -660,8 +660,7 @@ bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
 //   BeamMetric
 //---------------------------------------------------------
 
-struct Bm
-      {
+struct Bm {
       signed char l;     // stem len   in 1/4 spatium units
       signed char s;     // beam slant in 1/4 spatium units
       Bm() : l(0), s(0) {}
@@ -1595,8 +1594,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               continue;   //y = c->pagePos().y();
                         else
                               y  = c->upNote()->pagePos().y();
-                        y1       = qMax(y1, y);
-                        y2       = qMin(y2, y);
+                        y1 = qMax(y1, y);
+                        y2 = qMin(y2, y);
                         }
                   if (y1 > y2)
                         beamY = y2 + (y1 - y2) * .5;
