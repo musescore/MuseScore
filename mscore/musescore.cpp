@@ -2223,10 +2223,43 @@ static bool processNonGui()
                         return mscore->savePdf(scores, fn);
                         }
                   }
+            if (fn.endsWith(".png")) {
+                  if (!exportScoreParts)
+                        return mscore->savePng(cs, fn);
+                  else {
+                        if (cs->excerpts().size() == 0) {
+                              QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs);
+                      
+                              foreach(Excerpt* e, exceprts) {
+                                    Score* nscore = new Score(e->oscore());
+                                    e->setPartScore(nscore);
+                                    nscore->setName(e->title()); // needed before AddExcerpt
+                                    nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                                    cs->startCmd();
+                                    cs->undo(new AddExcerpt(nscore));
+                                    createExcerpt(e);
+                                    cs->endCmd();
+                                    }
+                              }
+                        if (!mscore->savePng(cs, fn))
+                              return false;
+                        int idx = 0;
+                        int padding = QString("%1").arg(cs->excerpts().size()).size();
+                        foreach(Excerpt* e, cs->excerpts()) {
+                              QString excerptName = fn.left(fn.size() - 4) + QString("__exc__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
+                              if (!mscore->savePng(e->partScore(), excerptName))
+                                    return false;
+                              idx++;
+                        }
+                        return true;
+                        }
+            }
+/*	
             else if (fn.endsWith(".png")) {
                   cs->switchToPageMode();
                   rv = mscore->savePng(cs, fn);
                   }
+*/
             else if (fn.endsWith(".svg")) {
                   cs->switchToPageMode();
                   rv = mscore->saveSvg(cs, fn);
