@@ -2065,12 +2065,12 @@ void Score::respace(QList<ChordRest*>* /*elements*/)
 qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       {
       Shape ls;
-      ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));            // simulated bar line
       if (isFirstMeasureInSystem)
             ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // left margin
+      else
+            ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));      // simulated bar line
       qreal x = s->minLeft(ls);
 
-      qreal _spatium         = spatium();
       qreal keysigLeftMargin  = styleP(StyleIdx::keysigLeftMargin);
       qreal timesigLeftMargin = styleP(StyleIdx::timesigLeftMargin);
 
@@ -2083,7 +2083,7 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             x = qMax(x, keysigLeftMargin);
       else if (s->isTimeSigType())
             x = qMax(x, timesigLeftMargin);
-      x += s->extraLeadingSpace().val() * _spatium;
+      x += s->extraLeadingSpace().val() * spatium();
 
       for (Segment* ss = s; ss;) {
             ss->rxpos() = x;
@@ -2092,7 +2092,6 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
 
             if (ns) {
                   w = ss->minHorizontalDistance(ns);
-
 #if 1
                   // look back for collisions with previous segments
                   // this is time consuming (ca. +5%) and probably requires more optimization
@@ -2983,6 +2982,46 @@ void Score::getNextMeasure(LayoutContext& lc)
       }
 
 //---------------------------------------------------------
+//   isTopBeam
+//---------------------------------------------------------
+
+static bool isTopBeam(ChordRest* cr)
+      {
+      if (cr->beam() && cr->beam()->elements().front() == cr) {
+            Beam* b = cr->beam();
+            bool movedUp = true;
+            for (ChordRest* cr1 : b->elements()) {
+                  if (cr1->staffMove() >= 0) {
+                        movedUp = false;
+                        break;
+                        }
+                  }
+            if (!b->cross() && !movedUp)
+                  return true;
+            }
+      return false;
+      }
+
+static bool notTopBeam(ChordRest* cr)
+      {
+      if (cr->beam() && cr->beam()->elements().front() == cr) {
+            Beam* b = cr->beam();
+            if (b->cross())
+                  return true;
+            bool movedUp = true;
+            for (ChordRest* cr1 : b->elements()) {
+                  if (cr1->staffMove() >= 0) {
+                        movedUp = false;
+                        break;
+                        }
+                  }
+            if (movedUp)
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   collectSystem
 //---------------------------------------------------------
 
@@ -3028,8 +3067,10 @@ System* Score::collectSystem(LayoutContext& lc)
                         addSystemHeader(m, lc.firstSystem);
                         ww = computeMinWidth(m->first(), true);
                         }
-                  else
+                  else if (m->hasSystemHeader())
                         ww = m->minWidth1();    // without system header
+                  else
+                        ww = computeMinWidth(m->first(), false);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   m->setWidth(ww);
@@ -3052,7 +3093,6 @@ System* Score::collectSystem(LayoutContext& lc)
 
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure
-
 
             if ((system->measures().size() > 1) && (minWidth + ww > systemWidth)) {
                   system->measures().pop_back();
@@ -3286,7 +3326,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (Element* e : s->elist()) {
                         if (e && e->isChordRest()) {
                               ChordRest* cr = toChordRest(e);
-                              if (cr->beam() && !cr->beam()->cross() && cr->beam()->elements().front() == cr)
+                              if (isTopBeam(cr))
                                     cr->beam()->layout();
                               }
                         }
@@ -3458,7 +3498,7 @@ bool Score::collectPage(LayoutContext& lc)
                                     if (!staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
-                                    if (cr->beam() && cr->beam()->cross() && cr->beam()->elements().front() == cr)     // layout cross staff beams
+                                    if (notTopBeam(cr))                   // layout cross staff beams
                                           cr->beam()->layout();
 
                                     if (cr->isChord()) {

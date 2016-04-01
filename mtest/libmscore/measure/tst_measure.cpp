@@ -186,20 +186,21 @@ void TestMeasure::insertBfKeyChange()
 void TestMeasure::minWidth()
       {
       MasterScore* score = readScore(DIR + "measure-2.mscx");
+
       int n = score->systems().size();
       int measuresSystem[n];
       for (int i = 0; i < n; ++i)
             measuresSystem[i] = score->systems().at(i)->measures().size();
 
+      score->doLayout();
+
       Measure* m1 = score->systems().at(1)->lastMeasure();
       Measure* m2 = score->systems().at(2)->firstMeasure();
-      qreal mw1 = m1->minWidth1();
-      qreal mw2 = m2->minWidth1();
+      qreal mw1   = m1->minWidth1();
+      qreal mw2   = m2->minWidth1();
 
       score->doLayout();
 
-      printf("m1: %f / %f\n", mw1, m1->minWidth1());
-      printf("m2: %f / %f\n", mw2, m2->minWidth1());
       QCOMPARE(mw1, m1->minWidth1());
       QCOMPARE(mw2, m2->minWidth1());
 

@@ -47,7 +47,7 @@ const char* tests[] = {
       "libmscore/join/tst_join",
       "libmscore/transpose/tst_transpose",
       "libmscore/copypaste/tst_copypaste",
-#if 0
+
 //      "libmscore/parts/tst_parts",                                // crash
       "libmscore/concertpitch/tst_concertpitchbenchmark",
       "libmscore/selectionfilter/tst_selectionfilter",
@@ -71,7 +71,6 @@ const char* tests[] = {
       "capella/io/tst_capella_io",
       "importmidi/tst_importmidi",
 //      "musicxml/io/tst_mxml_io",
-#endif
       };
 
 //---------------------------------------------------------

@@ -2826,7 +2826,7 @@ qreal Measure::minWidth1() const
       {
       int nstaves = score()->nstaves();
       Segment* s = first();
-      Segment::Type st = Segment::Type::Clef | Segment::Type::KeySig | Segment::Type::StartRepeatBarLine;
+      Segment::Type st = Segment::Type::Clef | Segment::Type::KeySig | Segment::Type::StartRepeatBarLine | Segment::Type::BeginBarLine;
       while ((s->segmentType() & st) && s->next()) {
             // found a segment that we might be able to skip
             // we can do so only if it contains no non-generated elements
