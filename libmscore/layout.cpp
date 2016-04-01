@@ -3073,6 +3073,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         ww = computeMinWidth(m->first(), false);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
+                  ww += m->createEndBarLines(true);
                   m->setWidth(ww);
 
                   qreal stretch = m->userStretch() * measureSpacing;

@@ -1331,7 +1331,6 @@ void Segment::createShape(int staffIdx)
             if (e && e->vStaffIdx() == staffIdx && e->visible())
                   s.add(e->shape());
             }
-
       for (Element* e : _annotations) {
             if (e->staffIdx() == staffIdx && e->visible())
                   s.add(e->shape());
