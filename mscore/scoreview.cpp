@@ -208,6 +208,7 @@ class EditTransition : public QMouseEventTransition
                   return false;
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
+            canvas->score()->currentlyEditedPage = canvas->point2page(p);
             Element* e = canvas->elementNear(p);
             if (e && e->isEditable())
                   canvas->setEditObject(e);
@@ -1236,9 +1237,13 @@ void ScoreView::updateGrips()
       // updateGrips returns grips in page coordinates,
       // transform to view coordinates:
 
-      Element* page = editObject;
-      while (page->parent())
-            page = page->parent();
+      // Element* page = editObject;
+      // while (page->parent())
+      //       page = page->parent();
+
+      // HACK: used by multi-page beams:
+      Element* page = score()->currentlyEditedPage;
+
       QPointF pageOffset(page->pos());
       for (int i = 0; i < grips; ++i) {
             grip[i].translate(pageOffset);
@@ -1897,11 +1902,13 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
                   p.translate(pos);
+                  _score->currentlyPaintedPage = page;
                   drawElements(p, ell);
                   p.translate(-pos);
                   r1 -= _matrix.mapRect(pr).toAlignedRect();
                   }
             }
+            _score->currentlyPaintedPage = nullptr;
       if (dropRectangle.isValid())
             p.fillRect(dropRectangle, QColor(80, 0, 0, 80));
 
@@ -6040,4 +6047,3 @@ void ScoreView::updateContinuousPanel()
       }
 
 }
-

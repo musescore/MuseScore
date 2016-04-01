@@ -31,6 +31,7 @@
 #include "stemslash.h"
 #include "groups.h"
 #include "xml.h"
+#include "page.h"
 
 namespace Ms {
 
@@ -44,6 +45,8 @@ namespace Ms {
 struct BeamFragment {
       qreal py1[2];
       qreal py2[2];
+      QPointF startPt;
+      QPointF endPt;
       };
 
 //---------------------------------------------------------
@@ -66,6 +69,7 @@ Beam::Beam(Score* s)
       _cross            = false;
       _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
       noSlopeStyle     = PropertyStyle::STYLED;
+      _pageLayoutIsComplete = false;
       }
 
 //---------------------------------------------------------
@@ -97,6 +101,7 @@ Beam::Beam(const Beam& b)
       slope            = b.slope;
       _noSlope         = b._noSlope;
       noSlopeStyle     = b.noSlopeStyle;
+      _pageLayoutIsComplete = b._pageLayoutIsComplete;
       }
 
 //---------------------------------------------------------
@@ -134,7 +139,12 @@ QPointF Beam::pagePos() const
 QPointF Beam::canvasPos() const
       {
       QPointF p(pagePos());
-      if (system() && system()->parent())
+      // HACK for multi-page beams:
+      if (score()->currentlyEditedPage &&
+          _lineIdxsForPage.contains(score()->currentlyEditedPage)) {
+            p += score()->currentlyEditedPage->pos();
+            }
+      else if (system() && system()->parent())
             p += system()->parent()->pos();
       return p;
       }
@@ -201,11 +211,33 @@ void Beam::removeChordRest(ChordRest* a)
 
 void Beam::draw(QPainter* painter) const
       {
+      // for multi-page beams --------
+      Page* activePage = score()->currentlyPaintedPage;
+      if (!activePage)
+            activePage = score()->currentlyEditedPage;
+
+      QPair<int, int> lineIdxs =
+            _lineIdxsForPage.value(
+                  activePage,
+                  qMakePair(-1, -1));
+
+      int lowIdx, highIdx;
+      if (lineIdxs.first == -1 && lineIdxs.second == -1) {
+            lowIdx = 0;
+            highIdx = beamSegments.size();
+            }
+      else {
+            lowIdx = lineIdxs.first;
+            highIdx = lineIdxs.second;
+            }
+      // -----------------------------
+
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
       qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach (const QLineF* bs, beamSegments) {
+      for (int i = lowIdx; i < highIdx; i++) {
             QPolygonF pg;
+            QLineF* bs = beamSegments.at(i);
                pg << QPointF(bs->x1(), bs->y1()-lw2)
                   << QPointF(bs->x2(), bs->y2()-lw2)
                   << QPointF(bs->x2(), bs->y2()+lw2)
@@ -461,14 +493,41 @@ void Beam::layoutGraceNotes()
 
 void Beam::layout()
       {
-      System* system = _elements.front()->measure()->system();
-      setParent(system);
+      if (_elements.isEmpty())  // should not happen
+            return;
+
+      _firstChordsInPages.clear();
+      _firstChordsInPages.insert(static_cast<ChordRest*>(_elements.front()));
+      _lineIdxsForPage.clear();
+
+      System *firstNoteSystem = _elements.front()->measure()->system();
+      setParent(firstNoteSystem);
+      System *lastNoteSystem = _elements.back()->measure()->system();
+
+      // cross-system beaming:
+      if (firstNoteSystem != lastNoteSystem) {
+            score()->multiSystemBeams.insert(this);
+            // if the systems are not laid out yet, return:
+            if (!_pageLayoutIsComplete)
+                  return;
+            }
+      else {
+            score()->multiSystemBeams.remove(this);
+            if (_pageLayoutIsComplete)
+                  return;
+            }
+
+
+      if (firstNoteSystem->page()) {
+            _lineIdxsForPage.insert(firstNoteSystem->page(), qMakePair(0, 0));
+            }
 
       QList<ChordRest*> crl;
 
       int n = 0;
       foreach(ChordRest* cr, _elements) {
-            if (cr->measure()->system() != system) {
+            System *currentNoteSystem = cr->measure()->system();
+            if (currentNoteSystem != firstNoteSystem) {
                   SpannerSegmentType st;
                   if (n == 0)
                         st = SpannerSegmentType::BEGIN;
@@ -479,7 +538,20 @@ void Beam::layout()
                         fragments.append(new BeamFragment);
                   layout2(crl, st, n-1);
                   crl.clear();
-                  system = cr->measure()->system();
+                  if (currentNoteSystem->page() && firstNoteSystem->page() &&
+                      currentNoteSystem->page() != firstNoteSystem->page()) {
+                        _firstChordsInPages.insert(cr);
+                        QPair<int, int> lastPageIdxs =
+                              _lineIdxsForPage[firstNoteSystem->page()];
+                        lastPageIdxs.second = beamSegments.size();
+                        _lineIdxsForPage.insert(
+                              firstNoteSystem->page(), lastPageIdxs);
+                        QPair<int, int> currPageIdxs =
+                              qMakePair(beamSegments.size(), 0);
+                        _lineIdxsForPage.insert(
+                              currentNoteSystem->page(), currPageIdxs);
+                        }
+                  firstNoteSystem = cr->measure()->system();
                   }
             crl.append(cr);
             }
@@ -492,6 +564,13 @@ void Beam::layout()
             if (fragments.size() < (n+1))
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);
+            }
+      if (firstNoteSystem->page()) {
+            QPair<int, int> lastPageIdxs =
+                  _lineIdxsForPage[firstNoteSystem->page()];
+            lastPageIdxs.second = beamSegments.size();
+            _lineIdxsForPage.insert(
+                  firstNoteSystem->page(), lastPageIdxs);
             }
 
       setbbox(QRectF());
@@ -1478,6 +1557,8 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
 
 void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       {
+      const int firstSegmentIdx = beamSegments.size();  // the index of the first segment of this beam fragment
+
       if (_distribute)
             score()->respace(&crl);       // fix horizontal spacing of stems
 
@@ -1534,7 +1615,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   py2 += _pagePos.y();
 
                   qreal beamY = py1;
-                  slope       = (py2 - py1) / (px2 - px1);
+                  if (c1 != c2)
+                        slope = (py2 - py1) / (px2 - px1);
+                  else
+                        slope = 0.0;
                   //
                   // set stem direction for every chord
                   //
@@ -1570,6 +1654,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal beamY   = 0.0;  // y position of main beam start
                   qreal y1   = -200000;
                   qreal y2   = 200000;
+
+                  // get the page position of the highest note of the each chord, when the chord is not a rest:
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
                         qreal y;
@@ -1581,7 +1667,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         y2       = qMin(y2, y);
                         }
                   if (y1 > y2)
-                        beamY = y2 + (y1 - y2) * .5;
+                        beamY = y1 + (y2 - y1) * .5;  // mean between the highest and lowest y
                   else
                         beamY = _up ? y2 : y1;
                   py1 = beamY;
@@ -1593,11 +1679,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         Chord* c = static_cast<Chord*>(cr);
                         if (c->type() != Element::Type::CHORD)
                               continue;
-                        qreal y  = c->upNote()->pagePos().y();
+                        qreal y = c->upNote()->pagePos().y();
                         bool nup = beamY < y;
                         if (c->up() != nup) {
+                              // as ChordRest::setUp() doesn't relayout the chord...
                               c->setUp(nup);
-                              // guess was wrong, have to relayout
+                              // ...we have to relayout the whole bar segment (guess was wrong, have to relayout)
                               score()->layoutChords1(c->segment(), c->staffIdx());
                               c->layout();
                               // TODO: this might affect chord space, which might affect segment position
@@ -1874,6 +1961,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               }
                         x3 = x2 + len;
                         }
+                  // prolong the beam if the group ends a system:
+                  if (cr2 == crl.last() && cr2 != _elements.last())
+                        x3 >= x2 ? x3 += beamMinLen : x2 += beamMinLen;
+                  // prolong the beam if the group starts a system:
+                  if (cr1 == crl.first() && cr1 != _elements.first())
+                        x2 <= x3 ? x2 -= beamMinLen : x3 += beamMinLen;
+
                   //feathered beams
                   qreal yo   = py1 + bl * _beamDist * _grow1;
                   qreal yoo  = py1 + bl * _beamDist * _grow2;
@@ -1886,6 +1980,19 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   else {
                         beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
+                        }
+
+                  // if we are calculating the top (eighth) beam line:
+                  if (beamLevel == 0) {
+                        // set the fragment's endpoints:
+                        if (x2 <= x3) {
+                              f->startPt = QPointF(x2, ly1);
+                              f->endPt = QPointF(x3, ly2);
+                              }
+                        else {
+                              f->startPt = QPointF(x3, ly2);
+                              f->endPt = QPointF(x2, ly1);
+                              }
                         }
                   }
             }
@@ -1920,8 +2027,12 @@ qDebug("create stem in layout beam, track %d", c->track());
             qreal fuzz = _spatium * .1;
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
-            foreach (const QLineF* l, beamSegments) {
-                  if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
+            for (int i = firstSegmentIdx; i < beamSegments.size(); i++) {
+                  const QLineF *l = beamSegments.at(i);
+                  qreal lxmin = qMin(l->x1(), l->x2()); // handle x-inverted segments
+                  qreal lxmax = qMax(l->x1(), l->x2());
+
+                  if ((x2 + fuzz) >= lxmin && (x2 - fuzz) <= lxmax) {
                         qreal y = (x2 - l->x1()) * slope + l->y1();
                         by = y2 < y1 ? qMax(by, y) : qMin(by, y);
                         }
@@ -1986,8 +2097,10 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
             foreach(BeamFragment* f, fragments) {
-                  f->py1[idx] = f->py1[idx] * diff;
-                  f->py2[idx] = f->py2[idx] * diff;
+                  f->py1[idx] *= diff;
+                  f->py2[idx] *= diff;
+                  f->startPt *= diff;
+                  f->endPt *= diff;
                   }
             }
       }
@@ -2136,27 +2249,9 @@ void Beam::editDrag(const EditData& ed)
 void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
       *defaultGrip = Grip::END;
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
-      BeamFragment* f = fragments[editFragment];
-
-      Chord* c1 = nullptr;
-      Chord* c2 = nullptr;
-      int n = _elements.size();
-      for (int i = 0; i < n; ++i) {
-            if (_elements[i]->type() == Element::Type::CHORD) {
-                  c1 = static_cast<Chord*>(_elements[i]);
-                  break;
-                  }
-            }
-      for (int i = n-1; i >= 0; --i) {
-            if (_elements[i]->type() == Element::Type::CHORD) {
-                  c2 = static_cast<Chord*>(_elements[i]);
-                  break;
-                  }
-            }
-      int y = pagePos().y();
-      grip[0].translate(QPointF(c1->stemPosX()+c1->pageX(), f->py1[idx] + y));
-      grip[1].translate(QPointF(c2->stemPosX()+c2->pageX(), f->py2[idx] + y));
+      BeamFragment* editedFrag = fragments[editFragment];
+      grip[0].moveCenter(pagePos() + editedFrag->startPt);
+      grip[1].moveCenter(pagePos() + editedFrag->endPt);
       }
 
 //---------------------------------------------------------
@@ -2443,5 +2538,12 @@ void Beam::styleChanged()
             setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 
-}
+// slot, used for cross-system beaming
+void Beam::onPageLayoutUpdated()
+      {
+      _pageLayoutIsComplete = true;
+      layout();
+      _pageLayoutIsComplete = false;
+      }
 
+}

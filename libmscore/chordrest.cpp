@@ -150,8 +150,9 @@ ChordRest::~ChordRest()
 
 void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (_beam && (_beam->elements().front() == this)
-       && !measure()->slashStyle(staffIdx()))
+      //if (_beam && (_beam->elements().front() == this || _beam->elements().back() == this) && !measure()->slashStyle(staffIdx()))
+      if (_beam && _beam->shouldBeCollectedByChordRest(this) &&
+          !measure()->slashStyle(staffIdx()))
             _beam->scanElements(data, func, all);
       foreach(Articulation* a, _articulations)
             func(data, a);
@@ -1454,4 +1455,3 @@ QString ChordRest::accessibleExtraInfo()
       return rez;
       }
 }
-

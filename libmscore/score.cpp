@@ -325,6 +325,8 @@ void Score::init()
       _layoutMode             = LayoutMode::PAGE;
       _noteHeadWidth          = 0.0;      // set in doLayout()
       _midiPortCount          = 0;
+      currentlyPaintedPage = nullptr;
+      currentlyEditedPage = nullptr;
       }
 
 //---------------------------------------------------------
@@ -4526,4 +4528,3 @@ QVariant Score::propertyDefault(P_ID id) const
       }
 
 }
-
