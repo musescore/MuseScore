@@ -9,10 +9,14 @@
 [ "${APPIMAGE}" ] || export APPIMAGE="${APPDIR}/AppRun"
 
 libs="${APPDIR}/lib"
-export LD_LIBRARY_PATH="${libs}:${libs}/qt5/lib:${LD_LIBRARY_PATH}"
+# Setting LD_LIBRARY_PATH won't override AppImage libraries, but advanced users
+# can do that with APPIMAGE_LIBRARY_PATH if they really want to.
+export LD_LIBRARY_PATH="${APPIMAGE_LIBRARY_PATH}:${libs}:${libs}/qt5/lib:${LD_LIBRARY_PATH}"
+
+export QT_STYLE_OVERRIDE="GTK+" # use system font size
 
 case "$1" in
-  -h|--help|install|uninstall|remove|man|manual|manpage|check-depends )
+  -h|--help|install|uninstall|remove|man|manual|manpage|check-depends|check-dependencies )
     "${APPDIR}/bin/portable-utils" "$@"
     ;;
   * )
