@@ -17,7 +17,7 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .\" TeX users may be more comfortable with the \fB<whatever>\fP and
-.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
 .\" respectively.
 .SH NAME@Variables_substituted_by_CMAKE_on_installation@
 mscore@MSCORE_INSTALL_SUFFIX@, musescore@MSCORE_INSTALL_SUFFIX@ \- @MUSESCORE_NAME_VERSION@ sheet music editor.
@@ -25,7 +25,7 @@ mscore@MSCORE_INSTALL_SUFFIX@, musescore@MSCORE_INSTALL_SUFFIX@ \- @MUSESCORE_NA
 .SH SYNOPSIS
 @BEGIN_section_to_only_appear_in_portable_builds@
 @MAN_PORTABLE@.SS Before installation:
-@MAN_PORTABLE@.B @PORTABLE_INSTALL_NAME@.AppImage
+@MAN_PORTABLE@.B ./@PORTABLE_INSTALL_NAME@.AppImage
 @MAN_PORTABLE@.RI [ OPTIONS ]
 @MAN_PORTABLE@.RI [ FILE .\|.\|.]
 
@@ -47,13 +47,13 @@ musical scores, released under the GNU General Public Licence (GPLv2).
 @MAN_PORTABLE@.SS Portable version
 @MAN_PORTABLE@This portable version of MuseScore has all of MuseScore's usual features,
 @MAN_PORTABLE@but it runs on a wider range of distributions and does not need to be
-@MAN_PORTABLE@installed. There is an option to install it if full integration with other
-@MAN_PORTABLE@applications and the desktop environment is desired.
+@MAN_PORTABLE@installed. There is an option to install it for full integration with other
+@MAN_PORTABLE@applications and the desktop environment.
 @END_section_to_only_appear_in_portable_builds@
 
 .SS Getting help
 This manual documents command line useage of
-.BR mscore .
+.BR mscore@MSCORE_INSTALL_SUFFIX@ .
 For help with the full MuseScore program see:
 .RS
 .TP
@@ -66,14 +66,14 @@ For help with the full MuseScore program see:
 
 .SS Further information
 .TP
-These pages cover the topics in this manual may be more up-to-date:
+These pages cover the topics in this manual and may be more up-to-date:
 
 <https://musescore.org/handbook/command-line-options-0>
 <https://musescore.org/handbook/revert-factory-settings-0>
 
 .SH OPTIONS
 A summary of options is included below. Running
-.B mscore
+.B mscore@MSCORE_INSTALL_SUFFIX@
 without options launches the full MuseScore
 program and opens any specified files.
 
@@ -85,14 +85,13 @@ program and opens any specified files.
 @MAN_PORTABLE@.TP
 @MAN_PORTABLE@.B man, manual, manpage
 @MAN_PORTABLE@Displays this manual.
-@MAN_PORTABLE@If MuseScore is installed the manual can be viewed using the traditional `man 
-@MAN_PORTABLE@.BR mscore `.
+@MAN_PORTABLE@If MuseScore is installed the manual can be viewed using the familiar `man
+@MAN_PORTABLE@.BR mscore@MSCORE_INSTALL_SUFFIX@ `.
 @MAN_PORTABLE@.TP
 @MAN_PORTABLE@.B install [-i] [PREFIX]
 @MAN_PORTABLE@.RS
-@MAN_PORTABLE@Run this without '-i' or 'PREFIX' specified to fully integrate MuseScore
-@MAN_PORTABLE@with the desktop environment (GNOME, KDE, etc) just as if it had been
-@MAN_PORTABLE@installed using a package manager. This should:
+@MAN_PORTABLE@Run this without '-i' or 'PREFIX' to fully integrate MuseScore
+@MAN_PORTABLE@with the desktop environment (GNOME, KDE, etc). This should:
 @MAN_PORTABLE@.RS 2
 @MAN_PORTABLE@.IP \[bu] 2
 @MAN_PORTABLE@Add MuseScore to your Applications Menu or Launcher,
@@ -123,7 +122,7 @@ program and opens any specified files.
 @MAN_PORTABLE@If you installed for all users then it will be removed for all users.
 @MAN_PORTABLE@
 @MAN_PORTABLE@.TP
-@MAN_PORTABLE@.B check-depends [exes-only]
+@MAN_PORTABLE@.B check-depends, check-dependencies [exes-only]
 @MAN_PORTABLE@System information for developers.
 @MAN_PORTABLE@This detects which software libraries needed
 @MAN_PORTABLE@by MuseScore are not available from the system
@@ -166,7 +165,7 @@ Displays all MIDI input on the console
 Displays all MIDI output on the console
 .TP
 .B \-o, --export-to <filename>
-Exports the currently opened file to the specified <filename>. The file type depends on the filename extension. This option switches to the "converter" mode and avoids any graphical interface. You can also add a filename before the -o if you want to import and export files from the command line. For example mscore -o "My Score.pdf" "My Score.mscz"
+Exports the currently opened file to the specified <filename>. The file type depends on the filename extension. This option switches to the "converter" mode and avoids any graphical interface. You can also add a filename before the -o if you want to import and export files from the command line. For example mscore@MSCORE_INSTALL_SUFFIX@ -o "My Score.pdf" "My Score.mscz"
 .TP
 .B \-r, --image-resolution <dpi>
 Determines the output resolution for the output to "*.png" files in the converter mode. The default resolution is 300 dpi.
@@ -232,12 +231,13 @@ No method of data rescue can match regular, automated backups.
 
 .SH BUGS
 .TP
-Issue Tracker:
+Please report any bugs via the Issue Tracker:
 
 <https://musescore.org/project/issues>
 
 .TP
-Please check if the bug has already been reported.
+Please check first to if the bug has already been reported. If you just need
+help with something then please use the support forum instead.
 
 .SH AUTHOR
 The MuseScore Team.

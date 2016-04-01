@@ -57,10 +57,11 @@ getCrossPlatformDependencies() {
   dest_dir="$qt_dest/lib"
   #dest_dir="$lib_dest"
 
-  #icudata, icui18n, & icuuc have version numbers .52 when build on jessie, .42 on centos.
-  copyLib libicudata.so #icudt53.dll # Needed by Ubuntu 12.04
-  copyLib libicui18n.so #libicuin53.so.5 # Needed by Ubuntu 12.04
-  copyLib libicuuc.so #libicuuc53.so.5 # Needed by Ubuntu 12.04
+  #icudata, icui18n, & icuuc have version numbers (.52 when build on jessie,
+  #.42 on centos) so moved to cross-platform for the time being.
+  #copyLib libicudata.so #icudt53.dll # Needed by Ubuntu 12.04
+  #copyLib libicui18n.so #libicuin53.so.5 # Needed by Ubuntu 12.04
+  #copyLib libicuuc.so #libicuuc53.so.5 # Needed by Ubuntu 12.04
 
   copyLib libQt5CLucene.so.5
   copyLib libQt5Core.so.5
@@ -158,6 +159,10 @@ building_on_Debian_Jessie() {
   copyLib libxml2.so.2
   copyLib libxslt.so.1
 
+  copyLib libicudata.so.52 # moved from cross-platform
+  copyLib libicui18n.so.52 # moved from cross-platform
+  copyLib libicuuc.so.52 # moved from cross-platform
+
   #2nd round of dependencies
   copyLib libavahi-client.so.3
   copyLib libavahi-common.so.3
@@ -254,6 +259,9 @@ building_on_CentOS_6() {
   copyLib libjpeg.so.62
   copyLib libssl.so.10
   copyLib libtiff.so.3
+  copyLib libicudata.so.42 # moved from cross-platform
+  copyLib libicui18n.so.42 # moved from cross-platform
+  copyLib libicuuc.so.42 # moved from cross-platform
 
   # Needed by Fedora 22:
   copyLib libmng.so.1
@@ -277,7 +285,7 @@ locateLib() {
       echo "$d/$1"
       return
     else
-      path="$(ls "$d/$1."* | grep -Em1 "$1.[0-9]+")" 
+      path="$(ls "$d/$1."* | grep -Em1 "$1.[0-9]+")"
       if [ "$path" ]; then
         echo "$path"
         return
