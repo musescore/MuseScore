@@ -1752,115 +1752,90 @@ p, li { white-space: pre-wrap; }
         <translation>Staff celfi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="586"/>
-        <source>Lines:</source>
-        <translation>Llinellau:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="618"/>
-        <source>Line distance:</source>
-        <translation>Llinell pellter</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="640"/>
-        <location filename="../../mscore/editstaff.ui" line="666"/>
-        <source>sp</source>
-        <translation>sp</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="650"/>
-        <source>Extra distance above staff:</source>
-        <translation> Rhagor o bellder uwch ataff:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="682"/>
-        <source>Scale</source>
-        <translation>Graddfa</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="689"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="710"/>
-        <source>Cutaway</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="717"/>
-        <source>Hide system barline</source>
-        <translation>Cyddied system llinellau bar</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="730"/>
-        <source>Small staff</source>
-        <translation>Staff Bach</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="737"/>
-        <source>Show clef</source>
-        <translation>Dangos cleff</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="746"/>
-        <source>Staff line color:</source>
-        <translation>Staff Liw y llinell:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="768"/>
-        <source>Show barlines</source>
-        <translation>Dangos llinellau bar</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="775"/>
-        <source>Show time signature</source>
-        <translation>Dangos arwydd-dôn</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="782"/>
-        <source>Advanced Style Properties...</source>
-        <translation>Uwchradd pob priodwedd</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="789"/>
+        <location filename="../../mscore/editstaff.ui" line="581"/>
         <source>Do not hide if system is empty</source>
         <translation>Dim cyddio os yw y system yn wag</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="798"/>
+        <location filename="../../mscore/editstaff.ui" line="588"/>
+        <source>Show time signature</source>
+        <translation>Dangos arwydd-dôn</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="597"/>
+        <source>Staff line color:</source>
+        <translation>Staff Liw y llinell:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="619"/>
+        <source>Advanced Style Properties...</source>
+        <translation>Uwchradd pob priodwedd</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="628"/>
         <source>Style group:</source>
         <translation>Arddull grŵp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="835"/>
+        <location filename="../../mscore/editstaff.ui" line="665"/>
         <source>Invisible staff lines</source>
         <translation>Anweledig linellau staff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="844"/>
-        <source>Hide when empty</source>
-        <translation type="unfinished"/>
+        <location filename="../../mscore/editstaff.ui" line="672"/>
+        <source>Show barlines</source>
+        <translation>Dangos llinellau bar</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="852"/>
-        <source>Auto</source>
-        <translation>Awtodrefnu </translation>
+        <location filename="../../mscore/editstaff.ui" line="679"/>
+        <source>Show clef</source>
+        <translation>Dangos cleff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="857"/>
-        <source>Always</source>
-        <translation>Yn wastad</translation>
+        <location filename="../../mscore/editstaff.ui" line="692"/>
+        <source>Small staff</source>
+        <translation>Staff Bach</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="862"/>
-        <source>Never</source>
-        <translation>Byth</translation>
+        <location filename="../../mscore/editstaff.ui" line="699"/>
+        <source>Never hide</source>
+        <translation>Byth cuddio</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="867"/>
-        <source>Instrument</source>
-        <translation>Offeryn</translation>
+        <location filename="../../mscore/editstaff.ui" line="711"/>
+        <source>Lines:</source>
+        <translation>Llinellau:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="743"/>
+        <source>Line distance:</source>
+        <translation>Llinell pellter</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="765"/>
+        <location filename="../../mscore/editstaff.ui" line="791"/>
+        <source>sp</source>
+        <translation>sp</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="775"/>
+        <source>Extra distance above staff:</source>
+        <translation> Rhagor o bellder uwch ataff:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="807"/>
+        <source>Scale</source>
+        <translation>Graddfa</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="814"/>
+        <source>%</source>
+        <translation>%</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="835"/>
+        <source>Hide system barline</source>
+        <translation>Cyddied system llinellau bar</translation>
     </message>
 </context>
 <context>
@@ -2192,7 +2167,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
-        <location filename="../../mscore/editstyle.ui" line="5857"/>
+        <location filename="../../mscore/editstyle.ui" line="5501"/>
         <source>Score</source>
         <translation>Sgôr</translation>
     </message>
@@ -2253,79 +2228,72 @@ p, li { white-space: pre-wrap; }
         <location filename="../../mscore/editstyle.ui" line="705"/>
         <location filename="../../mscore/editstyle.ui" line="743"/>
         <location filename="../../mscore/editstyle.ui" line="830"/>
-        <location filename="../../mscore/editstyle.ui" line="1477"/>
-        <location filename="../../mscore/editstyle.ui" line="1512"/>
-        <location filename="../../mscore/editstyle.ui" line="1541"/>
-        <location filename="../../mscore/editstyle.ui" line="1570"/>
-        <location filename="../../mscore/editstyle.ui" line="1661"/>
-        <location filename="../../mscore/editstyle.ui" line="1678"/>
-        <location filename="../../mscore/editstyle.ui" line="1754"/>
-        <location filename="../../mscore/editstyle.ui" line="1771"/>
+        <location filename="../../mscore/editstyle.ui" line="1471"/>
+        <location filename="../../mscore/editstyle.ui" line="1506"/>
+        <location filename="../../mscore/editstyle.ui" line="1535"/>
+        <location filename="../../mscore/editstyle.ui" line="1564"/>
+        <location filename="../../mscore/editstyle.ui" line="1618"/>
+        <location filename="../../mscore/editstyle.ui" line="1681"/>
+        <location filename="../../mscore/editstyle.ui" line="1747"/>
+        <location filename="../../mscore/editstyle.ui" line="1782"/>
         <location filename="../../mscore/editstyle.ui" line="1848"/>
-        <location filename="../../mscore/editstyle.ui" line="1911"/>
-        <location filename="../../mscore/editstyle.ui" line="1977"/>
-        <location filename="../../mscore/editstyle.ui" line="2012"/>
-        <location filename="../../mscore/editstyle.ui" line="2078"/>
-        <location filename="../../mscore/editstyle.ui" line="2094"/>
-        <location filename="../../mscore/editstyle.ui" line="2135"/>
-        <location filename="../../mscore/editstyle.ui" line="2176"/>
-        <location filename="../../mscore/editstyle.ui" line="2239"/>
-        <location filename="../../mscore/editstyle.ui" line="2296"/>
-        <location filename="../../mscore/editstyle.ui" line="2312"/>
-        <location filename="../../mscore/editstyle.ui" line="2341"/>
-        <location filename="../../mscore/editstyle.ui" line="2357"/>
-        <location filename="../../mscore/editstyle.ui" line="2508"/>
-        <location filename="../../mscore/editstyle.ui" line="2528"/>
-        <location filename="../../mscore/editstyle.ui" line="2548"/>
-        <location filename="../../mscore/editstyle.ui" line="2568"/>
-        <location filename="../../mscore/editstyle.ui" line="2588"/>
-        <location filename="../../mscore/editstyle.ui" line="2659"/>
-        <location filename="../../mscore/editstyle.ui" line="2669"/>
-        <location filename="../../mscore/editstyle.ui" line="2731"/>
-        <location filename="../../mscore/editstyle.ui" line="2757"/>
-        <location filename="../../mscore/editstyle.ui" line="2783"/>
-        <location filename="../../mscore/editstyle.ui" line="2809"/>
-        <location filename="../../mscore/editstyle.ui" line="2835"/>
-        <location filename="../../mscore/editstyle.ui" line="2861"/>
-        <location filename="../../mscore/editstyle.ui" line="2887"/>
-        <location filename="../../mscore/editstyle.ui" line="3024"/>
-        <location filename="../../mscore/editstyle.ui" line="3047"/>
-        <location filename="../../mscore/editstyle.ui" line="3070"/>
-        <location filename="../../mscore/editstyle.ui" line="3127"/>
-        <location filename="../../mscore/editstyle.ui" line="3157"/>
-        <location filename="../../mscore/editstyle.ui" line="3276"/>
-        <location filename="../../mscore/editstyle.ui" line="3302"/>
-        <location filename="../../mscore/editstyle.ui" line="3328"/>
-        <location filename="../../mscore/editstyle.ui" line="3348"/>
-        <location filename="../../mscore/editstyle.ui" line="3583"/>
-        <location filename="../../mscore/editstyle.ui" line="3602"/>
-        <location filename="../../mscore/editstyle.ui" line="3667"/>
-        <location filename="../../mscore/editstyle.ui" line="3700"/>
-        <location filename="../../mscore/editstyle.ui" line="3720"/>
-        <location filename="../../mscore/editstyle.ui" line="3753"/>
-        <location filename="../../mscore/editstyle.ui" line="3858"/>
-        <location filename="../../mscore/editstyle.ui" line="3897"/>
-        <location filename="../../mscore/editstyle.ui" line="3914"/>
-        <location filename="../../mscore/editstyle.ui" line="4078"/>
-        <location filename="../../mscore/editstyle.ui" line="4091"/>
-        <location filename="../../mscore/editstyle.ui" line="4108"/>
-        <location filename="../../mscore/editstyle.ui" line="4274"/>
-        <location filename="../../mscore/editstyle.ui" line="4300"/>
-        <location filename="../../mscore/editstyle.ui" line="4414"/>
-        <location filename="../../mscore/editstyle.ui" line="4709"/>
-        <location filename="../../mscore/editstyle.ui" line="4741"/>
-        <location filename="../../mscore/editstyle.ui" line="4770"/>
-        <location filename="../../mscore/editstyle.ui" line="4799"/>
-        <location filename="../../mscore/editstyle.ui" line="4888"/>
-        <location filename="../../mscore/editstyle.ui" line="5100"/>
-        <location filename="../../mscore/editstyle.ui" line="5598"/>
-        <location filename="../../mscore/editstyle.ui" line="5617"/>
-        <location filename="../../mscore/editstyle.ui" line="5636"/>
-        <location filename="../../mscore/editstyle.ui" line="5704"/>
-        <location filename="../../mscore/editstyle.ui" line="5723"/>
-        <location filename="../../mscore/editstyle.ui" line="5739"/>
-        <location filename="../../mscore/editstyle.ui" line="5758"/>
-        <location filename="../../mscore/editstyle.ui" line="5790"/>
+        <location filename="../../mscore/editstyle.ui" line="1864"/>
+        <location filename="../../mscore/editstyle.ui" line="1905"/>
+        <location filename="../../mscore/editstyle.ui" line="1946"/>
+        <location filename="../../mscore/editstyle.ui" line="2009"/>
+        <location filename="../../mscore/editstyle.ui" line="2066"/>
+        <location filename="../../mscore/editstyle.ui" line="2082"/>
+        <location filename="../../mscore/editstyle.ui" line="2111"/>
+        <location filename="../../mscore/editstyle.ui" line="2127"/>
+        <location filename="../../mscore/editstyle.ui" line="2278"/>
+        <location filename="../../mscore/editstyle.ui" line="2298"/>
+        <location filename="../../mscore/editstyle.ui" line="2318"/>
+        <location filename="../../mscore/editstyle.ui" line="2338"/>
+        <location filename="../../mscore/editstyle.ui" line="2358"/>
+        <location filename="../../mscore/editstyle.ui" line="2429"/>
+        <location filename="../../mscore/editstyle.ui" line="2439"/>
+        <location filename="../../mscore/editstyle.ui" line="2501"/>
+        <location filename="../../mscore/editstyle.ui" line="2527"/>
+        <location filename="../../mscore/editstyle.ui" line="2553"/>
+        <location filename="../../mscore/editstyle.ui" line="2579"/>
+        <location filename="../../mscore/editstyle.ui" line="2605"/>
+        <location filename="../../mscore/editstyle.ui" line="2631"/>
+        <location filename="../../mscore/editstyle.ui" line="2657"/>
+        <location filename="../../mscore/editstyle.ui" line="2794"/>
+        <location filename="../../mscore/editstyle.ui" line="2817"/>
+        <location filename="../../mscore/editstyle.ui" line="2840"/>
+        <location filename="../../mscore/editstyle.ui" line="2897"/>
+        <location filename="../../mscore/editstyle.ui" line="2927"/>
+        <location filename="../../mscore/editstyle.ui" line="3046"/>
+        <location filename="../../mscore/editstyle.ui" line="3072"/>
+        <location filename="../../mscore/editstyle.ui" line="3098"/>
+        <location filename="../../mscore/editstyle.ui" line="3118"/>
+        <location filename="../../mscore/editstyle.ui" line="3346"/>
+        <location filename="../../mscore/editstyle.ui" line="3379"/>
+        <location filename="../../mscore/editstyle.ui" line="3399"/>
+        <location filename="../../mscore/editstyle.ui" line="3432"/>
+        <location filename="../../mscore/editstyle.ui" line="3537"/>
+        <location filename="../../mscore/editstyle.ui" line="3576"/>
+        <location filename="../../mscore/editstyle.ui" line="3593"/>
+        <location filename="../../mscore/editstyle.ui" line="3757"/>
+        <location filename="../../mscore/editstyle.ui" line="3770"/>
+        <location filename="../../mscore/editstyle.ui" line="3787"/>
+        <location filename="../../mscore/editstyle.ui" line="3953"/>
+        <location filename="../../mscore/editstyle.ui" line="3979"/>
+        <location filename="../../mscore/editstyle.ui" line="4093"/>
+        <location filename="../../mscore/editstyle.ui" line="4388"/>
+        <location filename="../../mscore/editstyle.ui" line="4420"/>
+        <location filename="../../mscore/editstyle.ui" line="4449"/>
+        <location filename="../../mscore/editstyle.ui" line="4478"/>
+        <location filename="../../mscore/editstyle.ui" line="4567"/>
+        <location filename="../../mscore/editstyle.ui" line="4779"/>
+        <location filename="../../mscore/editstyle.ui" line="5277"/>
+        <location filename="../../mscore/editstyle.ui" line="5296"/>
+        <location filename="../../mscore/editstyle.ui" line="5315"/>
+        <location filename="../../mscore/editstyle.ui" line="5383"/>
+        <location filename="../../mscore/editstyle.ui" line="5402"/>
+        <location filename="../../mscore/editstyle.ui" line="5418"/>
+        <location filename="../../mscore/editstyle.ui" line="5437"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2391,7 +2359,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="376"/>
         <location filename="../../mscore/editstyle.ui" line="1180"/>
         <location filename="../../mscore/editstyle.ui" line="1352"/>
-        <location filename="../../mscore/editstyle.ui" line="5862"/>
+        <location filename="../../mscore/editstyle.ui" line="5506"/>
         <source>Page</source>
         <translation>Tudalen</translation>
     </message>
@@ -2412,7 +2380,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="490"/>
-        <location filename="../../mscore/editstyle.ui" line="5314"/>
+        <location filename="../../mscore/editstyle.ui" line="4993"/>
         <source>Staff distance:</source>
         <translation>Staff pellter:</translation>
     </message>
@@ -2522,8 +2490,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1022"/>
         <location filename="../../mscore/editstyle.ui" line="1312"/>
-        <location filename="../../mscore/editstyle.ui" line="1613"/>
-        <location filename="../../mscore/editstyle.ui" line="4959"/>
+        <location filename="../../mscore/editstyle.ui" line="4638"/>
         <source>Left</source>
         <translation>Chwith</translation>
     </message>
@@ -2536,8 +2503,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1042"/>
         <location filename="../../mscore/editstyle.ui" line="1359"/>
-        <location filename="../../mscore/editstyle.ui" line="1706"/>
-        <location filename="../../mscore/editstyle.ui" line="4966"/>
+        <location filename="../../mscore/editstyle.ui" line="4645"/>
         <source>Right</source>
         <translation>De</translation>
     </message>
@@ -2590,889 +2556,835 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1447"/>
-        <location filename="../../mscore/editstyle.ui" line="5872"/>
+        <location filename="../../mscore/editstyle.ui" line="5516"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1456"/>
-        <source>Brackets</source>
-        <translation>Cromfachau</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1467"/>
+        <location filename="../../mscore/editstyle.ui" line="1461"/>
         <source>System bracket thickness:</source>
         <translation>Cyfundrefn trwch braced:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1496"/>
+        <location filename="../../mscore/editstyle.ui" line="1490"/>
         <source>System bracket distance:</source>
         <translation>System braced pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1531"/>
+        <location filename="../../mscore/editstyle.ui" line="1525"/>
         <source>Brace thickness:</source>
         <translation>Cyplysnod trwch:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1560"/>
+        <location filename="../../mscore/editstyle.ui" line="1554"/>
         <source>Brace distance:</source>
         <translation>Pellter cyplysnod:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1607"/>
-        <source>Dividers</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1627"/>
-        <location filename="../../mscore/editstyle.ui" line="1720"/>
-        <source>Symbol:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1654"/>
-        <location filename="../../mscore/editstyle.ui" line="1747"/>
-        <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1671"/>
-        <location filename="../../mscore/editstyle.ui" line="1764"/>
-        <source>Vertical offset:</source>
-        <translation>Fertigol yn erbyn</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1825"/>
-        <location filename="../../mscore/editstyle.ui" line="5877"/>
+        <location filename="../../mscore/editstyle.ui" line="1595"/>
+        <location filename="../../mscore/editstyle.ui" line="5521"/>
         <source>Measure</source>
         <translation>Mesur</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1864"/>
+        <location filename="../../mscore/editstyle.ui" line="1634"/>
         <source>Spacing (1=tight):</source>
         <translation>Bylchiad (1=tight):</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1892"/>
+        <location filename="../../mscore/editstyle.ui" line="1662"/>
         <source>Minimum measure width:</source>
         <translation>Mesir isafbwynt lled:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1927"/>
+        <location filename="../../mscore/editstyle.ui" line="1697"/>
         <source>Note to barline distance:</source>
         <translation>Nodyn i linell bar pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1952"/>
+        <location filename="../../mscore/editstyle.ui" line="1722"/>
         <source>Barline to note distance:</source>
         <translation>Llinell bar Nodyn pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2028"/>
+        <location filename="../../mscore/editstyle.ui" line="1798"/>
         <source>Clef left margin:</source>
         <translation>Cleff chwith pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2053"/>
+        <location filename="../../mscore/editstyle.ui" line="1823"/>
         <source>Minimum note distance:</source>
         <translation>Lleiaf nodyn pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2110"/>
+        <location filename="../../mscore/editstyle.ui" line="1880"/>
         <source>Key signature left margin:</source>
         <translation>Arwydd cywair ffin chwith: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2151"/>
+        <location filename="../../mscore/editstyle.ui" line="1921"/>
         <source>Time signature left margin:</source>
         <translation> Arwydd amseriad ffin chwith:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2192"/>
+        <location filename="../../mscore/editstyle.ui" line="1962"/>
         <source>Clef/Key right margin:</source>
         <translation>Allwedd cleff  ffin dde:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2220"/>
+        <location filename="../../mscore/editstyle.ui" line="1990"/>
         <source>Clef to barline distance:</source>
         <translation>Cleff ir bar linall pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2255"/>
+        <location filename="../../mscore/editstyle.ui" line="2025"/>
         <source>Staff line thickness:</source>
         <translation>Trwch linall trwch:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2280"/>
+        <location filename="../../mscore/editstyle.ui" line="2050"/>
         <source>Barline to accidental distance:</source>
         <translation>Llinell bar ir hapnod pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2322"/>
+        <location filename="../../mscore/editstyle.ui" line="2092"/>
         <source>Multimeasure rest margin:</source>
         <translation>Lluosrif tawnodau ffin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2373"/>
+        <location filename="../../mscore/editstyle.ui" line="2143"/>
         <source>Barline to grace note distance:</source>
         <translation>Lline llbar i nonyn gras pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2433"/>
-        <location filename="../../mscore/editstyle.ui" line="5882"/>
+        <location filename="../../mscore/editstyle.ui" line="2203"/>
+        <location filename="../../mscore/editstyle.ui" line="5526"/>
         <source>Barlines</source>
         <translation>Llinellau bar</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2441"/>
+        <location filename="../../mscore/editstyle.ui" line="2211"/>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
         <translation>Dangos ailadroddiad bar tipiadau (&quot;winged&quot; repeats)</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2448"/>
+        <location filename="../../mscore/editstyle.ui" line="2218"/>
         <source>Barline at start of single staff</source>
         <translation>Llinell bar ar ddechrau staff sengl</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2455"/>
+        <location filename="../../mscore/editstyle.ui" line="2225"/>
         <source>Barline at start of multiple staves</source>
         <translation>Llinell bar ar ddechrau lluosog stafes</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2465"/>
+        <location filename="../../mscore/editstyle.ui" line="2235"/>
         <source>Scale barlines to staff size</source>
         <translation>Graddfa lline llbar i linell staff maint</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2498"/>
+        <location filename="../../mscore/editstyle.ui" line="2268"/>
         <source>Barline thickness:</source>
         <translation>Trwch llinall bar:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2518"/>
+        <location filename="../../mscore/editstyle.ui" line="2288"/>
         <source>Final barline thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2538"/>
+        <location filename="../../mscore/editstyle.ui" line="2308"/>
         <source>Final barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2558"/>
+        <location filename="../../mscore/editstyle.ui" line="2328"/>
         <source>Double barline thickness:</source>
         <translation>Dwbwl bar llinall trwch</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2578"/>
+        <location filename="../../mscore/editstyle.ui" line="2348"/>
         <source>Double barline distance:</source>
         <translation>Dwbwl bar llinell pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2623"/>
-        <location filename="../../mscore/editstyle.ui" line="5887"/>
+        <location filename="../../mscore/editstyle.ui" line="2393"/>
+        <location filename="../../mscore/editstyle.ui" line="5531"/>
         <source>Notes</source>
         <translation>Nodiadau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2632"/>
+        <location filename="../../mscore/editstyle.ui" line="2402"/>
         <source>Shorten stems</source>
         <translation>Byrhau bonion</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2649"/>
+        <location filename="../../mscore/editstyle.ui" line="2419"/>
         <source>Progression:</source>
         <translation>Dilyniant:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2682"/>
+        <location filename="../../mscore/editstyle.ui" line="2452"/>
         <source>Shortest stem:</source>
         <translation>Byrraf stem:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2715"/>
+        <location filename="../../mscore/editstyle.ui" line="2485"/>
         <source>Accidental note distance:</source>
         <translation>Nodyn hapnod pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2741"/>
+        <location filename="../../mscore/editstyle.ui" line="2511"/>
         <source>Accidental distance:</source>
         <translation>Hapnod pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2767"/>
+        <location filename="../../mscore/editstyle.ui" line="2537"/>
         <source>Note dot distance:</source>
         <translation>Nodyn dot pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2793"/>
+        <location filename="../../mscore/editstyle.ui" line="2563"/>
         <source>Dot dot distance:</source>
         <translation>Dot dot pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2819"/>
+        <location filename="../../mscore/editstyle.ui" line="2589"/>
         <source>Ledger line thickness:</source>
         <translation>Llinell estyngedig trwch:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2845"/>
+        <location filename="../../mscore/editstyle.ui" line="2615"/>
         <source>Ledger line length:</source>
         <translation>Llinell estyngedig hyd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2871"/>
+        <location filename="../../mscore/editstyle.ui" line="2641"/>
         <source>Stem thickness:</source>
         <translation>Bôn tewder:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2897"/>
+        <location filename="../../mscore/editstyle.ui" line="2667"/>
         <source>Dot size:</source>
         <translation>Maint dot:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2951"/>
-        <location filename="../../mscore/editstyle.ui" line="5892"/>
+        <location filename="../../mscore/editstyle.ui" line="2721"/>
+        <location filename="../../mscore/editstyle.ui" line="5536"/>
         <source>Clefs</source>
         <translation>Cleffiau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2957"/>
+        <location filename="../../mscore/editstyle.ui" line="2727"/>
         <source>Default TAB Clef</source>
         <translation>Diffig TAB Cleff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2963"/>
+        <location filename="../../mscore/editstyle.ui" line="2733"/>
         <source>Standard TAB clef</source>
         <translation>Safonol TAB cleff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2970"/>
+        <location filename="../../mscore/editstyle.ui" line="2740"/>
         <source>Serif TAB clef</source>
         <translation>Seriff TAB cleff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3003"/>
-        <location filename="../../mscore/editstyle.ui" line="5897"/>
+        <location filename="../../mscore/editstyle.ui" line="2773"/>
+        <location filename="../../mscore/editstyle.ui" line="5541"/>
         <source>Arpeggios</source>
         <translation>Arpeggi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3014"/>
+        <location filename="../../mscore/editstyle.ui" line="2784"/>
         <source>Distance to note:</source>
         <translation>Pellter at nodyn:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3037"/>
-        <location filename="../../mscore/editstyle.ui" line="3657"/>
-        <location filename="../../mscore/editstyle.ui" line="3904"/>
-        <location filename="../../mscore/editstyle.ui" line="4068"/>
-        <location filename="../../mscore/editstyle.ui" line="4359"/>
+        <location filename="../../mscore/editstyle.ui" line="2807"/>
+        <location filename="../../mscore/editstyle.ui" line="3336"/>
+        <location filename="../../mscore/editstyle.ui" line="3583"/>
+        <location filename="../../mscore/editstyle.ui" line="3747"/>
+        <location filename="../../mscore/editstyle.ui" line="4038"/>
         <source>Line thickness:</source>
         <translation>Trwch llinell:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3060"/>
+        <location filename="../../mscore/editstyle.ui" line="2830"/>
         <source>Hook length:</source>
         <translation>Bachyn hyd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3108"/>
-        <location filename="../../mscore/editstyle.ui" line="5902"/>
+        <location filename="../../mscore/editstyle.ui" line="2878"/>
+        <location filename="../../mscore/editstyle.ui" line="5546"/>
         <source>Beams</source>
         <translation>Trawstiau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3117"/>
+        <location filename="../../mscore/editstyle.ui" line="2887"/>
         <source>Beam thickness:</source>
         <translation>Trwch trawst:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3137"/>
+        <location filename="../../mscore/editstyle.ui" line="2907"/>
         <source>Beam distance (in beam thickness units):</source>
         <translation>Trawst pellder (yn uned trawst trwch):</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3167"/>
+        <location filename="../../mscore/editstyle.ui" line="2937"/>
         <source>Broken beam minimum length:</source>
         <translation>Toredig trawst lleiaf hyd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3203"/>
+        <location filename="../../mscore/editstyle.ui" line="2973"/>
         <source>Flatten all beams</source>
         <translation>Fflatio pob trawst</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3220"/>
-        <location filename="../../mscore/editstyle.ui" line="5907"/>
+        <location filename="../../mscore/editstyle.ui" line="2990"/>
+        <location filename="../../mscore/editstyle.ui" line="5551"/>
         <source>Slurs/Ties</source>
         <translation>Llithriadau/Rhwymun</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3260"/>
+        <location filename="../../mscore/editstyle.ui" line="3030"/>
         <source>Line thickness at end:</source>
         <translation>Llines trwchus ar ddiwedd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3286"/>
+        <location filename="../../mscore/editstyle.ui" line="3056"/>
         <source>Line thickness middle:</source>
         <translation>Llines trwchus cannol:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3312"/>
+        <location filename="../../mscore/editstyle.ui" line="3082"/>
         <source>Dotted line thickness:</source>
         <translation>Llinell doredig trwch</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3338"/>
+        <location filename="../../mscore/editstyle.ui" line="3108"/>
         <source>Minimum tie length:</source>
         <translation>Isafswm cwlwm hyd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3370"/>
-        <location filename="../../mscore/editstyle.ui" line="5912"/>
+        <location filename="../../mscore/editstyle.ui" line="3140"/>
+        <location filename="../../mscore/editstyle.ui" line="5556"/>
         <source>Sizes</source>
         <translation>Meintiau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3382"/>
+        <location filename="../../mscore/editstyle.ui" line="3152"/>
         <source>Small staff size:</source>
         <translation>Maint staff bach:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3423"/>
+        <location filename="../../mscore/editstyle.ui" line="3193"/>
         <source>Small note size:</source>
         <translation>Maint nodyn bach:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3461"/>
+        <location filename="../../mscore/editstyle.ui" line="3231"/>
         <source>Grace note size:</source>
         <translation>Maint addurnod:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3502"/>
+        <location filename="../../mscore/editstyle.ui" line="3272"/>
         <source>Small clef size:</source>
         <translation>Maint cleff bach:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3550"/>
-        <source>Lyrics Dash</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3556"/>
-        <source>Max. dash length:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3563"/>
-        <source>Always force dash</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3618"/>
-        <source>Min. dash length:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3648"/>
+        <location filename="../../mscore/editstyle.ui" line="3327"/>
         <source>Hairpins</source>
         <translation>Pingwallt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3690"/>
+        <location filename="../../mscore/editstyle.ui" line="3369"/>
         <source>Height:</source>
         <translation>Uchder:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3710"/>
+        <location filename="../../mscore/editstyle.ui" line="3389"/>
         <source>Continue height:</source>
         <translation>Parhau uchder:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3743"/>
-        <location filename="../../mscore/editstyle.ui" line="3960"/>
-        <location filename="../../mscore/editstyle.ui" line="4144"/>
-        <location filename="../../mscore/editstyle.ui" line="4290"/>
-        <location filename="../../mscore/editstyle.ui" line="4404"/>
-        <location filename="../../mscore/editstyle.ui" line="4699"/>
-        <location filename="../../mscore/editstyle.ui" line="4920"/>
+        <location filename="../../mscore/editstyle.ui" line="3422"/>
+        <location filename="../../mscore/editstyle.ui" line="3639"/>
+        <location filename="../../mscore/editstyle.ui" line="3823"/>
+        <location filename="../../mscore/editstyle.ui" line="3969"/>
+        <location filename="../../mscore/editstyle.ui" line="4083"/>
+        <location filename="../../mscore/editstyle.ui" line="4378"/>
+        <location filename="../../mscore/editstyle.ui" line="4599"/>
         <source>Default vertical position:</source>
         <translation>Rhagosodiad lleoliad fertigol:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3775"/>
-        <location filename="../../mscore/editstyle.ui" line="3791"/>
-        <location filename="../../mscore/editstyle.ui" line="3807"/>
-        <location filename="../../mscore/editstyle.ui" line="3823"/>
-        <location filename="../../mscore/editstyle.ui" line="3976"/>
-        <location filename="../../mscore/editstyle.ui" line="3992"/>
-        <location filename="../../mscore/editstyle.ui" line="4008"/>
-        <location filename="../../mscore/editstyle.ui" line="4024"/>
-        <location filename="../../mscore/editstyle.ui" line="4058"/>
-        <location filename="../../mscore/editstyle.ui" line="4183"/>
-        <location filename="../../mscore/editstyle.ui" line="4199"/>
-        <location filename="../../mscore/editstyle.ui" line="4215"/>
-        <location filename="../../mscore/editstyle.ui" line="4251"/>
+        <location filename="../../mscore/editstyle.ui" line="3454"/>
+        <location filename="../../mscore/editstyle.ui" line="3470"/>
+        <location filename="../../mscore/editstyle.ui" line="3486"/>
+        <location filename="../../mscore/editstyle.ui" line="3502"/>
+        <location filename="../../mscore/editstyle.ui" line="3655"/>
+        <location filename="../../mscore/editstyle.ui" line="3671"/>
+        <location filename="../../mscore/editstyle.ui" line="3687"/>
+        <location filename="../../mscore/editstyle.ui" line="3703"/>
+        <location filename="../../mscore/editstyle.ui" line="3737"/>
+        <location filename="../../mscore/editstyle.ui" line="3862"/>
+        <location filename="../../mscore/editstyle.ui" line="3878"/>
+        <location filename="../../mscore/editstyle.ui" line="3894"/>
+        <location filename="../../mscore/editstyle.ui" line="3930"/>
         <source>Reset value</source>
         <translation>Ailosod gwerth</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3836"/>
+        <location filename="../../mscore/editstyle.ui" line="3515"/>
         <source>Volta</source>
         <translation>Amser</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3887"/>
-        <location filename="../../mscore/editstyle.ui" line="4098"/>
+        <location filename="../../mscore/editstyle.ui" line="3566"/>
+        <location filename="../../mscore/editstyle.ui" line="3777"/>
         <source>Hook height:</source>
         <translation>Uchder bach:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3922"/>
-        <location filename="../../mscore/editstyle.ui" line="4116"/>
-        <location filename="../../mscore/editstyle.ui" line="4308"/>
+        <location filename="../../mscore/editstyle.ui" line="3601"/>
+        <location filename="../../mscore/editstyle.ui" line="3795"/>
+        <location filename="../../mscore/editstyle.ui" line="3987"/>
         <source>Continuous</source>
         <translation>Parhaol</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3927"/>
-        <location filename="../../mscore/editstyle.ui" line="4121"/>
-        <location filename="../../mscore/editstyle.ui" line="4313"/>
+        <location filename="../../mscore/editstyle.ui" line="3606"/>
+        <location filename="../../mscore/editstyle.ui" line="3800"/>
+        <location filename="../../mscore/editstyle.ui" line="3992"/>
         <source>Dashed</source>
         <translation>Doredig</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3932"/>
-        <location filename="../../mscore/editstyle.ui" line="4126"/>
-        <location filename="../../mscore/editstyle.ui" line="4318"/>
+        <location filename="../../mscore/editstyle.ui" line="3611"/>
+        <location filename="../../mscore/editstyle.ui" line="3805"/>
+        <location filename="../../mscore/editstyle.ui" line="3997"/>
         <source>Dotted</source>
         <translation>Tawnod unpwynt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3937"/>
-        <location filename="../../mscore/editstyle.ui" line="4131"/>
-        <location filename="../../mscore/editstyle.ui" line="4323"/>
+        <location filename="../../mscore/editstyle.ui" line="3616"/>
+        <location filename="../../mscore/editstyle.ui" line="3810"/>
+        <location filename="../../mscore/editstyle.ui" line="4002"/>
         <source>Dash-dotted</source>
         <translation>Dot llinell doriad</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3942"/>
-        <location filename="../../mscore/editstyle.ui" line="4136"/>
-        <location filename="../../mscore/editstyle.ui" line="4328"/>
+        <location filename="../../mscore/editstyle.ui" line="3621"/>
+        <location filename="../../mscore/editstyle.ui" line="3815"/>
+        <location filename="../../mscore/editstyle.ui" line="4007"/>
         <source>Dash-dot-dotted</source>
         <translation>Doriad-dot-dotiog</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3950"/>
-        <location filename="../../mscore/editstyle.ui" line="4167"/>
-        <location filename="../../mscore/editstyle.ui" line="4349"/>
+        <location filename="../../mscore/editstyle.ui" line="3629"/>
+        <location filename="../../mscore/editstyle.ui" line="3846"/>
+        <location filename="../../mscore/editstyle.ui" line="4028"/>
         <source>Line style:</source>
         <translation>Arddull Llinall:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4043"/>
+        <location filename="../../mscore/editstyle.ui" line="3722"/>
         <source>Ottava</source>
         <translation>Wythfed</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4225"/>
+        <location filename="../../mscore/editstyle.ui" line="3904"/>
         <source>Numbers only</source>
         <translation>Rhifau yn unig</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4268"/>
+        <location filename="../../mscore/editstyle.ui" line="3947"/>
         <source>Pedal Line</source>
         <translation>Llinell pedal</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4385"/>
+        <location filename="../../mscore/editstyle.ui" line="4064"/>
         <source>Trill Line</source>
         <translation>Llinell Tril</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4453"/>
+        <location filename="../../mscore/editstyle.ui" line="4132"/>
         <source>Chord Symbols</source>
         <translation>Symbolau tant</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4462"/>
-        <location filename="../../mscore/editstyle.ui" line="5777"/>
+        <location filename="../../mscore/editstyle.ui" line="4141"/>
         <source>Appearance</source>
         <translation>Ymddangosiadau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4471"/>
-        <location filename="../../mscore/editstyle.ui" line="4579"/>
+        <location filename="../../mscore/editstyle.ui" line="4150"/>
+        <location filename="../../mscore/editstyle.ui" line="4258"/>
         <source>Standard</source>
         <translation>Safonol</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4478"/>
+        <location filename="../../mscore/editstyle.ui" line="4157"/>
         <source>Jazz</source>
         <translation>Jas</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4485"/>
+        <location filename="../../mscore/editstyle.ui" line="4164"/>
         <source>Custom</source>
         <translation>Arfer</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4548"/>
+        <location filename="../../mscore/editstyle.ui" line="4227"/>
         <source>Chord symbols style file:</source>
         <translation>Tant symbolau arddull ffeil:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4558"/>
+        <location filename="../../mscore/editstyle.ui" line="4237"/>
         <source>Load chords.xml</source>
         <translation>Llwytho rhifoli cordiau.xml</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4568"/>
+        <location filename="../../mscore/editstyle.ui" line="4247"/>
         <source>Note Spelling</source>
         <translation>Sillafu nodyn </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4576"/>
+        <location filename="../../mscore/editstyle.ui" line="4255"/>
         <source>A, B♭, B, C, C♯, ...</source>
         <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4586"/>
+        <location filename="../../mscore/editstyle.ui" line="4265"/>
         <source>A, B♭, H, C, C♯, ...</source>
         <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4589"/>
+        <location filename="../../mscore/editstyle.ui" line="4268"/>
         <source>German</source>
         <translation>Almaenaidd</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4596"/>
+        <location filename="../../mscore/editstyle.ui" line="4275"/>
         <source>A, B, H, C, Cis</source>
         <translation>
 A, B, H, C, Cis</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4599"/>
+        <location filename="../../mscore/editstyle.ui" line="4278"/>
         <source>Full German</source>
         <translation>Llawn Almaenaidd</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4606"/>
+        <location filename="../../mscore/editstyle.ui" line="4285"/>
         <source>Do, Do♯, Re♭, Re, ...</source>
         <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4609"/>
+        <location filename="../../mscore/editstyle.ui" line="4288"/>
         <source>Solfeggio</source>
         <translation>Solfeggio</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4616"/>
+        <location filename="../../mscore/editstyle.ui" line="4295"/>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
         <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4619"/>
+        <location filename="../../mscore/editstyle.ui" line="4298"/>
         <source>French</source>
         <translation>Ffrengig</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4641"/>
+        <location filename="../../mscore/editstyle.ui" line="4320"/>
         <source>Automatic Capitalization</source>
         <translation>Awtomatig Priflythrennu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4650"/>
+        <location filename="../../mscore/editstyle.ui" line="4329"/>
         <source>Lower case minor chords</source>
         <translation>Is achos lleiaf tant tannau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4657"/>
+        <location filename="../../mscore/editstyle.ui" line="4336"/>
         <source>Lower case bass notes</source>
         <translation>Cas is nodiadau bas </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4664"/>
+        <location filename="../../mscore/editstyle.ui" line="4343"/>
         <source>All caps note names</source>
         <translation>holl priflythrennau enwau nodau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4690"/>
+        <location filename="../../mscore/editstyle.ui" line="4369"/>
         <source>Positioning</source>
         <translation>Gosod</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4728"/>
+        <location filename="../../mscore/editstyle.ui" line="4407"/>
         <source>Distance to fretboard diagram:</source>
         <translation>Pellder at cribellford deialogram:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4760"/>
+        <location filename="../../mscore/editstyle.ui" line="4439"/>
         <source>Minimum chord spacing:</source>
         <translation>Lleiaf tant bylchiad:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4789"/>
+        <location filename="../../mscore/editstyle.ui" line="4468"/>
         <source>Maximum barline distance:</source>
         <translation>Mwyaf llinell bar pellter:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4834"/>
+        <location filename="../../mscore/editstyle.ui" line="4513"/>
         <source>Capo</source>
         <translation>Capo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4840"/>
+        <location filename="../../mscore/editstyle.ui" line="4519"/>
         <source>Capo fret position:</source>
         <translation>Capo cribell lleoliad:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4876"/>
+        <location filename="../../mscore/editstyle.ui" line="4555"/>
         <source>Fretboard Diagrams</source>
         <translation>Bwrddcribell Diagramau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4910"/>
+        <location filename="../../mscore/editstyle.ui" line="4589"/>
         <source>Fret offset number font size:</source>
         <translation>Cribell atred rhif maint ffont: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4952"/>
+        <location filename="../../mscore/editstyle.ui" line="4631"/>
         <source>Position:</source>
         <translation>Safle:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4986"/>
+        <location filename="../../mscore/editstyle.ui" line="4665"/>
         <source>Barré line thickness:</source>
         <translation>Graddfa llinell bar trwch:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5009"/>
+        <location filename="../../mscore/editstyle.ui" line="4688"/>
         <source>Scale:</source>
         <translation>Graddfa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5049"/>
-        <location filename="../../mscore/editstyle.ui" line="5932"/>
+        <location filename="../../mscore/editstyle.ui" line="4728"/>
+        <location filename="../../mscore/editstyle.ui" line="5576"/>
         <source>Figured Bass</source>
         <translation>Bas Rhifoledig</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5081"/>
+        <location filename="../../mscore/editstyle.ui" line="4760"/>
         <source>Font:</source>
         <translation>Ffont</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5119"/>
+        <location filename="../../mscore/editstyle.ui" line="4798"/>
         <source>Size:</source>
         <translation>Maint</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5138"/>
+        <location filename="../../mscore/editstyle.ui" line="4817"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5154"/>
+        <location filename="../../mscore/editstyle.ui" line="4833"/>
         <source>Line height:</source>
         <translation>Uchder llinell:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5170"/>
+        <location filename="../../mscore/editstyle.ui" line="4849"/>
         <source>Vertical position:</source>
         <translation>Sefyllfa fertigol:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5193"/>
+        <location filename="../../mscore/editstyle.ui" line="4872"/>
         <source>from top of staff</source>
         <translation>O dop y staff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5200"/>
+        <location filename="../../mscore/editstyle.ui" line="4879"/>
         <source>of font height</source>
         <translation>Y uchdwr ffont</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5224"/>
+        <location filename="../../mscore/editstyle.ui" line="4903"/>
         <source>Alignment</source>
         <translation>Aliniad</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5230"/>
+        <location filename="../../mscore/editstyle.ui" line="4909"/>
         <source>Top</source>
         <translation>Top</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5237"/>
+        <location filename="../../mscore/editstyle.ui" line="4916"/>
         <source>Bottom</source>
         <translation>Gweulod</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5260"/>
+        <location filename="../../mscore/editstyle.ui" line="4939"/>
         <source>Style</source>
         <translation>Arddull</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5266"/>
+        <location filename="../../mscore/editstyle.ui" line="4945"/>
         <source>Modern</source>
         <translation>Diweddar</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5273"/>
+        <location filename="../../mscore/editstyle.ui" line="4952"/>
         <source>Historic</source>
         <translation>Hanesyddol</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5306"/>
-        <location filename="../../mscore/editstyle.ui" line="5937"/>
+        <location filename="../../mscore/editstyle.ui" line="4985"/>
+        <location filename="../../mscore/editstyle.ui" line="5581"/>
         <source>Articulations, Ornaments</source>
         <translation>Ynganiadau, Addurniadau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5324"/>
-        <location filename="../../mscore/editstyle.ui" line="5344"/>
-        <location filename="../../mscore/editstyle.ui" line="5364"/>
+        <location filename="../../mscore/editstyle.ui" line="5003"/>
+        <location filename="../../mscore/editstyle.ui" line="5023"/>
+        <location filename="../../mscore/editstyle.ui" line="5043"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5334"/>
+        <location filename="../../mscore/editstyle.ui" line="5013"/>
         <source>Articulation distance:</source>
         <translation>Ynganiad pellder:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5354"/>
+        <location filename="../../mscore/editstyle.ui" line="5033"/>
         <source>Note head distance:</source>
         <translation>Pen nodyn pellder:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5390"/>
+        <location filename="../../mscore/editstyle.ui" line="5069"/>
         <source>Articulation size:</source>
         <translation>Maint ynganiad:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5468"/>
-        <location filename="../../mscore/editstyle.ui" line="5942"/>
+        <location filename="../../mscore/editstyle.ui" line="5147"/>
+        <location filename="../../mscore/editstyle.ui" line="5586"/>
         <source>Accidentals</source>
         <translation>Anhapon</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5478"/>
+        <location filename="../../mscore/editstyle.ui" line="5157"/>
         <source>Accidental</source>
         <translation>Hapnod</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5483"/>
+        <location filename="../../mscore/editstyle.ui" line="5162"/>
         <source>Semitones offset</source>
         <translation>Hanner tôn atred</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5488"/>
+        <location filename="../../mscore/editstyle.ui" line="5167"/>
         <source>Cents offset</source>
         <translation>Cents atred</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5499"/>
+        <location filename="../../mscore/editstyle.ui" line="5178"/>
         <source>Naturals in Key Signatures</source>
         <translation>Naturiolau yn Arwydd Cywir</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5505"/>
+        <location filename="../../mscore/editstyle.ui" line="5184"/>
         <source>Only for a change to C Maj / A min</source>
         <translation>Unig am y newid i C mwyaf/ A lleiaf</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5512"/>
+        <location filename="../../mscore/editstyle.ui" line="5191"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
         <translation>Cyn arwydd cywair os newid i llai llonnod neu meddalnod</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5519"/>
+        <location filename="../../mscore/editstyle.ui" line="5198"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
         <translation>Ar ôl arwydd cywair os newid i llai llonnod neu meddalnod. R&apos;r blaen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5549"/>
-        <location filename="../../mscore/editstyle.ui" line="5947"/>
+        <location filename="../../mscore/editstyle.ui" line="5228"/>
+        <location filename="../../mscore/editstyle.ui" line="5591"/>
         <source>Tuplets</source>
         <translation>Tuplets</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5555"/>
+        <location filename="../../mscore/editstyle.ui" line="5234"/>
         <source>Vertical Distance from the Notes</source>
         <translation>Fertigol Pellter oddi wrth y Nodau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5561"/>
+        <location filename="../../mscore/editstyle.ui" line="5240"/>
         <source>Maximum slope:</source>
         <translation>Llethr uchafrif</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5571"/>
+        <location filename="../../mscore/editstyle.ui" line="5250"/>
         <source>Vertical distance from stem:</source>
         <translation>Fertigol pellder oddi wrth coes:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5581"/>
+        <location filename="../../mscore/editstyle.ui" line="5260"/>
         <source>Vertical distance from note head:</source>
         <translation>Fertigol pellder oddi wrth pen nodyn:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5591"/>
+        <location filename="../../mscore/editstyle.ui" line="5270"/>
         <source>Avoid the staves</source>
         <translation>Ysgoi yr erwyddau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5658"/>
+        <location filename="../../mscore/editstyle.ui" line="5337"/>
         <source>Horizontal Distance from the Notes</source>
         <translation> Llorwedd Pellter oddi wrth y Nodau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5664"/>
+        <location filename="../../mscore/editstyle.ui" line="5343"/>
         <source>Distance before the stem of the first note:</source>
         <translation>Pellder cyn coes y stem or nodyn cynatf:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5674"/>
+        <location filename="../../mscore/editstyle.ui" line="5353"/>
         <source>Distance before the head of the first note:</source>
         <translation>Pellder cyn y pen or nodyn cynatf:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5684"/>
+        <location filename="../../mscore/editstyle.ui" line="5363"/>
         <source>Distance after the stem of the last note:</source>
         <translation>Pellder ar ôl  y stem or nodyn olaf:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5694"/>
+        <location filename="../../mscore/editstyle.ui" line="5373"/>
         <source>Distance after the head of the last note:</source>
         <translation>Pellder ar ôl  y pen ar nodyn olaf:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5783"/>
-        <source>Tuplet bracket thickness:</source>
-        <translation>Tuplet braced trwch:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="5867"/>
+        <location filename="../../mscore/editstyle.ui" line="5511"/>
         <source>Header, Footer, Numbers</source>
         <translation>Pennawd, Troedyn, Rhifau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5917"/>
+        <location filename="../../mscore/editstyle.ui" line="5561"/>
         <source>Hairpins, Volta, Ottava</source>
         <translation>Hairpinau, Foltedd, Ottafa</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5922"/>
+        <location filename="../../mscore/editstyle.ui" line="5566"/>
         <source>Pedal, Trill</source>
         <translation>Pedal, Trill</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5927"/>
+        <location filename="../../mscore/editstyle.ui" line="5571"/>
         <source>Chord Symbols, Fretboard Diagrams</source>
         <translation>Tant Symbolau, Cribellford Diagramau</translation>
     </message>
@@ -3615,7 +3527,7 @@ A, B, H, C, Cis</translation>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3869"/>
+        <location filename="../../mscore/musescore.cpp" line="3845"/>
         <source>Record</source>
         <translation>Record</translation>
     </message>
@@ -7910,7 +7822,7 @@ byddai tuplet yn croisi mesur</translation>
 <context>
     <name>MenuNotes</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="851"/>
+        <location filename="../../mscore/musescore.cpp" line="849"/>
         <source>&amp;Notes</source>
         <translation>&amp;Nodiadau</translation>
     </message>
@@ -7919,8 +7831,8 @@ byddai tuplet yn croisi mesur</translation>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>MuseScore: Score Information</source>
-        <translation>MuseScore: Gwybodaeth sgôr</translation>
+        <source>Score Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="28"/>
@@ -7974,17 +7886,17 @@ byddai tuplet yn croisi mesur</translation>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2963"/>
+        <location filename="../../mscore/musescore.cpp" line="2939"/>
         <source>Unstable Prerelease for Version: </source>
         <translation>Ansefydlog Cynrhyddhad am Fersiwn</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2965"/>
+        <location filename="../../mscore/musescore.cpp" line="2941"/>
         <source>Version: </source>
         <translation>Fersiwn:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2966"/>
+        <location filename="../../mscore/musescore.cpp" line="2942"/>
         <source>Revision: %1</source>
         <translation>Rifersiwn: %1</translation>
     </message>
@@ -8068,12 +7980,12 @@ byddai tuplet yn croisi mesur</translation>
 <context>
     <name>Ms::BarLine</name>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1521"/>
+        <location filename="../../libmscore/barline.cpp" line="1505"/>
         <source>%1 Start of %2</source>
         <translation>%1  Cychwyn y %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1523"/>
+        <location filename="../../libmscore/barline.cpp" line="1507"/>
         <source>%1 End of %2</source>
         <translation>%1 Diwedd y %2</translation>
     </message>
@@ -8094,74 +8006,74 @@ byddai tuplet yn croisi mesur</translation>
 <context>
     <name>Ms::ChordRest</name>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1072"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1049"/>
         <source>Duplet</source>
         <translation>Dwbled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1075"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1052"/>
         <source>Triplet</source>
         <translation>Tribled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1078"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1055"/>
         <source>Quadruplet</source>
         <translation>Pedrybled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1081"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1058"/>
         <source>Quintuplet</source>
         <translation>Pumled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1084"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1061"/>
         <source>Sextuplet</source>
         <translation>Chwephled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1087"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1064"/>
         <source>Septuplet</source>
         <translation>Seithpled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1090"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1067"/>
         <source>Octuplet</source>
         <translation>Wythpled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1093"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1070"/>
         <source>Nonuplet</source>
         <translation>Nawpled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1096"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1073"/>
         <source>Custom Tuplet</source>
         <translation>Cwstwm Pled</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1105"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1082"/>
         <source>Dotted %1</source>
         <translation>Dotiog %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1108"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1085"/>
         <source>Double dotted %1</source>
         <translation> Dwbl dotiog %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1111"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1088"/>
         <source>Triple dotted %1</source>
         <translation>Triphlyg dotiog  %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1449"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1455"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1426"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1432"/>
         <source>%1 Start of %2</source>
         <translation>%1  Cychwyn y %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1451"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1460"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1428"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1437"/>
         <source>%1 End of %2</source>
         <translation>%1 Diwedd y %2</translation>
     </message>
@@ -8270,7 +8182,7 @@ methodd:</translation>
 <context>
     <name>Ms::EditStaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="274"/>
+        <location filename="../../mscore/editstaff.cpp" line="256"/>
         <source>The instrument name is invalid.</source>
         <translation>Yr Offeryn enw mae&apos;n annilys</translation>
     </message>
@@ -8293,140 +8205,122 @@ methodd:</translation>
 <context>
     <name>Ms::EditStyle</name>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="156"/>
+        <location filename="../../mscore/editstyle.cpp" line="149"/>
         <source>Apply to all Parts</source>
         <translation>Ceisiwch pob Rhan</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="184"/>
+        <location filename="../../mscore/editstyle.cpp" line="177"/>
         <source>Symbol</source>
         <translation>Symbol</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="184"/>
+        <location filename="../../mscore/editstyle.cpp" line="177"/>
         <source>Anchor</source>
         <translation>Angor</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="210"/>
+        <location filename="../../mscore/editstyle.cpp" line="203"/>
         <source>Above Staff</source>
         <translation>Uwchben Staff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="211"/>
+        <location filename="../../mscore/editstyle.cpp" line="204"/>
         <source>Below Staff</source>
         <translation>Islaw Staff</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="212"/>
+        <location filename="../../mscore/editstyle.cpp" line="205"/>
         <source>Chord Automatic</source>
         <translation>Tant Awtomatig</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="213"/>
+        <location filename="../../mscore/editstyle.cpp" line="206"/>
         <source>Above Chord</source>
         <translation>Uwch Tant</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="214"/>
+        <location filename="../../mscore/editstyle.cpp" line="207"/>
         <source>Below Chord</source>
         <translation>Islaw Tant</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="218"/>
-        <location filename="../../mscore/editstyle.cpp" line="221"/>
-        <source>System Divider</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="219"/>
-        <location filename="../../mscore/editstyle.cpp" line="222"/>
-        <source>Long System Divider</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="220"/>
-        <location filename="../../mscore/editstyle.cpp" line="223"/>
-        <source>Extra Long System Divider</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="238"/>
+        <location filename="../../mscore/editstyle.cpp" line="224"/>
         <source>Special symbols in header/footer</source>
         <translation>Symbolau arbennig yr yr pennawd/troedyn</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="241"/>
+        <location filename="../../mscore/editstyle.cpp" line="227"/>
         <source>page number, except on first page</source>
         <translation>rhif tudalen. ar pob un heblaw y cyntaf</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="243"/>
+        <location filename="../../mscore/editstyle.cpp" line="229"/>
         <source>page number, if there is more than one page</source>
         <translation>rhif tudalen, os oes mwy nag un tudalen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="245"/>
+        <location filename="../../mscore/editstyle.cpp" line="231"/>
         <source>page number, on all pages</source>
         <translation>rhif tudalen. ar pob tudalenau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="247"/>
+        <location filename="../../mscore/editstyle.cpp" line="233"/>
         <source>number of pages</source>
         <translation>rhif y tudalenau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="249"/>
+        <location filename="../../mscore/editstyle.cpp" line="235"/>
         <source>file name</source>
         <translation>enw ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="251"/>
+        <location filename="../../mscore/editstyle.cpp" line="237"/>
         <source>file path+name</source>
         <translation>ffeil llwybr+enw</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="253"/>
+        <location filename="../../mscore/editstyle.cpp" line="239"/>
         <source>current date</source>
         <translation>dyddiad cyfredol</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="255"/>
+        <location filename="../../mscore/editstyle.cpp" line="241"/>
         <source>creation date</source>
         <translation>dyddiad creu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="257"/>
+        <location filename="../../mscore/editstyle.cpp" line="243"/>
         <source>last modification time</source>
         <translation>addasiad olaf amseriad</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="259"/>
+        <location filename="../../mscore/editstyle.cpp" line="245"/>
         <source>last modification date</source>
         <translation>addasiad olaf dyddiad</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="261"/>
+        <location filename="../../mscore/editstyle.cpp" line="247"/>
         <source>copyright, on first page only</source>
         <translation>hawlfraint, ar tudalennau cyntaf yn unig </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="263"/>
+        <location filename="../../mscore/editstyle.cpp" line="249"/>
         <source>copyright, on all pages</source>
         <translation>hawlfraint, ar pob tudalennau</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="265"/>
+        <location filename="../../mscore/editstyle.cpp" line="251"/>
         <source>the $ sign itself</source>
         <translation>y $ arwydd ei hun</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="267"/>
+        <location filename="../../mscore/editstyle.cpp" line="253"/>
         <source>meta data tag, see below</source>
         <translation>meta data tag, gwel isod</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="269"/>
+        <location filename="../../mscore/editstyle.cpp" line="255"/>
         <source>Available meta data tags and their current values:</source>
         <translation>Ar gael meta data tag ac eu cyfredol werth:</translation>
     </message>
@@ -8472,12 +8366,12 @@ methodd:</translation>
 <context>
     <name>Ms::Harmony</name>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1613"/>
+        <location filename="../../libmscore/harmony.cpp" line="1609"/>
         <source>sharp</source>
         <translation>llonnod</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1618"/>
+        <location filename="../../libmscore/harmony.cpp" line="1614"/>
         <source>flat</source>
         <translation>fflat</translation>
     </message>
@@ -8672,7 +8566,7 @@ failed: </source>
 <context>
     <name>Ms::KeySig</name>
     <message>
-        <location filename="../../libmscore/keysig.cpp" line="583"/>
+        <location filename="../../libmscore/keysig.cpp" line="582"/>
         <source>%1: Custom</source>
         <translation>%1: Arfer</translation>
     </message>
@@ -8848,7 +8742,7 @@ failed: </source>
 <context>
     <name>Ms::Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="126"/>
+        <location filename="../../mscore/mixer.cpp" line="102"/>
         <source>MuseScore: Mixer</source>
         <translation>MuseScore: Cymysgydd</translation>
     </message>
@@ -8907,7 +8801,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="240"/>
-        <location filename="../../mscore/musescore.cpp" line="3391"/>
+        <location filename="../../mscore/musescore.cpp" line="3367"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
@@ -9018,7 +8912,7 @@ cyn cau?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="927"/>
         <location filename="../../mscore/file.cpp" line="954"/>
-        <location filename="../../mscore/musescore.cpp" line="4261"/>
+        <location filename="../../mscore/musescore.cpp" line="4241"/>
         <source>MuseScore: Load Style</source>
         <translation>MuseScore: Llwytho Arddull</translation>
     </message>
@@ -9031,7 +8925,7 @@ cyn cau?</translation>
         <location filename="../../mscore/file.cpp" line="934"/>
         <location filename="../../mscore/file.cpp" line="971"/>
         <location filename="../../mscore/file.cpp" line="1054"/>
-        <location filename="../../mscore/musescore.cpp" line="4251"/>
+        <location filename="../../mscore/musescore.cpp" line="4231"/>
         <source>MuseScore: Save Style</source>
         <translation>
 MuseScore: Arbad Arddull</translation>
@@ -9509,32 +9403,27 @@ Ydych am amnewid hwynt?
         <translation>Newid offeryn</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1200"/>
-        <source>Fretboard diagram</source>
-        <translation>Cribellford diagram</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/menus.cpp" line="1242"/>
+        <location filename="../../mscore/menus.cpp" line="1272"/>
         <source>&amp;Add</source>
         <translation>&amp;Adio</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1245"/>
+        <location filename="../../mscore/menus.cpp" line="1275"/>
         <source>&amp;Measures</source>
         <translation>&amp;Mesurau</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1252"/>
+        <location filename="../../mscore/menus.cpp" line="1282"/>
         <source>&amp;Frames</source>
         <translation>&amp;ffrâmgelloedd</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1263"/>
+        <location filename="../../mscore/menus.cpp" line="1293"/>
         <source>&amp;Text</source>
         <translation>&amp;Testun</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1279"/>
+        <location filename="../../mscore/menus.cpp" line="1309"/>
         <source>&amp;Lines</source>
         <translation>&amp;Llinellau</translation>
     </message>
@@ -9596,157 +9485,152 @@ Dewisiwch fesur ac yna ymdrechwch drachefn plîs</translation>
         <translation>Golwg Parhaus </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="573"/>
-        <source>Single Page</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="577"/>
+        <location filename="../../mscore/musescore.cpp" line="575"/>
         <source>Transport Tools</source>
         <translation>Offer Trafnidiaeth</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="594"/>
+        <location filename="../../mscore/musescore.cpp" line="592"/>
         <source>Concert Pitch</source>
         <translation>Cyngerdd Cywair</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="598"/>
+        <location filename="../../mscore/musescore.cpp" line="596"/>
         <source>Image Capture</source>
         <translation>Delwedd Daliad</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="608"/>
+        <location filename="../../mscore/musescore.cpp" line="606"/>
         <source>Note Input</source>
         <translation>Nodyn Mewnosodiad</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
+        <location filename="../../mscore/musescore.cpp" line="654"/>
         <source>&amp;File</source>
         <translation>&amp;Fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="662"/>
+        <location filename="../../mscore/musescore.cpp" line="660"/>
         <source>Open &amp;Recent</source>
         <translation>Agor &amp;ddiweddar</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="693"/>
+        <location filename="../../mscore/musescore.cpp" line="691"/>
         <source>&amp;Edit</source>
         <translation>&amp;Golygu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="712"/>
+        <location filename="../../mscore/musescore.cpp" line="710"/>
         <source>&amp;Measure</source>
         <translation>&amp;Mesur</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="717"/>
+        <location filename="../../mscore/musescore.cpp" line="715"/>
         <source>&amp;Tools</source>
         <translation>&amp;Offer</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="722"/>
+        <location filename="../../mscore/musescore.cpp" line="720"/>
         <source>&amp;Voices</source>
         <translation>&amp;Lleisiau</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="737"/>
+        <location filename="../../mscore/musescore.cpp" line="735"/>
         <source>W&amp;orkspaces</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="741"/>
+        <location filename="../../mscore/musescore.cpp" line="739"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Dewisiadau</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="748"/>
+        <location filename="../../mscore/musescore.cpp" line="746"/>
         <source>&amp;View</source>
         <translation>&amp;Golwg</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="858"/>
+        <location filename="../../mscore/musescore.cpp" line="856"/>
         <source>Add N&amp;ote</source>
         <translation>Adio N&amp;ote</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="876"/>
+        <location filename="../../mscore/musescore.cpp" line="874"/>
         <source>Add &amp;Interval</source>
         <translation>Ategu &amp;Cyfwng</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="892"/>
+        <location filename="../../mscore/musescore.cpp" line="890"/>
         <source>T&amp;uplets</source>
         <translation>T&amp;uplets</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="908"/>
+        <location filename="../../mscore/musescore.cpp" line="906"/>
         <source>&amp;Layout</source>
         <translation>&amp;Gosodiad</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="921"/>
+        <location filename="../../mscore/musescore.cpp" line="919"/>
         <source>&amp;Style</source>
         <translation>&amp;Style</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="936"/>
+        <location filename="../../mscore/musescore.cpp" line="934"/>
         <source>&amp;Plugins</source>
         <translation>%Plwgmewn</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="953"/>
+        <location filename="../../mscore/musescore.cpp" line="951"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="964"/>
+        <location filename="../../mscore/musescore.cpp" line="962"/>
         <source>&amp;Online Handbook</source>
         <translation>&amp;Ar y We Llawlyfr</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="968"/>
+        <location filename="../../mscore/musescore.cpp" line="966"/>
         <source>&amp;About...</source>
         <translation>&amp;Oddeutu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="974"/>
+        <location filename="../../mscore/musescore.cpp" line="972"/>
         <source>About &amp;Qt...</source>
         <translation>Oddeutu &amp;Qt...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="979"/>
+        <location filename="../../mscore/musescore.cpp" line="977"/>
         <source>About &amp;MusicXML...</source>
         <translation>Oddeutu &amp;CerddoriaethXML...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="985"/>
+        <location filename="../../mscore/musescore.cpp" line="983"/>
         <source>Check for &amp;Update</source>
         <translation>Arolwg am &amp;ddiweddaraf</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="989"/>
+        <location filename="../../mscore/musescore.cpp" line="987"/>
         <source>Ask for Help</source>
         <translation>Gofynnwch am Gymorth</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="990"/>
+        <location filename="../../mscore/musescore.cpp" line="988"/>
         <source>Report a Bug</source>
         <translation>Adroddiad y Byg</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="995"/>
+        <location filename="../../mscore/musescore.cpp" line="993"/>
         <source>Revert to Factory Settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1126"/>
+        <location filename="../../mscore/musescore.cpp" line="1124"/>
         <source>Are you sure?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1127"/>
+        <location filename="../../mscore/musescore.cpp" line="1125"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -9754,18 +9638,18 @@ Are you sure you want to proceed?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1336"/>
+        <location filename="../../mscore/musescore.cpp" line="1334"/>
         <source>Clear Recent Files</source>
         <translation>Clirio Ffeils Diweddar</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2461"/>
+        <location filename="../../mscore/musescore.cpp" line="2437"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2469"/>
+        <location filename="../../mscore/musescore.cpp" line="2445"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>Gwall darllen iaith ffeil %s ar linell %d colofn %d:
@@ -9773,62 +9657,62 @@ Are you sure you want to proceed?</source>
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2635"/>
+        <location filename="../../mscore/musescore.cpp" line="2611"/>
         <source>No score</source>
         <translation>Dim sgôr</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2644"/>
+        <location filename="../../mscore/musescore.cpp" line="2620"/>
         <source>Note input mode</source>
         <translation>Nodyn mewnbwn modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2648"/>
+        <location filename="../../mscore/musescore.cpp" line="2624"/>
         <source>Drum input mode</source>
         <translation>Drwm mewnbwn modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2656"/>
+        <location filename="../../mscore/musescore.cpp" line="2632"/>
         <source>TAB input mode</source>
         <translation>TAB mewnbwn modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2659"/>
+        <location filename="../../mscore/musescore.cpp" line="2635"/>
         <source>Edit mode</source>
         <translation>Modd golygu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2662"/>
+        <location filename="../../mscore/musescore.cpp" line="2638"/>
         <source>Text edit mode</source>
         <translation> Testun Golygu modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2665"/>
+        <location filename="../../mscore/musescore.cpp" line="2641"/>
         <source>Lyrics edit mode</source>
         <translation>Telynog golygu modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2668"/>
+        <location filename="../../mscore/musescore.cpp" line="2644"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation>Tant symbol/rhifoledig bas golygu modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2671"/>
+        <location filename="../../mscore/musescore.cpp" line="2647"/>
         <source>Play</source>
         <translation>Chwarae</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2674"/>
+        <location filename="../../mscore/musescore.cpp" line="2650"/>
         <source>Image capture mode</source>
         <translation>Delwedd daliad modd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2678"/>
+        <location filename="../../mscore/musescore.cpp" line="2654"/>
         <source>Score locked</source>
         <translation>Sgôr ar glo</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3392"/>
+        <location filename="../../mscore/musescore.cpp" line="3368"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -9837,32 +9721,32 @@ Restore session?</source>
 adfer sesiwn?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4123"/>
+        <location filename="../../mscore/musescore.cpp" line="4103"/>
         <source>Key Signatures</source>
         <translation>Arwtdd Cywair</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4125"/>
+        <location filename="../../mscore/musescore.cpp" line="4105"/>
         <source>Time Signatures</source>
         <translation>Arwydd Amseriad</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4127"/>
+        <location filename="../../mscore/musescore.cpp" line="4107"/>
         <source>Symbols</source>
         <translation>Symbolau</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4443"/>
+        <location filename="../../mscore/musescore.cpp" line="4423"/>
         <source>MuseScore: Warning</source>
         <translation>MuseScore: Rhybudd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4444"/>
+        <location filename="../../mscore/musescore.cpp" line="4424"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>Methu a creu tuplet: Gwerth nodyn yn rhy fur</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4583"/>
+        <location filename="../../mscore/musescore.cpp" line="4561"/>
         <source>Go To: </source>
         <translation>Ewch I:</translation>
     </message>
@@ -10043,67 +9927,67 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
 <context>
     <name>Ms::Note</name>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1899"/>
+        <location filename="../../libmscore/note.cpp" line="1868"/>
         <source>Acciaccatura</source>
         <translation>Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1901"/>
+        <location filename="../../libmscore/note.cpp" line="1870"/>
         <source>Appoggiatura</source>
         <translation>Gogwyddnod</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1905"/>
+        <location filename="../../libmscore/note.cpp" line="1874"/>
         <source>Grace note after</source>
         <translation>Nodyn gras wedyn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1909"/>
+        <location filename="../../libmscore/note.cpp" line="1878"/>
         <source>Grace note before</source>
         <translation>Nodyn gras o flaen</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1911"/>
+        <location filename="../../libmscore/note.cpp" line="1880"/>
         <source>Invalid note</source>
         <translation>Nodyn annilys</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1913"/>
+        <location filename="../../libmscore/note.cpp" line="1882"/>
         <source>Note</source>
         <translation>Nodyn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2547"/>
-        <location filename="../../libmscore/note.cpp" line="2566"/>
+        <location filename="../../libmscore/note.cpp" line="2502"/>
+        <location filename="../../libmscore/note.cpp" line="2521"/>
         <source>Voice: %1</source>
         <translation>Llais: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2551"/>
-        <location filename="../../libmscore/note.cpp" line="2570"/>
+        <location filename="../../libmscore/note.cpp" line="2506"/>
+        <location filename="../../libmscore/note.cpp" line="2525"/>
         <source>Beat Slash</source>
         <translation>Trawiad Slaes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2551"/>
-        <location filename="../../libmscore/note.cpp" line="2570"/>
+        <location filename="../../libmscore/note.cpp" line="2506"/>
+        <location filename="../../libmscore/note.cpp" line="2525"/>
         <source>Rhythm Slash</source>
         <translation>Rhythm Slaes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2556"/>
+        <location filename="../../libmscore/note.cpp" line="2511"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
         <translation>%1; Llain:%2; Parhad: %3%4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2595"/>
-        <location filename="../../libmscore/note.cpp" line="2603"/>
+        <location filename="../../libmscore/note.cpp" line="2550"/>
+        <location filename="../../libmscore/note.cpp" line="2558"/>
         <source>%1 Start of %2</source>
         <translation>%1  Cychwyn y %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2598"/>
-        <location filename="../../libmscore/note.cpp" line="2609"/>
+        <location filename="../../libmscore/note.cpp" line="2553"/>
+        <location filename="../../libmscore/note.cpp" line="2564"/>
         <source>%1 End of %2</source>
         <translation>%1 Diwedd y %2</translation>
     </message>
@@ -10212,72 +10096,6 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
     </message>
 </context>
 <context>
-    <name>Ms::PartEdit</name>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="608"/>
-        <source>Sound: '%1'' vs '%2'
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="610"/>
-        <source>Volume: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="612"/>
-        <source>Pan: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="614"/>
-        <source>Reverb: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="616"/>
-        <source>Chorus: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="618"/>
-        <source>Solo: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="620"/>
-        <source>Mute: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="623"/>
-        <source>Instrument '%1'    Instrument '%2'
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="626"/>
-        <source>There is already an instrument &apos;%1&apos; with MIDI port = %2 and channel = %3.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="628"/>
-        <source>Do you want to synchronize current instrument with an existing one?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="631"/>
-        <source>Assign next free MIDI channel</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Ms::PathListDialog</name>
     <message>
         <location filename="../../mscore/pathlistdialog.cpp" line="47"/>
@@ -10312,37 +10130,37 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="230"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="388"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="463"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="377"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="452"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="231"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="389"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="464"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="378"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="453"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>Plwgmewn &quot;%1&quot; sydd gonddo newidiadau
 Arbed cyn cau?</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="437"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="426"/>
         <source>MuseScore: Save Plugin</source>
         <translation>MuseScore: Arbed Ategyn</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="437"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="426"/>
         <source>Cannot determine file type</source>
         <translation>Methu penderfynu math y ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="473"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="462"/>
         <source>untitled</source>
         <translation>diteitl</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="531"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="520"/>
         <source>Manual</source>
         <translation>Llawlyfr</translation>
     </message>
@@ -10350,7 +10168,7 @@ Arbed cyn cau?</translation>
 <context>
     <name>Ms::PreferenceDialog</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="688"/>
+        <location filename="../../mscore/preferences.cpp" line="689"/>
         <source>The language will be changed once you restart MuseScore.</source>
         <translation>Bydd yr iaith yn newid unwaith i chwe ail ddechrau MuseScore.</translation>
     </message>
@@ -10407,48 +10225,48 @@ Arbed cyn cau?</translation>
         <translation>MuseScore Ffeils (*.mscz *.mscx);;All (*)</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1530"/>
+        <location filename="../../mscore/preferences.cpp" line="1527"/>
         <source>Choose Default Style for Imports</source>
         <translation>Dewis Rhagosodedig Arddull yn Fewnforion</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1616"/>
+        <location filename="../../mscore/preferences.cpp" line="1613"/>
         <source>Choose Score Folder</source>
         <translation>Dewis  Sgôr Ffolder</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1632"/>
+        <location filename="../../mscore/preferences.cpp" line="1629"/>
         <source>Choose Style Folder</source>
         <translation>Dewis Arddull Ffolder</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1648"/>
+        <location filename="../../mscore/preferences.cpp" line="1645"/>
         <source>Choose Template Folder</source>
         <translation>Dewis   Templed Ffolder</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1664"/>
+        <location filename="../../mscore/preferences.cpp" line="1661"/>
         <source>Choose Plugin Folder</source>
         <translation>Dewis Plwgmewn Ffolder</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1680"/>
+        <location filename="../../mscore/preferences.cpp" line="1677"/>
         <source>Choose Image Folder</source>
         <translation>Dewis Delwedd Ffolder</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1695"/>
+        <location filename="../../mscore/preferences.cpp" line="1692"/>
         <source>SoundFont Folders</source>
         <translation>SainFfont Ffolderau</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1894"/>
-        <location filename="../../mscore/preferences.cpp" line="1934"/>
+        <location filename="../../mscore/preferences.cpp" line="1891"/>
+        <location filename="../../mscore/preferences.cpp" line="1931"/>
         <source>MuseScore Shortcuts</source>
         <translation>MuseScore Bur Ffurdd</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1898"/>
+        <location filename="../../mscore/preferences.cpp" line="1895"/>
         <source>Print Shortcuts</source>
         <translation>Print Bur Ffurdd</translation>
     </message>
@@ -10495,13 +10313,13 @@ Arbed cyn cau?</translation>
 <context>
     <name>Ms::Rest</name>
     <message>
-        <location filename="../../libmscore/rest.cpp" line="760"/>
-        <location filename="../../libmscore/rest.cpp" line="770"/>
+        <location filename="../../libmscore/rest.cpp" line="732"/>
+        <location filename="../../libmscore/rest.cpp" line="742"/>
         <source>Voice: %1</source>
         <translation>Llais: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/rest.cpp" line="761"/>
+        <location filename="../../libmscore/rest.cpp" line="733"/>
         <source>%1; Duration: %2; %3</source>
         <translation>%1; Parhad: %2; %3</translation>
     </message>
@@ -10520,14 +10338,14 @@ Arbed cyn cau?</translation>
     </message>
     <message>
         <location filename="../../libmscore/score.cpp" line="342"/>
-        <location filename="../../libmscore/score.cpp" line="354"/>
-        <location filename="../../libmscore/score.cpp" line="395"/>
-        <location filename="../../libmscore/score.cpp" line="404"/>
+        <location filename="../../libmscore/score.cpp" line="353"/>
+        <location filename="../../libmscore/score.cpp" line="389"/>
+        <location filename="../../libmscore/score.cpp" line="398"/>
         <source>No selection</source>
         <translation>Dim detholiad</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="355"/>
+        <location filename="../../libmscore/scorefile.cpp" line="353"/>
         <source>The following file is locked: 
 %1 
 
@@ -10537,7 +10355,7 @@ Try saving to a different location.</source>
 Rhowch gais yw arbed wahanol lleoliad</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="367"/>
+        <location filename="../../libmscore/scorefile.cpp" line="365"/>
         <source>Open Temp File
 %1
 failed: %2</source>
@@ -10546,19 +10364,19 @@ failed: %2</source>
 methodd: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="381"/>
+        <location filename="../../libmscore/scorefile.cpp" line="379"/>
         <source>MuseScore: Save File failed: %1</source>
         <translation>MuseScore: Arbed Ffeil methodd: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="440"/>
+        <location filename="../../libmscore/scorefile.cpp" line="438"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Ailanwi templed. ffeil &lt;%1&gt; to &lt;%2&gt; methodd:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="462"/>
+        <location filename="../../libmscore/scorefile.cpp" line="460"/>
         <source>Open File
 %1
 failed: </source>
@@ -10567,7 +10385,7 @@ failed: </source>
 methodd:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="593"/>
+        <location filename="../../libmscore/scorefile.cpp" line="591"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10576,12 +10394,12 @@ failed: %2</source>
 methodd: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="615"/>
+        <location filename="../../libmscore/scorefile.cpp" line="613"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Nid yw ffeil arddull ddim yn gytûn a&apos;r fersiwn o MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="636"/>
+        <location filename="../../libmscore/scorefile.cpp" line="634"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10590,12 +10408,12 @@ failed: %2</source>
 methodd: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="644"/>
         <source>Write Style failed: %1</source>
         <translation>Ysgrifennu Arddull methodd: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1183"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1179"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML darllen gwall ar linell %1 colofn %2: %3</translation>
     </message>
@@ -10660,12 +10478,7 @@ methodd: %2</translation>
         <translation>Creu Sgôr Newydd</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreBrowser.cpp" line="149"/>
-        <source>Getting Started</source>
-        <translation>Dechrau Arni</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/scoreBrowser.cpp" line="224"/>
+        <location filename="../../mscore/scoreBrowser.cpp" line="220"/>
         <source>Custom Templates</source>
         <translation>Arfer Templedau</translation>
     </message>
@@ -10853,7 +10666,7 @@ methodd: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="267"/>
         <location filename="../../mscore/propertymenu.cpp" line="286"/>
-        <location filename="../../mscore/scoreview.cpp" line="1102"/>
+        <location filename="../../mscore/scoreview.cpp" line="1101"/>
         <source>Staff</source>
         <translation>Staff</translation>
     </message>
@@ -10861,21 +10674,21 @@ methodd: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="268"/>
         <location filename="../../mscore/propertymenu.cpp" line="287"/>
         <location filename="../../mscore/propertymenu.cpp" line="325"/>
-        <location filename="../../mscore/scoreview.cpp" line="1116"/>
+        <location filename="../../mscore/scoreview.cpp" line="1115"/>
         <source>Staff Properties...</source>
         <translation>Hen Nodiant Priodweddau...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="273"/>
         <location filename="../../mscore/propertymenu.cpp" line="292"/>
-        <location filename="../../mscore/scoreview.cpp" line="1122"/>
+        <location filename="../../mscore/scoreview.cpp" line="1121"/>
         <source>Measure</source>
         <translation>Mesur</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/propertymenu.cpp" line="293"/>
-        <location filename="../../mscore/scoreview.cpp" line="1130"/>
+        <location filename="../../mscore/scoreview.cpp" line="1129"/>
         <source>Measure Properties...</source>
         <translation>Masur Priodweddau...</translation>
     </message>
@@ -10910,110 +10723,110 @@ methodd: %2</translation>
         <translation>Glissando Priodweddau...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1023"/>
+        <location filename="../../mscore/scoreview.cpp" line="1022"/>
         <source>Select</source>
         <translation>Dethol</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1027"/>
+        <location filename="../../mscore/scoreview.cpp" line="1026"/>
         <source>More...</source>
         <translation>Mwy</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1038"/>
+        <location filename="../../mscore/scoreview.cpp" line="1037"/>
         <source>Help</source>
         <translation>Cymorth</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1043"/>
+        <location filename="../../mscore/scoreview.cpp" line="1042"/>
         <source>Debugger</source>
         <translation>Dadfygiwr</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1103"/>
+        <location filename="../../mscore/scoreview.cpp" line="1102"/>
         <source>Edit Drumset...</source>
         <translation>Golygu Drwmset...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1108"/>
+        <location filename="../../mscore/scoreview.cpp" line="1107"/>
         <source>Drumroll Editor...</source>
         <translation>Drwmrholyn Golygu...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1112"/>
+        <location filename="../../mscore/scoreview.cpp" line="1111"/>
         <source>Pianoroll Editor...</source>
         <translation>Pianorholyn Golygu...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1118"/>
+        <location filename="../../mscore/scoreview.cpp" line="1117"/>
         <source>Split Staff...</source>
         <translation>Hollti Hen Nodiant...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1136"/>
+        <location filename="../../mscore/scoreview.cpp" line="1135"/>
         <source>Object Debugger</source>
         <translation>Gwrthrych Dadfygiwr</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2490"/>
+        <location filename="../../mscore/scoreview.cpp" line="2481"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Plîs dethol y cyflawn tuplet/tremolo ac ail y gorchymyn</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2555"/>
+        <location filename="../../mscore/scoreview.cpp" line="2546"/>
         <source>No destination to paste</source>
         <translation>Dim cyrchfan i bastio</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2558"/>
+        <location filename="../../mscore/scoreview.cpp" line="2549"/>
         <source>Cannot paste into tuplet</source>
         <translation>Methwch a pastio i mewn i tuplet</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2561"/>
+        <location filename="../../mscore/scoreview.cpp" line="2552"/>
         <source>Tuplet cannot cross barlines</source>
         <translation>Tuplet ni allwch traws barlinellau</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2565"/>
+        <location filename="../../mscore/scoreview.cpp" line="2556"/>
         <source>Cannot paste in local time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2569"/>
+        <location filename="../../mscore/scoreview.cpp" line="2560"/>
         <source>Cannot paste in tremolo</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3005"/>
+        <location filename="../../mscore/scoreview.cpp" line="2996"/>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
         <translation>Dim tant/gofod dewiswyd
 Os gwelwch yn dda dewisiwch tant/gofod ac ail gynig</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3014"/>
+        <location filename="../../mscore/scoreview.cpp" line="3005"/>
         <source>Cannot split measure here:
 First beat of measure</source>
         <translation>Ni ellir hollti mesur yma
 Trawiad cyntaf o&apos;r mesur</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3019"/>
+        <location filename="../../mscore/scoreview.cpp" line="3010"/>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
         <translation>Methu a hollti mesur yma:
 Methu s hollti tuplet</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3031"/>
+        <location filename="../../mscore/scoreview.cpp" line="3022"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Dim mesurau ddewiswyd
 Plîs dewisiwch rhes o Fesurau i uno a cais eto</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5345"/>
+        <location filename="../../mscore/scoreview.cpp" line="5333"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -11022,7 +10835,7 @@ plîs defnyddiwch yr offerynau deialog i
 greu yn gyntaf rhai erwyddi</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5426"/>
+        <location filename="../../mscore/scoreview.cpp" line="5414"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Dim mesur wedi ei ddewis:
@@ -11084,19 +10897,20 @@ Dewisiwch fesur ac yna ymdrechwch drachefn plîs</translation>
 <context>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="144"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="147"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="155"/>
         <source>Shortcut conflicts with </source>
         <translation> Llwybr byr croestyniad ac</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="156"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="167"/>
         <source>Shortcut conflicts with</source>
         <translation> Llwybr byr croestyniad ac</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="161"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="189"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="191"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="172"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="200"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="202"/>
         <source>New shortcut</source>
         <translation>Newydd llwybrau byr</translation>
     </message>
@@ -11124,7 +10938,7 @@ Dewisiwch fesur ac yna ymdrechwch drachefn plîs</translation>
 <context>
     <name>Ms::StartDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2263"/>
+        <location filename="../../mscore/musescore.cpp" line="2239"/>
         <source>MuseScore Startup Dialog</source>
         <translation>MuseScore Cyfeiriadur Llwytho Dialog</translation>
     </message>
@@ -11140,22 +10954,22 @@ Dewisiwch fesur ac yna ymdrechwch drachefn plîs</translation>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="321"/>
+        <location filename="../../libmscore/tempotext.cpp" line="334"/>
         <source>Dotted %1</source>
         <translation>Dotiog %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="323"/>
+        <location filename="../../libmscore/tempotext.cpp" line="336"/>
         <source>Double dotted %1</source>
         <translation> Dwbl dotiog</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="325"/>
+        <location filename="../../libmscore/tempotext.cpp" line="338"/>
         <source>Triple dotted %1</source>
         <translation>Triphlyg dotiog  %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="334"/>
+        <location filename="../../libmscore/tempotext.cpp" line="347"/>
         <source>note = %1</source>
         <translation>nodyn = %1</translation>
     </message>
@@ -11795,14 +11609,14 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
         <translation>dileu</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="395"/>
-        <source>Even Page Margins</source>
-        <translation>Llyfn Tydalen Ymylon</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pagesettings.ui" line="318"/>
         <source>Odd Page Margins</source>
         <translation>Tudalen Od Ymylon</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pagesettings.ui" line="395"/>
+        <source>Even Page Margins</source>
+        <translation>Llyfn Tydalen Ymylon</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="474"/>
@@ -12289,28 +12103,18 @@ methodd:</translation>
         <translation>Drwm set</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="426"/>
-        <source>Port:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.ui" line="440"/>
-        <source>Channel:</source>
-        <translation> Sianel:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.ui" line="480"/>
+        <location filename="../../mscore/mixer.ui" line="449"/>
         <location filename="../../mscore/partedit.ui" line="366"/>
         <source>Sound:</source>
         <translation>Sain:</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="490"/>
+        <location filename="../../mscore/mixer.ui" line="459"/>
         <source>MIDI sound</source>
         <translation>MIDI sain</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="493"/>
+        <location filename="../../mscore/mixer.ui" line="462"/>
         <source>Sound</source>
         <translation>Sain</translation>
     </message>
@@ -12640,288 +12444,288 @@ h:mm:s</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="112"/>
+        <source>Language</source>
+        <translation>Iaith</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="124"/>
+        <source>Select language</source>
+        <translation>Dethol iaith</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="127"/>
+        <source>The language will be changed once you restart MuseScore.</source>
+        <translation>Bydd yr iaith yn newid unwaith i chwe ail ddechrau MuseScore.</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="158"/>
+        <source>Update translations</source>
+        <translation>Diweddaru cyfieithiadau</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="168"/>
         <source>Program Start</source>
         <translation>Cychwyn Rhaglen</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="121"/>
-        <location filename="../../mscore/prefsdialog.ui" line="124"/>
+        <location filename="../../mscore/prefsdialog.ui" line="177"/>
+        <location filename="../../mscore/prefsdialog.ui" line="180"/>
         <source>Start empty</source>
         <translation>Cychwyn gwag</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="139"/>
-        <location filename="../../mscore/prefsdialog.ui" line="142"/>
+        <location filename="../../mscore/prefsdialog.ui" line="195"/>
+        <location filename="../../mscore/prefsdialog.ui" line="198"/>
         <source>Start with score:</source>
         <translation>Cychwyn a scor</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="149"/>
+        <location filename="../../mscore/prefsdialog.ui" line="205"/>
         <source>Start with score</source>
         <translation>Cychwyn gyda sgôr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="152"/>
+        <location filename="../../mscore/prefsdialog.ui" line="208"/>
         <source>Insert path to starting score</source>
         <translation>Mewnosodiad llwbur i ddechrau sgôr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="162"/>
+        <location filename="../../mscore/prefsdialog.ui" line="218"/>
         <source>Choose starting score</source>
         <translation>Dewis dechreuad sgôr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="165"/>
+        <location filename="../../mscore/prefsdialog.ui" line="221"/>
         <source>Opens a file dialog for selecting the starting score</source>
         <translation>Agor ffeil deialog i ddewis am ddechrau sgôr </translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="177"/>
-        <location filename="../../mscore/prefsdialog.ui" line="180"/>
+        <location filename="../../mscore/prefsdialog.ui" line="233"/>
+        <location filename="../../mscore/prefsdialog.ui" line="236"/>
         <source>Show splash screen</source>
         <translation>Dangos sgrin arwydd lun</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="187"/>
+        <location filename="../../mscore/prefsdialog.ui" line="243"/>
         <source>Show start center</source>
         <translation>Dangos cychwyn canol</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="194"/>
-        <location filename="../../mscore/prefsdialog.ui" line="197"/>
+        <location filename="../../mscore/prefsdialog.ui" line="250"/>
+        <location filename="../../mscore/prefsdialog.ui" line="253"/>
         <source>Continue last session</source>
         <translation>Mynd ymlaen a&apos;r sasiwn dwethaf</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="207"/>
-        <location filename="../../mscore/prefsdialog.ui" line="210"/>
+        <location filename="../../mscore/prefsdialog.ui" line="263"/>
+        <location filename="../../mscore/prefsdialog.ui" line="266"/>
         <source>Start with new score</source>
         <translation>Cychwyn a scor newydd</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="217"/>
-        <location filename="../../mscore/prefsdialog.ui" line="220"/>
+        <location filename="../../mscore/prefsdialog.ui" line="273"/>
+        <location filename="../../mscore/prefsdialog.ui" line="276"/>
         <source>Show play panel</source>
         <translation>Dangos panel chwarae</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="227"/>
-        <location filename="../../mscore/prefsdialog.ui" line="230"/>
+        <location filename="../../mscore/prefsdialog.ui" line="283"/>
+        <location filename="../../mscore/prefsdialog.ui" line="286"/>
         <source>Show navigator</source>
         <translation>Dangos llywiwr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="240"/>
+        <location filename="../../mscore/prefsdialog.ui" line="296"/>
+        <source>Folders</source>
+        <translation>Ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="323"/>
+        <source>Score folder</source>
+        <translation>Sgôr ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="326"/>
+        <source>Insert path to score folder.</source>
+        <translation>Mewnosodiad llwybr sgôr ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="333"/>
+        <source>Images:</source>
+        <translation>Delweddau:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="346"/>
+        <source>Scores:</source>
+        <translation>Sgoriau:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="359"/>
+        <source>Styles:</source>
+        <translation>Arddull:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="372"/>
+        <source>Style folder</source>
+        <translation>Steil ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="375"/>
+        <source>Insert path for style folder</source>
+        <translation>Mewnosod er steil ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="382"/>
+        <source>Templates:</source>
+        <translation>Templedi</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="398"/>
+        <source>Choose score folder</source>
+        <translation>Dewis ffolder sgôr</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="401"/>
+        <source>Opens a folder dialog for selecting the score folder</source>
+        <translation>Agor y ffolder deialog i ddethol y sgôr ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="414"/>
+        <source>Choose style folder</source>
+        <translation>Dewis arddull ffolder </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="417"/>
+        <source>Opens a folder dialog for selecting the style folder</source>
+        <translation>Agor y ffolder deialog i ddethol y  ffolder arddull</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="427"/>
+        <source>Plugins:</source>
+        <translation>Ategion:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="440"/>
+        <source>Template folder</source>
+        <translation>Templed ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="443"/>
+        <source>Insert path to Template folder</source>
+        <translation>Mewnosodiad llwybr i Templed ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="450"/>
+        <source>Plugin folder</source>
+        <translation>Ategiad ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="453"/>
+        <source>Insert path to plugin folder</source>
+        <translation>Mewnosodiad llwybr i&apos;r ategiad ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="460"/>
+        <location filename="../../mscore/prefsdialog.ui" line="544"/>
+        <source>SoundFont folders</source>
+        <translation>Ffont Sain ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="463"/>
+        <source>Insert path to SoundFont folders</source>
+        <translation>Mewnosodiad llwbr at Ffont Sain ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="473"/>
+        <source>Choose plugin folder</source>
+        <translation>Dewis ategiad ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="476"/>
+        <source>Opens a folder dialog for selecting the plugin folder</source>
+        <translation>Agored y  ffolder deialog i dethol yr ategiad ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="486"/>
+        <source>SoundFonts:</source>
+        <translation>Ffont Sain: </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="499"/>
+        <location filename="../../mscore/prefsdialog.ui" line="528"/>
+        <source>Image folder</source>
+        <translation>Delwedd ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="502"/>
+        <source>Insert path to image folder</source>
+        <translation>Mewnosod llwybr at delwedd ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="512"/>
+        <source>Choose template folder</source>
+        <translation>Dewis templed ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="515"/>
+        <source>Opens a folder dialog for selecting the template folder</source>
+        <translation>Agored i ffolder deialog i ddewis y templed ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="531"/>
+        <source>Opens a folder dialog for selecting the image folder</source>
+        <translation>Agored i ffolder deialog i ddewis y  ddelwedd ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="547"/>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation>Agorir y ddialog i ffurfweddu y SainFfont ffolder</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="560"/>
+        <location filename="../../mscore/prefsdialog.ui" line="563"/>
+        <source>Auto Save</source>
+        <translation>Awto Cynilo</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="590"/>
+        <source>Save every:</source>
+        <translation>Cynilo pob:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="597"/>
+        <source>Select delay (in minutes) between auto saves</source>
+        <translation>Dethol oedi (mewn munudau) rhwng awto arbed</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="610"/>
+        <source>minutes</source>
+        <translation>munudau</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="633"/>
         <source>OSC remote control</source>
         <translation>OSC rheolaeth bell</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="243"/>
+        <location filename="../../mscore/prefsdialog.ui" line="636"/>
         <source>OSC Remote Control</source>
         <translation>OSC Rheolaeth Bell</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="258"/>
+        <location filename="../../mscore/prefsdialog.ui" line="651"/>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
         <translation>Rhif Porth:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="268"/>
+        <location filename="../../mscore/prefsdialog.ui" line="661"/>
         <source>Port number</source>
         <translation>Rhif porth</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="300"/>
-        <location filename="../../mscore/prefsdialog.ui" line="303"/>
-        <source>Auto Save</source>
-        <translation>Awto Cynilo</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="330"/>
-        <source>Save every:</source>
-        <translation>Cynilo pob:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="337"/>
-        <source>Select delay (in minutes) between auto saves</source>
-        <translation>Dethol oedi (mewn munudau) rhwng awto arbed</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="350"/>
-        <source>minutes</source>
-        <translation>munudau</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="373"/>
-        <source>Language</source>
-        <translation>Iaith</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="385"/>
-        <source>Select language</source>
-        <translation>Dethol iaith</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="388"/>
-        <source>The language will be changed once you restart MuseScore.</source>
-        <translation>Bydd yr iaith yn newid unwaith i chwe ail ddechrau MuseScore.</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="419"/>
-        <source>Update translations</source>
-        <translation>Diweddaru cyfieithiadau</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="429"/>
-        <source>Folders</source>
-        <translation>Ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="456"/>
-        <source>Score folder</source>
-        <translation>Sgôr ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="459"/>
-        <source>Insert path to score folder.</source>
-        <translation>Mewnosodiad llwybr sgôr ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="466"/>
-        <source>Images:</source>
-        <translation>Delweddau:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="479"/>
-        <source>Scores:</source>
-        <translation>Sgoriau:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="492"/>
-        <source>Styles:</source>
-        <translation>Arddull:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="505"/>
-        <source>Style folder</source>
-        <translation>Steil ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="508"/>
-        <source>Insert path for style folder</source>
-        <translation>Mewnosod er steil ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="515"/>
-        <source>Templates:</source>
-        <translation>Templedi</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="531"/>
-        <source>Choose score folder</source>
-        <translation>Dewis ffolder sgôr</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="534"/>
-        <source>Opens a folder dialog for selecting the score folder</source>
-        <translation>Agor y ffolder deialog i ddethol y sgôr ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="547"/>
-        <source>Choose style folder</source>
-        <translation>Dewis arddull ffolder </translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="550"/>
-        <source>Opens a folder dialog for selecting the style folder</source>
-        <translation>Agor y ffolder deialog i ddethol y  ffolder arddull</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="560"/>
-        <source>Plugins:</source>
-        <translation>Ategion:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="573"/>
-        <source>Template folder</source>
-        <translation>Templed ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="576"/>
-        <source>Insert path to Template folder</source>
-        <translation>Mewnosodiad llwybr i Templed ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="583"/>
-        <source>Plugin folder</source>
-        <translation>Ategiad ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="586"/>
-        <source>Insert path to plugin folder</source>
-        <translation>Mewnosodiad llwybr i&apos;r ategiad ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="593"/>
-        <location filename="../../mscore/prefsdialog.ui" line="677"/>
-        <source>SoundFont folders</source>
-        <translation>Ffont Sain ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="596"/>
-        <source>Insert path to SoundFont folders</source>
-        <translation>Mewnosodiad llwbr at Ffont Sain ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="606"/>
-        <source>Choose plugin folder</source>
-        <translation>Dewis ategiad ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="609"/>
-        <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation>Agored y  ffolder deialog i dethol yr ategiad ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="619"/>
-        <source>SoundFonts:</source>
-        <translation>Ffont Sain: </translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="632"/>
-        <location filename="../../mscore/prefsdialog.ui" line="661"/>
-        <source>Image folder</source>
-        <translation>Delwedd ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="635"/>
-        <source>Insert path to image folder</source>
-        <translation>Mewnosod llwybr at delwedd ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="645"/>
-        <source>Choose template folder</source>
-        <translation>Dewis templed ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="648"/>
-        <source>Opens a folder dialog for selecting the template folder</source>
-        <translation>Agored i ffolder deialog i ddewis y templed ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="664"/>
-        <source>Opens a folder dialog for selecting the image folder</source>
-        <translation>Agored i ffolder deialog i ddewis y  ddelwedd ffolder</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="680"/>
-        <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation>Agorir y ddialog i ffurfweddu y SainFfont ffolder</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="693"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2182"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2162"/>
         <source>Style</source>
         <translation>Arddull</translation>
     </message>
@@ -12962,127 +12766,127 @@ h:mm:s</translation>
         <translation>Animeiddio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="776"/>
+        <location filename="../../mscore/prefsdialog.ui" line="763"/>
         <source>Canvas Tab</source>
         <translation>Cynfas Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="779"/>
+        <location filename="../../mscore/prefsdialog.ui" line="766"/>
         <source>Canvas</source>
         <translation>Cynfas</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="800"/>
-        <location filename="../../mscore/prefsdialog.ui" line="803"/>
+        <location filename="../../mscore/prefsdialog.ui" line="787"/>
+        <location filename="../../mscore/prefsdialog.ui" line="790"/>
         <source>Background</source>
         <translation>Cefndir</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="854"/>
-        <source>Background Wallpaper</source>
-        <translation>Cefndir Papur wal</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="857"/>
-        <location filename="../../mscore/prefsdialog.ui" line="974"/>
-        <source>Wallpaper</source>
-        <translation>Papur Wal</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="827"/>
+        <location filename="../../mscore/prefsdialog.ui" line="814"/>
         <source>Background Color</source>
         <translation>Lliw Cefndir </translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="830"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1018"/>
+        <location filename="../../mscore/prefsdialog.ui" line="817"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1005"/>
         <source>Color</source>
         <translation>Lliw</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="898"/>
-        <source>Background wallpaper path</source>
-        <translation>Cefndir Papur wal llwybr</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="841"/>
+        <source>Background Wallpaper</source>
+        <translation>Cefndir Papur wal</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="901"/>
-        <source>Insert path to background wallpaper file</source>
-        <translation>Mewnosodiad llwybr i ffeil gefndir papur  wal </translation>
+        <location filename="../../mscore/prefsdialog.ui" line="844"/>
+        <location filename="../../mscore/prefsdialog.ui" line="961"/>
+        <source>Wallpaper</source>
+        <translation>Papur Wal</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="883"/>
+        <location filename="../../mscore/prefsdialog.ui" line="870"/>
         <source>Choose Background wallpaper file</source>
         <translation>Dewis  Cefndir papur  wal ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="886"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1003"/>
+        <location filename="../../mscore/prefsdialog.ui" line="873"/>
+        <location filename="../../mscore/prefsdialog.ui" line="990"/>
         <source>Opens a file dialog for selecting the wallpaper file</source>
         <translation>Agor y ffeil mewnosodiad i ddethol  yffeil papur  wal </translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="911"/>
+        <location filename="../../mscore/prefsdialog.ui" line="885"/>
+        <source>Background wallpaper path</source>
+        <translation>Cefndir Papur wal llwybr</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="888"/>
+        <source>Insert path to background wallpaper file</source>
+        <translation>Mewnosodiad llwybr i ffeil gefndir papur  wal </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="898"/>
         <source>Select background color</source>
         <translation>Dewis lliw cefndir </translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="914"/>
+        <location filename="../../mscore/prefsdialog.ui" line="901"/>
         <source>Opens a dialog for selecting the background color</source>
         <translation>Agor y dialog i ddewis cefndir lliw</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="927"/>
-        <location filename="../../mscore/prefsdialog.ui" line="930"/>
+        <location filename="../../mscore/prefsdialog.ui" line="914"/>
+        <location filename="../../mscore/prefsdialog.ui" line="917"/>
         <source>Paper</source>
         <translation>Papur</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1041"/>
-        <source>Paper wallpaper path</source>
-        <translation>Papur papur wal llwybr</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1044"/>
-        <source>Insert path to paper wallpaper file</source>
-        <translation>Mewnosodiad llwybr papur papur wal ffeil</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1000"/>
-        <source>Choose paper wallpaper file</source>
-        <translation>Dewis papur papur wal ffei</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1028"/>
-        <source>Select paper color</source>
-        <translation>Dewis lliw papur</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1031"/>
-        <source>Opens a dialog for selecting the paper color</source>
-        <translation>Agor y deialog i ddethol lliw y papur</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="971"/>
+        <location filename="../../mscore/prefsdialog.ui" line="958"/>
         <source>Paper Wallpaper</source>
         <translation>Papur Papur wal</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1015"/>
+        <location filename="../../mscore/prefsdialog.ui" line="987"/>
+        <source>Choose paper wallpaper file</source>
+        <translation>Dewis papur papur wal ffei</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1002"/>
         <source>Paper Color</source>
         <translation>Lliw Papur</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1054"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1015"/>
+        <source>Select paper color</source>
+        <translation>Dewis lliw papur</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1018"/>
+        <source>Opens a dialog for selecting the paper color</source>
+        <translation>Agor y deialog i ddethol lliw y papur</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1028"/>
+        <source>Paper wallpaper path</source>
+        <translation>Papur papur wal llwybr</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1031"/>
+        <source>Insert path to paper wallpaper file</source>
+        <translation>Mewnosodiad llwybr papur papur wal ffeil</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1041"/>
         <source>Scroll pages</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1060"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1047"/>
         <source>Horizontally</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1070"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1057"/>
         <source>Vertically</source>
         <translation type="unfinished"/>
     </message>
@@ -13090,12 +12894,6 @@ h:mm:s</translation>
         <location filename="../../mscore/prefsdialog.ui" line="1080"/>
         <source>Miscellaneous</source>
         <translation>Amrywiol</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1111"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1137"/>
-        <source>Proximity for selecting elements:</source>
-        <translation>agosrwydd i dethol elfennau:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1089"/>
@@ -13115,58 +12913,64 @@ h:mm:s</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1161"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1111"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1137"/>
+        <source>Proximity for selecting elements:</source>
+        <translation>agosrwydd i dethol elfennau:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1148"/>
         <source>Note Input Tab</source>
         <translation>Nodyn Mewnosodiad Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1164"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1170"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1151"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1157"/>
         <source>Note Input</source>
         <translation>Nodyn Mewnosodiad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1176"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1163"/>
         <source>Enable MIDI Input</source>
         <translation>Galluogi MIDI mewnbwn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1179"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1166"/>
         <source>Enable MIDI input</source>
         <translation>Galluogi MIDI mewnbwn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1186"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1189"/>
-        <source>Color notes outside of usable pitch range</source>
-        <translation>Lliw nodiadau tuallan i&apos;r defnyddil cywair cwmpas</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1202"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1205"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1176"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1179"/>
         <source>Play notes when editing</source>
         <translation>Chwarae nodiadau tra golygu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1217"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1191"/>
         <source>Default duration:</source>
         <translation>Rhagosodiad parhad:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1224"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1198"/>
         <source>Default duration</source>
         <translation>Rhagosodedig parhad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1227"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1201"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1246"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1249"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1220"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1223"/>
         <source>Play whole chord when adding note</source>
         <translation>Chwarae holl tant wrth adio nodyn </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1246"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1249"/>
+        <source>Color notes outside of usable pitch range</source>
+        <translation>Lliw nodiadau tuallan i&apos;r defnyddil cywair cwmpas</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1272"/>
@@ -13454,719 +13258,714 @@ h:mm:s</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1993"/>
         <location filename="../../mscore/prefsdialog.ui" line="1996"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3445"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3451"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3425"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3431"/>
         <source>Clear</source>
         <translation>Clirio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2020"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2007"/>
         <source>Score Tab</source>
         <translation>Sgôr  Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2023"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2010"/>
         <source>Score</source>
         <translation>Sgôr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2029"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2016"/>
         <source>View</source>
         <translation>Golygfa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2038"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2025"/>
         <source>Default scale for new score views</source>
         <translation>Rhagosod graddfa am sgôr newydd golygfeydd</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2041"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2028"/>
         <source>Default zoom</source>
         <translation>Rhagosodedig chwyddo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2044"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2031"/>
         <source>default scale for new score views</source>
         <translation>rhagosodedig graddfa er mwyn golygfa newydd</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2069"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2056"/>
         <source>Default zoom:</source>
         <translation>Rhagosodedig chwydd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2089"/>
-        <source>Show MIDI controls in Mixer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2099"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2079"/>
         <source>Default Files</source>
         <translation>Ffeil rhagosodedig</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2126"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2106"/>
         <source>Instrument list 2:</source>
         <translation>Ufferyn List 2:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2139"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2119"/>
         <source>Choose Instrument list 1</source>
         <translation>Dewis Offeryn rhestr 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2142"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2260"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2122"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2240"/>
         <source>Opens a file dialog for selecting a instrument list file</source>
         <translation>Agor ffeil deialog i ddewis yr offeryn feil list</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2152"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2132"/>
         <source>Instrument list 1:</source>
         <translation>Ufferyn List 1:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2162"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2142"/>
         <source>Instrument list 1</source>
         <translation>Offeryn rhestr 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2165"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2247"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2145"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2227"/>
         <source>Insert path to a instrument list file</source>
         <translation>Mewnosodiad llwybr offeryn rhestr ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2172"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2152"/>
         <source>Style:</source>
         <translation>Steil:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2185"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2856"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2165"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2836"/>
         <source>Insert path to style file</source>
         <translation>Mewnosodiad llwybr i steil ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2195"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2863"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2175"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2843"/>
         <source>Choose style</source>
         <translation>Dewis steil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2198"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2866"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2178"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2846"/>
         <source>Opens a file dialog for selecting a style file</source>
         <translation>Agor ffeil deialog i ddewis yr arddull feil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2208"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2188"/>
         <source>Style for part:</source>
         <translation>Arddull i&apos;r darn: </translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2218"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2198"/>
         <source>Style for part</source>
         <translation>Steil i ddarn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2221"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2201"/>
         <source>Insert path to style file for part</source>
         <translation>Mewnosodiad llwybr i steil ffeil i&apos;r rhan</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2231"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2211"/>
         <source>Choose style for part</source>
         <translation>Dewis steil i ddarn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2234"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2214"/>
         <source>Opens a file dialog for selecting a style file for part</source>
         <translation>Agor y ffeil deialog i dethol y steil ffeil rhan</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2244"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2224"/>
         <source>Instrument list 2</source>
         <translation>Offeryn list 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2257"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2237"/>
         <source>Choose Instrument list 2</source>
         <translation>Dewis Offeryn list 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2287"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2267"/>
         <source>I/O Tab</source>
         <translation>I/O Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2290"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2792"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2270"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2772"/>
         <source>Attention: Any changes on this page require a restart of MuseScore.</source>
         <translation>Sylwer: Os newidir unrhyw beth ar y dudalen hon bydd rhaid ailgychwyn MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2293"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2273"/>
         <source>I/O</source>
         <translation>I/O</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2305"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2285"/>
         <source>PulseAudio</source>
         <translation>PwlsClywedol</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2324"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2304"/>
         <source>Port Audio</source>
         <translation>Porth Sain</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2327"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2307"/>
         <source>PortAudio</source>
         <translation>PorthClywedol</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2352"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2332"/>
         <source>API:</source>
         <translation>API:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2368"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2348"/>
         <source>API</source>
         <translation>API</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2371"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2351"/>
         <source>Choose API</source>
         <translation>Dewis API</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2378"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2358"/>
         <source>MIDI Input:</source>
         <translation>MIDI Cyfraniad:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2397"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2377"/>
         <source>MIDI Input</source>
         <translation>Mewnbwn MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2400"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2380"/>
         <source>Choose MIDI Input</source>
         <translation>Dewis MIDI mewnbwn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2407"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2387"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2469"/>
         <source>Device:</source>
         <translation>Dyfais:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2423"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2619"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2403"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2599"/>
         <source>Device</source>
         <translation>Dyfais</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2426"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2406"/>
         <source>Choose device</source>
         <translation>Dewis dyfais</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2442"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2445"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2422"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2425"/>
         <source>ALSA audio</source>
         <translation>ALSA sain</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2460"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2440"/>
         <source>Period Size:</source>
         <translation>Maint Cyfnod:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2470"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2450"/>
         <source>Fragments</source>
         <translation>Tamaid</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2473"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2453"/>
         <source>Choose number of fragments</source>
         <translation>Dewis rhif y tamaidiau</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2496"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3192"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2476"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3172"/>
         <source>Sample rate:</source>
         <translation>Sampl graddfa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2506"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Period Size</source>
         <translation>Maint Brawddeg</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2509"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
         <source>Choose period size</source>
         <translation>Dewis maint brawddeg</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2513"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2493"/>
         <source>4096</source>
         <translation>4096</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2518"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2498"/>
         <source>2048</source>
         <translation>2048</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2523"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2503"/>
         <source>1024</source>
         <translation>1024</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2528"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2508"/>
         <source>512</source>
         <translation>512</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2533"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2513"/>
         <source>256</source>
         <translation>256</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2538"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2518"/>
         <source>128</source>
         <translation>128</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2543"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2523"/>
         <source>64</source>
         <translation>64</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2564"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2544"/>
         <source>Fragments:</source>
         <translation>Tameidiau:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2574"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3199"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2554"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3179"/>
         <source>Sample rate</source>
         <translation>Sampl graddfa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2577"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3202"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2557"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3182"/>
         <source>Choose sample rate</source>
         <translation>Dewis sampl graddfa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2581"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2561"/>
         <source>192000</source>
         <translation>192000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2586"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2566"/>
         <source>96000</source>
         <translation>96000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2591"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2571"/>
         <source>88200</source>
         <translation>88200</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2596"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3211"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2576"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3191"/>
         <source>48000</source>
         <translation>48000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2601"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3206"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2581"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3186"/>
         <source>44100</source>
         <translation>44100</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2606"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2586"/>
         <source>32000</source>
         <translation>32000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2611"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2591"/>
         <source>22050</source>
         <translation>22050</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2622"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2602"/>
         <source>default</source>
         <translation>rhagosodiad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2638"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2641"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2618"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2621"/>
         <source>JACK audio server</source>
         <translation>JACK sain gweinydd</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2659"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2662"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2639"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2642"/>
         <source>Timebase Master</source>
         <translation>Amserlin Meistr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2675"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2678"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2655"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2658"/>
         <source>Use JACK Transport</source>
         <translation>Iws JACK Trafnidiaeth</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2685"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2688"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2665"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2668"/>
         <source>Use JACK Audio</source>
         <translation>Iws JACK Sain</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2704"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2707"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2684"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2687"/>
         <source>Remember last connection(s)</source>
         <translation>Cofio diwethaf cysylltiad(s)</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2736"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2739"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2716"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2719"/>
         <source>Use JACK MIDI</source>
         <translation>Defnyddio JAC MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2813"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2793"/>
         <source>Import Tab</source>
         <translation>Mewnforyn Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2816"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2796"/>
         <source>Import</source>
         <translation>Mewnforyn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2822"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2802"/>
         <source>Style Used for Import</source>
         <translation>Arddull Ddefnyddir i mewnforyn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2831"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2811"/>
         <source>Build in style</source>
         <translation>Ymgorffori steil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2834"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2814"/>
         <source>Built in style</source>
         <translation>Arddull adeiledu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2843"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2853"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2823"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2833"/>
         <source>Use style file</source>
         <translation>Arfer steil ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2846"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2826"/>
         <source>Use style file:</source>
         <translation>Defnyddio ffeil arddyll:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2869"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2849"/>
         <source>Browse...</source>
         <translation>Pori...</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2881"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2861"/>
         <source>Character Set Used When Importing Binary Files</source>
         <translation>Llythyren Set Ddefnyddir Pan Mewnforyn Dwyran Ffeil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2892"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2872"/>
         <source>Overture import character set:</source>
         <translation>Agorawd mewnforyn cymeriad set:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2899"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2879"/>
         <source>Overture import character set</source>
         <translation>Mewnforyn agorawd  set cymeriad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2902"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2882"/>
         <source>Choose Overture import character set</source>
         <translation>Dewis Mewnforyn agorawd  set cymeriad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2909"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2889"/>
         <source>Guitar Pro import character set:</source>
         <translation>Gitâr Proffesiynol mewnforyn cymeriad set:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2916"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2896"/>
         <source>Guitar Pro import character set</source>
         <translation>Gitâr pro mewnforyn agorawd  set</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2919"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2899"/>
         <source>Choose Guitar Pro import character set</source>
         <translation>Dewis Gitâr pro mewnforyn agorawd  set</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2937"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2940"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3241"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3244"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2917"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2920"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3221"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3224"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2949"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2952"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2929"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2932"/>
         <source>Import layout</source>
         <translation>Mewnforyn dyluniad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2959"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2962"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2939"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2942"/>
         <source>Import system and page breaks</source>
         <translation>Mewnforyn system a toriadau tudalen</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2978"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2981"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3151"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3154"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2958"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2961"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3131"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3134"/>
         <source>MIDI</source>
         <translation>MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2987"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2967"/>
         <source>Shortest note:</source>
         <translation>Nodyn byrraf:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2994"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2974"/>
         <source>Shortest note</source>
         <translation>Byrraf nodyn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2997"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2977"/>
         <source>Choose the shortest note value</source>
         <translation>Dewis y byrraf nodyn gwerth</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3004"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2984"/>
         <source>Quarter</source>
         <translation>Chwarter</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3009"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2989"/>
         <source>Eighth</source>
         <translation>Wythfed</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3014"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2994"/>
         <source>16th</source>
         <translation>16th</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3019"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2999"/>
         <source>32nd</source>
         <translation>32nd</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3024"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3004"/>
         <source>64th</source>
         <translation>64th</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3062"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3042"/>
         <source>Export Tab</source>
         <translation>Allforyn Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3065"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3045"/>
         <source>Export</source>
         <translation>Allforio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3084"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3064"/>
         <source>PNG/SVG</source>
         <translation>PNG/SVG</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3093"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3310"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3073"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3290"/>
         <source>Resolution DPI:</source>
         <translation>Cydraniad DPI:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3100"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3103"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3080"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3083"/>
         <source>Transparent background</source>
         <translation>Cefndir tryloyw</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3123"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3317"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3103"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3297"/>
         <source>Resolution DPI</source>
         <translation>Penderfyniad DPI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3126"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3320"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3106"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3300"/>
         <source>Choose resolution DPI</source>
         <translation>Dewis Penderfyniad DPI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3163"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3166"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3143"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3146"/>
         <source>Expand repeats</source>
         <translation>Ehangu ailadroddiadau</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3173"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3153"/>
         <source>Export RPNs</source>
         <translation>Allforyn RPNs</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3183"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3186"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3163"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3166"/>
         <source>Audio</source>
         <translation>Sain</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3253"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3256"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3233"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3236"/>
         <source>Export layout</source>
         <translation>Allforio cynllun</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3265"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3268"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3245"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3248"/>
         <source>Export all system and page breaks</source>
         <translation>Allforio  holl system a tudalen</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3275"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3278"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3255"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3258"/>
         <source>Export manually added system and page breaks only</source>
         <translation>Allforio  mewnosod  atodol system a toriadau tudalen yn unig</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3285"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3288"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3265"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3268"/>
         <source>Do not export system or page breaks</source>
         <translation>Peidied allforio system na toriadau tudalen </translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3304"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3284"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3353"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3333"/>
         <source>Shortcuts Tab</source>
         <translation>Llwybr byr Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3356"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3336"/>
         <source>Shortcuts</source>
         <translation>Llwybrau byr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3377"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3357"/>
         <source>Shortcuts table</source>
         <translation>Llwybr byr tabl</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3380"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3360"/>
         <source>Here you can configure shortcuts for actions</source>
         <translation>Yma gallwch ffurfweddu llwybr byr i gweithrediadau</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3402"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3382"/>
         <source>Action</source>
         <translation>Gweithred</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3407"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3387"/>
         <source>Shortcut</source>
         <translation>llwybr byr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3432"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3412"/>
         <source>Reset Shortcut to default</source>
         <translation>Ailosod Llwybr byr i rhagosodedig</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3435"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3415"/>
         <source>Resets the shortcuts to their default assignment</source>
         <translation>Ailosod llwybr byr i&apos;r rhagosodedig aseiniad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3438"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3418"/>
         <source>Reset Shortcut to Default</source>
         <translation>Ailosod Llwybrau byr i Rhagosodedig</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3448"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3428"/>
         <source>Clears the shortcut assignment for the selected action</source>
         <translation> Clirio llwybr byr aseiniad i&apos;r dewisiad weithred</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3458"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3438"/>
         <source>Define</source>
         <translation>Diffinio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3461"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3441"/>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
         <translation>Agorir i deialog i diffinio newdd llwybr byr at ddewis weithred</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3464"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3444"/>
         <source>Define...</source>
         <translation>Difinio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3477"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3457"/>
         <source>Filter</source>
         <translation>Ffilter</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3497"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3503"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3477"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3483"/>
         <source>Print</source>
         <translation>Print</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3500"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3480"/>
         <source>Print the shortcuts list</source>
         <translation>Print y llwybr byr</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3513"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3493"/>
         <source>Update Tab</source>
         <translation>Diweddaru Tab</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3516"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3496"/>
         <source>Update</source>
         <translation>Diweddaru</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3522"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3525"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3502"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3505"/>
         <source>Automatic Update Check</source>
         <translation>Awtomatig Diweddaru Siec</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3564"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3544"/>
         <source>Check for new version of MuseScore</source>
         <translation>Siec am fersiwn newydd o MuseScore</translation>
     </message>
@@ -14174,19 +13973,17 @@ h:mm:s</translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2499"/>
+        <location filename="../../libmscore/edit.cpp" line="2494"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="433"/>
         <location filename="../../libmscore/utils.cpp" line="443"/>
         <location filename="../../libmscore/utils.cpp" line="453"/>
         <location filename="../../libmscore/utils.cpp" line="462"/>
-        <location filename="../../mscore/mscorePlugins.cpp" line="418"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="305"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2500"/>
+        <location filename="../../libmscore/edit.cpp" line="2495"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14233,14 +14030,6 @@ Os gwelwch yn dda un nodyn neu seibiant ac ail gweithred
 </source>
         <translation>Os gwelwch yn dda dewisiwch un neu erwydd ac ail gweithred
 </translation>
-    </message>
-    <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="419"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="306"/>
-        <source>No score open.
-This plugin requires an open score to run.
-</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -14376,7 +14165,7 @@ meddodd:
         <translation>dwbwl llonnod</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1194"/>
+        <location filename="../../libmscore/stafftype.cpp" line="899"/>
         <source>Cannot open tablature font description:
 %1
 %2</source>
@@ -14385,87 +14174,87 @@ meddodd:
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1341"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1046"/>
         <source>Standard</source>
         <translation>Safonol</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1342"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1047"/>
         <source>Perc. 1 line</source>
         <translation>Perc. 1 llinell</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1343"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1048"/>
         <source>Perc. 3 lines</source>
         <translation>Perc. 3 llinellau</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1344"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1049"/>
         <source>Perc. 5 lines</source>
         <translation>Perc. 5 llinellau</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1346"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1051"/>
         <source>Tab. 6-str. simple</source>
         <translation>Tab. 6-str. syml</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1347"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1052"/>
         <source>Tab. 6-str. common</source>
         <translation>Tab. 6-str. cyffredin</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1348"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1053"/>
         <source>Tab. 6-str. full</source>
         <translation>Tab. 6-str. lawn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1349"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1054"/>
         <source>Tab. 4-str. simple</source>
         <translation>Tab. 4-str. syml</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1350"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1055"/>
         <source>Tab. 4-str. common</source>
         <translation>Tab. 4-str. cyffredin</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1351"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1056"/>
         <source>Tab. 4-str. full</source>
         <translation>Tab. 4-str. llawn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1352"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1057"/>
         <source>Tab. 5-str. simple</source>
         <translation>Tab. 5-str. syml</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1353"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1058"/>
         <source>Tab. 5-str. common</source>
         <translation>Tab. 5-str. cyffredin</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1354"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1059"/>
         <source>Tab. 5-str. full</source>
         <translation>Tab. 5-str. llawn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1355"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1060"/>
         <source>Tab. ukulele</source>
         <translation>Tab. ukulele</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1356"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1061"/>
         <source>Tab. balalaika</source>
         <translation>Tab. balalaika</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1357"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1062"/>
         <source>Tab. 6-str. Italian</source>
         <translation>Tab. 6-str. Eidalaidd</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1358"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1063"/>
         <source>Tab. 6-str. French</source>
         <translation>Tab. 6-str. Ffrengig</translation>
     </message>
@@ -14587,10 +14376,10 @@ Ymwelwch a  &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore We&lt;/a&gt
     <message>
         <location filename="../../mscore/album.cpp" line="245"/>
         <location filename="../../mscore/capella.cpp" line="2662"/>
-        <location filename="../../mscore/importgtp.cpp" line="2305"/>
+        <location filename="../../mscore/importgtp.cpp" line="2303"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1198"/>
         <location filename="../../mscore/instrdialog.cpp" line="135"/>
-        <location filename="../../mscore/musescore.cpp" line="2474"/>
+        <location filename="../../mscore/musescore.cpp" line="2450"/>
         <source>Quit</source>
         <translation>Ymadael</translation>
     </message>
@@ -14655,7 +14444,7 @@ methodd</translation>
     </message>
     <message>
         <location filename="../../mscore/capella.cpp" line="2661"/>
-        <location filename="../../mscore/importgtp.cpp" line="2304"/>
+        <location filename="../../mscore/importgtp.cpp" line="2302"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1197"/>
         <source>Load failed: </source>
         <translation>Methodd lwytho</translation>
@@ -14693,7 +14482,7 @@ A wyt am trosysgrifo e?</translation>
         <translation>SainFfont wedi osod. Plîs ewch i Weld &gt; Syntheseisydd i ategu Gweld &gt; Cymysgydd i ddewis yr offeryn sain.</translation>
     </message>
     <message>
-        <location filename="../../mscore/importgtp.cpp" line="2303"/>
+        <location filename="../../mscore/importgtp.cpp" line="2301"/>
         <source>MuseScore: Import Guitar Pro</source>
         <translation>MuseScore: Mewnforyn Gitâr Pro </translation>
     </message>
@@ -14708,12 +14497,12 @@ A wyt am trosysgrifo e?</translation>
         <translation>MuseScore: Llwytho Steil Methodd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2472"/>
+        <location filename="../../mscore/musescore.cpp" line="2448"/>
         <source>MuseScore: Load Languages Failed:</source>
         <translation>MuseScore: Lwytho Iaith Methodd</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3970"/>
+        <location filename="../../mscore/musescore.cpp" line="3946"/>
         <source>MuseScore: Invalid Command</source>
         <translation>MuseScore: Gorchymyn Annilys</translation>
     </message>
@@ -14721,7 +14510,7 @@ A wyt am trosysgrifo e?</translation>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3858"/>
+        <location filename="../../mscore/musescore.cpp" line="3834"/>
         <source>Record</source>
         <translation>Record</translation>
     </message>
@@ -15016,17 +14805,17 @@ A wyt am trosysgrifo e?</translation>
 <context>
     <name>Staff type group name</name>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="36"/>
+        <location filename="../../libmscore/stafftype.cpp" line="34"/>
         <source>Standard</source>
         <translation>Safonol</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="37"/>
+        <location filename="../../libmscore/stafftype.cpp" line="35"/>
         <source>Percussion</source>
         <translation>Taro</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="38"/>
+        <location filename="../../libmscore/stafftype.cpp" line="36"/>
         <source>Tablature</source>
         <translation>Tabl nodiant</translation>
     </message>
@@ -15648,197 +15437,197 @@ A wyt am trosysgrifo e?</translation>
 <context>
     <name>TextStyle</name>
     <message>
-        <location filename="../../libmscore/style.cpp" line="285"/>
+        <location filename="../../libmscore/style.cpp" line="273"/>
         <source>Title</source>
         <translation>Pennawd</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="287"/>
+        <location filename="../../libmscore/style.cpp" line="275"/>
         <source>Subtitle</source>
         <translation>Isdeitl</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="289"/>
+        <location filename="../../libmscore/style.cpp" line="277"/>
         <source>Composer</source>
         <translation>Cyfansoddwr</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="291"/>
+        <location filename="../../libmscore/style.cpp" line="279"/>
         <source>Lyricist</source>
         <translation>Telynegion</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="294"/>
+        <location filename="../../libmscore/style.cpp" line="282"/>
         <source>Lyrics Odd Lines</source>
         <translation>Telynor Od Llinellau </translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="296"/>
+        <location filename="../../libmscore/style.cpp" line="284"/>
         <source>Lyrics Even Lines</source>
         <translation>Telynor Eilrif Llinellau </translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="298"/>
+        <location filename="../../libmscore/style.cpp" line="286"/>
         <source>Fingering</source>
         <translation>Byseddu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="300"/>
+        <location filename="../../libmscore/style.cpp" line="288"/>
         <source>LH Guitar Fingering</source>
         <translation>LH Gitâr Byseddu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="302"/>
+        <location filename="../../libmscore/style.cpp" line="290"/>
         <source>RH Guitar Fingering</source>
         <translation>RH Gitâr Byseddu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="304"/>
+        <location filename="../../libmscore/style.cpp" line="292"/>
         <source>String Number</source>
         <translation>Rhif Llinyn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="308"/>
+        <location filename="../../libmscore/style.cpp" line="296"/>
         <source>Instrument Name (Long)</source>
         <translation>Enw Offeryn (Hir)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="310"/>
+        <location filename="../../libmscore/style.cpp" line="298"/>
         <source>Instrument Name (Short)</source>
         <translation>Enw Offeryn (Bur)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="312"/>
+        <location filename="../../libmscore/style.cpp" line="300"/>
         <source>Instrument Name (Part)</source>
         <translation>Enw Offeryn (Rhan)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="316"/>
+        <location filename="../../libmscore/style.cpp" line="304"/>
         <source>Dynamics</source>
         <translation>Dynameg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="318"/>
+        <location filename="../../libmscore/style.cpp" line="306"/>
         <source>Technique</source>
         <translation>Techneg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="321"/>
+        <location filename="../../libmscore/style.cpp" line="309"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="325"/>
+        <location filename="../../libmscore/style.cpp" line="313"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="327"/>
+        <location filename="../../libmscore/style.cpp" line="315"/>
         <source>Measure Number</source>
         <translation>Rhif Mesur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="329"/>
+        <location filename="../../libmscore/style.cpp" line="317"/>
         <source>Translator</source>
         <translation>Cyfieithydd</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="331"/>
+        <location filename="../../libmscore/style.cpp" line="319"/>
         <source>Tuplet</source>
         <translation>Tuplet</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="334"/>
+        <location filename="../../libmscore/style.cpp" line="322"/>
         <source>System</source>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="338"/>
+        <location filename="../../libmscore/style.cpp" line="326"/>
         <source>Staff</source>
         <translation>Staff</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="340"/>
+        <location filename="../../libmscore/style.cpp" line="328"/>
         <source>Chord Symbol</source>
         <translation>Simbol Tant</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="343"/>
+        <location filename="../../libmscore/style.cpp" line="331"/>
         <source>Rehearsal Mark</source>
         <translation>Marc Rihyrsal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="347"/>
+        <location filename="../../libmscore/style.cpp" line="335"/>
         <source>Repeat Text Left</source>
         <translation>Ailadroddiad Testun Chwith</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="351"/>
+        <location filename="../../libmscore/style.cpp" line="339"/>
         <source>Repeat Text Right</source>
         <translation>Ailadroddiad Testun Dde</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="356"/>
+        <location filename="../../libmscore/style.cpp" line="344"/>
         <source>Repeat Text</source>
         <translation>Ailadroddiad Testun</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="361"/>
+        <location filename="../../libmscore/style.cpp" line="349"/>
         <source>Volta</source>
         <translation>Amser</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="363"/>
+        <location filename="../../libmscore/style.cpp" line="351"/>
         <source>Frame</source>
         <translation>Ffrâm</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="365"/>
+        <location filename="../../libmscore/style.cpp" line="353"/>
         <source>Text Line</source>
         <translation>Llinell Testun</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="367"/>
+        <location filename="../../libmscore/style.cpp" line="355"/>
         <source>Glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="370"/>
+        <location filename="../../libmscore/style.cpp" line="358"/>
         <source>Ottava</source>
         <translation>Wythfed</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="372"/>
+        <location filename="../../libmscore/style.cpp" line="360"/>
         <source>Pedal</source>
         <translation>Pedal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="374"/>
+        <location filename="../../libmscore/style.cpp" line="362"/>
         <source>Hairpin</source>
         <translation>Pin gwallt</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="376"/>
+        <location filename="../../libmscore/style.cpp" line="364"/>
         <source>Bend</source>
         <translation>Cerddorfa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="378"/>
+        <location filename="../../libmscore/style.cpp" line="366"/>
         <source>Header</source>
         <translation>Pennawd</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="380"/>
+        <location filename="../../libmscore/style.cpp" line="368"/>
         <source>Footer</source>
         <translation>Troedyn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="382"/>
+        <location filename="../../libmscore/style.cpp" line="370"/>
         <source>Instrument Change</source>
         <translation>Newid Offeryn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="388"/>
+        <location filename="../../libmscore/style.cpp" line="376"/>
         <source>Figured Bass</source>
         <translation>Bas Rhifoledig</translation>
     </message>
@@ -22073,6 +21862,7 @@ D#</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="50"/>
+        <location filename="../../libmscore/clef.cpp" line="55"/>
         <source>Percussion</source>
         <translation>Taro</translation>
     </message>
@@ -22097,11 +21887,6 @@ D#</translation>
         <translation>Cleff Bas 15ma</translation>
     </message>
     <message>
-        <location filename="../../libmscore/clef.cpp" line="55"/>
-        <source>Percussion2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../libmscore/clef.cpp" line="56"/>
         <source>Tablature2</source>
         <translation>Tabl nodiant2</translation>
@@ -22110,11 +21895,6 @@ D#</translation>
         <location filename="../../libmscore/clef.cpp" line="57"/>
         <source>Treble clef optional 8vb</source>
         <translation>Trebl allwedd dewisol 8vb</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/clef.cpp" line="58"/>
-        <source>Treble clef 8vb Old</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -22453,63 +22233,63 @@ D#</translation>
 <context>
     <name>editstaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="491"/>
+        <location filename="../../mscore/editstaff.cpp" line="470"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="492"/>
+        <location filename="../../mscore/editstaff.cpp" line="471"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="493"/>
+        <location filename="../../mscore/editstaff.cpp" line="472"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="494"/>
+        <location filename="../../mscore/editstaff.cpp" line="473"/>
         <source>Eb</source>
         <translation>Eb</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="495"/>
+        <location filename="../../mscore/editstaff.cpp" line="474"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="496"/>
+        <location filename="../../mscore/editstaff.cpp" line="475"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="497"/>
+        <location filename="../../mscore/editstaff.cpp" line="476"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="498"/>
+        <location filename="../../mscore/editstaff.cpp" line="477"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="499"/>
+        <location filename="../../mscore/editstaff.cpp" line="478"/>
         <source>Ab</source>
         <translation>
 Ab</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="500"/>
+        <location filename="../../mscore/editstaff.cpp" line="479"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="501"/>
+        <location filename="../../mscore/editstaff.cpp" line="480"/>
         <source>Bb</source>
         <translation>Bb</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="502"/>
+        <location filename="../../mscore/editstaff.cpp" line="481"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -22614,11 +22394,6 @@ Ab</translation>
         <location filename="../../libmscore/element.cpp" line="101"/>
         <source>Barline</source>
         <translation>Llinell bar</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/element.cpp" line="102"/>
-        <source>System Divider</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="103"/>
@@ -23077,7 +22852,7 @@ Ab</translation>
 <context>
     <name>images_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="177"/>
+        <location filename="../../mscore/preferences.cpp" line="176"/>
         <source>Images</source>
         <translation>Delweddau</translation>
     </message>
@@ -23303,7 +23078,7 @@ Ab</translation>
 <context>
     <name>plugins_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="179"/>
+        <location filename="../../mscore/preferences.cpp" line="178"/>
         <source>Plugins</source>
         <translation>Ategyn</translation>
     </message>
@@ -23311,7 +23086,7 @@ Ab</translation>
 <context>
     <name>scores_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="175"/>
+        <location filename="../../mscore/preferences.cpp" line="174"/>
         <source>Scores</source>
         <translation>Sgoriau</translation>
     </message>
@@ -23427,7 +23202,7 @@ Ab</translation>
 <context>
     <name>soundfonts_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="180"/>
+        <location filename="../../mscore/preferences.cpp" line="179"/>
         <source>Soundfonts</source>
         <translation>Ffonsain</translation>
     </message>
@@ -23453,7 +23228,7 @@ Ab</translation>
 <context>
     <name>styles_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="176"/>
+        <location filename="../../mscore/preferences.cpp" line="175"/>
         <source>Styles</source>
         <translation>Steiliau</translation>
     </message>
@@ -23461,7 +23236,7 @@ Ab</translation>
 <context>
     <name>templates_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="178"/>
+        <location filename="../../mscore/preferences.cpp" line="177"/>
         <source>Templates</source>
         <translation>templedi</translation>
     </message>

@@ -148,17 +148,6 @@
         <translation>Фл. Хб.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="40"/>
-        <source>Baroque Flute</source>
-        <translation>Барокна флаута</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="42"/>
-        <source>Bq. Fl.</source>
-        <extracomment>Baroque Flute</extracomment>
-        <translation>Бар. фл.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="43"/>
         <source>Danso</source>
         <translation>Тансо</translation>
@@ -217,12 +206,6 @@
         <location filename="../instruments/instrumentsxml.h" line="58"/>
         <source>F Dizi</source>
         <translation>Ди — Фа</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="60"/>
-        <source>F Di.</source>
-        <extracomment>F Dizi</extracomment>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="61"/>
@@ -618,22 +601,9 @@
         <translation>Флаута — Ирска</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="174"/>
-        <location filename="../instruments/instrumentsxml.h" line="180"/>
-        <source>Tin. Wh.</source>
-        <extracomment>Tin Whistle</extracomment>
-        <translation>Фл. Ир.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="175"/>
         <source>B♭ Tin Whistle</source>
         <translation>Флаута — Ирска (Си♭, „B♭“)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="177"/>
-        <source>B♭ Tin. Wh.</source>
-        <extracomment>B♭ Tin Whistle</extracomment>
-        <translation>Фл. Ир. Си♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
@@ -1180,17 +1150,6 @@ Sheng</extracomment>
         <translation>Клар. С.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="331"/>
-        <source>C Clarinet</source>
-        <translation>Кларинет — До</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="333"/>
-        <source>C Cl.</source>
-        <extracomment>C Clarinet</extracomment>
-        <translation>Клар. До</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="334"/>
         <source>D Clarinet</source>
         <translation>Кларинет — Ре</translation>
@@ -1605,13 +1564,13 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="448"/>
         <source>Melody Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Мелодијски саксофон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="450"/>
         <source>Mel. Sax.</source>
         <extracomment>Melody Saxophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Мел. сакс.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="451"/>
@@ -1800,12 +1759,12 @@ Harmonium</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="509"/>
         <source>20 Hole Chordet Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Кордет усна хармоника са 20 рупа</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="512"/>
         <source>Bass Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Бас усна хармоника</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="514"/>
@@ -1817,7 +1776,7 @@ Harmonium</extracomment>
 Bass Hohner Harmonica
 ----------
 Bass Huang Harmonica</extracomment>
-        <translation type="unfinished"/>
+        <translation>Бас ус. харm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="515"/>
@@ -1932,7 +1891,7 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="551"/>
         <source>Br.</source>
         <extracomment>Brass</extracomment>
-        <translation type="unfinished"/>
+        <translation>Лим</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="552"/>
@@ -1948,57 +1907,57 @@ Bass Huang Harmonica</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="555"/>
         <source>High C Horn</source>
-        <translation type="unfinished"/>
+        <translation>Висока хорна in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="557"/>
         <source>H. C Hn.</source>
         <extracomment>High C Horn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Вис. хн. in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="558"/>
         <source>Horn in B♭</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="560"/>
         <source>B♭ Hn.</source>
         <extracomment>Horn in B♭</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="561"/>
         <source>Horn in A</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="563"/>
         <source>A Hn.</source>
         <extracomment>Horn in A</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="564"/>
         <source>Horn in A♭</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in As</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="566"/>
         <source>A♭ Hn.</source>
         <extracomment>Horn in A♭</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in As</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="567"/>
         <source>Horn in G</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="569"/>
         <source>G Hn.</source>
         <extracomment>Horn in G</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="570"/>
@@ -2009,40 +1968,40 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="572"/>
         <source>E Hn.</source>
         <extracomment>E Horn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in E</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="573"/>
         <source>Horn in E♭</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in Es</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="575"/>
         <source>E♭ Hn.</source>
         <extracomment>Horn in E♭</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in Es</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="576"/>
         <source>Horn in D</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="578"/>
         <source>Hn.</source>
         <extracomment>Horn in D</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="579"/>
         <source>Horn in C</source>
-        <translation type="unfinished"/>
+        <translation>Хорна in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="581"/>
         <source>C Hn.</source>
         <extracomment>Horn in C</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хн. in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="582"/>
@@ -2078,42 +2037,6 @@ Bass Huang Harmonica</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="591"/>
-        <location filename="../instruments/instrumentsxml.h" line="595"/>
-        <location filename="../instruments/instrumentsxml.h" line="599"/>
-        <location filename="../instruments/instrumentsxml.h" line="603"/>
-        <location filename="../instruments/instrumentsxml.h" line="629"/>
-        <location filename="../instruments/instrumentsxml.h" line="633"/>
-        <location filename="../instruments/instrumentsxml.h" line="637"/>
-        <location filename="../instruments/instrumentsxml.h" line="641"/>
-        <location filename="../instruments/instrumentsxml.h" line="645"/>
-        <location filename="../instruments/instrumentsxml.h" line="649"/>
-        <location filename="../instruments/instrumentsxml.h" line="653"/>
-        <location filename="../instruments/instrumentsxml.h" line="657"/>
-        <location filename="../instruments/instrumentsxml.h" line="661"/>
-        <location filename="../instruments/instrumentsxml.h" line="665"/>
-        <location filename="../instruments/instrumentsxml.h" line="669"/>
-        <location filename="../instruments/instrumentsxml.h" line="673"/>
-        <location filename="../instruments/instrumentsxml.h" line="677"/>
-        <location filename="../instruments/instrumentsxml.h" line="684"/>
-        <location filename="../instruments/instrumentsxml.h" line="688"/>
-        <location filename="../instruments/instrumentsxml.h" line="692"/>
-        <location filename="../instruments/instrumentsxml.h" line="696"/>
-        <source>mute</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="592"/>
-        <source>C Cornet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="594"/>
-        <source>C Cnt.</source>
-        <extracomment>C Cornet</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="596"/>
         <source>B♭ Cornet</source>
         <translation type="unfinished"/>
@@ -2122,17 +2045,6 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="598"/>
         <source>B♭ Cnt.</source>
         <extracomment>B♭ Cornet</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="600"/>
-        <source>A Cornet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="602"/>
-        <source>A Cnt.</source>
-        <extracomment>A Cornet</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2168,19 +2080,19 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="613"/>
         <location filename="../instruments/instrumentsxml.h" line="616"/>
         <source>Baritone Horn</source>
-        <translation type="unfinished"/>
+        <translation>Баритон хорна</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="615"/>
         <location filename="../instruments/instrumentsxml.h" line="618"/>
         <source>Bar. Hn.</source>
         <extracomment>Baritone Horn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Бар. хн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="619"/>
         <source>Baritone Horn (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Баритон хорна (Виолински кључ)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="620"/>
@@ -2218,112 +2130,79 @@ Bass Huang Harmonica</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="630"/>
         <source>Piccolo Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Пиколо труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="632"/>
         <source>P. Tpt.</source>
         <extracomment>Piccolo Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>П. тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="634"/>
         <source>Piccolo Trumpet in B♭</source>
-        <translation type="unfinished"/>
+        <translation>Пиколо труба in B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="636"/>
         <source>P. Tpt. B♭</source>
         <extracomment>Piccolo Trumpet in B♭</extracomment>
-        <translation type="unfinished"/>
+        <translation>П. тр. in B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="638"/>
         <source>Piccolo Trumpet in A</source>
-        <translation type="unfinished"/>
+        <translation>Пиколо труба in A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="640"/>
         <source>P. Tpt. A</source>
         <extracomment>Piccolo Trumpet in A</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="642"/>
-        <source>F Trumpet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="644"/>
-        <source>F Tpt.</source>
-        <extracomment>F Trumpet</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="646"/>
-        <source>E Trumpet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="648"/>
-        <source>E Tpt.</source>
-        <extracomment>E Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>П. тр. in A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="650"/>
         <source>E♭ Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Es труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="652"/>
         <source>E♭ Tpt.</source>
         <extracomment>E♭ Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Еs тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="654"/>
         <source>D Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>D труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="656"/>
         <source>D Tpt.</source>
         <extracomment>D Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>D тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="658"/>
         <source>C Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>C труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="660"/>
         <source>C Tpt.</source>
         <extracomment>C Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>C тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="662"/>
         <source>B♭ Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>B труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="664"/>
         <source>B♭ Tpt.</source>
         <extracomment>B♭ Trumpet</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="666"/>
-        <source>A Trumpet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="668"/>
-        <source>A Tpt.</source>
-        <extracomment>A Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>B тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="670"/>
@@ -2334,7 +2213,7 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="672"/>
         <source>Pkt. Tpt.</source>
         <extracomment>Pocket Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Џеп. тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="674"/>
@@ -2356,7 +2235,7 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="680"/>
         <source>Tnr. Tpt.</source>
         <extracomment>Tenor Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тен. труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="681"/>
@@ -2367,29 +2246,29 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="683"/>
         <source>B. Tpt.</source>
         <extracomment>Bass Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Б. труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="685"/>
         <source>E♭ Bass Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Es бас труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="687"/>
         <source>E♭ B. Tpt.</source>
         <extracomment>E♭ Bass Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Es б. тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="689"/>
         <source>Bass Trumpet in C</source>
-        <translation type="unfinished"/>
+        <translation>Бас труба in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="691"/>
         <source>B. Tpt. C</source>
         <extracomment>Bass Trumpet in C</extracomment>
-        <translation type="unfinished"/>
+        <translation>Б. тр. in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="693"/>
@@ -2405,13 +2284,13 @@ Bass Huang Harmonica</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="697"/>
         <source>Baroque Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Барокна труба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="699"/>
         <source>Bq. Tpt.</source>
         <extracomment>Baroque Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Бар. тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="700"/>
@@ -2730,37 +2609,37 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="787"/>
         <location filename="../instruments/instrumentsxml.h" line="790"/>
         <source>Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Тромбон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="793"/>
         <source>Trombone (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Тромбон (виолински кључ)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="794"/>
         <source>Soprano Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Сопрано тромбон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="797"/>
         <source>Alto Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Алт тромбон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="800"/>
         <source>Tenor Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Тенор тромбон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="803"/>
         <source>Bass Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Бас тромбон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="806"/>
         <source>Contrabass Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Контрабас тромбон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="809"/>
@@ -2793,12 +2672,133 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1062"/>
         <source>Tu.</source>
         <extracomment>Tubo</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тб.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="822"/>
         <source>F Tuba</source>
+        <translation>Туба in F</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="40"/>
+        <source>Baroque Flute</source>
+        <translation>Барокна флаута</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="42"/>
+        <source>Bq. Fl.</source>
+        <extracomment>Baroque Flute</extracomment>
+        <translation>Бар. фл.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="60"/>
+        <source>F Di.</source>
+        <extracomment>F Dizi</extracomment>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="174"/>
+        <location filename="../instruments/instrumentsxml.h" line="180"/>
+        <source>Tin Wh.</source>
+        <extracomment>Tin Whistle</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="177"/>
+        <source>B♭ Tin Wh.</source>
+        <extracomment>B♭ Tin Whistle</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="331"/>
+        <source>C Clarinet</source>
+        <translation>Кларинет — До</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="333"/>
+        <source>C Cl.</source>
+        <extracomment>C Clarinet</extracomment>
+        <translation>Клар. До</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="591"/>
+        <location filename="../instruments/instrumentsxml.h" line="595"/>
+        <location filename="../instruments/instrumentsxml.h" line="599"/>
+        <location filename="../instruments/instrumentsxml.h" line="603"/>
+        <location filename="../instruments/instrumentsxml.h" line="629"/>
+        <location filename="../instruments/instrumentsxml.h" line="633"/>
+        <location filename="../instruments/instrumentsxml.h" line="637"/>
+        <location filename="../instruments/instrumentsxml.h" line="641"/>
+        <location filename="../instruments/instrumentsxml.h" line="645"/>
+        <location filename="../instruments/instrumentsxml.h" line="649"/>
+        <location filename="../instruments/instrumentsxml.h" line="653"/>
+        <location filename="../instruments/instrumentsxml.h" line="657"/>
+        <location filename="../instruments/instrumentsxml.h" line="661"/>
+        <location filename="../instruments/instrumentsxml.h" line="665"/>
+        <location filename="../instruments/instrumentsxml.h" line="669"/>
+        <location filename="../instruments/instrumentsxml.h" line="673"/>
+        <location filename="../instruments/instrumentsxml.h" line="677"/>
+        <location filename="../instruments/instrumentsxml.h" line="684"/>
+        <location filename="../instruments/instrumentsxml.h" line="688"/>
+        <location filename="../instruments/instrumentsxml.h" line="692"/>
+        <location filename="../instruments/instrumentsxml.h" line="696"/>
+        <source>mute</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="592"/>
+        <source>C Cornet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="594"/>
+        <source>C Cnt.</source>
+        <extracomment>C Cornet</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="600"/>
+        <source>A Cornet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="602"/>
+        <source>A Cnt.</source>
+        <extracomment>A Cornet</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="642"/>
+        <source>F Trumpet</source>
+        <translation>F Труба</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="644"/>
+        <source>F Tpt.</source>
+        <extracomment>F Trumpet</extracomment>
+        <translation>F Тр.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="646"/>
+        <source>E Trumpet</source>
+        <translation>E труба</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="648"/>
+        <source>E Tpt.</source>
+        <extracomment>E Trumpet</extracomment>
+        <translation>Е тр.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="666"/>
+        <source>A Trumpet</source>
+        <translation>А труба</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="668"/>
+        <source>A Tpt.</source>
+        <extracomment>A Trumpet</extracomment>
+        <translation>А тр.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="741"/>
@@ -2811,62 +2811,62 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="792"/>
         <source>Tbn.</source>
         <extracomment>Trombone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тбн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="796"/>
         <source>S. Tbn.</source>
         <extracomment>Soprano Trombone</extracomment>
-        <translation type="unfinished"/>
+        <translation>С. Тбн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="799"/>
         <source>A. Tbn.</source>
         <extracomment>Alto Trombone</extracomment>
-        <translation type="unfinished"/>
+        <translation>А. тбн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="802"/>
         <source>T. Tbn.</source>
         <extracomment>Tenor Trombone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Т. тбн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="805"/>
         <source>B. Tbn.</source>
         <extracomment>Bass Trombone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Б. тбн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="808"/>
         <source>Cb. Tbn.</source>
         <extracomment>Contrabass Trombone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Контр. тбн.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="814"/>
         <location filename="../instruments/instrumentsxml.h" line="817"/>
         <source>Euph.</source>
         <extracomment>Euphonium</extracomment>
-        <translation type="unfinished"/>
+        <translation>Еуф.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="821"/>
         <source>Tba.</source>
         <extracomment>Tuba</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тба.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="824"/>
         <source>F Tu.</source>
         <extracomment>F Tuba</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тб. in F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="825"/>
         <location filename="../instruments/instrumentsxml.h" line="828"/>
         <source>E♭ Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Туба in Es</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="827"/>
@@ -3111,13 +3111,13 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="897"/>
         <source>Crotales</source>
-        <translation type="unfinished"/>
+        <translation>Кротали</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="899"/>
         <source>Cro.</source>
         <extracomment>Crotales</extracomment>
-        <translation type="unfinished"/>
+        <translation>Крот.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="900"/>
@@ -3287,7 +3287,7 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="945"/>
         <source>Hand Bells</source>
-        <translation type="unfinished"/>
+        <translation>Ручна звона</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="947"/>
@@ -3320,7 +3320,7 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="954"/>
         <source>Musical Saw</source>
-        <translation type="unfinished"/>
+        <translation>Музичка тестера</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="956"/>
@@ -3331,7 +3331,7 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="957"/>
         <source>Musical Glasses</source>
-        <translation type="unfinished"/>
+        <translation>Музичке чаше</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="959"/>
@@ -3342,13 +3342,13 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="960"/>
         <source>Glass Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Стаклена хармоника</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="962"/>
         <source>Gla. Har.</source>
         <extracomment>Glass Harmonica</extracomment>
-        <translation type="unfinished"/>
+        <translation>Стак. харм.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="963"/>
@@ -3359,34 +3359,34 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Xyl.</source>
         <extracomment>Xylophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ксил.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
         <source>Orff Soprano Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Орфов сопрано ксилофон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="968"/>
         <source>O. S. Xyl.</source>
         <extracomment>Orff Soprano Xylophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>О. с. ксил.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="969"/>
         <source>Orff Alto Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Орфов алт ксилофон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="971"/>
         <source>O. A. Xyl.</source>
         <extracomment>Orff Alto Xylophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>О. а. клис.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="972"/>
         <source>Orff Bass Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Орфов бас ксилофон</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="974"/>
@@ -3397,13 +3397,13 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="975"/>
         <source>Xylomarimba</source>
-        <translation type="unfinished"/>
+        <translation>Ксиломаримба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="977"/>
         <source>XMrm.</source>
         <extracomment>Xylomarimba</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ксиломар.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="978"/>
@@ -3414,18 +3414,18 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="980"/>
         <source>Mrm.</source>
         <extracomment>Marimba</extracomment>
-        <translation type="unfinished"/>
+        <translation>Марим.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="981"/>
         <source>Bass Marimba</source>
-        <translation type="unfinished"/>
+        <translation>Бас маримба</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="983"/>
         <source>B. Mrm.</source>
         <extracomment>Bass Marimba</extracomment>
-        <translation type="unfinished"/>
+        <translation>Б. марим.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="984"/>
@@ -3524,7 +3524,7 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1009"/>
         <source>Piccolo Snare Drum</source>
-        <translation type="unfinished"/>
+        <translation>Мали добош</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1011"/>
@@ -3546,18 +3546,18 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1015"/>
         <source>Tom Toms</source>
-        <translation type="unfinished"/>
+        <translation>Том томови</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1017"/>
         <source>Toms</source>
         <extracomment>Tom Toms</extracomment>
-        <translation type="unfinished"/>
+        <translation>Томови</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1018"/>
         <source>Chinese Tom-toms</source>
-        <translation type="unfinished"/>
+        <translation>Кинески том-томови</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1020"/>
@@ -3574,7 +3574,7 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1023"/>
         <source>Bo.</source>
         <extracomment>Bongos</extracomment>
-        <translation type="unfinished"/>
+        <translation>Бонг.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1024"/>
@@ -3584,13 +3584,13 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1027"/>
         <source>Timbales</source>
-        <translation type="unfinished"/>
+        <translation>Тимбали</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1029"/>
         <source>Timb.</source>
         <extracomment>Timbales</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тимб.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1030"/>
@@ -3659,7 +3659,7 @@ Congas</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1050"/>
         <source>Be.</source>
         <extracomment>Bells</extracomment>
-        <translation type="unfinished"/>
+        <translation>Звон.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1051"/>
@@ -3702,13 +3702,13 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1063"/>
         <source>Metal Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Металне кастењете</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1065"/>
         <source>Met. Cst.</source>
         <extracomment>Metal Castanets</extracomment>
-        <translation type="unfinished"/>
+        <translation>Мет. каст.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1066"/>
@@ -4324,13 +4324,13 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1234"/>
         <source>Toy Piano</source>
-        <translation type="unfinished"/>
+        <translation>Клавир играчка</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1236"/>
         <source>Toy Pno.</source>
         <extracomment>Toy Piano</extracomment>
-        <translation type="unfinished"/>
+        <translation>Кл. иг.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1237"/>
@@ -4415,24 +4415,24 @@ Pipe Organ</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1258"/>
         <source>Percussive Organ</source>
-        <translation type="unfinished"/>
+        <translation>Ударачке оргуље</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1260"/>
         <source>Perc. Org.</source>
         <extracomment>Percussive Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Уд. орг.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1261"/>
         <source>Hammond Organ</source>
-        <translation type="unfinished"/>
+        <translation>Хамондове оргуље</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1263"/>
         <source>Hm. Org.</source>
         <extracomment>Hammond Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Хам. орг.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1264"/>
@@ -4475,7 +4475,7 @@ Pipe Organ</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1278"/>
         <source>Effect Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер ефеката</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1280"/>
@@ -4550,92 +4550,92 @@ Bass Synthesizer
 Brass Synthesizer
 ----------
 String Synthesizer</extracomment>
-        <translation type="unfinished"/>
+        <translation>Синт.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1281"/>
         <source>rain</source>
-        <translation type="unfinished"/>
+        <translation>киша</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1282"/>
         <source>soundtrack</source>
-        <translation type="unfinished"/>
+        <translation>Филмска музика</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1283"/>
         <source>crystal</source>
-        <translation type="unfinished"/>
+        <translation>кристал</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1284"/>
         <source>atmosphere</source>
-        <translation type="unfinished"/>
+        <translation>атмосфера</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1285"/>
         <source>brightness</source>
-        <translation type="unfinished"/>
+        <translation>Осветљеност</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1286"/>
         <source>goblins</source>
-        <translation type="unfinished"/>
+        <translation>гоблини</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1287"/>
         <source>echoes</source>
-        <translation type="unfinished"/>
+        <translation>ехои</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1288"/>
         <source>scifi</source>
-        <translation type="unfinished"/>
+        <translation>научна фантастика</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1289"/>
         <source>Atmosphere Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер атмосфера</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1292"/>
         <source>Brightness Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Осветљени синтисајзер</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1295"/>
         <source>Crystal Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Кристални синтисајзер</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1298"/>
         <source>Echoes Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер ехоа</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1301"/>
         <source>Goblins Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер гоблина</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1304"/>
         <source>Rain Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Кишни синтисајзер</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1307"/>
         <source>Sci-fi Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер научне фантастике</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1310"/>
         <source>Soundtrack Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер филмске музике</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1313"/>
         <source>Pad Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Синтисајзер са подлогом</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1316"/>
@@ -4670,7 +4670,7 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1322"/>
         <source>halo</source>
-        <translation type="unfinished"/>
+        <translation>Хало</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1323"/>
@@ -4710,7 +4710,7 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1342"/>
         <source>Halo Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Хало синтисајзер</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1345"/>
@@ -5004,13 +5004,13 @@ Acoustic Guitar</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1438"/>
         <source>Contra Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Контра гитара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1440"/>
         <source>C Guit.</source>
         <extracomment>Contra Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>Конт. гит.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1441"/>
@@ -5162,7 +5162,7 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1498"/>
         <source>A. Lt.</source>
         <extracomment>Archlute</extracomment>
-        <translation type="unfinished"/>
+        <translation>A. laut.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1544"/>
@@ -5624,7 +5624,7 @@ D Violone</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1640"/>
         <source>D Violone</source>
-        <translation type="unfinished"/>
+        <translation>D Виолина</translation>
     </message>
 </context>
 </TS>

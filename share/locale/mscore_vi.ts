@@ -207,7 +207,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
         <source>MuseScore: Articulation Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Thuộc tính Dấu diễn đạt</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -425,17 +425,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="58"/>
         <source>Attack</source>
-        <translation type="unfinished"/>
+        <translation>Bắt đầu</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="73"/>
         <source>Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Tỷ lệ</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="88"/>
         <source>Release</source>
-        <translation type="unfinished"/>
+        <translation>Thả ra</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="103"/>
@@ -451,42 +451,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="128"/>
         <source>Attack time (ms)</source>
-        <translation type="unfinished"/>
+        <translation>Điểm bắt đầu (ms)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="131"/>
         <source>The attack time in milliseconds.</source>
-        <translation type="unfinished"/>
+        <translation>Điểm bắt đầu theo mi-li giây</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="177"/>
         <source>Threshold</source>
-        <translation type="unfinished"/>
+        <translation>Ngưỡng</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="192"/>
         <source>Gain</source>
-        <translation type="unfinished"/>
+        <translation>Khuếch đại</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="202"/>
         <source>Release time (ms)</source>
-        <translation type="unfinished"/>
+        <translation>Điểm kết thúc (ms)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="205"/>
         <source>The release time in milliseconds.</source>
-        <translation type="unfinished"/>
+        <translation>Điểm kết thúc theo mi-li giây</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="312"/>
         <source>Ratio (1:n)</source>
-        <translation type="unfinished"/>
+        <translation>Tỷ lệ (1:n)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="315"/>
         <source>The gain reduction ratio used when the signal level exceeds the threshold.</source>
-        <translation type="unfinished"/>
+        <translation>Tỷ lệ giảm khuếch đại được dùng khi tín hiệu vượt ngưỡng.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="356"/>
@@ -516,7 +516,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
         <source>Threshold level (dB)</source>
-        <translation type="unfinished"/>
+        <translation>Cập độ ngưỡng (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="476"/>
@@ -534,7 +534,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../../effects/compressor/compressor_gui.ui" line="615"/>
         <location filename="../../effects/compressor/compressor_gui.ui" line="640"/>
         <source>dB</source>
-        <translation type="unfinished"/>
+        <translation>dB</translation>
     </message>
 </context>
 <context>
@@ -1752,115 +1752,90 @@ p, li { white-space: pre-wrap; }
         <translation>Đặc tính khuông nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="586"/>
-        <source>Lines:</source>
-        <translation>Số đường kẻ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="618"/>
-        <source>Line distance:</source>
-        <translation>Khoảng cách đường kẻ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="640"/>
-        <location filename="../../mscore/editstaff.ui" line="666"/>
-        <source>sp</source>
-        <translation>sp</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="650"/>
-        <source>Extra distance above staff:</source>
-        <translation>Khoảng dư phía trên khuông:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="682"/>
-        <source>Scale</source>
-        <translation>Tỷ lệ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="689"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="710"/>
-        <source>Cutaway</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="717"/>
-        <source>Hide system barline</source>
-        <translation>Ẩn vạch nhịp đầu dòng</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="730"/>
-        <source>Small staff</source>
-        <translation>Khuông nhạc nhỏ lại</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="737"/>
-        <source>Show clef</source>
-        <translation>Hiện khóa nhạc</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="746"/>
-        <source>Staff line color:</source>
-        <translation>Màu dòng kẻ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="768"/>
-        <source>Show barlines</source>
-        <translation>Hiện vạch nhịp</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="775"/>
-        <source>Show time signature</source>
-        <translation>Hiện số chỉ nhịp</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="782"/>
-        <source>Advanced Style Properties...</source>
-        <translation>Đặc tính định kiểu chi tiết...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="789"/>
+        <location filename="../../mscore/editstaff.ui" line="581"/>
         <source>Do not hide if system is empty</source>
         <translation>Không ẩn đi nếu dòng nhạc rỗng</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="798"/>
+        <location filename="../../mscore/editstaff.ui" line="588"/>
+        <source>Show time signature</source>
+        <translation>Hiện số chỉ nhịp</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="597"/>
+        <source>Staff line color:</source>
+        <translation>Màu dòng kẻ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="619"/>
+        <source>Advanced Style Properties...</source>
+        <translation>Đặc tính định kiểu chi tiết...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="628"/>
         <source>Style group:</source>
         <translation>Nhóm định kiểu:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="835"/>
+        <location filename="../../mscore/editstaff.ui" line="665"/>
         <source>Invisible staff lines</source>
         <translation>Ẩn dòng kẻ nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="844"/>
-        <source>Hide when empty</source>
-        <translation type="unfinished"/>
+        <location filename="../../mscore/editstaff.ui" line="672"/>
+        <source>Show barlines</source>
+        <translation>Hiện vạch nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="852"/>
-        <source>Auto</source>
-        <translation>Tự động</translation>
+        <location filename="../../mscore/editstaff.ui" line="679"/>
+        <source>Show clef</source>
+        <translation>Hiện khóa nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="857"/>
-        <source>Always</source>
-        <translation>Luôn luôn</translation>
+        <location filename="../../mscore/editstaff.ui" line="692"/>
+        <source>Small staff</source>
+        <translation>Khuông nhạc nhỏ lại</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="862"/>
-        <source>Never</source>
-        <translation>Không bao giờ</translation>
+        <location filename="../../mscore/editstaff.ui" line="699"/>
+        <source>Never hide</source>
+        <translation>Không bao giờ ẩn</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="867"/>
-        <source>Instrument</source>
-        <translation>Nhạc cụ</translation>
+        <location filename="../../mscore/editstaff.ui" line="711"/>
+        <source>Lines:</source>
+        <translation>Số đường kẻ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="743"/>
+        <source>Line distance:</source>
+        <translation>Khoảng cách đường kẻ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="765"/>
+        <location filename="../../mscore/editstaff.ui" line="791"/>
+        <source>sp</source>
+        <translation>sp</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="775"/>
+        <source>Extra distance above staff:</source>
+        <translation>Khoảng dư phía trên khuông:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="807"/>
+        <source>Scale</source>
+        <translation>Tỷ lệ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="814"/>
+        <source>%</source>
+        <translation>%</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="835"/>
+        <source>Hide system barline</source>
+        <translation>Ẩn vạch nhịp đầu dòng</translation>
     </message>
 </context>
 <context>
@@ -2192,7 +2167,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
-        <location filename="../../mscore/editstyle.ui" line="5857"/>
+        <location filename="../../mscore/editstyle.ui" line="5501"/>
         <source>Score</source>
         <translation>Bản nhạc</translation>
     </message>
@@ -2253,79 +2228,72 @@ p, li { white-space: pre-wrap; }
         <location filename="../../mscore/editstyle.ui" line="705"/>
         <location filename="../../mscore/editstyle.ui" line="743"/>
         <location filename="../../mscore/editstyle.ui" line="830"/>
-        <location filename="../../mscore/editstyle.ui" line="1477"/>
-        <location filename="../../mscore/editstyle.ui" line="1512"/>
-        <location filename="../../mscore/editstyle.ui" line="1541"/>
-        <location filename="../../mscore/editstyle.ui" line="1570"/>
-        <location filename="../../mscore/editstyle.ui" line="1661"/>
-        <location filename="../../mscore/editstyle.ui" line="1678"/>
-        <location filename="../../mscore/editstyle.ui" line="1754"/>
-        <location filename="../../mscore/editstyle.ui" line="1771"/>
+        <location filename="../../mscore/editstyle.ui" line="1471"/>
+        <location filename="../../mscore/editstyle.ui" line="1506"/>
+        <location filename="../../mscore/editstyle.ui" line="1535"/>
+        <location filename="../../mscore/editstyle.ui" line="1564"/>
+        <location filename="../../mscore/editstyle.ui" line="1618"/>
+        <location filename="../../mscore/editstyle.ui" line="1681"/>
+        <location filename="../../mscore/editstyle.ui" line="1747"/>
+        <location filename="../../mscore/editstyle.ui" line="1782"/>
         <location filename="../../mscore/editstyle.ui" line="1848"/>
-        <location filename="../../mscore/editstyle.ui" line="1911"/>
-        <location filename="../../mscore/editstyle.ui" line="1977"/>
-        <location filename="../../mscore/editstyle.ui" line="2012"/>
-        <location filename="../../mscore/editstyle.ui" line="2078"/>
-        <location filename="../../mscore/editstyle.ui" line="2094"/>
-        <location filename="../../mscore/editstyle.ui" line="2135"/>
-        <location filename="../../mscore/editstyle.ui" line="2176"/>
-        <location filename="../../mscore/editstyle.ui" line="2239"/>
-        <location filename="../../mscore/editstyle.ui" line="2296"/>
-        <location filename="../../mscore/editstyle.ui" line="2312"/>
-        <location filename="../../mscore/editstyle.ui" line="2341"/>
-        <location filename="../../mscore/editstyle.ui" line="2357"/>
-        <location filename="../../mscore/editstyle.ui" line="2508"/>
-        <location filename="../../mscore/editstyle.ui" line="2528"/>
-        <location filename="../../mscore/editstyle.ui" line="2548"/>
-        <location filename="../../mscore/editstyle.ui" line="2568"/>
-        <location filename="../../mscore/editstyle.ui" line="2588"/>
-        <location filename="../../mscore/editstyle.ui" line="2659"/>
-        <location filename="../../mscore/editstyle.ui" line="2669"/>
-        <location filename="../../mscore/editstyle.ui" line="2731"/>
-        <location filename="../../mscore/editstyle.ui" line="2757"/>
-        <location filename="../../mscore/editstyle.ui" line="2783"/>
-        <location filename="../../mscore/editstyle.ui" line="2809"/>
-        <location filename="../../mscore/editstyle.ui" line="2835"/>
-        <location filename="../../mscore/editstyle.ui" line="2861"/>
-        <location filename="../../mscore/editstyle.ui" line="2887"/>
-        <location filename="../../mscore/editstyle.ui" line="3024"/>
-        <location filename="../../mscore/editstyle.ui" line="3047"/>
-        <location filename="../../mscore/editstyle.ui" line="3070"/>
-        <location filename="../../mscore/editstyle.ui" line="3127"/>
-        <location filename="../../mscore/editstyle.ui" line="3157"/>
-        <location filename="../../mscore/editstyle.ui" line="3276"/>
-        <location filename="../../mscore/editstyle.ui" line="3302"/>
-        <location filename="../../mscore/editstyle.ui" line="3328"/>
-        <location filename="../../mscore/editstyle.ui" line="3348"/>
-        <location filename="../../mscore/editstyle.ui" line="3583"/>
-        <location filename="../../mscore/editstyle.ui" line="3602"/>
-        <location filename="../../mscore/editstyle.ui" line="3667"/>
-        <location filename="../../mscore/editstyle.ui" line="3700"/>
-        <location filename="../../mscore/editstyle.ui" line="3720"/>
-        <location filename="../../mscore/editstyle.ui" line="3753"/>
-        <location filename="../../mscore/editstyle.ui" line="3858"/>
-        <location filename="../../mscore/editstyle.ui" line="3897"/>
-        <location filename="../../mscore/editstyle.ui" line="3914"/>
-        <location filename="../../mscore/editstyle.ui" line="4078"/>
-        <location filename="../../mscore/editstyle.ui" line="4091"/>
-        <location filename="../../mscore/editstyle.ui" line="4108"/>
-        <location filename="../../mscore/editstyle.ui" line="4274"/>
-        <location filename="../../mscore/editstyle.ui" line="4300"/>
-        <location filename="../../mscore/editstyle.ui" line="4414"/>
-        <location filename="../../mscore/editstyle.ui" line="4709"/>
-        <location filename="../../mscore/editstyle.ui" line="4741"/>
-        <location filename="../../mscore/editstyle.ui" line="4770"/>
-        <location filename="../../mscore/editstyle.ui" line="4799"/>
-        <location filename="../../mscore/editstyle.ui" line="4888"/>
-        <location filename="../../mscore/editstyle.ui" line="5100"/>
-        <location filename="../../mscore/editstyle.ui" line="5598"/>
-        <location filename="../../mscore/editstyle.ui" line="5617"/>
-        <location filename="../../mscore/editstyle.ui" line="5636"/>
-        <location filename="../../mscore/editstyle.ui" line="5704"/>
-        <location filename="../../mscore/editstyle.ui" line="5723"/>
-        <location filename="../../mscore/editstyle.ui" line="5739"/>
-        <location filename="../../mscore/editstyle.ui" line="5758"/>
-        <location filename="../../mscore/editstyle.ui" line="5790"/>
+        <location filename="../../mscore/editstyle.ui" line="1864"/>
+        <location filename="../../mscore/editstyle.ui" line="1905"/>
+        <location filename="../../mscore/editstyle.ui" line="1946"/>
+        <location filename="../../mscore/editstyle.ui" line="2009"/>
+        <location filename="../../mscore/editstyle.ui" line="2066"/>
+        <location filename="../../mscore/editstyle.ui" line="2082"/>
+        <location filename="../../mscore/editstyle.ui" line="2111"/>
+        <location filename="../../mscore/editstyle.ui" line="2127"/>
+        <location filename="../../mscore/editstyle.ui" line="2278"/>
+        <location filename="../../mscore/editstyle.ui" line="2298"/>
+        <location filename="../../mscore/editstyle.ui" line="2318"/>
+        <location filename="../../mscore/editstyle.ui" line="2338"/>
+        <location filename="../../mscore/editstyle.ui" line="2358"/>
+        <location filename="../../mscore/editstyle.ui" line="2429"/>
+        <location filename="../../mscore/editstyle.ui" line="2439"/>
+        <location filename="../../mscore/editstyle.ui" line="2501"/>
+        <location filename="../../mscore/editstyle.ui" line="2527"/>
+        <location filename="../../mscore/editstyle.ui" line="2553"/>
+        <location filename="../../mscore/editstyle.ui" line="2579"/>
+        <location filename="../../mscore/editstyle.ui" line="2605"/>
+        <location filename="../../mscore/editstyle.ui" line="2631"/>
+        <location filename="../../mscore/editstyle.ui" line="2657"/>
+        <location filename="../../mscore/editstyle.ui" line="2794"/>
+        <location filename="../../mscore/editstyle.ui" line="2817"/>
+        <location filename="../../mscore/editstyle.ui" line="2840"/>
+        <location filename="../../mscore/editstyle.ui" line="2897"/>
+        <location filename="../../mscore/editstyle.ui" line="2927"/>
+        <location filename="../../mscore/editstyle.ui" line="3046"/>
+        <location filename="../../mscore/editstyle.ui" line="3072"/>
+        <location filename="../../mscore/editstyle.ui" line="3098"/>
+        <location filename="../../mscore/editstyle.ui" line="3118"/>
+        <location filename="../../mscore/editstyle.ui" line="3346"/>
+        <location filename="../../mscore/editstyle.ui" line="3379"/>
+        <location filename="../../mscore/editstyle.ui" line="3399"/>
+        <location filename="../../mscore/editstyle.ui" line="3432"/>
+        <location filename="../../mscore/editstyle.ui" line="3537"/>
+        <location filename="../../mscore/editstyle.ui" line="3576"/>
+        <location filename="../../mscore/editstyle.ui" line="3593"/>
+        <location filename="../../mscore/editstyle.ui" line="3757"/>
+        <location filename="../../mscore/editstyle.ui" line="3770"/>
+        <location filename="../../mscore/editstyle.ui" line="3787"/>
+        <location filename="../../mscore/editstyle.ui" line="3953"/>
+        <location filename="../../mscore/editstyle.ui" line="3979"/>
+        <location filename="../../mscore/editstyle.ui" line="4093"/>
+        <location filename="../../mscore/editstyle.ui" line="4388"/>
+        <location filename="../../mscore/editstyle.ui" line="4420"/>
+        <location filename="../../mscore/editstyle.ui" line="4449"/>
+        <location filename="../../mscore/editstyle.ui" line="4478"/>
+        <location filename="../../mscore/editstyle.ui" line="4567"/>
+        <location filename="../../mscore/editstyle.ui" line="4779"/>
+        <location filename="../../mscore/editstyle.ui" line="5277"/>
+        <location filename="../../mscore/editstyle.ui" line="5296"/>
+        <location filename="../../mscore/editstyle.ui" line="5315"/>
+        <location filename="../../mscore/editstyle.ui" line="5383"/>
+        <location filename="../../mscore/editstyle.ui" line="5402"/>
+        <location filename="../../mscore/editstyle.ui" line="5418"/>
+        <location filename="../../mscore/editstyle.ui" line="5437"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2345,7 +2313,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="211"/>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
-        <translation>Cho thấy giá trị các nốt ngân qua vạch nhịp (THỬ NGHIỆM, dành cho âm nhạc cổ-thuở đầu!)</translation>
+        <translation>Cho thấy giá trị các nốt ngân qua vạch nhịp (THỬ NGHIỆM, âm nhạc thuở đầu!)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
@@ -2391,7 +2359,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="376"/>
         <location filename="../../mscore/editstyle.ui" line="1180"/>
         <location filename="../../mscore/editstyle.ui" line="1352"/>
-        <location filename="../../mscore/editstyle.ui" line="5862"/>
+        <location filename="../../mscore/editstyle.ui" line="5506"/>
         <source>Page</source>
         <translation>Trang</translation>
     </message>
@@ -2412,7 +2380,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="490"/>
-        <location filename="../../mscore/editstyle.ui" line="5314"/>
+        <location filename="../../mscore/editstyle.ui" line="4993"/>
         <source>Staff distance:</source>
         <translation>Khoảng cách khuông nhạc:</translation>
     </message>
@@ -2523,8 +2491,7 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1022"/>
         <location filename="../../mscore/editstyle.ui" line="1312"/>
-        <location filename="../../mscore/editstyle.ui" line="1613"/>
-        <location filename="../../mscore/editstyle.ui" line="4959"/>
+        <location filename="../../mscore/editstyle.ui" line="4638"/>
         <source>Left</source>
         <translation>Trái</translation>
     </message>
@@ -2537,8 +2504,7 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1042"/>
         <location filename="../../mscore/editstyle.ui" line="1359"/>
-        <location filename="../../mscore/editstyle.ui" line="1706"/>
-        <location filename="../../mscore/editstyle.ui" line="4966"/>
+        <location filename="../../mscore/editstyle.ui" line="4645"/>
         <source>Right</source>
         <translation>Phải</translation>
     </message>
@@ -2592,890 +2558,836 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1447"/>
-        <location filename="../../mscore/editstyle.ui" line="5872"/>
+        <location filename="../../mscore/editstyle.ui" line="5516"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
         <translation>Dòng nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1456"/>
-        <source>Brackets</source>
-        <translation>Ngoặc nối khuông</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1467"/>
+        <location filename="../../mscore/editstyle.ui" line="1461"/>
         <source>System bracket thickness:</source>
         <translation>Độ dày ngoặc ôm:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1496"/>
+        <location filename="../../mscore/editstyle.ui" line="1490"/>
         <source>System bracket distance:</source>
         <translation>Kh/cách ngoặc ôm:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1531"/>
+        <location filename="../../mscore/editstyle.ui" line="1525"/>
         <source>Brace thickness:</source>
         <translation>Độ dày ngoặc nhọn:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1560"/>
+        <location filename="../../mscore/editstyle.ui" line="1554"/>
         <source>Brace distance:</source>
         <translation>Kh/cách ngoặc nhọn:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1607"/>
-        <source>Dividers</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1627"/>
-        <location filename="../../mscore/editstyle.ui" line="1720"/>
-        <source>Symbol:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1654"/>
-        <location filename="../../mscore/editstyle.ui" line="1747"/>
-        <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1671"/>
-        <location filename="../../mscore/editstyle.ui" line="1764"/>
-        <source>Vertical offset:</source>
-        <translation>Độ lệch dọc:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1825"/>
-        <location filename="../../mscore/editstyle.ui" line="5877"/>
+        <location filename="../../mscore/editstyle.ui" line="1595"/>
+        <location filename="../../mscore/editstyle.ui" line="5521"/>
         <source>Measure</source>
         <translation>Ô nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1864"/>
+        <location filename="../../mscore/editstyle.ui" line="1634"/>
         <source>Spacing (1=tight):</source>
         <translation>Kh/cách giữa 2 nốt (1=khít nhau):</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1892"/>
+        <location filename="../../mscore/editstyle.ui" line="1662"/>
         <source>Minimum measure width:</source>
         <translation>Độ rộng tối thiểu của ô nhịp:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1927"/>
+        <location filename="../../mscore/editstyle.ui" line="1697"/>
         <source>Note to barline distance:</source>
         <translation>Kh/cách từ nốt nhạc đến vạch nhịp:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1952"/>
+        <location filename="../../mscore/editstyle.ui" line="1722"/>
         <source>Barline to note distance:</source>
         <translation>Kh/cách từ vạch nhịp đến nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2028"/>
+        <location filename="../../mscore/editstyle.ui" line="1798"/>
         <source>Clef left margin:</source>
         <translation>Lề trái khóa nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2053"/>
+        <location filename="../../mscore/editstyle.ui" line="1823"/>
         <source>Minimum note distance:</source>
         <translation>Kh/cách tối thiểu của nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2110"/>
+        <location filename="../../mscore/editstyle.ui" line="1880"/>
         <source>Key signature left margin:</source>
         <translation>Lề trái của hóa biểu:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2151"/>
+        <location filename="../../mscore/editstyle.ui" line="1921"/>
         <source>Time signature left margin:</source>
         <translation>Lề trái của số chỉ nhịp:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2192"/>
+        <location filename="../../mscore/editstyle.ui" line="1962"/>
         <source>Clef/Key right margin:</source>
         <translation>Lề phải khóa-nhạc/hóa-biểu:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2220"/>
+        <location filename="../../mscore/editstyle.ui" line="1990"/>
         <source>Clef to barline distance:</source>
         <translation>Kh/cách từ khóa nhạc đến vạch nhịp:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2255"/>
+        <location filename="../../mscore/editstyle.ui" line="2025"/>
         <source>Staff line thickness:</source>
         <translation>Độ dày của đường kẻ nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2280"/>
+        <location filename="../../mscore/editstyle.ui" line="2050"/>
         <source>Barline to accidental distance:</source>
         <translation>Kh/cách từ vạch nhịp đến dấu hóa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2322"/>
+        <location filename="../../mscore/editstyle.ui" line="2092"/>
         <source>Multimeasure rest margin:</source>
         <translation>Lề của dấu-lặng-đa-ô-nhịp:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2373"/>
+        <location filename="../../mscore/editstyle.ui" line="2143"/>
         <source>Barline to grace note distance:</source>
         <translation>Kh/cách từ vạch nhịp đến nốt láy:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2433"/>
-        <location filename="../../mscore/editstyle.ui" line="5882"/>
+        <location filename="../../mscore/editstyle.ui" line="2203"/>
+        <location filename="../../mscore/editstyle.ui" line="5526"/>
         <source>Barlines</source>
         <translation>Vạch nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2441"/>
+        <location filename="../../mscore/editstyle.ui" line="2211"/>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
         <translation>Hiển thị vạch nhịp lặp lại có móc (vạch nhịp &quot;có cánh&quot;)</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2448"/>
+        <location filename="../../mscore/editstyle.ui" line="2218"/>
         <source>Barline at start of single staff</source>
         <translation>Hiện vạch nhịp ở đầu dòng nhạc đơn khuông</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2455"/>
+        <location filename="../../mscore/editstyle.ui" line="2225"/>
         <source>Barline at start of multiple staves</source>
         <translation>Hiện vạch nhịp ở đầu dòng nhạc đa khuông</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2465"/>
+        <location filename="../../mscore/editstyle.ui" line="2235"/>
         <source>Scale barlines to staff size</source>
         <translation>Giãn vạch nhịp theo kích cỡ khuông nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2498"/>
+        <location filename="../../mscore/editstyle.ui" line="2268"/>
         <source>Barline thickness:</source>
         <translation>Độ dày vạch nhịp:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2518"/>
+        <location filename="../../mscore/editstyle.ui" line="2288"/>
         <source>Final barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày vạch nhịp kết:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2538"/>
+        <location filename="../../mscore/editstyle.ui" line="2308"/>
         <source>Final barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách vạch nhịp kết:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2558"/>
+        <location filename="../../mscore/editstyle.ui" line="2328"/>
         <source>Double barline thickness:</source>
         <translation>Độ dày vạch nhịp kép:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2578"/>
+        <location filename="../../mscore/editstyle.ui" line="2348"/>
         <source>Double barline distance:</source>
         <translation>Khoảng cách vạch nhịp kép:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2623"/>
-        <location filename="../../mscore/editstyle.ui" line="5887"/>
+        <location filename="../../mscore/editstyle.ui" line="2393"/>
+        <location filename="../../mscore/editstyle.ui" line="5531"/>
         <source>Notes</source>
         <translation>Nốt nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2632"/>
+        <location filename="../../mscore/editstyle.ui" line="2402"/>
         <source>Shorten stems</source>
         <translation>Thu ngắn thân nốt nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2649"/>
+        <location filename="../../mscore/editstyle.ui" line="2419"/>
         <source>Progression:</source>
         <translation>Tiến hành:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2682"/>
+        <location filename="../../mscore/editstyle.ui" line="2452"/>
         <source>Shortest stem:</source>
         <translation>Thân nốt nhạc ngắn nhất:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2715"/>
+        <location filename="../../mscore/editstyle.ui" line="2485"/>
         <source>Accidental note distance:</source>
         <translation>Kh/cách dấu hóa của nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2741"/>
+        <location filename="../../mscore/editstyle.ui" line="2511"/>
         <source>Accidental distance:</source>
         <translation>Khoảng cách các dấu hóa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2767"/>
+        <location filename="../../mscore/editstyle.ui" line="2537"/>
         <source>Note dot distance:</source>
         <translation>Khoảng cách chấm dôi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2793"/>
+        <location filename="../../mscore/editstyle.ui" line="2563"/>
         <source>Dot dot distance:</source>
         <translation>Kh/cách giữa hai chấm dôi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2819"/>
+        <location filename="../../mscore/editstyle.ui" line="2589"/>
         <source>Ledger line thickness:</source>
         <translation>Độ dày đường kẻ phụ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2845"/>
+        <location filename="../../mscore/editstyle.ui" line="2615"/>
         <source>Ledger line length:</source>
         <translation>Độ dài đường kẻ phụ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2871"/>
+        <location filename="../../mscore/editstyle.ui" line="2641"/>
         <source>Stem thickness:</source>
         <translation>Độ dày thân nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2897"/>
+        <location filename="../../mscore/editstyle.ui" line="2667"/>
         <source>Dot size:</source>
         <translation>Kích cỡ chấm dôi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2951"/>
-        <location filename="../../mscore/editstyle.ui" line="5892"/>
+        <location filename="../../mscore/editstyle.ui" line="2721"/>
+        <location filename="../../mscore/editstyle.ui" line="5536"/>
         <source>Clefs</source>
         <translation>Khóa nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2957"/>
+        <location filename="../../mscore/editstyle.ui" line="2727"/>
         <source>Default TAB Clef</source>
         <translation>Khóa TAB mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2963"/>
+        <location filename="../../mscore/editstyle.ui" line="2733"/>
         <source>Standard TAB clef</source>
         <translation>Khóa TAB chuẩn</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2970"/>
+        <location filename="../../mscore/editstyle.ui" line="2740"/>
         <source>Serif TAB clef</source>
         <translation>Khóa TAB nét nhỏ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3003"/>
-        <location filename="../../mscore/editstyle.ui" line="5897"/>
+        <location filename="../../mscore/editstyle.ui" line="2773"/>
+        <location filename="../../mscore/editstyle.ui" line="5541"/>
         <source>Arpeggios</source>
         <translation>Dấu rải gam</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3014"/>
+        <location filename="../../mscore/editstyle.ui" line="2784"/>
         <source>Distance to note:</source>
         <translation>Khoảng cách đến nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3037"/>
-        <location filename="../../mscore/editstyle.ui" line="3657"/>
-        <location filename="../../mscore/editstyle.ui" line="3904"/>
-        <location filename="../../mscore/editstyle.ui" line="4068"/>
-        <location filename="../../mscore/editstyle.ui" line="4359"/>
+        <location filename="../../mscore/editstyle.ui" line="2807"/>
+        <location filename="../../mscore/editstyle.ui" line="3336"/>
+        <location filename="../../mscore/editstyle.ui" line="3583"/>
+        <location filename="../../mscore/editstyle.ui" line="3747"/>
+        <location filename="../../mscore/editstyle.ui" line="4038"/>
         <source>Line thickness:</source>
         <translation>Độ dày đường kẻ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3060"/>
+        <location filename="../../mscore/editstyle.ui" line="2830"/>
         <source>Hook length:</source>
         <translation>Độ dài dấu móc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3108"/>
-        <location filename="../../mscore/editstyle.ui" line="5902"/>
+        <location filename="../../mscore/editstyle.ui" line="2878"/>
+        <location filename="../../mscore/editstyle.ui" line="5546"/>
         <source>Beams</source>
         <translation>Dấu nối cờ nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3117"/>
+        <location filename="../../mscore/editstyle.ui" line="2887"/>
         <source>Beam thickness:</source>
         <translation>Độ dày dấu nối cờ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3137"/>
+        <location filename="../../mscore/editstyle.ui" line="2907"/>
         <source>Beam distance (in beam thickness units):</source>
         <translation>Kh/cách giữa các dấu nối (theo % độ dày của nó):</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3167"/>
+        <location filename="../../mscore/editstyle.ui" line="2937"/>
         <source>Broken beam minimum length:</source>
         <translation>Độ dài tối thiểu dấu-nối-cờ dạng hở:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3203"/>
+        <location filename="../../mscore/editstyle.ui" line="2973"/>
         <source>Flatten all beams</source>
         <translation>Làm phẳng mọi dấu nối cờ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3220"/>
-        <location filename="../../mscore/editstyle.ui" line="5907"/>
+        <location filename="../../mscore/editstyle.ui" line="2990"/>
+        <location filename="../../mscore/editstyle.ui" line="5551"/>
         <source>Slurs/Ties</source>
         <translation>Dấu-luyến/Dấu-nối</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3260"/>
+        <location filename="../../mscore/editstyle.ui" line="3030"/>
         <source>Line thickness at end:</source>
         <translation>Độ dày ở cuối đường kẻ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3286"/>
+        <location filename="../../mscore/editstyle.ui" line="3056"/>
         <source>Line thickness middle:</source>
         <translation>Độ dày khúc giữa đường kẻ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3312"/>
+        <location filename="../../mscore/editstyle.ui" line="3082"/>
         <source>Dotted line thickness:</source>
         <translation>Độ dày đường kẻ chấm:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3338"/>
+        <location filename="../../mscore/editstyle.ui" line="3108"/>
         <source>Minimum tie length:</source>
         <translation>Độ dài dấu nối tối thiểu:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3370"/>
-        <location filename="../../mscore/editstyle.ui" line="5912"/>
+        <location filename="../../mscore/editstyle.ui" line="3140"/>
+        <location filename="../../mscore/editstyle.ui" line="5556"/>
         <source>Sizes</source>
         <translation>Kích cỡ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3382"/>
+        <location filename="../../mscore/editstyle.ui" line="3152"/>
         <source>Small staff size:</source>
         <translation>Kích cỡ khuông nhạc nhỏ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3423"/>
+        <location filename="../../mscore/editstyle.ui" line="3193"/>
         <source>Small note size:</source>
         <translation>Kích cỡ nốt nhạc nhỏ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3461"/>
+        <location filename="../../mscore/editstyle.ui" line="3231"/>
         <source>Grace note size:</source>
         <translation>Kích cỡ nốt hoa mỹ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3502"/>
+        <location filename="../../mscore/editstyle.ui" line="3272"/>
         <source>Small clef size:</source>
         <translation>Kích cỡ khóa nhạc nhỏ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3550"/>
-        <source>Lyrics Dash</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3556"/>
-        <source>Max. dash length:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3563"/>
-        <source>Always force dash</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3618"/>
-        <source>Min. dash length:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3648"/>
+        <location filename="../../mscore/editstyle.ui" line="3327"/>
         <source>Hairpins</source>
         <translation>Dấu biến cường</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3690"/>
+        <location filename="../../mscore/editstyle.ui" line="3369"/>
         <source>Height:</source>
         <translation>Chiều cao:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3710"/>
+        <location filename="../../mscore/editstyle.ui" line="3389"/>
         <source>Continue height:</source>
         <translation>Duy trì chiều cao:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3743"/>
-        <location filename="../../mscore/editstyle.ui" line="3960"/>
-        <location filename="../../mscore/editstyle.ui" line="4144"/>
-        <location filename="../../mscore/editstyle.ui" line="4290"/>
-        <location filename="../../mscore/editstyle.ui" line="4404"/>
-        <location filename="../../mscore/editstyle.ui" line="4699"/>
-        <location filename="../../mscore/editstyle.ui" line="4920"/>
+        <location filename="../../mscore/editstyle.ui" line="3422"/>
+        <location filename="../../mscore/editstyle.ui" line="3639"/>
+        <location filename="../../mscore/editstyle.ui" line="3823"/>
+        <location filename="../../mscore/editstyle.ui" line="3969"/>
+        <location filename="../../mscore/editstyle.ui" line="4083"/>
+        <location filename="../../mscore/editstyle.ui" line="4378"/>
+        <location filename="../../mscore/editstyle.ui" line="4599"/>
         <source>Default vertical position:</source>
         <translation>Vị trí chiều dọc mặc định:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3775"/>
-        <location filename="../../mscore/editstyle.ui" line="3791"/>
-        <location filename="../../mscore/editstyle.ui" line="3807"/>
-        <location filename="../../mscore/editstyle.ui" line="3823"/>
-        <location filename="../../mscore/editstyle.ui" line="3976"/>
-        <location filename="../../mscore/editstyle.ui" line="3992"/>
-        <location filename="../../mscore/editstyle.ui" line="4008"/>
-        <location filename="../../mscore/editstyle.ui" line="4024"/>
-        <location filename="../../mscore/editstyle.ui" line="4058"/>
-        <location filename="../../mscore/editstyle.ui" line="4183"/>
-        <location filename="../../mscore/editstyle.ui" line="4199"/>
-        <location filename="../../mscore/editstyle.ui" line="4215"/>
-        <location filename="../../mscore/editstyle.ui" line="4251"/>
+        <location filename="../../mscore/editstyle.ui" line="3454"/>
+        <location filename="../../mscore/editstyle.ui" line="3470"/>
+        <location filename="../../mscore/editstyle.ui" line="3486"/>
+        <location filename="../../mscore/editstyle.ui" line="3502"/>
+        <location filename="../../mscore/editstyle.ui" line="3655"/>
+        <location filename="../../mscore/editstyle.ui" line="3671"/>
+        <location filename="../../mscore/editstyle.ui" line="3687"/>
+        <location filename="../../mscore/editstyle.ui" line="3703"/>
+        <location filename="../../mscore/editstyle.ui" line="3737"/>
+        <location filename="../../mscore/editstyle.ui" line="3862"/>
+        <location filename="../../mscore/editstyle.ui" line="3878"/>
+        <location filename="../../mscore/editstyle.ui" line="3894"/>
+        <location filename="../../mscore/editstyle.ui" line="3930"/>
         <source>Reset value</source>
         <translation>Trả lại mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3836"/>
+        <location filename="../../mscore/editstyle.ui" line="3515"/>
         <source>Volta</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3887"/>
-        <location filename="../../mscore/editstyle.ui" line="4098"/>
+        <location filename="../../mscore/editstyle.ui" line="3566"/>
+        <location filename="../../mscore/editstyle.ui" line="3777"/>
         <source>Hook height:</source>
         <translation>Chiều cao dấu móc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3922"/>
-        <location filename="../../mscore/editstyle.ui" line="4116"/>
-        <location filename="../../mscore/editstyle.ui" line="4308"/>
+        <location filename="../../mscore/editstyle.ui" line="3601"/>
+        <location filename="../../mscore/editstyle.ui" line="3795"/>
+        <location filename="../../mscore/editstyle.ui" line="3987"/>
         <source>Continuous</source>
         <translation>Liền nét</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3927"/>
-        <location filename="../../mscore/editstyle.ui" line="4121"/>
-        <location filename="../../mscore/editstyle.ui" line="4313"/>
+        <location filename="../../mscore/editstyle.ui" line="3606"/>
+        <location filename="../../mscore/editstyle.ui" line="3800"/>
+        <location filename="../../mscore/editstyle.ui" line="3992"/>
         <source>Dashed</source>
         <translation>Gạch đứt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3932"/>
-        <location filename="../../mscore/editstyle.ui" line="4126"/>
-        <location filename="../../mscore/editstyle.ui" line="4318"/>
+        <location filename="../../mscore/editstyle.ui" line="3611"/>
+        <location filename="../../mscore/editstyle.ui" line="3805"/>
+        <location filename="../../mscore/editstyle.ui" line="3997"/>
         <source>Dotted</source>
         <translation>Dấu chấm</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3937"/>
-        <location filename="../../mscore/editstyle.ui" line="4131"/>
-        <location filename="../../mscore/editstyle.ui" line="4323"/>
+        <location filename="../../mscore/editstyle.ui" line="3616"/>
+        <location filename="../../mscore/editstyle.ui" line="3810"/>
+        <location filename="../../mscore/editstyle.ui" line="4002"/>
         <source>Dash-dotted</source>
         <translation>Gạch-chấm</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3942"/>
-        <location filename="../../mscore/editstyle.ui" line="4136"/>
-        <location filename="../../mscore/editstyle.ui" line="4328"/>
+        <location filename="../../mscore/editstyle.ui" line="3621"/>
+        <location filename="../../mscore/editstyle.ui" line="3815"/>
+        <location filename="../../mscore/editstyle.ui" line="4007"/>
         <source>Dash-dot-dotted</source>
         <translation>Gạch-chấm-chấm</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3950"/>
-        <location filename="../../mscore/editstyle.ui" line="4167"/>
-        <location filename="../../mscore/editstyle.ui" line="4349"/>
+        <location filename="../../mscore/editstyle.ui" line="3629"/>
+        <location filename="../../mscore/editstyle.ui" line="3846"/>
+        <location filename="../../mscore/editstyle.ui" line="4028"/>
         <source>Line style:</source>
         <translation>Định kiểu đường kẻ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4043"/>
+        <location filename="../../mscore/editstyle.ui" line="3722"/>
         <source>Ottava</source>
         <translation>Dấu chuyển bát độ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4225"/>
+        <location filename="../../mscore/editstyle.ui" line="3904"/>
         <source>Numbers only</source>
         <translation>Chỉ hiện số</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4268"/>
+        <location filename="../../mscore/editstyle.ui" line="3947"/>
         <source>Pedal Line</source>
         <translation>Đường kẻ Pê-đan</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4385"/>
+        <location filename="../../mscore/editstyle.ui" line="4064"/>
         <source>Trill Line</source>
         <translation>Nét vẽ Trill</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4453"/>
+        <location filename="../../mscore/editstyle.ui" line="4132"/>
         <source>Chord Symbols</source>
         <translation>Ký hiệu Gam</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4462"/>
-        <location filename="../../mscore/editstyle.ui" line="5777"/>
+        <location filename="../../mscore/editstyle.ui" line="4141"/>
         <source>Appearance</source>
         <translation>Hiển thị</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4471"/>
-        <location filename="../../mscore/editstyle.ui" line="4579"/>
+        <location filename="../../mscore/editstyle.ui" line="4150"/>
+        <location filename="../../mscore/editstyle.ui" line="4258"/>
         <source>Standard</source>
         <translation>Dạng chuẩn</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4478"/>
+        <location filename="../../mscore/editstyle.ui" line="4157"/>
         <source>Jazz</source>
         <translation>Nhạc Jazz, Phong cách Jazz</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4485"/>
+        <location filename="../../mscore/editstyle.ui" line="4164"/>
         <source>Custom</source>
         <translation>Tùy chỉnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4548"/>
+        <location filename="../../mscore/editstyle.ui" line="4227"/>
         <source>Chord symbols style file:</source>
         <translation>Tập tin các ký hiệu gam:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4558"/>
+        <location filename="../../mscore/editstyle.ui" line="4237"/>
         <source>Load chords.xml</source>
         <translation>Nạp chords.xml</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4568"/>
+        <location filename="../../mscore/editstyle.ui" line="4247"/>
         <source>Note Spelling</source>
         <translation>Chính tả nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4576"/>
+        <location filename="../../mscore/editstyle.ui" line="4255"/>
         <source>A, B♭, B, C, C♯, ...</source>
         <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4586"/>
+        <location filename="../../mscore/editstyle.ui" line="4265"/>
         <source>A, B♭, H, C, C♯, ...</source>
         <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4589"/>
+        <location filename="../../mscore/editstyle.ui" line="4268"/>
         <source>German</source>
         <translation>kiểu Đức</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4596"/>
+        <location filename="../../mscore/editstyle.ui" line="4275"/>
         <source>A, B, H, C, Cis</source>
         <translation>A, B, H, C, Cis</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4599"/>
+        <location filename="../../mscore/editstyle.ui" line="4278"/>
         <source>Full German</source>
         <translation>kiểu Đức đầy đủ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4606"/>
+        <location filename="../../mscore/editstyle.ui" line="4285"/>
         <source>Do, Do♯, Re♭, Re, ...</source>
         <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4609"/>
+        <location filename="../../mscore/editstyle.ui" line="4288"/>
         <source>Solfeggio</source>
         <translation>Xướng âm</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4616"/>
+        <location filename="../../mscore/editstyle.ui" line="4295"/>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
         <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4619"/>
+        <location filename="../../mscore/editstyle.ui" line="4298"/>
         <source>French</source>
         <translation>kiểu Pháp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4641"/>
+        <location filename="../../mscore/editstyle.ui" line="4320"/>
         <source>Automatic Capitalization</source>
         <translation>Tự động viết chữ hoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4650"/>
+        <location filename="../../mscore/editstyle.ui" line="4329"/>
         <source>Lower case minor chords</source>
         <translation>Không viết hoa gam thứ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4657"/>
+        <location filename="../../mscore/editstyle.ui" line="4336"/>
         <source>Lower case bass notes</source>
         <translation>Không viết hoa nốt bass</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4664"/>
+        <location filename="../../mscore/editstyle.ui" line="4343"/>
         <source>All caps note names</source>
         <translation>Viết hoa tất cả các tên nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4690"/>
+        <location filename="../../mscore/editstyle.ui" line="4369"/>
         <source>Positioning</source>
         <translation>Vị trí</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4728"/>
+        <location filename="../../mscore/editstyle.ui" line="4407"/>
         <source>Distance to fretboard diagram:</source>
         <translation>Kh/cách tới biểu đồ phím ghi-ta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4760"/>
+        <location filename="../../mscore/editstyle.ui" line="4439"/>
         <source>Minimum chord spacing:</source>
         <translation>Không gian tối thiểu của hợp âm:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4789"/>
+        <location filename="../../mscore/editstyle.ui" line="4468"/>
         <source>Maximum barline distance:</source>
         <translation>Khoảng cách vạch nhịp tối đa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4834"/>
+        <location filename="../../mscore/editstyle.ui" line="4513"/>
         <source>Capo</source>
         <translation>Capô</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4840"/>
+        <location filename="../../mscore/editstyle.ui" line="4519"/>
         <source>Capo fret position:</source>
         <translation>Vị trí kẹp Capo:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4876"/>
+        <location filename="../../mscore/editstyle.ui" line="4555"/>
         <source>Fretboard Diagrams</source>
         <translation>Biểu đồ phím ghi-ta</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4910"/>
+        <location filename="../../mscore/editstyle.ui" line="4589"/>
         <source>Fret offset number font size:</source>
         <translation>Độ lớn chỉ số của phím:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4952"/>
+        <location filename="../../mscore/editstyle.ui" line="4631"/>
         <source>Position:</source>
         <translation>Vị trí:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4986"/>
+        <location filename="../../mscore/editstyle.ui" line="4665"/>
         <source>Barré line thickness:</source>
         <translation>Độ dày vạch chặn dây:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5009"/>
+        <location filename="../../mscore/editstyle.ui" line="4688"/>
         <source>Scale:</source>
         <translation>Tỷ lệ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5049"/>
-        <location filename="../../mscore/editstyle.ui" line="5932"/>
+        <location filename="../../mscore/editstyle.ui" line="4728"/>
+        <location filename="../../mscore/editstyle.ui" line="5576"/>
         <source>Figured Bass</source>
         <translation>Ngón bấm Bass</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5081"/>
+        <location filename="../../mscore/editstyle.ui" line="4760"/>
         <source>Font:</source>
         <translation>Phông chữ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5119"/>
+        <location filename="../../mscore/editstyle.ui" line="4798"/>
         <source>Size:</source>
         <translation>Kích cỡ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5138"/>
+        <location filename="../../mscore/editstyle.ui" line="4817"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5154"/>
+        <location filename="../../mscore/editstyle.ui" line="4833"/>
         <source>Line height:</source>
         <translation>Chiều cao dòng chữ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5170"/>
+        <location filename="../../mscore/editstyle.ui" line="4849"/>
         <source>Vertical position:</source>
         <translation>Vị trí chiều dọc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5193"/>
+        <location filename="../../mscore/editstyle.ui" line="4872"/>
         <source>from top of staff</source>
         <translation> phía trên của khuông nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5200"/>
+        <location filename="../../mscore/editstyle.ui" line="4879"/>
         <source>of font height</source>
         <translation> chiều cao phông chữ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5224"/>
+        <location filename="../../mscore/editstyle.ui" line="4903"/>
         <source>Alignment</source>
         <translation>Canh lề</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5230"/>
+        <location filename="../../mscore/editstyle.ui" line="4909"/>
         <source>Top</source>
         <translation>Trên cùng</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5237"/>
+        <location filename="../../mscore/editstyle.ui" line="4916"/>
         <source>Bottom</source>
         <translation>Ở dưới</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5260"/>
+        <location filename="../../mscore/editstyle.ui" line="4939"/>
         <source>Style</source>
         <translation>Định kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5266"/>
+        <location filename="../../mscore/editstyle.ui" line="4945"/>
         <source>Modern</source>
         <translation>Hiện đại</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5273"/>
+        <location filename="../../mscore/editstyle.ui" line="4952"/>
         <source>Historic</source>
         <translation>Lịch sử</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5306"/>
-        <location filename="../../mscore/editstyle.ui" line="5937"/>
+        <location filename="../../mscore/editstyle.ui" line="4985"/>
+        <location filename="../../mscore/editstyle.ui" line="5581"/>
         <source>Articulations, Ornaments</source>
         <translation>Dấu diễn đạt, Dấu hoa mỹ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5324"/>
-        <location filename="../../mscore/editstyle.ui" line="5344"/>
-        <location filename="../../mscore/editstyle.ui" line="5364"/>
+        <location filename="../../mscore/editstyle.ui" line="5003"/>
+        <location filename="../../mscore/editstyle.ui" line="5023"/>
+        <location filename="../../mscore/editstyle.ui" line="5043"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5334"/>
+        <location filename="../../mscore/editstyle.ui" line="5013"/>
         <source>Articulation distance:</source>
         <translation>Kh/cách dấu-diễn-đạt:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5354"/>
+        <location filename="../../mscore/editstyle.ui" line="5033"/>
         <source>Note head distance:</source>
         <translation>Khoảng cách đầu nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5390"/>
+        <location filename="../../mscore/editstyle.ui" line="5069"/>
         <source>Articulation size:</source>
         <translation>Độ lớn dấu-diễn-đạt:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5468"/>
-        <location filename="../../mscore/editstyle.ui" line="5942"/>
+        <location filename="../../mscore/editstyle.ui" line="5147"/>
+        <location filename="../../mscore/editstyle.ui" line="5586"/>
         <source>Accidentals</source>
         <translation>Dấu hóa bất thường</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5478"/>
+        <location filename="../../mscore/editstyle.ui" line="5157"/>
         <source>Accidental</source>
         <translation>Dấu hóa bất thường</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5483"/>
+        <location filename="../../mscore/editstyle.ui" line="5162"/>
         <source>Semitones offset</source>
         <translation>Bộ đệm nửa cung</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5488"/>
+        <location filename="../../mscore/editstyle.ui" line="5167"/>
         <source>Cents offset</source>
         <translation>Bộ đệm Cents</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5499"/>
+        <location filename="../../mscore/editstyle.ui" line="5178"/>
         <source>Naturals in Key Signatures</source>
         <translation>Dấu bình trong Hóa biểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5505"/>
+        <location filename="../../mscore/editstyle.ui" line="5184"/>
         <source>Only for a change to C Maj / A min</source>
         <translation>Hiển thị chỉ khi chuyển về C trưởng / A thứ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5512"/>
+        <location filename="../../mscore/editstyle.ui" line="5191"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
         <translation>Nằm trước hóa biểu nếu chuyển về hóa biểu ít thăng hoặc giáng hơn</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5519"/>
+        <location filename="../../mscore/editstyle.ui" line="5198"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
         <translation>
 Nằm sau hóa biểu nếu chuyển về hóa biểu ít thăng hoặc giáng hơn. 
 Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biểu giáng.</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5549"/>
-        <location filename="../../mscore/editstyle.ui" line="5947"/>
+        <location filename="../../mscore/editstyle.ui" line="5228"/>
+        <location filename="../../mscore/editstyle.ui" line="5591"/>
         <source>Tuplets</source>
         <translation>Dấu liên</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5555"/>
+        <location filename="../../mscore/editstyle.ui" line="5234"/>
         <source>Vertical Distance from the Notes</source>
         <translation>Kh/cách theo chiều dọc so với các nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5561"/>
+        <location filename="../../mscore/editstyle.ui" line="5240"/>
         <source>Maximum slope:</source>
         <translation>Độ dốc tối đa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5571"/>
+        <location filename="../../mscore/editstyle.ui" line="5250"/>
         <source>Vertical distance from stem:</source>
         <translation>Kh/cách dọc so với thân nốt:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5581"/>
+        <location filename="../../mscore/editstyle.ui" line="5260"/>
         <source>Vertical distance from note head:</source>
         <translation>Kh/cách so với đầu nốt nhạc:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5591"/>
+        <location filename="../../mscore/editstyle.ui" line="5270"/>
         <source>Avoid the staves</source>
         <translation>Tránh các khuông nhạc ra</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5658"/>
+        <location filename="../../mscore/editstyle.ui" line="5337"/>
         <source>Horizontal Distance from the Notes</source>
         <translation>Kh/cách theo chiều ngang so với các nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5664"/>
+        <location filename="../../mscore/editstyle.ui" line="5343"/>
         <source>Distance before the stem of the first note:</source>
         <translation>Kh/cách trước thân nốt của nốt đầu tiên:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5674"/>
+        <location filename="../../mscore/editstyle.ui" line="5353"/>
         <source>Distance before the head of the first note:</source>
         <translation>Kh/cách trước đầu nốt của nốt đầu tiên:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5684"/>
+        <location filename="../../mscore/editstyle.ui" line="5363"/>
         <source>Distance after the stem of the last note:</source>
         <translation>Kh/cách sau thân nốt của nốt cuối:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5694"/>
+        <location filename="../../mscore/editstyle.ui" line="5373"/>
         <source>Distance after the head of the last note:</source>
         <translation>Kh/cách sau đầu nốt của nốt cuối:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5783"/>
-        <source>Tuplet bracket thickness:</source>
-        <translation>Độ dày dấu liên:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="5867"/>
+        <location filename="../../mscore/editstyle.ui" line="5511"/>
         <source>Header, Footer, Numbers</source>
         <translation>Khung tin đầu trang, chân trang, Đánh số</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5917"/>
+        <location filename="../../mscore/editstyle.ui" line="5561"/>
         <source>Hairpins, Volta, Ottava</source>
         <translation>Dấu biến cường, Volta, Chuyển bát độ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5922"/>
+        <location filename="../../mscore/editstyle.ui" line="5566"/>
         <source>Pedal, Trill</source>
         <translation>Ký hiệu Pê-đan, Láy rền</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5927"/>
+        <location filename="../../mscore/editstyle.ui" line="5571"/>
         <source>Chord Symbols, Fretboard Diagrams</source>
         <translation>Ký hiệu gam, Biểu đồ phím ghi-ta</translation>
     </message>
@@ -3496,13 +3408,13 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
         <location filename="../../mscore/excerptsdialog.ui" line="49"/>
         <location filename="../../mscore/excerptsdialog.ui" line="52"/>
         <source>Move part up</source>
-        <translation type="unfinished"/>
+        <translation>Dời bè lên</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="68"/>
         <location filename="../../mscore/excerptsdialog.ui" line="71"/>
         <source>Move part down</source>
-        <translation type="unfinished"/>
+        <translation>Dời bè xuống</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="87"/>
@@ -3545,12 +3457,12 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="47"/>
         <source>Move Soundfont up</source>
-        <translation type="unfinished"/>
+        <translation>Dời gói âm thanh lên</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="69"/>
         <source>Move Soundfont down</source>
-        <translation type="unfinished"/>
+        <translation>Dời gói âm thanh xuống</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="101"/>
@@ -3618,7 +3530,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3869"/>
+        <location filename="../../mscore/musescore.cpp" line="3845"/>
         <source>Record</source>
         <translation>Thâu</translation>
     </message>
@@ -3671,7 +3583,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="14"/>
         <source>MuseScore: Insert Measures</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Chèn nhiều ô nhịp</translation>
     </message>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="39"/>
@@ -4553,7 +4465,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="122"/>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Các thuộc tính</translation>
     </message>
 </context>
 <context>
@@ -4861,7 +4773,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="110"/>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Các thuộc tính</translation>
     </message>
 </context>
 <context>
@@ -5482,7 +5394,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="192"/>
         <source>Wide dashed</source>
-        <translation type="unfinished"/>
+        <translation>Gạch lớn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="203"/>
@@ -6328,7 +6240,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="110"/>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Các thuộc tính</translation>
     </message>
 </context>
 <context>
@@ -7848,7 +7760,7 @@ cho ô nhịp</translation>
     <message>
         <location filename="../../mscore/measuresdialog.ui" line="14"/>
         <source>MuseScore: Append Measures</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Thêm nhiều ô nhịp</translation>
     </message>
     <message>
         <location filename="../../mscore/measuresdialog.ui" line="39"/>
@@ -7912,7 +7824,7 @@ cho ô nhịp</translation>
 <context>
     <name>MenuNotes</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="851"/>
+        <location filename="../../mscore/musescore.cpp" line="849"/>
         <source>&amp;Notes</source>
         <translation>&amp;Nốt</translation>
     </message>
@@ -7921,8 +7833,8 @@ cho ô nhịp</translation>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>MuseScore: Score Information</source>
-        <translation>Musescore: Thông tin Bản nhạc</translation>
+        <source>Score Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="28"/>
@@ -7942,7 +7854,7 @@ cho ô nhịp</translation>
     <message>
         <location filename="../../mscore/metaedit.ui" line="72"/>
         <source>File Path:</source>
-        <translation type="unfinished"/>
+        <translation>Đường dẫn tập tin:</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="108"/>
@@ -7976,17 +7888,17 @@ cho ô nhịp</translation>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2963"/>
+        <location filename="../../mscore/musescore.cpp" line="2939"/>
         <source>Unstable Prerelease for Version: </source>
         <translation>Phiên bản thử nghiệm, có lỗi kỹ thuật: </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2965"/>
+        <location filename="../../mscore/musescore.cpp" line="2941"/>
         <source>Version: </source>
         <translation>Phiên bản:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2966"/>
+        <location filename="../../mscore/musescore.cpp" line="2942"/>
         <source>Revision: %1</source>
         <translation>Mã số: %1</translation>
     </message>
@@ -8070,12 +7982,12 @@ cho ô nhịp</translation>
 <context>
     <name>Ms::BarLine</name>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1521"/>
+        <location filename="../../libmscore/barline.cpp" line="1505"/>
         <source>%1 Start of %2</source>
         <translation>%1 Bắt đầu của %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1523"/>
+        <location filename="../../libmscore/barline.cpp" line="1507"/>
         <source>%1 End of %2</source>
         <translation>%1 là cuối của %2</translation>
     </message>
@@ -8096,74 +8008,74 @@ cho ô nhịp</translation>
 <context>
     <name>Ms::ChordRest</name>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1072"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1049"/>
         <source>Duplet</source>
         <translation>Liên hai</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1075"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1052"/>
         <source>Triplet</source>
         <translation>Liên ba</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1078"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1055"/>
         <source>Quadruplet</source>
         <translation>Liên bốn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1081"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1058"/>
         <source>Quintuplet</source>
         <translation>Liên năm</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1084"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1061"/>
         <source>Sextuplet</source>
         <translation>Liên sáu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1087"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1064"/>
         <source>Septuplet</source>
         <translation>Liên bảy</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1090"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1067"/>
         <source>Octuplet</source>
         <translation>Liên tám</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1093"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1070"/>
         <source>Nonuplet</source>
         <translation>Liên chín</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1096"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1073"/>
         <source>Custom Tuplet</source>
         <translation>Dấu liên tùy chỉnh</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1105"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1082"/>
         <source>Dotted %1</source>
         <translation>%1 chấm dôi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1108"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1085"/>
         <source>Double dotted %1</source>
         <translation>%1 chấm dôi kép</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1111"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1088"/>
         <source>Triple dotted %1</source>
         <translation>%1 ba chấm dôi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1449"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1455"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1426"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1432"/>
         <source>%1 Start of %2</source>
         <translation>%1 Bắt đầu của %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1451"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1460"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1428"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1437"/>
         <source>%1 End of %2</source>
         <translation>%1 là cuối của %2</translation>
     </message>
@@ -8272,7 +8184,7 @@ bị lỗi:</translation>
 <context>
     <name>Ms::EditStaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="274"/>
+        <location filename="../../mscore/editstaff.cpp" line="256"/>
         <source>The instrument name is invalid.</source>
         <translation>Tên nhạc cụ không hợp lệ</translation>
     </message>
@@ -8295,140 +8207,122 @@ bị lỗi:</translation>
 <context>
     <name>Ms::EditStyle</name>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="156"/>
+        <location filename="../../mscore/editstyle.cpp" line="149"/>
         <source>Apply to all Parts</source>
         <translation>Áp dụng cho mọi Bè</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="184"/>
+        <location filename="../../mscore/editstyle.cpp" line="177"/>
         <source>Symbol</source>
         <translation>Ký hiệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="184"/>
+        <location filename="../../mscore/editstyle.cpp" line="177"/>
         <source>Anchor</source>
         <translation>Điểm neo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="210"/>
+        <location filename="../../mscore/editstyle.cpp" line="203"/>
         <source>Above Staff</source>
         <translation>Phía trên khuông nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="211"/>
+        <location filename="../../mscore/editstyle.cpp" line="204"/>
         <source>Below Staff</source>
         <translation>Phía dưới khuông nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="212"/>
+        <location filename="../../mscore/editstyle.cpp" line="205"/>
         <source>Chord Automatic</source>
         <translation>Tùy theo hướng gam</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="213"/>
+        <location filename="../../mscore/editstyle.cpp" line="206"/>
         <source>Above Chord</source>
         <translation>Phía trên hợp âm</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="214"/>
+        <location filename="../../mscore/editstyle.cpp" line="207"/>
         <source>Below Chord</source>
         <translation>Phía dưới hợp âm</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="218"/>
-        <location filename="../../mscore/editstyle.cpp" line="221"/>
-        <source>System Divider</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="219"/>
-        <location filename="../../mscore/editstyle.cpp" line="222"/>
-        <source>Long System Divider</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="220"/>
-        <location filename="../../mscore/editstyle.cpp" line="223"/>
-        <source>Extra Long System Divider</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="238"/>
+        <location filename="../../mscore/editstyle.cpp" line="224"/>
         <source>Special symbols in header/footer</source>
         <translation>Ký hiệu riêng dùng trong khung tin đầu/chân trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="241"/>
+        <location filename="../../mscore/editstyle.cpp" line="227"/>
         <source>page number, except on first page</source>
         <translation>số đếm trang, ngoại trừ trang đầu </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="243"/>
+        <location filename="../../mscore/editstyle.cpp" line="229"/>
         <source>page number, if there is more than one page</source>
         <translation>số đếm trang, nếu có hơn 1 trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="245"/>
+        <location filename="../../mscore/editstyle.cpp" line="231"/>
         <source>page number, on all pages</source>
         <translation>số đếm trang, trên mọi trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="247"/>
+        <location filename="../../mscore/editstyle.cpp" line="233"/>
         <source>number of pages</source>
         <translation>tổng số trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="249"/>
+        <location filename="../../mscore/editstyle.cpp" line="235"/>
         <source>file name</source>
         <translation>tên tập tin</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="251"/>
+        <location filename="../../mscore/editstyle.cpp" line="237"/>
         <source>file path+name</source>
         <translation>tên+đường dẫn tập tin</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="253"/>
+        <location filename="../../mscore/editstyle.cpp" line="239"/>
         <source>current date</source>
         <translation>ngày tháng hiện tại</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="255"/>
+        <location filename="../../mscore/editstyle.cpp" line="241"/>
         <source>creation date</source>
         <translation>ngày tháng tạo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="257"/>
+        <location filename="../../mscore/editstyle.cpp" line="243"/>
         <source>last modification time</source>
         <translation>thời gian lần sửa đổi cuối cùng</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="259"/>
+        <location filename="../../mscore/editstyle.cpp" line="245"/>
         <source>last modification date</source>
         <translation>ngày chỉnh sửa sau cùng</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="261"/>
+        <location filename="../../mscore/editstyle.cpp" line="247"/>
         <source>copyright, on first page only</source>
         <translation>bản quyền, chỉ ở trang đầu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="263"/>
+        <location filename="../../mscore/editstyle.cpp" line="249"/>
         <source>copyright, on all pages</source>
         <translation>bản quyền, trên mọi trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="265"/>
+        <location filename="../../mscore/editstyle.cpp" line="251"/>
         <source>the $ sign itself</source>
         <translation>hiển thị dấu $</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="267"/>
+        <location filename="../../mscore/editstyle.cpp" line="253"/>
         <source>meta data tag, see below</source>
         <translation>thẻ siêu dữ liệu, xem bên dưới</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="269"/>
+        <location filename="../../mscore/editstyle.cpp" line="255"/>
         <source>Available meta data tags and their current values:</source>
         <translation>Các thẻ siêu dữ liệu hiện có và giá trị hiện tại của chúng là:</translation>
     </message>
@@ -8474,12 +8368,12 @@ bị lỗi:</translation>
 <context>
     <name>Ms::Harmony</name>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1613"/>
+        <location filename="../../libmscore/harmony.cpp" line="1609"/>
         <source>sharp</source>
         <translation>thăng</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1618"/>
+        <location filename="../../libmscore/harmony.cpp" line="1614"/>
         <source>flat</source>
         <translation>giáng</translation>
     </message>
@@ -8674,7 +8568,7 @@ bị lỗi:</translation>
 <context>
     <name>Ms::KeySig</name>
     <message>
-        <location filename="../../libmscore/keysig.cpp" line="583"/>
+        <location filename="../../libmscore/keysig.cpp" line="582"/>
         <source>%1: Custom</source>
         <translation>%1: Tùy chỉnh</translation>
     </message>
@@ -8850,7 +8744,7 @@ bị lỗi:</translation>
 <context>
     <name>Ms::Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="126"/>
+        <location filename="../../mscore/mixer.cpp" line="102"/>
         <source>MuseScore: Mixer</source>
         <translation>MuseScore: Bộ phối âm</translation>
     </message>
@@ -8867,7 +8761,7 @@ bị lỗi:</translation>
         <location filename="../../mscore/exportaudio.cpp" line="87"/>
         <location filename="../../mscore/exportmp3.cpp" line="699"/>
         <source>Exporting...</source>
-        <translation type="unfinished"/>
+        <translation>Xuất dữ liệu...</translation>
     </message>
     <message>
         <location filename="../../mscore/exportmp3.cpp" line="626"/>
@@ -8909,7 +8803,7 @@ bị lỗi:</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="240"/>
-        <location filename="../../mscore/musescore.cpp" line="3391"/>
+        <location filename="../../mscore/musescore.cpp" line="3367"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
@@ -9020,7 +8914,7 @@ trước khi đóng?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="927"/>
         <location filename="../../mscore/file.cpp" line="954"/>
-        <location filename="../../mscore/musescore.cpp" line="4261"/>
+        <location filename="../../mscore/musescore.cpp" line="4241"/>
         <source>MuseScore: Load Style</source>
         <translation>MuseScore: Tải Định kiểu lên</translation>
     </message>
@@ -9033,7 +8927,7 @@ trước khi đóng?</translation>
         <location filename="../../mscore/file.cpp" line="934"/>
         <location filename="../../mscore/file.cpp" line="971"/>
         <location filename="../../mscore/file.cpp" line="1054"/>
-        <location filename="../../mscore/musescore.cpp" line="4251"/>
+        <location filename="../../mscore/musescore.cpp" line="4231"/>
         <source>MuseScore: Save Style</source>
         <translation>MuseScore: Lưu trữ định kiểu</translation>
     </message>
@@ -9509,32 +9403,27 @@ Bạn có muốn thay thế nó ?
         <translation>Đổi nhạc cụ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1200"/>
-        <source>Fretboard diagram</source>
-        <translation>Biểu đồ phím ghi-ta</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/menus.cpp" line="1242"/>
+        <location filename="../../mscore/menus.cpp" line="1272"/>
         <source>&amp;Add</source>
         <translation>Thê&amp;m</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1245"/>
+        <location filename="../../mscore/menus.cpp" line="1275"/>
         <source>&amp;Measures</source>
         <translation>Ô &amp;nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1252"/>
+        <location filename="../../mscore/menus.cpp" line="1282"/>
         <source>&amp;Frames</source>
         <translation>&amp;Khung chèn</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1263"/>
+        <location filename="../../mscore/menus.cpp" line="1293"/>
         <source>&amp;Text</source>
         <translation>&amp;Chữ viết</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1279"/>
+        <location filename="../../mscore/menus.cpp" line="1309"/>
         <source>&amp;Lines</source>
         <translation>&amp;Các đường kẻ</translation>
     </message>
@@ -9596,238 +9485,236 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
         <translation>Xem liền dòng</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="573"/>
-        <source>Single Page</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="577"/>
+        <location filename="../../mscore/musescore.cpp" line="575"/>
         <source>Transport Tools</source>
         <translation>Công cụ Truyền tải</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="594"/>
+        <location filename="../../mscore/musescore.cpp" line="592"/>
         <source>Concert Pitch</source>
         <translation>Cao độ theo âm</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="598"/>
+        <location filename="../../mscore/musescore.cpp" line="596"/>
         <source>Image Capture</source>
         <translation>Hình chụp</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="608"/>
+        <location filename="../../mscore/musescore.cpp" line="606"/>
         <source>Note Input</source>
         <translation>Nhập nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
+        <location filename="../../mscore/musescore.cpp" line="654"/>
         <source>&amp;File</source>
         <translation>&amp;Tập tin</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="662"/>
+        <location filename="../../mscore/musescore.cpp" line="660"/>
         <source>Open &amp;Recent</source>
         <translation>Mở &amp;Gần đây</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="693"/>
+        <location filename="../../mscore/musescore.cpp" line="691"/>
         <source>&amp;Edit</source>
         <translation>Điều &amp;Chỉnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="712"/>
+        <location filename="../../mscore/musescore.cpp" line="710"/>
         <source>&amp;Measure</source>
         <translation>Ô &amp;nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="717"/>
+        <location filename="../../mscore/musescore.cpp" line="715"/>
         <source>&amp;Tools</source>
         <translation>&amp;Công cụ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="722"/>
+        <location filename="../../mscore/musescore.cpp" line="720"/>
         <source>&amp;Voices</source>
         <translation>&amp;Các giọng</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="737"/>
+        <location filename="../../mscore/musescore.cpp" line="735"/>
         <source>W&amp;orkspaces</source>
         <translation>&amp;Kh/gian làm việc</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="741"/>
+        <location filename="../../mscore/musescore.cpp" line="739"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Thiết lập...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="748"/>
+        <location filename="../../mscore/musescore.cpp" line="746"/>
         <source>&amp;View</source>
         <translation>&amp;Xem</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="858"/>
+        <location filename="../../mscore/musescore.cpp" line="856"/>
         <source>Add N&amp;ote</source>
         <translation>&amp;Thêm Nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="876"/>
+        <location filename="../../mscore/musescore.cpp" line="874"/>
         <source>Add &amp;Interval</source>
         <translation>Thêm &amp;Quãng</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="892"/>
+        <location filename="../../mscore/musescore.cpp" line="890"/>
         <source>T&amp;uplets</source>
         <translation>&amp;Liên</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="908"/>
+        <location filename="../../mscore/musescore.cpp" line="906"/>
         <source>&amp;Layout</source>
         <translation>Trình &amp;Bày</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="921"/>
+        <location filename="../../mscore/musescore.cpp" line="919"/>
         <source>&amp;Style</source>
         <translation>Định &amp;kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="936"/>
+        <location filename="../../mscore/musescore.cpp" line="934"/>
         <source>&amp;Plugins</source>
         <translation>Trình &amp;phụ trợ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="953"/>
+        <location filename="../../mscore/musescore.cpp" line="951"/>
         <source>&amp;Help</source>
         <translation>&amp;Hỗ trợ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="964"/>
+        <location filename="../../mscore/musescore.cpp" line="962"/>
         <source>&amp;Online Handbook</source>
         <translation>&amp;Sách chỉ dẫn trực tuyến</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="968"/>
+        <location filename="../../mscore/musescore.cpp" line="966"/>
         <source>&amp;About...</source>
         <translation>&amp;Thông tin...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="974"/>
+        <location filename="../../mscore/musescore.cpp" line="972"/>
         <source>About &amp;Qt...</source>
         <translation>Th/tin &amp;Qt...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="979"/>
+        <location filename="../../mscore/musescore.cpp" line="977"/>
         <source>About &amp;MusicXML...</source>
         <translation>Th/tin &amp;MusicXML...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="985"/>
+        <location filename="../../mscore/musescore.cpp" line="983"/>
         <source>Check for &amp;Update</source>
         <translation>Kiểm tra &amp;Cập nhật</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="989"/>
+        <location filename="../../mscore/musescore.cpp" line="987"/>
         <source>Ask for Help</source>
         <translation>Yêu cầu giúp đỡ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="990"/>
+        <location filename="../../mscore/musescore.cpp" line="988"/>
         <source>Report a Bug</source>
         <translation>Báo lỗi cho MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="995"/>
+        <location filename="../../mscore/musescore.cpp" line="993"/>
         <source>Revert to Factory Settings</source>
-        <translation type="unfinished"/>
+        <translation>Trả lại các thiết lập ban đầu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1126"/>
+        <location filename="../../mscore/musescore.cpp" line="1124"/>
         <source>Are you sure?</source>
-        <translation type="unfinished"/>
+        <translation>Bạn có chắc không?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1127"/>
+        <location filename="../../mscore/musescore.cpp" line="1125"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
 Are you sure you want to proceed?</source>
-        <translation type="unfinished"/>
+        <translation>Việc này sẽ trả mọi thiết lập của bạn về mặc định.
+Bảng công cụ, phím tắt tùy chỉnh của bạn và tên các bản nhạc đã mở gần đây sẽ bị xóa. MuseScore sẽ khởi động lại với những thiết lập mặc định.
+Việc khôi phục này sẽ không xóa bất kỳ bản nhạc nào từ máy của bạn.
+Bạn có chắc muốn tiếp tục không?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1336"/>
+        <location filename="../../mscore/musescore.cpp" line="1334"/>
         <source>Clear Recent Files</source>
         <translation>Xóa d/sách tập tin mở gần đây</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2461"/>
+        <location filename="../../mscore/musescore.cpp" line="2437"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>Hệ thống</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2469"/>
+        <location filename="../../mscore/musescore.cpp" line="2445"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>Lỗi khi đọc tập tin ngôn ngữ %s tại dòng %d cột %d: %s
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2635"/>
+        <location filename="../../mscore/musescore.cpp" line="2611"/>
         <source>No score</source>
         <translation>Chưa có bản nào</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2644"/>
+        <location filename="../../mscore/musescore.cpp" line="2620"/>
         <source>Note input mode</source>
         <translation>Chế độ nhập nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2648"/>
+        <location filename="../../mscore/musescore.cpp" line="2624"/>
         <source>Drum input mode</source>
         <translation>Chế độ nhập trống</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2656"/>
+        <location filename="../../mscore/musescore.cpp" line="2632"/>
         <source>TAB input mode</source>
         <translation>Chế độ nhập TAB</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2659"/>
+        <location filename="../../mscore/musescore.cpp" line="2635"/>
         <source>Edit mode</source>
         <translation>Chế độ điều chỉnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2662"/>
+        <location filename="../../mscore/musescore.cpp" line="2638"/>
         <source>Text edit mode</source>
         <translation>Chế độ điều chỉnh chữ viết</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2665"/>
+        <location filename="../../mscore/musescore.cpp" line="2641"/>
         <source>Lyrics edit mode</source>
         <translation>Chế độ điều chỉnh lời nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2668"/>
+        <location filename="../../mscore/musescore.cpp" line="2644"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation>Chế độ chỉnh Ký-hiệu-gam/Ngón-bấm-bass</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2671"/>
+        <location filename="../../mscore/musescore.cpp" line="2647"/>
         <source>Play</source>
         <translation>Phát</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2674"/>
+        <location filename="../../mscore/musescore.cpp" line="2650"/>
         <source>Image capture mode</source>
         <translation>Chế độ chụp ảnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2678"/>
+        <location filename="../../mscore/musescore.cpp" line="2654"/>
         <source>Score locked</source>
         <translation>Đã khóa bản nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3392"/>
+        <location filename="../../mscore/musescore.cpp" line="3368"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -9836,32 +9723,32 @@ Restore session?</source>
 Phục hồi lại?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4123"/>
+        <location filename="../../mscore/musescore.cpp" line="4103"/>
         <source>Key Signatures</source>
         <translation>Các Hóa biểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4125"/>
+        <location filename="../../mscore/musescore.cpp" line="4105"/>
         <source>Time Signatures</source>
         <translation>Số chỉ nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4127"/>
+        <location filename="../../mscore/musescore.cpp" line="4107"/>
         <source>Symbols</source>
         <translation>Ký hiệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4443"/>
+        <location filename="../../mscore/musescore.cpp" line="4423"/>
         <source>MuseScore: Warning</source>
         <translation>MuseScore: Cảnh báo</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4444"/>
+        <location filename="../../mscore/musescore.cpp" line="4424"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>Không thể tạo dấu liên: Giá trị nốt quá ngắn</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4583"/>
+        <location filename="../../mscore/musescore.cpp" line="4561"/>
         <source>Go To: </source>
         <translation>Đi đến: </translation>
     </message>
@@ -10042,67 +9929,67 @@ vui lòng chọn một tên khác:</translation>
 <context>
     <name>Ms::Note</name>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1899"/>
+        <location filename="../../libmscore/note.cpp" line="1868"/>
         <source>Acciaccatura</source>
         <translation>Acciaccatura-nốt dựa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1901"/>
+        <location filename="../../libmscore/note.cpp" line="1870"/>
         <source>Appoggiatura</source>
         <translation>Appoggiatura - nốt dựa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1905"/>
+        <location filename="../../libmscore/note.cpp" line="1874"/>
         <source>Grace note after</source>
         <translation>Nốt láy phía sau</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1909"/>
+        <location filename="../../libmscore/note.cpp" line="1878"/>
         <source>Grace note before</source>
         <translation>Nốt láy phía trước</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1911"/>
+        <location filename="../../libmscore/note.cpp" line="1880"/>
         <source>Invalid note</source>
         <translation>Nốt không hợp lệ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1913"/>
+        <location filename="../../libmscore/note.cpp" line="1882"/>
         <source>Note</source>
         <translation>Nốt nhạc</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2547"/>
-        <location filename="../../libmscore/note.cpp" line="2566"/>
+        <location filename="../../libmscore/note.cpp" line="2502"/>
+        <location filename="../../libmscore/note.cpp" line="2521"/>
         <source>Voice: %1</source>
         <translation>Giọng: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2551"/>
-        <location filename="../../libmscore/note.cpp" line="2570"/>
+        <location filename="../../libmscore/note.cpp" line="2506"/>
+        <location filename="../../libmscore/note.cpp" line="2525"/>
         <source>Beat Slash</source>
         <translation>Beat Slash</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2551"/>
-        <location filename="../../libmscore/note.cpp" line="2570"/>
+        <location filename="../../libmscore/note.cpp" line="2506"/>
+        <location filename="../../libmscore/note.cpp" line="2525"/>
         <source>Rhythm Slash</source>
         <translation>Ký âm Dạng tiết tấu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2556"/>
+        <location filename="../../libmscore/note.cpp" line="2511"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
         <translation>%1; Cao độ: %2; Trường độ: %3%4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2595"/>
-        <location filename="../../libmscore/note.cpp" line="2603"/>
+        <location filename="../../libmscore/note.cpp" line="2550"/>
+        <location filename="../../libmscore/note.cpp" line="2558"/>
         <source>%1 Start of %2</source>
         <translation>%1 Bắt đầu của %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2598"/>
-        <location filename="../../libmscore/note.cpp" line="2609"/>
+        <location filename="../../libmscore/note.cpp" line="2553"/>
+        <location filename="../../libmscore/note.cpp" line="2564"/>
         <source>%1 End of %2</source>
         <translation>%1 là cuối của %2</translation>
     </message>
@@ -10211,72 +10098,6 @@ vui lòng chọn một tên khác:</translation>
     </message>
 </context>
 <context>
-    <name>Ms::PartEdit</name>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="608"/>
-        <source>Sound: '%1'' vs '%2'
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="610"/>
-        <source>Volume: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="612"/>
-        <source>Pan: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="614"/>
-        <source>Reverb: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="616"/>
-        <source>Chorus: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="618"/>
-        <source>Solo: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="620"/>
-        <source>Mute: %1 vs %2
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="623"/>
-        <source>Instrument '%1'    Instrument '%2'
-</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="626"/>
-        <source>There is already an instrument &apos;%1&apos; with MIDI port = %2 and channel = %3.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="628"/>
-        <source>Do you want to synchronize current instrument with an existing one?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.cpp" line="631"/>
-        <source>Assign next free MIDI channel</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Ms::PathListDialog</name>
     <message>
         <location filename="../../mscore/pathlistdialog.cpp" line="47"/>
@@ -10311,37 +10132,37 @@ vui lòng chọn một tên khác:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="230"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="388"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="463"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="377"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="452"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="231"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="389"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="464"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="378"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="453"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>Trình phụ trợ &quot;%1&quot; đã có thay đổi.
 Lưu trữ trước khi đóng?</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="437"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="426"/>
         <source>MuseScore: Save Plugin</source>
         <translation>MuseScore: Lưu trữ trình phụ trợ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="437"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="426"/>
         <source>Cannot determine file type</source>
         <translation>Không xác định được kiểu tập tin</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="473"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="462"/>
         <source>untitled</source>
         <translation>không đề</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="531"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="520"/>
         <source>Manual</source>
         <translation>Sổ tay lập trình</translation>
     </message>
@@ -10349,7 +10170,7 @@ Lưu trữ trước khi đóng?</translation>
 <context>
     <name>Ms::PreferenceDialog</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="688"/>
+        <location filename="../../mscore/preferences.cpp" line="689"/>
         <source>The language will be changed once you restart MuseScore.</source>
         <translation>Ngôn ngữ sẽ được thay đổi một khi bạn khởi động lại MuseScore</translation>
     </message>
@@ -10406,48 +10227,48 @@ Lưu trữ trước khi đóng?</translation>
         <translation>Tệp MuseScore (*.mscz *.mscx);;Tất cả (*)</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1530"/>
+        <location filename="../../mscore/preferences.cpp" line="1527"/>
         <source>Choose Default Style for Imports</source>
         <translation>Chọn Định kiểu m/định khi Nhập</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1616"/>
+        <location filename="../../mscore/preferences.cpp" line="1613"/>
         <source>Choose Score Folder</source>
         <translation>Chọn Thư mục bản nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1632"/>
+        <location filename="../../mscore/preferences.cpp" line="1629"/>
         <source>Choose Style Folder</source>
         <translation>Chọn Thư mục chứa Định kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1648"/>
+        <location filename="../../mscore/preferences.cpp" line="1645"/>
         <source>Choose Template Folder</source>
         <translation>Chọn thư mục khuôn mẫu</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1664"/>
+        <location filename="../../mscore/preferences.cpp" line="1661"/>
         <source>Choose Plugin Folder</source>
         <translation>Chọn Thư mục Trình phụ trợ</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1680"/>
+        <location filename="../../mscore/preferences.cpp" line="1677"/>
         <source>Choose Image Folder</source>
         <translation>Chọn thư mục ảnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1695"/>
+        <location filename="../../mscore/preferences.cpp" line="1692"/>
         <source>SoundFont Folders</source>
         <translation>Các thư mục Gói âm thanh</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1894"/>
-        <location filename="../../mscore/preferences.cpp" line="1934"/>
+        <location filename="../../mscore/preferences.cpp" line="1891"/>
+        <location filename="../../mscore/preferences.cpp" line="1931"/>
         <source>MuseScore Shortcuts</source>
         <translation>Các phím tắt của MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1898"/>
+        <location filename="../../mscore/preferences.cpp" line="1895"/>
         <source>Print Shortcuts</source>
         <translation>Các phím tắt để in</translation>
     </message>
@@ -10494,13 +10315,13 @@ Lưu trữ trước khi đóng?</translation>
 <context>
     <name>Ms::Rest</name>
     <message>
-        <location filename="../../libmscore/rest.cpp" line="760"/>
-        <location filename="../../libmscore/rest.cpp" line="770"/>
+        <location filename="../../libmscore/rest.cpp" line="732"/>
+        <location filename="../../libmscore/rest.cpp" line="742"/>
         <source>Voice: %1</source>
         <translation>Giọng: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/rest.cpp" line="761"/>
+        <location filename="../../libmscore/rest.cpp" line="733"/>
         <source>%1; Duration: %2; %3</source>
         <translation>%1; Trường độ: %2; %3</translation>
     </message>
@@ -10519,14 +10340,14 @@ Lưu trữ trước khi đóng?</translation>
     </message>
     <message>
         <location filename="../../libmscore/score.cpp" line="342"/>
-        <location filename="../../libmscore/score.cpp" line="354"/>
-        <location filename="../../libmscore/score.cpp" line="395"/>
-        <location filename="../../libmscore/score.cpp" line="404"/>
+        <location filename="../../libmscore/score.cpp" line="353"/>
+        <location filename="../../libmscore/score.cpp" line="389"/>
+        <location filename="../../libmscore/score.cpp" line="398"/>
         <source>No selection</source>
         <translation>Chưa chọn gì</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="355"/>
+        <location filename="../../libmscore/scorefile.cpp" line="353"/>
         <source>The following file is locked: 
 %1 
 
@@ -10536,7 +10357,7 @@ Try saving to a different location.</source>
 Hãy thử lưu trữ ở một nơi khác.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="367"/>
+        <location filename="../../libmscore/scorefile.cpp" line="365"/>
         <source>Open Temp File
 %1
 failed: %2</source>
@@ -10545,19 +10366,19 @@ failed: %2</source>
 bị lỗi: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="381"/>
+        <location filename="../../libmscore/scorefile.cpp" line="379"/>
         <source>MuseScore: Save File failed: %1</source>
         <translation>MuseScore: Lỗi lưu tập tin: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="440"/>
+        <location filename="../../libmscore/scorefile.cpp" line="438"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Đổi tên tập tin tạm &lt;%1&gt; thành &lt;%2&gt; báo lỗi:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="462"/>
+        <location filename="../../libmscore/scorefile.cpp" line="460"/>
         <source>Open File
 %1
 failed: </source>
@@ -10566,7 +10387,7 @@ failed: </source>
 báo lỗi:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="593"/>
+        <location filename="../../libmscore/scorefile.cpp" line="591"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10575,12 +10396,12 @@ failed: %2</source>
 báo lỗi: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="615"/>
+        <location filename="../../libmscore/scorefile.cpp" line="613"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Tập tin không thích hợp với phiên bản MuseScore này.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="636"/>
+        <location filename="../../libmscore/scorefile.cpp" line="634"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10589,12 +10410,12 @@ failed: %2</source>
 lỗi: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="644"/>
         <source>Write Style failed: %1</source>
         <translation>Lỗi soạn thảo Định kiểu: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1183"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1179"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML đọc lỗi tại dòng %1 cột %2: %3</translation>
     </message>
@@ -10659,12 +10480,7 @@ lỗi: %2</translation>
         <translation>Tạo Bản nhạc mới</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreBrowser.cpp" line="149"/>
-        <source>Getting Started</source>
-        <translation>Bắt đầu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/scoreBrowser.cpp" line="224"/>
+        <location filename="../../mscore/scoreBrowser.cpp" line="220"/>
         <source>Custom Templates</source>
         <translation>Tùy chỉnh Kiểu mẫu</translation>
     </message>
@@ -10852,7 +10668,7 @@ lỗi: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="267"/>
         <location filename="../../mscore/propertymenu.cpp" line="286"/>
-        <location filename="../../mscore/scoreview.cpp" line="1102"/>
+        <location filename="../../mscore/scoreview.cpp" line="1101"/>
         <source>Staff</source>
         <translation>Khuông nhạc</translation>
     </message>
@@ -10860,21 +10676,21 @@ lỗi: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="268"/>
         <location filename="../../mscore/propertymenu.cpp" line="287"/>
         <location filename="../../mscore/propertymenu.cpp" line="325"/>
-        <location filename="../../mscore/scoreview.cpp" line="1116"/>
+        <location filename="../../mscore/scoreview.cpp" line="1115"/>
         <source>Staff Properties...</source>
         <translation>Đặc tính của khuông nhạc...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="273"/>
         <location filename="../../mscore/propertymenu.cpp" line="292"/>
-        <location filename="../../mscore/scoreview.cpp" line="1122"/>
+        <location filename="../../mscore/scoreview.cpp" line="1121"/>
         <source>Measure</source>
         <translation>Ô nhịp</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/propertymenu.cpp" line="293"/>
-        <location filename="../../mscore/scoreview.cpp" line="1130"/>
+        <location filename="../../mscore/scoreview.cpp" line="1129"/>
         <source>Measure Properties...</source>
         <translation>Đặc tính ô nhịp...</translation>
     </message>
@@ -10909,110 +10725,110 @@ lỗi: %2</translation>
         <translation>Thuộc tính Vuốt phím...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1023"/>
+        <location filename="../../mscore/scoreview.cpp" line="1022"/>
         <source>Select</source>
         <translation>Chọn</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1027"/>
+        <location filename="../../mscore/scoreview.cpp" line="1026"/>
         <source>More...</source>
         <translation>Thêm nữa...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1038"/>
+        <location filename="../../mscore/scoreview.cpp" line="1037"/>
         <source>Help</source>
         <translation>Hỗ trợ</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1043"/>
+        <location filename="../../mscore/scoreview.cpp" line="1042"/>
         <source>Debugger</source>
         <translation>Trình gỡ rối</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1103"/>
+        <location filename="../../mscore/scoreview.cpp" line="1102"/>
         <source>Edit Drumset...</source>
         <translation>Soạn Trống...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1108"/>
+        <location filename="../../mscore/scoreview.cpp" line="1107"/>
         <source>Drumroll Editor...</source>
         <translation>Bảng cuộn Soạn Trống...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1112"/>
+        <location filename="../../mscore/scoreview.cpp" line="1111"/>
         <source>Pianoroll Editor...</source>
         <translation>Bảng cuộn soạn với Piano....</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1118"/>
+        <location filename="../../mscore/scoreview.cpp" line="1117"/>
         <source>Split Staff...</source>
         <translation>Tách Khuông...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1136"/>
+        <location filename="../../mscore/scoreview.cpp" line="1135"/>
         <source>Object Debugger</source>
         <translation>Th/tin cho người lập trình</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2490"/>
+        <location filename="../../mscore/scoreview.cpp" line="2481"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Vui lòng chọn một dấu-liên/ký-hiệu-vê và thử lại câu lệnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2555"/>
+        <location filename="../../mscore/scoreview.cpp" line="2546"/>
         <source>No destination to paste</source>
         <translation>Chưa chọn nơi để dán</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2558"/>
+        <location filename="../../mscore/scoreview.cpp" line="2549"/>
         <source>Cannot paste into tuplet</source>
         <translation>Không thể dán vào chùm liên</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2561"/>
+        <location filename="../../mscore/scoreview.cpp" line="2552"/>
         <source>Tuplet cannot cross barlines</source>
         <translation>Dấu-Liên không thể vượt qua vạch nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2565"/>
+        <location filename="../../mscore/scoreview.cpp" line="2556"/>
         <source>Cannot paste in local time signature</source>
-        <translation type="unfinished"/>
+        <translation>Không thể dán trong số chỉ nhịp cục bộ</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2569"/>
+        <location filename="../../mscore/scoreview.cpp" line="2560"/>
         <source>Cannot paste in tremolo</source>
-        <translation type="unfinished"/>
+        <translation>Không thể dán vào dấu vê</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3005"/>
+        <location filename="../../mscore/scoreview.cpp" line="2996"/>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
         <translation>Không có gam/dấu-lặng nào được chọn:
 Vui lòng chọn một gam/dấu-lặng và thử lại lần nữa</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3014"/>
+        <location filename="../../mscore/scoreview.cpp" line="3005"/>
         <source>Cannot split measure here:
 First beat of measure</source>
         <translation>Không thể tách ô nhịp tại đây:
 Phách đầu tiên của ô nhịp</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3019"/>
+        <location filename="../../mscore/scoreview.cpp" line="3010"/>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
         <translation>Không thể tách ô nhịp ở đây:
 Không thể tách liên ba</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3031"/>
+        <location filename="../../mscore/scoreview.cpp" line="3022"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Không có ô nhịp nào được chọn:
 Vui lòng chọn dãy ô nhịp muốn ghép nối và thử lại lần nữa</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5345"/>
+        <location filename="../../mscore/scoreview.cpp" line="5333"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -11021,7 +10837,7 @@ vui lòng sử dụng hộp thoại nhạc cụ để
 tạo vài khuông nhạc đầu tiên</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5426"/>
+        <location filename="../../mscore/scoreview.cpp" line="5414"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Chưa có ô nhịp nào được chọn:
@@ -11083,19 +10899,20 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
 <context>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="144"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="147"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="155"/>
         <source>Shortcut conflicts with </source>
         <translation>Xung đột với phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="156"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="167"/>
         <source>Shortcut conflicts with</source>
         <translation>Xung đột với phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="161"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="189"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="191"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="172"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="200"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="202"/>
         <source>New shortcut</source>
         <translation>Phím tắt mới</translation>
     </message>
@@ -11123,7 +10940,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
 <context>
     <name>Ms::StartDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2263"/>
+        <location filename="../../mscore/musescore.cpp" line="2239"/>
         <source>MuseScore Startup Dialog</source>
         <translation>Hộp thoại khởi động MuseScore</translation>
     </message>
@@ -11139,22 +10956,22 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="321"/>
+        <location filename="../../libmscore/tempotext.cpp" line="334"/>
         <source>Dotted %1</source>
         <translation>%1 chấm dôi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="323"/>
+        <location filename="../../libmscore/tempotext.cpp" line="336"/>
         <source>Double dotted %1</source>
         <translation>%1 chấm dôi kép</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="325"/>
+        <location filename="../../libmscore/tempotext.cpp" line="338"/>
         <source>Triple dotted %1</source>
         <translation>%1 chấm dôi tam bội</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="334"/>
+        <location filename="../../libmscore/tempotext.cpp" line="347"/>
         <source>note = %1</source>
         <translation>= %1</translation>
     </message>
@@ -11207,17 +11024,17 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="563"/>
         <source>Common Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Các ký hiệu phổ biến</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="600"/>
         <source>Musical Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Các ký hiệu âm nhạc</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="619"/>
         <source>Unicode Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Các ký hiệu Unicode</translation>
     </message>
 </context>
 <context>
@@ -11756,12 +11573,12 @@ vui lòng chọn một tên khác:</translation>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="175"/>
         <source>Staff space (sp):</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách khuông (sp):</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="216"/>
         <source>Unit</source>
-        <translation type="unfinished"/>
+        <translation>Đơn vị</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="222"/>
@@ -11794,14 +11611,14 @@ vui lòng chọn một tên khác:</translation>
         <translation>Hủy bỏ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="395"/>
-        <source>Even Page Margins</source>
-        <translation>Canh lề trang chẵn</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pagesettings.ui" line="318"/>
         <source>Odd Page Margins</source>
         <translation>Canh lề trang lẻ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pagesettings.ui" line="395"/>
+        <source>Even Page Margins</source>
+        <translation>Canh lề trang chẵn</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="474"/>
@@ -11829,7 +11646,7 @@ vui lòng chọn một tên khác:</translation>
     <message>
         <location filename="../../libmscore/barline.cpp" line="58"/>
         <source>Final barline</source>
-        <translation type="unfinished"/>
+        <translation>Vạch nhịp kết</translation>
     </message>
     <message>
         <location filename="../../libmscore/barline.cpp" line="59"/>
@@ -11970,12 +11787,12 @@ vui lòng chọn một tên khác:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="805"/>
         <source>Diminuendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Dấu nhỏ dần</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="823"/>
         <source>Diminuendo line</source>
-        <translation type="unfinished"/>
+        <translation>Dấu nhỏ dần</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="832"/>
@@ -12294,28 +12111,18 @@ trong khoảng rộng - panorama</translation>
         <translation>Tiếng trống</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="426"/>
-        <source>Port:</source>
-        <translation>Ports</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.ui" line="440"/>
-        <source>Channel:</source>
-        <translation>Kênh:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/mixer.ui" line="480"/>
+        <location filename="../../mscore/mixer.ui" line="449"/>
         <location filename="../../mscore/partedit.ui" line="366"/>
         <source>Sound:</source>
         <translation>Âm thanh:</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="490"/>
+        <location filename="../../mscore/mixer.ui" line="459"/>
         <source>MIDI sound</source>
         <translation>Âm thanh MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="493"/>
+        <location filename="../../mscore/mixer.ui" line="462"/>
         <source>Sound</source>
         <translation>Âm thanh</translation>
     </message>
@@ -12643,288 +12450,288 @@ trong khoảng rộng - panorama</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="112"/>
+        <source>Language</source>
+        <translation>Ngôn ngữ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="124"/>
+        <source>Select language</source>
+        <translation>Chọn ngôn ngữ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="127"/>
+        <source>The language will be changed once you restart MuseScore.</source>
+        <translation>Ngôn ngữ sẽ được thay đổi một khi bạn khởi động lại MuseScore.</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="158"/>
+        <source>Update translations</source>
+        <translation>Cập nhật bản dịch</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="168"/>
         <source>Program Start</source>
         <translation>Khởi động chương trình</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="121"/>
-        <location filename="../../mscore/prefsdialog.ui" line="124"/>
+        <location filename="../../mscore/prefsdialog.ui" line="177"/>
+        <location filename="../../mscore/prefsdialog.ui" line="180"/>
         <source>Start empty</source>
         <translation>Không tạo gì hết</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="139"/>
-        <location filename="../../mscore/prefsdialog.ui" line="142"/>
+        <location filename="../../mscore/prefsdialog.ui" line="195"/>
+        <location filename="../../mscore/prefsdialog.ui" line="198"/>
         <source>Start with score:</source>
         <translation>Khởi tạo với bài:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="149"/>
+        <location filename="../../mscore/prefsdialog.ui" line="205"/>
         <source>Start with score</source>
         <translation>Khởi tạo với bản nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="152"/>
+        <location filename="../../mscore/prefsdialog.ui" line="208"/>
         <source>Insert path to starting score</source>
         <translation>Chèn đường dẫn vào bản nhạc khởi tạo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="162"/>
+        <location filename="../../mscore/prefsdialog.ui" line="218"/>
         <source>Choose starting score</source>
         <translation>Chọn bản nhạc khởi tạo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="165"/>
+        <location filename="../../mscore/prefsdialog.ui" line="221"/>
         <source>Opens a file dialog for selecting the starting score</source>
         <translation>Mở hộp thoại tập tin để chọn bản nhạc khởi tạo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="177"/>
-        <location filename="../../mscore/prefsdialog.ui" line="180"/>
+        <location filename="../../mscore/prefsdialog.ui" line="233"/>
+        <location filename="../../mscore/prefsdialog.ui" line="236"/>
         <source>Show splash screen</source>
         <translation>Hiện khung giới thiệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="187"/>
+        <location filename="../../mscore/prefsdialog.ui" line="243"/>
         <source>Show start center</source>
         <translation>Hiện trung tâm khởi tạo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="194"/>
-        <location filename="../../mscore/prefsdialog.ui" line="197"/>
+        <location filename="../../mscore/prefsdialog.ui" line="250"/>
+        <location filename="../../mscore/prefsdialog.ui" line="253"/>
         <source>Continue last session</source>
         <translation>Tiếp tục phiên làm việc trước</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="207"/>
-        <location filename="../../mscore/prefsdialog.ui" line="210"/>
+        <location filename="../../mscore/prefsdialog.ui" line="263"/>
+        <location filename="../../mscore/prefsdialog.ui" line="266"/>
         <source>Start with new score</source>
         <translation>Tạo bản nhạc mới</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="217"/>
-        <location filename="../../mscore/prefsdialog.ui" line="220"/>
+        <location filename="../../mscore/prefsdialog.ui" line="273"/>
+        <location filename="../../mscore/prefsdialog.ui" line="276"/>
         <source>Show play panel</source>
         <translation>Hiện bảng điều khiển chơi nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="227"/>
-        <location filename="../../mscore/prefsdialog.ui" line="230"/>
+        <location filename="../../mscore/prefsdialog.ui" line="283"/>
+        <location filename="../../mscore/prefsdialog.ui" line="286"/>
         <source>Show navigator</source>
         <translation>Hiện bộ điều hướng</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="240"/>
+        <location filename="../../mscore/prefsdialog.ui" line="296"/>
+        <source>Folders</source>
+        <translation>Các thư mục</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="323"/>
+        <source>Score folder</source>
+        <translation>Thư mục bản nhạc</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="326"/>
+        <source>Insert path to score folder.</source>
+        <translation>Nhập đường dẫn cho thư mục định kiểu.</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="333"/>
+        <source>Images:</source>
+        <translation>Hình ảnh:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="346"/>
+        <source>Scores:</source>
+        <translation>Bản nhạc:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="359"/>
+        <source>Styles:</source>
+        <translation>Định kiểu:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="372"/>
+        <source>Style folder</source>
+        <translation>Thư mục định kiểu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="375"/>
+        <source>Insert path for style folder</source>
+        <translation>Nhập đường dẫn cho thư mục định kiểu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="382"/>
+        <source>Templates:</source>
+        <translation>Kiều mẫu:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="398"/>
+        <source>Choose score folder</source>
+        <translation>Chọn thư mục bản nhạc</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="401"/>
+        <source>Opens a folder dialog for selecting the score folder</source>
+        <translation>Mở hộp thoại thư mục để chọn thư mục lưu bản nhạc</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="414"/>
+        <source>Choose style folder</source>
+        <translation>Chọn thư mục bản nhạc</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="417"/>
+        <source>Opens a folder dialog for selecting the style folder</source>
+        <translation>Mở hộp thoại thư mục để chọn thư mục định kiểu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="427"/>
+        <source>Plugins:</source>
+        <translation>Trình phụ trợ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="440"/>
+        <source>Template folder</source>
+        <translation>Thư mục kiểu-mẫu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="443"/>
+        <source>Insert path to Template folder</source>
+        <translation>Nhập đường dẫn cho thư mục kiểu-mẫu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="450"/>
+        <source>Plugin folder</source>
+        <translation>Thư mục trình phụ trợ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="453"/>
+        <source>Insert path to plugin folder</source>
+        <translation>Cho đường dẫn tới thư mục trình phụ trợ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="460"/>
+        <location filename="../../mscore/prefsdialog.ui" line="544"/>
+        <source>SoundFont folders</source>
+        <translation>Các Thư mục gói âm thanh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="463"/>
+        <source>Insert path to SoundFont folders</source>
+        <translation>Nhập đường dẫn cho Các thư mục gói âm thanh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="473"/>
+        <source>Choose plugin folder</source>
+        <translation>Chọn thư mục trình phụ trợ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="476"/>
+        <source>Opens a folder dialog for selecting the plugin folder</source>
+        <translation>Mở hộp thoại để chọn một thư mục trình phụ trợ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="486"/>
+        <source>SoundFonts:</source>
+        <translation>Gói âm thanh:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="499"/>
+        <location filename="../../mscore/prefsdialog.ui" line="528"/>
+        <source>Image folder</source>
+        <translation>Thư mục ảnh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="502"/>
+        <source>Insert path to image folder</source>
+        <translation>Nhập đường dẫn cho thư mục ảnh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="512"/>
+        <source>Choose template folder</source>
+        <translation>Chọn thư mục kiểu-mẫu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="515"/>
+        <source>Opens a folder dialog for selecting the template folder</source>
+        <translation>Mở hộp thoại thư mục để chọn thư mục kiểu mẫu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="531"/>
+        <source>Opens a folder dialog for selecting the image folder</source>
+        <translation>Mở hộp thoại thư mục để chọn thư mục ảnh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="547"/>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation>Mở hộp thoại để cấu hình Các thư mục gói âm thanh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="560"/>
+        <location filename="../../mscore/prefsdialog.ui" line="563"/>
+        <source>Auto Save</source>
+        <translation>Tự động lưu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="590"/>
+        <source>Save every:</source>
+        <translation>Lưu lại mỗi:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="597"/>
+        <source>Select delay (in minutes) between auto saves</source>
+        <translation>Chọn khoảng chờ (theo phút) giữa các lần lưu tự động</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="610"/>
+        <source>minutes</source>
+        <translation>phút</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="633"/>
         <source>OSC remote control</source>
         <translation>OSC Điều khiển từ xa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="243"/>
+        <location filename="../../mscore/prefsdialog.ui" line="636"/>
         <source>OSC Remote Control</source>
         <translation>OSC điều khiển từ xa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="258"/>
+        <location filename="../../mscore/prefsdialog.ui" line="651"/>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
         <translation>Cổng kết nối:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="268"/>
+        <location filename="../../mscore/prefsdialog.ui" line="661"/>
         <source>Port number</source>
         <translation>Cổng kết nối</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="300"/>
-        <location filename="../../mscore/prefsdialog.ui" line="303"/>
-        <source>Auto Save</source>
-        <translation>Tự động lưu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="330"/>
-        <source>Save every:</source>
-        <translation>Lưu lại mỗi:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="337"/>
-        <source>Select delay (in minutes) between auto saves</source>
-        <translation>Chọn khoảng chờ (theo phút) giữa các lần lưu tự động</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="350"/>
-        <source>minutes</source>
-        <translation>phút</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="373"/>
-        <source>Language</source>
-        <translation>Ngôn ngữ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="385"/>
-        <source>Select language</source>
-        <translation>Chọn ngôn ngữ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="388"/>
-        <source>The language will be changed once you restart MuseScore.</source>
-        <translation>Ngôn ngữ sẽ được thay đổi một khi bạn khởi động lại MuseScore.</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="419"/>
-        <source>Update translations</source>
-        <translation>Cập nhật bản dịch</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="429"/>
-        <source>Folders</source>
-        <translation>Các thư mục</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="456"/>
-        <source>Score folder</source>
-        <translation>Thư mục bản nhạc</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="459"/>
-        <source>Insert path to score folder.</source>
-        <translation>Nhập đường dẫn cho thư mục định kiểu.</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="466"/>
-        <source>Images:</source>
-        <translation>Hình ảnh:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="479"/>
-        <source>Scores:</source>
-        <translation>Bản nhạc:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="492"/>
-        <source>Styles:</source>
-        <translation>Định kiểu:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="505"/>
-        <source>Style folder</source>
-        <translation>Thư mục định kiểu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="508"/>
-        <source>Insert path for style folder</source>
-        <translation>Nhập đường dẫn cho thư mục định kiểu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="515"/>
-        <source>Templates:</source>
-        <translation>Kiều mẫu:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="531"/>
-        <source>Choose score folder</source>
-        <translation>Chọn thư mục bản nhạc</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="534"/>
-        <source>Opens a folder dialog for selecting the score folder</source>
-        <translation>Mở hộp thoại thư mục để chọn thư mục lưu bản nhạc</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="547"/>
-        <source>Choose style folder</source>
-        <translation>Chọn thư mục bản nhạc</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="550"/>
-        <source>Opens a folder dialog for selecting the style folder</source>
-        <translation>Mở hộp thoại thư mục để chọn thư mục định kiểu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="560"/>
-        <source>Plugins:</source>
-        <translation>Trình phụ trợ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="573"/>
-        <source>Template folder</source>
-        <translation>Thư mục kiểu-mẫu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="576"/>
-        <source>Insert path to Template folder</source>
-        <translation>Nhập đường dẫn cho thư mục kiểu-mẫu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="583"/>
-        <source>Plugin folder</source>
-        <translation>Thư mục trình phụ trợ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="586"/>
-        <source>Insert path to plugin folder</source>
-        <translation>Cho đường dẫn tới thư mục trình phụ trợ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="593"/>
-        <location filename="../../mscore/prefsdialog.ui" line="677"/>
-        <source>SoundFont folders</source>
-        <translation>Các Thư mục gói âm thanh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="596"/>
-        <source>Insert path to SoundFont folders</source>
-        <translation>Nhập đường dẫn cho Các thư mục gói âm thanh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="606"/>
-        <source>Choose plugin folder</source>
-        <translation>Chọn thư mục trình phụ trợ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="609"/>
-        <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation>Mở hộp thoại để chọn một thư mục trình phụ trợ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="619"/>
-        <source>SoundFonts:</source>
-        <translation>Gói âm thanh:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="632"/>
-        <location filename="../../mscore/prefsdialog.ui" line="661"/>
-        <source>Image folder</source>
-        <translation>Thư mục ảnh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="635"/>
-        <source>Insert path to image folder</source>
-        <translation>Nhập đường dẫn cho thư mục ảnh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="645"/>
-        <source>Choose template folder</source>
-        <translation>Chọn thư mục kiểu-mẫu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="648"/>
-        <source>Opens a folder dialog for selecting the template folder</source>
-        <translation>Mở hộp thoại thư mục để chọn thư mục kiểu mẫu</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="664"/>
-        <source>Opens a folder dialog for selecting the image folder</source>
-        <translation>Mở hộp thoại thư mục để chọn thư mục ảnh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="680"/>
-        <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation>Mở hộp thoại để cấu hình Các thư mục gói âm thanh</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="693"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2182"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2162"/>
         <source>Style</source>
         <translation>Định kiểu</translation>
     </message>
@@ -12965,140 +12772,134 @@ trong khoảng rộng - panorama</translation>
         <translation>(Ảnh) Động</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="776"/>
+        <location filename="../../mscore/prefsdialog.ui" line="763"/>
         <source>Canvas Tab</source>
         <translation>Thẻ bộ vẽ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="779"/>
+        <location filename="../../mscore/prefsdialog.ui" line="766"/>
         <source>Canvas</source>
         <translation>Bộ vẽ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="800"/>
-        <location filename="../../mscore/prefsdialog.ui" line="803"/>
+        <location filename="../../mscore/prefsdialog.ui" line="787"/>
+        <location filename="../../mscore/prefsdialog.ui" line="790"/>
         <source>Background</source>
         <translation>Nền (phía sau)</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="854"/>
-        <source>Background Wallpaper</source>
-        <translation>Ảnh nền</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="857"/>
-        <location filename="../../mscore/prefsdialog.ui" line="974"/>
-        <source>Wallpaper</source>
-        <translation>Bức ảnh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="827"/>
+        <location filename="../../mscore/prefsdialog.ui" line="814"/>
         <source>Background Color</source>
         <translation>Màu nền</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="830"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1018"/>
+        <location filename="../../mscore/prefsdialog.ui" line="817"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1005"/>
         <source>Color</source>
         <translation>Màu sắc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="898"/>
-        <source>Background wallpaper path</source>
-        <translation>Đường dẫn ảnh nền</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="841"/>
+        <source>Background Wallpaper</source>
+        <translation>Ảnh nền</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="901"/>
-        <source>Insert path to background wallpaper file</source>
-        <translation>Chèn đường dẫn vào tập tin ảnh nền</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="844"/>
+        <location filename="../../mscore/prefsdialog.ui" line="961"/>
+        <source>Wallpaper</source>
+        <translation>Bức ảnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="883"/>
+        <location filename="../../mscore/prefsdialog.ui" line="870"/>
         <source>Choose Background wallpaper file</source>
         <translation>Chọn tập tin ảnh nền</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="886"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1003"/>
+        <location filename="../../mscore/prefsdialog.ui" line="873"/>
+        <location filename="../../mscore/prefsdialog.ui" line="990"/>
         <source>Opens a file dialog for selecting the wallpaper file</source>
         <translation>Mở hộp thoại tập tin để chọn tập tin ảnh nền</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="911"/>
+        <location filename="../../mscore/prefsdialog.ui" line="885"/>
+        <source>Background wallpaper path</source>
+        <translation>Đường dẫn ảnh nền</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="888"/>
+        <source>Insert path to background wallpaper file</source>
+        <translation>Chèn đường dẫn vào tập tin ảnh nền</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="898"/>
         <source>Select background color</source>
         <translation>Chọn màu sắc cho nền</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="914"/>
+        <location filename="../../mscore/prefsdialog.ui" line="901"/>
         <source>Opens a dialog for selecting the background color</source>
         <translation>Mở hộp thoại để chọn màu nền</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="927"/>
-        <location filename="../../mscore/prefsdialog.ui" line="930"/>
+        <location filename="../../mscore/prefsdialog.ui" line="914"/>
+        <location filename="../../mscore/prefsdialog.ui" line="917"/>
         <source>Paper</source>
         <translation>Giấy</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1041"/>
-        <source>Paper wallpaper path</source>
-        <translation>Đường dẫn ảnh nền cho trang giấy</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1044"/>
-        <source>Insert path to paper wallpaper file</source>
-        <translation>Chèn đường dẫn vào tập tin ảnh nền của trang</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1000"/>
-        <source>Choose paper wallpaper file</source>
-        <translation>Chọn tập tin ảnh nền của trang</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1028"/>
-        <source>Select paper color</source>
-        <translation>Chọn màu sắc cho trang giấy</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1031"/>
-        <source>Opens a dialog for selecting the paper color</source>
-        <translation>Mở hộp thoại để chọn màu cho trang giấy</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="971"/>
+        <location filename="../../mscore/prefsdialog.ui" line="958"/>
         <source>Paper Wallpaper</source>
         <translation>Ảnh nền trang giấy</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1015"/>
+        <location filename="../../mscore/prefsdialog.ui" line="987"/>
+        <source>Choose paper wallpaper file</source>
+        <translation>Chọn tập tin ảnh nền của trang</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1002"/>
         <source>Paper Color</source>
         <translation>Màu trang giấy</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1054"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1015"/>
+        <source>Select paper color</source>
+        <translation>Chọn màu sắc cho trang giấy</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1018"/>
+        <source>Opens a dialog for selecting the paper color</source>
+        <translation>Mở hộp thoại để chọn màu cho trang giấy</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1028"/>
+        <source>Paper wallpaper path</source>
+        <translation>Đường dẫn ảnh nền cho trang giấy</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1031"/>
+        <source>Insert path to paper wallpaper file</source>
+        <translation>Chèn đường dẫn vào tập tin ảnh nền của trang</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1041"/>
         <source>Scroll pages</source>
-        <translation type="unfinished"/>
+        <translation>Cuộn trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1060"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1047"/>
         <source>Horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Theo chiều ngang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1070"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1057"/>
         <source>Vertically</source>
-        <translation type="unfinished"/>
+        <translation>Theo chiều dọc</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1080"/>
         <source>Miscellaneous</source>
         <translation>Những thứ linh tinh</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1111"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1137"/>
-        <source>Proximity for selecting elements:</source>
-        <translation>Vùng lân cận để chọn một vật:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1089"/>
@@ -13119,58 +12920,64 @@ một kỹ thuật trong xử lý đồ họa</translation>
         <translation>Khử răng cưa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1161"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1111"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1137"/>
+        <source>Proximity for selecting elements:</source>
+        <translation>Vùng lân cận để chọn một vật:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1148"/>
         <source>Note Input Tab</source>
         <translation>Thẻ nhập nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1164"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1170"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1151"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1157"/>
         <source>Note Input</source>
         <translation>Nhập nốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1176"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1163"/>
         <source>Enable MIDI Input</source>
         <translation>Cho nhập từ thiết bị MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1179"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1166"/>
         <source>Enable MIDI input</source>
         <translation>Cho nhập từ thiết bị MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1186"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1189"/>
-        <source>Color notes outside of usable pitch range</source>
-        <translation>Tô màu các nốt nằm ngoài âm vực cho phép</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1202"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1205"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1176"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1179"/>
         <source>Play notes when editing</source>
         <translation>Phát tiếng của nốt khi soạn thảo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1217"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1191"/>
         <source>Default duration:</source>
         <translation>Trường độ định sẵn:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1224"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1198"/>
         <source>Default duration</source>
         <translation>Trường độ mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1227"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1201"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1246"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1249"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1220"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1223"/>
         <source>Play whole chord when adding note</source>
         <translation>Phát hợp âm khi đang thêm nốt vào nó</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1246"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1249"/>
+        <source>Color notes outside of usable pitch range</source>
+        <translation>Tô màu các nốt nằm ngoài âm vực cho phép</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1272"/>
@@ -13458,719 +13265,714 @@ một kỹ thuật trong xử lý đồ họa</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1993"/>
         <location filename="../../mscore/prefsdialog.ui" line="1996"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3445"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3451"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3425"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3431"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2020"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2007"/>
         <source>Score Tab</source>
         <translation>Thẻ bản nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2023"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2010"/>
         <source>Score</source>
         <translation>Bài nhạc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2029"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2016"/>
         <source>View</source>
         <translation>Xem</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2038"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2025"/>
         <source>Default scale for new score views</source>
         <translation>Tỉ lệ hiển thị mặc định cho bản nhạc mới</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2041"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2028"/>
         <source>Default zoom</source>
         <translation>Mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2044"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2031"/>
         <source>default scale for new score views</source>
         <translation>tỉ lệ hiển thị mặc định cho bản nhạc mới</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2069"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2056"/>
         <source>Default zoom:</source>
         <translation>Mặc định:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2089"/>
-        <source>Show MIDI controls in Mixer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2099"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2079"/>
         <source>Default Files</source>
         <translation>Các tập tin mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2126"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2106"/>
         <source>Instrument list 2:</source>
         <translation>D/sách nhạc cụ 2:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2139"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2119"/>
         <source>Choose Instrument list 1</source>
         <translation>Chọn d/sách nhạc cụ 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2142"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2260"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2122"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2240"/>
         <source>Opens a file dialog for selecting a instrument list file</source>
         <translation>Mở hộp thoại để chọn một tập tin danh sách nhạc cụ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2152"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2132"/>
         <source>Instrument list 1:</source>
         <translation>D/sách nhạc cụ 1:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2162"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2142"/>
         <source>Instrument list 1</source>
         <translation>D/sách nhạc cụ 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2165"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2247"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2145"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2227"/>
         <source>Insert path to a instrument list file</source>
         <translation>Chèn đường dẫn vào tập tin danh sách nhạc cụ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2172"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2152"/>
         <source>Style:</source>
         <translation>Định kiểu:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2185"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2856"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2165"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2836"/>
         <source>Insert path to style file</source>
         <translation>Chèn đường dẫn vào tập tin định kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2195"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2863"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2175"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2843"/>
         <source>Choose style</source>
         <translation>Chọn định-kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2198"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2866"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2178"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2846"/>
         <source>Opens a file dialog for selecting a style file</source>
         <translation>Mở hộp thoại để chọn một tập tin định kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2208"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2188"/>
         <source>Style for part:</source>
         <translation>Định kiểu cho bè:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2218"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2198"/>
         <source>Style for part</source>
         <translation>Định kiểu cho bè</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2221"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2201"/>
         <source>Insert path to style file for part</source>
         <translation>Chèn đường dẫn vào tập tin định kiểu cho bè</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2231"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2211"/>
         <source>Choose style for part</source>
         <translation>Chọn định kiểu cho bè</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2234"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2214"/>
         <source>Opens a file dialog for selecting a style file for part</source>
         <translation>Mở hộp thoại tập tin để chọn tập tin định kiểu cho bè</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2244"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2224"/>
         <source>Instrument list 2</source>
         <translation>D/sách nhạc cụ 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2257"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2237"/>
         <source>Choose Instrument list 2</source>
         <translation>Chọn d/sách nhạc cụ 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2287"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2267"/>
         <source>I/O Tab</source>
         <translation>Thẻ Nhập/Xuất âm thanh</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2290"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2792"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2270"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2772"/>
         <source>Attention: Any changes on this page require a restart of MuseScore.</source>
         <translation>Chú ý: Cần khởi động lại MuseScore nếu có bất cứ thay đổi nào trong trang này.</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2293"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2273"/>
         <source>I/O</source>
         <translation>Nhập/Xuất âm thanh</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2305"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2285"/>
         <source>PulseAudio</source>
         <translation>PulseAudio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2324"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2304"/>
         <source>Port Audio</source>
         <translation>Port Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2327"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2307"/>
         <source>PortAudio</source>
         <translation>PortAudio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2352"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2332"/>
         <source>API:</source>
         <translation>API:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2368"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2348"/>
         <source>API</source>
         <translation>API</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2371"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2351"/>
         <source>Choose API</source>
         <translation>Chọn API</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2378"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2358"/>
         <source>MIDI Input:</source>
         <translation>MIDI đầu vào:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2397"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2377"/>
         <source>MIDI Input</source>
         <translation>Th/bị nhập MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2400"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2380"/>
         <source>Choose MIDI Input</source>
         <translation>Chọn th/bị nhập MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2407"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2387"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2469"/>
         <source>Device:</source>
         <translation>Thiết bị:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2423"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2619"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2403"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2599"/>
         <source>Device</source>
         <translation>Thiết bị</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2426"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2406"/>
         <source>Choose device</source>
         <translation>Chọn thiết bị</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2442"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2445"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2422"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2425"/>
         <source>ALSA audio</source>
         <translation>Âm thanh ALSA</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2460"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2440"/>
         <source>Period Size:</source>
         <translation>Period Size:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2470"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2450"/>
         <source>Fragments</source>
         <translation>Fragments</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2473"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2453"/>
         <source>Choose number of fragments</source>
         <translation>Chọn số lượng fragments</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2496"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3192"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2476"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3172"/>
         <source>Sample rate:</source>
         <translation>Tần số lấy mẫu:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2506"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Period Size</source>
         <translation>Kích cỡ giới hạn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2509"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
         <source>Choose period size</source>
         <translation>Chọn kích cỡ giới hạn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2513"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2493"/>
         <source>4096</source>
         <translation>4096</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2518"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2498"/>
         <source>2048</source>
         <translation>2048</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2523"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2503"/>
         <source>1024</source>
         <translation>1024</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2528"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2508"/>
         <source>512</source>
         <translation>512</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2533"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2513"/>
         <source>256</source>
         <translation>256</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2538"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2518"/>
         <source>128</source>
         <translation>128</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2543"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2523"/>
         <source>64</source>
         <translation>64</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2564"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2544"/>
         <source>Fragments:</source>
         <translation>Fragments:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2574"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3199"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2554"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3179"/>
         <source>Sample rate</source>
         <translation>T/suất lấy mẫu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2577"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3202"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2557"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3182"/>
         <source>Choose sample rate</source>
         <translation>Chọn t/suất lấy mẫu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2581"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2561"/>
         <source>192000</source>
         <translation>192000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2586"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2566"/>
         <source>96000</source>
         <translation>96000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2591"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2571"/>
         <source>88200</source>
         <translation>88200</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2596"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3211"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2576"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3191"/>
         <source>48000</source>
         <translation>48000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2601"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3206"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2581"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3186"/>
         <source>44100</source>
         <translation>44100</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2606"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2586"/>
         <source>32000</source>
         <translation>32000</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2611"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2591"/>
         <source>22050</source>
         <translation>22050</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2622"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2602"/>
         <source>default</source>
         <translation>định sẵn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2638"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2641"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2618"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2621"/>
         <source>JACK audio server</source>
         <translation>JACK audio server</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2659"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2662"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2639"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2642"/>
         <source>Timebase Master</source>
         <translation>Th/bị Timebase chính</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2675"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2678"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2655"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2658"/>
         <source>Use JACK Transport</source>
         <translation>Dùng JACK Transport</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2685"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2688"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2665"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2668"/>
         <source>Use JACK Audio</source>
         <translation>Dùng JACK Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2704"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2707"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2684"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2687"/>
         <source>Remember last connection(s)</source>
         <translation>Ghi nhớ connection trước đó</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2736"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2739"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2716"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2719"/>
         <source>Use JACK MIDI</source>
         <translation>Dùng JACK MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2813"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2793"/>
         <source>Import Tab</source>
         <translation>Thẻ nhập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2816"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2796"/>
         <source>Import</source>
         <translation>Nhập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2822"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2802"/>
         <source>Style Used for Import</source>
         <translation>Định kiểu được dùng khi Nhập liệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2831"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2811"/>
         <source>Build in style</source>
         <translation>Định kiểu tích hợp sẵn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2834"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2814"/>
         <source>Built in style</source>
         <translation>Định kiểu tích hợp sẵn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2843"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2853"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2823"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2833"/>
         <source>Use style file</source>
         <translation>Sử dụng tập tin định kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2846"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2826"/>
         <source>Use style file:</source>
         <translation>Định kiểu trong tập tin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2869"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2849"/>
         <source>Browse...</source>
         <translation>Duyệt tập tin...</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2881"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2861"/>
         <source>Character Set Used When Importing Binary Files</source>
         <translation>Bộ ký tự sử dụng khi nhập dữ liệu từ tập tin nhị phân</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2892"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2872"/>
         <source>Overture import character set:</source>
         <translation>Bộ ký tự để nhập liệu từ Overture:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2899"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2879"/>
         <source>Overture import character set</source>
         <translation>Bộ ký tự sử dụng khi nhập liệu từ Overture</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2902"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2882"/>
         <source>Choose Overture import character set</source>
         <translation>Chọn bộ ký tự sử dụng khi nhập liệu từ Overture</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2909"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2889"/>
         <source>Guitar Pro import character set:</source>
         <translation>Bộ ký tự để nhập liệu từ Guitar Pro:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2916"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2896"/>
         <source>Guitar Pro import character set</source>
         <translation>Bộ ký tự sử dụng khi nhập liệu từ Guitar Pro</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2919"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2899"/>
         <source>Choose Guitar Pro import character set</source>
         <translation>Chọn bộ ký tự sử dụng khi nhập liệu từ Guitar Pro</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2937"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2940"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3241"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3244"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2917"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2920"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3221"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3224"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2949"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2952"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2929"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2932"/>
         <source>Import layout</source>
         <translation>Nhập: Các bố trí trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2959"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2962"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2939"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2942"/>
         <source>Import system and page breaks</source>
         <translation>Nhập: Dấu ngắt dòng và ngắt trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2978"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2981"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3151"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3154"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2958"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2961"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3131"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3134"/>
         <source>MIDI</source>
         <translation>MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2987"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2967"/>
         <source>Shortest note:</source>
         <translation>Nốt trường độ ngắn nhất:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2994"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2974"/>
         <source>Shortest note</source>
         <translation>Nốt trường độ ngắn nhất</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2997"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2977"/>
         <source>Choose the shortest note value</source>
         <translation>Chọn giá trị nốt có trường độ ngắn nhất</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3004"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2984"/>
         <source>Quarter</source>
         <translation>Nốt đen</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3009"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2989"/>
         <source>Eighth</source>
         <translation>Nốt móc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3014"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2994"/>
         <source>16th</source>
         <translation>Móc đôi</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3019"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2999"/>
         <source>32nd</source>
         <translation>Móc ba</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3024"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3004"/>
         <source>64th</source>
         <translation>Móc 4</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3062"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3042"/>
         <source>Export Tab</source>
         <translation>Thẻ xuất dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3065"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3045"/>
         <source>Export</source>
         <translation>Xuất dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3084"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3064"/>
         <source>PNG/SVG</source>
         <translation>PNG/SVG</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3093"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3310"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3073"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3290"/>
         <source>Resolution DPI:</source>
         <translation>Độ phân giải DPI:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3100"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3103"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3080"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3083"/>
         <source>Transparent background</source>
         <translation>Nền trong suốt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3123"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3317"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3103"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3297"/>
         <source>Resolution DPI</source>
         <translation>Độ phân giải DPI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3126"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3320"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3106"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3300"/>
         <source>Choose resolution DPI</source>
         <translation>Chọn độ phân giải DPI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3163"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3166"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3143"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3146"/>
         <source>Expand repeats</source>
         <translation>Xử lý mọi dấu lặp khi xuất</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3173"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3153"/>
         <source>Export RPNs</source>
         <translation>Xuất RPNs</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3183"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3186"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3163"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3166"/>
         <source>Audio</source>
         <translation>Âm thanh</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3253"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3256"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3233"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3236"/>
         <source>Export layout</source>
         <translation>Xuất sự bố trí trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3265"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3268"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3245"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3248"/>
         <source>Export all system and page breaks</source>
         <translation>Xuất: Toàn bộ dấu ngắt dòng và ngắt trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3275"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3278"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3255"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3258"/>
         <source>Export manually added system and page breaks only</source>
         <translation>Xuất: Chỉ các dấu ngắt dòng và ngắt trang tự tay thêm</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3285"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3288"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3265"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3268"/>
         <source>Do not export system or page breaks</source>
         <translation>Không xuất dấu ngắt dòng hoặc ngắt trang</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3304"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3284"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3353"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3333"/>
         <source>Shortcuts Tab</source>
         <translation>Thẻ Các phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3356"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3336"/>
         <source>Shortcuts</source>
         <translation>Các phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3377"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3357"/>
         <source>Shortcuts table</source>
         <translation>Bảng phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3380"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3360"/>
         <source>Here you can configure shortcuts for actions</source>
         <translation>Bạn có thể thiết lập các phím tắt cho các lệnh ở đây</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3402"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3382"/>
         <source>Action</source>
         <translation>Lệnh</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3407"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3387"/>
         <source>Shortcut</source>
         <translation>Phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3432"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3412"/>
         <source>Reset Shortcut to default</source>
         <translation>Trả phím tắt về mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3435"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3415"/>
         <source>Resets the shortcuts to their default assignment</source>
         <translation>Trả các phím tắt về cài đặt mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3438"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3418"/>
         <source>Reset Shortcut to Default</source>
         <translation>Trả phím tắt về mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3448"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3428"/>
         <source>Clears the shortcut assignment for the selected action</source>
         <translation>Xóa cài đặt phím tắt cho tác vụ đang chọn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3458"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3438"/>
         <source>Define</source>
         <translation>Định nghĩa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3461"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3441"/>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
         <translation>Mở hộp thoại để định nghĩa phím tắt mới cho lệnh được chọn</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3464"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3444"/>
         <source>Define...</source>
         <translation>Định nghĩa...</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3477"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3457"/>
         <source>Filter</source>
         <translation>Bộ lọc</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3497"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3503"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3477"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3483"/>
         <source>Print</source>
         <translation>In</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3500"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3480"/>
         <source>Print the shortcuts list</source>
         <translation>In ra danh sách các phím tắt</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3513"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3493"/>
         <source>Update Tab</source>
         <translation>Thẻ Cập nhật</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3516"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3496"/>
         <source>Update</source>
         <translation>Cập nhật</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3522"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3525"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3502"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3505"/>
         <source>Automatic Update Check</source>
         <translation>Tự động Kiểm tra Cập nhật</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3564"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3544"/>
         <source>Check for new version of MuseScore</source>
         <translation>Kiểm tra phiên bản mới của MuseScore</translation>
     </message>
@@ -14178,19 +13980,17 @@ một kỹ thuật trong xử lý đồ họa</translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2499"/>
+        <location filename="../../libmscore/edit.cpp" line="2494"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="433"/>
         <location filename="../../libmscore/utils.cpp" line="443"/>
         <location filename="../../libmscore/utils.cpp" line="453"/>
         <location filename="../../libmscore/utils.cpp" line="462"/>
-        <location filename="../../mscore/mscorePlugins.cpp" line="418"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="305"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2500"/>
+        <location filename="../../libmscore/edit.cpp" line="2495"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14238,14 +14038,6 @@ Vui lòng chọn một nốt hoặc dấu lặng và thử lại thao tác
 </source>
         <translation>Vui lòng chọn một hoặc nhiều khuông nhạc và thử lại
 </translation>
-    </message>
-    <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="419"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="306"/>
-        <source>No score open.
-This plugin requires an open score to run.
-</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -14379,7 +14171,7 @@ lỗi: %2</translation>
         <translation>thăng kép</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1194"/>
+        <location filename="../../libmscore/stafftype.cpp" line="899"/>
         <source>Cannot open tablature font description:
 %1
 %2</source>
@@ -14388,87 +14180,87 @@ lỗi: %2</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1341"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1046"/>
         <source>Standard</source>
         <translation>Dạng chuẩn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1342"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1047"/>
         <source>Perc. 1 line</source>
         <translation>Perc. 1 line</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1343"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1048"/>
         <source>Perc. 3 lines</source>
         <translation>Perc. 3 lines</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1344"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1049"/>
         <source>Perc. 5 lines</source>
         <translation>Perc. 5 lines</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1346"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1051"/>
         <source>Tab. 6-str. simple</source>
         <translation>Tab. 6-dây đơn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1347"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1052"/>
         <source>Tab. 6-str. common</source>
         <translation>Tab. 6-dây thông dụng</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1348"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1053"/>
         <source>Tab. 6-str. full</source>
         <translation>Tab. 6-dây đầy đủ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1349"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1054"/>
         <source>Tab. 4-str. simple</source>
         <translation>Tab. 4-dây đơn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1350"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1055"/>
         <source>Tab. 4-str. common</source>
         <translation>Tab. 4-dây thông dụng</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1351"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1056"/>
         <source>Tab. 4-str. full</source>
         <translation>Tab. 4-dây đầy đủ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1352"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1057"/>
         <source>Tab. 5-str. simple</source>
         <translation>Tab. 5-dây đơn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1353"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1058"/>
         <source>Tab. 5-str. common</source>
         <translation>Tab. 5-dây thông dụng</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1354"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1059"/>
         <source>Tab. 5-str. full</source>
         <translation>Tab. 5-dây đầy đủ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1355"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1060"/>
         <source>Tab. ukulele</source>
         <translation>Tab. cho ukulele</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1356"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1061"/>
         <source>Tab. balalaika</source>
         <translation>Tab. cho balalaika</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1357"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1062"/>
         <source>Tab. 6-str. Italian</source>
         <translation>Tab. 6-dây kiểu Ý</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1358"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1063"/>
         <source>Tab. 6-str. French</source>
         <translation>Tab. 6-dây kiểu Pháp</translation>
     </message>
@@ -14589,10 +14381,10 @@ Hãy tới trang mạng &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore
     <message>
         <location filename="../../mscore/album.cpp" line="245"/>
         <location filename="../../mscore/capella.cpp" line="2662"/>
-        <location filename="../../mscore/importgtp.cpp" line="2305"/>
+        <location filename="../../mscore/importgtp.cpp" line="2303"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1198"/>
         <location filename="../../mscore/instrdialog.cpp" line="135"/>
-        <location filename="../../mscore/musescore.cpp" line="2474"/>
+        <location filename="../../mscore/musescore.cpp" line="2450"/>
         <source>Quit</source>
         <translation>Thoát chương trình</translation>
     </message>
@@ -14657,7 +14449,7 @@ lỗi:</translation>
     </message>
     <message>
         <location filename="../../mscore/capella.cpp" line="2661"/>
-        <location filename="../../mscore/importgtp.cpp" line="2304"/>
+        <location filename="../../mscore/importgtp.cpp" line="2302"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1197"/>
         <source>Load failed: </source>
         <translation>Tải lên lỗi: </translation>
@@ -14695,7 +14487,7 @@ Bạn muốn ghi đè không?</translation>
         <translation>Đã cài đặt Gói âm thanh. Vui lòng đi đến &quot;Xem &gt; Bộ tổng hợp âm tần&quot; để thêm nó vào và &quot;Xem &gt; Bộ phối âm&quot; để chọn một âm sắc nhạc cụ.</translation>
     </message>
     <message>
-        <location filename="../../mscore/importgtp.cpp" line="2303"/>
+        <location filename="../../mscore/importgtp.cpp" line="2301"/>
         <source>MuseScore: Import Guitar Pro</source>
         <translation>MuseScore: Nhập dữ liệu từ Guitar Pro</translation>
     </message>
@@ -14710,12 +14502,12 @@ Bạn muốn ghi đè không?</translation>
         <translation>MuseScore: Lỗi khi nạp Định kiểu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2472"/>
+        <location filename="../../mscore/musescore.cpp" line="2448"/>
         <source>MuseScore: Load Languages Failed:</source>
         <translation>MuseScore: Lỗi khi nạp Các ngôn ngữ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3970"/>
+        <location filename="../../mscore/musescore.cpp" line="3946"/>
         <source>MuseScore: Invalid Command</source>
         <translation>MuseScore: Mệnh lệnh không đúng</translation>
     </message>
@@ -14723,7 +14515,7 @@ Bạn muốn ghi đè không?</translation>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3858"/>
+        <location filename="../../mscore/musescore.cpp" line="3834"/>
         <source>Record</source>
         <translation>Thâu</translation>
     </message>
@@ -15018,17 +14810,17 @@ Bạn muốn ghi đè không?</translation>
 <context>
     <name>Staff type group name</name>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="36"/>
+        <location filename="../../libmscore/stafftype.cpp" line="34"/>
         <source>Standard</source>
         <translation>Dạng chuẩn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="37"/>
+        <location filename="../../libmscore/stafftype.cpp" line="35"/>
         <source>Percussion</source>
         <translation>Percussion</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="38"/>
+        <location filename="../../libmscore/stafftype.cpp" line="36"/>
         <source>Tablature</source>
         <translation>Tablature</translation>
     </message>
@@ -15650,197 +15442,197 @@ Bạn muốn ghi đè không?</translation>
 <context>
     <name>TextStyle</name>
     <message>
-        <location filename="../../libmscore/style.cpp" line="285"/>
+        <location filename="../../libmscore/style.cpp" line="273"/>
         <source>Title</source>
         <translation>Tựa đề</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="287"/>
+        <location filename="../../libmscore/style.cpp" line="275"/>
         <source>Subtitle</source>
         <translation>Tiểu đề</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="289"/>
+        <location filename="../../libmscore/style.cpp" line="277"/>
         <source>Composer</source>
         <translation>Nhạc sỹ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="291"/>
+        <location filename="../../libmscore/style.cpp" line="279"/>
         <source>Lyricist</source>
         <translation>Thi sỹ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="294"/>
+        <location filename="../../libmscore/style.cpp" line="282"/>
         <source>Lyrics Odd Lines</source>
         <translation>Lời nhạc dòng lẻ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="296"/>
+        <location filename="../../libmscore/style.cpp" line="284"/>
         <source>Lyrics Even Lines</source>
         <translation>Lời nhạc dòng chẵn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="298"/>
+        <location filename="../../libmscore/style.cpp" line="286"/>
         <source>Fingering</source>
         <translation>Ngón bấm</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="300"/>
+        <location filename="../../libmscore/style.cpp" line="288"/>
         <source>LH Guitar Fingering</source>
         <translation>Ngón bấm ghi-ta tay trái</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="302"/>
+        <location filename="../../libmscore/style.cpp" line="290"/>
         <source>RH Guitar Fingering</source>
         <translation>Ngón bấm ghi-ta tay phải</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="304"/>
+        <location filename="../../libmscore/style.cpp" line="292"/>
         <source>String Number</source>
         <translation>Chữ số dây đàn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="308"/>
+        <location filename="../../libmscore/style.cpp" line="296"/>
         <source>Instrument Name (Long)</source>
         <translation>Tên (dài) của nhạc cụ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="310"/>
+        <location filename="../../libmscore/style.cpp" line="298"/>
         <source>Instrument Name (Short)</source>
         <translation>Tên (ngắn) của nhạc cụ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="312"/>
+        <location filename="../../libmscore/style.cpp" line="300"/>
         <source>Instrument Name (Part)</source>
         <translation>Tên nhạc cụ (Bè)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="316"/>
+        <location filename="../../libmscore/style.cpp" line="304"/>
         <source>Dynamics</source>
         <translation>Cường độ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="318"/>
+        <location filename="../../libmscore/style.cpp" line="306"/>
         <source>Technique</source>
         <translation>Nét chữ Kỹ thuật</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="321"/>
+        <location filename="../../libmscore/style.cpp" line="309"/>
         <source>Tempo</source>
         <translation>Nhịp độ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="325"/>
+        <location filename="../../libmscore/style.cpp" line="313"/>
         <source>Metronome</source>
         <translation>Máy gõ nhịp</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="327"/>
+        <location filename="../../libmscore/style.cpp" line="315"/>
         <source>Measure Number</source>
         <translation>Số đếm ô nhịp</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="329"/>
+        <location filename="../../libmscore/style.cpp" line="317"/>
         <source>Translator</source>
         <translation>Translator</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="331"/>
+        <location filename="../../libmscore/style.cpp" line="319"/>
         <source>Tuplet</source>
         <translation>Dấu liên</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="334"/>
+        <location filename="../../libmscore/style.cpp" line="322"/>
         <source>System</source>
         <translation>Dòng nhạc</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="338"/>
+        <location filename="../../libmscore/style.cpp" line="326"/>
         <source>Staff</source>
         <translation>Khuông nhạc</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="340"/>
+        <location filename="../../libmscore/style.cpp" line="328"/>
         <source>Chord Symbol</source>
         <translation>Ký hiệu Gam</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="343"/>
+        <location filename="../../libmscore/style.cpp" line="331"/>
         <source>Rehearsal Mark</source>
         <translation>Nhãn diễn lặp</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="347"/>
+        <location filename="../../libmscore/style.cpp" line="335"/>
         <source>Repeat Text Left</source>
         <translation>Ký hiệu lặp nằm bên trái</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="351"/>
+        <location filename="../../libmscore/style.cpp" line="339"/>
         <source>Repeat Text Right</source>
         <translation>Ký hiệu lặp nằm bên phải</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="356"/>
+        <location filename="../../libmscore/style.cpp" line="344"/>
         <source>Repeat Text</source>
         <translation>Ký hiệu lặp</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="361"/>
+        <location filename="../../libmscore/style.cpp" line="349"/>
         <source>Volta</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="363"/>
+        <location filename="../../libmscore/style.cpp" line="351"/>
         <source>Frame</source>
         <translation>Khung bao chữ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="365"/>
+        <location filename="../../libmscore/style.cpp" line="353"/>
         <source>Text Line</source>
         <translation>Đ/kẻ có chữ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="367"/>
+        <location filename="../../libmscore/style.cpp" line="355"/>
         <source>Glissando</source>
         <translation>Vuốt phím</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="370"/>
+        <location filename="../../libmscore/style.cpp" line="358"/>
         <source>Ottava</source>
         <translation>Dấu chuyển bát độ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="372"/>
+        <location filename="../../libmscore/style.cpp" line="360"/>
         <source>Pedal</source>
         <translation>Pê-đan</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="374"/>
+        <location filename="../../libmscore/style.cpp" line="362"/>
         <source>Hairpin</source>
         <translation>Dấu biến cường</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="376"/>
+        <location filename="../../libmscore/style.cpp" line="364"/>
         <source>Bend</source>
         <translation>Bend: Nhéo cao độ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="378"/>
+        <location filename="../../libmscore/style.cpp" line="366"/>
         <source>Header</source>
         <translation>Khung tin đầu trang</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="380"/>
+        <location filename="../../libmscore/style.cpp" line="368"/>
         <source>Footer</source>
         <translation>Khung tin chân trang</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="382"/>
+        <location filename="../../libmscore/style.cpp" line="370"/>
         <source>Instrument Change</source>
         <translation>Chữ báo Đổi nhạc cụ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="388"/>
+        <location filename="../../libmscore/style.cpp" line="376"/>
         <source>Figured Bass</source>
         <translation>Ngón bấm Bass</translation>
     </message>
@@ -16808,7 +16600,7 @@ bị lỗi:</translation>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="99"/>
         <source>Loading...</source>
-        <translation type="unfinished"/>
+        <translation>Đang nạp...</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="99"/>
@@ -17678,7 +17470,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="570"/>
         <source>Toggle sforzato</source>
-        <translation type="unfinished"/>
+        <translation>Bật/Tắt sforzato</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="580"/>
@@ -19361,12 +19153,12 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2091"/>
         <source>Score Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Thuộc tính bản nhạc...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2092"/>
         <source>Edit score properties</source>
-        <translation type="unfinished"/>
+        <translation>Sửa thuộc tính bản nhạc</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2102"/>
@@ -19833,22 +19625,22 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2522"/>
         <source>Split Measure before Selected Note</source>
-        <translation type="unfinished"/>
+        <translation>Tách ô nhịp trước nốt được chọn</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2523"/>
         <source>Split measure before selected note</source>
-        <translation type="unfinished"/>
+        <translation>Tách ô nhịp trước nốt được chọn</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2529"/>
         <source>Join Selected Measures</source>
-        <translation type="unfinished"/>
+        <translation>Ghép các ô nhịp được chọn</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2530"/>
         <source>Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Ghép các ô nhịp được chọn</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2536"/>
@@ -20148,12 +19940,12 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2795"/>
         <source>Note Anchored Line</source>
-        <translation type="unfinished"/>
+        <translation>Nốt tự dịch vào dòng kẻ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2796"/>
         <source>Note anchored line</source>
-        <translation type="unfinished"/>
+        <translation>Nốt tự dịch vào dòng kẻ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2802"/>
@@ -20369,7 +20161,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2994"/>
         <source>Add fret 4 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 4 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3000"/>
@@ -20379,7 +20171,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3001"/>
         <source>Add fret 5 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 5 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3007"/>
@@ -20389,7 +20181,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3008"/>
         <source>Add fret 6 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 6 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3014"/>
@@ -20399,7 +20191,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3015"/>
         <source>Add fret 7 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 7 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3021"/>
@@ -20409,7 +20201,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3022"/>
         <source>Add fret 8 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 8 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3028"/>
@@ -20419,7 +20211,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3029"/>
         <source>Add fret 9 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 9 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3035"/>
@@ -20429,7 +20221,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3036"/>
         <source>Add fret 10 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 10 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3042"/>
@@ -20439,7 +20231,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3043"/>
         <source>Add fret 11 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 11 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3049"/>
@@ -20449,7 +20241,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3050"/>
         <source>Add fret 12 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 12 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3056"/>
@@ -20459,7 +20251,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3057"/>
         <source>Add fret 13 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 13 trên dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3063"/>
@@ -20469,7 +20261,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3064"/>
         <source>Add fret 14 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Thêm phím 14 của dây hiện tại (chỉ TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3073"/>
@@ -20726,12 +20518,12 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3293"/>
         <source>Copy Lyrics to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Chép lời nhạc vào bộ nhớ máy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3294"/>
         <source>Copy lyrics to clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Chép lời nhạc vào bộ nhớ máy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3304"/>
@@ -22079,6 +21871,7 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="50"/>
+        <location filename="../../libmscore/clef.cpp" line="55"/>
         <source>Percussion</source>
         <translation>Khóa cho Bộ gõ</translation>
     </message>
@@ -22103,11 +21896,6 @@ Measure is not empty</source>
         <translation>Khóa F: Bass 15ma</translation>
     </message>
     <message>
-        <location filename="../../libmscore/clef.cpp" line="55"/>
-        <source>Percussion2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../libmscore/clef.cpp" line="56"/>
         <source>Tablature2</source>
         <translation>Dạng TAB 2</translation>
@@ -22116,11 +21904,6 @@ Measure is not empty</source>
         <location filename="../../libmscore/clef.cpp" line="57"/>
         <source>Treble clef optional 8vb</source>
         <translation>Khóa Treble tùy chọn 8vb</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/clef.cpp" line="58"/>
-        <source>Treble clef 8vb Old</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -22459,62 +22242,62 @@ Measure is not empty</source>
 <context>
     <name>editstaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="491"/>
+        <location filename="../../mscore/editstaff.cpp" line="470"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="492"/>
+        <location filename="../../mscore/editstaff.cpp" line="471"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="493"/>
+        <location filename="../../mscore/editstaff.cpp" line="472"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="494"/>
+        <location filename="../../mscore/editstaff.cpp" line="473"/>
         <source>Eb</source>
         <translation>Eb</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="495"/>
+        <location filename="../../mscore/editstaff.cpp" line="474"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="496"/>
+        <location filename="../../mscore/editstaff.cpp" line="475"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="497"/>
+        <location filename="../../mscore/editstaff.cpp" line="476"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="498"/>
+        <location filename="../../mscore/editstaff.cpp" line="477"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="499"/>
+        <location filename="../../mscore/editstaff.cpp" line="478"/>
         <source>Ab</source>
         <translation>Ab</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="500"/>
+        <location filename="../../mscore/editstaff.cpp" line="479"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="501"/>
+        <location filename="../../mscore/editstaff.cpp" line="480"/>
         <source>Bb</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="502"/>
+        <location filename="../../mscore/editstaff.cpp" line="481"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -22618,11 +22401,6 @@ Measure is not empty</source>
         <location filename="../../libmscore/element.cpp" line="101"/>
         <source>Barline</source>
         <translation>Vạch nhịp</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/element.cpp" line="102"/>
-        <source>System Divider</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="103"/>
@@ -23081,7 +22859,7 @@ Measure is not empty</source>
 <context>
     <name>images_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="177"/>
+        <location filename="../../mscore/preferences.cpp" line="176"/>
         <source>Images</source>
         <translation>Hình ảnh</translation>
     </message>
@@ -23162,12 +22940,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="798"/>
         <source>Crescendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Dấu to dần</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="814"/>
         <source>Crescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Dấu to dần</translation>
     </message>
 </context>
 <context>
@@ -23307,7 +23085,7 @@ Measure is not empty</source>
 <context>
     <name>plugins_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="179"/>
+        <location filename="../../mscore/preferences.cpp" line="178"/>
         <source>Plugins</source>
         <translation>Trình phụ trợ</translation>
     </message>
@@ -23315,7 +23093,7 @@ Measure is not empty</source>
 <context>
     <name>scores_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="175"/>
+        <location filename="../../mscore/preferences.cpp" line="174"/>
         <source>Scores</source>
         <translation>Các bản nhạc</translation>
     </message>
@@ -23431,7 +23209,7 @@ Measure is not empty</source>
 <context>
     <name>soundfonts_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="180"/>
+        <location filename="../../mscore/preferences.cpp" line="179"/>
         <source>Soundfonts</source>
         <translation>Các gói âm thanh</translation>
     </message>
@@ -23457,7 +23235,7 @@ Measure is not empty</source>
 <context>
     <name>styles_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="176"/>
+        <location filename="../../mscore/preferences.cpp" line="175"/>
         <source>Styles</source>
         <translation>Định kiểu</translation>
     </message>
@@ -23465,7 +23243,7 @@ Measure is not empty</source>
 <context>
     <name>templates_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="178"/>
+        <location filename="../../mscore/preferences.cpp" line="177"/>
         <source>Templates</source>
         <translation>Kiểu mẫu</translation>
     </message>
@@ -23475,22 +23253,22 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="287"/>
         <source>Basic Latin</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự La-tinh cơ bản</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="288"/>
         <source>Latin-1 Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Bổ sung Latin-1</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="289"/>
         <source>Latin Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>La tinh mở rộng-A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="290"/>
         <source>Latin Extended-B</source>
-        <translation type="unfinished"/>
+        <translation>La tinh mở rộng-B</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="291"/>
@@ -23510,292 +23288,292 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="294"/>
         <source>Greek and Coptic</source>
-        <translation type="unfinished"/>
+        <translation>Hy Lạp và Ai Cập</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="295"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation>Cyrillic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="296"/>
         <source>Cyrillic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Bổ sung Cyrillic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="297"/>
         <source>Armenian</source>
-        <translation type="unfinished"/>
+        <translation>Armenian</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="298"/>
         <source>Hebrew</source>
-        <translation type="unfinished"/>
+        <translation>Do Thái</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="299"/>
         <source>Arabic</source>
-        <translation type="unfinished"/>
+        <translation>Ả rập</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="300"/>
         <source>Syriac</source>
-        <translation type="unfinished"/>
+        <translation>Xi-ry</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="301"/>
         <source>Arabic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Bổ sung Ả-rập</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="302"/>
         <source>Thaana</source>
-        <translation type="unfinished"/>
+        <translation>Thaana</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="303"/>
         <source>NKo</source>
-        <translation type="unfinished"/>
+        <translation>NKo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="304"/>
         <source>Samaritan</source>
-        <translation type="unfinished"/>
+        <translation>Xa-ma-ri-a</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="305"/>
         <source>Mandaic</source>
-        <translation type="unfinished"/>
+        <translation>Mandaic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="306"/>
         <source>Arabic Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>Ả rập mở rộng-A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="307"/>
         <source>Devanagari</source>
-        <translation type="unfinished"/>
+        <translation>Devanagari</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="308"/>
         <source>Bengali</source>
-        <translation type="unfinished"/>
+        <translation>Bengali</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="309"/>
         <source>Gurmukhi</source>
-        <translation type="unfinished"/>
+        <translation>Gurmukhi</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="310"/>
         <source>Gujarati</source>
-        <translation type="unfinished"/>
+        <translation>Gujarati</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="311"/>
         <source>Oriya</source>
-        <translation type="unfinished"/>
+        <translation>Oriya</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="312"/>
         <source>Tamil</source>
-        <translation type="unfinished"/>
+        <translation>Tamil</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="313"/>
         <source>Telugu</source>
-        <translation type="unfinished"/>
+        <translation>Telugu</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="314"/>
         <source>Kannada</source>
-        <translation type="unfinished"/>
+        <translation>Kannada</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="315"/>
         <source>Malayalam</source>
-        <translation type="unfinished"/>
+        <translation>Malayalam</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="316"/>
         <source>Sinhala</source>
-        <translation type="unfinished"/>
+        <translation>Sinhala</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="317"/>
         <source>Thai</source>
-        <translation type="unfinished"/>
+        <translation>Thái</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="318"/>
         <source>Lao</source>
-        <translation type="unfinished"/>
+        <translation>Lào</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="319"/>
         <source>Tibetan</source>
-        <translation type="unfinished"/>
+        <translation>Tây Tạng</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="320"/>
         <source>Myanmar</source>
-        <translation type="unfinished"/>
+        <translation>Miên-an-ma</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="321"/>
         <source>Georgian</source>
-        <translation type="unfinished"/>
+        <translation>Georgian</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="322"/>
         <source>Hangul Jamo</source>
-        <translation type="unfinished"/>
+        <translation>Hangul Jamo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="323"/>
         <source>Ethiopic</source>
-        <translation type="unfinished"/>
+        <translation>Ethiopic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="324"/>
         <source>Ethiopic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Bổ sung Ethiopic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="325"/>
         <source>Cherokee</source>
-        <translation type="unfinished"/>
+        <translation>Cherokee</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="326"/>
         <source>Unified Canadian Aboriginal Syllabics Extended</source>
-        <translation type="unfinished"/>
+        <translation>Âm tiết Hợp chủng thổ dân Ca-na-đa mở rộng</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="327"/>
         <source>Ogham</source>
-        <translation type="unfinished"/>
+        <translation>Ogham</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="328"/>
         <source>Runic</source>
-        <translation type="unfinished"/>
+        <translation>Runic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="329"/>
         <source>Tagalog</source>
-        <translation type="unfinished"/>
+        <translation>Dân tộc Tagalog</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="330"/>
         <source>Hanunoo</source>
-        <translation type="unfinished"/>
+        <translation>Hanunoo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="331"/>
         <source>Buhid</source>
-        <translation type="unfinished"/>
+        <translation>Buhid</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="332"/>
         <source>Tagbanwa</source>
-        <translation type="unfinished"/>
+        <translation>Tagbanwa</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="333"/>
         <source>Khmer</source>
-        <translation type="unfinished"/>
+        <translation>Khờ-me</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="334"/>
         <source>Mongolian</source>
-        <translation type="unfinished"/>
+        <translation>Mông cổ</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="335"/>
         <source>Unified Canadian Aboriginal Syllabics</source>
-        <translation type="unfinished"/>
+        <translation>Âm tiết Hợp chủng thổ dân Ca-na-đa</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="336"/>
         <source>Limbu</source>
-        <translation type="unfinished"/>
+        <translation>Limbu</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="337"/>
         <source>Tai Le</source>
-        <translation type="unfinished"/>
+        <translation>Tai Le</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="338"/>
         <source>New Tai Lue</source>
-        <translation type="unfinished"/>
+        <translation>Tai Le mới</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="339"/>
         <source>Khmer Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự Khờ-me</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="340"/>
         <source>Buginese</source>
-        <translation type="unfinished"/>
+        <translation>Buginese</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="341"/>
         <source>Tai Tham</source>
-        <translation type="unfinished"/>
+        <translation>Tai Tham</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="342"/>
         <source>Combining Diacritical Marks Extended</source>
-        <translation type="unfinished"/>
+        <translation>Combining Diacritical Marks Extended</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="343"/>
         <source>Balinese</source>
-        <translation type="unfinished"/>
+        <translation>Balinese</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="344"/>
         <source>Sundanese</source>
-        <translation type="unfinished"/>
+        <translation>Sundanese</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="345"/>
         <source>Batak</source>
-        <translation type="unfinished"/>
+        <translation>Batak</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="346"/>
         <source>Lepcha</source>
-        <translation type="unfinished"/>
+        <translation>Lepcha</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="347"/>
         <source>Ol Chiki</source>
-        <translation type="unfinished"/>
+        <translation>Ol Chiki</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="348"/>
         <source>Sundanese Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Bổ sung Xu-đăng</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="349"/>
         <source>Vedic Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Vedic mở rộng</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="350"/>
         <source>Phonetic Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Ngữ âm mở rộng</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="351"/>
         <source>Phonetic Extensions Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Ngữ âm mở rộng bổ sung</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="352"/>
@@ -23815,7 +23593,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="355"/>
         <source>General Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>Dấu châm câu phổ biến</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="356"/>
@@ -23825,7 +23603,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="357"/>
         <source>Currency Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự tiền tệ</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="358"/>
@@ -23845,67 +23623,67 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="361"/>
         <source>Arrows</source>
-        <translation type="unfinished"/>
+        <translation>Dấu mũi tên</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="362"/>
         <source>Mathematical Operators</source>
-        <translation type="unfinished"/>
+        <translation>Toán tử của Toán</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="363"/>
         <source>Miscellaneous Technical</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự chuyên môn khác</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="364"/>
         <source>Control Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh ảnh</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="365"/>
         <source>Optical Character Recognition</source>
-        <translation type="unfinished"/>
+        <translation>Nhận dạng quang học</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="366"/>
         <source>Enclosed Alphanumerics</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự Số và Chữ</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="367"/>
         <source>Box Drawing</source>
-        <translation type="unfinished"/>
+        <translation>Hộp vẽ</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="368"/>
         <source>Block Elements</source>
-        <translation type="unfinished"/>
+        <translation>Khối cơ bản</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="369"/>
         <source>Geometric Shapes</source>
-        <translation type="unfinished"/>
+        <translation>Hình trong hình học</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="370"/>
         <source>Miscellaneous Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự linh tinh</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="371"/>
         <source>Dingbats</source>
-        <translation type="unfinished"/>
+        <translation>Dingbats</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="372"/>
         <source>Miscellaneous Mathematical Symbols-A</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự Toán linh tinh-A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="373"/>
         <source>Supplemental Arrows-A</source>
-        <translation type="unfinished"/>
+        <translation>Dấu mũi tên bổ sung-A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="374"/>
@@ -23915,207 +23693,207 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="375"/>
         <source>Supplemental Arrows-B</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự mũi tên bổ sung-B</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="376"/>
         <source>Miscellaneous Mathematical Symbols-B</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự Toán linh tinh-B</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="377"/>
         <source>Supplemental Mathematical Operators</source>
-        <translation type="unfinished"/>
+        <translation>Toán tử trong Toán bổ sung</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="378"/>
         <source>Miscellaneous Symbols and Arrows</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự và Mũi tên linh tinh</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="379"/>
         <source>Glagolitic</source>
-        <translation type="unfinished"/>
+        <translation>Glagolitic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="380"/>
         <source>Latin Extended-C</source>
-        <translation type="unfinished"/>
+        <translation>La-tinh mở rộng-C</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="381"/>
         <source>Coptic</source>
-        <translation type="unfinished"/>
+        <translation>Coptic</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="382"/>
         <source>Georgian Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Georgian Supplement</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="383"/>
         <source>Tifinagh</source>
-        <translation type="unfinished"/>
+        <translation>Tifinagh</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="384"/>
         <source>Ethiopic Extended</source>
-        <translation type="unfinished"/>
+        <translation>Ethiopic Extended</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="385"/>
         <source>Cyrillic Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>Cyrillic Extended-A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="386"/>
         <source>Supplemental Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>Supplemental Punctuation</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="387"/>
         <source>CJK Radicals Supplement</source>
-        <translation type="unfinished"/>
+        <translation>CJK Radicals Supplement</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="388"/>
         <source>Kangxi Radicals</source>
-        <translation type="unfinished"/>
+        <translation>Kangxi Radicals</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="389"/>
         <source>Ideographic Description Characters</source>
-        <translation type="unfinished"/>
+        <translation>Ideographic Description Characters</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="390"/>
         <source>CJK Symbols and Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>CJK Symbols and Punctuation</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="391"/>
         <source>Hiragana</source>
-        <translation type="unfinished"/>
+        <translation>Hiragana</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="392"/>
         <source>Katakana</source>
-        <translation type="unfinished"/>
+        <translation>Katakana</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="393"/>
         <source>Bopomofo</source>
-        <translation type="unfinished"/>
+        <translation>Bopomofo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="394"/>
         <source>Hangul Compatibility Jamo</source>
-        <translation type="unfinished"/>
+        <translation>Hangul Compatibility Jamo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="395"/>
         <source>Kanbun</source>
-        <translation type="unfinished"/>
+        <translation>Kanbun</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="396"/>
         <source>Bopomofo Extended</source>
-        <translation type="unfinished"/>
+        <translation>Bopomofo Extended</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="397"/>
         <source>CJK Strokes</source>
-        <translation type="unfinished"/>
+        <translation>CJK Strokes</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="398"/>
         <source>Katakana Phonetic Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Katakana Phonetic Extensions</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="399"/>
         <source>Enclosed CJK Letters and Months</source>
-        <translation type="unfinished"/>
+        <translation>Enclosed CJK Letters and Months</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="400"/>
         <source>CJK Compatibility</source>
-        <translation type="unfinished"/>
+        <translation>CJK Compatibility</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="401"/>
         <source>CJK Unified Ideographs Extension A</source>
-        <translation type="unfinished"/>
+        <translation>CJK Unified Ideographs Extension A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="402"/>
         <source>Yijing Hexagram Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Yijing Hexagram Symbols</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="403"/>
         <source>CJK Unified Ideographs</source>
-        <translation type="unfinished"/>
+        <translation>CJK Unified Ideographs</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="404"/>
         <source>Yi Syllables</source>
-        <translation type="unfinished"/>
+        <translation>Yi Syllables</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="405"/>
         <source>Yi Radicals</source>
-        <translation type="unfinished"/>
+        <translation>Yi Radicals</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="406"/>
         <source>Lisu</source>
-        <translation type="unfinished"/>
+        <translation>Lisu</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="407"/>
         <source>Vai</source>
-        <translation type="unfinished"/>
+        <translation>Vai</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="408"/>
         <source>Cyrillic Extended-B</source>
-        <translation type="unfinished"/>
+        <translation>Cyrillic Extended-B</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="409"/>
         <source>Bamum</source>
-        <translation type="unfinished"/>
+        <translation>Bamum</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="410"/>
         <source>Modifier Tone Letters</source>
-        <translation type="unfinished"/>
+        <translation>Modifier Tone Letters</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="411"/>
         <source>Latin Extended-D</source>
-        <translation type="unfinished"/>
+        <translation>Latin Extended-D</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="412"/>
         <source>Syloti Nagri</source>
-        <translation type="unfinished"/>
+        <translation>Syloti Nagri</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="413"/>
         <source>Common Indic Number Forms</source>
-        <translation type="unfinished"/>
+        <translation>Common Indic Number Forms</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="414"/>
         <source>Phags-pa</source>
-        <translation type="unfinished"/>
+        <translation>Phags-pa</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="415"/>
         <source>Saurashtra</source>
-        <translation type="unfinished"/>
+        <translation>Saurashtra</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="416"/>
@@ -24585,7 +24363,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="512"/>
         <source>Musical Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Các ký hiệu âm nhạc</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="513"/>
@@ -24670,12 +24448,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="529"/>
         <source>Geometric Shapes Extended</source>
-        <translation type="unfinished"/>
+        <translation>Các kiểu hình khác trong hình học</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="530"/>
         <source>Supplemental Arrows-C</source>
-        <translation type="unfinished"/>
+        <translation>Ký tự mũi tên bổ sung-C</translation>
     </message>
 </context>
 <context>
