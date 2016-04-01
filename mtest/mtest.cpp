@@ -27,7 +27,7 @@ const char* tests[] = {
       "libmscore/timesig/tst_timesig",
 
       "libmscore/repeat/tst_repeat",                  //FAIL
-
+#if 0
       "libmscore/dynamic/tst_dynamic",
       "libmscore/breath/tst_breath",
       "libmscore/tuplet/tst_tuplet",
@@ -71,6 +71,7 @@ const char* tests[] = {
       "capella/io/tst_capella_io",
       "importmidi/tst_importmidi",
 //      "musicxml/io/tst_mxml_io",
+#endif
       };
 
 //---------------------------------------------------------

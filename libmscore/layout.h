@@ -53,6 +53,8 @@ struct LayoutContext {
       int measureNo            { 0 };
       bool rangeLayout         { false };
       int endTick;
+
+      int adjustMeasureNo(MeasureBase*);
       };
 
 typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;

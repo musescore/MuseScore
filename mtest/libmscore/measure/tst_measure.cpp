@@ -73,8 +73,8 @@ void TestMeasure::insertMeasureMiddle()
       {
       MasterScore* score = readScore(DIR + "measure-1.mscx");
 
-      Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
+      Measure* m = score->firstMeasure()->nextMeasure();
       score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
 
@@ -89,14 +89,13 @@ void TestMeasure::insertMeasureMiddle()
 void TestMeasure::insertMeasureBegin()
       {
       MasterScore* score = readScore(DIR + "measure-1.mscx");
-      for (Score* s : score->scoreList())
-            s->doLayout();
 
-      Measure* m = score->firstMeasure();
       score->startCmd();
+      Measure* m = score->firstMeasure();
       score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-2.mscx", DIR + "measure-2-ref.mscx"));
+
       delete score;
       }
 
@@ -107,15 +106,10 @@ void TestMeasure::insertMeasureBegin()
 void TestMeasure::insertMeasureEnd()
       {
       MasterScore* score = readScore(DIR + "measure-1.mscx");
-      for (Score* s : score->scoreList())
-            s->doLayout();
 
       score->startCmd();
       score->insertMeasure(Element::Type::MEASURE, 0);
       score->endCmd();
-
-      for (Score* s : score->scoreList())
-            s->doLayout();
 
       QVERIFY(saveCompareScore(score, "measure-3.mscx", DIR + "measure-3-ref.mscx"));
       delete score;
@@ -128,8 +122,6 @@ void TestMeasure::insertMeasureEnd()
 void TestMeasure::insertBfClefChange()
       {
       MasterScore* score = readScore(DIR + "measure-insert_bf_clef.mscx");
-      for (Score* s : score->scoreList())
-            s->doLayout();
       // 4th measure
       Measure* m = score->firstMeasure()->nextMeasure();
       m = m->nextMeasure()->nextMeasure();
@@ -162,8 +154,6 @@ void TestMeasure::insertBfClefChange()
 void TestMeasure::insertBfKeyChange()
       {
       MasterScore* score = readScore(DIR + "measure-insert_bf_key.mscx");
-      for (Score* s : score->scoreList())
-            s->doLayout();
       // 4th measure
       Measure* m = score->firstMeasure()->nextMeasure();
       m = m->nextMeasure()->nextMeasure();
@@ -196,8 +186,6 @@ void TestMeasure::insertBfKeyChange()
 void TestMeasure::minWidth()
       {
       MasterScore* score = readScore(DIR + "measure-2.mscx");
-      for (Score* s : score->scoreList())
-            s->doLayout();
       int n = score->systems().size();
       int measuresSystem[n];
       for (int i = 0; i < n; ++i)
@@ -234,9 +222,6 @@ void TestMeasure::minWidth()
 void TestMeasure::spanner_a()
       {
       MasterScore* score = readScore(DIR + "measure-3.mscx");
-      score->doLayout();
-      for (Excerpt* e : score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
@@ -257,9 +242,6 @@ void TestMeasure::spanner_a()
 void TestMeasure::spanner_b()
       {
       MasterScore* score = readScore(DIR + "measure-4.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure();
       score->startCmd();
@@ -279,9 +261,6 @@ void TestMeasure::spanner_b()
 void TestMeasure::spanner_A()
       {
       MasterScore* score = readScore(DIR + "measure-6.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure();
       score->startCmd();
@@ -303,15 +282,13 @@ void TestMeasure::spanner_A()
 void TestMeasure::spanner_B()
       {
       MasterScore* score = readScore(DIR + "measure-7.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
-      Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
+      Measure* m = score->firstMeasure()->nextMeasure();
       score->select(m);
       score->cmdDeleteSelectedMeasures();
       score->endCmd();
+
       QVERIFY(saveCompareScore(score, "measure-7.mscx", DIR + "measure-7-ref.mscx"));
       delete score;
       }
@@ -327,15 +304,13 @@ void TestMeasure::spanner_B()
 void TestMeasure::spanner_C()
       {
       MasterScore* score = readScore(DIR + "measure-8.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
-      Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
+      Measure* m = score->firstMeasure()->nextMeasure();
       score->select(m);
       score->cmdDeleteSelectedMeasures();
       score->endCmd();
+
       QVERIFY(saveCompareScore(score, "measure-8.mscx", DIR + "measure-8-ref.mscx"));
       delete score;
       }
@@ -351,15 +326,13 @@ void TestMeasure::spanner_C()
 void TestMeasure::spanner_D()
       {
       MasterScore* score = readScore(DIR + "measure-9.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
-      Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
+      Measure* m = score->firstMeasure()->nextMeasure();
       score->select(m);
       score->cmdDeleteSelectedMeasures();
       score->endCmd();
+
       QVERIFY(saveCompareScore(score, "measure-9.mscx", DIR + "measure-9-ref.mscx"));
       delete score;
       }

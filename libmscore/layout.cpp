@@ -2616,6 +2616,21 @@ static bool breakMultiMeasureRest(Measure* m)
       }
 
 //---------------------------------------------------------
+//   adjustMeasureNo
+//---------------------------------------------------------
+
+int LayoutContext::adjustMeasureNo(MeasureBase* m)
+      {
+      measureNo += m->noOffset();
+      m->setNo(measureNo);
+      if (!m->irregular())          // dont count measure
+            ++measureNo;
+      if (m->sectionBreak())
+            measureNo = 0;
+      return measureNo;
+      }
+
+//---------------------------------------------------------
 //   getNextMeasure
 //---------------------------------------------------------
 
@@ -2630,11 +2645,7 @@ void Score::getNextMeasure(LayoutContext& lc)
       if (!lc.curMeasure)
             return;
 
-      lc.measureNo += lc.curMeasure->noOffset();
-      lc.curMeasure->setNo(lc.measureNo);
-      if (!lc.curMeasure->irregular())          // dont count measure
-            ++lc.measureNo;
-      int mno = lc.measureNo;
+      int mno = lc.adjustMeasureNo(lc.curMeasure);
 
       if (lc.curMeasure->isMeasure() && score()->styleB(StyleIdx::createMultiMeasureRests)) {
             Measure* m = toMeasure(lc.curMeasure);
@@ -2649,10 +2660,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
                   if (breakMultiMeasureRest(nm) && n)
                         break;
-                  lc.measureNo += nm->noOffset();
-                  nm->setNo(lc.measureNo);
-                  if (!nm->irregular())          // dont count measure
-                        ++lc.measureNo;
+                  lc.adjustMeasureNo(nm);
                   ++n;
                   len += nm->len();
                   lm = nm;
