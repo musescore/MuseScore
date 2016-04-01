@@ -26,8 +26,8 @@ ifeq ($(CPUS), 0)
 endif
 
 PREFIX    = "/usr/local"
-VERSION   = "2.0.3b-${REVISION}"
-#VERSION = 2.0.2
+#VERSION   = "2.0.3b-${REVISION}"
+VERSION = 2.0.3
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"

@@ -6,12 +6,12 @@ LONGER_NAME="MuseScore 2"
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.tiff
 APP_PATH=applebuild/${APPNAME}.app
- 
+
 VOLNAME=${LONG_NAME}-${VERSION}
 DMGNAME=${VOLNAME}Uncompressed.dmg
 COMPRESSEDDMGNAME=${VOLNAME}.dmg
- 
- 
+
+
 function set_bundle_display_options() {
 	osascript <<-EOF
     tell application "Finder"
@@ -43,42 +43,42 @@ function set_bundle_display_options() {
         delay 5 -- sync
     end tell
 EOF
- 
+
 }
-  
+
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
 hdiutil create -size 300m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
- 
+
 # Mount the disk image
 hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
- 
+
 # Obtain device information
 DEVS=$(hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME} | cut -f 1)
 DEV=$(echo $DEVS | cut -f 1 -d ' ')
 VOLUME=$(mount |grep ${DEV} | cut -f 3 -d ' ')
- 
+
 # copy in the application bundle
 cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
- 
+
 # fix the libs, qt5.1 has double slashes...
 BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
-for P in `otool -L $BIN_FILE | awk '{print $1}'` 
-do 
-    if [[ "$P" == *//* ]] 
-    then 
+for P in `otool -L $BIN_FILE | awk '{print $1}'`
+do
+    if [[ "$P" == *//* ]]
+    then
         PSLASH=$(echo $P | sed 's,//,/,g')
         install_name_tool -change $P $PSLASH $BIN_FILE
         for P1 in `otool -L $PSLASH | awk '{print $1}'`
         do
-            if [[ "$P1" == *//* ]] 
-            then 
+            if [[ "$P1" == *//* ]]
+            then
                 PSLASH1=$(echo $P1 | sed 's,//,/,g')
                 install_name_tool -change $P1 $PSLASH1 $PSLASH
             fi
         done
-    fi 
+    fi
 done
 
 #homebrew libs may not be writable force it?
@@ -131,14 +131,15 @@ set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
 #codesign
-codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+#codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+codesign --deep -s "3960BB759FEA07BB51DB31B9D79065263B72BEA6" "${VOLUME}/${LONGER_NAME}.app"
 #codesign --deep -s "3rd Party Mac Developer Application: MuseScore (6EPAF2X3PR)" --entitlements build/mscore.entitlements "${VOLUME}/${LONGER_NAME}.app"
 codesign -v "${VOLUME}/${LONGER_NAME}.app"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
- 
+
 # Unmount the disk image
 hdiutil detach $DEV
- 
+
 # Convert the disk image to read-only
 hdiutil convert ${WORKING_DIRECTORY}/${DMGNAME} -format UDBZ -o ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
