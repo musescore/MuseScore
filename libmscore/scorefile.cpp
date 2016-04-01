@@ -240,7 +240,7 @@ void Score::write(Xml& xml, bool selectionOnly)
                   }
             }
       else
-            xml.tag("name", masterScore()->fileInfo()->completeBaseName());
+            xml.tag("name", fileInfo()->completeBaseName());
       xml.etag();
 
       if (unhide) {
@@ -1117,7 +1117,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "name") {
                   QString n = e.readElementText();
                   if (!isMaster()) //ignore the name if it's not a child score
-                        masterScore()->setName(n);
+                        setName(n);
                   }
             else if (tag == "page-layout") {    // obsolete
                   if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
