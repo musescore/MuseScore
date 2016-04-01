@@ -2225,7 +2225,37 @@ static bool processNonGui()
                   }
             else if (fn.endsWith(".png")) {
                   cs->switchToPageMode();
-                  rv = mscore->savePng(cs, fn);
+                  if (!exportScoreParts) {
+                        return mscore->savePng(cs, fn);
+                        }
+                  else {
+                        if (cs->excerpts().size() == 0) {
+                              auto exceprts = Excerpt::createAllExcerpt(cs->masterScore());
+                      
+                              for (Excerpt* e: exceprts) {
+                                    Score* nscore = new Score(e->oscore());
+                                    e->setPartScore(nscore);
+                                    nscore->setName(e->title()); // needed before AddExcerpt
+                                    nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                                    cs->startCmd();
+                                    cs->undo(new AddExcerpt(nscore));
+                                    createExcerpt(e);
+                                    cs->endCmd();
+                                    }
+                              }
+                        if (!mscore->savePng(cs, fn))
+                              return false;
+                        int idx = 0;
+                        int padding = QString("%1").arg(cs->excerpts().size()).size();
+                        for (Excerpt* e: cs->excerpts()) {
+                              QString suffix = QString("__excerpt__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
+                              QString excerptFn = fn.left(fn.size() - 4) + suffix;
+                              if (!mscore->savePng(e->partScore(), excerptFn))
+                                    return false;
+                              idx++;
+                              }
+                        return true;
+                        }
                   }
             else if (fn.endsWith(".svg")) {
                   cs->switchToPageMode();
