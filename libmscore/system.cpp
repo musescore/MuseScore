@@ -1056,6 +1056,23 @@ qreal System::minDistance(System* s2) const
       qreal lastStaffY          = _staves[lastStaff]->y();
 
       for (MeasureBase* mb1 : ml) {
+            if (mb1->isMeasure()) {
+                  Measure* m = toMeasure(mb1);
+                  Spacer* sp = m->mstaves().back()->_vspacerDown;
+                  if (sp)
+                        dist = qMax(dist, sp->gap());
+                  }
+            }
+      for (MeasureBase* mb2 : s2->ml) {
+            if (mb2->isMeasure()) {
+                  Measure* m = toMeasure(mb2);
+                  Spacer* sp = m->mstaves().front()->_vspacerUp;
+                  if (sp)
+                        dist = qMax(dist, sp->gap());
+                  }
+            }
+
+      for (MeasureBase* mb1 : ml) {
             qreal bx1 = mb1->x();
             qreal bx2 = mb1->x() + mb1->width();
             for (MeasureBase* mb2 : s2->measures()) {
@@ -1084,12 +1101,11 @@ qreal System::minDistance(System* s2) const
                         s2.add(QRectF(0.0, 0.0,      1000000.0, 0.0));   // simulated top staff line
 
                         qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
-                        dist = qMax(dist, d);
+                        dist = qMax(dist, d - height());
                         }
                   }
             }
-
-      return qMax(score()->styleP(StyleIdx::minSystemDistance), dist - height());
+      return dist;
       }
 
 //---------------------------------------------------------
