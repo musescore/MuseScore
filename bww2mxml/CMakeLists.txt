@@ -4,7 +4,7 @@
 #  Linux Music Score Editor
 #  $Id: CMakeLists.txt 5560 2012-04-19 11:39:34Z lasconic $
 #
-#  Copyright (C) 2002-2010 by Werner Schweer and others
+#  Copyright (C) 2002-2016 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.

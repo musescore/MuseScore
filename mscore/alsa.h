@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: alsa.h 5660 2012-05-22 14:17:39Z wschweer $
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  AlsaDriver based on code from Fons Adriaensen (clalsadr.cc)
 //  Copyright (C) 2003 Fons Adriaensen

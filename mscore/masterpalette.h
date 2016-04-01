@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id: score.h 5242 2012-01-23 17:25:56Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2

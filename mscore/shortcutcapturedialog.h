@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: shortcutcapturedialog.h 5537 2012-04-16 07:55:10Z wschweer $
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //  Copyright (C) 2003 Mathias Lundgren <lunar_shuttle@users.sourceforge.net>
 //
 //  This program is free software; you can redistribute it and/or modify

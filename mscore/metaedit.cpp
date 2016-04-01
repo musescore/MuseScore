@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: metaedit.cpp 5290 2012-02-07 16:27:27Z wschweer $
 //
-//  Copyright (C) 2002-2008 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
