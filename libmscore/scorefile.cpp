@@ -1489,7 +1489,8 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         }
                   if ((segment->segmentType() == Segment::Type::EndBarLine) && (m->mmRestCount() < 0 || m->mmRest())) {
                         BarLine* bl = static_cast<BarLine*>(e);
-                        bl->setBarLineType(m->endBarLineType());
+                        if (styleB(StyleIdx::createMultiMeasureRests))
+                              bl->setBarLineType(m->endBarLineType());
                         bl->setVisible(m->endBarLineVisible());
                         }
                   e->write(xml);
