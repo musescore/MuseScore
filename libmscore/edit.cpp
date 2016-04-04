@@ -446,7 +446,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
             int tick1 = m1->tick();
             int tick2 = m2->endTick();
-            for (auto i : s->spannerMap().findContained(tick1, tick2))
+            auto spanners = s->spannerMap().findContained(tick1, tick2);
+            for (auto i : spanners)
                   undo(new RemoveElement(i.value));
             s->undoRemoveMeasures(m1, m2);
 
@@ -830,6 +831,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               // HACK do it twice to accommodate undo
                               nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
                               nsig->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
+                              nsig->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
                               nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
                               }
@@ -1011,7 +1013,9 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   }
 
             case StaffGroup::STANDARD: {
-                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
+                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line, error);
+                  if (error)
+                        return nval;
                   int step           = absStep(line, clef);
                   int octave         = step/7;
                   nval.pitch         = step2pitch(step) + octave * 12 + int(acci);
@@ -1308,7 +1312,10 @@ void Score::repitchNote(const Position& p, bool replace)
       ClefType clef   = st->clef(tick);
 
       NoteVal nval;
-      AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line);
+      bool error = false;
+      AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line, error);
+      if (error)
+            return;
       int step   = absStep(p.line, clef);
       int octave = step / 7;
       nval.pitch = step2pitch(step) + octave * 12 + int(acci);
@@ -2037,18 +2044,34 @@ void Score::cmdDeleteSelectedMeasures()
             }
 
 
-      // get the last deleted timesig in order to restore after deletion
+      // get the last deleted timesig & keysig in order to restore after deletion
       TimeSig* lastDeletedSig = 0;
+      KeySig* lastDeletedKeySig = 0;
+      KeySigEvent lastDeletedKeySigEvent;
+      bool transposeKeySigEvent = false;
       for (MeasureBase* mb = ie;; mb = mb->prev()) {
             if (mb->isMeasure()) {
                   Measure* m = static_cast<Measure*>(mb);
                   Segment* sts = m->findSegment(Segment::Type::TimeSig, m->tick());
-                  if (sts) {
+                  if (sts && !lastDeletedSig)
                         lastDeletedSig = static_cast<TimeSig*>(sts->element(0));
-                        break;
+                  sts = m->findSegment(Segment::Type::KeySig, m->tick());
+                  if (sts && !lastDeletedKeySig) {
+                        lastDeletedKeySig = static_cast<KeySig*>(sts->element(0));
+                        if (lastDeletedKeySig) {
+                              lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
+                              if (!styleB(StyleIdx::concertPitch) && !lastDeletedKeySigEvent.isAtonal() && !lastDeletedKeySigEvent.custom()) {
+                                    // convert to concert pitch
+                                    transposeKeySigEvent = true;
+                                    Interval v = staff(0)->part()->instrument(m->tick())->transpose();
+                                    if (!v.isZero())
+                                          lastDeletedKeySigEvent.setKey(transposeKey(lastDeletedKeySigEvent.key(), v));
+                                    }
+                              }
                         }
+                  if (lastDeletedSig && lastDeletedKeySig)
+                        break;
                   }
-
             if (mb == is)
                   break;
             }
@@ -2061,22 +2084,22 @@ void Score::cmdDeleteSelectedMeasures()
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
 
-            undoRemoveMeasures(is, ie);
+            score->undoRemoveMeasures(is, ie);
 
             // adjust views
-            Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();
-            foreach(MuseScoreView* v, score->viewer)
+            Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : score->firstMeasure();
+            for (MuseScoreView* v : score->viewer)
                   v->adjustCanvasPosition(focusOn, false);
 
             if (createEndBar) {
                   Measure* lastMeasure = score->lastMeasure();
                   if (lastMeasure && lastMeasure->endBarLineType() == BarLineType::NORMAL)
-                        undoChangeEndBarLineType(lastMeasure, BarLineType::END);
+                        score->undoChangeEndBarLineType(lastMeasure, BarLineType::END);
                   }
 
             // insert correct timesig after deletion
             Measure* mBeforeSel = is->prevMeasure();
-            Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
+            Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : score->firstMeasure();
             if (mAfterSel && lastDeletedSig) {
                   bool changed = true;
                   if (mBeforeSel) {
@@ -2093,6 +2116,26 @@ void Score::cmdDeleteSelectedMeasures()
                               nts->setParent(ns);
                               nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
                               score->undoAddElement(nts);
+                              }
+                        }
+                  }
+            // insert correct keysig if necessary
+            if (mAfterSel && !mBeforeSel && lastDeletedKeySig) {
+                  Segment* s = mAfterSel->findSegment(Segment::Type::KeySig, mAfterSel->tick());
+                  if (!s) {
+                        Segment* ns = mAfterSel->undoGetSegment(Segment::Type::KeySig, mAfterSel->tick());
+                        for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                              KeySigEvent nkse = lastDeletedKeySigEvent;
+                              if (transposeKeySigEvent) {
+                                    Interval v = staff(staffIdx)->part()->instrument(0)->transpose();
+                                    v.flip();
+                                    nkse.setKey(transposeKey(nkse.key(), v));
+                                    }
+                              KeySig* nks = new KeySig(score);
+                              nks->setTrack(staffIdx * VOICES);
+                              nks->setParent(ns);
+                              nks->setKeySigEvent(nkse);
+                              score->undoAddElement(nks);
                               }
                         }
                   }
@@ -2114,6 +2157,12 @@ void Score::cmdDeleteSelection()
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
 
+            // delete content from measures underlying mmrests
+            if (s1 && s1->measure() && s1->measure()->isMMRest())
+                  s1 = s1->measure()->mmRestFirst()->first();
+            if (s2 && s2->measure() && s2->measure()->isMMRest())
+                  s2 = s2->measure()->mmRestLast()->last();
+
             int stick1 = selection().tickStart();
             int stick2 = selection().tickEnd();
 
@@ -2126,7 +2175,8 @@ void Score::cmdDeleteSelection()
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
             int track2  = selection().staffEnd() * VOICES;
-            for (auto i : _spanner.findOverlapping(stick1, stick2 - 1)) {
+            auto spanners = _spanner.findOverlapping(stick1, stick2 - 1);
+            for (auto i : spanners) {
                   Spanner* sp = i.value;
                   if (sp->type() == Element::Type::VOLTA)
                         continue;
@@ -2277,8 +2327,12 @@ void Score::cmdDeleteSelection()
                   // find location of element to select after deleting notes
                   int tick = -1;
                   int track = -1;
-                  if (!cr && e->type() == Element::Type::NOTE) {
-                        tick = static_cast<Note*>(e)->chord()->tick();
+                  if (!cr) {
+                        if (e->type() == Element::Type::NOTE)
+                              tick = static_cast<Note*>(e)->chord()->tick();
+                        else if (e->type() == Element::Type::REST)
+                              tick = static_cast<Rest*>(e)->tick();
+                        //else tick < 0
                         track = e->track();
                         }
 
@@ -2317,12 +2371,37 @@ void Score::cmdDeleteSelection()
 
 void Score::cmdFullMeasureRest()
       {
-      if (selection().isRange()) {
-            Segment* s1 = selection().startSegment();
-            Segment* s2 = selection().endSegment();
-            int stick1 = selection().tickStart();
-            int stick2 = selection().tickEnd();
+      Segment* s1 = nullptr;
+      Segment* s2 = nullptr;
+      int stick1 = -1;
+      int stick2 = -1;
+      int track1 = -1;
+      int track2 = -1;
+      Rest* r = nullptr;
 
+      if (inputState().noteEntryMode()) {
+            s1 = inputState().segment();
+            if (!s1 || s1->rtick() != 0)
+                  return;
+            Measure* m = s1->measure();
+            s2 = m->last();
+            stick1 = s1->tick();
+            stick2 = s2->tick();
+            track1 = inputState().track();
+            track2 = track1 + 1;
+            }
+      else if (selection().isRange()) {
+            s1 = selection().startSegment();
+            s2 = selection().endSegment();
+            if (styleB(StyleIdx::createMultiMeasureRests)) {
+                   // use underlying measures
+                   if (s1 && s1->measure()->isMMRest())
+                         s1 = tick2segment(stick1);
+                   if (s2 && s2->measure()->isMMRest())
+                         s2 = tick2segment(stick2, true);
+                   }
+            stick1 = selection().tickStart();
+            stick2 = selection().tickEnd();
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::Type::ChordRest)
                   ss1 = ss1->next1(Segment::Type::ChordRest);
@@ -2330,49 +2409,80 @@ void Score::cmdFullMeasureRest()
                   && (s2 == 0 || (s2->segmentType() == Segment::Type::EndBarLine)
                         || (s2->segmentType() == Segment::Type::TimeSigAnnounce)
                         || (s2->segmentType() == Segment::Type::KeySigAnnounce));
-
             if (!fullMeasure) {
                   return;
+                  }
+            track1 = selection().staffStart() * VOICES;
+            track2 = selection().staffEnd() * VOICES;
+            }
+      else if (selection().cr()) {
+            ChordRest* cr = selection().cr();
+            if (!cr || cr->rtick() != 0)
+                  return;
+            Measure* m = cr->measure();
+            s1 = m->first();
+            s2 = m->last();
+            stick1 = s1->tick();
+            stick2 = s2->tick();
+            track1 = selection().cr()->track();
+            track2 = track1 + 1;
+            }
+      else {
+            return;
             }
 
-            int track1  = selection().staffStart() * VOICES;
-            int track2  = selection().staffEnd() * VOICES;
-            for (int track = track1; track < track2; ++track) {
-                  int tick  = -1;
-                  for (Segment* s = s1; s != s2; s = s->next1()) {
-                        if (!(s->measure()->isOnlyRests(track))) // Don't remove anything from measures that contain notes
-                              continue;
-                        if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
-                              continue;
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-
-                        if (tick == -1) {
-                              // first ChordRest found:
-                              tick = s->measure()->tick();
-                              removeChordRest(cr, true);
-                              }
-                        else {
-                              removeChordRest(cr, true);
-                              }
-                        }
-                  for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                        if (!(track % VOICES) && m->isOnlyRests(track)) {
-                              addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
-                              }
-                        if (s2 && (m == s2->measure()))
-                              break;
-                        }
+      for (int track = track1; track < track2; ++track) {
+            if (selection().isRange() && !selectionFilter().canSelectVoice(track))
+                  continue;
+            // first pass - remove non-initial rests from empty measures/voices
+            for (Segment* s = s1; s != s2; s = s->next1()) {
+                  if (!(s->measure()->isOnlyRests(track))) // Don't remove anything from measures that contain notes
+                        continue;
+                  if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
+                        continue;
+                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  // keep first rest of measure as placeholder (replaced in second pass)
+                  // but delete all others
+                  if (s->rtick())
+                        removeChordRest(cr, true);
                   }
-            s1 = tick2segment(stick1);
-            s2 = tick2segment(stick2);
-            if (s1 == 0 || s2 == 0)
-                  deselectAll();
-            else {
-                  _selection.setStartSegment(s1);
-                  _selection.setEndSegment(s2);
-                  _selection.updateSelectedElements();
+            // second pass - replace placeholders with full measure rests
+            for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
+                  if (m->isOnlyRests(track)) {
+                        ChordRest* cr = m->findChordRest(m->tick(), track);
+                        if (cr) {
+                              removeChordRest(cr, true);
+                              r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                              }
+                        else if (inputState().noteEntryMode()) {
+                              // might be no cr at input position
+                              r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                              }
+                        }
+                  if (s2 && (m == s2->measure()))
+                        break;
                   }
             }
+
+      // selected range is probably empty now and possibly subsumed by an mmrest
+      // so updating selection requires forcing mmrests to be updated first
+      if (styleB(StyleIdx::createMultiMeasureRests))
+            createMMRests();
+      s1 = tick2segmentMM(stick1);
+      s2 = tick2segmentMM(stick2, true);
+      if (selection().isRange() && s1 && s2) {
+            _selection.setStartSegment(s1);
+            _selection.setEndSegment(s2);
+            _selection.updateSelectedElements();
+            }
+      else if (r) {
+            // note entry mode
+            select(r, SelectType::SINGLE);
+            }
+      else {
+            deselectAll();
+            }
+
       _layoutAll = true;
       }
 
@@ -2668,8 +2778,12 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
                   }
             }
       else {
-            if (!mb->links())
-                  qDebug("searchMeasureBase: no links");
+            if (!mb->links()) {
+                  if (mb->score() == score)
+                        return mb;
+                  else
+                        qDebug("searchMeasureBase: no links");
+                  }
             else {
                   for (ScoreElement* m : *mb->links()) {
                         if (m->score() == score)
@@ -2737,7 +2851,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         }
 
                   Measure* m = static_cast<Measure*>(mb);
-                  Measure* mi = static_cast<Measure*>(im);
+                  Measure* mi = im ? score->tick2measure(im->tick()) : nullptr;
                   m->setTimesig(f);
                   m->setLen(f);
                   ticks = m->ticks();

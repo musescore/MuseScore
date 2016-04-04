@@ -323,12 +323,12 @@ bool GuitarPro5::readMixChange(Measure* measure)
       {
       /*char patch   =*/ readChar();
       skip(16);
-      char volume  = readChar();
-      char pan     = readChar();
-      char chorus  = readChar();
-      char reverb  = readChar();
-      char phase   = readChar();
-      char tremolo = readChar();
+      signed char volume  = readChar();
+      signed char pan     = readChar();
+      signed char chorus  = readChar();
+      signed char reverb  = readChar();
+      signed char phase   = readChar();
+      signed char tremolo = readChar();
       readDelphiString();                 // tempo name
 
       int tempo = readInt();

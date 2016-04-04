@@ -64,11 +64,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       QFileInfo np(pluginPath);
       if (np.suffix() != "qml")
             return;
-      QString baseName = np.baseName();
+      QString baseName = np.completeBaseName();
 
       foreach(QString s, plugins) {
             QFileInfo fi(s);
-            if (fi.baseName() == baseName) {
+            if (fi.completeBaseName() == baseName) {
                   if (MScore::debugMode)
                         qDebug("  Plugin <%s> already registered", qPrintable(pluginPath));
                   return;
@@ -130,12 +130,12 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
       QFileInfo np(pluginPath);
       if (np.suffix() != "qml")
             return;
-      QString baseName = np.baseName();
+      QString baseName = np.completeBaseName();
 
       bool found = false;
       foreach(QString s, plugins) {
             QFileInfo fi(s);
-            if (fi.baseName() == baseName) {
+            if (fi.completeBaseName() == baseName) {
                   found = true;
                   break;
                   }
@@ -324,11 +324,11 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
 
 int MuseScore::pluginIdxFromPath(QString pluginPath) {
       QFileInfo np(pluginPath);
-      QString baseName = np.baseName();
+      QString baseName = np.completeBaseName();
       int idx = 0;
       foreach(QString s, plugins) {
             QFileInfo fi(s);
-            if (fi.baseName() == baseName)
+            if (fi.completeBaseName() == baseName)
                   return idx;
             idx++;
             }

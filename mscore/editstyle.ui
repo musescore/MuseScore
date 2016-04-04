@@ -42,17 +42,17 @@
               </property>
               <item>
                <property name="text">
+                <string notr="true">Bravura</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string notr="true">Emmentaler</string>
                </property>
               </item>
               <item>
                <property name="text">
                 <string notr="true">Gonville</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string notr="true">Bravura</string>
                </property>
               </item>
              </widget>
@@ -91,17 +91,17 @@
              <widget class="QComboBox" name="musicalTextFont">
               <item>
                <property name="text">
+                <string>Bravura Text</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>Emmentaler Text</string>
                </property>
               </item>
               <item>
                <property name="text">
                 <string>Gonville Text</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Bravura Text</string>
                </property>
               </item>
               <item>
@@ -1629,23 +1629,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="dividerLeftSym">
-                    <item>
-                     <property name="text">
-                      <string>systemDivider</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>systemDividerLong</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>systemDividerExtraLong</string>
-                     </property>
-                    </item>
-                   </widget>
+                   <widget class="QComboBox" name="dividerLeftSym"/>
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_18">
@@ -1738,23 +1722,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="dividerRightSym">
-                    <item>
-                     <property name="text">
-                      <string>systemDivider</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>systemDividerLong</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>systemDividerExtraLong</string>
-                     </property>
-                    </item>
-                   </widget>
+                   <widget class="QComboBox" name="dividerRightSym"/>
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_20">

@@ -272,7 +272,17 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               break;
                               }
                         }
-                  interval = keydiff2Interval(key, trKey, direction);
+                  if (key != trKey) {
+                        interval = keydiff2Interval(key, trKey, direction);
+                        }
+                  else {      //same key, which direction?
+                        if (direction == TransposeDirection::UP)
+                              interval = Interval(12);
+                        else if (direction == TransposeDirection::DOWN)
+                              interval = Interval(-12);
+                        else  //don't do anything for same key and closest direction
+                              return true;
+                        }
                   }
             else {
                   interval = intervalList[transposeInterval];
@@ -489,7 +499,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
             if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            bool createKey = tickStart == 0;
+            bool createKey = tickStart <= 0;    // 0 and -1 are both valid values to indicate start of score
             for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
@@ -665,15 +675,13 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
       {
       Interval v = part->instrument(tickStart)->transpose();
       v.flip();
+      Interval diffV(oldV.chromatic + v.chromatic);
 
       // transpose keys first
-      if (!styleB(StyleIdx::concertPitch)) {
-            Interval diffV(oldV.chromatic + v.chromatic);
-            //int tickEnd = lastSegment() ? lastSegment()->tick() : 0;
+      if (!styleB(StyleIdx::concertPitch))
             transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, tickStart, tickEnd, diffV);
-            }
 
-      // now transpose notes
+      // now transpose notes and chord symbols
       for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             if (s->tick() < tickStart)
                   continue;
@@ -696,6 +704,18 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
                               for (Note* n : c->notes()) {
                                     int tpc = transposeTpc(n->tpc1(), v, true);
                                     n->undoSetTpc2(tpc);
+                                    }
+                              }
+                        // find chord symbols
+                        for (Element* e : s->annotations()) {
+                              if (e->track() != track || e->type() != Element::Type::HARMONY)
+                                    continue;
+                              Harmony* h  = static_cast<Harmony*>(e);
+                              int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
+                              int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
+                              for (ScoreElement* e : h->linkList()) {
+                                    if (!e->score()->styleB(StyleIdx::concertPitch))
+                                          undoTransposeHarmony(static_cast<Harmony*>(e), rootTpc, baseTpc);
                                     }
                               }
                         }

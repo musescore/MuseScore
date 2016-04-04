@@ -42,12 +42,22 @@ if(POLICY CMP0020)
       cmake_policy(SET CMP0020 OLD)
 endif(POLICY CMP0020)
 
+# silently ignore non-existent dependencies (mops1, mops2)
+if(POLICY CMP0046)
+      cmake_policy(SET CMP0046 OLD)
+endif(POLICY CMP0046)
+
+# ignore MACOSX_RPATH is not specified for awlplugin
+if(POLICY CMP0042)
+      cmake_policy(SET CMP0042 OLD)
+endif(POLICY CMP0042)
+
 include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
 #include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
-include (UsePkgConfig1)
+include (UsePkgConfig1) #defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 include (TargetDoc)
 include (FindPulseAudio)
 include (GetCompilerVersion)
@@ -63,6 +73,25 @@ set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
+# Disable components not supported on Windows
+if (MINGW)
+      set(WIN_NOT_AVAIL "not available on Windows")
+      option(BUILD_PULSEAUDIO ${WIN_NOT_AVAIL} OFF)
+      option(BUILD_ALSA ${WIN_NOT_AVAIL} OFF)
+endif (MINGW)
+
+# Disable components not supported on Mac
+if (APPLE)
+      set(MAC_NOT_AVAIL "not available on Mac")
+      option(BUILD_PULSEAUDIO ${MAC_NOT_AVAIL} OFF)
+      option(BUILD_ALSA ${MAC_NOT_AVAIL} OFF)
+endif (APPLE)
+
+# Disable components not supported on Linux/BSD
+if (NOT APPLE AND NOT MINGW)
+      set(NIX_NOT_AVAIL "not available on Linux/BSD")
+endif (NOT APPLE AND NOT MINGW)
+
 option(AEOLUS        "enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "enable experimental sfz sampler"    ON)
 option(OSC           "enable OSC remote control protocol" ON)
@@ -76,7 +105,10 @@ option(BUILD_LAME    "enable mp3 export" ON)                   # requires libmp3
 
 SET(JACK_LONGNAME "jack (jack audio connection kit)")
 SET(JACK_MIN_VERSION "0.98.0")
-option(BUILD_JACK    "Build with support for ${JACK_LONGNAME}. jack >= ${JACK_MIN_VERSION} will be needed." ON)
+option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. jack >= ${JACK_MIN_VERSION} will be needed." ON)
+option(BUILD_PULSEAUDIO "Build with support for Pulseaudio audio backend." OFF)
+option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
+option(BUILD_PORTAUDIO "Build with support for Portaudio audio backend." ON)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -116,13 +148,13 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
 if (APPLE)
-   set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++0x -fPIC -stdlib=libc++ -g")
-   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -stdlib=libc++ -g -Wno-inconsistent-missing-override")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG -Wno-inconsistent-missing-override")
 else (APPLE)
    if (MINGW)
       # -mno-ms-bitfields see #22048
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -mno-ms-bitfields -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -mno-ms-bitfields -g")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
       set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
    else (MINGW)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -g")
@@ -187,7 +219,7 @@ SET(QT_USE_QTHELP        TRUE)
 ##
 
 ##if (APPLE)
-##      PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+##      PKGCONFIG1 (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
 ##      if (FREETYPE_INCLUDE_DIRS)
 ##          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
 ##          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
@@ -203,36 +235,44 @@ SET(QT_USE_QTHELP        TRUE)
 ## alsa >= 1.0.0
 ##
 
+if (BUILD_ALSA)
+      PKGCONFIG1 (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
+      if (NOT ALSA_INCDIR)
+            message(SEND_ERROR "Error: ALSA support requested (BUILD_ALSA=${BUILD_ALSA}), but ALSA >= 1.0.0 was not found.")
+      else (NOT ALSA_INCDIR)
+            message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}")
+            set (USE_ALSA 1)
+      endif (NOT ALSA_INCDIR)
+else (BUILD_ALSA)
+     message(STATUS "ALSA support disabled")
+endif (BUILD_ALSA)
+
+##
+## MIDI
+##
+
 if (APPLE OR MINGW)
-      message("Disabling ALSA support due to OS X or MINGW build.")
-      set (USE_ALSA 0)
       set (HAS_MIDI 1)
 else (APPLE OR MINGW)
-      PKGCONFIG (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
-      if (NOT ALSA_INCDIR)
-            message(FATAL_ERROR "Fatal error: ALSA >= 1.0.0 required")
-      else (NOT ALSA_INCDIR)
-            message("Alsa found.")
-            set (USE_ALSA 1)
+      if (USE_ALSA)
             set (HAS_MIDI 1)
-      endif (NOT ALSA_INCDIR)
+      endif (USE_ALSA)
 endif (APPLE OR MINGW)
 
 ##
 ## pulseaudio
 ##
 
-if (APPLE OR MINGW)
-      set (USE_PULSEAUDIO 0)
-else (APPLE OR MINGW)
+if (BUILD_PULSEAUDIO)
       if (PULSEAUDIO_FOUND)
             set(USE_PULSEAUDIO 1)
-            message("Pulseaudio found.")
+            message("Pulseaudio found. Pulseaudio support enabled.")
       else (PULSEAUDIO_FOUND)
-            set(USE_PULSEAUDIO 0)
-            message("Pulseaudio not found.")
+            message(SEND_ERROR "Error: Pulseaudio support requested (BUILD_PULSEAUDIO=${BUILD_PULSEAUDIO}), but Pulseaudio was not found.")
       endif (PULSEAUDIO_FOUND)
-endif (APPLE OR MINGW)
+else (BUILD_PULSEAUDIO)
+      message(STATUS "Pulseaudio support disabled")
+endif (BUILD_PULSEAUDIO)
 
 ##
 ## lame
@@ -281,19 +321,18 @@ IF(BUILD_JACK)
                  set (JACK_LIB "$ENV{PROGRAMFILES(x86)}/Jack/lib/libjack.a")
               ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # theoretically impossible case...
+                 MESSAGE(SEND_ERROR "Error: Impossible program/environment bitness combination deduced: 64-bit program running in 32-bit environment. This is a programming error. PROCESSOR_ARCHITEW6432=$ENV{PROCESSOR_ARCHITEW6432}. PROCESSOR_ARCHITECTURE=$ENV{PROCESSOR_ARCHITECTURE}")
               ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
            ENDIF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-
+           MESSAGE("jack support enabled.")
      ELSE(MINGW)
-           PKGCONFIG(jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
+           PKGCONFIG1 (jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
            IF(JACK_INCDIR)
-                 MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} found")
+                 MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} found. jack support enabled.")
                  SET(USE_JACK 1)
            ELSE(JACK_INCDIR)
                  MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} not found")
-                 IF(NOT BUILD_JACK STREQUAL AUTO)
-                       MESSAGE(SEND_ERROR "Error: jack support requested but not found (BUILD_JACK=${BUILD_JACK})")
-                 ENDIF()
+                 MESSAGE(SEND_ERROR "Error: jack support requested (BUILD_JACK=${BUILD_JACK}), but jack was not found")
            ENDIF(JACK_INCDIR)
      ENDIF(MINGW)
 ELSE(BUILD_JACK)
@@ -305,24 +344,27 @@ ENDIF(BUILD_JACK)
 ## portaudio
 ##
 
-if (MINGW)
-    set ( USE_PORTAUDIO 1 )
-    set ( USE_PORTMIDI  1 )
-else (MINGW)
-    PKGCONFIG (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
-    if (PORTAUDIO_INCDIR)
-        message("portaudio detected ${PORTAUDIO_INCDIR} ${PORTAUDIO_LIBDIR} ${PORTAUDIO_LIB}")
-          set ( USE_PORTAUDIO 1 )
-    else (PORTAUDIO_INCDIR)
-          message("optional package portaudio-2.0 Version 19 not found (package portaudio19-dev)\n")
-          set ( USE_PORTAUDIO 0 )
-    endif (PORTAUDIO_INCDIR)
-    if (APPLE)
-      set (USE_PORTMIDI   1)
-    else (APPLE)
-      set (USE_PORTMIDI   0)
-    endif (APPLE)
-endif (MINGW)
+if (BUILD_PORTAUDIO)
+    if (MINGW)
+        set ( USE_PORTAUDIO 1 )
+        set ( USE_PORTMIDI  1 )
+    else (MINGW)
+        PKGCONFIG1 (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
+        if (PORTAUDIO_INCDIR)
+              message(STATUS "Portaudio found. Portaudio support enabled. INCDIR ${PORTAUDIO_INCDIR}, LIBDIR ${PORTAUDIO_LIBDIR}, LIB ${PORTAUDIO_LIB}")
+              set ( USE_PORTAUDIO 1 )
+        else (PORTAUDIO_INCDIR)
+              message(SEND_ERROR "Error: Portaudio support requested (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}), but portaudio-2.0 Version 19 was not found (package portaudio19-dev)")
+        endif (PORTAUDIO_INCDIR)
+        if (APPLE)
+          set (USE_PORTMIDI   1)
+        else (APPLE)
+          set (USE_PORTMIDI   0)
+        endif (APPLE)
+    endif (MINGW)
+else (BUILD_PORTAUDIO)
+     message(STATUS "Portaudio support disabled")
+endif (BUILD_PORTAUDIO)
 
 
 if (APPLE)
@@ -331,7 +373,7 @@ if (APPLE)
       ## libvorbis
       ##
 
-      PKGCONFIG (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
+      PKGCONFIG1 (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
       if (VORBIS_INCDIR)
           message("libvorbis detected ${VORBIS_INCDIR} ${VORBIS_LIBDIR} ${VORBIS_LIB}")
       else (VORBIS_INCDIR)
@@ -343,7 +385,7 @@ if (APPLE)
       ## libogg
       ##
 
-      PKGCONFIG (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
+      PKGCONFIG1 (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
       if (OGG_INCDIR)
           message("libogg detected ${OGG_INCDIR} ${OGG_LIBDIR} ${OGG_LIB}")
       else (OGG_INCDIR)
@@ -356,7 +398,7 @@ if (APPLE)
       ## libsndfile
       ##
 
-      PKGCONFIG (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
+      PKGCONFIG1 (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
       if (SNDFILE_INCDIR)
           message("libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
       else (SNDFILE_INCDIR)
@@ -409,8 +451,34 @@ if (NOT MINGW AND NOT APPLE)
     #     qt libraries as we used at compile time
     #
     SET(CMAKE_INSTALL_RPATH "${_qt5Core_install_prefix}/lib") # ignored if CMAKE_SKIP_RPATH="TRUE"
+    string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
+    if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
+      # Build portable AppImage as per https://github.com/probonopd/AppImageKit
+      if (NOT DEFINED ARCH)
+        execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# get architecture (strip trailing newline)
+      endif (NOT DEFINED ARCH)
+      get_filename_component(PORTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX} PATH)# get path (dirname)
+      get_filename_component(PORTABLE_INSTALL_NAME ${CMAKE_INSTALL_PREFIX} NAME)# strip path (basename)
+      if (NOT MSCORE_UNSTABLE)
+        set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${MUSESCORE_VERSION_FULL}") # append version info.
+      endif (NOT MSCORE_UNSTABLE)
+      set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${ARCH}") # append system architecture.
+      set(CMAKE_INSTALL_PREFIX ${PORTABLE_INSTALL_PATH}/${PORTABLE_INSTALL_NAME}.AppDir) # e.g. "MuseScore-X.Y.Z-x86_64.AppDir"
+      execute_process(COMMAND echo ${CMAKE_INSTALL_PREFIX} OUTPUT_FILE PREFIX.txt)
+      # Prepare portable scripts:
+      configure_file(build/Linux+BSD/portable/AppRun.in          AppRun         @ONLY)
+      configure_file(build/Linux+BSD/portable/portable-utils.in  portable-utils @ONLY)
+      set(SCRIPT_PERMS PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ WORLD_READ)
+      install(PROGRAMS ${PROJECT_BINARY_DIR}/AppRun     DESTINATION .   COMPONENT portable ${SCRIPT_PERMS})
+      install(PROGRAMS ${PROJECT_BINARY_DIR}/portable-utils
+                       build/Linux+BSD/portable/ldd-recursive
+                       build/rm-empty-dirs              DESTINATION bin COMPONENT portable ${SCRIPT_PERMS})
+      install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
+    else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
+      set(MAN_PORTABLE '.\"') # comment out lines in man page that are only relevent to the portable version
+    endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
     # install desktop file (perform variable substitution first)
-    configure_file(build/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
+    configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
     install( FILES ${PROJECT_BINARY_DIR}/mscore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
     # substitute variables within man pages
     set(MAN_NAME mscore)
@@ -418,7 +486,7 @@ if (NOT MINGW AND NOT APPLE)
     set(MAN_EXTENSION .1)
     set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
     set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/${MAN_NAME}${MAN_EXTENSION}.in)
+    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/Linux+BSD/${MAN_NAME}${MAN_EXTENSION}.in)
     set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
     configure_file(${MAN_TARGET} ${MAN_BUILD})
     # compress man pages if gzip is installed (don't on OpenBSD)
@@ -436,7 +504,7 @@ if (NOT MINGW AND NOT APPLE)
             DEPENDS ${MAN_TARGET}
             COMMAND ${GZIP_EXECUTABLE} -9 < ${MAN_TARGET} > ${MAN_BUILD}
             )
-        add_custom_target(manpages
+        add_custom_target(manpages ALL
             DEPENDS ${MAN_BUILD}
             COMMAND echo "Man pages have been compressed ready for installation."
             VERBATIM
@@ -447,7 +515,7 @@ if (NOT MINGW AND NOT APPLE)
         else (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
             message(STATUS "gzip not found (it is optional). Man pages will not be compressed.")
         endif (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-        add_custom_target(manpages
+        add_custom_target(manpages ALL
             COMMAND echo "Man pages will be installed uncompressed."
             VERBATIM
             )
@@ -469,7 +537,7 @@ if (NOT MINGW AND NOT APPLE)
          message(STATUS "ln not found (it is optional). No symlink aliases will be created.")
      endif (LN_EXECUTABLE)
     # add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
-    configure_file(build/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
+    configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: must now run "update-mime-database" to apply changes. This is done in the Makefile.
 endif (NOT MINGW AND NOT APPLE)
@@ -570,9 +638,9 @@ include(Packaging)
 
 add_custom_target(lupdate
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR} > mscore.pro
-   COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/mscore.pro
+   COMMAND ${QT_LUPDATE_EXECUTABLE} ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
-   COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/instruments.pro
+   COMMAND ${QT_LUPDATE_EXECUTABLE} ${PROJECT_BINARY_DIR}/instruments.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 

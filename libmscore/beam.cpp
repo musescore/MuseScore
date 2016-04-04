@@ -644,10 +644,10 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
 
 struct Bm
       {
-      char l;     // stem len   in 1/4 spatium units
-      char s;     // beam slant in 1/4 spatium units
+      signed char l;     // stem len   in 1/4 spatium units
+      signed char s;     // beam slant in 1/4 spatium units
       Bm() : l(0), s(0) {}
-      Bm(char a, char b) : l(a), s(b) {}
+      Bm(signed char a, signed char b) : l(a), s(b) {}
       static int key(int a, int b, int c) { return ((a & 0xff) << 16) | ((b & 0xff) << 8) | (c & 0xff); }
       };
 
@@ -2019,11 +2019,9 @@ void Beam::write(Xml& xml) const
                   xml.etag();
                   }
             }
-#ifndef NDEBUG
-      //
+
       // this info is used for regression testing
       // l1/l2 is the beam position of the layout engine
-      //
       if (MScore::testMode) {
             qreal _spatium4 = spatium() * .25;
             foreach(BeamFragment* f, fragments) {
@@ -2031,7 +2029,7 @@ void Beam::write(Xml& xml) const
                   xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
                   }
             }
-#endif
+
       xml.etag();
       }
 

@@ -47,7 +47,7 @@
      <item row="1" column="2">
       <widget class="Ms::ExampleView" name="view16">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -67,9 +67,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -87,9 +87,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -107,9 +107,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -152,7 +152,7 @@
      <item row="2" column="2">
       <widget class="Ms::ExampleView" name="view32">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -172,9 +172,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -192,9 +192,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -212,9 +212,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -238,7 +238,7 @@
      <item row="0" column="2">
       <widget class="Ms::ExampleView" name="view8">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -258,9 +258,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -278,9 +278,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>
@@ -298,9 +298,9 @@
           <colorrole role="Window">
            <brush brushstyle="SolidPattern">
             <color alpha="255">
-             <red>244</red>
-             <green>238</green>
-             <blue>217</blue>
+             <red>249</red>
+             <green>249</green>
+             <blue>249</blue>
             </color>
            </brush>
           </colorrole>

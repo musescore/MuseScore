@@ -2800,14 +2800,12 @@ void MgStyle::renderRadioButton(QPainter* painter, const QRect& rect,
                                 qreal opacity, AnimationMode mode) const {
       const int s( CheckBox_Size );
       const QRect r( centerRect(rect, s, s) );
-      const int x = r.x();
-      const int y = r.y();
 
       const QColor color( palette.color(QPalette::Button) );
       const QColor glow( slabShadowColor( color, options, opacity, mode ) );
 
       QPixmap slabPixmap = glow.isValid() ? _helper.roundSlabFocused( color, glow, 0.0 ) : _helper.roundSlab( color, 0.0 );
-      painter->drawPixmap(x, y, slabPixmap);
+      painter->drawPixmap(r, slabPixmap);
 
       // draw the radio mark
       if (state == CheckOn) {
@@ -2881,8 +2879,10 @@ void MgStyle::renderCheckBox(
       //const int s( CheckBox_Size );
       const QRect r( centerRect(rect, s, s) );
 
-      if ( options & Sunken ) _helper.holeFlat( palette.color(QPalette::Window), 0.0 )->render( r, painter, TileSet::Full );
-      else renderSlab( painter, r, palette.color(QPalette::Button), options, opacity, mode, TileSet::Ring );
+      if ( options & Sunken )
+            _helper.holeFlat( palette.color(QPalette::Window), 0.0 )->render( r, painter, TileSet::Full );
+      else
+            renderSlab( painter, r, palette.color(QPalette::Button), options, opacity, mode, TileSet::Ring );
 
       // check mark
       const qreal x( r.center().x() - 3.5 );

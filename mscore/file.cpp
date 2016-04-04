@@ -108,20 +108,25 @@ extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
-//   paintElements
+//   paintElement(s)
 //---------------------------------------------------------
 
+static void paintElement(QPainter& p, const Element* e)
+{
+    QPointF pos(e->pagePos());
+    p.translate(pos);
+    e->draw(&p);
+    p.translate(-pos);
+}
+
 static void paintElements(QPainter& p, const QList<const Element*>& el)
-      {
-      foreach (const Element* e, el) {
-            if (!e->visible())
-                  continue;
-            QPointF pos(e->pagePos());
-            p.translate(pos);
-            e->draw(&p);
-            p.translate(-pos);
-            }
-      }
+{
+    foreach (const Element* e, el) {
+        if (!e->visible())
+            continue;
+        paintElement(p, e);
+    }
+}
 
 //---------------------------------------------------------
 //   createDefaultFileName
@@ -1474,7 +1479,8 @@ void MuseScore::printFile()
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
       printerDev.setOutputFormat(QPrinter::NativeFormat);
-      printerDev.setFromTo(1, cs->pages().size());
+      int pages    = cs->pages().size();
+      printerDev.setFromTo(1, pages);
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       printerDev.setOutputFileName("");
@@ -1490,11 +1496,7 @@ void MuseScore::printFile()
             return;
 
       LayoutMode layoutMode = cs->layoutMode();
-      if (layoutMode != LayoutMode::PAGE) {
-            cs->startCmd();
-            cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
-            cs->doLayout();
-            }
+      cs->switchToPageMode();
 
       QPainter p(&printerDev);
       p.setRenderHint(QPainter::Antialiasing, true);
@@ -1503,11 +1505,8 @@ void MuseScore::printFile()
 
       p.scale(mag, mag);
 
-      const QList<Page*> pl = cs->pages();
-      int pages    = pl.size();
-      int offset   = cs->pageNumberOffset();
-      int fromPage = printerDev.fromPage() - 1 - offset;
-      int toPage   = printerDev.toPage() - 1 - offset;
+      int fromPage = printerDev.fromPage() - 1;
+      int toPage   = printerDev.toPage() - 1;
       if (fromPage < 0)
             fromPage = 0;
       if ((toPage < 0) || (toPage >= pages))
@@ -1690,7 +1689,7 @@ bool MuseScore::exportParts()
       QString skipMessage = tr("Skip");
       foreach (Excerpt* e, thisScore->excerpts())  {
             Score* pScore = e->partScore();
-            QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
+            QString partfn = fi.absolutePath() + QDir::separator() + fi.completeBaseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
                   if(noToAll)
@@ -1724,7 +1723,7 @@ bool MuseScore::exportParts()
             foreach(Excerpt* e, thisScore->excerpts())  {
                   scores.append(e->partScore());
                   }
-            QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
+            QString partfn(fi.absolutePath() + QDir::separator() + fi.completeBaseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
                   if (!noToAll) {
@@ -1976,7 +1975,7 @@ void importSoundfont(QString name)
             QWidget::tr("Do you want to install the SoundFont %1?").arg(info.fileName()),
              QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
       if (ret == QMessageBox::Yes) {
-            QStringList pl = preferences.sfPath.split(";");
+            QStringList pl = preferences.mySoundfontsPath.split(";");
             QString destPath;
             for (QString s : pl) {
                   QFileInfo dest(s);
@@ -1990,7 +1989,7 @@ void importSoundfont(QString name)
                   if (destFileInfo.exists()) {
                         int ret1 = QMessageBox::question(0, QWidget::tr("Overwrite?"),
                           QWidget::tr("%1 already exists.\nDo you want to overwrite it?").arg(destFileInfo.absoluteFilePath()),
-                          QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
+                          QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
                         if (ret1 == QMessageBox::No)
                               return;
                         destFile.remove();
@@ -2500,19 +2499,27 @@ QString MuseScore::getWallpaper(const QString& caption)
       }
 
 //---------------------------------------------------------
-//   saveSvg
+//   MuseScore::saveSvg
 //---------------------------------------------------------
-
+// [TODO:
+// [In most of the functions above the Score* parameter is named "cs".
+// [But there is also a member variable in class MuseScoreCore called "cs"
+// [and it too is a Score*. If the member variable exists, the functions
+// [should not bother to pass it around, especially with multiple names.
+// [I have continued to use the "score" argument in this function, but
+// [I was just following the existing convention, inconsistent as it is.
+// [All the class MuseScore member functions should use the member variable.
+// [This file is currently undergoing a bunch of changes, and that's the kind
+// [of edit that must be coordinated with the MuseScore master code base.
+//
 bool MuseScore::saveSvg(Score* score, const QString& saveName)
-      {
-      SvgGenerator printer;
-      printer.setResolution(converterDpi);
+{
+    SvgGenerator printer;
+
       QString title(score->title());
       printer.setTitle(title);
-      printer.setDescription(QString("Generated by MuseScore %1").arg(VERSION));
       printer.setFileName(saveName);
       const PageFormat* pf = cs->pageFormat();
-      double mag = converterDpi / DPI;
 
       QRectF r;
       if (trimMargin >= 0 && score->npages() == 1) {
@@ -2524,8 +2531,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       qreal w = r.width();
       qreal h = r.height();
 
-      printer.setSize(QSize(w * mag, h * mag));
-      printer.setViewBox(QRectF(0.0, 0.0, w * mag, h * mag));
+      printer.setSize(QSize(w, h));
+      printer.setViewBox(QRectF(0, 0, w, h));
 
       score->setPrinting(true);
       MScore::pdfPrinting = true;
@@ -2533,22 +2540,89 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       QPainter p(&printer);
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
-      p.scale(mag, mag);
+    //p.scale(mag, mag); // mag == 1 now, 1:1 scaling, the default
       if (trimMargin >= 0 && score->npages() == 1)
             p.translate(-r.topLeft());
 
       foreach (Page* page, score->pages()) {
-            QList<const Element*> pel = page->elements();
-            qStableSort(pel.begin(), pel.end(), elementLessThan);
-            paintElements(p, pel);
-            p.translate(QPointF(pf->width() * DPI, 0.0));
-            }
+        // 1st pass: StaffLines
+        foreach (System* s, *(page->systems())) {
+            for (int i = 0, n = s->staves()->size(); i < n; i++) {
+                if (score->staff(i)->invisible())
+                    continue;  // ignore invisible staves
 
+                // The goal here is to draw SVG staff lines more efficiently.
+                // MuseScore draws staff lines by measure, but for SVG they can
+                // generally be drawn once for each system. This makes a big
+                // difference for scores that scroll horizontally on a single
+                // page. But there is an exception to this rule:
+                //
+                //   ~ One (or more) invisible measure(s) in a system/staff ~
+                //     In this case the SVG staff lines for the system/staff
+                //     are drawn by measure.
+                //
+                bool byMeasure = false;
+                for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                    if (!static_cast<Measure*>(mb)->visible(i)) {
+                        byMeasure = true;
+                        break;
+                    }
+                }
+                if (byMeasure) { // Draw visible staff lines by measure
+                    for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                        Measure* m = static_cast<Measure*>(mb);
+                        if (m->visible(i)) {
+                            StaffLines* sl = m->staffLines(i);
+                            printer.setElement(sl);
+                            paintElement(p, sl);
+                        }
+                    }
+                }
+                else { // Draw staff lines once per system
+                    StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
+                    StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
+                    firstSL->bbox().setRight(lastSL->bbox().right()
+                                          +  lastSL->pagePos().x()
+                                          - firstSL->pagePos().x());
+                    printer.setElement(firstSL);
+                    paintElement(p, firstSL);
+                }
+            }
+        }
+        // 2nd pass: the rest of the elements
+        QList<const Element*> pel = page->elements();
+        qStableSort(pel.begin(), pel.end(), elementLessThan);
+
+        Element::Type eType;
+        foreach (const Element* e, pel) {
+            // Always exclude invisible elements
+            if (!e->visible())
+                    continue;
+
+            eType = e->type();
+            switch (eType) { // In future sub-type code, this switch() grows, and eType gets used
+            case Element::Type::STAFF_LINES : // Handled in the 1st pass above
+                continue; // Exclude from 2nd pass
+                break;
+            default:
+                break;
+            } // switch(eType)
+
+            // Set the Element pointer inside SvgGenerator/SvgPaintEngine
+            printer.setElement(e);
+
+            // Paint it
+            paintElement(p, e);
+        }
+        p.translate(QPointF(pf->width() * DPI, 0.0));
+      }
+
+    // Clean up and return
       score->setPrinting(false);
       MScore::pdfPrinting = false;
-      p.end();
+      p.end(); // Writes MuseScore SVG file to disk, finally
       return true;
-      }
+}
 
 //---------------------------------------------------------
 //   createThumbnail

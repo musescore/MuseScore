@@ -17,6 +17,7 @@
 #include "tuplet.h"
 #include "sym.h"
 #include "note.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -413,7 +414,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   tag(name, data);
                   break;
             case P_TYPE::ORNAMENT_STYLE:
-                  switch ( MScore::OrnamentStyle(data.toInt())) {
+                  switch (MScore::OrnamentStyle(data.toInt())) {
                         case MScore::OrnamentStyle::BAROQUE:
                               tag(name, QVariant("baroque"));
                               break;
@@ -423,7 +424,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                              }
                   break;
             case P_TYPE::GLISSANDO_STYLE:
-                  switch ( MScore::GlissandoStyle(data.toInt())) {
+                  switch (MScore::GlissandoStyle(data.toInt())) {
                         case MScore::GlissandoStyle::BLACK_KEYS:
                               tag(name, QVariant("blackkeys"));
                               break;
@@ -439,7 +440,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                              }
                   break;
             case P_TYPE::DIRECTION:
-                  switch(MScore::Direction(data.toInt())) {
+                  switch (MScore::Direction(data.toInt())) {
                         case MScore::Direction::UP:
                               tag(name, QVariant("up"));
                               break;
@@ -451,7 +452,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::DIRECTION_H:
-                  switch(MScore::DirectionH(data.toInt())) {
+                  switch (MScore::DirectionH(data.toInt())) {
                         case MScore::DirectionH::LEFT:
                               tag(name, QVariant("left"));
                               break;
@@ -463,7 +464,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::LAYOUT_BREAK:
-                  switch(LayoutBreak::Type(data.toInt())) {
+                  switch (LayoutBreak::Type(data.toInt())) {
                         case LayoutBreak::Type::LINE:
                               tag(name, QVariant("line"));
                               break;
@@ -476,7 +477,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::VALUE_TYPE:
-                  switch(Note::ValueType(data.toInt())) {
+                  switch (Note::ValueType(data.toInt())) {
                         case Note::ValueType::OFFSET_VAL:
                               tag(name, QVariant("offset"));
                               break;
@@ -486,7 +487,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::PLACEMENT:
-                  switch(Element::Placement(data.toInt())) {
+                  switch (Element::Placement(data.toInt())) {
                         case Element::Placement::ABOVE:
                               tag(name, QVariant("above"));
                               break;
@@ -497,6 +498,9 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
             case P_TYPE::SYMID:
                   tag(name, Sym::id2name(SymId(data.toInt())));
+                  break;
+            case P_TYPE::BARLINE_TYPE:
+                  tag(name, BarLine::barLineTypeName(BarLineType(data.toInt())));
                   break;
             default:
                   Q_ASSERT(false);

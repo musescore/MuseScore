@@ -99,8 +99,10 @@ public:
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
 
 private:
-      // generic pass 1 data
+      // functions
+      void setFirstInstr(const QString& id, const Fraction stime);
 
+      // generic pass 1 data
       QXmlStreamReader _e;
       int _divs;                                ///< Current MusicXML divisions value
       QMap<QString, MusicXmlPart> _parts;       ///< Parts data, mapped on part id
@@ -114,6 +116,8 @@ private:
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read
       QMap<int, MxmlOctaveShiftDesc> _octaveShifts; ///< Pending octave-shifts
+      Fraction _firstInstrSTime;                ///< First instrument start time
+      QString _firstInstrId;                    ///< First instrument id
       };
 
 } // namespace Ms

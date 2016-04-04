@@ -27,6 +27,8 @@
 
 namespace Ms {
 
+extern QString mscoreGlobalShare;
+
 enum class SessionStart : char {
       EMPTY, LAST, NEW, SCORE
       };
@@ -88,6 +90,7 @@ struct Preferences {
       QColor fgColor;
       int iconHeight, iconWidth;
       QColor dropColor;
+      QColor pianoHlColor;
       bool enableMidiInput;
       bool playNotes;         // play notes on click
       bool playChordOnAddNote;
@@ -164,8 +167,7 @@ struct Preferences {
       QString myImagesPath;
       QString myTemplatesPath;
       QString myPluginsPath;
-
-      QString sfPath;
+      QString mySoundfontsPath;
 
       bool nativeDialogs;
 

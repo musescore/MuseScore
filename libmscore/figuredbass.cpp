@@ -986,8 +986,11 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
       {
       setOnNote(fb.onNote());
       setTicks(fb.ticks());
-      for (auto i : fb.items)       // deep copy is needed
-            items.push_back(new FiguredBassItem(*i));
+      for (auto i : fb.items) {     // deep copy is needed
+            FiguredBassItem* fbi = new FiguredBassItem(*i);
+            fbi->setParent(this);
+            items.push_back(fbi);
+            }
 //      items = fb.items;
       }
 
@@ -1111,7 +1114,7 @@ void FiguredBass::layout()
 
 void FiguredBass::layoutLines()
       {
-      if(_ticks <= 0) {
+      if(_ticks <= 0 || segment() == nullptr) {
 NoLen:
             _lineLenghts.resize(1);                         // be sure to always have
             _lineLenghts[0] = 0;                            // at least 1 item in array

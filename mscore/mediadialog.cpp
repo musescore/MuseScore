@@ -151,7 +151,7 @@ void MediaDialog::addAudioPressed()
 #endif
 
       QFileInfo fi(path);
-      QFile syncFile(fi.absolutePath() + "/" + fi.baseName() + ".txt");
+      QFile syncFile(fi.absolutePath() + "/" + fi.completeBaseName() + ".txt");
 
       TempoMap* tmo = score->tempomap();
 

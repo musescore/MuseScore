@@ -647,6 +647,8 @@ int System::y2staff(qreal y) const
 
 void System::add(Element* el)
       {
+      if (!el)
+            return;
 // qDebug("%p System::add: %p %s", this, el, el->name());
 
       el->setParent(this);
@@ -1117,6 +1119,16 @@ qreal System::staffYpage(int staffIdx) const
             return pagePos().y();
             }
       return _staves[staffIdx]->y() + y(); // pagePos().y();
+      }
+
+//---------------------------------------------------------
+//   staffCanvasYpage
+//    return canvas coordinates
+//---------------------------------------------------------
+
+qreal System::staffCanvasYpage(int staffIdx) const
+      {
+      return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
       }
 
 //---------------------------------------------------------

@@ -93,7 +93,7 @@ class TimeSig : public Element {
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
       //@ sets the time signature
-      Q_INVOKABLE void setSig(int z, int n, TimeSigType st = TimeSigType::NORMAL) { setSig(Fraction(z, n), st); }
+      Q_INVOKABLE void setSig(int z, int n, int st = static_cast<int>(TimeSigType::NORMAL)) { setSig(Fraction(z, n), static_cast<TimeSigType>(st)); }
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
 

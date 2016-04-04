@@ -198,7 +198,7 @@ void TestMidiMapping::testReadWriteOther(const char* f1, const char* ref)
       score->doLayout();
       QVERIFY(score);
       score->rebuildMidiMapping();
-      QVERIFY(saveCompareScore(score, qf.baseName()+QString(".mscx"), DIR + ref));
+      QVERIFY(saveCompareScore(score, qf.completeBaseName()+QString(".mscx"), DIR + ref));
       delete score;
       }
 

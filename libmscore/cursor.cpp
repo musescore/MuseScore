@@ -159,6 +159,7 @@ void Cursor::addNote(int pitch)
       {
       NoteVal nval(pitch);
       _score->addPitch(nval, false);
+      _segment = _score->inputState().segment();
       }
 
 //---------------------------------------------------------
@@ -189,6 +190,15 @@ int Cursor::tick()
 double Cursor::time()
       {
       return _score->utick2utime(tick()) * 1000;
+      }
+
+//---------------------------------------------------------
+//   tempo
+//---------------------------------------------------------
+
+qreal Cursor::tempo()
+      {
+      return _score->tempo(tick());
       }
 
 //---------------------------------------------------------

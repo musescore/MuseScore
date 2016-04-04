@@ -142,6 +142,9 @@ void MScore::init()
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");
+
+      //classed enumerations
+      qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
 #endif
 
 //      DPMM = DPI / INCH;       // dots/mm
@@ -159,7 +162,12 @@ void MScore::init()
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       _globalShare = dir.absolutePath() + "/";
 #else
-      _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
+      // Try relative path (needed for portable AppImage and non-standard installations)
+      QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+      if (dir.exists())
+            _globalShare = dir.absolutePath() + "/";
+      else // Fall back to default location (e.g. if binary has moved relative to share)
+            _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
       selectColor[0].setNamedColor("#1259d0");   //blue
@@ -346,6 +354,9 @@ QQmlEngine* MScore::qml()
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
+
+            //classed enumerations
+            qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();

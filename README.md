@@ -81,43 +81,52 @@ Kept as an example of how to integrate with a complex synthesizer.
     used in MIDI import for beat detection. (http://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
 
 
-## Installation
+## Building
 **Read the developer handbook for a [complete build walkthrough](http://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
 
-* unpack source distribution
+### Getting sources
+If using git to download repo of entire code history, type:
 
-        tar xvofj mscore-x.x.x.tar.bz2
+    git clone https://github.com/musescore/MuseScore.git
+    cd MuseScore
 
-* make
+Else can just download the latest source release tarball from https://github.com/musescore/MuseScore/releases, and then from your download directory type:
 
-        cd mscore-x.x.x
-        make release
+    tar xzf MuseScore-x.x.x.tar.gz
+    cd MuseScore-x.x.x
 
-if something goes wrong, then remove the whole build subdirectory with `make clean` and start new with `make release`
+### Release Build
+To compile MuseScore, type:
 
-* install as root user
+    make release
 
-        sudo make install
+If something goes wrong, then remove the whole build subdirectory with `make clean` and start new with `make release`.
+
+### Running
+To start MuseScore, type:
+
+    ./build.release/mscore/mscore
+
+The Start Center window will appear on every invocation, until you disable that setting via the "Preferences" dialog.
+
+### Installing 
+To install to default prefix using root user, type:
+
+    sudo make install
+
+### Debug Build
+A debug version can be built by doing `make debug` instead of `make release`.
+
+To run the debug version, type:
+
+    ./build.debug/mscore/mscore
+
+### Testing
+See mtest/README.md or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
 
 ### Program Documentation
-To generate the program documentation with DoxyGen, type
+To generate program documentation using DoxyGen, first do `make debug`, then type:
 
-    cd build
     make doxy
 
-Browse the documentation with your favourite html browser at build/Doc/html/index.html
-
-### Run
-
-    cd build.release/mscore
-    ./mscore
-
-to start MuseScore. On first invocation a demofile is shown. You probably want to change that in the "Preferences" dialog.
-
-### Debug
-A debug version can be built by doing `make debug` above, instead of `make release`.
-
-To test the debug version, type
-
-    cd build.debug/mscore
-    ./mscore
+Browse the documentation in subdirectory Doc/html/index.html using any html browser.

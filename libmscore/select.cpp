@@ -505,9 +505,12 @@ void Selection::updateSelectedElements()
             if (sp->type() == Element::Type::VOLTA)
                   continue;
             if (sp->type() == Element::Type::SLUR) {
-                if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
-                      if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
-                        appendFiltered(sp); // slur with start or end in range selection
+                  // ignore if start & end elements not calculated yet
+                  if (!sp->startElement() || !sp->endElement())
+                        continue;
+                  if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
+                        if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
+                              appendFiltered(sp);     // slur with start or end in range selection
             }
             else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
                   appendFiltered(sp); // spanner with start and end in range selection
@@ -1041,7 +1044,7 @@ static bool checkEnd(Element* e, int endTick)
 //---------------------------------------------------------
 //   canCopy
 //    return false if range selection intersects a tuplet
-//    or a tremolo
+//    or a tremolo, or a local timne signature
 //---------------------------------------------------------
 
 bool Selection::canCopy() const
@@ -1051,7 +1054,8 @@ bool Selection::canCopy() const
 
       int endTick = _endSegment ? _endSegment->tick() : score()->lastSegment()->tick();
 
-      for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx)
+      for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
+
             for (int voice = 0; voice < VOICES; ++voice) {
                   int track = staffIdx * VOICES + voice;
                   if (!canSelectVoice(track))
@@ -1076,6 +1080,14 @@ bool Selection::canCopy() const
                   if (checkEnd(endSegmentSelection->element(track), endTick))
                         return false;
                   }
+
+            // loop through measures on this staff checking for local time signatures
+            for (Measure* m = _startSegment->measure(); m && m->tick() < endTick; m = m->nextMeasure()) {
+                  if (_score->staff(staffIdx)->isLocalTimeSignature(m->tick()))
+                        return false;
+                  }
+
+            }
       return true;
       }
 
@@ -1183,11 +1195,18 @@ void Selection::extendRangeSelection(ChordRest* cr)
 void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
       {
       bool activeIsFirst = false;
+      int activeStaff = _activeTrack / VOICES;
 
       if (staffIdx < _staffStart)
             _staffStart = staffIdx;
       else if (staffIdx >= _staffEnd)
             _staffEnd = staffIdx + 1;
+      else if (_staffEnd - _staffStart > 1) { // at least 2 staff selected
+            if (staffIdx == _staffStart + 1 && activeStaff == _staffStart) // going down
+                  _staffStart = staffIdx;
+            else if (staffIdx == _staffEnd - 2 && activeStaff == _staffEnd - 1) // going up
+                  _staffEnd = staffIdx + 1;
+            }
 
       if (tick < tickStart()) {
             _startSegment = seg;

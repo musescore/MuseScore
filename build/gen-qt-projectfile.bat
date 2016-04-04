@@ -26,6 +26,7 @@ echo       %1/share/locale/mscore_fa.ts \
 echo       %1/share/locale/mscore_fi.ts \
 echo       %1/share/locale/mscore_fo.ts \
 echo       %1/share/locale/mscore_fr.ts \
+echo       %1/share/locale/mscore_ga.ts \
 echo       %1/share/locale/mscore_gl.ts \
 echo       %1/share/locale/mscore_he.ts \
 echo       %1/share/locale/mscore_hi_IN.ts \
@@ -50,6 +51,7 @@ echo       %1/share/locale/mscore_ru.ts \
 echo       %1/share/locale/mscore_sk.ts \
 echo       %1/share/locale/mscore_sl.ts \
 echo       %1/share/locale/mscore_sr.ts \
+echo       %1/share/locale/mscore_sr_RS.ts \
 echo       %1/share/locale/mscore_sv.ts \
 echo       %1/share/locale/mscore_th.ts \
 echo       %1/share/locale/mscore_tr.ts \

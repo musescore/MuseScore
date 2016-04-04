@@ -205,7 +205,7 @@ Chord::Chord(const Chord& c, bool link)
    : ChordRest(c, link)
       {
       if (link)
-            score()->undo(new Link(this, const_cast<Chord*>(&c)));
+            score()->undo(new Link(const_cast<Chord*>(&c), this));
       _ledgerLines = 0;
 
       for (Note* onote : c._notes) {
@@ -241,13 +241,13 @@ Chord::Chord(const Chord& c, bool link)
             Arpeggio* a = new Arpeggio(*(c._arpeggio));
             add(a);
             if (link)
-                  score()->undo(new Link(a, const_cast<Arpeggio*>(c._arpeggio)));
+                  score()->undo(new Link(const_cast<Arpeggio*>(c._arpeggio), a));
             }
       if (c._tremolo && !c._tremolo->twoNotes()) {
             Tremolo* t = new Tremolo(*(c._tremolo));
             add(t);
             if (link)
-                  score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
+                  score()->undo(new Link(const_cast<Tremolo*>(c._tremolo), t));
             }
 
       for (Element* e : c.el()) {
@@ -256,7 +256,7 @@ Chord::Chord(const Chord& c, bool link)
                   ChordLine* ncl = new ChordLine(*cl);
                   add(ncl);
                   if (link)
-                        score()->undo(new Link(cl, const_cast<ChordLine*>(ncl)));
+                        score()->undo(new Link(const_cast<ChordLine*>(ncl), cl));
                   }
             }
       }
@@ -493,6 +493,8 @@ void Chord::add(Element* e)
 
 void Chord::remove(Element* e)
       {
+      if (e == nullptr)
+            return;
       switch(e->type()) {
             case Element::Type::NOTE:
                   {
@@ -2148,7 +2150,7 @@ void Chord::layoutTablature()
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
       int   ledgerLines = 0;
-      qreal llY;
+      qreal llY         = 0.0;
 
       int   numOfNotes  = _notes.size();
       qreal minY        = 1000.0;               // just a very large value
@@ -2339,6 +2341,7 @@ void Chord::layoutTablature()
             qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
             _arpeggio->setHeight(h);
             _arpeggio->setPos(-lll, y);
+            _arpeggio->adjustReadPos();
 
             // handle the special case of _arpeggio->span() > 1
             // in layoutArpeggio2() after page layout has done so we
@@ -2844,8 +2847,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
       bool botGap = false;
       bool topGap = false;
 
-      const std::vector< ::Interval<Spanner*> >& si = score()->spannerMap().findOverlapping(tick(), tick());
-      for (::Interval<Spanner*> is : si) {
+      auto si = score()->spannerMap().findOverlapping(tick(), tick());
+      for (auto is : si) {
             Spanner* sp = is.value;
             if ((sp->type() != Element::Type::SLUR) || (sp->tick() != tick() && sp->tick2() != tick()))
                  continue;

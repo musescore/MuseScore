@@ -867,16 +867,16 @@ void Seq::process(unsigned n, float* buffer)
       //
       // metering / master gain
       //
-      float lv = 0.0f;
-      float rv = 0.0f;
+      qreal lv = 0.0f;
+      qreal rv = 0.0f;
       p = buffer;
       for (unsigned i = 0; i < n; ++i) {
             qreal val = *p;
-            lv = qMax(lv, fabsf(val));
+            lv = qMax(lv, qAbs(val));
             *p++ = val;
 
             val = *p;
-            rv = qMax(lv, fabsf(val));
+            rv = qMax(lv, qAbs(val));
             *p++ = val;
             }
       meterValue[0] = lv;

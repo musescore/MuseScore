@@ -69,11 +69,10 @@ void MuseScore::showInspector(bool visible)
             connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::RightDockWidgetArea, _inspector);
             }
-      if (visible) {
-            updateInspector();
-            }
       if (_inspector)
             _inspector->setVisible(visible);
+      if (visible)
+            updateInspector();
       }
 
 //---------------------------------------------------------
@@ -258,10 +257,18 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorArpeggio(this);
                               break;
                         default:
-                              if (_element->isText())
-                                    ie = new InspectorText(this);
-                              else
-                                    ie = new InspectorElement(this);
+                              if (_element->isText()) {
+                                    if (_element->type() == Element::Type::INSTRUMENT_NAME) // these are generated
+                                          ie = new InspectorEmpty(this);
+                                    else
+                                          ie = new InspectorText(this);
+                                    }
+                              else {
+                                    if (_element->type() == Element::Type::BRACKET) // these are generated
+                                          ie = new InspectorEmpty(this);
+                                    else
+                                          ie = new InspectorElement(this);
+                                    }
                               break;
                         }
                   }
@@ -800,6 +807,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
             { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
             };
       mapSignals();
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
 
@@ -857,6 +865,7 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
             { P_ID::VELOCITY,           0, 0, d.velocity, d.resetVelocity }
             };
       mapSignals();
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
 //---------------------------------------------------------
@@ -891,11 +900,12 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       s.setupUi(addWidget());
 
       iList = {
-            { P_ID::COLOR,      0, 0, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,    0, 0, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,   0, 0, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,   1, 0, e.offsetY,  e.resetY        },
-            { P_ID::LINE_TYPE,  0, 0, s.lineType, s.resetLineType }
+            { P_ID::COLOR,           0, 0, e.color,         e.resetColor         },
+            { P_ID::VISIBLE,         0, 0, e.visible,       e.resetVisible       },
+            { P_ID::USER_OFF,        0, 0, e.offsetX,       e.resetX             },
+            { P_ID::USER_OFF,        1, 0, e.offsetY,       e.resetY             },
+            { P_ID::LINE_TYPE,       0, 0, s.lineType,      s.resetLineType      },
+            { P_ID::SLUR_DIRECTION,  0, 0, s.slurDirection, s.resetSlurDirection }
             };
       mapSignals();
       }

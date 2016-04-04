@@ -410,7 +410,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
 ///   relative staff line.
 //---------------------------------------------------------
 
-AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
+AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &error) const
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
@@ -423,7 +423,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
             if (segment == s && staff->isPitchedStaff()) {
                   ClefType clef = staff->clef(s->tick());
                   int l = relStep(line, clef);
-                  return tversatz.accidentalVal(l);
+                  return tversatz.accidentalVal(l, error);
                   }
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = segment->element(track);
@@ -1135,11 +1135,18 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             // replicate time signature
             if (ts) {
                   TimeSig* ots = 0;
+                  bool constructed = false;
                   for (int track = 0; track < staves.size() * VOICES; ++track) {
                         if (ts->element(track)) {
                               ots = static_cast<TimeSig*>(ts->element(track));
                               break;
                               }
+                        }
+                  if (!ots) {
+                        // no time signature found; use measure length to construct one
+                        ots = new TimeSig(score());
+                        ots->setSig(len());
+                        constructed = true;
                         }
                   // do no replicate local time signatures
                   if (ots && !ots->isLocal()) {
@@ -1149,6 +1156,8 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                         timesig->setSig(ots->sig(), ots->timeSigType());
                         timesig->setNeedLayout(true);
                         score()->undoAddElement(timesig);
+                        if (constructed)
+                              delete ots;
                         }
                   }
             }
@@ -2266,14 +2275,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "breakMultiMeasureRest")
                   _breakMultiMeasureRest = e.readBool();
             else if (tag == "sysInitBarLineType") {
-                  const QString& val(e.readElementText());
-                  _systemInitialBarLineType = BarLineType::NORMAL;
-                  for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
-                        if (BarLine::barLineTypeName(BarLineType(i)) == val) {
-                              _systemInitialBarLineType = BarLineType(i);
-                              break;
-                              }
-                        }
+                  _systemInitialBarLineType = BarLineType(Ms::getProperty(P_ID::SYSTEM_INITIAL_BARLINE_TYPE, e).toInt());
                   }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());
@@ -2608,10 +2610,10 @@ bool Measure::createEndBarLines()
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
       bool mensur = false;    // keep note of Mensurstrich case
-      int spanTot;            // to keep track of the target span as we count down
-      int lastIdx;
-      int spanFrom;
-      int spanTo;
+      int spanTot = 0;        // to keep track of the target span as we count down
+      int lastIdx = 0;
+      int spanFrom = 0;
+      int spanTo = 0;
       static const int unknownSpanFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -2905,6 +2907,13 @@ bool Measure::isMeasureRest(int staffIdx) const
             for (int track = strack; track < etrack; ++track) {
                   Element* e = s->element(track);
                   if (e && e->type() != Element::Type::REST)
+                        return false;
+                  }
+            for (Element* a : s->annotations()) {
+                  if (!a || a->systemFlag())
+                        continue;
+                  int atrack = a->track();
+                  if (atrack >= strack && atrack < etrack)
                         return false;
                   }
             }
@@ -3385,7 +3394,8 @@ void Measure::layoutX(qreal stretch)
                                     Lyrics* l = cr->lyricsList().at(i);
                                     if (!l || l->isEmpty())
                                           continue;
-                                    lyrics = l;
+                                    if (!lyrics || l->no() > lyrics->no())
+                                          lyrics = l;
                                     QRectF b(l->bbox().translated(l->pos()));
                                     qreal brgt = b.right();
                                     // if lyrics followed by a dash & score style requires the dash in any case,

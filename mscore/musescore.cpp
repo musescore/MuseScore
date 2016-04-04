@@ -131,7 +131,7 @@ bool externalIcons = false;
 bool pluginMode = false;
 static bool startWithNewScore = false;
 double converterDpi = 0;
-double guiScaling = 1.0;
+double guiScaling = 0.0;
 int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
@@ -216,6 +216,11 @@ QString getSharePath()
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       return dir.absolutePath() + "/";
 #else
+      // Try relative path (needed for portable AppImage and non-standard installations)
+      QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+      if (dir.exists())
+            return dir.absolutePath() + "/";
+      // Otherwise fall back to default location (e.g. if binary has moved relative to share)
       return QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 #endif
@@ -349,8 +354,22 @@ MuseScore::MuseScore()
    : QMainWindow()
       {
       QScreen* screen      = QGuiApplication::primaryScreen();
+#if defined(Q_OS_WIN)
+      if (QSysInfo::WindowsVersion <= QSysInfo::WV_WINDOWS7)
+            _physicalDotsPerInch = screen->logicalDotsPerInch() * screen->devicePixelRatio();
+      else
+            _physicalDotsPerInch = screen->physicalDotsPerInch();  // physical resolution
+#else
       _physicalDotsPerInch = screen->physicalDotsPerInch();        // physical resolution
-      _physicalDotsPerInch *= guiScaling;
+#endif
+      if (guiScaling == 0.0) {
+            // set scale for icons, palette elements, window sizes, etc
+            // the default values are hard coded in pixel sizes and assume ~96 DPI
+            if (qAbs(_physicalDotsPerInch - DPI_DISPLAY) > 6.0)
+                  guiScaling = _physicalDotsPerInch / DPI_DISPLAY;
+            else
+                  guiScaling = 1.0;
+            }
 
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
@@ -371,7 +390,7 @@ MuseScore::MuseScore()
 
       if (!converterMode && !pluginMode) {
             _loginManager = new LoginManager(this);
-
+#if 0
             // initialize help engine
             QString lang = mscore->getLocaleISOCode();
             if (lang == "en_US")    // HACK
@@ -385,6 +404,7 @@ MuseScore::MuseScore()
                   delete _helpEngine;
                   _helpEngine = 0;
                   }
+#endif
             }
 
       _positionLabel = new QLabel;
@@ -437,7 +457,6 @@ MuseScore::MuseScore()
 
       mainWindow = new QSplitter;
       mainWindow->setChildrenCollapsible(false);
-      mainWindow->setOrientation(Qt::Vertical);
 
       QWidget* mainScore = new QWidget;
       mainScore->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -451,6 +470,7 @@ MuseScore::MuseScore()
       _navigator = new NScrollArea;
       _navigator->setFocusPolicy(Qt::NoFocus);
       mainWindow->addWidget(_navigator);
+      scorePageLayoutChanged();
       showNavigator(preferences.showNavigator);
 
       mainWindow->setStretchFactor(0, 1);
@@ -812,10 +832,13 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
       menuView->addSeparator();
+      
+#ifndef Q_OS_MAC
       a = getAction("fullscreen");
       a->setCheckable(true);
       a->setChecked(false);
       menuView->addAction(a);
+#endif
 
       //---------------------
       //    Menu Create
@@ -970,6 +993,8 @@ MuseScore::MuseScore()
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
+      menuHelp->addSeparator();
+      menuHelp->addAction(tr("Revert to Factory Settings"), this, SLOT(resetAndRestart()));
 
       //accessibility for menus
       foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
@@ -1095,6 +1120,26 @@ void MuseScore::helpBrowser1() const
       }
 
 //---------------------------------------------------------
+//   resetAndRestart
+//---------------------------------------------------------
+
+void MuseScore::resetAndRestart()
+      {
+      int ret = QMessageBox::question(0, tr("Are you sure?"),
+                  tr("This will reset all your preferences.\n"
+                   "Custom palettes, custom shortcuts, and the list of recent scores will be deleted. "
+                   "MuseScore will restart with its default settings.\n"
+                   "Reverting will not remove any scores from your computer.\n"
+                   "Are you sure you want to proceed?"),
+                   QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+      if (ret == QMessageBox::Yes ) {
+             close();
+             QStringList args("-F");
+             QProcess::startDetached(qApp->arguments()[0], args);
+             }
+      }
+
+//---------------------------------------------------------
 //   aboutQt
 //---------------------------------------------------------
 
@@ -1153,7 +1198,7 @@ void MuseScore::selectionChanged(SelState selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
-      if (_inspector && _inspector->isVisible())
+      if (_inspector)
             updateInspector();
       }
 
@@ -1165,7 +1210,7 @@ void MuseScore::updateInspector()
       {
       if (!_inspector)
             return;
-      if (cs) {
+      if (_inspector->isVisible() && cs) {
             if (state() == STATE_EDIT)
                   _inspector->setElement(cv->getEditObject());
             else if (state() == STATE_FOTO)
@@ -1450,6 +1495,9 @@ void MuseScore::updateViewModeCombo()
                   break;
             case LayoutMode::SYSTEM:
                   idx = 2;
+                  break;
+            default:
+                  idx = 0;
                   break;
             }
       viewModeCombo->setCurrentIndex(idx);
@@ -2170,11 +2218,7 @@ static bool processNonGui()
                         }
                   }
             else if (fn.endsWith(".png")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = mscore->savePng(cs, fn);
                   }
             else if (fn.endsWith(".svg")) {
@@ -2813,6 +2857,7 @@ void MuseScore::readSettings()
       resize(settings.value("size", QSize(1024, 768)).toSize());
       mainWindow->restoreState(settings.value("debuggerSplitter").toByteArray());
       mainWindow->setOpaqueResize(false);
+      scorePageLayoutChanged();
 
       move(settings.value("pos", QPoint(10, 10)).toPoint());
       //for some reason when MuseScore starts maximized the screen-reader
@@ -3534,6 +3579,16 @@ void MuseScore::excerptsChanged(Score* s)
       }
 
 //---------------------------------------------------------
+//   scorePageLayoutChanged
+//---------------------------------------------------------
+
+void MuseScore::scorePageLayoutChanged()
+      {
+      if (mainWindow)
+             mainWindow->setOrientation(MScore::verticalOrientation() ? Qt::Horizontal : Qt::Vertical);
+      }
+
+//---------------------------------------------------------
 //   editRaster
 //---------------------------------------------------------
 
@@ -3969,6 +4024,31 @@ void MuseScore::endCmd()
             updateUndoRedo();
             dirtyChanged(cs);
             Element* e = cs->selection().element();
+
+            // For multiple notes selected check if they all have same pitch and tuning
+            bool samePitch = true;
+            int pitch = 0;
+            float tuning = 0;
+            for (int i = 0; i < cs->selection().elements().size(); ++i) {
+                  const auto& element = cs->selection().elements()[i];
+                  if (element->type() != Element::Type::NOTE) {
+                        samePitch = false;
+                        break;
+                        }
+
+                  const auto& note = static_cast<Note*>(element);
+                  if (i == 0) {
+                        pitch = note->ppitch();
+                        tuning = note->tuning();
+                        }
+                  else if (note->ppitch() != pitch || fabs(tuning - note->tuning()) > 0.01) {
+                        samePitch = false;
+                        break;
+                        }
+                  }
+            if (samePitch && !cs->selection().elements().empty())
+                  e = cs->selection().elements()[0];
+
             if (e && (cs->playNote() || cs->playChord())) {
                   if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == Element::Type::NOTE)
                         play(static_cast<Note*>(e)->chord());
@@ -4791,6 +4871,7 @@ int main(int argc, char* av[])
             QSettings settings;
             QFile::remove(settings.fileName() + ".lock"); //forcibly remove lock
             QFile::remove(settings.fileName());
+            settings.clear();
             }
 
       // create local plugin directory

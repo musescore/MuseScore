@@ -1367,11 +1367,11 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   }
 
             if (nstaff) {
-                  qreal s1y2 = ss->bbox().y() + ss->bbox().height();
-                  sy2        = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                  qreal s1y2 = ss->bbox().bottom();
+                  sy2        = system->page()->canvasPos().y() + s1y2 + (nstaff->bbox().y() - s1y2) * .5;
                   }
             else
-                  sy2 = system->page()->height() - system->pos().y();   // system->height();
+                  sy2 = system->page()->canvasPos().y() + system->page()->height() - system->pagePos().y();   // system->height();
             if (y < sy2) {
                   sstaff = ss;
                   break;
@@ -1942,6 +1942,15 @@ Segment* Score::firstSegment(Segment::Type segType) const
       }
 
 //---------------------------------------------------------
+//   firstSegment Q_INVOKABLE wrapper
+//---------------------------------------------------------
+
+Segment* Score::firstSegment(int segType) const
+      {
+      return firstSegment(static_cast<Segment::Type>(segType));
+      }
+
+//---------------------------------------------------------
 //   firstSegmentMM
 //---------------------------------------------------------
 
@@ -2168,7 +2177,7 @@ void Score::addExcerpt(Score* score)
       ex->setPartScore(score);
       excerpts().append(ex);
       ex->setTitle(score->name());
-      foreach(Staff* s, score->staves()) {
+      for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
                   continue;
@@ -2188,7 +2197,7 @@ void Score::addExcerpt(Score* score)
 
 void Score::removeExcerpt(Score* score)
       {
-      foreach (Excerpt* ex, excerpts()) {
+      for (Excerpt* ex : excerpts()) {
             if (ex->partScore() == score) {
                   if (excerpts().removeOne(ex)) {
                         delete ex;
@@ -2477,7 +2486,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         undoRemoveElement(note);
                         Chord* chord = note->chord();
                         if (chord->notes().isEmpty()) {
-                              undoRemoveElement(chord);
                               for (auto sp : spanner()) {
                                     Slur* slur = static_cast<Slur*>(sp.second);
                                     if (slur->type() != Element::Type::SLUR)
@@ -2497,6 +2505,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                                                 }
                                           }
                                     }
+                              undoRemoveElement(chord);
                               }
                         }
                   }
@@ -2749,23 +2758,28 @@ void Score::cmdRemoveStaff(int staffIdx)
 
       undoRemoveStaff(s);
 
-      // remove linked staff and measures in linked staves in excerps
-      // should be done earlier for the main staff
-      Staff* s2 = 0;
+      // remove linked staff and measures in linked staves in excerpts
+      // unlink staff in the same score
       if (s->linkedStaves()) {
-            for (Staff* staff : s->linkedStaves()->staves()) {
-                  if (staff != s)
-                        s2 = staff;
+            Staff* sameScoreLinkedStaff = nullptr;
+            auto staves = s->linkedStaves()->staves();
+            for (Staff* staff : staves) {
+                  if (staff == s)
+                        continue;
                   Score* lscore = staff->score();
                   if (lscore != this) {
-                        undoRemoveStaff(staff);
+                        lscore->undoRemoveStaff(staff);
+                        s->score()->undo(new UnlinkStaff(s, staff));
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
-                              undoRemovePart(staff->part(), pIndex);
+                              lscore->undoRemovePart(staff->part(), pIndex);
                               }
                         }
+                  else // linked staff in the same score
+                       sameScoreLinkedStaff = staff;
                   }
-            s->score()->undo(new UnlinkStaff(s2, s));
+            if (sameScoreLinkedStaff)
+                  s->score()->undo(new UnlinkStaff(sameScoreLinkedStaff, s)); // once should be enough
             }
       }
 
@@ -3082,6 +3096,8 @@ void Score::selectAdd(Element* e)
 void Score::selectRange(Element* e, int staffIdx)
       {
       int activeTrack = e->track();
+      // current selection is range extending to end of score?
+      bool endRangeSelected = selection().isRange() && selection().endSegment() == nullptr;
       if (e->type() == Element::Type::MEASURE) {
             Measure* m = static_cast<Measure*>(e);
             int tick  = m->tick();
@@ -3189,7 +3205,7 @@ void Score::selectRange(Element* e, int staffIdx)
                   qDebug("sel state %d", int(_selection.state()));
                   return;
                   }
-            if (!_selection.endSegment())
+            if (!endRangeSelected && !_selection.endSegment())
                   _selection.setEndSegment(cr->segment()->nextCR());
             if (!_selection.startSegment())
                   _selection.setStartSegment(cr->segment());
@@ -3926,7 +3942,7 @@ QString Score::title()
             fn = metaTag("workTitle");
 
       if (fn.isEmpty())
-            fn = fileInfo()->baseName();
+            fn = fileInfo()->completeBaseName();
 
       if (fn.isEmpty())
             fn = "Untitled";

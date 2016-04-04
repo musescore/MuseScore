@@ -21,6 +21,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "sym.h"
 #include "system.h"
 #include "textline.h"
 #include "utils.h"
@@ -496,7 +497,7 @@ QLineF LineSegment::dragAnchor() const
             return QLineF();
       System* s;
       QPointF p = line()->linePos(Grip::START, &s);
-      p += QPointF(s->canvasPos().x(), s->staffYpage(line()->staffIdx()));
+      p += QPointF(s->canvasPos().x(), s->staffCanvasYpage(line()->staffIdx()));
 
       return QLineF(p, canvasPos());
       }
@@ -545,7 +546,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // others say to start the text just to left of notehead
                               // some say to include accidental, others don't
                               // our compromise - left align, but account for accidental
-                              if (cr->durationType() == TDuration::DurationType::V_MEASURE)
+                              if (cr->durationType() == TDuration::DurationType::V_MEASURE && !cr->measure()->hasVoices(cr->staffIdx()))
                                     x = cr->x();            // center for measure rests
                               else if (cr->space().lw() > 0.0)
                                     x = -cr->space().lw();  // account for accidentals, etc
@@ -692,26 +693,48 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   else {
                         qreal _spatium = spatium();
 
-                        m = endMeasure();
-                        x = m->pos().x() + m->bbox().right();
                         if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
-                              //find the actual measure where the volta should stop
-                              Measure* sm = startMeasure();
-                              Measure* m = sm;
-                              if (sm->hasMMRest())
-                                    m = sm->mmRest();
+                              // find the actual measure where the volta should stop
+                              m = startMeasure();
+                              if (m->hasMMRest())
+                                    m = m->mmRest();
                               while (m->nextMeasureMM() && (m->endTick() < tick2()))
                                     m = m->nextMeasureMM();
-                              x = m->pos().x() + m->bbox().right();
                               }
+                        else {
+                              m = endMeasure();
+                              }
+                        // back up to barline (skip courtesy elements)
                         Segment* seg = m->last();
-                        if (seg->segmentType() == Segment::Type::EndBarLine) {
+                        while (seg && seg->segmentType() != Segment::Type::EndBarLine)
+                              seg = seg->prev();
+                        qreal mwidth = seg ? seg->x() : m->bbox().right();
+                        x = m->pos().x() + mwidth;
+                        // align to barline
+                        if (seg && seg->segmentType() == Segment::Type::EndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == Element::Type::BAR_LINE) {
-                                    if (static_cast<BarLine*>(e)->barLineType() == BarLineType::START_REPEAT)
-                                          x -= e->width() - _spatium * .5;
-                                    else
-                                          x -= _spatium * .5;
+                                    BarLineType blt = static_cast<BarLine*>(e)->barLineType();
+                                    switch (blt) {
+                                          case BarLineType::END_REPEAT:
+                                          case BarLineType::END_START_REPEAT:
+                                                // skip dots
+                                                x += symWidth(SymId::repeatDot);
+                                                x += score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                                                // fall through
+                                          case BarLineType::DOUBLE:
+                                                // center on leftmost (thinner) barline
+                                                x += score()->styleS(StyleIdx::doubleBarWidth).val() * _spatium * 0.5;
+                                                break;
+                                          case BarLineType::START_REPEAT:
+                                                // center on leftmost (thicker) barline
+                                                x += score()->styleS(StyleIdx::endBarWidth).val() * _spatium * 0.5;
+                                                break;
+                                          default:
+                                                // center on barline
+                                                x += score()->styleS(StyleIdx::barWidth).val() * _spatium * 0.5;
+                                                break;
+                                          }
                                     }
                               }
                         }

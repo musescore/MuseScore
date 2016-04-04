@@ -113,8 +113,8 @@ enum class MeasureNumberMode : char {
 class Measure : public MeasureBase {
       Q_OBJECT
 
-      Q_PROPERTY(Ms::Segment* firstSegment      READ last)
-      Q_PROPERTY(Ms::Segment* lastSegment       READ first)
+      Q_PROPERTY(Ms::Segment* firstSegment      READ first)
+      Q_PROPERTY(Ms::Segment* lastSegment       READ last)
 
       SegmentList _segments;
 
@@ -284,7 +284,7 @@ class Measure : public MeasureBase {
       void resetRepeatFlag(Repeat val)             { _repeatFlags = Repeat(int(_repeatFlags) & ~int(val)); }
 
       AccidentalVal findAccidental(Note*) const;
-      AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
+      AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool &error) const;
       void exchangeVoice(int voice1, int voice2, int staffIdx);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;

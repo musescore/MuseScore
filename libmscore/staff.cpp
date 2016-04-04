@@ -515,7 +515,7 @@ void Staff::write(Xml& xml) const
                   xml.tag("barLineSpan", _barLineSpan);
             }
       if (_userDist != 0.0)
-            xml.tag("distOffset", _userDist / spatium());
+            xml.tag("distOffset", _userDist / score()->spatium());
 
       writeProperty(xml, P_ID::MAG);
       writeProperty(xml, P_ID::COLOR);
@@ -607,7 +607,7 @@ void Staff::read(XmlReader& e)
                         _barLineTo = lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2;
                   }
             else if (tag == "distOffset")
-                  _userDist = e.readDouble() * spatium();
+                  _userDist = e.readDouble() * score()->spatium();
             else if (tag == "mag")
                   _userMag = e.readDouble(0.1, 10.0);
             else if (tag == "linkedTo") {
@@ -841,7 +841,8 @@ void Staff::unlink(Staff* staff)
       {
       if (!_linkedStaves)
             return;
-      Q_ASSERT(_linkedStaves->staves().contains(staff));
+      if (!_linkedStaves->staves().contains(staff))
+            return;
       _linkedStaves->remove(staff);
       if (_linkedStaves->staves().size() <= 1) {
             delete _linkedStaves;
@@ -856,7 +857,8 @@ void Staff::unlink(Staff* staff)
 
 void LinkedStaves::add(Staff* staff)
       {
-      _staves.append(staff);
+      if (!_staves.contains(staff))
+            _staves.append(staff);
       }
 
 //---------------------------------------------------------

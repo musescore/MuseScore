@@ -56,6 +56,10 @@ class Cursor : public QObject {
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
+
+      //@ get tempo at current tick
+      Q_PROPERTY(qreal tempo      READ tempo)
+
       Q_PROPERTY(int keySignature READ qmlKeySignature)
       Q_PROPERTY(Ms::Score* score READ score    WRITE setScore)
 
@@ -95,6 +99,7 @@ class Cursor : public QObject {
 
       int tick();
       double time();
+      qreal tempo();
 
       int qmlKeySignature();
 

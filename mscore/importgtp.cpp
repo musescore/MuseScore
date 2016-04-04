@@ -131,7 +131,7 @@ void GuitarPro::read(void* p, qint64 len)
 
 int GuitarPro::readChar()
       {
-      char c;
+      signed char c;
       read(&c, 1);
       return c;
       }
@@ -294,8 +294,8 @@ void GuitarPro::initGuitarProDrumset()
       gpDrumset->drum(70) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Maracas"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(71) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short Whistle"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(72) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long Whistle"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
-      gpDrumset->drum(73) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short G\u00fciro"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
-      gpDrumset->drum(74) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long G\u00fciro"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
+      gpDrumset->drum(73) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short Guiro"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
+      gpDrumset->drum(74) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long Guiro"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(75) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Claves"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(76) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Wood Block"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(77) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Wood Block"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
@@ -687,12 +687,12 @@ Fraction GuitarPro::len2fraction(int len)
 bool GuitarPro::readMixChange(Measure* measure)
       {
       /*char patch   =*/ readChar();
-      char volume  = readChar();
-      char pan     = readChar();
-      char chorus  = readChar();
-      char reverb  = readChar();
-      char phase   = readChar();
-      char tremolo = readChar();
+      signed char volume  = readChar();
+      signed char pan     = readChar();
+      signed char chorus  = readChar();
+      signed char reverb  = readChar();
+      signed char phase   = readChar();
+      signed char tremolo = readChar();
       int tempo    = readInt();
 
       if (volume >= 0)

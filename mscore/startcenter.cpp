@@ -115,10 +115,6 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
-      if (fil.size() == 0) {
-            QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
-            fil.prepend(gettingStartedScore);
-            }
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
@@ -154,7 +150,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(690, 520)).toSize());
+      resize(settings.value("size", QSize(720, 570)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
@@ -259,6 +255,8 @@ void MyWebView::link(const QUrl& url)
       QFileInfo fi(path);
       if (fi.suffix() == "mscz" || fi.suffix() == "xml" || fi.suffix() == "mxl") {
             mscore->loadFile(url);
+            QAction* a = getAction("startcenter");
+            a->setChecked(false);
             mscore->showStartcenter(false);
             }
       else

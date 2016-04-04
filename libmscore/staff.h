@@ -96,7 +96,7 @@ class Staff : public QObject, public ScoreElement {
       Q_OBJECT
 
 public:
-      enum class HideMode { AUTO, ALWAYS, NEVER };
+      enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
 
 private:
       Part* _part       { 0 };
@@ -171,6 +171,8 @@ private:
       void clearTimeSig();
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
+      bool isLocalTimeSignature(int tick) { return timeStretch(tick) != Fraction(1, 1); }
+
       const Groups& group(int tick) const;
 
       KeyList* keyList()               { return &_keys;                  }

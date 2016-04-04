@@ -116,7 +116,7 @@ bool ZInstrument::load(const QString& path)
       {
       instrumentPath = path;
       QFileInfo fi(path);
-      _name = fi.baseName();
+      _name = fi.completeBaseName();
       if (fi.isFile())
             return loadFromFile(path);
       if (fi.isDir())

@@ -31,12 +31,12 @@ namespace Ms {
 //    this is the list of available score fonts
 //---------------------------------------------------------
 
-static const int FALLBACK_FONT = 2;       // Bravura
+static const int FALLBACK_FONT = 0;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts {
+      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  ),
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
-      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
-      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  )
+      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" )
       };
 
 //---------------------------------------------------------

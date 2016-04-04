@@ -24,6 +24,7 @@ echo       %1/../../share/locale/instruments_fa.ts \
 echo       %1/../../share/locale/instruments_fi.ts \
 echo       %1/../../share/locale/instruments_fo.ts \
 echo       %1/../../share/locale/instruments_fr.ts \
+echo       %1/../../share/locale/instruments_ga.ts \
 echo       %1/../../share/locale/instruments_gl.ts \
 echo       %1/../../share/locale/instruments_he.ts \
 echo       %1/../../share/locale/instruments_hi_IN.ts \
@@ -48,6 +49,7 @@ echo       %1/../../share/locale/instruments_ru.ts \
 echo       %1/../../share/locale/instruments_sk.ts \
 echo       %1/../../share/locale/instruments_sl.ts \
 echo       %1/../../share/locale/instruments_sr.ts \
+echo       %1/../../share/locale/instruments_sr_RS.ts \
 echo       %1/../../share/locale/instruments_sv.ts \
 echo       %1/../../share/locale/instruments_th.ts \
 echo       %1/../../share/locale/instruments_tr.ts \

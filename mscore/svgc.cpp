@@ -144,8 +144,7 @@ void createAllExcerpts(Score * score) {
   qWarning() << "Created new excerpts:" << score->rootScore()->excerpts().size();
 }
 
-
-QPainter * getSvgPainter(QIODevice * device, qreal width, qreal height, qreal scale) 
+SvgGenerator * getSvgPrinter(QIODevice * device, qreal width, qreal height) 
    {
       SvgGenerator * printer = new SvgGenerator();
       printer->setResolution(converterDpi);
@@ -155,14 +154,16 @@ QPainter * getSvgPainter(QIODevice * device, qreal width, qreal height, qreal sc
 
       qreal w = width; //* MScore::DPI;
       qreal h = height; //* MScore::DPI;
-      printer->setSize(QSize(w * scale, h * scale));
-      printer->setViewBox(QRectF(0.0, 0.0, w * scale, h * scale));
+      printer->setSize(QSize(w, h));
+      printer->setViewBox(QRectF(0.0, 0.0, w, h));
 
+      return printer;
+    }
 
+QPainter * getSvgPainter(SvgGenerator * printer) {
       QPainter * p = new QPainter(printer);
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setRenderHint(QPainter::TextAntialiasing, true);
-      p->scale(scale, scale);
 
       return p;
    }
@@ -430,6 +431,7 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       qts["meta_version"] = 2;
 
       score->setPrinting(true);
+      MScore::pdfPrinting = true;
 
       LayoutMode layout_mode = score->layoutMode();
 
@@ -448,6 +450,7 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       score->doLayout();
 
       score->setPrinting(false);
+      MScore::pdfPrinting = false;
 
       uz->addFile(prefix+"metainfo.json",QJsonDocument(qts).toJson());
    }
@@ -543,6 +546,7 @@ qreal * find_margins(Score * score) {
 
 QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, const qreal t0, QString basename) {
 
+      SvgGenerator * printer = NULL;
       QPainter * p = NULL;
       QBuffer * svgbuf=NULL;
 
@@ -550,8 +554,6 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
       uint count = 1;
 
       int firstNonRest = 0, lastNonRest = 0;
-
-      qreal mag = converterDpi / DPI;
 
       QString svgname = "";
 
@@ -597,8 +599,8 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
 
             svgname = basename + QString::number(count++)+".svg";
             sobj["img"] = svgname;
-            sobj["width"] = w*mag;
-            sobj["height"] = h*mag;
+            sobj["width"] = w;
+            sobj["height"] = h;
 
             // Staff vertical positions
             QJsonArray staves;
@@ -616,7 +618,8 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
 
             qreal dx = -(sys_rect.left()-h_margin), 
                   dy = -(sys_rect.top()-top_margin);
-            p = getSvgPainter(svgbuf,w,h,mag);
+            printer = getSvgPrinter(svgbuf,w,h);
+            p = getSvgPainter(printer);
             p->translate(dx,dy);
 
             // Collect together all elements belonging to this system!
@@ -632,6 +635,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
             QMap<int,int> is_rest;
             QMap<int,int> pitches;
             tie_ends = mark_tie_ends(elems);
+
             foreach(const Element * e, elems) {
 
                if (!e->visible())
@@ -639,10 +643,6 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
 
                if (e->type() == Element::Type::TEMPO_TEXT)
                   continue;
-
-               QPointF pos(e->pagePos());
-               p->translate(pos);
-               e->draw(p);
 
                QRectF bb = e->pageBoundingRect();
 
@@ -662,11 +662,8 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
 
                   int tick = cr->segment()->tick();
 
-
-                  if (!tick2pos.contains(tick) || 
-                      (e->type() == Element::Type::NOTE && 
-                        (tick2pos[tick]>lpos || is_rest.value(tick,false))))
-                    // is_rest check here mainly for the full measure rest special case if there are notes in other voices
+                  if (!tick2pos.contains(tick) || tick2pos[tick]>lpos || 
+                      (is_rest.value(tick,false) && e->type() == Element::Type::NOTE)) // is_rest check here mainly for the full measure rest special case if there are notes in other voices
                     tick2pos[tick] = lpos;
 
                   // NB! ar[17] = !ar.contains(17); would not work as expected...
@@ -700,14 +697,28 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
                   
                   end_pos = (bb.right()+dx)/w;
                }
-
-               p->translate(-pos);
             }
 
             if (end_pos>0)                     
                barlines.push_back(end_pos);
 
+            // Actual drawing
+            qStableSort(elems.begin(), elems.end(), elementLessThan);
+            foreach(const Element * e, elems) {
 
+               if (!e->visible())
+                     continue;
+
+               if (e->type() == Element::Type::TEMPO_TEXT)
+                  continue;
+
+               printer->setElement(e);
+
+               QPointF pos(e->pagePos());
+               p->translate(pos);
+               e->draw(p);
+               p->translate(-pos);
+            }
             p->end();
 
             svgbuf->seek(0);

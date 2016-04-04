@@ -43,7 +43,7 @@ static void scanDir(QDir d)
                   }
             else if (fi.isExecutable()) {
                   QString s(fi.filePath());
-                  if (fi.baseName().startsWith("tst_"))
+                  if (fi.completeBaseName().startsWith("tst_"))
                         process(s);
                   }
             }

@@ -210,13 +210,10 @@ void ChordRest::writeProperties(Xml& xml) const
 
       foreach(const Articulation* a, _articulations)
             a->write(xml);
-#ifndef NDEBUG
+
       if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
-#else
-      if (_beam && !_beam->generated())
-            xml.tag("Beam", _beam->id());
-#endif
+
       foreach(Lyrics* lyrics, _lyricsList) {
             if (lyrics)
                   lyrics->write(xml);
@@ -1117,29 +1114,6 @@ QString ChordRest::durationUserName()
       }
 
 //---------------------------------------------------------
-//   setTrack
-//---------------------------------------------------------
-
-void ChordRest::setTrack(int val)
-      {
-      foreach(Articulation* a, _articulations)
-            a->setTrack(val);
-      Element::setTrack(val);
-      if (type() == Element::Type::CHORD) {
-            foreach(Note* n, static_cast<Chord*>(this)->notes())
-                  n->setTrack(val);
-            }
-      if (_beam)
-            _beam->setTrack(val);
-      foreach(Lyrics* l, _lyricsList) {
-            if (l)
-                  l->setTrack(val);
-            }
-      if (tuplet())
-            tuplet()->setTrack(val);
-      }
-
-//---------------------------------------------------------
 //   tick
 //---------------------------------------------------------
 
@@ -1348,17 +1322,10 @@ bool ChordRest::isGraceAfter() const
 void ChordRest::writeBeam(Xml& xml)
       {
       Beam* b = beam();
-#ifndef NDEBUG
       if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
             b->setId(xml.beamId++);
             b->write(xml);
             }
-#else
-      if (b && !b->generated() && b->elements().front() == this) {
-            b->setId(xml.beamId++);
-            b->write(xml);
-            }
-#endif
       }
 
 //---------------------------------------------------------
@@ -1376,6 +1343,45 @@ Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
                   return s;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   setTrack
+//---------------------------------------------------------
+
+void ChordRest::setTrack(int val)
+      {
+      Element::setTrack(val);
+      processSiblings([val] (Element* e) { e->setTrack(val); } );
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void ChordRest::setScore(Score* s)
+      {
+      Element::setScore(s);
+      processSiblings([s] (Element* e) { e->setScore(s); } );
+      }
+
+//---------------------------------------------------------
+//   processSiblings
+//---------------------------------------------------------
+
+void ChordRest::processSiblings(std::function<void(Element*)> func)
+      {
+      if (_beam)
+            func(_beam);
+      for (Articulation* a : _articulations)
+            func(a);
+      if (_tabDur)
+            func(_tabDur);
+      for (Lyrics* l : _lyricsList)
+            if (l)
+                  func(l);
+      if (tuplet())
+            func(tuplet());
       }
 
 //---------------------------------------------------------
@@ -1420,8 +1426,7 @@ QString ChordRest::accessibleExtraInfo()
 
             SpannerMap& smap = score()->spannerMap();
             auto spanners = smap.findOverlapping(tick(), tick());
-            for (auto i = spanners.begin(); i < spanners.end(); i++) {
-                  const ::Interval<Spanner*> interval = *i;
+            for (auto interval : spanners) {
                   Spanner* s = interval.value;
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines

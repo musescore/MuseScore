@@ -162,8 +162,8 @@ class MeasureBaseList {
 struct MidiMapping {
       Part* part;
       Channel* articulation;
-      char port;
-      char channel;
+      signed char port;
+      signed char channel;
       };
 
 //---------------------------------------------------------
@@ -224,7 +224,9 @@ enum class PasteStatus : char {
       NO_DEST,
       DEST_TUPLET,
       DEST_NO_CR,
-      TUPLET_CROSSES_BAR
+      TUPLET_CROSSES_BAR,
+      DEST_LOCAL_TIME_SIGNATURE,
+      DEST_TREMOLO
       };
 
 //---------------------------------------------------------
@@ -789,7 +791,7 @@ class Score : public QObject, public ScoreElement {
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       PasteStatus cmdPaste(const QMimeData* ms, MuseScoreView* view);
-      bool pasteStaff(XmlReader&, Segment* dst, int staffIdx);
+      PasteStatus pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
@@ -888,8 +890,9 @@ class Score : public QObject, public ScoreElement {
       Ms::Measure* lastMeasureMM() const;
       MeasureBase* measure(int idx) const;
 
+      Ms::Segment* firstSegment(Segment::Type s) const;
       //@ returns the first segment of the score of the given type (use Segment.Clef, ... enum)
-      Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
+      Q_INVOKABLE Ms::Segment* firstSegment(int segType = static_cast<int>(Segment::Type::All)) const;
       Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* lastSegment() const;
 

@@ -161,6 +161,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QPointF dragOffset;
 
+      bool scoreViewDragging; // decide if dragging or clearing selection
+
       // editing mode
       QVector<QRectF> grip;         // edit "grips"
       Grip curGrip;
@@ -272,6 +274,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void startFotoDrag();
       void endFotoDrag();
       void endFotoDragEdit();
+      void startScoreViewDrag();
+      void endScoreViewDrag();
 
       void posChanged(POS pos, unsigned tick);
       void loopToggled(bool);

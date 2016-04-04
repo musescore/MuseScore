@@ -30,7 +30,6 @@
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
 #include "libmscore/sym.h"
-#include "palette.h"
 #include "pa.h"
 #include "pm.h"
 #include "libmscore/page.h"
@@ -52,29 +51,6 @@ extern bool useFactorySettings;
 extern bool externalStyle;
 
 static int exportAudioSampleRates[2] = { 44100, 48000 };
-
-//---------------------------------------------------------
-//   PeriodItem
-//---------------------------------------------------------
-
-struct PeriodItem {
-       int time;
-       const char* text;
-       PeriodItem(const int t, const  char* txt) {
-             time = t;
-             text = txt;
-             }
-       };
-
-static PeriodItem updatePeriods[] = {
-      PeriodItem(24,      QT_TRANSLATE_NOOP("preferences","Every Day")),
-      PeriodItem(72,      QT_TRANSLATE_NOOP("preferences","Every 3 Days")),
-      PeriodItem(7*24,    QT_TRANSLATE_NOOP("preferences","Every Week")),
-      PeriodItem(2*7*24,  QT_TRANSLATE_NOOP("preferences","Every 2 Weeks")),
-      PeriodItem(30*24,   QT_TRANSLATE_NOOP("preferences","Every Month")),
-      PeriodItem(2*30*24, QT_TRANSLATE_NOOP("preferences","Every 2 Months")),
-      PeriodItem(-1,      QT_TRANSLATE_NOOP("preferences","Never")),
-      };
 
 //---------------------------------------------------------
 //   Preferences
@@ -99,6 +75,7 @@ void Preferences::init()
       bgWallpaper        = QString();
       fgWallpaper        = ":/data/paper5.png";
       fgColor.setNamedColor("#f9f9f9");
+      pianoHlColor.setNamedColor("#1259d0");
       iconHeight         = 24;
       iconWidth          = 28;
 
@@ -201,7 +178,7 @@ void Preferences::init()
       myImagesPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absoluteFilePath();
       myTemplatesPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
       myPluginsPath   = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
-      sfPath          = QString("%1;%2").arg(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath()).arg(QFileInfo(QString("%2/%3").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath());
+      mySoundfontsPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath();
 
       MScore::setNudgeStep(.1);         // cursor key (default 0.1)
       MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
@@ -246,6 +223,7 @@ void Preferences::write()
       s.setValue("selectColor4",       MScore::selectColor[3]);
       s.setValue("dropColor",          MScore::dropColor);
       s.setValue("defaultColor",       MScore::defaultColor);
+      s.setValue("pianoHlColor",       pianoHlColor);
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
       s.setValue("playChordOnAddNote", playChordOnAddNote);
@@ -337,7 +315,7 @@ void Preferences::write()
       s.setValue("myImagesPath", myImagesPath);
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
-      s.setValue("sfPath",  sfPath);
+      s.setValue("mySoundfontsPath", mySoundfontsPath);
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -398,6 +376,7 @@ void Preferences::read()
 
       MScore::defaultColor    = s.value("defaultColor", MScore::defaultColor).value<QColor>();
       MScore::dropColor       = s.value("dropColor",    MScore::dropColor).value<QColor>();
+      pianoHlColor            = s.value("pianoHlColor", pianoHlColor).value<QColor>();
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
@@ -480,7 +459,7 @@ void Preferences::read()
       myImagesPath     = s.value("myImagesPath",     myImagesPath).toString();
       myTemplatesPath  = s.value("myTemplatesPath",  myTemplatesPath).toString();
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
-      sfPath           = s.value("sfPath",           sfPath).toString();
+      mySoundfontsPath = s.value("mySoundfontsPath", mySoundfontsPath).toString();
 
       //Create directories if they are missing
       QDir dir;
@@ -489,7 +468,7 @@ void Preferences::read()
       dir.mkpath(myImagesPath);
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
-      foreach (QString path, sfPath.split(";"))
+      foreach (QString path, mySoundfontsPath.split(";"))
             dir.mkpath(path);
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
@@ -625,8 +604,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
-
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
+
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
@@ -867,6 +846,7 @@ void PreferenceDialog::updateValues()
                   }
             }
       language->blockSignals(false);
+      
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -877,6 +857,9 @@ void PreferenceDialog::updateValues()
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
+      
+      //Generate the filtered Shortcut List 
+      filterShortcutsTextChanged(filterShortcuts->text());
 
       //
       // initialize portaudio
@@ -982,7 +965,7 @@ void PreferenceDialog::updateValues()
       myImages->setText(prefs.myImagesPath);
       myTemplates->setText(prefs.myTemplatesPath);
       myPlugins->setText(prefs.myPluginsPath);
-      sfPath->setText(prefs.sfPath);
+      mySoundfonts->setText(prefs.mySoundfontsPath);
 
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -995,8 +978,6 @@ void PreferenceDialog::updateValues()
       exportAudioSampleRate->setCurrentIndex(idx);
       exportPdfDpi->setValue(prefs.exportPdfDpi);
       pageVertical->setChecked(MScore::verticalOrientation());
-
-      sfChanged = false;
       }
 
 //---------------------------------------------------------
@@ -1016,7 +997,7 @@ void PreferenceDialog::portaudioApiActivated(int)  {}
 #endif
 
 //---------------------------------------------------------
-//   ShortcutITem
+//   ShortcutItem
 //---------------------------------------------------------
 
 bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
@@ -1102,17 +1083,17 @@ void PreferenceDialog::clearShortcutClicked()
 //--------------------------------------------------------
 
 void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
-    {
-    QTreeWidgetItem *item;
-    for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
-        item = shortcutList->topLevelItem(i);
+      {
+      QTreeWidgetItem *item;
+      for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
+          item = shortcutList->topLevelItem(i);
 
-        if(item->text(0).toLower().contains(query.toLower()))
-            item->setHidden(false);
-        else
-            item->setHidden(true);
-        }
-    }
+          if(item->text(0).toLower().contains(query.toLower()))
+              item->setHidden(false);
+          else
+              item->setHidden(true);
+          }
+      }
 
 //---------------------------------------------------------
 //   selectFgWallpaper
@@ -1168,7 +1149,9 @@ void PreferenceDialog::selectInstrumentList1()
          this,
          tr("Choose Instrument List"),
          instrumentList1->text(),
-         tr("Instrument List (*.xml)")
+         tr("Instrument List (*.xml)"),
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (!s.isNull())
             instrumentList1->setText(s);
@@ -1184,7 +1167,9 @@ void PreferenceDialog::selectInstrumentList2()
          this,
          tr("Choose Instrument List"),
          instrumentList2->text(),
-         tr("Instrument List (*.xml)")
+         tr("Instrument List (*.xml)"),
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (!s.isNull())
             instrumentList2->setText(s);
@@ -1200,7 +1185,9 @@ void PreferenceDialog::selectStartWith()
          this,
          tr("Choose Starting Score"),
          sessionScore->text(),
-         tr("MuseScore Files (*.mscz *.mscx);;All (*)")
+         tr("MuseScore Files (*.mscz *.mscx);;All (*)"),
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (!s.isNull())
             sessionScore->setText(s);
@@ -1381,7 +1368,7 @@ void PreferenceDialog::apply()
       prefs.myImagesPath       = myImages->text();
       prefs.myTemplatesPath    = myTemplates->text();
       prefs.myPluginsPath      = myPlugins->text();
-      prefs.sfPath             = sfPath->text();
+      prefs.mySoundfontsPath = mySoundfonts->text();
 
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
@@ -1412,8 +1399,12 @@ void PreferenceDialog::apply()
             MScore::setVerticalOrientation(pageVertical->isChecked());
             for (Score* s : mscore->scores()) {
                   s->doLayout();
+                  for (Score* ss : s->scoreList())
+                        ss->doLayout();
                   }
-            mscore->currentScoreView()->setOffset(0.0, 0.0);
+            if (mscore->currentScoreView())
+                  mscore->currentScoreView()->setOffset(0.0, 0.0);
+            mscore->scorePageLayoutChanged();
             mscore->update();
             }
 
@@ -1626,7 +1617,8 @@ void PreferenceDialog::selectScoresDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Score Folder"),
-         myScores->text()
+         myScores->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myScores->setText(s);
@@ -1641,7 +1633,8 @@ void PreferenceDialog::selectStylesDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Style Folder"),
-         myStyles->text()
+         myStyles->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myStyles->setText(s);
@@ -1656,7 +1649,8 @@ void PreferenceDialog::selectTemplatesDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Template Folder"),
-         myTemplates->text()
+         myTemplates->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myTemplates->setText(s);
@@ -1671,7 +1665,8 @@ void PreferenceDialog::selectPluginsDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Plugin Folder"),
-         myPlugins->text()
+         myPlugins->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myPlugins->setText(s);
@@ -1686,7 +1681,8 @@ void PreferenceDialog::selectImagesDirectory()
       QString s = QFileDialog::getExistingDirectory(
          this,
          tr("Choose Image Folder"),
-         myImages->text()
+         myImages->text(),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!s.isNull())
             myImages->setText(s);
@@ -1700,9 +1696,9 @@ void PreferenceDialog::changeSoundfontPaths()
       {
       PathListDialog pld(this);
       pld.setWindowTitle(tr("SoundFont Folders"));
-      pld.setPath(sfPath->text());
+      pld.setPath(mySoundfonts->text());
       if(pld.exec())
-            sfPath->setText(pld.path());
+            mySoundfonts->setText(pld.path());
       }
 
 //---------------------------------------------------------

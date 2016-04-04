@@ -83,7 +83,7 @@ static bool needsStaff(Element* e)
 Palette::Palette(QWidget* parent)
    : QWidget(parent)
       {
-      extraMag      = 1.0;
+      extraMag      = 1.0 * guiScaling;
       currentIdx    = -1;
       dragIdx       = -1;
       selectedIdx   = -1;
@@ -674,8 +674,8 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
       PaletteCell* cell = new PaletteCell;
       int idx;
       if (_moreElements) {
-            idx = cells.size()-2;
-            cells.insert(cells.size()-1, cell);
+            cells.insert(cells.size() - 1, cell);
+            idx = cells.size() - 2;
             }
       else {
             cells.append(cell);
@@ -1015,7 +1015,7 @@ void Palette::dropEvent(QDropEvent* event)
                   s->load(filePath);
                   e = s;
                   QFileInfo f(filePath);
-                  name = f.baseName();
+                  name = f.completeBaseName();
                   }
             }
       else if (data->hasFormat(mimeSymbolFormat)) {
@@ -1117,8 +1117,7 @@ void Palette::write(Xml& xml) const
       xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
       xml.tag("gridWidth", hgrid / guiScaling);
       xml.tag("gridHeight", vgrid / guiScaling);
-      if (extraMag != 1.0)
-            xml.tag("mag", extraMag / guiScaling);
+      xml.tag("mag", extraMag / guiScaling);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 

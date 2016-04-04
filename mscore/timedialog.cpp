@@ -71,6 +71,7 @@ TimeDialog::TimeDialog(QWidget* parent)
       for (int i = 0; i < sp->size(); ++i)      // cells can be changed
             sp->setCellReadOnly(i, false);
 
+      sp->element(2)->layout();
       sp->setSelected(2);
       paletteChanged(2);
       }
@@ -93,6 +94,7 @@ void TimeDialog::addClicked()
             }
       // extend palette:
       sp->append(ts, "");
+      sp->setSelected(sp->size() - 1);
       _dirty = true;
       }
 
@@ -195,11 +197,11 @@ void TimeDialog::paletteChanged(int idx)
       Groups g = e->groups();
       if (g.empty())
             g = Groups::endings(sig);
-      groups->setSig(sig, g);
       zNominal->setValue(sig.numerator());
       nNominal->setCurrentIndex(denominator2Idx(sig.denominator()));
       zText->setText(e->numeratorString());
       nText->setText(e->denominatorString());
+      groups->setSig(sig, g);
       }
 
 }

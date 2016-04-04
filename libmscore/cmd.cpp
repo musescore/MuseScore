@@ -328,6 +328,8 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
 
 //---------------------------------------------------------
 //   expandVoice
+//    fills gaps in voice with rests,
+//    from previous cr (or beginning of measure) to next cr (or end of measure)
 //---------------------------------------------------------
 
 void Score::expandVoice(Segment* s, int track)
@@ -342,6 +344,7 @@ void Score::expandVoice(Segment* s, int track)
             return;
             }
 
+      // find previous segment with cr in this track
       Segment* ps;
       for (ps = s; ps; ps = ps->prev(Segment::Type::ChordRest)) {
             if (ps->element(track))
@@ -350,24 +353,22 @@ void Score::expandVoice(Segment* s, int track)
       if (ps) {
             ChordRest* cr = static_cast<ChordRest*>(ps->element(track));
             int tick = cr->tick() + cr->actualTicks();
-            if (tick == s->tick())
-                  return;
             if (tick > s->tick()) {
+                  // previous cr extends past current segment
                   qDebug("expandVoice: cannot insert element here");
                   return;
                   }
             if (cr->type() == Element::Type::CHORD) {
-                  // since there was nothing in track at original segment,
-                  // and chord at previous segment does not take us up to tick of original segment.
-                  // we have a hole, but it starts *after* this chord
-                  // move ps to start of hole
-                  // don't move ps for holes after rests
-                  // they will be cleaned up when we fill up to s->tick() with rests below
+                  // previous cr ends on or before current segment
+                  // for chords, move ps to just after cr ends
+                  // so we can fill any gap that might exist
+                  // but don't move ps if previous cr is a rest
+                  // this will be combined with any new rests needed to fill up to s->tick() below
                   ps = ps->measure()->undoGetSegment(Segment::Type::ChordRest, tick);
                   }
             }
       //
-      // fill upto s->tick() with rests
+      // fill up to s->tick() with rests
       //
       Measure* m = s->measure();
       int stick  = ps ?  ps->tick() : m->tick();
@@ -376,7 +377,7 @@ void Score::expandVoice(Segment* s, int track)
             setRest(stick, track, Fraction::fromTicks(ticks), false, 0);
 
       //
-      // fill from s->tick() until next chord/rest
+      // fill from s->tick() until next chord/rest in measure
       //
       Segment* ns;
       for (ns = s->next(Segment::Type::ChordRest); ns; ns = ns->next(Segment::Type::ChordRest)) {
@@ -445,6 +446,10 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   transposeInterval(on->pitch(), on->tpc(), &npitch, &ntpc1, interval, false);
                   ntpc1 = on->tpc1();
                   ntpc2 = on->tpc2();
+                  }
+            if (npitch < 0 || npitch > 127) {
+                  delete note;
+                  return;
                   }
             note->setPitch(npitch, ntpc1, ntpc2);
 
@@ -1224,8 +1229,11 @@ void Score::upDown(bool up, UpDownMode mode)
                   case StaffGroup::PERCUSSION:
                         {
                         const Drumset* ds = part->instrument()->drumset();
-                        if (ds)
+                        if (ds) {
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
+                              newTpc1 = pitch2tpc(newPitch, Key::C, Prefer::NEAREST);
+                              newTpc2 = newTpc1;
+                              }
                         }
                         break;
                   case StaffGroup::TAB:
@@ -1688,20 +1696,18 @@ void Score::cmdAddStretch(qreal val)
 
 void Score::cmdResetBeamMode()
       {
-      if (!selection().isRange()) {
+      bool noSelection = selection().isNone();
+      if (noSelection)
+            cmdSelectAll();
+      else if (!selection().isRange()) {
             qDebug("no system or staff selected");
             return;
             }
-      int startTick = selection().tickStart();
+
       int endTick   = selection().tickEnd();
 
-      Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-            if (seg->tick() < startTick)
-                  continue;
-            if (seg->tick() >= endTick)
-                  break;
-            for (int track = 0; track < nstaves() * VOICES; ++track) {
+      for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(Segment::Type::ChordRest)) {
+            for (int track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0)
                         continue;
@@ -1716,6 +1722,8 @@ void Score::cmdResetBeamMode()
                   }
             }
       _layoutAll = true;
+      if (noSelection)
+            deselectAll();
       }
 
 //---------------------------------------------------------
@@ -2651,7 +2659,7 @@ void Score::cmdExplode()
             if (cr) {
                   XmlReader e(srcSelection.mimeData());
                   e.setPasteMode(true);
-                  if (!pasteStaff(e, cr->segment(), cr->staffIdx()))
+                  if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteStatus::PS_NO_ERROR)
                         qDebug("explode: paste failed");
                   }
             }

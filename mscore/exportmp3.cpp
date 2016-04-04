@@ -65,7 +65,7 @@ bool MP3Exporter::findLibrary()
       if (!mLibPath.isEmpty()) {
             QFileInfo fi(mLibPath);
             path = fi.absolutePath();
-            name = fi.baseName();
+            name = fi.completeBaseName();
             }
       else {
             path = getLibraryPath();
@@ -531,7 +531,7 @@ void MP3Exporter::cancelEncoding()
       else if (beWriteInfoTag) {
          f.flush();
          QFileInfo fi(f);
-         beWriteInfoTag(mGF, qPrintable(fi.baseName()));
+         beWriteInfoTag(mGF, qPrintable(fi.completeBaseName()));
          mGF = NULL;
       }
 #endif
@@ -709,6 +709,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       EventMap::const_iterator endPos = events.cend();
       --endPos;
       const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
+      const int maxEndTime = (score->utick2utime(endPos->first) + 3) * MScore::sampleRate;
       progress.setRange(0, et);
 
       for (int pass = 0; pass < 2; ++pass) {
@@ -833,6 +834,9 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         synti->allNotesOff(-1);
                   // create sound until the sound decays
                   if (playTime >= et && max * peak < 0.000001)
+                        break;
+                  // hard limit
+                  if (playTime > maxEndTime)
                         break;
                   }
             if (progress.wasCanceled())

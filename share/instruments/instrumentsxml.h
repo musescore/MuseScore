@@ -171,13 +171,13 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Slide Whistle"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Sl. Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Whistle"),
 //: Tin Whistle
-QT_TRANSLATE_NOOP("InstrumentsXML", "Tin. Wh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tin Whistle"),
 //: B♭ Tin Whistle
-QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tin. Wh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tin Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Whistle"),
 //: Tin Whistle
-QT_TRANSLATE_NOOP("InstrumentsXML", "Tin. Wh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tin Wh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Oboe"),
 //: Piccolo Oboe
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Ob."),
@@ -589,9 +589,17 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Cornet"),
 //: E♭ Cornet
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Cnt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Cornet"),
+//: C Cornet
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Cnt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Cornet"),
 //: B♭ Cornet
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Cnt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "A Cornet"),
+//: A Cornet
+QT_TRANSLATE_NOOP("InstrumentsXML", "A Cnt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Saxhorn"),
 //: Saxhorn
@@ -631,6 +639,14 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Trumpet in A"),
 //: Piccolo Trumpet in A
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Tpt. A"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "F Trumpet"),
+//: F Trumpet
+QT_TRANSLATE_NOOP("InstrumentsXML", "F Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "E Trumpet"),
+//: E Trumpet
+QT_TRANSLATE_NOOP("InstrumentsXML", "E Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Trumpet"),
 //: E♭ Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tpt."),
@@ -646,6 +662,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Trumpet"),
 //: B♭ Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "A Trumpet"),
+//: A Trumpet
+QT_TRANSLATE_NOOP("InstrumentsXML", "A Tpt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pocket Trumpet"),
 //: Pocket Trumpet
@@ -1415,6 +1435,9 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Classical Guitar"),
 //: Classical Guitar
 QT_TRANSLATE_NOOP("InstrumentsXML", "Guit."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Classical Guitar [Tablature]"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Contra Guitar"),
+//: Contra Guitar
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Guit."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Acoustic Guitar"),
 //: Acoustic Guitar
 QT_TRANSLATE_NOOP("InstrumentsXML", "Guit."),

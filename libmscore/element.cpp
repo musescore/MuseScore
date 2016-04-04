@@ -326,7 +326,7 @@ Element::Element(const Element& e)
 Element* Element::linkedClone()
       {
       Element* e = clone();
-      score()->undo(new Link(this, e));
+      score()->undo(new Link(e, this));
       return e;
       }
 
@@ -518,7 +518,7 @@ QPointF Element::pagePos() const
             else if (parent()->type() == Element::Type::SYSTEM)
                   system = static_cast<System*>(parent());
             else
-                  Q_ASSERT(false);
+                  {Q_ASSERT(false);}
             if (system) {
                   int si = staffIdx();
                   if (type() == Element::Type::CHORD || type() == Element::Type::REST)
@@ -553,7 +553,7 @@ QPointF Element::canvasPos() const
             else if (parent()->type() == Element::Type::SYSTEM)
                   system = static_cast<System*>(parent());
             else
-                  Q_ASSERT(false);
+                  {Q_ASSERT(false);}
             if (system) {
                   int si = staffIdx();
                   if (type() == Element::Type::CHORD || type() == Element::Type::REST)

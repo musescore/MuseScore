@@ -1,16 +1,28 @@
-Version 2.110 Fix panning position of Drawbar Organ
-Version 2.109 Increase Contrabass range to A5 (MIDI #81)
-Version 2.108 Withdrawn
-Version 2.107 Add Mellow Yamaha Grand at Bank #8 Patch #0
-Version 2.106 Fix Alto Sax range issue
-Version 2.105 Fix Recorder range issue
-Version 2.104 Tweak tuning for Violin preset
-Version 2.103 Remove Burst Noise preset which was overloading 
+Version 2.305  Fix Orchestral Drumset Decay/Release Envelopes
+Version 2.304  Fix Orchestral Drumset keymapping issues
+Version 2.303  Apply pitch shift fix to Marching Cymbals
+Version 2.302  Apply pitch shift fix to Marching Snare
+Version 2.301  Fix pitch shift problems with Drumline Bass Drum
+Version 2.300  Add Mike Shorsch Drumline instruments
+Version 2.203  Fix Decay and Release envelopes for Timpani
+Version 2.202  Add Dry Strings preset for short articulations
+Version 2.201  Extend Strings instrument range to E7 (MIDI #100)
+Version 2.200  Add temple blocks preset at Bank #1 Patch #115
+Version 2.112  Extend Baritone Sax range (now goes up to note #127)
+Version 2.111  Map out sample Aah Choir F#4 containing an audio glitch
+Version 2.110  Fix panning position of Drawbar Organ
+Version 2.109  Increase Contrabass range to A5 (MIDI #81)
+Version 2.108  Withdrawn
+Version 2.107  Add Mellow Yamaha Grand at Bank #8 Patch #0
+Version 2.106  Fix Alto Sax range issue
+Version 2.105  Fix Recorder range issue
+Version 2.104  Tweak tuning for Violin preset
+Version 2.103  Remove Burst Noise preset which was overloading 
                       FluidSynth
-Version 2.102 Fix name problem for Bass & Lead
-Version 2.101 Fix typo in Accordion def
+Version 2.102  Fix name problem for Bass & Lead
+Version 2.101  Fix typo in Accordion def
 Version 2.10   Raise level of drumkits
-Version 2.9     Panning fix to Clarinet
-Version 2.8     Fix Goblin Synth patch crashing FluidSynth in Windows
-Version 2.7     Fix missing drum in some drum kits
-Version 2.6     Beta release of mono soundfont
+Version 2.9    Panning fix to Clarinet
+Version 2.8    Fix Goblin Synth patch crashing FluidSynth in Windows
+Version 2.7    Fix missing drum in some drum kits
+Version 2.6    Beta release of mono soundfont
