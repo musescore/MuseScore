@@ -2526,7 +2526,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "split-measure",
-         QT_TRANSLATE_NOOP("action","Split Measure before Selected Note"),
+         QT_TRANSLATE_NOOP("action","Split Measure Before Selected Note"),
          QT_TRANSLATE_NOOP("action","Split measure before selected note")
          },
       {
