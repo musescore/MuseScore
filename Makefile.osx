@@ -19,7 +19,7 @@
 #=============================================================================
 
 REVISION  = `cat mscore/revision.h`
-VERSION   = "2.0.3b-${REVISION}"
+VERSION   = "2.0.4b-${REVISION}"
 #VERSION = 2.0.2
 PREFIX=../applebuild
 
@@ -47,7 +47,7 @@ xcode:
     cd build.xcode;                                  \
     cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
           .. -G Xcode;                         \
-    xcodebuild -project ${XCODEPROJ} -target lrelease; 
+    xcodebuild -project ${XCODEPROJ} -target lrelease;
 
 lupdate:
 	cd build.release;xcodebuild -project ${XCODEPROJ} -target lupdate;
