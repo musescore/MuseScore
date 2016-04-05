@@ -784,6 +784,15 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "T. Co."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Serpent"),
 //: Serpent
 QT_TRANSLATE_NOOP("InstrumentsXML", "Spt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Alto Sackbut"),
+//: Alto Sackbut
+QT_TRANSLATE_NOOP("InstrumentsXML", "A. Sack."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tenor Sackbut"),
+//: Tenor Sackbut
+QT_TRANSLATE_NOOP("InstrumentsXML", "T. Sack."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Sackbut"),
+//: Bass Sackbut
+QT_TRANSLATE_NOOP("InstrumentsXML", "B. Sack."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone"),
 //: Trombone
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tbn."),
