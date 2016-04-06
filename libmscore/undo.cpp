@@ -2631,7 +2631,7 @@ static void updateTextStyle(void* a, Element* e)
             Text* text = static_cast<Text*>(e);
             if (text->textStyle().name() == s) {
                   text->setTextStyle(text->score()->textStyle(s));
-                  text->textStyleChanged();
+                  text->styleChanged();
                   }
             }
       }
