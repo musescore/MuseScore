@@ -677,6 +677,7 @@
   <SC>
     <key>fullscreen</key>
     <seq>Ctrl+U</seq>
+    <seq>Meta+Ctrl+F</seq>
     </SC>
   <SC>
     <key>repitch</key>
