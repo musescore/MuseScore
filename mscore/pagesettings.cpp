@@ -30,6 +30,9 @@
 
 namespace Ms {
 
+static const int DEFAULT_POS_X  = 300;
+static const int DEFAULT_POS_Y  = 100;
+
 //---------------------------------------------------------
 //   PageSettings
 //---------------------------------------------------------
@@ -46,6 +49,10 @@ PageSettings::PageSettings(QWidget* parent)
       preview->setPreviewOnly(true);
 
       static_cast<QVBoxLayout*>(previewGroup->layout())->insertWidget(0, sa);
+
+      QSettings settings;
+      restoreGeometry(settings.value("pageSettings/geometry").toByteArray());
+      move(settings.value("pageSettings/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
 
       mmUnit = true;      // should be made a global configuration item
 
@@ -81,7 +88,44 @@ PageSettings::PageSettings(QWidget* parent)
 
 PageSettings::~PageSettings()
       {
+      QSettings settings;
+
+
+            settings.setValue("pageSettings/pos", pos());
+            settings.setValue("pageSettings/geometry", saveGeometry());
+
       }
+
+//---------------------------------------------------------
+//   closeEvent
+//
+//    Called when the PageSettings is closed with its own button
+//    but not when it is hidden with the main menu command
+//---------------------------------------------------------
+
+void PageSettings::closeEvent(QCloseEvent* ev)
+      {
+      emit closed(false);
+      QWidget::closeEvent(ev);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//
+//    Called both when the PageSettings is closed with its own button and
+//    when it is hidden via the main menu command
+//
+//    Stores widget geometry and position into settings.
+//---------------------------------------------------------
+
+void PageSettings::hideEvent(QHideEvent* ev)
+      {
+      QSettings settings;
+      settings.setValue("pageSettings/pos", pos());
+      settings.setValue("pageSettings/geometry", saveGeometry());
+      QWidget::hideEvent(ev);
+      }
+
 
 //---------------------------------------------------------
 //   setScore
