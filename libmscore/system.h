@@ -134,7 +134,6 @@ class System : public Element {
       MeasureBase* nextMeasure(const MeasureBase*) const;
 
       qreal leftMargin() const    { return _leftMargin; }
-//      bool isVbox() const;
       VBox* vbox() const;
 
       const QList<Bracket*>& brackets() const { return _brackets; }

@@ -173,7 +173,6 @@ void TestParts::createParts(MasterScore* score)
 void TestParts::testPartCreation(const QString& test)
       {
       MasterScore* score = readScore(DIR + test + ".mscx");
-      score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, test + "-1.mscx", DIR + test + ".mscx"));
       createParts(score);
@@ -188,7 +187,6 @@ void TestParts::testPartCreation(const QString& test)
 void TestParts::appendMeasure()
       {
       MasterScore* score = readScore(DIR + "part-all.mscx");
-      score->doLayout();
 
       QVERIFY(score);
       createParts(score);
@@ -213,7 +211,6 @@ void TestParts::appendMeasure()
 void TestParts::insertMeasure()
       {
       MasterScore* score = readScore(DIR + "part-all.mscx");
-      score->doLayout();
       QVERIFY(score);
       createParts(score);
 
@@ -238,7 +235,6 @@ void TestParts::insertMeasure()
 void TestParts::styleScore()
       {
       MasterScore* score = readScore(DIR + "partStyle.mscx");
-      score->doLayout();
       QVERIFY(score);
       createParts(score);
       score->style()->set(StyleIdx::clefLeftMargin, 4.0);
@@ -265,7 +261,6 @@ void TestParts::styleScoreReload()
 void TestParts::stylePartDefault()
       {
       MasterScore* score = readScore(DIR + "partStyle.mscx");
-      score->doLayout();
       QVERIFY(score);
       // TODO: set defaultStyleForParts
       MScore::_defaultStyleForParts = new MStyle();
@@ -285,7 +280,6 @@ void TestParts::stylePartDefault()
 void TestParts::styleScoreDefault()
       {
       MasterScore* score = readScore(DIR + "partStyle.mscx");
-      score->doLayout();
       QVERIFY(score);
       // TODO: set defaultStyle
       createParts(score);
@@ -340,10 +334,6 @@ void TestParts::createPartImage()
 MasterScore* TestParts::doAddBreath()
       {
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
-      score->doLayout();
-
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
@@ -398,7 +388,6 @@ void TestParts::undoRedoAddBreath()
 
       score->undoStack()->undo();
       score->endUndoRedo();
-//      score->doLayout();
 
       score->undoStack()->redo();
       score->endUndoRedo();
@@ -414,9 +403,6 @@ void TestParts::undoRedoAddBreath()
 MasterScore* TestParts::doRemoveBreath()
       {
       MasterScore* score = readScore(DIR + "part-breath-add.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(Segment::Type::Breath);
@@ -463,7 +449,6 @@ void TestParts::undoRedoRemoveBreath()
       MasterScore* score = doRemoveBreath();
       score->undoStack()->undo();
       score->endUndoRedo();
-//      score->doLayout();
 
       score->undoStack()->redo();
       score->endUndoRedo();
@@ -479,9 +464,6 @@ void TestParts::undoRedoRemoveBreath()
 MasterScore* TestParts::doAddFingering()
       {
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
@@ -545,9 +527,6 @@ void TestParts::undoRedoAddFingering()
 MasterScore* TestParts::doRemoveFingering()
       {
       MasterScore* score = readScore(DIR + "part-fingering-parts.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(Segment::Type::ChordRest);
@@ -615,9 +594,6 @@ void TestParts::undoRedoRemoveFingering()
 MasterScore* TestParts::doAddSymbol()
       {
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
@@ -681,9 +657,6 @@ void TestParts::undoRedoAddSymbol()
 MasterScore* TestParts::doRemoveSymbol()
       {
       MasterScore* score = readScore(DIR + "part-symbol-parts.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(Segment::Type::ChordRest);
@@ -751,9 +724,6 @@ void TestParts::undoRedoRemoveSymbol()
 MasterScore* TestParts::doAddChordline()
       {
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
@@ -818,9 +788,6 @@ void TestParts::undoRedoAddChordline()
 MasterScore* TestParts::doRemoveChordline()
       {
       MasterScore* score = readScore(DIR + "part-chordline-parts.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(Segment::Type::ChordRest);
@@ -862,7 +829,6 @@ void TestParts::undoRemoveChordline()
       MasterScore* score = doRemoveChordline();
       score->undoStack()->undo();
       score->endUndoRedo();
-//      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-chordline-udel.mscx", DIR + "part-chordline-udel.mscx"));
       delete score;
       }
@@ -889,9 +855,6 @@ void TestParts::undoRedoRemoveChordline()
 MasterScore* TestParts::doAddImage()
       {
       MasterScore* score = readScore(DIR + "part1-2o.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
@@ -955,9 +918,6 @@ void TestParts::undoRedoAddImage()
 MasterScore* TestParts::doRemoveImage()
       {
       MasterScore* score = readScore(DIR + "part12o.mscx");
-      score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
-            e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(SegChordRest);
@@ -1027,7 +987,6 @@ void TestParts::undoRedoRemoveImage()
 void TestParts::staffStyles()
       {
       MasterScore* score = readScore(DIR + "part1.mscx");
-      score->doLayout();
       QVERIFY(score);
 //      int numOfStaffTypes = score->staffTypes().count();
       createParts(score);

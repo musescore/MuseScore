@@ -2626,9 +2626,9 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
 QPointF Chord::layoutArticulation(Articulation* a)
       {
       qreal _spatium = spatium();
-      qreal pld = staff()->lineDistance();
-      qreal lld = staff()->logicalLineDistance();
-      bool scale = staff()->scaleNotesToLines();
+      qreal pld      = staff()->lineDistance();
+      qreal lld      = staff()->logicalLineDistance();
+      bool scale     = staff()->scaleNotesToLines();
       qreal _spStaff = _spatium * pld;    // scaled to physical staff line distance
 
       ArticulationAnchor aa = a->anchor();
@@ -2636,7 +2636,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       qreal chordTopY = upPos();    // note position of highest note
       qreal chordBotY = downPos();  // note position of lowest note
       qreal x         = centerX();
-      qreal y = 0.0;
+      qreal y         = 0.0;
 
       ArticulationType st = a->articulationType();
 

@@ -354,14 +354,13 @@ void TestMidi::events()
       QString reference(DIR + file + "-ref.txt");
 
       MasterScore* score = readScore(readFile);
-      score->doLayout();
       EventMap events;
       score->renderMidi(&events);
       qDebug() << "Opened score " << readFile;
       QFile filehandler(writeFile);
       filehandler.open(QIODevice::WriteOnly | QIODevice::Text);
       QTextStream out(&filehandler);
-      multimap<int, NPlayEvent> ::iterator iter;
+
       for (auto iter = events.begin(); iter!= events.end(); ++iter){
             out << qSetFieldWidth(5) << "Tick  =  ";
             out << qSetFieldWidth(5) << iter->first;

@@ -1402,10 +1402,14 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
             else
                   w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
             }
-      else if (st == Segment::Type::Clef && nst == Segment::Type::KeySig)
-            w += score()->styleP(StyleIdx::clefKeyDistance);
-      else if (st == Segment::Type::Clef && nst == Segment::Type::TimeSig)
-            w += score()->styleP(StyleIdx::clefTimesigDistance);
+      else if (st == Segment::Type::Clef) {
+            if (nst == Segment::Type::KeySig)
+                  w += score()->styleP(StyleIdx::clefKeyDistance);
+            else if (nst == Segment::Type::TimeSig)
+                  w += score()->styleP(StyleIdx::clefTimesigDistance);
+            else if (nst & (Segment::Type::EndBarLine | Segment::Type::StartRepeatBarLine))
+                  w += score()->styleP(StyleIdx::clefBarlineDistance);
+            }
       else if (st == Segment::Type::KeySig && nst == Segment::Type::TimeSig)
             w += score()->styleP(StyleIdx::keyTimesigDistance);
       else if (st == Segment::Type::KeySig && nst == Segment::Type::StartRepeatBarLine)

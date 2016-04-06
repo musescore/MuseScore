@@ -35,7 +35,10 @@ extern MScore* mscore;
 
 MCursor::MCursor(Score* s)
       {
-      _score = s->masterScore();
+      if (s)
+            _score = s->masterScore();
+      else
+            _score = 0;
       move(0, 0);
       }
 
