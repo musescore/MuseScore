@@ -478,9 +478,9 @@ void ChordRest::layoutArticulations()
       qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
       qreal _spDist  = _spatium;          // scaling for distance between articulations
 
-      if (type() == Element::Type::CHORD) {
+      if (isChord()) {
             if (_articulations.size() == 1) {
-                  static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
+                  toChord(this)->layoutArticulation(_articulations[0]);
                   return;
                   }
             if (_articulations.size() == 2) {

@@ -3071,15 +3071,18 @@ System* Score::collectSystem(LayoutContext& lc)
                         ww = m->minWidth1();    // without system header
                   else
                         ww = computeMinWidth(m->first(), false);
-                  if (ww < minMeasureWidth)
-                        ww = minMeasureWidth;
+//                  if (ww < minMeasureWidth)
+//                        ww = minMeasureWidth;
                   ww += m->createEndBarLines(true);
-                  m->setWidth(ww);
+//                  m->setWidth(ww);
 
                   qreal stretch = m->userStretch() * measureSpacing;
                   if (stretch < 1.0)
                         stretch = 1.0;
                   ww *= stretch;
+                  m->setWidth(ww);
+                  if (ww < minMeasureWidth)
+                        ww = minMeasureWidth;
 
                   bool hasCourtesy;
                   cautionaryW = cautionaryWidth(m, hasCourtesy) * stretch;
@@ -3529,7 +3532,7 @@ bool Score::collectPage(LayoutContext& lc)
                                                       sp->layout();
                                                 }
                                           }
-                                    cr->layoutArticulations();
+//TODO-ws                                    cr->layoutArticulations();
                                     }
                               else if (e->isBarLine())
                                     e->layout();

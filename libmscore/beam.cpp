@@ -1911,9 +1911,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       //  calculate stem length
       //
       for (ChordRest* cr : crl) {
-            Chord* c = toChord(cr);
-            if (!c->isChord())
+            if (!cr->isChord())
                   continue;
+            Chord* c = toChord(cr);
             c->layoutStem1();
             if (c->hook())
                   score()->undoRemoveElement(c->hook());

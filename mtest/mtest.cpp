@@ -19,58 +19,58 @@ static int failed = 0;
 
 const char* tests[] = {
 //      "libmscore/compat/tst_compat",          // expected to not work
+#if 1
       "libmscore/element/tst_element",
       "libmscore/note/tst_note",
       "libmscore/keysig/tst_keysig",
       "libmscore/barline/tst_barline",
       "libmscore/clef/tst_clef",
       "libmscore/timesig/tst_timesig",
-
-      "libmscore/repeat/tst_repeat",                  //FAIL
-
+      "libmscore/repeat/tst_repeat",
       "libmscore/dynamic/tst_dynamic",
       "libmscore/breath/tst_breath",
       "libmscore/tuplet/tst_tuplet",
       "libmscore/hairpin/tst_hairpin",
-/**/      "libmscore/chordsymbol/tst_chordsymbol",
+      "libmscore/chordsymbol/tst_chordsymbol",
       "libmscore/text/tst_text",
-/**/      "libmscore/measure/tst_measure",
+      "libmscore/measure/tst_measure",
       "libmscore/beam/tst_beam",
-//      "libmscore/spanners/tst_spanners",
-//      "libmscore/clef_courtesy/tst_clef_courtesy",
-
-//      "libmscore/midimapping/tst_midimapping",      // probably ok
-
       "libmscore/layout/tst_benchmark",
-//      "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/instrumentchange/tst_instrumentchange",
       "libmscore/join/tst_join",
       "libmscore/transpose/tst_transpose",
       "libmscore/copypaste/tst_copypaste",
-
-//      "libmscore/parts/tst_parts",                                // crash
       "libmscore/concertpitch/tst_concertpitchbenchmark",
       "libmscore/selectionfilter/tst_selectionfilter",
-//      "libmscore/earlymusic/tst_earlymusic",
-
-//      "libmscore/midi/tst_midi",
-      "libmscore/tools/tst_tools",              // FAIL but probably ok
-//      "libmscore/splitstaff/tst_splitstaff",
-//      "libmscore/split/tst_split",
+      "libmscore/tools/tst_tools",                    // some tests disabled
       "libmscore/plugins/tst_plugins",
       "libmscore/album/tst_album",
-//      "libmscore/copypastesymbollist/tst_copypastesymbollist",
       "scripting/tst_scripting"
-
-        // import/export
       "guitarpro/tst_guitarpro",
       "biab/tst_biab",
-//      "testoves/structure/tst_ove_structure",
-//      "testoves/ove3/tst_ove_ove3",
-//      "testoves/bdat/tst_ove_bdat",
       "capella/io/tst_capella_io",
       "importmidi/tst_importmidi",
-//      "musicxml/io/tst_mxml_io",
+      "libmscore/selectionrangedelete/tst_selectionrangedelete",
+      "libmscore/parts/tst_parts",
+#endif
+#if 0
+      "libmscore/spanners/tst_spanners",              // FAIL
+
+      "libmscore/clef_courtesy/tst_clef_courtesy",    // FAIL
+      "libmscore/midimapping/tst_midimapping",        // FAIL
+      "libmscore/earlymusic/tst_earlymusic",          // FAIL
+
+      "libmscore/midi/tst_midi",                      // FAIL
+      "libmscore/splitstaff/tst_splitstaff",          // FAIL
+      "libmscore/split/tst_split",                    // FAIL
+      "libmscore/copypastesymbollist/tst_copypastesymbollist",    // FAIL
+
+        // import/export
+      "testoves/structure/tst_ove_structure",         // FAIL
+      "testoves/ove3/tst_ove_ove3",                   // FAIL
+      "testoves/bdat/tst_ove_bdat",
+      "musicxml/io/tst_mxml_io",                      // FAIL
+#endif
       };
 
 //---------------------------------------------------------

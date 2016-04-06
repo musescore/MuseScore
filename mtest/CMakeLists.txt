@@ -156,7 +156,51 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves)
+subdirs (
+        libmscore/album
+        libmscore/barline
+        libmscore/beam
+        libmscore/breath
+        libmscore/chordsymbol
+        libmscore/clef
+#        libmscore/clef_courtesy
+#        libmscore/compat
+        libmscore/concertpitch
+        libmscore/copypaste
+#        libmscore/copypastesymbollist
+        libmscore/dynamic
+#        libmscore/earlymusic
+        libmscore/element
+        libmscore/hairpin
+        libmscore/instrumentchange
+        libmscore/join
+        libmscore/keysig
+        libmscore/layout
+        libmscore/parts
+        libmscore/measure
+#        libmscore/midi
+#        libmscore/midimapping
+        libmscore/note
+        libmscore/plugins
+        libmscore/repeat
+        libmscore/selectionfilter
+        libmscore/selectionrangedelete
+#        libmscore/spanners
+#        libmscore/split
+#        libmscore/splitstaff
+        libmscore/timesig
+        libmscore/tools
+        libmscore/transpose
+        libmscore/tuplet
+        libmscore/text
+        importmidi
+        capella
+        biab
+#       musicxml
+#        guitarpro
+#        scripting
+#        testoves
+        )
 
 
 install(FILES

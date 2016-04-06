@@ -40,8 +40,8 @@ inline void initMyResources() {
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
-// Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
-Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtDebugMsg)
+Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+// Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtDebugMsg)
 
 namespace Ms {
 

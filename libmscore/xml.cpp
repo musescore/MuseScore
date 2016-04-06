@@ -838,17 +838,6 @@ int Xml::spannerId(const Spanner* s)
       }
 
 //---------------------------------------------------------
-//   clefs
-//---------------------------------------------------------
-
-QList<std::pair<int, ClefType>>& XmlReader::clefs(int idx)
-      {
-      while (idx >= _clefs.size())
-            _clefs.append(QList<std::pair<int,ClefType>>());
-      return _clefs[idx];
-      }
-
-//---------------------------------------------------------
 //   canWrite
 //---------------------------------------------------------
 
