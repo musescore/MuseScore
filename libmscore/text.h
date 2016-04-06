@@ -304,7 +304,7 @@ class Text : public Element {
       bool readProperties(XmlReader&);
 
       void spellCheckUnderline(bool) {}
-      virtual void textStyleChanged();
+      virtual void styleChanged() override;
 
       virtual void paste();
 
