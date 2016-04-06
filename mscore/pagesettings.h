@@ -38,6 +38,8 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       Navigator* preview;
       bool mmUnit;
       Score* cs;
+      virtual void closeEvent(QCloseEvent*);
+      virtual void hideEvent (QHideEvent* event);
       void updateValues();
       void updatePreview(int);
       void blockSignals(bool);
@@ -67,6 +69,9 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void pageHeightChanged(double);
       void pageWidthChanged(double);
       void pageOffsetChanged(int val);
+
+   signals:
+      void closed(bool);
 
    public:
       PageSettings(QWidget* parent = 0);
