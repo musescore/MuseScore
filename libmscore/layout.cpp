@@ -1994,9 +1994,8 @@ qreal sff2(qreal x, qreal xMin, const SpringMap2& springs)
 //   respace
 //---------------------------------------------------------
 
-void Score::respace(QList<ChordRest*>* /*elements*/)
+void Score::respace(std::vector<ChordRest*>* elements)
       {
-#if 0
       ChordRest* cr1 = elements->front();
       ChordRest* cr2 = elements->back();
       int n          = elements->size();
@@ -2009,11 +2008,9 @@ void Score::respace(QList<ChordRest*>* /*elements*/)
 
       for (int i = 0; i < n-1; ++i) {
             ChordRest* cr  = (*elements)[i];
-            ChordRest* ncr = (*elements)[i+1];
-            Space space(cr->space());
-            Space nspace(ncr->space());
-            width[i] = space.rw() + nspace.lw();
-            ticksList[i] = ncr->segment()->tick() - cr->segment()->tick();
+            ChordRest* ncr  = (*elements)[i+1];
+            width[i]       = cr->shape().minHorizontalDistance(ncr->shape());
+            ticksList[i]   = cr->duration().ticks();
             minTick = qMin(ticksList[i], minTick);
             }
 
@@ -2026,7 +2023,6 @@ void Score::respace(QList<ChordRest*>* /*elements*/)
       for (int i = 0; i < n-1; ++i) {
             qreal w   = width[i];
             int t     = ticksList[i];
-            // qreal str = 1.0 + .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
             qreal str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
             qreal d   = w / str;
 
@@ -2052,7 +2048,6 @@ void Score::respace(QList<ChordRest*>* /*elements*/)
             qreal dx = x - cr->segment()->pos().x();
             cr->rxpos() += dx;
             }
-#endif
       }
 
 //---------------------------------------------------------

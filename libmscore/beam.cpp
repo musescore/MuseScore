@@ -506,7 +506,7 @@ void Beam::layout()
             qreal lw2      = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
             ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
-            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+//            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
 
             for (const QLineF* bs : beamSegments) {
                   QPolygonF a(4);
@@ -1495,8 +1495,8 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
 
 void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       {
-//TODO-ws      if (_distribute)
-//            score()->respace(&crl);       // fix horizontal spacing of stems
+      if (_distribute)
+            score()->respace(&crl);       // fix horizontal spacing of stems
 
       if (crl.empty())                  // no beamed Elements
             return;
