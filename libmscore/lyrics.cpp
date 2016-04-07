@@ -872,6 +872,7 @@ void LyricsLineSegment::layout()
 #endif
             qreal len         = pos2().x();
             qreal minDashLen  = score()->styleS(StyleIdx::lyricsDashMinLength).val() * sp;
+            qreal maxDashDist = score()->styleS(StyleIdx::lyricsDashMaxDistance).val() * sp;
             if (len < minDashLen) {                                           // if no room for a dash
                   // if at end of system or dash is forced
                   if (endOfSystem || score()->styleB(StyleIdx::lyricsDashForce)) {
@@ -882,13 +883,13 @@ void LyricsLineSegment::layout()
                   else                                                        //   if within system or dash not forced
                         _numOfDashes = 0;                                     //     draw no dash
                   }
-            else if (len < (Lyrics::LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) { // if no room for two dashes
+            else if (len < (maxDashDist * TWICE)) {                           // if no room for two dashes
                   _numOfDashes = 1;                                           //    draw one dash
                   if (_dashLength > len)                                      // if no room for a full dash
                         _dashLength = len;                                    //    shorten it
                   }
             else
-                  _numOfDashes = len / (Lyrics::LYRICS_DASH_DEFAULT_STEP * sp);// draw several dashes
+                  _numOfDashes = len / maxDashDist;                           // draw several dashes
 
             // adjust next lyrics horiz. position if too little a space forced to skip the dash
             if (_numOfDashes == 0 && nextLyr != nullptr && len > 0)
