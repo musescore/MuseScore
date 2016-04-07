@@ -314,6 +314,7 @@ void Preferences::write()
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
       s.setValue("mySoundfontsPath", mySoundfontsPath);
+      s.remove("sfPath");
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -458,7 +459,6 @@ void Preferences::read()
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
       // compatibility: 2.0.X with X < 3 was storing sfPath and included global path
       mySoundfontsPath = s.value("sfPath",           mySoundfontsPath).toString();
-      s.remove("sfPath");
       QStringList pl = mySoundfontsPath.split(";");
       pl.removeAll(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath());
       mySoundfontsPath = pl.join(";");
