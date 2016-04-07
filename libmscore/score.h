@@ -975,7 +975,7 @@ class Score : public QObject, public ScoreElement {
       Tuplet* searchTuplet(XmlReader& e, int id);
       void cmdSelectAll();
       void cmdSelectSection();
-      void respace(QList<ChordRest*>* elements);
+      void respace(std::vector<ChordRest*>* elements);
       void transposeSemitone(int semitone);
       MeasureBase* insertMeasure(Element::Type type, MeasureBase*,
          bool createEmptyMeasures = false);
