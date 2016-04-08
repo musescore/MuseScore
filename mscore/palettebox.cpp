@@ -191,18 +191,28 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
       switch(cmd) {
             case PaletteCommand::PDELETE:
                   {
-                  vbox->removeItem(item);
-                  b->deleteLater();      // this is the button widget
-                  delete item;
-                  item = vbox->itemAt(slot);
-                  vbox->removeItem(item);
-                  delete item->widget();
-                  delete item;
-                  for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
-                        static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
-                  emit changed();
+                  QMessageBox::StandardButton reply;
+                  reply = QMessageBox::question(0,
+                             QWidget::tr("Warning"),
+                             QWidget::tr("Are you sure?"),
+                             QMessageBox::Yes | QMessageBox::No,
+                             QMessageBox::Yes
+                             );
+                  if (reply == QMessageBox::Yes) {
+                        vbox->removeItem(item);
+                        b->deleteLater();      // this is the button widget
+                        delete item;
+                        item = vbox->itemAt(slot);
+                        vbox->removeItem(item);
+                        delete item->widget();
+                        delete item;
+                        for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
+                              static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
+                        emit changed();
+                        }
                   }
                   break;
+
             case PaletteCommand::SAVE:
                   {
                   QString path = mscore->getPaletteFilename(false, palette->name());
