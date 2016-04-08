@@ -40,14 +40,14 @@ void SearchComboBox::searchTextChanged(const QString& s)
       bool ok;
 
       int n = s.toInt(&ok);
-      if (ok && n >= 0) {
+      if (ok && n > 0) {
             setSearchType(SearchType::SEARCH_MEASURE);
             _found = cv->searchMeasure(n);
             }
       else {
             if (s.size() >= 2 && s[0].toLower() == 'p' && s[1].isNumber()) {
                   n = s.mid(1).toInt(&ok);
-                  if (ok && n >= 0) {
+                  if (ok) {
                         setSearchType(SearchType::SEARCH_PAGE);
                         _found = cv->searchPage(n);
                         }
@@ -55,7 +55,10 @@ void SearchComboBox::searchTextChanged(const QString& s)
 
             if (searchType() != SearchType::SEARCH_PAGE) {
                   setSearchType(SearchType::SEARCH_REHEARSAL_MARK);
-                  _found = cv->searchRehearsalMark(s);
+                  if (s.size() >= 2 && s[0].toLower() == 'r' && s[1].isNumber())
+                        _found = cv->searchRehearsalMark(s.mid(1));
+                  else
+                        _found = cv->searchRehearsalMark(s);
                   }
             }
       //updating status bar
