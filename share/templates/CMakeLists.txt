@@ -76,8 +76,9 @@ install(FILES
       )
 
 install(FILES
-      07-Band/01-Concert_Band.mscz
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/07-Band
+      07-Band_and_Percussion/01-Concert_Band.mscz
+      07-Band_and_Percussion/02-Marching_Percussion.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/07-Band_and_Percussion
       )
 
 install(FILES
