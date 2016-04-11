@@ -2715,7 +2715,8 @@ void Score::undoInsertTime(int tick, int len)
                         if (t2 > s->tick())
                               append = true;
                         }
-                  else if (s->tick() >= tick && s->tick2() < tick2)
+//                  else if (s->tick() >= tick && s->tick2() < tick2)
+                  else if (s->tick() >= tick && s->tick2() <= tick2)
                         append = true;
                   else if (s->tick() > tick && s->tick2() > tick2)
                         append = true;
@@ -2769,10 +2770,12 @@ void Score::undoInsertTime(int tick, int len)
                         //    +---remove---+
                         //
                         int t2 = s->tick2() + len;
-                        if (t2 > s->tick())
+                        if (t2 > s->tick()) {
                               undoChangeProperty(s, P_ID::SPANNER_TICKS, s->ticks() + len);
+                              }
                         }
-                  else if (s->tick() >= tick && s->tick2() < tick2) {
+//                  else if (s->tick() >= tick && s->tick2() < tick2) {
+                  else if (s->tick() >= tick && s->tick2() <= tick2) {
                         //
                         //  case C:
                         //    +---spanner---+
@@ -2944,10 +2947,10 @@ void InsertRemoveMeasures::removeMeasures()
 
             score->insertTime(tick1, -(tick2 - tick1));
             score->setLayoutAll();
-            for (Spanner* sp : score->unmanagedSpanners())
-                  if ( (sp->tick() >= tick1 && sp->tick() < tick2)
-                              || (sp->tick2() >= tick1 && sp->tick2() < tick2) )
+            for (Spanner* sp : score->unmanagedSpanners()) {
+                  if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
+                  }
             score->connectTies(true);   // ??
             }
       score->setLayoutAll();

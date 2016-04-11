@@ -1890,7 +1890,7 @@ bool Score::appendScore(Score* score)
 
 void Score::splitStaff(int staffIdx, int splitPoint)
       {
-      qDebug("split staff %d point %d", staffIdx, splitPoint);
+//      qDebug("split staff %d point %d", staffIdx, splitPoint);
 
       //
       // create second staff
