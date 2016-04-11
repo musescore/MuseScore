@@ -137,7 +137,7 @@ void Album::print()
 //   createScore
 //---------------------------------------------------------
 
-bool Album::createScore(const QString& fn)
+bool Album::createScore(const QString& fn, bool addPageBreak, bool addSectionBreak)
       {
       loadScores();
 
@@ -184,7 +184,7 @@ bool Album::createScore(const QString& fn)
 
             // try to append root score
             item->score->doLayout();
-            if (!score->appendScore(item->score)) {
+            if (!score->appendScore(item->score, addPageBreak, addSectionBreak)) {
                   qDebug("Cannot append root score of album item \"%s\".", qPrintable(item->name));
                   delete score;
                   return false;
@@ -196,7 +196,7 @@ bool Album::createScore(const QString& fn)
                         Score* currentScoreExcerpt = item->score->excerpts().at(i)->partScore();
                         if (currentScoreExcerpt) {
                               currentScoreExcerpt->doLayout();
-                              if (!score->excerpts().at(i)->partScore()->appendScore(currentScoreExcerpt)) {
+                              if (!score->excerpts().at(i)->partScore()->appendScore(currentScoreExcerpt, addPageBreak, addSectionBreak)) {
                                     qDebug("Cannot append excerpt %d of album item \"%s\".", i, qPrintable(item->name));
                                     delete score;
                                     return false;

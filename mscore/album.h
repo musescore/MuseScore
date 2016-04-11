@@ -60,7 +60,7 @@ class Album {
       ~Album();
 
       void print();
-      bool createScore(const QString& fn);
+      bool createScore(const QString& fn, bool addPageBreak = false, bool addSectionBreak = true);
       bool read(const QString& path);
       void write(Xml& xml);
       bool dirty() const             { return _dirty; }
