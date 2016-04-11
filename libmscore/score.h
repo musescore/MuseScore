@@ -532,7 +532,7 @@ class Score : public QObject, public ScoreElement {
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
-      bool appendScore(Score*);
+      bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       int pageIdx(Page* page) const { return _pages.indexOf(page); }
 

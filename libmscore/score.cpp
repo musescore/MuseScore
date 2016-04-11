@@ -2060,7 +2060,7 @@ void Score::removeAudio()
 //   appendScore
 //---------------------------------------------------------
 
-bool Score::appendScore(Score* score)
+bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       {
       if (parts().size() < score->parts().size() || staves().size() < score->staves().size())
             return false;
@@ -2071,13 +2071,17 @@ bool Score::appendScore(Score* score)
             return false;
       int tickOfAppend = lastMeasure->endTick();
 
-      if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak()) {
+      // apply Page/Section Breaks if desired
+      if (addPageBreak) {
+            if (!lastMeasure->pageBreak()) {
+                  lastMeasure->undoSetBreak(false, LayoutBreak::Type::LINE); // remove line break if exists
+                  lastMeasure->undoSetBreak(true, LayoutBreak::Type::PAGE);  // apply page break
+                  }
+            }
+      else if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak())
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::LINE);
-            }
-
-      if (!lastMeasure->sectionBreak()) {
+      if (addSectionBreak && !lastMeasure->sectionBreak())
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::SECTION);
-            }
 
       // match concert pitch states
       if (styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch))
