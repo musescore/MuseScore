@@ -141,7 +141,7 @@ void AlbumManager::createScoreClicked()
             );
             if (fn.isEmpty())
                   return;
-            if (!album->createScore(fn))
+            if (!album->createScore(fn, checkBoxAddPageBreak->isChecked(), checkBoxAddSectionBreak->isChecked()))
                   QMessageBox::critical(mscore, QWidget::tr("MuseScore: Save File"), tr("Error while creating score from album."));
             }
       }

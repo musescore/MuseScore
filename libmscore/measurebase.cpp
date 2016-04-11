@@ -385,7 +385,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             score()->undoAddElement(lb);
             }
       else {
-            // remove line break
+            // remove layout break
             for (Element* e : el()) {
                   if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == type) {
                         score()->undoRemoveElement(e);
