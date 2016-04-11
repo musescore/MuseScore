@@ -32,6 +32,7 @@ class TestAlbum : public QObject, public MTest
       void album_78521();
       void album_76101();
       void album_105716();
+      void album_105621();
       };
 
 //---------------------------------------------------------
@@ -122,6 +123,22 @@ void TestAlbum::album_105716()
 
       album.createScore("album_105716-joined-noaddBreak.mscx", false, false);
       QVERIFY(compareFiles("album_105716-joined-noaddBreak.mscx", DIR + "album_105716-joined-noaddBreak-ref.mscx"));
+      }
+
+//---------------------------------------------------------
+//   album_105621
+//    crash when removing second score from AlbumManager after previously joining the album.
+//    crash occured because TBox::clone() would not allocate memory for a new Text* object.
+//--------------------------------------------------------
+
+void TestAlbum::album_105621()
+      {
+      Album album;
+      album.setName("test");
+      album.append(new AlbumItem(root + "/" + DIR + "album_105621-measure.mscx"));
+      album.append(new AlbumItem(root + "/" + DIR + "album_105621-textbox.mscx"));
+      album.createScore("album_105621.mscx");
+      album.remove(1); // crash would occur here in ~TBox
       }
 
 QTEST_MAIN(TestAlbum)
