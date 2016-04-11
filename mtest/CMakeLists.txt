@@ -186,8 +186,8 @@ subdirs (
         libmscore/selectionfilter
         libmscore/selectionrangedelete
 #        libmscore/spanners
-#        libmscore/split
-#        libmscore/splitstaff
+        libmscore/split
+        libmscore/splitstaff
         libmscore/timesig
         libmscore/tools
         libmscore/transpose

@@ -1385,7 +1385,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         }
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
-                  if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::Type::ChordRest)) {
+                  if ((!(m && m->isMMRest())) && segment->isChordRestType()) {
                         auto endIt = spanner().upper_bound(endTick);
                         for (auto i = spanner().begin(); i != endIt; ++i) {
                               Spanner* s = i->second;
@@ -1412,7 +1412,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           }
                                     }
                               if ((s->tick2() == segment->tick())
-                                 && s->type() != Element::Type::SLUR
+                                 && !s->isSlur()
                                  && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                                  && (!clip || s->tick() >= fs->tick())
                                  ) {
