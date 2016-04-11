@@ -2062,26 +2062,30 @@ void Score::removeAudio()
 
 bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       {
-      if (parts().size() < score->parts().size() || staves().size() < score->staves().size())
+      if (parts().size() < score->parts().size() || staves().size() < score->staves().size()) {
+            qDebug("Score to append has %d parts and %d staves, but this score only has %d parts and %d staves.", score->parts().size(), score->staves().size(), parts().size(), staves().size());
             return false;
-      TieMap tieMap;
+            }
 
-      MeasureBase* lastMeasure = last();
-      if (!lastMeasure)
+      if (!last()) {
+            qDebug("This score doesn't have any MeasureBase objects.");
             return false;
-      int tickOfAppend = lastMeasure->endTick();
+            }
+
+      TieMap tieMap;
+      int tickOfAppend = last()->endTick();
 
       // apply Page/Section Breaks if desired
       if (addPageBreak) {
-            if (!lastMeasure->pageBreak()) {
-                  lastMeasure->undoSetBreak(false, LayoutBreak::Type::LINE); // remove line break if exists
-                  lastMeasure->undoSetBreak(true, LayoutBreak::Type::PAGE);  // apply page break
+            if (!last()->pageBreak()) {
+                  last()->undoSetBreak(false, LayoutBreak::Type::LINE); // remove line break if exists
+                  last()->undoSetBreak(true, LayoutBreak::Type::PAGE);  // apply page break
                   }
             }
-      else if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak())
-            lastMeasure->undoSetBreak(true, LayoutBreak::Type::LINE);
-      if (addSectionBreak && !lastMeasure->sectionBreak())
-            lastMeasure->undoSetBreak(true, LayoutBreak::Type::SECTION);
+      else if (!last()->lineBreak() && !last()->pageBreak())
+            last()->undoSetBreak(true, LayoutBreak::Type::LINE);
+      if (addSectionBreak && !last()->sectionBreak())
+            last()->undoSetBreak(true, LayoutBreak::Type::SECTION);
 
       // match concert pitch states
       if (styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch))
@@ -2098,7 +2102,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 
                         // if the first clef of score to append is generated and
                         // if the first clef of score to append is of different type than clef at final tick of first score
-                        if (initialClef->generated() && initialClef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
+                        if (initialClef && initialClef->generated() && initialClef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
 
                               // then convert that generated clef into a real non-generated clef so that its different type will be copied to joined score
                               score->undoChangeClef(staff, initialClefSegment, initialClef->clefType());
