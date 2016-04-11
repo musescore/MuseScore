@@ -40,6 +40,12 @@ TBox::TBox(Score* score)
       _text->setTextStyleType(TextStyleType::FRAME);
       }
 
+TBox::TBox(const TBox& tbox)
+   : VBox(tbox)
+      {
+      _text = new Text(*(tbox._text));
+      }
+
 TBox::~TBox()
       {
       delete _text;
