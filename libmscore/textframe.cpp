@@ -45,6 +45,13 @@ TBox::~TBox()
       delete _text;
       }
 
+TBox* TBox::clone() const
+      {
+      TBox* tbox = new TBox(*this);
+      tbox->_text = new Text(*this->_text);
+      return tbox;
+      }
+
 //---------------------------------------------------------
 //   layout
 ///   The text box layout() adjusts the frame height to text

@@ -31,7 +31,7 @@ class TBox : public VBox {
    public:
       TBox(Score* score);
       ~TBox();
-      virtual TBox* clone() const        { return new TBox(*this); }
+      virtual TBox* clone() const;
       virtual Element::Type type() const { return Element::Type::TBOX;       }
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
