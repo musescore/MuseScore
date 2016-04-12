@@ -279,7 +279,6 @@ class Text : public Element {
       bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&);
 
       void setFormat(FormatId, QVariant);
-      QString getBaby()                      { return _text; }
       bool deletePreviousChar();
       bool deleteChar();
       void deleteSelectedText();
