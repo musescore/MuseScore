@@ -23,7 +23,9 @@
 #include "sym.h"
 #include "xml.h"
 #include "undo.h"
-
+#include <iostream>
+#include <string>
+#include <regex>
 namespace Ms {
 
 static const qreal subScriptSize   = 0.6;
@@ -1520,7 +1522,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       setEditMode(true);
       if (_cursor == nullptr)
             _cursor = new TextCursor();
-      _cursor->setText(this);
+            _cursor->setText(this);
       _cursor->setLine(0);
       _cursor->setColumn(0);
       _cursor->clearSelection();
@@ -1533,6 +1535,69 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       oldText = _text;
       // instead of dong this here, wait until we find out if text is actually changed
       //undoPushProperty(P_ID::TEXT);
+      }
+
+QString Text::manageSpacing(QString t)
+      {
+      QString m;
+      QRegExp rx("<(?=b>)|<(?=/b>)|<(?=i>)|<(?=/i>)|<(?=sub>)|<(?=/sub>)|<(?=sup>)|<(?=/sup>)|<(?=u>)|<(?=/u>)|<(?=sym>)|<(?=/sym>)|<(?=font)");
+      QStringList query = t.split(rx);
+
+      if (query.length() < 2)
+            return t;
+
+      QListIterator<QString> itr(query);
+
+      while (itr.hasNext()) {
+            QString current = itr.next();
+            if (current.length() > 0 && current.contains(">"))
+                  current.push_front("<");
+            QRegExp r2("</b>|</i>|</sub>|</sup>|</sym>");
+            QStringList currentList = current.split(r2);
+
+            if (currentList.length() > 1) {
+                  QString el1 = currentList[1];
+                  if (el1.count(" ") == el1.length() && el1.length() > 0) {
+                        QStringList strip = current.split(el1);
+                        current = strip[0];
+                        current.push_front(el1);
+                        }
+                  }
+            else {
+                  QRegExp r3("</u>");
+                  QStringList handleList = current.split(r3);
+                  if (handleList.length() > 1) {
+                        QString el2 = handleList[1];
+                        if (el2.count(" ") == el2.length() && el2.length() > 0) {
+                              el2.push_front("</u><sup>.");
+                              el2.push_back("</sup>");
+                              current = el2;
+                              }
+                        }                
+                  else {
+                        QRegExp r4("<(?=font)");
+                        QRegExp r5("<font.+>");
+                        QStringList fList = current.split(r4);
+                        if (fList.length() > 1) {
+                              QString el3 = fList[1];
+                              if (el3.contains(">"))
+                                    el3.push_front("<");
+                              QStringList gList = el3.split(r5);
+                              if (gList.length() > 1) {
+                                    QString el4 = gList[1];
+                                    if (el4.count(" ") == el4.length() && el4.length() > 0) {
+                                          current = el3.split(el4)[0];
+                                          el4.push_front("<sup>.");
+                                          el4.push_back("</sup>");
+                                          current.append(el4);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            m.append(current);
+            }
+      return m;
       }
 
 //---------------------------------------------------------
@@ -1575,8 +1640,8 @@ void Text::endEdit()
 
                   // because we are pushing each individual linked element's old text to the undo stack,
                   // we don't actually need to call the undo version of change property here
-
-                  e->setProperty(P_ID::TEXT, _text);
+                  QString newstring  = manageSpacing(_text);
+                  e->setProperty(P_ID::TEXT,newstring) ;
 
                   // the change mentioned previously eliminated the following line, which is where the linked elements actually got their text set
                   // one would think this line alone would be enough to make undo work
@@ -1592,8 +1657,7 @@ void Text::endEdit()
             // yet we still need to consider this a change, since newly added palette texts end up here
             textChanged();
             }
-
-      // formerly we needed to setLayoutAll here to force the text to be laid out after editing
+      // formerly we needed to  here to force the text to be laid out after editing
       // but now that we are calling setProperty for all elements - including "this"
       // it is no longer necessary
       }
