@@ -15,9 +15,13 @@ set -x # echo commands
 export CC=/usr/bin/gcc-4.9
 export CXX=/usr/bin/g++-4.9
 
+#install cmake
+CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.1-Linux-x86_64.tar.gz"
+mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+export PATH=${PWD}/cmake/bin:${PATH}
+
 # Get Qt
-mkdir qt5
-wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt560.zip
+mkdir qt5 && travis_retry wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt560.zip
 unzip -qq qt5.zip -d qt5
 export PATH="${PWD}/qt5/bin:$PATH"
 export QT_PLUGIN_PATH="${PWD}/qt5/plugins"
