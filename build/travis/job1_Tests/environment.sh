@@ -17,7 +17,7 @@ export CXX=/usr/bin/g++-4.9
 
 # Get Qt
 mkdir qt5
-wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt542.zip
+wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt560.zip
 unzip -qq qt5.zip -d qt5
 export PATH="${PWD}/qt5/bin:$PATH"
 export QT_PLUGIN_PATH="${PWD}/qt5/plugins"
