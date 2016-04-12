@@ -1522,7 +1522,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       setEditMode(true);
       if (_cursor == nullptr)
             _cursor = new TextCursor();
-            _cursor->setText(this);
+      _cursor->setText(this);
       _cursor->setLine(0);
       _cursor->setColumn(0);
       _cursor->clearSelection();
