@@ -272,6 +272,7 @@ class Text : public Element {
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
 
+      QString manageSpacing(QString t);
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
       bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&);
