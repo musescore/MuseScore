@@ -185,7 +185,6 @@ public:
 
     QBrush brush;
     QPen pen;
-//    QMatrix matrix; // OBSOLETE
 //    QFont font;  // UNUSED
 
 // GRADIENTS NOT IMPLEMENTED (YET)
