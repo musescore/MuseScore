@@ -746,13 +746,16 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(new CommandTransition("mag", states[MAG]));            // ->mag
       s->addTransition(new CommandTransition("play", states[PLAY]));          // ->play
       s->addTransition(new CommandTransition("fotomode", states[FOTOMODE]));  // ->fotomode
+      ct = new CommandTransition("swap", 0);                                  // swap
+      connect(ct, SIGNAL(triggered()), SLOT(normalSwap()));
+      s->addTransition(ct);
       ct = new CommandTransition("paste", 0);                                 // paste
       connect(ct, SIGNAL(triggered()), SLOT(normalPaste()));
       s->addTransition(ct);
       ct = new CommandTransition("copy", 0);                                  // copy
       connect(ct, SIGNAL(triggered()), SLOT(normalCopy()));
       s->addTransition(ct);
-      ct = new CommandTransition("cut", 0);                                  // copy
+      ct = new CommandTransition("cut", 0);                                   // cut
       connect(ct, SIGNAL(triggered()), SLOT(normalCut()));
       s->addTransition(ct);
 
@@ -820,6 +823,10 @@ ScoreView::ScoreView(QWidget* parent)
 
       ct = new CommandTransition("paste", 0);                                 // paste
       connect(ct, SIGNAL(triggered()), SLOT(editPaste()));
+      s->addTransition(ct);
+
+      ct = new CommandTransition("swap", 0);                                  // swap
+      connect(ct, SIGNAL(triggered()), SLOT(editSwap()));
       s->addTransition(ct);
 
       //----------------------------------
@@ -1024,6 +1031,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
+      popup->addAction(getAction("swap"));
 
       QMenu* selMenu = popup->addMenu(tr("Select"));
       selMenu->addAction(getAction("select-similar"));
@@ -1052,7 +1060,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (a == 0)
             return;
       QString cmd(a->data().toString());
-      if (cmd == "cut" || cmd =="copy" || cmd == "paste") {
+      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap") {
             // these actions are already activated
             return;
             }
@@ -1128,6 +1136,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
+      popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
       popup->addAction(getAction("insert-measure"));
       popup->addSeparator();
@@ -1145,8 +1154,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       if (a == 0)
             return;
       QString cmd(a->data().toString());
-      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "insert-measure"
-         || cmd == "select-similar"
+      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap"
+         || cmd == "insert-measure" || cmd == "select-similar"
          || cmd == "delete") {
             // these actions are already activated
             return;
@@ -2548,6 +2557,21 @@ void ScoreView::normalCut()
       }
 
 //---------------------------------------------------------
+//   editSwap
+//---------------------------------------------------------
+
+void ScoreView::editSwap()
+      {
+      if (editObject && editObject->isText() && !(editObject->type() == Element::Type::LYRICS)) {
+          Text* text = static_cast<Text*>(editObject);
+          QString s = text->selectedText();
+            text->paste();
+            if (!s.isEmpty())
+                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+            }
+      }
+
+//---------------------------------------------------------
 //   editPaste
 //---------------------------------------------------------
 
@@ -2562,10 +2586,57 @@ void ScoreView::editPaste()
       }
 
 //---------------------------------------------------------
+//   normalSwap
+//---------------------------------------------------------
+
+void ScoreView::normalSwap()
+      {
+      if (!checkCopyOrCut())
+            return;
+      QString mimeType = _score->selection().mimeType();
+      const QMimeData* ms = QApplication::clipboard()->mimeData();
+      if (mimeType == mimeStaffListFormat) { // determine size of clipboard selection
+            int tickLen = 0, staves = 0;
+            QByteArray data(ms->data(mimeStaffListFormat));
+            XmlReader e(data);
+            e.readNextStartElement();
+            if (e.name() == "StaffList") {
+                  tickLen         = e.intAttribute("len", 0);
+                  staves          = e.intAttribute("staves", 0);
+                  }
+            if (tickLen > 0) { // attempt to extend selection to match clipboard size
+                  Segment* seg = _score->selection().startSegment();
+                  int tick = _score->selection().tickStart() + tickLen;
+                  Segment* segAfter = _score->tick2leftSegment(tick);
+                  int staffIdx = _score->selection().staffStart() + staves - 1;
+                  if (staffIdx >= _score->nstaves())
+                        staffIdx = _score->nstaves() - 1;
+                  tick = _score->selection().tickStart();
+                  int etick = tick + tickLen;
+                  if (MScore::debugMode)
+                        _score->selection().dump();
+                  _score->selection().extendRangeSelection(seg, segAfter, staffIdx, tick, etick);
+                  _score->selection().update();
+                  if (MScore::debugMode)
+                        _score->selection().dump();
+                  if (!checkCopyOrCut())
+                        return;
+                  ms = QApplication::clipboard()->mimeData();
+                  }
+            }
+      QByteArray data(_score->selection().mimeData());
+      if (this->normalPaste()) {
+            QMimeData* mimeData = new QMimeData;
+            mimeData->setData(mimeType, data);
+            QApplication::clipboard()->setMimeData(mimeData);
+            }
+      }
+
+//---------------------------------------------------------
 //   normalPaste
 //---------------------------------------------------------
 
-void ScoreView::normalPaste()
+bool ScoreView::normalPaste()
       {
       _score->startCmd();
 
@@ -2595,6 +2666,11 @@ void ScoreView::normalPaste()
            }
 
       _score->endCmd();
+
+      if (status == PasteState::PS_NO_ERROR)
+          return true;
+      else
+          return false;
       }
 
 //---------------------------------------------------------
@@ -2627,7 +2703,7 @@ void ScoreView::cmd(const QAction* a)
             sm->postEvent(new CommandEvent(cmd));
             }
       else if (cmd == "note-input" || cmd == "copy" || cmd == "paste"
-         || cmd == "cut" || cmd == "fotomode") {
+         || cmd == "swap" || cmd == "cut" || cmd == "fotomode") {
             sm->postEvent(new CommandEvent(cmd));
             }
       else if (cmd == "lyrics") {
