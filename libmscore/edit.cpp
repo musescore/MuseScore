@@ -2398,7 +2398,7 @@ void Score::cmdFullMeasureRest()
             stick1 = selection().tickStart();
             stick2 = selection().tickEnd();
             Segment* ss1 = s1;
-            if (ss1->segmentType() != Segment::Type::ChordRest)
+            if (ss1 && ss1->segmentType() != Segment::Type::ChordRest)
                   ss1 = ss1->next1(Segment::Type::ChordRest);
             bool fullMeasure = ss1 && (ss1->measure()->first(Segment::Type::ChordRest) == ss1)
                   && (s2 == 0 || (s2->segmentType() == Segment::Type::EndBarLine)
