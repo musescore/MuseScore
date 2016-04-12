@@ -20,7 +20,7 @@
 project(mscore)
 
 #minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
 
 set (CI $ENV{CI})
 if (CI)
@@ -200,7 +200,7 @@ endif (MINGW OR APPLE)
 ##
 ##  look for Qt5
 ##
-SET(QT_MIN_VERSION    "5.3.0")
+SET(QT_MIN_VERSION    "5.6.0")
 
 SET(QT_USE_QTXML         TRUE)
 SET(QT_USE_QTSVG         TRUE)
