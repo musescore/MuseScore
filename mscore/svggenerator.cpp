@@ -1128,27 +1128,27 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
     if (!qFuzzyIsNull(state.opacity() - 1))
         stateStream << SVG_OPACITY << state.opacity() << SVG_QUOTE;
 
-    // Translations, SVG transform="translate()", are handled separately from
-    // other transformations such as rotation. Qt translates everything, but
-    // other transformations do occur, and must be handled here.
-    QTransform t = state.transform();
-    if (t.m11() == t.m22()    // No scaling
-     && t.m12() == t.m21()) { // No rotation, etc.
-        // No transformation except translation
-        _dx = t.m31();
-        _dy = t.m32();
-    }
-    else {
-        // Other transformations are more straightforward with a full matrix
-        _dx = 0;
-        _dy = 0;
-        stateStream << SVG_MATRIX << t.m11() << SVG_COMMA
-                                  << t.m12() << SVG_COMMA
-                                  << t.m21() << SVG_COMMA
-                                  << t.m22() << SVG_COMMA
-                                  << t.m31() << SVG_COMMA
-                                  << t.m32() << SVG_RPAREN_QUOTE;
-    }
+      // Translations, SVG transform="translate()", are handled separately from
+      // other transformations such as rotation. Qt translates everything, but
+      // other transformations do occur, and must be handled here.
+      QTransform t = state.transform();
+      if (t.m11() == t.m22()    // No scaling
+       && t.m12() == t.m21()) { // No rotation, etc.
+            // No transformation except translation
+            _dx = t.m31();
+            _dy = t.m32();
+      }
+      else {
+            // Other transformations are more straightforward with a full matrix
+            _dx = 0;
+            _dy = 0;
+            stateStream << SVG_MATRIX << t.m11() << SVG_COMMA
+                                      << t.m12() << SVG_COMMA
+                                      << t.m21() << SVG_COMMA
+                                      << t.m22() << SVG_COMMA
+                                      << t.m31() << SVG_COMMA
+                                      << t.m32() << SVG_RPAREN_QUOTE;
+      }
 
 }
 
