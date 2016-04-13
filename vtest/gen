@@ -57,9 +57,9 @@ fi
 
 #####DEBUG: failed tests
 
-SRC=" \
-      layout-1 layout-2 layout-3 layout-4
-      system-4"
+#SRC=" \
+#      layout-1 layout-2 layout-3 layout-4
+#      system-4"
 
 DPI=130
 F=vtest.html
@@ -68,7 +68,9 @@ rm -rf html
 mkdir html
 cd html
 
-rm ../LOG
+if test -f ../LOG; then
+      rm ../LOG
+      fi
 
 for src in $SRC; do
       echo process ../$src
