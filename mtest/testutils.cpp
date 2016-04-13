@@ -179,7 +179,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 //   saveScore
 //---------------------------------------------------------
 
-bool MTest::saveScore(MasterScore* score, const QString& name) const
+bool MTest::saveScore(Score* score, const QString& name) const
       {
       QFileInfo fi(name);
 //      MScore::testMode = true;
@@ -217,7 +217,8 @@ qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << c
 //   saveCompareScore
 //---------------------------------------------------------
 
-bool MTest::saveCompareScore(MasterScore* score, const QString& saveName, const QString& compareWith) const
+// bool MTest::saveCompareScore(MasterScore* score, const QString& saveName, const QString& compareWith) const
+bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith) const
       {
       if (!saveScore(score, saveName))
             return false;
