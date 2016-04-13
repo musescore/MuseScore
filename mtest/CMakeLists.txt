@@ -182,7 +182,7 @@ subdirs (
 #        libmscore/midi
 #        libmscore/midimapping
         libmscore/note
-        libmscore/plugins
+#        libmscore/plugins
         libmscore/repeat
         libmscore/selectionfilter
         libmscore/selectionrangedelete
