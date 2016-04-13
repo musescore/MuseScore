@@ -55,6 +55,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       QAction* showWave;
       WaveView* waveView;
       QSplitter* split;
+      QList<QAction*> actions;
 
       void updateVelocity(Note* note);
       void updateSelection();
