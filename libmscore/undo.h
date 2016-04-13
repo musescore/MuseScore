@@ -1261,32 +1261,30 @@ class LinkUnlink : public UndoCommand {
    public:
       LinkUnlink(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
       };
-#if 0
+
 //---------------------------------------------------------
 //   Unlink
 //---------------------------------------------------------
 
-class Unlink : public UndoCommand {
-      ScoreElement* e;
-      ScoreElement* le = nullptr;
+class Unlink : public LinkUnlink {
+
    public:
-      Unlink(ScoreElement* _e) : e(_e) {}
-      virtual void undo() override;
-      virtual void redo() override;
+      Unlink(ScoreElement* _e) : LinkUnlink(_e, 0) {}
+      virtual void undo() override { doLink();   }
+      virtual void redo() override { doUnlink(); }
       UNDO_NAME("Unlink")
       };
-#endif
+
 //---------------------------------------------------------
 //   Link
 //---------------------------------------------------------
 
-class Link : public UndoCommand {
-      ScoreElement* e;
-      ScoreElement* le;
+class Link : public LinkUnlink {
+
    public:
-      Link(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
-      virtual void undo() override;
-      virtual void redo() override;
+      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(e, le) {}
+      virtual void undo() override { doUnlink(); }
+      virtual void redo() override { doLink();   }
       UNDO_NAME("Link")
       };
 
