@@ -156,6 +156,8 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
+#        libmscore/compat
+
 subdirs (
         libmscore/album
         libmscore/barline
@@ -163,8 +165,7 @@ subdirs (
         libmscore/breath
         libmscore/chordsymbol
         libmscore/clef
-#        libmscore/clef_courtesy
-#        libmscore/compat
+        libmscore/clef_courtesy
         libmscore/concertpitch
         libmscore/copypaste
 #        libmscore/copypastesymbollist

@@ -136,7 +136,7 @@ void Clef::addElement(Element* e, qreal x, qreal y)
 void Clef::setSelected(bool f)
       {
       Element::setSelected(f);
-      foreach(Element* e, elements)
+      for (Element* e : elements)
             e->setSelected(f);
       }
 
@@ -150,6 +150,9 @@ void Clef::layout()
       int   lines;
       qreal lineDist;
       Segment* clefSeg  = segment();
+
+      qDeleteAll(elements);
+      elements.clear();
 
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
@@ -186,10 +189,9 @@ void Clef::layout()
 
             // if clef not to show or not compatible with staff group
             if (!show) {
-                  qDeleteAll(elements);         // set empty bbox and do nothing
-                  elements.clear();
                   setbbox(QRectF());
-                  qDebug("Clef::layout(): invisible clef at tick %d staff %d", segment()->tick(), staffIdx());
+                  qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %d",
+                     segment()->tick(), segment()->tick()/1920, staffIdx());
                   return;
                   }
             lines    = staffType->lines();         // init values from staff type
@@ -203,8 +205,6 @@ void Clef::layout()
       qreal _spatium = spatium();
       qreal yoff     = 0.0;
 
-      qDeleteAll(elements);
-      elements.clear();
 
       Symbol* symbol = new Symbol(score());
 
