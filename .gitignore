@@ -25,4 +25,5 @@ mscore/revision.h
 CMakeLists.txt.user.*
 vtest/html
 thirdparty/mupdf-qt
+vtest/LOG
 
