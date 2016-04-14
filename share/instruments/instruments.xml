@@ -3794,6 +3794,48 @@
                   <genre>orchestra</genre>
                   <genre>earlymusic</genre>
             </Instrument>
+            <Instrument id="alto-sackbut">
+                  <longName>Alto Sackbut</longName>
+                  <shortName>A. Sack.</shortName>
+                  <description>Alto Sackbut</description>
+                  <musicXMLid>brass.sackbutt.alto</musicXMLid>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>45-74</aPitchRange>
+                  <pPitchRange>45-77</pPitchRange>
+                  <Channel>
+                        <program value="57"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="tenor-sackbut">
+                  <longName>Tenor Sackbut</longName>
+                  <shortName>T. Sack.</shortName>
+                  <description>Tenor Sackbut</description>
+                  <musicXMLid>brass.sackbutt.tenor</musicXMLid>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-70</aPitchRange>
+                  <pPitchRange>40-74</pPitchRange>
+                  <Channel>
+                        <program value="57"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="bass-sackbut">
+                  <longName>Bass Sackbut</longName>
+                  <shortName>B. Sack.</shortName>
+                  <description>Bass Sackbut</description>
+                  <musicXMLid>brass.sackbutt.bass</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>36-70</aPitchRange>
+                  <pPitchRange>36-74</pPitchRange>
+                  <Channel>
+                        <program value="57"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
             <Instrument id="trombone">
                   <longName>Trombone</longName>
                   <shortName>Tbn.</shortName>
