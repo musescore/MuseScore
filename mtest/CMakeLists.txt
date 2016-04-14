@@ -165,7 +165,7 @@ subdirs (
         libmscore/breath
         libmscore/chordsymbol
         libmscore/clef
-#        libmscore/clef_courtesy
+        libmscore/clef_courtesy
         libmscore/concertpitch
         libmscore/copypaste
 #        libmscore/copypastesymbollist

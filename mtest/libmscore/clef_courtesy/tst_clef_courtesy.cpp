@@ -84,6 +84,7 @@ void TestClefCourtesy::clef_courtesy01()
       Measure* m2 = getMeasure(score, 7);
       dropClef(m2, ClefType::G);
 
+
       // check the required courtesy clef is there and it is shown
       Clef*    clefCourt = 0;
       Measure* m = m1->prevMeasure();
