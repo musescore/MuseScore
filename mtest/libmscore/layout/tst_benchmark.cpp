@@ -39,6 +39,7 @@ class TestBenchmark : public QObject, public MTest
       void benchmark3();
       void benchmark1();
       void benchmark2();
+      void benchmark4();            // incremental layout (one page)
       };
 
 //---------------------------------------------------------
@@ -78,6 +79,14 @@ void TestBenchmark::benchmark2()
 //      score->doLayout();
       QBENCHMARK {                        // warm run
             score->doLayout();
+            }
+      }
+void TestBenchmark::benchmark4()
+      {
+      QBENCHMARK {
+            score->startCmd();
+            score->setLayout(480);
+            score->endCmd();
             }
       }
 
