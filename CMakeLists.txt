@@ -47,11 +47,6 @@ if(POLICY CMP0046)
       cmake_policy(SET CMP0046 OLD)
 endif(POLICY CMP0046)
 
-# ignore MACOSX_RPATH is not specified for awlplugin
-if(POLICY CMP0042)
-      cmake_policy(SET CMP0042 OLD)
-endif(POLICY CMP0042)
-
 include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
@@ -148,6 +143,11 @@ endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 if (APPLE)
    set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -stdlib=libc++ -g -Wno-inconsistent-missing-override")
    set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG -Wno-inconsistent-missing-override")
+   # this is necessary for genManual to be executed during the build phase
+   # it needs to be able to get the Qt libs.
+   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+   SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+   SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_PREFIX}/lib")
 else (APPLE)
    if (MINGW)
       # -mno-ms-bitfields see #22048
