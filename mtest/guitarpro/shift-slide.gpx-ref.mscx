@@ -178,10 +178,6 @@
           <lid>13</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>14</lid>
@@ -404,10 +400,6 @@
             <lid>13</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>14</lid>
@@ -475,10 +467,6 @@
             <lid>13</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>14</lid>

@@ -89,7 +89,6 @@ InspectorNote::InspectorNote(QWidget* parent)
             { P_ID::STEM_DIRECTION, 0, 1, c.stemDirection, c.resetStemDirection },
 
             { P_ID::LEADING_SPACE,  0, 2, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::TRAILING_SPACE, 0, 2, s.trailingSpace, s.resetTrailingSpace }
             };
 
       mapSignals();
@@ -162,9 +161,11 @@ InspectorNote::InspectorNote(QWidget* parent)
 void InspectorNote::setElement()
       {
       Note* note = static_cast<Note*>(inspector->element());
-      dot1->setEnabled(note->dot(0));
-      dot2->setEnabled(note->dot(1));
-      dot3->setEnabled(note->dot(2));
+
+      int n = note->dots().size();
+      dot1->setEnabled(n > 0);
+      dot2->setEnabled(n > 1);
+      dot3->setEnabled(n > 2);
       stem->setEnabled(note->chord()->stem());
       hook->setEnabled(note->chord()->hook());
       beam->setEnabled(note->chord()->beam());
@@ -172,8 +173,6 @@ void InspectorNote::setElement()
       InspectorBase::setElement();
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
-      s.trailingSpace->setEnabled(nograce);
-      s.resetTrailingSpace->setEnabled(nograce && s.trailingSpace->value());
       s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
       }
 
@@ -183,11 +182,11 @@ void InspectorNote::setElement()
 
 void InspectorNote::dot1Clicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
-      NoteDot* dot = note->dot(0);
-      if (dot) {
+      if (note->dots().size() > 0) {
+            NoteDot* dot = note->dot(0);
             dot->score()->select(dot);
             inspector->setElement(dot);
             dot->score()->end();
@@ -200,11 +199,11 @@ void InspectorNote::dot1Clicked()
 
 void InspectorNote::dot2Clicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
-      NoteDot* dot = note->dot(1);
-      if (dot) {
+      if (note->dots().size() > 1) {
+            NoteDot* dot = note->dot(1);
             dot->score()->select(dot);
             inspector->setElement(dot);
             dot->score()->end();
@@ -217,11 +216,11 @@ void InspectorNote::dot2Clicked()
 
 void InspectorNote::dot3Clicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
-      NoteDot* dot = note->dot(2);
-      if (dot) {
+      if (note->dots().size() > 2) {
+            NoteDot* dot = note->dot(2);
             dot->score()->select(dot);
             inspector->setElement(dot);
             dot->score()->end();

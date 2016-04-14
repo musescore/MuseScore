@@ -35,9 +35,9 @@ struct BeamFragment;
 class Beam : public Element {
       Q_OBJECT
 
-      QList<ChordRest*> _elements;        // must be sorted by tick
-      QList<QLineF*> beamSegments;
-      MScore::Direction _direction;
+      QVector<ChordRest*> _elements;        // must be sorted by tick
+      QVector<QLineF*> beamSegments;
+      Direction _direction;
 
       bool _up;
       bool _distribute;                   // equal spacing of elements
@@ -52,7 +52,7 @@ class Beam : public Element {
       qreal _grow2;
       qreal _beamDist;
 
-      QList<BeamFragment*> fragments;     // beam splits across systems
+      QVector<BeamFragment*> fragments;     // beam splits across systems
 
       mutable int _id;          // used in read()/write()
 
@@ -63,10 +63,10 @@ class Beam : public Element {
 
       int editFragment;       // valid in edit mode
 
-      void layout2(QList<ChordRest*>, SpannerSegmentType, int frag);
+      void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
       bool twoBeamedNotes();
-      void computeStemLen(const QList<ChordRest*>& crl, qreal& py1, int beamLevels);
-      bool slopeZero(const QList<ChordRest*>& crl);
+      void computeStemLen(const std::vector<ChordRest*>& crl, qreal& py1, int beamLevels);
+      bool slopeZero(const std::vector<ChordRest*>& crl);
       bool hasNoSlope();
       void addChordRest(ChordRest* a);
       void removeChordRest(ChordRest* a);
@@ -104,9 +104,9 @@ class Beam : public Element {
       void layoutGraceNotes();
       void layout();
 
-      const QList<ChordRest*>& elements() { return _elements;  }
+      const QVector<ChordRest*>& elements() { return _elements;  }
       void clear()                        { _elements.clear(); }
-      bool isEmpty() const                { return _elements.isEmpty(); }
+      bool empty() const                { return _elements.empty(); }
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
@@ -121,10 +121,10 @@ class Beam : public Element {
       bool noSlope() const                { return _noSlope; }
       void setNoSlope(bool val)           { _noSlope = val; }
 
-      void setBeamDirection(MScore::Direction d);
-      MScore::Direction beamDirection() const     { return _direction; }
+      void setBeamDirection(Direction d);
+      Direction beamDirection() const     { return _direction; }
 
-      virtual QPainterPath shape() const override;
+      virtual QPainterPath outline() const override;
       virtual bool contains(const QPointF& p) const override;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
@@ -142,7 +142,7 @@ class Beam : public Element {
 
       QPointF beamPos() const;
       void setBeamPos(const QPointF& bp);
-      
+
       qreal beamDist() const              { return _beamDist; }
 
       virtual QVariant getProperty(P_ID propertyId) const override;

@@ -141,7 +141,7 @@ bool Album::createScore(const QString& fn)
       {
       loadScores();
 
-      Score* firstScore = _scores[0]->score;
+      MasterScore* firstScore = _scores[0]->score->masterScore();
       if (!firstScore) {
             qDebug("First score is NULL. Will not attempt to join scores.");
             return false;
@@ -159,7 +159,7 @@ bool Album::createScore(const QString& fn)
                   }
             }
 
-      Score* score = firstScore->clone();
+      MasterScore* score = firstScore->clone();
 
       int excerptCount = firstScore->excerpts().count();
       bool joinExcerpt = true;
@@ -212,14 +212,14 @@ bool Album::createScore(const QString& fn)
                   }
             }
 
-      score->fileInfo()->setFile(fn);
+      score->masterScore()->fileInfo()->setFile(fn);
       qDebug("Album::createScore: save file");
       try {
-            QString suffix  = score->fileInfo()->suffix().toLower();
+            QString suffix  = score->masterScore()->fileInfo()->suffix().toLower();
             if (suffix == "mscz")
-                  score->saveCompressedFile(*score->fileInfo(), false);
+                  score->saveCompressedFile(*score->masterScore()->fileInfo(), false);
             else if (suffix == "mscx")
-                  score->saveFile(*score->fileInfo());
+                  score->Score::saveFile(*score->masterScore()->fileInfo());
             }
       catch (QString s) {
             delete score;
@@ -310,7 +310,7 @@ void Album::loadScores()
                   QFileInfo f(_path);
                   ip = f.path() + "/" + item->path;
                   }
-            Score* score = new Score(MScore::baseStyle());  // start with built-in style
+            MasterScore* score = new MasterScore(MScore::baseStyle());  // start with built-in style
             score->loadMsc(item->path, false);
             item->score = score;
             }

@@ -11,7 +11,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "mcursor.h"
+#include "libmscore/mcursor.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/note.h"
@@ -35,7 +35,10 @@ extern MScore* mscore;
 
 MCursor::MCursor(Score* s)
       {
-      _score = s;
+      if (s)
+            _score = s->masterScore();
+      else
+            _score = 0;
       move(0, 0);
       }
 
@@ -132,7 +135,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
 void MCursor::createScore(const QString& name)
       {
       delete _score;
-      _score = new Score(mscore->baseStyle());
+      _score = new MasterScore(mscore->baseStyle());
       _score->setName(name);
       move(0, 0);
       }
@@ -171,11 +174,11 @@ void MCursor::addPart(const QString& instrument)
 
 void MCursor::saveScore()
       {
-      QFile fp(_score->name() + ".mscx");
+      QFile fp(_score->fileInfo()->completeBaseName() + ".mscx");
       if (!fp.open(QIODevice::WriteOnly)) {
             qFatal("Open <%s> failed", qPrintable(fp.fileName()));
             }
-      _score->saveFile(&fp, false);
+      _score->Score::saveFile(&fp, false);
       fp.close();
       }
 

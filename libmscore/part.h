@@ -74,8 +74,9 @@ class Part : public QObject, public ScoreElement {
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
 
+      virtual const char* name() const override { return "Part"; }
+
       void read(XmlReader&);
-      void read114(XmlReader&);
       void write(Xml& xml) const;
 
       int nstaves() const                       { return _staves.size(); }

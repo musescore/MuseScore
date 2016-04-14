@@ -17,6 +17,7 @@
 #include "spatium.h"
 #include "fraction.h"
 #include "scoreElement.h"
+#include "shape.h"
 
 class QPainter;
 
@@ -38,6 +39,39 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
+class BarLine;
+class Articulation;
+class Marker;
+class Clef;
+class KeySig;
+class TimeSig;
+class TempoText;
+class Breath;
+class Box;
+class HBox;
+class VBox;
+class TBox;
+class FBox;
+class ChordRest;
+class Slur;
+class Tie;
+class Glissando;
+class SystemDivider;
+class RehearsalMark;
+class Harmony;
+class Volta;
+class Jump;
+class StaffText;
+class Ottava;
+class Note;
+class Chord;
+class Rest;
+class LayoutBreak;
+class Tremolo;
+class System;
+class Lyrics;
+class Stem;
+
 enum class SymId;
 
 //---------------------------------------------------------
@@ -70,33 +104,6 @@ typedef QFlags<ElementFlag> ElementFlags;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
 
 //---------------------------------------------------------
-///   \brief Unit of horizontal measure
-//    represent the space used by a Segment
-//---------------------------------------------------------
-
-class Space {
-      qreal _lw { 0.0 };       // space needed to the left
-      qreal _rw { 0.0 };       // space needed to the right
-
-   public:
-      Space() {}
-      Space(qreal a, qreal b) : _lw(a), _rw(b) {}
-      qreal lw() const             { return _lw; }
-      qreal rw() const             { return _rw; }
-      qreal width() const          { return _lw + _rw; }
-      void setLw(qreal e)          { _lw = e; }
-      void setRw(qreal m)          { _rw = m; }
-      void addL(qreal v)           { _lw += v; }
-      void addR(qreal v)           { _rw += v; }
-      void max(const Space& s);
-      Space& operator+=(const Space& s) {
-            _lw += s._lw;
-            _rw += s._rw;
-            return *this;
-            }
-      };
-
-//---------------------------------------------------------
 //   DropData
 //---------------------------------------------------------
 
@@ -108,6 +115,7 @@ struct DropData {
       Qt::KeyboardModifiers modifiers;
       Fraction duration;
 
+      bool control() const { return modifiers & Qt::ControlModifier; }
       DropData();
       };
 
@@ -311,13 +319,15 @@ class Element : public QObject, public ScoreElement {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
+
    protected:
       QPointF _startDragPosition;   ///< used during drag
 
    public:
       Element(Score* s = 0);
       Element(const Element&);
-      virtual ~Element();
+      virtual ~Element() {}
+
       Element &operator=(const Element&) = delete;
       //@ create a copy of the element
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;
@@ -375,7 +385,6 @@ class Element : public QObject, public ScoreElement {
       void scriptSetUserOff(const QPointF& o);
 
       bool isNudged() const                   { return !(_readPos.isNull() && _userOff.isNull()); }
-
       const QPointF& readPos() const          { return _readPos;   }
       void setReadPos(const QPointF& p)       { _readPos = p;      }
       virtual void adjustReadPos();
@@ -393,20 +402,12 @@ class Element : public QObject, public ScoreElement {
       virtual void addbbox(const QRectF& r) const { _bbox |= r;          }
       virtual bool contains(const QPointF& p) const;
       bool intersects(const QRectF& r) const;
-      virtual QPainterPath shape() const;
+      virtual QPainterPath outline() const;
+      virtual Shape shape() const;
       virtual qreal baseLine() const          { return -height();       }
 
       virtual Element::Type type() const = 0;
       virtual int subtype() const   { return -1; }  // for select gui
-
-      bool isRest() const      { return type() == Element::Type::REST; }
-      bool isChord() const     { return type() == Element::Type::CHORD; }
-      bool isMeasure() const   { return type() == Element::Type::MEASURE; }
-      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE; }
-
-      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
-      bool isSLine() const;
-      bool isSLineSegment() const;
 
       virtual void draw(QPainter*) const {}
 
@@ -440,6 +441,7 @@ class Element : public QObject, public ScoreElement {
       virtual int z() const                   { return int(type()) * 100; }  // stacking order
 
       int staffIdx() const                    { return _track >> 2;        }
+      virtual int vStaffIdx() const           { return staffIdx();         }
       int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) * VOICES + v; }
       Staff* staff() const;
@@ -455,15 +457,13 @@ class Element : public QObject, public ScoreElement {
 
       // debug functions
       virtual void dump() const;
-      const char* name() const;
+      virtual const char* name() const override;
       virtual Q_INVOKABLE QString subtypeName() const;
       //@ Returns the human-readable name of the element type
       virtual Q_INVOKABLE QString userName() const;
       //@ Returns the name of the element type
       virtual Q_INVOKABLE QString _name() const { return QString(name()); }
       void dumpQPointF(const char*) const;
-
-      virtual Space space() const      { return Space(0.0, width()); }
 
       virtual QColor color() const             { return _color; }
       QColor curColor() const;
@@ -505,7 +505,7 @@ class Element : public QObject, public ScoreElement {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      virtual void reset();
+      virtual void reset();         // reset all properties & position to default
 
       virtual qreal mag() const        { return _mag;   }
       void setMag(qreal val)           { _mag = val;    }
@@ -517,6 +517,9 @@ class Element : public QObject, public ScoreElement {
       virtual bool isSpannerSegment() const    { return false; }
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
+
+      virtual int tick() const;       // utility, searches for segment / segment parent
+      virtual int rtick() const;      // utility, searches for segment / segment parent
 
       //
       // check element for consistency; return false if element
@@ -552,24 +555,30 @@ class Element : public QObject, public ScoreElement {
                   _flags &= ~ElementFlags(ElementFlag::DROP_TARGET);
             }
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
-      bool isSegment() const           { return flag(ElementFlag::SEGMENT);     }
+      bool isSegmentFlag() const           { return flag(ElementFlag::SEGMENT);     }
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+      void undoChangeProperty(P_ID, const QVariant&);
+      void resetProperty(P_ID);
+      void undoResetProperty(P_ID);
+      bool custom(P_ID) const;
+      void readProperty(XmlReader&, P_ID);
+      virtual bool isUserModified() const;
 
       virtual void styleChanged() {}
 
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF()) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
-      void drawSymbols(const QList<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
+      void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
       qreal symHeight(SymId id) const;
       qreal symWidth(SymId id) const;
-      qreal symWidth(const QList<SymId>&) const;
+      qreal symWidth(const std::vector<SymId>&) const;
       QRectF symBbox(SymId id) const;
-      QRectF symBbox(const QList<SymId>&) const;
+      QRectF symBbox(const std::vector<SymId>&) const;
       QPointF symStemDownNW(SymId id) const;
       QPointF symStemUpSE(SymId id) const;
       QPointF symCutOutNE(SymId id) const;
@@ -577,28 +586,141 @@ class Element : public QObject, public ScoreElement {
       QPointF symCutOutSE(SymId id) const;
       QPointF symCutOutSW(SymId id) const;
       qreal symAdvance(SymId id) const;
-      QList<SymId> toTimeSigString(const QString& s) const;
+      std::vector<SymId> toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
+
+      bool concertPitch() const;
 
       virtual Element* nextElement();  //< Used for navigation
       virtual Element* prevElement();  //< next-element and prev-element command
 
-      bool concertPitch() const;
-      virtual QString accessibleInfo();                                  //< used to populate the status bar
-      virtual QString screenReaderInfo()    { return accessibleInfo(); } //< by default returns accessibleInfo, but can be overriden
-                                                                         //  if the screen-reader needs a special string (see note for example)
-      virtual QString accessibleExtraInfo() { return QString();        } //< used to return info that will be appended to accessibleInfo
-                                                                         // and passed only to the screen-reader
+      virtual QString accessibleInfo() const;         //< used to populate the status bar
+      virtual QString screenReaderInfo() const  {     //< by default returns accessibleInfo, but can be overriden
+            return accessibleInfo();
+            }
+                                                       //  if the screen-reader needs a special string (see note for example)
+      virtual QString accessibleExtraInfo() const {    // used to return info that will be appended to accessibleInfo
+            return QString();                          // and passed only to the screen-reader
+            }
 
-      virtual bool isUserModified() const;
+      //---------------------------------------------------
+      // check type
+      //
+      // Example for ChordRest:
+      //
+      //    bool             isChordRest()
+      //---------------------------------------------------
+      // DEBUG: check to catch old (now renamed) ambitious Segment->isChordRest() calls
+      //    (which check the subtype)
+
+      bool isChordRest() const { Q_ASSERT(type() != Element::Type::SEGMENT); return type() == Element::Type::REST || type() == Element::Type::CHORD
+            || type() == Element::Type::REPEAT_MEASURE; }
+      bool isChordRest1() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
+            || type() == Element::Type::REPEAT_MEASURE; }
+      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
+      bool isSLine() const;
+      bool isSLineSegment() const;
+
+#define CONVERT(a,b) \
+      bool is##a() const { return type() == Element::Type::b; }
+
+      CONVERT(Note,          NOTE);
+      CONVERT(Rest,          REST);
+      CONVERT(Chord,         CHORD);
+      CONVERT(BarLine,       BAR_LINE);
+      CONVERT(Articulation,  ARTICULATION);
+      CONVERT(Marker,        MARKER);
+      CONVERT(Clef,          CLEF);
+      CONVERT(KeySig,        KEYSIG);
+      CONVERT(TimeSig,       TIMESIG);
+      CONVERT(Measure,       MEASURE);
+      CONVERT(TempoText,     TEMPO_TEXT);
+      CONVERT(Breath,        BREATH);
+      CONVERT(HBox,          HBOX);
+      CONVERT(VBox,          VBOX);
+      CONVERT(TBox,          TBOX);
+      CONVERT(FBox,          FBOX);
+      CONVERT(Tie,           TIE);
+      CONVERT(Slur,          SLUR);
+      CONVERT(Glissando,     GLISSANDO);
+      CONVERT(SystemDivider, SYSTEM_DIVIDER);
+      CONVERT(RehearsalMark, REHEARSAL_MARK);
+      CONVERT(Harmony,       HARMONY);
+      CONVERT(Volta,         VOLTA);
+      CONVERT(Jump,          JUMP);
+      CONVERT(StaffText,     STAFF_TEXT);
+      CONVERT(Ottava,        OTTAVA);
+      CONVERT(LayoutBreak,   LAYOUT_BREAK);
+      CONVERT(Segment,       SEGMENT);
+      CONVERT(Tremolo,       TREMOLO);
+      CONVERT(System,        SYSTEM);
+      CONVERT(Lyrics,        LYRICS);
+      CONVERT(Stem,          STEM);
+#undef CONVERT
       };
+
+      //---------------------------------------------------
+      // safe casting of Element
+      //
+      // Example for ChordRest:
+      //
+      //    ChordRest* toChordRest(Element* e)
+      //---------------------------------------------------
+
+static inline ChordRest* toChordRest(Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::REPEAT_MEASURE);
+      return (ChordRest*)e;
+      }
+static inline const ChordRest* toChordRest(const Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::REPEAT_MEASURE);
+      return (const ChordRest*)e;
+      }
+
+#define CONVERT(a,b) \
+static inline a* to##a(Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (a*)e; } \
+static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (const a*)e; }
+
+      CONVERT(Note,          NOTE);
+      CONVERT(Rest,          REST);
+      CONVERT(Chord,         CHORD);
+      CONVERT(BarLine,       BAR_LINE);
+      CONVERT(Articulation,  ARTICULATION);
+      CONVERT(Marker,        MARKER);
+      CONVERT(Clef,          CLEF);
+      CONVERT(KeySig,        KEYSIG);
+      CONVERT(TimeSig,       TIMESIG);
+      CONVERT(Measure,       MEASURE);
+      CONVERT(TempoText,     TEMPO_TEXT);
+      CONVERT(Breath,        BREATH);
+      CONVERT(HBox,          HBOX);
+      CONVERT(VBox,          VBOX);
+      CONVERT(TBox,          TBOX);
+      CONVERT(FBox,          FBOX);
+      CONVERT(Tie,           TIE);
+      CONVERT(Slur,          SLUR);
+      CONVERT(Glissando,     GLISSANDO);
+      CONVERT(SystemDivider, SYSTEM_DIVIDER);
+      CONVERT(RehearsalMark, REHEARSAL_MARK);
+      CONVERT(Harmony,       HARMONY);
+      CONVERT(Volta,         VOLTA);
+      CONVERT(Jump,          JUMP);
+      CONVERT(StaffText,     STAFF_TEXT);
+      CONVERT(Ottava,        OTTAVA);
+      CONVERT(LayoutBreak,   LAYOUT_BREAK);
+      CONVERT(Segment,       SEGMENT);
+      CONVERT(Tremolo,       TREMOLO);
+      CONVERT(System,        SYSTEM);
+      CONVERT(Lyrics,        LYRICS);
+      CONVERT(Stem,          STEM);
+#undef CONVERT
 
 //---------------------------------------------------------
 //   ElementList
 //---------------------------------------------------------
 
-// class ElementList : public std::list<Element*> {
-class ElementList : public QList<Element*> {
+class ElementList : public std::vector<Element*> {
    public:
       ElementList() {}
       bool remove(Element*);
@@ -650,7 +772,7 @@ class Line : public Element {
    protected:
       bool vertical;
 
-   public:
+public:
       Line(Score*);
       Line(Score*, bool vertical);
       Line &operator=(const Line&);
@@ -702,8 +824,6 @@ extern void collectElements(void* data, Element* e);
 
 
 }     // namespace Ms
-
-
 
 Q_DECLARE_METATYPE(Ms::Element::Type);
 Q_DECLARE_METATYPE(Ms::Element::Placement);

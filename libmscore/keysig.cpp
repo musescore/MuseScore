@@ -131,17 +131,17 @@ void KeySig::layout()
       // OR key sig is CMaj/Amin (in which case they are always shown)
 
       bool naturalsOn = false;
-      Measure* prevMeas = measure() ? measure()->prevMeasure() : nullptr;
+      Measure* prevMeas = measure() ? measure()->prevMeasure() : 0;
 
       // If we're not force hiding naturals (Continuous panel), use score style settings
       if (!_hideNaturals)
           naturalsOn =
-            (prevMeas && prevMeas->sectionBreak() == nullptr
+            (prevMeas && !prevMeas->sectionBreak()
             && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
 
       // Don't repeat naturals if shown in courtesy
-      if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick()) != 0
-          && segment()->segmentType() != Segment::Type::KeySigAnnounce )
+      if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick())
+          && !segment()->isKeySigAnnounceType())
             naturalsOn = false;
 
       int coffset = 0;
@@ -253,7 +253,7 @@ void KeySig::draw(QPainter* p) const
       p->setPen(curColor());
       for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
-      if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().isEmpty()) {
+      if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
             // empty custom or atonal key signature - draw something for palette
             p->setPen(Qt::gray);
             drawSymbol(SymId::timeSigX, p, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
@@ -289,7 +289,7 @@ Element* KeySig::drop(const DropData& data)
             }
       else {
             // apply to all staves:
-            foreach(Staff* s, score()->rootScore()->staves())
+            foreach(Staff* s, score()->masterScore()->staves())
                   score()->undoChangeKeySig(s, tick(), k);
             }
       return this;
@@ -304,15 +304,6 @@ void KeySig::setKey(Key key)
       KeySigEvent e;
       e.setKey(key);
       setKeySigEvent(e);
-      }
-
-//---------------------------------------------------------
-//   space
-//---------------------------------------------------------
-
-Space KeySig::space() const
-      {
-      return Space(point(score()->styleS(StyleIdx::keysigLeftMargin)), width());
       }
 
 //---------------------------------------------------------
@@ -418,7 +409,7 @@ void KeySig::read(XmlReader& e)
       // for backward compatibility
       if (!_sig.isValid())
             _sig.initFromSubtype(subtype);
-      if (_sig.custom() && _sig.keySymbols().isEmpty())
+      if (_sig.custom() && _sig.keySymbols().empty())
             _sig.setMode(KeyMode::NONE);
       }
 
@@ -534,7 +525,7 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       setGenerated(false);
       return true;
       }
@@ -574,7 +565,7 @@ Element* KeySig::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString KeySig::accessibleInfo()
+QString KeySig::accessibleInfo() const
       {
       QString keySigType;
       if (isAtonal())

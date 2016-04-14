@@ -219,7 +219,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
       score->measures()->add(currentMeasure);
 
       if (mbf.repeatBegin)
-            currentMeasure->setRepeatFlags(Ms::Repeat::START);
+            currentMeasure->setRepeatStart(true);
 
       if (mbf.irregular)
             currentMeasure->setIrregular(true);
@@ -277,7 +277,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       {
       qDebug() << "MsScWriter::endMeasure()";
       if (mef.repeatEnd)
-            currentMeasure->setRepeatFlags(Ms::Repeat::END);
+            currentMeasure->setRepeatEnd(true);
 
       if (mef.endingEnd) {
             if (lastVolta) {
@@ -302,10 +302,10 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             }
 
       if (mef.lastOfPart && !mef.repeatEnd) {
-            currentMeasure->setEndBarLineType(Ms::BarLineType::END, false, true);
+//TODO            currentMeasure->setEndBarLineType(Ms::BarLineType::END, false, true);
             }
       else if (mef.doubleBarLine) {
-            currentMeasure->setEndBarLineType(Ms::BarLineType::DOUBLE, false, true);
+//TODO            currentMeasure->setEndBarLineType(Ms::BarLineType::DOUBLE, false, true);
             }
       // BarLine* barLine = new BarLine(score);
       // bool visible = true;
@@ -346,7 +346,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       if (triplet != ST_NONE) ticks = 2 * ticks / 3;
 
       Ms::Beam::Mode bm  = (beamList.at(0) == Bww::BM_BEGIN) ? Ms::Beam::Mode::BEGIN : Ms::Beam::Mode::AUTO;
-      Ms::MScore::Direction sd = Ms::MScore::Direction::AUTO;
+      Ms::Direction sd = Ms::Direction::AUTO;
 
       // create chord
       Ms::Chord* cr = new Ms::Chord(score);
@@ -356,13 +356,13 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       if (grace) {
             cr->setNoteType(Ms::NoteType::GRACE32);
             cr->setDurationType(Ms::TDuration::DurationType::V_32ND);
-            sd = Ms::MScore::Direction::UP;
+            sd = Ms::Direction::UP;
             }
       else {
             if (durationType.type() == Ms::TDuration::DurationType::V_INVALID)
                   durationType.setType(Ms::TDuration::DurationType::V_QUARTER);
             cr->setDurationType(durationType);
-            sd = Ms::MScore::Direction::DOWN;
+            sd = Ms::Direction::DOWN;
             }
       cr->setDuration(durationType.fraction());
       cr->setDots(dots);
@@ -527,7 +527,7 @@ namespace Ms {
 //   importBww
 //---------------------------------------------------------
 
-Score::FileError importBww(Score* score, const QString& path)
+Score::FileError importBww(MasterScore* score, const QString& path)
       {
       qDebug("Score::importBww(%s)", qPrintable(path));
 

@@ -213,10 +213,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -455,10 +451,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>3360</tick>
           <endSpanner id="7"/>
           </Measure>
@@ -545,10 +537,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>S-Gt</name>

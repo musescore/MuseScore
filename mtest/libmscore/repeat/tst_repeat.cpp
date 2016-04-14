@@ -48,23 +48,23 @@ class TestRepeat : public QObject, public MTest
       void repeat13() { repeat("repeat13.mscx", "1;2;3;4;5"); }                   // no repeat
       void repeat14() { repeat("repeat14.mscx", "1;2;3;4;5;6;7;8;9;10; 2;3;4;5;6;7;8;11;12; 2;3;4;5;6;7;8;13;14;15; 16;17;18; 16;17;18; 19;20;21;22;23; 5;6;7; 24;25;26"); } // complex roadmap DS al coda, volta, repeat
       void repeat15() { repeat("repeat15.mscx", "1;2;2;2;2;2;2;2;2;3"); } // repeat barline ||: x8 :||
-      
+
       void repeat16() { repeat("repeat16.mscx", "1;2;3;4;4;1;2"); } // simple repeat ||: :|| in coda
       void repeat17() { repeat("repeat17.mscx", "1;2;1;3;4;5;4;6;7;8;7;9"); } // volta in coda
-      
+
       void repeat18() { repeat("repeat18.mscx", "1;2;1;3;4;5;6;5;7;8"); } // twice volta
       void repeat19() { repeat("repeat19.mscx", "1;2;3;4;1;2;4"); } // DS al coda after the coda
-      
+
       void repeat20() { repeat("repeat20.mscx", "1;2;3;1;4;5;6;7;8;5;6"); } // two sections, 1/ DS al Coda, 2/DS Al fine
       void repeat21() { repeat("repeat21.mscx", "1;2;3;1;2;3;4;5;6;7;5;8"); } // two sections, 1/DS, 2/DS al Coda
-      
+
       void repeat22() { repeat("repeat22.mscx", "1;2;3;2;3;4;5;5;6"); } // DS and ||: :||
       // complex roadmap
       void repeat23() { repeat("repeat23.mscx", "1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15;16;13;14"); }
-      
+
       void repeat24() { repeat("repeat24.mscx", "1;2;3;4;2;3;4;5;3;4;5;6"); } // imbricated DS and ||: :||
       void repeat25() { repeat("repeat25.mscx", "1;2;1;2;3;4;2;3;4;5;4;5"); } // imbricated DS and ||: :||
-      
+
       void repeat26() { repeat("repeat26.mscx", "1;1;2;2;3"); } // empty and garbage jump
 
       void repeat27() { repeat("repeat27.mscx", "1;2;2;1"); }       // #73486 single-measure repeat at end of section
@@ -100,11 +100,10 @@ void TestRepeat::initTestCase()
 void TestRepeat::repeat(const char* f1, const QString & ref)
       {
       Score* score = readScore(DIR + f1);
-      score->doLayout();
       QVERIFY(score);
       score->updateRepeatList(true);
       QStringList sl;
-      foreach (const RepeatSegment* rs, *score->repeatList()) {
+      for (const RepeatSegment* rs : *score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             for (Measure* m = score->tick2measure(startTick); m; m = m->nextMeasure()) {
@@ -116,7 +115,7 @@ void TestRepeat::repeat(const char* f1, const QString & ref)
       QString s = sl.join(";");
       QString ref1 = ref;
       ref1.replace(" ","");
-      qDebug("sequence %s", qPrintable(s));
+      qDebug("File <%s> sequence %s", f1, qPrintable(s));
       QCOMPARE(s, ref1);
       delete score;
       }

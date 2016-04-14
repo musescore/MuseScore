@@ -298,7 +298,7 @@ void RepeatList::unwind()
             // unwindSection only deals with real Measures, so sectionEndMeasureBase and sectionStartMeasureBase will only point to real Measures
             if (mb->isMeasure()) {
                   sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
-            
+
                   // starting measure of section will be the first non-NULL actual Measure encountered
                   if (sectionStartMeasureBase == NULL)
                         sectionStartMeasureBase = mb;
@@ -348,15 +348,12 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
       for (Measure* nm = sectionStartMeasure; nm; ) {
             m = nm;
             m->setPlaybackCount(m->playbackCount() + 1);
-            Repeat flags = m->repeatFlags();
+//            Repeat flags = m->repeatFlags();
             bool doJump = false; // process jump after endrepeat
 
             // during any DC or DS, will take last time through repeat
-            if (isGoto && (flags & Repeat::END))
+            if (isGoto && m->repeatEnd())
                   loop = m->repeatCount() - 1;
-
-//            qDebug("m%d(tick %7d) %p: playbackCount %d loop %d repeatCount %d isGoto %d endRepeat %p continueAt %p flags 0x%x",
-//                   m->no()+1, m->tick(), m, m->playbackCount(), loop, repeatCount, isGoto, endRepeat, continueAt, int(flags));
 
             if (endRepeat) {
                   Volta* volta = _score->searchVolta(m->tick());
@@ -369,15 +366,15 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                               }
                         rs->tick = m->endTick();
                         }
-                  else if (flags & Repeat::JUMP) {
+                  else if (m->repeatJump()) {
                         doJump = true;
                         isGoto = false;
                         }
                   }
-            else if (flags & Repeat::JUMP) { // Jumps are only accepted outside of other repeats
+            else if (m->repeatJump()) { // Jumps are only accepted outside of other repeats
                   doJump = true;
                   }
-                  
+
 
             if (isGoto && (endRepeat == m)) {
                   if (continueAt == 0)
@@ -391,7 +388,7 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                   endRepeat = 0;
                   continue;
                   }
-            else if (flags & Repeat::END) {
+            else if (m->repeatEnd()) {
                   if (endRepeat == m) {
                         ++loop;
                         if (loop >= repeatCount) {
@@ -480,7 +477,7 @@ Measure* RepeatList::jumpToStartRepeat(Measure* m)
       // search backwards until find start of repeat
       while (true) {
 
-            if (m->repeatFlags() & Repeat::START)
+            if (m->repeatStart())
                   break;
 
             if (m == _score->firstMeasure())

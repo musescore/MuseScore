@@ -40,7 +40,7 @@ QAccessible::Role AccessibleScoreView::role() const{
 QString AccessibleScoreView::text(QAccessible::Text t) const {
       switch (t) {
             case QAccessible::Name:
-                  return tr("Score %1").arg(s->score()->name());
+                  return tr("Score %1").arg(s->score()->fileInfo()->completeBaseName());
             case QAccessible::Value:
                   return s->score()->accessibleInfo();
             default:
@@ -57,7 +57,7 @@ QAccessibleInterface* AccessibleScoreView::ScoreViewFactory(const QString &class
       {
           QAccessibleInterface *iface = 0;
           if (classname == QLatin1String("Ms::ScoreView") && object && object->isWidgetType()){
-                qDebug("Creating interface for ScoreView object");
+//                qDebug("Creating interface for ScoreView object");
                 iface = static_cast<QAccessibleInterface*>(new AccessibleScoreView(static_cast<ScoreView*>(object)));
                 }
 

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/midimapping/test14.mscx   test14-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test15.mscx   test15-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test16.mscx   test16-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test17.mscx   test17-ref.mscx
+

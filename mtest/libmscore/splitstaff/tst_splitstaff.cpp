@@ -56,10 +56,10 @@ void TestSplitStaff::initTestCase()
 
 void TestSplitStaff::splitstaff(int idx, int staffIdx)
       {
-      Score* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
-      score->doLayout();
+      MasterScore* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
+      score->startCmd();
       score->splitStaff(staffIdx, 60);
-      score->doLayout();
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, QString("splitstaff0%1.mscx").arg(idx),
          DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));

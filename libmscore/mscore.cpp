@@ -55,6 +55,7 @@
 #include "stemslash.h"
 #include "fraction.h"
 #include "excerpt.h"
+#include "spatium.h"
 
 namespace Ms {
 
@@ -111,21 +112,72 @@ extern void initScoreFonts();
 extern QString mscoreGlobalShare;
 
 //---------------------------------------------------------
+//   Direction
+//---------------------------------------------------------
+
+Direction::Direction(const QString& s)
+      {
+      if (s == "up")
+            val = UP;
+      else if (s == "down")
+            val = DOWN;
+      else if (s == "auto")
+            val = AUTO;
+      else
+            abort();
+      }
+
+//---------------------------------------------------------
+//   Direction::toString
+//---------------------------------------------------------
+
+const char* Direction::toString() const
+      {
+      switch (val) {
+            case AUTO: return "auto";
+            case UP:   return "up";
+            case DOWN: return "down";
+            }
+      __builtin_unreachable();
+      }
+
+//---------------------------------------------------------
+//   fillComboBox
+//---------------------------------------------------------
+
+void Direction::fillComboBox(QComboBox* cb)
+      {
+      cb->clear();
+      cb->addItem(qApp->translate("Direction", "auto"), int(AUTO));
+      cb->addItem(qApp->translate("Direction", "up"),   int(UP));
+      cb->addItem(qApp->translate("Direction", "down"), int(DOWN));
+      }
+
+static Spatium doubleToSpatium(double d)       { return Spatium(d); }
+
+//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
 void MScore::init()
       {
+      if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble))
+            qFatal("registerConverter Spatium::toDouble failed");
+      if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
+            qFatal("registerConverter douobleToSpatium failed");
+
+
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<Element::Type>("ElementType");
-      qRegisterMetaType<Note::ValueType>("ValueType");
-      qRegisterMetaType<MScore::Direction>("Direction");
+      qRegisterMetaType<Element::Type>     ("ElementType");
+      qRegisterMetaType<Note::ValueType>   ("ValueType");
+
+//      qRegisterMetaType<MSQE_Direction::E>("Direction");
+      qRegisterMetaType<Direction::E>("Direction");
+
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
-//      qRegisterMetaType<AccidentalRole>("AccidentalRole");
-//      qRegisterMetaType<AccidentalType>("AccidentalType");
-      qRegisterMetaType<Spanner::Anchor>("Anchor");
-      qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
+      qRegisterMetaType<Spanner::Anchor>   ("Anchor");
+      qRegisterMetaType<NoteHead::Group>   ("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");
       qRegisterMetaType<Segment::Type>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
@@ -229,6 +281,10 @@ void MScore::init()
       StaffType::initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);
+
+#ifdef DEBUG_SHAPES
+      testShapes();
+#endif
       }
 
 //---------------------------------------------------------
@@ -317,6 +373,9 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
+//            qmlRegisterUncreatableType<MSQE_Direction>("MuseScore", 1, 0, "Direction", tr("You can't create an enumeration"));
+            qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr("You can't create an enumeration"));
+
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
 //            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");

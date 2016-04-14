@@ -85,7 +85,7 @@ class SpannerSegment : public Element {
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
       virtual bool isSpannerSegment() const override { return true; }
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       virtual void styleChanged() override;
       };
 
@@ -141,9 +141,9 @@ class Spanner : public Element {
       virtual Element::Type type() const = 0;
       virtual void setScore(Score* s) override;
 
-      int tick() const         { return _tick;          }
-      int tick2() const        { return _tick + _ticks; }
-      int ticks() const        { return _ticks;         }
+      virtual int tick() const override { return _tick;          }
+      int tick2() const                 { return _tick + _ticks; }
+      int ticks() const                 { return _ticks;         }
 
       void setTick(int v);
       void setTick2(int v);

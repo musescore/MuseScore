@@ -88,7 +88,7 @@ void TestCopyPaste::initTestCase()
 
 void TestCopyPaste::copypaste(const char* idx)
       {
-      Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
+      MasterScore* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();    // src
@@ -130,7 +130,7 @@ void TestCopyPaste::copypaste(const char* idx)
 
 void TestCopyPaste::copypastestaff(const char* idx)
       {
-      Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
+      MasterScore* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();    // src
@@ -163,7 +163,7 @@ void TestCopyPaste::copypastestaff(const char* idx)
 
 void TestCopyPaste::copyPastePartial()
       {
-      Score* score = readScore(DIR + QString("copypaste_partial_01.mscx"));
+      MasterScore* score = readScore(DIR + QString("copypaste_partial_01.mscx"));
       score->doLayout();
 
       Measure* m1 = score->firstMeasure();
@@ -196,7 +196,7 @@ void TestCopyPaste::copyPastePartial()
 
 void TestCopyPaste::copyPaste2Voice()
       {
-      Score* score = readScore(DIR + QString("copypaste13.mscx"));
+      MasterScore* score = readScore(DIR + QString("copypaste13.mscx"));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
@@ -239,7 +239,7 @@ void TestCopyPaste::copyPaste2Voice()
 
 void TestCopyPaste::copypastevoice(const char* idx, int voice)
       {
-      Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
+      MasterScore* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
@@ -277,7 +277,7 @@ void TestCopyPaste::copypastevoice(const char* idx, int voice)
 
 void TestCopyPaste::copyPaste2Voice5()
       {
-      Score* score = readScore(DIR + QString("copypaste17.mscx"));
+      MasterScore* score = readScore(DIR + QString("copypaste17.mscx"));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
 
@@ -320,7 +320,7 @@ void TestCopyPaste::copyPaste2Voice5()
 
 void TestCopyPaste::copyPasteOnlySecondVoice()
       {
-      Score* score = readScore(DIR + QString("copypaste18.mscx"));
+      MasterScore* score = readScore(DIR + QString("copypaste18.mscx"));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
@@ -358,7 +358,7 @@ void TestCopyPaste::copyPasteOnlySecondVoice()
 
 void TestCopyPaste::copypaste2Voice6()
       {
-      Score* score = readScore(DIR + QString("copypaste20.mscx"));
+      MasterScore* score = readScore(DIR + QString("copypaste20.mscx"));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
 
@@ -398,7 +398,7 @@ void TestCopyPaste::copypaste2Voice6()
 
 void TestCopyPaste::copypastetuplet(const char* idx)
       {
-      Score* score = readScore(DIR + QString("copypaste_tuplet_%1.mscx").arg(idx));
+      MasterScore* score = readScore(DIR + QString("copypaste_tuplet_%1.mscx").arg(idx));
       score->doLayout();
 
       Measure* m1 = score->firstMeasure();

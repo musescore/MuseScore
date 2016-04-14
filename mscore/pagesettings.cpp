@@ -87,10 +87,10 @@ PageSettings::~PageSettings()
 //   setScore
 //---------------------------------------------------------
 
-void PageSettings::setScore(Score* s)
+void PageSettings::setScore(MasterScore* s)
       {
       cs  = s;
-      Score* sl = s->clone();
+      MasterScore* sl = s->clone();
       preview->setScore(sl);
 
       const PageFormat* pf = s->pageFormat();
@@ -106,7 +106,7 @@ void PageSettings::setScore(Score* s)
             }
 
       pageGroup->setCurrentIndex(index);
-      buttonApplyToAllParts->setEnabled(s->parentScore() != nullptr);
+      buttonApplyToAllParts->setEnabled(!s->isMaster());
       updateValues();
       updatePreview(0);
       }
@@ -346,7 +346,7 @@ void PageSettings::applyToScore(Score* s)
 
 void PageSettings::applyToAllParts()
       {
-      for (Excerpt* e : cs->rootScore()->excerpts())
+      for (Excerpt* e : cs->excerpts())
             applyToScore(e->partScore());
       }
 
@@ -366,7 +366,7 @@ void PageSettings::ok()
 
 void PageSettings::done(int val)
       {
-      cs->setLayoutAll(true);     // HACK
+      cs->setLayoutAll();     // HACK
       QDialog::done(val);
       }
 
@@ -635,7 +635,7 @@ void PageSettings::updatePreview(int val)
                   preview->score()->doLayout();
                   break;
             case 1:
-                  preview->score()->doLayoutPages();
+//TODO-ws                  preview->score()->doLayoutPages();
                   break;
             }
       preview->layoutChanged();

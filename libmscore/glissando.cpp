@@ -89,9 +89,9 @@ void GlissandoSegment::draw(QPainter* painter) const
             qreal w  = symAdvance(SymId::wiggleTrill);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*w) * 0.5;   // centre line in available space
-            QList<SymId> ids;
+            std::vector<SymId> ids;
             for (int i = 0; i < n; ++i)
-                  ids.append(SymId::wiggleTrill);
+                  ids.push_back(SymId::wiggleTrill);
             // this is very ugly but fix #68846 for now
             bool tmp = MScore::pdfPrinting;
             MScore::pdfPrinting = true;
@@ -235,7 +235,7 @@ void Glissando::layout()
 
       if (score() == gscore                                                   // for use in palettes
                   || startElement() == nullptr || endElement() == nullptr) {  // or while dragging
-            if (spannerSegments().isEmpty())
+            if (spannerSegments().empty())
                   add(createLineSegment());
             LineSegment* s = frontSegment();
             s->setPos(QPointF());
@@ -422,64 +422,6 @@ void Glissando::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-/*
-void Glissando::draw(QPainter* painter) const
-      {
-      painter->save();
-      qreal _spatium = spatium();
-
-      QPen pen(curColor());
-      pen.setWidthF(_spatium * .15);
-      pen.setCapStyle(Qt::RoundCap);
-      painter->setPen(pen);
-
-      qreal w = line.dx();
-      qreal h = line.dy();
-
-      qreal l = sqrt(w * w + h * h);
-      painter->translate(line.p1());
-      qreal wi = asin(-h / l) * 180.0 / M_PI;
-      painter->rotate(-wi);
-
-      if (glissandoType() == Type::STRAIGHT) {
-            painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
-            }
-      else if (glissandoType() == Type::WAVY) {
-            QRectF b = symBbox(SymId::wiggleTrill);
-            qreal w  = symWidth(SymId::wiggleTrill);
-            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
-            qreal x  = (l - n*w) * 0.5;   // centre line in available space
-            drawSymbol(SymId::wiggleTrill, painter, QPointF(x, b.height()*.5), n);
-            }
-      if (_showText) {
-            const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
-            QFont f = st.fontPx(_spatium);
-            QRectF r = QFontMetricsF(f).boundingRect(_text);
-            // if text longer than available space, skip it
-            if (r.width() < l) {
-                  qreal yOffset = r.height() + r.y();       // find text descender height
-                  // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-                  yOffset += _spatium * (glissandoType() == Type::WAVY ? 0.75 : 0.05);
-                  painter->setFont(f);
-                  qreal x = (l - r.width()) * 0.5;
-                  painter->drawText(QPointF(x, -yOffset), _text);
-                  }
-            }
-      painter->restore();
-      }
-*/
-//---------------------------------------------------------
-//   space
-//---------------------------------------------------------
-
-Space Glissando::space() const
-      {
-      return Space(0.0, spatium() * 2.0);
-      }
-
-//---------------------------------------------------------
 //   computeStartElement
 //---------------------------------------------------------
 /*
@@ -560,8 +502,6 @@ void Glissando::undoSetShowText(bool f)
 //    of the same instrument, preferring the chord in the same track as chord, if it exists.
 //
 //    CANNOT be called if the final chord and/or its segment do not exist yet in the score
-//    (i.e. while reading the chord itself): for this reason, Score::read114() calls it
-//    during Score::connectTies(), once everything have been read in.
 //
 //    Parameter:  chord: the chord this glissando ends into
 //    Returns:    the top note in a suitable previous chord or nullptr if none found.
@@ -570,8 +510,8 @@ void Glissando::undoSetShowText(bool f)
 Note* Glissando::guessInitialNote(Chord* chord)
       {
       switch (chord->noteType()) {
-            case NoteType::INVALID:
-                  return nullptr;
+//            case NoteType::INVALID:
+//                  return nullptr;
             // for grace notes before, previous chord is previous chord of parent chord
             case NoteType::ACCIACCATURA:
             case NoteType::APPOGGIATURA:
@@ -594,7 +534,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
                         return nullptr;
             case NoteType::NORMAL:
                   // if chord has grace notes before, the last one is the previous note
-                  QList<Chord*>graces = chord->graceNotesBefore();
+                  QVector<Chord*>graces = chord->graceNotesBefore();
                   if (graces.size() > 0)
                         return graces.last()->upNote();
                   break;                        // else process to standard case
@@ -628,7 +568,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
                   // if we found a target previous chord
                   if (target) {
                         // if chord has grace notes after, the last one is the previous note
-                        QList<Chord*>graces = target->graceNotesAfter();
+                        QVector<Chord*>graces = target->graceNotesAfter();
                         if (graces.size() > 0)
                               return graces.last()->upNote();
                         return target->upNote();      // if no grace after, return top note
@@ -643,7 +583,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
 //---------------------------------------------------------
 //   STATIC FUNCTIONS: guessFinalNote
 //
-//    Used while dropping a glissando on a note to determine (guess!) the glissando final note from its initial chord.
+//    Used while dropping a glissando on a note to determine (guess!) the glissando final
+//    note from its initial chord.
 //    Returns the top note of next chord of the same instrument,
 //    preferring the chord in the same track as chord, if it exists.
 //
@@ -654,8 +595,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
 Note* Glissando::guessFinalNote(Chord* chord)
       {
       switch (chord->noteType()) {
-            case NoteType::INVALID:
-                  return nullptr;
+//            case NoteType::INVALID:
+//                  return nullptr;
             // for grace notes before, return top note of parent chord
             // TODO : if the grace-before is not the LAST ONE, this still returns the main note
             //    which is probably not correct; however a glissando between two grace notes
@@ -682,7 +623,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
                   break;
             case NoteType::NORMAL:
                   // if chord has grace notes after, the first one is the next note
-                  QList<Chord*>graces = chord->graceNotesAfter();
+                  QVector<Chord*>graces = chord->graceNotesAfter();
                   if (graces.size() > 0)
                         return graces.first()->upNote();
                   break;
@@ -717,7 +658,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
                   // if we found a target next chord
                   if (target) {
                         // if chord has grace notes before, the first one is the next note
-                        QList<Chord*>graces = target->graceNotesBefore();
+                        QVector<Chord*>graces = target->graceNotesBefore();
                         if (graces.size() > 0)
                               return graces.first()->upNote();
                         return target->upNote();      // if no grace before, return top note
@@ -779,7 +720,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

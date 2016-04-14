@@ -120,7 +120,7 @@ static int segtotal;                // total number of segments - 1
 static qreal seglength;
 
 static QList<int> seg_prof[28];
-static QList<qreal> key_score[56];
+static QList<qreal> keyscore()[56];
 static QList<SBeat> sbeat;
 static QList<qreal> analysis[56][56];
 
@@ -131,7 +131,7 @@ static QList<int> final;
 static int num_sbeats;
 
 static QList<int> pc_tally;
-static QList<qreal> final_score;
+static QList<qreal> finalscore();
 
 static qreal key_profile[56][28];
 static int final_timepoint;
@@ -491,7 +491,7 @@ static void match_profiles()
 
       for (key = 0; key < 56; ++key) {
             for (s = 0; s <= segtotal; ++s)
-                  key_score[key].append(0.0);
+                  keyscore()[key].append(0.0);
             }
 
       if (scoring_mode==0) {
@@ -521,11 +521,11 @@ static void match_profiles()
 
             for (key=0; key<56; ++key) {
                   kprob[key] = 0.0;
-                  key_score[key][s] = -1000000.0;
+                  keyscore()[key][s] = -1000000.0;
                   if (npc_or_tpc_profile==0 && (key<9 || (key>20 && key<37) || key>48))
                         continue;
                   kprob[key] = 1.0;
-                  key_score[key][s] = 0.0;
+                  keyscore()[key][s] = 0.0;
                   for (tpc=0; tpc<28; ++tpc) {
 
           /*
@@ -555,30 +555,30 @@ static void match_profiles()
                               if(tpc<9 || tpc>20)
                                     continue;
                               /* calculate numerator */
-                              key_score[key][s] += key_profile[key][tpc] * (seg_prof[tpc][s]-segment[s].average_dur);
-                              /* qDebug("x-X=%6.3f, y-Y=%6.3f, product=%6.3f, new total=%6.3f", key_profile[key][tpc], seg_prof[tpc][s]-segment[s].average_dur, key_profile[key][tpc] * (seg_prof[tpc][s]-segment[s].average_dur), key_score[key][s]); */
+                              keyscore()[key][s] += key_profile[key][tpc] * (seg_prof[tpc][s]-segment[s].average_dur);
+                              /* qDebug("x-X=%6.3f, y-Y=%6.3f, product=%6.3f, new total=%6.3f", key_profile[key][tpc], seg_prof[tpc][s]-segment[s].average_dur, key_profile[key][tpc] * (seg_prof[tpc][s]-segment[s].average_dur), keyscore()[key][s]); */
                               }
 
                         if(scoring_mode==1 || scoring_mode==2)
-                              key_score[key][s] += (key_profile[key][tpc] * seg_prof[tpc][s]);
+                              keyscore()[key][s] += (key_profile[key][tpc] * seg_prof[tpc][s]);
 
                         if(scoring_mode == 3) {
                               /* if(tpc>11) continue; */
                               /* if(tpc<9 || tpc>20) continue; */
 
                               if(seg_prof[tpc][s]==0) {
-                                    key_score[key][s] += log(1.000 - key_profile[key][tpc]);
-                              /* qDebug("kp value = %6.3f: log(1-p) = %6.3f: score = %6.3f", key_profile[key][tpc], log(1.000 - key_profile[key][tpc]), key_score[key][s]); */
+                                    keyscore()[key][s] += log(1.000 - key_profile[key][tpc]);
+                              /* qDebug("kp value = %6.3f: log(1-p) = %6.3f: score = %6.3f", key_profile[key][tpc], log(1.000 - key_profile[key][tpc]), keyscore()[key][s]); */
                                     if(tpc>=9 && tpc<=20)
                                           kprob[key] *= (1.000 - key_profile[key][tpc]);
                                     }
                               else {
-                                    key_score[key][s] += log(key_profile[key][tpc]);
+                                    keyscore()[key][s] += log(key_profile[key][tpc]);
                                     if(tpc>=9 && tpc<=20)
                                           kprob[key] *= key_profile[key][tpc];
                                     }
 
-                              /* qDebug("kp value = %6.3f: log(p) = %6.3f: score = %6.3f", key_profile[key][tpc], log(key_profile[key][tpc]), key_score[key][s]); */
+                              /* qDebug("kp value = %6.3f: log(p) = %6.3f: score = %6.3f", key_profile[key][tpc], log(key_profile[key][tpc]), keyscore()[key][s]); */
                               }
                         }
 
@@ -586,26 +586,26 @@ static void match_profiles()
                         /* qDebug("sqrt(major_sumsq * input_sumsq) = %6.3f", sqrt(major_sumsq * input_sumsq)); */
                         /* calculate denominator */
                         if(key<28)
-                              key_score[key][s] = key_score[key][s] / sqrt(major_sumsq * input_sumsq);
+                              keyscore()[key][s] = keyscore()[key][s] / sqrt(major_sumsq * input_sumsq);
                         else
-                              key_score[key][s] = key_score[key][s] / sqrt(minor_sumsq * input_sumsq);
+                              keyscore()[key][s] = keyscore()[key][s] / sqrt(minor_sumsq * input_sumsq);
                         }
                   if(scoring_mode == 2) {
                         if(pc_tally[s] == 0)
-                              key_score[key][s] = 0;
+                              keyscore()[key][s] = 0;
                         else
-                              key_score[key][s] = key_score[key][s] / pc_tally[s];
+                              keyscore()[key][s] = keyscore()[key][s] / pc_tally[s];
                         }
 
-                  /* if(s==0) qDebug("local score for key %d on segment %d: %6.3f", key, s, key_score[key][s]); */
-                  if (key_score[key][s] > key_score[best_key][s])
+                  /* if(s==0) qDebug("local score for key %d on segment %d: %6.3f", key, s, keyscore()[key][s]); */
+                  if (keyscore()[key][s] > keyscore()[best_key][s])
                         best_key = key;
                   }
 
             if(verbosity>=2) {
                   qDebug("The best local key for segment %d at time %d is ", s, segment[s].start);
                   print_keyname(best_key);
-                  qDebug("with score %6.3f", key_score[best_key][s]);
+                  qDebug("with score %6.3f", keyscore()[best_key][s]);
                   }
 
             if(scoring_mode==3) {
@@ -681,9 +681,9 @@ static void make_first_table(int seg)
       for(i = 0; i < 56; ++i) {
             for(j = 0; j < 56; ++j) {
                   if (j != i)
-                        analysis[i][j][1] = ((key_score[i][0] + key_score[j][1]) * seg_factor) + mod_factor;
+                        analysis[i][j][1] = ((keyscore()[i][0] + keyscore()[j][1]) * seg_factor) + mod_factor;
                   else
-                        analysis[i][j][1] = ((key_score[i][0] + key_score[j][1]) * seg_factor) + nomod_factor;
+                        analysis[i][j][1] = ((keyscore()[i][0] + keyscore()[j][1]) * seg_factor) + nomod_factor;
                   }
             }
       choose_best_i(seg);
@@ -717,9 +717,9 @@ static void make_tables()
                   for(int i = 0; i < 56; ++i) {
                         int n = best[i][seg-1];
                         if (j != i)
-                              analysis[i][j][seg] = analysis[n][i][seg-1] + (key_score[j][seg] * seg_factor) + mod_factor;
+                              analysis[i][j][seg] = analysis[n][i][seg-1] + (keyscore()[j][seg] * seg_factor) + mod_factor;
                         else
-                              analysis[i][j][seg] = analysis[n][i][seg-1] + (key_score[j][seg] * seg_factor) + nomod_factor;
+                              analysis[i][j][seg] = analysis[n][i][seg-1] + (keyscore()[j][seg] * seg_factor) + nomod_factor;
                         }
                   }
             choose_best_i(seg);
@@ -771,9 +771,9 @@ static void best_key_analysis()
             }
 
       if (verbosity >= 2) {
-            qDebug("Segment 0: key choice %d; total score %6.3f; segment score %6.3f", final[0], key_score[final[0]][0],
-               key_score[final[0]][0]);
-            qDebug("Segment 1: key choice %d; total score %6.3f; segment score %6.3f", final[1], analysis[final[0]][final[1]][1], analysis[final[0]][final[1]][1] - key_score[final[0]][0]);
+            qDebug("Segment 0: key choice %d; total score %6.3f; segment score %6.3f", final[0], keyscore()[final[0]][0],
+               keyscore()[final[0]][0]);
+            qDebug("Segment 1: key choice %d; total score %6.3f; segment score %6.3f", final[1], analysis[final[0]][final[1]][1], analysis[final[0]][final[1]][1] - keyscore()[final[0]][0]);
             for(s = 2; s <= segtotal; s++) {
                   qDebug("Segment %d: key choice %d; total score %6.3f; segment score %6.3f", s, final[s], analysis[final[s-1]][final[s]][s], analysis[final[s-1]][final[s]][s] - analysis[final[s-2]][final[s-1]][s-1]);
                   }
@@ -789,11 +789,11 @@ static void best_key_analysis()
       for (s = 0; s <= segtotal; ++s) {
             f = final[s];
             if (s > 0 && final[s] != final[s-1])
-                  final_score[s] = (key_score[f][s]) - (change_penalty / seglength);
+                  finalscore()[s] = (keyscore()[f][s]) - (change_penalty / seglength);
             else
-                  final_score[s]=key_score[f][s];
+                  finalscore()[s]=keyscore()[f][s];
             if (verbosity > 1) {
-                  qDebug(" segment %d: %6.3f", s, final_score[s]);
+                  qDebug(" segment %d: %6.3f", s, finalscore()[s]);
                   }
             }
       }
@@ -848,7 +848,7 @@ int findKey(MidiTrack* mt, TimeSigMap* sigmap)
       numnotes   = note.size();
       numchords  = 0;
 
-      if (note.isEmpty()) {
+      if (note.empty()) {
             qDebug("Error: No notes in input.");
             return 0;
             }
@@ -861,7 +861,7 @@ int findKey(MidiTrack* mt, TimeSigMap* sigmap)
       for (int i = 0; i < segtotal+1; ++i) {
             final.append(0);
             pc_tally.append(0);
-            final_score.append(0.0);
+            finalscore().append(0.0);
             }
 
       fill_segments();
@@ -912,14 +912,14 @@ int findKey(MidiTrack* mt, TimeSigMap* sigmap)
       for (int i = 0; i < 28; ++i)
             seg_prof[i].clear();
       for (int i = 0; i < 56; ++i) {
-            key_score[i].clear();
+            keyscore()[i].clear();
             best[i].clear();
             for (int k = 0; k < 56; ++k)
                   analysis[i][k].clear();
             }
       final.clear();
       pc_tally.clear();
-      final_score.clear();
+      finalscore().clear();
 
       return xkey;
       }

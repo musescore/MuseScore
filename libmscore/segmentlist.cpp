@@ -52,6 +52,7 @@ void SegmentList::check()
       for (Segment* s = _first; s; s = s->next()) {
             switch (s->segmentType()) {
                   case Segment::Type::Invalid:
+                  case Segment::Type::BeginBarLine:
                   case Segment::Type::Clef:
                   case Segment::Type::KeySig:
                   case Segment::Type::Ambitus:

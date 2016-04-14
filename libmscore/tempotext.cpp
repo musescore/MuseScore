@@ -258,7 +258,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -311,7 +311,7 @@ void TempoText::layout()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TempoText::accessibleInfo()
+QString TempoText::accessibleInfo() const
       {
       TDuration t;
       int len;

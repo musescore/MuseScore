@@ -20,7 +20,7 @@
 project(mscore)
 
 #minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
 
 set (CI $ENV{CI})
 if (CI)
@@ -47,11 +47,6 @@ if(POLICY CMP0046)
       cmake_policy(SET CMP0046 OLD)
 endif(POLICY CMP0046)
 
-# ignore MACOSX_RPATH is not specified for awlplugin
-if(POLICY CMP0042)
-      cmake_policy(SET CMP0042 OLD)
-endif(POLICY CMP0042)
-
 include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
@@ -64,12 +59,10 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # for debugging the make system uncomment next line:
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set (CMAKE_AUTOMOC TRUE)
-
-set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
-
+set (CMAKE_AUTOMOC    TRUE)
+set(MSCORE_UNSTABLE   TRUE)          # mark as unstable
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
@@ -150,6 +143,11 @@ endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 if (APPLE)
    set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -stdlib=libc++ -g -Wno-inconsistent-missing-override")
    set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG -Wno-inconsistent-missing-override")
+   # this is necessary for genManual to be executed during the build phase
+   # it needs to be able to get the Qt libs.
+   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+   SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+   SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_PREFIX}/lib")
 else (APPLE)
    if (MINGW)
       # -mno-ms-bitfields see #22048
@@ -157,8 +155,8 @@ else (APPLE)
       set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
       set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
    else (MINGW)
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -g -Wall -Wextra")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG -DQT_NO_DEBUG_OUTPUT")
    endif (MINGW)
 endif(APPLE)
 
@@ -202,7 +200,7 @@ endif (MINGW OR APPLE)
 ##
 ##  look for Qt5
 ##
-SET(QT_MIN_VERSION    "5.3.0")
+SET(QT_MIN_VERSION    "5.6.0")
 
 SET(QT_USE_QTXML         TRUE)
 SET(QT_USE_QTSVG         TRUE)
@@ -212,7 +210,7 @@ SET(QT_USE_QTWEBKIT      TRUE)
 SET(QT_USE_QTXMLPATTERNS TRUE)
 SET(QT_USE_QTHELP        TRUE)
 
-#find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
+#find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer Declarative)
 
 ##
 ## freetype2 >= 2.5.2
@@ -571,8 +569,10 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth
+      thirdparty/qzip thirdparty/kQOAuth
       )
+#      thirdparty/xmlstream
+
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project
 add_subdirectory(mtest)

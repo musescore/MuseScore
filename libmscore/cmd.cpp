@@ -78,6 +78,49 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void CmdState::reset()
+      {
+//      refresh             = QRectF();     ///< area to update, canvas coordinates
+      layoutFlags         = LayoutFlag::NO_FLAGS;
+      _updateMode         = UpdateMode::DoNothing;
+//      _playNote           = false;        ///< play selected note after command
+//      _playChord          = false;        ///< play whole chord for the selected note
+      _excerptsChanged    = false;
+      _instrumentsChanged = false;
+//      _selectionChanged   = false;
+      _startTick          = -1;
+      _endTick            = -1;
+      }
+
+//---------------------------------------------------------
+//   setTick
+//---------------------------------------------------------
+
+void CmdState::setTick(int t)
+      {
+      if (_updateMode == UpdateMode::LayoutAll)
+            return;
+      if (_startTick == -1 || t < _startTick)
+            _startTick = t;
+      if (_endTick == -1 || t > _endTick)
+            _endTick = t;
+      setUpdateMode(UpdateMode::LayoutRange);
+      }
+
+//---------------------------------------------------------
+//   setUpdateMode
+//---------------------------------------------------------
+
+void CmdState::setUpdateMode(UpdateMode m)
+      {
+      if (int(m) > int(_updateMode))
+            _updateMode = m;
+      }
+
+//---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
 ///   and starting a user-visble undo.
@@ -87,18 +130,18 @@ void Score::startCmd()
       {
       if (MScore::debugMode)
             qDebug("===startCmd()");
-      _layoutAll = true;      ///< do a complete relayout
-      _playNote = false;
+
+      cmdState().reset();
 
       // Start collecting low-level undo operations for a
       // user-visible undo action.
 
-      if (undo()->active()) {
+      if (undoStack()->active()) {
             // if (MScore::debugMode)
             qDebug("Score::startCmd(): cmd already active");
             return;
             }
-      undo()->beginMacro();
+      undoStack()->beginMacro();
       undo(new SaveState(this));
       }
 
@@ -110,56 +153,29 @@ void Score::startCmd()
 
 void Score::endCmd(bool rollback)
       {
-      if (!undo()->active()) {
-            // if (MScore::debugMode)
-                  qDebug("Score::endCmd(): no cmd active");
-            end();
+      if (!undoStack()->active()) {
+            qDebug("Score::endCmd(): no cmd active");
+            update();
             return;
             }
 
       if (rollback) {
-            setLayoutAll(true);
-            undo()->current()->unwind();
+            setLayoutAll();
+            undoStack()->current()->unwind();
             }
 
-      for (Score* s : scoreList()) {
-            if (s->layoutAll()) {
-                  s->_updateAll  = true;
-                  s->doLayout();
-                  if (s != this)
-                        s->deselectAll();
-                  }
-            const InputState& is = s->inputState();
-            if (is.noteEntryMode() && is.segment())
-                  s->setPlayPos(is.segment()->tick());
-            }
-      if (_playlistDirty) {
-            emit playlistChanged();
-            _playlistDirty = false;
-            }
+      update();
 
       if (MScore::debugMode)
-            qDebug("===endCmd() %d", undo()->current()->childCount());
-      bool noUndo = (undo()->current()->childCount() <= 1);       // nothing to undo?
-      undo()->endMacro(noUndo);
-      end();      // DEBUG
+            qDebug("===endCmd() %d", undoStack()->current()->childCount());
+      bool noUndo = undoStack()->current()->childCount() <= 1;       // nothing to undo?
+      undoStack()->endMacro(noUndo);
 
       if (dirty()) {
-            rootScore()->_playlistDirty = true;  // TODO: flag individual operations
-            rootScore()->_autosaveDirty = true;
+            masterScore()->_playlistDirty = true;  // TODO: flag individual operations
+            masterScore()->_autosaveDirty = true;
             }
       MuseScoreCore::mscoreCore->endCmd();
-      }
-
-//---------------------------------------------------------
-//   end
-///   Update the redraw area.
-//---------------------------------------------------------
-
-void Score::end()
-      {
-      for (Score* s : scoreList())
-            s->end1();
       }
 
 //---------------------------------------------------------
@@ -169,36 +185,39 @@ void Score::end()
 
 void Score::update()
       {
-      for (Score* s : scoreList()) {
-            if (s->layoutAll()) {
-                  s->setUpdateAll(true);
+      CmdState& cs = cmdState();
+      if (cs.layoutAll()) {
+            for (Score* s : scoreList())
                   s->doLayout();
+            }
+      else if (cs.layoutRange()) {
+            for (Score* s : scoreList())
+                  s->doLayoutRange(cs.startTick(), cs.endTick());
+            }
+      if (cs.updateAll()) {
+            for (Score* s : scoreList()) {
+                  for (MuseScoreView* v : s->viewer)
+                        v->updateAll();
                   }
-            if (s != this)
-                  s->deselectAll();
-            s->end1();
             }
-      }
-
-//---------------------------------------------------------
-//   end1
-//---------------------------------------------------------
-
-void Score::end1()
-      {
-      if (_updateAll) {
-            for (MuseScoreView* v : viewer)
-                  v->updateAll();
-            }
-      else {
-            // update a little more:
+      else if (cs.updateRange()) {
+            // updateRange updates only current score
             qreal d = spatium() * .5;
-            refresh.adjust(-d, -d, 2 * d, 2 * d);
+            _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
             for (MuseScoreView* v : viewer)
-                  v->dataChanged(refresh);
+                  v->dataChanged(_updateState.refresh);
+            _updateState.refresh = QRectF();
             }
-      refresh    = QRectF();
-      _updateAll = false;
+
+      const InputState& is = inputState();
+      if (is.noteEntryMode() && is.segment()) {
+            setPlayPos(is.segment()->tick());
+            }
+      if (_playlistDirty) {
+            emit playlistChanged();
+            _playlistDirty = false;
+            }
+      cmdState().reset();
       }
 
 //---------------------------------------------------------
@@ -208,23 +227,8 @@ void Score::end1()
 
 void Score::endUndoRedo()
       {
+      update();
       updateSelection();
-      for (Score* score : scoreList()) {
-            if (score->layoutAll()) {
-                  score->setUndoRedo(true);
-                  score->doLayout();
-                  score->setUndoRedo(false);
-                  score->setUpdateAll(true);
-                  }
-            const InputState& is = score->inputState();
-            if (is.noteEntryMode() && is.segment())
-                  score->setPlayPos(is.segment()->tick());
-            if (_playlistDirty) {
-                  emit playlistChanged();
-                  _playlistDirty = false;
-                  }
-            }
-      end();
       }
 
 //---------------------------------------------------------
@@ -401,7 +405,7 @@ void Score::expandVoice()
 //   cmdAddInterval
 //---------------------------------------------------------
 
-void Score::cmdAddInterval(int val, const QList<Note*>& nl)
+void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
       {
       startCmd();
       for (Note* on : nl) {
@@ -453,11 +457,11 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
-            _playNote = true;
+            setPlayNote(true);
 
             select(note, SelectType::SINGLE, 0);
             }
-      setLayoutAll(true);
+      setLayoutAll();
       _is.moveToNextInputPos();
       endCmd();
       }
@@ -516,7 +520,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 //---------------------------------------------------------
 
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
-   MScore::Direction stemDirection)
+   Direction stemDirection)
       {
       Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
 
@@ -538,13 +542,12 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                      sd.denominator());
                   break;
                   }
-            QList<TDuration> dl = toDurationList(dd, true);
 
             measure = segment->measure();
+            std::vector<TDuration> dl = toDurationList(dd, true);
             int n = dl.size();
             for (int i = 0; i < n; ++i) {
-                  TDuration d = dl[i];
-
+                  const TDuration& d = dl[i];
                   ChordRest* ncr;
                   Note* note = 0;
                   Tie* addTie = 0;
@@ -581,7 +584,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   undoAddCR(ncr, measure, tick);
                   if (addTie)
                         undoAddElement(addTie);
-                  _playNote = true;
+                  setPlayNote(true);
                   segment = ncr->segment();
                   tick += ncr->actualTicks();
                   }
@@ -636,7 +639,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                                     }
                               }
                         }
-                  setLayoutAll(true);
+                  setLayoutAll();
                   }
             select(nr, SelectType::SINGLE, 0);
             }
@@ -660,7 +663,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
       Q_ASSERT(_sd.numerator());
 
       Measure* measure = segment->measure();
-      setLayoutAll(true);
+      setLayoutAll();
       Fraction akkumulated;
       Fraction sd = _sd;
 
@@ -754,8 +757,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   akkumulated = _sd;
                   Fraction rd = td - sd;
 
-                  QList<TDuration> dList = toDurationList(rd, false);
-                  if (dList.isEmpty())
+                  std::vector<TDuration> dList = toDurationList(rd, false);
+                  if (dList.empty())
                         return akkumulated;
 
                   Fraction f = sd / cr->staff()->timeStretch(cr->tick());
@@ -765,7 +768,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
                         foreach(TDuration d, dList) {
-                              qDebug("    reinstate at %d, %d", tick, d.ticks());
+                              qDebug("reinstate at %d, %d", tick, d.ticks());
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
                                     Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
@@ -821,7 +824,7 @@ bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[V
       {
       Segment* seg = tick2segment(baseTick, true, Segment::Type::ChordRest);
       if (!seg) {
-            qDebug("1:makeGap1: no segment to paste at tick %d", baseTick);
+            qDebug("no segment to paste at tick %d", baseTick);
             return false;
             }
       int strack = staffIdx * VOICES;
@@ -850,7 +853,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Segment* seg1 = seg->prev(Segment::Type::ChordRest);
             for (;;) {
                   if (seg1 == 0) {
-                        qDebug("1:makeGapVoice: no segment before tick %d", tick);
+                        qDebug("no segment before tick %d", tick);
                         // this happens only for voices other than voice 1
                         expandVoice(seg, track);
                         return makeGapVoice(seg,track,len,tick);
@@ -862,7 +865,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
             Fraction srcF = cr1->duration();
             Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
-            QList<TDuration> dList = toDurationList(dstF, true);
+            std::vector<TDuration> dList = toDurationList(dstF, true);
             int n = dList.size();
             undoChangeChordRestLen(cr1, TDuration(dList[0]));
             if (n > 1) {
@@ -897,7 +900,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             for (;;) {
                   seg1 = seg1->next1(Segment::Type::ChordRest);
                   if (seg1 == 0) {
-                        qDebug("2:makeGapVoice: no segment");
+                        qDebug("no segment");
                         return false;
                         }
                   if (seg1->element(track)) {
@@ -909,12 +912,12 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
 
       for (;;) {
             if (!cr) {
-                  qDebug("3:makeGapVoice: cannot make gap");
+                  qDebug("cannot make gap");
                   return false;
                   }
             Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
             if (l.isZero()) {
-                  qDebug("4:makeGapVoice: makeGap returns zero gap");
+                  qDebug("returns zero gap");
                   return false;
                   }
             len -= l;
@@ -1038,7 +1041,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       //
       // split required len into Measures
       QList<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
-      if (flist.isEmpty())
+      if (flist.empty())
             return;
 
       deselectAll();
@@ -1057,10 +1060,10 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                   Fraction timeStretch = cr1->staff()->timeStretch(cr1->tick());
                   Rest* r = static_cast<Rest*>(cr);
                   if (first) {
-                        QList<TDuration> dList = toDurationList(f2, true);
+                        std::vector<TDuration> dList = toDurationList(f2, true);
                         undoChangeChordRestLen(cr, dList[0]);
                         int tick2 = cr->tick();
-                        for (int i = 1; i < dList.size(); ++i) {
+                        for (unsigned i = 1; i < dList.size(); ++i) {
                               tick2 += dList[i-1].ticks();
                               TDuration d = dList[i];
                               setRest(tick2, track, d.fraction() * timeStretch, (d.dots() > 0), tuplet);
@@ -1076,7 +1079,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                   tick += f2.ticks() * timeStretch.numerator() / timeStretch.denominator();
                   }
             else {
-                  QList<TDuration> dList = toDurationList(f2, true);
+                  std::vector<TDuration> dList = toDurationList(f2, true);
                   Measure* measure = tick2measure(tick);
                   int etick = measure->tick();
                   if (((tick - etick) % dList[0].ticks()) == 0) {
@@ -1207,10 +1210,8 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 void Score::upDown(bool up, UpDownMode mode)
       {
       QList<Note*> el = selection().uniqueNotes();
-      if (el.empty())
-            return;
 
-      foreach (Note* oNote, el) {
+      for (Note* oNote : el) {
             int tick     = oNote->chord()->tick();
             Staff* staff = oNote->staff();
             Part* part   = staff->part();
@@ -1288,7 +1289,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         }
                         break;
                   case StaffGroup::STANDARD:
-                        switch(mode) {
+                        switch (mode) {
                               case UpDownMode::OCTAVE:
                                     if (up) {
                                           if (pitch < 116)
@@ -1345,15 +1346,12 @@ void Score::upDown(bool up, UpDownMode mode)
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
                   // remove accidental if present to make sure
                   // user added accidentals are removed here.
-                  if (oNote->links()) {
-                        for (ScoreElement* e : *oNote->links()) {
-                              Note* ln = static_cast<Note*>(e);
-                              if (ln->accidental())
-                                    undoRemoveElement(ln->accidental());
-                              }
+                  auto l = oNote->linkList();
+                  for (ScoreElement* e : l) {
+                        Note* ln = static_cast<Note*>(e);
+                        if (ln->accidental())
+                              undo(new RemoveElement(ln->accidental()));
                         }
-                  else if (oNote->accidental())
-                        undoRemoveElement(oNote->accidental());
                   undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
                   }
 
@@ -1376,7 +1374,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
 
             // play new note with velocity 80 for 0.3 sec:
-            _playNote = true;
+            setPlayNote(true);
             }
 
       _selection.clear();
@@ -1607,7 +1605,7 @@ void Score::resetUserStretch()
             if (m == m2)
                   break;
             }
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1686,7 +1684,7 @@ void Score::cmdAddStretch(qreal val)
                   stretch = 0;
             m->undoChangeProperty(P_ID::USER_STRETCH, stretch);
             }
-      _layoutAll = true;
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1720,9 +1718,7 @@ void Score::cmdResetBeamMode()
                         }
                   }
             }
-      _layoutAll = true;
-      if (noSelection)
-            deselectAll();
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1733,12 +1729,12 @@ bool Score::processMidiInput()
       {
       if (MScore::debugMode)
           qDebug("processMidiInput");
-      if (midiInputQueue.isEmpty())
+      if (midiInputQueue().empty())
             return false;
 
       bool cmdActive = false;
-      while (!midiInputQueue.isEmpty()) {
-            MidiInputEvent ev = midiInputQueue.dequeue();
+      while (!midiInputQueue().empty()) {
+            MidiInputEvent ev = midiInputQueue().dequeue();
             if (MScore::debugMode)
                   qDebug("<-- !noteentry dequeue %i", ev.pitch);
             if (!noteEntryMode()) {
@@ -1781,7 +1777,7 @@ bool Score::processMidiInput()
                   }
             }
       if (cmdActive) {
-            _layoutAll = true;
+            setLayoutAll();
             endCmd();
             //after relayout
             Element* e = inputState().cr();
@@ -1820,7 +1816,7 @@ Element* Score::move(const QString& cmd)
 
       // no chord/rest found? look for another type of element
       if (cr == 0) {
-            if (selection().elements().isEmpty())
+            if (selection().elements().empty())
                   return 0;
             // retrieve last element of section list
             Element* el = selection().elements().last();
@@ -1878,7 +1874,7 @@ Element* Score::move(const QString& cmd)
                   // if chord, go to topmost note
                   if (trg->type() == Element::Type::CHORD)
                         trg = static_cast<Chord*>(trg)->upNote();
-                  _playNote = true;
+                  setPlayNote(true);
                   select(trg, SelectType::SINGLE, 0);
                   return trg;
                   }
@@ -1994,7 +1990,7 @@ Element* Score::move(const QString& cmd)
       if (el) {
             if (el->type() == Element::Type::CHORD)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
-            _playNote = true;
+            setPlayNote(true);
             if (noteEntryMode()) {
                   // if cursor moved into a gap, selection cannot follow
                   // only select & play el if it was not already selected (does not normally happen)
@@ -2002,7 +1998,7 @@ Element* Score::move(const QString& cmd)
                   if (cr || !el->selected())
                         select(el, SelectType::SINGLE, 0);
                   else
-                        _playNote = false;
+                        setPlayNote(false);
                   for (MuseScoreView* view : viewer)
                         view->moveCursor();
                   }
@@ -2184,12 +2180,12 @@ void Score::cmdAddBracket()
 //   cmdMoveRest
 //---------------------------------------------------------
 
-void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
+void Score::cmdMoveRest(Rest* rest, Direction dir)
       {
       QPointF pos(rest->userOff());
-      if (dir == MScore::Direction::UP)
+      if (dir == Direction::UP)
             pos.ry() -= spatium();
-      else if (dir == MScore::Direction::DOWN)
+      else if (dir == Direction::DOWN)
             pos.ry() += spatium();
       undoChangeProperty(rest, P_ID::USER_OFF, pos);
       }
@@ -2198,12 +2194,12 @@ void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
 //   cmdMoveLyrics
 //---------------------------------------------------------
 
-void Score::cmdMoveLyrics(Lyrics* lyrics, MScore::Direction dir)
+void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       {
-      ChordRest* cr      = lyrics->chordRest();
-      QList<Lyrics*>& ll = cr->lyricsList();
-      int no             = lyrics->no();
-      if (dir == MScore::Direction::UP) {
+      ChordRest* cr        = lyrics->chordRest();
+      QVector<Lyrics*>& ll = cr->lyricsList();
+      int no               = lyrics->no();
+      if (dir == Direction::UP) {
             if (no) {
                   if (ll[no-1] == 0) {
                         ll[no-1] = ll[no];
@@ -2241,22 +2237,22 @@ void Score::cmd(const QAction* a)
       //
       Element* el = selection().element();
       if (cmd == "pitch-up") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
-            else if (el && el->type() == Element::Type::REST)
-                  cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::UP);
-            else if (el && el->type() == Element::Type::LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::Direction::UP);
+            else if (el && el->isRest())
+                  cmdMoveRest(toRest(el), Direction::UP);
+            else if (el && el->isLyrics())
+                  cmdMoveLyrics(toLyrics(el), Direction::UP);
             else
                   upDown(true, UpDownMode::CHROMATIC);
             }
       else if (cmd == "pitch-down") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
-            else if (el && el->type() == Element::Type::REST)
-                  cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::DOWN);
-            else if (el && el->type() == Element::Type::LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::Direction::DOWN);
+            else if (el && el->isRest())
+                  cmdMoveRest(toRest(el), Direction::DOWN);
+            else if (el && el->isLyrics())
+                  cmdMoveLyrics(toLyrics(el), Direction::DOWN);
             else
                   upDown(false, UpDownMode::CHROMATIC);
             }
@@ -2282,13 +2278,13 @@ void Score::cmd(const QAction* a)
             cmdDeleteSelectedMeasures();
             }
       else if (cmd == "pitch-up-octave") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
             else
                   upDown(true, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-down-octave") {
-            if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
+            if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
             else
                   upDown(false, UpDownMode::OCTAVE);
@@ -2476,10 +2472,8 @@ void Score::cmd(const QAction* a)
             cmdDoubleDuration();
       else if (cmd == "half-duration")
             cmdHalfDuration();
-      else if (cmd == "") {               //Midi note received only?
-            if (!noteEntryMode())
-                  setLayoutAll(false);
-            }
+      else if (cmd == "")               //Midi note received only?
+                  ;
       else if (cmd == "add-audio")
             addAudioTrack();
       else if (cmd == "transpose-up")
@@ -2641,7 +2635,7 @@ void Score::cmdExplode()
                   Element* e = s->element(srcTrack);
                   if (e && e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
-                        n = qMax(n, c->notes().size());
+                        n = qMax(n, int(c->notes().size()));
                         }
                   }
             lastStaff = qMin(nstaves(), srcStaff + n);
@@ -2658,7 +2652,7 @@ void Score::cmdExplode()
             if (cr) {
                   XmlReader e(srcSelection.mimeData());
                   e.setPasteMode(true);
-                  if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteStatus::PS_NO_ERROR)
+                  if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR)
                         qDebug("explode: paste failed");
                   }
             }
@@ -2670,7 +2664,7 @@ void Score::cmdExplode()
                   Element* e = s->element(track);
                   if (e && e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
-                        QList<Note*> notes = c->notes();
+                        std::vector<Note*> notes = c->notes();
                         int nnotes = notes.size();
                         // keep note "i" from top, which is backwards from nnotes - 1
                         // reuse notes if there are more instruments than notes
@@ -2690,7 +2684,7 @@ void Score::cmdExplode()
       select(startMeasure, SelectType::RANGE, srcStaff);
       select(endMeasure, SelectType::RANGE, lastStaff - 1);
 
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2795,7 +2789,7 @@ void Score::cmdImplode()
       select(startMeasure, SelectType::RANGE, dstStaff);
       select(endMeasure, SelectType::RANGE, dstStaff);
 
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2913,7 +2907,7 @@ void Score::cmdSlashFill()
             select(firstSlash, SelectType::RANGE);
             select(lastSlash, SelectType::RANGE);
             }
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2958,7 +2952,7 @@ void Score::cmdSlashRhythm()
                         c->setSlash(!c->slash(), false);
                   }
             }
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2997,6 +2991,10 @@ void Score::cmdResequenceRehearsalMarks()
 
 //---------------------------------------------------------
 //   addRemoveBreaks
+//    interval lock
+//    0        false    remove all linebreaks
+//    > 0      false    add linebreak every interval measure
+//    d.c.     true     add linebreak at every system end
 //---------------------------------------------------------
 
 void Score::addRemoveBreaks(int interval, bool lock)
@@ -3029,7 +3027,6 @@ void Score::addRemoveBreaks(int interval, bool lock)
                   if (mm->system() && mm->system()->lastMeasure() == mm)
                         m->undoSetLineBreak(true);
                   }
-
             else {
                   if (interval == 0) {
                         // remove line break if present

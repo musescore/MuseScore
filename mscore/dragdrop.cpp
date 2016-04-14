@@ -728,7 +728,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   score()->pasteStaff(xml, seg, idx);
                   }
             event->acceptProposedAction();
-            _score->setLayoutAll(true);
+            _score->setLayoutAll();
             _score->endCmd();
             }
       setDropTarget(0); // this also resets dropRectangle and dropAnchor
@@ -741,9 +741,7 @@ void ScoreView::dropEvent(QDropEvent* event)
 void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
       {
       if (dragElement) {
-            _score->setLayoutAll(false);
-//            _score->addRefresh(dragElement->canvasBoundingRect());
-            _score->setUpdateAll(true);
+            _score->setUpdateAll();
             delete dragElement;
             dragElement = 0;
             _score->end();

@@ -18,6 +18,7 @@
 #include "duration.h"
 #include "beam.h"
 #include "segment.h"
+#include "shape.h"
 
 namespace Ms {
 
@@ -59,9 +60,9 @@ class ChordRest : public DurationElement {
       void processSiblings(std::function<void(Element*)> func);
 
    protected:
-      QList<Articulation*> _articulations;
+      QVector<Articulation*> _articulations;
       Beam* _beam;
-      QList<Lyrics*> _lyricsList;
+      QVector<Lyrics*> _lyricsList;
       TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
 
       Beam::Mode _beamMode;
@@ -71,8 +72,6 @@ class ChordRest : public DurationElement {
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
       CrossMeasure _crossMeasure;         ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
       TDuration _crossMeasureTDur;        ///< the total Duration type of the combined notes
-
-      Space _space;                       // cached value from layout
 
    public:
       ChordRest(Score*);
@@ -114,8 +113,8 @@ class ChordRest : public DurationElement {
       bool up() const                           { return _up;   }
       void setUp(bool val)                      { _up = val; }
 
-      QList<Articulation*>& articulations()     { return _articulations; }
-      const QList<Articulation*>& articulations() const { return _articulations; }
+      QVector<Articulation*>& articulations()     { return _articulations; }
+      const QVector<Articulation*>& articulations() const { return _articulations; }
       Articulation* hasArticulation(const Articulation*);
 
       bool small() const                        { return _small; }
@@ -124,6 +123,7 @@ class ChordRest : public DurationElement {
 
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
+      virtual int vStaffIdx() const override    { return staffIdx() + _staffMove;  }
 
       void layoutArticulations();
 
@@ -141,19 +141,17 @@ class ChordRest : public DurationElement {
       int actualDots() const  { return _durationType.dots(); }
       int durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks()
                                     : _durationType.ticks(); }
-      QString durationUserName();
+      QString durationUserName() const;
 
       virtual void setTrack(int val) override;
-      virtual int tick() const;
-      virtual int rtick() const;
-      virtual Space space() const               { return _space; }
 
-      const QList<Lyrics*>& lyricsList() const { return _lyricsList; }
-      QList<Lyrics*>& lyricsList()             { return _lyricsList; }
+      const QVector<Lyrics*>& lyricsList() const { return _lyricsList; }
+      QVector<Lyrics*>& lyricsList()             { return _lyricsList; }
       Lyrics* lyrics(int no)                   { return _lyricsList.value(no); }
+
       virtual void add(Element*);
       virtual void remove(Element*);
-      void removeDeleteBeam(bool beamed = false);
+      void removeDeleteBeam(bool beamed);
 
       CrossMeasure crossMeasure() const            { return _crossMeasure; }
       void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
@@ -175,7 +173,8 @@ class ChordRest : public DurationElement {
       virtual void setScore(Score* s) override;
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
-      virtual QString accessibleExtraInfo() override;
+      virtual QString accessibleExtraInfo() const override;
+      virtual Shape shape() const override;
       };
 
 

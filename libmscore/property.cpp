@@ -36,9 +36,9 @@ struct PropertyData {
 //
 //
 static const PropertyData propertyList[] = {
-      { P_ID::SUBTYPE,             false, "subtype",       P_TYPE::INT   },
+      { P_ID::SUBTYPE,             false,  "subtype",      P_TYPE::INT   },
       { P_ID::SELECTED,            false, "selected",      P_TYPE::BOOL  },
-      { P_ID::GENERATED,           false, "generated",     P_TYPE::BOOL  },
+      { P_ID::GENERATED,           false,  "generated",    P_TYPE::BOOL  },
       { P_ID::COLOR,               false, "color",         P_TYPE::COLOR },
       { P_ID::VISIBLE,             false, "visible",       P_TYPE::BOOL  },
       { P_ID::SMALL,               false, "small",         P_TYPE::BOOL  },
@@ -62,16 +62,17 @@ static const PropertyData propertyList[] = {
       { P_ID::NO_STEM,             false, "noStem",        P_TYPE::INT },
       { P_ID::SLUR_DIRECTION,      false, "slurDirection", P_TYPE::INT },
       { P_ID::LEADING_SPACE,       false, "leadingSpace",  P_TYPE::SPATIUM },
-      { P_ID::TRAILING_SPACE,      false, "trailingSpace", P_TYPE::SPATIUM },
       { P_ID::DISTRIBUTE,          false, "distribute",    P_TYPE::BOOL },
       { P_ID::MIRROR_HEAD,         false, "mirror",        P_TYPE::DIRECTION_H },
       { P_ID::DOT_POSITION,        false, "dotPosition",   P_TYPE::DIRECTION },
       { P_ID::TUNING,              false, "tuning",        P_TYPE::REAL  },
       { P_ID::PAUSE,               false, "pause",         P_TYPE::REAL  },
-      { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT   },
 
+      { P_ID::BARLINE_TYPE,        false, 0,               P_TYPE::BARLINE_TYPE },
+      { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_FROM,   false, 0,               P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_TO,     false, 0,               P_TYPE::INT   },
+
       { P_ID::USER_OFF,            false, "userOff",       P_TYPE::POINT },
       { P_ID::FRET,                true,  "fret",          P_TYPE::INT   },
       { P_ID::STRING,              true,  "string",        P_TYPE::INT   },
@@ -120,7 +121,6 @@ static const PropertyData propertyList[] = {
       { P_ID::ACCIDENTAL_BRACKET,  false, "bracket",       P_TYPE::BOOL   },
       { P_ID::NUMERATOR_STRING,    false, "textN",         P_TYPE::STRING },
       { P_ID::DENOMINATOR_STRING,  false, "textD",         P_TYPE::STRING },
-      { P_ID::BREAK_HINT,          false, "breakHint",     P_TYPE::BOOL   },
       { P_ID::FBPREFIX,            false, "prefix",        P_TYPE::INT    },
       { P_ID::FBDIGIT,             false, "digit",         P_TYPE::INT    },
       { P_ID::FBSUFFIX,            false, "suffix",        P_TYPE::INT    },
@@ -153,10 +153,12 @@ static const PropertyData propertyList[] = {
       { P_ID::MARKER_TYPE,         false, 0,               P_TYPE::INT    },
       { P_ID::ARP_USER_LEN1,       false, 0,               P_TYPE::REAL   },
       { P_ID::ARP_USER_LEN2,       false, 0,               P_TYPE::REAL   },
-      { P_ID::REPEAT_FLAGS,        false,  0,              P_TYPE::INT    },
-      { P_ID::END_BARLINE_TYPE,    false, 0,               P_TYPE::INT    },
-      { P_ID::END_BARLINE_VISIBLE, false, 0,               P_TYPE::BOOL   },
-      { P_ID::END_BARLINE_COLOR,   false, 0,               P_TYPE::COLOR  },
+
+      { P_ID::REPEAT_END,          true,  0,               P_TYPE::BOOL   },
+      { P_ID::REPEAT_START,        true,  0,               P_TYPE::BOOL   },
+      { P_ID::REPEAT_MEASURE,      true,  0,               P_TYPE::BOOL   },
+      { P_ID::REPEAT_JUMP,         true,  0,               P_TYPE::BOOL   },
+
       { P_ID::MEASURE_NUMBER_MODE, false, "measureNumberMode", P_TYPE::INT    },
 
       { P_ID::GLISS_TYPE,          false, 0,               P_TYPE::INT    },
@@ -215,7 +217,6 @@ static const PropertyData propertyList[] = {
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
       { P_ID::LINE_VISIBLE,        true,  "lineVisible",           P_TYPE::BOOL },
 
-      { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::BARLINE_TYPE },
       { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
       { P_ID::USE_DRUMSET,         false, "useDrumset",            P_TYPE::BOOL },
       { P_ID::PART_VOLUME,         false, "volume",                P_TYPE::INT },
@@ -301,37 +302,27 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
             case P_TYPE::GLISSANDO_STYLE: {
-                QString value(e.readElementText());
-                if ( value == "whitekeys")
-                    return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
-                else if ( value == "blackkeys")
-                    return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
-                else if ( value == "diatonic")
-                    return QVariant(int(MScore::GlissandoStyle::DIATONIC));
-                else // e.g., normally "Chromatic"
-                    return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
-            }
-              break;
-            case P_TYPE::ORNAMENT_STYLE:
-                  {
-                      QString value(e.readElementText());
-                      if ( value == "baroque")
-                          return QVariant(int(MScore::OrnamentStyle::BAROQUE));
-
-                      return QVariant(int(MScore::OrnamentStyle::DEFAULT));
-                  }
-                  break; // break is really not necessary because of the default return
-            case P_TYPE::DIRECTION:
-                  {
                   QString value(e.readElementText());
-                  if (value == "up")
-                        return QVariant(int(MScore::Direction::UP));
-                  else if (value == "down")
-                        return QVariant(int(MScore::Direction::DOWN));
-                  else if (value == "auto")
-                        return QVariant(int(MScore::Direction::AUTO));
+                  if ( value == "whitekeys")
+                        return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
+                  else if ( value == "blackkeys")
+                        return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
+                  else if ( value == "diatonic")
+                        return QVariant(int(MScore::GlissandoStyle::DIATONIC));
+                  else // e.g., normally "Chromatic"
+                        return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
                   }
                   break;
+            case P_TYPE::ORNAMENT_STYLE: {
+                  QString value(e.readElementText());
+                  if ( value == "baroque")
+                        return QVariant(int(MScore::OrnamentStyle::BAROQUE));
+                  return QVariant(int(MScore::OrnamentStyle::DEFAULT));
+                  }
+
+            case P_TYPE::DIRECTION:
+                  return QVariant::fromValue(Direction(e.readElementText()));
+
             case P_TYPE::DIRECTION_H:
                   {
                   QString value(e.readElementText());
@@ -373,19 +364,12 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::BARLINE_TYPE: {
                   bool ok;
                   const QString& val(e.readElementText());
-                  // In MuseScore 2.0.2 and before, SYSTEM_INITIAL_BARLINE_TYPE
-                  // was stored as a int, so try this first
                   int ct = val.toInt(&ok);
                   if (ok)
                         return QVariant(ct);
                   else {
-                        for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
-                              if (BarLine::barLineTypeName(BarLineType(i)) == val) {
-                                    ct = i;
-                                    break;
-                                    }
-                              }
-                        return QVariant(ct);
+                        BarLineType t = BarLine::barLineType(val);
+                        return QVariant::fromValue(t);
                         }
                   }
                   break;
@@ -408,6 +392,22 @@ QVariant getProperty(P_ID id, XmlReader& e)
             }
       return QVariant();
       }
+
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   checkProperties
+//---------------------------------------------------------
+
+void checkProperties()
+      {
+      int idx = 0;
+      for (const PropertyData& d : propertyList) {
+            Q_ASSERT(int(d.id) == idx);
+            ++idx;
+            }
+      }
+#endif
+
 
 }
 

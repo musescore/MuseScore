@@ -26,9 +26,11 @@ class Spatium {
       qreal _val;
 
    public:
-      Spatium()                       { _val = 0.0; }
+      constexpr Spatium() : _val(0.0) {}
       explicit Spatium(qreal v)       { _val = v; }
-      qreal val() const               { return _val; }
+
+      constexpr qreal val() const     { return _val; }
+
       bool operator>(const Spatium& a) const  { return _val > a._val; }
       bool operator<(const Spatium& a) const  { return _val < a._val; }
       bool operator==(const Spatium& a) const { return _val == a._val; }
@@ -59,6 +61,9 @@ class Spatium {
             return *this;
             }
       Spatium operator-() const { return Spatium(-_val); }
+      operator QVariant() const { return QVariant::fromValue(*this); }
+
+      static double toDouble(const Spatium& v) { return v._val; }
       };
 
 inline Spatium operator+(const Spatium& a, const Spatium& b)
@@ -103,8 +108,9 @@ inline Spatium operator*(qreal a, const Spatium& b)
       r *= a;
       return r;
       }
-
-
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Spatium);
+
 #endif
 

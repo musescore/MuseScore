@@ -73,10 +73,9 @@ void ScoreView::startEdit()
       {
       if (editObject->type() == Element::Type::TBOX)
             editObject = static_cast<TBox*>(editObject)->text();
-      _score->setLayoutAll(false);
       curElement  = 0;
       setFocus();
-      if (!_score->undo()->active())
+      if (!_score->undoStack()->active())
             _score->startCmd();
       editObject->startEdit(this, data.startMove);
       curGrip = Grip::NO_GRIP;
@@ -113,7 +112,7 @@ void ScoreView::endEdit()
             Text* text = static_cast<Text*>(editObject);
             // remove text if empty
             // dont do this for TBOX
-            if (text->isEmpty() && text->parent() && text->parent()->type() != Element::Type::TBOX)
+            if (text->empty() && text->parent() && text->parent()->type() != Element::Type::TBOX)
                   _score->undoRemoveElement(text);
             }
 
@@ -192,7 +191,6 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             }
       data.delta = data.pos - data.lastPos;
 
-      _score->setLayoutAll(false);
       score()->addRefresh(editObject->canvasBoundingRect());
       if (editObject->isText()) {
             Text* text = static_cast<Text*>(editObject);

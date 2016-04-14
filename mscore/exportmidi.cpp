@@ -248,8 +248,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
                   foreach(const Channel* ch, j->second->channel()) {
-                        char port    = part->score()->midiPort(ch->channel);
-                        char channel = part->score()->midiChannel(ch->channel);
+                        char port    = part->masterScore()->midiPort(ch->channel);
+                        char channel = part->masterScore()->midiChannel(ch->channel);
 
                         if (staff->isTop()) {
                               track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_RESET_ALL_CTRL, 0));
@@ -294,8 +294,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               NPlayEvent event(i->second);
-                              char eventPort    = cs->midiPort(event.channel());
-                              char eventChannel = cs->midiChannel(event.channel());
+                              char eventPort    = cs->masterScore()->midiPort(event.channel());
+                              char eventChannel = cs->masterScore()->midiChannel(event.channel());
                               if (port != eventPort || channel != eventChannel)
                                     continue;
 

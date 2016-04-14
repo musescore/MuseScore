@@ -15,19 +15,49 @@
 
 namespace Ms {
 
+class Segment;
+
 //---------------------------------------------------------
 //   Spring
 //---------------------------------------------------------
 
 struct Spring {
-      int seg;
+      Segment* seg;
       qreal stretch;
       qreal fix;
-      Spring(int i, qreal s, qreal f) : seg(i), stretch(s), fix(f) {}
+      Spring(Segment* s, qreal str) : seg(s), stretch(str), fix(s->width()) {}
+      };
+
+//---------------------------------------------------------
+//   LayoutContext
+//    temp values used during layout
+//---------------------------------------------------------
+
+struct LayoutContext {
+      bool startWithLongNames  { true };
+      bool firstSystem         { true };
+      int curPage              { 0 };      // index in Score->_pages
+      int tick                 { 0 };
+      Fraction sig;
+
+      QList<System*> systemList;          // reusable systems
+      System* curSystem        { 0 };
+      MeasureBase* systemOldMeasure;
+      System* pageOldSystem    { 0 };
+      bool systemChanged       { false };
+      bool pageChanged         { false };
+
+      MeasureBase* prevMeasure { 0 };
+      MeasureBase* curMeasure  { 0 };
+      MeasureBase* nextMeasure { 0 };
+      int measureNo            { 0 };
+      bool rangeLayout         { false };
+      int endTick;
+
+      int adjustMeasureNo(MeasureBase*);
       };
 
 typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
-typedef SpringMap::const_iterator iSpring;
 
 extern qreal sff(qreal x, qreal xMin, const SpringMap& springs);
 

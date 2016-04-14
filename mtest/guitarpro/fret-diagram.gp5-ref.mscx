@@ -916,10 +916,6 @@
             <string>1</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -1860,10 +1856,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -2643,10 +2635,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Acoustic</name>

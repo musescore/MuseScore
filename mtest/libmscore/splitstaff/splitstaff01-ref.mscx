@@ -57,6 +57,10 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
+      <Staff id="3">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
       <trackName>Voice</trackName>
       <Instrument>
         <trackName>Voice</trackName>
@@ -159,6 +163,41 @@
         <KeySig>
           <accidental>0</accidental>
           </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

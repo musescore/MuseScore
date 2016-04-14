@@ -18,6 +18,31 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ScoreElement
+//---------------------------------------------------------
+
+ScoreElement::ScoreElement(const ScoreElement& se)
+      {
+      _score = se._score;
+      _links = 0;
+      }
+
+//---------------------------------------------------------
+//   ~ScoreElement
+//---------------------------------------------------------
+
+ScoreElement::~ScoreElement()
+      {
+      if (_links) {
+            _links->removeOne(this);
+            if (_links->empty()) {
+                  delete _links;
+                  _links = 0;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
@@ -44,7 +69,7 @@ void ScoreElement::undoChangeProperty(P_ID id, const QVariant& val)
 void ScoreElement::undoPushProperty(P_ID id)
       {
       QVariant val = getProperty(id);
-      score()->undo()->push1(new ChangeProperty(this, id, val));
+      score()->undoStack()->push1(new ChangeProperty(this, id, val));
       }
 
 //---------------------------------------------------------
@@ -108,8 +133,8 @@ void ScoreElement::unlink()
 
 void ScoreElement::undoUnlink()
       {
-      if (_links)
-            _score->undo(new Unlink(this));
+//      if (_links)
+//TODO-ws            _score->undo(new Unlink(this));
       }
 
 //---------------------------------------------------------
@@ -151,5 +176,13 @@ void LinkedElements::setLid(Score* score, int id)
       score->linkId(id);
       }
 
+//---------------------------------------------------------
+//   masterScore
+//---------------------------------------------------------
+
+MasterScore* ScoreElement::masterScore() const
+      {
+      return _score->masterScore();
+      }
 }
 

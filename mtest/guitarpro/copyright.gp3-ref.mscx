@@ -115,10 +115,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -257,10 +253,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -287,10 +279,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Track 1</name>

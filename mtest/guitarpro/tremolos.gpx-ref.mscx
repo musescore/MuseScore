@@ -191,10 +191,6 @@
             <lid>16</lid>
             </Tremolo>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -409,10 +405,6 @@
               <lid>16</lid>
               </Tremolo>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -477,10 +469,6 @@
               <lid>16</lid>
               </Tremolo>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>S-Gt</name>

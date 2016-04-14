@@ -288,7 +288,7 @@ void TextBlock::layout(Text* t)
                         break;
                   }
             }
-      if (_text.isEmpty()) {
+      if (_text.empty()) {
             QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
             _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
             _lineSpacing = fm.lineSpacing();
@@ -368,7 +368,7 @@ qreal TextBlock::xpos(int column, const Text* t) const
 
 const TextFragment* TextBlock::fragment(int column) const
       {
-      if (_text.isEmpty())
+      if (_text.empty())
             return 0;
       int col = 0;
       auto f = _text.begin();
@@ -493,7 +493,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                   }
             }
       else {
-            if (!_text.isEmpty() && _text.back().format == *cursor->format())
+            if (!_text.empty() && _text.back().format == *cursor->format())
                   _text.back().text.append(s);
             else
                   _text.append(TextFragment(cursor, s));
@@ -533,7 +533,7 @@ void TextBlock::insert(TextCursor* cursor, SymId id)
                   }
             }
       else {
-            if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL)
+            if (!_text.empty() && _text.back().format.type() == CharFormatType::SYMBOL)
                   _text.back().ids.append(id);
             else
                   _text.append(TextFragment(cursor, id));
@@ -577,7 +577,7 @@ void TextBlock::remove(int column)
                               i->text.remove(rcol, 2);
                         if (i->format.type() == CharFormatType::SYMBOL) {
                               i->ids.removeAt(idx);
-                              if (i->ids.isEmpty())
+                              if (i->ids.empty())
                                     _text.erase(i);
                               }
                         else {
@@ -1228,7 +1228,7 @@ void Text::layout1()
       if (!_editMode)
             createLayout();
 
-      if (_layout.isEmpty())
+      if (_layout.empty())
             _layout.append(TextBlock());
 
       QRectF bb;
@@ -1267,7 +1267,7 @@ void Text::layout1()
             }
 
       if (textStyle().align() & AlignmentFlags::BOTTOM)
-            yoff += h-bb.bottom();
+            yoff += h - bb.bottom();
       else if (textStyle().align() & AlignmentFlags::VCENTER)
             yoff +=  (h - (bb.top() + bb.bottom())) * .5;
       else if (textStyle().align() & AlignmentFlags::BASELINE)
@@ -1466,7 +1466,7 @@ void Text::genText()
             if (block.eol())
                   _text += QChar::LineFeed;
             }
-      while (!xmlNesting.isEmpty())
+      while (!xmlNesting.empty())
             xmlNesting.popToken();
       }
 
@@ -1518,13 +1518,13 @@ QString Text::plainText(bool noSym) const
 void Text::startEdit(MuseScoreView*, const QPointF& pt)
       {
       setEditMode(true);
-      if (_cursor == nullptr)
+      if (!_cursor)
             _cursor = new TextCursor();
       _cursor->setText(this);
       _cursor->setLine(0);
       _cursor->setColumn(0);
       _cursor->clearSelection();
-      if (_layout.isEmpty())
+      if (_layout.empty())
             layout();
       if (setCursor(pt))
             updateCursorFormat(_cursor);
@@ -1570,7 +1570,7 @@ void Text::endEdit()
                         // these can differ (eg, for chord symbols in transposing parts)
 
                         QString undoText = (e == this) ? oldText : static_cast<Text*>(e)->_text;
-                        score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, undoText));
+                        score()->undoStack()->push1(new ChangeProperty(e, P_ID::TEXT, undoText));
                         }
 
                   // because we are pushing each individual linked element's old text to the undo stack,
@@ -1838,8 +1838,8 @@ void Text::editInsertText(const QString& s)
             tbox->layout();
             System* system = tbox->system();
             system->setHeight(tbox->height());
-            score()->doLayoutPages();
-            score()->setUpdateAll(true);
+//TODO-ws            score()->doLayoutPages();
+            score()->setUpdateAll();
             }
       else {
             static const qreal w = 2.0; // 8.0 / view->matrix().m11();
@@ -2092,7 +2092,7 @@ bool Text::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
                   }
             }
       _cursor->setColumn(curLine().column(pt.x(), this));
-      score()->setUpdateAll(true);
+      score()->setUpdateAll();
       if (mode == QTextCursor::MoveAnchor)
             _cursor->clearSelection();
       if (_cursor->hasSelection())
@@ -2232,8 +2232,6 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
 //   readProperties
 //---------------------------------------------------------
 
-extern QString convertOldTextStyleNames(const QString&);
-
 bool Text::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
@@ -2292,8 +2290,6 @@ bool Text::readProperties(XmlReader& e)
                   //st = TextStyleType(i);
                   }
             else {
-                  if (score()->mscVersion() <= 124)
-                        val = convertOldTextStyleNames(val);
                   st = score()->style()->textStyleType(val);
                   }
             setTextStyleType(st);
@@ -2335,7 +2331,7 @@ bool Text::readProperties(XmlReader& e)
 void Text::textStyleChanged()
       {
       setTextStyle(score()->textStyle(_styleIndex));
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2492,7 +2488,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   setTextStyle(v.value<TextStyle>());
                   break;
             case P_ID::TEXT_STYLE_TYPE:
-                  setTextStyleType(TextStyleType(v.toInt()));
+                  setTextStyleType(v.value<TextStyleType>());
                   setGenerated(false);
                   break;
             case P_ID::TEXT:
@@ -2502,7 +2498,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return rv;
       }
 
@@ -2619,9 +2615,9 @@ void Text::paste()
           insertText(token);
           }
       layoutEdit();
-      bool lo = type() == Element::Type::INSTRUMENT_NAME;
-      score()->setLayoutAll(lo);
       score()->setUpdateAll();
+      if (type() == Element::Type::INSTRUMENT_NAME)
+            score()->setLayoutAll();
       score()->end();
       }
 
@@ -2652,8 +2648,8 @@ void Text::layoutEdit()
             tbox->layout();
             System* system = tbox->system();
             system->setHeight(tbox->height());
-            score()->doLayoutPages();
-            score()->setUpdateAll(true);
+//TODO-ws            score()->doLayoutPages();
+            score()->setUpdateAll();
             }
       else {
             static const qreal w = 2.0; // 8.0 / view->matrix().m11();
@@ -2938,7 +2934,7 @@ QString Text::unEscape(QString s)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Text::accessibleInfo()
+QString Text::accessibleInfo() const
       {
       QString rez;
       const QList<TextStyle>& ts = score()->style()->textStyles();
@@ -3018,7 +3014,7 @@ QList<TextFragment> Text::fragmentList() const
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
                   /* TODO TBD
-                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                  if (f.text.empty())                     // skip empty fragments, not to
                         continue;                           // insert extra HTML formatting
                    */
                   res.append(f);
@@ -3096,7 +3092,7 @@ bool Text::validateText(QString& s)
       XmlReader xml(ss);
       while (xml.readNextStartElement())
             ; // qDebug("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
-      if (xml.error() == XmlStreamReader::NoError) {
+      if (xml.error() == QXmlStreamReader::NoError) {
             s = d;
             return true;
             }

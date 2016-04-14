@@ -258,7 +258,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                         if (dotted) {
                               // there is at most one dotted note in this guitar pro version
                               NoteDot* dot = new NoteDot(score);
-                              dot->setIdx(0);
+                              // dot->setIdx(0);
                               dot->setParent(note);
                               dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
                               dot->setVisible(true);
@@ -279,9 +279,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == ARPEGGIO_DOWN)
-                  chord->setStemDirection(MScore::Direction::DOWN);
+                  chord->setStemDirection(Direction::DOWN);
             else if (rr == ARPEGGIO_UP)
-                  chord->setStemDirection(MScore::Direction::UP);
+                  chord->setStemDirection(Direction::UP);
             }
       int r = readChar();
       if (r & 0x8) {

@@ -788,8 +788,8 @@ Note* searchTieNote(Note* note)
       else {
             // normal chord
             // try to tie to grace note after if present
-            QList<Chord*> gna = chord->graceNotesAfter();
-            if (!gna.isEmpty()) {
+            QVector<Chord*> gna = chord->graceNotesAfter();
+            if (!gna.empty()) {
                   Chord* gc = gna[0];
                   note2 = gc->findNote(note->pitch());
                   if (note2)
@@ -813,8 +813,8 @@ Note* searchTieNote(Note* note)
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
                   // if there are grace notes before, try to tie to first one
-                  QList<Chord*> gnb = c->graceNotesBefore();
-                  if (!gnb.isEmpty()) {
+                  QVector<Chord*> gnb = c->graceNotesBefore();
+                  if (!gnb.empty()) {
                         Chord* gc = gnb[0];
                         Note* gn2 = gc->findNote(note->pitch());
                         if (gn2)

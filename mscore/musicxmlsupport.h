@@ -136,17 +136,17 @@ struct MusicXMLDrumInstrument {
       int midiPan;                     // pan value read from MusicXML
       NoteHead::Group notehead;        ///< notehead symbol set
       int line;                        ///< place notehead onto this line
-      MScore::Direction stemDirection;
+      Direction stemDirection;
 
       QString toString() const;
 
       MusicXMLDrumInstrument()
             : pitch(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-              notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
+              notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
       MusicXMLDrumInstrument(QString s)
             : pitch(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-              notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
-      MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, MScore::Direction d)
+              notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
+      MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
             : pitch(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
               notehead(nh), line(l), stemDirection(d) {}
       };

@@ -659,10 +659,6 @@
             <string>0</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <endSpanner id="8"/>
         </Measure>
       </Staff>
@@ -1346,10 +1342,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <endSpanner id="15"/>
           </Measure>
         </Staff>
@@ -1775,10 +1767,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Track 1</name>

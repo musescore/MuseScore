@@ -108,19 +108,19 @@ void TestNote::note()
       delete n;
 
    // dot position
-      note->setUserDotPosition(MScore::Direction::UP);
+      note->setUserDotPosition(Direction::UP);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
       delete n;
 
-      note->setUserDotPosition(MScore::Direction::DOWN);
+      note->setUserDotPosition(Direction::DOWN);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
       delete n;
 
-      note->setUserDotPosition(MScore::Direction::AUTO);
+      note->setUserDotPosition(Direction::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
       delete n;
   // headGroup
       for (int i = 0; i < int (NoteHead::Group::HEAD_GROUPS); ++i) {
@@ -229,19 +229,19 @@ void TestNote::note()
       delete n;
 
    // dot position
-      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::UP));
+      note->setProperty(P_ID::DOT_POSITION, QVariant::fromValue(Direction(Direction::UP)));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::DOWN));
+      note->setProperty(P_ID::DOT_POSITION, QVariant::fromValue(Direction(Direction::DOWN)));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::AUTO));
+      note->setProperty(P_ID::DOT_POSITION, QVariant::fromValue(Direction(Direction::AUTO)));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
+      QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
       delete n;
 
   // headGroup
@@ -315,7 +315,7 @@ void TestNote::note()
 
 void TestNote::grace()
       {
-      Score* score = readScore(DIR + "grace.mscx");
+      MasterScore* score = readScore(DIR + "grace.mscx");
       score->doLayout();
       Ms::Chord* chord = score->firstMeasure()->findChord(0, 0);
       Note* note = chord->upNote();
@@ -323,7 +323,7 @@ void TestNote::grace()
       // create
       score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division/2);
       Ms::Chord* gc = chord->graceNotes().first();
-      Note* gn = gc->notes().first();
+      Note* gn = gc->notes().front();
 //      Note* n = static_cast<Note*>(writeReadElement(gn));
 //      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
 //      delete n;
@@ -360,7 +360,6 @@ void TestNote::grace()
 //      delete c;
 
       QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
-
       }
 
 //---------------------------------------------------------
@@ -370,7 +369,7 @@ void TestNote::grace()
 
 void TestNote::tpc()
       {
-      Score* score = readScore(DIR + "tpc.mscx");
+      MasterScore* score = readScore(DIR + "tpc.mscx");
       score->doLayout();
 
       score->inputState().setTrack(0);
@@ -400,7 +399,7 @@ void TestNote::tpc()
 
 void TestNote::tpcTranspose()
       {
-      Score* score = readScore(DIR + "tpc-transpose.mscx");
+      MasterScore* score = readScore(DIR + "tpc-transpose.mscx");
       score->doLayout();
 
       score->startCmd();
@@ -428,8 +427,9 @@ void TestNote::tpcTranspose()
 ///   more tests of note tpc values & transposition
 //---------------------------------------------------------
 
-void TestNote::tpcTranspose2() {
-      Score* score = readScore(DIR + "tpc-transpose2.mscx");
+void TestNote::tpcTranspose2()
+      {
+      MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
       score->doLayout();
 
       score->inputState().setTrack(0);
@@ -449,36 +449,37 @@ void TestNote::tpcTranspose2() {
 ///   noteLimits
 //---------------------------------------------------------
 
-void TestNote::noteLimits() {
-      Score* score = readScore(DIR + "empty.mscx");
+void TestNote::noteLimits()
+      {
+      MasterScore* score = readScore(DIR + "empty.mscx");
       score->doLayout();
 
       score->inputState().setTrack(0);
       score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
-      
+
       // over 127 shouldn't crash
       score->cmdAddPitch(140, false);
       // below 0 shouldn't crash
       score->cmdAddPitch(-40, false);
-      
+
       // stack chords
       score->cmdAddPitch(42, false);
       for (int i = 1; i < 20; i++)
             score->cmdAddPitch(42 + i * 7, true);
-      
+
       // interval below
       score->cmdAddPitch(42, false);
       for (int i = 0; i < 20; i++) {
-            QList<Note*> nl = score->selection().noteList();
+            std::vector<Note*> nl = score->selection().noteList();
             score->cmdAddInterval(-8, nl);
             }
-      
+
       // interval above
       score->cmdAddPitch(42, false);
       for (int i = 0; i < 20; i++) {
-            QList<Note*> nl = score->selection().noteList();
+            std::vector<Note*> nl = score->selection().noteList();
             score->cmdAddInterval(8, nl);
             }
       QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));

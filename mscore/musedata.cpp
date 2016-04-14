@@ -206,12 +206,12 @@ void MuseData::readNote(Part* part, const QString& s)
                   break;
                   }
             }
-      MScore::Direction dir = MScore::Direction::AUTO;
+      Direction dir = Direction::AUTO;
       if (s.size() >= 23) {
             if (s[22] == 'u')
-                  dir = MScore::Direction::UP;
+                  dir = Direction::UP;
             else if (s[22] == 'd')
-                  dir = MScore::Direction::DOWN;
+                  dir = Direction::DOWN;
             }
 
       int staffIdx = 0;
@@ -742,7 +742,7 @@ void MuseData::convert()
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError importMuseData(Score* score, const QString& name)
+Score::FileError importMuseData(MasterScore* score, const QString& name)
       {
       if(!QFileInfo(name).exists())
             return Score::FileError::FILE_NOT_FOUND;

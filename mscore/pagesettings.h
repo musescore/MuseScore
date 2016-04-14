@@ -25,6 +25,7 @@
 
 namespace Ms {
 
+class MasterScore;
 class Score;
 class Navigator;
 
@@ -37,7 +38,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
 
       Navigator* preview;
       bool mmUnit;
-      Score* cs;
+      MasterScore* cs;
       void updateValues();
       void updatePreview(int);
       void blockSignals(bool);
@@ -71,7 +72,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
    public:
       PageSettings(QWidget* parent = 0);
       ~PageSettings();
-      void setScore(Score*);
+      void setScore(MasterScore*);
       };
 
 

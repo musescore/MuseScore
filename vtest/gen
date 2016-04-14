@@ -52,8 +52,14 @@ else
        user-offset-1 user-offset-2 chord-space-1 chord-space-2 tablature-1 image-1\
        lyrics-1 lyrics-2 lyrics-3 lyrics-4 lyrics-5 lyrics-6 lyrics-7 voice-1 voice-2 slash-1 slash-2\
        system-1 system-2 system-3 system-4 system-5 system-6 system-7 hide-1 small-1 tremolo-1\
-       staff-1 staff-2"
+       staff-1 staff-2 layout-1 layout-2 layout-3 layout-4"
 fi
+
+#####DEBUG: failed tests
+
+#SRC=" \
+#      layout-1 layout-2 layout-3 layout-4
+#      system-4"
 
 DPI=130
 F=vtest.html
@@ -62,10 +68,15 @@ rm -rf html
 mkdir html
 cd html
 
+if test -f ../LOG; then
+      rm ../LOG
+      fi
+
 for src in $SRC; do
       echo process ../$src
+      echo =================== process ../$src >> ../LOG
       cp ../$src-ref.png .
-      $MSCORE ../$src.mscz -r $DPI -o $src.png > /dev/null 2>&1
+      $MSCORE ../$src.mscz -r $DPI -o $src.png >> ../LOG 2>&1
       compare $src-1.png $src-ref.png $src-diff.png
       done
 

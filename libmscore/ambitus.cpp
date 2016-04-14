@@ -28,7 +28,7 @@ static const NoteHead::Group  NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORM
 static const NoteHead::Type   NOTEHEADTYPE_DEFAULT  = NoteHead::Type::HEAD_AUTO;
 static const MScore::DirectionH     DIR_DEFAULT     = MScore::DirectionH::AUTO;
 static const bool           HASLINE_DEFAULT         = true;
-static const qreal          LINEWIDTH_DEFAULT       = 0.12;
+static const Spatium          LINEWIDTH_DEFAULT(0.12);
 #if 0 // yet(?) unused
 static const qreal          LEDGEROFFSET_DEFAULT    = 0.25;
 #endif
@@ -206,7 +206,7 @@ void Ambitus::read(XmlReader& e)
             else if (tag == "hasLine")
                   setHasLine(e.readInt());
             else if (tag == "lineWidth")
-                  setProperty(P_ID::LINE_WIDTH, Ms::getProperty(P_ID::LINE_WIDTH, e).toReal());
+                  setProperty(P_ID::LINE_WIDTH, Ms::getProperty(P_ID::LINE_WIDTH, e));
             else if (tag == "topPitch")
                   _topPitch = e.readInt();
             else if (tag == "bottomPitch")
@@ -406,7 +406,7 @@ void Ambitus::layout()
 void Ambitus::draw(QPainter* p) const
       {
       qreal _spatium = spatium();
-      qreal lw = lineWidth() * _spatium;
+      qreal lw = lineWidth().val() * _spatium;
       p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       drawSymbol(noteHead(), p, _topPos);
       drawSymbol(noteHead(), p, _bottomPos);
@@ -436,21 +436,6 @@ void Ambitus::draw(QPainter* p) const
                         p->drawLine(QPointF(xMin, y), QPointF(xMax, y));
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   space
-//---------------------------------------------------------
-
-Space Ambitus::space() const
-      {
-      qreal _spatium = spatium();
-      // reduce left space if there accidentals
-      qreal leftSpace = _spatium *
-            ((_topAccid.accidentalType() != AccidentalType::NONE
-                  || _bottomAccid.accidentalType() != AccidentalType::NONE)
-            ? 0.5 : 0.75);
-      return Space(leftSpace - bbox().x(), width() + bbox().x() + _spatium * 0.5);
       }
 
 //---------------------------------------------------------
@@ -650,7 +635,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
                   setHasLine(v.toBool());
                   break;
             case P_ID::LINE_WIDTH:
-                  setLineWidth(v.toReal());
+                  setLineWidth(v.value<Spatium>());
                   break;
             case P_ID::TPC1:
                   setTopTpc(v.toInt());
@@ -675,7 +660,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             }
       if (rv)
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
       return rv;
       }
 
@@ -690,7 +675,7 @@ QVariant Ambitus::propertyDefault(P_ID id) const
             case P_ID::HEAD_TYPE:       return int(NOTEHEADTYPE_DEFAULT);
             case P_ID::MIRROR_HEAD:     return int(DIR_DEFAULT);
             case P_ID::GHOST:           return HASLINE_DEFAULT;
-            case P_ID::LINE_WIDTH:      return LINEWIDTH_DEFAULT;
+            case P_ID::LINE_WIDTH:      return Spatium(LINEWIDTH_DEFAULT);
             case P_ID::TPC1:                  // no defaults for pitches, tpc's and octaves
             case P_ID::FBPARENTHESIS1:
             case P_ID::PITCH:
@@ -724,7 +709,8 @@ Element* Ambitus::prevElement()
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
-QString Ambitus::accessibleInfo()
+
+QString Ambitus::accessibleInfo() const
       {
       return tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::accessibleInfo())\
                                                           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false))\
@@ -737,7 +723,7 @@ QString Ambitus::accessibleInfo()
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Ambitus::screenReaderInfo()
+QString Ambitus::screenReaderInfo() const
       {
       return tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::screenReaderInfo())\
                                                           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, true))\

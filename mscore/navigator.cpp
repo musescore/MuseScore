@@ -349,8 +349,8 @@ void Navigator::paintEvent(QPaintEvent* ev)
 
             p.fillRect(pr, Qt::white);
             p.translate(pos);
-            foreach(System* s, *page->systems()) {
-                  foreach(MeasureBase* m, s->measures())
+            for (System* s  : page->systems()) {
+                  for (MeasureBase* m : s->measures())
                         m->scanElements(&p, paintElement, false);
                   }
             page->scanElements(&p, paintElement, false);

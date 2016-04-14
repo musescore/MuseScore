@@ -284,7 +284,7 @@ void SynthControl::saveButtonClicked()
       if (!_score)
             return;
       _score->startCmd();
-      _score->undo()->push(new ChangeSynthesizerState(_score, synti->state()));
+      _score->undo(new ChangeSynthesizerState(_score, synti->state()));
       _score->endCmd();
 
       loadButton->setEnabled(false);

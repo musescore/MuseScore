@@ -23,7 +23,6 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
-            - cmake
             - alsa
             - libsndfile1
             - wget

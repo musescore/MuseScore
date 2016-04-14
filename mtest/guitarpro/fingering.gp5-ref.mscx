@@ -286,10 +286,6 @@
           <lid>39</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -599,10 +595,6 @@
             <lid>39</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -783,10 +775,6 @@
             <lid>39</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Track 1</name>

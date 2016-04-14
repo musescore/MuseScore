@@ -87,16 +87,16 @@ void SlurSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(point(score()->styleS(StyleIdx::SlurEndWidth)));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurEndWidth));
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(point(score()->styleS(StyleIdx::SlurDottedWidth)));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(point(score()->styleS(StyleIdx::SlurDottedWidth)));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
                   pen.setStyle(Qt::DashLine);
                   break;
             }
@@ -152,7 +152,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
       Slur* sl = static_cast<Slur*>(slurTie());
 
       if (key == Qt::Key_X) {
-            sl->setSlurDirection(sl->up() ? MScore::Direction::DOWN : MScore::Direction::UP);
+            sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
             sl->layout();
             return true;
             }
@@ -261,7 +261,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
             score()->endCmd();
             score()->startCmd();
             viewer->startEdit(newSegment, curGrip);
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
             }
       }
 
@@ -526,7 +526,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = (score()->styleS(StyleIdx::SlurMidWidth).val() - score()->styleS(StyleIdx::SlurEndWidth).val()) * _spatium;
+      qreal w = score()->styleP(StyleIdx::SlurMidWidth) - score()->styleP(StyleIdx::SlurEndWidth);
       if ((c2 - c1) <= _spatium)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur
@@ -691,7 +691,7 @@ bool SlurSegment::isEdited() const
 SlurTie::SlurTie(Score* s)
    : Spanner(s)
       {
-      _slurDirection = MScore::Direction::AUTO;
+      _slurDirection = Direction::AUTO;
       _up            = true;
       _lineType      = 0;     // default is solid
       }
@@ -721,7 +721,7 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       //
       // handle special case of tenuto and staccato;
       //
-      const QList<Articulation*>& al = c->articulations();
+      const QVector<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
             if (a->up() == c->up())
@@ -1026,7 +1026,7 @@ void Slur::slurPos(SlurPos* sp)
                         Beam* beam2 = ec->beam();
                         if ((stemPos && (scr->up() == ec->up()))
                            || (beam2
-                             && (!beam2->elements().isEmpty())
+                             && (!beam2->elements().empty())
                              && (beam2->elements().front() != ec)
                              && (ec->up() == _up)
                              && sc && (sc->noteType() == NoteType::NORMAL)
@@ -1112,12 +1112,12 @@ void Slur::slurPos(SlurPos* sp)
 void SlurTie::writeProperties(Xml& xml) const
       {
       Element::writeProperties(xml);
-      if(track() != track2() && track2() != -1)
+      if (track() != track2() && track2() != -1)
             xml.tag("track2", track2());
       int idx = 0;
-      foreach(const SpannerSegment* ss, spannerSegments())
+      for (const SpannerSegment* ss : spannerSegments())
             ((SlurSegment*)ss)->writeSlur(xml, idx++);
-      if (_slurDirection != MScore::Direction::AUTO)
+      if (_slurDirection != Direction::AUTO)
             xml.tag("up", int(_slurDirection));
       if (_lineType)
             xml.tag("lineType", _lineType);
@@ -1147,7 +1147,7 @@ bool SlurTie::readProperties(XmlReader& e)
                   segment->SpannerSegment::setVisible(segment->visible());
             }
       else if (tag == "up")
-            _slurDirection = MScore::Direction(e.readInt());
+            _slurDirection = Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (!Element::readProperties(e))
@@ -1168,7 +1168,7 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(MScore::Direction d)
+void SlurTie::undoSetSlurDirection(Direction d)
       {
       score()->undoChangeProperty(this, P_ID::SLUR_DIRECTION, int(d));
       }
@@ -1204,11 +1204,11 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_ID::SLUR_DIRECTION: setSlurDirection(MScore::Direction(v.toInt())); break;
+            case P_ID::SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -1222,7 +1222,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
             case P_ID::LINE_TYPE:
                   return 0;
             case P_ID::SLUR_DIRECTION:
-                  return int(MScore::Direction::AUTO);
+                  return int(Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
             }
@@ -1276,7 +1276,7 @@ bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return SpannerSegment::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -1426,7 +1426,7 @@ void Slur::layout()
             // possible and needed
             //
             SlurSegment* s;
-            if (spannerSegments().isEmpty()) {
+            if (spannerSegments().empty()) {
                   s = new SlurSegment(score());
                   s->setTrack(track());
                   add(s);
@@ -1450,13 +1450,13 @@ void Slur::layout()
             setTick2(tick());
             }
       switch (_slurDirection) {
-            case MScore::Direction::UP:
+            case Direction::UP:
                   _up = true;
                   break;
-            case MScore::Direction::DOWN:
+            case Direction::DOWN:
                   _up = false;
                   break;
-            case MScore::Direction::AUTO:
+            case Direction::AUTO:
                   {
                   //
                   // assumption:
@@ -1500,14 +1500,14 @@ void Slur::layout()
       SlurPos sPos;
       slurPos(&sPos);
 
-      QList<System*>* sl = score()->systems();
-      iSystem is = sl->begin();
-      while (is != sl->end()) {
+      const QList<System*>& sl = score()->systems();
+      ciSystem is = sl.begin();
+      while (is != sl.end()) {
             if (*is == sPos.system1)
                   break;
             ++is;
             }
-      if (is == sl->end())
+      if (is == sl.end())
             qDebug("Slur::layout  first system not found");
       setPos(0, 0);
 
@@ -1517,8 +1517,8 @@ void Slur::layout()
       //---------------------------------------------------------
 
       unsigned nsegs = 1;
-      for (iSystem iis = is; iis != sl->end(); ++iis) {
-            if ((*iis)->isVbox())
+      for (ciSystem iis = is; iis != sl.end(); ++iis) {
+            if ((*iis)->vbox())
                   continue;
             if (*iis == sPos.system2)
                   break;
@@ -1527,9 +1527,9 @@ void Slur::layout()
 
       fixupSegments(nsegs);
 
-      for (int i = 0; is != sl->end(); ++i, ++is) {
+      for (int i = 0; is != sl.end(); ++i, ++is) {
             System* system  = *is;
-            if (system->isVbox()) {
+            if (system->vbox()) {
                   --i;
                   continue;
                   }
@@ -1564,7 +1564,7 @@ void Slur::layout()
             if (system == sPos.system2)
                   break;
             }
-      setbbox(spannerSegments().isEmpty() ? QRectF() : frontSegment()->bbox());
+      setbbox(spannerSegments().empty() ? QRectF() : frontSegment()->bbox());
       }
 
 //---------------------------------------------------------
@@ -1626,7 +1626,7 @@ void SlurTie::fixupSegments(unsigned nsegs)
       if (nsegs > onsegs) {
             for (unsigned i = onsegs; i < nsegs; ++i) {
                   SlurSegment* s;
-                  if (!delSegments.isEmpty()) {
+                  if (!delSegments.empty()) {
                         s = delSegments.dequeue();
                         }
                   else {
@@ -1684,7 +1684,7 @@ void SlurTie::endEdit()
                   for (ScoreElement* e : linkList()) {
                         Spanner* spanner = static_cast<Spanner*>(e);
                         if (spanner == this)
-                              score()->undo()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
+                              score()->undoStack()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
                         else {
                               Element* se = 0;
                               Element* ee = 0;
@@ -1725,7 +1725,7 @@ void SlurTie::endEdit()
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF3, o.o[2]);
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF4, o.o[3]);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 }

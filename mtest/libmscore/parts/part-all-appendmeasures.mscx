@@ -597,6 +597,11 @@
           <lid>112</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>113</lid>
+          </BarLine>
         </Measure>
       <Measure number="33">
         <Rest>
@@ -604,10 +609,6 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -933,6 +934,11 @@
           <lid>170</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>171</lid>
+          </BarLine>
         </Measure>
       <Measure number="33">
         <Rest>
@@ -940,10 +946,6 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -1289,10 +1291,6 @@
             <durationType>measure</durationType>
             <duration z="104" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <tick>11520</tick>
         <Measure number="7">
@@ -1502,6 +1500,11 @@
             <lid>112</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>113</lid>
+            </BarLine>
           </Measure>
         <Measure number="33">
           <Rest>
@@ -1509,10 +1512,6 @@
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Alto</name>
@@ -1722,10 +1721,6 @@
             <durationType>measure</durationType>
             <duration z="112" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <tick>7680</tick>
         <Measure number="5">
@@ -1949,6 +1944,11 @@
             <lid>170</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>171</lid>
+            </BarLine>
           </Measure>
         <Measure number="33">
           <Rest>
@@ -1956,10 +1956,6 @@
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Tenor</name>

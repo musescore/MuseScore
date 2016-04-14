@@ -139,7 +139,7 @@ public:
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics, QSet<Lyrics*>& extLyrics);
       void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter);
-      void stem(MScore::Direction& sd, bool& nost);
+      void stem(Direction& sd, bool& nost);
       void fermata(ChordRest* cr);
       void tuplet(MusicXmlTupletDesc& tupletDesc);
       void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QString& text);

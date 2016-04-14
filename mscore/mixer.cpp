@@ -112,8 +112,8 @@ void PartEdit::setPart(Part* p, Channel* a)
                   }
             }
       _setChecked(drumset, p->instrument()->useDrumset());
-      _setValue(portSpinBox,    part->score()->midiMapping(a->channel)->port + 1);
-      _setValue(channelSpinBox, part->score()->midiMapping(a->channel)->channel + 1);
+      _setValue(portSpinBox,    part->masterScore()->midiMapping(a->channel)->port + 1);
+      _setValue(channelSpinBox, part->masterScore()->midiMapping(a->channel)->channel + 1);
       }
 
 //---------------------------------------------------------
@@ -191,7 +191,7 @@ void Mixer::keyPressEvent(QKeyEvent* ev) {
 //   updateAll
 //---------------------------------------------------------
 
-void Mixer::updateAll(Score* score)
+void Mixer::updateAll(MasterScore* score)
       {
       cs = score;
       int n = -vb->count();
@@ -301,7 +301,7 @@ void MuseScore::showMixer(bool val)
             connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             connect(mixer, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
-      mixer->updateAll(cs);
+      mixer->updateAll(cs->masterScore());
       mixer->setVisible(val);
       }
 
@@ -323,7 +323,7 @@ void PartEdit::patchChanged(int n, bool syncControls)
       if (score) {
             score->startCmd();
             score->undo(new ChangePatch(score, channel, p));
-            score->setLayoutAll(true);
+            score->setLayoutAll();
             score->endCmd();
             }
       channel->updateInitList();
@@ -476,7 +476,7 @@ void PartEdit::drumsetToggled(bool val, bool syncControls)
             return;
             }
       score->undo(new ChangePatch(score, channel, p));
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->endCmd();
       sync(syncControls);
       }
@@ -575,7 +575,7 @@ void PartEdit::midiChannelChanged(int)
       int c = channelSpinBox->value() - 1;
 
       // 1 is for going up, -1 for going down
-      int direction = copysign(1, c - part->score()->midiMapping(channel->channel)->channel);
+      int direction = copysign(1, c - part->masterScore()->midiMapping(channel->channel)->channel);
 
       // Channel 9 is special for drums
       if (part->instrument()->useDrumset() && c != 9) {
@@ -631,21 +631,21 @@ void PartEdit::midiChannelChanged(int)
                   QPushButton *assignFreeChannel = msgBox.addButton(tr("Assign next free MIDI channel"), QMessageBox::HelpRole);
                   msgBox.setDefaultButton(QMessageBox::Ok);
                   if (msgBox.exec() == QMessageBox::Cancel) {
-                        _setValue(channelSpinBox, part->score()->midiMapping(channel->channel)->channel + 1);
-                        _setValue(portSpinBox,    part->score()->midiMapping(channel->channel)->port + 1);
+                        _setValue(channelSpinBox, part->masterScore()->midiMapping(channel->channel)->channel + 1);
+                        _setValue(portSpinBox,    part->masterScore()->midiMapping(channel->channel)->port + 1);
                         needSync = false;
                         break;
                         }
 
                   if (msgBox.clickedButton() == assignFreeChannel) {
-                        newChannel = part->score()->getNextFreeMidiMapping();
+                        newChannel = part->masterScore()->getNextFreeMidiMapping();
                         break;
                         }
                   // Sync
                   _setValue(channelSpinBox, newChannel % 16 + 1);
                   _setValue(portSpinBox,    newChannel / 16 + 1);
-                  part->score()->midiMapping(channel->channel)->channel = newChannel % 16;
-                  part->score()->midiMapping(channel->channel)->port    = newChannel / 16;
+                  part->masterScore()->midiMapping(channel->channel)->channel = newChannel % 16;
+                  part->masterScore()->midiMapping(channel->channel)->port    = newChannel / 16;
                   channel->volume = lrint(pe->volume->value());
                   channel->pan    = lrint(pe->pan->value());
                   channel->reverb = lrint(pe->reverb->value());
@@ -661,9 +661,9 @@ void PartEdit::midiChannelChanged(int)
                   channel->bank    = newPatch->bank;
                   channel->synti   = newPatch->synti;
 
-                  part->score()->setSoloMute();
+                  part->masterScore()->setSoloMute();
                   part->score()->setInstrumentsChanged(true);
-                  part->score()->setLayoutAll(true);
+                  part->score()->setLayoutAll();
                   break;
                   }
             }
@@ -671,10 +671,10 @@ void PartEdit::midiChannelChanged(int)
       if (needSync) {
             _setValue(channelSpinBox, newChannel % 16 + 1);
             _setValue(portSpinBox,    newChannel / 16 + 1);
-            part->score()->midiMapping(channel->channel)->channel = newChannel % 16;
-            part->score()->midiMapping(channel->channel)->port    = newChannel / 16;
+            part->masterScore()->midiMapping(channel->channel)->channel = newChannel % 16;
+            part->masterScore()->midiMapping(channel->channel)->port    = newChannel / 16;
             part->score()->setInstrumentsChanged(true);
-            part->score()->setLayoutAll(true);
+            part->score()->setLayoutAll();
             seq->initInstruments();
             }
       else {
@@ -688,8 +688,8 @@ void PartEdit::midiChannelChanged(int)
             }
 
       // Update MIDI Out ports
-      int maxPort = max(p, part->score()->midiPortCount());
-      part->score()->setMidiPortCount(maxPort);
+      int maxPort = max(p, part->score()->masterScore()->midiPortCount());
+      part->score()->masterScore()->setMidiPortCount(maxPort);
       if (seq->driver() && (preferences.useJackMidi || preferences.useAlsaAudio))
             seq->driver()->updateOutPortCount(maxPort + 1);
       }

@@ -195,10 +195,6 @@
             <subtype>2</subtype>
             </Arpeggio>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -417,10 +413,6 @@
               <subtype>2</subtype>
               </Arpeggio>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -489,10 +481,6 @@
               <subtype>2</subtype>
               </Arpeggio>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>S-Gt</name>
