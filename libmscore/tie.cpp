@@ -283,8 +283,8 @@ void Tie::calculateDirection()
       Measure* m1 = c1->measure();
       Measure* m2 = c2->measure();
 
-      if (_slurDirection == MScore::Direction::AUTO) {
-            QList<Note*> notes = c1->notes();
+      if (_slurDirection == Direction::AUTO) {
+            std::vector<Note*> notes = c1->notes();
             int n = notes.size();
             if (m1->mstaff(c1->staffIdx())->hasVoices || m2->mstaff(c2->staffIdx())->hasVoices) {
                   // in polyphonic passage, ties go on the stem side
@@ -334,7 +334,7 @@ void Tie::calculateDirection()
                   }
             }
       else
-            _up = _slurDirection == MScore::Direction::UP ? true : false;
+            _up = _slurDirection == Direction::UP ? true : false;
       }
 
 //---------------------------------------------------------
@@ -352,7 +352,7 @@ void Tie::layout()
                   return;
                   }
             Chord* c1 = startNote()->chord();
-            if (_slurDirection == MScore::Direction::AUTO) {
+            if (_slurDirection == Direction::AUTO) {
                   if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
                         // in polyphonic passage, ties go on the stem side
                         _up = c1->up();
@@ -361,7 +361,7 @@ void Tie::layout()
                         _up = !c1->up();
                   }
             else
-                  _up = _slurDirection == MScore::Direction::UP ? true : false;
+                  _up = _slurDirection == Direction::UP ? true : false;
             fixupSegments(1);
             SlurSegment* segment = segmentAt(0);
             segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
@@ -389,7 +389,7 @@ void Tie::layout()
 
       // p1, p2, s1, s2
 
-      QList<System*>* systems = score()->systems();
+      const QList<System*>& systems = score()->systems();
       setPos(0, 0);
 
       //---------------------------------------------------------
@@ -397,15 +397,15 @@ void Tie::layout()
       //    user offsets (drags) are retained
       //---------------------------------------------------------
 
-      int sysIdx1 = systems->indexOf(sPos.system1);
+      int sysIdx1 = systems.indexOf(sPos.system1);
       if (sysIdx1 == -1) {
             qDebug("system not found");
-            foreach(System* s, *systems)
+            for (System* s : systems)
                   qDebug("   search %p in %p", sPos.system1, s);
             return;
             }
 
-      int sysIdx2     = systems->indexOf(sPos.system2);
+      int sysIdx2     = systems.indexOf(sPos.system2);
       if (sysIdx2 < 0)
             sysIdx2 = sysIdx1;
       unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
@@ -413,8 +413,8 @@ void Tie::layout()
 
       int i = 0;
       for (uint ii = 0; ii < nsegs; ++ii) {
-            System* system = (*systems)[sysIdx1++];
-            if (system->isVbox())
+            System* system = systems[sysIdx1++];
+            if (system->vbox())
                   continue;
             SlurSegment* segment = segmentAt(i);
             segment->setSystem(system);
@@ -459,10 +459,10 @@ void Tie::startEdit(MuseScoreView* v, const QPointF& p)
 void Tie::endEdit()
       {
       if (editStartNote != startNote() || editEndNote != endNote()) {
-            score()->undo()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
+            score()->undoStack()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
             }
       SlurTie::endEdit();
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------

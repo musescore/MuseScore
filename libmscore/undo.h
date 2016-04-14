@@ -40,6 +40,8 @@
 #include "note.h"
 #include "drumset.h"
 
+Q_DECLARE_LOGGING_CATEGORY(undoRedo)
+
 namespace Ms {
 
 class ElementList;
@@ -83,11 +85,7 @@ enum class PlayEventType : char;
 
 // #define DEBUG_UNDO
 
-#ifdef DEBUG_UNDO
-#define UNDO_NAME(a)  virtual const char* name() const { return a; }
-#else
-#define UNDO_NAME(a)
-#endif
+#define UNDO_NAME(a)  virtual const char* name() const override { return a; }
 
 enum class LayoutMode : char;
 
@@ -110,9 +108,9 @@ class UndoCommand {
       int childCount() const             { return childList.size();     }
       void unwind();
       virtual void cleanup(bool undo);
-#ifdef DEBUG_UNDO
-      virtual const char* name() const  { return "UndoCommand"; }
-#endif
+// #ifndef QT_NO_DEBUG
+      virtual const char* name() const { return "UndoCommand"; }
+// #endif
       };
 
 //---------------------------------------------------------
@@ -139,7 +137,7 @@ class UndoStack {
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
       bool isClean() const          { return cleanIdx == curIdx;   }
-      bool isEmpty() const          { return !canUndo() && !canRedo();  }
+      bool empty() const          { return !canUndo() && !canRedo();  }
       UndoCommand* current() const  { return curCmd;               }
       void undo();
       void redo();
@@ -410,21 +408,6 @@ class ChangeChordNoStem : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeEndBarLineType
-//---------------------------------------------------------
-
-class ChangeEndBarLineType : public UndoCommand {
-      Measure* measure;
-      BarLineType subtype;
-      bool endBarLineGenerated;
-      void flip();
-
-   public:
-      ChangeEndBarLineType(Measure*, BarLineType subtype);
-      UNDO_NAME("ChangeEndBarLineType")
-      };
-
-//---------------------------------------------------------
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 
@@ -574,9 +557,7 @@ class AddElement : public UndoCommand {
       virtual void undo();
       virtual void redo();
       virtual void cleanup(bool);
-#ifdef DEBUG_UNDO
-      virtual const char* name() const;
-#endif
+      virtual const char* name() const override;
       };
 
 //---------------------------------------------------------
@@ -591,9 +572,7 @@ class RemoveElement : public UndoCommand {
       virtual void undo();
       virtual void redo();
       virtual void cleanup(bool);
-#ifdef DEBUG_UNDO
-      virtual const char* name() const;
-#endif
+      virtual const char* name() const override;
       };
 
 //---------------------------------------------------------
@@ -1268,16 +1247,31 @@ class ChangeNoteEvent : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   LinkUnlink
+//---------------------------------------------------------
+
+class LinkUnlink : public UndoCommand {
+      ScoreElement* e;
+      ScoreElement* le;
+
+   protected:
+      void doLink();
+      void doUnlink();
+
+   public:
+      LinkUnlink(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
+      };
+
+//---------------------------------------------------------
 //   Unlink
 //---------------------------------------------------------
 
-class Unlink : public UndoCommand {
-      ScoreElement* e;
-      ScoreElement* le = nullptr;
+class Unlink : public LinkUnlink {
+
    public:
-      Unlink(ScoreElement* _e) : e(_e) {}
-      virtual void undo() override;
-      virtual void redo() override;
+      Unlink(ScoreElement* _e) : LinkUnlink(_e, 0) {}
+      virtual void undo() override { doLink();   }
+      virtual void redo() override { doUnlink(); }
       UNDO_NAME("Unlink")
       };
 
@@ -1285,13 +1279,12 @@ class Unlink : public UndoCommand {
 //   Link
 //---------------------------------------------------------
 
-class Link : public UndoCommand {
-      ScoreElement* e;
-      ScoreElement* le;
+class Link : public LinkUnlink {
+
    public:
-      Link(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
-      virtual void undo() override;
-      virtual void redo() override;
+      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(e, le) {}
+      virtual void undo() override { doUnlink(); }
+      virtual void redo() override { doLink();   }
       UNDO_NAME("Link")
       };
 

@@ -53,7 +53,7 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
 struct ArticulationInfo {
       SymId upSym;
       SymId downSym;
-      QString name;           // as stored in score files
+      const char* name;           // as stored in score files
       QString description;    // user-visible, translatable, name
       qreal timeStretch;      // for fermata
       MScore::OrnamentStyle ornamentStyle; // or ornaments such as trill
@@ -70,7 +70,7 @@ class Articulation : public Element {
       Q_OBJECT
 
       ArticulationType _articulationType;
-      MScore::Direction _direction;
+      Direction _direction;
       QString _channelName;
 
       ArticulationAnchor _anchor;
@@ -115,13 +115,10 @@ class Articulation : public Element {
 
       QString subtypeUserName() const;
 
-      virtual QPointF pagePos() const override;      ///< position in page coordinates
-      virtual QPointF canvasPos() const override;
-
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
-      void setDirection(MScore::Direction d);
-      MScore::Direction direction() const   { return _direction; }
+      void setDirection(Direction d);
+      Direction direction() const   { return _direction; }
 
       ChordRest* chordRest() const;
       Segment* segment() const;
@@ -143,7 +140,7 @@ class Articulation : public Element {
 
       bool playArticulation() const { return _playArticulation;}
       void setPlayArticulation(bool val) { _playArticulation = val; }
-    
+
       QString channelName() const           { return _channelName; }
       void setChannelName(const QString& s) { _channelName = s;    }
 
@@ -155,7 +152,7 @@ class Articulation : public Element {
                                 _articulationType == ArticulationType::Longfermata ||
                                 _articulationType == ArticulationType::Verylongfermata; }
 
-      QString accessibleInfo() override;
+      QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

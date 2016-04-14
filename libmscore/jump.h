@@ -85,7 +85,7 @@ class Jump : public Text {
 
       Element* nextElement() override;
       Element* prevElement() override;
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 

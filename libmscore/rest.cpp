@@ -113,9 +113,7 @@ void Rest::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
             painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
 
-//            painter->setFont(score()->scoreFont()->font());
-//            QFontMetricsF fm(score()->scoreFont()->font());
-            QList<SymId> s = toTimeSigString(QString("%1").arg(n));
+            std::vector<Ms::SymId> s = toTimeSigString(QString("%1").arg(n));
             y  = -_spatium * 1.5 - staff()->height() *.5;
             qreal x = center(x1, x2);
             x -= symBbox(s).width() * .5;
@@ -157,7 +155,6 @@ void Rest::setUserOff(const QPointF& o)
       else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3))
             _sym = SymId::restHalf;
 
-//      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
       Element::setUserOff(o);
       }
 
@@ -245,7 +242,7 @@ Element* Rest::drop(const DropData& data)
                   {
                   Chord* c              = static_cast<Chord*>(e);
                   Note* n               = c->upNote();
-                  MScore::Direction dir = c->stemDirection();
+                  Direction dir = c->stemDirection();
                   // score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
@@ -332,13 +329,9 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
 
 void Rest::layout()
       {
-      _space.setLw(0.0);
-
       for (Element* e : _el)
             e->layout();
       if (measure() && measure()->isMMRest()) {
-            _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
-
             static const qreal verticalLineWidth = .2;
             qreal _spatium = spatium();
             qreal h        = _spatium * (2 + verticalLineWidth);
@@ -375,8 +368,8 @@ void Rest::layout()
                   _tabDur->layout();
                   setbbox(_tabDur->bbox());
                   setPos(0.0, 0.0);             // no rest is drawn: reset any position might be set for it
-                  _space.setLw(0.0);
-                  _space.setRw(width());
+//                  _space.setLw(0.0);
+//                  _space.setRw(width());
                   return;
                   }
             // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
@@ -431,10 +424,6 @@ void Rest::layout()
                + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       setbbox(symBbox(_sym));
-      qreal symOffset = bbox().x();
-      if (symOffset < 0.0)
-            _space.setLw(-symOffset);
-      _space.setRw(width() + point(rs) + symOffset);
       }
 
 //---------------------------------------------------------
@@ -672,7 +661,8 @@ qreal Rest::mag() const
 
 int Rest::upLine() const
       {
-      return lrint((pos().y() + bbox().top() + spatium()) * 2 / spatium());
+      qreal _spatium = spatium();
+      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------
@@ -681,7 +671,8 @@ int Rest::upLine() const
 
 int Rest::downLine() const
       {
-      return lrint((pos().y() + bbox().top() + spatium()) * 2 / spatium());
+      qreal _spatium = spatium();
+      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------
@@ -755,7 +746,7 @@ void Rest::setAccent(bool flag)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Rest::accessibleInfo()
+QString Rest::accessibleInfo() const
       {
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       return tr("%1; Duration: %2; %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
@@ -765,7 +756,7 @@ QString Rest::accessibleInfo()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Rest::screenReaderInfo()
+QString Rest::screenReaderInfo() const
       {
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       return QString("%1 %2 %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
@@ -865,7 +856,7 @@ bool Rest::setProperty(P_ID propertyId, const QVariant& v)
                   layout();
                   score()->addRefresh(canvasBoundingRect());
                   if (beam())
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                   break;
             default:
                   return ChordRest::setProperty(propertyId, v);
@@ -873,5 +864,19 @@ bool Rest::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape Rest::shape() const
+      {
+      Shape shape;
+      shape.add(ChordRest::shape());
+      if (parent() && measure() && measure()->isMMRest())
+            shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
+      else
+            shape.add(bbox().translated(pos()));
+      return shape;
+      }
 }
 

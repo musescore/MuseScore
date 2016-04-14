@@ -27,7 +27,7 @@ void VoltaSegment::layout()
       rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
-            rypos() += score()->styleS(StyleIdx::voltaY).val() * spatium();
+            rypos() += score()->styleP(StyleIdx::voltaY) * mag();
       adjustReadPos();
       }
 
@@ -312,7 +312,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
                   break;
             case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
-                  setLineWidth(Spatium(val.toDouble()));
+                  setLineWidth(val.value<Spatium>());
                   break;
             case P_ID::LINE_STYLE:
                   lineStyleStyle = PropertyStyle::UNSTYLED;
@@ -325,7 +325,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
             }
       // layout();
       // score()->addRefresh(pageBoundingRect());
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -346,7 +346,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
                   return 0;
 
             case P_ID::LINE_WIDTH:
-                  return score()->styleS(StyleIdx::voltaLineWidth).val();
+                  return score()->style(StyleIdx::voltaLineWidth);
 
             case P_ID::BEGIN_TEXT_PLACE:
             case P_ID::CONTINUE_TEXT_PLACE:
@@ -360,7 +360,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
 
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleS(StyleIdx::voltaHook).val();
+                  return score()->style(StyleIdx::voltaHook);
 
             case P_ID::TEXT_STYLE_TYPE:
                   return int(TextStyleType::VOLTA);
@@ -452,7 +452,7 @@ void Volta::reset()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Volta::accessibleInfo()
+QString Volta::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(text());
       }

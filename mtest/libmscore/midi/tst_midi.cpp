@@ -32,7 +32,7 @@
 #define DIR QString("libmscore/midi/")
 
 namespace Ms {
-      extern Score::FileError importMidi(Score*, const QString&);
+      extern Score::FileError importMidi(MasterScore*, const QString&);
       }
 
 using namespace Ms;
@@ -237,14 +237,14 @@ void TestMidi::midi01()
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(63, TDuration(TDuration::DurationType::V_QUARTER));
-      Score* score = c.score();
+      MasterScore* score = c.score();
 
       score->doLayout();
       score->rebuildMidiMapping();
       c.saveScore();
       saveMidi(score, "test1.mid");
 
-      Score* score2 = new Score(mscore->baseStyle());
+      MasterScore* score2 = new MasterScore(mscore->baseStyle());
       score2->setName("test1b");
       QCOMPARE(importMidi(score2, "test1.mid"), Score::FileError::FILE_NO_ERROR);
 
@@ -277,14 +277,14 @@ void TestMidi::midi02()
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
-      Score* score = c.score();
+      MasterScore* score = c.score();
 
       score->doLayout();
       score->rebuildMidiMapping();
       c.saveScore();
       saveMidi(score, "test2.mid");
 
-      Score* score2 = new Score(mscore->baseStyle());
+      MasterScore* score2 = new MasterScore(mscore->baseStyle());
       score2->setName("test2b");
 
       QCOMPARE(importMidi(score2, "test2.mid"), Score::FileError::FILE_NO_ERROR);
@@ -319,14 +319,14 @@ void TestMidi::midi03()
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(63, TDuration(TDuration::DurationType::V_QUARTER));
-      Score* score = c.score();
+      MasterScore* score = c.score();
 
       score->doLayout();
       score->rebuildMidiMapping();
       c.saveScore();
       saveMidi(score, "test3.mid");
 
-      Score* score2 = new Score(mscore->baseStyle());
+      MasterScore* score2 = new MasterScore(mscore->baseStyle());
       score2->setName("test3b");
       QCOMPARE(importMidi(score2, "test3.mid"), Score::FileError::FILE_NO_ERROR);
 
@@ -353,15 +353,14 @@ void TestMidi::events()
       QString writeFile(file + "-test.txt");
       QString reference(DIR + file + "-ref.txt");
 
-      Score* score = readScore(readFile);
-      score->doLayout();
+      MasterScore* score = readScore(readFile);
       EventMap events;
       score->renderMidi(&events);
       qDebug() << "Opened score " << readFile;
       QFile filehandler(writeFile);
       filehandler.open(QIODevice::WriteOnly | QIODevice::Text);
       QTextStream out(&filehandler);
-      multimap<int, NPlayEvent> ::iterator iter;
+
       for (auto iter = events.begin(); iter!= events.end(); ++iter){
             out << qSetFieldWidth(5) << "Tick  =  ";
             out << qSetFieldWidth(5) << iter->first;
@@ -391,7 +390,7 @@ void TestMidi::midiExportTestRef(const QString& file)
       {
       MScore::debugMode = true;
       preferences.midiExportRPNs = true;
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       score->doLayout();
       score->rebuildMidiMapping();

@@ -106,12 +106,12 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
       ScoreFont* f = score()->scoreFont();
 
       symbols.clear();
-      symbols.append(end);
       qreal w1 = f->advance(end, mag);
       qreal w2 = f->advance(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
-           symbols.prepend(fill);
+           symbols.push_back(fill);
+      symbols.push_back(end);
       }
 
 //---------------------------------------------------------
@@ -434,7 +434,7 @@ bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

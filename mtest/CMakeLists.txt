@@ -123,7 +123,7 @@ else (APPLE)
       set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
    else (MINGW)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -fPIE -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG -DQT_NO_DEBUG_OUTPUT")
    endif (MINGW)
 endif(APPLE)
 
@@ -156,7 +156,52 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves)
+#        libmscore/compat
+
+subdirs (
+        libmscore/album
+        libmscore/barline
+        libmscore/beam
+        libmscore/breath
+        libmscore/chordsymbol
+        libmscore/clef
+        libmscore/clef_courtesy
+        libmscore/concertpitch
+        libmscore/copypaste
+#        libmscore/copypastesymbollist
+        libmscore/dynamic
+#        libmscore/earlymusic
+        libmscore/element
+        libmscore/hairpin
+        libmscore/instrumentchange
+        libmscore/join
+        libmscore/keysig
+        libmscore/layout
+        libmscore/parts
+        libmscore/measure
+#        libmscore/midi
+#        libmscore/midimapping
+        libmscore/note
+#        libmscore/plugins
+        libmscore/repeat
+        libmscore/selectionfilter
+        libmscore/selectionrangedelete
+#        libmscore/spanners
+        libmscore/split
+        libmscore/splitstaff
+        libmscore/timesig
+        libmscore/tools
+        libmscore/transpose
+        libmscore/tuplet
+        libmscore/text
+        importmidi
+        capella
+        biab
+#       musicxml
+#        guitarpro
+#        scripting
+#        testoves
+        )
 
 
 install(FILES

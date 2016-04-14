@@ -1277,10 +1277,6 @@
             <durationType>measure</durationType>
             <duration z="104" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <tick>11520</tick>
         <Measure number="7">
@@ -1704,10 +1700,6 @@
             <durationType>measure</durationType>
             <duration z="112" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <tick>7680</tick>
         <Measure number="5">

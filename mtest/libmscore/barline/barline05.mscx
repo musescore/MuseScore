@@ -46,7 +46,6 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
@@ -86,7 +85,6 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Violin</trackName>
@@ -127,7 +125,6 @@
       </Part>
     <Part>
       <Staff id="3">
-        <type>0</type>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Viola</trackName>
@@ -168,7 +165,6 @@
       </Part>
     <Part>
       <Staff id="4">
-        <type>0</type>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Violoncello</trackName>

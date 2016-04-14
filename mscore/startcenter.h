@@ -33,12 +33,12 @@ class MyNetworkAccessManager: public QNetworkAccessManager
                                     const QNetworkRequest & req,
                                     QIODevice * outgoingData = 0);
       };
-
+#if 0
 //---------------------------------------------------------
 //   MyWebView
 //---------------------------------------------------------
 
-class MyWebView: public QWebView
+class MyWebView: public QWebEngineView
       {
       Q_OBJECT
 
@@ -51,7 +51,7 @@ class MyWebView: public QWebView
 #ifndef QT_NO_OPENSSL
       void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
 #endif
-     
+
    public:
       MyWebView(QWidget *parent = 0);
       ~MyWebView();
@@ -103,7 +103,7 @@ class Startcenter : public QDialog, public Ui::Startcenter
       void writeSettings(QSettings&);
       void readSettings(QSettings&);
       };
-
+#endif
 }
 #endif
 

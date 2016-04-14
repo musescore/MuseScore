@@ -48,7 +48,6 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Voice</trackName>

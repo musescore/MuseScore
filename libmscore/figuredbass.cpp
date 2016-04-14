@@ -705,7 +705,7 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -1152,11 +1152,11 @@ NoLen:
       _printedLineLength = lastCR ? lastCR->pageX() - pageX() + 1.5*spatium() : 3 * spatium();
 
       // get duration indicator line(s) from page position of nextSegm
-      QList<System*>* systems = score()->systems();
+      const QList<System*>& systems = score()->systems();
       System* s1  = segment()->measure()->system();
       System* s2  = nextSegm->measure()->system();
-      int sysIdx1 = systems->indexOf(s1);
-      int sysIdx2 = systems->indexOf(s2);
+      int sysIdx1 = systems.indexOf(s1);
+      int sysIdx2 = systems.indexOf(s2);
 
       int i, len ,segIdx;
       for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
@@ -1167,7 +1167,7 @@ NoLen:
                   }
             else if (i == sysIdx1) {
                   // initial line
-                  qreal w   = s1->staff(staffIdx())->right();
+                  qreal w   = s1->staff(staffIdx())->bbox().right();
                   qreal x   = s1->pageX() + w;
                   len = x - pageX();
                   }
@@ -1243,7 +1243,7 @@ void FiguredBass::endEdit()
       // as the standard text editor keeps inserting spurious HTML formatting and styles
       // retrieve and work only on the plain text
       QString txt = plainText();
-      if(txt.isEmpty()) {                       // if no text, nothing to do
+      if (txt.isEmpty()) {                       // if no text, nothing to do
             setXmlText(txt);                       // clear the stored text: the empty f.b. element will be deleted
             return;
             }
@@ -1374,7 +1374,7 @@ bool FiguredBass::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Text::setProperty(propertyId, v);
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -1572,7 +1572,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
       {
       QString     path;
 
-      if(fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
+      if (fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
 #ifdef Q_OS_IOS
             {
             extern QString resourcePath();
@@ -1698,7 +1698,7 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
                   pItem->readMusicXML(e, parentheses);
                   items.append(*pItem);
                   // add item normalized text
-                  if (!normalizedText.isEmpty())
+                  if (!normalizedText.empty())
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
@@ -1708,7 +1708,7 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
                   }
             }
       setText(normalizedText);                  // this is the text to show while editing
-      bool res = !normalizedText.isEmpty();
+      bool res = !normalizedText.empty();
       return res;
       }
 #endif

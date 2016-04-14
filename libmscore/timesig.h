@@ -88,7 +88,6 @@ class TimeSig : public Element {
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
-      virtual Space space() const override;
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
@@ -146,7 +145,7 @@ class TimeSig : public Element {
 
       virtual Element* nextElement();
       virtual Element* prevElement();
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

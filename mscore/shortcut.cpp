@@ -2298,8 +2298,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Edit general style"),
          0,
          Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
+         Qt::WindowShortcut
          },
       {
          MsWidget::SCORE_TAB,

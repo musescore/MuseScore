@@ -140,10 +140,11 @@ class Page : public Element {
    public:
       Page(Score*);
       ~Page();
-      virtual Page* clone() const            { return new Page(*this); }
-      virtual Element::Type type() const     { return Element::Type::PAGE; }
-      const QList<System*>* systems() const  { return &_systems;   }
-      QList<System*>* systems()              { return &_systems;   }
+      virtual Page* clone() const           { return new Page(*this); }
+      virtual Element::Type type() const    { return Element::Type::PAGE; }
+      const QList<System*>& systems() const { return _systems;   }
+      QList<System*>& systems()             { return _systems;   }
+      System* system(int idx)               { return _systems[idx];   }
 
       virtual void layout();
       virtual void write(Xml&) const;
@@ -152,15 +153,15 @@ class Page : public Element {
       void appendSystem(System* s);
 
       int no() const                     { return _no;        }
-      void setNo(int n);
+      void setNo(int n)                  { _no = n;           }
       bool isOdd() const;
       qreal tm() const;            // margins in pixel
       qreal bm() const;
       qreal lm() const;
       qreal rm() const;
 
-      virtual void draw(QPainter*) const;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void draw(QPainter*) const override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       QList<Element*> items(const QRectF& r);
       QList<Element*> items(const QPointF& p);
@@ -170,8 +171,9 @@ class Page : public Element {
       Measure* searchMeasure(const QPointF& p) const;
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
-      QList<const Element*> elements();         ///< list of visible elements
+      QList<Element*> elements();               ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
+      int endTick() const;
       };
 
 extern const PaperSize paperSizes[];

@@ -1240,12 +1240,12 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
                   }
             case OVE::BarLineType::RepeatLeft:{
                   bartype = BarLineType::START_REPEAT;
-                  measure->setRepeatFlags(Repeat::START);
+                  measure->setRepeatStart(true);
                   break;
                   }
             case OVE::BarLineType::RepeatRight:{
                   bartype = BarLineType::END_REPEAT;
-                  measure->setRepeatFlags(Repeat::END);
+                  measure->setRepeatEnd(true);
                   break;
                   }
             case OVE::BarLineType::Dashed:{
@@ -1260,11 +1260,11 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             bartype = BarLineType::END;
             }
 
-      measure->setEndBarLineType(bartype, false);
+//TODO      measure->setEndBarLineType(bartype, false);
 
       if(measurePtr->getLeftBarline() == OVE::BarLineType::RepeatLeft){
             //bartype = BarLineType::START_REPEAT;
-            measure->setRepeatFlags(measure->repeatFlags()|Repeat::START);
+            measure->setRepeatStart(true);
             }
 
       // rehearsal
@@ -1608,7 +1608,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         //cr->setVisible(oveNote->getShow());
                         ((Ms::Chord*) cr)->setNoStem(int(container->getNoteType()) <= int(OVE::NoteType::Note_Whole));
                         if(!setDirection)
-                              ((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::Direction::UP : MScore::Direction::DOWN);
+                              ((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? Direction::UP : Direction::DOWN);
 
                         // cross staff
                         int staffMove = 0;
@@ -1677,7 +1677,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         const OVE::Tuplet* oveTuplet = getTuplet(tuplets, container->start()->getOffset());
                         if (oveTuplet != 0) {
                               //set direction
-                              tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? MScore::Direction::UP : MScore::Direction::DOWN);
+                              tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? Direction::UP : Direction::DOWN);
 
                               if(container->start()->getOffset() == oveTuplet->stop()->getOffset()){
                                     tuplet = 0;
@@ -1927,7 +1927,7 @@ void OveToMScore::convertArticulation(
                   }
             case OVE::ArticulationType::Fermata_Inverted :{
                   Articulation* a = new Articulation(score_);
-                  a->setDirection(MScore::Direction::DOWN);
+                  a->setDirection(Direction::DOWN);
                   a->setArticulationType(ArticulationType::Fermata);
                   cr->add(a);
                   break;
@@ -2257,7 +2257,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
                   int absEndTick = mtt_->getTick(slurPtr->start()->getMeasure()+slurPtr->stop()->getMeasure(), endContainer->getTick());
 
                   Slur* slur = new Slur(score_);
-                  slur->setSlurDirection(slurPtr->getShowOnTop()? MScore::Direction::UP : MScore::Direction::DOWN);
+                  slur->setSlurDirection(slurPtr->getShowOnTop()? Direction::UP : Direction::DOWN);
                   slur->setTick(absStartTick);
                   slur->setTick2(absEndTick);
                   slur->setTrack(track);
@@ -2458,7 +2458,8 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
       }
 
 //////////////////////////////////////////////////////////////////////////
-Score::FileError importOve(Score* score, const QString& name) {
+
+Score::FileError importOve(MasterScore* score, const QString& name) {
       OVE::IOVEStreamLoader* oveLoader = OVE::createOveStreamLoader();
       OVE::OveSong oveSong;
 
@@ -2489,3 +2490,4 @@ Score::FileError importOve(Score* score, const QString& name) {
 
       return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
       }
+

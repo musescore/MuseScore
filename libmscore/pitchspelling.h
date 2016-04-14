@@ -59,7 +59,7 @@ extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
 extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);
-extern int computeWindow(const QList<Note*>& notes, int start, int end);
+extern int computeWindow(const std::vector<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
 extern QString tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false);
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc, bool explicitAccidental = false);

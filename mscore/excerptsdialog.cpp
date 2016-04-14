@@ -58,22 +58,20 @@ PartItem::PartItem(Part* p, QListWidget* parent)
 //   ExcerptsDialog
 //---------------------------------------------------------
 
-ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
+ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
-      score = s;
-      if (score->parentScore())
-            score = score->parentScore();
+      score = s->masterScore();
 
-      foreach(Excerpt* e, score->excerpts()) {
+      for (Excerpt* e : score->excerpts()) {
             ExcerptItem* ei = new ExcerptItem(e);
             excerptList->addItem(ei);
             }
-      foreach(Part* p, score->parts()) {
+      for (Part* p : score->parts()) {
             PartItem* item = new PartItem(p);
             partList->addItem(item);
             }
@@ -111,7 +109,7 @@ void MuseScore::startExcerptsDialog()
       {
       if (cs == 0)
             return;
-      ExcerptsDialog ed(cs, 0);
+      ExcerptsDialog ed(cs->masterScore(), 0);
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("PartEditor");
@@ -125,7 +123,7 @@ void MuseScore::startExcerptsDialog()
       settings.setValue("size", ed.size());
       settings.setValue("pos", ed.pos());
       settings.endGroup();
-      cs->setLayoutAll(true);
+      cs->setLayoutAll();
       cs->end();
       }
 
@@ -315,7 +313,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       if (e->parts().isEmpty())
             return;
 
-      Score* nscore = new Score(e->oscore());
+      Score* nscore = new Score(static_cast<MasterScore*>(e->oscore()));
       e->setPartScore(nscore);
 
       nscore->setName(e->title()); // needed before AddExcerpt

@@ -18,11 +18,11 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __TEXTSTYLE_H__
-#define __TEXTSTYLE_H__
+#ifndef __TEXTSTYLEDIALOG_H__
+#define __TEXTSTYLEDIALOG_H__
 
 #include "libmscore/style.h"
-#include "ui_textstyle.h"
+#include "ui_textstyledialog.h"
 
 namespace Ms {
 

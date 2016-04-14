@@ -401,7 +401,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        QList<Note*> nl = chord->notes();
+                        std::vector<Note*> nl = chord->notes();
                         for (Note* n : nl) {
                               if (mode == TransposeMode::DIATONICALLY)
                                     n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
@@ -523,7 +523,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         // remove initial C major key signatures
                         if (nKey == Key::C && s->tick() == 0) {
                               undo(new RemoveElement(ks));
-                              if (s->isEmpty())
+                              if (s->empty())
                                     undo(new RemoveElement(s));
                               }
                         else {
@@ -595,7 +595,7 @@ void Score::transposeSemitone(int step)
             }
       else {
             deselectAll();
-            setLayoutAll(true);
+            setLayoutAll();
             endCmd(false);
             }
       }

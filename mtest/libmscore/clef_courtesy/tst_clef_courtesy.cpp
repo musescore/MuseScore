@@ -46,6 +46,26 @@ void TestClefCourtesy::initTestCase()
       initMTest();
       }
 
+static Measure* getMeasure(Score* score, int idx)
+      {
+      Measure* m = score->firstMeasure();
+      for (int i = 0; i < idx-1; i++)
+            m = m->nextMeasure();
+      return m;
+      }
+
+static void dropClef(Measure* m, ClefType t)
+      {
+      Clef* clef = new Clef(m->score()); // create a new element, as Measure::drop() will eventually delete it
+      clef->setClefType(t);
+      DropData dropData;
+      dropData.pos = m->pagePos();
+      dropData.element = clef;
+      m->score()->startCmd();
+      m->drop(dropData);
+      m->score()->endCmd();
+      }
+
 //---------------------------------------------------------
 //   clef_courtesy01
 //    add two clefs mid-score at the begining of systems and look for courtesy clefs
@@ -54,49 +74,33 @@ void TestClefCourtesy::initTestCase()
 
 void TestClefCourtesy::clef_courtesy01()
       {
-      Score* score = readScore(DIR + "clef_courtesy01.mscx");
-      score->doLayout();
+      MasterScore* score = readScore(DIR + "clef_courtesy01.mscx");
 
-      // 'go' to 4th measure
-      Measure* m1 = score->firstMeasure();
-      for (int i=0; i < 3; i++)
-            m1 = m1->nextMeasure();
-      // make a clef-drop object and drop it to the measure
-      Clef* clef = new Clef(score); // create a new element, as Measure::drop() will eventually delete it
-      clef->setClefType(ClefType::G1);
-      DropData dropData;
-      dropData.pos = m1->pagePos();
-      dropData.element = clef;
-      m1->drop(dropData);
+      // drop G1 clef to 4th measure
+      Measure* m1 = getMeasure(score, 4);
+      dropClef(m1, ClefType::G1);
 
-      // 'go' to 7th measure
-      Measure* m2 = m1;
-      for (int i=0; i < 3; i++)
-            m2 = m2->nextMeasure();
-      // make a clef-drop object and drop it to the measure
-      clef = new Clef(score); // create a new element, as Measure::drop() will eventually delete it
-      clef->setClefType(ClefType::G);
-      dropData.pos = m2->pagePos();
-      dropData.element = clef;
-      m2->drop(dropData);
-      score->doLayout();
+      // drop G clef to 7th measure
+      Measure* m2 = getMeasure(score, 7);
+      dropClef(m2, ClefType::G);
+
 
       // check the required courtesy clef is there and it is shown
-      Clef*    clefCourt = nullptr;
+      Clef*    clefCourt = 0;
       Measure* m = m1->prevMeasure();
       Segment* seg = m->findSegment(Segment::Type::Clef, m1->tick());
-      QVERIFY2(seg != nullptr, "No SegClef in measure 3.");
+      QVERIFY2(seg, "No SegClef in measure 3.");
       clefCourt = static_cast<Clef*>(seg->element(0));
-      QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 3.");
+      QVERIFY2(clefCourt, "No courtesy clef element in measure 3.");
       QVERIFY2(clefCourt->bbox().width() > 0, "Courtesy clef in measure 3 is hidden.");
 
       // check the not required courtesy clef element is there but it is not shown
       clefCourt = nullptr;
-      m = m2->prevMeasure();
+      m   = m2->prevMeasure();
       seg = m->findSegment(Segment::Type::Clef, m2->tick());
-      QVERIFY2(seg != nullptr, "No SegClef in measure 6.");
+      QVERIFY2(seg, "No SegClef in measure 6.");
       clefCourt = static_cast<Clef*>(seg->element(0));
-      QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 6.");
+      QVERIFY2(clefCourt, "No courtesy clef element in measure 6.");
       QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef in measure 3 is NOT hidden.");
 
       QVERIFY(saveCompareScore(score, "clef_courtesy01.mscx", DIR + "clef_courtesy01-ref.mscx"));
@@ -111,8 +115,7 @@ void TestClefCourtesy::clef_courtesy01()
 
 void TestClefCourtesy::clef_courtesy02()
       {
-      Score* score = readScore(DIR + "clef_courtesy02.mscx");
-      score->doLayout();
+      MasterScore* score = readScore(DIR + "clef_courtesy02.mscx");
 
       // 'go' to 4th measure
       Measure* m1 = score->firstMeasure();
@@ -169,8 +172,7 @@ void TestClefCourtesy::clef_courtesy02()
 
 void TestClefCourtesy::clef_courtesy03()
       {
-      Score* score = readScore(DIR + "clef_courtesy03.mscx");
-      score->doLayout();
+      MasterScore* score = readScore(DIR + "clef_courtesy03.mscx");
 
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
@@ -204,8 +206,7 @@ void TestClefCourtesy::clef_courtesy03()
 
 void TestClefCourtesy::clef_courtesy_78196()
       {
-      Score* score = readScore(DIR + "clef_courtesy_78196.mscx");
-      score->doLayout();
+      MasterScore* score = readScore(DIR + "clef_courtesy_78196.mscx");
 
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();

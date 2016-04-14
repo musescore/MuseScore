@@ -140,7 +140,7 @@ void TestPlugins::testTextStyle()
       MuseScoreCore::mscoreCore->setCurrentScore(score);
       item->runPlugin();
       QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test.mscx", DIR + "testTextStyle-ref.mscx"));
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test2.mscx", DIR + "testTextStyle.mscx"));
 
       delete item;

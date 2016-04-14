@@ -333,11 +333,6 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>1920</tick>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -694,11 +689,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -944,11 +934,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Bass</name>

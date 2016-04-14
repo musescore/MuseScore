@@ -29,17 +29,6 @@ NoteDot::NoteDot(Score* s)
       }
 
 //---------------------------------------------------------
-//   layout
-//    height() and width() should return sensible
-//    values when calling this method
-//---------------------------------------------------------
-
-void NoteDot::layout()
-      {
-      setbbox(symBbox(SymId::augmentationDot));
-      }
-
-//---------------------------------------------------------
 //   NoteDot::draw
 //---------------------------------------------------------
 
@@ -51,6 +40,15 @@ void NoteDot::draw(QPainter* p) const
             p->setPen(curColor());
             drawSymbol(SymId::augmentationDot, p);
             }
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void NoteDot::layout()
+      {
+      setbbox(symBbox(SymId::augmentationDot));
       }
 
 //---------------------------------------------------------

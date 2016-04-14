@@ -47,7 +47,4 @@
 #define USE_BSP         true
 #define SCRIPT_INTERFACE true
 
-#if QT_VERSION >= 0x040800
-//#define USE_GLYPHS  1
-#endif
 

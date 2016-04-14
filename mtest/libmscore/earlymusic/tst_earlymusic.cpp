@@ -51,8 +51,7 @@ void TestEarlymusic::initTestCase()
 
 void TestEarlymusic::earlymusic01()
       {
-
-      Score* score = readScore(DIR + "mensurstrich01.mscx");
+      MasterScore* score = readScore(DIR + "mensurstrich01.mscx");
       QVERIFY(score);
       score->doLayout();
 
@@ -91,8 +90,8 @@ void TestEarlymusic::earlymusic01()
       QVERIFY(saveCompareScore(score, "mensurstrich01.mscx", DIR + "mensurstrich01-ref.mscx"));
 
       // UNDO AND VERIFY
-      score->undo()->undo();
-      score->doLayout();
+      score->undoStack()->undo();
+//      score->doLayout();
       QVERIFY(chord->crossMeasure() == CrossMeasure::UNKNOWN);
       cmDur = chord->crossMeasureDurationType();
 //      QVERIFY(cmDur.type() == TDuration::DurationType::V_LONG);    // irrelevant if crossMeasure() == UNKNOWN

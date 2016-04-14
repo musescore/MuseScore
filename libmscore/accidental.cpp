@@ -321,8 +321,7 @@ void Accidental::layout()
 
       QRectF r;
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff())
-          || (note() && note()->fixed())) {
+      if ((staff() && staff()->isTabStaff()) || (note() && note()->fixed())) {
             setbbox(r);
             return;
             }
@@ -486,7 +485,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
                   return Element::setProperty(propertyId, v);
             }
       layout();
-      score()->setLayoutAll(true);  // spacing changes
+      score()->setLayoutAll();  // spacing changes
       return true;
       }
 
@@ -494,7 +493,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Accidental::accessibleInfo()
+QString Accidental::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental", Accidental::subtypeUserName()));
       }

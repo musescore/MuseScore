@@ -153,7 +153,7 @@ QRectF InstrumentChange::drag(EditData* ed)
       if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
             int si;
             Segment* seg = 0;
-            if (_score->pos2measure(ed->pos, &si, 0, &seg, 0) == nullptr)
+            if (score()->pos2measure(ed->pos, &si, 0, &seg, 0) == nullptr)
                   return f;
             if (seg && (seg != segment() || staffIdx() != si)) {
                   QPointF pos1(canvasPos());

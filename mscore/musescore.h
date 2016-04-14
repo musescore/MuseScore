@@ -33,6 +33,7 @@
 #include "loginmanager.h"
 #include "uploadscoredialog.h"
 #include "libmscore/musescoreCore.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -48,6 +49,7 @@ class PlayPanel;
 class Mixer;
 class Debugger;
 class MeasureListEditor;
+class MasterScore;
 class Score;
 class Tuplet;
 class PageSettings;
@@ -497,7 +499,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PlayPanel* getPlayPanel() const { return playPanel; }
       Mixer* getMixer() const { return mixer; }
       QMenu* genCreateMenu(QWidget* parent = 0);
-      virtual int appendScore(Score*);
+      virtual int appendScore(MasterScore*);
       void midiCtrlReceived(int controller, int value);
       void showElementContext(Element* el);
       void cmdAppendMeasures(int);
@@ -607,7 +609,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePdf(QList<Score*> cs, const QString& saveName);
 
 
-      Score* readScore(const QString& name);
+      MasterScore* readScore(const QString& name);
 
       bool saveAs(Score*, bool saveCopy = false);
       bool saveSelection(Score*);
@@ -719,5 +721,20 @@ struct PluginDescription;
 extern void collectPluginMetaInformation(PluginDescription*);
 extern QString getSharePath();
 
+extern Score::FileError importMidi(MasterScore*, const QString& name);
+extern Score::FileError importGTP(MasterScore*, const QString& name);
+extern Score::FileError importBww(MasterScore*, const QString& path);
+extern Score::FileError importMusicXml(MasterScore*, const QString&);
+extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
+extern Score::FileError importMuseData(MasterScore*, const QString& name);
+extern Score::FileError importLilypond(MasterScore*, const QString& name);
+extern Score::FileError importBB(MasterScore*, const QString& name);
+extern Score::FileError importCapella(MasterScore*, const QString& name);
+extern Score::FileError importCapXml(MasterScore*, const QString& name);
+extern Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError);
+
 } // namespace Ms
+
+extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
+
 #endif

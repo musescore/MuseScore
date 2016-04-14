@@ -374,7 +374,7 @@ bool BBFile::read(const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError importBB(Score* score, const QString& name)
+Score::FileError importBB(MasterScore* score, const QString& name)
       {
       BBFile bb;
       if(!QFileInfo(name).exists())
@@ -522,9 +522,9 @@ Score::FileError importBB(Score* score, const QString& name)
                   measure->add(lb);
                   }
             if (startChorus == n)
-                  measure->setRepeatFlags(Repeat::START);
+                  measure->setRepeatStart(true);
             else if (endChorus == n) {
-                  measure->setRepeatFlags(Repeat::END);
+                  measure->setRepeatEnd(true);
                   measure->setRepeatCount(bb.repeats());
                   }
             ++n;

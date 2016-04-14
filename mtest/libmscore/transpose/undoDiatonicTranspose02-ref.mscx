@@ -132,6 +132,10 @@
             <tpc>23</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -168,6 +172,10 @@
             <tpc>20</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Chord>
@@ -204,6 +212,10 @@
             <tpc>24</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <Chord>

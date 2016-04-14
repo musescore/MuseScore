@@ -65,9 +65,9 @@ void Part::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score);
+                  Staff* staff = new Staff(score());
                   staff->setPart(this);
-                  _score->staves().push_back(staff);
+                  score()->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read(e);
                   }
@@ -79,7 +79,7 @@ void Part::read(XmlReader& e)
                   // adjust drumset line numbers for pre-2.1 scores
                   Drumset* ds = instr->drumset();
                   int lld = s ? qRound(s->logicalLineDistance()) : 1;
-                  if (_score->mscVersion() < 207 && ds && lld > 1) {
+                  if (score()->mscVersion() < 207 && ds && lld > 1) {
                         for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
                               ds->drum(i).line /= lld;
                         }
@@ -140,13 +140,13 @@ void Part::setStaves(int n)
             qDebug("Part::setStaves(): remove staves not implemented!");
             return;
             }
-      int staffIdx = _score->staffIdx(this) + ns;
+      int staffIdx = score()->staffIdx(this) + ns;
       for (int i = ns; i < n; ++i) {
-            Staff* staff = new Staff(_score);
+            Staff* staff = new Staff(score());
             staff->setPart(this);
             _staves.push_back(staff);
-            _score->staves().insert(staffIdx, staff);
-            for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
+            score()->staves().insert(staffIdx, staff);
+            for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
                   m->insertStaff(staff, staffIdx);
                   if (m->hasMMRest())
                         m->mmRest()->insertStaff(staff, staffIdx);
@@ -298,7 +298,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return score()->midiChannel(instrument()->channel(0)->channel);
+      return masterScore()->midiChannel(instrument()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -307,7 +307,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return score()->midiPort(instrument()->channel(0)->channel);
+      return masterScore()->midiPort(instrument()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -334,21 +334,21 @@ void Part::setMidiChannel(int ch, int port, int tick)
                   mm.channel = ch;
             if (port != -1)
                   mm.port = port;
-            channel->channel = score()->midiMapping()->size();
-            score()->midiMapping()->append(mm);
+            channel->channel = masterScore()->midiMapping()->size();
+            masterScore()->midiMapping()->append(mm);
             }
       else {
             // Update existing mapping
-            if (channel->channel >= score()->midiMapping()->size()) {
+            if (channel->channel >= masterScore()->midiMapping()->size()) {
                   qDebug()<<"Can't' set midi channel: midiMapping is empty!";
                   return;
                   }
 
             if (ch != -1)
-                  score()->midiMapping(channel->channel)->channel = ch;
+                  masterScore()->midiMapping(channel->channel)->channel = ch;
             if (port != -1)
-                  score()->midiMapping(channel->channel)->port = port;
-            score()->midiMapping(channel->channel)->part = this;
+                  masterScore()->midiMapping(channel->channel)->port = port;
+            masterScore()->midiMapping(channel->channel)->part = this;
             }
       }
 
@@ -418,7 +418,7 @@ QString Part::instrumentId(int tick) const
 QString Part::longName(int tick) const
       {
       const QList<StaffName>& nl = longNames(tick);
-      return nl.isEmpty() ? "" : nl[0].name();
+      return nl.empty() ? "" : nl[0].name();
       }
 
 //---------------------------------------------------------
@@ -437,7 +437,7 @@ QString Part::instrumentName(int tick) const
 QString Part::shortName(int tick) const
       {
       const QList<StaffName>& nl = shortNames(tick);
-      return nl.isEmpty() ? "" : nl[0].name();
+      return nl.empty() ? "" : nl[0].name();
       }
 
 //---------------------------------------------------------
@@ -511,12 +511,6 @@ bool Part::setProperty(P_ID id, const QVariant& property)
       switch (id) {
             case P_ID::VISIBLE:
                   setShow(property.toBool());
-                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
-                        m->setDirty();
-                        if (m->mmRest())
-                              m->mmRest()->setDirty();
-                        break;
-                        }
                   break;
             case P_ID::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());
@@ -540,7 +534,7 @@ bool Part::setProperty(P_ID id, const QVariant& property)
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

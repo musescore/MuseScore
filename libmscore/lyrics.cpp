@@ -37,7 +37,7 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
             // search through all tracks of current staff looking for a lyric in specified verse
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && !cr->lyricsList().isEmpty()) {
+                  if (cr && !cr->lyricsList().empty()) {
                         // cr with lyrics found, but does it have a syllable in specified verse?
                         l = cr->lyricsList().value(verse);
                         if (l)
@@ -291,7 +291,7 @@ void Lyrics::layout1()
           return;
 
       ChordRest* cr = chordRest();
-      const QList<Lyrics*>* ll = &(cr->lyricsList());
+      const QVector<Lyrics*>* ll = &(cr->lyricsList());
 
       qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
       int line = ll->indexOf(this);
@@ -419,7 +419,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
 #endif
       QString txt = QApplication::clipboard()->text(mode);
       QStringList sl = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-      if (sl.isEmpty())
+      if (sl.empty())
             return;
 
       QStringList hyph = sl[0].split("-");
@@ -463,8 +463,8 @@ void Lyrics::paste(MuseScoreView* scoreview)
             }
 
       layout();
-      score()->setLayoutAll(true);
-      score()->end();
+      score()->setLayoutAll();
+      score()->update();
       txt = sl.join(" ");
 
       QApplication::clipboard()->setText(txt, mode);
@@ -539,7 +539,7 @@ void Lyrics::setNo(int n)
 void Lyrics::endEdit()
       {
       Text::endEdit();
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -589,7 +589,7 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -768,7 +768,7 @@ bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -854,7 +854,7 @@ void LyricsLineSegment::layout()
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
-            qreal offsetX = score()->styleD(StyleIdx::minNoteDistance) * sp;
+            qreal offsetX = score()->styleP(StyleIdx::minNoteDistance) * mag();
             // if final segment, extend slightly after the chord, otherwise shorten it
             rxpos2() +=
                   (spannerSegmentType() == SpannerSegmentType::BEGIN ||
@@ -868,7 +868,7 @@ void LyricsLineSegment::layout()
             _dashLength = lyr->dashLength();
 #else
             rypos()     -= lyr->bbox().height() * Lyrics::LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength = score()->styleS(StyleIdx::lyricsDashMaxLength).val() * sp;  // and dash length
+            _dashLength = score()->styleP(StyleIdx::lyricsDashMaxLength) * mag();  // and dash length
 #endif
             qreal len         = pos2().x();
             qreal minDashLen  = score()->styleS(StyleIdx::lyricsDashMinLength).val() * sp;

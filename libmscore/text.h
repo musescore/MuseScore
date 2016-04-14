@@ -14,7 +14,7 @@
 #define __SIMPLETEXT_H__
 
 #include "element.h"
-#include "style.h"
+#include "textstyle.h"
 #include "elementlayout.h"
 
 namespace Ms {
@@ -266,7 +266,7 @@ class Text : public Element {
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
 
-      bool isEmpty() const                { return _text.isEmpty(); }
+      bool empty() const                { return _text.isEmpty(); }
       void clear()                        { _text.clear();          }
 
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
@@ -333,7 +333,7 @@ class Text : public Element {
       static QString unEscape(QString s);
 
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
 
       virtual int subtype() const;
       virtual QString subtypeName() const;

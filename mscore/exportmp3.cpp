@@ -729,7 +729,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                                     if (e.type() == ME_INVALID)
                                           continue;
                                     e.setChannel(a->channel);
-                                    int syntiIdx= synti->index(score->midiMapping(a->channel)->articulation->synti);
+                                    int syntiIdx= synti->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
                                     synti->play(e, syntiIdx);
                                     }
                               }
@@ -772,7 +772,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         const NPlayEvent& e = playPos->second;
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
-                              Channel* c = score->midiMapping(channelIdx)->articulation;
+                              Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
                               if (!c->mute) {
                                     synti->play(e, synti->index(c->synti));
                                     }

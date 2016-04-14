@@ -187,7 +187,7 @@ bool Jump::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -232,7 +232,7 @@ Element* Jump::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Jump::accessibleInfo()
+QString Jump::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->jumpTypeUserName());
       }

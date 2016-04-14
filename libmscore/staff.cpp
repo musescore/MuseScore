@@ -47,7 +47,7 @@ namespace Ms {
 
 int Staff::idx() const
       {
-      return _score->staffIdx(this);
+      return score()->staffIdx(this);
       }
 
 //---------------------------------------------------------
@@ -81,7 +81,7 @@ void Staff::setBracket(int idx, BracketType val)
       for (int i = _brackets.size(); i <= idx; ++i)
             _brackets.append(BracketItem());
       _brackets[idx]._bracket = val;
-      while (!_brackets.isEmpty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
+      while (!_brackets.empty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
             _brackets.removeLast();
       }
 
@@ -104,14 +104,14 @@ void Staff::setBracketSpan(int idx, int val)
 
 void Staff::addBracket(BracketItem b)
       {
-      if (!_brackets.isEmpty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
+      if (!_brackets.empty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
             _brackets[0] = b;
             }
       else {
             //
             // create new bracket level
             //
-            foreach(Staff* s, _score->staves()) {
+            foreach(Staff* s, score()->staves()) {
                   if (s == this)
                         s->_brackets.append(b);
                   else
@@ -121,13 +121,41 @@ void Staff::addBracket(BracketItem b)
       }
 
 //---------------------------------------------------------
+//   innerBracket
+//    Return type inner bracket.
+//    The bracket type determines the staff distance.
+//---------------------------------------------------------
+
+BracketType Staff::innerBracket() const
+      {
+      int staffIdx = idx();
+
+      BracketType t = BracketType::NO_BRACKET;
+      int level = 1000;
+      for (int i = 0; i < score()->nstaves(); ++i) {
+            Staff* staff = score()->staff(i);
+            for (int k = 0; k < staff->brackets().size(); ++k) {
+                  const BracketItem& bi = staff->brackets().at(k);
+                  if (bi._bracket != BracketType::NO_BRACKET) {
+                        if (i < staffIdx && ((i + bi._bracketSpan) > staffIdx) && k < level) {
+                              t = bi._bracket;
+                              level = k;
+                              break;
+                              }
+                        }
+                  }
+            }
+      return t;
+      }
+
+//---------------------------------------------------------
 //   cleanupBrackets
 //---------------------------------------------------------
 
 void Staff::cleanupBrackets()
       {
       int index = idx();
-      int n = _score->nstaves();
+      int n = score()->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
             if (_brackets[i]._bracket == BracketType::NO_BRACKET)
                   continue;
@@ -180,7 +208,7 @@ Staff::~Staff()
       {
       if (_linkedStaves) {
             _linkedStaves->remove(this);
-            if (_linkedStaves->isEmpty())
+            if (_linkedStaves->empty())
                   delete _linkedStaves;
             }
       }
@@ -262,6 +290,7 @@ void Staff::dumpTimeSigs(const char* title) const
 
 void Staff::setClef(Clef* clef)
       {
+//      qDebug("Staff::setClef generated %d", clef->generated());
       if (clef->generated())
             return;
       int tick = clef->segment()->tick();
@@ -281,6 +310,7 @@ void Staff::setClef(Clef* clef)
 
 void Staff::removeClef(Clef* clef)
       {
+//      qDebug("Staff::removeClef generated %d", clef->generated());
       if (clef->generated())
             return;
       int tick = clef->segment()->tick();
@@ -449,9 +479,7 @@ void Staff::write(Xml& xml) const
       int idx = score()->staffIdx(this);
       xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
       if (linkedStaves()) {
-            Score* s = score();
-            if (s->parentScore())
-                  s = s->parentScore();
+            Score* s = masterScore();
             foreach(Staff* staff, linkedStaves()->staves()) {
                   if ((staff->score() == s) && (staff != this))
                         xml.tag("linkedTo", s->staffIdx(staff) + 1);
@@ -502,8 +530,9 @@ void Staff::write(Xml& xml) const
       else {                                    // if some bar line, default is the default for span target staff
             int targetStaffIdx = idx + _barLineSpan - 1;
             if (targetStaffIdx >= score()->nstaves()) {
-                  qFatal("bad _barLineSpan %d for staff %d (nstaves %d)",
+                  qInfo("bad _barLineSpan %d for staff %d (nstaves %d)",
                      _barLineSpan, idx, score()->nstaves());
+                  targetStaffIdx = score()->nstaves() - 1;
                   }
             int targetStaffLines = score()->staff(targetStaffIdx)->lines();
             defaultLineTo = (targetStaffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (targetStaffLines-1) * 2);
@@ -577,7 +606,7 @@ void Staff::read(XmlReader& e)
             else if (tag == "hideSystemBarLine")
                   _hideSystemBarLine = e.readInt();
             else if (tag == "keylist")
-                  _keys.read(e, _score);
+                  _keys.read(e, score());
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket     = BracketType(e.intAttribute("type", -1));
@@ -613,10 +642,10 @@ void Staff::read(XmlReader& e)
             else if (tag == "linkedTo") {
                   int v = e.readInt() - 1;
                   //
-                  // if this is an excerpt, link staff to parentScore()
+                  // if this is an excerpt, link staff to masterScore()
                   //
-                  if (score()->parentScore()) {
-                        Staff* st = score()->parentScore()->staff(v);
+                  if (!score()->isMaster()) {
+                        Staff* st = masterScore()->staff(v);
                         if (st)
                               linkTo(st);
                         else {
@@ -655,7 +684,7 @@ qreal Staff::height() const
 
 qreal Staff::spatium() const
       {
-      return _score->spatium() * mag();
+      return score()->spatium() * mag();
       }
 
 //---------------------------------------------------------
@@ -686,7 +715,7 @@ SwingParameters Staff::swing(int tick) const
             swingUnit = 0;
       sp.swingRatio = swingRatio;
       sp.swingUnit = swingUnit;
-      if (_swingList.isEmpty())
+      if (_swingList.empty())
             return sp;
       QMap<int, SwingParameters>::const_iterator i = _swingList.upperBound(tick);
       if (i == _swingList.begin())
@@ -701,7 +730,7 @@ SwingParameters Staff::swing(int tick) const
 
 int Staff::channel(int tick,  int voice) const
       {
-      if (_channelList[voice].isEmpty())
+      if (_channelList[voice].empty())
             return 0;
       QMap<int, int>::const_iterator i = _channelList[voice].upperBound(tick);
       if (i == _channelList[voice].begin())
@@ -1100,7 +1129,7 @@ void Staff::insertTime(int tick, int len)
       // check if there is a clef at the end of measure
       // before tick
       Clef* clef = 0;
-      Measure* m = _score->tick2measure(tick);
+      Measure* m = score()->tick2measure(tick);
       if (m && (m->tick() == tick) && (m->prevMeasure())) {
             m = m->prevMeasure();
             Segment* s = m->findSegment(Segment::Type::Clef, tick);
@@ -1220,7 +1249,7 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
                   qDebug("Staff::setProperty: unhandled id");
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 

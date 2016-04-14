@@ -657,10 +657,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         chord->setTrack(track);
                         switch (o->stemDir) {
                               case ChordObj::StemDir::DOWN:
-                                    chord->setStemDirection(MScore::Direction::DOWN);
+                                    chord->setStemDirection(Direction::DOWN);
                                     break;
                               case ChordObj::StemDir::UP:
-                                    chord->setStemDirection(MScore::Direction::UP);
+                                    chord->setStemDirection(Direction::UP);
                                     break;
                               case ChordObj::StemDir::NONE:
                                     chord->setNoStem(true);
@@ -870,20 +870,20 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (st == BarLineType::NORMAL)
                               break;
 
-                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
-                              pm->setEndBarLineType(st, false, true);
+//TODO                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
+//                              pm->setEndBarLineType(st, false, true);
 
                         if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)
                               nm = score->getCreateMeasure(tick);
                               // qDebug("nm %p", nm);
                               if (nm)
-                                    nm->setRepeatFlags(nm->repeatFlags() | Repeat::START);
+                                    nm->setRepeatStart(true);
                               }
 
                         if (st == BarLineType::END_REPEAT || st == BarLineType::END_START_REPEAT) {
                               if (pm)
-                                    pm->setRepeatFlags(pm->repeatFlags() | Repeat::END);
+                                    pm->setRepeatEnd(true);
                               }
                         }
                         break;
@@ -1322,8 +1322,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       score->connectTies();
       score->fixTicks();
       score->setPlaylistDirty();
-      score->setLayoutAll(true);
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+      score->setLayoutAll();
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       }
 
 //---------------------------------------------------------
@@ -2642,7 +2642,7 @@ void Capella::read(QFile* fp)
 //   importCapella
 //---------------------------------------------------------
 
-Score::FileError importCapella(Score* score, const QString& name)
+Score::FileError importCapella(MasterScore* score, const QString& name)
       {
       QFile fp(name);
       if(!fp.exists())

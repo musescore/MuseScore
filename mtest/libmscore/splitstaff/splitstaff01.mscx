@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="2.00">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>d9c596a</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <SyntiSettings>
-      <s name="soundfont" val="/usr/local/share/mscore-2.0/sound/TimGM6mb.sf2"/>
-      <f name="RevRoomsize" val="0.5"/>
-      <f name="RevDamp" val="0.5"/>
-      <f name="RevWidth" val="1"/>
-      <f name="RevGain" val="0.495052"/>
-      <f name="ChoType" val="0"/>
-      <f name="ChoSpeed" val="0.002"/>
-      <f name="ChoDepth" val="0.8"/>
-      <f name="ChoBlocks" val="0.03"/>
-      <f name="ChoGain" val="0.495052"/>
-      </SyntiSettings>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -41,11 +27,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <PageList>
@@ -58,8 +48,14 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
@@ -123,13 +119,9 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <Chord>
+        <Rest>
           <durationType>quarter</durationType>
-          <Note>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
+          </Rest>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -140,20 +132,63 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
         </Measure>
       <Measure number="4">
         <Rest>

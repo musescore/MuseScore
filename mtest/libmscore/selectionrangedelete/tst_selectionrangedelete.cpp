@@ -29,8 +29,8 @@ using namespace Ms;
 class TestSelectionRangeDelete : public QObject, public MTest
       {
       Q_OBJECT
-      void verifyDelete(Score* score, size_t spanners);
-      void verifyNoDelete(Score* score, size_t spanners);
+      void verifyDelete(MasterScore* score, size_t spanners);
+      void verifyNoDelete(MasterScore* score, size_t spanners);
       void deleteVoice(int voice, QString idx);
 
    private slots:
@@ -55,14 +55,14 @@ void TestSelectionRangeDelete::initTestCase()
 //   verifyDelete
 //---------------------------------------------------------
 
-void TestSelectionRangeDelete::verifyDelete(Score* score, size_t spanners)
+void TestSelectionRangeDelete::verifyDelete(MasterScore* score, size_t spanners)
       {
       score->startCmd();
       score->cmdDeleteSelection();
       score->endCmd();
 
       QVERIFY(score->spanner().size() == spanners -1);
-      score->undo()->undo();
+      score->undoStack()->undo();
       score->endUndoRedo();
       QVERIFY(score->spanner().size() == spanners);
       }
@@ -71,14 +71,14 @@ void TestSelectionRangeDelete::verifyDelete(Score* score, size_t spanners)
 //   verifyNoDelete
 //---------------------------------------------------------
 
-void TestSelectionRangeDelete::verifyNoDelete(Score* score, size_t spanners)
+void TestSelectionRangeDelete::verifyNoDelete(MasterScore* score, size_t spanners)
       {
       score->startCmd();
       score->cmdDeleteSelection();
       score->endCmd();
 
       QVERIFY(score->spanner().size() == spanners);
-      score->undo()->undo();
+      score->undoStack()->undo();
       score->endUndoRedo();
       QVERIFY(score->spanner().size() == spanners);
       }
@@ -107,7 +107,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSlur()
        *  ss es ss   es
        *  q  q  q  e e
        */
-      Score* score = readScore(DIR + "selectionrangedelete01.mscx");
+      MasterScore* score = readScore(DIR + "selectionrangedelete01.mscx");
 
       score->doLayout();
       QVERIFY(score);
@@ -149,7 +149,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
        *  ss    es
        *  q  q  q
        */
-      Score* score = readScore(DIR + "selectionrangedelete02.mscx");
+      MasterScore* score = readScore(DIR + "selectionrangedelete02.mscx");
 
       score->doLayout();
       QVERIFY(score);
@@ -182,7 +182,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
 
 void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
       {
-      Score* score = readScore(DIR + QString("selectionrangedelete%1.mscx").arg(idx));
+      MasterScore* score = readScore(DIR + QString("selectionrangedelete%1.mscx").arg(idx));
 
       Measure* m1 = score->firstMeasure();
       QVERIFY(m1);
@@ -208,7 +208,7 @@ void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
 
 void TestSelectionRangeDelete::deleteSkipAnnotations()
       {
-      Score* score = readScore(DIR + QString("selectionrangedelete05.mscx"));
+      MasterScore* score = readScore(DIR + QString("selectionrangedelete05.mscx"));
 
       Measure* m1 = score->firstMeasure();
       QVERIFY(m1);

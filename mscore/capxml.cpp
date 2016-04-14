@@ -1166,7 +1166,7 @@ void Capella::readCapx(XmlReader& e)
 
 void convertCapella(Score* score, Capella* cap, bool capxMode);
 
-Score::FileError importCapXml(Score* score, const QString& name)
+Score::FileError importCapXml(MasterScore* score, const QString& name)
       {
       qDebug("importCapXml(score %p, name %s)", score, qPrintable(name));
       MQZipReader uz(name);

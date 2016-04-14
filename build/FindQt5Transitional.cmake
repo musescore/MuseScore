@@ -20,11 +20,11 @@ if (Qt5Core_FOUND)
         PrintSupport
         Concurrent
         UiTools
-        WebKit
-        WebKitWidgets
         OpenGL
         LinguistTools
         Help
+        WebEngine
+        WebEngineWidgets
       )
     foreach(_component ${_components})
       find_package(Qt5${_component})
@@ -35,9 +35,9 @@ if (Qt5Core_FOUND)
     set(_components ${Qt5Transitional_FIND_COMPONENTS})
     foreach(_component ${Qt5Transitional_FIND_COMPONENTS})
       find_package(Qt5${_component} REQUIRED)
-      if ("${_component}" STREQUAL "WebKit")
-        find_package(Qt5WebKitWidgets REQUIRED)
-        list(APPEND QT_LIBRARIES ${Qt5WebKitWidgets_LIBRARIES} )
+      if ("${_component}" STREQUAL "WebEngine")
+        find_package(Qt5WebEngine REQUIRED)
+        list(APPEND QT_LIBRARIES ${Qt5WebEngine_LIBRARIES})
       endif()
       if ("${_component}" STREQUAL "Gui")
         find_package(Qt5Widgets REQUIRED)

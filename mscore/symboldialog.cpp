@@ -21,6 +21,7 @@
 #include "symboldialog.h"
 #include "palette.h"
 #include "musescore.h"
+#include "libmscore/score.h"
 #include "libmscore/sym.h"
 #include "libmscore/style.h"
 #include "libmscore/element.h"
@@ -29,7 +30,7 @@
 
 namespace Ms {
 
-extern Score* gscore;
+extern MasterScore* gscore;
 
 //---------------------------------------------------------
 //   createSymbolPalette

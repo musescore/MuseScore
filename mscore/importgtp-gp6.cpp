@@ -815,7 +815,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (dotted) {
                                                       // there is at most one dotted note in this guitar pro version
                                                       NoteDot* dot = new NoteDot(score);
-                                                      dot->setIdx(dotted);
+                                                      //dot->setIdx(dotted);
                                                       dot->setParent(note);
                                                       dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
                                                       dot->setVisible(true);
@@ -1804,9 +1804,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         bool start = !masterBarElement.attributes().namedItem("start").toAttr().value().compare("true");
                         int count = masterBarElement.attributes().namedItem("count").toAttr().value().toInt();
                         if (start)
-                              measure->setRepeatFlags(Repeat::START);
+                              measure->setRepeatStart(true);
                         else
-                              measure->setRepeatFlags(Repeat::END);
+                              measure->setRepeatEnd(true);
                         measure->setRepeatCount(count);
                         }
                   else if (!masterBarElement.nodeName().compare("AlternateEndings")) {

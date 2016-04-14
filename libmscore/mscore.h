@@ -110,6 +110,7 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
 //    parameters. Those should be from the correct storageType and static_casts should
 //    be applied when necessary.
 //---------------------------------------------------------
+
 #define MS_QML_ENUM(name, storageType, ...)\
       enum class name : storageType {\
             __VA_ARGS__\
@@ -123,6 +124,35 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
             };\
       };
 
+//---------------------------------------------------------
+//   Direction
+//---------------------------------------------------------
+
+class Direction  {
+      Q_GADGET
+      Q_ENUMS(E)
+      int val;
+
+   public:
+      enum E { AUTO, UP, DOWN };
+
+      Direction()                                {}
+      constexpr Direction(const int v) : val(v)  {}
+      Direction(const Direction& v) : val(v.val) {}
+      Direction(const QString&);
+
+      // automatic conversions
+      operator QVariant() const                { return QVariant::fromValue(*this); }
+//      explicit constexpr operator int() const  { return val; }
+      constexpr operator int() const  { return val; }
+
+      bool operator==(const Direction d) const { return val == d.val; }
+      bool operator==(const E d) const         { return val == d; }
+      bool operator!=(const E d) const         { return val != d; }
+
+      const char* toString() const;
+      static void fillComboBox(QComboBox*);
+      };
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -134,7 +164,6 @@ enum class ArticulationType : char {
       Longfermata,
       Verylongfermata,
       Sforzatoaccent,
-//      Espressivo,
       Staccato,
       Staccatissimo,
       Tenuto,
@@ -168,10 +197,6 @@ enum class ArticulationType : char {
       Schleifer,
       Snappizzicato,
       ARTICULATIONS_PROPER,
-//      Tapping,
-//      Slapping,
-//      Popping,
-      // Fingerings
       ThumbPosition = ARTICULATIONS_PROPER,
       LuteFingThumb,
       LuteFingFirst,
@@ -179,7 +204,6 @@ enum class ArticulationType : char {
       LuteFingThird,
       ARTICULATIONS
       };
-
 
 //---------------------------------------------------------
 //   BracketType
@@ -252,18 +276,25 @@ enum class SelectType : char {
 //   NoteType
 //---------------------------------------------------------
 
-enum class NoteType : char {
-      NORMAL,
-      ACCIACCATURA,
-      APPOGGIATURA,       // grace notes
-      GRACE4,
-      GRACE16,
-      GRACE32,
-      GRACE8_AFTER,
-      GRACE16_AFTER,
-      GRACE32_AFTER,
-      INVALID
+enum class NoteType : unsigned char {
+      NORMAL        = 0,
+      ACCIACCATURA  = 0x1,
+      APPOGGIATURA  = 0x2,       // grace notes
+      GRACE4        = 0x4,
+      GRACE16       = 0x8,
+      GRACE32       = 0x10,
+      GRACE8_AFTER  = 0x20,
+      GRACE16_AFTER = 0x40,
+      GRACE32_AFTER = 0x80
       };
+
+constexpr NoteType operator| (NoteType t1, NoteType t2) {
+      return static_cast<NoteType>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (NoteType t1, NoteType t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
 
 //---------------------------------------------------------
 //    AccidentalVal
@@ -361,10 +392,24 @@ MS_QML_ENUM(TextStyleType, signed char,\
 //   BarLineType
 //---------------------------------------------------------
 
-enum class BarLineType : char {
-      NORMAL, DOUBLE, START_REPEAT, END_REPEAT,
-      BROKEN, END, END_START_REPEAT, DOTTED
+enum class BarLineType : int {
+      NORMAL           = 1,
+      DOUBLE           = 2,
+      START_REPEAT     = 4,
+      END_REPEAT       = 8,
+      BROKEN           = 0x10,
+      END              = 0x20,
+      END_START_REPEAT = 0x40,
+      DOTTED           = 0x80
       };
+
+constexpr BarLineType operator| (BarLineType t1, BarLineType t2) {
+      return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (BarLineType t1, BarLineType t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
 
 // Icon() subtypes
 enum class IconType : signed char {
@@ -398,11 +443,10 @@ class MScore : public QObject {
 #endif
 
    public:
-      enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
       enum class OrnamentStyle : char { DEFAULT, BAROQUE};
       enum class GlissandoStyle : char { CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC };
-      Q_ENUMS(Direction DirectionH OrnamentStyle GlissandoStyle)
+      Q_ENUMS(DirectionH OrnamentStyle GlissandoStyle)
 
       static void init();
 
@@ -493,7 +537,11 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MScore::Direction);
+Q_DECLARE_METATYPE(Ms::Direction);
+//Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
+Q_DECLARE_METATYPE(Ms::Direction::E);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
+Q_DECLARE_METATYPE(Ms::TextStyleType);
+Q_DECLARE_METATYPE(Ms::BarLineType);
 
 #endif

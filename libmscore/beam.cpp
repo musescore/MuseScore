@@ -37,8 +37,8 @@ namespace Ms {
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
-//    idx 0 - MScore::Direction::AUTO or MScore::Direction::DOWN
-//        1 - MScore::Direction::UP
+//    idx 0 - Direction::AUTO or Direction::DOWN
+//        1 - Direction::UP
 //---------------------------------------------------------
 
 struct BeamFragment {
@@ -54,7 +54,7 @@ Beam::Beam(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::SELECTABLE);
-      _direction       = MScore::Direction::AUTO;
+      _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
       _userModified[0] = false;
@@ -77,7 +77,7 @@ Beam::Beam(const Beam& b)
       {
       _elements     = b._elements;
       _id           = b._id;
-      foreach(QLineF* bs, b.beamSegments)
+      for (const QLineF* bs : b.beamSegments)
             beamSegments.append(new QLineF(*bs));
       _direction       = b._direction;
       _up              = b._up;
@@ -87,7 +87,7 @@ Beam::Beam(const Beam& b)
       _grow1           = b._grow1;
       _grow2           = b._grow2;
       editFragment     = b.editFragment;
-      foreach(BeamFragment* f, b.fragments)
+      for (const BeamFragment* f : b.fragments)
             fragments.append(new BeamFragment(*f));
       minMove          = b.minMove;
       maxMove          = b.maxMove;
@@ -108,7 +108,7 @@ Beam::~Beam()
       //
       // delete all references from chords
       //
-      foreach(ChordRest* cr, _elements)
+      for (ChordRest* cr : _elements)
             cr->setBeam(0);
       qDeleteAll(beamSegments);
       qDeleteAll(fragments);
@@ -120,10 +120,10 @@ Beam::~Beam()
 
 QPointF Beam::pagePos() const
       {
-      System* system = static_cast<System*>(parent());
-      if (system == 0)
+      System* s = system();
+      if (s == 0)
             return pos();
-      qreal yp = y() + system->staff(staffIdx())->y() + system->y();
+      qreal yp = y() + s->staff(staffIdx())->y() + s->y();
       return QPointF(pageX(), yp);
       }
 
@@ -143,18 +143,20 @@ QPointF Beam::canvasPos() const
 //   add
 //---------------------------------------------------------
 
-void Beam::add(Element* e) {
-      if (e && e->isChordRest())
-            addChordRest(static_cast<ChordRest*>(e));
+void Beam::add(Element* e)
+      {
+      if (e->isChordRest())
+            addChordRest(toChordRest(e));
       }
 
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
-void Beam::remove(Element* e) {
-      if (e && e->isChordRest())
-            removeChordRest(static_cast<ChordRest*>(e));
+void Beam::remove(Element* e)
+      {
+      if (e->isChordRest())
+            removeChordRest(toChordRest(e));
       }
 
 //---------------------------------------------------------
@@ -169,7 +171,7 @@ void Beam::addChordRest(ChordRest* a)
             // insert element in same order as it appears
             // in the score
             //
-            if (a->segment() && !_elements.isEmpty()) {
+            if (a->segment() && !_elements.empty()) {
                   for (int i = 0; i < _elements.size(); ++i) {
                         Segment* s = _elements[i]->segment();
                         if ((s->tick() > a->segment()->tick())
@@ -203,8 +205,8 @@ void Beam::draw(QPainter* painter) const
       {
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach (const QLineF* bs, beamSegments) {
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+      for (const QLineF* bs : beamSegments) {
             QPolygonF pg;
                pg << QPointF(bs->x1(), bs->y1()-lw2)
                   << QPointF(bs->x2(), bs->y2()-lw2)
@@ -221,7 +223,7 @@ void Beam::draw(QPainter* painter) const
 void Beam::move(const QPointF& offset)
       {
       Element::move(offset);
-      foreach (QLineF* bs, beamSegments)
+      for (QLineF* bs : beamSegments)
             bs->translate(offset);
       }
 
@@ -235,12 +237,12 @@ bool Beam::twoBeamedNotes()
       {
       // if not two elements or elements are not chords or chords have more than 1 note, return failure
       if ((_elements.size() != 2)
-         || (_elements[0]->type() != Element::Type::CHORD)
-         || _elements[1]->type() != Element::Type::CHORD) {
+         || !_elements[0]->isChord()
+         || !_elements[1]->isChord()) {
             return false;
             }
-      const Chord* c1 = static_cast<const Chord*>(_elements[0]);
-      const Chord* c2 = static_cast<const Chord*>(_elements[1]);
+      const Chord* c1 = toChord(_elements[0]);
+      const Chord* c2 = toChord(_elements[1]);
       if (c1->notes().size() != 1 || c2->notes().size() != 1)
             return false;
 
@@ -251,10 +253,13 @@ bool Beam::twoBeamedNotes()
             _up = false;
             Segment* s = c1->segment();
             s = s->prev1(Segment::Type::ChordRest);
-            if (s && s->element(c1->track())) {
-                  Chord* c = static_cast<Chord*>(s->element(c1->track()));
-                  if ((c->type() == Element::Type::CHORD) && c->beam())
-                        _up = c->beam()->up();
+            if (s) {
+                  Element* e = s->element(c1->track());
+                  if (e && e->isChord()) {
+                        Chord* c = toChord(e);
+                        if (c->beam())
+                              _up = c->beam()->up();
+                        }
                   }
             }
       else if (qAbs(dist1) > qAbs(dist2))
@@ -287,25 +292,24 @@ void Beam::layout1()
             slope = 0.0;
             _cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
-            foreach (ChordRest* cr, _elements) {
-                  if (cr->type() == Element::Type::CHORD) {
+            for (ChordRest* cr : _elements) {
+                  if (cr->isChord()) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                               maxDuration = cr->durationType();
-                        c2 = static_cast<Chord*>(cr);
+                        c2 = toChord(cr);
                         if (c1 == 0)
                               c1 = c2;
                         }
                   }
             }
       else if (staff()->isDrumStaff()) {
-            if (_direction != MScore::Direction::AUTO) {
-                  _up = _direction == MScore::Direction::UP;
-                  }
+            if (_direction != Direction::AUTO)
+                  _up = _direction == Direction::UP;
             else {
-                  foreach (ChordRest* cr, _elements) {
-                        if (cr->type() == Element::Type::CHORD) {
-                              c2 = static_cast<Chord*>(cr);
+                  for (ChordRest* cr :_elements) {
+                        if (cr->isChord()) {
+                              c2 = toChord(cr);
                               _up = c2->up();
                               break;
                               }
@@ -325,11 +329,13 @@ void Beam::layout1()
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
-            foreach (ChordRest* cr, _elements) {
+            int staffIdx = -1;
+            for (ChordRest* cr : _elements) {
                   qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
                   mag = qMax(mag, m);
-                  if (cr->type() == Element::Type::CHORD) {
-                        c2 = static_cast<Chord*>(cr);
+                  if (cr->isChord()) {
+                        c2 = toChord(cr);
+                        staffIdx = c2->vStaffIdx();
                         if (c1 == 0)
                               c1 = c2;
                         int i = c2->staffMove();
@@ -351,16 +357,16 @@ void Beam::layout1()
             //
             // determine beam stem direction
             //
-            if (_direction != MScore::Direction::AUTO) {
-                  _up = _direction == MScore::Direction::UP;
+            if (_direction != Direction::AUTO) {
+                  _up = _direction == Direction::UP;
                   }
             else {
                   if (maxMove > 0)            // cross staff beaming down
                         _up = false;
                   else if (c1) {
                         Measure* m = c1->measure();
-                        if (c1->stemDirection() != MScore::Direction::AUTO)
-                              _up = c1->stemDirection() == MScore::Direction::UP;
+                        if (c1->stemDirection() != Direction::AUTO)
+                              _up = c1->stemDirection() == Direction::UP;
                         else if (m->hasVoices(c1->staffIdx()))
                               _up = !(c1->voice() % 2);
                         else if (!twoBeamedNotes()) {
@@ -377,7 +383,10 @@ void Beam::layout1()
 
 
             _cross = minMove < maxMove;
-            // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+            if (minMove == 1 && maxMove == 1)
+                  setTrack(staffIdx * VOICES + voice());
+
+            // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
             slope = 0.0;
 
             for (ChordRest* cr : _elements) {
@@ -411,7 +420,7 @@ void Beam::layoutGraceNotes()
       qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
       setMag(graceMag);
 
-      foreach (ChordRest* cr, _elements) {
+      for (ChordRest* cr : _elements) {
             c2 = static_cast<Chord*>(cr);
             if (c1 == 0)
                   c1 = c2;
@@ -433,8 +442,8 @@ void Beam::layoutGraceNotes()
             _up   = !staff()->staffType()->stemsDown();
             }
       else {
-            if (_direction != MScore::Direction::AUTO)
-                  _up = _direction == MScore::Direction::UP;
+            if (_direction != Direction::AUTO)
+                  _up = _direction == Direction::UP;
             else {
                   ChordRest* cr = _elements[0];
 
@@ -446,11 +455,11 @@ void Beam::layoutGraceNotes()
                   }
             }
 
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       slope   = 0.0;
 
       if (!_userModified[idx]) {
-            foreach(ChordRest* cr, _elements)
+            for (ChordRest* cr : _elements)
                   cr->setUp(_up);
             }
       }
@@ -464,10 +473,10 @@ void Beam::layout()
       System* system = _elements.front()->measure()->system();
       setParent(system);
 
-      QList<ChordRest*> crl;
+      std::vector<ChordRest*> crl;
 
       int n = 0;
-      foreach(ChordRest* cr, _elements) {
+      for (ChordRest* cr : _elements) {
             if (cr->measure()->system() != system) {
                   SpannerSegmentType st;
                   if (n == 0)
@@ -481,9 +490,10 @@ void Beam::layout()
                   crl.clear();
                   system = cr->measure()->system();
                   }
-            crl.append(cr);
+            crl.push_back(cr);
             }
-      if (!crl.isEmpty()) {
+      setbbox(QRectF());
+      if (!crl.empty()) {
             SpannerSegmentType st;
             if (n == 0)
                   st = SpannerSegmentType::SINGLE;
@@ -492,29 +502,34 @@ void Beam::layout()
             if (fragments.size() < (n+1))
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);
-            }
 
-      setbbox(QRectF());
-      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach(const QLineF* bs, beamSegments) {
-            QPolygonF a(4);
-            a[0] = QPointF(bs->x1(), bs->y1()-lw2);
-            a[1] = QPointF(bs->x2(), bs->y2()-lw2);
-            a[2] = QPointF(bs->x2(), bs->y2()+lw2);
-            a[3] = QPointF(bs->x1(), bs->y1()+lw2);
-            addbbox(a.boundingRect());
+            qreal lw2      = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+            ChordRest* cr  = crl.front();
+//            Shape& s       = cr->segment()->shape(staffIdx());
+//            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+
+            for (const QLineF* bs : beamSegments) {
+                  QPolygonF a(4);
+                  a[0] = QPointF(bs->x1(), bs->y1());
+                  a[1] = QPointF(bs->x2(), bs->y2());
+                  a[2] = QPointF(bs->x2(), bs->y2());
+                  a[3] = QPointF(bs->x1(), bs->y1());
+                  QRectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
+//TODO                  s.add(r.translated(-offset));
+                  addbbox(r);
+                  }
             }
       }
 
 //---------------------------------------------------------
-//   shape
+//   outline
 //---------------------------------------------------------
 
-QPainterPath Beam::shape() const
+QPainterPath Beam::outline() const
       {
       QPainterPath pp;
-      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach(const QLineF* bs, beamSegments) {
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+      for (const QLineF* bs : beamSegments) {
             QPolygonF a(5);
             a[0] = QPointF(bs->x1(), bs->y1()-lw2);
             a[1] = QPointF(bs->x2(), bs->y2()-lw2);
@@ -532,7 +547,7 @@ QPainterPath Beam::shape() const
 
 bool Beam::contains(const QPointF& p) const
       {
-      return shape().contains(p - pagePos());
+      return outline().contains(p - pagePos());
       }
 
 //---------------------------------------------------------
@@ -554,7 +569,7 @@ inline qreal absLimit(qreal val, qreal limit)
 
 bool Beam::hasNoSlope()
       {
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       return _noSlope && !_userModified[idx];
       }
 
@@ -562,7 +577,7 @@ bool Beam::hasNoSlope()
 //   slopeZero
 //---------------------------------------------------------
 
-bool Beam::slopeZero(const QList<ChordRest*>& cl)
+bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
       {
       if (hasNoSlope() || cl.size() < 2)
             return true;
@@ -570,6 +585,9 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       //
       // return true if beam spans a rest
       //
+      if (cl.size() == 2 && (cl.front()->isRest() || cl.back()->isRest()))
+            return true;
+
 //      for(const ChordRest* cr : cl) {
 //            if (cr->type() != Element::Type::CHORD)
 //                  return true;
@@ -604,7 +622,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       slope = 0.0;
       if (cl.size() >= 3) {
             int l4 = cl[1]->line(_up);
-            for (int i = 1; i < cl.size()-1; ++i) {
+            for (unsigned  i = 1; i < cl.size()-1; ++i) {
                   // Don't consider interior rests
                   if (cl[i]->type() != Element::Type::CHORD)
                         continue;
@@ -642,8 +660,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
 //   BeamMetric
 //---------------------------------------------------------
 
-struct Bm
-      {
+struct Bm {
       signed char l;     // stem len   in 1/4 spatium units
       signed char s;     // beam slant in 1/4 spatium units
       Bm() : l(0), s(0) {}
@@ -1056,7 +1073,7 @@ static Bm beamMetric1(bool up, char l1, char l2)
 //    return 1/4 spatium units
 //---------------------------------------------------------
 
-static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
+static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       {
       int n = cl.size();
       const ChordRest* c1 = cl[0];
@@ -1161,7 +1178,7 @@ static int* slantTable(uint interval)
 //   computeStemLen
 //---------------------------------------------------------
 
-void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevels)
+void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int beamLevels)
       {
       qreal _spatium      = spatium();
       qreal _spatium4     = _spatium * .25;
@@ -1476,12 +1493,12 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
 //   layout2
 //---------------------------------------------------------
 
-void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
+void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       {
       if (_distribute)
             score()->respace(&crl);       // fix horizontal spacing of stems
 
-      if (crl.isEmpty())                  // no beamed Elements
+      if (crl.empty())                  // no beamed Elements
             return;
       const ChordRest* c1 = crl.front();       // first chord/rest in beam
       const ChordRest* c2 = crl.back();        // last chord/rest in beam
@@ -1491,13 +1508,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             beamLevels = qMax(beamLevels, c->durationType().hooks());
 
       BeamFragment* f = fragments[frag];
-      int dIdx        = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int dIdx        = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       qreal& py1      = f->py1[dIdx];
       qreal& py2      = f->py2[dIdx];
 
       qreal _spatium   = spatium();
       QPointF _pagePos(pagePos());
-      qreal beamMinLen = point(score()->styleS(StyleIdx::beamMinLen)) * mag();
+      qreal beamMinLen = score()->styleP(StyleIdx::beamMinLen) * mag();
 
       if (beamLevels == 4)
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance)*4/3);
@@ -1541,7 +1558,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   bool relayoutGrace = false;
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() == Element::Type::REST)
+                        if (c->isRest())
                               continue;
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
@@ -1573,12 +1590,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
                         qreal y;
-                        if (c->type() == Element::Type::REST)
+                        if (c->isRest())
                               continue;   //y = c->pagePos().y();
                         else
                               y  = c->upNote()->pagePos().y();
-                        y1       = qMax(y1, y);
-                        y2       = qMin(y2, y);
+                        y1 = qMax(y1, y);
+                        y2 = qMin(y2, y);
                         }
                   if (y1 > y2)
                         beamY = y2 + (y1 - y2) * .5;
@@ -1626,7 +1643,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         slant = -slant;
                   py1   = yUpMin + (yDownMax - yUpMin) * .5 - slant * .5;
                   slope = slant / (px2 - px1);
-                  if (_direction == MScore::Direction::AUTO)
+                  if (_direction == Direction::AUTO)
                         _up = crl.front()->up();
                   }
             else {
@@ -1635,7 +1652,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   computeStemLen(crl, py1, beamLevels);
                   }
             py2  = (px2 - px1) * slope + py1;   // for debug
-            py2 -= _pagePos.y();                //
+            py2 -= _pagePos.y();
             py1 -= _pagePos.y();
             }
 
@@ -1733,8 +1750,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               crBase[i] = bl;
                         }
 
-                  qreal stemWidth  = point(score()->styleS(StyleIdx::stemWidth));
-                  qreal x2   = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
+                  qreal stemWidth  = score()->styleP(StyleIdx::stemWidth);
+                  qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
                   if ((c2 - c1) > 1) {
@@ -1894,82 +1911,50 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //  calculate stem length
       //
       for (ChordRest* cr : crl) {
-            Chord* c = static_cast<Chord*>(cr);
-            if (c->type() != Element::Type::CHORD)
+            if (!cr->isChord())
                   continue;
+            Chord* c = toChord(cr);
             c->layoutStem1();
-            Stem* stem = c->stem();
-#if 0
-            if (!stem) {
-                  // is this ever true? -> yes
-qDebug("create stem in layout beam, track %d", c->track());
-                  stem = new Stem(score());
-                  stem->setParent(c);
-                  score()->undoAddElement(stem);
-//                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
-                  }
-#endif
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
             QPointF stemPos(c->stemPos());
-            qreal x2 = stemPos.x() - _pagePos.x();
-            qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
-            qreal y2 = stemPos.y();
-
+            qreal x2   = stemPos.x() - _pagePos.x();
+            qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
+            qreal y2   = stemPos.y();
             qreal fuzz = _spatium * .1;
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
-            foreach (const QLineF* l, beamSegments) {
+            for (const QLineF* l : beamSegments) {
                   if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                         qreal y = (x2 - l->x1()) * slope + l->y1();
                         by = y2 < y1 ? qMax(by, y) : qMin(by, y);
                         }
                   }
             if (by == -1000000 || by == 1000000) {
-                  if (beamSegments.isEmpty())
+                  if (beamSegments.empty())
                         qDebug("no BeamSegments");
                   else {
                         qDebug("BeamSegment not found: x %f  %f-%f",
                            x2, beamSegments.front()->x1(),
                            beamSegments.back()->x2());
                         }
+                  by = 0;
                   }
-            if (stem)
+            Stem* stem = c->stem();
+            if (stem) {
+                  qreal sw2  = score()->styleP(StyleIdx::stemWidth) * .5;
+                  if (cr->up())
+                        sw2 = -sw2;
                   stem->setLen(y2 - (by + _pagePos.y()));
-
-#if 0       // TODO ??
-            if (!tab) {
-                  bool _up = c->up();
-                  qreal stemWidth5 = stem->lineWidth() * .5;
-                  qreal noteWidth  = c->notes().size() ? c->notes().at(0)->headWidth() :
-                     symbols[score()->symIdx()][quartheadSym].width(magS());
-                  qreal stemX;
-                  if (_up)
-                        stemX = noteWidth - stemWidth5;
-                  else
-                        stemX = stemWidth5;
-                  stem->rxpos() = stemX;
+                  stem->rxpos() = c->stemPosX() + sw2;
+                  Shape& shape = cr->segment()->shape(cr->vStaffIdx());
+                  shape.add(stem->shape());
                   }
-#endif
 
-
-            //
-            // layout stem slash for acciacatura
-            //
-            if ((c == crl.front()) && c->noteType() == NoteType::ACCIACCATURA) {
-                  StemSlash* stemSlash = c->stemSlash();
-                  // if (!stemSlash)
-                  //      c->add(new StemSlash(score()));
-                  if (stemSlash)
-                        stemSlash->layout();
-                  }
-#if 0
-            else {
-                  if (c->stemSlash())
-                        c->remove(c->stemSlash());
-                  }
-#endif
+            StemSlash* stemSlash = c->stemSlash();
+            if (stemSlash)
+                  stemSlash->layout();
             Tremolo* tremolo = c->tremolo();
             if (tremolo)
                   tremolo->layout();
@@ -1982,10 +1967,10 @@ qDebug("create stem in layout beam, track %d", c->track());
 
 void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   f->py1[idx] = f->py1[idx] * diff;
                   f->py2[idx] = f->py2[idx] * diff;
                   }
@@ -1998,7 +1983,7 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Beam::write(Xml& xml) const
       {
-      if (_elements.isEmpty())
+      if (_elements.empty())
             return;
       xml.stag(QString("Beam id=\"%1\"").arg(_id));
       Element::writeProperties(xml);
@@ -2009,10 +1994,10 @@ void Beam::write(Xml& xml) const
       writeProperty(xml, P_ID::GROW_LEFT);
       writeProperty(xml, P_ID::GROW_RIGHT);
 
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal _spatium = spatium();
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   xml.stag("Fragment");
                   xml.tag("y1", f->py1[idx] / _spatium);
                   xml.tag("y2", f->py2[idx] / _spatium);
@@ -2024,7 +2009,7 @@ void Beam::write(Xml& xml) const
       // l1/l2 is the beam position of the layout engine
       if (MScore::testMode) {
             qreal _spatium4 = spatium() * .25;
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   xml.tag("l1", int(lrint(f->py1[idx] / _spatium4)));
                   xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
                   }
@@ -2059,24 +2044,24 @@ void Beam::read(XmlReader& e)
             else if (tag == "growRight")
                   setGrowRight(e.readDouble());
             else if (tag == "y1") {
-                  if (fragments.isEmpty())
+                  if (fragments.empty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py1[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "y2") {
-                  if (fragments.isEmpty())
+                  if (fragments.empty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py2[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "Fragment") {
                   BeamFragment* f = new BeamFragment;
-                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   qreal _spatium = spatium();
 
@@ -2106,7 +2091,7 @@ void Beam::read(XmlReader& e)
 
 void Beam::editDrag(const EditData& ed)
       {
-      int idx  = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
       BeamFragment* f = fragments[editFragment];
       if (ed.curGrip == Grip::START)
@@ -2136,7 +2121,7 @@ void Beam::editDrag(const EditData& ed)
 void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
       *defaultGrip = Grip::END;
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
       Chord* c1 = nullptr;
@@ -2163,11 +2148,11 @@ void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(MScore::Direction d)
+void Beam::setBeamDirection(Direction d)
       {
       _direction = d;
-      if (d != MScore::Direction::AUTO)
-            _up = d == MScore::Direction::UP;
+      if (d != Direction::AUTO)
+            _up = d == Direction::UP;
       }
 
 //---------------------------------------------------------
@@ -2186,8 +2171,8 @@ void Beam::reset()
             score()->undoChangeProperty(this, P_ID::BEAM_POS, QVariant(beamPos()));
             score()->undoChangeProperty(this, P_ID::USER_MODIFIED, false);
             }
-      if (beamDirection() != MScore::Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
+      if (beamDirection() != Direction::AUTO)
+            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
       if (noSlopeStyle == PropertyStyle::UNSTYLED)
             score()->undoChangeProperty(this, P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
 
@@ -2206,10 +2191,10 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
       QPointF pt(p - pagePos());
       qreal ydiff = 100000000.0;
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       int i = 0;
       editFragment = 0;
-      foreach (BeamFragment* f, fragments) {
+      for (BeamFragment* f : fragments) {
             qreal d = fabs(f->py1[idx] - pt.y());
             if (d < ydiff) {
                   ydiff = d;
@@ -2228,7 +2213,7 @@ void Beam::endEdit()
       Element::endEdit();
       editFragment = -1;
       // we need a full relayout to trigger stems to be redrawn
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -2278,10 +2263,10 @@ Element* Beam::drop(const DropData& data)
 
 QPointF Beam::beamPos() const
       {
-      if (fragments.isEmpty())
+      if (fragments.empty())
             return QPointF(0.0, 0.0);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       qreal _spatium = spatium();
       return QPointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
       }
@@ -2292,10 +2277,10 @@ QPointF Beam::beamPos() const
 
 void Beam::setBeamPos(const QPointF& bp)
       {
-      if (fragments.isEmpty())
+      if (fragments.empty())
             fragments.append(new BeamFragment);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       _userModified[idx] = true;
       setGenerated(false);
       qreal _spatium = spatium();
@@ -2309,7 +2294,7 @@ void Beam::setBeamPos(const QPointF& bp)
 
 bool Beam::userModified() const
       {
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       return _userModified[idx];
       }
 
@@ -2319,7 +2304,7 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
       {
-      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       _userModified[idx] = val;
       }
 
@@ -2329,8 +2314,8 @@ void Beam::setUserModified(bool val)
 
 QVariant Beam::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
-            case P_ID::STEM_DIRECTION: return int(beamDirection());
+      switch (propertyId) {
+            case P_ID::STEM_DIRECTION: return beamDirection();
             case P_ID::DISTRIBUTE:     return distribute();
             case P_ID::GROW_LEFT:      return growLeft();
             case P_ID::GROW_RIGHT:     return growRight();
@@ -2348,9 +2333,9 @@ QVariant Beam::getProperty(P_ID propertyId) const
 
 bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::STEM_DIRECTION:
-                  setBeamDirection(MScore::Direction(v.toInt()));
+                  setBeamDirection(v.value<Direction>());
                   break;
             case P_ID::DISTRIBUTE:
                   setDistribute(v.toBool());
@@ -2377,7 +2362,10 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      if (!_elements.empty()) {
+            score()->setLayout(_elements.front()->tick());
+            score()->setLayout(_elements.back()->tick());
+            }
       setGenerated(false);
       return true;
       }
@@ -2388,8 +2376,8 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Beam::propertyDefault(P_ID id) const
       {
-      switch(id) {
-            case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
+      switch (id) {
+            case P_ID::STEM_DIRECTION: return Direction(Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;

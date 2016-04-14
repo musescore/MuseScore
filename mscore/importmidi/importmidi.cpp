@@ -481,7 +481,7 @@ void setMusicNotesFromMidi(Score *score,
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
-                        MScore::Direction sd = drumset->stemDirection(mn.pitch);
+                        Direction sd = drumset->stemDirection(mn.pitch);
                         chord->setStemDirection(sd);
                         }
                   }
@@ -1168,7 +1168,7 @@ void loadMidiData(MidiFile &mf)
       mf.setMidiType(mt);
       }
 
-Score::FileError importMidi(Score *score, const QString &name)
+Score::FileError importMidi(MasterScore *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FileError::FILE_NOT_FOUND;

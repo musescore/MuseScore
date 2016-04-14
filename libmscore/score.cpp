@@ -73,7 +73,7 @@
 
 namespace Ms {
 
-Score* gscore;                 ///< system score, used for palettes etc.
+MasterScore* gscore;                 ///< system score, used for palettes etc.
 
 bool scriptDebug     = false;
 bool noSeq           = false;
@@ -237,95 +237,27 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
             e->setParent(nb);
       }
 
+#if 0
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
 void Score::init()
       {
-      _linkId         = 0;
-      _currentLayer   = 0;
-      _playMode       = PlayMode::SYNTHESIZER;
       Layer l;
       l.name          = "default";
       l.tags          = 1;
       _layer.append(l);
       _layerTags[0]   = "default";
 
-      if (!_parentScore) {
-#if defined(Q_OS_WIN)
-            _metaTags.insert("platform", "Microsoft Windows");
-#elif defined(Q_OS_MAC)
-            _metaTags.insert("platform", "Apple Macintosh");
-#elif defined(Q_OS_LINUX)
-            _metaTags.insert("platform", "Linux");
-#else
-            _metaTags.insert("platform", "Unknown");
-#endif
-            _metaTags.insert("movementNumber", "");
-            _metaTags.insert("movementTitle", "");
-            _metaTags.insert("workNumber", "");
-            _metaTags.insert("workTitle", "");
-            _metaTags.insert("arranger", "");
-            _metaTags.insert("composer", "");
-            _metaTags.insert("lyricist", "");
-            _metaTags.insert("poet", "");
-            _metaTags.insert("translator", "");
-            _metaTags.insert("source", "");
-            _metaTags.insert("copyright", "");
-            _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
-            _undo       = new UndoStack();
-            _repeatList = new RepeatList(this);
-            }
-      else {
-            _undo = 0;
-            _repeatList = 0;
-            }
-
-      _revisions = new Revisions;
       _scoreFont = ScoreFont::fontFactory("emmentaler");
 
-      _pageNumberOffset = 0;
-
-      _mscVersion             = MSCVERSION;
-      _created                = false;
-
-      _updateAll              = true;
-      _layoutAll              = true;
-      layoutFlags             = 0;
-      _undoRedo               = false;
-      _playNote               = false;
-      _playChord              = false;
-      _excerptsChanged        = false;
-      _instrumentsChanged     = false;
-      _selectionChanged       = false;
-
-      keyState                = 0;
-      _showInvisible          = true;
-      _showUnprintable        = true;
-      _showFrames             = true;
-      _showPageborders        = false;
-      _showInstrumentNames    = true;
-      _showVBox               = true;
-
-      _printing               = false;
-      _playlistDirty          = true;
-      _autosaveDirty          = true;
-      _saved                  = false;
       _pos[int(POS::CURRENT)] = 0;
       _pos[int(POS::LEFT)]    = 0;
       _pos[int(POS::RIGHT)]   = 0;
       _fileDivision           = MScore::division;
-      _defaultsRead           = false;
-      _omr                    = 0;
-      _audio                  = 0;
-      _showOmr                = false;
-      _sigmap                 = 0;
-      _tempomap               = 0;
-      _layoutMode             = LayoutMode::PAGE;
-      _noteHeadWidth          = 0.0;      // set in doLayout()
-      _midiPortCount          = 0;
       }
+#endif
 
 //---------------------------------------------------------
 //   Score
@@ -334,44 +266,28 @@ void Score::init()
 Score::Score()
    : QObject(0), ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
-      _parentScore = 0;
-      init();
-      _tempomap = new TempoMap;
-      _sigmap   = new TimeSigMap();
+      _masterScore = 0;
+//      init();
+      Layer l;
+      l.name          = "default";
+      l.tags          = 1;
+      _layer.append(l);
+      _layerTags[0]   = "default";
+
+      _scoreFont = ScoreFont::fontFactory("emmentaler");
+
+      _pos[int(POS::CURRENT)] = 0;
+      _pos[int(POS::LEFT)]    = 0;
+      _pos[int(POS::RIGHT)]   = 0;
+      _fileDivision           = MScore::division;
       _style    = *(MScore::defaultStyle());
       accInfo = tr("No selection");
-      _midiMapping.clear();
       }
 
-Score::Score(const MStyle* s)
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
+Score::Score(MasterScore* parent)
+   : Score{}
       {
-      _parentScore = 0;
-      init();
-      _tempomap = new TempoMap;
-      _sigmap   = new TimeSigMap();
-      _style    = *s;
-      accInfo = tr("No selection");
-      _midiMapping.clear();
-      }
-
-//
-//  a linked score shares some properties with parentScore():
-//    _undo
-//    _sigmap
-//    _tempomap
-//    _repeatList
-//    _links
-//    _staffTypes
-//    _metaTags
-//
-
-Score::Score(Score* parent)
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
-      {
-      _parentScore = parent;
-      init();
-
+      _masterScore = parent;
       if (MScore::defaultStyleForParts())
             _style = *MScore::defaultStyleForParts();
       else {
@@ -380,9 +296,8 @@ Score::Score(Score* parent)
 
             // but borrow defaultStyle page layout settings
             const PageFormat* pf = MScore::defaultStyle()->pageFormat();
-            qreal sp = MScore::defaultStyle()->spatium();
             _style.setPageFormat(*pf);
-            _style.setSpatium(sp);
+            _style.set(StyleIdx::spatium, MScore::defaultStyle()->value(StyleIdx::spatium));
 
             // and force some style settings that just make sense for parts
             _style.set(StyleIdx::concertPitch, false);
@@ -390,18 +305,13 @@ Score::Score(Score* parent)
             _style.set(StyleIdx::dividerLeft, false);
             _style.set(StyleIdx::dividerRight, false);
             }
-
       _synthesizerState = parent->_synthesizerState;
-      accInfo = tr("No selection");
       }
 
-Score::Score(Score* parent, const MStyle* s)
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
+Score::Score(MasterScore* parent, const MStyle* s)
+   : Score{parent}
       {
-      _parentScore = parent;
-      init();
-      _style    = *s;
-      accInfo = tr("No selection");
+      _style  = *s;
       }
 
 //---------------------------------------------------------
@@ -410,7 +320,6 @@ Score::Score(Score* parent, const MStyle* s)
 
 Score::~Score()
       {
-      _midiPortCount = 0;
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
       // deselectAll();
@@ -419,21 +328,11 @@ Score::~Score()
             delete m;
             m = nm;
             }
-      foreach(Part* p, _parts)
-            delete p;
-      foreach(Staff* staff, _staves)
-            delete staff;
-      foreach(System* s, _systems)
-            delete s;
-      foreach(Page* page, _pages)
-            delete page;
-      foreach(Excerpt* e, _excerpts)
-            delete e;
-      delete _revisions;
-      delete _undo;           // this also removes _undoStack from Mscore::_undoGroup
-      delete _tempomap;
-      delete _sigmap;
-      delete _repeatList;
+      qDeleteAll(_parts);
+      qDeleteAll(_staves);
+      qDeleteAll(_systems);
+      qDeleteAll(_pages);
+      _masterScore = 0;
       }
 
 //---------------------------------------------------------
@@ -481,14 +380,12 @@ void Score::fixTicks()
       for (Staff* staff : _staves)
             staff->clearTimeSig();
 
-      TimeSigMap* smap = sigmap();
       Fraction sig(fm->len());
-      Fraction nsig(fm->timesig());
 
-      if (!parentScore()) {
+      if (isMaster()) {
             tempomap()->clear();
-            smap->clear();
-            smap->add(0, SigEvent(sig,  nsig, 0));
+            sigmap()->clear();
+            sigmap()->add(0, SigEvent(fm->len(),  fm->timesig(), 0));
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -504,77 +401,76 @@ void Score::fixTicks()
             if (m->mmRest())
                   m->mmRest()->moveTicks(diff);
 
-//            if (!parentScore()) {
-                  //
-                  //  implement section break rest
-                  //
-                  if (m->sectionBreak() && m->pause() != 0.0)
-                        setPause(m->tick() + m->ticks(), m->pause());
+            //
+            //  implement section break rest
+            //
+            if (m->sectionBreak() && m->pause() != 0.0)
+                  setPause(m->tick() + m->ticks(), m->pause());
 
-                  //
-                  // implement fermata as a tempo change
-                  //
+            //
+            // implement fermata as a tempo change
+            //
 
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() == Segment::Type::Breath) {
-                              qreal length = 0.0;
-                              int tick = s->tick();
-                              // find longest pause
-                              for (int i = 0, n = ntracks(); i < n; ++i) {
-                                    Element* e = s->element(i);
-                                    if (e && e->type() == Element::Type::BREATH) {
-                                          Breath* b = static_cast<Breath*>(e);
-                                          length = qMax(length, b->pause());
-                                          }
-                                    }
-                              if (length != 0.0)
-                                    setPause(tick, length);
-                              }
-                        else if (s->segmentType() == Segment::Type::TimeSig) {
-                              for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-                                    TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
-                                    if (ts)
-                                          staff(staffIdx)->addTimeSig(ts);
+            for (Segment* s = m->first(); s; s = s->next()) {
+                  if (s->segmentType() == Segment::Type::Breath) {
+                        qreal length = 0.0;
+                        int tick = s->tick();
+                        // find longest pause
+                        for (int i = 0, n = ntracks(); i < n; ++i) {
+                              Element* e = s->element(i);
+                              if (e && e->type() == Element::Type::BREATH) {
+                                    Breath* b = static_cast<Breath*>(e);
+                                    length = qMax(length, b->pause());
                                     }
                               }
-                        else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
-                              foreach (Element* e, s->annotations()) {
-                                    if (e->type() == Element::Type::TEMPO_TEXT) {
-                                          const TempoText* tt = static_cast<const TempoText*>(e);
-                                          setTempo(tt->segment(), tt->tempo());
-                                          }
+                        if (length != 0.0)
+                              setPause(tick, length);
+                        }
+                  else if (s->segmentType() == Segment::Type::TimeSig) {
+                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                              TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
+                              if (ts)
+                                    staff(staffIdx)->addTimeSig(ts);
+                              }
+                        }
+                  else if (isMaster() && (s->segmentType() == Segment::Type::ChordRest)) {
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() == Element::Type::TEMPO_TEXT) {
+                                    const TempoText* tt = static_cast<const TempoText*>(e);
+                                    setTempo(tt->segment(), tt->tempo());
                                     }
-                              qreal stretch = 0.0;
-                              for (int i = 0; i < s->elist().size(); ++i) {
-                                    Element* e = s->elist().at(i);
-                                    if (!e)
-                                          continue;
-                                    ChordRest* cr = static_cast<ChordRest*>(e);
-                                    int nn = cr->articulations().size();
-                                    for (int ii = 0; ii < nn; ++ii)
-                                          stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
-                                    if (stretch != 0.0 && stretch != 1.0) {
-                                          qreal otempo = tempomap()->tempo(cr->tick());
-                                          qreal ntempo = otempo / stretch;
-                                          setTempo(cr->tick(), ntempo);
-                                          int etick = cr->tick() + cr->actualTicks() - 1;
-                                          auto e = tempomap()->find(etick);
-                                          if (e == tempomap()->end())
-                                                setTempo(etick, otempo);
-                                          break;
-                                          }
+                              }
+                        qreal stretch = 0.0;
+                        for (unsigned i = 0; i < s->elist().size(); ++i) {
+                              Element* e = s->elist().at(i);
+                              if (!e)
+                                    continue;
+                              ChordRest* cr = static_cast<ChordRest*>(e);
+                              int nn = cr->articulations().size();
+                              for (int ii = 0; ii < nn; ++ii)
+                                    stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
+                              if (stretch != 0.0 && stretch != 1.0) {
+                                    qreal otempo = tempomap()->tempo(cr->tick());
+                                    qreal ntempo = otempo / stretch;
+                                    setTempo(cr->tick(), ntempo);
+                                    int etick = cr->tick() + cr->actualTicks() - 1;
+                                    auto e = tempomap()->find(etick);
+                                    if (e == tempomap()->end())
+                                          setTempo(etick, otempo);
+                                    break;
                                     }
                               }
                         }
-//                  }
+                  }
 
             // update time signature map
             // create event if measure len and time signature are different
             // even if they are equivalent 4/4 vs 2/2
-            if (!parentScore() && ((m->len().numerator() != sig.numerator())
+
+            if (isMaster() && ((m->len().numerator() != sig.numerator())
                || (m->len().denominator() != sig.denominator()))) {
                   sig = m->len();
-                  smap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
+                  sigmap()->add(tick, SigEvent(sig, m->timesig(),  m->no()));
                   }
 
             tick += measureTicks;
@@ -702,8 +598,8 @@ void Score::setShowInvisible(bool v)
       {
       _showInvisible = v;
       rebuildBspTree();
-      _updateAll = true;
-      end();
+      setUpdateAll();
+      update();
       }
 
 //---------------------------------------------------------
@@ -713,8 +609,8 @@ void Score::setShowInvisible(bool v)
 void Score::setShowUnprintable(bool v)
       {
       _showUnprintable = v;
-      _updateAll      = true;
-      end();
+      setUpdateAll();
+      update();
       }
 
 //---------------------------------------------------------
@@ -724,8 +620,8 @@ void Score::setShowUnprintable(bool v)
 void Score::setShowFrames(bool v)
       {
       _showFrames = v;
-      _updateAll  = true;
-      end();
+      setUpdateAll();
+      update();
       }
 
 //---------------------------------------------------------
@@ -735,8 +631,8 @@ void Score::setShowFrames(bool v)
 void Score::setShowPageborders(bool v)
       {
       _showPageborders = v;
-      _updateAll = true;
-      end();
+      setUpdateAll();
+      update();
       }
 
 //---------------------------------------------------------
@@ -745,7 +641,7 @@ void Score::setShowPageborders(bool v)
 
 bool Score::dirty() const
       {
-      return !undo()->isClean();
+      return !undoStack()->isClean();
       }
 
 //---------------------------------------------------------
@@ -755,14 +651,16 @@ bool Score::dirty() const
 void Score::spell()
       {
       for (int i = 0; i < nstaves(); ++i) {
-            QList<Note*> notes;
+            std::vector<Note*> notes;
             for (Segment* s = firstSegment(); s; s = s->next1()) {
                   int strack = i * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
                         if (e && e->type() == Element::Type::CHORD)
-                              notes.append(static_cast<Chord*>(e)->notes());
+                              notes.insert(notes.end(),
+                                 static_cast<Chord*>(e)->notes().begin(),
+                                 static_cast<Chord*>(e)->notes().end());
                         }
                   }
             spellNotelist(notes);
@@ -772,14 +670,16 @@ void Score::spell()
 void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment)
       {
       for (int i = startStaff; i < endStaff; ++i) {
-            QList<Note*> notes;
+            std::vector<Note*> notes;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next()) {
                   int strack = i * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
                         if (e && e->type() == Element::Type::CHORD)
-                              notes.append(static_cast<Chord*>(e)->notes());
+                              notes.insert(notes.end(),
+                                 static_cast<Chord*>(e)->notes().begin(),
+                                 static_cast<Chord*>(e)->notes().end());
                         }
                   }
             spellNotelist(notes);
@@ -794,10 +694,10 @@ Note* prevNote(Note* n)
       {
       Chord* chord = n->chord();
       Segment* seg = chord->segment();
-      const QList<Note*> nl = chord->notes();
-      int i = nl.indexOf(n);
-      if (i)
-            return nl[i-1];
+      const std::vector<Note*> nl = chord->notes();
+      auto i = std::find(nl.begin(), nl.end(), n);
+      if (i != nl.begin())
+            return *(i-1);
       int staff      = n->staffIdx();
       int startTrack = staff * VOICES + n->voice() - 1;
       int endTrack   = 0;
@@ -819,14 +719,16 @@ Note* prevNote(Note* n)
 //   nextNote
 //---------------------------------------------------------
 
-Note* nextNote(Note* n)
+static Note* nextNote(Note* n)
       {
       Chord* chord = n->chord();
-      const QList<Note*> nl = chord->notes();
-      int i = nl.indexOf(n);
-      ++i;
-      if (i < nl.size())
-            return nl[i];
+      const std::vector<Note*> nl = chord->notes();
+      auto i = std::find(nl.begin(), nl.end(), n);
+      if (i != nl.end()) {
+            ++i;
+            if (i != nl.end())
+                  return *i;
+            }
       Segment* seg   = chord->segment();
       int staff      = n->staffIdx();
       int startTrack = staff * VOICES + n->voice() + 1;
@@ -852,35 +754,25 @@ Note* nextNote(Note* n)
 
 void Score::spell(Note* note)
       {
-      QList<Note*> notes;
+      std::vector<Note*> notes;
 
-      notes.append(note);
+      notes.push_back(note);
       Note* nn = nextNote(note);
-      notes.append(nn);
+      notes.push_back(nn);
       nn = nextNote(nn);
-      notes.append(nn);
+      notes.push_back(nn);
       nn = nextNote(nn);
-      notes.append(nn);
+      notes.push_back(nn);
 
       nn = prevNote(note);
-      notes.prepend(nn);
+      notes.insert(notes.begin(), nn);
       nn = prevNote(nn);
-      notes.prepend(nn);
+      notes.insert(notes.begin(), nn);
       nn = prevNote(nn);
-      notes.prepend(nn);
+      notes.insert(notes.begin(), nn);
 
       int opt = Ms::computeWindow(notes, 0, 7);
       note->setTpc(Ms::tpc(3, note->pitch(), opt));
-      }
-
-//---------------------------------------------------------
-//   isSavable
-//---------------------------------------------------------
-
-bool Score::isSavable() const
-      {
-      // TODO: check if file can be created if it does not exist
-      return info.isWritable() || !info.exists();
       }
 
 //---------------------------------------------------------
@@ -890,301 +782,6 @@ bool Score::isSavable() const
 void Score::appendPart(Part* p)
       {
       _parts.append(p);
-      }
-
-//---------------------------------------------------------
-//   getNextFreeMidiMapping
-//---------------------------------------------------------
-
-int Score::getNextFreeMidiMapping(int p, int ch)
-      {
-      if (ch != -1 && p != -1)
-            return p*16+ch;
-
-      else if (ch != -1 && p == -1) {
-            for (int port = 0;; port++) {
-                  if (!occupiedMidiChannels.contains(port*16+ch)) {
-                        occupiedMidiChannels.insert(port*16+ch);
-                        return port*16+ch;
-                        }
-                  }
-            }
-      else if (ch == -1 && p != -1) {
-            for (int channel = 0; channel < 16; channel++) {
-                  if (channel != 9 && !occupiedMidiChannels.contains(p*16+channel)) {
-                        occupiedMidiChannels.insert(p*16+channel);
-                        return p*16+channel;
-                        }
-                  }
-            }
-
-      for (;;searchMidiMappingFrom++) {
-            if (searchMidiMappingFrom % 16 != 9 && !occupiedMidiChannels.contains(searchMidiMappingFrom)) {
-                  occupiedMidiChannels.insert(searchMidiMappingFrom);
-                  return searchMidiMappingFrom;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   getNextFreeDrumMidiMapping
-//---------------------------------------------------------
-
-int Score::getNextFreeDrumMidiMapping()
-      {
-      for (int i = 0;; i++) {
-            if (!occupiedMidiChannels.contains(i*16+9)) {
-                  occupiedMidiChannels.insert(i*16+9);
-                  return i*16+9;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   reorderMidiMapping
-//   Set mappings in order you see in Add->Instruments
-//---------------------------------------------------------
-
-void Score::reorderMidiMapping()
-      {
-      int sequenceNumber = 0;
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  for (Channel* channel : instr->channel()) {
-                        if (!(_midiMapping[sequenceNumber].part == part
-                              && _midiMapping[sequenceNumber].articulation == channel)) {
-                              int shouldBe = channel->channel;
-                              _midiMapping.swap(sequenceNumber, shouldBe);
-                              _midiMapping[sequenceNumber].articulation->channel = sequenceNumber;
-                              channel->channel = sequenceNumber;
-                              _midiMapping[shouldBe].articulation->channel = shouldBe;
-                              }
-                        sequenceNumber++;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   removeDeletedMidiMapping
-//   Remove mappings to deleted instruments
-//---------------------------------------------------------
-
-void Score::removeDeletedMidiMapping()
-      {
-      int removeOffset = 0;
-      int mappingSize = _midiMapping.size();
-      for (int index = 0; index < mappingSize; index++) {
-            Part* p = midiMapping(index)->part;
-            if (!_parts.contains(p)) {
-                  removeOffset++;
-                  continue;
-                  }
-            // Not all channels could exist
-            bool channelExists = false;
-            const InstrumentList* il = p->instruments();
-            for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
-                  const Instrument* instr = i->second;
-                  channelExists = (_midiMapping[index].articulation->channel != -1 && instr->channel().contains(_midiMapping[index].articulation)
-                      && !(_midiMapping[index].port == -1 && _midiMapping[index].channel == -1));
-                  if (channelExists)
-                        break;
-                  }
-            if (!channelExists) {
-                  removeOffset++;
-                  continue;
-                  }
-            // Let's do a left shift by 'removeOffset' items if necessary
-            if (index != 0 && removeOffset != 0) {
-                  _midiMapping[index-removeOffset] = _midiMapping[index];
-                  _midiMapping[index-removeOffset].articulation->channel -= removeOffset;
-                  }
-            }
-      // We have 'removeOffset' deleted instruments, let's remove their mappings
-      for (int index = 0; index < removeOffset; index++)
-            _midiMapping.removeLast();
-      }
-
-//---------------------------------------------------------
-//   updateMidiMapping
-//   Add mappings to new instruments and repair existing ones
-//---------------------------------------------------------
-
-int Score::updateMidiMapping()
-      {
-      int maxport = 0;
-      occupiedMidiChannels.clear();
-      searchMidiMappingFrom = 0;
-      occupiedMidiChannels.reserve(_midiMapping.size()); // Bringing down the complexity of insertion to amortized O(1)
-
-      for(MidiMapping mm :_midiMapping) {
-            if (mm.port == -1 || mm.channel == -1)
-                  continue;
-            occupiedMidiChannels.insert((int)(mm.port)*16+(int)mm.channel);
-            if (maxport < mm.port)
-                  maxport = mm.port;
-            }
-
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  bool drum = instr->useDrumset();
-                  for (Channel* channel : instr->channel()) {
-                        bool channelExists = false;
-                        for (MidiMapping mapping: _midiMapping) {
-                              if (channel == mapping.articulation && channel->channel != -1) {
-                                    channelExists = true;
-                                    break;
-                                    }
-                              }
-                        // Channel could already exist, but have unassigned port or channel. Repair and continue
-                        if (channelExists) {
-                              if (_midiMapping[channel->channel].port == -1) {
-                                    int nm = getNextFreeMidiMapping(-1, _midiMapping[channel->channel].channel);
-                                    _midiMapping[channel->channel].port = nm / 16;
-                                    }
-                              else if (_midiMapping[channel->channel].channel == -1) {
-                                    if (drum) {
-                                          _midiMapping[channel->channel].port = getNextFreeDrumMidiMapping() / 16;
-                                          _midiMapping[channel->channel].channel = 9;
-                                          continue;
-                                          }
-                                    int nm = getNextFreeMidiMapping(_midiMapping[channel->channel].port);
-                                    _midiMapping[channel->channel].port    = nm / 16;
-                                    _midiMapping[channel->channel].channel = nm % 16;
-                                    }
-                              continue;
-                              }
-
-                        MidiMapping mm;
-                        if (drum) {
-                              mm.port = getNextFreeDrumMidiMapping() / 16;
-                              mm.channel = 9;
-                              }
-                        else {
-                              int nm = getNextFreeMidiMapping();
-                              mm.port    = nm / 16;
-                              mm.channel = nm % 16;
-                              }
-
-                        if (mm.port > maxport)
-                              maxport = mm.port;
-
-                        mm.part         = part;
-                        mm.articulation = channel;
-
-                        _midiMapping.append(mm);
-                        channel->channel = _midiMapping.size()-1;
-                        }
-                  }
-            }
-      return maxport;
-      }
-
-//---------------------------------------------------------
-//   rebuildMidiMapping
-//---------------------------------------------------------
-
-void Score::rebuildMidiMapping()
-      {
-      removeDeletedMidiMapping();
-      int maxport = updateMidiMapping();
-      reorderMidiMapping();
-      setMidiPortCount(maxport);
-      }
-
-//---------------------------------------------------------
-//   checkMidiMapping
-//   midi mapping is simple if all ports and channels
-//   don't decrease and don't have 'holes' except drum tracks
-//---------------------------------------------------------
-
-void Score::checkMidiMapping()
-      {
-      isSimpleMidiMaping = true;
-      rebuildMidiMapping();
-
-      QList<bool> drum;
-      drum.reserve(_midiMapping.size());
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  for (int j = 0; j < instr->channel().size(); ++j)
-                        drum.append(instr->useDrumset());
-                  }
-            }
-      int lastChannel  = -1; // port*16+channel
-      int lastDrumPort = -1;
-      int index = 0;
-      for (MidiMapping m : _midiMapping) {
-            if (index >= drum.size())
-                  break;
-            if (drum[index]) {
-                  lastDrumPort++;
-                  if (m.port != lastDrumPort) {
-                        isSimpleMidiMaping = false;
-                        return;
-                        }
-                  }
-            else {
-                  lastChannel++;
-                  if (lastChannel % 16 == 9)
-                        lastChannel++;
-                  int p = lastChannel / 16;
-                  int c = lastChannel % 16;
-                  if (m.port != p || m.channel != c) {
-                        isSimpleMidiMaping = false;
-                        return;
-                        }
-                  }
-            index++;
-            }
-      }
-
-//---------------------------------------------------------
-//   midiPortCount
-//---------------------------------------------------------
-
-int Score::midiPortCount() const {
-      const Score* root = rootScore();
-      if (this == root)
-            return _midiPortCount;
-      else
-            return root->midiPortCount();
-      }
-
-//---------------------------------------------------------
-//   setMidiPortCount
-//---------------------------------------------------------
-
-void Score::setMidiPortCount(int maxport) {
-      Score* root = rootScore();
-      if (this == root)
-            _midiPortCount = maxport;
-      else
-            root->setMidiPortCount(maxport);
-      }
-
-//---------------------------------------------------------
-//   midiPort
-//---------------------------------------------------------
-
-int Score::midiPort(int idx) const
-      {
-      return _midiMapping[idx].port;
-      }
-
-//---------------------------------------------------------
-//   midiChannel
-//---------------------------------------------------------
-
-int Score::midiChannel(int idx) const
-      {
-      return _midiMapping[idx].channel;
       }
 
 //---------------------------------------------------------
@@ -1215,7 +812,7 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
       if (page == 0)
             return systems;
       qreal y = pos.y() - page->pos().y();  // transform to page relative
-      const QList<System*>* sl = page->systems();
+      const QList<System*>* sl = &page->systems();
       qreal y2;
       int n = sl->size();
       for (int i = 0; i < n; ++i) {
@@ -1254,7 +851,7 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
 Measure* Score::searchMeasure(const QPointF& p) const
       {
       QList<System*> systems = searchSystem(p);
-      if (systems.isEmpty())
+      if (systems.empty())
             return 0;
 
       foreach(System* system, systems) {
@@ -1461,7 +1058,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
 bool Score::checkHasMeasures() const
       {
       Page* page = pages().front();
-      const QList<System*>* sl = page->systems();
+      const QList<System*>* sl = &page->systems();
       if (sl == 0 || sl->empty() || sl->front()->measures().empty()) {
             qDebug("first create measure, then repeat operation");
             return false;
@@ -1476,14 +1073,8 @@ bool Score::checkHasMeasures() const
 
 void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
       {
-      foreach(System* system, *systems()) {
-            if (system->isVbox())
-                  continue;
-            foreach(Bracket* b, system->brackets()) {
-                  if (b->staffIdx() == staffIdx && b->level() == srcCol)
-                        b->setLevel(dstCol);
-                  }
-            }
+      for (System* system : systems())
+            system->moveBracket(staffIdx, srcCol, dstCol);
       }
 
 //---------------------------------------------------------
@@ -1511,11 +1102,6 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
       }
 
-void Score::setSpatium(qreal v)
-      {
-      style()->setSpatium(v);
-      }
-
 //---------------------------------------------------------
 //   getCreateMeasure
 //    - return Measure for tick
@@ -1530,7 +1116,7 @@ Measure* Score::getCreateMeasure(int tick)
             int lastTick  = last ? (last->tick()+last->ticks()) : 0;
             while (tick >= lastTick) {
                   Measure* m = new Measure(this);
-                  Fraction ts = _sigmap->timesig(lastTick).timesig();
+                  Fraction ts = sigmap()->timesig(lastTick).timesig();
 // qDebug("getCreateMeasure %d  %d/%d", tick, ts.numerator(), ts.denominator());
                   m->setTick(lastTick);
                   m->setTimesig(ts);
@@ -1555,32 +1141,27 @@ Measure* Score::getCreateMeasure(int tick)
 
 void Score::addElement(Element* element)
       {
-      if (MScore::debugMode) {
-            qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
-               this, element, element->name(), element->parent(),
-               element->parent() ? element->parent()->name() : "");
-            }
+      Element* parent = element->parent();
 
-      if (element->parent() && element->parent()->type() == Element::Type::SEGMENT)
-            static_cast<Segment*>(element->parent())->measure()->setDirty();
+//      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
+//         this, element, element->name(), parent, parent ? parent->name() : "");
 
       Element::Type et = element->type();
       if (et == Element::Type::TREMOLO)
-            setLayoutAll(true);
+            setLayoutAll();
       else if (et == Element::Type::MEASURE
          || (et == Element::Type::HBOX && element->parent()->type() != Element::Type::VBOX)
          || et == Element::Type::VBOX
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
          ) {
-            setLayoutAll(true);
+            setLayoutAll();
             measures()->add(static_cast<MeasureBase*>(element));
-            addLayoutFlags(LayoutFlag::FIX_TICKS);
             return;
             }
 
-      if (element->parent())
-            element->parent()->add(element);
+      if (parent)
+            parent->add(element);
 
       switch(et) {
             case Element::Type::BEAM:
@@ -1621,14 +1202,14 @@ void Score::addElement(Element* element)
                         if (ss->system())
                               ss->system()->add(ss);
                         }
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   o->staff()->updateOttava();
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::Type::DYNAMIC:
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1651,8 +1232,8 @@ void Score::addElement(Element* element)
                   Interval oldV = ic->part()->instrument(tickStart)->transpose();
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
-                  rebuildMidiMapping();
-                  _instrumentsChanged = true;
+                  masterScore()->rebuildMidiMapping();
+                  cmdState()._instrumentsChanged = true;
                   }
                   break;
 
@@ -1667,22 +1248,15 @@ void Score::addElement(Element* element)
             case Element::Type::ARTICULATION:
             case Element::Type::ARPEGGIO:
                   {
-                  Element* cr = element->parent();
+                  Element* cr = parent;
                   if (cr->type() == Element::Type::CHORD)
                         createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
-            case Element::Type::BREATH:
-                  addLayoutFlags(LayoutFlag::FIX_TICKS);
-                  break;
-            case Element::Type::LAYOUT_BREAK:
-                  if (static_cast<LayoutBreak*>(element)->layoutBreakType() == LayoutBreak::Type::SECTION)
-                        addLayoutFlags(LayoutFlag::FIX_TICKS);
-                  break;
             default:
                   break;
             }
-      setLayoutAll(true);
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1696,30 +1270,24 @@ void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
 
-      if (MScore::debugMode) {
-            qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
-               this, element, element->name(), parent, parent ? parent->name() : "");
-            }
-
-      if (parent && parent->type() == Element::Type::SEGMENT)
-            static_cast<Segment*>(parent)->measure()->setDirty();
+//      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
+//         this, element, element->name(), parent, parent ? parent->name() : "");
 
       // special for MEASURE, HBOX, VBOX
       // their parent is not static
 
       Element::Type et = element->type();
       if (et == Element::Type::TREMOLO)
-            setLayoutAll(true);
+            setLayoutAll();
 
       else if (et == Element::Type::MEASURE
-         || (et == Element::Type::HBOX && parent->type() != Element::Type::VBOX)
+         || (et == Element::Type::HBOX && !parent->isVBox())
          || et == Element::Type::VBOX
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
             ) {
             measures()->remove(static_cast<MeasureBase*>(element));
-            addLayoutFlags(LayoutFlag::FIX_TICKS);
-            setLayoutAll(true);
+            setLayoutAll();
             return;
             }
 
@@ -1729,7 +1297,7 @@ void Score::removeElement(Element* element)
       if (parent)
             parent->remove(element);
 
-      switch(et) {
+      switch (et) {
             case Element::Type::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(element);
@@ -1747,7 +1315,6 @@ void Score::removeElement(Element* element)
             case Element::Type::PEDAL:
             case Element::Type::TEXTLINE:
             case Element::Type::HAIRPIN:
-//            case Element::Type::LYRICSLINE:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   if (et == Element::Type::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
@@ -1769,13 +1336,13 @@ void Score::removeElement(Element* element)
                               ss->system()->remove(ss);
                         }
                   o->staff()->updateOttava();
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::Type::DYNAMIC:
-                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1810,8 +1377,8 @@ void Score::removeElement(Element* element)
                   Interval oldV = ic->part()->instrument(tickStart)->transpose();
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
-                  rebuildMidiMapping();
-                  _instrumentsChanged = true;
+                  masterScore()->rebuildMidiMapping();
+                  cmdState()._instrumentsChanged = true;
                   }
                   break;
 
@@ -1828,7 +1395,7 @@ void Score::removeElement(Element* element)
             default:
                   break;
             }
-      setLayoutAll(true);
+//      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1850,10 +1417,7 @@ Measure* Score::firstMeasure() const
 
 Measure* Score::firstMeasureMM() const
       {
-      MeasureBase* mb = _measures.first();
-      while (mb && mb->type() != Element::Type::MEASURE)
-            mb = mb->next();
-      Measure* m = static_cast<Measure*>(mb);
+      Measure* m = firstMeasure();
       if (m && styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest())
             return m->mmRest();
       return m;
@@ -2073,81 +1637,6 @@ Text* Score::getText(TextStyleType subtype)
       }
 
 //---------------------------------------------------------
-//   rootScore
-//---------------------------------------------------------
-
-Score* Score::rootScore()
-      {
-      Score* score = this;
-      while (score->parentScore())
-            score = parentScore();
-      return score;
-      }
-
-const Score* Score::rootScore() const
-      {
-      const Score* score = this;
-      while (score->parentScore())
-            score = parentScore();
-      return score;
-      }
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
-
-UndoStack* Score::undo() const
-      {
-      return rootScore()->_undo;
-      }
-
-//---------------------------------------------------------
-//   repeatList
-//---------------------------------------------------------
-
-RepeatList* Score::repeatList()  const
-      {
-      return rootScore()->_repeatList;
-      }
-
-//---------------------------------------------------------
-//   links
-//---------------------------------------------------------
-
-QMap<int, LinkedElements*>& Score::links()
-      {
-      return rootScore()->_elinks;
-      }
-
-//---------------------------------------------------------
-//   setTempomap
-//---------------------------------------------------------
-
-void Score::setTempomap(TempoMap* tm)
-      {
-      delete _tempomap;
-      _tempomap = tm;
-      }
-
-//---------------------------------------------------------
-//   tempomap
-//---------------------------------------------------------
-
-TempoMap* Score::tempomap() const
-      {
-      return rootScore()->_tempomap;
-      }
-
-//---------------------------------------------------------
-//   sigmap
-//---------------------------------------------------------
-
-TimeSigMap* Score::sigmap() const
-      {
-      return rootScore()->_sigmap;
-      }
-
-//---------------------------------------------------------
 //   metaTag
 //---------------------------------------------------------
 
@@ -2155,7 +1644,7 @@ QString Score::metaTag(const QString& s) const
       {
       if (_metaTags.contains(s))
             return _metaTags.value(s);
-      return rootScore()->_metaTags.value(s);
+      return _masterScore->_metaTags.value(s);
       }
 
 //---------------------------------------------------------
@@ -2171,17 +1660,17 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void Score::addExcerpt(Score* score)
+void MasterScore::addExcerpt(Score* score)
       {
       Excerpt* ex = new Excerpt(this);
       ex->setPartScore(score);
       excerpts().append(ex);
-      ex->setTitle(score->name());
+      ex->setTitle(score->fileInfo()->completeBaseName());
       for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
                   continue;
-            foreach(Staff* ps, ls->staves()) {
+            for (Staff* ps : ls->staves()) {
                   if (ps->score() == this) {
                         ex->parts().append(ps->part());
                         break;
@@ -2214,7 +1703,7 @@ void Score::removeExcerpt(Score* score)
 //   clone
 //---------------------------------------------------------
 
-Score* Score::clone()
+MasterScore* MasterScore::clone()
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
@@ -2228,10 +1717,10 @@ Score* Score::clone()
       buffer.close();
 
       XmlReader r(buffer.buffer());
-      Score* score = new Score(style());
+      MasterScore* score = new MasterScore(style());
       score->read1(r, true);
 
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       score->scanElements(0, elementAdjustReadPos);  //??
       return score;
@@ -2245,29 +1734,6 @@ void Score::setSynthesizerState(const SynthesizerState& s)
       {
       // TODO: make undoable
       _synthesizerState = s;
-      }
-
-//---------------------------------------------------------
-//   setLayoutAll
-//---------------------------------------------------------
-
-void Score::setLayoutAll(bool val)
-      {
-      foreach(Score* score, scoreList())
-            score->_layoutAll = val;
-      }
-
-//---------------------------------------------------------
-//   removeOmr
-//---------------------------------------------------------
-
-void Score::removeOmr()
-      {
-      _showOmr = false;
-#ifdef OMR
-      delete _omr;
-      _omr = 0;
-#endif
       }
 
 //---------------------------------------------------------
@@ -2414,7 +1880,7 @@ bool Score::appendScore(Score* score)
                   }
             addElement(ns);
             }
-      setLayoutAll(true);
+      setLayoutAll();
       return true;
       }
 
@@ -2424,7 +1890,7 @@ bool Score::appendScore(Score* score)
 
 void Score::splitStaff(int staffIdx, int splitPoint)
       {
-      qDebug("split staff %d point %d", staffIdx, splitPoint);
+//      qDebug("split staff %d point %d", staffIdx, splitPoint);
 
       //
       // create second staff
@@ -2443,11 +1909,12 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Segment* seg = firstMeasure()->getSegment(Segment::Type::Clef, 0);
       clef->setParent(seg);
       undoAddElement(clef);
+      clef->layout();
 
       undoChangeKeySig(ns, 0, s->keySigEvent(0));
 
-      rebuildMidiMapping();
-      _instrumentsChanged = true;
+      masterScore()->rebuildMidiMapping();
+      cmdState()._instrumentsChanged = true;
       doLayout();
 
       //
@@ -2485,7 +1952,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                   for (Note* note : removeNotes) {
                         undoRemoveElement(note);
                         Chord* chord = note->chord();
-                        if (chord->notes().isEmpty()) {
+                        if (chord->notes().empty()) {
                               for (auto sp : spanner()) {
                                     Slur* slur = static_cast<Slur*>(sp.second);
                                     if (slur->type() != Element::Type::SLUR)
@@ -2671,12 +2138,14 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                   if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span - (eidx-sidx));
                   }
+#if 0 // TODO
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                   int newSpan = span - (eidx-sidx) + 1;
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
                   undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
                   }
+#endif
             }
       }
 
@@ -2696,6 +2165,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                   if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span + (eidx-sidx));
                   }
+#if 0 // TODO
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx < (staffIdx + span))) {
                   int idx = staffIdx + span - 1;
@@ -2703,6 +2173,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                         idx = _staves.size() - 1;
                   undoChangeBarLineSpan(staff, span, 0, (_staves[idx]->lines()-1)*2);
                   }
+#endif
             }
       }
 
@@ -2789,7 +2260,7 @@ void Score::cmdRemoveStaff(int staffIdx)
 
 void Score::sortStaves(QList<int>& dst)
       {
-      systems()->clear();  //??
+      systems().clear();  //??
       _parts.clear();
       Part* curPart = 0;
       QList<Staff*> dl;
@@ -2979,7 +2450,7 @@ void Score::padToggle(Pad n)
 
 void Score::deselect(Element* el)
       {
-      refresh |= el->abbox();
+      addRefresh(el->abbox());
       _selection.remove(el);
       setSelectionChanged(true);
       }
@@ -3021,14 +2492,14 @@ void Score::selectSingle(Element* e, int staffIdx)
       deselectAll();
       if (e == 0) {
             selState = SelState::NONE;
-            _updateAll = true;
+            setUpdateAll();
             }
       else {
             if (e->type() == Element::Type::MEASURE) {
                   select(e, SelectType::RANGE, staffIdx);
                   return;
                   }
-            refresh |= e->abbox();
+            addRefresh(e->abbox());
             _selection.add(e);
             _is.setTrack(e->track());
             selState = SelState::LIST;
@@ -3072,12 +2543,12 @@ void Score::selectAdd(Element* e)
                   select(0, SelectType::SINGLE, 0);
                   return;
                   }
-            _updateAll = true;
+            setUpdateAll();
             selState = SelState::RANGE;
             _selection.updateSelectedElements();
             }
       else { // None or List
-            refresh |= e->abbox();
+            addRefresh(e->abbox());
             if (_selection.elements().contains(e))
                   _selection.remove(e);
             else {
@@ -3373,9 +2844,9 @@ void Score::lassoSelectEnd()
       int endStaff          = 0;
       const ChordRest* endCR = 0;
 
-      if (_selection.elements().isEmpty()) {
+      if (_selection.elements().empty()) {
             _selection.setState(SelState::NONE);
-            _updateAll = true;
+            setUpdateAll();
             return;
             }
       _selection.setState(SelState::LIST);
@@ -3408,7 +2879,7 @@ void Score::lassoSelectEnd()
                   _selection.setState(SelState::RANGE);
             _selection.updateSelectedElements();
             }
-      _updateAll = true;
+      setUpdateAll();
       }
 
 //---------------------------------------------------------
@@ -3524,7 +2995,7 @@ void Score::cmdSelectAll()
       Measure* last = lastMeasureMM();
       selectRange(first, 0);
       selectRange(last, nstaves() - 1);
-      setUpdateAll(true);
+      setUpdateAll();
       end();
       }
 
@@ -3566,7 +3037,7 @@ void Score::cmdSelectSection()
 
 void Score::undo(UndoCommand* cmd) const
       {
-      undo()->push(cmd);
+      undoStack()->push(cmd);
       }
 
 //---------------------------------------------------------
@@ -3575,13 +3046,13 @@ void Score::undo(UndoCommand* cmd) const
 
 int Score::linkId()
       {
-      return (rootScore()->_linkId)++;
+      return (masterScore()->_linkId)++;
       }
 
 // val is a used link id
 void Score::linkId(int val)
       {
-      Score* s = rootScore();
+      Score* s = masterScore();
       if (val >= s->_linkId)
             s->_linkId = val + 1;   // update unused link id
       }
@@ -3595,7 +3066,7 @@ void Score::linkId(int val)
 QList<Score*> Score::scoreList()
       {
       QList<Score*> scores;
-      Score* root = rootScore();
+      Score* root = masterScore();
       scores.append(root);
       for (const Excerpt* ex : root->excerpts()) {
             if (ex->partScore())
@@ -3636,7 +3107,7 @@ void Score::appendPart(const QString& name)
             t = &defaultInstrument;
             }
 
-      if (t->channel.isEmpty()) {
+      if (t->channel.empty()) {
             Channel a;
             a.chorus = 0;
             a.reverb = 0;
@@ -3664,7 +3135,7 @@ void Score::appendPart(const QString& name)
       part->staves()->front()->setBarLineSpan(part->nstaves());
       undoInsertPart(part, n);
       fixTicks();
-      rebuildMidiMapping();
+      masterScore()->rebuildMidiMapping();
       }
 
 //---------------------------------------------------------
@@ -3890,7 +3361,7 @@ ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
 //   called once at opening file, adds soloMute marks
 //---------------------------------------------------------
 
-void Score::setSoloMute()
+void MasterScore::setSoloMute()
       {
       for (int i = 0; i < _midiMapping.size(); i++) {
             Channel* b = _midiMapping[i].articulation;
@@ -3904,18 +3375,6 @@ void Score::setSoloMute()
                         }
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   setName
-//---------------------------------------------------------
-
-void Score::setName(QString s)
-      {
-      s.replace('/', '_');    // for sanity
-      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
-            s += ".mscz";
-      info.setFile(s);
       }
 
 //---------------------------------------------------------
@@ -3942,7 +3401,7 @@ QString Score::title()
             fn = metaTag("workTitle");
 
       if (fn.isEmpty())
-            fn = fileInfo()->completeBaseName();
+            fn = masterScore()->fileInfo()->completeBaseName();
 
       if (fn.isEmpty())
             fn = "Untitled";
@@ -4422,11 +3881,11 @@ void Score::changeVoice(int voice)
                   }
             }
 
-      if (!el.isEmpty())
+      if (!el.empty())
             selection().clear();
       for (Element* e : el)
             select(e, SelectType::ADD, -1);
-      setLayoutAll(true);
+      setLayoutAll();
       endCmd();
       }
 
@@ -4507,7 +3966,7 @@ bool Score::setProperty(P_ID id, const QVariant& v)
                   qDebug("Score::setProperty: unhandled id");
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -4525,5 +3984,128 @@ QVariant Score::propertyDefault(P_ID id) const
             }
       }
 
+//---------------------------------------------------------
+//   setStyle
+//---------------------------------------------------------
+
+void Score::setStyle(const MStyle& s)
+      {
+      if (style()->value(StyleIdx::spatium) != s.value(StyleIdx::spatium))
+            spatiumChanged(style()->value(StyleIdx::spatium).toDouble(), s.value(StyleIdx::spatium).toDouble());
+      _style = s;
+      }
+
+//---------------------------------------------------------
+//   MasterScore
+//---------------------------------------------------------
+
+MasterScore::MasterScore()
+   : Score()
+      {
+      _tempomap    = new TempoMap;
+      _sigmap      = new TimeSigMap();
+      _undo        = new UndoStack();
+      _repeatList  = new RepeatList(this);
+      _revisions   = new Revisions;
+      setMasterScore(this);
+
+      _undoRedo    = false;
+      _omr         = 0;
+      _showOmr     = false;
+
+#if defined(Q_OS_WIN)
+      metaTags().insert("platform", "Microsoft Windows");
+#elif defined(Q_OS_MAC)
+      metaTags().insert("platform", "Apple Macintosh");
+#elif defined(Q_OS_LINUX)
+      metaTags().insert("platform", "Linux");
+#else
+      metaTags().insert("platform", "Unknown");
+#endif
+      metaTags().insert("movementNumber", "");
+      metaTags().insert("movementTitle", "");
+      metaTags().insert("workNumber", "");
+      metaTags().insert("workTitle", "");
+      metaTags().insert("arranger", "");
+      metaTags().insert("composer", "");
+      metaTags().insert("lyricist", "");
+      metaTags().insert("poet", "");
+      metaTags().insert("translator", "");
+      metaTags().insert("source", "");
+      metaTags().insert("copyright", "");
+      metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+      }
+
+MasterScore::MasterScore(const MStyle* s)
+   : MasterScore{}
+      {
+      setStyle(*s);
+      }
+
+MasterScore::~MasterScore()
+      {
+      delete _revisions;
+      delete _repeatList;
+      delete _undo;
+      delete _sigmap;
+      delete _tempomap;
+      qDeleteAll(_excerpts);
+      }
+
+//---------------------------------------------------------
+//   isSavable
+//---------------------------------------------------------
+
+bool MasterScore::isSavable() const
+      {
+      // TODO: check if file can be created if it does not exist
+      return fileInfo()->isWritable() || !fileInfo()->exists();
+      }
+
+//---------------------------------------------------------
+//   setTempomap
+//---------------------------------------------------------
+
+void MasterScore::setTempomap(TempoMap* tm)
+      {
+      delete _tempomap;
+      _tempomap = tm;
+      }
+
+//---------------------------------------------------------
+//   setName
+//---------------------------------------------------------
+
+void Score::setName(const QString& ss)
+      {
+      QString s(ss);
+      s.replace('/', '_');    // for sanity
+      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
+            s += ".mscz";
+      info.setFile(s);
+      }
+
+//---------------------------------------------------------
+//   removeOmr
+//---------------------------------------------------------
+
+void MasterScore::removeOmr()
+      {
+      _showOmr = false;
+#ifdef OMR
+      delete _omr;
+#endif
+      _omr = 0;
+      }
+
+//---------------------------------------------------------
+//   addRefresh
+//---------------------------------------------------------
+
+void Score::addRefresh(const QRectF& r)
+      {
+      _updateState.refresh |= r;
+      cmdState().setUpdateMode(UpdateMode::Update);
+      }
 }
 

@@ -29,7 +29,7 @@ class Accidental;
 class TrillSegment : public LineSegment {
       Q_OBJECT
 
-      QList<SymId> _symbols;
+      std::vector<SymId> _symbols;
 
       void symbolLine(SymId start, SymId fill);
       void symbolLine(SymId start, SymId fill, SymId end);
@@ -51,8 +51,8 @@ class TrillSegment : public LineSegment {
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
 
-      QList<SymId> symbols() const           { return _symbols; }
-      void setSymbols(const QList<SymId>& s) { _symbols = s; }
+      std::vector<SymId> symbols() const           { return _symbols; }
+      void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
       };
 
 //---------------------------------------------------------
@@ -98,7 +98,7 @@ class Trill : public SLine {
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
       QString trillTypeName() const;
-      QString trillTypeUserName();
+      QString trillTypeUserName() const;
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
 
@@ -110,7 +110,7 @@ class Trill : public SLine {
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void setYoff(qreal) override;
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 struct TrillTableItem {

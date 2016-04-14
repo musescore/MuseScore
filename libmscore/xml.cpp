@@ -85,14 +85,14 @@ bool XmlReader::hasAttribute(const char* s) const
 
 QPointF XmlReader::readPoint()
       {
-      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
 #ifndef NDEBUG
       if (!attributes().hasAttribute("x")) {
-            XmlStreamAttributes map = attributes();
+            QXmlStreamAttributes map = attributes();
             qDebug("XmlReader::readPoint: x attribute missing: %s (%d)",
                name().toUtf8().data(), map.size());
             for (int i = 0; i < map.size(); ++i) {
-                  const XmlStreamAttribute& a = map.at(i);
+                  const QXmlStreamAttribute& a = map.at(i);
                   qDebug(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
                   }
             unknown();
@@ -114,7 +114,7 @@ QPointF XmlReader::readPoint()
 
 QColor XmlReader::readColor()
       {
-      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
       QColor c;
       c.setRed(intAttribute("r"));
       c.setGreen(intAttribute("g"));
@@ -130,7 +130,7 @@ QColor XmlReader::readColor()
 
 QSizeF XmlReader::readSize()
       {
-      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
       QSizeF p;
       p.setWidth(doubleAttribute("w", 0.0));
       p.setHeight(doubleAttribute("h", 0.0));
@@ -144,7 +144,7 @@ QSizeF XmlReader::readSize()
 
 QRectF XmlReader::readRect()
       {
-      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
       QRectF p;
       p.setX(doubleAttribute("x", 0.0));
       p.setY(doubleAttribute("y", 0.0));
@@ -160,7 +160,7 @@ QRectF XmlReader::readRect()
 
 Fraction XmlReader::readFraction()
       {
-      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
       int z = attribute("z", "0").toInt();
       int n = attribute("n", "0").toInt();
       skipCurrentElement();
@@ -174,7 +174,7 @@ Fraction XmlReader::readFraction()
 
 void XmlReader::unknown()
       {
-      if (XmlStreamReader::error())
+      if (QXmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));
       qDebug("%s: xml read error at line %lld col %lld: %s",
          qPrintable(docName), lineNumber(), columnNumber(),
@@ -221,8 +221,8 @@ double XmlReader::readDouble(double min, double max)
 bool XmlReader::readBool()
       {
       bool val;
-      XmlStreamReader::TokenType tt = readNext();
-      if (tt == XmlStreamReader::Characters) {
+      QXmlStreamReader::TokenType tt = readNext();
+      if (tt == QXmlStreamReader::Characters) {
             val = text().toInt() != 0;
             readNext();
             }
@@ -400,7 +400,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
       if (name == 0)
             return;
 
-      switch(propertyType(id)) {
+      switch (propertyType(id)) {
             case P_TYPE::BOOL:
             case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
@@ -440,16 +440,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                              }
                   break;
             case P_TYPE::DIRECTION:
-                  switch (MScore::Direction(data.toInt())) {
-                        case MScore::Direction::UP:
-                              tag(name, QVariant("up"));
-                              break;
-                        case MScore::Direction::DOWN:
-                              tag(name, QVariant("down"));
-                              break;
-                        case MScore::Direction::AUTO:
-                              break;
-                        }
+                  tag(name, data.value<Direction>().toString());
                   break;
             case P_TYPE::DIRECTION_H:
                   switch (MScore::DirectionH(data.toInt())) {
@@ -573,9 +564,18 @@ void Xml::tag(const QString& name, QVariant data)
                   *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
                   }
                   break;
-            default:
-                  qDebug("Xml::tag: unsupported type %d", data.type());
-                  // abort();
+            default: {
+                  const char* type = data.typeName();
+                  if (strcmp(type, "Ms::Spatium") == 0) {
+                        *this << "<" << name << ">";
+                        *this << data.value<Spatium>().val();
+                        *this << "</" << ename << ">\n";
+                        }
+                  else {
+                        qDebug("Xml::tag: unsupported type %d %s", data.type(), type);
+                        // abort();
+                        }
+                  }
                   break;
             }
       }
@@ -658,25 +658,25 @@ void Xml::dump(int len, const unsigned char* p)
 void XmlReader::htmlToString(int level, QString* s)
       {
       *s += QString("<%1").arg(name().toString());
-      for (const XmlStreamAttribute& a : attributes())
+      for (const QXmlStreamAttribute& a : attributes())
             *s += QString(" %1=\"%2\"").arg(a.name().toString()).arg(a.value().toString());
       *s += ">";
       ++level;
       for (;;) {
-            XmlStreamReader::TokenType t = readNext();
+            QXmlStreamReader::TokenType t = readNext();
             switch(t) {
-                  case XmlStreamReader::StartElement:
+                  case QXmlStreamReader::StartElement:
                         htmlToString(level, s);
                         break;
-                  case XmlStreamReader::EndElement:
+                  case QXmlStreamReader::EndElement:
                         *s += QString("</%1>").arg(name().toString());
                         --level;
                         return;
-                  case XmlStreamReader::Characters:
+                  case QXmlStreamReader::Characters:
                         if (!isWhitespace())
                               *s += text().toString().toHtmlEscaped();
                         break;
-                  case XmlStreamReader::Comment:
+                  case QXmlStreamReader::Comment:
                         break;
 
                   default:
@@ -696,18 +696,18 @@ QString XmlReader::readXml()
       QString s;
       int level = 1;
       for (;;) {
-            XmlStreamReader::TokenType t = readNext();
+            QXmlStreamReader::TokenType t = readNext();
             switch(t) {
-                  case XmlStreamReader::StartElement:
+                  case QXmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;
-                  case XmlStreamReader::EndElement:
+                  case QXmlStreamReader::EndElement:
                         return s;
-                  case XmlStreamReader::Characters:
+                  case QXmlStreamReader::Characters:
                         if (!isWhitespace() || text().toString() == "\n")
                               s += text().toString().toHtmlEscaped();
                         break;
-                  case XmlStreamReader::Comment:
+                  case QXmlStreamReader::Comment:
                         break;
 
                   default:
@@ -835,17 +835,6 @@ int Xml::spannerId(const Spanner* s)
                   return i.first;
             }
       return addSpanner(s);
-      }
-
-//---------------------------------------------------------
-//   clefs
-//---------------------------------------------------------
-
-QList<std::pair<int, ClefType>>& XmlReader::clefs(int idx)
-      {
-      while (idx >= _clefs.size())
-            _clefs.append(QList<std::pair<int,ClefType>>());
-      return _clefs[idx];
       }
 
 //---------------------------------------------------------
