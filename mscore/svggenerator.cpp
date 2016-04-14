@@ -232,7 +232,7 @@ private:
     QString     stateString;
     QTextStream stateStream;
 
-// To eliminate transform attribute on polylines
+// Qt translates everything. These help avoid SVG transform="translate()".
     qreal _dx;
     qreal _dy;
 
@@ -274,7 +274,8 @@ protected:
 
 #define SVG_CLASS    " class=\""
 
-#define SVG_ELEMENT_END "/>"
+#define SVG_ELEMENT_END  "/>"
+#define SVG_RPAREN_QUOTE ")\""
 
 #define SVG_TITLE_BEGIN "<title>"
 #define SVG_TITLE_END   "</title>"
@@ -305,6 +306,8 @@ protected:
 
 #define SVG_FILL_RULE       " fill-rule=\"evenodd\""
 #define SVG_VECTOR_EFFECT   " vector-effect=\"non-scaling-stroke\""
+
+#define SVG_MATRIX    " transform=\"matrix("
 
 public:
     SvgPaintEngine()
@@ -1126,10 +1129,28 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
     if (!qFuzzyIsNull(state.opacity() - 1))
         stateStream << SVG_OPACITY << state.opacity() << SVG_QUOTE;
 
-    // Set these class variables for later use in the drawXXX() functions
-    QMatrix mx = state.matrix();
-    _dx = mx.dx();
-    _dy = mx.dy();
+    // Translations, SVG transform="translate()", are handled separately from
+    // other transformations such as rotation. Qt translates everything, but
+    // other transformations do occur, and must be handled here.
+    QTransform t = state.transform();
+    if (t.m11() == t.m22()    // No scaling
+     && t.m12() == t.m21()) { // No rotation, etc.
+          // No transformation except translation
+          _dx = t.m31();
+          _dy = t.m32();
+    }
+    else {
+          // Other transformations are more straightforward with a full matrix
+          _dx = 0;
+          _dy = 0;
+          stateStream << SVG_MATRIX << t.m11() << SVG_COMMA
+                                    << t.m12() << SVG_COMMA
+                                    << t.m21() << SVG_COMMA
+                                    << t.m22() << SVG_COMMA
+                                    << t.m31() << SVG_COMMA
+                                    << t.m32() << SVG_RPAREN_QUOTE;
+    }
+
 }
 
 void SvgPaintEngine::drawPath(const QPainterPath &p)
