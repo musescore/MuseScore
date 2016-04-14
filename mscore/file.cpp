@@ -121,7 +121,7 @@ static void paintElement(QPainter& p, const Element* e)
 
 static void paintElements(QPainter& p, const QList<const Element*>& el)
 {
-    foreach (const Element* e, el) {
+    for (const Element* e : el) {
         if (!e->visible())
             continue;
         paintElement(p, e);
@@ -2539,9 +2539,9 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       if (trimMargin >= 0 && score->npages() == 1)
             p.translate(-r.topLeft());
 
-      foreach (Page* page, score->pages()) {
+      for (Page* page : score->pages()) {
             // 1st pass: StaffLines
-            foreach (System* s, *(page->systems())) {
+            for  (System* s : *(page->systems())) {
                   for (int i = 0, n = s->staves()->size(); i < n; i++) {
                         if (score->staff(i)->invisible())
                               continue;  // ignore invisible staves
@@ -2550,10 +2550,11 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                         // MuseScore draws staff lines by measure, but for SVG they can
                         // generally be drawn once for each system. This makes a big
                         // difference for scores that scroll horizontally on a single
-                        // page. But there is an exception to this rule:
+                        // page. But there are exceptions to this rule:
                         //
                         //   ~ One (or more) invisible measure(s) in a system/staff ~
                         //   ~ One (or more) elements of type HBOX or VBOX          ~
+                        //
                         // In these cases the SVG staff lines for the system/staff
                         // are drawn by measure.
                         //
@@ -2593,7 +2594,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             qStableSort(pel.begin(), pel.end(), elementLessThan);
 
             Element::Type eType;
-            foreach (const Element* e, pel) {
+            for (const Element* e : pel) {
                   // Always exclude invisible elements
                   if (!e->visible())
                         continue;
