@@ -34,7 +34,10 @@
 #include <QLoggingCategory>
 #include <QModelIndex>
 
+#ifndef Q_OS_WIN
+// no precompiled QtWebEngine in Qt 5.6 windows gcc
 #include <QWebEngineView>
+#endif
 
 #include <QtXml>
 #include <QAbstractMessageHandler>
