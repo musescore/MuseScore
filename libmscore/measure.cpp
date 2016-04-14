@@ -2203,7 +2203,8 @@ bool Measure::slashStyle(int staffIdx) const
 //---------------------------------------------------------
 //   isFinalMeasureOfSection
 //    returns true if this measure is final actual measure of a section
-//    takes into consideration fact that subsequent measures base objects may have section break before encountering next actual measure
+//    takes into consideration fact that subsequent measures base objects
+//    may have section break before encountering next actual measure
 //---------------------------------------------------------
 
 bool Measure::isFinalMeasureOfSection() const

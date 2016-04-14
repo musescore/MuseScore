@@ -15,6 +15,17 @@
 - Implement a way to (re-)layout only the modified part of the score.
   A reorganization of layout is needed for this. Layout should work in one pass in
   an incremental way.
+  The pattern to trigger incremental layout is:
+            score->startCmd();
+            ...
+            score->setLayout(tick1);      // tick position of score change
+            ...
+            score->setLayout(tickn);      // another change at a different position
+            ...
+            score->endCmd();
+   setLayout(int tick) records the min+max value of all calls and feeds it
+   to score->doLayoutRange(int minTick, int maxTick);
+
 
 - Do not allow more than one System on a line. In 2.x a horizontal box splits
   a line into two systems. In 3.x a horizontal box is handled as a special measure.

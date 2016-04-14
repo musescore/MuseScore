@@ -175,16 +175,19 @@ void Clef::layout()
             // only if there is a clef change
             if (show && tick > 0) {
                   Measure* m = clefSeg->measure();
-                  show =
-                        // show this clef if:
-                        // it is not a courtesy clef (not at the end of the last measure of the system)
-                        (m->system() && m != m->system()->lastMeasure()) || (clefSeg->tick() != m->endTick())
-                        // if courtesy clef: show if score has courtesy clefs on
+
+                  // show this clef if:
+                  //    - it is not a courtesy clef (not at the end of the last measure of the system)
+                  //    - if courtesy clef: show if score has courtesy clefs on
+                  //       AND measure is not at the end of a repeat or of a section
+                  //       AND this clef has courtesy clef turned on
+
+                  bool notCourtesy = (m->system() && m != m->system()->lastMeasure()) || (clefSeg->tick() != m->endTick());
+                  show = notCourtesy
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
-                              // AND measure is not at the end of a repeat or of a section
                               && !( m->repeatEnd() || m->isFinalMeasureOfSection() )
-                              // AND this clef has courtesy clef turned on
                               && showCourtesy() );
+//                  printf("=====section %d\n", m->isFinalMeasureOfSection());
                   }
 
             // if clef not to show or not compatible with staff group

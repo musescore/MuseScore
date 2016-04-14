@@ -95,7 +95,7 @@ void TestClefCourtesy::clef_courtesy01()
 
       // check the not required courtesy clef element is there but it is not shown
       clefCourt = nullptr;
-      m = m2->prevMeasure();
+      m   = m2->prevMeasure();
       seg = m->findSegment(Segment::Type::Clef, m2->tick());
       QVERIFY2(seg, "No SegClef in measure 6.");
       clefCourt = static_cast<Clef*>(seg->element(0));
