@@ -3066,18 +3066,15 @@ System* Score::collectSystem(LayoutContext& lc)
                         ww = m->minWidth1();    // without system header
                   else
                         ww = computeMinWidth(m->first(), false);
-//                  if (ww < minMeasureWidth)
-//                        ww = minMeasureWidth;
                   ww += m->createEndBarLines(true);
-//                  m->setWidth(ww);
 
                   qreal stretch = m->userStretch() * measureSpacing;
                   if (stretch < 1.0)
                         stretch = 1.0;
                   ww *= stretch;
-                  m->setWidth(ww);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
+                  m->setWidth(ww);
 
                   bool hasCourtesy;
                   cautionaryW = cautionaryWidth(m, hasCourtesy) * stretch;
@@ -3093,7 +3090,8 @@ System* Score::collectSystem(LayoutContext& lc)
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure
 
-            if ((system->measures().size() > 1) && (minWidth + ww > systemWidth)) {
+
+            if (!system->measures().empty() && (minWidth + ww > systemWidth)) {
                   system->measures().pop_back();
                   lc.curMeasure->setSystem(oldSystem);
                   break;
@@ -3112,8 +3110,7 @@ System* Score::collectSystem(LayoutContext& lc)
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
                   case LayoutMode::SYSTEM:
-                        pbreak =
-                              lc.curMeasure->pageBreak()
+                        pbreak = lc.curMeasure->pageBreak()
                                  || lc.curMeasure->lineBreak()
                                  || lc.curMeasure->sectionBreak()
                                  || lc.curMeasure->isVBox()
@@ -3136,10 +3133,11 @@ System* Score::collectSystem(LayoutContext& lc)
             getNextMeasure(lc);
             minWidth += ww;
 
-            Element::Type nt = lc.nextMeasure ? lc.nextMeasure->type() : Element::Type::INVALID;
+            Element::Type nt = lc.curMeasure ? lc.curMeasure->type() : Element::Type::INVALID;
             if (pbreak || nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX
-               || (minWidth + minMeasureWidth > systemWidth))
+               || (minWidth + minMeasureWidth > systemWidth)) {
                   break;      // break system
+                  }
 
             // whether the measure actually has courtesy elements or whether we added space for hypothetical ones,
             // we should remove the width of courtesy elements for this measure from the accumulated total
