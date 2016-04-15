@@ -123,10 +123,3 @@ To run the debug version, type:
 
 ### Testing
 See mtest/README.md or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
-
-### Program Documentation
-To generate program documentation using DoxyGen, first do `make debug`, then type:
-
-    make doxy
-
-Browse the documentation in subdirectory Doc/html/index.html using any html browser.
