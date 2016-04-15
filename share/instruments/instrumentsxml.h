@@ -548,7 +548,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "B She."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Brass"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Brass"),
 //: Brass
-QT_TRANSLATE_NOOP("InstrumentsXML", "Br."),
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Br.", "Brass"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Horn in F"),
 //: Horn in F
 QT_TRANSLATE_NOOP("InstrumentsXML", "F Hn."),
@@ -717,7 +717,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Rag Dung"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Rg. Dng."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bugle"),
 //: Bugle
-QT_TRANSLATE_NOOP("InstrumentsXML", "Bu."),
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Bu.", "Bugle"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Soprano Bugle"),
 //: Soprano Bugle
 QT_TRANSLATE_NOOP("InstrumentsXML", "Sop. Bu."),
@@ -1056,7 +1056,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Tam-tam"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tam-tam"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bells"),
 //: Bells
-QT_TRANSLATE_NOOP("InstrumentsXML", "Be."),
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Be.", "Bells"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Sleigh Bells"),
 //: Sleigh Bells
 QT_TRANSLATE_NOOP("InstrumentsXML", "Sle. Be."),
@@ -1117,8 +1117,8 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Clv."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Castanets"),
 //: Castanets
 QT_TRANSLATE_NOOP("InstrumentsXML", "Cst."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Guiro"),
-//: Guiro
+QT_TRANSLATE_NOOP("InstrumentsXML", "Güiro"),
+//: Güiro
 QT_TRANSLATE_NOOP("InstrumentsXML", "Gro."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Maracas"),
 //: Maracas
@@ -1563,6 +1563,21 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "5-str. Electric Bass"),
 //: 5-str. Electric Bass
 QT_TRANSLATE_NOOP("InstrumentsXML", "El. B."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "5-str. Electric Bass [Tablature]"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Prima"),
+//: Prima
+QT_TRANSLATE_NOOP("InstrumentsXML", "Pr."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Brač"),
+//: Brač
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Br.", "Brač"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Čelo"),
+//: Čelo
+QT_TRANSLATE_NOOP("InstrumentsXML", "Č."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Bugarija"),
+//: Bugarija
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Bu.", "Bugarija"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Berda"),
+//: Berda
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Be.", "Berda"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Strings"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Erhu"),
 //: Erhu
