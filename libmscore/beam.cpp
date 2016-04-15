@@ -504,7 +504,7 @@ void Beam::layout()
             layout2(crl, st, n);
 
             qreal lw2      = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
-            ChordRest* cr  = crl.front();
+//            ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
 //            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
 

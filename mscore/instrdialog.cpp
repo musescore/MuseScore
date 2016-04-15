@@ -456,9 +456,9 @@ void MuseScore::editInstrList()
                         // this staff starts a span
                         curSpan = setSpan;
                         // calculate spanFrom and spanTo values
-                        int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                        int linesTo = masterScore->staff(i + setSpan - 1)->lines();
-                        int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
+//                        int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+//                        int linesTo = masterScore->staff(i + setSpan - 1)->lines();
+//                        int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
 //TODO                         s->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
                         }
 

@@ -465,7 +465,7 @@ static void bspInsert(void* bspTree, Element* e)
       ((BspTree*) bspTree)->insert(e);
       }
 
-static void countElements(void* data, Element* e)
+static void countElements(void* data, Element* /*e*/)
       {
       ++(*(int*)data);
       }
