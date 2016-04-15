@@ -165,14 +165,62 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="createScore">
-       <property name="text">
-        <string>Join Scores</string>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxJoinScores">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>63</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Save Joined Score</string>
+     </property>
+     <widget class="QPushButton" name="createScore">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>20</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Join Scores</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxAddPageBreak">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>281</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add page break between scores</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxAddSectionBreak">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>281</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add section break between scores</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -196,6 +244,8 @@
   <tabstop>createNew</tabstop>
   <tabstop>load</tabstop>
   <tabstop>print</tabstop>
+  <tabstop>checkBoxAddSectionBreak</tabstop>
+  <tabstop>checkBoxAddPageBreak</tabstop>
   <tabstop>createScore</tabstop>
  </tabstops>
  <resources/>
