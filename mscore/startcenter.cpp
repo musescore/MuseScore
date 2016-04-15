@@ -22,7 +22,7 @@ namespace Ms {
 //   showStartcenter
 //---------------------------------------------------------
 
-void MuseScore::showStartcenter(bool val)
+void MuseScore::showStartcenter(bool /*val*/)
       {
 /*      QAction* a = getAction("startcenter");
       if (val && startcenter == nullptr) {

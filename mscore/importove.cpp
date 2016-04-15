@@ -1218,6 +1218,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             measure->setBreakMultiMeasureRest(true);
             }
 
+#if 0 // TODO
       // barline
       BarLineType bartype = BarLineType::NORMAL;
 
@@ -1260,7 +1261,8 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             bartype = BarLineType::END;
             }
 
-//TODO      measure->setEndBarLineType(bartype, false);
+      measure->setEndBarLineType(bartype, false);
+#endif
 
       if(measurePtr->getLeftBarline() == OVE::BarLineType::RepeatLeft){
             //bartype = BarLineType::START_REPEAT;
