@@ -676,6 +676,7 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
       {
       int tick = measure->tick();
       QSet<Staff*> sl;
+
       for (int staffIdx = staff1; staffIdx < staff2; ++staffIdx) {
             for (Staff* s : staff(staffIdx)->staffList())
                   sl.insert(s);
@@ -2079,13 +2080,13 @@ ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff)
 
 void ExchangeVoice::undo()
       {
-      measure->exchangeVoice(val2, val1, staff);
+      measure->exchangeVoice(val2, val1, staff, measure);
       measure->checkMultiVoices(staff);
       }
 
 void ExchangeVoice::redo()
       {
-      measure->exchangeVoice(val1, val2, staff);
+      measure->exchangeVoice(val1, val2, staff, measure);
       }
 
 //---------------------------------------------------------

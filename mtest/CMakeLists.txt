@@ -171,6 +171,7 @@ subdirs (
         libmscore/dynamic
         libmscore/earlymusic
         libmscore/element
+        libmscore/exchangevoices
         libmscore/hairpin
         libmscore/instrumentchange
         libmscore/join
