@@ -23,9 +23,13 @@ if (Qt5Core_FOUND)
         OpenGL
         LinguistTools
         Help
-        WebEngine
-        WebEngineWidgets
       )
+    if (NOT MINGW)
+      set(_components
+        ${_components}
+        WebEngine
+        WebEngineWidgets)
+    endif()
     foreach(_component ${_components})
       find_package(Qt5${_component})
 
