@@ -19,9 +19,7 @@
 //=============================================================================
 
 #include "drumroll.h"
-
 #include "config.h"
-#include "drumroll.h"
 #include "piano.h"
 #include "ruler.h"
 #include "drumview.h"

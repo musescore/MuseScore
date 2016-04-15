@@ -10,26 +10,26 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
 #include "pianoroll.h"
+#include "config.h"
 #include "piano.h"
 #include "ruler.h"
 #include "pianoview.h"
+#include "musescore.h"
+#include "seq.h"
+#include "preferences.h"
+#include "waveview.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "libmscore/repeatlist.h"
-#include "awl/pitchlabel.h"
-#include "awl/pitchedit.h"
-#include "awl/poslabel.h"
-#include "musescore.h"
 #include "libmscore/undo.h"
 #include "libmscore/part.h"
 #include "libmscore/instrument.h"
-#include "seq.h"
-#include "preferences.h"
-#include "seq.h"
-#include "waveview.h"
+#include "awl/pitchlabel.h"
+#include "awl/pitchedit.h"
+#include "awl/poslabel.h"
+
 
 namespace Ms {
 
