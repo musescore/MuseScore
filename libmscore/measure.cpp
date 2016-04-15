@@ -2785,10 +2785,35 @@ void Measure::sortStaves(QList<int>& dst)
 
 void Measure::exchangeVoice(int v1, int v2, int staffIdx)
       {
+      int strack = staffIdx * VOICES + v1;
+      int dtrack = staffIdx * VOICES + v2;
+
       for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
-            int strack = staffIdx * VOICES + v1;
-            int dtrack = staffIdx * VOICES + v2;
             s->swapElements(strack, dtrack);
+            }
+
+      auto spanners = score()->spannerMap().findOverlapping(tick(), endTick()-1);
+      int start = tick();
+      int end = start + ticks();
+      for (auto i = spanners.begin(); i < spanners.end(); i++) {
+            Spanner* sp = i->value;
+            int spStart = sp->tick();
+            int spEnd = spStart + sp->ticks();
+            qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart, spEnd, spEnd-spStart, start, end);
+            if (sp->type() == Element::Type::SLUR && (spStart >= start || spEnd < end)) {
+                  if (sp->track() == strack && spStart >= start){
+                        sp->setTrack(dtrack);
+                        }
+                  else if (sp->track() == dtrack && spStart >= start){
+                        sp->setTrack(strack);
+                        }
+                  if (sp->track2() == strack && spEnd < end){
+                        sp->setTrack2(dtrack);
+                        }
+                  else if (sp->track2() == dtrack && spEnd < end){
+                        sp->setTrack2(strack);
+                        }
+                  }
             }
       // MStaff* ms = mstaff(staffIdx);
       // ms->hasVoices = true;

@@ -158,7 +158,6 @@ add_custom_target(reporthtml
 
 subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves)
 
-
 install(FILES
       ../share/styles/chords_std.xml
       ../share/styles/chords_jazz.xml

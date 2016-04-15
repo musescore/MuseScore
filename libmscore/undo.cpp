@@ -708,6 +708,7 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
       {
       int tick = measure->tick();
       QSet<Staff*> sl;
+
       for (int staffIdx = staff1; staffIdx < staff2; ++staffIdx) {
             for (Staff* s : staff(staffIdx)->staffList())
                   sl.insert(s);

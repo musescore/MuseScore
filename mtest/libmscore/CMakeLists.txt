@@ -13,7 +13,7 @@
 
 subdirs(
       album barline beam breath chordsymbol clef clef_courtesy compat concertpitch copypaste
-      copypastesymbollist cursor dynamic earlymusic element hairpin instrumentchange join keysig layout links parts measure midi
+      copypastesymbollist cursor dynamic earlymusic element exchangevoices hairpin instrumentchange join keysig layout links parts measure midi
       note plugins repeat selectionfilter selectionrangedelete spanners split splitstaff timesig tools transpose tuplet text
       )
 
