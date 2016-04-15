@@ -43,6 +43,7 @@ struct LayoutContext {
       QList<System*> systemList;          // reusable systems
       System* curSystem        { 0 };
       MeasureBase* systemOldMeasure;
+      bool rangeDone           { false };
       System* pageOldSystem    { 0 };
       bool systemChanged       { false };
       bool pageChanged         { false };
