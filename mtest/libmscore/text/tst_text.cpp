@@ -16,6 +16,7 @@
 #include "libmscore/text.h"
 #include "libmscore/score.h"
 #include "libmscore/sym.h"
+#include "libmscore/xml.h"
 #include "mtest/testutils.h"
 
 using namespace Ms;
@@ -36,6 +37,7 @@ class TestText : public QObject, public MTest
       void testTextProperties();
       void testCompatibility();
       void testDelete();
+      void testReadWrite();
       };
 
 //---------------------------------------------------------
@@ -367,6 +369,53 @@ void TestText::testCompatibility()
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">test&amp;&lt;&gt;&quot;'</p></body></html>");
       QCOMPARE(text->convertFromHtml(sescape), QString("<font face=\"Times New Roman\"/>test&amp;&lt;&gt;&quot;'"));
       }
+
+//---------------------------------------------------------
+///   testReadWrite
+//---------------------------------------------------------
+
+void TestText::testReadWrite() {
+      auto testrw = [](Score* score, Text* t) {
+            QBuffer buffer;
+            buffer.open(QIODevice::WriteOnly);
+            Xml xml(&buffer);
+            t->write(xml);
+            buffer.close();
+
+            XmlReader e(buffer.buffer());
+            Text* text2 = new Text(score);
+            e.readNextStartElement();
+            text2->read(e);
+            QCOMPARE(t->xmlText(), text2->xmlText());
+        };
+      Text* text = new Text(score);
+      text->setXmlText("test");
+      testrw(score, text);
+      
+      text = new Text(score);
+      text->setXmlText("<b>Title</b><i>two</i>");
+      testrw(score, text);
+      
+      text = new Text(score);
+      text->setXmlText("<i>Title</i> <b>Two</b>");
+      testrw(score, text);
+      
+      text = new Text(score);
+      text->setXmlText("<i>Title</i>    <b>Two</b>");
+      testrw(score, text);
+      
+      text = new Text(score);
+      text->setXmlText("<i>Title</i>\t<b>Two</b>");
+      testrw(score, text);
+      
+      text = new Text(score);
+      text->setXmlText("<i>Title</i>\n<b>Two</b>");
+      testrw(score, text);
+      
+      text = new Text(score);
+      text->setXmlText("<i>Ti  tle</i><b>Tw  o</b>");
+      testrw(score, text);
+}
 
 QTEST_MAIN(TestText)
 

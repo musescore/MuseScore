@@ -704,8 +704,7 @@ QString XmlReader::readXml()
                   case QXmlStreamReader::EndElement:
                         return s;
                   case QXmlStreamReader::Characters:
-                        if (!isWhitespace() || text().toString() == "\n")
-                              s += text().toString().toHtmlEscaped();
+                        s += text().toString().toHtmlEscaped();
                         break;
                   case QXmlStreamReader::Comment:
                         break;
