@@ -193,9 +193,4 @@ unix:
             echo "build directory linux does alread exist, please remove first";  \
          fi
 
-doxy:
-	doxygen build.debug/Doxyfile
-doxylib:
-	doxygen build.debug/Doxyfile-LibMscore
-
 

@@ -53,7 +53,6 @@ include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 #include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (UsePkgConfig1) #defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
-include (TargetDoc)
 include (FindPulseAudio)
 include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
@@ -432,14 +431,6 @@ endif(USE_SYSTEM_QTSINGLEAPPLICATION)
 configure_file (
       ${PROJECT_SOURCE_DIR}/build/config.h.in
       ${PROJECT_BINARY_DIR}/config.h
-      )
-configure_file (
-      ${PROJECT_SOURCE_DIR}/build/Doxyfile.in
-      ${PROJECT_BINARY_DIR}/Doxyfile
-      )
-configure_file (
-      ${PROJECT_SOURCE_DIR}/build/Doxyfile-LibMscore.in
-      ${PROJECT_BINARY_DIR}/Doxyfile-LibMscore
       )
 
 if (NOT MINGW AND NOT APPLE)

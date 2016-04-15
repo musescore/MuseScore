@@ -61,10 +61,3 @@ clean:
 	-rmdir /S/Q build.debug build.release win32install
 
 
-#
-# generate code documentation
-#
-doxy:
-	doxygen build.debug/Doxyfile
-doxylib:
-	doxygen build.debug/Doxyfile-LibMscore
