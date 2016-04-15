@@ -20,10 +20,6 @@
 
 REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
-# Avoid build errors when processor=0 (as in m68k)
-ifeq ($(CPUS), 0)
-  CPUS=1
-endif
 
 PREFIX    = "/usr/local"
 VERSION   = "2.0.4b-${REVISION}"
