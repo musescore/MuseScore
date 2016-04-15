@@ -5,8 +5,9 @@ import xml.etree.ElementTree as ET
 
 def addMessage(f, text, comment=''):
     if (comment):
-        f.write("//: " + comment.encode('utf8') + "\n")
-    f.write('QT_TRANSLATE_NOOP("InstrumentsXML", "' + text.encode('utf8') + '"),\n')
+        f.write('QT_TRANSLATE_NOOP3("InstrumentsXML", u8"' + text.encode('utf8') + '", u8"' + comment.encode('utf8') + '"),\n')
+    else:
+        f.write('QT_TRANSLATE_NOOP("InstrumentsXML", u8"' + text.encode('utf8') + '"),\n')
     
 
 
