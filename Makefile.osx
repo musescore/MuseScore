@@ -81,10 +81,3 @@ clean:
 	-rm -rf build.release build.debug build.xcode
 	-rm -rf applebuild
 
-#
-# generate code documentation
-#
-doxy:
-	doxygen build.debug/Doxyfile
-doxylib:
-	doxygen build.debug/Doxyfile-LibMscore
