@@ -6770,6 +6770,8 @@
       <InstrumentGroup id="vocals">
             <name>Vocals</name>
             <Instrument id="voice">
+            <!-- don't remove this 'instrument', it is used in ...mscore/noteGroups.cpp,
+                 to generate the time sig dialog of the master palette -->
                   <longName>Voice</longName>
                   <shortName>Vo.</shortName>
                   <description>Voice</description>
@@ -8608,6 +8610,8 @@
                   </Channel>
             </Instrument>
             <Instrument id="electric-guitar">
+            <!-- don't remove this instrument, it is used in ...mtest/libmscore/links/tst_links.cpp
+                 and ...mtest/libmscore/midi/tst_midi.cpp for testing purposes -->
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
                   <description>Electric Guitar</description>
