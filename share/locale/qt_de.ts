@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de">
+<TS version="2.1" language="de">
 <context>
     <name>MAC_APPLICATION_MENU</name>
     <message>
@@ -1731,7 +1731,7 @@ Möchten sie die Datei trotzdem löschen?</translation>
     </message>
     <message>
         <source>SSL handshake failed</source>
-        <translation>Es trat ein Fehler im Ablauf des SSL-Protokolls auf.</translation>
+        <translation>Es trat ein Fehler im Ablauf des SSL-Protokolls auf</translation>
     </message>
     <message>
         <source>Unknown protocol specified</source>
@@ -2731,7 +2731,7 @@ Möchten sie die Datei trotzdem löschen?</translation>
     </message>
     <message>
         <source>Print To File ...</source>
-        <translation>In Datei drucken</translation>
+        <translation>In Datei drucken ...</translation>
     </message>
     <message>
         <source>File %1 is not writable.
@@ -5007,7 +5007,7 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>The namespace URI in the name for a computed attribute cannot be %1.</source>
-        <translation>Der Namensraum-URI im Namen eines berechneten Attributes darf nicht %1 sein</translation>
+        <translation>Der Namensraum-URI im Namen eines berechneten Attributes darf nicht %1 sein.</translation>
     </message>
     <message>
         <source>The name for a computed attribute cannot have the namespace URI %1 with the local name %2.</source>
