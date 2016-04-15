@@ -3125,18 +3125,21 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   }
 
-            Element::Type nt = lc.nextMeasure ? lc.nextMeasure->type() : Element::Type::INVALID;
-            if (pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
-                  minWidth += ww;
-                  getNextMeasure(lc);
-                  break;
+            if (lc.rangeLayout && lc.endTick <= lc.curMeasure->tick()) {
+                  // TODO: we may check if another measure fits in this system
+                  if (lc.curMeasure == lc.systemOldMeasure) {
+                        lc.rangeDone = true;
+                        break;
+                        }
                   }
+
             getNextMeasure(lc);
-
-            if (minWidth + minMeasureWidth > systemWidth)   // small optimization
-                  break;      // next measure will not fit
-
             minWidth += ww;
+
+            Element::Type nt = lc.nextMeasure ? lc.nextMeasure->type() : Element::Type::INVALID;
+            if (pbreak || nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX
+               || (minWidth + minMeasureWidth > systemWidth))
+                  break;      // break system
 
             // whether the measure actually has courtesy elements or whether we added space for hypothetical ones,
             // we should remove the width of courtesy elements for this measure from the accumulated total
@@ -3443,14 +3446,12 @@ bool Score::collectPage(LayoutContext& lc)
             //
             //  check for page break or if next system will fit on page
             //
-            if (lc.rangeLayout && lc.endTick <= lc.curSystem->endTick()) {
+            if (lc.rangeDone) {
                   // take next system unchanged
                   System* s    = lc.systemList.empty() ? 0 : lc.systemList.takeFirst();
                   lc.curSystem = s;
-                  if (s) {
-                        lc.systemOldMeasure = lc.curSystem->measures().empty() ? 0 : lc.curSystem->measures().back();
+                  if (s)
                         _systems.append(lc.curSystem);
-                        }
                   }
             else
                   collectSystem(lc);
@@ -3600,6 +3601,7 @@ void Score::doLayout()
             createPlayEvents();
 
       LayoutContext lc;
+      lc.rangeDone = false;
       _systems.swap(lc.systemList);
       getNextMeasure(lc);
       getNextMeasure(lc);
@@ -3649,6 +3651,7 @@ void Score::doLayoutRange(int stick, int etick)
             }
 
       lc.rangeLayout = true;
+      lc.rangeDone   = false;
       lc.endTick     = etick;
       _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
@@ -3669,16 +3672,11 @@ void Score::doLayoutRange(int stick, int etick)
       Page* p    = m->system()->page();
       System* s  = p->systems().front();
 
-      int systemIndex = _systems.indexOf(s);
-      lc.systemList   =  _systems.mid(systemIndex);
+      int systemIndex  = _systems.indexOf(s);
+      lc.systemList    =  _systems.mid(systemIndex);
       _systems.erase(_systems.begin() + systemIndex, _systems.end());
-      lc.curPage      = _pages.indexOf(p);
-
-      if (systemIndex > 0)
-            lc.curSystem = _systems[systemIndex-1];
-      else
-            lc.curSystem = 0;
-
+      lc.curPage       = _pages.indexOf(p);
+      lc.curSystem     = systemIndex > 0 ? _systems[systemIndex-1] : 0;
       lc.prevMeasure   = 0;
       lc.nextMeasure   = s->measure(0);
       lc.curMeasure    = s->measure(0)->prev();
@@ -3693,7 +3691,7 @@ void Score::doLayoutRange(int stick, int etick)
       //---------------------------------------------------
 
       while (collectPage(lc)) {
-            if (!lc.curSystem || (!lc.pageChanged && lc.curSystem->endTick() >= etick))
+            if (lc.rangeDone)
                   break;
             }
       if (!lc.curSystem) {

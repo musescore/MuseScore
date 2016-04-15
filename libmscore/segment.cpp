@@ -1396,7 +1396,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
 
       if (st == Segment::Type::ChordRest) {
             if (nst == Segment::Type::EndBarLine)
-                  w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::noteBarDistance);
+                  // w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::noteBarDistance);
+                  w += score()->styleP(StyleIdx::noteBarDistance);
             else if (nst == Segment::Type::Clef)
                   w = qMax(w, score()->styleP(StyleIdx::clefLeftMargin));
             else
