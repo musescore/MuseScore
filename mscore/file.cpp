@@ -2541,7 +2541,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 
       for (Page* page : score->pages()) {
             // 1st pass: StaffLines
-            for  (System* s : page->systems()) {
+            for  (System* s : *page->systems()) {
                   for (int i = 0, n = s->staves()->size(); i < n; i++) {
                         if (score->staff(i)->invisible())
                               continue;  // ignore invisible staves
@@ -2590,7 +2590,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                   }
             }
             // 2nd pass: the rest of the elements
-            QList<Element*> pel = page->elements();
+            QList<const Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
 
             Element::Type eType;
