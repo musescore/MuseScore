@@ -76,12 +76,9 @@ static void addHeader(QString& out)
 
 static void addFooter(QString& out)
       {
-/*      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
-             "&copy; 2002-2014 Werner Schweer &amp; others</div>\n"
+      out += /* "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br/>\n"
+             "&copy; 2002-2016 Werner Schweer &amp; others</div>\n" */
              "</body>\n"
-             "</html>\n";
-      */
-      out += "</body>\n"
              "</html>\n";
       }
 
@@ -245,7 +242,7 @@ static void writeOutput()
                   out += "</div>\n";
                   }
             else
-                  out += "<br />";
+                  out += "<br/>";
 
             if (!cl.procs.isEmpty()) {
                   out += "<h4>Methods</h4>\n";
@@ -310,7 +307,7 @@ static void writeOutput()
             QString ofile = dstPath + "/plugins/" + cl.name.toLower() + ".html";
             QFile of(ofile);
             if (!of.open(QIODevice::WriteOnly)) {
-                  printf("open <%s> failed: %s\n", qPrintable(ofile), qPrintable(of.errorString()));
+                  fprintf(stderr, "open <%s> failed: %s\n", qPrintable(ofile), qPrintable(of.errorString()));
                   exit(-4);
                   }
             of.write(out.toUtf8());
@@ -335,7 +332,7 @@ static void writeOutput()
       QString ofile = dstPath + "/plugins/plugins.html";
       QFile of(ofile);
       if (!of.open(QIODevice::WriteOnly)) {
-            printf("open <%s> failed\n", qPrintable(ofile));
+            fprintf(stderr, "open <%s> failed\n", qPrintable(ofile));
             exit(-4);
             }
       of.write(out.toUtf8());
