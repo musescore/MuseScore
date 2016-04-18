@@ -202,8 +202,8 @@ void Debugger::layout()
       {
       if (!curElement)
             return;
-      curElement->score()->doLayout();
-      curElement->score()->end();
+      curElement->score()->setLayoutAll();
+      curElement->score()->update();
       mscore->endCmd();
       }
 

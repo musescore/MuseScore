@@ -137,7 +137,6 @@ void Score::startCmd()
       // user-visible undo action.
 
       if (undoStack()->active()) {
-            // if (MScore::debugMode)
             qDebug("Score::startCmd(): cmd already active");
             return;
             }
@@ -175,7 +174,8 @@ void Score::endCmd(bool rollback)
             masterScore()->_playlistDirty = true;  // TODO: flag individual operations
             masterScore()->_autosaveDirty = true;
             }
-      MuseScoreCore::mscoreCore->endCmd();
+//      MuseScoreCore::mscoreCore->endCmd();
+      cmdState().reset();
       }
 
 //---------------------------------------------------------
@@ -189,16 +189,19 @@ void Score::update()
       if (cs.layoutAll()) {
             for (Score* s : scoreList())
                   s->doLayout();
+            cs._setUpdateMode(UpdateMode::UpdateAll);
             }
       else if (cs.layoutRange()) {
             for (Score* s : scoreList())
                   s->doLayoutRange(cs.startTick(), cs.endTick());
+            cs._setUpdateMode(UpdateMode::UpdateAll);
             }
       if (cs.updateAll()) {
             for (Score* s : scoreList()) {
                   for (MuseScoreView* v : s->viewer)
                         v->updateAll();
                   }
+            cs._setUpdateMode(UpdateMode::DoNothing);
             }
       else if (cs.updateRange()) {
             // updateRange updates only current score
@@ -1726,10 +1729,11 @@ void Score::cmdResetBeamMode()
 
 bool Score::processMidiInput()
       {
-      if (MScore::debugMode)
-          qDebug("processMidiInput");
       if (midiInputQueue().empty())
             return false;
+
+      if (MScore::debugMode)
+          qDebug("processMidiInput");
 
       bool cmdActive = false;
       while (!midiInputQueue().empty()) {
@@ -1746,7 +1750,7 @@ bool Score::processMidiInput()
                   if (p) {
                         if (!styleB(StyleIdx::concertPitch)) {
                               ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
-                        }
+                              }
                         MScore::seq->startNote(
                                           p->instrument()->channel(0)->channel,
                                           ev.pitch,

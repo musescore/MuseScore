@@ -3008,7 +3008,7 @@ void Score::cmdSelectAll()
       selectRange(first, 0);
       selectRange(last, nstaves() - 1);
       setUpdateAll();
-      end();
+      update();
       }
 
 //---------------------------------------------------------

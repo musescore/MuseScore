@@ -2069,8 +2069,9 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       qreal keysigLeftMargin  = styleP(StyleIdx::keysigLeftMargin);
       qreal timesigLeftMargin = styleP(StyleIdx::timesigLeftMargin);
 
-      if (s->isChordRestType())
-            x += styleP(StyleIdx::barNoteDistance);
+      if (s->isChordRestType()) {
+            x = qMax(x + styleP(StyleIdx::minNoteDistance), styleP(StyleIdx::barNoteDistance));
+            }
       else if (s->isClefType())
             // x = qMax(x, clefLeftMargin);
             x += styleP(StyleIdx::clefLeftMargin);
@@ -3122,7 +3123,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   }
 
-            if (lc.rangeLayout && lc.endTick <= lc.curMeasure->tick()) {
+//            if (lc.rangeLayout && lc.endTick <= lc.curMeasure->tick()) {
+            if (lc.rangeLayout && lc.endTick < lc.curMeasure->tick()) {
                   // TODO: we may check if another measure fits in this system
                   if (lc.curMeasure == lc.systemOldMeasure) {
                         lc.rangeDone = true;
@@ -3575,6 +3577,13 @@ bool Score::collectPage(LayoutContext& lc)
 
 void Score::doLayout()
       {
+#if 0
+      static int mops= 0;
+
+      ++mops;
+      if (mops == 1)
+            abort();
+#endif
       qDebug();
 
       if (_staves.empty() || first() == 0) {

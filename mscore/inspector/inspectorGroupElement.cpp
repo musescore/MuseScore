@@ -132,7 +132,7 @@ void InspectorGroupElement::notesClicked()
                   }
             }
       inspector->setElements(nel);
-      score->end();
+      score->update();
       }
 
 //---------------------------------------------------------
@@ -152,7 +152,7 @@ void InspectorGroupElement::restsClicked()
                   }
             }
       inspector->setElements(nel);
-      score->end();
+      score->update();
       }
 
 }

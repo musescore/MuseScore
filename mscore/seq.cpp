@@ -345,7 +345,7 @@ void Seq::stop()
       if (cs) {
             cs->setLayoutAll();
             cs->setUpdateAll();
-            cs->end();
+            cs->update();
             }
       }
 
@@ -377,7 +377,7 @@ void MuseScore::seqStarted()
       if (cv)
             cv->setCursorOn(true);
       if (cs)
-            cs->end();
+            cs->update();
       }
 
 //---------------------------------------------------------
@@ -421,7 +421,7 @@ void Seq::guiStop()
             return;
 
       cs->setPlayPos(cs->repeatList()->utick2tick(cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate))));
-      cs->end();
+      cs->update();
       emit stopped();
       }
 
@@ -440,7 +440,7 @@ void Seq::seqMessage(int msg, int arg)
                   if (seg)
                         mscore->currentScoreView()->moveCursor(seg->tick());
                   cs->setPlayPos(arg);
-                  cs->end();
+                  cs->update();
                   break;
                   }
             case '4':   // Restart the playback at the end of the score
@@ -1058,7 +1058,7 @@ void Seq::seek(int utick)
       if (seg)
             mscore->currentScoreView()->moveCursor(seg->tick());
       cs->setPlayPos(tick);
-      cs->end();
+      cs->update();
       guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       }
 

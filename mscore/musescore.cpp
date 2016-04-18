@@ -3511,7 +3511,7 @@ void MuseScore::splitWindow(bool horizontal)
                   tab2->setCurrentIndex(0);
                   MasterScore* s = scoreList[0];
                   s->setLayoutAll();
-                  s->end();
+                  s->update();
                   setCurrentView(1, 0);
                   }
             }
@@ -3972,7 +3972,7 @@ void MuseScore::cmd(QAction* a)
       QString cmdn(a->data().toString());
 
       if (MScore::debugMode)
-            qDebug("MuseScore::cmd <%s>", cmdn.toLatin1().data());
+            qDebug("MuseScore::cmd <%s>", qPrintable(cmdn));
 
       const Shortcut* sc = Shortcut::getShortcut(cmdn.toLatin1().data());
       if (sc == 0) {
@@ -4080,7 +4080,7 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             updateViewModeCombo();
-            cs->end();
+//            cs->update();
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
       else {
@@ -4388,7 +4388,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   //isAncestorOf is called to see if a widget from inspector has focus
                   //if so, the focus doesn't get shifted to the score, unless escape is
                   //pressed, or the user clicks in the score
-                  if(!inspector()->isAncestorOf(qApp->focusWidget()) || cmd == "escape")
+                  if (!inspector()->isAncestorOf(qApp->focusWidget()) || cmd == "escape")
                         cv->setFocus();
                   cv->cmd(a);
                   }
