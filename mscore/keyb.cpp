@@ -224,7 +224,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             if (editObject->isText() && (key == Qt::Key_Left || key == Qt::Key_Right)) {
                   ev->accept();
-                  _score->end();
+                  _score->update();
                   mscore->endCmd();
                   //return;
                   }

@@ -57,7 +57,7 @@ void ScoreView::startDrag()
             foreach(Element* e, _score->selection().elements())
                   e->setStartDragPosition(e->userOff());
             }
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------

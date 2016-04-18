@@ -1267,7 +1267,7 @@ void ScoreView::setEditPos(const QPointF& pt)
       {
       editObject->setGrip(curGrip, pt);
       updateGrips();
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -2148,8 +2148,7 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
 
 void ScoreView::wheelEvent(QWheelEvent* event)
        {
-
-      #define PIXELSSTEPSFACTOR 5
+#define PIXELSSTEPSFACTOR 5
 
       QPoint pixelsScrolled = event->pixelDelta();
       QPoint stepsScrolled = event->angleDelta();
@@ -2998,7 +2997,7 @@ void ScoreView::cmd(const QAction* a)
             if (editMode()) {
                   editObject->reset();
                   updateGrips();
-                  _score->end();
+                  _score->update();
                   }
             else {
                   _score->startCmd();
@@ -3378,7 +3377,7 @@ void ScoreView::startNoteEntry()
       shadowNote->setVisible(true);
       dragElement = 0;
       _score->setUpdateAll();
-      _score->end();
+      _score->update();
 
       Staff* staff = _score->staff(is.track() / VOICES);
       switch (staff->staffType()->group()) {
@@ -3423,7 +3422,7 @@ void ScoreView::endNoteEntry()
       shadowNote->setVisible(false);
       setCursorOn(false);
       _score->setUpdateAll();
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -3455,7 +3454,7 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       else {
             QMenu* popup = mscore->genCreateMenu();
             _score->setLayoutAll();
-            _score->end();
+            _score->update();
             popup->popup(gp);
             }
       }
@@ -3607,9 +3606,9 @@ void ScoreView::select(QMouseEvent* ev)
 
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
-      startMoveI = ev->pos();
-      data.startMove  = imatrix.map(QPointF(startMoveI));
-      curElement = elementNear(data.startMove);
+      startMoveI     = ev->pos();
+      data.startMove = imatrix.map(QPointF(startMoveI));
+      curElement     = elementNear(data.startMove);
 
       if (curElement && curElement->type() == Element::Type::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
@@ -3642,7 +3641,7 @@ void ScoreView::onEditPasteTransition(QMouseEvent* ev)
       if (e == editObject) {
             if (editObject->mousePress(data.startMove, ev)) {
                   _score->addRefresh(editObject->canvasBoundingRect());
-                  _score->end();
+                  _score->update();
                   }
             }
       }
@@ -3700,7 +3699,7 @@ void ScoreView::doDragLasso(QMouseEvent* ev)
       mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
       _score->addRefresh(lasso->canvasBoundingRect());
       _score->lassoSelect(lasso->rect());
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -3712,7 +3711,7 @@ void ScoreView::endLasso()
       _score->addRefresh(lasso->canvasBoundingRect());
       lasso->setRect(QRectF());
       _score->lassoSelectEnd();
-      _score->end();
+      _score->update();
       mscore->endCmd();
       }
 
@@ -3746,7 +3745,7 @@ void ScoreView::endScoreViewDrag()
 void ScoreView::deselectAll()
       {
       _score->deselectAll();
-      _score->end();
+      _score->update();
       mscore->endCmd();
       }
 
@@ -4244,14 +4243,14 @@ bool ScoreView::event(QEvent* event)
                   if (ke->key() == Qt::Key_Tab) {
                         rv = editObject->nextGrip(&curGrip);
                         updateGrips();
-                        _score->end();
+                        _score->update();
                         if (rv)
                               return true;
                         }
                   else if (ke->key() == Qt::Key_Backtab)
                         rv = editObject->prevGrip(&curGrip);
                   updateGrips();
-                  _score->end();
+                  _score->update();
                   if (rv)
                         return true;
                   }
@@ -4337,13 +4336,8 @@ void ScoreView::cmdAddSlur()
       else {
             Note* firstNote = 0;
             Note* lastNote  = 0;
-#if 0
-            for (Note* n : nl) {
-                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick() || (lastNote && n->chord()->parent() == lastNote->chord()))
-#else
             for (Note* n : _score->selection().noteList()) {
                   if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
-#endif
                         firstNote = n;
                   if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick() || (firstNote && firstNote->chord()->parent() == n->chord()))
                         lastNote = n;
@@ -4736,7 +4730,7 @@ void ScoreView::changeVoice(int voice)
                   is->setSegment(is->segment()->measure()->first(Segment::Type::ChordRest));
                   moveCursor();
                   score()->setUpdateAll();
-                  score()->end();
+                  score()->update();
                   mscore->setPos(is->segment()->tick());
                   }
             }
@@ -5569,7 +5563,7 @@ void ScoreView::selectMeasure(int n)
             _score->addRefresh(measure->canvasBoundingRect());
             adjustCanvasPosition(measure, true);
             _score->setUpdateAll();
-            _score->end();
+            _score->update();
             break;
             }
       }
@@ -5684,7 +5678,7 @@ void ScoreView::gotoMeasure(Measure* measure)
                   break;
             }
       _score->setUpdateAll();
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------

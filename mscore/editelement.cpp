@@ -44,7 +44,7 @@ void ScoreView::startEdit(Element* e)
             e = static_cast<TBox*>(e)->text();
       editObject = e;
       sm->postEvent(new CommandEvent("edit"));
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -80,7 +80,7 @@ void ScoreView::startEdit()
       editObject->startEdit(this, data.startMove);
       curGrip = Grip::NO_GRIP;
       updateGrips();
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -121,7 +121,7 @@ void ScoreView::endEdit()
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
             _score->select(curElement);
-            _score->end();
+            _score->update();
             }
       mscore->updateInspector();
 
@@ -146,7 +146,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       if (e && (e == editObject) && (editObject->isText())) {
             if (editObject->mousePress(data.startMove, ev)) {
                   _score->addRefresh(editObject->canvasBoundingRect());
-                  _score->end();
+                  _score->update();
                   }
             return true;
             }
@@ -158,7 +158,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
                         curGrip = Grip(i);
                         data.curGrip = Grip(i);
                         updateGrips();
-                        score()->end();
+                        score()->update();
                         break;
                         }
                   }
@@ -219,7 +219,7 @@ void ScoreView::endDragEdit()
       updateGrips();
       _score->rebuildBspTree();
       _score->addRefresh(editObject->canvasBoundingRect());
-      _score->end();
+      _score->update();
       }
 
 }

@@ -82,7 +82,7 @@ void MeasureProperties::gotoNextMeasure()
             setMeasure(getNextMeasure(m));
       nextButton->setEnabled(getNextMeasure(m));
       previousButton->setEnabled(getPrevMeasure(m));
-      m->score()->end();
+      m->score()->update();
       }
 
 //---------------------------------------------------------
@@ -95,7 +95,7 @@ void MeasureProperties::gotoPreviousMeasure()
             setMeasure(getPrevMeasure(m));
       nextButton->setEnabled(getNextMeasure(m));
       previousButton->setEnabled(getPrevMeasure(m));
-      m->score()->end();
+      m->score()->update();
       }
 
 //---------------------------------------------------------

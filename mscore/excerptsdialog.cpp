@@ -124,7 +124,7 @@ void MuseScore::startExcerptsDialog()
       settings.setValue("pos", ed.pos());
       settings.endGroup();
       cs->setLayoutAll();
-      cs->end();
+      cs->update();
       }
 
 //---------------------------------------------------------

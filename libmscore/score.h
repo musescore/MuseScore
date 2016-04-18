@@ -269,6 +269,7 @@ class CmdState {
       void reset();
       UpdateMode updateMode() const { return _updateMode; }
       void setUpdateMode(UpdateMode m);
+      void _setUpdateMode(UpdateMode m) { _updateMode = m; }
       bool layoutAll() const   { return _updateMode == UpdateMode::LayoutAll; }
       bool layoutRange() const { return _updateMode == UpdateMode::LayoutRange; }
       bool updateAll() const   { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
@@ -654,7 +655,6 @@ class Score : public QObject, public ScoreElement {
       void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command
       void update();
-      void end() { update(); }
 
       void cmdRemoveTimeSig(TimeSig*);
       void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);

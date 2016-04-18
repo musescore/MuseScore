@@ -172,7 +172,7 @@ void TextTools::updateText()
             return;
       if (_textElement->type() == Element::Type::LYRICS) {
             _textElement->score()->setLayoutAll();
-            _textElement->score()->end();
+            _textElement->score()->update();
             }
       else
             layoutText();
@@ -185,7 +185,7 @@ void TextTools::updateText()
 void TextTools::layoutText()
       {
       _textElement->score()->setLayoutAll();
-      _textElement->score()->end();
+      _textElement->score()->update();
       }
 
 //---------------------------------------------------------

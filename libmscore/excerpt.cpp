@@ -240,8 +240,14 @@ void createExcerpt(Excerpt* excerpt)
 
 void deleteExcerpt(Excerpt* excerpt)
       {
-      Score* oscore = excerpt->oscore();
-      Score* partScore  = excerpt->partScore();
+      MasterScore* oscore = excerpt->oscore();
+      Score* partScore    = excerpt->partScore();
+
+      if (!partScore) {
+            qDebug("deleteExcerpt: no partScore");
+            return;
+            }
+
       // unlink the staves in the excerpt
       for (Staff* s : partScore->staves()) {
             Staff* staff = nullptr;

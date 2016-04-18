@@ -530,7 +530,7 @@ void InspectorRest::tupletClicked()
       if (tuplet) {
             rest->score()->select(tuplet);
             inspector->setElement(tuplet);
-            rest->score()->end();
+            rest->score()->update();
             }
       }
 

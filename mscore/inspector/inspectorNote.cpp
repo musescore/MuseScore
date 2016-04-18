@@ -189,7 +189,7 @@ void InspectorNote::dot1Clicked()
             NoteDot* dot = note->dot(0);
             dot->score()->select(dot);
             inspector->setElement(dot);
-            dot->score()->end();
+            dot->score()->update();
             }
       }
 
@@ -206,7 +206,7 @@ void InspectorNote::dot2Clicked()
             NoteDot* dot = note->dot(1);
             dot->score()->select(dot);
             inspector->setElement(dot);
-            dot->score()->end();
+            dot->score()->update();
             }
       }
 
@@ -223,7 +223,7 @@ void InspectorNote::dot3Clicked()
             NoteDot* dot = note->dot(2);
             dot->score()->select(dot);
             inspector->setElement(dot);
-            dot->score()->end();
+            dot->score()->update();
             }
       }
 
@@ -240,7 +240,7 @@ void InspectorNote::hookClicked()
       if (hook) {
             note->score()->select(hook);
             inspector->setElement(hook);
-            note->score()->end();
+            note->score()->update();
             }
       }
 
@@ -257,7 +257,7 @@ void InspectorNote::stemClicked()
       if (stem) {
             note->score()->select(stem);
             inspector->setElement(stem);
-            note->score()->end();
+            note->score()->update();
             }
       }
 
@@ -274,7 +274,7 @@ void InspectorNote::beamClicked()
       if (beam) {
             note->score()->select(beam);
             inspector->setElement(beam);
-            note->score()->end();
+            note->score()->update();
             }
       }
 
@@ -291,7 +291,7 @@ void InspectorNote::tupletClicked()
       if (tuplet) {
             note->score()->select(tuplet);
             inspector->setElement(tuplet);
-            note->score()->end();
+            note->score()->update();
             }
       }
 

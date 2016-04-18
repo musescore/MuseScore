@@ -269,7 +269,7 @@ void DrumrollEditor::selectionChanged()
                   }
             }
       _score->setUpdateAll();
-      _score->end();
+      _score->update();
 //      _score->blockSignals(false);
       }
 
