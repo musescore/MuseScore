@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -32,7 +32,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" extracomment="do not translate">Tuplet</string>
+      <string notr="true">Tuplet</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -73,7 +73,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string notr="true" extracomment="do not translate">baseLen:</string>
+           <string notr="true">baseLen:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -102,7 +102,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string notr="true" extracomment="do not translate">ratio:</string>
+           <string notr="true">ratio:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -128,14 +128,14 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string notr="true" extracomment="do not translate">Chord/Rest/Tuplet List:</string>
+         <string notr="true">Chord/Rest/Tuplet List:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="4">
        <widget class="QTreeWidget" name="elements">
         <property name="toolTip">
-         <string/>
+         <string notr="true"/>
         </property>
         <property name="indentation">
          <number>0</number>
@@ -154,17 +154,17 @@
         </property>
         <column>
          <property name="text">
-          <string notr="true" extracomment="do not translate">Element</string>
+          <string notr="true">Element</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string notr="true" extracomment="do not translate">Tick</string>
+          <string notr="true">Tick</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string notr="true" extracomment="do not translate">Length</string>
+          <string notr="true">Length</string>
          </property>
         </column>
        </widget>
@@ -172,7 +172,7 @@
       <item row="3" column="0">
        <widget class="QPushButton" name="number">
         <property name="text">
-         <string notr="true" extracomment="do not translate">Text Element</string>
+         <string notr="true">Text Element</string>
         </property>
        </widget>
       </item>
@@ -202,7 +202,7 @@
       <item row="3" column="1">
        <widget class="QPushButton" name="tuplet">
         <property name="text">
-         <string>Tuplet</string>
+         <string notr="true">Tuplet</string>
         </property>
        </widget>
       </item>
