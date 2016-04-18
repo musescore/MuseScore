@@ -4859,7 +4859,7 @@ int main(int argc, char* av[])
             }
 
       if (dataPath.isEmpty())
-            dataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+            dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
       if (deletePreferences) {
             QDir(dataPath).removeRecursively();

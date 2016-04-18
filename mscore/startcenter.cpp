@@ -45,7 +45,7 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
                                           QIODevice * outgoingData)
       {
       QNetworkRequest new_req(req);
-      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
+      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toLatin1());
       return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
       }
 
