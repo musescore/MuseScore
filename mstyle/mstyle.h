@@ -81,8 +81,8 @@ class MgStyle : public QCommonStyle {
             one tab is being drawn
             */
             class TabBarData: public QObject {
-                        QWeakPointer<const MgStyle> _style;   //! pointer to parent style object
-                        QWeakPointer<const QWidget> _tabBar; //! pointer to target tabBar
+                        QPointer<const MgStyle> _style;   //! pointer to parent style object
+                        QPointer<const QWidget> _tabBar; //! pointer to target tabBar
                         bool _dirty;                         //! if true, will paint on next TabBarTabShapeControlCall
 
                   public:

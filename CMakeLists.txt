@@ -47,11 +47,11 @@ if(POLICY CMP0046)
       cmake_policy(SET CMP0046 OLD)
 endif(POLICY CMP0046)
 
-include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
-include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
-
+##  look for Qt5
+SET(QT_MIN_VERSION    "5.6.0")
 #include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
+include (FindQt5)
 include (UsePkgConfig1) #defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 include (FindPulseAudio)
 include (GetCompilerVersion)
@@ -60,7 +60,7 @@ include (CreatePrecompiledHeader)
 # for debugging the make system uncomment next line:
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set (CMAKE_AUTOMOC    TRUE)
+set(CMAKE_AUTOMOC    TRUE)
 set(MSCORE_UNSTABLE   TRUE)          # mark as unstable
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
@@ -144,7 +144,6 @@ if (APPLE)
    set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG -Wno-inconsistent-missing-override")
    # this is necessary for genManual to be executed during the build phase
    # it needs to be able to get the Qt libs.
-   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
    SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_PREFIX}/lib")
 else (APPLE)
@@ -195,38 +194,6 @@ else (MINGW OR APPLE)
       SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
 endif (MINGW OR APPLE)
-
-##
-##  look for Qt5
-##
-SET(QT_MIN_VERSION    "5.6.0")
-
-SET(QT_USE_QTXML         TRUE)
-SET(QT_USE_QTSVG         TRUE)
-SET(QT_USE_QTNETWORK     TRUE)
-SET(QT_USE_QTDESIGNER    TRUE)
-SET(QT_USE_QTWEBKIT      TRUE)
-SET(QT_USE_QTXMLPATTERNS TRUE)
-SET(QT_USE_QTHELP        TRUE)
-
-#find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer Declarative)
-
-##
-## freetype2 >= 2.5.2
-##
-
-##if (APPLE)
-##      PKGCONFIG1 (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
-##      if (FREETYPE_INCLUDE_DIRS)
-##          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-##          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
-##          message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
-##      else (FREETYPE_INCLUDE_DIRS)
-##          message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
-##      endif (FREETYPE_INCLUDE_DIRS)
-##else (APPLE)
-##    find_package(Freetype REQUIRED)
-##endif (APPLE)
 
 ##
 ## alsa >= 1.0.0
@@ -629,16 +596,14 @@ include(Packaging)
 
 add_custom_target(lupdate
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR} > mscore.pro
-   COMMAND ${QT_LUPDATE_EXECUTABLE} ${PROJECT_BINARY_DIR}/mscore.pro
+   COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
-   COMMAND ${QT_LUPDATE_EXECUTABLE} ${PROJECT_BINARY_DIR}/instruments.pro
+   COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/instruments.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
 add_custom_target(lrelease
-   COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR} > mscore.pro
-   COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
-   COMMAND ${QT_LRELEASE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/share/locale/*.ts
+   COMMAND Qt5::lrelease ${PROJECT_SOURCE_DIR}/share/locale/*.ts
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 

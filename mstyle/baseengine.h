@@ -35,7 +35,7 @@ class BaseEngine: public QObject {
 
       public:
 
-            typedef QWeakPointer<BaseEngine> Pointer;
+            typedef QPointer<BaseEngine> Pointer;
 
             //! constructor
             BaseEngine( QObject* parent ):
