@@ -148,7 +148,7 @@ class MenuBarDataV1: public AnimationData {
             //@{
 
             //! guarded action pointer
-            typedef QWeakPointer<QAction> ActionPointer;
+            typedef QPointer<QAction> ActionPointer;
 
             //! current action
             virtual const ActionPointer& currentAction( void ) const {
@@ -347,7 +347,7 @@ class MenuBarDataV2: public AnimationData {
             //@{
 
             //! guarded action pointer
-            typedef QWeakPointer<QAction> ActionPointer;
+            typedef QPointer<QAction> ActionPointer;
 
             //! current action
             virtual const ActionPointer& currentAction( void ) const {

@@ -113,7 +113,7 @@ class LineEditData: public TransitionData {
             QBasicTimer timer_;
 
             //! target
-            QWeakPointer<QLineEdit> target_;
+            QPointer<QLineEdit> target_;
 
             //! true if target has clean button
             bool hasClearButton_;

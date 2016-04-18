@@ -2232,7 +2232,7 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
                                          lastPage->pos().y() * mag(),
                                          lastPage->width() * mag(),
                                          lastPage->height() * mag());
-            QRectF pagesRect = firstPageRect.unite(lastPageRect).translated(offsetPt);
+            QRectF pagesRect = firstPageRect.united(lastPageRect).translated(offsetPt);
             qreal hmargin = this->width() * 0.75;
             qreal vmargin = this->height() * 0.75;
             pagesRect.adjust(-hmargin, -vmargin, hmargin, vmargin);

@@ -286,10 +286,10 @@ void TracksView::restoreVHeaderState(const QByteArray &data)
 
 void TracksView::setHHeaderResizeMode(QHeaderView::ResizeMode mode)
       {
-      horizontalHeader()->setResizeMode(mode);
-      _frozenHTableView->horizontalHeader()->setResizeMode(mode);
-      _frozenVTableView->horizontalHeader()->setResizeMode(mode);
-      _frozenCornerTableView->horizontalHeader()->setResizeMode(mode);
+      horizontalHeader()->setSectionResizeMode(mode);
+      _frozenHTableView->horizontalHeader()->setSectionResizeMode(mode);
+      _frozenVTableView->horizontalHeader()->setSectionResizeMode(mode);
+      _frozenCornerTableView->horizontalHeader()->setSectionResizeMode(mode);
       }
 
 void TracksView::setVHeaderDefaultSectionSize(int size)

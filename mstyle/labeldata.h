@@ -89,7 +89,7 @@ class LabelData: public TransitionData {
             QBasicTimer timer_;
 
             //! target
-            QWeakPointer<QLabel> target_;
+            QPointer<QLabel> target_;
 
             //! old text
             QString text_;

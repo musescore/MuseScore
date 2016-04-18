@@ -171,7 +171,7 @@ void Preferences::init()
       animations              = true;
 #endif
 
-      QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
+      QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
 
       myScoresPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("scores_directory",     "Scores"))).absoluteFilePath();
       myStylesPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory",     "Styles"))).absoluteFilePath();
@@ -846,7 +846,7 @@ void PreferenceDialog::updateValues()
                   }
             }
       language->blockSignals(false);
-      
+
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -857,8 +857,8 @@ void PreferenceDialog::updateValues()
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
-      
-      //Generate the filtered Shortcut List 
+
+      //Generate the filtered Shortcut List
       filterShortcutsTextChanged(filterShortcuts->text());
 
       //

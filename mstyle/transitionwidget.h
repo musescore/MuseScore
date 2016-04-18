@@ -39,7 +39,7 @@ class TransitionWidget: public QWidget {
       public:
 
             //! shortcut to painter
-            typedef QWeakPointer<TransitionWidget> Pointer;
+            typedef QPointer<TransitionWidget> Pointer;
 
             //! constructor
             TransitionWidget( QWidget* parent, int duration );

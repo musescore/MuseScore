@@ -61,7 +61,7 @@ class StackedWidgetData: public TransitionData {
       private:
 
             //! target
-            QWeakPointer<QStackedWidget> target_;
+            QPointer<QStackedWidget> target_;
 
             //! current index
             int index_;
