@@ -2550,7 +2550,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             t = BarLineType::END_REPEAT;
             force = true;
             }
-      else if (!isLastMeasureInSystem && nextMeasure()->repeatStart()) {
+      else if (!isLastMeasureInSystem && nextMeasure() && nextMeasure()->repeatStart()) {
             t = BarLineType::START_REPEAT;
             force = true;
             }
