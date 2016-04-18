@@ -170,10 +170,10 @@ void MyWebView::stopBusy(bool val)
             "  <div align=\"center\"><a class=\"close\" href=\"#\" onclick=\"return closePermanently();\">%4</div>"
             "</div></div>"
             "</body></html>")
-            .arg(tr("Could not<br /> connect"))
-            .arg(tr("To connect with the community, <br /> you need to have internet <br /> connection enabled"))
+            .arg(tr("Could not/nconnect"))
+            .arg(tr("To connect with the community,\nyou need to have internet\nconnection enabled")                 )
             .arg(tr("Retry"))
-            .arg(tr("Close this permanently")),
+            .arg(tr("Close this permanently")).replace("\n", "<br/>"),
             QUrl("qrc:/"));
             }
       mscore->hideProgressBar();
