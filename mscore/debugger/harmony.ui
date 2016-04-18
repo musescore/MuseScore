@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" comment="do not translate">Harmony</string>
+      <string notr="true">Harmony</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -227,7 +227,7 @@
            </size>
           </property>
           <property name="text">
-           <string/>
+           <string notr="true"/>
           </property>
           <property name="maxLength">
            <number>3</number>

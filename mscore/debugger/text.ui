@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" comment="do not translate">Text</string>
+      <string notr="true">Text</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -104,14 +104,14 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string notr="true" comment="do not translate">Abs.:</string>
+           <string notr="true">Abs.:</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string notr="true" comment="do not translate">Rel.:</string>
+           <string notr="true">Rel.:</string>
           </property>
          </widget>
         </item>
@@ -160,7 +160,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string notr="true" comment="do not translate">Text:</string>
+         <string notr="true">Text:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -179,7 +179,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string notr="true" comment="do not translate">Offset:</string>
+         <string notr="true">Offset:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -189,14 +189,14 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string notr="true" comment="do not translate">TextStyle:</string>
+         <string notr="true">TextStyle:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string/>
+         <string notr="true"/>
         </property>
        </widget>
       </item>
