@@ -664,7 +664,6 @@ class Score : public QObject, public ScoreElement {
       virtual inline void setLayout(int);
       virtual inline CmdState& cmdState();
       virtual inline void addLayoutFlags(LayoutFlags);
-      virtual inline void setExcerptsChanged(bool);
       virtual inline void setInstrumentsChanged(bool);
 
       bool playNote() const                 { return _updateState._playNote; }
@@ -932,7 +931,6 @@ class Score : public QObject, public ScoreElement {
       Volta* searchVolta(int tick) const;
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
-      void removeExcerpt(Score*);
       void createRevision();
       void writeSegments(Xml& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
 
@@ -1149,9 +1147,9 @@ class MasterScore : public Score {
       virtual void setLayout(int t) override                { _cmdState.setTick(t); }
       virtual CmdState& cmdState() override                 { return _cmdState; }
       virtual void addLayoutFlags(LayoutFlags val) override { _cmdState.layoutFlags |= val; }
-      virtual void setExcerptsChanged(bool val) override    { _cmdState._excerptsChanged = val; }
       virtual void setInstrumentsChanged(bool val) override { _cmdState._instrumentsChanged = val; }
 
+      void setExcerptsChanged(bool val)     { _cmdState._excerptsChanged = val; }
       bool excerptsChanged() const          { return _cmdState._excerptsChanged; }
       bool instrumentsChanged() const       { return _cmdState._instrumentsChanged; }
 
@@ -1190,6 +1188,7 @@ class MasterScore : public Score {
       void setSoloMute();
 
       void addExcerpt(Score*);
+      void removeExcerpt(Score*);
       };
 
 inline bool Score::undoRedo() const                   { return _masterScore->undoRedo();       }
@@ -1205,7 +1204,6 @@ inline void Score::setLayoutAll()                     { _masterScore->setLayoutA
 inline void Score::setLayout(int tick)                { _masterScore->setLayout(tick);         }
 inline CmdState& Score::cmdState()                    { return _masterScore->cmdState();       }
 inline void Score::addLayoutFlags(LayoutFlags f)      { _masterScore->addLayoutFlags(f);       }
-inline void Score::setExcerptsChanged(bool val)       { _masterScore->setExcerptsChanged(val);  }
 inline void Score::setInstrumentsChanged(bool v)      { _masterScore->setInstrumentsChanged(v); }
 
 extern MasterScore* gscore;

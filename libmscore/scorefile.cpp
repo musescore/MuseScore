@@ -1213,7 +1213,6 @@ bool Score::read(XmlReader& e)
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
       createPlayEvents();
-      setExcerptsChanged(false);
       return true;
       }
 
