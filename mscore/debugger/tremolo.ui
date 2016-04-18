@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -34,14 +34,14 @@
         <item>
          <widget class="QPushButton" name="firstChord">
           <property name="text">
-           <string notr="true" extracomment="do not translate">firstChord</string>
+           <string notr="true">firstChord</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="secondChord">
           <property name="text">
-           <string notr="true" extracomment="do not translate - only for debugging">secondChord</string>
+           <string notr="true">secondChord</string>
           </property>
          </widget>
         </item>

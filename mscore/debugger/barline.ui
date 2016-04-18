@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -176,14 +176,14 @@
         <item row="1" column="0" colspan="2">
          <widget class="QCheckBox" name="customSubtype">
           <property name="text">
-           <string>custom subtype</string>
+           <string notr="true">custom subtype</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="QCheckBox" name="customSpan">
           <property name="text">
-           <string>custom span</string>
+           <string notr="true">custom span</string>
           </property>
          </widget>
         </item>
