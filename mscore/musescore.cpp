@@ -3560,7 +3560,7 @@ const char* stateName(ScoreState s)
 //   excerptsChanged
 //---------------------------------------------------------
 
-void MuseScore::excerptsChanged(Score* s)
+void MuseScore::excerptsChanged(MasterScore* s)
       {
       if (tab2) {
 //            ScoreView* v = tab2->view();
@@ -4059,16 +4059,16 @@ void MuseScore::endCmd()
                   cs->setPlayNote(false);
                   cs->setPlayChord(false);
                   }
-            if (cs->masterScore()->excerptsChanged()) {
-                  //Q_ASSERT(cs == cs->masterScore());
-                  excerptsChanged(cs->masterScore());
-                  cs->masterScore()->setExcerptsChanged(false);
+            MasterScore* ms = cs->masterScore();
+            if (ms->excerptsChanged()) {
+                  excerptsChanged(ms);
+                  ms->setExcerptsChanged(false);
                   }
-            if (cs->masterScore()->instrumentsChanged()) {
+            if (ms->instrumentsChanged()) {
                   if (!noSeq && (seq && seq->isRunning()))
                         seq->initInstruments();
                   instrumentChanged();                // update mixer
-                  cs->setInstrumentsChanged(false);
+                  ms->setInstrumentsChanged(false);
                   }
             if (cs->selectionChanged()) {
                   cs->setSelectionChanged(false);

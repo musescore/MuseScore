@@ -909,12 +909,12 @@ class RemoveExcerpt : public UndoCommand {
 //---------------------------------------------------------
 
 class SwapExcerpt : public UndoCommand {
-      Score* score;
+      MasterScore* score;
       int pos1;
       int pos2;
 
    public:
-      SwapExcerpt(Score* s, int p1, int p2) : score(s), pos1(p1), pos2(p2) {}
+      SwapExcerpt(MasterScore* s, int p1, int p2) : score(s), pos1(p1), pos2(p2) {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("SwapExcerpt")

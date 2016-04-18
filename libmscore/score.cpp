@@ -1691,11 +1691,12 @@ void MasterScore::addExcerpt(Score* score)
 //   removeExcerpt
 //---------------------------------------------------------
 
-void Score::removeExcerpt(Score* score)
+void MasterScore::removeExcerpt(Score* score)
       {
       for (Excerpt* ex : excerpts()) {
             if (ex->partScore() == score) {
                   if (excerpts().removeOne(ex)) {
+                        setExcerptsChanged(true);
                         delete ex;
                         return;
                         }

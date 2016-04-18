@@ -379,7 +379,7 @@ void ExcerptsDialog::accept()
       qDebug() << "\nFirst pass : delete unwanted parts";
 
       int pos = 0;
-      foreach(Excerpt* e, score->excerpts()) {
+      for (Excerpt* e : score->excerpts()) {
             if (!isInPartsList(e)) {
                   // Delete it because not in the list anymore
                   if (e->partScore()) {
@@ -457,8 +457,8 @@ void ExcerptsDialog::accept()
                   }
             }
 
-      score->endCmd();
       score->setExcerptsChanged(true);
+      score->endCmd();
 
       QDialog::accept();
       }

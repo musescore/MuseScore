@@ -217,7 +217,6 @@ void Score::update()
             emit playlistChanged();
             _playlistDirty = false;
             }
-      cmdState().reset();
       }
 
 //---------------------------------------------------------
