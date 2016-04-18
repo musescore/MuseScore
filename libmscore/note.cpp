@@ -1793,15 +1793,14 @@ void Note::updateAccidental(AccidentalState* as)
                   return;
             if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
-                  if (_tieBack)
+                  acci = Accidental::value2subtype(accVal);
+                  // if previous tied note has same accidental, don't show this one's
+                  if (_tieBack && _tieBack->startNote()->accidentalType() == acci)
                         acci = AccidentalType::NONE;
-                  else {
-                        acci = Accidental::value2subtype(accVal);
-                        if (acci == AccidentalType::NONE)
-                              acci = AccidentalType::NATURAL;
-                        }
+                  else if (acci == AccidentalType::NONE)
+                        acci = AccidentalType::NATURAL;
                   }
-            if (acci != AccidentalType::NONE && !_tieBack && !_hidden) {
+            if (acci != AccidentalType::NONE && !_hidden) {
                   if (_accidental == 0) {
                         Accidental* a = new Accidental(score());
                         a->setParent(this);
