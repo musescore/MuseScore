@@ -1948,7 +1948,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         sw2 = -sw2;
                   stem->setLen(y2 - (by + _pagePos.y()));
                   stem->rxpos() = c->stemPosX() + sw2;
-                  Shape& shape = cr->segment()->shape(cr->vStaffIdx());
+                  Shape& shape = cr->segment()->staffShape(cr->vStaffIdx());
                   shape.add(stem->shape());
                   }
 

@@ -1387,7 +1387,7 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
 
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-            qreal d = shape(staffIdx).minHorizontalDistance(ns->shape(staffIdx));
+            qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
 //            if (st == Segment::Type::ChordRest && nst == Segment::Type::Clef)
 //                  d = qMax(d, minRight()) + score()->styleP(StyleIdx::noteBarDistance);
             w = qMax(w, d);
