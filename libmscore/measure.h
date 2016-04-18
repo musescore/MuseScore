@@ -263,6 +263,8 @@ class Measure : public MeasureBase {
 
       void removeSystemHeader();
       void removeSystemTrailer();
+
+      BarLineType endBarLineType() const;
       };
 
 }     // namespace Ms
