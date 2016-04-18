@@ -3419,5 +3419,31 @@ void Measure::removeSystemTrailer()
                   }
             }
       }
+
+//---------------------------------------------------------
+//   endBarLineType
+//    Assume all barlines have same type if there is more
+//    than one.
+//---------------------------------------------------------
+
+BarLineType Measure::endBarLineType() const
+      {
+      // search barline segment:
+
+      Segment* s = last();
+      while (s && s->segmentType() != Segment::Type::EndBarLine)
+            s = s->prev();
+
+      // search first element
+
+      if (s) {
+            for (const Element* e : s->elist()) {
+                  if (e)
+                        return toBarLine(e)->barLineType();
+                  }
+            }
+      return BarLineType::NORMAL;
+      }
+
 }
 

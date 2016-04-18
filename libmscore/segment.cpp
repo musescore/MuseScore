@@ -1406,6 +1406,8 @@ qreal Segment::minHorizontalDistance(Segment* ns) const
       else if (st == Segment::Type::Clef) {
             if (nst == Segment::Type::KeySig)
                   w += score()->styleP(StyleIdx::clefKeyDistance);
+            else if (nst == Segment::Type::ChordRest)
+                  w += score()->styleP(StyleIdx::keyTimesigDistance);
             else if (nst == Segment::Type::TimeSig)
                   w += score()->styleP(StyleIdx::clefTimesigDistance);
             else if (nst & (Segment::Type::EndBarLine | Segment::Type::StartRepeatBarLine))
