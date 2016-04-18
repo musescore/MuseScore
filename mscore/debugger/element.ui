@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -35,7 +35,7 @@
       <string notr="true"/>
      </property>
      <property name="title">
-      <string notr="true" comment="do not translate">Element</string>
+      <string notr="true">Element</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -192,7 +192,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">Color</string>
+           <string notr="true">Color</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -214,7 +214,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">generated</string>
+           <string notr="true">generated</string>
           </property>
          </widget>
         </item>
@@ -249,7 +249,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">selected</string>
+           <string notr="true">selected</string>
           </property>
          </widget>
         </item>
@@ -262,7 +262,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">visible</string>
+           <string notr="true">visible</string>
           </property>
          </widget>
         </item>
@@ -281,7 +281,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">Mag</string>
+           <string notr="true">Mag</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -329,7 +329,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">system</string>
+           <string notr="true">system</string>
           </property>
          </widget>
         </item>
@@ -456,7 +456,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">Pos</string>
+           <string notr="true">Pos</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -540,7 +540,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">BBox</string>
+           <string notr="true">BBox</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -814,7 +814,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true" comment="do not translate">Uoff</string>
+           <string notr="true">Uoff</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -842,7 +842,7 @@
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
           <property name="suffix">
-           <string comment="do not translate"/>
+           <string notr="true"/>
           </property>
           <property name="minimum">
            <double>-100000.000000000000000</double>
@@ -873,7 +873,7 @@
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
           <property name="suffix">
-           <string comment="do not translate"/>
+           <string notr="true"/>
           </property>
           <property name="minimum">
            <double>-100000.000000000000000</double>

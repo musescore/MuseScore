@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -32,7 +32,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" comment="do not translate">TimeSig</string>
+      <string notr="true">TimeSig</string>
      </property>
      <property name="flat">
       <bool>false</bool>
