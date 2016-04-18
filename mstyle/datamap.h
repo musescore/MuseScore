@@ -29,12 +29,12 @@
 
 //! data map
 /*! it maps templatized data object to associated object */
-template< typename K, typename T > class BaseDataMap: public QMap< const K*, QWeakPointer<T> > {
+template< typename K, typename T > class BaseDataMap: public QMap< const K*, QPointer<T> > {
 
       public:
 
             typedef const K* Key;
-            typedef QWeakPointer<T> Value;
+            typedef QPointer<T> Value;
 
             //! constructor
             BaseDataMap( void ):

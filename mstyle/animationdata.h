@@ -48,7 +48,7 @@ class AnimationData: public QObject {
                   enabled_ = value;
                   }
 
-            const QWeakPointer<QWidget>& target( void ) const {
+            const QPointer<QWidget>& target( void ) const {
                   return target_;
                   }
             static qreal OpacityInvalid;
@@ -65,7 +65,7 @@ class AnimationData: public QObject {
 
       private:
             //! guarded target
-            QWeakPointer<QWidget> target_;
+            QPointer<QWidget> target_;
             bool enabled_;
       };
 

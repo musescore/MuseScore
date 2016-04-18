@@ -77,7 +77,7 @@ class ComboBoxData: public TransitionData {
             QBasicTimer timer_;
 
             //! target
-            QWeakPointer<QComboBox> target_;
+            QPointer<QComboBox> target_;
 
       };
 
