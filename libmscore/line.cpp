@@ -562,7 +562,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     // lay out just past right edge of all notes for this segment on this staff
 
                                     Segment* s = cr->segment();
-                                    qreal width = s->shape(staffIdx()).right();
+                                    qreal width = s->staffShape(staffIdx()).right();
                                     x = width + sp;
 
                                     // extend past chord/rest

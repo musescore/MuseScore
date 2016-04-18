@@ -412,8 +412,8 @@ void System::layout2()
                   Measure* m = toMeasure(mb);
                   Shape s1, s2;
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        s1.add(s->shape(si1).translated(s->pos()));
-                        s2.add(s->shape(si2).translated(s->pos()));
+                        s1.add(s->staffShape(si1).translated(s->pos()));
+                        s2.add(s->staffShape(si2).translated(s->pos()));
 
                         for (Element* e : s->annotations()) {
                               if (e->staffIdx() == si1)
@@ -1091,9 +1091,9 @@ qreal System::minDistance(System* s2) const
                         Shape s1;
                         Shape s2;
                         for (Segment* s = m1->first(); s; s = s->next())
-                              s1.add(s->shape(lastStaff).translated(s->pos()));
+                              s1.add(s->staffShape(lastStaff).translated(s->pos()));
                         for (Segment* s = m2->first(); s; s = s->next())
-                              s2.add(s->shape(0).translated(s->pos()));
+                              s2.add(s->staffShape(0).translated(s->pos()));
                         s1.translate(QPointF(m1->x(), lastStaffY));
                         s2.translate(QPointF(m2->x(), 0.0));
 
@@ -1120,7 +1120,7 @@ qreal System::minTop() const
             if (mb->type() != Element::Type::MEASURE)
                   continue;
             for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
-                  dist = qMin(dist, s->shape(0).top());
+                  dist = qMin(dist, s->staffShape(0).top());
             }
       return dist;
       }
@@ -1138,7 +1138,7 @@ qreal System::minBottom() const
             if (mb->type() != Element::Type::MEASURE)
                   continue;
             for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
-                  dist = qMax(dist, s->shape(staffIdx).bottom());
+                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
             }
       return dist - spatium() * 4;
       }
