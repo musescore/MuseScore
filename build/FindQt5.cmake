@@ -33,5 +33,6 @@ foreach(_component ${_components})
 endforeach()
 
 include_directories(${QT_INCLUDES})
+set(QT_INSTALL_PREFIX ${_qt5Core_install_prefix})
 
 #add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
