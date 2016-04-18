@@ -1163,7 +1163,7 @@ void Score::addElement(Element* element)
       if (parent)
             parent->add(element);
 
-      switch(et) {
+      switch (et) {
             case Element::Type::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(element);
@@ -1249,10 +1249,12 @@ void Score::addElement(Element* element)
             case Element::Type::ARPEGGIO:
                   {
                   Element* cr = parent;
-                  if (cr->type() == Element::Type::CHORD)
-                        createPlayEvents(static_cast<Chord*>(cr));
+                  if (cr->isChord())
+                        createPlayEvents(toChord(cr));
+                  setLayout(cr->tick());
                   }
-                  break;
+                  return;
+
             default:
                   break;
             }
@@ -1387,15 +1389,20 @@ void Score::removeElement(Element* element)
             case Element::Type::ARPEGGIO:
                   {
                   Element* cr = element->parent();
-                  if (cr->type() == Element::Type::CHORD)
-                        createPlayEvents(static_cast<Chord*>(cr));
+                  if (cr->isChord())
+                        createPlayEvents(toChord(cr));
+                  setLayout(cr->tick());
                   }
-                  break;
+                  return;
+
+            case Element::Type::NOTE:
+                  setLayout(element->tick());
+                  return;
 
             default:
                   break;
             }
-//      setLayoutAll();
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
