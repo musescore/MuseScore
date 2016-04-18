@@ -2641,17 +2641,16 @@ void Measure::checkMultiVoices(int staffIdx)
       int strack = staffIdx * VOICES + 1;
       int etrack = staffIdx * VOICES + VOICES;
       _mstaves[staffIdx]->hasVoices = false;
-      for (Segment* s = first(); s; s = s->next()) {
-            if (s->isChordRestType())
-                  continue;
+
+      for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             for (int track = strack; track < etrack; ++track) {
                   Element* e = s->element(track);
                   if (e) {
                         bool v;
-                        if (e->type() == Element::Type::CHORD) {
+                        if (e->isChord()) {
                               v = false;
                               // consider chord visible if any note is visible
-                              Chord* c = static_cast<Chord*>(e);
+                              Chord* c = toChord(e);
                               for (Note* n : c->notes()) {
                                     if (n->visible()) {
                                           v = true;
