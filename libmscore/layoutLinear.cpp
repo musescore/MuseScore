@@ -79,9 +79,8 @@ void Score::layoutLinear(LayoutContext& lc)
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
             Element::Type t = mb->type();
-            if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
+            if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX)
                   continue;
-                  }
             if (styleB(StyleIdx::createMultiMeasureRests) && mb->type() == Element::Type::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   if (m->hasMMRest())
@@ -100,13 +99,16 @@ void Score::layoutLinear(LayoutContext& lc)
             }
 
       QPointF pos(0.0, 0.0);
-      bool isFirstMeasure = true;
+      bool isFirstMeasure   = true;
+      qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
+
       foreach (MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::Type::MEASURE) {
                   Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = m->nextMeasure();
-                  m->createEndBarLines(nm == 0);
+                  bool lastMeasureInSystem = nm == 0;
+                  m->createEndBarLines(lastMeasureInSystem);
                   if (isFirstMeasure) {
                         pos.rx() += system->leftMargin();
                         // width with header
@@ -121,9 +123,8 @@ void Score::layoutLinear(LayoutContext& lc)
                         }
                   else {
                         m->removeSystemHeader();
-                        w = m->minWidth1() * styleD(StyleIdx::linearStretch);
+                        w = computeMinWidth(m->first(), false) * styleD(StyleIdx::linearStretch);
                         }
-                  qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
                   if (w < minMeasureWidth)
                         w = minMeasureWidth;
                   m->stretchMeasure(w);
@@ -132,7 +133,7 @@ void Score::layoutLinear(LayoutContext& lc)
             else {
                   mb->layout();
                   w = mb->width();
-                 }
+                  }
 
             mb->setPos(pos);
             pos.rx() += w;
@@ -140,6 +141,14 @@ void Score::layoutLinear(LayoutContext& lc)
       system->setWidth(pos.x());
       page->setWidth(pos.x());
       system->layout2();
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            m->layout2();
+            }
+
       page->setHeight(system->height() + 20 * spatium());
       page->rebuildBspTree();
       }
