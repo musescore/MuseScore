@@ -120,6 +120,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::clefTimesigDistance,     false, clefTimesigDistance,     resetClefTimesigDistance },
       { StyleIdx::keyTimesigDistance,      false, keyTimesigDistance,      resetKeyTimesigDistance },
       { StyleIdx::keyBarlineDistance,      false, keyBarlineDistance,      resetKeyBarlineDistance },
+      { StyleIdx::systemHeaderDistance,    false, systemHeaderDistance,    resetSystemHeaderDistance },
 
       { StyleIdx::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
       { StyleIdx::staffLineWidth,          false, staffLineWidth,          resetStaffLineWidth },

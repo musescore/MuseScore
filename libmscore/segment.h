@@ -224,7 +224,7 @@ public:
       qreal minRight() const;
       qreal minLeft(const Shape&) const;
       qreal minLeft() const;
-      qreal minHorizontalDistance(Segment* ns) const;
+      qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
 
       // some helper function
       ChordRest* cr(int track) const                    {

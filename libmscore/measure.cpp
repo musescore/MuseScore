@@ -2579,7 +2579,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 
       // fix previous segment width
       Segment* ps = seg->prev();
-      qreal www   = ps->minHorizontalDistance(seg);
+      qreal www   = ps->minHorizontalDistance(seg, false);
       w          += www - ps->width();
       ps->setWidth(www);
 
