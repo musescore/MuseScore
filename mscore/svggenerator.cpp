@@ -1133,8 +1133,8 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
     // other transformations such as rotation. Qt translates everything, but
     // other transformations do occur, and must be handled here.
     QTransform t = state.transform();
-    if (t.m11() == t.m22()    // No scaling
-     && t.m12() == t.m21()) { // No rotation, etc.
+    if (t.m11() == 1 && t.m22() == 1 // No scaling
+     && t.m12() == t.m21()) {        // No rotation, etc.
           // No transformation except translation
           _dx = t.m31();
           _dy = t.m32();
