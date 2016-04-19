@@ -38,8 +38,8 @@ static const std::vector<ParDescr> pd = {
       { R_EQ1FR, "eq1fr", true,   logf(40.0),  logf(2.5e3), 160.0 },
       { R_EQ1GN, "eq1gn", false, -15.0,        15.0,        0.0   },
 
-      { R_EQ2FR, "eg2fr", true,   logf(160.0), logf(10e3),  2.5e3 },
-      { R_EQ2GN, "eg2gn", false, -15.0,        15.0,        0.0   },
+      { R_EQ2FR, "eq2fr", true,   logf(160.0), logf(10e3),  2.5e3 },
+      { R_EQ2GN, "eq2gn", false, -15.0,        15.0,        0.0   },
 
       { R_OPMIX, "opmix", false,  0.0,         1.0,         0.5   }
       };
