@@ -460,20 +460,20 @@ void Selection::updateSelectedElements()
             if (!canSelectVoice(st))
                   continue;
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
-                  if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
+                  if (s->isEndBarLineType())  // do not select end bar line
                         continue;
-                  foreach(Element* e, s->annotations()) {
+                  for (Element* e : s->annotations()) {
                         if (e->track() != st)
                               continue;
-                        if (e->systemFlag()) //exclude system text
-                              continue;
+                        // if (e->systemFlag()) //exclude system text  // ws: why?
+                        //      continue;
                         appendFiltered(e);
                         }
                   Element* e = s->element(st);
                   if (!e || e->generated() || e->type() == Element::Type::TIMESIG || e->type() == Element::Type::KEYSIG)
                         continue;
                   if (e->isChordRest()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         for (Element* e : cr->lyricsList()) {
                               if (e)
                                     appendFiltered(e);
@@ -481,8 +481,8 @@ void Selection::updateSelectedElements()
                         for (Articulation* art : cr->articulations())
                               appendFiltered(art);
                         }
-                  if (e->type() == Element::Type::CHORD) {
-                        Chord* chord = static_cast<Chord*>(e);
+                  if (e->isChord()) {
+                        Chord* chord = toChord(e);
                         for (Chord* graceNote : chord->graceNotes())
                               if (canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
@@ -1173,13 +1173,13 @@ QList<Note*> Selection::uniqueNotes(int track) const
 
 void Selection::extendRangeSelection(ChordRest* cr)
       {
-            extendRangeSelection(cr->segment(),
-                                 cr->nextSegmentAfterCR(Segment::Type::ChordRest
-                                                             | Segment::Type::EndBarLine
-                                                             | Segment::Type::Clef),
-                                 cr->staffIdx(),
-                                 cr->tick(),
-                                 cr->tick());
+      extendRangeSelection(cr->segment(),
+         cr->nextSegmentAfterCR(Segment::Type::ChordRest
+            | Segment::Type::EndBarLine
+            | Segment::Type::Clef),
+            cr->staffIdx(),
+            cr->tick(),
+            cr->tick());
       }
 
 //---------------------------------------------------------
