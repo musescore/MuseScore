@@ -122,7 +122,7 @@ To run the debug version, type:
     ./build.debug/mscore/mscore
 
 ### Testing
-See mtest/README.md or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
+See [mtest/README.md](/mtest/README.md) or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
 
 ### Program Documentation
 To generate program documentation using DoxyGen, first do `make debug`, then type:
