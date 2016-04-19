@@ -1175,8 +1175,8 @@ void MuseScore::selectScore(QAction* action)
       if (!a.isEmpty()) {
             if (a == "clear-recent") {
                   _recentScores.clear();
-//                  if (startcenter)
-//TODO                        startcenter->updateRecentScores();
+                  if (startcenter)
+                        startcenter->updateRecentScores();
                   }
             else {
                   MasterScore* score = readScore(a);
@@ -1268,8 +1268,8 @@ void MuseScore::addRecentScore(Score* score)
       addRecentScore(path);
       path = score->masterScore()->fileInfo()->absoluteFilePath();
       addRecentScore(path);
-//TODO      if (startcenter)
-//            startcenter->updateRecentScores();
+      if (startcenter)
+            startcenter->updateRecentScores();
       }
 
 void MuseScore::addRecentScore(const QString& scorePath)
@@ -2834,8 +2834,8 @@ void MuseScore::writeSettings()
             pianorollEditor->writeSettings();
       if (drumrollEditor)
             drumrollEditor->writeSettings();
-//TODO      if (startcenter)
-//            startcenter->writeSettings(settings);
+      if (startcenter)
+            startcenter->writeSettings(settings);
       }
 
 //---------------------------------------------------------
@@ -3194,8 +3194,8 @@ void MuseScore::handleMessage(const QString& message)
       {
       if (message.isEmpty())
             return;
-//TODO      if (startcenter)
-//            showStartcenter(false);
+      if (startcenter)
+            showStartcenter(false);
       ((QtSingleApplication*)(qApp))->activateWindow();
       MasterScore* score = readScore(message);
       if (score) {
@@ -4225,8 +4225,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             undoRedo(false);
       else if (cmd == "toggle-palette")
             showPalette(a->isChecked());
-//TODO      else if (cmd == "startcenter")
-//            showStartcenter(a->isChecked());
+      else if (cmd == "startcenter")
+            showStartcenter(a->isChecked());
       else if (cmd == "inspector")
             showInspector(a->isChecked());
 #ifdef OMR
