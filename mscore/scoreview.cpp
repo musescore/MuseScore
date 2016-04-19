@@ -3599,6 +3599,7 @@ void ScoreView::select(QMouseEvent* ev)
       else
             curElement = 0;
       _score->setUpdateAll();   //DEBUG
+      _score->update();
       mscore->endCmd();
       }
 
