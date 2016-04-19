@@ -47,17 +47,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   SysStaff
-//---------------------------------------------------------
-
-SysStaff::SysStaff()
-      {
-      _yOff = 0.0;
-      idx   = 0;
-      _show = true;
-      }
-
-//---------------------------------------------------------
 //   ~SysStaff
 //---------------------------------------------------------
 
@@ -350,6 +339,7 @@ void System::layout2()
       for (int i = 0; i < _staves.size(); ++i) {
             Staff*    s  = score()->staff(i);
             SysStaff* ss = _staves[i];
+//DEBUG            ss->setShow(true);
             if (s->show() && ss->show()) {
                   visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
                   if (firstStaffIdx == -1)
@@ -362,8 +352,9 @@ void System::layout2()
                         lastStaffInitialIdx = i;
                         }
                   }
-            else
+            else {
                   ss->setbbox(QRectF());  // already done in layout() ?
+                  }
             }
       if (firstStaffIdx == -1)
             firstStaffIdx = 0;
@@ -376,7 +367,11 @@ void System::layout2()
       qreal staffDistance       = score()->styleP(StyleIdx::staffDistance);
       qreal akkoladeDistance    = score()->styleP(StyleIdx::akkoladeDistance);
 
-      Q_ASSERT(!visibleStaves.empty());
+      if (visibleStaves.empty()) {
+            printf("====no visible staves, staves %d, score staves %d\n", _staves.size(), score()->nstaves());
+            }
+
+//      Q_ASSERT(!visibleStaves.empty());
 
       for (auto i = visibleStaves.begin();; ++i) {
             SysStaff* ss  = i->second;
