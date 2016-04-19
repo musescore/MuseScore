@@ -2224,11 +2224,13 @@ static bool processNonGui()
                         }
                   }
             else if (fn.endsWith(".png")) {
-                  if (!exportScoreParts)
+                  if (!exportScoreParts) {
+                        cs->switchToPageMode();
                         return mscore->savePng(cs, fn);
+                        }
                   else {
                         if (cs->excerpts().size() == 0) {
-                              QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs);
+                              QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs->masterScore());
                       
                               foreach(Excerpt* e, exceprts) {
                                     Score* nscore = new Score(e->oscore());
@@ -2246,7 +2248,7 @@ static bool processNonGui()
                         int idx = 0;
                         int padding = QString("%1").arg(cs->excerpts().size()).size();
                         foreach(Excerpt* e, cs->excerpts()) {
-                              QString suffix = QString("__exc__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
+                              QString suffix = QString("__excerpt__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
                               QString excerptFn = fn.left(fn.size() - 4) + suffix;
                               if (!mscore->savePng(e->partScore(), excerptFn))
                                     return false;
