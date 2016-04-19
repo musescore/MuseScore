@@ -1085,7 +1085,7 @@ class Score : public QObject, public ScoreElement {
       virtual QVariant propertyDefault(P_ID) const override;
 
       virtual inline bool undoRedo() const;
-      virtual inline QQueue<MidiInputEvent> midiInputQueue();
+      virtual inline QQueue<MidiInputEvent>* midiInputQueue();
 
       friend class ChangeSynthesizerState;
       friend class Chord;
@@ -1132,15 +1132,15 @@ class MasterScore : public Score {
 
       void setUndoRedo(bool val)              { _undoRedo = val;    }
 
-      virtual bool undoRedo() const override                   { return _undoRedo;   }
-      virtual bool isMaster() const override                   { return true;        }
-      virtual UndoStack* undoStack() const override            { return _undo;       }
-      virtual TimeSigMap* sigmap() const override              { return _sigmap;     }
-      virtual TempoMap* tempomap() const override              { return _tempomap;   }
-      virtual RepeatList* repeatList()  const override         { return _repeatList; }
-      virtual QList<Excerpt*>& excerpts() override             { return _excerpts;   }
-      virtual const QList<Excerpt*>& excerpts() const override { return _excerpts;   }
-      virtual QQueue<MidiInputEvent> midiInputQueue() override { return _midiInputQueue; }
+      virtual bool undoRedo() const override                    { return _undoRedo;   }
+      virtual bool isMaster() const override                    { return true;        }
+      virtual UndoStack* undoStack() const override             { return _undo;       }
+      virtual TimeSigMap* sigmap() const override               { return _sigmap;     }
+      virtual TempoMap* tempomap() const override               { return _tempomap;   }
+      virtual RepeatList* repeatList()  const override          { return _repeatList; }
+      virtual QList<Excerpt*>& excerpts() override              { return _excerpts;   }
+      virtual const QList<Excerpt*>& excerpts() const override  { return _excerpts;   }
+      virtual QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
 
       virtual void setUpdateAll() override                  { _cmdState.setUpdateMode(UpdateMode::UpdateAll);  }
       virtual void setLayoutAll() override                  { _cmdState.setUpdateMode(UpdateMode::LayoutAll);  }
@@ -1191,20 +1191,20 @@ class MasterScore : public Score {
       void removeExcerpt(Score*);
       };
 
-inline bool Score::undoRedo() const                   { return _masterScore->undoRedo();       }
-inline UndoStack* Score::undoStack() const            { return _masterScore->undoStack();      }
-inline RepeatList* Score::repeatList()  const         { return _masterScore->repeatList();     }
-inline TempoMap* Score::tempomap() const              { return _masterScore->tempomap();       }
-inline TimeSigMap* Score::sigmap() const              { return _masterScore->sigmap();         }
-inline QList<Excerpt*>& Score::excerpts()             { return _masterScore->excerpts();       }
-inline const QList<Excerpt*>& Score::excerpts() const { return _masterScore->excerpts();       }
-inline QQueue<MidiInputEvent> Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
-inline void Score::setUpdateAll()                     { _masterScore->setUpdateAll();          }
-inline void Score::setLayoutAll()                     { _masterScore->setLayoutAll();          }
-inline void Score::setLayout(int tick)                { _masterScore->setLayout(tick);         }
-inline CmdState& Score::cmdState()                    { return _masterScore->cmdState();       }
-inline void Score::addLayoutFlags(LayoutFlags f)      { _masterScore->addLayoutFlags(f);       }
-inline void Score::setInstrumentsChanged(bool v)      { _masterScore->setInstrumentsChanged(v); }
+inline bool Score::undoRedo() const                    { return _masterScore->undoRedo();       }
+inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }
+inline RepeatList* Score::repeatList()  const          { return _masterScore->repeatList();     }
+inline TempoMap* Score::tempomap() const               { return _masterScore->tempomap();       }
+inline TimeSigMap* Score::sigmap() const               { return _masterScore->sigmap();         }
+inline QList<Excerpt*>& Score::excerpts()              { return _masterScore->excerpts();       }
+inline const QList<Excerpt*>& Score::excerpts() const  { return _masterScore->excerpts();       }
+inline QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
+inline void Score::setUpdateAll()                      { _masterScore->setUpdateAll();          }
+inline void Score::setLayoutAll()                      { _masterScore->setLayoutAll();          }
+inline void Score::setLayout(int tick)                 { _masterScore->setLayout(tick);         }
+inline CmdState& Score::cmdState()                     { return _masterScore->cmdState();       }
+inline void Score::addLayoutFlags(LayoutFlags f)       { _masterScore->addLayoutFlags(f);       }
+inline void Score::setInstrumentsChanged(bool v)       { _masterScore->setInstrumentsChanged(v); }
 
 extern MasterScore* gscore;
 extern void fixTicks();

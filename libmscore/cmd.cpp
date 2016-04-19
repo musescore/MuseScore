@@ -1729,15 +1729,15 @@ void Score::cmdResetBeamMode()
 
 bool Score::processMidiInput()
       {
-      if (midiInputQueue().empty())
+      if (midiInputQueue()->empty())
             return false;
 
       if (MScore::debugMode)
           qDebug("processMidiInput");
 
       bool cmdActive = false;
-      while (!midiInputQueue().empty()) {
-            MidiInputEvent ev = midiInputQueue().dequeue();
+      while (!midiInputQueue()->empty()) {
+            MidiInputEvent ev = midiInputQueue()->dequeue();
             if (MScore::debugMode)
                   qDebug("<-- !noteentry dequeue %i", ev.pitch);
             if (!noteEntryMode()) {
