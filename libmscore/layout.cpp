@@ -1450,24 +1450,23 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
 
 void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       {
-       //
-      //    hide empty staves
-      //
-      int staves = _staves.size();
+      int staves   = _staves.size();
       int staffIdx = 0;
       bool systemIsEmpty = true;
 
-      foreach (Staff* staff, _staves) {
-            SysStaff* s  = system->staff(staffIdx);
-            bool oldShow = s->show();
+      for (Staff* staff : _staves) {
+            SysStaff* ss  = system->staff(staffIdx);
+//            bool oldShow = ss->show();
+
             Staff::HideMode hideMode = staff->hideWhenEmpty();
+
             if (hideMode == Staff::HideMode::ALWAYS
                 || (styleB(StyleIdx::hideEmptyStaves)
                     && (staves > 1)
                     && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
                     && hideMode != Staff::HideMode::NEVER)) {
                   bool hideStaff = true;
-                  foreach(MeasureBase* m, system->measures()) {
+                  for (MeasureBase* m : system->measures()) {
                         if (!m->isMeasure())
                               continue;
                         Measure* measure = toMeasure(m);
@@ -1507,34 +1506,40 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                                     break;
                               }
                         }
-                  s->setShow(hideStaff ? false : staff->show());
-                  if (s->show()) {
+                  ss->setShow(hideStaff ? false : staff->show());
+                  if (ss->show())
                         systemIsEmpty = false;
-                        }
                   }
             else {
                   systemIsEmpty = false;
-                  s->setShow(true);
+                  ss->setShow(true);
                   }
 
-            if (oldShow != s->show()) {
 #if 0
+            if (oldShow != s->show()) {
                   foreach (MeasureBase* mb, system->measures()) {
                         if (!mb->isMeasure())
                               continue;
                         static_cast<Measure*>(mb)->createEndBarLines();
                         }
-#endif
                   }
+#endif
             ++staffIdx;
             }
       if (systemIsEmpty) {
-            foreach (Staff* staff, _staves) {
-                  SysStaff* s  = system->staff(staff->idx());
-                  if (staff->showIfEmpty() && !s->show()) {
-                        s->setShow(true);
+            for (Staff* staff : _staves) {
+                  SysStaff* ss  = system->staff(staff->idx());
+                  if (staff->showIfEmpty() && !ss->show()) {
+                        ss->setShow(true);
+                        systemIsEmpty = false;
                         }
                   }
+            }
+      // dont allow a complete empty system
+      if (systemIsEmpty) {
+            Staff* staff = _staves.front();
+            SysStaff* ss = system->staff(staff->idx());
+            ss->setShow(true);
             }
       }
 

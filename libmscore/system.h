@@ -44,12 +44,12 @@ class BarLine;
 //---------------------------------------------------------
 
 class SysStaff {
-      QRectF _bbox;                 ///< Bbox of StaffLines.
-      qreal _yOff { 0 };            ///< offset of top staff line within bbox
-      bool _show { true };          ///< derived from Staff or false if empty
-                                    ///< staff is hidden
+      QRectF _bbox;                 // Bbox of StaffLines.
+      qreal _yOff { 0    };         // offset of top staff line within bbox
+      bool _show  { true };         // derived from Staff or false if empty
+                                    // staff is hidden
    public:
-      int idx;
+      int idx     { 0    };
       QList<InstrumentName*> instrumentNames;
 
       const QRectF& bbox() const    { return _bbox; }
@@ -61,7 +61,7 @@ class SysStaff {
       bool show() const             { return _show; }
       void setShow(bool v)          { _show = v; }
 
-      SysStaff();
+      SysStaff() {}
       ~SysStaff();
       };
 
