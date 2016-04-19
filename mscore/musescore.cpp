@@ -2223,7 +2223,7 @@ static bool processNonGui()
                         return mscore->savePdf(scores, fn);
                         }
                   }
-            if (fn.endsWith(".png")) {
+            else if (fn.endsWith(".png")) {
                   if (!exportScoreParts)
                         return mscore->savePng(cs, fn);
                   else {
@@ -2246,20 +2246,15 @@ static bool processNonGui()
                         int idx = 0;
                         int padding = QString("%1").arg(cs->excerpts().size()).size();
                         foreach(Excerpt* e, cs->excerpts()) {
-                              QString excerptName = fn.left(fn.size() - 4) + QString("__exc__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
-                              if (!mscore->savePng(e->partScore(), excerptName))
+                              QString suffix = QString("__exc__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
+                              QString excerptFn = fn.left(fn.size() - 4) + suffix;
+                              if (!mscore->savePng(e->partScore(), excerptFn))
                                     return false;
                               idx++;
-                        }
+                              }
                         return true;
                         }
-            }
-/*	
-            else if (fn.endsWith(".png")) {
-                  cs->switchToPageMode();
-                  rv = mscore->savePng(cs, fn);
                   }
-*/
             else if (fn.endsWith(".svg")) {
                   cs->switchToPageMode();
                   rv = mscore->saveSvg(cs, fn);
