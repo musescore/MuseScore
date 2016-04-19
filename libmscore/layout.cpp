@@ -2081,13 +2081,20 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             x = qMax(x, timesigLeftMargin);
       x += s->extraLeadingSpace().val() * spatium();
 
+      bool isSystemHeader = isFirstMeasureInSystem;
+
       for (Segment* ss = s; ss;) {
             ss->rxpos() = x;
             Segment* ns = ss->next();
             qreal w;
 
             if (ns) {
-                  w = ss->minHorizontalDistance(ns);
+                  if (isSystemHeader && ns->isChordRestType()) {        // this is the system header gap
+                        w = ss->minHorizontalDistance(ns, true);
+                        isSystemHeader = false;
+                        }
+                  else
+                        w = ss->minHorizontalDistance(ns, false);
 #if 1
                   // look back for collisions with previous segments
                   // this is time consuming (ca. +5%) and probably requires more optimization
@@ -2101,7 +2108,7 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                               ps = ps->prev();
                               if (ps->isChordRestType())
                                     ++n;
-                              ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+                              ww = ps->minHorizontalDistance(ns, false) - (ss->x() - ps->x());
                               }
                         if (ww > w) {
                               // overlap !
