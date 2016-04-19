@@ -2699,7 +2699,7 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       Measure* measure = toMeasure(lc.curMeasure);
       measure->moveTicks(lc.tick - measure->tick());
-      if (isMaster() && lc.prevMeasure) {
+      if (isMaster() && !lc.prevMeasure) {
             lc.sig = measure->len();
             tempomap()->clear();
             sigmap()->clear();
