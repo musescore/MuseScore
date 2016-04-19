@@ -3103,8 +3103,7 @@ System* Score::collectSystem(LayoutContext& lc)
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure
 
-
-            if (!system->measures().empty() && (minWidth + ww > systemWidth)) {
+            if ((system->measures().size() > 1) && (minWidth + ww > systemWidth)) {
                   system->measures().pop_back();
                   lc.curMeasure->setSystem(oldSystem);
                   break;
@@ -3135,7 +3134,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   }
 
-//            if (lc.rangeLayout && lc.endTick <= lc.curMeasure->tick()) {
             if (lc.rangeLayout && lc.endTick < lc.curMeasure->tick()) {
                   // TODO: we may check if another measure fits in this system
                   if (lc.curMeasure == lc.systemOldMeasure) {
