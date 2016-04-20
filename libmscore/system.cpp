@@ -1053,6 +1053,7 @@ qreal System::minDistance(System* s2) const
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
+                  Q_ASSERT(!m->mstaves().empty());
                   Spacer* sp = m->mstaves().back()->_vspacerDown;
                   if (sp)
                         dist = qMax(dist, sp->gap());
@@ -1061,6 +1062,7 @@ qreal System::minDistance(System* s2) const
       for (MeasureBase* mb2 : s2->ml) {
             if (mb2->isMeasure()) {
                   Measure* m = toMeasure(mb2);
+                  Q_ASSERT(!m->mstaves().empty());
                   Spacer* sp = m->mstaves().front()->_vspacerUp;
                   if (sp)
                         dist = qMax(dist, sp->gap());

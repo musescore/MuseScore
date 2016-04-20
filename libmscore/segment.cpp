@@ -1401,10 +1401,18 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
             }
       else if (st != Segment::Type::ChordRest && nst == Segment::Type::ChordRest) {
-            qreal d = score()->styleP(systemHeaderGap ? StyleIdx::systemHeaderDistance : StyleIdx::barNoteDistance);
-            d      -= ns->minLeft() * .7;      // hack
-            d       = qMax(d, spatium());
-            w       = qMax(w, minRight()) + d;
+            qreal d;
+            if (systemHeaderGap) {
+                  if (st == Segment::Type::TimeSig)
+                        d = score()->styleP(StyleIdx::systemHeaderTimeSigDistance);
+                  else
+                        d = score()->styleP(StyleIdx::systemHeaderDistance);
+                  }
+            else
+                  d = score()->styleP(StyleIdx::barNoteDistance);
+            d -= ns->minLeft() * .7;      // hack
+            d = qMax(d, spatium());       // minimum distance is one spatium
+            w = qMax(w, minRight()) + d;
             }
       else if (st == Segment::Type::Clef) {
             if (nst == Segment::Type::KeySig)
@@ -1414,8 +1422,10 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             else if (nst & (Segment::Type::EndBarLine | Segment::Type::StartRepeatBarLine))
                   w += score()->styleP(StyleIdx::clefBarlineDistance);
             }
-      else if (st == Segment::Type::KeySig && nst == Segment::Type::TimeSig)
+      else if ((st & (Segment::Type::KeySig | Segment::Type::KeySigAnnounce))
+         && (nst & (Segment::Type::TimeSig | Segment::Type::TimeSigAnnounce))) {
             w += score()->styleP(StyleIdx::keyTimesigDistance);
+            }
       else if (st == Segment::Type::KeySig && nst == Segment::Type::StartRepeatBarLine)
             w += score()->styleP(StyleIdx::keyBarlineDistance);
       else if (st == Segment::Type::StartRepeatBarLine)
@@ -1423,7 +1433,9 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       else if (st == Segment::Type::BeginBarLine && nst == Segment::Type::Clef)
             w += score()->styleP(StyleIdx::clefLeftMargin);
       else if (st == Segment::Type::EndBarLine && nst == Segment::Type::KeySigAnnounce)
-            w += score()->styleP(StyleIdx::clefKeyRightMargin);
+            w += score()->styleP(StyleIdx::keysigLeftMargin);
+      else if (st == Segment::Type::EndBarLine && nst == Segment::Type::TimeSigAnnounce)
+            w += score()->styleP(StyleIdx::timesigLeftMargin);
       else if (st == Segment::Type::Breath)
             w += spatium() * 1.5;
       if (w < 0.0)

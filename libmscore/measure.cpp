@@ -2518,25 +2518,21 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       if (isLastMeasureInSystem && show) {
             int tick = endTick();
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  int track = staffIdx * VOICES;
-                  Staff* staff = score()->staff(staffIdx);
-
+                  Staff* staff     = score()->staff(staffIdx);
                   KeySigEvent key1 = staff->keySigEvent(tick - 1);
                   KeySigEvent key2 = staff->keySigEvent(tick);
-                  if (show && !(key1 == key2)) {
+                  if (!(key1 == key2)) {
                         // locate a key sig. in next measure and, if found,
                         // check if it has court. sig turned off
                         Segment* s = nm->findSegment(Segment::Type::KeySig, tick);
                         if (s) {
-                              KeySig* ks = toKeySig(s->element(track));
+                              KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
                               if (ks && !ks->showCourtesy())
-                                    show = false;     // this key change has court. sig turned off
+                                    continue;
                               }
-                        if (show) {
-                              setHasCourtesyKeySig(true);
-                              t = BarLineType::DOUBLE;
-                              break;
-                              }
+                        setHasCourtesyKeySig(true);
+                        t = BarLineType::DOUBLE;
+                        break;
                         }
                   }
             }

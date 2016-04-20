@@ -97,7 +97,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::clefTimesigDistance,     "clefTimesigDistance",     Spatium(1.0) },
       { StyleIdx::keyTimesigDistance,      "keyTimesigDistance",      Spatium(1.0) },    // gould: 1 - 1.5
       { StyleIdx::keyBarlineDistance,      "keyTimesigDistance",      Spatium(1.0) },
-      { StyleIdx::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },
+      { StyleIdx::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },     // gould: 2.5
+      { StyleIdx::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },  // gould: 2.0
 
       { StyleIdx::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.18) },      // was 0.5
       { StyleIdx::stemWidth,               "stemWidth",               Spatium(0.13) },      // 0.09375
