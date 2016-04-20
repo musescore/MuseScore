@@ -182,8 +182,8 @@ void Clef::layout()
                   //       AND measure is not at the end of a repeat or of a section
                   //       AND this clef has courtesy clef turned on
 
-                  bool notCourtesy = (m->system() && m != m->system()->lastMeasure()) && (clefSeg->tick() != m->endTick());
-                  show = notCourtesy
+                  bool isCourtesy = m->system() && (m == m->system()->lastMeasure()) && (clefSeg->tick() == m->endTick());
+                  show = !isCourtesy
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
                               && !( m->repeatEnd() || m->isFinalMeasureOfSection() )
                               && showCourtesy() );
