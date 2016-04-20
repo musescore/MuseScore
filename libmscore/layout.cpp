@@ -1238,11 +1238,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       int nVisible = 0;
       int staffIdx = 0;
 
-      // keep key sigs in TABs: TABs themselves should hide them
-      bool needKeysig = isFirstSystem || styleB(StyleIdx::genKeysig);
-
       for (Staff* staff : _staves) {
-
             // At this time we don't know which staff is visible or not...
             // but let's not create the key/clef if there were no visible before this layout
             // sometimes we will be right, other time it will take another layout to be right...
@@ -1281,28 +1277,57 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom() || keyIdx.isAtonal())) {
-                  //
-                  // create missing key signature
-                  //
-                  keysig = new KeySig(this);
-                  keysig->setKeySigEvent(keyIdx);
-                  keysig->setTrack(strack);
-                  keysig->setGenerated(true);
-                  Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
-                  keysig->setParent(seg);
-                  undo(new AddElement(keysig));
-                  }
-            else if (!needKeysig && keysig && keysig->generated()) {
-                  undoRemoveElement(keysig);
-                  keysig = 0;
-                  }
-            else if (keysig && !(keysig->keySigEvent() == keyIdx))
-                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
+            // keep key sigs in TABs: TABs themselves should hide them
+            bool needKeysig = isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (keysig) {
+            // If we need a Key::C KeySig (which would be invisible) and there is
+            // a courtesy key sig, dont create it and switch generated flags.
+            // This avoids creating an invisible KeySig which can distort layout.
+
+            KeySig* ksAnnounce = 0;
+            if (needKeysig && (keyIdx.key() == Key::C)) {
+                  Measure* pm = m->prevMeasure();
+                  if (pm && pm->hasCourtesyKeySig()) {
+                        Segment* ks = pm->first(Segment::Type::KeySigAnnounce);
+                        if (ks) {
+                              ksAnnounce = toKeySig(ks->element(strack));
+                              if (ksAnnounce) {
+                                    needKeysig = false;
+                                    if (keysig) {
+                                          ksAnnounce->setGenerated(false);
+                                          keysig->setGenerated(true);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+
+            needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
+            needKeysig = needKeysig || (keysig && !keysig->generated());  // dont remove user modified keysigs
+
+            if (needKeysig) {
+                  if (!keysig) {
+                        //
+                        // create missing key signature
+                        //
+                        keysig = new KeySig(this);
+                        keysig->setKeySigEvent(keyIdx);
+                        keysig->setTrack(strack);
+                        keysig->setGenerated(true);
+                        Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
+                        keysig->setParent(seg);
+                        undo(new AddElement(keysig));
+                        }
+                  else {
+                        if (!(keysig->keySigEvent() == keyIdx))
+                              undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
+                        }
                   keysig->layout();       // hide naturals may have changed
                   keysig->segment()->createShape(staffIdx);
+                  }
+            else if (keysig) {
+                  undoRemoveElement(keysig);
+                  keysig = 0;
                   }
 
             if (isFirstSystem || styleB(StyleIdx::genClef)) {
@@ -3177,6 +3202,7 @@ System* Score::collectSystem(LayoutContext& lc)
       Measure* nm = m ? m->nextMeasure() : 0;
       Segment* s;
 
+
       if (m && nm) {
             m->setHasSystemTrailer(false);
             int tick = m->endTick();
@@ -3187,6 +3213,7 @@ System* Score::collectSystem(LayoutContext& lc)
             TimeSig* ts;
             Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
             bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
+
             if (showCourtesySig) {
                   ts = toTimeSig(tss->element(0));
                   if (ts && !ts->showCourtesySig())
@@ -3222,48 +3249,39 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
 
             // courtesy key signatures
-            int n = _staves.size();
+            int n     = _staves.size();
+            bool show = m->hasCourtesyKeySig();
+            Segment* s;
+            if (show)
+                  s = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick);
+            else
+                  s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
+
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-                  int track = staffIdx * VOICES;
+                  int track    = staffIdx * VOICES;
                   Staff* staff = _staves[staffIdx];
 
-                  bool show = m->hasCourtesyKeySig();
                   if (show) {
-                        KeySigEvent key1 = staff->keySigEvent(tick - 1);
+                        m->setHasSystemTrailer(true);
+                        KeySig* ks = toKeySig(s->element(track));
                         KeySigEvent key2 = staff->keySigEvent(tick);
-                        if (!(key1 == key2)) {
-                              // locate a key sig. in next measure and, if found,
-                              // check if it has court. sig turned off
-                              Segment* s = m->findSegment(Segment::Type::KeySig, tick);
-                              if (s) {
-                                    KeySig* ks = toKeySig(s->element(staff->idx() * VOICES));
-                                    if (ks && !ks->showCourtesy())
-                                          show = false;
-                                    }
-                              }
-                        if (show) {
-                              m->setHasSystemTrailer(true);
-                              s  = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick);
-                              KeySig* ks = toKeySig(s->element(track));
 
-                              if (!ks) {
-                                    ks = new KeySig(this);
-                                    ks->setKeySigEvent(key2);
-                                    ks->setTrack(track);
-                                    ks->setGenerated(true);
-                                    ks->setParent(s);
-                                    undoAddElement(ks);
-                                    ks->layout();
-                                    s->createShape(track / VOICES);
-                                    }
-                              else if (!(ks->keySigEvent() == key2)) {
-                                    undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
-                                    }
+                        if (!ks) {
+                              ks = new KeySig(this);
+                              ks->setKeySigEvent(key2);
+                              ks->setTrack(track);
+                              ks->setGenerated(true);
+                              ks->setParent(s);
+                              undoAddElement(ks);
                               }
+                        else if (!(ks->keySigEvent() == key2)) {
+                              undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
+                              }
+                        ks->layout();
+                        s->createShape(track / VOICES);
                         }
-                  if (!show) {
+                  else {
                         // remove any existent courtesy key signature
-                        Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
                         if (s && s->element(track))
                               undoRemoveElement(s->element(track));
                         }
