@@ -1584,8 +1584,11 @@ void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         mmr->scanElements(data, func, all);
                   }
             }
-      for (Page* page : pages())
-            page->scanElements(data, func, all);
+      for (Page* page : pages()) {
+            for (System* s :page->systems())
+                  s->scanElements(data, func, all);
+            func(data, page);
+            }
       }
 
 //---------------------------------------------------------
@@ -2733,10 +2736,7 @@ void Score::collectMatch(void* data, Element* e)
       if ((p->staffStart != -1)
          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
-         || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS
-         || e->type() == Element::Type::BEAM || e->type() == Element::Type::STEM
-         || e->type() == Element::Type::SLUR_SEGMENT) {
+      if (e->isChord() || e->isRest() || e->isNote() || e->isLyrics() || e->isBeam() || e->isStem() || e->isSlurSegment()) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
@@ -2785,9 +2785,8 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       score->scanElements(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      for (Element* e : pattern.el) {
+      for (Element* e : pattern.el)
             score->select(e, SelectType::ADD, 0);
-            }
       }
 
 //---------------------------------------------------------
