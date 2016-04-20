@@ -1902,10 +1902,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
       if (!dragMode && _accidental)
             func(data, _accidental);
-      if (chord()) {
-            for (NoteDot* dot : _dots)
-                  func(data, dot);
-            }
+      for (NoteDot* dot : _dots)
+            func(data, dot);
       }
 
 //---------------------------------------------------------
