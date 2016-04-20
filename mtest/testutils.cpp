@@ -164,7 +164,6 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       else
             rv = Score::FileError::FILE_UNKNOWN_TYPE;
 
-
       if (rv != Score::FileError::FILE_NO_ERROR) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
@@ -337,7 +336,7 @@ void MTest::initMTest()
 
       root = TESTROOT "/mtest";
       loadInstrumentTemplates(":/instruments.xml");
-      score = readScore("/test.mscx");
+      score = readScore("test.mscx");
       }
 }
 
