@@ -4723,8 +4723,8 @@ int main(int argc, char* av[])
             QCoreApplication::setApplicationName("MuseScoreDevelopment");
             }
       else {
-            app = new MuseScoreApplication("mscore2", argc, av);
-            QCoreApplication::setApplicationName("MuseScore2");
+            app = new MuseScoreApplication("mscore3", argc, av);
+            QCoreApplication::setApplicationName("MuseScore3");
             }
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
