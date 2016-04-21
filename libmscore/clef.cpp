@@ -141,6 +141,19 @@ void Clef::setSelected(bool f)
       }
 
 //---------------------------------------------------------
+//   clear
+//    Remove all elements and set bbxo to zero. This
+//    makes the clef invisible.
+//---------------------------------------------------------
+
+void Clef::clear()
+      {
+      qDeleteAll(elements);
+      elements.clear();
+      setbbox(QRectF());
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -156,10 +169,11 @@ void Clef::layout()
 
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
-            StaffType*  staffType = staff()->staffType();
-            bool show             = staffType->genClef();        // check staff type allows clef display
-            int tick              = clefSeg->tick();              // check clef is compatible with staff type group
+            StaffType* staffType = staff()->staffType();
+            bool show            = staffType->genClef();        // check staff type allows clef display
+            int tick             = clefSeg->tick();
 
+            // check clef is compatible with staff type group:
             if (ClefInfo::staffGroup(clefType()) != staffType->group()) {
                   if (tick > 0 && !generated()) // if clef is not generated, hide it
                         show = false;
@@ -167,26 +181,6 @@ void Clef::layout()
                         // TODO : instead of initial staff clef (which is assumed to be compatible)
                         // use the last compatible clef previously found in staff
                         _clefTypes = staff()->clefType(0);
-                  }
-
-            //
-            // courtesy clef
-            //
-            // only if there is a clef change
-            if (show && tick > 0) {
-                  Measure* m = clefSeg->measure();
-
-                  // show this clef if:
-                  //    - it is not a courtesy clef (not at the end of the last measure of the system)
-                  //    - if courtesy clef: show if score has courtesy clefs on
-                  //       AND measure is not at the end of a repeat or of a section
-                  //       AND this clef has courtesy clef turned on
-
-                  bool isCourtesy = m->system() && (m == m->system()->lastMeasure()) && (clefSeg->tick() == m->endTick());
-                  show = !isCourtesy
-                        || ( score()->styleB(StyleIdx::genCourtesyClef)
-                              && !( m->repeatEnd() || m->isFinalMeasureOfSection() )
-                              && showCourtesy() );
                   }
 
             // if clef not to show or not compatible with staff group
@@ -200,13 +194,12 @@ void Clef::layout()
             lineDist = staffType->lineDistance().val();
             }
       else {
-            lines = 5;
+            lines    = 5;
             lineDist = 1.0;
             }
 
       qreal _spatium = spatium();
       qreal yoff     = 0.0;
-
 
       Symbol* symbol = new Symbol(score());
 
