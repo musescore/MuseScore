@@ -4158,6 +4158,22 @@
                   </Channel>
                   <genre>jazz</genre>
             </Instrument>
+            <Instrument id="bb-sousaphone">
+                  <longName>B♭ Sousaphone</longName>
+                  <shortName>B♭ Sphn.</shortName>
+                  <description>B♭ Sousaphone</description>
+                  <musicXMLid>brass.sousaphone</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>30-60</aPitchRange>
+                  <pPitchRange>24-74</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="58"/>
+                  </Channel>
+                  <genre>jazz</genre>
+            </Instrument>
             <Instrument id="wagner-tuba">
                   <longName>Wagner Tuba</longName>
                   <shortName>Wag. Tu.</shortName>
