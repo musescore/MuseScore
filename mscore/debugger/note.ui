@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>807</width>
-    <height>309</height>
+    <height>325</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -157,7 +157,7 @@
          <bool>true</bool>
         </property>
         <property name="minimum">
-         <number>-99</number>
+         <number>-9999</number>
         </property>
        </widget>
       </item>

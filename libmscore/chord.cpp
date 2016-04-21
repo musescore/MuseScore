@@ -1603,8 +1603,9 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             }
 
       std::vector<Note*> lnotes(notes());  // we need a copy!
-      for (Note* note : lnotes) {
-            if (staffGroup == StaffGroup::STANDARD) {
+
+      if (staffGroup == StaffGroup::STANDARD) {
+            for (Note* note : lnotes) {
                   if (note->tieBack()) {
                         if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                               // TODO: remove accidental only if note is not
@@ -1614,19 +1615,25 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
-            else if (staffGroup == StaffGroup::PERCUSSION) {
-                  const Instrument* instrument = part()->instrument();
-                  const Drumset* drumset = instrument->drumset();
-                  int pitch = note->pitch();
-                  if (drumset) {
+            }
+      else if (staffGroup == StaffGroup::PERCUSSION) {
+            const Instrument* instrument = part()->instrument();
+            const Drumset* drumset = instrument->drumset();
+            if (!drumset)
+                  qWarning("no drumset");
+            for (Note* note : lnotes) {
+                  if (!drumset)
+                        note->setLine(0);
+                  else {
+                        int pitch = note->pitch();
                         if (!drumset->isValid(pitch)) {
-                              // qDebug("unmapped drum note %d", pitch);
+                              note->setLine(0);
+                              qWarning("unmapped drum note %d", pitch);
                               }
                         else if (!note->fixed()) {
                               note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
-                             // note->setHeadGroup(drumset->noteHead(pitch));
+                              // note->setHeadGroup(drumset->noteHead(pitch));
                               note->setLine(drumset->line(pitch));
-                              continue;
                               }
                         }
                   }
@@ -1704,7 +1711,7 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal _mag             = staff()->mag();
+      qreal _mag             = staff() ? staff()->mag() : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(StyleIdx::dotNoteDistance)  * _mag;
       qreal minNoteDistance  = score()->styleP(StyleIdx::minNoteDistance)  * _mag;
       qreal minTieLength     = score()->styleP(StyleIdx::MinTieLength)     * _mag;
