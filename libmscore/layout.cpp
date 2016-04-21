@@ -3202,7 +3202,6 @@ System* Score::collectSystem(LayoutContext& lc)
       Measure* nm = m ? m->nextMeasure() : 0;
       Segment* s;
 
-
       if (m && nm) {
             m->setHasSystemTrailer(false);
             int tick = m->endTick();
@@ -3257,6 +3256,8 @@ System* Score::collectSystem(LayoutContext& lc)
             else
                   s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
 
+            Segment* clefSegment = m->findSegment(Segment::Type::Clef, tick);
+
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   int track    = staffIdx * VOICES;
                   Staff* staff = _staves[staffIdx];
@@ -3284,6 +3285,14 @@ System* Score::collectSystem(LayoutContext& lc)
                         // remove any existent courtesy key signature
                         if (s && s->element(track))
                               undoRemoveElement(s->element(track));
+                        }
+                  if (clefSegment) {
+                        Clef* clef = toClef(clefSegment->element(track));
+                        if (clef && (!score()->styleB(StyleIdx::genCourtesyClef)
+                           || m->repeatEnd() || m->isFinalMeasureOfSection()
+                           || !clef->showCourtesy())) {
+                              clef->clear();          // make invisible
+                              }
                         }
                   }
             //HACK to layout cautionary elements:
