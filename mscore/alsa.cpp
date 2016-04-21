@@ -620,7 +620,7 @@ AlsaAudio::~AlsaAudio()
 //    return false on error
 //---------------------------------------------------------
 
-bool AlsaAudio::init(bool hot)
+bool AlsaAudio::init(bool /*hot*/)
       {
       alsa = new AlsaDriver(
          preferences.alsaDevice,
