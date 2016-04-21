@@ -2855,8 +2855,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
       if (cr->small())
             m *= score()->styleD(StyleIdx::smallNoteMag);
 
-      if (cr->type() == Element::Type::CHORD) {
-            Chord* chord = static_cast<Chord*>(cr);
+      if (cr->isChord()) {
+            Chord* chord = toChord(cr);
             for (Chord* c : chord->graceNotes())
                   layoutCR0(c, mm, as);
             if (!chord->isGrace())
