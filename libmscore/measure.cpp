@@ -513,7 +513,7 @@ ChordRest* Measure::findChordRest(int tick, int track)
                   return 0;
             if (seg.tick() == tick) {
                   Element* el = seg.element(track);
-                  if (el->isChordRest())
+                  if (el && el->isChordRest())
                         return toChordRest(el);
                   }
             }
