@@ -1330,7 +1330,9 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   keysig = 0;
                   }
 
-            if (isFirstSystem || styleB(StyleIdx::genClef)) {
+            StaffType* staffType  = staff->staffType();
+            bool showClef         = staffType->genClef() && (isFirstSystem || styleB(StyleIdx::genClef));
+            if (showClef) {
                   ClefTypeList cl = staff->clefType(tick);
                   if (!clef) {
                         //
