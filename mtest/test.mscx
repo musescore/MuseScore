@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="2.07">
-  <programVersion>2.1.0</programVersion>
-  <programRevision>3543170</programRevision>
+  <programVersion>3.0.0</programVersion>
+  <programRevision>3cb7621</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>

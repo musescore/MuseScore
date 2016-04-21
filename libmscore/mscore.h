@@ -54,7 +54,7 @@ static constexpr int MSCVERSION = 207;
 //    2.04  added hideSystemBarLine flag to Staff
 //    2.05  breath segment changed to use tick of following chord rather than preceding chord
 //    2.06  Glissando moved from final chord to start note (Version 2.0.x)
-//    2.07  irregular, breakMMrest, more style options, system divider, bass string for tab (2.1)
+//    2.07  irregular, breakMMrest, more style options, system divider, bass string for tab (3.0)
 
 
 class MStyle;

@@ -1,7 +1,7 @@
-VERSION=2.0
+VERSION=3.0
 APPNAME=mscore
 LONG_NAME=MuseScore
-LONGER_NAME="MuseScore 2"
+LONGER_NAME="MuseScore 3"
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.tiff
