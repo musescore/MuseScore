@@ -57,7 +57,7 @@ set_target_properties (
       ${TARGET}
       PROPERTIES
       AUTOMOC true
-      COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
+      COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
       LINK_FLAGS    "-g -stdlib=libc++"
       )
 else(APPLE)
@@ -69,5 +69,13 @@ set_target_properties (
       LINK_FLAGS    "-g"
       )
 endif(APPLE)
+
+if (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
+set_target_properties (
+      ${TARGET}
+      PROPERTIES
+      COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
+      )
+endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 
 add_test(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}  -xunitxml -o result.xml)
