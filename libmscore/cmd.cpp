@@ -88,8 +88,8 @@ void CmdState::reset()
       _updateMode         = UpdateMode::DoNothing;
 //      _playNote           = false;        ///< play selected note after command
 //      _playChord          = false;        ///< play whole chord for the selected note
-      _excerptsChanged    = false;
-      _instrumentsChanged = false;
+//      _excerptsChanged    = false;
+//      _instrumentsChanged = false;
 //      _selectionChanged   = false;
       _startTick          = -1;
       _endTick            = -1;

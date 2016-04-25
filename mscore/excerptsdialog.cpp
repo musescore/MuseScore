@@ -313,7 +313,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       if (e->parts().isEmpty())
             return;
 
-      Score* nscore = new Score(static_cast<MasterScore*>(e->oscore()));
+      Score* nscore = new Score(e->oscore());
       e->setPartScore(nscore);
 
       nscore->setName(e->title()); // needed before AddExcerpt
@@ -408,7 +408,6 @@ void ExcerptsDialog::accept()
             QListWidgetItem* cur = excerptList->currentItem();
             if (cur == 0)
                   continue;
-
             createExcerptClicked(cur);
             }
 
@@ -456,10 +455,7 @@ void ExcerptsDialog::accept()
                   score->undo(new SwapExcerpt(score, i, position));
                   }
             }
-
-      score->setExcerptsChanged(true);
       score->endCmd();
-
       QDialog::accept();
       }
 }

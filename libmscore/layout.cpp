@@ -3463,7 +3463,7 @@ bool Score::collectPage(LayoutContext& lc)
       Page* page = getEmptyPage(lc);
       qreal y    = page->tm();
       qreal ey   = page->height() - page->bm();
-      System* s1 = 0;                           // previous system
+      System* s1 = 0;               // previous system
       System* s2 = lc.curSystem;
 
       for (;;) {
