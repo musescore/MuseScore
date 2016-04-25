@@ -1084,7 +1084,7 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       xml.etag();
       const PageFormat* pf = s->pageFormat();
       if (pf)
-            writePageFormat(pf, xml, INCH / millimeters * tenths);
+            writePageFormat(pf, xml, PageFormat::SCALE_XML);
 
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
@@ -1156,12 +1156,12 @@ void ExportMusicXml::credits(Xml& xml)
       // determine page formatting
       const PageFormat* pf = _score->pageFormat();
       if (!pf) return;
-      const double h  = getTenthsFromInches(pf->size().height());
-      const double w  = getTenthsFromInches(pf->size().width());
-      const double lm = getTenthsFromInches(pf->oddLeftMargin());
-      const double rm = getTenthsFromInches(pf->oddRightMargin());
-      //const double tm = getTenthsFromInches(pf->oddTopMargin());
-      const double bm = getTenthsFromInches(pf->oddBottomMargin());
+      const double h  = pf->size().height()   * PageFormat::SCALE_XML;
+      const double w  = pf->size().width()    * PageFormat::SCALE_XML;
+      const double lm = pf->oddLeftMargin()   * PageFormat::SCALE_XML;
+      const double rm = pf->oddRightMargin()  * PageFormat::SCALE_XML;
+      //const double tm = pf->oddTopMargin()  * PageFormat::SCALE_XML;
+      const double bm = pf->oddBottomMargin() * PageFormat::SCALE_XML;
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
@@ -2363,8 +2363,8 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QVector<Lyrics*>* ll, 
 #endif
 
       const PageFormat* pf = _score->pageFormat();
-      const double pageHeight  = getTenthsFromInches(pf->size().height());
-      // const double pageWidth  = getTenthsFromInches(pf->size().width());
+      const double pageHeight  = pf->size().height() * PageFormat::SCALE_XML;
+      // const double pageWidth  = pf->size().width() * PageFormat::SCALE_XML;
 
       for (Note* note : nl) {
             QString val;
@@ -4451,10 +4451,10 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
             if (doLayout) {
                   xml.stag(QString("print%1").arg(newThing));
                   const PageFormat* pf = score()->pageFormat();
-                  const double pageWidth  = getTenthsFromInches(pf->size().width());
-                  const double lm = getTenthsFromInches(pf->oddLeftMargin());
-                  const double rm = getTenthsFromInches(pf->oddRightMargin());
-                  const double tm = getTenthsFromInches(pf->oddTopMargin());
+                  const double pageWidth  = pf->size().width() * PageFormat::SCALE_XML;
+                  const double lm = pf->oddLeftMargin()  * PageFormat::SCALE_XML;
+                  const double rm = pf->oddRightMargin() * PageFormat::SCALE_XML;
+                  const double tm = pf->oddTopMargin()   * PageFormat::SCALE_XML;
 
                   // System Layout
 
@@ -5420,7 +5420,7 @@ bool saveMxl(Score* score, const QString& name)
 
 double ExportMusicXml::getTenthsFromInches(double inches)
       {
-      return inches * INCH / millimeters * tenths;
+      return inches * MMPI / millimeters * tenths;
       }
 
 double ExportMusicXml::getTenthsFromDots(double dots)
