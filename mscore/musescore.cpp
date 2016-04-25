@@ -2203,10 +2203,10 @@ static bool processNonGui()
                         }
                   else {
                         if (cs->excerpts().size() == 0) {
-                              QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs->masterScore());
+                              auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
 
-                              foreach(Excerpt* e, exceprts) {
-                                    Score* nscore = new Score(static_cast<MasterScore*>(e->oscore()));
+                              for (Excerpt* e : excerpts) {
+                                    Score* nscore = new Score(e->oscore());
                                     e->setPartScore(nscore);
                                     nscore->masterScore()->setName(e->title()); // needed before AddExcerpt
                                     nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
@@ -2218,7 +2218,7 @@ static bool processNonGui()
                               }
                         QList<Score*> scores;
                         scores.append(cs);
-                        foreach(Excerpt* e, cs->excerpts())
+                        for (Excerpt* e : cs->excerpts())
                               scores.append(e->partScore());
                         return mscore->savePdf(scores, fn);
                         }
@@ -2230,9 +2230,9 @@ static bool processNonGui()
                         }
                   else {
                         if (cs->excerpts().size() == 0) {
-                              auto exceprts = Excerpt::createAllExcerpt(cs->masterScore());
-                      
-                              for (Excerpt* e: exceprts) {
+                              auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
+
+                              for (Excerpt* e: excerpts) {
                                     Score* nscore = new Score(e->oscore());
                                     e->setPartScore(nscore);
                                     nscore->setName(e->title()); // needed before AddExcerpt
