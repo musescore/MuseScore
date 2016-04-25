@@ -33,15 +33,23 @@
 
 namespace Ms {
 
-#define MM(x) ((x)/INCH)
+#define MM(x) ((x)*DPMM)
+#define INCH(x) ((x)*DPI)
+
+const char* unitSuffixes[] = {QT_TRANSLATE_NOOP(TRANSLATE_CTX_UNITS, "px"),
+                              QT_TRANSLATE_NOOP(TRANSLATE_CTX_UNITS, "mm"),
+                              QT_TRANSLATE_NOOP(TRANSLATE_CTX_UNITS, "in"),
+                              QT_TRANSLATE_NOOP(TRANSLATE_CTX_UNITS, "sp"),
+                              QT_TRANSLATE_NOOP(TRANSLATE_CTX_UNITS, "pt")
+                             };
 
 const PaperSize paperSizes[] = {
       PaperSize("Custom",    MM(1),    MM(1)),
       PaperSize("A4",        MM(210),  MM(297)),
       PaperSize("B5",        MM(176),  MM(250)),
-      PaperSize("Letter",    8.5,      11),
-      PaperSize("Legal",     8.5,      14),
-      PaperSize("Executive", 7.5,      10),
+      PaperSize("Letter",    INCH(8.5),INCH(11)),
+      PaperSize("Legal",     INCH(8.5),INCH(14)),
+      PaperSize("Executive", INCH(7.5),INCH(10)),
       PaperSize("A0",        MM(841),  MM(1189)),
       PaperSize("A1",        MM(594),  MM(841)),
       PaperSize("A2",        MM(420),  MM(594)),
@@ -83,7 +91,7 @@ const PaperSize* getPaperSize(const QString& name)
                   return &paperSizes[i];
             }
       qDebug("unknown paper size");
-      return &paperSizes[0];
+      return &paperSizes[Page::SIZE_CUSTOM];
       }
 
 //---------------------------------------------------------
@@ -106,7 +114,7 @@ static qreal sizeError(const qreal si, const qreal sref)
 const PaperSize* getPaperSize(const qreal wi, const qreal hi)
       {
       if (wi < minSize || hi < minSize)
-            return &paperSizes[0];
+            return &paperSizes[Page::SIZE_CUSTOM];
       for (int i = 0;;++i) {
             if (paperSizes[i].name == 0)
                   break;
@@ -119,7 +127,7 @@ const PaperSize* getPaperSize(const qreal wi, const qreal hi)
             }
       qDebug("unknown paper size for %f x %f", wi, hi);
       //return custom
-      return &paperSizes[0];
+      return &paperSizes[Page::SIZE_CUSTOM];
       }
 
 //---------------------------------------------------------
@@ -292,15 +300,21 @@ void Page::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 PageFormat::PageFormat()
       {
-      _size             = QSizeF(210.0/INCH, 297.0/INCH); // A4
-      _evenLeftMargin   = 10.0 / INCH;
-      _oddLeftMargin    = 10.0 / INCH;
-      _printableWidth   = _size.width() - 20.0 / INCH;
-      _evenTopMargin    = 10.0 / INCH;
-      _evenBottomMargin = 20.0 / INCH;
-      _oddTopMargin     = 10.0 / INCH;
-      _oddBottomMargin  = 20.0 / INCH;
+      const int   marginMM  = 10;              // Default margin in millimeters
+      const qreal marginPX  = marginMM * DPMM; //                in pixels/points
+      const qreal marginPX2 = marginPX * 2;    // Double margin  in pixels/points
+
+      _size             = QSizeF(210 * DPMM, 297 * DPMM); // A4 - very hardcoded!!! global preferences
+      _evenLeftMargin   = marginPX;
+      _oddLeftMargin    = marginPX;
+      _printableWidth   = _size.width() - marginPX2;
+// ??? Why no printableHeight???
+      _evenTopMargin    = marginPX;
+      _evenBottomMargin = marginPX2;
+      _oddTopMargin     = marginPX;
+      _oddBottomMargin  = marginPX2;
       _twosided         = true;
+      _units            = Units::MM; //!!!global preferences - why not preferences for all these settings? or is that solved by templates?
       }
 
 //---------------------------------------------------------
@@ -318,6 +332,7 @@ void PageFormat::copy(const PageFormat& p)
       _oddTopMargin       = p._oddTopMargin;
       _oddBottomMargin    = p._oddBottomMargin;
       _twosided           = p._twosided;
+      _units              = p._units;
       }
 
 //---------------------------------------------------------
@@ -372,7 +387,7 @@ void PageFormat::read(XmlReader& e, Score* score)
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
-                        qreal val = e.readDouble() * 0.5 / PPI;
+                        qreal val = e.readDouble() / SCALE_XML;
                         if (tag == "left-margin")
                               lm = val;
                         else if (tag == "right-margin")
@@ -399,9 +414,19 @@ void PageFormat::read(XmlReader& e, Score* score)
                         }
                   }
             else if (tag == "page-height")
-                  _size.rheight() = e.readDouble() * 0.5 / PPI;
+                  _size.rheight() = e.readDouble() / SCALE_XML;
             else if (tag == "page-width")
-                  _size.rwidth() = e.readDouble() * .5 / PPI;
+                  _size.rwidth() = e.readDouble() / SCALE_XML;
+            else if (tag == "page-units") {
+                  QString val(e.readElementText());
+                  int n = sizeof(unitSuffixes) / sizeof(char*);
+                  for (int i = 0; i < n; i++) {
+                        if (val == unitSuffixes[i]) {
+                              _units = Units(i);
+                              break;
+                        }
+                  }
+            }
             else if (tag == "page-offset") {           // obsolete, moved to Score
                   QString val(e.readElementText());
                   if(score)
@@ -424,32 +449,30 @@ void PageFormat::read(XmlReader& e, Score* score)
 void PageFormat::write(Xml& xml) const
       {
       xml.stag("page-layout");
+      xml.tag("page-height", _size.height() * SCALE_XML);
+      xml.tag("page-width",  _size.width()  * SCALE_XML);
+      if (_units != Units::MM) // only write this if it's not the default: MM
+        xml.tag("page-units", unitSuffixes[int(_units)]);
 
-      // convert inch to 1/10 spatium units
-      // 20 - font design size in point
-      // SPATIUM = 20/4
-      // qreal t = 10 * PPI / (20 / 4);
-      qreal t = 2 * PPI;
-
-      xml.tag("page-height", _size.height() * t);
-      xml.tag("page-width",  _size.width() * t);
-
+      double rm;
       const char* type = "both";
       if (_twosided) {
             type = "even";
+            rm = evenRightMargin() > 0.0005 ? evenRightMargin() : 0; // eliminates tiny non-zero values
             xml.stag(QString("page-margins type=\"%1\"").arg(type));
-            xml.tag("left-margin",   evenLeftMargin() * t);
-            xml.tag("right-margin",  evenRightMargin() * t);
-            xml.tag("top-margin",    evenTopMargin() * t);
-            xml.tag("bottom-margin", evenBottomMargin() * t);
+            xml.tag("left-margin",   evenLeftMargin()   * SCALE_XML);
+            xml.tag("right-margin",  rm                 * SCALE_XML);
+            xml.tag("top-margin",    evenTopMargin()    * SCALE_XML);
+            xml.tag("bottom-margin", evenBottomMargin() * SCALE_XML);
             xml.etag();
             type = "odd";
             }
+      rm = oddRightMargin() > 0.0005 ? oddRightMargin() : 0; // eliminates tiny non-zero values
       xml.stag(QString("page-margins type=\"%1\"").arg(type));
-      xml.tag("left-margin",   oddLeftMargin() * t);
-      xml.tag("right-margin",  oddRightMargin() * t);
-      xml.tag("top-margin",    oddTopMargin() * t);
-      xml.tag("bottom-margin", oddBottomMargin() * t);
+      xml.tag("left-margin",   oddLeftMargin()   * SCALE_XML);
+      xml.tag("right-margin",  rm                * SCALE_XML);
+      xml.tag("top-margin",    oddTopMargin()    * SCALE_XML);
+      xml.tag("bottom-margin", oddBottomMargin() * SCALE_XML);
       xml.etag();
 
       xml.etag();
@@ -826,7 +849,7 @@ QList<Element*> Page::elements()
 qreal Page::tm() const
       {
       const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddTopMargin() : pf->evenTopMargin()) * DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddTopMargin() : pf->evenTopMargin());
       }
 
 //---------------------------------------------------------
@@ -836,7 +859,7 @@ qreal Page::tm() const
 qreal Page::bm() const
       {
       const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddBottomMargin() : pf->evenBottomMargin()) * DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddBottomMargin() : pf->evenBottomMargin());
       }
 
 //---------------------------------------------------------
@@ -846,7 +869,7 @@ qreal Page::bm() const
 qreal Page::lm() const
       {
       const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddLeftMargin() : pf->evenLeftMargin()) * DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddLeftMargin() : pf->evenLeftMargin());
       }
 
 //---------------------------------------------------------
@@ -856,7 +879,7 @@ qreal Page::lm() const
 qreal Page::rm() const
       {
       const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * DPI;
+      return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin());
       }
 
 //---------------------------------------------------------

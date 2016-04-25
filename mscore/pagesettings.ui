@@ -94,7 +94,7 @@
            </sizepolicy>
           </property>
           <property name="maximum">
-           <double>2000.000000000000000</double>
+           <double>200000.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -107,14 +107,14 @@
            </sizepolicy>
           </property>
           <property name="maximum">
-           <double>2000.000000000000000</double>
+           <double>20000.000000000000000</double>
           </property>
          </widget>
         </item>
         <item row="4" column="0" colspan="2">
          <widget class="QCheckBox" name="twosided">
           <property name="text">
-           <string>Two sided</string>
+           <string>Two-sided</string>
           </property>
          </widget>
         </item>
@@ -219,14 +219,21 @@
         <item>
          <widget class="QRadioButton" name="inchButton">
           <property name="text">
-           <string>inch</string>
+           <string>Inches (in)</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="mmButton">
           <property name="text">
-           <string>mm</string>
+           <string>Millimeters (mm)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pxButton">
+          <property name="text">
+           <string>Points / pixels (pt/px)</string>
           </property>
          </widget>
         </item>

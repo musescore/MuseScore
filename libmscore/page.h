@@ -26,6 +26,19 @@ class Xml;
 class Score;
 class MeasureBase;
 
+//-----------------------------------------------------------
+//   PageFormat Units, including Staff Space
+//-----------------------------------------------------------
+enum class Units : char {
+      PX = 0, // Pixels/Points
+      MM,     // Millimeters
+      INCH,   // Inches
+      SP,     // Staff Spaces
+      PT      // Points only, for font sizes
+};
+// For converting from Ms::Units to a two-char string used as a suffix
+static const char TRANSLATE_CTX_UNITS[] = "unitSuffix";
+
 //---------------------------------------------------------
 //   PaperSize
 //---------------------------------------------------------
@@ -78,8 +91,12 @@ class PageFormat {
       qreal _oddTopMargin;
       qreal _oddBottomMargin;
       bool _twosided;
+      Ms::Units _units;
 
    public:
+      // file storage uses PPI/DPI * 2 as the units, 144PPI/DPI
+      static constexpr qreal SCALE_XML = 2;
+
       PageFormat();
 
       const QSizeF& size() const    { return _size;          }    // size in inch
@@ -109,6 +126,9 @@ class PageFormat {
 
       bool twosided() const               { return _twosided; }
       void setTwosided(bool val)          { _twosided = val;  }
+
+      Ms::Units units()                   { return _units; }
+      void setUnits(Ms::Units val)        { _units = val;  }
 
       // convenience functions
       qreal evenRightMargin() const       { return _size.width() - _printableWidth - _evenLeftMargin; }
@@ -174,10 +194,12 @@ class Page : public Element {
       QList<Element*> elements();               ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
       int endTick() const;
+
+      static const int SIZE_CUSTOM = 0;
       };
 
 extern const PaperSize paperSizes[];
-
+extern const char* unitSuffixes[];
 
 }     // namespace Ms
 #endif
