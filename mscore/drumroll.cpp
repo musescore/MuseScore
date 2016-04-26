@@ -19,9 +19,7 @@
 //=============================================================================
 
 #include "drumroll.h"
-
 #include "config.h"
-#include "drumroll.h"
 #include "piano.h"
 #include "ruler.h"
 #include "drumview.h"
@@ -192,7 +190,7 @@ void DrumrollEditor::setStaff(Staff* st)
       {
       staff = st;
       _score = staff->score();
-      setWindowTitle(tr("MuseScore: <%1> Staff: %2").arg(_score->name()).arg(st->idx()));
+      setWindowTitle(tr("MuseScore: <%1> Staff: %2").arg(_score->fileInfo()->completeBaseName()).arg(st->idx()));
       TempoMap* tl = _score->tempomap();
       TimeSigMap*  sl = _score->sigmap();
       for (int i = 0; i < 3; ++i)
@@ -271,7 +269,7 @@ void DrumrollEditor::selectionChanged()
                   }
             }
       _score->setUpdateAll();
-      _score->end();
+      _score->update();
 //      _score->blockSignals(false);
       }
 
@@ -306,9 +304,9 @@ void DrumrollEditor::veloTypeChanged(int val)
       if ((note == 0) || (Note::ValueType(val) == note->veloType()))
             return;
 
-      _score->undo()->beginMacro();
+      _score->undoStack()->beginMacro();
       _score->undo(new ChangeVelocity(note, Note::ValueType(val), note->veloOffset()));
-      _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
+      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
       updateVelocity(note);
       }
 
@@ -355,9 +353,9 @@ void DrumrollEditor::velocityChanged(int val)
       if (vt == Note::ValueType::OFFSET_VAL)
             return;
 
-      _score->undo()->beginMacro();
+      _score->undoStack()->beginMacro();
       _score->undo(new ChangeVelocity(note, vt, val));
-      _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
+      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
       }
 
 //---------------------------------------------------------

@@ -31,12 +31,12 @@ namespace Ms {
 //    this is the list of available score fonts
 //---------------------------------------------------------
 
-static const int FALLBACK_FONT = 2;       // Bravura
+static const int FALLBACK_FONT = 0;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts {
+      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  ),
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
-      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
-      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  )
+      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" )
       };
 
 //---------------------------------------------------------
@@ -5288,7 +5288,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos)
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
       {
-      if (!sym(id).symList().isEmpty()) {  // is this a compound symbol?
+      if (!sym(id).symList().empty()) {  // is this a compound symbol?
             draw(sym(id).symList(), painter, mag, pos);
             return;
             }
@@ -5315,7 +5315,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                   font->setFamily(_family);
                   font->setStyleStrategy(QFont::NoFontMerging);
                   font->setHintingPreference(QFont::PreferVerticalHinting);
-                  qreal size = 20.0 * MScore::DPI / PPI;
+                  qreal size = 20.0;
                   font->setPixelSize(lrint(size));
                   }
             qreal imag = 1.0 / mag;
@@ -5384,13 +5384,13 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
-      QList<SymId> d;
+      std::vector<SymId> d;
       for (int i = 0; i < n; ++i)
-            d += id;
+            d.push_back(id);
       draw(d, painter, mag, pos);
       }
 
-void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
       {
       QPointF pos(_pos);
       for (SymId id : ids) {
@@ -5398,7 +5398,7 @@ void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPoi
             pos.rx() += (sym(id).advance() * mag);
             }
       }
-void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
       {
       qreal scale = p->worldTransform().m11();
       draw(ids, p, mag, _pos, scale);
@@ -5423,7 +5423,6 @@ void initScoreFonts()
       int error = FT_Init_FreeType(&ftlib);
       if (!ftlib || error)
             qFatal("init freetype library failed");
-      qDebug("initScoreFonts %p", ftlib);
       int index = 0;
       for (auto i : Sym::symNames)
             Sym::lnhash.insert(i, SymId(index++));
@@ -5502,7 +5501,7 @@ void ScoreFont::load()
             }
       cache = new QCache<GlyphKey, GlyphPixmap>(100);
 
-      qreal pixelSize = 200.0 * MScore::DPI/PPI;
+      qreal pixelSize = 200.0;
       FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
 
       QFile fi(_fontPath + "glyphnames.json");
@@ -5538,7 +5537,7 @@ void ScoreFont::load()
 
       QJsonObject oo = o.value("glyphsWithAnchors").toObject();
       for (auto i : oo.keys()) {
-            qreal scale = MScore::DPI * SPATIUM20;
+            constexpr qreal scale = SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
             if (symId == SymId::noSym) {
@@ -5552,12 +5551,12 @@ void ScoreFont::load()
                   if (i == "stemDownNW") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setStemDownNW(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        sym->setStemDownNW(QPointF(4.0 * x, 4.0 * -y));
                         }
                   else if (i == "stemUpSE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setStemUpSE(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        sym->setStemUpSE(QPointF(4.0 * x, 4.0 * -y));
                         }
                   else if (i == "cutOutNE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
@@ -5652,9 +5651,9 @@ void ScoreFont::load()
       for (const Composed& c : composed) {
             if (!_symbols[int(c.id)].isValid()) {
                   Sym* sym = &_symbols[int(c.id)];
-                  QList<SymId> s;
+                  std::vector<SymId> s;
                   for (SymId id : c.rids)
-                        s += id;
+                        s.push_back(id);
                   sym->setSymList(s);
                   sym->setBbox(bbox(s, 1.0));
                   }
@@ -5743,6 +5742,11 @@ ScoreFont* ScoreFont::fontFactory(QString s)
                   break;
                   }
             }
+      if (!f) {
+            qDebug("ScoreFont <%s> not found in list", qPrintable(s));
+            for (ScoreFont& sf : _scoreFonts)
+                  qDebug("   %s", qPrintable(sf.name()));
+            }
       Q_ASSERT(f);
 
       if (!f->face)
@@ -5781,7 +5785,7 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 
-const QRectF ScoreFont::bbox(const QList<SymId>& s, qreal mag) const
+const QRectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
       {
       QRectF r;
       QPointF pos;
@@ -5792,7 +5796,7 @@ const QRectF ScoreFont::bbox(const QList<SymId>& s, qreal mag) const
       return r;
       }
 
-qreal ScoreFont::width(const QList<SymId>& s, qreal mag) const
+qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
       {
       return bbox(s, mag).width();
       }

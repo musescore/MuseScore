@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>807</width>
-    <height>309</height>
+    <height>325</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" comment="do not translate">Note</string>
+      <string notr="true">Note</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -44,7 +44,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string notr="true" comment="do not translate">Pitch</string>
+         <string notr="true">Pitch</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -79,7 +79,7 @@
       <item row="0" column="2">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string notr="true" comment="do not translate">Head</string>
+         <string notr="true">Head</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -99,7 +99,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string notr="true" comment="do not translate">TPC2</string>
+         <string notr="true">TPC2</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -109,7 +109,7 @@
       <item row="3" column="2">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string notr="true" comment="do not translate">HGrp.</string>
+         <string notr="true">HGrp.</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -132,7 +132,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string notr="true" comment="do not translate">Line</string>
+         <string notr="true">Line</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -157,28 +157,28 @@
          <bool>true</bool>
         </property>
         <property name="minimum">
-         <number>-99</number>
+         <number>-9999</number>
         </property>
        </widget>
       </item>
       <item row="4" column="2" colspan="2">
        <widget class="QPushButton" name="tieFor">
         <property name="text">
-         <string notr="true" comment="do not translate">Tie Forw.</string>
+         <string notr="true">Tie Forw.</string>
         </property>
        </widget>
       </item>
       <item row="9" column="0" colspan="2">
        <widget class="QCheckBox" name="mirror">
         <property name="text">
-         <string notr="true" comment="do not translate">Mirror Head</string>
+         <string notr="true">Mirror Head</string>
         </property>
        </widget>
       </item>
       <item row="5" column="2" colspan="2">
        <widget class="QPushButton" name="tieBack">
         <property name="text">
-         <string notr="true" comment="do not translate">Tie Back</string>
+         <string notr="true">Tie Back</string>
         </property>
        </widget>
       </item>
@@ -192,7 +192,7 @@
       <item row="6" column="2" colspan="2">
        <widget class="QPushButton" name="accidental">
         <property name="text">
-         <string notr="true" comment="do not translate">Accidental</string>
+         <string notr="true">Accidental</string>
         </property>
        </widget>
       </item>
@@ -212,7 +212,7 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string notr="true" comment="do not translate">S-Channel</string>
+         <string notr="true">S-Channel</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -280,7 +280,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string notr="true" comment="do not translate">Elements</string>
+         <string notr="true">Elements</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -290,7 +290,7 @@
       <item row="9" column="2" colspan="2">
        <widget class="QCheckBox" name="hidden">
         <property name="text">
-         <string notr="true" comment="do not translate">Hidden</string>
+         <string notr="true">Hidden</string>
         </property>
        </widget>
       </item>
@@ -421,7 +421,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string notr="true" comment="do not translate">TPC1</string>
+         <string notr="true">TPC1</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -450,7 +450,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string notr="true" comment="do not translate">ePitch</string>
+         <string notr="true">ePitch</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>

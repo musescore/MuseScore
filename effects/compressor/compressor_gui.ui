@@ -403,7 +403,7 @@
       <string/>
      </property>
      <property name="whatsThis">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</string>
      </property>
      <property name="value" stdset="0">
       <double>0.000000000000000</double>
@@ -470,7 +470,7 @@
    <item row="0" column="3">
     <widget class="Awl::Knob" name="threshold" native="true">
      <property name="toolTip">
-      <string>Threshhold level (dB)</string>
+      <string>Threshold level (dB)</string>
      </property>
      <property name="whatsThis">
       <string>The point at which the compressor will start to kick in.</string>

@@ -68,7 +68,7 @@ class QmlPlugin : public QQuickItem {
       Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion)
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
       Q_PROPERTY(Ms::Score* curScore     READ curScore)
-      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
+//TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
 
       MuseScoreCore* msc;
       QString _menuPath;
@@ -110,7 +110,7 @@ class QmlPlugin : public QQuickItem {
       int mscoreMajorVersion() const      { return majorVersion();  }
       int mscoreMinorVersion() const      { return minorVersion();  }
       int mscoreUpdateVersion() const     { return updateVersion(); }
-      qreal mscoreDPI() const             { return MScore::DPI;     }
+      qreal mscoreDPI() const             { return DPI;     }
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();

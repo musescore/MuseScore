@@ -95,6 +95,7 @@ private slots:
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void incorrectStaffNumber() { mxmlIoTestRef("testIncorrectStaffNumber"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
+      void invalidTimesig() { mxmlIoTestRef("testInvalidTimesig"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void keysig2() { mxmlIoTest("testKeysig2"); }
@@ -106,8 +107,9 @@ private slots:
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
-      //void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); } must also fix exportxml.cpp
+      void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
+      void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
@@ -118,18 +120,20 @@ private slots:
       void noteAttributes3() { mxmlIoTest("testNoteAttributes3"); }
       void noteheadParentheses() { mxmlIoTest("testNoteheadParentheses"); }
       void noteheads() { mxmlIoTest("testNoteheads"); }
+      void noteheadsFilled() { mxmlIoTest("testNoteheadsFilled"); }
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
+      void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
       void restNotations() { mxmlIoTestRef("testRestNotations"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void restsTypeWhole() { mxmlIoTestRef("testRestsTypeWhole"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
-      //void slurs2() { mxmlIoTest("testSlurs2"); } OK in DOM parser, fails in pull parser
+      void slurs2() { mxmlIoTest("testSlurs2"); }
       void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
@@ -138,6 +142,7 @@ private slots:
       void tablature1() { mxmlIoTest("testTablature1"); }
       void tablature2() { mxmlIoTest("testTablature2"); }
       void tablature3() { mxmlIoTest("testTablature3"); }
+      void tablature4() { mxmlIoTest("testTablature4"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
       void tempo2() { mxmlIoTestRef("testTempo2"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
@@ -147,7 +152,7 @@ private slots:
       void tuplets2() { mxmlIoTestRef("testTuplets2"); }
       void tuplets3() { mxmlIoTestRef("testTuplets3"); }
       void tuplets4() { mxmlIoTest("testTuplets4"); }
-      //void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); } correct behaviour to be checked
+      void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
       void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
       void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
@@ -156,8 +161,7 @@ private slots:
       void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
       void volta1() { mxmlIoTest("testVolta1"); }
       void wedge1() { mxmlIoTest("testWedge1"); }
-// wedge2 fails: a spanner changes ticks length
-//      void wedge2() { mxmlIoTest("testWedge2"); }
+      void wedge2() { mxmlIoTest("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
       void words2() { mxmlIoTest("testWords2"); }
       };
@@ -181,7 +185,7 @@ static void fixupScore(Score* score)
       {
 //      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
       score->connectTies();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->setCreated(false);
       score->setSaved(false);
 
@@ -230,7 +234,7 @@ void TestMxmlIO::mxmlIoTest(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -249,7 +253,7 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -268,7 +272,7 @@ void TestMxmlIO::mxmlMscxExportTestRef(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlExportLayout = false;
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -287,7 +291,7 @@ void TestMxmlIO::mxmlReadTestCompr(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".mxl");
+      MasterScore* score = readScore(DIR + file + ".mxl");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -308,7 +312,7 @@ void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
       MScore::debugMode = true;
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
-      Score* score = readScore(DIR + file + ".xml");
+      MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();

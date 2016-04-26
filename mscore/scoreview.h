@@ -50,6 +50,9 @@ class OmrView;
 class PositionCursor;
 class ContinuousPanel;
 class Tuplet;
+class FretDiagram;
+class Bend;
+class TremoloBar;
 
 enum class Grip : signed char;
 enum class POS : char;
@@ -63,7 +66,8 @@ enum class TEXT : char {
       PART,
       SYSTEM,
       STAFF,
-      REHEARSAL_MARK
+      REHEARSAL_MARK,
+      INSTRUMENT_CHANGE
       };
 
 //---------------------------------------------------------
@@ -157,6 +161,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPoint  startMoveI;
 
       QPointF dragOffset;
+
+      bool scoreViewDragging; // decide if dragging or clearing selection
 
       // editing mode
       QVector<QRectF> grip;         // edit "grips"
@@ -269,6 +275,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void startFotoDrag();
       void endFotoDrag();
       void endFotoDragEdit();
+      void startScoreViewDrag();
+      void endScoreViewDrag();
 
       void posChanged(POS pos, unsigned tick);
       void loopToggled(bool);
@@ -373,6 +381,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setDropAnchor(const QLineF&);
       const QTransform& matrix() const  { return _matrix; }
       qreal mag() const;
+      qreal lmag() const;
       MagIdx magIdx() const             { return _magIdx; }
       void setMag(MagIdx idx, double mag);
       qreal xoffset() const;
@@ -438,6 +447,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       Element* getEditObject()    { return editObject; }
       void setEditObject(Element* e) { editObject = e; }
       virtual Element* elementNear(QPointF);
+      void editFretDiagram(FretDiagram*);
+      void editBendProperties(Bend*);
+      void editTremoloBarProperties(TremoloBar*);
       };
 
 //---------------------------------------------------------

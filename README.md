@@ -27,7 +27,7 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
 Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html
 Kept as an example of how to integrate with a complex synthesizer.
 
-* **assets** Graphical assets, use them if you need a MuseScore icon. For logo, color etc... see http://musescore.org/en/about/logos-and-graphics 
+* **assets** Graphical assets, use them if you need a MuseScore icon. For logo, color etc... see http://musescore.org/en/about/logos-and-graphics
 
 * **awl** Audio Widget Library, from the MusE project
 
@@ -75,49 +75,51 @@ Kept as an example of how to integrate with a complex synthesizer.
 
     * **thirdparty/portmidi**
     Clone from [PortMidi](http://portmedia.sourceforge.net/)
-   
+
     * **thirdparty/beatroot**
-    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam, 
+    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam,
     used in MIDI import for beat detection. (http://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
 
 
-## Installation
+## Building
 **Read the developer handbook for a [complete build walkthrough](http://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
 
-* unpack source distribution
+### Getting sources
+If using git to download repo of entire code history, type:
 
-        tar xvofj mscore-x.x.x.tar.bz2
+    git clone https://github.com/musescore/MuseScore.git
+    cd MuseScore
 
-* make
+Else can just download the latest source release tarball from https://github.com/musescore/MuseScore/releases, and then from your download directory type:
 
-        cd mscore-x.x.x
-        make release
+    tar xzf MuseScore-x.x.x.tar.gz
+    cd MuseScore-x.x.x
 
-if something goes wrong, then remove the whole build subdirectory with `make clean` and start new with `make release`
+### Release Build
+To compile MuseScore, type:
 
-* install as root user
+    make release
 
-        sudo make install
+If something goes wrong, then remove the whole build subdirectory with `make clean` and start new with `make release`.
 
-### Program Documentation
-To generate the program documentation with DoxyGen, type
+### Running
+To start MuseScore, type:
 
-    cd build
-    make doxy
+    ./build.release/mscore/mscore
 
-Browse the documentation with your favourite html browser at build/Doc/html/index.html
+The Start Center window will appear on every invocation, until you disable that setting via the "Preferences" dialog.
 
-### Run
+### Installing
+To install to default prefix using root user, type:
 
-    cd build.release/mscore
-    ./mscore
+    sudo make install
 
-to start MuseScore. On first invocation a demofile is shown. You probably want to change that in the "Preferences" dialog.
+### Debug Build
+A debug version can be built by doing `make debug` instead of `make release`.
 
-### Debug
-A debug version can be built by doing `make debug` above, instead of `make release`.
+To run the debug version, type:
 
-To test the debug version, type
+    ./build.debug/mscore/mscore
 
-    cd build.debug/mscore
-    ./mscore
+### Testing
+See [mtest/README.md](/mtest/README.md) or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.

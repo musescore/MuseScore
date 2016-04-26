@@ -21,6 +21,7 @@
 #include "image.h"
 #include "segment.h"
 #include "tempo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -31,26 +32,26 @@ namespace Ms {
 MeasureBase::MeasureBase(Score* score)
    : Element(score)
       {
-      _prev = 0;
-      _next = 0;
-      _breakHint    = false;
-      _lineBreak    = false;
-      _pageBreak    = false;
-      _sectionBreak = 0;
       }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
    : Element(m)
       {
-      _next         = m._next;
-      _prev         = m._prev;
-      _tick         = m._tick;
-      _breakHint    = m._breakHint;
-      _lineBreak    = m._lineBreak;
-      _pageBreak    = m._pageBreak;
-      _sectionBreak = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
+      _next          = m._next;
+      _prev          = m._prev;
+      _tick          = m._tick;
+      _lineBreak     = m._lineBreak;
+      _pageBreak     = m._pageBreak;
+      _sectionBreak  = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
+      _no            = m._no;
+      _noOffset      = m._noOffset;
+      _irregular     = m._irregular;
+      _repeatEnd     = m._repeatEnd;
+      _repeatStart   = m._repeatStart;
+      _repeatMeasure = m._repeatMeasure;
+      _repeatJump    = m._repeatJump;
 
-      foreach(Element* e, m._el)
+      for (Element* e : m._el)
             add(e->clone());
       }
 
@@ -84,7 +85,7 @@ void MeasureBase::setScore(Score* score)
       Element::setScore(score);
       if (_sectionBreak)
             _sectionBreak->setScore(score);
-      foreach (Element* e, _el)
+      for (Element* e : _el)
             e->setScore(score);
       }
 
@@ -94,8 +95,7 @@ void MeasureBase::setScore(Score* score)
 
 MeasureBase::~MeasureBase()
       {
-      foreach(Element* e, _el)
-            delete e;
+      qDeleteAll(_el);
       }
 
 //---------------------------------------------------------
@@ -105,7 +105,7 @@ MeasureBase::~MeasureBase()
 void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       if (isMeasure()) {
-            foreach(Element* e, _el) {
+            for (Element* e : _el) {
                   if (score()->tagIsValid(e->tag())) {
                         if (e->staffIdx() >= score()->staves().size())
                               qDebug("MeasureBase::scanElements: bad staffIdx %d in element %s", e->staffIdx(), e->name());
@@ -115,7 +115,7 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
                   }
             }
       else {
-            foreach(Element* e, _el) {
+            for (Element* e : _el) {
                   if (score()->tagIsValid(e->tag()))
                         e->scanElements(data, func, all);
                   }
@@ -132,14 +132,16 @@ void MeasureBase::add(Element* e)
       {
       e->setParent(this);
       if (e->type() == Element::Type::LAYOUT_BREAK) {
-            LayoutBreak* b = static_cast<LayoutBreak*>(e);
+            LayoutBreak* b = toLayoutBreak(e);
+#ifndef NDEBUG
             foreach (Element* ee, _el) {
-                  if (ee->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
+                  if (ee->isLayoutBreak() && toLayoutBreak(ee)->layoutBreakType() == b->layoutBreakType()) {
                         if (MScore::debugMode)
                               qDebug("warning: layout break already set");
                         return;
                         }
                   }
+#endif
             switch (b->layoutBreakType()) {
                   case LayoutBreak::Type::PAGE:
                         _pageBreak = true;
@@ -150,7 +152,7 @@ void MeasureBase::add(Element* e)
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         break;
                   }
             }
@@ -164,8 +166,8 @@ void MeasureBase::add(Element* e)
 
 void MeasureBase::remove(Element* el)
       {
-      if (el->type() == Element::Type::LAYOUT_BREAK) {
-            LayoutBreak* lb = static_cast<LayoutBreak*>(el);
+      if (el->isLayoutBreak()) {
+            LayoutBreak* lb = toLayoutBreak(el);
             switch (lb->layoutBreakType()) {
                   case LayoutBreak::Type::PAGE:
                         _pageBreak = false;
@@ -176,14 +178,12 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = 0;
                         score()->setPause(endTick(), 0);
-                        score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         break;
                   }
             }
       if (!_el.remove(el)) {
             qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
-            //abort();
             }
       }
 
@@ -271,10 +271,10 @@ void MeasureBase::layout()
       {
       int breakCount = 0;
 
-      foreach (Element* element, _el) {
+      for (Element* element : _el) {
             if (!score()->tagIsValid(element->tag()))
                   continue;
-            if (element->type() == Element::Type::LAYOUT_BREAK) {
+            if (element->isLayoutBreak()) {
                   qreal _spatium = spatium();
                   qreal x = -_spatium - element->width() + width()
                             - breakCount * (element->width() + _spatium * .8);
@@ -311,9 +311,15 @@ MeasureBase* Score::last()  const
 
 QVariant MeasureBase::getProperty(P_ID id) const
       {
-      switch(id) {
-            case P_ID::BREAK_HINT:
-                  return QVariant(_breakHint);
+      switch (id) {
+            case P_ID::REPEAT_END:
+                  return repeatEnd();
+            case P_ID::REPEAT_START:
+                  return repeatStart();
+            case P_ID::REPEAT_MEASURE:
+                  return repeatMeasure();
+            case P_ID::REPEAT_JUMP:
+                  return repeatJump();
             default:
                   return Element::getProperty(id);
             }
@@ -323,41 +329,70 @@ QVariant MeasureBase::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureBase::setProperty(P_ID id, const QVariant& property)
+bool MeasureBase::setProperty(P_ID id, const QVariant& value)
       {
-      switch(id) {
-            case P_ID::BREAK_HINT:
-                  _breakHint = property.toBool();
+      switch (id) {
+            case P_ID::REPEAT_END:
+                  setRepeatEnd(value.toBool());
+                  break;
+            case P_ID::REPEAT_START:
+                  setRepeatStart(value.toBool());
+                  break;
+            case P_ID::REPEAT_MEASURE:
+                  setRepeatMeasure(value.toBool());
+                  break;
+            case P_ID::REPEAT_JUMP:
+                  setRepeatJump(value.toBool());
                   break;
             default:
-                  if (!Element::setProperty(id, property))
+                  if (!Element::setProperty(id, value))
                         return false;
                   break;
             }
+      score()->setLayoutAll();
       return true;
       }
 
 //---------------------------------------------------------
-//   setProperty
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant MeasureBase::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::REPEAT_END:
+            case P_ID::REPEAT_START:
+            case P_ID::REPEAT_MEASURE:
+            case P_ID::REPEAT_JUMP:
+                  return false;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
+//   undoSetBreak
 //---------------------------------------------------------
 
 void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
       {
       if (v) {
-            LayoutBreak* lb = new LayoutBreak(_score);
+            LayoutBreak* lb = new LayoutBreak(score());
             lb->setLayoutBreakType(type);
             lb->setTrack(-1);       // this are system elements
             lb->setParent(this);
-            _score->undoAddElement(lb);
+            score()->undoAddElement(lb);
             }
       else {
-            // remove line break
-            foreach(Element* e, el()) {
-                  if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
-                        _score->undoRemoveElement(e);
-                        break;
+            // remove layout break
+            for (Element* e : el()) {
+                  if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == type) {
+                        score()->undoRemoveElement(e);
+                        return;
                         }
                   }
+            qDebug("no break found");
             }
       }
 
@@ -368,12 +403,59 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
 MeasureBase* MeasureBase::nextMM() const
       {
       if (_next
-         && _next->type() == Element::Type::MEASURE
+         && _next->isMeasure()
          && score()->styleB(StyleIdx::createMultiMeasureRests)
          && static_cast<Measure*>(_next)->hasMMRest()) {
-            return static_cast<Measure*>(_next)->mmRest();
+            return toMeasure(_next)->mmRest();
             }
       return _next;
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void MeasureBase::writeProperties(Xml& xml) const
+      {
+      Element::writeProperties(xml);
+      for (const Element* e : el())
+            e->write(xml);
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool MeasureBase::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "LayoutBreak") {
+            LayoutBreak* lb = new LayoutBreak(score());
+            lb->read(e);
+            add(lb);
+            }
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   index
+//    for debugging only
+//---------------------------------------------------------
+
+int MeasureBase::index() const
+      {
+      int idx = 0;
+      MeasureBase* m = score()->first();
+      while (m) {
+            if (m == this)
+                  return idx;
+            m = m->next();
+            }
+      return  -1;
       }
 }
 

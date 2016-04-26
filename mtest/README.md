@@ -1,19 +1,17 @@
-Building the tests
+Building & running the tests
 ==================
 
-Adapt for your own platform
-    
-    make debug
-    make debug install
-    cd build.debug/mtest
-    make
-    (make install) on Windows
+To build all tests:
 
-running them all
+| Linux | OSX | Windows |
+| ----- | --- | ------- |
+| make debug<br>sudo make installdebug<br>cd build.debug/mtest<br>make</pre> | make -f Makefile.osx debug<br>make -f Makefile.osx installdebug<br>cd build.debug/mtest<br>make -f Makefile.osx | mingw32-make -f Makefile.mingw debug<br>mingw32-make -f Makefile.mingw installdebug<br>cd build.debug\mtest<br>mingw32-make -f Makefile.mingw |
+
+To run all tests:
 
     ctest
 
-running only one for debug purpose
+To run only one test (for debugging purposes):
 
     cd libmscore/join/
     ./tst_join

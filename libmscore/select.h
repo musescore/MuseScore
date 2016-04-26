@@ -129,7 +129,7 @@ class Selection {
       void setState(SelState s);
 
       const QList<Element*>& elements() const { return _el; }
-      QList<Note*> noteList(int track = -1) const;
+      std::vector<Note*> noteList(int track = -1) const;
 
       const QList<Element*> uniqueElements() const;
       QList<Note*> uniqueNotes(int track = -1) const;

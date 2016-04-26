@@ -13,6 +13,8 @@
 #ifndef __CURSOR_H__
 #define __CURSOR_H__
 
+#include "segment.h"
+
 namespace Ms {
 
 class Element;
@@ -20,7 +22,7 @@ class Score;
 class Chord;
 class Rest;
 class Note;
-class Segment;
+// class Segment;
 class RepeatSegment;
 class ChordRest;
 class StaffText;
@@ -54,6 +56,10 @@ class Cursor : public QObject {
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
+
+      //@ get tempo at current tick
+      Q_PROPERTY(qreal tempo      READ tempo)
+
       Q_PROPERTY(int keySignature READ qmlKeySignature)
       Q_PROPERTY(Ms::Score* score READ score    WRITE setScore)
 
@@ -93,6 +99,7 @@ class Cursor : public QObject {
 
       int tick();
       double time();
+      qreal tempo();
 
       int qmlKeySignature();
 

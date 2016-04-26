@@ -112,7 +112,7 @@ class Dynamic : public Text {
       virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

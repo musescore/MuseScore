@@ -321,11 +321,13 @@ Palette* MuseScore::newBarLinePalette(bool basic)
       sp->setGrid(42, 38);
 
       // bar line styles
-      for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
+      for (unsigned i = 0;; ++i) {
+            const BarLineTableItem* bti = BarLine::barLineTableItem(i);
+            if (!bti)
+                  break;
             BarLine* b  = new BarLine(gscore);
-            BarLineTableItem bti = BarLine::barLineTableItem(i);
-            b->setBarLineType(bti.type);
-            sp->append(b, qApp->translate("Palette", bti.name));
+            b->setBarLineType(bti->type);
+            sp->append(b, qApp->translate("Palette", bti->name));
             }
 
       if (!basic) {
@@ -464,6 +466,12 @@ Palette* MuseScore::newFingeringPalette()
             f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
+      // include additional symbol-based fingerings (temporarily?) implemented as articulations
+      for (int i = int(ArticulationType::ARTICULATIONS_PROPER); i < int(ArticulationType::ARTICULATIONS); ++i) {
+            Articulation* s = new Articulation(gscore);
+            s->setArticulationType(ArticulationType(i));
+            sp->append(s, qApp->translate("Fingering", s->subtypeUserName().toUtf8().constData()));
+            }
       return sp;
       }
 
@@ -545,7 +553,8 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
                   }
             }
       else {
-            for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
+            // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
+            for (int i = 0; i < int(ArticulationType::ARTICULATIONS_PROPER); ++i) {
                   Articulation* s = new Articulation(gscore);
                   s->setArticulationType(ArticulationType(i));
                   sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
@@ -1173,24 +1182,54 @@ void MuseScore::setAdvancedPalette()
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
 
-/*      sp->append(SymId(accDiscantSym));
-      sp->append(SymId(accDotSym));
-      sp->append(SymId(accFreebaseSym));
-      sp->append(SymId(accStdbaseSym));
-      sp->append(SymId(accBayanbaseSym));
-      sp->append(SymId(accOldEESym));
-      sp->append(SymId(accpushSym));
-      sp->append(SymId(accpullSym));
-*/
+      FretDiagram* fret = FretDiagram::fromString(gscore, "X32O1O");
+      sp->append(fret, "C");
+      fret = FretDiagram::fromString(gscore, "X-554-");
+      sp->append(fret, "Cm");
+      fret = FretDiagram::fromString(gscore, "X3231O");
+      sp->append(fret, "C7");
 
-      FretDiagram* fret = new FretDiagram(gscore);
-      fret->setDot(4, 1);
-      fret->setDot(2, 2);
-      fret->setDot(1, 3);
-      fret->setMarker(0, 'X');
-      fret->setMarker(3, 'O');
-      fret->setMarker(5, 'O');
-      sp->append(fret, tr("Fretboard diagram"));
+      fret = FretDiagram::fromString(gscore, "XXO232");
+      sp->append(fret, "D");
+      fret = FretDiagram::fromString(gscore, "XXO231");
+      sp->append(fret, "Dm");
+      fret = FretDiagram::fromString(gscore, "XXO212");
+      sp->append(fret, "D7");
+
+      fret = FretDiagram::fromString(gscore, "O221OO");
+      sp->append(fret, "E");
+      fret = FretDiagram::fromString(gscore, "O22OOO");
+      sp->append(fret, "Em");
+      fret = FretDiagram::fromString(gscore, "O2O1OO");
+      sp->append(fret, "E7");
+
+      fret = FretDiagram::fromString(gscore, "-332--");
+      sp->append(fret, "F");
+      fret = FretDiagram::fromString(gscore, "-33---");
+      sp->append(fret, "Fm");
+      fret = FretDiagram::fromString(gscore, "-3-2--");
+      sp->append(fret, "F7");
+
+      fret = FretDiagram::fromString(gscore, "32OOO3");
+      sp->append(fret, "G");
+      fret = FretDiagram::fromString(gscore, "-55---");
+      sp->append(fret, "Gm");
+      fret = FretDiagram::fromString(gscore, "32OOO1");
+      sp->append(fret, "G7");
+
+      fret = FretDiagram::fromString(gscore, "XO222O");
+      sp->append(fret, "A");
+      fret = FretDiagram::fromString(gscore, "XO221O");
+      sp->append(fret, "Am");
+      fret = FretDiagram::fromString(gscore, "XO2O2O");
+      sp->append(fret, "A7");
+
+      fret = FretDiagram::fromString(gscore, "X-444-");
+      sp->append(fret, "B");
+      fret = FretDiagram::fromString(gscore, "X-443-");
+      sp->append(fret, "Bm");
+      fret = FretDiagram::fromString(gscore, "X212O2");
+      sp->append(fret, "B7");
 
       paletteBox->addPalette(sp);
       }
@@ -1264,6 +1303,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("staff-text"));
       text->addAction(getAction("chord-text"));
       text->addAction(getAction("rehearsalmark-text"));
+      text->addAction(getAction("instrument-change-text"));
       text->addSeparator();
       text->addAction(getAction("lyrics"));
       text->addAction(getAction("figured-bass"));

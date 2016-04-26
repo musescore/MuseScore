@@ -265,7 +265,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             qDebug("processMeta: no staff");
             return;
             }
-      const uchar* data = (uchar*)mm.edata();
+      const uchar* data = mm.edata();
       Score* cs         = staff->score();
 
       switch (mm.metaType()) {
@@ -290,7 +290,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   break;
             case META_KEY_SIGNATURE:
                   {
-                  const int key = ((const char*)data)[0];
+                  const signed char key = ((const signed char*)data)[0];
                   if (key < -7 || key > 7) {
                         qDebug("ImportMidi: illegal key %d", key);
                         break;
@@ -481,7 +481,7 @@ void setMusicNotesFromMidi(Score *score,
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
-                        MScore::Direction sd = drumset->stemDirection(mn.pitch);
+                        Direction sd = drumset->stemDirection(mn.pitch);
                         chord->setStemDirection(sd);
                         }
                   }
@@ -1168,7 +1168,7 @@ void loadMidiData(MidiFile &mf)
       mf.setMidiType(mt);
       }
 
-Score::FileError importMidi(Score *score, const QString &name)
+Score::FileError importMidi(MasterScore *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FileError::FILE_NOT_FOUND;

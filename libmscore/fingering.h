@@ -41,7 +41,7 @@ class Fingering : public Text {
       virtual int subtype() const override         { return (int) textStyleType(); }
       virtual QString subtypeName() const override { return textStyle().name(); }
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 

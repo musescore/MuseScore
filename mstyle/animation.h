@@ -34,7 +34,7 @@ class Animation: public QPropertyAnimation {
       public:
 
             //! TimeLine shared pointer
-            typedef QWeakPointer<Animation> Pointer;
+            typedef QPointer<Animation> Pointer;
 
             //! constructor
             Animation( int duration, QObject* parent ):

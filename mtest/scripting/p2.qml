@@ -26,8 +26,16 @@ MuseScore {
                               log2("frets:",      e.frets)
                               log2("barre:",      e.barre)
                               log2("fretOffset:", e.fretOffset)
-                              e.userMag = 2.2;
-                              log2("set userMag:",    e.userMag)
+                              e.userMag = 2.2
+                              e.strings = 8
+                              e.frets   = 7
+                              e.barre   = 2
+                              e.fretOffset = 4
+                              log2("set userMag:",     e.userMag)
+                              log2("set strings:",     e.strings)
+                              log2("set frets:",       e.frets)
+                              log2("set barre:",       e.barre)
+                              log2("set fretOffset:",  e.fretOffset)
                               }
                         }
                   cursor.next();

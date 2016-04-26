@@ -26,7 +26,7 @@
 #include "lineproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
-#include "textstyle.h"
+#include "textstyledialog.h"
 #include "textproperties.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
@@ -338,14 +338,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             ArticulationProperties rp(static_cast<Articulation*>(e));
             rp.exec();
             }
-      else if (cmd == "b-props") {
-            Bend* bend = static_cast<Bend*>(e);
-            BendProperties bp(bend, 0);
-            if (bp.exec()) {
-                  for (ScoreElement* b : bend->linkList())
-                        b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
-                  }
-            }
+      else if (cmd == "b-props")
+            editBendProperties(static_cast<Bend*>(e));
       else if (cmd == "measure-props") {
             Measure* m = 0;
             if (e->type() == Element::Type::NOTE)
@@ -410,7 +404,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "insert-hbox") {
             HBox* s = new HBox(score());
-            double w = e->width() - s->leftMargin() * MScore::DPMM - s->rightMargin() * MScore::DPMM;
+            double w = e->width() - s->leftMargin() * DPMM - s->rightMargin() * DPMM;
             s->setBoxWidth(Spatium(w / s->spatium()));
             s->setParent(e);
             score()->undoAddElement(s);
@@ -420,14 +414,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "v-props") {
             VoltaSegment* vs = static_cast<VoltaSegment*>(e);
             VoltaProperties vp;
-            vp.setText(vs->volta()->text());
+            vp.setText(Text::unEscape(vs->volta()->text()));
             vp.setEndings(vs->volta()->endings());
             int rv = vp.exec();
             if (rv) {
                   QString txt  = vp.getText();
                   QList<int> l = vp.getEndings();
                   if (txt != vs->volta()->text())
-                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, txt);
+                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, Text::tagEscape(txt));
                   if (l != vs->volta()->endings())
                         vs->volta()->undoChangeProperty(P_ID::VOLTA_ENDING, QVariant::fromValue(l));
                   }
@@ -437,14 +431,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             LineProperties lp(vs->textLine());
             lp.exec();
             }
-      else if (cmd == "tr-props") {
-            TremoloBar* tb = static_cast<TremoloBar*>(e);
-            TremoloBarProperties bp(tb, 0);
-            if (bp.exec()) {
-                  for (ScoreElement* b : tb->linkList())
-                        score()->undo(new ChangeTremoloBar(static_cast<TremoloBar*>(b), bp.points()));
-                  }
-            }
+      else if (cmd == "tr-props")
+            editTremoloBarProperties(static_cast<TremoloBar*>(e));
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             ts->undoChangeProperty(P_ID::SHOW_COURTESY, !ts->showCourtesySig());
@@ -481,7 +469,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   StaffText* nt = rp.staffText()->clone();
                   nt->setScore(score);
                   score->undoChangeElement(e, nt);
-                  score->updateChannel();
+                  score->masterScore()->updateChannel();
                   score->updateSwing();
                   score->setPlaylistDirty();
                   }
@@ -524,9 +512,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         // TODO: undo/redo
                         ss->setInstrument(Instrument::fromTemplate(it));
                         ss->staff()->part()->setInstrument(ss->instrument(), ss->segment()->tick());
-                        score()->rebuildMidiMapping();
+                        score()->masterScore()->rebuildMidiMapping();
                         seq->initInstruments();
-                        score()->setLayoutAll(true);
+                        score()->setLayoutAll();
                         }
                   else
                         qDebug("no template selected?");
@@ -566,29 +554,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
                         ic->setInstrument(Instrument::fromTemplate(it));
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
-                        score()->updateChannel();
+                        score()->masterScore()->updateChannel();
                         }
                   else
                         qDebug("no template selected?");
                   }
            }
-      else if (cmd == "fret-props") {
-            FretDiagram* fd = static_cast<FretDiagram*>(e);
-            FretDiagram* nFret = const_cast<FretDiagram*>(fd->clone());
-            FretDiagramProperties fp(nFret, 0);
-            int rv = fp.exec();
-            nFret->layout();
-            if (rv) {
-                  for (ScoreElement* ee : fd->linkList()) {
-                        Element* e = static_cast<Element*>(ee);
-                        FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
-                        f->setScore(e->score());
-                        f->setTrack(e->track());
-                        e->score()->undoChangeElement(e, f);
-                        }
-                  }
-            delete nFret;
-            }
+      else if (cmd == "fret-props")
+            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "gliss-props") {
             GlissandoProperties vp(static_cast<Glissando*>(e));
             vp.exec();
@@ -609,6 +582,54 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int n = cmd.mid(6).toInt();
             uint mask = 1 << n;
             e->setTag(mask);
+            }
+      }
+
+//---------------------------------------------------------
+//   editFretDiagram
+//---------------------------------------------------------
+
+void ScoreView::editFretDiagram(FretDiagram* fd)
+      {
+      FretDiagram* nFret = const_cast<FretDiagram*>(fd->clone());
+      FretDiagramProperties fp(nFret, 0);
+      int rv = fp.exec();
+      nFret->layout();
+      if (rv) {
+            for (ScoreElement* ee : fd->linkList()) {
+                  Element* e = static_cast<Element*>(ee);
+                  FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
+                  f->setScore(e->score());
+                  f->setTrack(e->track());
+                  e->score()->undoChangeElement(e, f);
+                  }
+            }
+      delete nFret;
+      }
+
+//---------------------------------------------------------
+//   editBendProperties
+//---------------------------------------------------------
+
+void ScoreView::editBendProperties(Bend* bend)
+      {
+      BendProperties bp(bend, 0);
+      if (bp.exec()) {
+            for (ScoreElement* b : bend->linkList())
+                  b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
+            }
+      }
+
+//---------------------------------------------------------
+//   editTremoloBarProperties
+//---------------------------------------------------------
+
+void ScoreView::editTremoloBarProperties(TremoloBar* tb)
+      {
+      TremoloBarProperties bp(tb, 0);
+      if (bp.exec()) {
+            for (ScoreElement* b : tb->linkList())
+                  score()->undo(new ChangeTremoloBar(static_cast<TremoloBar*>(b), bp.points()));
             }
       }
 }

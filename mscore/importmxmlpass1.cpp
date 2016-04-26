@@ -263,6 +263,8 @@ void MusicXMLParserPass1::initPartState(const QString& /* partId */)
       {
       _timeSigDura = Fraction(0, 0);       // invalid
       _octaveShifts.clear();
+      _firstInstrSTime = Fraction(0, 1);
+      _firstInstrId = "";
       }
 
 //---------------------------------------------------------
@@ -346,7 +348,7 @@ void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
                                             const QString& instrId,
                                             const NoteHead::Group hg,
                                             const int line,
-                                            const MScore::Direction sd)
+                                            const Direction sd)
       {
       if (_drumsets.contains(id)
           && _drumsets[id].contains(instrId)) {
@@ -646,16 +648,16 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
       /*
       qDebug("MusicXml::doCredits()");
       qDebug("page format set (inch) w=%g h=%g tm=%g spatium=%g DPMM=%g DPI=%g",
-             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), MScore::DPMM, MScore::DPI);
+             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = pf->height() * 10 * MScore::DPI / score->spatium();
+      const double ph  = pf->height() * 10 * DPI / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
       /*
-      const double pw  = pf->width() * 10 * MScore::DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * MScore::DPI / score->spatium();
+      const double pw  = pf->width() * 10 * DPI / score->spatium();
+      const double tm  = pf->oddTopMargin() * 10 * DPI / score->spatium();
       const double tov = ph - tm;
       qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
       qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
@@ -721,7 +723,6 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
       VBox* vbox = new VBox(score);
       vbox->setBoxHeight(Spatium(vboxHeight));
 
-      QString remainingFooterText;
       QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
       bool creditWordsUsed = false;
 
@@ -737,14 +738,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         // found composer
                         addText2(vbox, score, w->words,
                                  TextStyleType::COMPOSER, AlignmentFlags::RIGHT | AlignmentFlags::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet
                         addText2(vbox, score, w->words,
                                  TextStyleType::POET, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
                   else {
@@ -753,8 +754,10 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   }
             // keep remaining footer text for possible use as copyright
             else if (useHeader && defy < ph2) {
+                  // found credit words in both header and footer
+                  // header was used to create a vbox at the top of the first page
+                  // footer is ignored as it conflicts with the default MuseScore footer style
                   //qDebug("add to copyright: '%s'", qPrintable(w->words));
-                  remainingFooterText += w->words;
                   }
             } // end for (ciCreditWords ...
 
@@ -785,7 +788,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      TextStyleType::TITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
       // add remaining credit-words as subtitles
@@ -794,7 +797,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      TextStyleType::SUBTITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
       // use metadata if no workable credit-words found
@@ -834,16 +837,6 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             vbox->setTick(0);
             score->measures()->add(vbox);
             }
-
-      // if no <rights> element was read and some text was found in the footer
-      // set the rights metadata to the value found
-      // TODO: remove formatting
-      // note that MusicXML files can contain at least two different copyright statements:
-      // - in the <rights> element (metadata)
-      // - in the <credit-words> (the printed version)
-      // while MuseScore supports only the first one
-      if (score->metaTag("copyright") == "" && remainingFooterText != "")
-            score->setMetaTag("copyright", remainingFooterText);
       }
 
 //---------------------------------------------------------
@@ -902,6 +895,23 @@ Score::FileError MusicXMLParserPass1::parse()
             }
 
       return Score::FileError::FILE_NO_ERROR;
+      }
+
+//---------------------------------------------------------
+//   allStaffGroupsIdentical
+//---------------------------------------------------------
+
+/**
+ Return true if all staves in Part \a p have the same staff group
+ */
+
+static bool allStaffGroupsIdentical(Part const* const p)
+      {
+      for (int i = 1; i < p->nstaves(); ++i) {
+            if (p->staff(0)->staffGroup() != p->staff(i)->staffGroup())
+                  return false;
+            }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -999,7 +1009,10 @@ void MusicXMLParserPass1::scorePartwise()
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
                   p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
-                  p->staff(0)->setBarLineSpan(p->nstaves());
+                  if (allStaffGroupsIdentical(p)) {
+                        // span only if the same types
+                        p->staff(0)->setBarLineSpan(p->nstaves());
+                        }
                   }
             }
       }
@@ -1355,7 +1368,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else
                               skipLogCurrElem();
                         }
-                  double _spatium = MScore::DPMM * (millimeter * 10.0 / tenths);
+                  double _spatium = DPMM * (millimeter * 10.0 / tenths);
                   if (preferences.musicxmlImportLayout)
                         _score->setSpatium(_spatium);
                   }
@@ -1899,6 +1912,9 @@ void MusicXMLParserPass1::part()
       allocateVoices(_parts[id].voicelist);
       // calculate the octave shifts
       _parts[id].calcOctaveShifts();
+      // set first instrument for multi-instrument part starting with rest
+      if (_firstInstrId != "" && _firstInstrSTime > Fraction(0, 1))
+            _parts[id]._instrList.setInstrument(_firstInstrId, Fraction(0, 1));
 
       // debug: print results
       /*
@@ -2163,7 +2179,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             }
       else {
             if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
-                  qDebug("ImportMusicXml: time symbol <%s> not recognized with beats=%s and beat-type=%s",
+                  qDebug("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
                          qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));       // TODO
                   return false;
                   }
@@ -2173,6 +2189,14 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             for (int i = 0; i < list.size(); i++)
                   bts += list.at(i).toInt();
             }
+
+      // determine if bts and btp are valid
+      if (bts <= 0 || btp <=0) {
+            qDebug("determineTimeSig: beats=%s and/or beat-type=%s not recognized",
+                   qPrintable(beats), qPrintable(beatType));         // TODO
+            return false;
+            }
+
       return true;
       }
 
@@ -2256,22 +2280,22 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
       Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
       logDebugTrace("MusicXMLParserPass1::staffDetails");
 
-      QString number = _e.attributes().value("number").toString();
-      int n = -1;       // invalid
-      if (number != "") {
-            n = number.toInt();
-            if (n <= 0) {
-                  logError(QString("invalid number %1").arg(number));
-                  n = -1;
-                  }
-            else
-                  n--;        // make zero-based
-            }
-
       Part* part = getPart(partId);
       Q_ASSERT(part);
       int staves = part->nstaves();
-      int staffIdx = _score->staffIdx(part);
+
+      QString number = _e.attributes().value("number").toString();
+      int n = 1; // default
+      if (number != "") {
+            n = number.toInt();
+            if (n <= 0 || n > staves) {
+                  logError(QString("invalid staff-details number %1").arg(number));
+                  n = 1;
+                  }
+            }
+      n--;        // make zero-based
+
+      int staffIdx = _score->staffIdx(part) + n;
 
       StringData* t = 0;
       if (_score->staff(staffIdx)->isTabStaff()) {
@@ -2299,12 +2323,7 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
             }
 
       if (staffLines > 0) {
-            if (n == -1) {
-                  for (int i = 0; i < staves; ++i)
-                        setStaffLines(_score, staffIdx+i, staffLines);
-                  }
-            else
-                  setStaffLines(_score, staffIdx, staffLines);
+            setStaffLines(_score, staffIdx, staffLines);
             }
 
       if (t) {
@@ -2592,6 +2611,24 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction cTime,
       }
 
 //---------------------------------------------------------
+//   setFirstInstr
+//---------------------------------------------------------
+
+void MusicXMLParserPass1::setFirstInstr(const QString& id, const Fraction stime)
+      {
+      // check for valid arguments
+      if (id == "" || !stime.isValid() || stime < Fraction(0, 1))
+            return;
+
+      // check for no instrument found yet or new earliest start time
+      // note: compare using <= to catch instrument at t=0
+      if (_firstInstrId == "" || stime <= _firstInstrSTime) {
+            _firstInstrId = id;
+            _firstInstrSTime = stime;
+            }
+      }
+
+//---------------------------------------------------------
 //   note
 //---------------------------------------------------------
 
@@ -2676,10 +2713,11 @@ void MusicXMLParserPass1::note(const QString& partId,
       staff--;
 
       // multi-instrument handling
+      setFirstInstr(instrId, sTime);
       QString prevInstrId = _parts[partId]._instrList.instrument(sTime);
       bool mustInsert = instrId != prevInstrId;
       /*
-      qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' insert %d",
+      qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' mustInsert %d",
              qPrintable(sTime.print()),
              sTime.ticks(),
              staff + 1,

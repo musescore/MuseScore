@@ -41,9 +41,9 @@ Cursor::Cursor(Score* s)
 void Cursor::setScore(Score* s)
       {
       _score = s;
-      if (_score) {
-            _score->inputState().setTrack(_track);
-            _score->inputState().setSegment(_segment);
+      if (score()) {
+            score()->inputState().setTrack(_track);
+            score()->inputState().setSegment(_segment);
             }
       }
 
@@ -55,23 +55,23 @@ void Cursor::rewind(int type)
       {
       if (type == 0) {
             _segment = 0;
-            Measure* m = _score->firstMeasure();
+            Measure* m = score()->firstMeasure();
             if (m) {
                   _segment = m->first(_filter);
                   nextInTrack();
                   }
             }
       else if (type == 1) {
-            _segment  = _score->selection().startSegment();
-            _track    = _score->selection().staffStart() * VOICES;
+            _segment  = score()->selection().startSegment();
+            _track    = score()->selection().staffStart() * VOICES;
             nextInTrack();
             }
       else if (type == 2) {
-            _segment  = _score->selection().endSegment();
-            _track    = (_score->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
+            _segment  = score()->selection().endSegment();
+            _track    = (score()->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
             }
-      _score->inputState().setTrack(_track);
-      _score->inputState().setSegment(_segment);
+      score()->inputState().setTrack(_track);
+      score()->inputState().setSegment(_segment);
       }
 
 //---------------------------------------------------------
@@ -86,8 +86,8 @@ bool Cursor::next()
             return false;
       _segment = _segment->next1(_filter);
       nextInTrack();
-      _score->inputState().setTrack(_track);
-      _score->inputState().setSegment(_segment);
+      score()->inputState().setTrack(_track);
+      score()->inputState().setSegment(_segment);
       return _segment != 0;
       }
 
@@ -130,25 +130,25 @@ void Cursor::add(Element* s)
       else if (s->type() == Element::Type::KEYSIG) {
             Segment* ns = _segment->measure()->undoGetSegment(Segment::Type::KeySig, _segment->tick());
             s->setParent(ns);
-            _score->undoAddElement(s);
+            score()->undoAddElement(s);
             }
       else if (s->type() == Element::Type::TIMESIG) {
             Measure* m = _segment->measure();
             int tick = m->tick();
-            _score->cmdAddTimeSig(m, _track, static_cast<TimeSig*>(s), false);
-            m = _score->tick2measure(tick);
+            score()->cmdAddTimeSig(m, _track, static_cast<TimeSig*>(s), false);
+            m = score()->tick2measure(tick);
             _segment = m->first(_filter);
             nextInTrack();
             }
       else if (s->type() == Element::Type::LAYOUT_BREAK) {
             Measure* m = _segment->measure();
             s->setParent(m);
-            _score->undoAddElement(s);
+            score()->undoAddElement(s);
             }
       else {
-            _score->undoAddElement(s);
+            score()->undoAddElement(s);
             }
-      _score->setLayoutAll(true);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -158,7 +158,7 @@ void Cursor::add(Element* s)
 void Cursor::addNote(int pitch)
       {
       NoteVal nval(pitch);
-      _score->addPitch(nval, false);
+      score()->addPitch(nval, false);
       }
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ void Cursor::setDuration(int z, int n)
       TDuration d(Fraction(z, n));
       if (!d.isValid())
             d = TDuration(TDuration::DurationType::V_QUARTER);
-      _score->inputState().setDuration(d);
+      score()->inputState().setDuration(d);
       }
 
 //---------------------------------------------------------
@@ -188,7 +188,16 @@ int Cursor::tick()
 
 double Cursor::time()
       {
-      return _score->utick2utime(tick()) * 1000;
+      return score()->utick2utime(tick()) * 1000;
+      }
+
+//---------------------------------------------------------
+//   tempo
+//---------------------------------------------------------
+
+qreal Cursor::tempo()
+      {
+      return score()->tempo(tick());
       }
 
 //---------------------------------------------------------
@@ -216,12 +225,12 @@ Measure* Cursor::measure() const
 void Cursor::setTrack(int v)
       {
       _track = v;
-      int tracks = _score->nstaves() * VOICES;
+      int tracks = score()->nstaves() * VOICES;
       if (_track < 0)
             _track = 0;
       else if (_track >= tracks)
             _track = tracks - 1;
-      _score->inputState().setTrack(_track);
+      score()->inputState().setTrack(_track);
       }
 
 //---------------------------------------------------------
@@ -231,12 +240,12 @@ void Cursor::setTrack(int v)
 void Cursor::setStaffIdx(int v)
       {
       _track = v * VOICES + _track % VOICES;
-      int tracks = _score->nstaves() * VOICES;
+      int tracks = score()->nstaves() * VOICES;
       if (_track < 0)
             _track = 0;
       else if (_track >= tracks)
             _track = tracks - 1;
-      _score->inputState().setTrack(_track);
+      score()->inputState().setTrack(_track);
       }
 
 //---------------------------------------------------------
@@ -246,12 +255,12 @@ void Cursor::setStaffIdx(int v)
 void Cursor::setVoice(int v)
       {
       _track = (_track / VOICES) * VOICES + v;
-      int tracks = _score->nstaves() * VOICES;
+      int tracks = score()->nstaves() * VOICES;
       if (_track < 0)
             _track = 0;
       else if (_track >= tracks)
             _track = tracks - 1;
-      _score->inputState().setTrack(_track);
+      score()->inputState().setTrack(_track);
       }
 
 //---------------------------------------------------------
@@ -291,7 +300,7 @@ void Cursor::nextInTrack()
 
 int Cursor::qmlKeySignature()
       {
-      Staff *staff = _score->staves()[staffIdx()];
+      Staff *staff = score()->staves()[staffIdx()];
       return (int) staff->key(tick());
       }
 }

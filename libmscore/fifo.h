@@ -43,7 +43,7 @@ class FifoBase {
       virtual ~FifoBase()     {}
       void clear();
       int count() const       { return counter; }
-      bool isEmpty() const    { return counter == 0; }
+      bool empty() const    { return counter == 0; }
       bool isFull() const     { return maxCount == counter; }
       };
 

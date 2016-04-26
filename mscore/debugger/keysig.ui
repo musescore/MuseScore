@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -32,7 +32,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" comment="do not translate">KeySig</string>
+      <string notr="true">KeySig</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -99,7 +99,7 @@
       <item row="2" column="1">
        <widget class="QCheckBox" name="atonal">
         <property name="text">
-         <string>atonal</string>
+         <string notr="true">atonal</string>
         </property>
        </widget>
       </item>

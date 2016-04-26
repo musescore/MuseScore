@@ -96,7 +96,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
             SymId::mensuralProlation11,         // tempus inperf., prol. perfecta, reversed
             };
 
-      ScoreFont* scoreFont = t->score()->scoreFont();
+      ScoreFont* scoreFont = gscore->scoreFont();
       int idx = 0;
       for (SymId symId : prolatioSymbols) {
             const QString& str = scoreFont->toString(symId);

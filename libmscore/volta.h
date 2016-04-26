@@ -96,7 +96,7 @@ class Volta : public TextLine {
       virtual void setYoff(qreal) override;
       virtual void reset() override;
       virtual bool systemFlag() const override  { return true;  }
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

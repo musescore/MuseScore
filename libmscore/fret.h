@@ -61,11 +61,11 @@ class FretDiagram : public Element {
       int _frets         { DEFAULT_FRETS };
       int _fretOffset    { 0  };
       int _maxFrets      { 24 };
+      int _barre         { 0 };
 
       char* _dots        { 0 };
       char* _marker      { 0 };
       char* _fingering   { 0 };
-      int _barre         { 0 };
 
       Harmony* _harmony  { 0 };
 
@@ -82,6 +82,8 @@ class FretDiagram : public Element {
       ~FretDiagram();
       virtual void draw(QPainter*) const override;
       virtual FretDiagram* clone() const override { return new FretDiagram(*this); }
+
+      static FretDiagram* fromString(Score* score, const QString &s);
 
       virtual Element::Type type() const override { return Element::Type::FRET_DIAGRAM; }
       virtual void layout() override;

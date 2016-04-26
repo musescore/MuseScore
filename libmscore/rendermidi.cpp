@@ -93,9 +93,9 @@ void Score::updateSwing()
 //   updateChannel
 //---------------------------------------------------------
 
-void Score::updateChannel()
+void MasterScore::updateChannel()
       {
-      foreach(Staff* s, _staves) {
+      for (Staff* s : staves()) {
             for (int i = 0; i < VOICES; ++i)
                   s->channelList(i)->clear();
             }
@@ -105,7 +105,7 @@ void Score::updateChannel()
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             foreach(const Element* e, s->annotations()) {
                   if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
-                        Staff* staff = _staves[e->staffIdx()];
+                        Staff* staff = Score::staff(e->staffIdx());
                         for (int voice = 0; voice < VOICES; ++voice)
                               staff->channelList(voice)->insert(s->tick(), 0);
                         continue;
@@ -117,7 +117,7 @@ void Score::updateChannel()
                         QString an(st->channelName(voice));
                         if (an.isEmpty())
                               continue;
-                        Staff* staff = _staves[st->staffIdx()];
+                        Staff* staff = Score::staff(st->staffIdx());
                         int a = staff->part()->instrument(s->tick())->channelIdx(an);
                         if (a != -1)
                               staff->channelList(voice)->insert(s->tick(), a);
@@ -126,7 +126,7 @@ void Score::updateChannel()
             }
 
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
-            foreach(Staff* st, _staves) {
+            for (Staff* st : staves()) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
@@ -915,7 +915,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       int lineR2 = convertLine(lineL2, noteL, noteR);
       // is there another note in this segment on the same line?
       // if so, use its pitch exactly.
-      int halfsteps;
+      int halfsteps = 0;
       int staffIdx = staffL->idx();
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
@@ -940,7 +940,8 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                   }
             if (!done) {
                   if (staffL->isPitchedStaff()) {
-                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
+                        bool error = false;
+                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
                         int acci2 = int(acciv2);
                         // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
                         halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
@@ -1300,7 +1301,8 @@ void renderGlissando(NoteEventList* events, Note *notestart)
 //---------------------------------------------------------
 
 Trill* findFirstTrill(Chord *chord) {
-      for (auto i : chord->score()->spannerMap().findOverlapping(1+chord->tick(), chord->tick() + chord->actualTicks() - 1)) {
+      auto spanners = chord->score()->spannerMap().findOverlapping(1+chord->tick(), chord->tick() + chord->actualTicks() - 1);
+      for (auto i : spanners) {
             if (i.value->type() != Element::Type::TRILL)
                   continue;
             if (i.value->track() != chord->track())
@@ -1324,7 +1326,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
       Instrument* instr = chord->part()->instrument(seg->tick());
       int channel  = 0;  // note->subchannel();
 
-      for (int k = 0; k < chord->notes().size(); ++k) {
+      for (unsigned k = 0; k < chord->notes().size(); ++k) {
             NoteEventList* events = &ell[k];
             Note *note = chord->notes()[k];
             Trill *trill;
@@ -1353,7 +1355,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
-      if (chord->notes().isEmpty())
+      if (chord->notes().empty())
             return ell;
 
       int notes = chord->notes().size();
@@ -1383,7 +1385,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
-void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime)
+void Score::createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* chord, int &ontime)
       {
       int n = gnb.size();
       if (n) {
@@ -1464,13 +1466,13 @@ void Score::createPlayEvents(Chord* chord)
 
       int ontime = 0;
 
-      Score::createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
+      createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
 
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;
       int ratio = st.swingRatio;
       // Check if swing needs to be applied
-      if (unit) {
+      if (unit && !chord->tuplet()) {
             swingAdjustParams(chord, gateTime, ontime, unit, ratio);
             }
       //
@@ -1582,7 +1584,7 @@ void Score::renderMidi(EventMap* events)
 
       updateRepeatList(MScore::playRepeats);
       _foundPlayPosAfterRepeats = false;
-      updateChannel();
+      masterScore()->updateChannel();
       updateVelo();
 
       // create note & other events

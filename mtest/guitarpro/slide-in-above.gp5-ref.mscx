@@ -108,7 +108,7 @@
             <string>5</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>7</lid>
             </ChordLine>
@@ -124,7 +124,7 @@
             <string>3</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>10</lid>
             </ChordLine>
@@ -140,7 +140,7 @@
             <string>2</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>13</lid>
             </ChordLine>
@@ -156,15 +156,11 @@
             <string>0</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>16</lid>
             </ChordLine>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>17</lid>
@@ -317,7 +313,7 @@
               <string>5</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>7</lid>
               </ChordLine>
@@ -333,7 +329,7 @@
               <string>3</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>10</lid>
               </ChordLine>
@@ -349,7 +345,7 @@
               <string>2</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>13</lid>
               </ChordLine>
@@ -365,15 +361,11 @@
               <string>0</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>16</lid>
               </ChordLine>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>17</lid>
@@ -414,7 +406,7 @@
               <string>5</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>7</lid>
               </ChordLine>
@@ -430,7 +422,7 @@
               <string>3</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>10</lid>
               </ChordLine>
@@ -446,7 +438,7 @@
               <string>2</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>13</lid>
               </ChordLine>
@@ -462,15 +454,11 @@
               <string>0</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>16</lid>
               </ChordLine>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>17</lid>

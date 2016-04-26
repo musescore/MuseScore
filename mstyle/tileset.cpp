@@ -35,7 +35,7 @@ void TileSet::initPixmap( PixmapList& pixmaps, const QPixmap& pix, int w, int h,
 
             pixmap.fill(Qt::transparent);
             QPainter p(&pixmap);
-            p.drawTiledPixmap(0, 0, w, h, tile);
+            p.drawTiledPixmap(QRect(0, 0, w, h), tile);
 
             pixmaps.push_back( pixmap );
             }

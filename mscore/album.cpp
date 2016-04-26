@@ -75,7 +75,7 @@ void Album::print()
       QPainter painter(&printer);
       painter.setRenderHint(QPainter::Antialiasing, true);
       painter.setRenderHint(QPainter::TextAntialiasing, true);
-      double mag = printer.logicalDpiX() / MScore::DPI;
+      double mag = printer.logicalDpiX() / DPI;
       painter.scale(mag, mag);
 
       int fromPage = printer.fromPage() - 1;
@@ -137,11 +137,11 @@ void Album::print()
 //   createScore
 //---------------------------------------------------------
 
-bool Album::createScore(const QString& fn)
+bool Album::createScore(const QString& fn, bool addPageBreak, bool addSectionBreak)
       {
       loadScores();
 
-      Score* firstScore = _scores[0]->score;
+      MasterScore* firstScore = _scores[0]->score->masterScore();
       if (!firstScore) {
             qDebug("First score is NULL. Will not attempt to join scores.");
             return false;
@@ -159,7 +159,7 @@ bool Album::createScore(const QString& fn)
                   }
             }
 
-      Score* score = firstScore->clone();
+      MasterScore* score = firstScore->clone();
 
       int excerptCount = firstScore->excerpts().count();
       bool joinExcerpt = true;
@@ -184,7 +184,7 @@ bool Album::createScore(const QString& fn)
 
             // try to append root score
             item->score->doLayout();
-            if (!score->appendScore(item->score)) {
+            if (!score->appendScore(item->score, addPageBreak, addSectionBreak)) {
                   qDebug("Cannot append root score of album item \"%s\".", qPrintable(item->name));
                   delete score;
                   return false;
@@ -196,7 +196,7 @@ bool Album::createScore(const QString& fn)
                         Score* currentScoreExcerpt = item->score->excerpts().at(i)->partScore();
                         if (currentScoreExcerpt) {
                               currentScoreExcerpt->doLayout();
-                              if (!score->excerpts().at(i)->partScore()->appendScore(currentScoreExcerpt)) {
+                              if (!score->excerpts().at(i)->partScore()->appendScore(currentScoreExcerpt, addPageBreak, addSectionBreak)) {
                                     qDebug("Cannot append excerpt %d of album item \"%s\".", i, qPrintable(item->name));
                                     delete score;
                                     return false;
@@ -212,14 +212,14 @@ bool Album::createScore(const QString& fn)
                   }
             }
 
-      score->fileInfo()->setFile(fn);
+      score->masterScore()->fileInfo()->setFile(fn);
       qDebug("Album::createScore: save file");
       try {
-            QString suffix  = score->fileInfo()->suffix().toLower();
+            QString suffix  = score->masterScore()->fileInfo()->suffix().toLower();
             if (suffix == "mscz")
-                  score->saveCompressedFile(*score->fileInfo(), false);
+                  score->saveCompressedFile(*score->masterScore()->fileInfo(), false);
             else if (suffix == "mscx")
-                  score->saveFile(*score->fileInfo());
+                  score->Score::saveFile(*score->masterScore()->fileInfo());
             }
       catch (QString s) {
             delete score;
@@ -310,7 +310,7 @@ void Album::loadScores()
                   QFileInfo f(_path);
                   ip = f.path() + "/" + item->path;
                   }
-            Score* score = new Score(MScore::baseStyle());  // start with built-in style
+            MasterScore* score = new MasterScore(MScore::baseStyle());  // start with built-in style
             score->loadMsc(item->path, false);
             item->score = score;
             }

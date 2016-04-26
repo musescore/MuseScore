@@ -810,7 +810,7 @@ void StyleHelper::renderDot(QPainter* p, const QPoint& point, const QColor& base
       QPixmap* pixmap(m_dotCache.object(key));
 
       if (!pixmap) {
-            pixmap = new QPixmap( 4, 4 );
+            pixmap = new QPixmap( 4 * qApp->devicePixelRatio(), 4 * qApp->devicePixelRatio());
             pixmap->fill( Qt::transparent );
             const qreal diameter( 1.8 );
 
@@ -836,7 +836,7 @@ void StyleHelper::renderDot(QPainter* p, const QPoint& point, const QColor& base
       p->save();
       p->translate( point - QPoint(1, 1) );
       p->setRenderHint(QPainter::Antialiasing);
-      p->drawPixmap( QPoint(0, 0), *pixmap );
+      p->drawPixmap( QRect(0, 0, 4, 4), *pixmap );
       p->restore();
       }
 
@@ -1160,7 +1160,7 @@ QPixmap StyleHelper::roundSlab(const QColor& color, qreal shade, int size) const
       QPixmap* pixmap = cache->object(key);
 
       if (!pixmap) {
-            QImage image(size * 3, size * 3,  QImage::Format_ARGB32_Premultiplied);
+            QImage image(size * 3 * qApp->devicePixelRatio(), size * 3 * qApp->devicePixelRatio(),  QImage::Format_ARGB32_Premultiplied);
             image.fill(Qt::transparent);
             QPainter p(&image);
             p.setRenderHints(QPainter::Antialiasing);
@@ -1187,7 +1187,7 @@ QPixmap StyleHelper::roundSlabFocused(const QColor& color, const QColor& glowCol
       QPixmap* pixmap = cache->object(key);
 
       if (!pixmap) {
-            QImage image(size * 3, size * 3,  QImage::Format_ARGB32_Premultiplied);
+            QImage image(size * 3 * qApp->devicePixelRatio(), size * 3 * qApp->devicePixelRatio(),  QImage::Format_ARGB32_Premultiplied);
             image.fill(Qt::transparent);
             QPainter p(&image);
             p.setRenderHints(QPainter::Antialiasing);

@@ -190,11 +190,11 @@
     </SC>
   <SC>
     <key>add-tenuto</key>
-    <seq>Ctrl+Alt+N</seq>
+    <seq>Shift+N</seq>
     </SC>
   <SC>
     <key>add-marcato</key>
-    <seq>Ctrl+Alt+O</seq>
+    <seq>Shift+O</seq>
     </SC>
   <SC>
     <key>add-sforzato</key>

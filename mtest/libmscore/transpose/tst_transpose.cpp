@@ -55,7 +55,7 @@ void TestTranspose::undoTranspose()
       QString writeFile2("undoTranspose02-test.mscx");
       QString reference2(DIR  + "undoTranspose02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
 
       // select all
       score->cmdSelectAll();
@@ -68,11 +68,15 @@ void TestTranspose::undoTranspose()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
       }
+
+//---------------------------------------------------------
+//   undoDiatonicTranspose
+//---------------------------------------------------------
 
 void TestTranspose::undoDiatonicTranspose()
       {
@@ -82,7 +86,8 @@ void TestTranspose::undoDiatonicTranspose()
       QString writeFile2("undoDiatonicTranspose02-test.mscx");
       QString reference2(DIR  + "undoDiatonicTranspose02-ref.mscx");
 
-      Score* score = readScore(readFile);
+      MasterScore* score = readScore(readFile);
+      score->doLayout();
 
       // select all
       score->cmdSelectAll();
@@ -95,7 +100,7 @@ void TestTranspose::undoDiatonicTranspose()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;

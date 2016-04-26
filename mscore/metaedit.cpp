@@ -37,11 +37,17 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       dirty = false;
 
       level->setValue(score->mscVersion());
+      level->setDisabled(true);
       version->setText(score->mscoreVersion());
+      version->setDisabled(true);
       revision->setValue(score->mscoreRevision());
+      revision->setDisabled(true);
+      filePath->setText(score->importedFilePath());
+      filePath->setDisabled(true);
 
       int idx = 0;
       QMapIterator<QString, QString> i(s->metaTags());
+      QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());
       while (i.hasNext()) {
             i.next();
             QLabel* label = new QLabel;
@@ -65,6 +71,7 @@ void MetaEditDialog::newClicked()
          tr("MuseScore: Input Tag Name"),
          tr("New tag name:")
          );
+      QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());
       if (!s.isEmpty()) {
             int idx = grid->rowCount();
             QLabel* label = new QLabel;
@@ -83,6 +90,7 @@ void MetaEditDialog::newClicked()
 void MetaEditDialog::accept()
       {
       if (dirty) {
+            QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());
             int idx = grid->rowCount();
             QMap<QString, QString> m;
             for (int i = 0; i < idx; ++i) {

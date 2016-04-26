@@ -284,7 +284,7 @@ void Bracket::editDrag(const EditData& ed)
       {
       h2 += ed.delta.y() * .5;
       layout();
-      score()->setLayoutAll(false);
+      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -372,7 +372,7 @@ bool Bracket::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifier
             staff()->setBracket(_column, bt);
             staff()->setBracketSpan(_column, _lastStaff - _firstStaff + 1);
             score()->moveBracket(staffIdx(), oldColumn, _column);
-            score()->setLayoutAll(true);
+            score()->setLayoutAll();
             return true;
             }
       if (key == Qt::Key_Right) {
@@ -387,7 +387,7 @@ bool Bracket::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifier
                   staff()->setBracket(l, bt);
                   staff()->setBracketSpan(l, _lastStaff - _firstStaff + 1);
                   score()->moveBracket(staffIdx(), _column, l);
-                  score()->setLayoutAll(true);
+                  score()->setLayoutAll();
                   break;
                   }
             return true;

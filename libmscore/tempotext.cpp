@@ -113,10 +113,10 @@ static const TempoPattern tp[] = {
       TempoPattern("<sym>metNote16thUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/240.0, TDuration::DurationType::V_16TH, 1),  // dotted 1/16
       TempoPattern("<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.5/480.0, TDuration::DurationType::V_32ND, 1),  // dotted 1/32
       TempoPattern("<sym>metNote32ndUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/480.0, TDuration::DurationType::V_32ND, 1),  // dotted 1/32
-      TempoPattern("<sym>metNoteWhole</sym>",                                               1.0/15.0, TDuration::DurationType::V_WHOLE),    // whole
-      TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
-      TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
-      TempoPattern("<sym>metNote8thUp</sym>",                                               1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
+      TempoPattern("<sym>metNoteWhole</sym>",                                               1.0/15.0,  TDuration::DurationType::V_WHOLE),    // whole
+      TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0/30.0,  TDuration::DurationType::V_HALF),     // 1/2
+      TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0/60.0,  TDuration::DurationType::V_QUARTER),  // 1/4
+      TempoPattern("<sym>metNote8thUp</sym>",                                               1.0/120.0, TDuration::DurationType::V_EIGHTH),   // 1/8
       TempoPattern("<sym>metNote16thUp</sym>",                                              1.0/240.0, TDuration::DurationType::V_16TH),     // 1/16
       TempoPattern("<sym>metNote32ndUp</sym>",                                              1.0/480.0, TDuration::DurationType::V_32ND),     // 1/32
       TempoPattern("<sym>metNote64thUp</sym>",                                              1.0/960.0, TDuration::DurationType::V_64TH),     // 1/64
@@ -184,6 +184,7 @@ void TempoText::textChanged()
                               setTempo(qreal(sl[1].toDouble()) * pa.f);
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
+                              score()->fixTicks();
                               score()->setPlaylistDirty();
                               }
                         break;
@@ -247,6 +248,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::TEMPO:
                   setTempo(v.toDouble());
                   score()->setTempo(segment(), _tempo);
+                  score()->fixTicks();
                   break;
             case P_ID::TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
@@ -256,7 +258,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -309,7 +311,7 @@ void TempoText::layout()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TempoText::accessibleInfo()
+QString TempoText::accessibleInfo() const
       {
       TDuration t;
       int len;

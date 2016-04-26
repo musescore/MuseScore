@@ -14,7 +14,7 @@
 #define __SIMPLETEXT_H__
 
 #include "element.h"
-#include "style.h"
+#include "textstyle.h"
 #include "elementlayout.h"
 
 namespace Ms {
@@ -175,20 +175,24 @@ class TextBlock {
       };
 
 //---------------------------------------------------------
-//   @@ Text
+//   @@ MText
 ///    Graphic representation of a text.
 //
-//   @P text  string  the raw text
+//   @P text           string  the raw text
+//   @P textStyleType  enum   (TextStyleType.DEFAULT, .TITLE, .SUBTITLE, .COMPOSER, .POET, .LYRIC1, .LYRIC2, .FINGERING, .LH_GUITAR_FINGERING, .RH_GUITAR_FINGERING, .STRING_NUMBER, .INSTRUMENT_LONG, .INSTRUMENT_SHORT, .INSTRUMENT_EXCERPT, .DYNAMICS, .TECHNIQUE, .TEMPO, .METRONOME, .MEASURE_NUMBER, .TRANSLATOR, .TUPLET, .SYSTEM, .STAFF, .HARMONY, .REHEARSAL_MARK, .REPEAT_LEFT, .REPEAT_RIGHT, .REPEAT, .VOLTA, .FRAME, .TEXTLINE, .GLISSANDO, .OTTAVA, .PEDAL, .HAIRPIN, .BENCH, .HEADER, .FOOTER, .INSTRUMENT_CHANGE, .FIGURED_BASS)
 //---------------------------------------------------------
 
 class Text : public Element {
       Q_OBJECT
 
       Q_PROPERTY(QString text READ xmlText WRITE undoSetText)
+      Q_PROPERTY(Ms::MSQE_TextStyleType::E textStyleType READ qmlTextStyleType WRITE qmlUndoSetTextStyleType)
+
+      Q_ENUMS(Ms::MSQE_TextStyleType::E)
 
       QString _text;
-      static QString oldText;      // used to remember original text in edit mode
-      static QString preEdit;
+      QString oldText;      // used to remember original text in edit mode
+      QString preEdit;
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
@@ -197,7 +201,7 @@ class Text : public Element {
       int  hexState                 { -1    };
       TextStyle _textStyle;
 
-      static TextCursor _cursor;       // used during editing
+      TextCursor* _cursor;       // used during editing
 
       QRectF cursorRect() const;
       const TextBlock& curLine() const;
@@ -225,7 +229,7 @@ class Text : public Element {
    public:
       Text(Score* = 0);
       Text(const Text&);
-      ~Text() {}
+      ~Text();
 
       virtual Text* clone() const override         { return new Text(*this); }
       virtual Element::Type type() const override  { return Element::Type::TEXT; }
@@ -244,6 +248,9 @@ class Text : public Element {
       void setTextStyleType(TextStyleType);
       void restyle(TextStyleType);
 
+      Ms::MSQE_TextStyleType::E qmlTextStyleType() const { return static_cast<Ms::MSQE_TextStyleType::E>(_styleIndex); }
+      void qmlUndoSetTextStyleType(Ms::MSQE_TextStyleType::E st) { undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(st)); }
+
       void setPlainText(const QString&);
       void setXmlText(const QString&);
       QString xmlText() const                 { return _text; }
@@ -259,7 +266,7 @@ class Text : public Element {
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
 
-      bool isEmpty() const                { return _text.isEmpty(); }
+      bool empty() const                { return _text.isEmpty(); }
       void clear()                        { _text.clear();          }
 
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
@@ -303,7 +310,7 @@ class Text : public Element {
 
       QRectF pageRectangle() const;
 
-      TextCursor* cursor() { return &_cursor; }
+      TextCursor* cursor() { return _cursor; }
 
       void setAbove(bool val) {  textStyle().setYoff(val ? -2.0 : 7.0); }
       void dragTo(const QPointF&);
@@ -322,9 +329,11 @@ class Text : public Element {
       virtual void textChanged() {}
       QString convertFromHtml(const QString& ss) const;
       static QString convertToHtml(const QString&, const TextStyle&);
+      static QString tagEscape(QString s);
+      static QString unEscape(QString s);
 
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
 
       virtual int subtype() const;
       virtual QString subtypeName() const;
@@ -341,4 +350,7 @@ class Text : public Element {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::MSQE_TextStyleType::E);
+
 #endif

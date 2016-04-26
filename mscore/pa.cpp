@@ -163,7 +163,7 @@ QStringList Portaudio::apiList() const
       for (PaHostApiIndex i = 0; i < apis; ++i) {
             const PaHostApiInfo* info = Pa_GetHostApiInfo(i);
             if (info)
-                  al.append(info->name);
+                  al.append(QString::fromLocal8Bit(info->name));
             }
       return al;
       }
@@ -181,7 +181,7 @@ QStringList Portaudio::deviceList(int apiIdx)
                   PaDeviceIndex idx = Pa_HostApiDeviceIndexToDeviceIndex(apiIdx, i);
                   const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
                   if (di)
-                        dl.append(di->name);
+                        dl.append(QString::fromLocal8Bit(di->name));
                   }
             }
       return dl;

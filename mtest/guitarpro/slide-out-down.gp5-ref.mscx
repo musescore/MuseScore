@@ -161,10 +161,6 @@
             <lid>16</lid>
             </ChordLine>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <lid>17</lid>
@@ -370,10 +366,6 @@
               <lid>16</lid>
               </ChordLine>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>17</lid>
@@ -467,10 +459,6 @@
               <lid>16</lid>
               </ChordLine>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>0</tick>
           <Rest>
             <lid>17</lid>

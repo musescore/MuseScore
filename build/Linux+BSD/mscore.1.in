@@ -1,0 +1,243 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" To preview the page formatting without installing use "man -l mscore.1"
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH @MAN_MSCORE_UPPER@ 1 "14th January 2016" https://musescore.org/ "MuseScore User Commands"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+.SH NAME@Variables_substituted_by_CMAKE_on_installation@
+mscore@MSCORE_INSTALL_SUFFIX@, musescore@MSCORE_INSTALL_SUFFIX@ \- @MUSESCORE_NAME_VERSION@ sheet music editor.
+
+.SH SYNOPSIS
+@BEGIN_section_to_only_appear_in_portable_builds@
+@MAN_PORTABLE@.SS Before installation:
+@MAN_PORTABLE@.B ./@PORTABLE_INSTALL_NAME@.AppImage
+@MAN_PORTABLE@.RI [ OPTIONS ]
+@MAN_PORTABLE@.RI [ FILE .\|.\|.]
+
+@MAN_PORTABLE@.SS After installation:
+@END_section_to_only_appear_in_portable_builds@
+.B mscore@MSCORE_INSTALL_SUFFIX@
+.RI [ OPTIONS ]
+.RI [ FILE .\|.\|.]
+.br
+.B musescore@MSCORE_INSTALL_SUFFIX@
+.RI [ OPTIONS ]
+.RI [ FILE .\|.\|.]
+
+.SH DESCRIPTION
+MuseScore is a free and open source WYSIWYG program for typesetting
+musical scores, released under the GNU General Public Licence (GPLv2).
+
+@BEGIN_section_to_only_appear_in_portable_builds@
+@MAN_PORTABLE@.SS Portable version
+@MAN_PORTABLE@This portable version of MuseScore has all of MuseScore's usual features,
+@MAN_PORTABLE@but it runs on a wider range of distributions and does not need to be
+@MAN_PORTABLE@installed. There is an option to install it for full integration with other
+@MAN_PORTABLE@applications and the desktop environment.
+@END_section_to_only_appear_in_portable_builds@
+
+.SS Getting help
+This manual documents command line useage of
+.BR mscore@MSCORE_INSTALL_SUFFIX@ .
+For help with the full MuseScore program see:
+.RS
+.TP
+.B Online Handbook
+<https://musescore.org/handbook>
+.TP
+.B Support Forum
+<https://musescore.org/forum>
+.RE
+
+.SS Further information
+.TP
+These pages cover the topics in this manual and may be more up-to-date:
+
+<https://musescore.org/handbook/command-line-options-0>
+<https://musescore.org/handbook/revert-factory-settings-0>
+
+.SH OPTIONS
+A summary of options is included below. Running
+.B mscore@MSCORE_INSTALL_SUFFIX@
+without options launches the full MuseScore
+program and opens any specified files.
+
+@BEGIN_section_to_only_appear_in_portable_builds@
+@MAN_PORTABLE@.SS Special options for the portable version
+@MAN_PORTABLE@.TP
+@MAN_PORTABLE@.B \-h, --help
+@MAN_PORTABLE@Lists the various command line options and their usage.
+@MAN_PORTABLE@.TP
+@MAN_PORTABLE@.B man, manual, manpage
+@MAN_PORTABLE@Displays this manual.
+@MAN_PORTABLE@If MuseScore is installed the manual can be viewed using the familiar `man
+@MAN_PORTABLE@.BR mscore@MSCORE_INSTALL_SUFFIX@ `.
+@MAN_PORTABLE@.TP
+@MAN_PORTABLE@.B install [-i] [PREFIX]
+@MAN_PORTABLE@.RS
+@MAN_PORTABLE@Run this without '-i' or 'PREFIX' to fully integrate MuseScore
+@MAN_PORTABLE@with the desktop environment (GNOME, KDE, etc). This should:
+@MAN_PORTABLE@.RS 2
+@MAN_PORTABLE@.IP \[bu] 2
+@MAN_PORTABLE@Add MuseScore to your Applications Menu or Launcher,
+@MAN_PORTABLE@and add it to the "Open with..." list of programs.
+@MAN_PORTABLE@.IP \[bu]
+@MAN_PORTABLE@Move the executable to put it with your other programs.
+@MAN_PORTABLE@(Usually a location within your PATH environment variable.)
+@MAN_PORTABLE@.IP \[bu]
+@MAN_PORTABLE@Create symlinks to make it easier to launch MuseScore from the
+@MAN_PORTABLE@command line when needed.
+@MAN_PORTABLE@.IP \[bu]
+@MAN_PORTABLE@Make sure MSCZ, MSCX and MusicXML files are recognised
+@MAN_PORTABLE@by the system and the correct icons are displayed.
+@MAN_PORTABLE@.RE
+@MAN_PORTABLE@
+@MAN_PORTABLE@Run as root (sudo) to install for all users.
+@MAN_PORTABLE@Advanced users can use '-i' to enter interactive mode
+@MAN_PORTABLE@and 'PREFIX' to install to a custom location.
+@MAN_PORTABLE@Installation not required to run the program.
+@MAN_PORTABLE@.RE
+@MAN_PORTABLE@
+@MAN_PORTABLE@.TP
+@MAN_PORTABLE@.B remove, uninstall [PREFIX]
+@MAN_PORTABLE@Removes icons and resources,
+@MAN_PORTABLE@and asks whether you would like to remove the program too.
+@MAN_PORTABLE@(You can delete it yourself later if you wish.)
+@MAN_PORTABLE@Scores and personal files are not removed.
+@MAN_PORTABLE@If you installed for all users then it will be removed for all users.
+@MAN_PORTABLE@
+@MAN_PORTABLE@.TP
+@MAN_PORTABLE@.B check-depends, check-dependencies [exes-only]
+@MAN_PORTABLE@System information for developers.
+@MAN_PORTABLE@This detects which software libraries needed
+@MAN_PORTABLE@by MuseScore are not available from the system
+@MAN_PORTABLE@and so must be packaged with MuseScore.
+@MAN_PORTABLE@
+@MAN_PORTABLE@.SS Normal MuseScore options
+@END_section_to_only_appear_in_portable_builds@
+.TP
+.B \-h, --help
+Displays help.
+.TP
+.B \-v, --version
+Displays MuseScore's current version in the command line without starting the graphical interface.
+.TP
+.B \--long-version
+Displays MuseScore's current version and revision in the command line without starting the graphical interface.
+.TP
+.B \-d, --debug
+Starts MuseScore in debug mode.
+.TP
+.B \-L, --layout-debug
+Starts MuseScore in layout debug mode
+.TP
+.B \-s, --no-synthesizer
+Disables the integrated software synthesizer
+.TP
+.B \-m, --no-midi
+Disables MIDI input
+.TP
+.B \-a, --use-audio <driver>
+Use audio driver: jack, alsa, pulse, portaudio
+.TP
+.B \-n, --new-score
+Starts with the new score wizard regardless of preference setting for start mode
+.TP
+.B \-I, --dump-midi-in
+Displays all MIDI input on the console
+.TP
+.B \-O, --dump-midi-out
+Displays all MIDI output on the console
+.TP
+.B \-o, --export-to <filename>
+Exports the currently opened file to the specified <filename>. The file type depends on the filename extension. This option switches to the "converter" mode and avoids any graphical interface. You can also add a filename before the -o if you want to import and export files from the command line. For example mscore@MSCORE_INSTALL_SUFFIX@ -o "My Score.pdf" "My Score.mscz"
+.TP
+.B \-r, --image-resolution <dpi>
+Determines the output resolution for the output to "*.png" files in the converter mode. The default resolution is 300 dpi.
+.TP
+.B \-T, --trim-margin <margin>
+Trims exported PNG and SVG images to remove surrounding whitespace around the score. The specified number of pixels of whitespace will be added as a margin; use 0 for a tightly cropped image. For SVG, this option works only with single-page scores.
+.TP
+.B \-x, --gui-scaling <factor>
+Scales the score display and other GUI elements by the specified factor, for use with high resolution displays.
+.TP
+.B \-S, --style <style>
+Loads a style file; useful when you convert with the \-o option
+.TP
+.B \-p, --plugin <name>
+Execute the named plugin
+.TP
+.B \--template-mode
+Save template mode, no page size
+.TP
+.B \-F, --factory-settings
+Use only the standard built-in presets or "factory-settings" and delete preferences
+.TP
+.B \-R, --revert-settings
+Use only the standard built-in presets or "factory-settings", but do not delete preferences
+.TP
+.B \-i, --load-icons
+Load icons from the file system. Useful if you want to edit the MuseScore icons and preview the changes
+.TP
+.B \-e, --experimental
+Enable experimental features. (E.g. layers).
+.TP
+.B \-c, --config-folder <pathname>
+Set config path
+.TP
+.B \-t, --test-mode
+Enable Test Mode
+.TP
+.B \-M, --midi-operations <file>
+Specify MIDI import operations file
+.TP
+.B \-w, --no-webview
+No web view in Start Center
+.TP
+.B \-P, --export-score-parts
+Used with -o .pdf, export score and parts
+
+.SH FILES
+Advanced users can find MuseScore's configuration files at:
+.RS
+.TP
+.I ~/.config/MuseScore/MuseScore2.ini
+Main MuseScore preference file.
+
+.TP
+.I ~/.local/share/data/MuseScore/MuseScore2/
+Directory for all other preferences and session data.
+(Autosaves, palettes, locale, plugin data, etc.)
+.RE
+
+The information in these files may allow partial recovery of lost work in
+some situations, but full recovery is extremely unlikely.
+No method of data rescue can match regular, automated backups.
+
+.SH BUGS
+.TP
+Please report any bugs via the Issue Tracker:
+
+<https://musescore.org/project/issues>
+
+.TP
+Please check first to if the bug has already been reported. If you just need
+help with something then please use the support forum instead.
+
+.SH AUTHOR
+The MuseScore Team.

@@ -40,7 +40,7 @@ Tuplet::Tuplet(Score* s)
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      _direction    = MScore::Direction::AUTO;
+      _direction    = Direction::AUTO;
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -137,13 +137,13 @@ void Tuplet::layout()
       //
       // find out main direction
       //
-      if (_direction == MScore::Direction::AUTO) {
+      if (_direction == Direction::AUTO) {
             int up = 1;
             foreach (const DurationElement* e, _elements) {
                   if (e->type() == Element::Type::CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
-                        if (c->stemDirection() != MScore::Direction::AUTO)
-                              up += c->stemDirection() == MScore::Direction::UP ? 1000 : -1000;
+                        if (c->stemDirection() != Direction::AUTO)
+                              up += c->stemDirection() == Direction::UP ? 1000 : -1000;
                         else
                               up += c->up() ? 1 : -1;
                         }
@@ -154,7 +154,7 @@ void Tuplet::layout()
             _isUp = up > 0;
             }
       else
-            _isUp = _direction == MScore::Direction::UP;
+            _isUp = _direction == Direction::UP;
 
       const DurationElement* cr1 = _elements.front();
       while (cr1->type() == Element::Type::TUPLET) {
@@ -202,12 +202,12 @@ void Tuplet::layout()
       //
       qreal maxSlope = score()->styleD(StyleIdx::tupletMaxSlope);
       bool outOfStaff = score()->styleB(StyleIdx::tupletOufOfStaff);
-      qreal vHeadDistance = score()->styleS(StyleIdx::tupletVHeadDistance).val() * _spatium;
-      qreal vStemDistance = score()->styleS(StyleIdx::tupletVStemDistance).val() * _spatium;
-      qreal stemLeft = score()->styleS(StyleIdx::tupletStemLeftDistance).val() * _spatium;
-      qreal stemRight = score()->styleS(StyleIdx::tupletStemRightDistance).val() * _spatium;
-      qreal noteLeft = score()->styleS(StyleIdx::tupletNoteLeftDistance).val() * _spatium;
-      qreal noteRight = score()->styleS(StyleIdx::tupletNoteRightDistance).val() * _spatium;
+      qreal vHeadDistance = score()->styleP(StyleIdx::tupletVHeadDistance);
+      qreal vStemDistance = score()->styleP(StyleIdx::tupletVStemDistance);
+      qreal stemLeft = score()->styleP(StyleIdx::tupletStemLeftDistance);
+      qreal stemRight = score()->styleP(StyleIdx::tupletStemRightDistance);
+      qreal noteLeft = score()->styleP(StyleIdx::tupletNoteLeftDistance);
+      qreal noteRight = score()->styleP(StyleIdx::tupletNoteRightDistance);
 
       int move = 0;
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -240,7 +240,7 @@ void Tuplet::layout()
       qreal beamAdjust = 0.0;
       if (cr1->beam() && cr1->beam() == cr2->beam()) {
             followBeam = true;
-            beamAdjust = point(score()->styleS(StyleIdx::beamWidth)) * 0.5 * mag();
+            beamAdjust = score()->styleP(StyleIdx::beamWidth) * 0.5 * mag();
             }
 
       if (_isUp) {
@@ -587,7 +587,7 @@ void Tuplet::draw(QPainter* painter) const
             painter->translate(-pos);
             }
       if (_hasBracket) {
-            painter->setPen(QPen(color, spatium() * score()->styleS(StyleIdx::tupletBracketWidth).val()));
+            painter->setPen(QPen(color, mag() * score()->styleP(StyleIdx::tupletBracketWidth)));
             if (!_number)
                   painter->drawPolyline(bracketL, 4);
             else {
@@ -618,7 +618,6 @@ void Tuplet::write(Xml& xml) const
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
-
       writeProperty(xml, P_ID::DIRECTION);
       writeProperty(xml, P_ID::NUMBER_TYPE);
       writeProperty(xml, P_ID::BRACKET_TYPE);
@@ -652,7 +651,7 @@ void Tuplet::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
+                  readProperty(e, P_ID::DIRECTION);
             else if (tag == "numberType")
                   _numberType = NumberType(e.readInt());
             else if (tag == "bracketType")
@@ -797,7 +796,7 @@ void Tuplet::editDrag(const EditData& ed)
             _p2 += ed.delta;
       setGenerated(false);
       layout();
-      score()->setUpdateAll(true);
+      score()->setUpdateAll();
       }
 
 //---------------------------------------------------------
@@ -888,9 +887,9 @@ Fraction Tuplet::elementsDuration()
 
 QVariant Tuplet::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
-                  return int(_direction);
+                  return _direction;
             case P_ID::NUMBER_TYPE:
                   return int(_numberType);
             case P_ID::BRACKET_TYPE:
@@ -916,9 +915,9 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
 bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
-                  setDirection(MScore::Direction(v.toInt()));
+                  setDirection(v.value<Direction>());
                   break;
             case P_ID::NUMBER_TYPE:
                   setNumberType(NumberType(v.toInt()));
@@ -942,7 +941,7 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
                   return DurationElement::setProperty(propertyId, v);
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -954,7 +953,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::DIRECTION:
-                  return int(MScore::Direction::AUTO);
+                  return Direction(Direction::AUTO);
             case P_ID::NUMBER_TYPE:
                   return int(Tuplet::NumberType::SHOW_NUMBER);
             case P_ID::BRACKET_TYPE:

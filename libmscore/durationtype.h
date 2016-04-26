@@ -24,7 +24,7 @@ namespace Ms {
 
 class TDuration {
    public:
-      enum class DurationType : char {
+      enum class DurationType : signed char {
             V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
             V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
             V_ZERO, V_MEASURE,  V_INVALID
@@ -42,6 +42,7 @@ class TDuration {
       DurationType type() const             { return _val; }
       bool isValid() const                  { return _val != DurationType::V_INVALID; }
       bool isZero() const                   { return _val == DurationType::V_ZERO; }
+      bool isMeasure() const                { return _val == DurationType::V_MEASURE; }
       void setVal(int tick);
       void setType(DurationType t);
       void setType(const QString&);
@@ -70,7 +71,7 @@ class TDuration {
       QString durationTypeUserName() const;
       };
 
-extern QList<TDuration> toDurationList(
+extern std::vector<TDuration> toDurationList(
             Fraction, bool useDots, int maxDots = 2, bool printRestRemains = true);
 
 

@@ -93,14 +93,16 @@ public:
       bool hasPart(const QString& id) const;
       Part* getPart(const QString& id) const { return _partMap.value(id); }
       MusicXMLDrumset getDrumset(const QString& id) const { return _drumsets.value(id); }
-      void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const MScore::Direction sd);
+      void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const Direction sd);
       MusicXmlInstrList getInstrList(const QString id) const;
       Fraction getMeasureStart(const int i) const;
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
 
 private:
-      // generic pass 1 data
+      // functions
+      void setFirstInstr(const QString& id, const Fraction stime);
 
+      // generic pass 1 data
       QXmlStreamReader _e;
       int _divs;                                ///< Current MusicXML divisions value
       QMap<QString, MusicXmlPart> _parts;       ///< Parts data, mapped on part id
@@ -114,6 +116,8 @@ private:
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read
       QMap<int, MxmlOctaveShiftDesc> _octaveShifts; ///< Pending octave-shifts
+      Fraction _firstInstrSTime;                ///< First instrument start time
+      QString _firstInstrId;                    ///< First instrument id
       };
 
 } // namespace Ms

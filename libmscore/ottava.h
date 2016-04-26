@@ -116,7 +116,7 @@ class Ottava : public TextLine {
       virtual void styleChanged() override;
       virtual void reset() override;
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

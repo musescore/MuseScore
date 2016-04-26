@@ -60,12 +60,15 @@ class Tremolo : public Element {
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);
 
+      Chord* chord() const { return (Chord*)parent(); }
+
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }
 
       virtual qreal mag() const;
       virtual void draw(QPainter*) const;
       virtual void layout();
+      void layout2();
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
 
@@ -80,7 +83,7 @@ class Tremolo : public Element {
       bool twoNotes() const { return tremoloType() > TremoloType::R64; } // is it a two note tremolo?
       int lines() const { return _lines; }
 
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 

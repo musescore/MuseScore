@@ -119,9 +119,9 @@ QSizeF Image::imageSize() const
 qreal Image::scaleFactor() const
       {
       if (imageType == ImageType::RASTER)
-            return ( (_sizeIsSpatium ? spatium() : MScore::DPMM) / 0.4 );
+            return ( (_sizeIsSpatium ? spatium() : DPMM) / 0.4 );
       else
-            return (_sizeIsSpatium ? 10.0 : MScore::DPMM);
+            return (_sizeIsSpatium ? 10.0 : DPMM);
       }
 
 //---------------------------------------------------------
@@ -165,7 +165,7 @@ QSizeF Image::scaleForSize(const QSizeF& s) const
 QSizeF Image::sizeForScale(const QSizeF& scale) const
       {
       QSizeF s = scale / 100.0;
-//      qreal sz = _sizeIsSpatium ? spatium() : MScore::DPMM;
+//      qreal sz = _sizeIsSpatium ? spatium() : DPMM;
 //      QSizeF oSize = imageSize() / sz;
       QSizeF oSize = imageSize() / scaleFactor();
       return QSizeF(s.width() * oSize.width(), s.height() * oSize.height());
@@ -222,7 +222,7 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             }
       setGenerated(false);
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return rv;
       }
 
@@ -264,7 +264,7 @@ void Image::draw(QPainter* painter) const
                   if (_sizeIsSpatium)
                         s = _size * spatium();
                   else
-                        s = _size * MScore::DPMM;
+                        s = _size * DPMM;
                   if (score()->printing()) {
                         // use original image size for printing
                         painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
@@ -309,17 +309,17 @@ void Image::write(Xml& xml) const
       {
       // attempt to convert the _linkPath to a path relative to the score
       //
-      // TODO : on Save As, _score->fileInfo() still contains the old path and fname
+      // TODO : on Save As, score()->fileInfo() still contains the old path and fname
       //          if the Save As path is different, image relative path will be wrong!
       //
       QString relativeFilePath= QString();
       if (!_linkPath.isEmpty() && _linkIsValid) {
             QFileInfo fi(_linkPath);
-            // _score->fileInfo()->canonicalPath() would be better
+            // score()->fileInfo()->canonicalPath() would be better
             // but we are saving under a temp file name and the 'final' file
             // might not exist yet, so canonicalFilePath() may return only "/"
             // OTOH, the score 'final' file name is practically always canonical, at this point
-            QString scorePath = _score->fileInfo()->absolutePath();
+            QString scorePath = score()->masterScore()->fileInfo()->absolutePath();
             QString imgFPath  = fi.canonicalFilePath();
             // if imgFPath is in (or below) the directory of scorePath
             if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
@@ -438,7 +438,7 @@ bool Image::load(const QString& ss)
       // if file path is relative, prepend score path
       QFileInfo fi(path);
       if (fi.isRelative()) {
-            path.prepend(_score->fileInfo()->absolutePath() + "/");
+            path.prepend(score()->masterScore()->fileInfo()->absolutePath() + "/");
             fi.setFile(path);
             }
 
@@ -498,8 +498,8 @@ void Image::editDrag(const EditData& ed)
             dy /= _spatium;
             }
       else {
-            dx /= MScore::DPMM;
-            dy /= MScore::DPMM;
+            dx /= DPMM;
+            dy /= DPMM;
             }
       if (ed.curGrip == Grip::START) {
             _size.setWidth(_size.width() + dx);
@@ -555,14 +555,14 @@ void Image::layout()
                               if (_sizeIsSpatium)
                                     _size /= spatium();
                               else
-                                    _size /= MScore::DPMM;
+                                    _size /= DPMM;
                               }
                         _dirty = true;
                         }
                   }
             }
 
-      qreal f = _sizeIsSpatium ? spatium() : MScore::DPMM;
+      qreal f = _sizeIsSpatium ? spatium() : DPMM;
       // if autoscale && inside a box, scale to box relevant size
       if (autoScale() && parent() && ((parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX))) {
             if (_lockAspectRatio) {

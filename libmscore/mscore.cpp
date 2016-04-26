@@ -55,12 +55,10 @@
 #include "stemslash.h"
 #include "fraction.h"
 #include "excerpt.h"
+#include "spatium.h"
 
 namespace Ms {
 
-qreal MScore::PDPI;
-qreal MScore::DPI;
-qreal MScore::DPMM;
 bool  MScore::debugMode;
 bool  MScore::testMode = false;
 bool  MScore::saveTemplateMode = false;
@@ -73,6 +71,10 @@ QString MScore::_globalShare;
 int     MScore::_vRaster;
 int     MScore::_hRaster;
 bool    MScore::_verticalOrientation = false;
+qreal   MScore::verticalPageGap = 5.0;
+qreal   MScore::horizontalPageGapEven = 1.0;
+qreal   MScore::horizontalPageGapOdd = 50.0;
+
 QColor  MScore::selectColor[VOICES];
 QColor  MScore::defaultColor;
 QColor  MScore::layoutBreakColor;
@@ -110,21 +112,72 @@ extern void initScoreFonts();
 extern QString mscoreGlobalShare;
 
 //---------------------------------------------------------
+//   Direction
+//---------------------------------------------------------
+
+Direction::Direction(const QString& s)
+      {
+      if (s == "up")
+            val = UP;
+      else if (s == "down")
+            val = DOWN;
+      else if (s == "auto")
+            val = AUTO;
+      else
+            abort();
+      }
+
+//---------------------------------------------------------
+//   Direction::toString
+//---------------------------------------------------------
+
+const char* Direction::toString() const
+      {
+      switch (val) {
+            case AUTO: return "auto";
+            case UP:   return "up";
+            case DOWN: return "down";
+            }
+      __builtin_unreachable();
+      }
+
+//---------------------------------------------------------
+//   fillComboBox
+//---------------------------------------------------------
+
+void Direction::fillComboBox(QComboBox* cb)
+      {
+      cb->clear();
+      cb->addItem(qApp->translate("Direction", "auto"), int(AUTO));
+      cb->addItem(qApp->translate("Direction", "up"),   int(UP));
+      cb->addItem(qApp->translate("Direction", "down"), int(DOWN));
+      }
+
+static Spatium doubleToSpatium(double d)       { return Spatium(d); }
+
+//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
 void MScore::init()
       {
+      if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble))
+            qFatal("registerConverter Spatium::toDouble failed");
+      if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
+            qFatal("registerConverter douobleToSpatium failed");
+
+
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<Element::Type>("ElementType");
-      qRegisterMetaType<Note::ValueType>("ValueType");
-      qRegisterMetaType<MScore::Direction>("Direction");
+      qRegisterMetaType<Element::Type>     ("ElementType");
+      qRegisterMetaType<Note::ValueType>   ("ValueType");
+
+//      qRegisterMetaType<MSQE_Direction::E>("Direction");
+      qRegisterMetaType<Direction::E>("Direction");
+
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
-//      qRegisterMetaType<AccidentalRole>("AccidentalRole");
-//      qRegisterMetaType<AccidentalType>("AccidentalType");
-      qRegisterMetaType<Spanner::Anchor>("Anchor");
-      qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
+      qRegisterMetaType<Spanner::Anchor>   ("Anchor");
+      qRegisterMetaType<NoteHead::Group>   ("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");
       qRegisterMetaType<Segment::Type>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
@@ -141,9 +194,12 @@ void MScore::init()
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");
+
+      //classed enumerations
+      qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
 #endif
 
-      DPMM = DPI / INCH;       // dots/mm
+//      DPMM = DPI / INCH;       // dots/mm
 
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
@@ -158,7 +214,12 @@ void MScore::init()
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       _globalShare = dir.absolutePath() + "/";
 #else
-      _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
+      // Try relative path (needed for portable AppImage and non-standard installations)
+      QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+      if (dir.exists())
+            _globalShare = dir.absolutePath() + "/";
+      else // Fall back to default location (e.g. if binary has moved relative to share)
+            _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
       selectColor[0].setNamedColor("#1259d0");   //blue
@@ -220,6 +281,10 @@ void MScore::init()
       StaffType::initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);
+
+#ifdef DEBUG_SHAPES
+      testShapes();
+#endif
       }
 
 //---------------------------------------------------------
@@ -308,6 +373,9 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
+//            qmlRegisterUncreatableType<MSQE_Direction>("MuseScore", 1, 0, "Direction", tr("You can't create an enumeration"));
+            qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr("You can't create an enumeration"));
+
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
 //            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
@@ -345,6 +413,9 @@ QQmlEngine* MScore::qml()
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
+
+            //classed enumerations
+            qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();

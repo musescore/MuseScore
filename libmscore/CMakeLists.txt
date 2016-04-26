@@ -44,13 +44,13 @@ add_library (
       harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp
       instrtemplate.cpp instrument.cpp interval.cpp
       key.cpp keyfinder.cpp keysig.cpp lasso.cpp
-      layoutbreak.cpp layout.cpp line.cpp lyrics.cpp measurebase.cpp
+      layoutbreak.cpp layout.cpp layoutLinear.cpp line.cpp lyrics.cpp measurebase.cpp
       measure.cpp navigate.cpp note.cpp noteevent.cpp ottava.cpp
       page.cpp part.cpp pedal.cpp pitch.cpp pitchspelling.cpp
       rendermidi.cpp repeat.cpp repeatlist.cpp rest.cpp
       score.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp
       spacer.cpp spanner.cpp staff.cpp staffstate.cpp
-      stafftext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
+      stafftext.cpp stafftype.cpp stem.cpp style.cpp textstyle.cpp symbol.cpp
       sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp
       textframe.cpp textline.cpp timesig.cpp
       tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
@@ -61,11 +61,12 @@ add_library (
       figuredbass.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       audio.cpp splitMeasure.cpp joinMeasure.cpp
-      cursor.cpp read114.cpp paste.cpp
+      cursor.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
+      shape.cpp systemdivider.cpp midimapping.cpp
       )
 
 set_target_properties (

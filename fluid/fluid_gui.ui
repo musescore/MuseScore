@@ -33,7 +33,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="soundFontUp">
+      <widget class="QToolButton" name="soundFontUp">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -43,13 +43,19 @@
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
+       <property name="toolTip">
+        <string>Move Soundfont up</string>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
        <property name="text">
-        <string>Up</string>
+        <string notr="true">Up</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="soundFontDown">
+      <widget class="QToolButton" name="soundFontDown">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -59,8 +65,11 @@
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
+       <property name="toolTip">
+        <string>Move Soundfont down</string>
+       </property>
        <property name="text">
-        <string>Down</string>
+        <string notr="true">Down</string>
        </property>
       </widget>
      </item>

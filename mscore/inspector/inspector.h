@@ -40,6 +40,7 @@
 #include "ui_inspector_empty.h"
 #include "ui_inspector_text.h"
 #include "ui_inspector_fret.h"
+#include "ui_inspector_tremolo.h"
 
 namespace Ms {
 
@@ -48,7 +49,6 @@ class Note;
 class Inspector;
 class Segment;
 class Chord;
-
 
 //---------------------------------------------------------
 //   InspectorElement
@@ -253,8 +253,28 @@ class InspectorBend : public InspectorBase {
       UiInspectorElement e;
       Ui::InspectorBend g;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorBend(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorTremoloBar
+//---------------------------------------------------------
+
+class InspectorTremoloBar : public InspectorBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorTremoloBar g;
+
+   private slots:
+      void propertiesClicked();
+
+   public:
+      InspectorTremoloBar(QWidget* parent);
       };
 
 //---------------------------------------------------------
@@ -300,6 +320,7 @@ class InspectorBarLine : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement e;
+      Ui::InspectorSegment s;
       Ui::InspectorBarLine b;
 
       static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
@@ -307,9 +328,12 @@ class InspectorBarLine : public InspectorBase {
       void  blockSpanDataSignals(bool val);
 
    private slots:
-      void spanTypeChanged(int idx);
-      void resetSpanType();
       void manageSpanData();
+      void presetDefaultClicked();
+      void presetTick1Clicked();
+      void presetTick2Clicked();
+      void presetShort1Clicked();
+      void presetShort2Clicked();
 
    public:
       InspectorBarLine(QWidget* parent);

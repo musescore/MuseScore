@@ -404,20 +404,25 @@ void Selection::appendFiltered(Element* e)
 
 void Selection::appendChord(Chord* chord)
       {
-      if (chord->beam() && !_el.contains(chord->beam())) _el.append(chord->beam());
-      if (chord->stem()) _el.append(chord->stem());
-      if (chord->hook()) _el.append(chord->hook());
-      if (chord->arpeggio()) appendFiltered(chord->arpeggio());
-//      if (chord->glissando()) appendFiltered(chord->glissando());
-      if (chord->stemSlash()) _el.append(chord->stemSlash());
-      if (chord->tremolo()) appendFiltered(chord->tremolo());
-      foreach(Note* note, chord->notes()) {
+      if (chord->beam() && !_el.contains(chord->beam()))
+            _el.append(chord->beam());
+      if (chord->stem())
+            _el.append(chord->stem());
+      if (chord->hook())
+            _el.append(chord->hook());
+      if (chord->arpeggio())
+            appendFiltered(chord->arpeggio());
+      if (chord->stemSlash())
+            _el.append(chord->stemSlash());
+      if (chord->tremolo())
+            appendFiltered(chord->tremolo());
+      for (Note* note : chord->notes()) {
             _el.append(note);
             if (note->accidental()) _el.append(note->accidental());
             foreach(Element* el, note->el())
                   appendFiltered(el);
-            for (int x = 0; x < MAX_DOTS; x++)
-                  if (note->dot(x) != 0) _el.append(note->dot(x));
+            for (NoteDot* dot : note->dots())
+                  _el.append(dot);
 
             if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
                   if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
@@ -436,7 +441,7 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
-      foreach(Element* e, _el)
+      for (Element* e : _el)
             e->setSelected(false);
       _el.clear();
 
@@ -455,35 +460,29 @@ void Selection::updateSelectedElements()
             if (!canSelectVoice(st))
                   continue;
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
-                  if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
+                  if (s->isEndBarLineType())  // do not select end bar line
                         continue;
-                  foreach(Element* e, s->annotations()) {
+                  for (Element* e : s->annotations()) {
                         if (e->track() != st)
                               continue;
-                        if (e->systemFlag()) //exclude system text
-                              continue;
+                        // if (e->systemFlag()) //exclude system text  // ws: why?
+                        //      continue;
                         appendFiltered(e);
                         }
                   Element* e = s->element(st);
-                  if (!e)
-                        continue;
-                  if (e->generated())
-                        continue;
-                  if (e->type() == Element::Type::TIMESIG)
-                        continue;
-                  if (e->type() == Element::Type::KEYSIG)
+                  if (!e || e->generated() || e->type() == Element::Type::TIMESIG || e->type() == Element::Type::KEYSIG)
                         continue;
                   if (e->isChordRest()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         for (Element* e : cr->lyricsList()) {
                               if (e)
                                     appendFiltered(e);
                               }
-                        foreach (Articulation* art, cr->articulations())
+                        for (Articulation* art : cr->articulations())
                               appendFiltered(art);
                         }
-                  if (e->type() == Element::Type::CHORD) {
-                        Chord* chord = static_cast<Chord*>(e);
+                  if (e->isChord()) {
+                        Chord* chord = toChord(e);
                         for (Chord* graceNote : chord->graceNotes())
                               if (canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
@@ -496,7 +495,7 @@ void Selection::updateSelectedElements()
       int stick = startSegment()->tick();
       int etick = tickEnd();
 
-      for (auto i = score()->spanner().begin(); i != score()->spanner().end(); ++i) {
+      for (auto i = _score->spanner().begin(); i != _score->spanner().end(); ++i) {
             Spanner* sp = (*i).second;
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
@@ -505,9 +504,12 @@ void Selection::updateSelectedElements()
             if (sp->type() == Element::Type::VOLTA)
                   continue;
             if (sp->type() == Element::Type::SLUR) {
-                if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
-                      if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
-                        appendFiltered(sp); // slur with start or end in range selection
+                  // ignore if start & end elements not calculated yet
+                  if (!sp->startElement() || !sp->endElement())
+                        continue;
+                  if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
+                        if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
+                              appendFiltered(sp);     // slur with start or end in range selection
             }
             else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
                   appendFiltered(sp); // spanner with start and end in range selection
@@ -686,7 +688,7 @@ QByteArray Selection::staffMimeData() const
 
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
 
-            Staff* staff = score()->staff(staffIdx);
+            Staff* staff = _score->staff(staffIdx);
             Part* part = staff->part();
             Interval interval = part->instrument(seg1->tick())->transpose();
             if (interval.chromatic)
@@ -700,7 +702,7 @@ QByteArray Selection::staffMimeData() const
                         xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
                         }
                   }
-            score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
+            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }
 
@@ -936,14 +938,14 @@ Enabling copying of more element types requires enabling pasting in Score::paste
 //   noteList
 //---------------------------------------------------------
 
-QList<Note*> Selection::noteList(int selTrack) const
+std::vector<Note*> Selection::noteList(int selTrack) const
       {
-      QList<Note*>nl;
+      std::vector<Note*>nl;
 
       if (_state == SelState::LIST) {
             foreach(Element* e, _el) {
                   if (e->type() == Element::Type::NOTE)
-                        nl.append(static_cast<Note*>(e));
+                        nl.push_back(static_cast<Note*>(e));
                   }
             }
       else if (_state == SelState::RANGE) {
@@ -961,9 +963,9 @@ QList<Note*> Selection::noteList(int selTrack) const
                                  || (selTrack != -1 && selTrack != track))
                                     continue;
                               Chord* c = static_cast<Chord*>(e);
-                              nl.append(c->notes());
+                              nl.insert(nl.end(), c->notes().begin(), c->notes().end());
                               for (Chord* g : c->graceNotes()) {
-                                    nl.append(g->notes());
+                                    nl.insert(nl.end(), g->notes().begin(), g->notes().end());
                                     }
                               }
                         }
@@ -1041,7 +1043,7 @@ static bool checkEnd(Element* e, int endTick)
 //---------------------------------------------------------
 //   canCopy
 //    return false if range selection intersects a tuplet
-//    or a tremolo
+//    or a tremolo, or a local timne signature
 //---------------------------------------------------------
 
 bool Selection::canCopy() const
@@ -1049,9 +1051,10 @@ bool Selection::canCopy() const
       if (_state != SelState::RANGE)
             return true;
 
-      int endTick = _endSegment ? _endSegment->tick() : score()->lastSegment()->tick();
+      int endTick = _endSegment ? _endSegment->tick() : _score->lastSegment()->tick();
 
-      for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx)
+      for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
+
             for (int voice = 0; voice < VOICES; ++voice) {
                   int track = staffIdx * VOICES + voice;
                   if (!canSelectVoice(track))
@@ -1076,6 +1079,14 @@ bool Selection::canCopy() const
                   if (checkEnd(endSegmentSelection->element(track), endTick))
                         return false;
                   }
+
+            // loop through measures on this staff checking for local time signatures
+            for (Measure* m = _startSegment->measure(); m && m->tick() < endTick; m = m->nextMeasure()) {
+                  if (_score->staff(staffIdx)->isLocalTimeSignature(m->tick()))
+                        return false;
+                  }
+
+            }
       return true;
       }
 
@@ -1090,7 +1101,7 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
             return false;
       *m1 = startSegment()->measure();
       Segment* s2 = endSegment();
-      *m2 = s2 ? s2->measure() : score()->lastMeasure();
+      *m2 = s2 ? s2->measure() : _score->lastMeasure();
       if (*m1 == *m2)
             return true;
       // if selection extends to last segment of a measure,
@@ -1162,13 +1173,13 @@ QList<Note*> Selection::uniqueNotes(int track) const
 
 void Selection::extendRangeSelection(ChordRest* cr)
       {
-            extendRangeSelection(cr->segment(),
-                                 cr->nextSegmentAfterCR(Segment::Type::ChordRest
-                                                             | Segment::Type::EndBarLine
-                                                             | Segment::Type::Clef),
-                                 cr->staffIdx(),
-                                 cr->tick(),
-                                 cr->tick());
+      extendRangeSelection(cr->segment(),
+         cr->nextSegmentAfterCR(Segment::Type::ChordRest
+            | Segment::Type::EndBarLine
+            | Segment::Type::Clef),
+            cr->staffIdx(),
+            cr->tick(),
+            cr->tick());
       }
 
 //---------------------------------------------------------
@@ -1183,11 +1194,18 @@ void Selection::extendRangeSelection(ChordRest* cr)
 void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
       {
       bool activeIsFirst = false;
+      int activeStaff = _activeTrack / VOICES;
 
       if (staffIdx < _staffStart)
             _staffStart = staffIdx;
       else if (staffIdx >= _staffEnd)
             _staffEnd = staffIdx + 1;
+      else if (_staffEnd - _staffStart > 1) { // at least 2 staff selected
+            if (staffIdx == _staffStart + 1 && activeStaff == _staffStart) // going down
+                  _staffStart = staffIdx;
+            else if (staffIdx == _staffEnd - 2 && activeStaff == _staffEnd - 1) // going up
+                  _staffEnd = staffIdx + 1;
+            }
 
       if (tick < tickStart()) {
             _startSegment = seg;

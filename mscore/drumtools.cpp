@@ -99,10 +99,10 @@ void DrumTools::updateDrumset(const Drumset* ds)
             int line      = drumset->line(pitch);
             NoteHead::Group noteHead  = drumset->noteHead(pitch);
             int voice     = drumset->voice(pitch);
-            MScore::Direction dir = drumset->stemDirection(pitch);
-            if (dir == MScore::Direction::UP)
+            Direction dir = drumset->stemDirection(pitch);
+            if (dir == Direction::UP)
                   up = true;
-            else if (dir == MScore::Direction::DOWN)
+            else if (dir == Direction::DOWN)
                   up = false;
             else
                   up = line > 4;
@@ -158,8 +158,8 @@ void DrumTools::editDrumset()
             _score->startCmd();
             _score->undo(new ChangeDrumset(staff->part()->instrument(), eds.drumset()));
             mscore->updateDrumTools(eds.drumset());
-            if (_score->undo()->active()) {
-                  _score->setLayoutAll(true);
+            if (_score->undoStack()->active()) {
+                  _score->setLayoutAll();
                   _score->endCmd();
                   }
             }

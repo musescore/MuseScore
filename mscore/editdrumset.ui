@@ -241,42 +241,42 @@
         <widget class="QComboBox" name="shortcut">
          <item>
           <property name="text">
-           <string>A</string>
+           <string notr="true">A</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>B</string>
+           <string notr="true">B</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>C</string>
+           <string notr="true">C</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>D</string>
+           <string notr="true">D</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>E</string>
+           <string notr="true">E</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>F</string>
+           <string notr="true">F</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>G</string>
+           <string notr="true">G</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>--</string>
+           <string notr="true">--</string>
           </property>
          </item>
         </widget>

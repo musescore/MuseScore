@@ -21,7 +21,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1443735617
+ModificationTime: 1446926968
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -64,7 +64,7 @@ NameList: Adobe Glyph List
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 57416 8 7
+WinInfo: 57936 8 7
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -4646,55 +4646,23 @@ EndChar
 StartChar: uniE26A
 Encoding: 57962 57962 115
 Width: 116
+UnlinkRmOvrlpSave: 1
 Flags: W
 VStem: 0 52<-126.266 128.29>
 LayerCount: 2
 Fore
-SplineSet
-116 -256 m 0
- 116 -265 112 -269 103 -269 c 0
- 97 -269 86 -257 70 -232 c 0
- 54 -207 38 -173 23 -128 c 0
- 8 -84 0 -41 0 0 c 0
- 0 41 8 83 22 128 c 0
- 38 173 53 207 70 232 c 0
- 86 257 97 269 103 269 c 0
- 112 269 116 265 116 256 c 0
- 116 255 111 247 100 230 c 0
- 89 214 79 186 68 146 c 0
- 57 106 52 57 52 0 c 0
- 52 -57 57 -106 68 -146 c 0
- 79 -185 89 -213 100 -230 c 0
- 111 -247 116 -255 116 -256 c 0
-EndSplineSet
-Validated: 1
+Refer: 150 57490 N 1 0 0 1 -26 0 2
 EndChar
 
 StartChar: uniE26B
 Encoding: 57963 57963 116
 Width: 116
+UnlinkRmOvrlpSave: 1
 Flags: W
 VStem: 64 52<-126.266 128.29>
 LayerCount: 2
 Fore
-SplineSet
-0 -256 m 0
- 0 -255 5 -247 16 -230 c 0
- 27 -213 37 -185 48 -146 c 0
- 59 -106 64 -57 64 0 c 0
- 64 57 59 106 48 146 c 0
- 37 186 27 214 16 230 c 0
- 5 247 0 255 0 256 c 0
- 0 265 4 269 13 269 c 0
- 19 269 30 257 46 232 c 0
- 63 207 79 173 94 128 c 0
- 108 83 116 41 116 0 c 0
- 116 -41 108 -84 93 -128 c 0
- 78 -173 62 -207 46 -232 c 0
- 30 -257 19 -269 13 -269 c 0
- 4 -269 0 -265 0 -256 c 0
-EndSplineSet
-Validated: 1
+Refer: 147 57491 N 1 0 0 1 -38 0 2
 EndChar
 
 StartChar: uniE057
@@ -8952,12 +8920,12 @@ EndChar
 StartChar: uniE0F5
 Encoding: 57589 57589 210
 Width: 116
+UnlinkRmOvrlpSave: 1
 Flags: W
 VStem: 0 52<-126.266 128.29>
 LayerCount: 2
 Fore
-Refer: 7 57506 N 1 0 0 1 -26 0 2
-Validated: 1
+Refer: 150 57490 N 1 0 0 1 -26 0 2
 EndChar
 
 StartChar: uniE658
@@ -9680,12 +9648,12 @@ EndChar
 StartChar: uniE0F6
 Encoding: 57590 57590 226
 Width: 116
+UnlinkRmOvrlpSave: 1
 Flags: W
 VStem: 64 52<-126.266 128.29>
 LayerCount: 2
 Fore
-Refer: 8 57507 N 1 0 0 1 -38 0 2
-Validated: 1
+Refer: 147 57491 N 1 0 0 1 -38 0 2
 EndChar
 
 StartChar: uniE051

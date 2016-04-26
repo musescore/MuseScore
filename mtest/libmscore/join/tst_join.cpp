@@ -62,7 +62,7 @@ void TestJoin::initTestCase()
 
 void TestJoin::join(const char* p1, const char* p2)
       {
-      Score* score = readScore(DIR + p1);
+      MasterScore* score = readScore(DIR + p1);
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
@@ -79,7 +79,7 @@ void TestJoin::join(const char* p1, const char* p2)
 
 void TestJoin::join(const char* p1, const char* p2, int index)
       {
-      Score* score = readScore(DIR + p1);
+      MasterScore* score = readScore(DIR + p1);
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       for (int i = 0; i < index; ++i)
@@ -98,7 +98,7 @@ void TestJoin::join(const char* p1, const char* p2, int index)
 
 void TestJoin::join1(const char* p1)
       {
-      Score* score = readScore(DIR + p1);
+      MasterScore* score = readScore(DIR + p1);
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();

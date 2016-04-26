@@ -51,8 +51,8 @@ Startcenter::Startcenter()
       connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
       setStyleSheet(QString("QPushButton { background-color: %1 }").arg(openScore->palette().color(QPalette::Base).name()));
 
-      //init webview
-      if (!noWebView) {
+      //TODO init webview
+      /*if (!noWebView) {
             _webView = new MyWebView(this);
             _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(VERSION)));
             horizontalLayout->addWidget(_webView);
@@ -60,7 +60,7 @@ Startcenter::Startcenter()
 
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
+      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);*/
       recentPage->setBoldTitle(false);
       updateRecentScores();
       }
@@ -70,8 +70,8 @@ Startcenter::Startcenter()
 //---------------------------------------------------------
 
 Startcenter::~Startcenter() {
-      if (_webView)
-            delete _webView;
+//TODO      if (_webView)
+//            delete _webView;
       }
 
 //---------------------------------------------------------
@@ -115,10 +115,6 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
-      if (fil.size() == 0) {
-            QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
-            fil.prepend(gettingStartedScore);
-            }
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
@@ -154,11 +150,12 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(690, 520)).toSize());
+      resize(settings.value("size", QSize(720, 570)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
 
+#if 0
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
@@ -168,7 +165,7 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
                                           QIODevice * outgoingData)
       {
       QNetworkRequest new_req(req);
-      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
+      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toLatin1());
       return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
       }
 
@@ -177,7 +174,7 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
 //---------------------------------------------------------
 
 MyWebView::MyWebView(QWidget *parent):
-   QWebView(parent)
+   QWebEngineView(parent)
       {
       page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
       QNetworkAccessManager* networkManager = new MyNetworkAccessManager(this);
@@ -259,6 +256,8 @@ void MyWebView::link(const QUrl& url)
       QFileInfo fi(path);
       if (fi.suffix() == "mscz" || fi.suffix() == "xml" || fi.suffix() == "mxl") {
             mscore->loadFile(url);
+            QAction* a = getAction("startcenter");
+            a->setChecked(false);
             mscore->showStartcenter(false);
             }
       else
@@ -364,6 +363,6 @@ void CookieJar::save()
             }
       file.close();
       }
-
+#endif
 }
 

@@ -176,7 +176,7 @@ void PositionCursor::move(int tick)
       double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score->spatium();
 
-      qreal mag = _spatium / (MScore::DPI * SPATIUM20);
+      qreal mag = _spatium / SPATIUM20;
       double w  = (_spatium * 2.0 + score->scoreFont()->width(SymId::noteheadBlack, mag))/3;
       double h  = 6 * _spatium;
       //

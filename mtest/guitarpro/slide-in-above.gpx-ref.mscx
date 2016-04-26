@@ -146,7 +146,7 @@
             <string>5</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>8</lid>
             </ChordLine>
@@ -162,7 +162,7 @@
             <string>3</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>11</lid>
             </ChordLine>
@@ -178,7 +178,7 @@
             <string>2</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>14</lid>
             </ChordLine>
@@ -194,15 +194,32 @@
             <string>0</string>
             </Note>
           <ChordLine>
-            <subtype>4</subtype>
+            <subtype>3</subtype>
             <straight>1</straight>
             <lid>17</lid>
             </ChordLine>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+        <tick>0</tick>
+        <Rest>
+          <lid>18</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>19</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>20</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>21</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       </Staff>
     <Score>
@@ -372,7 +389,7 @@
               <string>5</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>8</lid>
               </ChordLine>
@@ -388,7 +405,7 @@
               <string>3</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>11</lid>
               </ChordLine>
@@ -404,7 +421,7 @@
               <string>2</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>14</lid>
               </ChordLine>
@@ -420,15 +437,32 @@
               <string>0</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>17</lid>
               </ChordLine>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>18</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>20</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>21</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -448,7 +482,7 @@
               <string>5</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>8</lid>
               </ChordLine>
@@ -464,7 +498,7 @@
               <string>3</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>11</lid>
               </ChordLine>
@@ -480,7 +514,7 @@
               <string>2</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>14</lid>
               </ChordLine>
@@ -496,15 +530,32 @@
               <string>0</string>
               </Note>
             <ChordLine>
-              <subtype>4</subtype>
+              <subtype>3</subtype>
               <straight>1</straight>
               <lid>17</lid>
               </ChordLine>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>18</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>20</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>21</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         </Staff>
       <name>S-Gt</name>

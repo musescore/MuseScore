@@ -93,6 +93,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       EventMap::const_iterator endPos = events.cend();
       --endPos;
       const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
+      const int maxEndTime = (score->utick2utime(endPos->first) + 3) * MScore::sampleRate;
+
       progress.setRange(0, et);
 
       for (int pass = 0; pass < 2; ++pass) {
@@ -112,7 +114,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                                     if (e.type() == ME_INVALID)
                                           continue;
                                     e.setChannel(a->channel);
-                                    int syntiIdx= synti->index(score->midiMapping(a->channel)->articulation->synti);
+                                    int syntiIdx = synti->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
                                     synti->play(e, syntiIdx);
                                     }
                               }
@@ -147,7 +149,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                         const NPlayEvent& e = playPos->second;
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
-                              Channel* c = score->midiMapping(channelIdx)->articulation;
+                              Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
                               if (!c->mute) {
                                     synti->play(e, synti->index(c->synti));
                                     }
@@ -181,6 +183,9 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                         synti->allNotesOff(-1);
                   // create sound until the sound decays
                   if (playTime >= et && max*peak < 0.000001)
+                        break;
+                  // hard limit
+                  if (playTime > maxEndTime)
                         break;
                   }
             if (progress.wasCanceled())

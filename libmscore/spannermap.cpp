@@ -27,6 +27,7 @@ SpannerMap::SpannerMap()
 
 //---------------------------------------------------------
 //   update
+//   updates the internal lookup tree, not the map itself
 //---------------------------------------------------------
 
 void SpannerMap::update() const
@@ -95,9 +96,23 @@ bool SpannerMap::removeSpanner(Spanner* s)
                   return true;
                   }
             }
-      qDebug("Score::removeSpanner: %s (%p) not found", s->name(), s);
+      qFatal("Score::removeSpanner: %s (%p) not found", s->name(), s);
       return false;
       }
+
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   dump
+//---------------------------------------------------------
+
+void SpannerMap::dump() const
+      {
+      qDebug("SpannerMap::dump");
+      for (auto i = begin(); i != end(); ++i)
+            qDebug("   %5d: %s %p", i->first, i->second->name(), i->second);
+      }
+
+#endif
 
 }     // namespace Ms
 

@@ -13,15 +13,15 @@
 #ifndef __PIANOROLL_H__
 #define __PIANOROLL_H__
 
-#include "libmscore/mscoreview.h"
-#include "libmscore/pos.h"
-#include "libmscore/score.h"
-#include "libmscore/select.h"
-
 namespace Awl {
       class PitchEdit;
       class PosLabel;
       };
+
+#include "libmscore/mscoreview.h"
+#include "libmscore/pos.h"
+#include "libmscore/score.h"
+#include "libmscore/select.h"
 
 namespace Ms {
 
@@ -32,8 +32,6 @@ class Note;
 class Ruler;
 class Seq;
 class WaveView;
-
-enum class Grip : signed char;
 
 //---------------------------------------------------------
 //   PianorollEditor
@@ -76,7 +74,6 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void tickLenChanged(int);
       void onTimeChanged(int val);
       void playlistChanged();
-      virtual void timerEvent(QTimerEvent*) override;
 
    public slots:
       void changeSelection(SelState);

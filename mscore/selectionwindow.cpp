@@ -101,8 +101,8 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
       if (_score->selection().isRange())
             _score->selection().updateSelectedElements();
       updateFilteredElements();
-      _score->setUpdateAll();
-      _score->end();
+//      _score->setUpdateAll();
+//      _score->end();
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
 

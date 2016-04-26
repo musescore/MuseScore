@@ -86,6 +86,21 @@ bool Excerpt::operator!=(const Excerpt& e) const
       }
 
 //---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool Excerpt::operator==(const Excerpt& e) const
+      {
+      if (e._oscore != _oscore)
+            return false;
+      if (e._title != _title)
+            return false;
+      if (e._parts != _parts)
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   localSetScore
 //---------------------------------------------------------
 
@@ -100,8 +115,8 @@ static void localSetScore(void* score, Element* element)
 
 void createExcerpt(Excerpt* excerpt)
       {
-      Score* oscore = excerpt->oscore();
-      Score* score  = excerpt->partScore();
+      MasterScore* oscore = excerpt->oscore();
+      Score* score        = excerpt->partScore();
 
       QList<Part*>& parts = excerpt->parts();
       QList<int> srcStaves;
@@ -165,7 +180,7 @@ void createExcerpt(Excerpt* excerpt)
       //
       // layout score
       //
-      score->addLayoutFlags(LayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO));
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       //
       // handle transposing instruments
@@ -216,11 +231,59 @@ void createExcerpt(Excerpt* excerpt)
       // layout score
       //
       score->setPlaylistDirty();
-      score->rebuildMidiMapping();
-      score->updateChannel();
+      oscore->rebuildMidiMapping();
+      oscore->updateChannel();
 
-      score->setLayoutAll(true);
+      score->setLayoutAll();
       score->doLayout();
+      }
+
+void deleteExcerpt(Excerpt* excerpt)
+      {
+      MasterScore* oscore = excerpt->oscore();
+      Score* partScore    = excerpt->partScore();
+
+      if (!partScore) {
+            qDebug("deleteExcerpt: no partScore");
+            return;
+            }
+
+      // unlink the staves in the excerpt
+      for (Staff* s : partScore->staves()) {
+            Staff* staff = nullptr;
+            // find staff in the main score
+            for (Staff* s2 : s->linkedStaves()->staves()) {
+                  if (s2->primaryStaff()) {
+                        staff = s2;
+                        break;
+                        }
+                  }
+            if (staff) {
+                  int staffIdx = partScore->staffIdx(s);
+                  // unlink the spanners
+                  for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
+                        Spanner* s = i->second;
+                        if (s->staffIdx() == staffIdx)
+                              s->undoUnlink();
+                        }
+                  int sTrack = staffIdx * VOICES;
+                  int eTrack = sTrack + VOICES;
+                  // unlink elements and annotation
+                  for (Segment* s = partScore->firstSegmentMM(); s; s = s->next1MM()) {
+                        for (int track = eTrack - 1; track >= sTrack; --track) {
+                              Element* el = s->element(track);
+                              if (el)
+                                    el->undoUnlink();
+                              }
+                        for (Element* e : s->annotations()) {
+                              if (e->staffIdx() == staffIdx)
+                                    e->undoUnlink();
+                              }
+                        }
+                  // unlink the staff
+                  oscore->undo(new UnlinkStaff(staff, s));
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -246,7 +309,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 
             ns->setStartElement(0);
             ns->setEndElement(0);
-            if (cr1->links()) {
+            if (cr1 && cr1->links()) {
                   for (ScoreElement* e : *cr1->links()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr == cr1)
@@ -257,7 +320,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
                               }
                         }
                   }
-            if (cr2->links()) {
+            if (cr2 && cr2->links()) {
                   for (ScoreElement* e : *cr2->links()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr == cr2)
@@ -358,17 +421,22 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nm->setTick(m->tick());
                   nm->setLen(m->len());
                   nm->setTimesig(m->timesig());
+
                   nm->setRepeatCount(m->repeatCount());
-                  nm->setRepeatFlags(m->repeatFlags());
+                  nm->setRepeatStart(m->repeatStart());
+                  nm->setRepeatEnd(m->repeatEnd());
+                  nm->setRepeatMeasure(m->repeatMeasure());
+                  nm->setRepeatJump(m->repeatJump());
+
                   nm->setIrregular(m->irregular());
                   nm->setNo(m->no());
                   nm->setNoOffset(m->noOffset());
-                  nm->setBreakMultiMeasureRest(m->getBreakMultiMeasureRest());
-                  nm->setEndBarLineType(
-                     m->endBarLineType(),
-                     m->endBarLineGenerated(),
-                     m->endBarLineVisible(),
-                     m->endBarLineColor());
+                  nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
+//TODO                  nm->setEndBarLineType(
+//                     m->endBarLineType(),
+//                     m->endBarLineGenerated(),
+//                     m->endBarLineVisible(),
+//                     m->endBarLineColor());
 
                   // Fraction ts = nm->len();
                   int tracks = oscore->nstaves() * VOICES;
@@ -457,7 +525,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
                                     ChordRest* ncr = static_cast<ChordRest*>(ne);
 
-                                    if (ocr->beam() && !ocr->beam()->isEmpty() && ocr->beam()->elements().front() == ocr) {
+                                    if (ocr->beam() && !ocr->beam()->empty() && ocr->beam()->elements().front() == ocr) {
                                           Beam* nb = ocr->beam()->clone();
                                           nb->clear();
                                           nb->setTrack(track);
@@ -606,6 +674,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         if (!map.contains(staffIdx))
                              --span;
                         }
+                  if (dstStaffIdx + span > n)
+                        span = n - dstStaffIdx - 1;
                   dstStaff->setBarLineSpan(span);
                   int idx = 0;
                   foreach(BracketItem bi, srcStaff->brackets()) {
@@ -953,7 +1023,12 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
             }
       }
 
-QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
+//---------------------------------------------------------
+//   createAllExcerpt
+//---------------------------------------------------------
+
+QList<Excerpt*> Excerpt::createAllExcerpt(MasterScore *score)
+      {
       QList<Excerpt*> all;
       for (Part* part : score->parts()) {
             if (part->show()) {
@@ -967,7 +1042,12 @@ QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
       return all;
       }
 
-QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList) {
+//---------------------------------------------------------
+//   createName
+//---------------------------------------------------------
+
+QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList)
+      {
       QString n = partName.simplified();
       QString name;
       int count = excerptList.count();

@@ -25,8 +25,9 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+#      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
       ${FREETYPE_INCLUDE_DIRS}
+      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
 if (SCRIPT_INTERFACE)
@@ -44,7 +45,7 @@ QT5_WRAP_UI (ui_headers
       glissandoprop.ui articulation.ui metaedit.ui palette.ui select.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui albummanager.ui layer.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyledialog.ui albummanager.ui layer.ui
       omrpanel.ui startdialog.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui
@@ -125,6 +126,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_break.ui
       inspector/inspector_bend.ui
       inspector/inspector_arpeggio.ui
+      inspector/inspector_tremolo.ui
       ${SCRIPT_UI}
       )
 
@@ -238,7 +240,7 @@ add_executable ( ${ExecutableName}
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp chordview.cpp
       album.cpp albummanager.cpp
-      textstyle.cpp
+      textstyledialog.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp glissandoproperties.cpp
       articulationprop.cpp textprop.cpp
@@ -302,11 +304,9 @@ target_link_libraries(mscore
       effects
       vorbisfile
       libmscore
-      xmlstream
       qzip
       beatroot
       kqoauth
-      ${FREETYPE_LIBRARIES}
       )
 
 if (MINGW)
@@ -385,13 +385,18 @@ if (MINGW)
       portaudio
       portmidi
       winmm
+      mscore_freetype
       z
       )
 
    if (OMR)
-	set(LIB_LIBZ /usr/local/lib/libz.a)
-	set(LIB_GLFW /usr/local/lib/libglfw.a)
-      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+
+#	set(LIB_LIBZ /usr/local/lib/libz.a)
+#	set(LIB_GLFW /usr/local/lib/libglfw.a)
+#      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openj#peg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+
+      target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
+
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -401,43 +406,38 @@ if (MINGW)
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
+   # Keep dependencies in alphabetical order. Changes made to this list
+   # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
    install( FILES
       ${CROSS}/bin/libgcc_s_dw2-1.dll
       ${CROSS}/bin/libstdc++-6.dll
       ${CROSS}/bin/libwinpthread-1.dll
-      ${CROSS}/lib/portaudio.dll
-      ${CROSS}/lib/libsndfile-1.dll
       ${CROSS}/lib/libogg.dll
+      ${CROSS}/lib/libsndfile-1.dll
       ${CROSS}/lib/libvorbis.dll
       ${CROSS}/lib/libvorbisfile.dll
-      ${CROSS}/opt/bin/ssleay32.dll
+      ${CROSS}/lib/portaudio.dll
       ${CROSS}/opt/bin/libeay32.dll
+      ${CROSS}/opt/bin/ssleay32.dll
+      ${CROSSQT}/bin/Qt5CLucene.dll
       ${CROSSQT}/bin/Qt5Core.dll
-      ${CROSSQT}/bin/Qt5Widgets.dll
       ${CROSSQT}/bin/Qt5Gui.dll
-      ${CROSSQT}/bin/Qt5Xml.dll
-      ${CROSSQT}/bin/Qt5Svg.dll
-      ${CROSSQT}/bin/Qt5Network.dll
-      ${CROSSQT}/bin/Qt5WebChannel.dll
-      ${CROSSQT}/bin/Qt5WebKit.dll
-      ${CROSSQT}/bin/Qt5WebKitWidgets.dll
-      ${CROSSQT}/bin/Qt5XmlPatterns.dll
-      ${CROSSQT}/bin/Qt5Qml.dll
-      ${CROSSQT}/bin/Qt5Quick.dll
-      ${CROSSQT}/bin/Qt5Sql.dll
-      ${CROSSQT}/bin/Qt5Positioning.dll
-      ${CROSSQT}/bin/Qt5PrintSupport.dll
-      ${CROSSQT}/bin/Qt5OpenGL.dll
-      ${CROSSQT}/bin/Qt5Sensors.dll
+      ${CROSSQT}/bin/Qt5Help.dll
       ${CROSSQT}/bin/Qt5Multimedia.dll
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/icuin53.dll
-      ${CROSSQT}/bin/icuuc53.dll
-      ${CROSSQT}/bin/icudt53.dll
-      ${CROSSQT}/bin/Qt5Help.dll
-      ${CROSSQT}/bin/Qt5CLucene.dll
-      $ENV{FREETYPE_DIR}/bin/freetype6.dll
-      $ENV{FREETYPE_DIR}/bin/zlib1.dll
+      ${CROSSQT}/bin/Qt5Network.dll
+      ${CROSSQT}/bin/Qt5OpenGL.dll
+      ${CROSSQT}/bin/Qt5Positioning.dll
+      ${CROSSQT}/bin/Qt5PrintSupport.dll
+      ${CROSSQT}/bin/Qt5Qml.dll
+      ${CROSSQT}/bin/Qt5Quick.dll
+      ${CROSSQT}/bin/Qt5Sensors.dll
+      ${CROSSQT}/bin/Qt5Sql.dll
+      ${CROSSQT}/bin/Qt5Svg.dll
+      ${CROSSQT}/bin/Qt5WebChannel.dll
+      ${CROSSQT}/bin/Qt5Widgets.dll
+      ${CROSSQT}/bin/Qt5Xml.dll
+      ${CROSSQT}/bin/Qt5XmlPatterns.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -447,7 +447,6 @@ if (MINGW)
 
     install(FILES
       ${CROSSQT}/plugins/imageformats/qjpeg.dll
-      ${CROSSQT}/plugins/imageformats/qmng.dll
       ${CROSSQT}/plugins/imageformats/qsvg.dll
       ${CROSSQT}/plugins/imageformats/qtiff.dll
       DESTINATION bin/imageformats)
@@ -467,17 +466,18 @@ if (MINGW)
     install(DIRECTORY
       ${CROSSQT}/qml
       DESTINATION .
-      REGEX ".*QtWebkit.*" EXCLUDE
-      REGEX ".*QtTest.*" EXCLUDE
-      REGEX ".*QtSensors.*" EXCLUDE
+      REGEX ".*d\\.dll" EXCLUDE
       REGEX ".*QtGraphicalEffects.*" EXCLUDE
       REGEX ".*QtMultimedia.*" EXCLUDE
-      REGEX ".*d\\.dll" EXCLUDE)
+      REGEX ".*QtSensors.*" EXCLUDE
+      REGEX ".*QtTest.*" EXCLUDE
+      REGEX ".*QtWebkit.*" EXCLUDE)
 
 else (MINGW)
    target_link_libraries(mscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
+      mscore_freetype
       z
       dl
       pthread
@@ -497,9 +497,10 @@ else (MINGW)
       )
 
    if (OMR)
-	set(LIB_LIBZ /usr/local/lib/libz.a)
-	set(LIB_GLFW /usr/local/lib/libglfw.a)
-      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+#	set(LIB_LIBZ /usr/local/lib/libz.a)
+#	set(LIB_GLFW /usr/local/lib/libglfw.a)
+#      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openj#peg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+      target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -536,21 +537,26 @@ else (MINGW)
      # install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
      install( TARGETS mscore RUNTIME DESTINATION bin )
      if (LN_EXECUTABLE)
-        add_custom_target(mscore_alias
+        add_custom_target(mscore_alias ALL
             COMMAND echo "Creating symlink alias for mscore executable."
             COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
             COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
             )
         install( FILES ${PROJECT_BINARY_DIR}/mscore/musescore${MSCORE_INSTALL_SUFFIX} DESTINATION bin)
      else (LN_EXECUTABLE)
-        add_custom_target(mscore_alias
+        add_custom_target(mscore_alias ALL
             COMMAND echo "No symlink aliases will be created."
             VERBATIM
             )
      endif (LN_EXECUTABLE)
      # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-     install( FILES   ../assets/musescore-icon-round.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
-     install( FILES   ../assets/musescore-icon-round-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
+     if (MSCORE_UNSTABLE)
+         set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # square icons on development builds
+     else (MSCORE_UNSTABLE)
+         set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # round icons on stable releases
+     endif (MSCORE_UNSTABLE)
+     install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
+     install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
      # install MIME (filetype) icons for each mimetype on Linux
      install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files

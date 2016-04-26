@@ -191,7 +191,7 @@ bool Pedal::setProperty(P_ID propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll();
       return true;
       }
 
@@ -203,7 +203,7 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
-                  return score()->styleS(StyleIdx::pedalLineWidth).val();
+                  return score()->style(StyleIdx::pedalLineWidth);
 
             case P_ID::LINE_STYLE:
                   return int(score()->styleI(StyleIdx::pedalLineStyle));

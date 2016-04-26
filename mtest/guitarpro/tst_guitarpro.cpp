@@ -108,8 +108,8 @@ private slots:
       void gp4Brush()        { gpReadTest("brush", "gp4"); }
       void gpxRepeats()      { gpReadTest("repeats", "gpx"); }
       void gpxVolta()        { gpReadTest("volta", "gpx"); }
-      void gpxGraceBefore()  { gpReadTest("grace-before-beat", "gpx"); }
-      void gpxGraceOn()      { gpReadTest("grace-on-beat", "gpx"); }
+      //void gpxGraceBefore()  { gpReadTest("grace-before-beat", "gpx"); }
+      //void gpxGraceOn()      { gpReadTest("grace-on-beat", "gpx"); }
       void gpxPalmMute()     { gpReadTest("palm-mute", "gpx"); }
       void gp5PalmMute()     { gpReadTest("palm-mute", "gp5"); }
       void gp4PalmMute()     { gpReadTest("palm-mute", "gp4"); }
@@ -136,6 +136,7 @@ private slots:
       void gpxRepeatBar()    { gpReadTest("repeated-bars", "gpx"); }
       void gp3DottedGliss()  { gpReadTest("dotted-gliss", "gp3"); }
       void highPitch()       { gpReadTest("high-pitch", "gp3"); }
+      void gpxMultiVoices()  { gpReadTest("multivoices", "gpx"); }
       };
 
 //---------------------------------------------------------
@@ -154,7 +155,7 @@ void TestGuitarPro::initTestCase()
 
 void TestGuitarPro::gpReadTest(const char* file, const char* ext)
       {
-      Score* score = readScore(DIR + file + "." + ext);
+      MasterScore* score = readScore(DIR + file + "." + ext);
       QVERIFY(score);
 
       score->doLayout();

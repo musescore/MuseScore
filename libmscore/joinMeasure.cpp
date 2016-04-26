@@ -33,12 +33,13 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
 
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
-      for (auto i : _spanner.findContained(tick1, tick2))
+      auto spanners = _spanner.findContained(tick1, tick2);
+      for (auto i : spanners)
             undo(new RemoveElement(i.value));
       undoRemoveMeasures(m1, m2);
       Measure* m = new Measure(this);
-      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
-         m2->endBarLineVisible(), m2->endBarLineColor());
+//TODO      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
+//         m2->endBarLineVisible(), m2->endBarLineColor());
 
       m->setTick(m1->tick());
       m->setTimesig(m1->timesig());

@@ -20,8 +20,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct Interval {
-      char diatonic;
-      char chromatic;
+      signed char diatonic;
+      signed char chromatic;
 
       Interval();
       Interval(int a, int b);

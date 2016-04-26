@@ -56,7 +56,7 @@ MediaDialog::MediaDialog(QWidget* /*parent*/)
 
 void MediaDialog::setScore(Score* s)
       {
-      score = s;
+      score = s->masterScore();
       Omr* omr = score->omr();
       if (omr) {
             scanFile->setText(omr->path());
@@ -151,7 +151,7 @@ void MediaDialog::addAudioPressed()
 #endif
 
       QFileInfo fi(path);
-      QFile syncFile(fi.absolutePath() + "/" + fi.baseName() + ".txt");
+      QFile syncFile(fi.absolutePath() + "/" + fi.completeBaseName() + ".txt");
 
       TempoMap* tmo = score->tempomap();
 

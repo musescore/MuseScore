@@ -29,6 +29,9 @@ class InspectorFretDiagram : public InspectorBase {
       UiInspectorElement  e;
       Ui::InspectorFretDiagram   f;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorFretDiagram(QWidget* parent);
       };

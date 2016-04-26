@@ -157,10 +157,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -181,11 +177,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          <lid>7</lid>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
@@ -193,11 +184,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          <lid>10</lid>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Chord>
@@ -218,11 +204,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          <lid>97</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -282,11 +263,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>101</lid>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
@@ -294,11 +270,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>103</lid>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
@@ -306,11 +277,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>105</lid>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
@@ -318,11 +284,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>163</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -456,10 +417,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            </BarLine>
           </Measure>
         <Measure number="2">
           <Chord>
@@ -480,11 +437,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            <lid>7</lid>
-            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -492,11 +444,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            <lid>10</lid>
-            </BarLine>
           </Measure>
         <Measure number="4">
           <Chord>
@@ -517,11 +464,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>2</span>
-            <lid>97</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -677,10 +619,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>0</subtype>
-            <visible>1</visible>
-            </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
@@ -688,11 +626,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>103</lid>
-            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -700,11 +633,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>105</lid>
-            </BarLine>
           </Measure>
         <Measure number="4">
           <Rest>
@@ -712,11 +640,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>163</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Flute</name>

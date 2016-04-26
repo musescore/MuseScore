@@ -17,6 +17,7 @@
 
 namespace Ms {
 
+#if 0
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
@@ -38,7 +39,7 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 //   MyWebView
 //---------------------------------------------------------
 
-class MyWebView: public QWebView
+class MyWebView: public QWebEngineView
       {
       Q_OBJECT
 
@@ -51,7 +52,7 @@ class MyWebView: public QWebView
 #ifndef QT_NO_OPENSSL
       void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
 #endif
-     
+
    public:
       MyWebView(QWidget *parent = 0);
       ~MyWebView();
@@ -77,7 +78,7 @@ class CookieJar : public QNetworkCookieJar
     private:
       QString _file; // where to save cookies
       };
-
+#endif
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
@@ -85,7 +86,7 @@ class CookieJar : public QNetworkCookieJar
 class Startcenter : public QDialog, public Ui::Startcenter
       {
       Q_OBJECT
-      MyWebView* _webView;
+//TODO      MyWebView* _webView;
       virtual void closeEvent(QCloseEvent*);
 
    private slots:
@@ -103,7 +104,6 @@ class Startcenter : public QDialog, public Ui::Startcenter
       void writeSettings(QSettings&);
       void readSettings(QSettings&);
       };
-
 }
 #endif
 

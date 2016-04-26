@@ -116,11 +116,12 @@ void InputState::moveInputPos(Element* e)
             return;
 
       Segment* s;
-      if (e->isChordRest())
-            s = static_cast<ChordRest*>(e)->segment();
+      if (e->isChordRest1())
+            s = toChordRest(e)->segment();
       else
-            s = static_cast<Segment*>(e);
-      if (s->type() == Element::Type::SEGMENT) {
+            s = toSegment(e);
+
+      if (s->isSegment()) {
             if (s->measure()->isMMRest()) {
                   Measure* m = s->measure()->mmRestFirst();
                   s = m->findSegment(Segment::Type::ChordRest, m->tick());

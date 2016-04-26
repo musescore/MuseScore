@@ -56,8 +56,8 @@ void TBox::layout()
       setPos(QPointF());      // !?
       bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       _text->layout();
-      _text->setPos(leftMargin() * MScore::DPMM, topMargin() * MScore::DPMM);
-      qreal h = _text->isEmpty() ? _text->lineSpacing() : _text->height();
+      _text->setPos(leftMargin() * DPMM, topMargin() * DPMM);
+      qreal h = _text->empty() ? _text->lineSpacing() : _text->height();
       bbox().setRect(0.0, 0.0, system()->width(), h);
       MeasureBase::layout();  // layout LayoutBreak's
       }

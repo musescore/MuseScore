@@ -490,7 +490,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             --barLine;
             }
-      if (channel.isEmpty()) {
+      if (channel.empty()) {
             Channel a;
             a.chorus       = 0;
             a.reverb       = 0;

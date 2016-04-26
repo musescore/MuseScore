@@ -136,7 +136,7 @@ MultiValueEditor::MultiValueEditor(const QStringList &values, QWidget *parent)
             else if (values[i + 1] == "undefined")
                   item->setCheckState(Qt::PartiallyChecked);
             else
-                  Q_ASSERT_X(false, "Midi delegate - MultiValue class", "Unknown value");
+                  {Q_ASSERT_X(false, "Midi delegate - MultiValue class", "Unknown value");}
 
             _listWidget->addItem(item);
             }
@@ -453,7 +453,7 @@ void OperationsDelegate::setModelData(QWidget *editor,
             else if (ts)
                   model->setData(index, ts->data());
             else
-                  Q_ASSERT_X(false, "Midi delegate - setModelData", "Unknown editor type");
+                  {Q_ASSERT_X(false, "Midi delegate - setModelData", "Unknown editor type");}
             }
       else {
             SeparatorDelegate::setModelData(editor, model, index);

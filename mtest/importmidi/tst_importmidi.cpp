@@ -38,7 +38,7 @@
 
 
 namespace Ms {
-      extern Score::FileError importMidi(Score*, const QString&);
+      extern Score::FileError importMidi(MasterScore*, const QString&);
       }
 
 using namespace Ms;
@@ -421,7 +421,7 @@ void TestImportMidi::initTestCase()
 
 void TestImportMidi::mf(const char* name) const
       {
-      Score* score = new Score(mscore->baseStyle());
+      MasterScore* score = new MasterScore(mscore->baseStyle());
       score->setName(name);
       const QString mscorename = QString(name) + ".mscx";
       QCOMPARE(importMidi(score,  midiFilePath(name)), Score::FileError::FILE_NO_ERROR);
@@ -1169,7 +1169,7 @@ void TestImportMidi::testGuiTracksModel()
       opers.addNewMidiFile(midiFileFullPath);
       MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFileFullPath);
 
-      Score score(mscore->baseStyle());
+      MasterScore score(mscore->baseStyle());
       score.setName(midiFile);
       QCOMPARE(importMidi(&score, midiFileFullPath), Score::FileError::FILE_NO_ERROR);
 

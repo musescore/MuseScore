@@ -38,8 +38,8 @@ static const std::vector<ParDescr> pd = {
       { R_EQ1FR, "eq1fr", true,   logf(40.0),  logf(2.5e3), 160.0 },
       { R_EQ1GN, "eq1gn", false, -15.0,        15.0,        0.0   },
 
-      { R_EQ2FR, "eg2fr", true,   logf(160.0), logf(10e3),  2.5e3 },
-      { R_EQ2GN, "eg2gn", false, -15.0,        15.0,        0.0   },
+      { R_EQ2FR, "eq2fr", true,   logf(160.0), logf(10e3),  2.5e3 },
+      { R_EQ2GN, "eq2gn", false, -15.0,        15.0,        0.0   },
 
       { R_OPMIX, "opmix", false,  0.0,         1.0,         0.5   }
       };
@@ -361,6 +361,9 @@ void ZitaReverb::init(float fsamp)
       _pareq2.setfsamp(fsamp);
       _pareq1.setparam(160.0, 0.0);
       _pareq2.setparam(2.5e3, 0.0);
+
+      _fragm = 1024;
+      _nsamp = 0;
       }
 
 
@@ -420,65 +423,75 @@ void ZitaReverb::prepare (int nfram)
 
 void ZitaReverb::process (int nfram, float* inp, float* out)
       {
-      prepare(2048);
-
       float t, g, x0, x1, x2, x3, x4, x5, x6, x7;
       g = sqrtf (0.125f);
 
-      float* p0 = inp;
-      float* p1 = inp + 1;
-      float* q0 = out;
-      float* q1 = out + 1;
 
-      for (int i = 0; i < nfram * 2; i += 2) {
-            _vdelay0.write (p0 [i]);
-            _vdelay1.write (p1 [i]);
+      while (nfram) {
+            if (!_nsamp) {
+                  prepare(_fragm);
+                  _nsamp = _fragm;
+                  }
 
-            t = 0.3f * _vdelay0.read ();
-            x0 = _diff1 [0].process (_delay [0].read () + t);
-            x1 = _diff1 [1].process (_delay [1].read () + t);
-            x2 = _diff1 [2].process (_delay [2].read () - t);
-            x3 = _diff1 [3].process (_delay [3].read () - t);
-            t = 0.3f * _vdelay1.read ();
-            x4 = _diff1 [4].process (_delay [4].read () + t);
-            x5 = _diff1 [5].process (_delay [5].read () + t);
-            x6 = _diff1 [6].process (_delay [6].read () - t);
-            x7 = _diff1 [7].process (_delay [7].read () - t);
+            int k = _nsamp < nfram ? _nsamp : nfram;
 
-            t = x0 - x1; x0 += x1;  x1 = t;
-            t = x2 - x3; x2 += x3;  x3 = t;
-            t = x4 - x5; x4 += x5;  x5 = t;
-            t = x6 - x7; x6 += x7;  x7 = t;
-            t = x0 - x2; x0 += x2;  x2 = t;
-            t = x1 - x3; x1 += x3;  x3 = t;
-            t = x4 - x6; x4 += x6;  x6 = t;
-            t = x5 - x7; x5 += x7;  x7 = t;
-            t = x0 - x4; x0 += x4;  x4 = t;
-            t = x1 - x5; x1 += x5;  x5 = t;
-            t = x2 - x6; x2 += x6;  x6 = t;
-            t = x3 - x7; x3 += x7;  x7 = t;
+            float* p0 = inp;
+            float* p1 = inp + 1;
+            float* q0 = out;
+            float* q1 = out + 1;
 
-            _g1 += _d1;
+            for (int i = 0; i < k * 2; i += 2) {
+                  _vdelay0.write (p0 [i]);
+                  _vdelay1.write (p1 [i]);
 
-            q0 [i] = _g1 * (x1 + x2);
-            q1 [i] = _g1 * (x1 - x2);
+                  t = 0.3f * _vdelay0.read ();
+                  x0 = _diff1 [0].process (_delay [0].read () + t);
+                  x1 = _diff1 [1].process (_delay [1].read () + t);
+                  x2 = _diff1 [2].process (_delay [2].read () - t);
+                  x3 = _diff1 [3].process (_delay [3].read () - t);
+                  t = 0.3f * _vdelay1.read ();
+                  x4 = _diff1 [4].process (_delay [4].read () + t);
+                  x5 = _diff1 [5].process (_delay [5].read () + t);
+                  x6 = _diff1 [6].process (_delay [6].read () - t);
+                  x7 = _diff1 [7].process (_delay [7].read () - t);
 
-            _delay [0].write (_filt1 [0].process (g * x0));
-            _delay [1].write (_filt1 [1].process (g * x1));
-            _delay [2].write (_filt1 [2].process (g * x2));
-            _delay [3].write (_filt1 [3].process (g * x3));
-            _delay [4].write (_filt1 [4].process (g * x4));
-            _delay [5].write (_filt1 [5].process (g * x5));
-            _delay [6].write (_filt1 [6].process (g * x6));
-            _delay [7].write (_filt1 [7].process (g * x7));
-            }
-      _pareq1.process (nfram, out);
-      _pareq2.process (nfram, out);
+                  t = x0 - x1; x0 += x1;  x1 = t;
+                  t = x2 - x3; x2 += x3;  x3 = t;
+                  t = x4 - x5; x4 += x5;  x5 = t;
+                  t = x6 - x7; x6 += x7;  x7 = t;
+                  t = x0 - x2; x0 += x2;  x2 = t;
+                  t = x1 - x3; x1 += x3;  x3 = t;
+                  t = x4 - x6; x4 += x6;  x6 = t;
+                  t = x5 - x7; x5 += x7;  x7 = t;
+                  t = x0 - x4; x0 += x4;  x4 = t;
+                  t = x1 - x5; x1 += x5;  x5 = t;
+                  t = x2 - x6; x2 += x6;  x6 = t;
+                  t = x3 - x7; x3 += x7;  x7 = t;
 
-      for (int i = 0; i < nfram; i++) {
-            *out++ += _g0 * *inp++;
-            *out++ += _g0 * *inp++;
-            _g0 += _d0;
+                  _g1 += _d1;
+
+                  q0 [i] = _g1 * (x1 + x2);
+                  q1 [i] = _g1 * (x1 - x2);
+
+                  _delay [0].write (_filt1 [0].process (g * x0));
+                  _delay [1].write (_filt1 [1].process (g * x1));
+                  _delay [2].write (_filt1 [2].process (g * x2));
+                  _delay [3].write (_filt1 [3].process (g * x3));
+                  _delay [4].write (_filt1 [4].process (g * x4));
+                  _delay [5].write (_filt1 [5].process (g * x5));
+                  _delay [6].write (_filt1 [6].process (g * x6));
+                  _delay [7].write (_filt1 [7].process (g * x7));
+                  }
+            _pareq1.process (k, out);
+            _pareq2.process (k, out);
+
+            for (int i = 0; i < k; i++) {
+                  *out++ += _g0 * *inp++;
+                  *out++ += _g0 * *inp++;
+                  _g0 += _d0;
+                  }
+            nfram  -= k;
+            _nsamp -= k;
             }
       }
 

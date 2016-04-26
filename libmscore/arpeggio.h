@@ -37,7 +37,7 @@ class Arpeggio : public Element {
       qreal _userLen2;
       qreal _height;
       int _span;              // spanning staves
-      QList<SymId> symbols;
+      std::vector<SymId> symbols;
       bool _playArpeggio;
 
       void symbolLine(SymId start, SymId fill);

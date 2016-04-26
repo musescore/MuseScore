@@ -1259,10 +1259,6 @@
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <endSpanner id="3"/>
         <tick>10080</tick>
         <Chord>
@@ -2585,10 +2581,6 @@
             <durationType>measure</durationType>
             <duration z="3" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <endSpanner id="5"/>
           <tick>10080</tick>
           <Chord>
@@ -3751,10 +3743,6 @@
             <durationType>measure</durationType>
             <duration z="3" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           <tick>10080</tick>
           <Chord>
             <lid>162</lid>

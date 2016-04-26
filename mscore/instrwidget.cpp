@@ -355,6 +355,8 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
+      upButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      downButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
       splitter->setStretchFactor(0, 10);
       splitter->setStretchFactor(1, 0);
       splitter->setStretchFactor(2, 15);
@@ -460,7 +462,7 @@ void InstrumentsWidget::genPartList(Score* cs)
                   sli->setPartIdx(s->rstaff());
                   const LinkedStaves* ls = s->linkedStaves();
                   bool bLinked = false;
-                  if (ls && !ls->isEmpty()) {
+                  if (ls && !ls->empty()) {
                         foreach(Staff* ps, ls->staves()) {
                               if (ps != s && ps->score() == s->score()) {
                                     bLinked = true;
@@ -1029,7 +1031,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
             staffIdx = nstaffIdx;
             }
 
-      cs->setLayoutAll(true);
+      cs->setLayoutAll();
       }
 
 //---------------------------------------------------------

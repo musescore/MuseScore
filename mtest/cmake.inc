@@ -26,11 +26,11 @@ target_link_libraries(
       libmscore
       synthesizer
       midi
-      xmlstream
       qzip
       z
       ${QT_LIBRARIES}
-      ${FREETYPE_LIBRARIES}
+      mscore_freetype
+      z
       )
 
 if (NOT MINGW AND NOT APPLE)

@@ -24,6 +24,7 @@
 #include "libmscore/part.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/undo.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -57,29 +58,32 @@ PartItem::PartItem(Part* p, QListWidget* parent)
 //   ExcerptsDialog
 //---------------------------------------------------------
 
-ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
+ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
-      score = s;
-      if (score->parentScore())
-            score = score->parentScore();
+      score = s->masterScore();
 
-      foreach(Excerpt* e, score->excerpts()) {
+      for (Excerpt* e : score->excerpts()) {
             ExcerptItem* ei = new ExcerptItem(e);
             excerptList->addItem(ei);
             }
-      foreach(Part* p, score->parts()) {
+      for (Part* p : score->parts()) {
             PartItem* item = new PartItem(p);
             partList->addItem(item);
             }
 
+      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
       connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
+      connect(moveUpButton, SIGNAL(clicked()), SLOT(moveUpClicked()));
+      connect(moveDownButton, SIGNAL(clicked()), SLOT(moveDownClicked()));
       connect(excerptList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(excerptChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(partList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
@@ -87,8 +91,11 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
       connect(partList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(partClicked(QListWidgetItem*)));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
-      if (score->excerpts().size() > 0)
+      int n = score->excerpts().size();
+      if (n > 0)
             excerptList->setCurrentRow(0);
+      moveDownButton->setEnabled(n > 1);
+      moveUpButton->setEnabled(false);
       bool flag = excerptList->currentItem() != 0;
       editGroup->setEnabled(flag);
       deleteButton->setEnabled(flag);
@@ -102,7 +109,7 @@ void MuseScore::startExcerptsDialog()
       {
       if (cs == 0)
             return;
-      ExcerptsDialog ed(cs, 0);
+      ExcerptsDialog ed(cs->masterScore(), 0);
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("PartEditor");
@@ -116,8 +123,8 @@ void MuseScore::startExcerptsDialog()
       settings.setValue("size", ed.size());
       settings.setValue("pos", ed.pos());
       settings.endGroup();
-      cs->setLayoutAll(true);
-      cs->end();
+      cs->setLayoutAll();
+      cs->update();
       }
 
 //---------------------------------------------------------
@@ -129,15 +136,9 @@ void ExcerptsDialog::deleteClicked()
       QListWidgetItem* cur = excerptList->currentItem();
       if (cur == 0)
             return;
-      Excerpt* ex = static_cast<ExcerptItem*>(cur)->excerpt();
 
-      if (ex->partScore()) {
-            score->startCmd();
-            score->undo(new RemoveExcerpt(ex->partScore()));
-            score->endCmd();
-            }
-      int row = excerptList->row(cur);
-      excerptList->takeItem(row);
+      delete cur;
+      //excerptList->takeItem(row);
       }
 
 //---------------------------------------------------------
@@ -189,6 +190,41 @@ void ExcerptsDialog::newAllClicked()
       }
 
 //---------------------------------------------------------
+//   moveUpClicked
+//---------------------------------------------------------
+
+void ExcerptsDialog::moveUpClicked()
+      {
+      QListWidgetItem* cur = excerptList->currentItem();
+      if (cur == 0)
+            return;
+      int currentRow = excerptList->currentRow();
+      if (currentRow <= 0)
+            return;
+      QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
+      excerptList->insertItem(currentRow - 1, currentItem);
+      excerptList->setCurrentRow(currentRow - 1);
+      }
+
+//---------------------------------------------------------
+//   moveDownClicked
+//---------------------------------------------------------
+
+void ExcerptsDialog::moveDownClicked()
+      {
+      QListWidgetItem* cur = excerptList->currentItem();
+      if (cur == 0)
+            return;
+      int currentRow = excerptList->currentRow();
+      int nbRows = excerptList->count();
+      if (currentRow >= nbRows - 1)
+            return;
+      QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
+      excerptList->insertItem(currentRow + 1, currentItem);
+      excerptList->setCurrentRow(currentRow + 1);
+      }
+
+//---------------------------------------------------------
 //   excerptChanged
 //---------------------------------------------------------
 
@@ -222,6 +258,10 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
       title->setEnabled(b);
 
       bool flag = excerptList->currentItem() != 0;
+      int n = excerptList->count();
+      int idx = excerptList->currentIndex().row();
+      moveUpButton->setEnabled(idx > 0);
+      moveDownButton->setEnabled(idx < (n-1));
       editGroup->setEnabled(flag);
       deleteButton->setEnabled(flag);
       }
@@ -249,11 +289,12 @@ void ExcerptsDialog::partClicked(QListWidgetItem* item)
 
       PartItem* pi = static_cast<PartItem*>(item);
       if (item->checkState() == Qt::Checked) {
-            foreach(Part* p, excerpt->parts()) {
-                  if (p == pi->part())
-                        return;
+            excerpt->parts().clear();
+            for (int i = 0; i < partList->count(); i++) {
+                  PartItem* pii = static_cast<PartItem*>(partList->item(i));
+                  if (pii->checkState() == Qt::Checked)
+                        excerpt->parts().append(pii->part());
                   }
-            excerpt->parts().append(pi->part());
            }
       else {
             excerpt->parts().removeOne(pi->part());
@@ -277,10 +318,17 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
 
       nscore->setName(e->title()); // needed before AddExcerpt
 
-      score->startCmd();
+      qDebug() << " + Add part : " << e->title();
       score->undo(new AddExcerpt(nscore));
       createExcerpt(e);
-      score->endCmd();
+
+      // a new excerpt is created in AddExcerpt, make sure the parts are filed
+      for (Excerpt* ee : e->oscore()->excerpts()) {
+            if (ee->partScore() == nscore) {
+                  ee->parts().clear();
+                  ee->parts().append(e->parts());
+                  }
+            }
 
       partList->setEnabled(false);
       title->setEnabled(false);
@@ -301,11 +349,59 @@ void ExcerptsDialog::titleChanged(const QString& s)
       }
 
 //---------------------------------------------------------
+//   titleChanged
+//---------------------------------------------------------
+
+bool ExcerptsDialog::isInPartsList(Excerpt* e)
+      {
+      int n = excerptList->count();
+      for (int i = 0; i < n; ++i) {
+            excerptList->setCurrentRow(i);
+            QListWidgetItem* cur = excerptList->currentItem();
+            if (cur == 0)
+                  continue;
+            if (((ExcerptItem*)cur)->excerpt() == ExcerptItem(e).excerpt())
+                  return true;
+                  //qDebug() << "#" << i << "¸-> " << (((ExcerptItem*)cur)->excerpt())->title();
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   accept
 //---------------------------------------------------------
 
 void ExcerptsDialog::accept()
       {
+      score->startCmd();
+
+      // first pass : see if actual parts needs to be deleted
+      qDebug() << "\nFirst pass : delete unwanted parts";
+
+      int pos = 0;
+      for (Excerpt* e : score->excerpts()) {
+            if (!isInPartsList(e)) {
+                  // Delete it because not in the list anymore
+                  if (e->partScore()) {
+                        Score* partScore = e->partScore();
+                        qDebug() << " - Deleting parts : " << ExcerptItem(e).excerpt()->title();
+
+                        // Swap Excerpts to the end before deleting, so if undoing, the part will be reordered
+                        int lastPos = score->excerpts().size()-1;
+                        if ((lastPos > 0) && (pos != lastPos))
+                              score->undo(new SwapExcerpt(score, pos, lastPos));
+
+                        deleteExcerpt(e);
+                        // remove the excerpt
+                        score->undo(new RemoveExcerpt(partScore));
+                        }
+                  }
+            else
+                  pos++;
+            }
+
+      // Second pass : Create new parts
+      qDebug() << "\nSecond pass : create new parts";
       int n = excerptList->count();
       for (int i = 0; i < n; ++i) {
             excerptList->setCurrentRow(i);
@@ -314,6 +410,52 @@ void ExcerptsDialog::accept()
                   continue;
             createExcerptClicked(cur);
             }
+
+      // Third pass : Remove empty parts.
+      int i = 0;
+      while (i < excerptList->count()) {
+            // This new part is empty, so we don't create an excerpt but remove it from the list.
+            // Necessary to order the parts later on.
+            excerptList->setCurrentRow(i);
+            QListWidgetItem* cur = excerptList->currentItem();
+            Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
+            if (e->parts().isEmpty() && !e->partScore()) {
+                  qDebug() << " - Deleting empty parts : " << cur->text();
+                  delete cur;
+                  }
+            else
+                  i++;
+            }
+
+      // Update the score parts order following excerpList widget
+      qDebug ()  << "\nFourth pass : Reordering parts";
+      qDebug ()  << "   Nb parts in score->excerpts().size() = " << score->excerpts().size();
+      qDebug ()  << "   Nb parts in the parts dialog : excerptList->count() = " << excerptList->count();
+
+      // The reference is the excerpt list. So we iterate following it and swap parts in the score accordingly
+      for (int i = 0; i < excerptList->count(); ++i) {
+            excerptList->setCurrentRow(i);
+            QListWidgetItem* cur = excerptList->currentItem();
+            if (cur == 0)
+                  continue;
+
+            int position = 0;  // Actual order position in score
+            bool found = false;
+
+            // Looks for the excerpt and its position.
+            foreach(Excerpt* e, score->excerpts()) {
+                  if (((ExcerptItem*)cur)->excerpt() == ExcerptItem(e).excerpt()) {
+                        found = true;
+                        break;
+                        }
+                  position++;
+                  }
+            if ((found) && (position != i)) {
+                  qDebug() << "   i=" << i << " <-> position=" << position;
+                  score->undo(new SwapExcerpt(score, i, position));
+                  }
+            }
+      score->endCmd();
       QDialog::accept();
       }
 }

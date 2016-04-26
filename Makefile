@@ -18,16 +18,12 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-REVISION  = `cat mscore/revision.h`
-CPUS      = `grep -c processor /proc/cpuinfo`
-# Avoid build errors when processor=0 (as in m68k)
-ifeq ($(CPUS), 0)
-  CPUS=1
-endif
+REVISION  := `cat mscore/revision.h`
+CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
-VERSION   = "2.1b-${REVISION}"
-#VERSION = 2.1.0
+VERSION   = "3.0b-${REVISION}"
+#VERSION = 3.0.0
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
@@ -47,16 +43,22 @@ release:
       cd build.release;                          \
       export PATH=${BINPATH};                    \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
+  	  -DCMAKE_TOOLCHAIN_FILE="${CMAKE_TOOLCHAIN_FILE}"       \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \
-      make manpages;                             \
-      make mscore_alias;                         \
       make -j ${CPUS};                           \
 
+
+#freetype:
+#	cd build.debug; \
+#      mkdir freetype; \
+#      cd freetype; \
+#      cmake ../../thirdparty/freetype; \
+#      make -j ${CPUS}
 
 debug:
 	if test ! -d build.debug; then mkdir build.debug; fi; \
@@ -69,10 +71,7 @@ debug:
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \
-      make manpages;                                        \
-      make mscore_alias;                                    \
       make -j ${CPUS};                                      \
-
 
 #
 #  win32
@@ -120,6 +119,32 @@ install: release
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
 	fi
 
+# Portable target: build AppDir ready to be turned into a portable AppImage.
+# Creating the AppImage requires https://github.com/probonopd/AppImageKit
+# Portable target requires both build and runtime dependencies,
+# if Qt is in a non-standard location then be sure to add its
+# "bin" folder to PATH and "lib" folder to LD_LIBRARY_PATH. i.e.:
+#   $  export $PATH="/path/to/Qt/bin:${PATH}"
+#   $  export $LD_LIBRARY_PATH="/path/to/Qt/lib:${LD_LIBRARY_PATH}"
+#   $  make portable
+# PREFIX sets install location *and* the name of the resulting AppDir.
+# Version is appended to PREFIX in CMakeLists.txt if MSCORE_UNSTABLE=FALSE.
+portable: PREFIX=MuseScore
+portable: SUFFIX=-portable
+portable: LABEL=Portable AppImage
+portable: NO_RPATH=TRUE
+portable: UPDATE_CACHE=FALSE
+portable: install
+	build_dir="$$(pwd)/build.release" && cd "$$(cat $${build_dir}/PREFIX.txt)" \
+	&& [ -L usr ] || ln -s . usr && mscore="mscore${SUFFIX}" \
+	&& dsktp="$${mscore}.desktop" icon="$${mscore}.svg" mani="install_manifest.txt" \
+	&& cp "share/applications/$${dsktp}" "$${dsktp}" \
+	&& cp "share/icons/hicolor/scalable/apps/$${icon}" "$${icon}" \
+	&& <"$${build_dir}/$${mani}" >"$${mani}" \
+	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p' \
+	&& "$${build_dir}/../build/Linux+BSD/portable/copy-libs" . \
+	;  ./AppRun check-depends | tee "$${build_dir}/dependencies.txt"
+
 installdebug: debug
 	cd build.debug \
 	&& make install \
@@ -163,10 +188,5 @@ unix:
          else                                      \
             echo "build directory linux does alread exist, please remove first";  \
          fi
-
-doxy:
-	doxygen build.debug/Doxyfile
-doxylib:
-	doxygen build.debug/Doxyfile-LibMscore
 
 

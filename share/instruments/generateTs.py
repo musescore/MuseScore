@@ -5,9 +5,10 @@ import xml.etree.ElementTree as ET
 
 def addMessage(f, text, comment=''):
     if (comment):
-        f.write("//: " + comment.encode('utf8') + "\n")
-    f.write('QT_TRANSLATE_NOOP("InstrumentsXML", "' + text.encode('utf8') + '"),\n')
-    
+        f.write('QT_TRANSLATE_NOOP3("InstrumentsXML", "' + text.encode('utf8') + '", "' + comment.encode('utf8') + '"),\n')
+    else:
+        f.write('QT_TRANSLATE_NOOP("InstrumentsXML", "' + text.encode('utf8') + '"),\n')
+
 
 
 f = open('instrumentsxml.h','w')
@@ -32,13 +33,13 @@ for child in root:
                 print "longName " + longName.text
                 addMessage(f, longName.text)
                 previousLongName = longName.text
-            
+
             shortName = instrument.find("shortName")
             if shortName is not None:
                 print "shortName " + shortName.text
                 addMessage(f, shortName.text, previousLongName)
                 previousLongName = ""
-            
+
             trackName = instrument.find("trackName")
             if trackName is not None:
                 print "trackName " + trackName.text
@@ -65,4 +66,4 @@ for child in root:
                     print "Instrument, MidiAction name :" + imaName
                     addMessage(f, ima)
 
-f.close() 
+f.close()

@@ -82,7 +82,7 @@ void MeasureProperties::gotoNextMeasure()
             setMeasure(getNextMeasure(m));
       nextButton->setEnabled(getNextMeasure(m));
       previousButton->setEnabled(getPrevMeasure(m));
-      m->score()->end();
+      m->score()->update();
       }
 
 //---------------------------------------------------------
@@ -95,7 +95,7 @@ void MeasureProperties::gotoPreviousMeasure()
             setMeasure(getPrevMeasure(m));
       nextButton->setEnabled(getNextMeasure(m));
       previousButton->setEnabled(getPrevMeasure(m));
-      m->score()->end();
+      m->score()->update();
       }
 
 //---------------------------------------------------------
@@ -118,10 +118,10 @@ void MeasureProperties::setMeasure(Measure* _m)
       nominalN->setNum(m->timesig().denominator());
 
       irregular->setChecked(m->irregular());
-      breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
+      breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
       int n  = m->repeatCount();
       count->setValue(n);
-      count->setEnabled(m->repeatFlags() & Repeat::END);
+      count->setEnabled(m->repeatEnd());
       layoutStretch->setValue(m->userStretch());
       measureNumberMode->setCurrentIndex(int(m->measureNumberMode()));
       measureNumberOffset->setValue(m->noOffset());

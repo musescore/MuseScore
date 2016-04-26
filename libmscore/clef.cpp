@@ -86,9 +86,6 @@ Clef::Clef(Score* s)
       _small                      = false;
       _clefTypes._concertClef     = ClefType::INVALID;
       _clefTypes._transposingClef = ClefType::INVALID;
-      curClefType                 = ClefType::G;
-      curLines                    = -1;
-      curLineDist                 = 1.0;
       }
 
 Clef::Clef(const Clef& c)
@@ -98,10 +95,6 @@ Clef::Clef(const Clef& c)
       _showPreviousClef = c._showPreviousClef;
       _small            = c._small;
       _clefTypes        = c._clefTypes;
-      curClefType       = c.curClefType;
-      curLines          = c.curLines;
-      curLineDist       = c.curLineDist;
-      layout1();
       }
 
 Clef::~Clef()
@@ -122,11 +115,13 @@ qreal Clef::mag() const
       }
 
 //---------------------------------------------------------
-//   add
+//   addElement
 //---------------------------------------------------------
 
 void Clef::addElement(Element* e, qreal x, qreal y)
       {
+      e->setMag(mag());
+      e->setColor(curColor());
       e->layout();
       e->setPos(x, y);
       e->setParent(this);
@@ -141,8 +136,21 @@ void Clef::addElement(Element* e, qreal x, qreal y)
 void Clef::setSelected(bool f)
       {
       Element::setSelected(f);
-      foreach(Element* e, elements)
+      for (Element* e : elements)
             e->setSelected(f);
+      }
+
+//---------------------------------------------------------
+//   clear
+//    Remove all elements and set bbxo to zero. This
+//    makes the clef invisible.
+//---------------------------------------------------------
+
+void Clef::clear()
+      {
+      qDeleteAll(elements);
+      elements.clear();
+      setbbox(QRectF());
       }
 
 //---------------------------------------------------------
@@ -151,129 +159,86 @@ void Clef::setSelected(bool f)
 
 void Clef::layout()
       {
-      setPos(QPoint());
-
       // determine current number of lines and line distance
-      int   lines       = 5;              // assume resonable defaults
-      qreal lineDist    = 1.0;
-
-      Staff*      stf         = staff();
-      StaffType*  staffType   = nullptr;
-      Segment*    clefSeg     = static_cast<Segment*>(parent());
-      // check clef visibility and type compatibility
-      if (clefSeg && stf && stf->staffType()) {
-            bool        bHide;
-            // check staff type allows clef display
-            staffType = stf->staffType();
-            bHide = !staffType->genClef();
-
-            // check clef is compatible with staff type group
-            int tick = clefSeg->tick();
-            if (ClefInfo::staffGroup(clefType()) != staffType->group()) {
-                  if (tick > 0 && !generated()) // if clef is not generated, hide it
-                        bHide = true;
-                  else                          // if generated, replace with initial clef type
-                        // TODO : instead of initial staff clef (which is assumed to be compatible)
-                        // use the last compatible clef previously found in staff
-                        _clefTypes = stf->clefType(0);
-                  }
-
-            //
-            // courtesy clef
-            //
-            bool showClef = true;
-            // only if there is a clef change
-            if (!bHide && tick > 0 ) {
-                  Measure* meas = clefSeg->measure();
-                  showClef =                    // show this clef if:
-                        // it is not a courtesy clef (not at the end of the last measure of the system)
-                        ((meas->system() && meas != meas->system()->lastMeasure())) || (clefSeg->tick() != meas->endTick())
-                        // if courtesy clef: show if score has courtesy clefs on
-                        || ( score()->styleB(StyleIdx::genCourtesyClef)
-                              // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & Repeat::END) || meas->isFinalMeasureOfSection() )
-                              // AND this clef has courtesy clef turned on
-                              && showCourtesy() );
-                  bHide |= !showClef;
-                  }
-
-            // if clef not to show or not compatible with staff group
-            if (bHide) {
-                  qDeleteAll(elements);         // set empty bbox and do nothing
-                  elements.clear();
-                  setbbox(QRectF());
-                  return;
-                  }
-
-            lines = staffType->lines();         // init values from staff type
-#if 0
-            // with fewer than 5 lines, keep clef toward top of staff (ignore line spacing)
-            if (!stf->isPitchedStaff() || lines >= 5)
-#endif
-            lineDist = staffType->lineDistance().val();
-            }
-
-      // if nothing changed since last layout, do nothing
-//DEBUG      if (curClefType == clefType() && curLines == lines && curLineDist == lineDist)
-//            return;
-      // if something has changed, cache new values and re-layout
-      curClefType = clefType();
-      curLines    = lines;
-      curLineDist = lineDist;
-      layout1();
-      }
-
-//---------------------------------------------------------
-//   layout1
-//---------------------------------------------------------
-
-void Clef::layout1()
-      {
-      qreal smag     = mag();
-      qreal _spatium = spatium();
-      qreal yoff     = 0.0;
+      int   lines;
+      qreal lineDist;
+      Segment* clefSeg  = segment();
 
       qDeleteAll(elements);
       elements.clear();
 
+      // check clef visibility and type compatibility
+      if (clefSeg && staff()) {
+            StaffType* staffType = staff()->staffType();
+            bool show            = staffType->genClef();        // check staff type allows clef display
+            int tick             = clefSeg->tick();
+
+            // check clef is compatible with staff type group:
+            if (ClefInfo::staffGroup(clefType()) != staffType->group()) {
+                  if (tick > 0 && !generated()) // if clef is not generated, hide it
+                        show = false;
+                  else                          // if generated, replace with initial clef type
+                        // TODO : instead of initial staff clef (which is assumed to be compatible)
+                        // use the last compatible clef previously found in staff
+                        _clefTypes = staff()->clefType(0);
+                  }
+
+            // if clef not to show or not compatible with staff group
+            if (!show) {
+                  setbbox(QRectF());
+                  qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %d",
+                     segment()->tick(), segment()->tick()/1920, staffIdx());
+                  return;
+                  }
+            lines    = staffType->lines();         // init values from staff type
+            lineDist = staffType->lineDistance().val();
+            }
+      else {
+            lines    = 5;
+            lineDist = 1.0;
+            }
+
+      qreal _spatium = spatium();
+      qreal yoff     = 0.0;
+
       Symbol* symbol = new Symbol(score());
 
-      switch (curClefType) {
+      switch (clefType()) {
             case ClefType::G:                              // G clef on 2nd line
                   symbol->setSym(SymId::gClef);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::G1:                             // G clef 8va on 2nd line
                   symbol->setSym(SymId::gClef8va);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::G2:                             // G clef 15ma on 2nd line
                   symbol->setSym(SymId::gClef15ma);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::G3:                             // G clef 8vb on 2nd line
                   symbol->setSym(SymId::gClef8vb);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::G3_O:                            // double G clef 8vb on 2nd line
                   symbol->setSym(SymId::gClef8vbOld);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::F:                              // F clef on penultimate line
                   symbol->setSym(SymId::fClef);
-                  yoff = 1.0 * curLineDist;
+                  yoff = 1.0 * lineDist;
                   break;
             case ClefType::F8:                             // F clef 8va bassa on penultimate line
                   symbol->setSym(SymId::fClef8vb);
-                  yoff = 1.0 * curLineDist;
+                  yoff = 1.0 * lineDist;
                   break;
             case ClefType::F15:                            // F clef 15ma bassa on penultimate line
                   symbol->setSym(SymId::fClef15mb);
-                  yoff = 1.0 * curLineDist;
+                  yoff = 1.0 * lineDist;
                   break;
             case ClefType::F_B:                            // baritone clef
                   symbol->setSym(SymId::fClef);
-                  yoff = 2.0 * curLineDist;
+                  yoff = 2.0 * lineDist;
                   break;
             case ClefType::F_C:                            // subbass clef
                   symbol->setSym(SymId::fClef);
@@ -281,19 +246,19 @@ void Clef::layout1()
                   break;
             case ClefType::C1:                             // C clef in 1st line
                   symbol->setSym(SymId::cClef);
-                  yoff = 4.0 * curLineDist;
+                  yoff = 4.0 * lineDist;
                   break;
             case ClefType::C2:                             // C clef on 2nd line
                   symbol->setSym(SymId::cClef);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::C3:                             // C clef in 3rd line
                   symbol->setSym(SymId::cClef);
-                  yoff = 2.0 * curLineDist;
+                  yoff = 2.0 * lineDist;
                   break;
             case ClefType::C4:                             // C clef on 4th line
                   symbol->setSym(SymId::cClef);
-                  yoff = 1.0 * curLineDist;
+                  yoff = 1.0 * lineDist;
                   break;
             case ClefType::C5:                             // C clef on 5th line
                   symbol->setSym(SymId::cClef);
@@ -302,52 +267,59 @@ void Clef::layout1()
             case ClefType::TAB:                            // TAB clef
                   symbol->setSym(SymId::sixStringTabClef);
                   // on tablature, position clef at half the number of spaces * line distance
-                  yoff = curLineDist * (curLines - 1) * .5;
+                  yoff = lineDist * (lines - 1) * .5;
                   break;
             case ClefType::TAB2:                           // TAB clef alternate style
                   symbol->setSym(SymId::sixStringTabClefSerif);
                   // on tablature, position clef at half the number of spaces * line distance
-                  yoff = curLineDist * (curLines - 1) * .5;
+                  yoff = lineDist * (lines - 1) * .5;
                   break;
             case ClefType::PERC:                           // percussion clefs
                   symbol->setSym(SymId::unpitchedPercussionClef1);
-                  yoff = curLineDist * (curLines - 1) * 0.5;
+                  yoff = lineDist * (lines - 1) * 0.5;
                   break;
             case ClefType::PERC2:
                   symbol->setSym(SymId::unpitchedPercussionClef2);
-                  yoff = curLineDist * (curLines - 1) * 0.5;
+                  yoff = lineDist * (lines - 1) * 0.5;
                   break;
             case ClefType::G4:                             // G clef in 1st line
                   symbol->setSym(SymId::gClef);
-                  yoff = 4.0 * curLineDist;
+                  yoff = 4.0 * lineDist;
                   break;
             case ClefType::F_8VA:                          // F clef 8va on penultimate line
                   symbol->setSym(SymId::fClef8va);
-                  yoff = 1.0 * curLineDist;
+                  yoff = 1.0 * lineDist;
                   break;
             case ClefType::F_15MA:                         // F clef 15ma on penultimate line
                   symbol->setSym(SymId::fClef15ma);
-                  yoff = 1.0 * curLineDist;
+                  yoff = 1.0 * lineDist;
                   break;
             case ClefType::G5:                              // G clef on 2nd line
                   symbol->setSym(SymId::gClef8vbParens);
-                  yoff = 3.0 * curLineDist;
+                  yoff = 3.0 * lineDist;
                   break;
             case ClefType::INVALID:
             case ClefType::MAX:
+                  qDebug("Clef::layout: invalid type");
                   return;
             }
-
-      symbol->setMag(smag);
-      symbol->layout();
       addElement(symbol, .0, yoff * _spatium);
-      setbbox(QRectF());
-      for (auto i = elements.begin(); i != elements.end(); ++i) {
-            Element* e = *i;
-            e->setColor(curColor());
-            addbbox(e->bbox().translated(e->pos()));
+      QRectF r;
+      for (Element* e : elements) {
+            r |= e->bbox().translated(e->pos());
             e->setSelected(selected());
             }
+
+      // clefs are right aligned to Segment
+
+//      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+//      QPointF off(-r.right() - clefKeyRightMargin, 0);
+      QPointF off(-r.right(), 0);
+      for (Element* e : elements)
+            e->move(off);
+      r.translate(off);
+      setbbox(r);
+      setPos(QPointF());
       }
 
 //---------------------------------------------------------
@@ -359,7 +331,7 @@ void Clef::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genClef())
             return;
       QColor color(curColor());
-      foreach(Element* e, elements) {
+      for (Element* e : elements) {
             e->setColor(color);           //??
             QPointF pt(e->pos());
             painter->translate(pt);
@@ -418,7 +390,6 @@ void Clef::setSmall(bool val)
       {
       if (val != _small) {
             _small = val;
-            curClefType = ClefType::INVALID;
             }
       }
 
@@ -594,8 +565,8 @@ ClefType Clef::clefType() const
 
 void Clef::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      layout1();
       Element::spatiumChanged(oldValue, newValue);
+      layout();
       }
 
 //---------------------------------------------------------
@@ -671,7 +642,7 @@ Element* Clef::prevElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Clef::accessibleInfo()
+QString Clef::accessibleInfo() const
       {
       return qApp->translate("clefTable", ClefInfo::name(clefType()));
       }

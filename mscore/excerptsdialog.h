@@ -25,7 +25,7 @@
 
 namespace Ms {
 
-class Score;
+class MasterScore;
 class Excerpt;
 class Part;
 
@@ -59,7 +59,7 @@ class PartItem : public QListWidgetItem {
 
 class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       Q_OBJECT
-      Score* score;
+      MasterScore* score;
 
       QString createName(const QString&);
 
@@ -69,14 +69,17 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void deleteClicked();
       void newClicked();
       void newAllClicked();
+      void moveUpClicked();
+      void moveDownClicked();
       void excerptChanged(QListWidgetItem* cur, QListWidgetItem* prev);
       void partDoubleClicked(QListWidgetItem*);
       void partClicked(QListWidgetItem*);
       void createExcerptClicked(QListWidgetItem*);
       void titleChanged(const QString&);
+      bool isInPartsList(Excerpt* e);
 
    public:
-      ExcerptsDialog(Score*, QWidget* parent = 0);
+      ExcerptsDialog(MasterScore*, QWidget* parent = 0);
       };
 
 

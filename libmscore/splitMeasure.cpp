@@ -31,11 +31,12 @@ void Score::cmdSplitMeasure(ChordRest* cr)
       range.read(measure->first(), measure->last());
 
       startCmd();
-      deleteItem(measure);
+      undoRemoveMeasures(measure, measure);
+      undoInsertTime(measure->tick(), -(measure->endTick() - measure->tick()));
 
       // create empty measures:
-      Measure* m2 = static_cast<Measure*>(insertMeasure(Element::Type::MEASURE, measure->next(), true));
-      Measure* m1 = static_cast<Measure*>(insertMeasure(Element::Type::MEASURE, m2, true));
+      Measure* m2 = toMeasure(insertMeasure(Element::Type::MEASURE, measure->next(), true));
+      Measure* m1 = toMeasure(insertMeasure(Element::Type::MEASURE, m2, true));
 
       int tick = segment->tick();
       m1->setTick(measure->tick());

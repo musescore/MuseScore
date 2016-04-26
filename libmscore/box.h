@@ -23,9 +23,9 @@ class QPainter;
 
 namespace Ms {
 
-class BarLine;
 class MuseScoreView;
-class Text;
+
+static constexpr qreal BOX_MARGIN = 0.0;
 
 //---------------------------------------------------------
 //   @@ Box
@@ -35,16 +35,16 @@ class Text;
 class Box : public MeasureBase {
       Q_OBJECT
 
-      Spatium _boxWidth;   // only valid for HBox
-      Spatium _boxHeight;  // only valid for VBox
-      qreal _topGap;       // distance from previous system (left border for hbox)
-                           // initialized with StyleIdx::systemFrameDistance
-      qreal _bottomGap;    // distance to next system (right border for hbox)
-                           // initialized with StyleIdx::frameSystemDistance
-      qreal _leftMargin, _rightMargin;   // inner margins in metric mm
-      qreal _topMargin, _bottomMargin;
-      bool editMode;
-      qreal dragX;            // used during drag of hbox
+      Spatium _boxWidth  { Spatium(0) };  // only valid for HBox
+      Spatium _boxHeight { Spatium(0) };  // only valid for VBox
+      qreal _topGap      { 0.0 };         // distance from previous system (left border for hbox)
+                                          // initialized with StyleIdx::systemFrameDistance
+      qreal _bottomGap   { 0.0 };         // distance to next system (right border for hbox)
+                                          // initialized with StyleIdx::frameSystemDistance
+      qreal _leftMargin { BOX_MARGIN }, _rightMargin { BOX_MARGIN };   // inner margins in metric mm
+      qreal _topMargin  { BOX_MARGIN }, _bottomMargin { BOX_MARGIN };
+      bool editMode     { false };
+      qreal dragX;                        // used during drag of hbox
 
    public:
       Box(Score*);
@@ -99,7 +99,7 @@ class HBox : public Box {
 
    public:
       HBox(Score* score);
-      ~HBox() {}
+      virtual ~HBox() {}
       virtual HBox* clone() const override        { return new HBox(*this); }
       virtual Element::Type type() const override { return Element::Type::HBOX;       }
 
@@ -121,7 +121,7 @@ class VBox : public Box {
 
    public:
       VBox(Score* score);
-      ~VBox() {}
+      virtual ~VBox() {}
       virtual VBox* clone() const override        { return new VBox(*this); }
       virtual Element::Type type() const override { return Element::Type::VBOX;       }
 
@@ -141,7 +141,7 @@ class FBox : public VBox {
 
    public:
       FBox(Score* score) : VBox(score) {}
-      ~FBox() {}
+      virtual ~FBox() {}
       virtual FBox* clone() const override        { return new FBox(*this); }
       virtual Element::Type type() const override { return Element::Type::FBOX;       }
 

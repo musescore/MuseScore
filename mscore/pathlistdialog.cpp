@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "pathlistdialog.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -41,8 +42,12 @@ PathListDialog::PathListDialog(QWidget* parent)
 
 void PathListDialog::addClicked()
       {
-      QString newPath = QFileDialog::getExistingDirectory (this, tr("Choose a directory"),
-         QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName()));
+      QString newPath = QFileDialog::getExistingDirectory(
+         this,
+         tr("Choose a directory"),
+         QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName()),
+         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
+         );
       if (!newPath.isEmpty()) {
             newPath = QDir(newPath).absolutePath();
             if(files->findItems(newPath, Qt::MatchExactly).size() == 0)

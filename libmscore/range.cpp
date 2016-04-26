@@ -68,7 +68,7 @@ void TrackList::append(Element* e)
             Fraction d = static_cast<DurationElement*>(e)->duration();
             _duration += d;
 
-            bool accumulateRest = e->type() == Element::Type::REST && !isEmpty()
+            bool accumulateRest = e->type() == Element::Type::REST && !empty()
                && back()->type() == Element::Type::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
@@ -112,7 +112,7 @@ void TrackList::appendGap(const Fraction& d)
       {
       if (d.isZero())
             return;
-      Element* e = isEmpty() ? 0 : back();
+      Element* e = empty() ? 0 : back();
       if (e && (e->type() == Element::Type::REST)) {
             Rest* rest  = static_cast<Rest*>(back());
             Fraction dd = rest->duration();
@@ -137,6 +137,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
       int tick = fs->tick();
       int gap  = 0;
       const Segment* s;
+
       for (s = fs; s && (s != es); s = s->next1()) {
             Element* e = s->element(_track);
             if (!e || e->generated()) {
@@ -362,7 +363,7 @@ bool TrackList::write(Measure* measure) const
                         else {
                               Fraction d = qMin(rest, duration);
                               if (e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE) {
-                                    for (TDuration k : toDurationList(d, false)) {
+                                    for (const TDuration& k : toDurationList(d, false)) {
                                           Rest* r = new Rest(score, k);
                                           Fraction dd(k.fraction());
                                           r->setTrack(_track);
@@ -436,10 +437,10 @@ bool TrackList::write(Measure* measure) const
                   }
             else if (e->type() == Element::Type::BAR_LINE) {
                   if (pos.numerator() == 0 && m) {
-                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
-                        Measure* pm = m->prevMeasure();
-                        if (pm)
-                              pm->setEndBarLineType(t,0);
+//                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
+//                        Measure* pm = m->prevMeasure();
+//TODO                        if (pm)
+//                              pm->setEndBarLineType(t,0);
                         }
                   }
             else {
@@ -619,7 +620,7 @@ void ScoreRange::fill(const Fraction& f)
 
 Fraction ScoreRange::duration() const
       {
-      return tracks.isEmpty() ? Fraction() : tracks[0]->duration();
+      return tracks.empty() ? Fraction() : tracks[0]->duration();
       }
 
 }

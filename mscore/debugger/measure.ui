@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>631</width>
-    <height>549</height>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
@@ -235,30 +235,7 @@
          </widget>
         </item>
         <item row="2" column="8">
-         <widget class="QSpinBox" name="endRepeat"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string notr="true">RepeatFLags:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QLineEdit" name="repeatFlags">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <widget class="QSpinBox" name="repeatCount"/>
         </item>
         <item row="3" column="3">
          <widget class="QLabel" name="label_12">
@@ -346,6 +323,20 @@
         <property name="spacing">
          <number>2</number>
         </property>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="pageBreak">
+          <property name="text">
+           <string notr="true">Page Break</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3" colspan="2">
+         <widget class="QCheckBox" name="breakMultiMeasureRest">
+          <property name="text">
+           <string notr="true">breakMultiMeasureRest</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="2">
          <widget class="QCheckBox" name="irregular">
           <property name="sizePolicy">
@@ -359,58 +350,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2">
-         <widget class="QCheckBox" name="breakMultiMeasureRest">
-          <property name="text">
-           <string notr="true">breakMultiMeasureRest</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QCheckBox" name="endBarLineGenerated">
-          <property name="text">
-           <string notr="true">Generated</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QCheckBox" name="endBarLineVisible">
-          <property name="text">
-           <string notr="true">Visible</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QLabel" name="label_10">
-          <property name="text">
-           <string notr="true">Type</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="4">
-         <widget class="QSpinBox" name="endBarLineType"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string notr="true">endBarLine:</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QCheckBox" name="lineBreak">
           <property name="text">
            <string notr="true">Line Break</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="pageBreak">
-          <property name="text">
-           <string notr="true">Page Break</string>
           </property>
          </widget>
         </item>
@@ -434,17 +377,45 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="breakMMRest">
-          <property name="text">
-           <string notr="true">breakMMRest</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="3">
          <widget class="QPushButton" name="mmRest">
           <property name="text">
            <string notr="true">mmRest</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="endRepeat">
+          <property name="text">
+           <string notr="true">EndRepeat</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="hasSystemHeader">
+          <property name="text">
+           <string notr="true">SystemHeader</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="hasSystemTrailer">
+          <property name="text">
+           <string notr="true">SystemTrailer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="hasCourtesyKeySig">
+          <property name="text">
+           <string notr="true">CourtesyKeySig</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="hasVoices">
+          <property name="text">
+           <string notr="true">hasVoices</string>
           </property>
          </widget>
         </item>

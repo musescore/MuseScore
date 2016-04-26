@@ -57,7 +57,7 @@ class LinkedStaves {
       const QList<Staff*>& staves() const { return _staves; }
       void add(Staff*);
       void remove(Staff*);
-      bool isEmpty() const { return _staves.isEmpty(); }
+      bool empty() const { return _staves.empty(); }
       };
 
 //---------------------------------------------------------
@@ -96,7 +96,7 @@ class Staff : public QObject, public ScoreElement {
       Q_OBJECT
 
 public:
-      enum class HideMode { AUTO, ALWAYS, NEVER };
+      enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
 
 private:
       Part* _part       { 0 };
@@ -139,12 +139,13 @@ private:
       void initFromStaffType(const StaffType* staffType);
       void init(const Staff*);
 
+      virtual const char* name() const override { return "Staff"; }
+
       bool isTop() const;
       QString partName() const;
       int rstaff() const;
       int idx() const;
       void read(XmlReader&);
-      void read114(XmlReader&);
       void write(Xml& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
@@ -171,6 +172,8 @@ private:
       void clearTimeSig();
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
+      bool isLocalTimeSignature(int tick) { return timeStretch(tick) != Fraction(1, 1); }
+
       const Groups& group(int tick) const;
 
       KeyList* keyList()               { return &_keys;                  }
@@ -230,6 +233,8 @@ private:
       bool isDrumStaff() const         { return staffGroup() == StaffGroup::PERCUSSION; }
 
       VeloList& velocities()           { return _velocities;     }
+      PitchList& pitchOffsets()        { return _pitchOffsets;   }
+
       int pitchOffset(int tick)        { return _pitchOffsets.pitchOffset(tick);   }
       void updateOttava();
 
@@ -258,6 +263,8 @@ private:
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+      BracketType innerBracket() const;
 
 #ifndef NDEBUG
       void dumpClefs(const char* title) const;

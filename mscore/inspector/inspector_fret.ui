@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
-    <height>141</height>
+    <width>235</width>
+    <height>116</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,7 +50,7 @@
       </font>
      </property>
      <property name="text">
-      <string>FretDiagram</string>
+      <string>Fretboard Diagram</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -72,7 +72,20 @@
       <number>0</number>
      </property>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="mag"/>
+      <widget class="QDoubleSpinBox" name="mag">
+       <property name="minimum">
+        <double>0.200000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>50.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.200000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
@@ -91,72 +104,33 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_4">
+     <item row="2" column="0" colspan="3">
+      <widget class="QToolButton" name="properties">
        <property name="text">
-        <string>barre</string>
+        <string>Properties</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>strings</string>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>frets</string>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
        </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QSpinBox" name="barre"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="strings"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QSpinBox" name="frets"/>
-     </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetStrings">
-       <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
        </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetFrets">
-       <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QToolButton" name="resetBarre">
-       <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

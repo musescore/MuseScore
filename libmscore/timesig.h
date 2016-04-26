@@ -88,12 +88,11 @@ class TimeSig : public Element {
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
-      virtual Space space() const override;
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
       //@ sets the time signature
-      Q_INVOKABLE void setSig(int z, int n, TimeSigType st = TimeSigType::NORMAL) { setSig(Fraction(z, n), st); }
+      Q_INVOKABLE void setSig(int z, int n, int st = static_cast<int>(TimeSigType::NORMAL)) { setSig(Fraction(z, n), static_cast<TimeSigType>(st)); }
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
 
@@ -146,7 +145,7 @@ class TimeSig : public Element {
 
       virtual Element* nextElement();
       virtual Element* prevElement();
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

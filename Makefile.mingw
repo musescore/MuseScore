@@ -20,8 +20,8 @@
 
 
 REVISION  = $(shell type mscore\revision.h)
-VERSION   = 2.1b-${REVISION}
-#VERSION = 2.1.0
+VERSION   = 3.0b-${REVISION}
+#VERSION = 3.0.0
 CPUS = %NUMBER_OF_PROCESSORS%
 
 release:
@@ -61,10 +61,3 @@ clean:
 	-rmdir /S/Q build.debug build.release win32install
 
 
-#
-# generate code documentation
-#
-doxy:
-	doxygen build.debug/Doxyfile
-doxylib:
-	doxygen build.debug/Doxyfile-LibMscore

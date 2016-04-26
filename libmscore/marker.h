@@ -56,7 +56,7 @@ class Marker : public Text {
 
       void setMarkerType(Type t);
       Type markerType() const          { return _markerType; }
-      QString markerTypeUserName();
+      QString markerTypeUserName() const;
 
       virtual Marker* clone() const override      { return new Marker(*this); }
       virtual Element::Type type() const override { return Element::Type::MARKER; }
@@ -82,7 +82,7 @@ class Marker : public Text {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
-      virtual QString accessibleInfo() override;
+      virtual QString accessibleInfo() const override;
       };
 
 typedef struct {

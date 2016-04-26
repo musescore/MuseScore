@@ -116,7 +116,6 @@ void Tremolo::layout()
       qreal _spatium  = spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(StyleIdx::tremoloWidth).val() * .5;
-      // qreal h2  = _spatium * score()->styleS(StyleIdx::tremoloBoxHeight).val()  * .5;
       qreal lw  = _spatium * score()->styleS(StyleIdx::tremoloStrokeWidth).val();
       qreal td  = _spatium * score()->styleS(StyleIdx::tremoloDistance).val();
       path      = QPainterPath();
@@ -253,7 +252,8 @@ void Tremolo::layout()
       _chord2 = static_cast<Chord*>(s->element(track()));
       _chord2->setTremolo(this);
 
-      Stem *stem2 = _chord2->stem(), *stem1 = _chord1->stem();
+      Stem* stem1 = _chord1->stem();
+      Stem* stem2 = _chord2->stem();
 
       // compute the y coordinates of the tips of the stems
       qreal y1, y2;
@@ -291,9 +291,11 @@ void Tremolo::layout()
 
       // compute the x coordinates of the inner edge of the stems
       qreal x2  = _chord2->stemPosBeam().x();
-      if (_chord2->up() && stem2) x2 -= stem2->lineWidth();
+      if (_chord2->up() && stem2)
+            x2 -= stem2->lineWidth();
       qreal x1  = _chord1->stemPosBeam().x();
-      if (!_chord1->up() && stem1) x1 += stem1->lineWidth();
+      if (!_chord1->up() && stem1)
+            x1 += stem1->lineWidth();
 
       x = (x1 + x2) * .5 - _chord1->pagePos().x();
 
@@ -449,7 +451,7 @@ QString Tremolo::subtypeName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Tremolo::accessibleInfo()
+QString Tremolo::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(subtypeName());
       }

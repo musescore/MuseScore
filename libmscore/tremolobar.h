@@ -22,15 +22,20 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   @@ TremoloBar
+//
+//   @P userMag    qreal
 //---------------------------------------------------------
 
 class TremoloBar : public Element {
       Q_OBJECT
 
+      Q_PROPERTY(qreal userMag  READ userMag    WRITE undoSetUserMag)
+
       QList<PitchValue> _points;
       qreal _lw;
       QPointF notePos;
       qreal noteWidth;
+      qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
 
    public:
       TremoloBar(Score* s);
@@ -43,6 +48,15 @@ class TremoloBar : public Element {
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
+
+      void undoSetUserMag(qreal val);
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+
+      qreal userMag() const         { return _userMag;   }
+      void setUserMag(qreal m)      { _userMag = m;      }
       };
 
 
