@@ -111,24 +111,27 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       if (staff->isTabStaff())
             return;
 
-      int upVoices = 0, downVoices = 0;
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
-      std::vector<Note*> upStemNotes, downStemNotes;
+      std::vector<Note*> upStemNotes;
+      std::vector<Note*> downStemNotes;
+      int upVoices       = 0;
+      int downVoices     = 0;
+      int startTrack     = staffIdx * VOICES;
+      int endTrack       = startTrack + VOICES;
       qreal nominalWidth = noteHeadWidth() * staff->mag();
-      qreal maxUpWidth = 0.0;
+      qreal maxUpWidth   = 0.0;
       qreal maxDownWidth = 0.0;
-      qreal maxUpMag = 0.0;
-      qreal maxDownMag = 0.0;
+      qreal maxUpMag     = 0.0;
+      qreal maxDownMag   = 0.0;
 
       // dots and hooks can affect layout of notes as well as vice versa
-      int upDots = 0;
-      int downDots = 0;
-      bool upHooks = false;
-      bool downHooks = false;
+      int upDots         = 0;
+      int downDots       = 0;
+      bool upHooks       = false;
+      bool downHooks     = false;
+
       // also check for grace notes
-      bool upGrace = false;
-      bool downGrace = false;
+      bool upGrace       = false;
+      bool downGrace     = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
@@ -169,7 +172,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             // otherwise there might be issues with unisons between voices
             // in some corner cases
 
-            maxUpWidth = nominalWidth * maxUpMag;
+            maxUpWidth   = nominalWidth * maxUpMag;
             maxDownWidth = nominalWidth * maxDownMag;
 
             // layout upstem noteheads
@@ -262,9 +265,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             // handle conflict between upstem and downstem chords
 
             if (upVoices && downVoices) {
-
                   Note* bottomUpNote = upStemNotes.front();
-                  Note* topDownNote = downStemNotes.back();
+                  Note* topDownNote  = downStemNotes.back();
                   int separation;
                   if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove())
                         separation = topDownNote->line() - bottomUpNote->line();
@@ -838,12 +840,9 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             qreal stemX  = chord->stemPosX();   // stem position for nominal notehead, but allowing for mag
 
             qreal overlapMirror;
-            if (chord->stem()) {
-                  qreal stemWidth = chord->stem()->lineWidth();
-                  qreal stemWidth5 = stemWidth * 0.5;
-                  chord->stem()->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
-                  overlapMirror = stemWidth;
-                  }
+            Stem* stem = chord->stem();
+            if (stem)
+                  overlapMirror = stem->lineWidth();
             else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE)
                   overlapMirror = styleP(StyleIdx::stemWidth) * chord->mag();
             else
@@ -878,9 +877,6 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
                   leftNotes.append(note);
             else if (sx < lx)
                   lx = sx;
-
-            //if (chord->stem())
-            //      chord->stem()->rxpos() = _up ? x + hw - stemWidth5 : x + stemWidth5;
 
             qreal xx = x + hw + chord->pos().x();
 
@@ -1742,104 +1738,6 @@ void Score::layoutFingering(Fingering* f)
       f->setUserOff(QPointF(x, y));
       }
 
-#if 0
-//---------------------------------------------------------
-//   layoutPages
-//    create list of pages
-//---------------------------------------------------------
-
-void Score::layoutPages(LayoutContext& lc)
-      {
-      const qreal slb        = styleP(StyleIdx::staffLowerBorder);
-      const qreal sub        = styleP(StyleIdx::staffUpperBorder);
-      lc.curPage             = 0;
-      Page* page             = getEmptyPage(lc);
-      bool breakPages        = layoutMode() != LayoutMode::SYSTEM;
-      qreal y                = page->tm();
-      qreal ey               = page->height() - page->bm();
-      System* s1             = 0;               // previous system
-      System* s2             = lc.curSystem;
-
-      for (int i = 0;; ++i) {
-            //
-            // calculate distance to previous system
-            //
-            qreal distance;
-            if (s1)
-                  distance = s1->minDistance(s2);
-            else {
-                  // this is the first system on page
-                  VBox* vbox = s2->vbox();
-                  distance = vbox ? vbox->topGap() : sub;
-                  distance = qMax(distance, -s2->minTop());
-                  }
-            y += distance;
-            s2->setPos(page->lm(), y);
-            page->appendSystem(s2);
-            y += s2->height();
-
-            //
-            //  check for page break or if next system will fit on page
-            //
-            System* s3     = _systems.value(i+1);   // next system
-            bool breakPage = !s3 || (breakPages && s2->pageBreak());
-
-            if (!breakPage) {
-                  qreal dist = s2->minDistance(s3) + s3->height();
-                  VBox* vbox = s3->vbox();
-                  if (vbox)
-                        dist += vbox->bottomGap();
-                  else
-                        dist += qMax(s3->minBottom(), slb);
-                  breakPage  = (y + dist) >= ey;
-                  }
-            if (breakPage) {
-                  VBox* vbox = s2->vbox();
-                  qreal dist = vbox ? vbox->bottomGap() : qMax(s2->minBottom(), slb);
-                  layoutPage(page, ey - (y + dist));
-                  if (!s3)
-                        break;
-                  page = getEmptyPage(lc);
-                  y    = page->tm();
-                  s2   = 0;
-                  }
-            s1 = s2;    // current system becomes previous
-            s2 = s3;    // next system becomes current
-            }
-
-      while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
-            _pages.takeLast();
-      }
-#endif
-
-#if 0
-//---------------------------------------------------------
-//   doLayoutSystems
-//    layout staves in a system
-//    layout pages
-//---------------------------------------------------------
-
-void Score::doLayoutSystems()
-      {
-      LayoutContext lc;
-
-      for (System* system : _systems)
-            system->layout2();
-
-      _systems.swap(lc.systemList);
-      lc.curSystem = lc.systemList.front();
-
-      if (layoutMode() != LayoutMode::LINE)
-            layoutPages(lc);
-
-      rebuildBspTree();
-      setUpdateAll();
-
-      for (MuseScoreView* v : viewer)
-            v->layoutChanged();
-      }
-#endif
-
 //---------------------------------------------------------
 //   checkDivider
 //---------------------------------------------------------
@@ -1936,27 +1834,6 @@ static void layoutPage(Page* page, qreal restHeight)
             s2->rypos() += yoff;
             }
       }
-
-//---------------------------------------------------------
-//   doLayoutPages
-//    small wrapper for layoutPages()
-//---------------------------------------------------------
-
-#if 0
-void Score::doLayoutPages()
-      {
-      LayoutContext lc;
-
-      _systems.swap(lc.systemList);
-      lc.curSystem = lc.systemList.front();
-      layoutPages(lc);
-
-      rebuildBspTree();
-      setUpdateAll();
-      foreach(MuseScoreView* v, viewer)
-            v->layoutChanged();
-      }
-#endif
 
 //---------------------------------------------------------
 //   sff
@@ -2150,7 +2027,6 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                               // only ChordRest segments get more space
                               // TODO: is there a special case n == 0 ?
 
-// printf("overlap %s(%d) - %s(%d)  n=%d +%f\n", ps->subTypeName(), ps->tick(), ns->subTypeName(), ns->tick(), n, ww-w);
                               qreal d = (ww - w) / n;
                               qreal xx = ps->x();
                               for (Segment* s = ps; s != ss;) {
@@ -2768,8 +2644,9 @@ void Score::getNextMeasure(LayoutContext& lc)
 
                         for (int t = track; t < endTrack; ++t) {
                               ChordRest* cr = segment->cr(t);
-                              if (cr)
+                              if (cr) {
                                     measure->layoutCR0(cr, staffMag, &as);
+                                    }
                               }
                         layoutChords1(segment, staffIdx);
                         }

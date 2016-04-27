@@ -63,12 +63,17 @@ qreal Stem::stemLen() const
 
 qreal Stem::lineWidth() const
       {
-      return point(score()->styleS(StyleIdx::stemWidth));
+      return score()->styleP(StyleIdx::stemWidth);
       }
 
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 //   layout
-//---------------------------------------------------------
+//    For beamed notes this is called twice. The final stem
+//    length can only be calculated after stretching of the measure.
+//    We need a guessed stem shape to calculate the minimal distance
+//    between segments. The guessed stem must have at least the
+//    right direction.
+//-------------------------------------------------------------------
 
 void Stem::layout()
       {
@@ -109,7 +114,7 @@ void Stem::layout()
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
       setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
-      adjustReadPos();
+      adjustReadPos();  // does not work if stem is layouted twice
       }
 
 //---------------------------------------------------------

@@ -175,6 +175,7 @@ class ChordRest : public DurationElement {
       virtual Element* prevElement() override;
       virtual QString accessibleExtraInfo() const override;
       virtual Shape shape() const override;
+      virtual void layoutStem1() {};
       };
 
 
