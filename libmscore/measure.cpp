@@ -2882,7 +2882,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
                         }
                   }
             chord->computeUp();
-            chord->layoutStem1();
+            chord->layoutStem1();   // create stems needed to calculate spacing
+                                    // stem direction can change later during beam processing
             }
       if (m != mag())
             cr->setMag(m);

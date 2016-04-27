@@ -459,17 +459,17 @@ void Chord::add(Element* e)
                   break;
             case Element::Type::STEM:
                   Q_ASSERT(!_stem);
-                  _stem = static_cast<Stem*>(e);
+                  _stem = toStem(e);
                   break;
             case Element::Type::HOOK:
-                  _hook = static_cast<Hook*>(e);
+                  _hook = toHook(e);
                   break;
             case Element::Type::CHORDLINE:
                   _el.push_back(e);
                   break;
             case Element::Type::STEM_SLASH:
                   Q_ASSERT(!_stemSlash);
-                  _stemSlash = static_cast<StemSlash*>(e);
+                  _stemSlash = toStemSlash(e);
                   break;
             case Element::Type::CHORD:
                   {
@@ -1054,23 +1054,6 @@ void Chord::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (score()->mscVersion() <= 114) { // #19988
-            Note * n = upNote();
-            if (n) {
-                  if (notes().size() == 1) {
-                        setUserOff(n->userOff() + userOff());
-                        n->setUserOff(QPoint());
-                        n->setReadPos(QPoint());
-                        }
-                  else if(!n->userOff().isNull()) {
-                        if(!_stem) {
-                              _stem = new Stem(score());
-                              add(_stem);
-                              }
-                         _stem->setUserOff(n->userOff() + _stem->userOff());
-                        }
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -1350,6 +1333,10 @@ void Chord::layoutStem1()
                   }
             else if (_stemSlash)
                   remove(_stemSlash);
+
+            qreal stemWidth5 = _stem->lineWidth() * .5;
+            _stem->rxpos()   = stemPosX() + (up() ? -stemWidth5 : +stemWidth5);
+            _stem->setLen(defaultStemLength());
             }
       else {
             if (_stem)
@@ -1376,7 +1363,6 @@ void Chord::layoutStem()
       //
       // TAB
       //
-      qreal _spatium = spatium();
       StaffType* tab = 0;
       if (staff() && staff()->isTabStaff()) {
             tab = staff()->staffType();
@@ -1392,7 +1378,7 @@ void Chord::layoutStem()
             if (!tab->stemThrough()) {
                   if (_stem) { // (duplicate code with defaultStemLength())
                         // process stem:
-                        _stem->setLen(tab->chordStemLength(this) * _spatium);
+                        _stem->setLen(tab->chordStemLength(this) * spatium());
                         // process hook
                         int   hookIdx = durationType().hooks();
                         if (!up())
@@ -1422,7 +1408,6 @@ void Chord::layoutStem()
       // NON-TAB (or TAB with stems through staff)
       //
       if (_stem) {
-            _stem->layout();  //?
             _stem->setLen(defaultStemLength());
             // if (isGrace())
             //      abort();
@@ -3214,7 +3199,7 @@ Shape Chord::shape() const
       {
       Shape shape;
       processSiblings([&shape, this] (Element* e) {
-            if (!(e->isStem() && beam()))
+//            if (!(e->isStem() && beam()))
                   shape.add(e->shape());
             });
       shape.add(ChordRest::shape());      // add articulation + lyrics
