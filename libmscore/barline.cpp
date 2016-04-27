@@ -954,7 +954,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       qreal dw = score->styleP(StyleIdx::barWidth) * mag;
 
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, mag);
-      switch(type) {
+      switch (type) {
             case BarLineType::DOUBLE:
                   dw  = (score->styleP(StyleIdx::doubleBarWidth) * 2
                      + score->styleP(StyleIdx::doubleBarDistance)) * mag;
@@ -981,7 +981,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
             case BarLineType::DOTTED:
                   break;
             default:
-                  qDebug("illegal barline type");
+                  qDebug("illegal barline type %d", int(type));
                   break;
             }
       return dw;
