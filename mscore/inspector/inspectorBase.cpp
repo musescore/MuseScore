@@ -83,6 +83,9 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             case P_TYPE::SIZE_MM:
                   v = v.toDouble() * DPMM;
                   break;
+            case P_TYPE::BARLINE_TYPE:
+                  v = QVariant::fromValue(BarLineType(v.toInt()));
+                  break;
             default:
                   break;
             }
