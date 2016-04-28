@@ -1410,9 +1410,12 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   }
             else
                   d = score()->styleP(StyleIdx::barNoteDistance);
-            d -= ns->minLeft() * .7;      // hack
-            d = qMax(d, spatium());       // minimum distance is one spatium
-            w = qMax(w, minRight()) + d;
+            qreal dd = minRight() + ns->minLeft();
+            w = qMax(d, dd + spatium());
+            // d -= ns->minLeft() * .7;      // hack
+            // d = qMax(d, ns->minLeft());
+            // d = qMax(d, spatium());       // minimum distance is one spatium
+            // w = qMax(w, minRight()) + d;
             }
       else if (st == Segment::Type::Clef) {
             if (nst == Segment::Type::KeySig)
