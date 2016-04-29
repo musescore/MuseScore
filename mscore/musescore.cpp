@@ -1407,7 +1407,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (selectionWindow)
             selectionWindow->setScore(cs);
       if (mixer)
-            mixer->updateAll(cs->masterScore());
+            mixer->updateAll(cs ? cs->masterScore() : nullptr);
 #ifdef OMR
       if (omrPanel) {
             if (cv && cv->omrView())
