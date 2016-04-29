@@ -25,7 +25,7 @@ then # Build is marked UNSTABLE inside CMakeLists.txt
     makefile_overrides="PREFIX='MuseScoreNightly-$date-$branch-$revision' \
                         SUFFIX='-portable-nightly' \
                         LABEL='Portable Nightly Build'"
-    cp -f build/travis/job2_AppImage/splash-nightly.png mscore/data/splash.png
+    cp -f build/travis/resources/splash-nightly.png mscore/data/splash.png
   else
     # This is someone developing on their own fork
     makefile_overrides="PREFIX='MuseScoreDev-$date-$branch-$revision' \

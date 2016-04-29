@@ -25,22 +25,27 @@ PREFIX=../applebuild
 
 XCODEPROJ = mscore.xcodeproj
 
+# Use xcpretty if installed
+ifneq ($(strip $(shell which xcpretty)),)
+  FORMATTER_START = set -o pipefail &&
+  FORMATTER_END = | xcpretty
+endif
+
 release:
 	mkdir build.release;                               \
     cd build.release;                                  \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
           .. -G Xcode; 			       \
-    xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
-	xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD;     \
+    xcodebuild -project ${XCODEPROJ} -target lrelease;                            \
+		$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);    \
 
-
-debug: xcode
-	mkdir build.debug;                         \
+debug:
+	mkdir build.release;                               \
     cd build.debug;                            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
           .. -G Xcode; 			       \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
-    xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD;       \
+    $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END);       \
 
 xcode:
 	mkdir build.xcode;              \
@@ -63,16 +68,22 @@ version:
 
 install:
 	cd build.release;   \
-	xcodebuild -project ${XCODEPROJ} -configuration Release -target install_plugins_manual; \
-	xcodebuild -project ${XCODEPROJ} -configuration Release -target install;
+	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);
 
 installdebug:
 	cd build.debug; \
-	xcodebuild -project ${XCODEPROJ} -configuration Debug -target install_plugins_manual; \
-	xcodebuild -project ${XCODEPROJ} -configuration Debug -target install;
+	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target install $(FORMATTER_END);
 
 package:
 	build/package_mac;
+
+ci: revision
+	mkdir build.release;     \
+    cd build.release;            \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
+          .. -G Xcode;                                                  \
+    xcodebuild -project ${XCODEPROJ} -target lrelease;                  \
+    $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);
 
 #
 # clean out of source build

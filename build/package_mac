@@ -1,7 +1,18 @@
-VERSION=2.0.3
+#!/bin/bash
+
 APPNAME=mscore
 LONG_NAME=MuseScore
-LONGER_NAME="MuseScore 2"
+
+if [[ $1 ]]
+then
+    LONG_NAME=MuseScoreNightly
+    LONGER_NAME=MuseScoreNightly
+    VERSION=$1
+else
+    LONG_NAME=MuseScore
+    LONGER_NAME="MuseScore 2"
+    VERSION=2.0.4
+fi
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.tiff
