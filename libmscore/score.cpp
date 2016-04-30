@@ -3902,10 +3902,10 @@ void Score::changeVoice(int voice)
 
 //---------------------------------------------------------
 //   cropPage - crop a single page score to the content
-///    margins will be applied on the 4 sides
+// Margins will be applied on the 4 sides
+// This function is called by plugins via external script
+// The margins arg is expecting millimeters
 //---------------------------------------------------------
-// ???Is this method ever called???
-// margins arg is in millimeters, but I can't find where it's called, so no context
 void Score::cropPage(qreal margins)
       {
       if (npages() == 1) {

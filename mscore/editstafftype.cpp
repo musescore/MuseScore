@@ -169,6 +169,8 @@ void EditStaffType::setValues()
                   if (idx == -1)
                         idx = 0;          // if name not found, use first name
                   fretFontName->setCurrentIndex(idx);
+                  QString suffix = qApp->translate(TRANSLATE_CTX_UNITS, unitSuffixes[int(Units::PT)]);
+                  fretFontSize->setSuffix(suffix);
                   fretFontSize->setValue(staffType.fretFontSize());
                   fretY->setValue(staffType.fretFontUserY());
 
@@ -185,6 +187,7 @@ void EditStaffType::setValues()
                         idx = 0;          // if name not found, use first name
                   durFontName->setCurrentIndex(idx);
                   durFontSize->setValue(staffType.durationFontSize());
+                  durFontSize->setSuffix(suffix);
                   durY->setValue(staffType.durationFontUserY());
                   // convert combined values of genDurations and slashStyle into noteValuesx radio buttons
                   // Sbove/Below, Beside/Through and minim are only used if stems-and-beams

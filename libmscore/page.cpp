@@ -308,7 +308,6 @@ PageFormat::PageFormat()
       _evenLeftMargin   = marginPX;
       _oddLeftMargin    = marginPX;
       _printableWidth   = _size.width() - marginPX2;
-// ??? Why no printableHeight???
       _evenTopMargin    = marginPX;
       _evenBottomMargin = marginPX2;
       _oddTopMargin     = marginPX;

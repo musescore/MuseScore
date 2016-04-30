@@ -38,6 +38,7 @@ enum class Units : char {
 };
 // For converting from Ms::Units to a two-char string used as a suffix
 static const char TRANSLATE_CTX_UNITS[] = "unitSuffix";
+extern const char* unitSuffixes[];
 
 //---------------------------------------------------------
 //   PaperSize
@@ -199,7 +200,6 @@ class Page : public Element {
       };
 
 extern const PaperSize paperSizes[];
-extern const char* unitSuffixes[];
 
 }     // namespace Ms
 #endif
