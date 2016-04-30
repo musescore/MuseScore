@@ -247,7 +247,7 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
 //   qmlMsgHandler
 //---------------------------------------------------------
 
-static void qmlMsgHandler(QtMsgType type, const char* msg)
+static void qmlMsgHandler(QtMsgType type, const QMessageLogContext &, const QString & msg)
       {
       QString s;
       switch(type) {
@@ -264,9 +264,6 @@ static void qmlMsgHandler(QtMsgType type, const char* msg)
                   s = QString("Fatal: %1\n").arg(msg);
                   break;
             default:
-
-// Qt5.2?   case QtTraceMsg:
-// Qt5.4   case QtInfoMsg:
                   s = QString("Info: %1\n").arg(msg);
                   break;
             }
@@ -295,7 +292,7 @@ void PluginCreator::runClicked()
             stop->setEnabled(false);
             return;
             }
-      qInstallMsgHandler(qmlMsgHandler);
+      qInstallMessageHandler(qmlMsgHandler);
       stop->setEnabled(true);
       run->setEnabled(false);
 
@@ -366,7 +363,7 @@ void PluginCreator::closePlugin()
             view->close();
       if (dock)
             dock->close();
-      qInstallMsgHandler(0);
+      qInstallMessageHandler(0);
       }
 
 //---------------------------------------------------------

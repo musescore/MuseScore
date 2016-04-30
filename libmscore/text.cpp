@@ -2431,7 +2431,7 @@ void Text::dragTo(const QPointF& p)
       {
       setCursor(p, QTextCursor::KeepAnchor);
       score()->setUpdateAll();
-      score()->end();
+      score()->update();
       }
 
 //---------------------------------------------------------
@@ -2618,7 +2618,7 @@ void Text::paste()
       score()->setUpdateAll();
       if (type() == Element::Type::INSTRUMENT_NAME)
             score()->setLayoutAll();
-      score()->end();
+      score()->update();
       }
 
 //---------------------------------------------------------

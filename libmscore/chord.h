@@ -138,7 +138,7 @@ class Chord : public ChordRest {
 
       qreal defaultStemLength();
 
-      void layoutStem1();
+      virtual void layoutStem1() override;
       void layoutStem();
       void layoutArpeggio2();
 

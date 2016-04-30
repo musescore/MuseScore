@@ -111,24 +111,27 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       if (staff->isTabStaff())
             return;
 
-      int upVoices = 0, downVoices = 0;
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
-      std::vector<Note*> upStemNotes, downStemNotes;
+      std::vector<Note*> upStemNotes;
+      std::vector<Note*> downStemNotes;
+      int upVoices       = 0;
+      int downVoices     = 0;
+      int startTrack     = staffIdx * VOICES;
+      int endTrack       = startTrack + VOICES;
       qreal nominalWidth = noteHeadWidth() * staff->mag();
-      qreal maxUpWidth = 0.0;
+      qreal maxUpWidth   = 0.0;
       qreal maxDownWidth = 0.0;
-      qreal maxUpMag = 0.0;
-      qreal maxDownMag = 0.0;
+      qreal maxUpMag     = 0.0;
+      qreal maxDownMag   = 0.0;
 
       // dots and hooks can affect layout of notes as well as vice versa
-      int upDots = 0;
-      int downDots = 0;
-      bool upHooks = false;
-      bool downHooks = false;
+      int upDots         = 0;
+      int downDots       = 0;
+      bool upHooks       = false;
+      bool downHooks     = false;
+
       // also check for grace notes
-      bool upGrace = false;
-      bool downGrace = false;
+      bool upGrace       = false;
+      bool downGrace     = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
@@ -169,7 +172,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             // otherwise there might be issues with unisons between voices
             // in some corner cases
 
-            maxUpWidth = nominalWidth * maxUpMag;
+            maxUpWidth   = nominalWidth * maxUpMag;
             maxDownWidth = nominalWidth * maxDownMag;
 
             // layout upstem noteheads
@@ -262,9 +265,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             // handle conflict between upstem and downstem chords
 
             if (upVoices && downVoices) {
-
                   Note* bottomUpNote = upStemNotes.front();
-                  Note* topDownNote = downStemNotes.back();
+                  Note* topDownNote  = downStemNotes.back();
                   int separation;
                   if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove())
                         separation = topDownNote->line() - bottomUpNote->line();
@@ -838,12 +840,9 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             qreal stemX  = chord->stemPosX();   // stem position for nominal notehead, but allowing for mag
 
             qreal overlapMirror;
-            if (chord->stem()) {
-                  qreal stemWidth = chord->stem()->lineWidth();
-                  qreal stemWidth5 = stemWidth * 0.5;
-                  chord->stem()->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
-                  overlapMirror = stemWidth;
-                  }
+            Stem* stem = chord->stem();
+            if (stem)
+                  overlapMirror = stem->lineWidth();
             else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE)
                   overlapMirror = styleP(StyleIdx::stemWidth) * chord->mag();
             else
@@ -878,9 +877,6 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
                   leftNotes.append(note);
             else if (sx < lx)
                   lx = sx;
-
-            //if (chord->stem())
-            //      chord->stem()->rxpos() = _up ? x + hw - stemWidth5 : x + stemWidth5;
 
             qreal xx = x + hw + chord->pos().x();
 
@@ -1238,11 +1234,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       int nVisible = 0;
       int staffIdx = 0;
 
-      // keep key sigs in TABs: TABs themselves should hide them
-      bool needKeysig = isFirstSystem || styleB(StyleIdx::genKeysig);
-
       for (Staff* staff : _staves) {
-
             // At this time we don't know which staff is visible or not...
             // but let's not create the key/clef if there were no visible before this layout
             // sometimes we will be right, other time it will take another layout to be right...
@@ -1281,31 +1273,62 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom() || keyIdx.isAtonal())) {
-                  //
-                  // create missing key signature
-                  //
-                  keysig = new KeySig(this);
-                  keysig->setKeySigEvent(keyIdx);
-                  keysig->setTrack(strack);
-                  keysig->setGenerated(true);
-                  Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
-                  keysig->setParent(seg);
-                  undo(new AddElement(keysig));
-                  }
-            else if (!needKeysig && keysig && keysig->generated()) {
-                  undoRemoveElement(keysig);
-                  keysig = 0;
-                  }
-            else if (keysig && !(keysig->keySigEvent() == keyIdx))
-                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
+            // keep key sigs in TABs: TABs themselves should hide them
+            bool needKeysig = isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (keysig) {
+            // If we need a Key::C KeySig (which would be invisible) and there is
+            // a courtesy key sig, dont create it and switch generated flags.
+            // This avoids creating an invisible KeySig which can distort layout.
+
+            KeySig* ksAnnounce = 0;
+            if (needKeysig && (keyIdx.key() == Key::C)) {
+                  Measure* pm = m->prevMeasure();
+                  if (pm && pm->hasCourtesyKeySig()) {
+                        Segment* ks = pm->first(Segment::Type::KeySigAnnounce);
+                        if (ks) {
+                              ksAnnounce = toKeySig(ks->element(strack));
+                              if (ksAnnounce) {
+                                    needKeysig = false;
+                                    if (keysig) {
+                                          ksAnnounce->setGenerated(false);
+                                          keysig->setGenerated(true);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+
+            needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
+            needKeysig = needKeysig || (keysig && !keysig->generated());  // dont remove user modified keysigs
+
+            if (needKeysig) {
+                  if (!keysig) {
+                        //
+                        // create missing key signature
+                        //
+                        keysig = new KeySig(this);
+                        keysig->setKeySigEvent(keyIdx);
+                        keysig->setTrack(strack);
+                        keysig->setGenerated(true);
+                        Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
+                        keysig->setParent(seg);
+                        undo(new AddElement(keysig));
+                        }
+                  else {
+                        if (!(keysig->keySigEvent() == keyIdx))
+                              undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
+                        }
                   keysig->layout();       // hide naturals may have changed
                   keysig->segment()->createShape(staffIdx);
                   }
+            else if (keysig) {
+                  undoRemoveElement(keysig);
+                  keysig = 0;
+                  }
 
-            if (isFirstSystem || styleB(StyleIdx::genClef)) {
+            StaffType* staffType  = staff->staffType();
+            bool showClef         = staffType->genClef() && (isFirstSystem || styleB(StyleIdx::genClef));
+            if (showClef) {
                   ClefTypeList cl = staff->clefType(tick);
                   if (!clef) {
                         //
@@ -1450,24 +1473,23 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
 
 void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       {
-       //
-      //    hide empty staves
-      //
-      int staves = _staves.size();
+      int staves   = _staves.size();
       int staffIdx = 0;
       bool systemIsEmpty = true;
 
-      foreach (Staff* staff, _staves) {
-            SysStaff* s  = system->staff(staffIdx);
-            bool oldShow = s->show();
+      for (Staff* staff : _staves) {
+            SysStaff* ss  = system->staff(staffIdx);
+//            bool oldShow = ss->show();
+
             Staff::HideMode hideMode = staff->hideWhenEmpty();
+
             if (hideMode == Staff::HideMode::ALWAYS
                 || (styleB(StyleIdx::hideEmptyStaves)
                     && (staves > 1)
                     && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
                     && hideMode != Staff::HideMode::NEVER)) {
                   bool hideStaff = true;
-                  foreach(MeasureBase* m, system->measures()) {
+                  for (MeasureBase* m : system->measures()) {
                         if (!m->isMeasure())
                               continue;
                         Measure* measure = toMeasure(m);
@@ -1507,34 +1529,40 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                                     break;
                               }
                         }
-                  s->setShow(hideStaff ? false : staff->show());
-                  if (s->show()) {
+                  ss->setShow(hideStaff ? false : staff->show());
+                  if (ss->show())
                         systemIsEmpty = false;
-                        }
                   }
             else {
                   systemIsEmpty = false;
-                  s->setShow(true);
+                  ss->setShow(true);
                   }
 
-            if (oldShow != s->show()) {
 #if 0
+            if (oldShow != s->show()) {
                   foreach (MeasureBase* mb, system->measures()) {
                         if (!mb->isMeasure())
                               continue;
                         static_cast<Measure*>(mb)->createEndBarLines();
                         }
-#endif
                   }
+#endif
             ++staffIdx;
             }
       if (systemIsEmpty) {
-            foreach (Staff* staff, _staves) {
-                  SysStaff* s  = system->staff(staff->idx());
-                  if (staff->showIfEmpty() && !s->show()) {
-                        s->setShow(true);
+            for (Staff* staff : _staves) {
+                  SysStaff* ss  = system->staff(staff->idx());
+                  if (staff->showIfEmpty() && !ss->show()) {
+                        ss->setShow(true);
+                        systemIsEmpty = false;
                         }
                   }
+            }
+      // dont allow a complete empty system
+      if (systemIsEmpty) {
+            Staff* staff = _staves.front();
+            SysStaff* ss = system->staff(staff->idx());
+            ss->setShow(true);
             }
       }
 
@@ -1710,104 +1738,6 @@ void Score::layoutFingering(Fingering* f)
       f->setUserOff(QPointF(x, y));
       }
 
-#if 0
-//---------------------------------------------------------
-//   layoutPages
-//    create list of pages
-//---------------------------------------------------------
-
-void Score::layoutPages(LayoutContext& lc)
-      {
-      const qreal slb        = styleP(StyleIdx::staffLowerBorder);
-      const qreal sub        = styleP(StyleIdx::staffUpperBorder);
-      lc.curPage             = 0;
-      Page* page             = getEmptyPage(lc);
-      bool breakPages        = layoutMode() != LayoutMode::SYSTEM;
-      qreal y                = page->tm();
-      qreal ey               = page->height() - page->bm();
-      System* s1             = 0;               // previous system
-      System* s2             = lc.curSystem;
-
-      for (int i = 0;; ++i) {
-            //
-            // calculate distance to previous system
-            //
-            qreal distance;
-            if (s1)
-                  distance = s1->minDistance(s2);
-            else {
-                  // this is the first system on page
-                  VBox* vbox = s2->vbox();
-                  distance = vbox ? vbox->topGap() : sub;
-                  distance = qMax(distance, -s2->minTop());
-                  }
-            y += distance;
-            s2->setPos(page->lm(), y);
-            page->appendSystem(s2);
-            y += s2->height();
-
-            //
-            //  check for page break or if next system will fit on page
-            //
-            System* s3     = _systems.value(i+1);   // next system
-            bool breakPage = !s3 || (breakPages && s2->pageBreak());
-
-            if (!breakPage) {
-                  qreal dist = s2->minDistance(s3) + s3->height();
-                  VBox* vbox = s3->vbox();
-                  if (vbox)
-                        dist += vbox->bottomGap();
-                  else
-                        dist += qMax(s3->minBottom(), slb);
-                  breakPage  = (y + dist) >= ey;
-                  }
-            if (breakPage) {
-                  VBox* vbox = s2->vbox();
-                  qreal dist = vbox ? vbox->bottomGap() : qMax(s2->minBottom(), slb);
-                  layoutPage(page, ey - (y + dist));
-                  if (!s3)
-                        break;
-                  page = getEmptyPage(lc);
-                  y    = page->tm();
-                  s2   = 0;
-                  }
-            s1 = s2;    // current system becomes previous
-            s2 = s3;    // next system becomes current
-            }
-
-      while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
-            _pages.takeLast();
-      }
-#endif
-
-#if 0
-//---------------------------------------------------------
-//   doLayoutSystems
-//    layout staves in a system
-//    layout pages
-//---------------------------------------------------------
-
-void Score::doLayoutSystems()
-      {
-      LayoutContext lc;
-
-      for (System* system : _systems)
-            system->layout2();
-
-      _systems.swap(lc.systemList);
-      lc.curSystem = lc.systemList.front();
-
-      if (layoutMode() != LayoutMode::LINE)
-            layoutPages(lc);
-
-      rebuildBspTree();
-      setUpdateAll();
-
-      for (MuseScoreView* v : viewer)
-            v->layoutChanged();
-      }
-#endif
-
 //---------------------------------------------------------
 //   checkDivider
 //---------------------------------------------------------
@@ -1904,27 +1834,6 @@ static void layoutPage(Page* page, qreal restHeight)
             s2->rypos() += yoff;
             }
       }
-
-//---------------------------------------------------------
-//   doLayoutPages
-//    small wrapper for layoutPages()
-//---------------------------------------------------------
-
-#if 0
-void Score::doLayoutPages()
-      {
-      LayoutContext lc;
-
-      _systems.swap(lc.systemList);
-      lc.curSystem = lc.systemList.front();
-      layoutPages(lc);
-
-      rebuildBspTree();
-      setUpdateAll();
-      foreach(MuseScoreView* v, viewer)
-            v->layoutChanged();
-      }
-#endif
 
 //---------------------------------------------------------
 //   sff
@@ -2059,26 +1968,31 @@ void Score::respace(std::vector<ChordRest*>* elements)
 
 qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       {
+      qreal x;
+
       Shape ls;
-      if (isFirstMeasureInSystem)
-            ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // left margin
-      else
-            ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));      // simulated bar line
-      qreal x = s->minLeft(ls);
+      if (s->isChordRestType()) {
+            // x = qMax(s->minLeft() + styleP(StyleIdx::minNoteDistance), styleP(StyleIdx::barNoteDistance));
+            x = s->minLeft() + styleP(StyleIdx::barNoteDistance);
+            }
+      else {
+            if (isFirstMeasureInSystem)
+                  ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // left margin
+            else
+                  ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));      // simulated bar line
+            x = s->minLeft(ls);
 
-      qreal keysigLeftMargin  = styleP(StyleIdx::keysigLeftMargin);
-      qreal timesigLeftMargin = styleP(StyleIdx::timesigLeftMargin);
+            if (s->isClefType())
+                  // x = qMax(x, clefLeftMargin);
+                  x += styleP(StyleIdx::clefLeftMargin);
+            else if (s->isKeySigType())
+                  x = qMax(x, styleP(StyleIdx::keysigLeftMargin));
+            else if (s->isTimeSigType())
+                  x = qMax(x, styleP(StyleIdx::timesigLeftMargin));
+            }
 
-      if (s->isChordRestType())
-            x += styleP(StyleIdx::barNoteDistance);
-      else if (s->isClefType())
-            // x = qMax(x, clefLeftMargin);
-            x += styleP(StyleIdx::clefLeftMargin);
-      else if (s->isKeySigType())
-            x = qMax(x, keysigLeftMargin);
-      else if (s->isTimeSigType())
-            x = qMax(x, timesigLeftMargin);
       x += s->extraLeadingSpace().val() * spatium();
+      bool isSystemHeader = isFirstMeasureInSystem;
 
       for (Segment* ss = s; ss;) {
             ss->rxpos() = x;
@@ -2086,7 +2000,12 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
             qreal w;
 
             if (ns) {
-                  w = ss->minHorizontalDistance(ns);
+                  if (isSystemHeader && ns->isChordRestType()) {        // this is the system header gap
+                        w = ss->minHorizontalDistance(ns, true);
+                        isSystemHeader = false;
+                        }
+                  else
+                        w = ss->minHorizontalDistance(ns, false);
 #if 1
                   // look back for collisions with previous segments
                   // this is time consuming (ca. +5%) and probably requires more optimization
@@ -2100,7 +2019,7 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                               ps = ps->prev();
                               if (ps->isChordRestType())
                                     ++n;
-                              ww = ps->minHorizontalDistance(ns) - (ss->x() - ps->x());
+                              ww = ps->minHorizontalDistance(ns, false) - (ss->x() - ps->x());
                               }
                         if (ww > w) {
                               // overlap !
@@ -2108,7 +2027,6 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                               // only ChordRest segments get more space
                               // TODO: is there a special case n == 0 ?
 
-// printf("overlap %s(%d) - %s(%d)  n=%d +%f\n", ps->subTypeName(), ps->tick(), ns->subTypeName(), ns->tick(), n, ww-w);
                               qreal d = (ww - w) / n;
                               qreal xx = ps->x();
                               for (Segment* s = ps; s != ss;) {
@@ -2691,7 +2609,7 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       Measure* measure = toMeasure(lc.curMeasure);
       measure->moveTicks(lc.tick - measure->tick());
-      if (isMaster() && lc.prevMeasure) {
+      if (isMaster() && !lc.prevMeasure) {
             lc.sig = measure->len();
             tempomap()->clear();
             sigmap()->clear();
@@ -2726,8 +2644,9 @@ void Score::getNextMeasure(LayoutContext& lc)
 
                         for (int t = track; t < endTrack; ++t) {
                               ChordRest* cr = segment->cr(t);
-                              if (cr)
+                              if (cr) {
                                     measure->layoutCR0(cr, staffMag, &as);
+                                    }
                               }
                         layoutChords1(segment, staffIdx);
                         }
@@ -3090,8 +3009,7 @@ System* Score::collectSystem(LayoutContext& lc)
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure
 
-
-            if (!system->measures().empty() && (minWidth + ww > systemWidth)) {
+            if ((system->measures().size() > 1) && (minWidth + ww > systemWidth)) {
                   system->measures().pop_back();
                   lc.curMeasure->setSystem(oldSystem);
                   break;
@@ -3122,7 +3040,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   }
 
-            if (lc.rangeLayout && lc.endTick <= lc.curMeasure->tick()) {
+            if (lc.rangeLayout && lc.endTick < lc.curMeasure->tick()) {
                   // TODO: we may check if another measure fits in this system
                   if (lc.curMeasure == lc.systemOldMeasure) {
                         lc.rangeDone = true;
@@ -3175,6 +3093,7 @@ System* Score::collectSystem(LayoutContext& lc)
             TimeSig* ts;
             Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
             bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
+
             if (showCourtesySig) {
                   ts = toTimeSig(tss->element(0));
                   if (ts && !ts->showCourtesySig())
@@ -3210,50 +3129,51 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
 
             // courtesy key signatures
-            int n = _staves.size();
+            int n     = _staves.size();
+            bool show = m->hasCourtesyKeySig();
+            Segment* s;
+            if (show)
+                  s = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick);
+            else
+                  s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
+
+            Segment* clefSegment = m->findSegment(Segment::Type::Clef, tick);
+
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-                  int track = staffIdx * VOICES;
+                  int track    = staffIdx * VOICES;
                   Staff* staff = _staves[staffIdx];
 
-                  bool show = m->hasCourtesyKeySig();
                   if (show) {
-                        KeySigEvent key1 = staff->keySigEvent(tick - 1);
+                        m->setHasSystemTrailer(true);
+                        KeySig* ks = toKeySig(s->element(track));
                         KeySigEvent key2 = staff->keySigEvent(tick);
-                        if (!(key1 == key2)) {
-                              // locate a key sig. in next measure and, if found,
-                              // check if it has court. sig turned off
-                              Segment* s = m->findSegment(Segment::Type::KeySig, tick);
-                              if (s) {
-                                    KeySig* ks = toKeySig(s->element(staff->idx() * VOICES));
-                                    if (ks && !ks->showCourtesy())
-                                          show = false;
-                                    }
-                              }
-                        if (show) {
-                              m->setHasSystemTrailer(true);
-                              s  = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick);
-                              KeySig* ks = toKeySig(s->element(track));
 
-                              if (!ks) {
-                                    ks = new KeySig(this);
-                                    ks->setKeySigEvent(key2);
-                                    ks->setTrack(track);
-                                    ks->setGenerated(true);
-                                    ks->setParent(s);
-                                    undoAddElement(ks);
-                                    ks->layout();
-                                    s->createShape(track / VOICES);
-                                    }
-                              else if (!(ks->keySigEvent() == key2)) {
-                                    undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
-                                    }
+                        if (!ks) {
+                              ks = new KeySig(this);
+                              ks->setKeySigEvent(key2);
+                              ks->setTrack(track);
+                              ks->setGenerated(true);
+                              ks->setParent(s);
+                              undoAddElement(ks);
                               }
+                        else if (!(ks->keySigEvent() == key2)) {
+                              undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
+                              }
+                        ks->layout();
+                        s->createShape(track / VOICES);
                         }
-                  if (!show) {
+                  else {
                         // remove any existent courtesy key signature
-                        Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
                         if (s && s->element(track))
                               undoRemoveElement(s->element(track));
+                        }
+                  if (clefSegment) {
+                        Clef* clef = toClef(clefSegment->element(track));
+                        if (clef && (!score()->styleB(StyleIdx::genCourtesyClef)
+                           || m->repeatEnd() || m->isFinalMeasureOfSection()
+                           || !clef->showCourtesy())) {
+                              clef->clear();          // make invisible
+                              }
                         }
                   }
             //HACK to layout cautionary elements:
@@ -3420,7 +3340,7 @@ bool Score::collectPage(LayoutContext& lc)
       Page* page = getEmptyPage(lc);
       qreal y    = page->tm();
       qreal ey   = page->height() - page->bm();
-      System* s1 = 0;                           // previous system
+      System* s1 = 0;               // previous system
       System* s2 = lc.curSystem;
 
       for (;;) {
@@ -3575,6 +3495,13 @@ bool Score::collectPage(LayoutContext& lc)
 
 void Score::doLayout()
       {
+#if 0
+      static int mops= 0;
+
+      ++mops;
+      if (mops == 1)
+            abort();
+#endif
       qDebug();
 
       if (_staves.empty() || first() == 0) {
@@ -3605,6 +3532,8 @@ void Score::doLayout()
       getNextMeasure(lc);
 
       if (_layoutMode == LayoutMode::LINE) {
+            while (lc.curMeasure->isVBox())
+                  getNextMeasure(lc);
             layoutLinear(lc);
             }
       else {

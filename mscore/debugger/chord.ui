@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string notr="true" comment="do not translate">Chord</string>
+      <string notr="true">Chord</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -32,7 +32,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string notr="true" comment="do not translate">Stem</string>
+         <string notr="true">Stem</string>
         </property>
        </widget>
       </item>
@@ -46,7 +46,7 @@
       <item row="2" column="0">
        <widget class="QCheckBox" name="graceNote">
         <property name="text">
-         <string notr="true" comment="do not translate">Grace Note</string>
+         <string notr="true">Grace Note</string>
         </property>
        </widget>
       </item>
@@ -56,7 +56,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string notr="true" comment="do not translate">Hook</string>
+         <string notr="true">Hook</string>
         </property>
        </widget>
       </item>
@@ -70,7 +70,7 @@
       <item row="0" column="2">
        <widget class="QPushButton" name="stemSlashButton">
         <property name="text">
-         <string notr="true" extracomment="do not translate">StemSlash</string>
+         <string notr="true">StemSlash</string>
         </property>
        </widget>
       </item>
@@ -84,7 +84,7 @@
       <item row="2" column="3">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string notr="true" comment="do not translate">Stem Direction</string>
+         <string notr="true">Stem Direction</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -100,7 +100,7 @@
       <item row="2" column="2">
        <widget class="QCheckBox" name="endsGlissando">
         <property name="text">
-         <string>Glissando end</string>
+         <string notr="true">Glissando end</string>
         </property>
        </widget>
       </item>
@@ -184,7 +184,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string notr="true" comment="do not translate">Notes:</string>
+        <string notr="true">Notes:</string>
        </property>
       </widget>
      </item>
@@ -197,7 +197,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string notr="true" comment="do not translate">Ledger Lines:</string>
+        <string notr="true">Ledger Lines:</string>
        </property>
       </widget>
      </item>
@@ -232,7 +232,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string notr="true" comment="do not translate">GraceChords</string>
+        <string notr="true">GraceChords</string>
        </property>
       </widget>
      </item>
@@ -245,7 +245,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string notr="true" comment="do not translate">GraceChords</string>
+        <string notr="true">GraceChords</string>
        </property>
       </widget>
      </item>
@@ -280,7 +280,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string notr="true" comment="do not translate">Elements</string>
+        <string notr="true">Elements</string>
        </property>
       </widget>
      </item>

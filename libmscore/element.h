@@ -71,6 +71,10 @@ class Tremolo;
 class System;
 class Lyrics;
 class Stem;
+class SlurSegment;
+class Beam;
+class Hook;
+class StemSlash;
 
 enum class SymId;
 
@@ -656,6 +660,10 @@ class Element : public QObject, public ScoreElement {
       CONVERT(System,        SYSTEM);
       CONVERT(Lyrics,        LYRICS);
       CONVERT(Stem,          STEM);
+      CONVERT(Beam,          BEAM);
+      CONVERT(Hook,          HOOK);
+      CONVERT(StemSlash,     STEM_SLASH);
+      CONVERT(SlurSegment,   SLUR_SEGMENT);
 #undef CONVERT
       };
 
@@ -714,6 +722,10 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(System,        SYSTEM);
       CONVERT(Lyrics,        LYRICS);
       CONVERT(Stem,          STEM);
+      CONVERT(Beam,          BEAM);
+      CONVERT(Hook,          HOOK);
+      CONVERT(StemSlash,     STEM_SLASH);
+      CONVERT(SlurSegment,   SLUR_SEGMENT);
 #undef CONVERT
 
 //---------------------------------------------------------

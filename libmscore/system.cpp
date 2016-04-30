@@ -47,17 +47,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   SysStaff
-//---------------------------------------------------------
-
-SysStaff::SysStaff()
-      {
-      _yOff = 0.0;
-      idx   = 0;
-      _show = true;
-      }
-
-//---------------------------------------------------------
 //   ~SysStaff
 //---------------------------------------------------------
 
@@ -350,6 +339,7 @@ void System::layout2()
       for (int i = 0; i < _staves.size(); ++i) {
             Staff*    s  = score()->staff(i);
             SysStaff* ss = _staves[i];
+//DEBUG            ss->setShow(true);
             if (s->show() && ss->show()) {
                   visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
                   if (firstStaffIdx == -1)
@@ -362,8 +352,9 @@ void System::layout2()
                         lastStaffInitialIdx = i;
                         }
                   }
-            else
+            else {
                   ss->setbbox(QRectF());  // already done in layout() ?
+                  }
             }
       if (firstStaffIdx == -1)
             firstStaffIdx = 0;
@@ -376,7 +367,11 @@ void System::layout2()
       qreal staffDistance       = score()->styleP(StyleIdx::staffDistance);
       qreal akkoladeDistance    = score()->styleP(StyleIdx::akkoladeDistance);
 
-      Q_ASSERT(!visibleStaves.empty());
+      if (visibleStaves.empty()) {
+            printf("====no visible staves, staves %d, score staves %d\n", _staves.size(), score()->nstaves());
+            }
+
+//      Q_ASSERT(!visibleStaves.empty());
 
       for (auto i = visibleStaves.begin();; ++i) {
             SysStaff* ss  = i->second;
@@ -412,8 +407,8 @@ void System::layout2()
                   Measure* m = toMeasure(mb);
                   Shape s1, s2;
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        s1.add(s->shape(si1).translated(s->pos()));
-                        s2.add(s->shape(si2).translated(s->pos()));
+                        s1.add(s->staffShape(si1).translated(s->pos()));
+                        s2.add(s->staffShape(si2).translated(s->pos()));
 
                         for (Element* e : s->annotations()) {
                               if (e->staffIdx() == si1)
@@ -1058,6 +1053,7 @@ qreal System::minDistance(System* s2) const
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
+                  Q_ASSERT(!m->mstaves().empty());
                   Spacer* sp = m->mstaves().back()->_vspacerDown;
                   if (sp)
                         dist = qMax(dist, sp->gap());
@@ -1066,6 +1062,7 @@ qreal System::minDistance(System* s2) const
       for (MeasureBase* mb2 : s2->ml) {
             if (mb2->isMeasure()) {
                   Measure* m = toMeasure(mb2);
+                  Q_ASSERT(!m->mstaves().empty());
                   Spacer* sp = m->mstaves().front()->_vspacerUp;
                   if (sp)
                         dist = qMax(dist, sp->gap());
@@ -1091,9 +1088,9 @@ qreal System::minDistance(System* s2) const
                         Shape s1;
                         Shape s2;
                         for (Segment* s = m1->first(); s; s = s->next())
-                              s1.add(s->shape(lastStaff).translated(s->pos()));
+                              s1.add(s->staffShape(lastStaff).translated(s->pos()));
                         for (Segment* s = m2->first(); s; s = s->next())
-                              s2.add(s->shape(0).translated(s->pos()));
+                              s2.add(s->staffShape(0).translated(s->pos()));
                         s1.translate(QPointF(m1->x(), lastStaffY));
                         s2.translate(QPointF(m2->x(), 0.0));
 
@@ -1120,7 +1117,7 @@ qreal System::minTop() const
             if (mb->type() != Element::Type::MEASURE)
                   continue;
             for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
-                  dist = qMin(dist, s->shape(0).top());
+                  dist = qMin(dist, s->staffShape(0).top());
             }
       return dist;
       }
@@ -1138,7 +1135,7 @@ qreal System::minBottom() const
             if (mb->type() != Element::Type::MEASURE)
                   continue;
             for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
-                  dist = qMax(dist, s->shape(staffIdx).bottom());
+                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
             }
       return dist - spatium() * 4;
       }

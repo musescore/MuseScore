@@ -399,7 +399,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   }
 
             dragElement->scanElements(&pos, moveElement, false);
-            _score->end();
+            _score->update();
             return;
             }
 
@@ -426,7 +426,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   else
                         setDropTarget(0);
                   }
-            _score->end();
+            _score->update();
             return;
             }
       QByteArray data;
@@ -440,12 +440,12 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             data = md->data(mimeStaffListFormat);
             }
       else {
-            _score->end();
+            _score->update();
             return;
             }
       Element* el = elementAt(pos);
       if (el == 0 || el->type() != Element::Type::MEASURE) {
-            _score->end();
+            _score->update();
             return;
             }
       else if (etype == Element::Type::ELEMENT_LIST) {
@@ -454,7 +454,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       else if (etype == Element::Type::STAFF_LIST || etype == Element::Type::MEASURE_LIST) {
 //TODO            el->acceptDrop(this, pos, etype, e);
             }
-      _score->end();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -699,7 +699,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             QStringList sl = md->formats();
             foreach(QString s, sl)
                   qDebug("  %s", qPrintable(s));
-            _score->end();
+            _score->update();
             return;
             }
 
@@ -744,7 +744,7 @@ void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
             _score->setUpdateAll();
             delete dragElement;
             dragElement = 0;
-            _score->end();
+            _score->update();
             }
       setDropTarget(0);
       }

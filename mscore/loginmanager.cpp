@@ -102,7 +102,11 @@ void LoginManager::onAuthorizedRequestDone()
       if (_oauthManager->lastError() == KQOAuthManager::NetworkError)
             QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
-            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
+            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.\n"
+                                                              "%1Please upgrade first%2.")
+                                  .arg("<a href=\"http://musescore.org\">")
+                                  .arg("</a>")
+                                  .replace("\n", "<br/>"));
       // don't do that, it will logout user if score is private and already known
       //else if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized){
       //      logout();
@@ -202,16 +206,22 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
                  if (o.value("code") != QJsonValue::Undefined) {
                  	   QString code = o["code"].toString();
                      if (code == "USER_AUTHENTICATION_FAILED") {
-                           message = tr("Sorry, wrong email address, username or password. Please check again. <a href=\"%1\">Have you forgotten your password</a>?").arg("https://musescore.com/user/password");
+                           message = tr("Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?")
+                                       .arg("<a href=\"https://musescore.com/user/password\">")
+                                       .arg("</a>");
                            }
                      else if (code == "USER_DENIED") {
                            message = tr("This account has been blocked.");
                            }
                      else if (code == "USER_NOT_ACTIVATED") {
-                           message = tr("Your account has not been activated yet. Please check your mailbox to activate your account or <a href=\"%1\">request a new activation email</a>.").arg("https://musescore.com/user/resendregistrationpassword");
+                           message = tr("Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.")
+                                       .arg("<a href=\"https://musescore.com/user/resendregistrationpassword\">")
+                                       .arg("</a>");
                            }
                      else if (code == "USER_TIMESTAMP_EXPIRED") {
-                           message = tr("The local time on your device is not set right. Please check it and adjust. It's advised to set the time/timezone to automatic. If you still can't log in, <a href=\"%1\">contact us</a>.").arg("https://musescore.com/contact?category=Login%20problems");
+                           message = tr("The local time on your device is not set right. Please check it and adjust. It's advised to set the time/timezone to automatic. If you still can't log in, %1contact us%2.")
+                                       .arg("<a href=\"https://musescore.com/contact?category=Login%20problems\">")
+                                       .arg("</a>");
                            }
                      }
                  }
@@ -221,7 +231,11 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
             QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
             }
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError) {
-            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
+            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.\n"
+                                                              "%1Please upgrade first%2.")
+                                  .arg("<a href=\"http://musescore.org\">")
+                                  .arg("</a>")
+                                  .replace("\n", "<br/>"));
             }
       }
 

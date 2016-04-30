@@ -52,7 +52,7 @@ struct MStaff {
       StaffLines*  lines   { 0 };
       Spacer* _vspacerUp   { 0 };
       Spacer* _vspacerDown { 0 };
-      bool hasVoices      { false };     ///< indicates that MStaff contains more than one voice,
+      bool hasVoices       { false };     ///< indicates that MStaff contains more than one voice,
                                           ///< this changes some layout rules
       bool _visible        { true };
       bool _slashStyle     { false };
@@ -263,6 +263,8 @@ class Measure : public MeasureBase {
 
       void removeSystemHeader();
       void removeSystemTrailer();
+
+      BarLineType endBarLineType() const;
       };
 
 }     // namespace Ms

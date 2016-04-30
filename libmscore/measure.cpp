@@ -513,7 +513,7 @@ ChordRest* Measure::findChordRest(int tick, int track)
                   return 0;
             if (seg.tick() == tick) {
                   Element* el = seg.element(track);
-                  if (el->isChordRest())
+                  if (el && el->isChordRest())
                         return toChordRest(el);
                   }
             }
@@ -2518,25 +2518,21 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       if (isLastMeasureInSystem && show) {
             int tick = endTick();
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  int track = staffIdx * VOICES;
-                  Staff* staff = score()->staff(staffIdx);
-
+                  Staff* staff     = score()->staff(staffIdx);
                   KeySigEvent key1 = staff->keySigEvent(tick - 1);
                   KeySigEvent key2 = staff->keySigEvent(tick);
-                  if (show && !(key1 == key2)) {
+                  if (!(key1 == key2)) {
                         // locate a key sig. in next measure and, if found,
                         // check if it has court. sig turned off
                         Segment* s = nm->findSegment(Segment::Type::KeySig, tick);
                         if (s) {
-                              KeySig* ks = toKeySig(s->element(track));
+                              KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
                               if (ks && !ks->showCourtesy())
-                                    show = false;     // this key change has court. sig turned off
+                                    continue;
                               }
-                        if (show) {
-                              setHasCourtesyKeySig(true);
-                              t = BarLineType::DOUBLE;
-                              break;
-                              }
+                        setHasCourtesyKeySig(true);
+                        t = BarLineType::DOUBLE;
+                        break;
                         }
                   }
             }
@@ -2550,7 +2546,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             t = BarLineType::END_REPEAT;
             force = true;
             }
-      else if (!isLastMeasureInSystem && nextMeasure()->repeatStart()) {
+      else if (!isLastMeasureInSystem && nextMeasure() && nextMeasure()->repeatStart()) {
             t = BarLineType::START_REPEAT;
             force = true;
             }
@@ -2579,7 +2575,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 
       // fix previous segment width
       Segment* ps = seg->prev();
-      qreal www   = ps->minHorizontalDistance(seg);
+      qreal www   = ps->minHorizontalDistance(seg, false);
       w          += www - ps->width();
       ps->setWidth(www);
 
@@ -2641,17 +2637,16 @@ void Measure::checkMultiVoices(int staffIdx)
       int strack = staffIdx * VOICES + 1;
       int etrack = staffIdx * VOICES + VOICES;
       _mstaves[staffIdx]->hasVoices = false;
-      for (Segment* s = first(); s; s = s->next()) {
-            if (s->isChordRestType())
-                  continue;
+
+      for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             for (int track = strack; track < etrack; ++track) {
                   Element* e = s->element(track);
                   if (e) {
                         bool v;
-                        if (e->type() == Element::Type::CHORD) {
+                        if (e->isChord()) {
                               v = false;
                               // consider chord visible if any note is visible
-                              Chord* c = static_cast<Chord*>(e);
+                              Chord* c = toChord(e);
                               for (Note* n : c->notes()) {
                                     if (n->visible()) {
                                           v = true;
@@ -2860,8 +2855,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
       if (cr->small())
             m *= score()->styleD(StyleIdx::smallNoteMag);
 
-      if (cr->type() == Element::Type::CHORD) {
-            Chord* chord = static_cast<Chord*>(cr);
+      if (cr->isChord()) {
+            Chord* chord = toChord(cr);
             for (Chord* c : chord->graceNotes())
                   layoutCR0(c, mm, as);
             if (!chord->isGrace())
@@ -2887,7 +2882,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
                         }
                   }
             chord->computeUp();
-            chord->layoutStem1();
+            chord->layoutStem1();   // create stems needed to calculate spacing
+                                    // stem direction can change later during beam processing
             }
       if (m != mag())
             cr->setMag(m);
@@ -3419,5 +3415,31 @@ void Measure::removeSystemTrailer()
                   }
             }
       }
+
+//---------------------------------------------------------
+//   endBarLineType
+//    Assume all barlines have same type if there is more
+//    than one.
+//---------------------------------------------------------
+
+BarLineType Measure::endBarLineType() const
+      {
+      // search barline segment:
+
+      Segment* s = last();
+      while (s && s->segmentType() != Segment::Type::EndBarLine)
+            s = s->prev();
+
+      // search first element
+
+      if (s) {
+            for (const Element* e : s->elist()) {
+                  if (e)
+                        return toBarLine(e)->barLineType();
+                  }
+            }
+      return BarLineType::NORMAL;
+      }
+
 }
 

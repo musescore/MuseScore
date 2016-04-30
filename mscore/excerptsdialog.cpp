@@ -124,7 +124,7 @@ void MuseScore::startExcerptsDialog()
       settings.setValue("pos", ed.pos());
       settings.endGroup();
       cs->setLayoutAll();
-      cs->end();
+      cs->update();
       }
 
 //---------------------------------------------------------
@@ -313,7 +313,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       if (e->parts().isEmpty())
             return;
 
-      Score* nscore = new Score(static_cast<MasterScore*>(e->oscore()));
+      Score* nscore = new Score(e->oscore());
       e->setPartScore(nscore);
 
       nscore->setName(e->title()); // needed before AddExcerpt
@@ -379,7 +379,7 @@ void ExcerptsDialog::accept()
       qDebug() << "\nFirst pass : delete unwanted parts";
 
       int pos = 0;
-      foreach(Excerpt* e, score->excerpts()) {
+      for (Excerpt* e : score->excerpts()) {
             if (!isInPartsList(e)) {
                   // Delete it because not in the list anymore
                   if (e->partScore()) {
@@ -408,7 +408,6 @@ void ExcerptsDialog::accept()
             QListWidgetItem* cur = excerptList->currentItem();
             if (cur == 0)
                   continue;
-
             createExcerptClicked(cur);
             }
 
@@ -456,10 +455,7 @@ void ExcerptsDialog::accept()
                   score->undo(new SwapExcerpt(score, i, position));
                   }
             }
-
       score->endCmd();
-      score->setExcerptsChanged(true);
-
       QDialog::accept();
       }
 }

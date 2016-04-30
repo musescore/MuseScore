@@ -239,7 +239,7 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
       if (!found)
             setDropTarget(0);
       dragElement->scanElements(&pos, moveElement, false);
-      _score->end();
+      _score->update();
       return;
       }
 

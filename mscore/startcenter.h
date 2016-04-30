@@ -17,6 +17,7 @@
 
 namespace Ms {
 
+#if 0
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
@@ -33,7 +34,7 @@ class MyNetworkAccessManager: public QNetworkAccessManager
                                     const QNetworkRequest & req,
                                     QIODevice * outgoingData = 0);
       };
-#if 0
+
 //---------------------------------------------------------
 //   MyWebView
 //---------------------------------------------------------
@@ -77,7 +78,7 @@ class CookieJar : public QNetworkCookieJar
     private:
       QString _file; // where to save cookies
       };
-
+#endif
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
@@ -85,7 +86,7 @@ class CookieJar : public QNetworkCookieJar
 class Startcenter : public QDialog, public Ui::Startcenter
       {
       Q_OBJECT
-      MyWebView* _webView;
+//TODO      MyWebView* _webView;
       virtual void closeEvent(QCloseEvent*);
 
    private slots:
@@ -103,7 +104,6 @@ class Startcenter : public QDialog, public Ui::Startcenter
       void writeSettings(QSettings&);
       void readSettings(QSettings&);
       };
-#endif
 }
 #endif
 

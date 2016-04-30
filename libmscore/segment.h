@@ -215,16 +215,16 @@ public:
       Element* firstElement(int staff);              //<  These methods are used for navigation
       Element* lastElement(int staff);               //<  for next-element and prev-element
 
-      std::vector<Shape> shapes()          { return _shapes; }
-      const std::vector<Shape>& shapes() const { return _shapes; }
-      const Shape& shape(int i) const     { return _shapes[i]; }
-      Shape& shape(int i)                 { return _shapes[i]; }
+      std::vector<Shape> shapes()                     { return _shapes; }
+      const std::vector<Shape>& shapes() const        { return _shapes; }
+      const Shape& staffShape(int staffIdx) const     { return _shapes[staffIdx]; }
+      Shape& staffShape(int staffIdx)                 { return _shapes[staffIdx]; }
       void createShapes();
       void createShape(int staffIdx);
       qreal minRight() const;
       qreal minLeft(const Shape&) const;
       qreal minLeft() const;
-      qreal minHorizontalDistance(Segment* ns) const;
+      qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
 
       // some helper function
       ChordRest* cr(int track) const                    {

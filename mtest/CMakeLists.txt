@@ -122,7 +122,7 @@ else (APPLE)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -mno-ms-bitfields -g")
       set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
    else (MINGW)
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -fPIE -g")
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -g")
       set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG -DQT_NO_DEBUG_OUTPUT")
    endif (MINGW)
 endif(APPLE)
@@ -130,19 +130,19 @@ endif(APPLE)
 
 string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
 
-if (APPLE)
+if (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 set_target_properties (
       testutils
       PROPERTIES
       COMPILE_FLAGS "-include all.h -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
       )
-else (APPLE)
+else (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 set_target_properties (
       testutils
       PROPERTIES
       COMPILE_FLAGS "-include all.h -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
       )
-endif(APPLE)
+endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 
 #      COMPILE_FLAGS "-include all.h -I ${INC} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
 
@@ -156,9 +156,8 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-#        libmscore/compat
-
 subdirs (
+#        libmscore/compat              # expected not to work
         libmscore/album
         libmscore/barline
         libmscore/beam
@@ -168,9 +167,9 @@ subdirs (
         libmscore/clef_courtesy
         libmscore/concertpitch
         libmscore/copypaste
-#        libmscore/copypastesymbollist
+#        libmscore/copypastesymbollist # FAIL
         libmscore/dynamic
-#        libmscore/earlymusic
+#        libmscore/earlymusic          # FAIL
         libmscore/element
         libmscore/hairpin
         libmscore/instrumentchange
@@ -179,28 +178,28 @@ subdirs (
         libmscore/layout
         libmscore/parts
         libmscore/measure
-#        libmscore/midi
-#        libmscore/midimapping
+#        libmscore/midi                # FAIL
+#        libmscore/midimapping         # FAIL
         libmscore/note
 #        libmscore/plugins
         libmscore/repeat
         libmscore/selectionfilter
         libmscore/selectionrangedelete
-#        libmscore/spanners
-        libmscore/split
-        libmscore/splitstaff
+#        libmscore/spanners            # FAIL
+        libmscore/split                # FAIL
+        libmscore/splitstaff           # FAIL
         libmscore/timesig
-        libmscore/tools
+        libmscore/tools                # some tests disabled
         libmscore/transpose
         libmscore/tuplet
         libmscore/text
         importmidi
         capella
         biab
-#       musicxml
+#        musicxml                      # FAIL
 #        guitarpro
 #        scripting
-#        testoves
+#        testoves                      # FAIL
         )
 
 

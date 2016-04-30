@@ -1163,7 +1163,7 @@ void Score::addElement(Element* element)
       if (parent)
             parent->add(element);
 
-      switch(et) {
+      switch (et) {
             case Element::Type::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(element);
@@ -1249,10 +1249,12 @@ void Score::addElement(Element* element)
             case Element::Type::ARPEGGIO:
                   {
                   Element* cr = parent;
-                  if (cr->type() == Element::Type::CHORD)
-                        createPlayEvents(static_cast<Chord*>(cr));
+                  if (cr->isChord())
+                        createPlayEvents(toChord(cr));
+                  setLayout(cr->tick());
                   }
-                  break;
+                  return;
+
             default:
                   break;
             }
@@ -1387,15 +1389,20 @@ void Score::removeElement(Element* element)
             case Element::Type::ARPEGGIO:
                   {
                   Element* cr = element->parent();
-                  if (cr->type() == Element::Type::CHORD)
-                        createPlayEvents(static_cast<Chord*>(cr));
+                  if (cr->isChord())
+                        createPlayEvents(toChord(cr));
+                  setLayout(cr->tick());
                   }
-                  break;
+                  return;
+
+            case Element::Type::NOTE:
+                  setLayout(element->tick());
+                  return;
 
             default:
                   break;
             }
-//      setLayoutAll();
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1577,8 +1584,11 @@ void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         mmr->scanElements(data, func, all);
                   }
             }
-      for (Page* page : pages())
-            page->scanElements(data, func, all);
+      for (Page* page : pages()) {
+            for (System* s :page->systems())
+                  s->scanElements(data, func, all);
+            func(data, page);
+            }
       }
 
 //---------------------------------------------------------
@@ -1684,11 +1694,12 @@ void MasterScore::addExcerpt(Score* score)
 //   removeExcerpt
 //---------------------------------------------------------
 
-void Score::removeExcerpt(Score* score)
+void MasterScore::removeExcerpt(Score* score)
       {
       for (Excerpt* ex : excerpts()) {
             if (ex->partScore() == score) {
                   if (excerpts().removeOne(ex)) {
+                        setExcerptsChanged(true);
                         delete ex;
                         return;
                         }
@@ -2725,10 +2736,7 @@ void Score::collectMatch(void* data, Element* e)
       if ((p->staffStart != -1)
          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
-         || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS
-         || e->type() == Element::Type::BEAM || e->type() == Element::Type::STEM
-         || e->type() == Element::Type::SLUR_SEGMENT) {
+      if (e->isChord() || e->isRest() || e->isNote() || e->isLyrics() || e->isBeam() || e->isStem() || e->isSlurSegment()) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
@@ -2777,9 +2785,8 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       score->scanElements(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      for (Element* e : pattern.el) {
+      for (Element* e : pattern.el)
             score->select(e, SelectType::ADD, 0);
-            }
       }
 
 //---------------------------------------------------------
@@ -3000,7 +3007,7 @@ void Score::cmdSelectAll()
       selectRange(first, 0);
       selectRange(last, nstaves() - 1);
       setUpdateAll();
-      end();
+      update();
       }
 
 //---------------------------------------------------------

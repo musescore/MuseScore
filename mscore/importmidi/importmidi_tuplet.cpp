@@ -847,7 +847,7 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
                         message += QString::number(midiChord.barIndex + 1);
 #endif
                         Q_ASSERT_X(tiedTuplet.voice == midiChord.voice,
-                                   "MidiTuplet::addTupletEvents", message.toAscii().data());
+                                   "MidiTuplet::addTupletEvents", message.toLatin1().data());
 
                         for (int j: tiedTuplet.tiedNoteIndexes) {
                               midiChord.notes[j].tuplet = it;

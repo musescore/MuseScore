@@ -2991,7 +2991,6 @@ void ChangeDuration::flip()
 void AddExcerpt::undo()
       {
       score->masterScore()->removeExcerpt(score);
-      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3001,7 +3000,6 @@ void AddExcerpt::undo()
 void AddExcerpt::redo()
       {
       score->masterScore()->addExcerpt(score);
-      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3011,7 +3009,6 @@ void AddExcerpt::redo()
 void RemoveExcerpt::undo()
       {
       score->masterScore()->addExcerpt(score);
-      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3021,7 +3018,6 @@ void RemoveExcerpt::undo()
 void RemoveExcerpt::redo()
       {
       score->masterScore()->removeExcerpt(score);
-      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------

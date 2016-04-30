@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
@@ -387,28 +387,35 @@
         <item row="1" column="2">
          <widget class="QCheckBox" name="endRepeat">
           <property name="text">
-           <string>EndRepeat</string>
+           <string notr="true">EndRepeat</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QCheckBox" name="hasSystemHeader">
           <property name="text">
-           <string>SystemHeader</string>
+           <string notr="true">SystemHeader</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
          <widget class="QCheckBox" name="hasSystemTrailer">
           <property name="text">
-           <string>SystemTrailer</string>
+           <string notr="true">SystemTrailer</string>
           </property>
          </widget>
         </item>
         <item row="2" column="2">
          <widget class="QCheckBox" name="hasCourtesyKeySig">
           <property name="text">
-           <string>CourtesyKeySig</string>
+           <string notr="true">CourtesyKeySig</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="hasVoices">
+          <property name="text">
+           <string notr="true">hasVoices</string>
           </property>
          </widget>
         </item>

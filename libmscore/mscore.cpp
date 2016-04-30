@@ -171,7 +171,6 @@ void MScore::init()
       qRegisterMetaType<Element::Type>     ("ElementType");
       qRegisterMetaType<Note::ValueType>   ("ValueType");
 
-//      qRegisterMetaType<MSQE_Direction::E>("Direction");
       qRegisterMetaType<Direction::E>("Direction");
 
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
@@ -373,7 +372,6 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
-//            qmlRegisterUncreatableType<MSQE_Direction>("MuseScore", 1, 0, "Direction", tr("You can't create an enumeration"));
             qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr("You can't create an enumeration"));
 
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");

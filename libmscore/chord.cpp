@@ -459,17 +459,17 @@ void Chord::add(Element* e)
                   break;
             case Element::Type::STEM:
                   Q_ASSERT(!_stem);
-                  _stem = static_cast<Stem*>(e);
+                  _stem = toStem(e);
                   break;
             case Element::Type::HOOK:
-                  _hook = static_cast<Hook*>(e);
+                  _hook = toHook(e);
                   break;
             case Element::Type::CHORDLINE:
                   _el.push_back(e);
                   break;
             case Element::Type::STEM_SLASH:
                   Q_ASSERT(!_stemSlash);
-                  _stemSlash = static_cast<StemSlash*>(e);
+                  _stemSlash = toStemSlash(e);
                   break;
             case Element::Type::CHORD:
                   {
@@ -1054,23 +1054,6 @@ void Chord::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (score()->mscVersion() <= 114) { // #19988
-            Note * n = upNote();
-            if (n) {
-                  if (notes().size() == 1) {
-                        setUserOff(n->userOff() + userOff());
-                        n->setUserOff(QPoint());
-                        n->setReadPos(QPoint());
-                        }
-                  else if(!n->userOff().isNull()) {
-                        if(!_stem) {
-                              _stem = new Stem(score());
-                              add(_stem);
-                              }
-                         _stem->setUserOff(n->userOff() + _stem->userOff());
-                        }
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -1350,6 +1333,10 @@ void Chord::layoutStem1()
                   }
             else if (_stemSlash)
                   remove(_stemSlash);
+
+            qreal stemWidth5 = _stem->lineWidth() * .5;
+            _stem->rxpos()   = stemPosX() + (up() ? -stemWidth5 : +stemWidth5);
+            _stem->setLen(defaultStemLength());
             }
       else {
             if (_stem)
@@ -1376,7 +1363,6 @@ void Chord::layoutStem()
       //
       // TAB
       //
-      qreal _spatium = spatium();
       StaffType* tab = 0;
       if (staff() && staff()->isTabStaff()) {
             tab = staff()->staffType();
@@ -1392,7 +1378,7 @@ void Chord::layoutStem()
             if (!tab->stemThrough()) {
                   if (_stem) { // (duplicate code with defaultStemLength())
                         // process stem:
-                        _stem->setLen(tab->chordStemLength(this) * _spatium);
+                        _stem->setLen(tab->chordStemLength(this) * spatium());
                         // process hook
                         int   hookIdx = durationType().hooks();
                         if (!up())
@@ -1422,7 +1408,6 @@ void Chord::layoutStem()
       // NON-TAB (or TAB with stems through staff)
       //
       if (_stem) {
-            _stem->layout();  //?
             _stem->setLen(defaultStemLength());
             // if (isGrace())
             //      abort();
@@ -1603,8 +1588,9 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             }
 
       std::vector<Note*> lnotes(notes());  // we need a copy!
-      for (Note* note : lnotes) {
-            if (staffGroup == StaffGroup::STANDARD) {
+
+      if (staffGroup == StaffGroup::STANDARD) {
+            for (Note* note : lnotes) {
                   if (note->tieBack()) {
                         if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                               // TODO: remove accidental only if note is not
@@ -1614,19 +1600,25 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
-            else if (staffGroup == StaffGroup::PERCUSSION) {
-                  const Instrument* instrument = part()->instrument();
-                  const Drumset* drumset = instrument->drumset();
-                  int pitch = note->pitch();
-                  if (drumset) {
+            }
+      else if (staffGroup == StaffGroup::PERCUSSION) {
+            const Instrument* instrument = part()->instrument();
+            const Drumset* drumset = instrument->drumset();
+            if (!drumset)
+                  qWarning("no drumset");
+            for (Note* note : lnotes) {
+                  if (!drumset)
+                        note->setLine(0);
+                  else {
+                        int pitch = note->pitch();
                         if (!drumset->isValid(pitch)) {
-                              // qDebug("unmapped drum note %d", pitch);
+                              note->setLine(0);
+                              qWarning("unmapped drum note %d", pitch);
                               }
                         else if (!note->fixed()) {
                               note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
-                             // note->setHeadGroup(drumset->noteHead(pitch));
+                              // note->setHeadGroup(drumset->noteHead(pitch));
                               note->setLine(drumset->line(pitch));
-                              continue;
                               }
                         }
                   }
@@ -1704,7 +1696,7 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal _mag             = staff()->mag();
+      qreal _mag             = staff() ? staff()->mag() : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(StyleIdx::dotNoteDistance)  * _mag;
       qreal minNoteDistance  = score()->styleP(StyleIdx::minNoteDistance)  * _mag;
       qreal minTieLength     = score()->styleP(StyleIdx::MinTieLength)     * _mag;
@@ -3207,7 +3199,7 @@ Shape Chord::shape() const
       {
       Shape shape;
       processSiblings([&shape, this] (Element* e) {
-            if (!(e->isStem() && beam()))
+//            if (!(e->isStem() && beam()))
                   shape.add(e->shape());
             });
       shape.add(ChordRest::shape());      // add articulation + lyrics

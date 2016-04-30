@@ -202,8 +202,8 @@ void Debugger::layout()
       {
       if (!curElement)
             return;
-      curElement->score()->doLayout();
-      curElement->score()->end();
+      curElement->score()->setLayoutAll();
+      curElement->score()->update();
       mscore->endCmd();
       }
 
@@ -776,6 +776,7 @@ void MeasureView::setElement(Element* e)
       mb.hasSystemHeader->setChecked(m->hasSystemHeader());
       mb.hasSystemTrailer->setChecked(m->hasSystemTrailer());
       mb.hasCourtesyKeySig->setChecked(m->hasCourtesyKeySig());
+      mb.hasVoices->setChecked(m->hasVoices(0));
       mb.sel->clear();
       foreach(const Element* e, m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
