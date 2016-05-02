@@ -66,40 +66,42 @@ class Segment : public Element {
       Q_PROPERTY(int                tick              READ tick)
       Q_ENUMS(Type)
 
-public:
-   enum class Type {
-         Invalid            = 0x0,
-         BeginBarLine       = 0x1,
-         Clef               = 0x2,        // type from Clef to TimeSig
-         KeySig             = 0x4,        // need to be in the order in which they
-         Ambitus            = 0x8,        // appear in a measure
-         TimeSig            = 0x10,
-         StartRepeatBarLine = 0x20,
-         BarLine            = 0x40,
-         Breath             = 0x80,
-         ChordRest          = 0x100,
-         EndBarLine         = 0x200,
-         KeySigAnnounce     = 0x400,
-         TimeSigAnnounce    = 0x800,
-         All                = -1
-         };
+   public:
+      // Type need to be in the order in which they appear in a measure
+      enum class Type {
+            Invalid            = 0x0,
+            BeginBarLine       = 0x1,
+            Clef               = 0x2,
+            KeySig             = 0x4,
+            Ambitus            = 0x8,
+            TimeSig            = 0x10,
+            StartRepeatBarLine = 0x20,
+            BarLine            = 0x40,
+            Breath             = 0x80,
+            ChordRest          = 0x100,
+            EndBarLine         = 0x200,
+            KeySigAnnounce     = 0x400,
+            TimeSigAnnounce    = 0x800,
+            All                = -1
+            };
 
    private:
       Segment* _next;                     // linked list of segments inside a measure
       Segment* _prev;
 
-      mutable bool _empty;                 // cached value
-      mutable bool _written { false };    // used for write()
+      std::vector<Element*> _annotations;
+      std::vector<Element*> _elist;       // Element storage, size = staves * VOICES.
+      std::vector<Shape>    _shapes;      // size = staves
+      std::vector<qreal>    _dotPosX;     // size = staves
 
-      Type _segmentType { Type::Invalid };
+      Spatium _extraLeadingSpace;
+      qreal _stretch;
       int _tick;
       int _ticks;
-      Spatium _extraLeadingSpace;
+      Type _segmentType { Type::Invalid };
 
-      std::vector<Element*> _annotations;
-      std::vector<Element*> _elist;       ///< Element storage, size = staves * VOICES.
-      std::vector<Shape>    _shapes;      // size = staves
-      std::vector<qreal>   _dotPosX;      ///< size = staves
+      mutable bool _empty;                // cached value
+      mutable bool _written { false };    // used for write()
 
       void init();
       void checkEmpty() const;
@@ -176,8 +178,11 @@ public:
       void removeGeneratedElements();
       bool empty() const                       { return _empty; }
       void fixStaffIdx();
+
+      qreal stretch() const                      { return _stretch; }
+      void setStretch(qreal v)                   { _stretch = v;    }
       void setTick(int);
-      virtual int tick() const override;
+      virtual int tick() const override          { return _tick + parent()->tick(); }
       virtual int rtick() const override         { return _tick; } // tickposition relative to measure start
       void setRtick(int val)                     { _tick = val; }
       int ticks() const                          { return _ticks; }

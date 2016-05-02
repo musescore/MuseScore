@@ -3156,7 +3156,6 @@ Element* Chord::prevElement()
                   return e;
                   }
             }
-
       return ChordRest::prevElement();
       }
 

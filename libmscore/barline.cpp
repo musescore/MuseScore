@@ -189,7 +189,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   staffIdx2 = score()->nstaves() - 1;
                   }
             Measure* measure = 0;
-            System* system;
+            System* system   = 0;
             SysStaff* sysStaff0 = 0;      // top staff for barline in system
             bool systemBarLine;
             if (parent()->type() == Element::Type::SEGMENT) {

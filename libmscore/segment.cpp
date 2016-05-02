@@ -767,10 +767,12 @@ void Segment::checkEmpty() const
 //   tick
 //---------------------------------------------------------
 
+#if 0
 int Segment::tick() const
       {
       return _tick + measure()->tick();
       }
+#endif
 
 //---------------------------------------------------------
 //   setTick
@@ -1332,7 +1334,7 @@ void Segment::createShape(int staffIdx)
                   s.add(e->shape());
             }
       for (Element* e : _annotations) {
-            if (e->staffIdx() == staffIdx && e->visible())
+            if (e->staffIdx() == staffIdx && e->visible() && !e->isTempoText())
                   s.add(e->shape());
             }
       }
@@ -1359,18 +1361,22 @@ qreal Segment::minRight() const
 qreal Segment::minLeft(const Shape& sl) const
       {
       qreal distance = 0.0;
-      for (const Shape& sh : shapes())
-            distance = qMax(distance, sl.minHorizontalDistance(sh));
-
+      for (const Shape& sh : shapes()) {
+            qreal d = sl.minHorizontalDistance(sh);
+            if (d > distance)
+                  distance = d;
+            }
       return distance;
       }
 
 qreal Segment::minLeft() const
       {
       qreal distance = 0.0;
-      for (const Shape& sh : shapes())
-            distance = qMax(distance, sh.left());
-
+      for (const Shape& sh : shapes()) {
+            qreal l = sh.left();
+            if (l > distance)
+                  distance = l;
+            }
       return distance;
       }
 
@@ -1410,8 +1416,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   }
             else
                   d = score()->styleP(StyleIdx::barNoteDistance);
-            qreal dd = minRight() + ns->minLeft();
-            w = qMax(d, dd + spatium());
+            qreal dd = minRight() + ns->minLeft() + spatium();
+            w = qMax(d, dd);
             // d -= ns->minLeft() * .7;      // hack
             // d = qMax(d, ns->minLeft());
             // d = qMax(d, spatium());       // minimum distance is one spatium

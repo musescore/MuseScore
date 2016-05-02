@@ -45,8 +45,7 @@ class SegmentList {
       void remove(Segment*);
       void push_back(Segment*);
       void push_front(Segment*);
-      void insert(Segment*);
-      void insert(Segment* e, Segment* el);
+      void insert(Segment* e, Segment* el);  // insert e before el
 
       class iterator {
             Segment* p;
