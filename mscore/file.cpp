@@ -178,7 +178,10 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             case Score::FileError::FILE_TOO_OLD:
                   msg += QObject::tr("It was last saved with version 0.9.5 or older.\n"
                                      "You can convert this score by opening and then\n"
-                                     "saving with MuseScore version 1.x");
+                                     "saving with MuseScore version 1.x.\n"
+                                     "Visit the %1MuseScore download page%2 to obtain such a 1.x version.")
+                              .arg("<a href=\"http://musescore.org/download#older-versions\">")
+                              .arg("</a>");
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_TOO_NEW:
