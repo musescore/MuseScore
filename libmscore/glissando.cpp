@@ -259,10 +259,10 @@ void Glissando::layout()
       // initial point: ipos() (relative to system origin)
       // ending point:  pos2() (relative to initial point)
 
-      // LINE ENDING POINTS TO NOTE HEAD CENTRES
+      // LINE ENDING POINTS TO NOTEHEAD CENTRES
 
       // assume gliss. line goes from centre of initial note centre to centre of ending note:
-      // move first segment origin and last segment ending point from note head origin to note head centre
+      // move first segment origin and last segment ending point from notehead origin to notehead centre
       QPointF     offs1       = QPointF(anchor1->headWidth() * 0.5, 0.0);
       QPointF     offs2       = QPointF(anchor2->headWidth() * 0.5, 0.0);
 
@@ -332,12 +332,12 @@ void Glissando::layout()
 
       // STAY CLEAR OF NOTE APPENDAGES
 
-      // initial note dots / ledger line / note head
+      // initial note dots / ledger line / notehead
       offs1 *= -1.0;          // discount changes already applied
       int dots = cr1->dots();
       LedgerLine * ledLin = cr1->ledgerLines();
       // if dots, start at right of last dot
-      // if no dots, from right of ledger line, if any; from right of note head, if no ledger line
+      // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
       offs1.rx() += (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
                   : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) );
 
