@@ -5280,7 +5280,7 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                   thisByte = placeHolder.toUnsignedInt();
                   notePtr->setShow((thisByte&0x80) != 0x80);
 
-                  // note head type
+                  // notehead type
                   notePtr->setHeadType(thisByte&0x7f);
 
                   // tie pos

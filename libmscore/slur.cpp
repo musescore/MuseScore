@@ -885,9 +885,9 @@ void Slur::slurPos(SlurPos* sp)
                   // place slur starting point at stem base point
                   pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
                   if (useTablature)                   // in tabs, stems are centred on note:
-                        pt.rx() = hw1 * 0.5;          // skip half note head to touch stem
+                        pt.rx() = hw1 * 0.5;          // skip half notehead to touch stem
                   sp->p1 += pt;
-                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the note head (y)
+                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the notehead (y)
                   break;
             case SlurAnchor::NONE:
                   break;
@@ -906,8 +906,8 @@ void Slur::slurPos(SlurPos* sp)
 
       //
       // default position:
-      //    horizontal: middle of note head
-      //    vertical:   _spatium * .4 above/below note head
+      //    horizontal: middle of notehead
+      //    vertical:   _spatium * .4 above/below notehead
       //
       //------p1
       // Compute x0, y0 and stemPos

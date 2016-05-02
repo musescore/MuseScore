@@ -497,7 +497,7 @@ void OmrSystem::searchBarLines()
                      && ((nx-x)/spatium < 8.0)   // at begin of system?
 //                     && (i < (n-1))
 //                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
-                                                 // missing: check fo note heads
+                                                 // missing: check for noteheads
                                                  // up to here
                      ) {
                         x = nx;
