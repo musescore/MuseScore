@@ -5070,7 +5070,7 @@ QVector<oldName> oldNames = {
       {"sharp sharp",                           SymId::accidentalDoubleSharp },     // accidentals.doublesharp
       {"sori",                                  SymId::accidentalSori },            // accidentals.sori
       {"koron",                                 SymId::accidentalKoron },           // accidentals.koron
-      {"right parenthesis",                     SymId::noteheadParenthesisRight },  // accidentals.rightparen SMULF parenth. for note heads used instead
+      {"right parenthesis",                     SymId::noteheadParenthesisRight },  // accidentals.rightparen SMULF parenth. for noteheads used instead
       {"left parenthesis",                      SymId::noteheadParenthesisLeft },   // accidentals.leftparen
 
       {"arrowheads.open.01",                    SymId::arrowheadWhiteRight }, // arrowheads.open.01 imilar, not identical in SMuFL

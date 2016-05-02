@@ -65,7 +65,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       };
 
       //
-      // fix order of note heads and tpc's
+      // fix order of noteheads and tpc's
       //
       for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i)
             r.noteHeadGroup->setItemData(i, int(heads[i]));

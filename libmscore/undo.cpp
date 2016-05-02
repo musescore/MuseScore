@@ -81,7 +81,7 @@ extern Measure* tick2measure(int tick);
 
 //---------------------------------------------------------
 //   updateNoteLines
-//    compute line position of note heads after
+//    compute line position of noteheads after
 //    clef change
 //---------------------------------------------------------
 

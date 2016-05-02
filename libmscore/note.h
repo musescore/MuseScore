@@ -119,18 +119,18 @@ struct NoteVal {
 //   @P accidentalType   int              note accidental type
 //   @P dots             array[NoteDot]   list of note dots (some can be null, read only)
 //   @P dotsCount        int              number of note dots (read only)
-//   @P elements         array[Element]   list of elements attached to note head
+//   @P elements         array[Element]   list of elements attached to notehead
 //   @P fret             int              fret number in tablature
 //   @P ghost            bool             ghost note (guitar: death note)
 //   @P headGroup        enum (NoteHead.HEAD_NORMAL, .HEAD_BREVIS_ALT, .HEAD_CROSS, .HEAD_DIAMOND, .HEAD_DO, .HEAD_FA, .HEAD_LA, .HEAD_MI, .HEAD_RE, .HEAD_SLASH, .HEAD_SOL, .HEAD_TI, .HEAD_XCIRCLE, .HEAD_TRIANGLE)
 //   @P headType         enum (NoteHead.HEAD_AUTO, .HEAD_BREVIS, .HEAD_HALF, .HEAD_QUARTER, .HEAD_WHOLE)
 //   @P hidden           bool             hidden, not played note (read only)
 //   @P line             int              notehead position (read only)
-//   @P mirror           bool             mirror note head on x axis (read only)
+//   @P mirror           bool             mirror notehead on x axis (read only)
 //   @P pitch            int              midi pitch
 //   @P play             bool             play note
 //   @P ppitch           int              actual played midi pitch (honoring ottavas) (read only)
-//   @P small            bool             small note head
+//   @P small            bool             small notehead
 //   @P string           int              string number in tablature
 //   @P subchannel       int              midi subchannel (for midi articulation) (read only)
 //   @P tieBack          Tie              note backward tie (null if none, read only)

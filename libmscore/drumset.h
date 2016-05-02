@@ -42,7 +42,7 @@ static const int DRUM_INSTRUMENTS = 128;
 
 //---------------------------------------------------------
 //   Drumset
-//    defines note heads and line position for all
+//    defines noteheads and line position for all
 //    possible midi notes in a drumset
 //---------------------------------------------------------
 

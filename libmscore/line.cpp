@@ -541,7 +541,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   if (grip == Grip::START) {
                         cr = static_cast<ChordRest*>(startElement());
                         if (cr && type() == Element::Type::OTTAVA) {
-                              // some sources say to center the text over the note head
+                              // some sources say to center the text over the notehead
                               // others say to start the text just to left of notehead
                               // some say to include accidental, others don't
                               // our compromise - left align, but account for accidental

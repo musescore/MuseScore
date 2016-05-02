@@ -3008,7 +3008,7 @@ void Score::collectMatch(void* data, Element* e)
 
       if (p->subtypeValid) {
             // HACK: grace note is different from normal note
-            // TODO: this disables the ability to distinguish note heads in subtype
+            // TODO: this disables the ability to distinguish noteheads in subtype
 
             if (p->type == int(Element::Type::NOTE)) {
                   if (p->subtype != static_cast<Note*>(e)->chord()->isGrace())

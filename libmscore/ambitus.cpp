@@ -32,7 +32,7 @@ static const qreal          LINEWIDTH_DEFAULT       = 0.12;
 #if 0 // yet(?) unused
 static const qreal          LEDGEROFFSET_DEFAULT    = 0.25;
 #endif
-static const qreal          LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
+static const qreal          LINEOFFSET_DEFAULT      = 0.8;      // the distance between notehead and line
 
 //---------------------------------------------------------
 //   Ambitus
@@ -265,7 +265,7 @@ void Ambitus::layout()
             }
 
       //
-      // NOTE HEADS Y POS
+      // NOTEHEADS Y POS
       //
       // if pitch == INVALID_PITCH oor tpc == INALID_TPC, set to some default:
       // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
@@ -277,7 +277,7 @@ void Ambitus::layout()
       else
             key = Key::C;
 
-      // top note head
+      // top notehead
       if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID)
             _topPos.setY(0);                          // if uninitialized, set to top staff line
       else {
@@ -303,7 +303,7 @@ void Ambitus::layout()
             _topAccid.rypos() = _topPos.y();
             }
 
-      // bottom note head
+      // bottom notehead
       if (_bottomPitch == INVALID_PITCH || _bottomTpc == Tpc::TPC_INVALID)
             _bottomPos.setY( (numOfLines-1) * lineDist);          // if uninitialized, set to last staff line
       else {
@@ -329,7 +329,7 @@ void Ambitus::layout()
             }
 
       //
-      // NOTE HEAD X POS
+      // NOTEHEAD X POS
       //
       // Note: manages colliding accidentals
       //
@@ -353,23 +353,23 @@ void Ambitus::layout()
             }
 
       switch (_dir) {
-            case MScore::DirectionH::AUTO:               // note heads one above the other
-                  // left align note heads and right align accidentals 'hanging' on the left
+            case MScore::DirectionH::AUTO:               // noteheads one above the other
+                  // left align noteheads and right align accidentals 'hanging' on the left
                   _topPos.setX(0.0);
                   _bottomPos.setX(0.0);
                   _topAccid.rxpos()       = - xAccidOffTop;
                   _bottomAccid.rxpos()    = - xAccidOffBottom;
                   break;
-            case MScore::DirectionH::LEFT:               // top note head at the left of bottom note head
-                  // place top note head at left margin; bottom note head at right of top head;
+            case MScore::DirectionH::LEFT:               // top notehead at the left of bottom notehead
+                  // place top notehead at left margin; bottom notehead at right of top head;
                   // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
                   _topPos.setX(0.0);
                   _bottomPos.setX(headWdt);
                   _topAccid.rxpos() = - xAccidOffTop;
                   _bottomAccid.rxpos() = collision ? - xAccidOffBottom : headWdt - xAccidOffBottom;
                   break;
-            case MScore::DirectionH::RIGHT:              // top note head at the right of bottom note head
-                  // bottom note head at left margin; top note head at right of bottomnote head
+            case MScore::DirectionH::RIGHT:              // top notehead at the right of bottom notehead
+                  // bottom notehead at left margin; top notehead at right of bottomnotehead
                   // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
                   _bottomPos.setX(0.0);
                   _topPos.setX(headWdt);
@@ -480,7 +480,7 @@ SymId Ambitus::noteHead() const
 
       SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
       if (t == SymId::noSym) {
-            qDebug("invalid note head %hhd/%hhd", _noteHeadGroup, _noteHeadType);
+            qDebug("invalid notehead %d/%d", int(_noteHeadGroup), int(_noteHeadType));
             t = Note::noteHead(0, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
@@ -489,7 +489,7 @@ SymId Ambitus::noteHead() const
 //---------------------------------------------------------
 //   headWidth
 //
-//    returns the width of the note head symbol
+//    returns the width of the notehead symbol
 //---------------------------------------------------------
 
 qreal Ambitus::headWidth() const

@@ -60,7 +60,7 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   noteHeads
-//    note head groups
+//    notehead groups
 //---------------------------------------------------------
 
 static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)] = {
@@ -448,7 +448,7 @@ SymId Note::noteHead() const
 
       SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
-            qDebug("invalid note head %hhd/%hhd", _headGroup, ht);
+            qDebug("invalid notehead %d/%d", int(_headGroup), int(ht));
             t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
@@ -457,7 +457,7 @@ SymId Note::noteHead() const
 //---------------------------------------------------------
 //   headWidth
 //
-//    returns the width of the note head symbol
+//    returns the width of the notehead symbol
 //    or the width of the string representation of the fret mark
 //---------------------------------------------------------
 
@@ -494,7 +494,7 @@ qreal Note::tabHeadWidth(StaffType* tab) const
 //---------------------------------------------------------
 //   headHeight
 //
-//    returns the height of the note head symbol
+//    returns the height of the notehead symbol
 //    or the height of the string representation of the fret mark
 //---------------------------------------------------------
 
@@ -746,7 +746,7 @@ void Note::draw(QPainter* painter) const
                   return;
             //
             // warn if pitch extends usable range of instrument
-            // by coloring the note head
+            // by coloring the notehead
             //
             if (chord() && chord()->segment() && staff() && !selected()
                && !score()->printing() && MScore::warnPitchRange) {
@@ -1407,7 +1407,7 @@ Element* Note::drop(const DropData& data)
                   NoteHead* s = static_cast<NoteHead*>(e);
                   NoteHead::Group group = s->headGroup();
                   if (group == NoteHead::Group::HEAD_INVALID) {
-                        qDebug("unknown note head");
+                        qDebug("unknown notehead");
                         group = NoteHead::Group::HEAD_NORMAL;
                         }
                   delete s;

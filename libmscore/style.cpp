@@ -101,7 +101,7 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::dotNoteDistance,             StyleType("dotNoteDistance",         StyleValueType::SPATIUM) },
       { StyleIdx::dotRestDistance,             StyleType("dotRestDistance",         StyleValueType::SPATIUM) },
       { StyleIdx::dotDotDistance,              StyleType("dotDotDistance",          StyleValueType::SPATIUM) },
-      { StyleIdx::propertyDistanceHead,        StyleType("propertyDistanceHead",    StyleValueType::SPATIUM) },     // note property to note head
+      { StyleIdx::propertyDistanceHead,        StyleType("propertyDistanceHead",    StyleValueType::SPATIUM) },     // note property to notehead
       { StyleIdx::propertyDistanceStem,        StyleType("propertyDistanceStem",    StyleValueType::SPATIUM) },     // note property to note stem
       { StyleIdx::propertyDistance,            StyleType("propertyDistance",        StyleValueType::SPATIUM) },     // note property to note property
       { StyleIdx::articulationMag,             StyleType("articulationMag",         StyleValueType::DOUBLE) },     // note property to note property
@@ -444,12 +444,12 @@ StyleData::StyleData()
             { StyleIdx::measureSpacing,              QVariant(1.2) },
             { StyleIdx::staffLineWidth,              QVariant(0.08) },      // 0.09375
             { StyleIdx::ledgerLineWidth,             QVariant(0.16) },     // 0.1875
-            { StyleIdx::ledgerLineLength,            QVariant(.6) },     // note head width + this value
+            { StyleIdx::ledgerLineLength,            QVariant(.6) },     // notehead width + this value
             { StyleIdx::accidentalDistance,          QVariant(0.22) },
             { StyleIdx::accidentalNoteDistance,      QVariant(0.22) },
             { StyleIdx::beamWidth,                   QVariant(0.5) },           // was 0.48
             { StyleIdx::beamDistance,                QVariant(0.5) },          // 0.25sp
-            { StyleIdx::beamMinLen,                  QVariant(1.32) },      // 1.316178 exactly note head width
+            { StyleIdx::beamMinLen,                  QVariant(1.32) },      // 1.316178 exactly notehead width
             { StyleIdx::beamNoSlope,                 QVariant(false) },
             { StyleIdx::dotMag,                      QVariant(1.0) },
             { StyleIdx::dotNoteDistance,             QVariant(0.35) },
@@ -559,7 +559,7 @@ StyleData::StyleData()
             { StyleIdx::ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
             { StyleIdx::ottavaNumbersOnly,           true },
             { StyleIdx::tabClef,                     QVariant(int(ClefType::TAB)) },
-            { StyleIdx::tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: note head width
+            { StyleIdx::tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: notehead width
             { StyleIdx::tremoloBoxHeight,            QVariant(0.65) },
             { StyleIdx::tremoloStrokeWidth,          QVariant(0.5) },  // was 0.35
             { StyleIdx::tremoloDistance,             QVariant(0.8) },

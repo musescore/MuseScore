@@ -53,7 +53,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             };
 
       //
-      // fix order of note heads
+      // fix order of noteheads
       //
       for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i) {
             n.noteHeadGroup->addItem(qApp->translate("noteheadnames", NoteHead::groupToGroupName(heads[i])));

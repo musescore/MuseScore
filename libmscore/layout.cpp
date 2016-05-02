@@ -553,13 +553,13 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
             incIdx = -1;
             }
 
-      int ll        = 1000;         // line of previous note head
+      int ll        = 1000;         // line of previous notehead
                                     // hack: start high so first note won't show as conflict
       bool lvisible = false;        // was last note visible?
-      bool mirror   = false;        // should current note head be mirrored?
+      bool mirror   = false;        // should current notehead be mirrored?
                                     // value is retained and may be used on next iteration
                                     // to track mirror status of previous note
-      bool isLeft   = notes[startIdx]->chord()->up();             // is note head on left?
+      bool isLeft   = notes[startIdx]->chord()->up();             // is notehead on left?
       int lmove     = notes[startIdx]->chord()->staffMove();      // staff offset of last note (for cross-staff beaming)
 
       for (int idx = startIdx; idx != endIdx; idx += incIdx) {
@@ -587,7 +587,7 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
             bool nmirror = (chord->up() != isLeft);
 
             // by default, notes and dots are not hidden
-            // this may be changed later to allow unisons to share note heads
+            // this may be changed later to allow unisons to share noteheads
             note->setHidden(false);
             note->setDotsHidden(false);
 
@@ -781,7 +781,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       qreal stepDistance = sp * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
-      qreal lx                = 10000.0;  // leftmost note head position
+      qreal lx                = 10000.0;  // leftmost notehead position
       qreal upDotPosX         = 0.0;
       qreal downDotPosX       = 0.0;
 

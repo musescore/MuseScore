@@ -672,7 +672,7 @@ void Chord::addLedgerLines(int move)
       int   minLine, maxLine;
       bool  visible = false;
       qreal x;
-      // the extra length of a ledger line with respect to note head (half of it on each side)
+      // the extra length of a ledger line with respect to notehead (half of it on each side)
       qreal extraLen = score()->styleS(StyleIdx::ledgerLineLength).val() * _spatium * 0.5;
 
       // scan chord notes, collecting visibility and x and y extrema
@@ -2661,7 +2661,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
       ArticulationType st = a->articulationType();
 
-      // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
+      // TENUTO and STACCATO: always near the notehead (or stem end if beyond a stem)
       if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::Sforzatoaccent) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             bool alignToStem = false;
