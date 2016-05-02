@@ -767,7 +767,7 @@ Element* ChordRest::drop(const DropData& data)
       switch (e->type()) {
             case Element::Type::BREATH:
                   {
-                  Breath* b = static_cast<Breath*>(e);
+                  Breath* b = toBreath(e);
                   int track = staffIdx() * VOICES;
                   b->setTrack(track);
 

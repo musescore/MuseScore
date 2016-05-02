@@ -263,8 +263,8 @@ class CmdState {
    public:
       LayoutFlags layoutFlags;
 
-      bool _excerptsChanged;
-      bool _instrumentsChanged;
+      bool _excerptsChanged     { false };
+      bool _instrumentsChanged  { false };
 
       void reset();
       UpdateMode updateMode() const { return _updateMode; }

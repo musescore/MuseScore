@@ -337,7 +337,7 @@ MasterScore* TestParts::doAddBreath()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
-      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+      Ms::Chord* chord = toChord(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;

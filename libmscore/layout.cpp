@@ -1369,7 +1369,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
 
       BarLine* bl = 0;
       Segment* s = m->findSegment(Segment::Type::BeginBarLine, tick);
-      if (s && s->isBeginBarLineType())
+      if (s)
             bl = toBarLine(s->element(0));
 
       if ((nVisible > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nVisible <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
@@ -1836,51 +1836,26 @@ static void layoutPage(Page* page, qreal restHeight)
       }
 
 //---------------------------------------------------------
-//   sff
-//    compute 1/Force for a given Extend
+//   Spring
 //---------------------------------------------------------
 
-qreal sff(qreal x, qreal xMin, const SpringMap& springs)
-      {
-      if (x <= xMin)
-            return 0.0;
-      auto i = springs.begin();
-      qreal c  = i->second.stretch;
-      if (c == 0.0)           //DEBUG
-            c = 1.1;
-      qreal f = 0.0;
-      for (; i != springs.end();) {
-            xMin -= i->second.fix;
-            f = (x - xMin) / c;
-            ++i;
-            if (i == springs.end() || f <= i->first)
-                  break;
-            c += i->second.stretch;
-            }
-      return f;
-      }
-
-//---------------------------------------------------------
-//   Spring2
-//---------------------------------------------------------
-
-struct Spring2 {
+struct Spring {
       int seg;
       qreal stretch;
       qreal fix;
-      Spring2(int i, qreal s, qreal f) : seg(i), stretch(s), fix(f) {}
+      Spring(int i, qreal s, qreal f) : seg(i), stretch(s), fix(f) {}
       };
 
-typedef std::multimap<qreal, Spring2, std::less<qreal> > SpringMap2;
+typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
 
 //---------------------------------------------------------
 //   sff2
 //    compute 1/Force for a given Extend
 //---------------------------------------------------------
 
-qreal sff2(qreal x, qreal xMin, const SpringMap2& springs)
+static qreal sff2(qreal width, qreal xMin, const SpringMap& springs)
       {
-      if (x <= xMin)
+      if (width <= xMin)
             return 0.0;
       auto i = springs.begin();
       qreal c  = i->second.stretch;
@@ -1889,7 +1864,7 @@ qreal sff2(qreal x, qreal xMin, const SpringMap2& springs)
       qreal f = 0.0;
       for (; i != springs.end();) {
             xMin -= i->second.fix;
-            f = (x - xMin) / c;
+            f = (width - xMin) / c;
             ++i;
             if (i == springs.end() || f <= i->first)
                   break;
@@ -1897,7 +1872,6 @@ qreal sff2(qreal x, qreal xMin, const SpringMap2& springs)
             }
       return f;
       }
-
 
 //---------------------------------------------------------
 //   respace
@@ -1927,7 +1901,7 @@ void Score::respace(std::vector<ChordRest*>* elements)
       // compute stretches
       //---------------------------------------------------
 
-      SpringMap2 springs;
+      SpringMap springs;
       qreal minimum = 0.0;
       for (int i = 0; i < n-1; ++i) {
             qreal w   = width[i];
@@ -1935,7 +1909,7 @@ void Score::respace(std::vector<ChordRest*>* elements)
             qreal str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
             qreal d   = w / str;
 
-            springs.insert(std::pair<qreal, Spring2>(d, Spring2(i, str, w)));
+            springs.insert(std::pair<qreal, Spring>(d, Spring(i, str, w)));
             minimum += w;
             }
 
@@ -2680,11 +2654,8 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             else if (isMaster() && s->isChordRestType()) {
                   for (Element* e : s->annotations()) {
-                        if (e->isTempoText()) {
-                              TempoText* tt = toTempoText(e);
-                              setTempo(tt->segment(), tt->tempo());
-                              }
-                        e->layout();
+                        if (!e->isTempoText())  // layout tempotext after stretchMeasure
+                              e->layout();
                         }
                   qreal stretch = 0.0;
                   for (Element* e : s->elist()) {
@@ -3248,6 +3219,14 @@ System* Score::collectSystem(LayoutContext& lc)
                               ChordRest* cr = toChordRest(e);
                               if (isTopBeam(cr))
                                     cr->beam()->layout();
+                              }
+                        }
+                  for (Element* e : s->annotations()) {
+                        if (e->isTempoText()) {
+                              TempoText* tt = toTempoText(e);
+                              setTempo(tt->segment(), tt->tempo());
+                              tt->layout();
+                              s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
                         }
                   }
