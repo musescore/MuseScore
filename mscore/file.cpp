@@ -156,6 +156,7 @@ static QString createDefaultFileName(QString fn)
 //   readScoreError
 //    if "ask" is true, ask to ignore; returns true if
 //    ignore is pressed by user
+//    returns true if -f is used in converter mode
 //---------------------------------------------------------
 
 static bool readScoreError(const QString& name, Score::FileError error, bool ask)
@@ -205,10 +206,13 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   msg += MScore::lastError;
                   break;
             }
-      int rv = false;
-      if (converterMode || pluginMode) {
+      if (converterMode && canIgnore && ignoreWarnings) {
+            fprintf(stderr, "%s\n\nWarning ignored, forcing score to load\n", qPrintable(msg));
+            return true;
+            }
+       if (converterMode || pluginMode) {
             fprintf(stderr, "%s\n", qPrintable(msg));
-            return rv;
+            return false;
             }
       QMessageBox msgBox;
       msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
@@ -229,7 +233,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                );
             msgBox.exec();
             }
-      return rv;
+      return false;
       }
 
 //---------------------------------------------------------

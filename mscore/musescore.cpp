@@ -134,6 +134,7 @@ double guiScaling = 0.0;
 int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
+bool ignoreWarnings = false;
 
 QString mscoreGlobalShare;
 
@@ -4727,7 +4728,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set testMode flag for all files"));
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
-      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "used with -o <file>.pdf, export score + parts"));
+      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with -o <file>.pdf, export score + parts"));
+      parser.addOption(QCommandLineOption({"f", "force"}, "Used with -o, ignore warnings reg. score being corrupted or from wrong version"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -4812,6 +4814,7 @@ int main(int argc, char* av[])
       exportScoreParts = parser.isSet("export-score-parts");
       if (exportScoreParts && !converterMode)
             parser.showHelp(EXIT_FAILURE);
+      ignoreWarnings = parser.isSet("f");
 
       QStringList argv = parser.positionalArguments();
 
