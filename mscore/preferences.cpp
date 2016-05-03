@@ -1149,7 +1149,7 @@ void PreferenceDialog::selectInstrumentList1()
          this,
          tr("Choose Instrument List"),
          instrumentList1->text(),
-         tr("Instrument List (*.xml)"),
+         tr("Instrument List") + " (*.xml)",
          0,
          preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
@@ -1167,7 +1167,7 @@ void PreferenceDialog::selectInstrumentList2()
          this,
          tr("Choose Instrument List"),
          instrumentList2->text(),
-         tr("Instrument List (*.xml)"),
+         tr("Instrument List") + " (*.xml)",
          0,
          preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
@@ -1185,7 +1185,7 @@ void PreferenceDialog::selectStartWith()
          this,
          tr("Choose Starting Score"),
          sessionScore->text(),
-         tr("MuseScore Files (*.mscz *.mscx);;All (*)"),
+         tr("MuseScore Files") + " (*.mscz *.mscx);;" + tr("All") + " (*)",
          0,
          preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
