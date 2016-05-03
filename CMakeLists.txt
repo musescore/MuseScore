@@ -101,6 +101,7 @@ option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. jac
 option(BUILD_PULSEAUDIO "Build with support for Pulseaudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for Portaudio audio backend." ON)
+option(BUILD_PCH "Build using precompiled headers." OFF)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -163,7 +164,7 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPA
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
 # The Mscore version number.
-SET (MUSESCORE_NAME "MuseScore")
+SET(MUSESCORE_NAME "MuseScore")
 SET(MUSESCORE_VERSION_MAJOR  "3")
 SET(MUSESCORE_VERSION_MINOR  "0")
 SET(MUSESCORE_VERSION_PATCH  "0")
@@ -510,11 +511,9 @@ add_custom_command(
     DEPENDS ${PROJECT_SOURCE_DIR}/all.h
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
-if (MINGW)
-  set(BUILD_PCH false)
-else (MINGW)
+if (NOT MINGW)
   set(BUILD_PCH true)
-endif(MINGW)
+endif(NOT MINGW)
 
 precompiled_header(QT_INCLUDES all ${BUILD_PCH})
 
