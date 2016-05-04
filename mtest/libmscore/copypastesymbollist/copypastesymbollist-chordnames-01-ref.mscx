@@ -208,11 +208,6 @@
           <root>13</root>
           <name>7</name>
           </Harmony>
-        <tick>15360</tick>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

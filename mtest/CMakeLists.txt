@@ -167,7 +167,7 @@ subdirs (
         libmscore/clef_courtesy
         libmscore/concertpitch
         libmscore/copypaste
-#        libmscore/copypastesymbollist # FAIL
+        libmscore/copypastesymbollist # FAIL
         libmscore/dynamic
 #        libmscore/earlymusic          # FAIL
         libmscore/element
@@ -186,8 +186,8 @@ subdirs (
         libmscore/selectionfilter
         libmscore/selectionrangedelete
 #        libmscore/spanners            # FAIL
-        libmscore/split                # FAIL
-        libmscore/splitstaff           # FAIL
+        libmscore/split
+        libmscore/splitstaff
         libmscore/timesig
         libmscore/tools                # some tests disabled
         libmscore/transpose
