@@ -124,6 +124,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::systemHeaderTimeSigDistance,    false, systemHeaderTimeSigDistance,    resetSystemHeaderTimeSigDistance },
 
       { StyleIdx::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
+      { StyleIdx::timesigBarlineDistance,  false, timesigBarlineDistance,  resetTimesigBarlineDistance },
       { StyleIdx::staffLineWidth,          false, staffLineWidth,          resetStaffLineWidth },
       { StyleIdx::beamWidth,               false, beamWidth,               0 },
       { StyleIdx::beamMinLen,              false, beamMinLen,              0 },

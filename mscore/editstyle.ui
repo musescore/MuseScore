@@ -2736,6 +2736,58 @@
               </property>
              </widget>
             </item>
+            <item row="9" column="4">
+             <widget class="QLabel" name="label_113">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Time signature barline distance:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+              <property name="indent">
+               <number>5</number>
+              </property>
+              <property name="buddy">
+               <cstring>timesigLeftMargin</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="5">
+             <widget class="QDoubleSpinBox" name="timesigBarlineDistance">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="suffix">
+               <string>sp</string>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="6">
+             <widget class="QToolButton" name="resetTimesigBarlineDistance">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item row="0" column="1">
