@@ -97,12 +97,10 @@ void PageSettings::setScore(Score* s)
       pageGroup->clear();
       int index = 0;
       const PaperSize* ps = pf->paperSize();
-      for (int i = 0; true; ++i) {
-            if (paperSizes[i].name == 0)
-                  break;
+      for (int i = 0; paperSizes[i].name; ++i) {
             if (ps == &paperSizes[i])
                   index = i;
-            pageGroup->addItem(QString(paperSizes[i].name));
+            pageGroup->addItem(qApp->translate("paperSizes", paperSizes[i].name));
             }
 
       pageGroup->setCurrentIndex(index);

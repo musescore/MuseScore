@@ -81,9 +81,9 @@ Jump::Type Jump::jumpType() const
 QString Jump::jumpTypeUserName() const
       {
       int idx = static_cast<int>(this->jumpType());
-      if(idx < jumpTypeTableSize())
+      if (idx < jumpTypeTableSize())
             return qApp->translate("jumpType", jumpTypeTable[idx].userText.toUtf8().constData());
-      return QString("Custom");
+      return tr("Custom");
       }
 
 //---------------------------------------------------------
