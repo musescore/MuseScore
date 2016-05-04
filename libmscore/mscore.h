@@ -68,11 +68,22 @@ inline int trackZeroVoice(int track) { return track & ~3;    }
 
 static const int MAX_TAGS = 32;
 
-static constexpr qreal INCH      = 25.4;
-static constexpr qreal PPI       = 72.0;           // printer points per inch
-static constexpr qreal SPATIUM20 = 5.0;
-static constexpr qreal DPI       = 72.0;
-static constexpr qreal DPMM      = DPI / INCH;
+// Constants for conversions between millimeters, inches, points and pixels
+static constexpr qreal MMPI      = 25.4;       // millimeters per inch
+static constexpr qreal IPMM      = 1 / MMPI;   // inches      per millimeter
+static constexpr qreal PPI       = 72;         // points      per inch
+static constexpr qreal DPI       = PPI;        // pixels/dots per inch
+static constexpr qreal DPMM      = DPI / MMPI; // pixels/dots per millimeter
+
+// Staff Spaces, e.g. "2.5sp", are yet another unit of measurement
+// Default staff spacing in points:
+static constexpr qreal SPATIUM20 =  5;
+// 20 is the total height of a 5-line staff
+// SPATIUM20 = 20 / 4 staff spaces = 5
+//
+// This constant also doubles as the base scaling factor for a score:
+// 5 = 100% scaling, 6 = 120% scaling, 4.5 = 90% scaling, etc.
+//
 
 static constexpr int MAX_STAVES  = 4;
 

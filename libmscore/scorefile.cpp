@@ -486,8 +486,8 @@ QImage Score::createThumbnail()
       int h      = int(fr.height() * mag);
 
       QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
-      pm.setDotsPerMeterX(lrint((mag * 1000) / INCH));
-      pm.setDotsPerMeterY(lrint((mag * 1000) / INCH));
+      pm.setDotsPerMeterX(lrint((mag * 1000) / MMPI));
+      pm.setDotsPerMeterY(lrint((mag * 1000) / MMPI));
       pm.fill(0xffffffff);
       QPainter p(&pm);
       p.setRenderHint(QPainter::Antialiasing, true);

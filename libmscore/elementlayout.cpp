@@ -109,7 +109,7 @@ void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
       if (l._offset != _offset) {
             QPointF pt(_offset);
             if (offsetType() == OffsetType::ABS)
-                  pt *= INCH;
+                  pt *= MMPI;
             xml.tag("xoffset", pt.x());         // save in spatium or metric mm
             xml.tag("yoffset", pt.y());
             }
@@ -148,7 +148,7 @@ void ElementLayout::writeProperties(Xml& xml) const
       if (!_offset.isNull()) {
             QPointF pt(_offset);
             if (offsetType() == OffsetType::ABS)
-                  pt *= INCH;
+                  pt *= MMPI;
             xml.tag("xoffset", pt.x());         // save in spatium or metric mm
             xml.tag("yoffset", pt.y());
             }
@@ -198,13 +198,13 @@ bool ElementLayout::readProperties(XmlReader& e)
       else if (tag == "xoffset") {
             qreal xo = e.readDouble();
             if (offsetType() == OffsetType::ABS)
-                  xo /= INCH;
+                  xo /= MMPI;
             setXoff(xo);
             }
       else if (tag == "yoffset") {
             qreal yo = e.readDouble();
             if (offsetType() == OffsetType::ABS)
-                  yo /= INCH;
+                  yo /= MMPI;
             setYoff(yo);
             }
       else if (tag == "rxoffset")         // obsolete
@@ -219,9 +219,9 @@ bool ElementLayout::readProperties(XmlReader& e)
             if (ot != offsetType()) {
                   setOffsetType(ot);
                   if (ot == OffsetType::ABS)
-                        _offset /= INCH;  // convert spatium -> inch
+                        _offset /= MMPI;  // convert spatium -> inch
                   else
-                        _offset *= INCH;  // convert inch -> spatium
+                        _offset *= MMPI;  // convert inch -> spatium
                   }
             }
       else
