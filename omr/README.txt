@@ -86,4 +86,11 @@ Graphical Model for System Identification
 In each hypothesized system(i,...,j) from i-th to j-th staves, we recognize shared barlines from left to right by finding the best scoring configuration
 b_opt = max(b(k1) + b(k2) + ... + b(kn)) supposing each horizontal location contains a bar or just background, where b(.) is the scoring function of barline in that column. We can also put negative constraints (note stem) into this bar line recognition process.
 
+<<<<<<< HEAD
 >>>>>>> 28df13d... update masterscore omr
+=======
+3, Todo
+Add pagebreak to generated score and alignment btw skeleton and OMR
+Fix pdf loading for vector graphs
+Optimize OMR performance and add clef/key recognitions
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation

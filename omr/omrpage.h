@@ -190,8 +190,12 @@ class OmrSystem {
 >>>>>>> 4615c3e... consider different number of staves in systems
 =======
       void searchSysBarLines();
+<<<<<<< HEAD
 >>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       float searchBarLinesvar(int n_staff);
+=======
+      float searchBarLinesvar(int n_staff/*, float *bar_score_vector*/);
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
       void searchNotes();
       };
 

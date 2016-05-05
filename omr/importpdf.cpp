@@ -347,9 +347,13 @@ void OmrState::importPdfPage(OmrPage* omrPage)
       {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 37b26ee... debug omr module
           TDuration d(TDuration::DurationType::V_MEASURE);
+=======
+      TDuration d(TDuration::DurationType::V_MEASURE);
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
       int tick         = 0;
 
       int nsystems = omrPage->systems().size();
@@ -558,6 +562,7 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
       score->style()->set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
       score->style()->set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> e3f6219... fix bugs in text size for pattern match
 =======
           
@@ -565,10 +570,14 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
           //return Score::FileError::FILE_NO_ERROR;
 >>>>>>> 1c244ad... rescale image according to their spatiums
 
+=======
+        
+      //incomplete implementation for musescore skeletion creation
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
       Part* part   = new Part(score);
-          OmrPage* omrPage = omr->pages().front();
+      OmrPage* omrPage = omr->pages().front();
          
-          if(omrPage->systems().size() > 0){
+      if(omrPage->systems().size() > 0){
               for (int i = 0; i < omrPage->systems().front().staves().size(); i++) {
                   Staff* staff = new Staff(score);
                   staff->setPart(part);
@@ -576,6 +585,7 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
                   score->staves().append(staff);
               }
           }
+<<<<<<< HEAD
           score->appendPart(part);
     
     
@@ -625,6 +635,9 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
 //            //staff->setInitialClef(omrStaff.clef().type);
 //            }
 >>>>>>> 8d0232d... debug skeleton creation
+=======
+      score->appendPart(part);
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
 
       OmrState state;
       state.score = score;

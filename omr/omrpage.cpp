@@ -152,6 +152,7 @@ namespace Ms {
 =======
 =======
         getRatio();
+<<<<<<< HEAD
 >>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         //identifySystems();
 <<<<<<< HEAD
@@ -175,6 +176,8 @@ namespace Ms {
 //        
 //        if (_systems.isEmpty())
 //            return;
+=======
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     struct SysState{
@@ -257,7 +260,7 @@ namespace Ms {
         
         //forward pass
         
-        for (int x = x1; x < x2; ++x) {
+        for (int x = x1; x <= x2; ++x) {
             int i = x - x1;
             
             for(int cur = 0; cur <= 1; ++cur){
@@ -315,17 +318,41 @@ namespace Ms {
         int numStaves    = staves.size();
         if(numStaves == 0) return;
         
-        float temp_scores[numStaves][numStaves];
-        int hashed[numStaves][numStaves];
+        //memory allocation
+        float **temp_scores = new float*[numStaves];
+        for(int i = 0; i < numStaves; i++) temp_scores[i] = new float[numStaves];
         
-        for(int i = 0; i < numStaves; ++i){
+        int **hashed = new int*[numStaves];
+        for(int i = 0; i < numStaves; i++) hashed[i] = new int[numStaves];
+        
+        float **scores = new float*[numStaves];
+        for(int i = 0; i < numStaves; i++) scores[i] = new float[2];
+        SysState **pred = new SysState*[numStaves];
+        for(int i = 0; i < numStaves; i++) pred[i] = new SysState[2];
+        
+//        float **bar_score_matrix = new float*[height()];//save bar column scores for re-use
+//        for(int i = 0; i < height(); i++) bar_score_matrix[i] = new float[wordsPerLine()];
+//        float *bar_score_vector = new float[wordsPerLine()];
+//        
+//        for(int i = 0; i < height(); i++){
+//            for(int j = 0; j < wordsPerLine(); j++){
+//                if(i == 0) bar_score_matrix[i][j] = 0;
+//                else{
+//                    const uint* p = scanLine(i) + j;
+//                    
+//                    if(*p) bar_score_matrix[i][j] = 1 + bar_score_matrix[i-1][j];
+//                    else bar_score_matrix[i][j] = bar_score_matrix[i-1][j];
+//                }
+//            }
+//        }
+        
+        
+        //initialization
+        for(int i = 0; i < numStaves; i++){
             for(int j = 0; j < numStaves; j++){
                 hashed[i][j] = 0;
             }
         }
-        
-        float scores[numStaves][2];
-        SysState pred[numStaves][2];
         
         SysState ss;
         ss.index = -1; ss.status = -1;
@@ -354,7 +381,14 @@ namespace Ms {
                         omrSystem.staves().append(staves[i]);
                     }
                     
-                    cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1);
+//                    int y1 = staves[cur_staff].top();
+//                    int y2 = staves[next_staff].bottom();
+//                    
+//                    for(int x = 0; x < wordsPerLine(); x++){
+//                        bar_score_vector[x] = bar_score_matrix[y2][x] - bar_score_matrix[y1-1][x];
+//                    }
+                    
+                    cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1/*, bar_score_vector*/);
                     temp_scores[cur_staff][next_staff] = cur_score;
                     hashed[cur_staff][next_staff] = 1;
                 }
@@ -391,7 +425,13 @@ namespace Ms {
                 for (int i = ss.index; i <= cur_staff; ++i) {
                     omrSystem.staves().append(staves[i]);
                 }
-                omrSystem.searchBarLinesvar(cur_staff - ss.index + 1);
+//                int y1 = staves[ss.index].top();
+//                int y2 = staves[cur_staff].bottom();
+//                
+//                for(int x = 0; x < wordsPerLine(); x++){
+//                    bar_score_vector[x] = bar_score_matrix[y2][x] - bar_score_matrix[y1-1][x];
+//                }
+                omrSystem.searchBarLinesvar(cur_staff - ss.index + 1/*, bar_score_vector*/);
                 _systems.append(omrSystem);
             }
             
@@ -412,12 +452,34 @@ namespace Ms {
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 21738fc... debugging omr
 =======
 
 >>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
+=======
+        
+        //delete allocated space
+        for(int i = 0; i < numStaves; i++){
+            delete [] scores[i];
+            delete [] pred[i];
+            delete [] temp_scores[i];
+            delete [] hashed[i];
+        }
+        
+        delete []scores;
+        delete []pred;
+        delete []temp_scores;
+        delete []hashed;
+        
+//        for(int i = 0; i < height(); i++){
+//            delete [] bar_score_matrix[i];
+//        }
+        //delete []bar_score_matrix;
+        //delete []bar_score_vector;
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     
@@ -1781,6 +1843,7 @@ struct BAR_STATE{
                 barLines.append(QLine(x, y1, x, y2));
             }
         }
+<<<<<<< HEAD
         
 <<<<<<< HEAD
 =======
@@ -1859,64 +1922,85 @@ struct BAR_STATE{
         //                  }
         //            }
         //      barLines = nbl;
+=======
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
-    //---------------------------------------------------------
-    //   searchBarLinesvar
-    //---------------------------------------------------------
-    float OmrSystem::searchBarLinesvar(int n_staff)
+    //-------------------------------------------------------------------
+    //   searchBarLinesvar: dynamic programming for system identification
+    //-------------------------------------------------------------------
+    float OmrSystem::searchBarLinesvar(int n_staff/*, float *bar_score_vector*/)
     {
         OmrStaff& r1 = _staves[0];
         OmrStaff& r2 = _staves[n_staff - 1];
         
-        int x1  = r1.x();
-        int x2  = x1 + r1.width();
-        int y1  = r1.y();
-        int y2  = r2.y() + r2.height();
+        int x1  = r1.left();
+        int x2  = r1.right();
+        int y1  = r1.top();
+        int y2  = r2.bottom();
         
-        int th = 0;
-        th = (y2 - y1 + 1)*2/3;
-//        for(int i  = 0; i < n_staff; ++i){
-//            th += _staves[i].height();
-//        }
+        int th = (y2 - y1)/2;//threshold
         
-        int vpw = x2-x1;
-        float vp[vpw];
-        memset(vp, 0, sizeof(float) * vpw);
-        
-        
-        //using note constraints
+        //
+        //compute note constraints
+        //
         searchNotes();
         
-        int note_constraints[x2-x1];
-        memset(note_constraints, 0, sizeof(int) * (x2-x1));
+        int *note_constraints = new int[x2-x1+1];
+        memset(note_constraints, 0, sizeof(int) * (x2-x1+1));
         for(int i = 0; i < n_staff; ++i){
             OmrStaff& r = _staves[i];
             foreach(OmrNote* n, r.notes()){
-                for(int x = n->x(); x <= n->x() + n->width(); ++x)
-                    note_constraints[x-x1] = 1;
+                for(int x = n->x(); x <= n->x() + n->width(); ++x){
+                    if(x >= x1 && x <= x2) note_constraints[x-x1] = 1;
+                }
             }
         }
         
         //
         // compute vertical projections
         //
+       
+        int vpw = x2-x1+1;
+        float vp[vpw];
+        //new way, save time, not working yet
+
+//        
+//        for(int x = 0; x < vpw; x++){
+//            vp[x] = -HUGE_VAL;
+//            
+//            if(!note_constraints[x]){
+//                vp[x] = bar_score_vector[x+x1]-th;
+//            }
+//        }
         
-        for (int x = x1; x < x2; ++x) {
+        //old way, more computationally expensive
+        for(int i = 0; i < vpw; i++) vp[i] = -HUGE_VAL;
+        
+        int bar_max_width = 3;
+        for (int x = x1+bar_max_width; x < x2-bar_max_width; ++x) {
             int dots = 0;
-            for (int y = y1; y < y2; ++y) {
-                if (_page->dot(x, y))
-                    ++dots;
-                else
-                    --dots;
-            }
+                for (int y = y1; y < y2; ++y) {
+                    for(int w = -bar_max_width; w <= bar_max_width; w++){
+                        if(_page->dot(x+w, y)){
+                            ++dots;
+                            break;
+                        }
+                    }
+                }
+            
             if(!note_constraints[x-x1])
-                vp[x - x1] = dots;// - /*(y2 - y1 - dots);*/th;
+                vp[x - x1] = dots - th;
             else vp[x - x1] = -HUGE_VAL;
         }
         
-        float scores[x2-x1+1][2];
-        BSTATE pred[x2-x1+1][2];
+        float **scores = new float *[x2-x1+1];
+        BSTATE **pred = new BSTATE *[x2-x1+1];
+        for(int i =0; i< x2-x1+1; i++){
+            scores[i] = new float[2];
+            pred[i] = new BSTATE[2];
+        }
+        
         BSTATE bs;
         
         //initialization
@@ -1932,7 +2016,7 @@ struct BAR_STATE{
         
         //forward pass
         
-        for (int x = x1; x < x2; ++x) {
+        for (int x = x1; x <= x2; ++x) {
             int i = x - x1;
             
             for(int cur = 0; cur <= 1; ++cur){
@@ -1942,12 +2026,19 @@ struct BAR_STATE{
                 if(cur){
                     scores[i][cur] += vp[i];
                     int next = 0;
-                    int step = 8*_page->spatium();//constraints between adjacent barlines
+                    int step = 8*_page->spatium();//minimum distance between adjacent barlines
                     if(step + i <= x2 - x1){
                         if(scores[step + i][next] < scores[i][cur]){
                             scores[step + i][next] = scores[i][cur];
                             bs.x = x; bs.status = cur;
                             pred[step + i][next] = bs;
+                        }
+                    }
+                    else{
+                        if(scores[x2 - x1][next] < scores[i][cur]){
+                            scores[x2 - x1][next] = scores[i][cur];
+                            bs.x = x; bs.status = cur;
+                            pred[x2 - x1][next] = bs;
                         }
                     }
                     
@@ -1972,6 +2063,7 @@ struct BAR_STATE{
 =======
         //trace back
         int state = 0;
+        
         for (int x = x2; x > x1; ){
             int i = x - x1;
             bs = pred[i][state];
@@ -1982,9 +2074,24 @@ struct BAR_STATE{
                 barLines.append(QLine(x, y1, x, y2));
             }
         }
+
+        float best_score = scores[x2-x1][0];
         
+        delete []note_constraints;
+        for(int i =0; i< x2-x1+1; i++){
+            delete []scores[i];
+            delete []pred[i];
+        }
+        delete []scores;
+        delete []pred;
+        
+        
+<<<<<<< HEAD
 >>>>>>> 21738fc... debugging omr
         return(scores[x2-x1][0]);
+=======
+        return(best_score);
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     //---------------------------------------------------------
@@ -2071,6 +2178,8 @@ static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
     
     void OmrSystem::searchNotes()
     {
+        //place holder for note detection, doesn't work well for now if using pixel-based template matching
+        return;
         for (int i = 0; i < _staves.size(); ++i) {
 <<<<<<< HEAD
             OmrStaff* r = &_staves[i];
