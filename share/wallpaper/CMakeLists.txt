@@ -24,5 +24,8 @@ install(FILES
       paper3.png
       paper4.png
       paper5.png
+      paper6.png
+      paper7.png
+      background1.png
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}wallpaper
       )
