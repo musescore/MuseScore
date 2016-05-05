@@ -807,6 +807,8 @@ class Score : public QObject, public ScoreElement {
       PasteState cmdPaste(const QMimeData* ms, MuseScoreView* view);
       PasteState pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
+      bool useCC11();
+      void renderHairpins(EventMap* events);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);

@@ -350,7 +350,14 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   Chord* chord = static_cast<Chord*>(cr);
                   Staff* staff = chord->staff();
-                  int velocity = staff->velocities().velo(seg->tick());
+                  int velocity1 = staff->velocities().velo(seg->tick());
+                  int velocity2 = staff->velocities().velo(seg->tick()+seg->ticks()-1);
+                  int velocity=velocity1;
+
+                  if (staff->score()->useCC11() && velocity1<velocity2)
+                        velocity=velocity2;
+
+
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
@@ -1572,6 +1579,88 @@ int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOf
       return tick + lastPause;
       }
 
+bool Score::useCC11()
+      {
+      //TODO get some info from staff/instrument to eval if to use CC11 or not
+      return true;
+      }
+
+void Score::renderHairpins(EventMap* events)
+      {
+      // TODO might to be put inside the loop (because some Hairpins should be rendern and others shouldn't)
+      if (!useCC11())
+            return;
+
+      foreach (const RepeatSegment* rs, *repeatList()) {
+            int tickOffset = rs->utick - rs->tick;
+            int utick1 = rs->utick;
+            int tick1 = repeatList()->utick2tick(utick1);
+            int tick2 = tick1 + rs->len;
+
+            for (const auto& sp : _spanner.map()) {
+                  Spanner* s = sp.second;
+                  if(s->type() != Element::Type::HAIRPIN)
+                        continue;
+
+                  Hairpin* h = static_cast<Hairpin*>(s);
+
+                  int hairpinStartTick = h->tick();
+                  int hairpinEndTick = h->tick2();
+                  int staffIdx = h->staffIdx();
+                  Segment* curChordRest = tick2segment(hairpinStartTick,false,Segment::Type::ChordRest);
+                  int v;
+
+                  while (curChordRest && curChordRest->tick()<hairpinEndTick) {
+                        bool foundChord = false;
+                        for (v=0;v<VOICES;++v) {
+                           Element* curElement = curChordRest->elementAt(v+staffIdx*4);
+                           if (curElement && curElement->type()==Element::Type::CHORD) {
+                                  foundChord==true;
+                                  break;
+                                  }
+                           }
+
+                        if (!foundChord) {
+                              curChordRest=curChordRest->next1(Segment::Type::ChordRest);
+                              continue;
+                              }
+
+                        // as a start let modulation end on chordend-2 and have it reset on -1 (maybe not best option)
+                        int cc11EndTick = curChordRest->tick()+curChordRest->ticks()-2;
+
+                        int cc11Ticks = curChordRest->tick();
+                        int cc11Amount = h->staff()->velocities().velo(cc11EndTick) - h->staff()->velocities().velo(curChordRest->tick());
+
+                        int cc11start;
+                        if (cc11Amount>0)
+                              cc11start=127-cc11Amount;
+                        else
+                              cc11start=127;
+
+                        // Do a update for every signle little step - maybe that is a bit too much
+                        // TODO find out good update intervals!
+                        int tickInc = cc11Ticks/abs(cc11Amount);
+
+                        int idx = h->staff()->channel(s->tick(), v);
+                        int channel = h->part()->instrument(h->tick())->channel(idx)->channel;
+
+                        for(int i=0;i<abs(cc11Amount);++i) {
+                              NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, cc11start);
+                              events->insert(std::pair<int,NPlayEvent>(curChordRest->tick()+i*tickInc,cc11event));
+                              cc11start++;
+                              }
+
+
+                        NPlayEvent cc11lastevent = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, 127);
+                        events->insert(std::pair<int,NPlayEvent>(curChordRest->tick()+curChordRest->ticks()-1,cc11lastevent));
+
+                        curChordRest = curChordRest->next1(Segment::Type::ChordRest);
+                        }
+                  }
+
+            }
+      }
+
 //---------------------------------------------------------
 //   renderMidi
 //    export score to event list
@@ -1590,6 +1679,8 @@ void Score::renderMidi(EventMap* events)
       // create note & other events
       foreach (Staff* part, _staves)
             renderStaff(events, part);
+
+      renderHairpins(events);
 
       // create sustain pedal events
       renderSpanners(events, -1);
