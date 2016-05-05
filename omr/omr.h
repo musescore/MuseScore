@@ -63,7 +63,7 @@ class Omr {
       
 >>>>>>> 8d0232d... debug skeleton creation
     
-    enum ActionID { READ_PDF, INIT_PARMS, SYSTEM_IDENTIFICATION, ACTION_NUM};
+    enum ActionID { READ_PDF, INIT_PAGE, FINALIZE_PARMS, SYSTEM_IDENTIFICATION, ACTION_NUM};
     QList<QString>ActionNames;
 
    public:
@@ -93,7 +93,7 @@ class Omr {
       double systemDistance() const;
       Score* score() const                 { return _score;     }
       const QString& path() const          { return _path;      }
-      bool actions(int ID);
+      bool omrActions(int &ID, int page = 0);
 
 <<<<<<< HEAD
 <<<<<<< HEAD

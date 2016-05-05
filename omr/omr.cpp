@@ -84,7 +84,7 @@ Omr::Omr(const QString& p, Score* s)
       _score        = s;
       _path         = p;
       _ocr          = 0;
-          ActionNames = QList<QString>()<< QWidget::tr("Loading Pdf") << QWidget::tr("Initializing Staves") << QWidget::tr("Identifying Systems");
+      ActionNames = QList<QString>()<< QWidget::tr("Loading Pdf") << QWidget::tr("Initializing Staves") << QWidget::tr("Load Parameters") << QWidget::tr("Identifying Systems");
       initUtils();
       }
 
@@ -161,6 +161,7 @@ int Omr::pagesInDocument() const
 //---------------------------------------------------------
 
 bool Omr::readPdf()
+<<<<<<< HEAD
       {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -179,6 +180,13 @@ bool Omr::readPdf()
           //progress.setLabelText(QWidget::tr("Importing..."));
           progress.show();
           progress.setRange(0, ACTION_NUM);
+=======
+    {
+        QProgressDialog *progress = new QProgressDialog(QWidget::tr("Reading PDF..."), QWidget::tr("Cancel"), 0, 100, 0, Qt::FramelessWindowHint);
+          progress->setWindowModality(Qt::ApplicationModal);
+          progress->show();
+          progress->setRange(0, ACTION_NUM);
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
           
           
 <<<<<<< HEAD
@@ -190,6 +198,7 @@ bool Omr::readPdf()
             _ocr = new Ocr;
       _ocr->init();
 #endif
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -229,6 +238,36 @@ bool Omr::readPdf()
 =======
           progress.close();
 >>>>>>> 8d0232d... debug skeleton creation
+=======
+          int ID = READ_PDF;
+          int page = 0;
+          bool val;
+          while(ID < ACTION_NUM){
+              
+              if(ID != INIT_PAGE && ID != SYSTEM_IDENTIFICATION){
+                  page = 0;
+                  progress->setLabelText(ActionNames.at(ID+1) + " at Page" + QString::number(1));
+                  val = omrActions(ID);
+              }
+              else{
+                  progress->setLabelText(ActionNames.at(ID) + " at Page" + QString::number(page+1));
+                  val = omrActions(ID,page);
+                  page++;
+              }
+
+              if(!val || progress->wasCanceled()){
+                  progress->close();
+                  return false;
+              }
+              else{
+                  if(ID < ACTION_NUM) progress->setValue(ID);
+                  else progress->setValue(ACTION_NUM - 1);
+                  qApp->processEvents();
+              }
+          }
+          progress->close();
+        
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
           return true;
       }
 
@@ -236,7 +275,7 @@ bool Omr::readPdf()
 //   actions
 //---------------------------------------------------------
     
-bool Omr::actions(int ID)
+bool Omr::omrActions(int &ID, int page)
     {
         if(ID == READ_PDF){
             _doc = new Pdf();
@@ -253,8 +292,12 @@ bool Omr::actions(int ID)
                 page->setImage(image);
                 _pages.append(page);
             }
+            
+            _spatium = 15.0; //constant spatium, image will be rescaled according to this parameter
+            ID++;
             return true;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -278,8 +321,27 @@ bool Omr::actions(int ID)
 =======
             double spatium_constant = 15.0;
 >>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
+=======
+        else if(ID == INIT_PAGE){
+            //load one page and rescale
+            _pages[page]->read();
             
+            //do the rescaling of image here
+            int new_w = _pages[page]->image().width()*_spatium/_pages[page]->spatium();
+            int new_h = _pages[page]->image().height()*_spatium/_pages[page]->spatium();
+            QImage image = _pages[page]->image().scaled(new_w ,new_h, Qt::KeepAspectRatio);
+            _pages[page]->setImage(image);
+            _pages[page]->read();
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
+            
+            if(page == _pages.size()-1) ID++;
+            return true;
+        }
+        else if(ID == FINALIZE_PARMS){
+            int n = _pages.size();
+            double w = 0;
             for (int i = 0; i < n; ++i) {
+<<<<<<< HEAD
                 _pages[i]->read();
                 //            if (_pages[i]->systems().size() > 0) {
                 //                sp += _pages[i]->spatium();
@@ -322,12 +384,14 @@ bool Omr::actions(int ID)
                 QImage image = _pages[i]->image().scaled(new_w ,new_h, Qt::KeepAspectRatio);
                 _pages[i]->setImage(image);
                 _pages[i]->read();
+=======
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
                 w  += _pages[i]->width();
             }
-            _spatium = spatium_constant; //sp / pages;
             w       /= n;
             _dpmm    = w / 210.0;            // PaperSize A4
             
+<<<<<<< HEAD
             
             
             // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
@@ -335,6 +399,8 @@ bool Omr::actions(int ID)
             quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
 >>>>>>> d065ed4... add progress dialog to the omr process
 =======
+=======
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
             //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
             quartheadPattern  = new Pattern(_score, "solid_note_head");
 >>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
@@ -354,7 +420,10 @@ bool Omr::actions(int ID)
             timesigPattern[7] = new Pattern(_score, SymId::timeSig7, _spatium);
             timesigPattern[8] = new Pattern(_score, SymId::timeSig8, _spatium);
             timesigPattern[9] = new Pattern(_score, SymId::timeSig9, _spatium);
+            
+            ID++;
             return true;
+<<<<<<< HEAD
 <<<<<<< HEAD
         }
         else if(ID == SYSTEM_IDENTIFICATION){
@@ -463,6 +532,13 @@ bool Omr::actions(int ID)
 //                }
 //            }
 >>>>>>> 21738fc... debugging omr
+=======
+            
+        }
+        else if(ID == SYSTEM_IDENTIFICATION){
+            _pages[page]->identifySystems();
+            if(page == _pages.size()-1) ID++;
+>>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
             return true;
 >>>>>>> d065ed4... add progress dialog to the omr process
         }
