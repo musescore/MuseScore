@@ -81,7 +81,7 @@ void InstrumentsDialog::on_saveButton_clicked()
          this,
          tr("MuseScore: Save Instrument List"),
          ".",
-         tr("MuseScore Instruments (*.xml)")
+         tr("MuseScore Instruments") + " (*.xml)"
          );
       if (name.isEmpty())
             return;
@@ -123,7 +123,7 @@ void InstrumentsDialog::on_loadButton_clicked()
       QString fn = QFileDialog::getOpenFileName(
          this, tr("MuseScore: Load Instrument List"),
           mscoreGlobalShare + "/templates",
-         tr("MuseScore Instruments (*.xml)")
+         tr("MuseScore Instruments") + " (*.xml)"
          );
       if (fn.isEmpty())
             return;

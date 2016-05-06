@@ -68,7 +68,7 @@ AlbumManager::AlbumManager(QWidget* parent)
 void AlbumManager::addClicked()
       {
       QStringList files = mscore->getOpenScoreNames(
-         tr("MuseScore Files (*.mscz *.mscx)"),
+         tr("MuseScore Files") + " (*.mscz *.mscx)",
          tr("MuseScore: Add Score")
          );
       if (files.isEmpty())
@@ -94,7 +94,7 @@ void AlbumManager::addClicked()
 void AlbumManager::loadClicked()
       {
       QStringList files = mscore->getOpenScoreNames(
-         tr("MuseScore Album Files (*.album)"),
+         tr("MuseScore Album Files") + " (*.album)",
          tr("MuseScore: Load Album")
          );
       if (files.isEmpty())
@@ -125,7 +125,7 @@ void AlbumManager::createScoreClicked()
       if (album) {
             if (album->scores().isEmpty())
                    return;
-            QString filter = QWidget::tr("MuseScore File (*.mscz)");
+            QString filter = QWidget::tr("MuseScore File") + " (*.mscz)";
             QSettings settings;
             if (mscore->lastSaveDirectory.isEmpty())
                   mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
@@ -302,7 +302,7 @@ void AlbumManager::writeAlbum()
             QString fn = mscore->getSaveScoreName(
                QWidget::tr("MuseScore: Save Album"),
                albumName,
-               QWidget::tr("MuseScore Files (*.album)")
+               QWidget::tr("MuseScore Files") + " (*.album)"
                );
             if (fn.isEmpty()) {
                   album->setDirty(false);

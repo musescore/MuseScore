@@ -76,9 +76,7 @@ const PaperSize paperSizes[] = {
 
 const PaperSize* getPaperSize(const QString& name)
       {
-      for (int i = 0;;++i) {
-            if (paperSizes[i].name == 0)
-                  break;
+      for (int i = 0; paperSizes[i].name; ++i) {
             if (name == paperSizes[i].name)
                   return &paperSizes[i];
             }
@@ -107,9 +105,7 @@ const PaperSize* getPaperSize(const qreal wi, const qreal hi)
       {
       if (wi < minSize || hi < minSize)
             return &paperSizes[0];
-      for (int i = 0;;++i) {
-            if (paperSizes[i].name == 0)
-                  break;
+      for (int i = 0; paperSizes[i].name; ++i) {
             if (sizeError(wi, paperSizes[i].w) < maxError
                && sizeError(hi, paperSizes[i].h) < maxError)
                   return &paperSizes[i];
