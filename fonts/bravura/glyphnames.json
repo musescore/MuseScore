@@ -1143,6 +1143,14 @@
         "codepoint": "U+E445", 
         "description": "Bakiye (sharp)"
     }, 
+    "accidentalBracketLeft": {
+        "codepoint": "U+E26C", 
+        "description": "Accidental bracket, left"
+    }, 
+    "accidentalBracketRight": {
+        "codepoint": "U+E26D", 
+        "description": "Accidental bracket, right"
+    }, 
     "accidentalBuyukMucennebFlat": {
         "codepoint": "U+E440", 
         "description": "B\u00fcy\u00fck m\u00fccenneb (flat)"
@@ -1171,6 +1179,10 @@
         "codepoint": "U+E2EC", 
         "description": "Combining lower by one 31-limit schisma"
     }, 
+    "accidentalCombiningLower53LimitComma": {
+        "codepoint": "U+E2F7", 
+        "description": "Combining lower by one 53-limit comma"
+    }, 
     "accidentalCombiningOpenCurlyBrace": {
         "codepoint": "U+E2EE", 
         "description": "Combining open curly brace"
@@ -1191,6 +1203,10 @@
         "codepoint": "U+E2ED", 
         "description": "Combining raise by one 31-limit schisma"
     }, 
+    "accidentalCombiningRaise53LimitComma": {
+        "codepoint": "U+E2F8", 
+        "description": "Combining raise by one 53-limit comma"
+    }, 
     "accidentalCommaSlashDown": {
         "codepoint": "U+E47A", 
         "description": "Syntonic/Didymus comma (80:81) down (Bosanquet)"
@@ -1203,6 +1219,10 @@
         "alternateCodepoint": "U+1D12B", 
         "codepoint": "U+E264", 
         "description": "Double flat"
+    }, 
+    "accidentalDoubleFlatArabic": {
+        "codepoint": "U+ED30", 
+        "description": "Arabic double flat"
     }, 
     "accidentalDoubleFlatEqualTempered": {
         "codepoint": "U+E2F0", 
@@ -1245,6 +1265,10 @@
         "codepoint": "U+E263", 
         "description": "Double sharp"
     }, 
+    "accidentalDoubleSharpArabic": {
+        "codepoint": "U+ED38", 
+        "description": "Arabic double sharp"
+    }, 
     "accidentalDoubleSharpEqualTempered": {
         "codepoint": "U+E2F4", 
         "description": "Double sharp equal tempered semitone"
@@ -1272,6 +1296,18 @@
     "accidentalDoubleSharpTwoArrowsUp": {
         "codepoint": "U+E2D3", 
         "description": "Double sharp raised by two syntonic commas"
+    }, 
+    "accidentalEnharmonicAlmostEqualTo": {
+        "codepoint": "U+E2FA", 
+        "description": "Enharmonically reinterpret accidental almost equal to"
+    }, 
+    "accidentalEnharmonicEquals": {
+        "codepoint": "U+E2FB", 
+        "description": "Enharmonically reinterpret accidental equals"
+    }, 
+    "accidentalEnharmonicTilde": {
+        "codepoint": "U+E2F9", 
+        "description": "Enharmonically reinterpret accidental tilde"
     }, 
     "accidentalFilledReversedFlatAndFlat": {
         "codepoint": "U+E296", 
@@ -1302,13 +1338,21 @@
         "description": "Five-quarter-tones sharp"
     }, 
     "accidentalFlat": {
-        "alternateCodepoint": "266D", 
+        "alternateCodepoint": "U+266D", 
         "codepoint": "U+E260", 
         "description": "Flat"
+    }, 
+    "accidentalFlatArabic": {
+        "codepoint": "U+ED32", 
+        "description": "Arabic half-tone flat"
     }, 
     "accidentalFlatEqualTempered": {
         "codepoint": "U+E2F1", 
         "description": "Flat equal tempered semitone"
+    }, 
+    "accidentalFlatLoweredStockhausen": {
+        "codepoint": "U+ED53", 
+        "description": "Lowered flat (Stockhausen)"
     }, 
     "accidentalFlatOneArrowDown": {
         "codepoint": "U+E2C1", 
@@ -1317,6 +1361,18 @@
     "accidentalFlatOneArrowUp": {
         "codepoint": "U+E2C6", 
         "description": "Flat raised by one syntonic comma"
+    }, 
+    "accidentalFlatRaisedStockhausen": {
+        "codepoint": "U+ED52", 
+        "description": "Raised flat (Stockhausen)"
+    }, 
+    "accidentalFlatRepeatedLineStockhausen": {
+        "codepoint": "U+ED5C", 
+        "description": "Repeated flat, note on line (Stockhausen)"
+    }, 
+    "accidentalFlatRepeatedSpaceStockhausen": {
+        "codepoint": "U+ED5B", 
+        "description": "Repeated flat, note in space (Stockhausen)"
     }, 
     "accidentalFlatThreeArrowsDown": {
         "codepoint": "U+E2D5", 
@@ -1418,6 +1474,10 @@
         "codepoint": "U+E2E0", 
         "description": "Lower by two septimal commas"
     }, 
+    "accidentalLoweredStockhausen": {
+        "codepoint": "U+ED51", 
+        "description": "Lowered (Stockhausen)"
+    }, 
     "accidentalNarrowReversedFlat": {
         "codepoint": "U+E284", 
         "description": "Narrow reversed flat(quarter-tone flat)"
@@ -1427,9 +1487,13 @@
         "description": "Narrow reversed flat and flat(three-quarter-tones flat)"
     }, 
     "accidentalNatural": {
-        "alternateCodepoint": "266E", 
+        "alternateCodepoint": "U+266E", 
         "codepoint": "U+E261", 
         "description": "Natural"
+    }, 
+    "accidentalNaturalArabic": {
+        "codepoint": "U+ED34", 
+        "description": "Arabic natural"
     }, 
     "accidentalNaturalEqualTempered": {
         "codepoint": "U+E2F2", 
@@ -1439,6 +1503,10 @@
         "codepoint": "U+E267", 
         "description": "Natural flat"
     }, 
+    "accidentalNaturalLoweredStockhausen": {
+        "codepoint": "U+ED55", 
+        "description": "Lowered natural (Stockhausen)"
+    }, 
     "accidentalNaturalOneArrowDown": {
         "codepoint": "U+E2C2", 
         "description": "Natural lowered by one syntonic comma"
@@ -1446,6 +1514,10 @@
     "accidentalNaturalOneArrowUp": {
         "codepoint": "U+E2C7", 
         "description": "Natural raised by one syntonic comma"
+    }, 
+    "accidentalNaturalRaisedStockhausen": {
+        "codepoint": "U+ED54", 
+        "description": "Raised natural (Stockhausen)"
     }, 
     "accidentalNaturalReversed": {
         "codepoint": "U+E482", 
@@ -1479,6 +1551,22 @@
         "codepoint": "U+E29B", 
         "description": "One and a half sharps with arrow up"
     }, 
+    "accidentalOneQuarterToneFlatFerneyhough": {
+        "codepoint": "U+E48F", 
+        "description": "One-quarter-tone flat (Ferneyhough)"
+    }, 
+    "accidentalOneQuarterToneFlatStockhausen": {
+        "codepoint": "U+ED59", 
+        "description": "One-quarter-tone flat (Stockhausen)"
+    }, 
+    "accidentalOneQuarterToneSharpFerneyhough": {
+        "codepoint": "U+E48E", 
+        "description": "One-quarter-tone sharp (Ferneyhough)"
+    }, 
+    "accidentalOneQuarterToneSharpStockhausen": {
+        "codepoint": "U+ED58", 
+        "description": "One-quarter-tone sharp (Stockhausen)"
+    }, 
     "accidentalOneThirdToneFlatFerneyhough": {
         "codepoint": "U+E48B", 
         "description": "One-third-tone flat (Ferneyhough)"
@@ -1495,10 +1583,22 @@
         "codepoint": "U+E26B", 
         "description": "Accidental parenthesis, right"
     }, 
+    "accidentalQuarterFlatEqualTempered": {
+        "codepoint": "U+E2F5", 
+        "description": "Lower by one equal tempered quarter-tone"
+    }, 
+    "accidentalQuarterSharpEqualTempered": {
+        "codepoint": "U+E2F6", 
+        "description": "Raise by one equal tempered quarter tone"
+    }, 
     "accidentalQuarterToneFlat4": {
         "alternateCodepoint": "U+1D133", 
         "codepoint": "U+E47F", 
         "description": "Quarter-tone flat"
+    }, 
+    "accidentalQuarterToneFlatArabic": {
+        "codepoint": "U+ED33", 
+        "description": "Arabic quarter-tone flat"
     }, 
     "accidentalQuarterToneFlatArrowUp": {
         "alternateCodepoint": "U+1D12C", 
@@ -1530,6 +1630,10 @@
         "alternateCodepoint": "U+1D132", 
         "codepoint": "U+E47E", 
         "description": "Quarter-tone sharp"
+    }, 
+    "accidentalQuarterToneSharpArabic": {
+        "codepoint": "U+ED35", 
+        "description": "Arabic quarter-tone sharp"
     }, 
     "accidentalQuarterToneSharpArrowDown": {
         "alternateCodepoint": "U+1D131", 
@@ -1569,6 +1673,10 @@
         "codepoint": "U+E2E1", 
         "description": "Raise by two septimal commas"
     }, 
+    "accidentalRaisedStockhausen": {
+        "codepoint": "U+ED50", 
+        "description": "Raised (Stockhausen)"
+    }, 
     "accidentalReversedFlatAndFlatArrowDown": {
         "codepoint": "U+E295", 
         "description": "Reversed flat and flat with arrow down"
@@ -1586,13 +1694,21 @@
         "description": "Reversed flat with arrow up"
     }, 
     "accidentalSharp": {
-        "alternateCodepoint": "266F", 
+        "alternateCodepoint": "U+266F", 
         "codepoint": "U+E262", 
         "description": "Sharp"
+    }, 
+    "accidentalSharpArabic": {
+        "codepoint": "U+ED36", 
+        "description": "Arabic half-tone sharp"
     }, 
     "accidentalSharpEqualTempered": {
         "codepoint": "U+E2F3", 
         "description": "Sharp equal tempered semitone"
+    }, 
+    "accidentalSharpLoweredStockhausen": {
+        "codepoint": "U+ED57", 
+        "description": "Lowered sharp (Stockhausen)"
     }, 
     "accidentalSharpOneArrowDown": {
         "codepoint": "U+E2C3", 
@@ -1605,6 +1721,18 @@
     "accidentalSharpOneHorizontalStroke": {
         "codepoint": "U+E473", 
         "description": "One or three quarter tones sharp"
+    }, 
+    "accidentalSharpRaisedStockhausen": {
+        "codepoint": "U+ED56", 
+        "description": "Raised sharp (Stockhausen)"
+    }, 
+    "accidentalSharpRepeatedLineStockhausen": {
+        "codepoint": "U+ED5E", 
+        "description": "Repeated sharp, note on line (Stockhausen)"
+    }, 
+    "accidentalSharpRepeatedSpaceStockhausen": {
+        "codepoint": "U+ED5D", 
+        "description": "Repeated sharp, note in space (Stockhausen)"
     }, 
     "accidentalSharpReversed": {
         "codepoint": "U+E481", 
@@ -1666,6 +1794,10 @@
         "codepoint": "U+E476", 
         "description": "Byzantine-style Bu\u0308yu\u0308k mu\u0308cenneb sharp (Tavener)"
     }, 
+    "accidentalThreeQuarterTonesFlatArabic": {
+        "codepoint": "U+ED31", 
+        "description": "Arabic three-quarter-tones flat"
+    }, 
     "accidentalThreeQuarterTonesFlatArrowDown": {
         "alternateCodepoint": "U+1D12D", 
         "codepoint": "U+E271", 
@@ -1691,6 +1823,10 @@
         "codepoint": "U+E281", 
         "description": "Reversed flat and flat (three-quarter-tones flat) (Zimmermann)"
     }, 
+    "accidentalThreeQuarterTonesSharpArabic": {
+        "codepoint": "U+ED37", 
+        "description": "Arabic three-quarter-tones sharp"
+    }, 
     "accidentalThreeQuarterTonesSharpArrowDown": {
         "codepoint": "U+E277", 
         "description": "Three-quarter-tones sharp"
@@ -1707,6 +1843,10 @@
     "accidentalThreeQuarterTonesSharpStein": {
         "codepoint": "U+E283", 
         "description": "One and a half sharps (three-quarter-tones sharp) (Stein)"
+    }, 
+    "accidentalThreeQuarterTonesSharpStockhausen": {
+        "codepoint": "U+ED5A", 
+        "description": "Three-quarter-tones sharp (Stockhausen)"
     }, 
     "accidentalTripleFlat": {
         "codepoint": "U+E266", 
@@ -2133,6 +2273,38 @@
         "codepoint": "U+E4BD", 
         "description": "Marcato-tenuto below"
     }, 
+    "articSoftAccentAbove": {
+        "codepoint": "U+ED40", 
+        "description": "Soft accent above"
+    }, 
+    "articSoftAccentBelow": {
+        "codepoint": "U+ED41", 
+        "description": "Soft accent below"
+    }, 
+    "articSoftAccentStaccatoAbove": {
+        "codepoint": "U+ED42", 
+        "description": "Soft accent-staccato above"
+    }, 
+    "articSoftAccentStaccatoBelow": {
+        "codepoint": "U+ED43", 
+        "description": "Soft accent-staccato below"
+    }, 
+    "articSoftAccentTenutoAbove": {
+        "codepoint": "U+ED44", 
+        "description": "Soft accent-tenuto above"
+    }, 
+    "articSoftAccentTenutoBelow": {
+        "codepoint": "U+ED45", 
+        "description": "Soft accent-tenuto below"
+    }, 
+    "articSoftAccentTenutoStaccatoAbove": {
+        "codepoint": "U+ED46", 
+        "description": "Soft accent-tenuto-staccato above"
+    }, 
+    "articSoftAccentTenutoStaccatoBelow": {
+        "codepoint": "U+ED47", 
+        "description": "Soft accent-tenuto-staccato below"
+    }, 
     "articStaccatissimoAbove": {
         "alternateCodepoint": "U+1D17E", 
         "codepoint": "U+E4A6", 
@@ -2470,6 +2642,10 @@
         "alternateCodepoint": "U+1D188", 
         "codepoint": "U+E5E2", 
         "description": "Smear"
+    }, 
+    "brassValveTrill": {
+        "codepoint": "U+E5EF", 
+        "description": "Valve trill"
     }, 
     "breathMarkComma": {
         "alternateCodepoint": "U+1D112", 
@@ -2875,6 +3051,10 @@
         "codepoint": "U+E890", 
         "description": "Strong beat or cue"
     }, 
+    "conductorUnconducted": {
+        "codepoint": "U+E89A", 
+        "description": "Unconducted/free passages"
+    }, 
     "conductorWeakBeat": {
         "codepoint": "U+E893", 
         "description": "Weak beat or cue"
@@ -3051,6 +3231,18 @@
         "codepoint": "U+E5F1", 
         "description": "Double-tongue below"
     }, 
+    "dynamicCombinedSeparatorColon": {
+        "codepoint": "U+E546", 
+        "description": "Colon separator for combined dynamics"
+    }, 
+    "dynamicCombinedSeparatorHyphen": {
+        "codepoint": "U+E547", 
+        "description": "Hyphen separator for combined dynamics"
+    }, 
+    "dynamicCombinedSeparatorSpace": {
+        "codepoint": "U+E548", 
+        "description": "Space separator for combined dynamics"
+    }, 
     "dynamicCrescendoHairpin": {
         "alternateCodepoint": "U+1D192", 
         "codepoint": "U+E53E", 
@@ -3093,6 +3285,22 @@
     "dynamicForzando": {
         "codepoint": "U+E535", 
         "description": "Forzando"
+    }, 
+    "dynamicHairpinBracketLeft": {
+        "codepoint": "U+E544", 
+        "description": "Left bracket (for hairpins)"
+    }, 
+    "dynamicHairpinBracketRight": {
+        "codepoint": "U+E545", 
+        "description": "Right bracket (for hairpins)"
+    }, 
+    "dynamicHairpinParenthesisLeft": {
+        "codepoint": "U+E542", 
+        "description": "Left parenthesis (for hairpins)"
+    }, 
+    "dynamicHairpinParenthesisRight": {
+        "codepoint": "U+E543", 
+        "description": "Right parenthesis (for hairpins)"
     }, 
     "dynamicMF": {
         "codepoint": "U+E52D", 
@@ -3616,6 +3824,10 @@
         "codepoint": "U+EA5D", 
         "description": "Figured bass 7"
     }, 
+    "figbass7Diminished": {
+        "codepoint": "U+ECC0", 
+        "description": "Figured bass 7 diminished"
+    }, 
     "figbass7Raised1": {
         "codepoint": "U+EA5E", 
         "description": "Figured bass 7 raised by half-step"
@@ -3683,6 +3895,86 @@
     "figbassSharp": {
         "codepoint": "U+EA66", 
         "description": "Figured bass sharp"
+    }, 
+    "fingering0": {
+        "codepoint": "U+ED10", 
+        "description": "Fingering 0 (open string)"
+    }, 
+    "fingering1": {
+        "codepoint": "U+ED11", 
+        "description": "Fingering 1 (thumb)"
+    }, 
+    "fingering2": {
+        "codepoint": "U+ED12", 
+        "description": "Fingering 2 (index finger)"
+    }, 
+    "fingering3": {
+        "codepoint": "U+ED13", 
+        "description": "Fingering 3 (middle finger)"
+    }, 
+    "fingering4": {
+        "codepoint": "U+ED14", 
+        "description": "Fingering 4 (ring finger)"
+    }, 
+    "fingering5": {
+        "codepoint": "U+ED15", 
+        "description": "Fingering 5 (little finger)"
+    }, 
+    "fingeringALower": {
+        "codepoint": "U+ED1B", 
+        "description": "Fingering a (anular; right-hand ring finger for guitar)"
+    }, 
+    "fingeringCLower": {
+        "codepoint": "U+ED1C", 
+        "description": "Fingering c (right-hand little finger for guitar)"
+    }, 
+    "fingeringELower": {
+        "codepoint": "U+ED1E", 
+        "description": "Fingering e (right-hand little finger for guitar)"
+    }, 
+    "fingeringILower": {
+        "codepoint": "U+ED19", 
+        "description": "Fingering i (indicio; right-hand index finger for guitar)"
+    }, 
+    "fingeringMLower": {
+        "codepoint": "U+ED1A", 
+        "description": "Fingering m (medio; right-hand middle finger for guitar)"
+    }, 
+    "fingeringMultipleNotes": {
+        "codepoint": "U+ED23", 
+        "description": "Multiple notes played by thumb or single finger"
+    }, 
+    "fingeringOLower": {
+        "codepoint": "U+ED1F", 
+        "description": "Fingering o (right-hand little finger for guitar)"
+    }, 
+    "fingeringPLower": {
+        "codepoint": "U+ED17", 
+        "description": "Fingering p (pulgar; right-hand thumb for guitar)"
+    }, 
+    "fingeringSubstitutionAbove": {
+        "codepoint": "U+ED20", 
+        "description": "Finger substitution above"
+    }, 
+    "fingeringSubstitutionBelow": {
+        "codepoint": "U+ED21", 
+        "description": "Finger substitution below"
+    }, 
+    "fingeringSubstitutionDash": {
+        "codepoint": "U+ED22", 
+        "description": "Finger substitution dash"
+    }, 
+    "fingeringTLower": {
+        "codepoint": "U+ED18", 
+        "description": "Fingering t (right-hand thumb for guitar)"
+    }, 
+    "fingeringTUpper": {
+        "codepoint": "U+ED16", 
+        "description": "Fingering T (left-hand thumb for guitar)"
+    }, 
+    "fingeringXLower": {
+        "codepoint": "U+ED1D", 
+        "description": "Fingering x (right-hand little finger for guitar)"
     }, 
     "flag1024thDown": {
         "codepoint": "U+E24F", 
@@ -3839,6 +4131,10 @@
         "codepoint": "U+EA78", 
         "description": "Function theory 8"
     }, 
+    "functionFUpper": {
+        "codepoint": "U+EA99", 
+        "description": "Function theory F"
+    }, 
     "functionFive": {
         "codepoint": "U+EA75", 
         "description": "Function theory 5"
@@ -3859,9 +4155,41 @@
         "codepoint": "U+EA7C", 
         "description": "Function theory greater than"
     }, 
+    "functionILower": {
+        "codepoint": "U+EA9B", 
+        "description": "Function theory i"
+    }, 
+    "functionIUpper": {
+        "codepoint": "U+EA9A", 
+        "description": "Function theory I"
+    }, 
+    "functionKLower": {
+        "codepoint": "U+EA9D", 
+        "description": "Function theory k"
+    }, 
+    "functionKUpper": {
+        "codepoint": "U+EA9C", 
+        "description": "Function theory K"
+    }, 
+    "functionLLower": {
+        "codepoint": "U+EA9F", 
+        "description": "Function theory l"
+    }, 
+    "functionLUpper": {
+        "codepoint": "U+EA9E", 
+        "description": "Function theory L"
+    }, 
     "functionLessThan": {
         "codepoint": "U+EA7A", 
         "description": "Function theory less than"
+    }, 
+    "functionMLower": {
+        "codepoint": "U+ED01", 
+        "description": "Function theory m"
+    }, 
+    "functionMUpper": {
+        "codepoint": "U+ED00", 
+        "description": "Function theory M"
     }, 
     "functionMinus": {
         "codepoint": "U+EA7B", 
@@ -3874,6 +4202,10 @@
     "functionNUpper": {
         "codepoint": "U+EA85", 
         "description": "Function theory N"
+    }, 
+    "functionNUpperSuperscript": {
+        "codepoint": "U+ED02", 
+        "description": "Function theory superscript N"
     }, 
     "functionNine": {
         "codepoint": "U+EA79", 
@@ -3902,6 +4234,10 @@
     "functionPlus": {
         "codepoint": "U+EA98", 
         "description": "Function theory prefix plus"
+    }, 
+    "functionRLower": {
+        "codepoint": "U+ED03", 
+        "description": "Function theory r"
     }, 
     "functionRepetition1": {
         "codepoint": "U+EA95", 
@@ -4069,6 +4405,14 @@
     "graceNoteSlashStemUp": {
         "codepoint": "U+E564", 
         "description": "Slash for stem up grace note"
+    }, 
+    "guitarBarreFull": {
+        "codepoint": "U+E848", 
+        "description": "Full barr\u00e9"
+    }, 
+    "guitarBarreHalf": {
+        "codepoint": "U+E849", 
+        "description": "Half barr\u00e9"
     }, 
     "guitarClosePedal": {
         "codepoint": "U+E83F", 
@@ -4274,6 +4618,22 @@
         "codepoint": "U+E696", 
         "description": "Descending aeolian chords (Salzedo)"
     }, 
+    "harpSalzedoDampAbove": {
+        "codepoint": "U+E69A", 
+        "description": "Damp above (Salzedo)"
+    }, 
+    "harpSalzedoDampBelow": {
+        "codepoint": "U+E699", 
+        "description": "Damp below (Salzedo)"
+    }, 
+    "harpSalzedoDampBothHands": {
+        "codepoint": "U+E698", 
+        "description": "Damp with both hands (Salzedo)"
+    }, 
+    "harpSalzedoDampLowStrings": {
+        "codepoint": "U+E697", 
+        "description": "Damp only low strings (Salzedo)"
+    }, 
     "harpSalzedoFluidicSoundsLeft": {
         "codepoint": "U+E68D", 
         "description": "Fluidic sounds, left hand (Salzedo)"
@@ -4282,9 +4642,17 @@
         "codepoint": "U+E68E", 
         "description": "Fluidic sounds, right hand (Salzedo)"
     }, 
+    "harpSalzedoIsolatedSounds": {
+        "codepoint": "U+E69C", 
+        "description": "Isolated sounds (Salzedo)"
+    }, 
     "harpSalzedoMetallicSounds": {
         "codepoint": "U+E688", 
         "description": "Metallic sounds (Salzedo)"
+    }, 
+    "harpSalzedoMetallicSoundsOneString": {
+        "codepoint": "U+E69B", 
+        "description": "Metallic sounds, one string (Salzedo)"
     }, 
     "harpSalzedoMuffleTotally": {
         "codepoint": "U+E68C", 
@@ -4301,6 +4669,10 @@
     "harpSalzedoSlideWithSuppleness": {
         "codepoint": "U+E684", 
         "description": "Slide with suppleness (Salzedo)"
+    }, 
+    "harpSalzedoSnareDrum": {
+        "codepoint": "U+E69D", 
+        "description": "Snare drum effect (Salzedo)"
     }, 
     "harpSalzedoTamTamSounds": {
         "codepoint": "U+E689", 
@@ -4407,9 +4779,21 @@
         "codepoint": "U+E663", 
         "description": "Pedal heel 3 (Davis)"
     }, 
+    "keyboardPedalHeelToToe": {
+        "codepoint": "U+E674", 
+        "description": "Pedal heel to toe"
+    }, 
     "keyboardPedalHeelToe": {
         "codepoint": "U+E666", 
         "description": "Pedal heel or toe"
+    }, 
+    "keyboardPedalHookEnd": {
+        "codepoint": "U+E673", 
+        "description": "Pedal hook end"
+    }, 
+    "keyboardPedalHookStart": {
+        "codepoint": "U+E672", 
+        "description": "Pedal hook start"
     }, 
     "keyboardPedalHyphen": {
         "codepoint": "U+E658", 
@@ -4439,6 +4823,10 @@
     "keyboardPedalToe2": {
         "codepoint": "U+E665", 
         "description": "Pedal toe 2"
+    }, 
+    "keyboardPedalToeToHeel": {
+        "codepoint": "U+E675", 
+        "description": "Pedal toe to heel"
     }, 
     "keyboardPedalUp": {
         "alternateCodepoint": "U+1D1AF", 
@@ -6221,6 +6609,10 @@
         "codepoint": "U+E1C9", 
         "description": "Arrowhead left black (Funk 7-shape re)"
     }, 
+    "noteShapeArrowheadLeftDoubleWhole": {
+        "codepoint": "U+ECDC", 
+        "description": "Arrowhead left double whole (Funk 7-shape re)"
+    }, 
     "noteShapeArrowheadLeftWhite": {
         "codepoint": "U+E1C8", 
         "description": "Arrowhead left white (Funk 7-shape re)"
@@ -6228,6 +6620,10 @@
     "noteShapeDiamondBlack": {
         "codepoint": "U+E1B9", 
         "description": "Diamond black (4-shape mi; 7-shape mi)"
+    }, 
+    "noteShapeDiamondDoubleWhole": {
+        "codepoint": "U+ECD4", 
+        "description": "Diamond double whole (4-shape mi; 7-shape mi)"
     }, 
     "noteShapeDiamondWhite": {
         "codepoint": "U+E1B8", 
@@ -6237,6 +6633,10 @@
         "codepoint": "U+E1C5", 
         "description": "Isosceles triangle black (Walker 7-shape ti)"
     }, 
+    "noteShapeIsoscelesTriangleDoubleWhole": {
+        "codepoint": "U+ECDA", 
+        "description": "Isosceles triangle double whole (Walker 7-shape ti)"
+    }, 
     "noteShapeIsoscelesTriangleWhite": {
         "codepoint": "U+E1C4", 
         "description": "Isosceles triangle white (Walker 7-shape ti)"
@@ -6244,6 +6644,10 @@
     "noteShapeKeystoneBlack": {
         "codepoint": "U+E1C1", 
         "description": "Inverted keystone black (Walker 7-shape do)"
+    }, 
+    "noteShapeKeystoneDoubleWhole": {
+        "codepoint": "U+ECD8", 
+        "description": "Inverted keystone double whole (Walker 7-shape do)"
     }, 
     "noteShapeKeystoneWhite": {
         "codepoint": "U+E1C0", 
@@ -6253,9 +6657,17 @@
         "codepoint": "U+E1BD", 
         "description": "Moon black (Aikin 7-shape re)"
     }, 
+    "noteShapeMoonDoubleWhole": {
+        "codepoint": "U+ECD6", 
+        "description": "Moon double whole (Aikin 7-shape re)"
+    }, 
     "noteShapeMoonLeftBlack": {
         "codepoint": "U+E1C7", 
         "description": "Moon left black (Funk 7-shape do)"
+    }, 
+    "noteShapeMoonLeftDoubleWhole": {
+        "codepoint": "U+ECDB", 
+        "description": "Moon left double whole (Funk 7-shape do)"
     }, 
     "noteShapeMoonLeftWhite": {
         "codepoint": "U+E1C6", 
@@ -6269,6 +6681,10 @@
         "codepoint": "U+E1C3", 
         "description": "Quarter moon black (Walker 7-shape re)"
     }, 
+    "noteShapeQuarterMoonDoubleWhole": {
+        "codepoint": "U+ECD9", 
+        "description": "Quarter moon double whole (Walker 7-shape re)"
+    }, 
     "noteShapeQuarterMoonWhite": {
         "codepoint": "U+E1C2", 
         "description": "Quarter moon white (Walker 7-shape re)"
@@ -6276,6 +6692,10 @@
     "noteShapeRoundBlack": {
         "codepoint": "U+E1B1", 
         "description": "Round black (4-shape sol; 7-shape so)"
+    }, 
+    "noteShapeRoundDoubleWhole": {
+        "codepoint": "U+ECD0", 
+        "description": "Round double whole (4-shape sol; 7-shape so)"
     }, 
     "noteShapeRoundWhite": {
         "codepoint": "U+E1B0", 
@@ -6285,6 +6705,10 @@
         "codepoint": "U+E1B3", 
         "description": "Square black (4-shape la; Aikin 7-shape la)"
     }, 
+    "noteShapeSquareDoubleWhole": {
+        "codepoint": "U+ECD1", 
+        "description": "Square double whole (4-shape la; Aikin 7-shape la)"
+    }, 
     "noteShapeSquareWhite": {
         "codepoint": "U+E1B2", 
         "description": "Square white (4-shape la; Aikin 7-shape la)"
@@ -6292,6 +6716,10 @@
     "noteShapeTriangleLeftBlack": {
         "codepoint": "U+E1B7", 
         "description": "Triangle left black (stem up; 4-shape fa; 7-shape fa)"
+    }, 
+    "noteShapeTriangleLeftDoubleWhole": {
+        "codepoint": "U+ECD3", 
+        "description": "Triangle left double whole (stem up; 4-shape fa; 7-shape fa)"
     }, 
     "noteShapeTriangleLeftWhite": {
         "codepoint": "U+E1B6", 
@@ -6301,6 +6729,10 @@
         "codepoint": "U+E1B5", 
         "description": "Triangle right black (stem down; 4-shape fa; 7-shape fa)"
     }, 
+    "noteShapeTriangleRightDoubleWhole": {
+        "codepoint": "U+ECD2", 
+        "description": "Triangle right double whole (stem down; 4-shape fa; 7-shape fa)"
+    }, 
     "noteShapeTriangleRightWhite": {
         "codepoint": "U+E1B4", 
         "description": "Triangle right white (stem down; 4-shape fa; 7-shape fa)"
@@ -6309,9 +6741,17 @@
         "codepoint": "U+E1BF", 
         "description": "Triangle-round black (Aikin 7-shape ti)"
     }, 
+    "noteShapeTriangleRoundDoubleWhole": {
+        "codepoint": "U+ECD7", 
+        "description": "Triangle-round white (Aikin 7-shape ti)"
+    }, 
     "noteShapeTriangleRoundLeftBlack": {
         "codepoint": "U+E1CB", 
         "description": "Triangle-round left black (Funk 7-shape ti)"
+    }, 
+    "noteShapeTriangleRoundLeftDoubleWhole": {
+        "codepoint": "U+ECDD", 
+        "description": "Triangle-round left double whole (Funk 7-shape ti)"
     }, 
     "noteShapeTriangleRoundLeftWhite": {
         "codepoint": "U+E1CA", 
@@ -6324,6 +6764,10 @@
     "noteShapeTriangleUpBlack": {
         "codepoint": "U+E1BB", 
         "description": "Triangle up black (Aikin 7-shape do)"
+    }, 
+    "noteShapeTriangleUpDoubleWhole": {
+        "codepoint": "U+ECD5", 
+        "description": "Triangle up double whole (Aikin 7-shape do)"
     }, 
     "noteShapeTriangleUpWhite": {
         "codepoint": "U+E1BA", 
@@ -6764,6 +7208,10 @@
         "codepoint": "U+E113", 
         "description": "Round black notehead"
     }, 
+    "noteheadRoundBlackDoubleSlashed": {
+        "codepoint": "U+E11C", 
+        "description": "Round black notehead, double slashed"
+    }, 
     "noteheadRoundBlackLarge": {
         "codepoint": "U+E110", 
         "description": "Large round black notehead"
@@ -6779,6 +7227,10 @@
     "noteheadRoundWhite": {
         "codepoint": "U+E114", 
         "description": "Round white notehead"
+    }, 
+    "noteheadRoundWhiteDoubleSlashed": {
+        "codepoint": "U+E11D", 
+        "description": "Round white notehead, double slashed"
     }, 
     "noteheadRoundWhiteLarge": {
         "codepoint": "U+E111", 
@@ -6824,6 +7276,10 @@
     "noteheadSlashVerticalEndsSmall": {
         "codepoint": "U+E105", 
         "description": "Small slash with vertical ends"
+    }, 
+    "noteheadSlashWhiteDoubleWhole": {
+        "codepoint": "U+E10A", 
+        "description": "White slash double whole"
     }, 
     "noteheadSlashWhiteHalf": {
         "codepoint": "U+E103", 
@@ -8292,7 +8748,11 @@
     }, 
     "pictScrapeAroundRim": {
         "codepoint": "U+E7F3", 
-        "description": "Scrape around rim"
+        "description": "Scrape around rim (counter-clockwise)"
+    }, 
+    "pictScrapeAroundRimClockwise": {
+        "codepoint": "U+E80E", 
+        "description": "Scrape around rim (clockwise)"
     }, 
     "pictScrapeCenterToEdge": {
         "codepoint": "U+E7F1", 
@@ -8591,7 +9051,6 @@
         "description": "Quindicesima"
     }, 
     "quindicesimaAlta": {
-        "alternateCodepoint": "U+1D138", 
         "codepoint": "U+E515", 
         "description": "Quindicesima alta"
     }, 
@@ -9064,9 +9523,29 @@
         "codepoint": "U+E219", 
         "description": "Combining vibrato pulse accent (Saunders) stem"
     }, 
+    "stockhausenTremolo": {
+        "codepoint": "U+E232", 
+        "description": "Stockhausen irregular tremolo (\"Morsen\", like Morse code)"
+    }, 
     "stringsBowBehindBridge": {
         "codepoint": "U+E618", 
         "description": "Bow behind bridge (sul ponticello)"
+    }, 
+    "stringsBowBehindBridgeFourStrings": {
+        "codepoint": "U+E62A", 
+        "description": "Bow behind bridge on four strings"
+    }, 
+    "stringsBowBehindBridgeOneString": {
+        "codepoint": "U+E627", 
+        "description": "Bow behind bridge on one string"
+    }, 
+    "stringsBowBehindBridgeThreeStrings": {
+        "codepoint": "U+E629", 
+        "description": "Bow behind bridge on three strings"
+    }, 
+    "stringsBowBehindBridgeTwoStrings": {
+        "codepoint": "U+E628", 
+        "description": "Bow behind bridge on two strings"
     }, 
     "stringsBowOnBridge": {
         "codepoint": "U+E619", 
@@ -9255,41 +9734,121 @@
         "codepoint": "U+E080", 
         "description": "Time signature 0"
     }, 
+    "timeSig0Reversed": {
+        "codepoint": "U+ECF0", 
+        "description": "Reversed time signature 0"
+    }, 
+    "timeSig0Turned": {
+        "codepoint": "U+ECE0", 
+        "description": "Turned time signature 0"
+    }, 
     "timeSig1": {
         "codepoint": "U+E081", 
         "description": "Time signature 1"
+    }, 
+    "timeSig1Reversed": {
+        "codepoint": "U+ECF1", 
+        "description": "Reversed time signature 1"
+    }, 
+    "timeSig1Turned": {
+        "codepoint": "U+ECE1", 
+        "description": "Turned time signature 1"
     }, 
     "timeSig2": {
         "codepoint": "U+E082", 
         "description": "Time signature 2"
     }, 
+    "timeSig2Reversed": {
+        "codepoint": "U+ECF2", 
+        "description": "Reversed time signature 2"
+    }, 
+    "timeSig2Turned": {
+        "codepoint": "U+ECE2", 
+        "description": "Turned time signature 2"
+    }, 
     "timeSig3": {
         "codepoint": "U+E083", 
         "description": "Time signature 3"
+    }, 
+    "timeSig3Reversed": {
+        "codepoint": "U+ECF3", 
+        "description": "Reversed time signature 3"
+    }, 
+    "timeSig3Turned": {
+        "codepoint": "U+ECE3", 
+        "description": "Turned time signature 3"
     }, 
     "timeSig4": {
         "codepoint": "U+E084", 
         "description": "Time signature 4"
     }, 
+    "timeSig4Reversed": {
+        "codepoint": "U+ECF4", 
+        "description": "Reversed time signature 4"
+    }, 
+    "timeSig4Turned": {
+        "codepoint": "U+ECE4", 
+        "description": "Turned time signature 4"
+    }, 
     "timeSig5": {
         "codepoint": "U+E085", 
         "description": "Time signature 5"
+    }, 
+    "timeSig5Reversed": {
+        "codepoint": "U+ECF5", 
+        "description": "Reversed time signature 5"
+    }, 
+    "timeSig5Turned": {
+        "codepoint": "U+ECE5", 
+        "description": "Turned time signature 5"
     }, 
     "timeSig6": {
         "codepoint": "U+E086", 
         "description": "Time signature 6"
     }, 
+    "timeSig6Reversed": {
+        "codepoint": "U+ECF6", 
+        "description": "Reversed time signature 6"
+    }, 
+    "timeSig6Turned": {
+        "codepoint": "U+ECE6", 
+        "description": "Turned time signature 6"
+    }, 
     "timeSig7": {
         "codepoint": "U+E087", 
         "description": "Time signature 7"
+    }, 
+    "timeSig7Reversed": {
+        "codepoint": "U+ECF7", 
+        "description": "Reversed time signature 7"
+    }, 
+    "timeSig7Turned": {
+        "codepoint": "U+ECE7", 
+        "description": "Turned time signature 7"
     }, 
     "timeSig8": {
         "codepoint": "U+E088", 
         "description": "Time signature 8"
     }, 
+    "timeSig8Reversed": {
+        "codepoint": "U+ECF8", 
+        "description": "Reversed time signature 8"
+    }, 
+    "timeSig8Turned": {
+        "codepoint": "U+ECE8", 
+        "description": "Turned time signature 8"
+    }, 
     "timeSig9": {
         "codepoint": "U+E089", 
         "description": "Time signature 9"
+    }, 
+    "timeSig9Reversed": {
+        "codepoint": "U+ECF9", 
+        "description": "Reversed time signature 9"
+    }, 
+    "timeSig9Turned": {
+        "codepoint": "U+ECE9", 
+        "description": "Turned time signature 9"
     }, 
     "timeSigBracketLeft": {
         "codepoint": "U+EC80", 
@@ -9324,14 +9883,34 @@
         "codepoint": "U+E08A", 
         "description": "Common time"
     }, 
+    "timeSigCommonReversed": {
+        "codepoint": "U+ECFA", 
+        "description": "Reversed common time"
+    }, 
+    "timeSigCommonTurned": {
+        "codepoint": "U+ECEA", 
+        "description": "Turned common time"
+    }, 
     "timeSigCut2": {
         "codepoint": "U+EC85", 
         "description": "Cut time (Bach)"
+    }, 
+    "timeSigCut3": {
+        "codepoint": "U+EC86", 
+        "description": "Cut triple time (9/8)"
     }, 
     "timeSigCutCommon": {
         "alternateCodepoint": "U+1D135", 
         "codepoint": "U+E08B", 
         "description": "Cut time"
+    }, 
+    "timeSigCutCommonReversed": {
+        "codepoint": "U+ECFB", 
+        "description": "Reversed cut time"
+    }, 
+    "timeSigCutCommonTurned": {
+        "codepoint": "U+ECEB", 
+        "description": "Turned cut time"
     }, 
     "timeSigEquals": {
         "codepoint": "U+E08F", 
@@ -9554,6 +10133,10 @@
         "codepoint": "U+E51E", 
         "description": "Ventiduesima bassa (mb)"
     }, 
+    "vocalFingerClickStockhausen": {
+        "codepoint": "U+E649", 
+        "description": "Finger click (Stockhausen)"
+    }, 
     "vocalMouthClosed": {
         "codepoint": "U+E640", 
         "description": "Mouth closed"
@@ -9574,9 +10157,21 @@
         "codepoint": "U+E643", 
         "description": "Mouth wide open"
     }, 
+    "vocalNasalVoice": {
+        "codepoint": "U+E647", 
+        "description": "Nasal voice"
+    }, 
     "vocalSprechgesang": {
         "codepoint": "U+E645", 
         "description": "Sprechgesang"
+    }, 
+    "vocalTongueClickStockhausen": {
+        "codepoint": "U+E648", 
+        "description": "Tongue click (Stockhausen)"
+    }, 
+    "vocalTongueFingerClickStockhausen": {
+        "codepoint": "U+E64A", 
+        "description": "Tongue and finger click (Stockhausen)"
     }, 
     "vocalsSussurando": {
         "codepoint": "U+E646", 
@@ -9938,6 +10533,10 @@
         "codepoint": "U+E600", 
         "description": "Somewhat tight embouchure"
     }, 
+    "windMouthpiecePop": {
+        "codepoint": "U+E60A", 
+        "description": "Mouthpiece or hand pop"
+    }, 
     "windMultiphonicsBlackStem": {
         "codepoint": "U+E607", 
         "description": "Combining multiphonics (black) for stem"
@@ -9969,6 +10568,10 @@
     "windRelaxedEmbouchure": {
         "codepoint": "U+E5FD", 
         "description": "Relaxed embouchure"
+    }, 
+    "windRimOnly": {
+        "codepoint": "U+E60B", 
+        "description": "Rim only"
     }, 
     "windSharpEmbouchure": {
         "codepoint": "U+E5FC", 
