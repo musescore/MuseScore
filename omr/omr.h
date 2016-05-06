@@ -53,15 +53,7 @@ class Omr {
       static void initUtils();
 
       void process1(int page);
-<<<<<<< HEAD
-<<<<<<< HEAD
       
-=======
-      QProgressDialog progress;
->>>>>>> d065ed4... add progress dialog to the omr process
-=======
-      
->>>>>>> 8d0232d... debug skeleton creation
     
     enum ActionID { READ_PDF, INIT_PAGE, FINALIZE_PARMS, SYSTEM_IDENTIFICATION, ACTION_NUM};
     QList<QString>ActionNames;
@@ -95,10 +87,6 @@ class Omr {
       const QString& path() const          { return _path;      }
       bool omrActions(int &ID, int page = 0);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 27d1d6c... debug pattern match
       static Pattern* quartheadPattern;
       static Pattern* halfheadPattern;
       static Pattern* sharpPattern;
@@ -106,23 +94,7 @@ class Omr {
       static Pattern* naturalPattern;
       static Pattern* trebleclefPattern;
       static Pattern* bassclefPattern;
-<<<<<<< HEAD
-<<<<<<< HEAD
       static Pattern* timesigPattern[10];
-=======
-//      static Pattern* quartheadPattern;
-//      static Pattern* halfheadPattern;
-//      static Pattern* sharpPattern;
-//      static Pattern* flatPattern;
-//      static Pattern* naturalPattern;
-//      static Pattern* trebleclefPattern;
-//      static Pattern* bassclefPattern;
->>>>>>> 57b9dad... compile omr module
-=======
->>>>>>> 27d1d6c... debug pattern match
-=======
-      static Pattern* timesigPattern[10];
->>>>>>> 40265ac... fix bugs in search clef,timesig and keys
       };
 
 #else

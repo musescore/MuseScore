@@ -36,10 +36,6 @@ namespace Ms {
 
 class ScoreView;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 27d1d6c... debug pattern match
 Pattern* Omr::quartheadPattern;
 Pattern* Omr::halfheadPattern;
 Pattern* Omr::sharpPattern;
@@ -47,23 +43,7 @@ Pattern* Omr::flatPattern;
 Pattern* Omr::naturalPattern;
 Pattern* Omr::trebleclefPattern;
 Pattern* Omr::bassclefPattern;
-<<<<<<< HEAD
-<<<<<<< HEAD
 Pattern* Omr::timesigPattern[10];
-=======
-//Pattern* Omr::quartheadPattern;
-//Pattern* Omr::halfheadPattern;
-//Pattern* Omr::sharpPattern;
-//Pattern* Omr::flatPattern;
-//Pattern* Omr::naturalPattern;
-//Pattern* Omr::trebleclefPattern;
-//Pattern* Omr::bassclefPattern;
->>>>>>> 57b9dad... compile omr module
-=======
->>>>>>> 27d1d6c... debug pattern match
-=======
-Pattern* Omr::timesigPattern[10];
->>>>>>> 40265ac... fix bugs in search clef,timesig and keys
 
 //---------------------------------------------------------
 //   Omr
@@ -161,84 +141,18 @@ int Omr::pagesInDocument() const
 //---------------------------------------------------------
 
 bool Omr::readPdf()
-<<<<<<< HEAD
-      {
-<<<<<<< HEAD
-<<<<<<< HEAD
-          QProgressDialog progress;
-=======
-          
->>>>>>> d065ed4... add progress dialog to the omr process
-=======
-          QProgressDialog progress;
->>>>>>> 8d0232d... debug skeleton creation
-          //set up progress dialog
-          progress.setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
-          progress.setWindowModality(Qt::ApplicationModal);
-          //progress.setCancelButton(0);
-          progress.setCancelButtonText(QWidget::tr("Cancel"));
-          //progress.setLabelText(QWidget::tr("Importing..."));
-          progress.show();
-          progress.setRange(0, ACTION_NUM);
-=======
     {
         QProgressDialog *progress = new QProgressDialog(QWidget::tr("Reading PDF..."), QWidget::tr("Cancel"), 0, 100, 0, Qt::FramelessWindowHint);
           progress->setWindowModality(Qt::ApplicationModal);
           progress->show();
           progress->setRange(0, ACTION_NUM);
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
           
-          
-<<<<<<< HEAD
-=======
-          
->>>>>>> d065ed4... add progress dialog to the omr process
+
 #ifdef OCR
       if (_ocr == 0)
             _ocr = new Ocr;
       _ocr->init();
 #endif
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> d065ed4... add progress dialog to the omr process
-      int ID;
-          for(ID = 0; ID < ACTION_NUM; ID++){
-              progress.setLabelText(ActionNames.at(ID));
-              bool val = actions(ID);
-              if(!val || progress.wasCanceled()){
-                  progress.close();
-                  return false;
-              }
-              else{
-<<<<<<< HEAD
-<<<<<<< HEAD
-                  if(ID + 1 < ACTION_NUM){
-                      progress.setLabelText(ActionNames.at(ID+1));
-                      progress.setValue(ID+1);
-                  }
-                  qApp->processEvents();
-              }
-          }
-          progress.close();
-=======
-                  if(ID + 1 < ACTION_NUM)
-=======
-                  if(ID + 1 < ACTION_NUM){
->>>>>>> 8d0232d... debug skeleton creation
-                      progress.setLabelText(ActionNames.at(ID+1));
-                      progress.setValue(ID+1);
-                  }
-                  qApp->processEvents();
-              }
-          }
-<<<<<<< HEAD
->>>>>>> d065ed4... add progress dialog to the omr process
-=======
-          progress.close();
->>>>>>> 8d0232d... debug skeleton creation
-=======
           int ID = READ_PDF;
           int page = 0;
           bool val;
@@ -267,7 +181,6 @@ bool Omr::readPdf()
           }
           progress->close();
         
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
           return true;
       }
 
@@ -297,31 +210,6 @@ bool Omr::omrActions(int &ID, int page)
             ID++;
             return true;
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> d065ed4... add progress dialog to the omr process
-        else if(ID == INIT_PARMS){
-            double sp = 0;
-            double w  = 0;
-            
-            int pages = 0;
-            int n = _pages.size();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            double spatium_constant = 15.0;
-=======
->>>>>>> d065ed4... add progress dialog to the omr process
-=======
-            int spatium_constant = 30;
->>>>>>> 1c244ad... rescale image according to their spatiums
-=======
-            double spatium_constant = 15.0;
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
-=======
         else if(ID == INIT_PAGE){
             //load one page and rescale
             _pages[page]->read();
@@ -332,7 +220,6 @@ bool Omr::omrActions(int &ID, int page)
             QImage image = _pages[page]->image().scaled(new_w ,new_h, Qt::KeepAspectRatio);
             _pages[page]->setImage(image);
             _pages[page]->read();
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
             
             if(page == _pages.size()-1) ID++;
             return true;
@@ -341,69 +228,13 @@ bool Omr::omrActions(int &ID, int page)
             int n = _pages.size();
             double w = 0;
             for (int i = 0; i < n; ++i) {
-<<<<<<< HEAD
-                _pages[i]->read();
-                //            if (_pages[i]->systems().size() > 0) {
-                //                sp += _pages[i]->spatium();
-                //                ++pages;
-                //            }
-<<<<<<< HEAD
-<<<<<<< HEAD
-                
-                sp += _pages[i]->spatium();
-                ++pages;
-                
-//                //do the rescaling of image here
-                int new_w = _pages[i]->image().width()*spatium_constant/_pages[i]->spatium();
-                int new_h = _pages[i]->image().height()*spatium_constant/_pages[i]->spatium();
-                QImage image = _pages[i]->image().scaled(new_w ,new_h, Qt::KeepAspectRatio);
-                _pages[i]->setImage(image);
-                _pages[i]->read();
-                w  += _pages[i]->width();
-            }
-<<<<<<< HEAD
-            _spatium = spatium_constant; //sp / pages;
-            w       /= n;
-            _dpmm    = w / 210.0;            // PaperSize A4
-            
-            
-            
-            // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
-            //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
-            quartheadPattern  = new Pattern(_score, "solid_note_head");
-=======
-=======
-                
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
-                sp += _pages[i]->spatium();
-                ++pages;
-                
-//                //do the rescaling of image here
-                int new_w = _pages[i]->image().width()*spatium_constant/_pages[i]->spatium();
-                int new_h = _pages[i]->image().height()*spatium_constant/_pages[i]->spatium();
-                QImage image = _pages[i]->image().scaled(new_w ,new_h, Qt::KeepAspectRatio);
-                _pages[i]->setImage(image);
-                _pages[i]->read();
-=======
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
                 w  += _pages[i]->width();
             }
             w       /= n;
             _dpmm    = w / 210.0;            // PaperSize A4
             
-<<<<<<< HEAD
-            
-            
-            // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
-<<<<<<< HEAD
-            quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
->>>>>>> d065ed4... add progress dialog to the omr process
-=======
-=======
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
             //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
             quartheadPattern  = new Pattern(_score, "solid_note_head");
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
             halfheadPattern   = new Pattern(_score, SymId::noteheadHalf,  _spatium);
             sharpPattern      = new Pattern(_score, SymId::accidentalSharp, _spatium);
             flatPattern       = new Pattern(_score, SymId::accidentalFlat, _spatium);
@@ -423,124 +254,12 @@ bool Omr::omrActions(int &ID, int page)
             
             ID++;
             return true;
-<<<<<<< HEAD
-<<<<<<< HEAD
-        }
-        else if(ID == SYSTEM_IDENTIFICATION){
-            int n = _pages.size();
-            for (int i = 0; i < n; ++i) {
-                _pages[i]->identifySystems();
-=======
-      _spatium = sp / pages;
-      w       /= n;
-      _dpmm    = w / 210.0;            // PaperSize A4
-
-// printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
-
-      quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
-      halfheadPattern   = new Pattern(_score, SymId::noteheadHalf,  _spatium);
-      sharpPattern      = new Pattern(_score, SymId::accidentalSharp, _spatium);
-      flatPattern       = new Pattern(_score, SymId::accidentalFlat, _spatium);
-      naturalPattern    = new Pattern(_score, SymId::accidentalNatural,_spatium);
-      trebleclefPattern = new Pattern(_score, SymId::gClef,_spatium);
-      bassclefPattern   = new Pattern(_score, SymId::fClef,_spatium);
-          timesigPattern[0] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[1] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[2] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[3] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[4] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[5] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[6] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[7] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[8] = new Pattern(_score, SymId::timeSig0, _spatium);
-          timesigPattern[9] = new Pattern(_score, SymId::timeSig0, _spatium);
-
-      for (int i = 0; i < n; ++i) {
-            OmrPage* page = _pages[i];
-            if (!page->systems().isEmpty()) {
-                  page->readBarLines(i);
-                  }
->>>>>>> 57b9dad... compile omr module
-            }
-            
-            
-            
-<<<<<<< HEAD
-//            for (int i = 0; i < n; ++i) {
-//
-            
-            
-            OmrPage* page = _pages[i];
-//                if (!page->systems().isEmpty()) {
-//                    page->readBarLines(i);
-//                }
-//            }
-            return true;
-=======
-        _spatium = sp / pages;
-        w       /= n;
-        _dpmm    = w / 210.0;            // PaperSize A4
-        
-        // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
-        quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
-        halfheadPattern   = new Pattern(_score, SymId::noteheadHalf,  _spatium);
-        sharpPattern      = new Pattern(_score, SymId::accidentalSharp, _spatium);
-        flatPattern       = new Pattern(_score, SymId::accidentalFlat, _spatium);
-        naturalPattern    = new Pattern(_score, SymId::accidentalNatural,_spatium);
-        trebleclefPattern = new Pattern(_score, SymId::gClef,_spatium);
-        bassclefPattern   = new Pattern(_score, SymId::fClef,_spatium);
-        timesigPattern[0] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[1] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[2] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[3] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[4] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[5] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[6] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[7] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[8] = new Pattern(_score, SymId::timeSig0, _spatium);
-        timesigPattern[9] = new Pattern(_score, SymId::timeSig0, _spatium);
-        
-        
-        for (int i = 0; i < n; ++i) {
-            _pages[i]->identifySystems();
-=======
->>>>>>> d065ed4... add progress dialog to the omr process
-        }
-        else if(ID == SYSTEM_IDENTIFICATION){
-            int n = _pages.size();
-            for (int i = 0; i < n; ++i) {
-                _pages[i]->identifySystems();
-            }
-            
-<<<<<<< HEAD
-            for (int i = 0; i < n; ++i) {
-                OmrPage* page = _pages[i];
-                if (!page->systems().isEmpty()) {
-                    page->readBarLines(i);
-                }
-            }
-<<<<<<< HEAD
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-=======
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
-//            for (int i = 0; i < n; ++i) {
-//                OmrPage* page = _pages[i];
-//                if (!page->systems().isEmpty()) {
-//                    page->readBarLines(i);
-//                }
-//            }
->>>>>>> 21738fc... debugging omr
-=======
             
         }
         else if(ID == SYSTEM_IDENTIFICATION){
             _pages[page]->identifySystems();
             if(page == _pages.size()-1) ID++;
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
             return true;
->>>>>>> d065ed4... add progress dialog to the omr process
         }
         return false;
     }

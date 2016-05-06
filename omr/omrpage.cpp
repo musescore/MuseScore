@@ -30,31 +30,12 @@
 #include "libmscore/measurebase.h"
 #include "libmscore/box.h"
 #include "libmscore/sym.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include "libmscore/note.h"
 #include "pattern.h"
-<<<<<<< HEAD
-=======
-=======
-#include "libmscore/note.h"
->>>>>>> 995a1ff... debugging omr module
-//#include "pattern.h"
->>>>>>> 57b9dad... compile omr module
-=======
->>>>>>> cf58f72... fix new bugs introduced by rebasing
 
 namespace Ms {
     
-<<<<<<< HEAD
-<<<<<<< HEAD
     static const double noteTH = 1.0;
-=======
-    static const double noteTH = 0.8;
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-    static const double noteTH = 1.0;
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     static const double timesigTH = 0.7;
     static const double clefTH = 0.7;
     static const double keysigTH = 0.8;
@@ -110,10 +91,6 @@ namespace Ms {
         return (*p) & (0x1 << (x % 32));
     }
     
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     //---------------------------------------------------------
     //   isBlack
     //---------------------------------------------------------
@@ -124,11 +101,6 @@ namespace Ms {
         return (qGray(c) < 100);
     }
     
-<<<<<<< HEAD
-=======
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     
     //---------------------------------------------------------
     //   read
@@ -142,42 +114,7 @@ namespace Ms {
         crop();
         slice();
         getStaffLines();
-<<<<<<< HEAD
-<<<<<<< HEAD
         getRatio();
-        //identifySystems();
-//        int numStaves    = staves.size();
-//        int stavesSystem = 2;
-//        int systems      = numStaves / stavesSystem;
-=======
-=======
-        getRatio();
-<<<<<<< HEAD
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
-        //identifySystems();
-<<<<<<< HEAD
-        int numStaves    = staves.size();
-        int stavesSystem = 2;
-        int systems      = numStaves / stavesSystem;
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-//        int numStaves    = staves.size();
-//        int stavesSystem = 2;
-//        int systems      = numStaves / stavesSystem;
->>>>>>> bcaee82... cancel note detection in the step of system identification, keep it in the barline detection after systems are determined
-        
-//        for (int system = 0; system < systems; ++system) {
-//            OmrSystem omrSystem(this);
-//            for (int i = 0; i < stavesSystem; ++i) {
-//                omrSystem.staves().append(staves[system * stavesSystem + i]);
-//            }
-//            _systems.append(omrSystem);
-//        }
-//        
-//        if (_systems.isEmpty())
-//            return;
-=======
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     struct SysState{
@@ -252,9 +189,7 @@ namespace Ms {
             for(int status = 0; status <= 1; ++status){
                 scores[i][status] = -HUGE_VAL;
                 pred[i][status] = bs;
-<<<<<<< HEAD
             }
-<<<<<<< HEAD
         }
         scores[0][0] = 0;
         
@@ -450,16 +385,6 @@ namespace Ms {
                 system->measures().append(m);
             }
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 21738fc... debugging omr
-=======
-
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
-=======
         
         //delete allocated space
         for(int i = 0; i < numStaves; i++){
@@ -479,7 +404,6 @@ namespace Ms {
 //        }
         //delete []bar_score_matrix;
         //delete []bar_score_vector;
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     
@@ -489,10 +413,6 @@ namespace Ms {
     
     void OmrPage::readBarLines(int pageNo)
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         //QFuture<void> bl = QtConcurrent::run(_systems, &OmrSystem::searchSysBarLines());
         //bl.waitForFinished();
         
@@ -547,71 +467,7 @@ namespace Ms {
                 }
                 system->measures().append(m);
             }
-<<<<<<< HEAD
-=======
-//        QFuture<void> bl = QtConcurrent::map(_systems, &OmrSystem::searchBarLines);
-//        bl.waitForFinished();
-//        
-//        int numStaves    = staves.size();
-//        //int stavesSystem = 2;
-//        //int systems = numStaves / stavesSystem;
-//        int systems = _systems.size();
-//        
-//        for (int i = 0; i < systems; ++i) {
-//            OmrSystem* system = &_systems[i];
-//            int n = system->barLines.size();
-//            for (int k = 0; k < n-1; ++k) {
-//                const QLine& l1 = system->barLines[k];
-//                const QLine& l2 = system->barLines[k+1];
-//                OmrMeasure m(l1.x1(), l2.x1());
-//                for (int ss = 0; ss < system->staves().size(); ++ss) {
-//                    OmrStaff& staff = system->staves()[ss];
-//                    QList<OmrChord> chords;
-//                    int nx   = 0;
-//                    SymId nsym = SymId::noSym;
-//                    OmrChord chord;
-//                    foreach(OmrNote* n, staff.notes()) {
-//                        int x = n->x();
-//                        if (x >= m.x2())
-//                            break;
-//                        if (x >= m.x1() && x < m.x2()) {
-//                            if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
-//                                if (!chord.notes.isEmpty()) {
-//                                    SymId sym = chord.notes.front()->sym;
-//                                    if (sym == SymId::noteheadBlack)
-//                                        chord.duration.setType(TDuration::DurationType::V_QUARTER);
-//                                    else if (sym == SymId::noteheadHalf)
-//                                        chord.duration.setType(TDuration::DurationType::V_HALF);
-//                                    chords.append(chord);
-//                                    chord.notes.clear();
-//                                }
-//                            }
-//                            nx   = x;
-//                            nsym = n->sym;
-//                            chord.notes.append(n);
-//                        }
-//                    }
-//                    if (!chord.notes.isEmpty()) {
-//                        SymId sym = chord.notes.front()->sym;
-//                        if (sym == SymId::noteheadBlack)
-//                            chord.duration.setType(TDuration::DurationType::V_QUARTER);
-//                        else if (sym == SymId::noteheadHalf)
-//                            chord.duration.setType(TDuration::DurationType::V_HALF);
-//                        chords.append(chord);
-//                    }
-//                    m.chords().append(chords);
-//                }
-//                system->measures().append(m);
-//            }
-<<<<<<< HEAD
->>>>>>> 8713f38... commented out QtConcurrent::map
         }
-=======
-//        }
->>>>>>> 494c67b... comment out qtconcurrent::map in omr
-=======
-        }
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         
 //        //--------------------------------------------------
 //        //    search clef/keysig
@@ -828,472 +684,10 @@ namespace Ms {
         int xx = x1;
         int max = 0;
         for (int x = x1; x < x2; ++x) {
-=======
-
-      if (_systems.isEmpty())
-            return;
-      }
-
-//---------------------------------------------------------
-//   readBarLines
-//---------------------------------------------------------
-
-void OmrPage::readBarLines(int pageNo)
-      {
-      QFuture<void> bl = QtConcurrent::map(_systems, &OmrSystem::searchBarLines);
-      bl.waitForFinished();
-
-      int numStaves    = staves.size();
-      int stavesSystem = 2;
-      int systems = numStaves / stavesSystem;
-
-      for (int i = 0; i < systems; ++i) {
-=======
-            }
-        }
-        scores[0][0] = 0;
-        
-        //forward pass
-        
-        for (int x = x1; x < x2; ++x) {
-            int i = x - x1;
-            
-            for(int cur = 0; cur <= 1; ++cur){
-                //current state
-                if(scores[i][cur] < -1000) continue;
-                
-                if(cur){
-                    scores[i][cur] += vp[i];
-                    int next = 0;
-                    int step = 3*_spatium;//constraints between adjacent barlines
-                    if(step + i <= x2 - x1){
-                        if(scores[step + i][next] < scores[i][cur]){
-                            scores[step + i][next] = scores[i][cur];
-                            bs.x = x; bs.status = cur;
-                            pred[step + i][next] = bs;
-                        }
-                    }
-                    
-                }
-                else{
-                    for(int next = 0; next <= 1; ++next){
-                        int step = 1;
-                        if(step + i <= x2 - x1){
-                            if(scores[step + i][next] < scores[i][cur]){
-                                scores[step + i][next] = scores[i][cur];
-                                bs.x = x; bs.status = cur;
-                                pred[step + i][next] = bs;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        //trace back
-//        int state = 0;
-//        for (int x = x2; x > x1; ){
-//            int i = x - x1;
-//            bs = pred[i][state];
-//            state = bs.status;
-//            x = bs.x;
-//            
-//            if(state){
-//                barLines.append(QLine(x, y1, x, y2));
-//            }
-//        }
-        
-        return(scores[x2][0]);
-    }
-    
-    //---------------------------------------------------------
-    //   identifySystems
-    //---------------------------------------------------------
-    void OmrPage::identifySystems(){
-        int numStaves    = staves.size();
-        
-        float temp_scores[numStaves][numStaves];
-        int hashed[numStaves][numStaves];
-        
-        for(int i = 0; i < numStaves; ++i){
-            for(int j = 0; j < numStaves; j++){
-                hashed[i][j] = 0;
-            }
-        }
-        
-        float scores[numStaves][2];
-        SysState pred[numStaves][2];
-        
-        SysState ss;
-        ss.index = -1; ss.status = -1;
-        
-        for(int i = 0; i < numStaves; ++i){
-            for(int j = 0; j < 2; j++){
-                scores[i][j] = -HUGE_VAL;
-                pred[i][j] = ss;
-            }
-        }
-        scores[0][0] = 0;
-
-        int status;
-        float cur_score;
-        int cur_staff,next_staff;
-        for(cur_staff = 0; cur_staff < numStaves; ++cur_staff){
-            status = 0;//start_staff
-            for(next_staff = cur_staff; next_staff < numStaves; ++next_staff){ //connects to end_staff
-                if(hashed[cur_staff][next_staff]){
-                    cur_score = temp_scores[cur_staff][next_staff];
-                }
-                else{
-                    //evaluate staff segment [c,n], dp here
-                    OmrSystem omrSystem(this);
-                    for (int i = cur_staff; i <= next_staff; ++i) {
-                        omrSystem.staves().append(staves[i]);
-                    }
-                    if(cur_staff == 1 && next_staff == numStaves - 1)
-                        printf("123");
-                    
-                    cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1);
-                    temp_scores[cur_staff][next_staff] = cur_score;
-                    hashed[cur_staff][next_staff] = 1;
-                }
-                
-                //forward pass
-                if(scores[cur_staff][status] + cur_score > scores[next_staff][1-status]){
-                    scores[next_staff][1-status] = scores[cur_staff][status] + cur_score;
-                    ss.status = status; ss.index = cur_staff;
-                    pred[next_staff][1-status] = ss;
-                }
-            }
-            
-            status = 1;//end_staff
-            next_staff = cur_staff + 1;
-            if(next_staff < numStaves){
-                //forward pass
-                if(scores[cur_staff][status] > scores[next_staff][1-status]){
-                    scores[next_staff][1-status] = scores[cur_staff][status];
-                    ss.status = status; ss.index = cur_staff;
-                    pred[next_staff][1-status] = ss;
-                }
-            }
-        }
-        
-        //backtrack
-        status = 1;//end_staff
-        cur_staff = numStaves - 1;//last staff index
-        while(cur_staff > 0 || status != 0){
-            ss = pred[cur_staff][status];
-            
-            if(!ss.status){
-                //add system here
-                OmrSystem omrSystem(this);
-                for (int i = ss.index; i <= cur_staff; ++i) {
-                    omrSystem.staves().append(staves[i]);
-                }
-                _systems.append(omrSystem);
-            }
-            
-            cur_staff = ss.index;
-            status = ss.status;
-        }
-        
-        
-//        int stavesSystem = 2;
-//        int systems      = numStaves / stavesSystem;
-//        
-//        for (int system = 0; system < systems; ++system) {
-//            OmrSystem omrSystem(this);
-//            for (int i = 0; i < stavesSystem; ++i) {
-//                omrSystem.staves().append(staves[system * stavesSystem + i]);
-//            }
-//            _systems.append(omrSystem);
-//        }
-    }
-    
-    
-    //---------------------------------------------------------
-    //   readBarLines
-    //---------------------------------------------------------
-    
-    void OmrPage::readBarLines(int pageNo)
-    {
-        QFuture<void> bl = QtConcurrent::map(_systems, &OmrSystem::searchBarLines);
-        bl.waitForFinished();
-        
-        int numStaves    = staves.size();
-        //int stavesSystem = 2;
-        //int systems = numStaves / stavesSystem;
-        int systems = _systems.size();
-        
-        for (int i = 0; i < systems; ++i) {
->>>>>>> 4615c3e... consider different number of staves in systems
-            OmrSystem* system = &_systems[i];
-            int n = system->barLines.size();
-            for (int k = 0; k < n-1; ++k) {
-                const QLine& l1 = system->barLines[k];
-                const QLine& l2 = system->barLines[k+1];
-                OmrMeasure m(l1.x1(), l2.x1());
-                for (int ss = 0; ss < system->staves().size(); ++ss) {
-                    OmrStaff& staff = system->staves()[ss];
-                    QList<OmrChord> chords;
-                    int nx   = 0;
-                    SymId nsym = SymId::noSym;
-                    OmrChord chord;
-                    foreach(OmrNote* n, staff.notes()) {
-                        int x = n->x();
-                        if (x >= m.x2())
-                            break;
-                        if (x >= m.x1() && x < m.x2()) {
-                            if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
-                                if (!chord.notes.isEmpty()) {
-                                    SymId sym = chord.notes.front()->sym;
-                                    if (sym == SymId::noteheadBlack)
-                                        chord.duration.setType(TDuration::DurationType::V_QUARTER);
-                                    else if (sym == SymId::noteheadHalf)
-                                        chord.duration.setType(TDuration::DurationType::V_HALF);
-                                    chords.append(chord);
-                                    chord.notes.clear();
-                                }
-                            }
-                            nx   = x;
-                            nsym = n->sym;
-                            chord.notes.append(n);
-                        }
-                    }
-                    if (!chord.notes.isEmpty()) {
-                        SymId sym = chord.notes.front()->sym;
-                        if (sym == SymId::noteheadBlack)
-                            chord.duration.setType(TDuration::DurationType::V_QUARTER);
-                        else if (sym == SymId::noteheadHalf)
-                            chord.duration.setType(TDuration::DurationType::V_HALF);
-                        chords.append(chord);
-                    }
-                    m.chords().append(chords);
-                }
-                system->measures().append(m);
-            }
-        }
-        
-//        //--------------------------------------------------
-//        //    search clef/keysig
-//        //--------------------------------------------------
-//        
-//        if (pageNo == 0) {
-//            OmrSystem* s = &_systems[0];
-//            for (int i = 0; i < s->staves().size(); ++i) {
-//                OmrStaff* staff = &s->staves()[i];
-//                OmrClef clef = searchClef(s, staff);
-//                staff->setClef(clef);
-//                
-//                searchKeySig(s, staff);
-//            }
-//            
-//            
-//            //--------------------------------------------------
-//            //    search time signature
-//            //--------------------------------------------------
-//            
-//            if (!s->staves().isEmpty()) {
-//                OmrTimesig* ts = searchTimeSig(s);
-//                s->measures()[0].setTimesig(ts);
-//            }
-//        }
-    }
-    
-    //---------------------------------------------------------
-    //   searchClef
-    //---------------------------------------------------------
-    
-    OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
-    {
-        std::vector<Pattern*> pl = {
-            Omr::trebleclefPattern,
-            Omr::bassclefPattern
-        };
-        const OmrMeasure& m = system->measures().front();
-        printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
-        
-        int x1 = m.x1() + 2;
-        int x2 = x1 + (m.x2() - x1)/2;
-        OmrPattern p = searchPattern(pl, staff->y(), x1, x2);
-        
-        OmrClef clef(p);
-        if (p.sym == SymId::gClef)
-            clef.type = ClefType::G;
-        else if (p.sym == SymId::fClef)
-            clef.type = ClefType::F;
-        else
-            clef.type = ClefType::G;
-        return clef;
-    }
-    
-    //---------------------------------------------------------
-    //   searchPattern
-    //---------------------------------------------------------
-    
-    OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
-    {
-        OmrPattern p;
-        p.sym  = SymId::noSym;
-        p.prob = 0.0;
-        for (Pattern* pattern : pl) {
-            double val = 0.0;
-            int xx = 0;
-            int hw = pattern->w();
-            
-            for (int x = x1; x < (x2 - hw); ++x) {
-                double val1 = pattern->match(&image(), x - pattern->base().x(), y - pattern->base().y());
-                if (val1 > val) {
-                    val = val1;
-                    xx  = x;
-                }
-            }
-            
-            if (val > p.prob) {
-                p.setRect(xx, y, pattern->w(), pattern->h());
-                p.sym  = pattern->id();
-                p.prob = val;
-            }
-            printf("Pattern found %d %f %d\n", pattern->id(), val, xx);
-        }
-        return p;
-    }
-    
-    //---------------------------------------------------------
-    //   searchTimeSig
-    //---------------------------------------------------------
-    
-    OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
-    {
-        
-        
-        int z = -1;
-        int n = -1;
-        double zval = 0;
-        double nval = 0;
-        QRect rz, rn;
-        
-        int y         = system->staves().front().y();
-        OmrMeasure* m = &system->measures().front();
-        int x1        = m->x1();
-        
-        for (int i = 0; i < 10; ++i) {
-            Pattern* pattern = Omr::timesigPattern[i];
-            double val = 0.0;
-            int hh     = pattern->h();
-            int hw     = pattern->w();
-            int x2     = m->x2() - hw;
-            QRect r;
-            
-            for (int x = x1; x < x2; ++x) {
-                double val1 = pattern->match(&image(), x, y);
-                if (val1 > val) {
-                    val = val1;
-                    r = QRect(x, y, hw, hh);
-                }
-            }
-            
-            if (val > timesigTH && val > zval) {
-                z = i;
-                zval = val;
-                rz   = r;
-            }
-            //            printf("   found %d %f\n", i, val);
-        }
-        
-        if (z < 0)
-            return 0;
-        y = system->staves().front().y() + lrint(_spatium * 2);
-        
-        x1 = rz.x();
-        int x2 = x1 + 1;
-        OmrTimesig* ts = 0;
-        for (int i = 0; i < 10; ++i) {
-            Pattern* pattern = Omr::timesigPattern[i];
-            double val = 0.0;
-            int hh     = pattern->h();
-            int hw     = pattern->w();
-            QRect r;
-            
-            for (int x = x1; x < x2; ++x) {
-                double val1 = pattern->match(&image(), x, y);
-                if (val1 > val) {
-                    val = val1;
-                    r   = QRect(x, y, hw, hh);
-                }
-            }
-            
-            if (val > timesigTH && val > nval) {
-                n = i;
-                nval = val;
-                rn   = r;
-            }
-            //            printf("   found %d %f\n", i, val);
-        }
-        if (n > 0) {
-            ts = new OmrTimesig(rz | rn);
-            ts->timesig = Fraction(z, n);
-            printf("timesig  %d/%d\n", z, n);
-        }
-        return ts;
-    }
-    
-    //---------------------------------------------------------
-    //   searchKeySig
-    //---------------------------------------------------------
-    
-    void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
-    {
-        Pattern* pl[2];
-        pl[0] = Omr::sharpPattern;
-        pl[1] = Omr::flatPattern;
-        
-        double zval = 0;
-        
-        int y         = system->staves().front().y();
-        OmrMeasure* m = &system->measures().front();
-        int x1        = m->x1();
-        
-        for (int i = 0; i < 2; ++i) {
-            Pattern* pattern = pl[i];
-            double val = 0.0;
-            int hh     = pattern->h();
-            int hw     = pattern->w();
-            int x2     = m->x2() - hw;
-            QRect r;
-            
-            for (int x = x1; x < x2; ++x) {
-                double val1 = pattern->match(&image(), x, y - hh/2);
-                if (val1 > val) {
-                    val = val1;
-                    r = QRect(x, y, hw, hh);
-                }
-            }
-            
-            if (val > keysigTH && val > zval) {
-                zval = val;
-                OmrKeySig key(r);
-                key.type = i == 0 ? 1 : -1;
-                staff->setKeySig(key);
-            }
-<<<<<<< HEAD
-      }
-
-//---------------------------------------------------------
-//   maxP
-//---------------------------------------------------------
-
-int maxP(int* projection, int x1, int x2)
-      {
-      int xx = x1;
-      int max = 0;
-      for (int x = x1; x < x2; ++x) {
->>>>>>> 57b9dad... compile omr module
             if (projection[x] > max) {
                 max = projection[x];
                 xx  = x;
             }
-<<<<<<< HEAD
         }
         return xx;
     }
@@ -1404,7 +798,6 @@ int maxP(int* projection, int x1, int x2)
                     }
                 }
             }
-<<<<<<< HEAD
         }
         
         //trace back
@@ -1419,511 +812,6 @@ int maxP(int* projection, int x1, int x2)
                 barLines.append(QLine(x, y1, x, y2));
             }
         }
-        
-        
-        //      for (int x = x1; x < x2; ++x) {
-        //            int dots = 0;
-        //            for (int y = y1; y < y2; ++y) {
-        //                  if (_page->dot(x, y))
-        //                        ++dots;
-        //                  }
-        //            vp[x - x1] = dots;
-        //            }
-        //
-        //
-        //
-        //
-        //      bool firstBarLine = true;
-        //      for (int x = 1; x < vpw; ++x) {
-        //            if (vp[x-1] < vp[x])
-        //                  continue;
-        //            if (vp[x] < th)
-        //                  continue;
-        ////            if (vp[x-1] > vp[x])
-        //                  {
-        //                  barLines.append(QLine(x + x1, y1, x + x1, y2));
-        //                  int xx = x + x1;
-        //                  if (firstBarLine) {
-        //                        firstBarLine = false;
-        //                        _staves[0].setX(xx);
-        //                        _staves[1].setX(xx);
-        //                        }
-        //                  else {
-        //                        _staves[0].setWidth(xx - _staves[0].x());
-        //                        _staves[1].setWidth(xx - _staves[1].x());
-        //                        }
-        //                  }
-        //            }
-        //
-        //      searchNotes();
-        
-        //
-        // remove false positive barlines:
-        //    - two barlines too narrow (repeat-/end-barlines
-        //      are detected as two barlines
-        //    - barlines which are really note stems
-        //
-        //      QList<QLine> nbl;
-        //      double x = -10000.0;
-        //      double spatium = _page->spatium();
-        //      int nbar = 0;
-        ////      int i = 0;
-        //      int n = barLines.size();
-        //      for (int i = 0; i < n; ++i) {
-        //
-        //          //if(nbar >= 2) break;//liang debug
-        //
-        //            const QLine& l = barLines[i];
-        //            int nx = l.x1();
-        //            if ((nx - x) > spatium) {
-        //                  //
-        //                  // check for start repeat:
-        //                  //
-        //                  if ((nbar == 1)
-        //                     && ((nx-x)/spatium < 8.0)   // at begin of system?
-        ////                     && (i < (n-1))
-        ////                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
-        //                                                 // missing: check fo note heads
-        //                                                 // up to here
-        //                     ) {
-        //                        x = nx;
-        //                        continue;
-        //                        }
-        //                  nbl.append(l);
-        //                  x = nx;
-        //                  ++nbar;
-        //                  }
-        //            }
-        //      barLines = nbl;
-    }
-    
-    //---------------------------------------------------------
-    //   searchBarLinesvar
-    //---------------------------------------------------------
-    float OmrSystem::searchBarLinesvar(int n_staff)
-    {
-        OmrStaff& r1 = _staves[0];
-        OmrStaff& r2 = _staves[n_staff - 1];
-        
-        int x1  = r1.x();
-        int x2  = x1 + r1.width();
-        int y1  = r1.y();
-        int y2  = r2.y() + r2.height();
-        
-        int th = 0;
-        th = (y2 - y1 + 1)*2/3;
-//        for(int i  = 0; i < n_staff; ++i){
-//            th += _staves[i].height();
-//        }
-        
-        int vpw = x2-x1;
-        float vp[vpw];
-        memset(vp, 0, sizeof(float) * vpw);
-        
-        
-        //using note constraints
-        searchNotes();
-        
-        int note_constraints[x2-x1];
-        memset(note_constraints, 0, sizeof(int) * (x2-x1));
-        for(int i = 0; i < n_staff; ++i){
-            OmrStaff& r = _staves[i];
-            foreach(OmrNote* n, r.notes()){
-                for(int x = n->x(); x <= n->x() + n->width(); ++x)
-                    note_constraints[x-x1] = 1;
-            }
-        }
-        
-        //
-        // compute vertical projections
-        //
-        
-        for (int x = x1; x < x2; ++x) {
-            int dots = 0;
-            for (int y = y1; y < y2; ++y) {
-                if (_page->dot(x, y))
-                    ++dots;
-                else
-                    --dots;
-            }
-            if(!note_constraints[x-x1])
-                vp[x - x1] = dots;// - /*(y2 - y1 - dots);*/th;
-            else vp[x - x1] = -HUGE_VAL;
-        }
-        
-        float scores[x2-x1+1][2];
-        BSTATE pred[x2-x1+1][2];
-        BSTATE bs;
-        
-        //initialization
-        bs.x = -1; bs.status = -1;
-        for (int x = x1; x <= x2; ++x) {
-            int i = x - x1;
-            for(int status = 0; status <= 1; ++status){
-                scores[i][status] = -HUGE_VAL;
-                pred[i][status] = bs;
-            }
-        }
-        scores[0][0] = 0;
-        
-        //forward pass
-        
-        for (int x = x1; x < x2; ++x) {
-            int i = x - x1;
-            
-            for(int cur = 0; cur <= 1; ++cur){
-                //current state
-                if(scores[i][cur] < -1000) continue;
-                
-                if(cur){
-                    scores[i][cur] += vp[i];
-                    int next = 0;
-                    int step = 8*_page->spatium();//constraints between adjacent barlines
-                    if(step + i <= x2 - x1){
-                        if(scores[step + i][next] < scores[i][cur]){
-                            scores[step + i][next] = scores[i][cur];
-                            bs.x = x; bs.status = cur;
-                            pred[step + i][next] = bs;
-                        }
-                    }
-                    
-                }
-                else{
-                    for(int next = 0; next <= 1; ++next){
-                        int step = 1;
-                        if(step + i <= x2 - x1){
-                            if(scores[step + i][next] < scores[i][cur]){
-                                scores[step + i][next] = scores[i][cur];
-                                bs.x = x; bs.status = cur;
-                                pred[step + i][next] = bs;
-                            }
-=======
-
-      searchNotes();
-=======
-      return xx;
-      }
-
-struct BAR_STATE{
-    int x;
-    int status;//0 represents white space, 1 represents bar
-=======
-            printf(" key found %d %f\n", i, val);
-        }
-    }
-    
-    //---------------------------------------------------------
-    //   maxP
-    //---------------------------------------------------------
-    
-    int maxP(int* projection, int x1, int x2)
-    {
-        int xx = x1;
-        int max = 0;
-        for (int x = x1; x < x2; ++x) {
-            if (projection[x] > max) {
-                max = projection[x];
-                xx  = x;
-            }
-        }
-        return xx;
-    }
-    
-    struct BSTATE{
-        int x;
-        int status;//0 represents white space, 1 represents bar
->>>>>>> 4615c3e... consider different number of staves in systems
-    };
-    
-    
-    //---------------------------------------------------------
-    //   searchSysBarLines
-    //---------------------------------------------------------
-    
-    void OmrSystem::searchSysBarLines()
-    {
-        OmrStaff& r1 = _staves[0];
-        OmrStaff& r2 = _staves[_staves.size() - 1];//[1];
-        
-        
-        int x1  = r1.x();
-        int x2  = x1 + r1.width();
-        int y1  = r1.y();
-        int y2  = r2.y() + r2.height();
-        int h   = y2 - y1 + 1;
-        int th  = /*r1.height() + r2.height() - 5;*/h / 2;     // threshold, data score for null model
-        
-        int vpw = x2-x1;
-        float vp[vpw];
-        memset(vp, 0, sizeof(float) * vpw);
-        
-        
-        
-        //using note constraints
-        searchNotes();
-        
-        int note_constraints[x2-x1];
-        for(int i = 0; i < _staves.size(); i++){
-            OmrStaff& r = _staves[i];
-            foreach(OmrNote* n, r.notes()){
-                for(int x = n->x(); x <= n->x() + n->width(); ++x)
-                    note_constraints[x-x1] = 1;
-            }
-        }
-        
-        //
-        // compute vertical projections
-        //
-        
-        for (int x = x1; x < x2; ++x) {
-            int dots = 0;
-            for (int y = y1; y < y2; ++y) {
-                if (_page->dot(x, y))
-                    ++dots;
-            }
-            if(!note_constraints[x-x1])
-                vp[x - x1] = dots - th;
-            else vp[x - x1] = -HUGE_VAL;
-        }
-        
-        float scores[x2-x1+1][2];
-        BSTATE pred[x2-x1+1][2];
-        BSTATE bs;
-        
-        //initialization
-        bs.x = -1; bs.status = -1;
-        for (int x = x1; x <= x2; ++x) {
-            int i = x - x1;
-            for(int status = 0; status <= 1; ++status){
-                scores[i][status] = -HUGE_VAL;
-                pred[i][status] = bs;
-            }
-        }
-        scores[0][0] = 0;
-        
-        //forward pass
-        
-        for (int x = x1; x < x2; ++x) {
-            int i = x - x1;
-            
-            for(int cur = 0; cur <= 1; ++cur){
-                //current state
-                if(scores[i][cur] < -1000) continue;
-                
-                if(cur){
-                    scores[i][cur] += vp[i];
-                    int next = 0;
-                    int step = 3*_page->spatium();//constraints between adjacent barlines
-                    if(step + i <= x2 - x1){
-                        if(scores[step + i][next] < scores[i][cur]){
-                            scores[step + i][next] = scores[i][cur];
-                            bs.x = x; bs.status = cur;
-                            pred[step + i][next] = bs;
-                        }
-                    }
-                    
-                }
-                else{
-                    for(int next = 0; next <= 1; ++next){
-                        int step = 1;
-                        if(step + i <= x2 - x1){
-                            if(scores[step + i][next] < scores[i][cur]){
-                                scores[step + i][next] = scores[i][cur];
-                                bs.x = x; bs.status = cur;
-                                pred[step + i][next] = bs;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        //trace back
-<<<<<<< HEAD
-          int state = 0;
-          for (int x = x2; x > x1; ){
-              int i = x - x1;
-              bs = pred[i][state];
-              state = bs.status;
-              x = bs.x;
-              
-              if(state){
-                  barLines.append(QLine(x, y1, x, y2));
-              }
-          }
-          
-          
-//      for (int x = x1; x < x2; ++x) {
-//            int dots = 0;
-//            for (int y = y1; y < y2; ++y) {
-//                  if (_page->dot(x, y))
-//                        ++dots;
-//                  }
-//            vp[x - x1] = dots;
-//            }
-//          
-//      
-//      
-//
-//      bool firstBarLine = true;
-//      for (int x = 1; x < vpw; ++x) {
-//            if (vp[x-1] < vp[x])
-//                  continue;
-//            if (vp[x] < th)
-//                  continue;
-////            if (vp[x-1] > vp[x])
-//                  {
-//                  barLines.append(QLine(x + x1, y1, x + x1, y2));
-//                  int xx = x + x1;
-//                  if (firstBarLine) {
-//                        firstBarLine = false;
-//                        _staves[0].setX(xx);
-//                        _staves[1].setX(xx);
-//                        }
-//                  else {
-//                        _staves[0].setWidth(xx - _staves[0].x());
-//                        _staves[1].setWidth(xx - _staves[1].x());
-//                        }
-//                  }
-//            }
-//
-//      searchNotes();
->>>>>>> dc84bba... first version of barline decoding
-
-      //
-      // remove false positive barlines:
-      //    - two barlines too narrow (repeat-/end-barlines
-      //      are detected as two barlines
-      //    - barlines which are really note stems
-      //
-<<<<<<< HEAD
-      QList<QLine> nbl;
-      double x = -10000.0;
-      double spatium = _page->spatium();
-      int nbar = 0;
-//      int i = 0;
-      int n = barLines.size();
-      for (int i = 0; i < n; ++i) {
-          
-          //if(nbar >= 2) break;//liang debug
-          
-            const QLine& l = barLines[i];
-            int nx = l.x1();
-            if ((nx - x) > spatium) {
-                  //
-                  // check for start repeat:
-                  //
-                  if ((nbar == 1)
-                     && ((nx-x)/spatium < 8.0)   // at begin of system?
-//                     && (i < (n-1))
-//                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
-                                                 // missing: check fo note heads
-                                                 // up to here
-                     ) {
-                        x = nx;
-                        continue;
->>>>>>> 57b9dad... compile omr module
-                        }
-                    }
-                }
-            }
-        }
-        
-        //trace back
-=======
->>>>>>> 4615c3e... consider different number of staves in systems
-        int state = 0;
-        for (int x = x2; x > x1; ){
-            int i = x - x1;
-            bs = pred[i][state];
-            state = bs.status;
-            x = bs.x;
-            
-            if(state){
-                barLines.append(QLine(x, y1, x, y2));
-            }
-        }
-<<<<<<< HEAD
-        
-<<<<<<< HEAD
-=======
-        
-        //      for (int x = x1; x < x2; ++x) {
-        //            int dots = 0;
-        //            for (int y = y1; y < y2; ++y) {
-        //                  if (_page->dot(x, y))
-        //                        ++dots;
-        //                  }
-        //            vp[x - x1] = dots;
-        //            }
-        //
-        //
-        //
-        //
-        //      bool firstBarLine = true;
-        //      for (int x = 1; x < vpw; ++x) {
-        //            if (vp[x-1] < vp[x])
-        //                  continue;
-        //            if (vp[x] < th)
-        //                  continue;
-        ////            if (vp[x-1] > vp[x])
-        //                  {
-        //                  barLines.append(QLine(x + x1, y1, x + x1, y2));
-        //                  int xx = x + x1;
-        //                  if (firstBarLine) {
-        //                        firstBarLine = false;
-        //                        _staves[0].setX(xx);
-        //                        _staves[1].setX(xx);
-        //                        }
-        //                  else {
-        //                        _staves[0].setWidth(xx - _staves[0].x());
-        //                        _staves[1].setWidth(xx - _staves[1].x());
-        //                        }
-        //                  }
-        //            }
-        //
-        //      searchNotes();
-        
-        //
-        // remove false positive barlines:
-        //    - two barlines too narrow (repeat-/end-barlines
-        //      are detected as two barlines
-        //    - barlines which are really note stems
-        //
-        //      QList<QLine> nbl;
-        //      double x = -10000.0;
-        //      double spatium = _page->spatium();
-        //      int nbar = 0;
-        ////      int i = 0;
-        //      int n = barLines.size();
-        //      for (int i = 0; i < n; ++i) {
-        //
-        //          //if(nbar >= 2) break;//liang debug
-        //
-        //            const QLine& l = barLines[i];
-        //            int nx = l.x1();
-        //            if ((nx - x) > spatium) {
-        //                  //
-        //                  // check for start repeat:
-        //                  //
-        //                  if ((nbar == 1)
-        //                     && ((nx-x)/spatium < 8.0)   // at begin of system?
-        ////                     && (i < (n-1))
-        ////                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
-        //                                                 // missing: check fo note heads
-        //                                                 // up to here
-        //                     ) {
-        //                        x = nx;
-        //                        continue;
-        //                        }
-        //                  nbl.append(l);
-        //                  x = nx;
-        //                  ++nbar;
-        //                  }
-        //            }
-        //      barLines = nbl;
-=======
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     //-------------------------------------------------------------------
@@ -2058,9 +946,6 @@ struct BAR_STATE{
             }
         }
         
-<<<<<<< HEAD
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
         //trace back
         int state = 0;
         
@@ -2086,12 +971,7 @@ struct BAR_STATE{
         delete []pred;
         
         
-<<<<<<< HEAD
->>>>>>> 21738fc... debugging omr
-        return(scores[x2-x1][0]);
-=======
         return(best_score);
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
     }
     
     //---------------------------------------------------------
@@ -2108,66 +988,9 @@ struct BAR_STATE{
         int xfuzz = fuzz;
         int yfuzz = fuzz;
         if (a.x() > b.x())
-<<<<<<< HEAD
-=======
-//      QList<QLine> nbl;
-//      double x = -10000.0;
-//      double spatium = _page->spatium();
-//      int nbar = 0;
-////      int i = 0;
-//      int n = barLines.size();
-//      for (int i = 0; i < n; ++i) {
-//          
-//          //if(nbar >= 2) break;//liang debug
-//          
-//            const QLine& l = barLines[i];
-//            int nx = l.x1();
-//            if ((nx - x) > spatium) {
-//                  //
-//                  // check for start repeat:
-//                  //
-//                  if ((nbar == 1)
-//                     && ((nx-x)/spatium < 8.0)   // at begin of system?
-////                     && (i < (n-1))
-////                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
-//                                                 // missing: check fo note heads
-//                                                 // up to here
-//                     ) {
-//                        x = nx;
-//                        continue;
-//                        }
-//                  nbl.append(l);
-//                  x = nx;
-//                  ++nbar;
-//                  }
-//            }
-//      barLines = nbl;
-      }
-
-//---------------------------------------------------------
-//   noteCompare
-//---------------------------------------------------------
-
-static bool noteCompare(OmrNote* n1, OmrNote* n2)
-      {
-      return n1->x() < n2->x();
-      }
-
-static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
-      {
-      int xfuzz = fuzz;
-      int yfuzz = fuzz;
-      if (a.x() > b.x())
->>>>>>> dc84bba... first version of barline decoding
             xfuzz = -xfuzz;
         if (a.y() > b.y())
             yfuzz = -yfuzz;
-<<<<<<< HEAD
-=======
-            xfuzz = -xfuzz;
-        if (a.y() > b.y())
-            yfuzz = -yfuzz;
->>>>>>> 4615c3e... consider different number of staves in systems
         
         return (a.intersects(b.translated(xfuzz, yfuzz)));
     }
@@ -2181,7 +1004,6 @@ static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
         //place holder for note detection, doesn't work well for now if using pixel-based template matching
         return;
         for (int i = 0; i < _staves.size(); ++i) {
-<<<<<<< HEAD
             OmrStaff* r = &_staves[i];
             int x1 = r->x();
             int x2 = x1 + r->width();
@@ -2216,64 +1038,6 @@ static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
     //   addText
     //---------------------------------------------------------
     
-=======
-
-      return (a.intersects(b.translated(xfuzz, yfuzz)));
-      }
-
-//---------------------------------------------------------
-//   searchNotes
-//---------------------------------------------------------
-
-void OmrSystem::searchNotes()
-      {
-      for (int i = 0; i < _staves.size(); ++i) {
-=======
->>>>>>> 4615c3e... consider different number of staves in systems
-            OmrStaff* r = &_staves[i];
-            int x1 = r->x();
-            int x2 = x1 + r->width();
-            
-            //
-            // search notes on a range of vertical line position
-            //
-            for (int line = -5; line < 14; ++line)
-                searchNotes(&r->notes(), x1, x2, r->y(), line);
-            
-            //
-            // detect collisions
-            //
-            int fuzz = int(_page->spatium()) / 2;
-            foreach(OmrNote* n, r->notes()) {
-                foreach(OmrNote* m, r->notes()) {
-                    if (m == n)
-                        continue;
-                    if (intersectFuzz(*m, *n, fuzz)) {
-                        if (m->prob > n->prob)
-                            r->notes().removeOne(n);
-                        else
-                            r->notes().removeOne(m);
-                    }
-                }
-            }
-<<<<<<< HEAD
-      }
-
-//---------------------------------------------------------
-//   addText
-//---------------------------------------------------------
-
->>>>>>> 57b9dad... compile omr module
-=======
-            qSort(r->notes().begin(), r->notes().end(), noteCompare);
-        }
-    }
-    
-    //---------------------------------------------------------
-    //   addText
-    //---------------------------------------------------------
-    
->>>>>>> 4615c3e... consider different number of staves in systems
 #ifdef OCR
     static void addText(Score* score, int subtype, const QString& s)
     {
@@ -2369,15 +1133,7 @@ void OmrSystem::searchNotes()
     void OmrPage::crop()
     {
         int wl  = wordsPerLine();
-<<<<<<< HEAD
-<<<<<<< HEAD
         cropT = cropB = cropL = cropR = 0;
-=======
-        int cropT = cropB = cropL = cropR = 0;
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-        cropT = cropB = cropL = cropR = 0;
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         for (int y = 0; y < height(); ++y) {
             const uint* p = scanLine(y);
             for (int k = 0; k < wl; ++k) {
@@ -2624,19 +1380,11 @@ void OmrSystem::searchNotes()
                             on  += onRun * onRun;
                             onRun  = 0;
                             offRun = 0;
-<<<<<<< HEAD
                         }
                         else {
                             onRun += offRun;
                             offRun = 0;
                         }
-=======
-                        }
-                        else {
-                            onRun += offRun;
-                            offRun = 0;
-                        }
->>>>>>> 4615c3e... consider different number of staves in systems
                     }
                     onFlag = bit;
                 }
@@ -2684,14 +1432,7 @@ void OmrSystem::searchNotes()
     
     void OmrPage::getStaffLines()
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
         staves.clear();
-=======
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-        staves.clear();
->>>>>>> 1c244ad... rescale image according to their spatiums
         int h  = height();
         int wl = wordsPerLine();
         // printf("getStaffLines %d %d  crop %d %d\n", h, wl, cropT, cropB);
@@ -2778,10 +1519,6 @@ void OmrSystem::searchNotes()
     }
     
     //---------------------------------------------------------
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     //   getRatio
     //---------------------------------------------------------
     
@@ -2798,20 +1535,11 @@ void OmrSystem::searchNotes()
                 if(isBlack(x,y)) num_black++;
                 else num_white++;
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         }
         _ratio = num_black/(num_black + num_white);
     }
     
     //---------------------------------------------------------
-<<<<<<< HEAD
-=======
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
     //   searchNotes
     //---------------------------------------------------------
     
@@ -2820,16 +1548,11 @@ void OmrSystem::searchNotes()
         double _spatium = _page->spatium();
         y += line * _spatium * .5;
         
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
         //Pattern* patternList[2];
         //patternList[0] = Omr::quartheadPattern;
         //patternList[1] = Omr::halfheadPattern;
         
         Pattern* pattern = Omr::quartheadPattern;
-<<<<<<< HEAD
         
         QList<Peak> notePeaks;
         
@@ -2846,179 +1569,6 @@ void OmrSystem::searchNotes()
                     xx1 = x;
                     val = val1;
                     found = true;
-                }
-            }
-            else {
-                if (found) {
-                    notePeaks.append(Peak(xx1, val, 0));
-                    found = false;
-                }
-            }
-        }
-        
-//        for (int k = 0; k < 2; ++k) {
-=======
-      }
-
-//---------------------------------------------------------
-//   searchNotes
-//---------------------------------------------------------
-
-<<<<<<< HEAD
-//void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
-//      {
-//      double _spatium = _page->spatium();
-//      y += line * _spatium * .5;
-//
-//      Pattern* patternList[2];
-//      patternList[0] = Omr::quartheadPattern;
-//      patternList[1] = Omr::halfheadPattern;
-//
-//      QList<Peak> notePeaks;
-//
-//      for (int k = 0; k < 2; ++k) {
->>>>>>> 57b9dad... compile omr module
-//            Pattern* pattern = patternList[k];
-//            int hh = pattern->h();
-//            int hw = pattern->w();
-//            bool found = false;
-//            int xx1;
-//            double val;
-<<<<<<< HEAD
-//            
-//            for (int x = x1; x < (x2 - hw); ++x) {
-//                double val1 = pattern->match(&_page->image(), x, y - hh/2);
-//                if (val1 >= noteTH) {
-//                    if (!found || (val1 > val)) {
-//                        xx1 = x;
-//                        val = val1;
-//                        found = true;
-//                    }
-//                }
-//                else {
-//                    if (found) {
-//                        notePeaks.append(Peak(xx1, val, k));
-//                        found = false;
-//                    }
-//                }
-//            }
-//        }
-        
-        qSort(notePeaks);
-        int n = notePeaks.size();
-        for (int i = 0; i < n; ++i) {
-            if (notePeaks[i].val < noteTH)
-                break;
-            OmrNote* note = new OmrNote;
-            int sym = notePeaks[i].sym;
-            int hh = pattern->h();
-            int hw = pattern->w();
-            note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
-            note->line = line;
-            note->sym  = pattern->id();
-            note->prob = notePeaks[i].val;
-            noteList->append(note);
-        }
-    }
-    
-    //---------------------------------------------------------
-    //   staffDistance
-    //---------------------------------------------------------
-    
-    double OmrPage::staffDistance() const
-    {
-        if (staves.size() < 2)
-=======
-//
-//            for (int x = x1; x < (x2 - hw); ++x) {
-//                  double val1 = pattern->match(&_page->image(), x, y - hh/2);
-//                  if (val1 >= noteTH) {
-//                        if (!found || (val1 > val)) {
-//                              xx1 = x;
-//                              val = val1;
-//                              found = true;
-//                              }
-//                        }
-//                  else {
-//                        if (found) {
-//                              notePeaks.append(Peak(xx1, val, k));
-//                              found = false;
-//                              }
-//                        }
-//                  }
-//            }
-//
-//      qSort(notePeaks);
-//      int n = notePeaks.size();
-//      for (int i = 0; i < n; ++i) {
-//            if (notePeaks[i].val < noteTH)
-//                  break;
-//            OmrNote* note = new OmrNote;
-//            int sym = notePeaks[i].sym;
-//            int hh = patternList[sym]->h();
-//            int hw = patternList[sym]->w();
-//            note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
-//            note->line = line;
-//            note->sym  = patternList[sym]->id();
-//            note->prob = notePeaks[i].val;
-//            noteList->append(note);
-//            }
-//      }
-=======
-void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
-      {
-      double _spatium = _page->spatium();
-      y += line * _spatium * .5;
-
-      Pattern* patternList[2];
-      patternList[0] = Omr::quartheadPattern;
-      patternList[1] = Omr::halfheadPattern;
-
-      QList<Peak> notePeaks;
-
-      for (int k = 0; k < 2; ++k) {
-=======
-        Pattern* patternList[2];
-        patternList[0] = Omr::quartheadPattern;
-        patternList[1] = Omr::halfheadPattern;
-        
-        QList<Peak> notePeaks;
-        
-        for (int k = 0; k < 2; ++k) {
->>>>>>> 4615c3e... consider different number of staves in systems
-            Pattern* pattern = patternList[k];
-            int hh = pattern->h();
-            int hw = pattern->w();
-            bool found = false;
-            int xx1;
-            double val;
-            
-            for (int x = x1; x < (x2 - hw); ++x) {
-                double val1 = pattern->match(&_page->image(), x, y - hh/2);
-                if (val1 >= noteTH) {
-                    if (!found || (val1 > val)) {
-                        xx1 = x;
-                        val = val1;
-                        found = true;
-                    }
-=======
-        
-        QList<Peak> notePeaks;
-        
-        int hh = pattern->h();
-        int hw = pattern->w();
-        bool found = false;
-        int xx1;
-        double val;
-        
-        for (int x = x1; x < (x2 - hw); ++x) {
-            double val1 = pattern->match(&_page->image(), x, y - hh/2, _page->ratio());
-            if (val1 >= noteTH) {
-                if (!found || (val1 > val)) {
-                    xx1 = x;
-                    val = val1;
-                    found = true;
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
                 }
             }
             else {
@@ -3069,20 +1619,6 @@ void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, in
             note->sym  = pattern->id();
             note->prob = notePeaks[i].val;
             noteList->append(note);
-<<<<<<< HEAD
-            }
-      }
->>>>>>> 27d1d6c... debug pattern match
-
-//---------------------------------------------------------
-//   staffDistance
-//---------------------------------------------------------
-
-double OmrPage::staffDistance() const
-      {
-      if (staves.size() < 2)
->>>>>>> 57b9dad... compile omr module
-=======
         }
     }
     
@@ -3093,7 +1629,6 @@ double OmrPage::staffDistance() const
     double OmrPage::staffDistance() const
     {
         if (staves.size() < 2)
->>>>>>> 4615c3e... consider different number of staves in systems
             return 5;
         return ((staves[1].y() - staves[0].y()) / _spatium) - 4.0;
     }

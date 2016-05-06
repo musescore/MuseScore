@@ -19,11 +19,6 @@
 //=============================================================================
 
 #include "pdf.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c974e91... add poppler to 3rd party folder
 #include "PDFDoc.h"
 #include "goo/GooString.h"
 #include "OutputDev.h"
@@ -31,18 +26,6 @@
 #include "GfxState.h"
 #include "Gfx.h"
 #include "Object.h"
-<<<<<<< HEAD
-=======
-#include "poppler/PDFDoc.h"
-#include "poppler/goo/GooString.h"
-#include "poppler/OutputDev.h"
-#include "poppler/GlobalParams.h"
-#include "poppler/GfxState.h"
-#include "poppler/Gfx.h"
-#include "poppler/Object.h"
->>>>>>> d065ed4... add progress dialog to the omr process
-=======
->>>>>>> c974e91... add poppler to 3rd party folder
 
 //------------------------------------------------------------------------
 // QImageOutputDev
@@ -189,17 +172,6 @@ void QImageOutputDev::drawImage(GfxState* state, Object* , Stream* str,
 #endif
     }
 }
-<<<<<<< HEAD
->>>>>>> add poppler to 3rd party folder
-=======
-extern "C" {
-//#include <fitz.h>
-#include "mupdf/fitz.h"
-// #include <mupdf.h>
-      }
->>>>>>> 57b9dad... compile omr module
-=======
->>>>>>> d065ed4... add progress dialog to the omr process
 
 namespace Ms {
 

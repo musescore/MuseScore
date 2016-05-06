@@ -34,15 +34,7 @@
 
 /* Defines the poppler version. */
 #ifndef POPPLER_VERSION
-<<<<<<< HEAD
-<<<<<<< HEAD
 #define POPPLER_VERSION "0.40.0"
-=======
-#define POPPLER_VERSION "0.38.0"
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-#define POPPLER_VERSION "0.40.0"
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 #endif
 
 /* Enable multithreading support. */
@@ -129,21 +121,9 @@
 #endif
 
 /* Defines if use cms */
-<<<<<<< HEAD
-<<<<<<< HEAD
 //#ifndef USE_CMS
 //#define USE_CMS 1
 //#endif
-=======
-#ifndef USE_CMS
-#define USE_CMS 1
-#endif
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-//#ifndef USE_CMS
-//#define USE_CMS 1
-//#endif
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
 // Also, there are preprocessor symbols in the header files
 // that are used but never defined when building poppler using configure

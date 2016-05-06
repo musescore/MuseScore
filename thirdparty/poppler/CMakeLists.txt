@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-include_directories(${PROJECT_SOURCE_DIR}/thirdparty/lcms2/include)
-=======
->>>>>>> 1b9d32e... update cmake files
-
->>>>>>> 22b06eb... change poppler cmake configurations
 add_library(poppler STATIC
       poppler/Annot.cc
       poppler/Array.cc

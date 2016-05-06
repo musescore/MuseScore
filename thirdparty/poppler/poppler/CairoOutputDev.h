@@ -18,15 +18,7 @@
 // Copyright (C) 2005, 2006 Kristian Høgsberg <krh@redhat.com>
 // Copyright (C) 2005 Nickolay V. Shmyrev <nshmyrev@yandex.ru>
 // Copyright (C) 2006-2011, 2013 Carlos Garcia Campos <carlosgc@gnome.org>
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Copyright (C) 2008, 2009, 2011-2015 Adrian Johnson <ajohnson@redneon.com>
-=======
-// Copyright (C) 2008, 2009, 2011-2014 Adrian Johnson <ajohnson@redneon.com>
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-// Copyright (C) 2008, 2009, 2011-2015 Adrian Johnson <ajohnson@redneon.com>
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 // Copyright (C) 2008 Michael Vrable <mvrable@cs.ucsd.edu>
 // Copyright (C) 2010-2013 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2015 Suzuki Toshiya <mpsuzuki@hiroshima-u.ac.jp>
@@ -120,15 +112,7 @@ public:
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
   virtual GBool useShadedFills(int type) { return type <= 7; }
 #else
-<<<<<<< HEAD
-<<<<<<< HEAD
   virtual GBool useShadedFills(int type) { return type > 1 && type < 4; }
-=======
-  virtual GBool useShadedFills(int type) { return type < 4; }
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-  virtual GBool useShadedFills(int type) { return type > 1 && type < 4; }
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 #endif
 
   // Does this device use FillColorStop()?
@@ -185,18 +169,9 @@ public:
 				  double *mat, double *bbox,
 				  int x0, int y0, int x1, int y1,
 				  double xStep, double yStep);
-<<<<<<< HEAD
-<<<<<<< HEAD
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
   virtual GBool functionShadedFill(GfxState *state, GfxFunctionShading *shading);
 #endif
-=======
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-  virtual GBool functionShadedFill(GfxState *state, GfxFunctionShading *shading);
-#endif
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   virtual GBool axialShadedFill(GfxState *state, GfxAxialShading *shading, double tMin, double tMax);
   virtual GBool axialShadedSupportExtend(GfxState *state, GfxAxialShading *shading);
   virtual GBool radialShadedFill(GfxState *state, GfxRadialShading *shading, double sMin, double sMax);
