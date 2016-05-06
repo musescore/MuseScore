@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.06">
   <programVersion>2.0.0</programVersion>
-  <programRevision>7eca27a</programRevision>
+  <programRevision>6e47f74</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -12,15 +12,9 @@
       <staffUpperBorder>0</staffUpperBorder>
       <staffLowerBorder>0</staffLowerBorder>
       <maxSystemDistance>8.5</maxSystemDistance>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <bracketWidth>0.3</bracketWidth>
       <bracketDistance>0.2</bracketDistance>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
       <showMeasureNumber>0</showMeasureNumber>
-      <smallNoteMag>0.7</smallNoteMag>
-      <graceNoteMag>0.7</graceNoteMag>
-      <smallStaffMag>0.7</smallStaffMag>
       <showFooter>0</showFooter>
       <evenFooterL></evenFooterL>
       <evenFooterC></evenFooterC>

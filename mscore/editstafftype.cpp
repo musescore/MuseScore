@@ -72,8 +72,8 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // load a sample tabulature score in preview
       MasterScore* sc = new MasterScore(MScore::defaultStyle());
-      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR)
-            preview->setScore(sc);
+      Q_ASSERT(readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR);
+      preview->setScore(sc);
 
       setValues();
 
@@ -485,12 +485,10 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 void EditStaffType::updatePreview()
       {
       setFromDlg();
-      if (preview) {
-            preview->score()->staff(0)->setStaffType(&staffType);
-            preview->score()->doLayout();
-            preview->updateAll();
-            preview->update();
-            }
+      preview->score()->staff(0)->setStaffType(&staffType);
+      preview->score()->doLayout();
+      preview->updateAll();
+      preview->update();
       }
 
 //---------------------------------------------------------
