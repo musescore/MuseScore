@@ -116,13 +116,13 @@ static const StyleType styleTypes[] {
       { StyleIdx::measureSpacing,          "measureSpacing",          QVariant(1.2) },
       { StyleIdx::staffLineWidth,          "staffLineWidth",          Spatium(0.08) },      // 0.09375
       { StyleIdx::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },     // 0.1875
-      { StyleIdx::ledgerLineLength,        "ledgerLineLength",        Spatium(.6) },     // note head width + this value
+      { StyleIdx::ledgerLineLength,        "ledgerLineLength",        Spatium(.6) },     // notehead width + this value
       { StyleIdx::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
       { StyleIdx::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
       { StyleIdx::beamWidth,               "beamWidth",               Spatium(0.5) },           // was 0.48
 
       { StyleIdx::beamDistance,            "beamDistance",            QVariant(0.5) },          // 0.25sp units
-      { StyleIdx::beamMinLen,              "beamMinLen",              Spatium(1.32) },      // 1.316178 exactly note head widthen beams
+      { StyleIdx::beamMinLen,              "beamMinLen",              Spatium(1.32) },      // 1.316178 exactly notehead widthen beams
       { StyleIdx::beamNoSlope,             "beamNoSlope",             QVariant(false) },
       { StyleIdx::dotMag,                  "dotMag",                  QVariant(1.0) },
       { StyleIdx::dotNoteDistance,         "dotNoteDistance",         Spatium(0.35) },
@@ -241,7 +241,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { StyleIdx::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
       { StyleIdx::tabClef,                 "tabClef",                 QVariant(int(ClefType::TAB)) },
-      { StyleIdx::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: note head width
+      { StyleIdx::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
       { StyleIdx::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
 
       { StyleIdx::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35

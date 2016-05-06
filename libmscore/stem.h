@@ -29,7 +29,7 @@ class Chord;
 class Stem : public Element {
       Q_OBJECT
 
-      QLineF line;            // p1 is attached to note head
+      QLineF line;            // p1 is attached to notehead
       qreal _userLen;
       qreal _len;             // allways positive
 
