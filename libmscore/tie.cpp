@@ -165,7 +165,7 @@ void Tie::slurPos(SlurPos* sp)
       // y offset for ties inside chord margins (typically multi-note chords): lined up with note top or bottom margin
       //    or outside (typically single-note chord): overlaps note and is above/below it
       // Outside: Tab: uses font size and may be asymmetric placed above/below line (frets ON or ABOVE line)
-      //          Std: assumes note head is 1 sp high, 1/2 sp above and 1/2 below line; add 1/4 sp to it
+      //          Std: assumes notehead is 1 sp high, 1/2 sp above and 1/2 below line; add 1/4 sp to it
       // Inside:  Tab: 1/2 of Outside offset
       //          Std: use a fixed pecentage of note width
       qreal yOffOutside = useTablature

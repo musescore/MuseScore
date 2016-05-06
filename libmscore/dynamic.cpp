@@ -265,7 +265,7 @@ void Dynamic::layout()
                   if (c->stem() && !c->up())  // stem down
                         rxpos() += noteHeadWidth * .25;  // center on stem + optical correction
                   else
-                        rxpos() += noteHeadWidth * .5;   // center on note head
+                        rxpos() += noteHeadWidth * .5;   // center on notehead
                   }
             else
                   rxpos() += c->width() * .5;

@@ -46,7 +46,7 @@ TODO:
       * create chords
 
       panel:
-            - note head detection threshold
+            - notehead detection threshold
 
       score gui:
             - hover with mouse and detect element
