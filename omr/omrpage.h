@@ -26,14 +26,7 @@
 #include "libmscore/fraction.h"
 #include "libmscore/clef.h"
 #include "libmscore/xml.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include "libmscore/sym.h"
-=======
->>>>>>> 57b9dad... compile omr module
-=======
-#include "libmscore/sym.h"
->>>>>>> cf58f72... fix new bugs introduced by rebasing
 
 namespace Ms {
 
@@ -182,20 +175,8 @@ class OmrSystem {
 
       QList<QLine> barLines;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
       void searchSysBarLines();
-=======
-      void searchBarLines();
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-      void searchSysBarLines();
-<<<<<<< HEAD
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
-      float searchBarLinesvar(int n_staff);
-=======
       float searchBarLinesvar(int n_staff/*, float *bar_score_vector*/);
->>>>>>> 9bd44cc... fixed bugs in omr module and update progressbar, load each page sequentially, extended documentation
       void searchNotes();
       };
 
@@ -256,21 +237,8 @@ class OmrPage {
       void readHeader(Score* score);
       void readBarLines(int);
       float searchBarLines(int start_staff, int end_staff);
-<<<<<<< HEAD
-<<<<<<< HEAD
       void identifySystems();
     
-=======
-    void identifySystems();
-=======
-      void identifySystems();
-<<<<<<< HEAD
->>>>>>> 8d0232d... debug skeleton creation
-
->>>>>>> 4615c3e... consider different number of staves in systems
-=======
-    
->>>>>>> 9d10dae... add note detector to suppress barline false positives: still under test
       const QList<OmrSystem>& systems() const { return _systems; }
       //QList<OmrSystem>& systems() { return _systems; }
       OmrSystem* system(int idx)  { return &_systems[idx]; }

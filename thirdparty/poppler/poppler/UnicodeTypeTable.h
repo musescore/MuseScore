@@ -15,14 +15,7 @@
 //
 // Copyright (C) 2006 Ed Catmur <ed@catmur.co.uk>
 // Copyright (C) 2012 Adrian Johnson <ajohnson@redneon.com>
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Copyright (C) 2016 Khaled Hosny <khaledhosny@eglug.org>
-=======
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-// Copyright (C) 2016 Khaled Hosny <khaledhosny@eglug.org>
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -46,8 +39,6 @@ extern GBool unicodeIsAlphabeticPresentationForm(Unicode c);
 
 extern Unicode unicodeToUpper(Unicode c);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 extern Unicode *unicodeNormalizeNFKC(Unicode *in, int len,
 				     int *out_len, int **offsets);
 
@@ -55,18 +46,4 @@ extern Unicode *unicodeNormalizeNFKC(Unicode *in, int len,
 				     int *out_len, int **offsets,
 				     GBool reverseRTL);
 
-=======
-extern Unicode *unicodeNormalizeNFKC(Unicode *in, int len, 
-				     int *out_len, int **offsets);
-
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-extern Unicode *unicodeNormalizeNFKC(Unicode *in, int len,
-				     int *out_len, int **offsets);
-
-extern Unicode *unicodeNormalizeNFKC(Unicode *in, int len,
-				     int *out_len, int **offsets,
-				     GBool reverseRTL);
-
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 #endif

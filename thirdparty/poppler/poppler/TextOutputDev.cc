@@ -35,14 +35,7 @@
 // Copyright (C) 2013 José Aliste <jaliste@src.gnome.org>
 // Copyright (C) 2013 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2013 Ed Catmur <ed@catmur.co.uk>
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Copyright (C) 2016 Khaled Hosny <khaledhosny@eglug.org>
-=======
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-// Copyright (C) 2016 Khaled Hosny <khaledhosny@eglug.org>
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -186,10 +179,6 @@
 #define combMaxMidDelta 0.3
 #define combMaxBaseDelta 0.4
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 static int reorderText(Unicode *text, int len, UnicodeMap *uMap, GBool primaryLR, GooString *s, Unicode* u) {
   char lre[8], rle[8], popdf[8], buf[8];
   int lreLen = 0, rleLen = 0, popdfLen = 0, n;
@@ -278,11 +267,6 @@ static int reorderText(Unicode *text, int len, UnicodeMap *uMap, GBool primaryLR
   return nCols;
 }
 
-<<<<<<< HEAD
-=======
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 //------------------------------------------------------------------------
 // TextUnderline
 //------------------------------------------------------------------------
@@ -3825,15 +3809,7 @@ GBool TextPage::findText(Unicode *s, int len,
 			 double *xMax, double *yMax) {
   TextBlock *blk;
   TextLine *line;
-<<<<<<< HEAD
-<<<<<<< HEAD
   Unicode *s2, *txt, *reordered;
-=======
-  Unicode *s2, *txt;
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-  Unicode *s2, *txt, *reordered;
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   Unicode *p;
   int txtSize, m, i, j, k;
   double xStart, yStart, xStop, yStop;
@@ -3841,22 +3817,11 @@ GBool TextPage::findText(Unicode *s, int len,
   double xMin1, yMin1, xMax1, yMax1;
   GBool found;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  //~ needs to handle right-to-left text
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 
   if (rawOrder) {
     return gFalse;
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   // handle right-to-left text
   reordered = (Unicode*)gmallocn(len, sizeof(Unicode));
   reorderText(s, len, NULL, primaryLR, NULL, reordered);
@@ -3864,26 +3829,11 @@ GBool TextPage::findText(Unicode *s, int len,
   // normalize the search string
   s2 = unicodeNormalizeNFKC(reordered, len, &len, NULL);
 
-<<<<<<< HEAD
   // convert the search string to uppercase
   if (!caseSensitive) {
     for (i = 0; i < len; ++i) {
       s2[i] = unicodeToUpper(s2[i]);
     }
-=======
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
-  // convert the search string to uppercase
-  if (!caseSensitive) {
-    for (i = 0; i < len; ++i) {
-      s2[i] = unicodeToUpper(s2[i]);
-    }
-<<<<<<< HEAD
-  } else {
-    s2 = unicodeNormalizeNFKC(s, len, &len, NULL);
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   }
 
   txt = NULL;
@@ -3951,17 +3901,8 @@ GBool TextPage::findText(Unicode *s, int len,
       if (!line->normalized)
 	line->normalized = unicodeNormalizeNFKC(line->text, line->len, 
 						&line->normalized_len, 
-<<<<<<< HEAD
-<<<<<<< HEAD
 						&line->normalized_idx,
 						true);
-=======
-						&line->normalized_idx);
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-						&line->normalized_idx,
-						true);
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
       // convert the line to uppercase
       m = line->normalized_len;
       if (!caseSensitive) {
@@ -4067,14 +4008,7 @@ GBool TextPage::findText(Unicode *s, int len,
   }
 
   gfree(s2);
-<<<<<<< HEAD
-<<<<<<< HEAD
   gfree(reordered);
-=======
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-  gfree(reordered);
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
   if (!caseSensitive) {
     gfree(txt);
   }
@@ -5490,8 +5424,6 @@ void TextPage::assignColumns(TextLineFrag *frags, int nFrags, GBool oneRot) {
 
 int TextPage::dumpFragment(Unicode *text, int len, UnicodeMap *uMap,
 			   GooString *s) {
-<<<<<<< HEAD
-<<<<<<< HEAD
   if (uMap->isUnicode()) {
     return reorderText(text, len, uMap, primaryLR, s, NULL);
   } else {
@@ -5508,37 +5440,6 @@ int TextPage::dumpFragment(Unicode *text, int len, UnicodeMap *uMap,
 
     return nCols;
   }
-=======
-  char lre[8], rle[8], popdf[8], buf[8];
-  int lreLen, rleLen, popdfLen, n;
-  int nCols, i, j, k;
-
-  nCols = 0;
-
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
-  if (uMap->isUnicode()) {
-    return reorderText(text, len, uMap, primaryLR, s, NULL);
-  } else {
-    int nCols = 0;
-
-    char buf[8];
-    int buflen = 0;
-
-    for (int i = 0; i < len; ++i) {
-      buflen = uMap->mapUnicode(text[i], buf, sizeof(buf));
-      s->append(buf, buflen);
-      nCols += buflen;
-    }
-
-    return nCols;
-  }
-<<<<<<< HEAD
-
-  return nCols;
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 }
 
 #if TEXTOUT_WORD_LIST

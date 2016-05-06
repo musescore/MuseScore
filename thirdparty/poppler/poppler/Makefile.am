@@ -296,15 +296,7 @@ libpoppler_la_LIBADD =				\
 	$(win32_libs)
 
 libpoppler_la_LDFLAGS =				\
-<<<<<<< HEAD
-<<<<<<< HEAD
 	-version-info 58:0:0			\
-=======
-	-version-info 57:0:0			\
->>>>>>> b81c4b1... put poppler into thirdparty folder
-=======
-	-version-info 58:0:0			\
->>>>>>> c5cb60a... update to Poppler 0.40, remove dependency on lcms and fontconfig(?)
 	@create_shared_lib@			\
 	@auto_import_flags@
 
