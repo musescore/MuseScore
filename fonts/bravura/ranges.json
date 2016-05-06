@@ -80,6 +80,22 @@
         "range_end": "U+E86F", 
         "range_start": "U+E860"
     }, 
+    "arabicAccidentals": {
+        "description": "Arabic accidentals", 
+        "glyphs": [
+            "accidentalDoubleFlatArabic", 
+            "accidentalThreeQuarterTonesFlatArabic", 
+            "accidentalFlatArabic", 
+            "accidentalQuarterToneFlatArabic", 
+            "accidentalNaturalArabic", 
+            "accidentalQuarterToneSharpArabic", 
+            "accidentalSharpArabic", 
+            "accidentalThreeQuarterTonesSharpArabic", 
+            "accidentalDoubleSharpArabic"
+        ], 
+        "range_end": "U+ED3F", 
+        "range_start": "U+ED30"
+    }, 
     "arelEzgiUzdilekAeuAccidentals": {
         "description": "Arel-Ezgi-Uzdilek (AEU) accidentals", 
         "glyphs": [
@@ -186,6 +202,21 @@
         ], 
         "range_end": "U+E4BF", 
         "range_start": "U+E4A0"
+    }, 
+    "articulationSupplement": {
+        "description": "Articulation supplement", 
+        "glyphs": [
+            "articSoftAccentAbove", 
+            "articSoftAccentBelow", 
+            "articSoftAccentStaccatoAbove", 
+            "articSoftAccentStaccatoBelow", 
+            "articSoftAccentTenutoAbove", 
+            "articSoftAccentTenutoBelow", 
+            "articSoftAccentTenutoStaccatoAbove", 
+            "articSoftAccentTenutoStaccatoBelow"
+        ], 
+        "range_end": "U+ED4F", 
+        "range_start": "U+ED40"
     }, 
     "athenianSagittalExtensionMediumPrecisionAccidentals": {
         "description": "Athenian Sagittal extension (medium precision) accidentals", 
@@ -485,7 +516,8 @@
             "brassHarmonMuteStemOpen", 
             "brassLiftSmoothShort", 
             "brassLiftSmoothMedium", 
-            "brassLiftSmoothLong"
+            "brassLiftSmoothLong", 
+            "brassValveTrill"
         ], 
         "range_end": "U+E5EF", 
         "range_start": "U+E5D0"
@@ -685,7 +717,8 @@
             "conductorBeat4Simple", 
             "conductorBeat2Compound", 
             "conductorBeat3Compound", 
-            "conductorBeat4Compound"
+            "conductorBeat4Compound", 
+            "conductorUnconducted"
         ], 
         "range_end": "U+E89F", 
         "range_start": "U+E890"
@@ -797,7 +830,14 @@
             "dynamicCrescendoHairpin", 
             "dynamicDiminuendoHairpin", 
             "dynamicMessaDiVoce", 
-            "dynamicNienteForHairpin"
+            "dynamicNienteForHairpin", 
+            "dynamicHairpinParenthesisLeft", 
+            "dynamicHairpinParenthesisRight", 
+            "dynamicHairpinBracketLeft", 
+            "dynamicHairpinBracketRight", 
+            "dynamicCombinedSeparatorColon", 
+            "dynamicCombinedSeparatorHyphen", 
+            "dynamicCombinedSeparatorSpace"
         ], 
         "range_end": "U+E54F", 
         "range_start": "U+E520"
@@ -929,7 +969,14 @@
             "accidentalFlatEqualTempered", 
             "accidentalNaturalEqualTempered", 
             "accidentalSharpEqualTempered", 
-            "accidentalDoubleSharpEqualTempered"
+            "accidentalDoubleSharpEqualTempered", 
+            "accidentalQuarterFlatEqualTempered", 
+            "accidentalQuarterSharpEqualTempered", 
+            "accidentalCombiningLower53LimitComma", 
+            "accidentalCombiningRaise53LimitComma", 
+            "accidentalEnharmonicTilde", 
+            "accidentalEnharmonicAlmostEqualTo", 
+            "accidentalEnharmonicEquals"
         ], 
         "range_end": "U+E2FF", 
         "range_start": "U+E2C0"
@@ -992,6 +1039,41 @@
         ], 
         "range_end": "U+EA6F", 
         "range_start": "U+EA50"
+    }, 
+    "figuredBassSupplement": {
+        "description": "Figured bass supplement", 
+        "glyphs": [
+            "figbass7Diminished"
+        ], 
+        "range_end": "U+ECCF", 
+        "range_start": "U+ECC0"
+    }, 
+    "fingering": {
+        "description": "Fingering", 
+        "glyphs": [
+            "fingering0", 
+            "fingering1", 
+            "fingering2", 
+            "fingering3", 
+            "fingering4", 
+            "fingering5", 
+            "fingeringTUpper", 
+            "fingeringPLower", 
+            "fingeringTLower", 
+            "fingeringILower", 
+            "fingeringMLower", 
+            "fingeringALower", 
+            "fingeringCLower", 
+            "fingeringXLower", 
+            "fingeringELower", 
+            "fingeringOLower", 
+            "fingeringSubstitutionAbove", 
+            "fingeringSubstitutionBelow", 
+            "fingeringSubstitutionDash", 
+            "fingeringMultipleNotes"
+        ], 
+        "range_end": "U+ED2F", 
+        "range_start": "U+ED10"
     }, 
     "flags": {
         "description": "Flags", 
@@ -1090,10 +1172,28 @@
             "functionRepetition1", 
             "functionRepetition2", 
             "functionRing", 
-            "functionPlus"
+            "functionPlus", 
+            "functionFUpper", 
+            "functionIUpper", 
+            "functionILower", 
+            "functionKUpper", 
+            "functionKLower", 
+            "functionLUpper", 
+            "functionLLower"
         ], 
         "range_end": "U+EA9F", 
         "range_start": "U+EA70"
+    }, 
+    "functionTheorySymbolsSupplement": {
+        "description": "Function theory symbols supplement", 
+        "glyphs": [
+            "functionMUpper", 
+            "functionMLower", 
+            "functionNUpperSuperscript", 
+            "functionRLower"
+        ], 
+        "range_end": "U+ED0F", 
+        "range_start": "U+ED00"
     }, 
     "germanRenaissanceLuteTablature": {
         "description": "German Renaissance lute tablature", 
@@ -1195,7 +1295,9 @@
             "guitarFadeOut", 
             "guitarVolumeSwell", 
             "guitarStrumUp", 
-            "guitarStrumDown"
+            "guitarStrumDown", 
+            "guitarBarreFull", 
+            "guitarBarreHalf"
         ], 
         "range_end": "U+E84F", 
         "range_start": "U+E830"
@@ -1250,7 +1352,14 @@
             "harpTuningKeyGlissando", 
             "harpStringNoiseStem", 
             "harpSalzedoAeolianAscending", 
-            "harpSalzedoAeolianDescending"
+            "harpSalzedoAeolianDescending", 
+            "harpSalzedoDampLowStrings", 
+            "harpSalzedoDampBothHands", 
+            "harpSalzedoDampBelow", 
+            "harpSalzedoDampAbove", 
+            "harpSalzedoMetallicSoundsOneString", 
+            "harpSalzedoIsolatedSounds", 
+            "harpSalzedoSnareDrum"
         ], 
         "range_end": "U+E69F", 
         "range_start": "U+E680"
@@ -1408,7 +1517,11 @@
             "keyboardPlayWithRH", 
             "keyboardPlayWithRHEnd", 
             "keyboardPlayWithLH", 
-            "keyboardPlayWithLHEnd"
+            "keyboardPlayWithLHEnd", 
+            "keyboardPedalHookStart", 
+            "keyboardPedalHookEnd", 
+            "keyboardPedalHeelToToe", 
+            "keyboardPedalToeToHeel"
         ], 
         "range_end": "U+E67F", 
         "range_start": "U+E650"
@@ -2284,7 +2397,9 @@
             "accidentalOneThirdToneSharpFerneyhough", 
             "accidentalOneThirdToneFlatFerneyhough", 
             "accidentalTwoThirdTonesSharpFerneyhough", 
-            "accidentalTwoThirdTonesFlatFerneyhough"
+            "accidentalTwoThirdTonesFlatFerneyhough", 
+            "accidentalOneQuarterToneSharpFerneyhough", 
+            "accidentalOneQuarterToneFlatFerneyhough"
         ], 
         "range_end": "U+E49F", 
         "range_start": "U+E470"
@@ -2354,7 +2469,8 @@
             "pictTurnLeftStem", 
             "pictTurnRightLeftStem", 
             "pictCrushStem", 
-            "pictDeadNoteStem"
+            "pictDeadNoteStem", 
+            "pictScrapeAroundRimClockwise"
         ], 
         "range_end": "U+E80F", 
         "range_start": "U+E7F0"
@@ -2616,7 +2732,9 @@
             "noteheadRoundBlackSlashed", 
             "noteheadRoundWhiteSlashed", 
             "noteheadSquareBlackLarge", 
-            "noteheadSquareBlackWhite"
+            "noteheadSquareBlackWhite", 
+            "noteheadRoundBlackDoubleSlashed", 
+            "noteheadRoundWhiteDoubleSlashed"
         ], 
         "range_end": "U+E11F", 
         "range_start": "U+E110"
@@ -2672,6 +2790,27 @@
         "range_end": "U+E1CF", 
         "range_start": "U+E1B0"
     }, 
+    "shapeNoteNoteheadsSupplement": {
+        "description": "Shape note noteheads supplement", 
+        "glyphs": [
+            "noteShapeRoundDoubleWhole", 
+            "noteShapeSquareDoubleWhole", 
+            "noteShapeTriangleRightDoubleWhole", 
+            "noteShapeTriangleLeftDoubleWhole", 
+            "noteShapeDiamondDoubleWhole", 
+            "noteShapeTriangleUpDoubleWhole", 
+            "noteShapeMoonDoubleWhole", 
+            "noteShapeTriangleRoundDoubleWhole", 
+            "noteShapeKeystoneDoubleWhole", 
+            "noteShapeQuarterMoonDoubleWhole", 
+            "noteShapeIsoscelesTriangleDoubleWhole", 
+            "noteShapeMoonLeftDoubleWhole", 
+            "noteShapeArrowheadLeftDoubleWhole", 
+            "noteShapeTriangleRoundLeftDoubleWhole"
+        ], 
+        "range_end": "U+ECDF", 
+        "range_start": "U+ECD0"
+    }, 
     "simplifiedMusicNotation": {
         "description": "Simplified Music Notation", 
         "glyphs": [
@@ -2715,7 +2854,8 @@
             "noteheadSlashX", 
             "noteheadSlashVerticalEndsMuted", 
             "noteheadSlashHorizontalEndsMuted", 
-            "noteheadSlashWhiteMuted"
+            "noteheadSlashWhiteMuted", 
+            "noteheadSlashWhiteDoubleWhole"
         ], 
         "range_end": "U+E10F", 
         "range_start": "U+E100"
@@ -2823,7 +2963,9 @@
             "accidentalNaturalSharp", 
             "accidentalSharpSharp", 
             "accidentalParensLeft", 
-            "accidentalParensRight"
+            "accidentalParensRight", 
+            "accidentalBracketLeft", 
+            "accidentalBracketRight"
         ], 
         "range_end": "U+E26F", 
         "range_start": "U+E260"
@@ -2892,6 +3034,28 @@
         "range_end": "U+E21F", 
         "range_start": "U+E210"
     }, 
+    "stockhausenAccidentals": {
+        "description": "Stockhausen accidentals (24-EDO)", 
+        "glyphs": [
+            "accidentalRaisedStockhausen", 
+            "accidentalLoweredStockhausen", 
+            "accidentalFlatRaisedStockhausen", 
+            "accidentalFlatLoweredStockhausen", 
+            "accidentalNaturalRaisedStockhausen", 
+            "accidentalNaturalLoweredStockhausen", 
+            "accidentalSharpRaisedStockhausen", 
+            "accidentalSharpLoweredStockhausen", 
+            "accidentalOneQuarterToneSharpStockhausen", 
+            "accidentalOneQuarterToneFlatStockhausen", 
+            "accidentalThreeQuarterTonesSharpStockhausen", 
+            "accidentalFlatRepeatedSpaceStockhausen", 
+            "accidentalFlatRepeatedLineStockhausen", 
+            "accidentalSharpRepeatedSpaceStockhausen", 
+            "accidentalSharpRepeatedLineStockhausen"
+        ], 
+        "range_end": "U+ED5F", 
+        "range_start": "U+ED50"
+    }, 
     "stringTechniques": {
         "description": "String techniques", 
         "glyphs": [
@@ -2917,7 +3081,11 @@
             "stringsVibratoPulse", 
             "stringsThumbPosition", 
             "stringsThumbPositionTurned", 
-            "stringsChangeBowDirection"
+            "stringsChangeBowDirection", 
+            "stringsBowBehindBridgeOneString", 
+            "stringsBowBehindBridgeTwoStrings", 
+            "stringsBowBehindBridgeThreeStrings", 
+            "stringsBowBehindBridgeFourStrings"
         ], 
         "range_end": "U+E62F", 
         "range_start": "U+E610"
@@ -2961,6 +3129,25 @@
         "range_end": "U+E09F", 
         "range_start": "U+E080"
     }, 
+    "timeSignaturesReversed": {
+        "description": "Reversed time signatures", 
+        "glyphs": [
+            "timeSig0Reversed", 
+            "timeSig1Reversed", 
+            "timeSig2Reversed", 
+            "timeSig3Reversed", 
+            "timeSig4Reversed", 
+            "timeSig5Reversed", 
+            "timeSig6Reversed", 
+            "timeSig7Reversed", 
+            "timeSig8Reversed", 
+            "timeSig9Reversed", 
+            "timeSigCommonReversed", 
+            "timeSigCutCommonReversed"
+        ], 
+        "range_end": "U+ECFF", 
+        "range_start": "U+ECF0"
+    }, 
     "timeSignaturesSupplement": {
         "description": "Time signatures supplement", 
         "glyphs": [
@@ -2969,10 +3156,30 @@
             "timeSigBracketLeftSmall", 
             "timeSigBracketRightSmall", 
             "timeSigSlash", 
-            "timeSigCut2"
+            "timeSigCut2", 
+            "timeSigCut3"
         ], 
         "range_end": "U+EC8F", 
         "range_start": "U+EC80"
+    }, 
+    "timeSignaturesTurned": {
+        "description": "Turned time signatures", 
+        "glyphs": [
+            "timeSig0Turned", 
+            "timeSig1Turned", 
+            "timeSig2Turned", 
+            "timeSig3Turned", 
+            "timeSig4Turned", 
+            "timeSig5Turned", 
+            "timeSig6Turned", 
+            "timeSig7Turned", 
+            "timeSig8Turned", 
+            "timeSig9Turned", 
+            "timeSigCommonTurned", 
+            "timeSigCutCommonTurned"
+        ], 
+        "range_end": "U+ECEF", 
+        "range_start": "U+ECE0"
     }, 
     "tremolos": {
         "description": "Tremolos", 
@@ -2994,7 +3201,8 @@
             "tremoloDivisiDots2", 
             "tremoloDivisiDots3", 
             "tremoloDivisiDots4", 
-            "tremoloDivisiDots6"
+            "tremoloDivisiDots6", 
+            "stockhausenTremolo"
         ], 
         "range_end": "U+E23F", 
         "range_start": "U+E220"
@@ -3098,7 +3306,11 @@
             "vocalMouthWideOpen", 
             "vocalMouthPursed", 
             "vocalSprechgesang", 
-            "vocalsSussurando"
+            "vocalsSussurando", 
+            "vocalNasalVoice", 
+            "vocalTongueClickStockhausen", 
+            "vocalFingerClickStockhausen", 
+            "vocalTongueFingerClickStockhausen"
         ], 
         "range_end": "U+E64F", 
         "range_start": "U+E640"
@@ -3149,7 +3361,9 @@
             "windReedPositionIn", 
             "windMultiphonicsBlackStem", 
             "windMultiphonicsWhiteStem", 
-            "windMultiphonicsBlackWhiteStem"
+            "windMultiphonicsBlackWhiteStem", 
+            "windMouthpiecePop", 
+            "windRimOnly"
         ], 
         "range_end": "U+E60F", 
         "range_start": "U+E5F0"
