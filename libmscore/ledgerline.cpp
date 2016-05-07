@@ -61,7 +61,8 @@ qreal LedgerLine::measureXPos() const
 void LedgerLine::layout()
       {
       setLineWidth(score()->styleS(StyleIdx::ledgerLineWidth) * chord()->mag());
-      setColor(staff()->color());
+      if (staff())
+            setColor(staff()->color());
       Line::layout();
       }
 
