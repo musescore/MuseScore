@@ -105,7 +105,7 @@ class Chord : public ChordRest {
       virtual qreal downPos() const;
       virtual qreal centerX() const;
       void createLedgerLines(int track, std::vector<LedgerLineData> &vecLines, bool visible);
-      void addLedgerLines(int move);
+      void addLedgerLines();
       void processSiblings(std::function<void(Element*)> func) const;
 
       void layoutPitched();
