@@ -633,7 +633,7 @@ void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium le
 
 //---------------------------------------------------------
 //   createLedgerLines
-///   Creates the ledger lines fro a chord
+///   Creates the ledger lines for a chord
 ///   \arg track      track the ledger line belongs to
 ///   \arg lines      a vector of LedgerLineData describing thelines to add
 ///   \arg visible    whether the line is visible or not
@@ -658,22 +658,34 @@ void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool 
 //   addLedgerLines
 //---------------------------------------------------------
 
-void Chord::addLedgerLines(int move)
+void Chord::addLedgerLines()
       {
-      LedgerLineData    lld;
-      qreal _spatium = spatium();
-      int   idx   = staffIdx() + move;
-      int   track = staff2track(idx);           // the track lines belong to
-      qreal hw    = _notes[0]->headWidth();
+      LedgerLineData lld;
+      // initialize for palette
+      int track = 0;                            // the track lines belong to
       // the line pos corresponding to the bottom line of the staff
-      int   lineBelow = (score()->staff(idx)->lines()-1) * 2;
+      int lineBelow = 8;                        // assuming 5-lined "staff"
+      qreal lineDistance = 1, _mag = 1;
+      bool staffVisible = true;
+
+      if (segment()) { //not palette
+            int idx   = staffIdx() + staffMove();
+            track     = staff2track(idx);
+            Staff* st = score()->staff(idx);
+            lineBelow    = (st->lines() - 1) * 2;
+            lineDistance = st->lineDistance();
+            _mag         = staff()->mag();
+            staffVisible = !staff()->invisible();
+            }
+
+      // the extra length of a ledger line with respect to notehead (half of it on each side)
+      qreal extraLen = score()->styleP(StyleIdx::ledgerLineLength) * _mag * 0.5;
+      qreal hw = _notes[0]->headWidth();
       qreal minX, maxX;                         // note extrema in raster units
 //      qreal minXr, maxXr;                       // ledger line extrema in raster units
       int   minLine, maxLine;
       bool  visible = false;
       qreal x;
-      // the extra length of a ledger line with respect to notehead (half of it on each side)
-      qreal extraLen = score()->styleS(StyleIdx::ledgerLineLength).val() * _spatium * 0.5;
 
       // scan chord notes, collecting visibility and x and y extrema
       // NOTE: notes are sorted from bottom to top (line no. decreasing)
@@ -763,11 +775,8 @@ void Chord::addLedgerLines(int move)
                         }
                   }
             if (minLine < 0 || maxLine > lineBelow)
-                  createLedgerLines(track, vecLines, !staff()->invisible());
+                  createLedgerLines(track, vecLines, staffVisible);
             }
-
-            return;                       // no ledger lines for this chord
-
       }
 
 //-----------------------------------------------------------------------------
@@ -1164,7 +1173,8 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _arpeggio);
       if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
-      if (staff() && staff()->showLedgerLines())
+      Staff* st = staff();
+      if ((st && st->showLedgerLines()) || !st)       // also for palette
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
       int n = _notes.size();
@@ -1182,7 +1192,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //   processSiblings
 //---------------------------------------------------------
 
-void Chord::processSiblings(std::function<void(Element*)> func)
+void Chord::processSiblings(std::function<void(Element*)> func) const
       {
       if (_hook)
             func(_hook);
@@ -1791,6 +1801,9 @@ void Chord::layoutPitched()
                   }
             computeUp();
             layoutStem();
+            addLedgerLines();
+            for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+                  ll->layout();
             return;
             }
 
@@ -1882,7 +1895,7 @@ void Chord::layoutPitched()
       //  create ledger lines
       //-----------------------------------------
 
-      addLedgerLines(staffMove());
+      addLedgerLines();
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             ll->layout();
 
