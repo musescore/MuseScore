@@ -1,15 +1,13 @@
 
 #Updates on Optical Music Recognition 
-##Liang Chen
 
 ###Graphical Model for System Identification
 
-1. We can easily treat bar line detection as finding significant vertical edge. But the performance of simple edge detection is unreliable since this process is sensitive to different noise such as note stems or lines in the text. The other problem of solely relying on detection is that we can hardly interpret the structure of systems based on the detection results. The solution to system identification is to use a graphical model to represent the system structure and encode useful distance and non-overlapping constraints, with which we can determine the grouping of staves into systems and the location of barlines in each system at the same time (simultaneously estimate both).
+1. We can treat bar line detection simply as vertical edge detection. But the performance is quite unreliable because this process is sensitive to noise such as note stems or lines in text. The other problem of solely relying on edge detection is that we can hardly interpret the structure of systems based on what has been detected. The solution to this problem is to apply a graphical model to represent the system structure and encode useful distance or non-overlapping constraints, with which we can determine the grouping of staves into systems and the location of barlines in each system at the same time (simultaneously estimate both).
 
-2. Suppose we have n staves (n-1 gaps), then there'll be 2^(n-1) ways of system grouping if taking each gap as a binary switch connecting or not connecting the adjacent staves. In each system (staff group), the barline positions will be commonly shared (a very strong and useful constriant!!). We use a nested dynamic programming to solve this problem. The optimal hypothesis (how the staves are grouped together) until k-th stave yielding the max score h(k) = max(h(i) + system(i+1, ..., k)), based on previous optimal hypotheses h(i), i= 1,2,...,k-1.
+2. Suppose we have n staves (n-1 gaps), then there'll be 2^(n-1) ways of grouping systems if taking each gap as a binary switch connecting or not connecting the adjacent staves. In each system (staff group), barline positions will be commonly shared (a very strong and useful constriant!). We can use a nested dynamic programming to solve this problem. The optimal hypothesis (how the staves are grouped together) until the k-th stave yielding the max score h(k) = max(h(i) + system(i+1, ..., k)), based on previous optimal hypotheses h(i), i= 1,2,...,k-1.
 In each hypothesized system(i,...,j) from i-th to j-th staves, we recognize shared barlines from left to right by finding the best scoring configuration
 b_opt = max(b(k1) + b(k2) + ... + b(kn)) supposing each horizontal location corresponds to a bar or just background, where b(.) is the scoring function for barline in that column. We can also incorporate negative constraints (clef, key sigs, time sigs, or note stem) into this bar line recognition process.
-
 
 
 <!--Likelihood Model for Symbol Template Matching
@@ -41,13 +39,11 @@ S(I(i,j)) = log(P(I(i,j)|M) / P(I(i,j)|B)) = Sum( log(P(p(i+ii,j+jj)|M)) - log(P
 If S(I(i,j)) is larger than 0, we say at position (i,j) there's a symbols candidate. This threshold 0 is automatically determined by our background model, but can also be tuned according to our request (e.g. for higher precision than recall the threshold should be larger).-->
 
 ###Demo
-data
-
-results
+[data and screenshots of results](https://github.com/liang-chen/MuseScore/tree/omr_dev/omr/data)
 
 ###Todo
 
-	2.1 Add pagebreak to generated skeleton
-	2.2 Alignm skeleton to OMR
-	2.3 Fix pdf loading for vector graphs
-	2.4 Optimize OMR performance and add clef/key recognitions
+	Add pagebreak to generated skeleton
+	Align skeleton to OMR
+	Fix pdf loading for vector graphs
+	Optimize OMR performance and add clef/key recognitions
