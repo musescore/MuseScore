@@ -194,20 +194,17 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
-      QString s = plainText();
+      QString s = xmlText();
       s.replace(",", ".");
       for (const TempoPattern& pa : tp) {
             QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*");
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
-                        qreal nt = qreal(sl[1].toDouble()) * pa.f;
-                        if (nt != _tempo) {
-                              setTempo(qreal(sl[1].toDouble()) * pa.f);
-                              _relative = 1.0;
-                              _isRelative = false;
-                              updateScore();
-                              }
+                        setTempo(qreal(sl[1].toDouble()) * pa.f);
+                        _relative = 1.0;
+                        _isRelative = false;
+                        updateScore();
                         break;
                         }
                   }
