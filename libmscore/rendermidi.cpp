@@ -350,19 +350,47 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   Chord* chord = static_cast<Chord*>(cr);
                   Staff* staff = chord->staff();
+
                   int velocity1 = staff->velocities().velo(seg->tick());
                   int velocity2 = staff->velocities().velo(seg->tick()+seg->ticks()-1);
                   int velocity=velocity1;
-
-                  if (staff->score()->useCC11() && velocity1<velocity2)
-                        velocity=velocity2;
-
 
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
                   foreach (Articulation* a, chord->articulations()) {
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
+                        }
+                  velocity1 = velocity;
+
+                  if (staff->score()->useCC11() && velocity1!=velocity2)
+                        {
+                        velocity=127;
+
+                        int cc11EndTick = seg->tick()+seg->ticks()-1;
+
+                        int cc11Ticks = seg->ticks();
+                        int cc11Amount = velocity2-velocity1;
+
+                        int cc11start = velocity1;
+
+                        // Do a update for every signle little step - maybe that is a bit too much
+                        // TODO find out good update intervals!
+                        int tickInc = cc11Ticks/abs(cc11Amount);
+
+                        for(int i=0;i<abs(cc11Amount);++i) {
+                              NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, cc11start);
+                              events->insert(std::pair<int,NPlayEvent>(seg->tick()+i*tickInc,cc11event));
+                              if (cc11Amount>0)
+                                    cc11start++;
+                              else
+                                    cc11start--;
+                              }
+
+
+                        NPlayEvent cc11lastevent = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, 127);
+                        events->insert(std::pair<int,NPlayEvent>(cc11EndTick+1,cc11lastevent));
+
                         }
 
                   for (Chord* c : chord->graceNotesBefore()) {
@@ -1625,7 +1653,7 @@ void Score::renderHairpins(EventMap* events)
                               continue;
                               }
 
-                        // as a start let modulation end on chordend-2 and have it reset on -1 (maybe not best option)
+                        // as a start let modulation end on chordend-2 and have it reset on -1 (maybe not best option)y
                         int cc11EndTick = curChordRest->tick()+curChordRest->ticks()-2;
 
                         int cc11Ticks = curChordRest->tick();
@@ -1680,7 +1708,7 @@ void Score::renderMidi(EventMap* events)
       foreach (Staff* part, _staves)
             renderStaff(events, part);
 
-      renderHairpins(events);
+//      renderHairpins(events);
 
       // create sustain pedal events
       renderSpanners(events, -1);
