@@ -31,8 +31,8 @@ class TestNotes : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void notes2() { omrFileTest("notes2"); }
-      void notes1() { omrFileTest("notes1"); }
+      //void notes2() { omrFileTest("notes2"); }
+      //void notes1() { omrFileTest("notes1"); }
       };
 
 //---------------------------------------------------------
