@@ -103,10 +103,6 @@ option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for Portaudio audio backend." ON)
 option(BUILD_PCH "Build using precompiled headers." OFF)
 
-
-
-
-
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")
@@ -585,7 +581,6 @@ include_directories(
    ${LAME_INCLUDE_DIR}
 #   ${FREETYPE_INCLUDE_DIRS}
    ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
-#   ${PROJECT_SOURCE_DIR}/poppler
 )
 
 if (OMR)
@@ -625,4 +620,3 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
    DEPENDS genManual
    )
-
