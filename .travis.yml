@@ -141,7 +141,3 @@ after_script:
 #  webhooks:
 #    # trigger Buildtime Trend Service to parse Travis CI log
 #    - https://buildtimetrend.herokuapp.com/travis
-<<<<<<< HEAD
->>>>>>> change .travis.yml
-=======
->>>>>>> 37f7f2e... change .travis.yml

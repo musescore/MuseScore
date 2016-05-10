@@ -29,7 +29,7 @@ class OmrView;
 //---------------------------------------------------------
 
 class OmrPanel : public QDockWidget {
-      //Q_OBJECT
+      Q_OBJECT
 
       Ui::OmrPanel op;
 
