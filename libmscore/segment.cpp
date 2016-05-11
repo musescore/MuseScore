@@ -1334,7 +1334,8 @@ void Segment::createShape(int staffIdx)
                   s.add(e->shape());
             }
       for (Element* e : _annotations) {
-            if (e->staffIdx() == staffIdx && e->visible() && !e->isTempoText())
+            // probably only allow for lyrics and chordnames
+            if (e->staffIdx() == staffIdx && e->visible() && !e->isTempoText() && !e->isStaffText())
                   s.add(e->shape());
             }
       }
