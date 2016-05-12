@@ -596,7 +596,7 @@ qreal Chord::maxHeadWidth() const
 
 //---------------------------------------------------------
 //   createLedgerLines
-///   Creates the ledger lines fro a chord
+///   Creates the ledger lines for a chord
 ///   \arg track      track the ledger line belongs to
 ///   \arg lines      a vector of LedgerLineData describing the lines to add
 ///   \arg visible    whether the line is visible or not
@@ -622,23 +622,33 @@ void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool 
 //   addLedgerLines
 //---------------------------------------------------------
 
-void Chord::addLedgerLines(int move)
+void Chord::addLedgerLines()
       {
-      LedgerLineData    lld;
-      qreal _mag     = staff()->mag();
-      int   idx   = staffIdx() + move;
-      int   track = staff2track(idx);           // the track lines belong to
-      qreal hw    = _notes[0]->headWidth();
+      LedgerLineData lld;
+      // initialize for palette
+      int track = 0;                            // the track lines belong to
       // the line pos corresponding to the bottom line of the staff
-      Staff* st = score()->staff(idx);
-      int lineBelow = (st->lines() - 1) * 2;
-      qreal lineDistance = st->lineDistance();
+      int lineBelow = 8;                        // assuming 5-lined "staff"
+      qreal lineDistance = 1, _mag = 1;
+      bool staffVisible = true;
+
+      if (segment()) { //not palette
+            int idx   = staffIdx() + staffMove();
+            track     = staff2track(idx);
+            Staff* st = score()->staff(idx);
+            lineBelow    = (st->lines() - 1) * 2;
+            lineDistance = st->lineDistance();
+            _mag         = staff()->mag();
+            staffVisible = !staff()->invisible();
+            }
+
+      // the extra length of a ledger line with respect to notehead (half of it on each side)
+      qreal extraLen = score()->styleP(StyleIdx::ledgerLineLength) * _mag * 0.5;
+      qreal hw = _notes[0]->headWidth();
       qreal minX, maxX;                         // note extrema in raster units
       int   minLine, maxLine;
       bool  visible = false;
       qreal x;
-      // the extra length of a ledger line with respect to notehead (half of it on each side)
-      qreal extraLen = score()->styleP(StyleIdx::ledgerLineLength) * _mag * 0.5;
 
       // scan chord notes, collecting visibility and x and y extrema
       // NOTE: notes are sorted from bottom to top (line no. decreasing)
@@ -732,11 +742,8 @@ void Chord::addLedgerLines(int move)
                         }
                   }
             if (minLine < 0 || maxLine > lineBelow)
-                  createLedgerLines(track, vecLines, !staff()->invisible());
+                  createLedgerLines(track, vecLines, staffVisible);
             }
-
-            return;                       // no ledger lines for this chord
-
       }
 
 //-----------------------------------------------------------------------------
@@ -1110,7 +1117,8 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _arpeggio);
       if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
-      if (staff() && staff()->showLedgerLines())
+      Staff* st = staff();
+      if ((st && st->showLedgerLines()) || !st)       // also for palette
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
       int n = _notes.size();
@@ -1733,6 +1741,9 @@ void Chord::layoutPitched()
                   }
             computeUp();
             layoutStem();
+            addLedgerLines();
+            for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+                  ll->layout();
             return;
             }
 
@@ -1815,7 +1826,7 @@ void Chord::layoutPitched()
       //  create ledger lines
       //-----------------------------------------
 
-      addLedgerLines(staffMove());
+      addLedgerLines();
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             ll->layout();
 
