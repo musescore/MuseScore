@@ -37,7 +37,6 @@ struct PaperSize {
          : name(n), w(wi), h(hi) {}
       };
 
-extern const PaperSize* getPaperSize(const QString&);
 extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 
 //---------------------------------------------------------
