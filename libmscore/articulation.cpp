@@ -547,7 +547,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch (propertyId) {
             case P_ID::DIRECTION:
-                  setDirection(Direction(v.value<Direction>()));
+                  setDirection(v.value<Direction>());
                   break;
             case P_ID::ARTICULATION_ANCHOR:
                   anchorStyle = PropertyStyle::UNSTYLED;
