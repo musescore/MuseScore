@@ -830,10 +830,10 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-pageborders"));
       menuView->addSeparator();
 
-#ifndef Q_OS_MAC
       a = getAction("fullscreen");
       a->setCheckable(true);
       a->setChecked(false);
+#ifndef Q_OS_MAC
       menuView->addAction(a);
 #endif
 
