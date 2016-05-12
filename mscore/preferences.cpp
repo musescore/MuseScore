@@ -72,8 +72,8 @@ void Preferences::init()
 
       bgUseColor         = true;
       fgUseColor         = true;
-      bgWallpaper        = QString();
-      fgWallpaper        = ":/data/paper5.png";
+      bgWallpaper        = (QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).absoluteFilePath());
+      fgWallpaper        = (QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath());
       fgColor.setNamedColor("#f9f9f9");
       pianoHlColor.setNamedColor("#1259d0");
       iconHeight         = 24;
