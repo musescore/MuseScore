@@ -37,10 +37,10 @@ namespace Ms {
 
 const PaperSize paperSizes[] = {
       PaperSize(QT_TRANSLATE_NOOP("paperSizes","Custom"),   MM(1),      MM(1)),
+      PaperSize("A4 (210 x 297 mm)",                        MM(210),    MM(297)),
       PaperSize("Letter (8.5 x 11 in)",                     8.5,        11),
       PaperSize("Legal (8.5 x 14 in)",                      8.5,        14),
       PaperSize("Tabloid (11 x 17 in)",                     11,         17),
-      PaperSize("A4 (210 x 297 mm)",                        MM(210),    MM(297)),
       PaperSize("B5 (176 x 250 mm)",                        MM(176),    MM(250)),
       PaperSize("Statement (5.5 x 8.5 in)",                 5.5,        8.25),
       PaperSize("Executive (7.25 x 10.5 in)",               7.25,       10.5),
@@ -83,20 +83,6 @@ const PaperSize paperSizes[] = {
       PaperSize("Ledger (17 x 11 in)",                      17,         11),
       PaperSize(0,                                          MM(1),      MM(1)) // mark end of list
       };
-
-//---------------------------------------------------------
-//   getPaperSize
-//---------------------------------------------------------
-
-const PaperSize* getPaperSize(const QString& name)
-      {
-      for (int i = 0; paperSizes[i].name; ++i) {
-            if (name == paperSizes[i].name)
-                  return &paperSizes[i];
-            }
-      qDebug("unknown paper size");
-      return &paperSizes[0];
-      }
 
 //---------------------------------------------------------
 //   paperSizeSizeToIndex
@@ -373,9 +359,7 @@ void PageFormat::read(XmlReader& e, Score* score)
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "pageFormat")            // obsolete
-                  setSize(getPaperSize(e.readElementText()));
-            else if (tag == "landscape")        // obsolete
+            if (tag == "landscape")        // obsolete
                   landscape = e.readInt();
             else if (tag == "page-margins") {
                   type = e.attribute("type","both");
