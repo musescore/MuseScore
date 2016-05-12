@@ -822,9 +822,13 @@ static value_ptr extract_uid(bplist_info_ptr bplist, uint64_t offset)
 
     value = value_create();
     value_set_uid(value, uid);
-    // return [NSDictionary dictionaryWithObject:
-    //         [NSNumber numberWithUnsignedLongLong:value] 
-    //         forKey:"CF$UID"];
+#if 0
+    return [NSDictionary dictionaryWithObject:
+             [NSNumber numberWithUnsignedLongLong:value]
+             forKey:"CF$UID"];
+#else
+    return NULL;
+#endif
 }
 
 
