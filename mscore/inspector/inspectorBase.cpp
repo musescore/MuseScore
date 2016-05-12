@@ -119,6 +119,9 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             case P_TYPE::SIZE_MM:
                   val = val.toDouble() / DPMM;
                   break;
+            case P_TYPE::DIRECTION:
+                  val = int(val.value<Direction>());
+                  break;
             default:
                   break;
             }

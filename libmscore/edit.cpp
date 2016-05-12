@@ -1695,7 +1695,7 @@ void Score::cmdFlip()
             else if (e->type() == Element::Type::NOTEDOT) {
                   Note* note = static_cast<Note*>(e->parent());
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(note, P_ID::DOT_POSITION, int(d));
+                  undoChangeProperty(note, P_ID::DOT_POSITION, d);
                   // undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
                   }
             else if (
