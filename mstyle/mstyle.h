@@ -554,7 +554,7 @@ class MgStyle : public QCommonStyle {
 
             void renderMenuItemRect( const QStyleOption* opt, const QRect& rect, const QPalette& pal,
                                      QPainter* p, qreal opacity = -1 ) const {
-                  renderMenuItemRect( opt, rect, pal.color(QPalette::Window), p, opacity );
+                  renderMenuItemRect( opt, rect, pal.color(QPalette::Window), pal, p, opacity );
                   }
 
             void renderMenuItemRect( const QStyleOption*, const QRect&, const QColor&, const QPalette&, QPainter* p, qreal opacity = -1 ) const;
