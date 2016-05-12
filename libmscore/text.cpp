@@ -2827,7 +2827,7 @@ void Text::restyle(TextStyleType oldType)
 QString Text::convertFromHtml(const QString& ss) const
       {
       QTextDocument doc;
-      doc.setHtml(ss);
+      doc.setHtml(ss.trimmed());
 
       QString s;
       qreal size = textStyle().size();
