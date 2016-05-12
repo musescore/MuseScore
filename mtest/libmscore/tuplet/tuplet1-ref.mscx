@@ -53,6 +53,10 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
+        <longName>
+          </longName>
+        <shortName>
+          </shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
