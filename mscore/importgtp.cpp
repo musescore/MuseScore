@@ -2363,7 +2363,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       int idx = 0;
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure(), ++idx) {
-            const GpBar& bar = gp->bars[idx];
+            //const GpBar& bar = gp->bars[idx];
 //TODO            if (bar.barLine != BarLineType::NORMAL)
 //                  m->setEndBarLineType(bar.barLine, false);
             }
