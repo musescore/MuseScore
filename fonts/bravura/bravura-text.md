@@ -1,6 +1,6 @@
 # An introduction to using Bravura Text
 
-*Version 1.0, 16 June 2014*
+*Version 1.1, 30 October 2015*
 
 Bravura Text is a [SMuFL-compliant] [1] font containing musical symbols intended for use in text-based applications such as word processors, text editors, desktop publishers, and it can also be used on the web.
 
@@ -110,24 +110,24 @@ In Bravura Text, ligatures are used to adjust the vertical position of individua
 
 The code points to use to raise or lower the position of symbols are as follows (the pitch names shown in parentheses correspond to a five-line staff with a treble clef; the default vertical position for movable symbols is therefore B4):
 
-* Raise by one staff position (C5): U+EB80
-* Raise by two staff positions (D5): U+EB81
-* Raise by three staff positions (E5): U+EB82
-* Raise by four staff positions (F5): U+EB83
-* Raise by five staff positions (G5): U+EB84
-* Raise by six staff positions (A5): U+EB85
-* Raise by seven staff positions (B5): U+EB86
-* Raise by eight staff positions (C6): U+EB87
-* Lower by one staff position (A4): U+EB88
-* Lower by two staff positions (G4): U+EB89
-* Lower by three staff positions (F4): U+EB8A
-* Lower by four staff positions (E4): U+EB8B
-* Lower by five staff positions (D4): U+EB8C
-* Lower by six staff positions (C4): U+EB8D
-* Lower by seven staff positions (B3): U+EB8E
-* Lower by eight staff positions (A3): U+EB8F
+* Raise by one staff position (C5): U+EB90
+* Raise by two staff positions (D5): U+EB91
+* Raise by three staff positions (E5): U+EB92
+* Raise by four staff positions (F5): U+EB93
+* Raise by five staff positions (G5): U+EB94
+* Raise by six staff positions (A5): U+EB95
+* Raise by seven staff positions (B5): U+EB96
+* Raise by eight staff positions (C6): U+EB97
+* Lower by one staff position (A4): U+EB98
+* Lower by two staff positions (G4): U+EB99
+* Lower by three staff positions (F4): U+EB9A
+* Lower by four staff positions (E4): U+EB9B
+* Lower by five staff positions (D4): U+EB9C
+* Lower by six staff positions (C4): U+EB9D
+* Lower by seven staff positions (B3): U+EB9E
+* Lower by eight staff positions (A3): U+EB9F
 
-So to position, say, a black notehead at the G4 staff position, you would first enter U+EB89 (lower by two staff positions) followed immediately by U+E0A4 (the black notehead).
+So to position, say, a black notehead at the G4 staff position, you would first enter U+EB99 (lower by two staff positions) followed immediately by U+E0A4 (the black notehead).
 
 Noteheads positioned outside the staff (i.e. raised or lowered by six or more staff positions) will not automatically show leger lines, so those must be added separately *before* the notehead (since they have zero width), and raised or lowered by the same number of staff positions.
 

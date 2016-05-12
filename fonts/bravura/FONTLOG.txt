@@ -10,20 +10,22 @@ Basic font information
 ----------------------
 Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 1.18 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 1.2 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
 http://www.steinberg.net/
 
-More information about SMuFL can be found at:
+The latest version of the SMuFL specification can be found at:
 
-http://www.smufl.org/
+https://w3c.github.io/smufl/gitbook/
 
 
 Note for developers
 -------------------
-If you are intending to use Bravura as part of your own software application, please refer to the 'Notes for implementers' section in the SMuFL specification for useful information about Bravura's metrics and how glyphs are registered.
+If you are intending to use Bravura as part of your own software application, please refer to the SMuFL specification for useful information about Bravura's metrics and how glyphs are registered:
+
+https://w3c.github.io/smufl/gitbook/specification/index.html
 
 
 Changelog
@@ -307,3 +309,38 @@ Changelog
 – Added side-bearings to figured bass digits, function symbols, and tuplet digits.
 – Corrected triangular clefs at U+E06F–U+E072 to match the actual usage by the Polish composer Schäffer.
 – Added z-style quarter (crotchet) rest.
+
+25 April 2016 (Daniel Spreadbury) Bravura 1.20
+– Added double whole note slash notehead (U+E10A)
+– Added double-slashed black and white round noteheads, often used to denote striking piano strings (U+E11C, U+E11D)
+– Added irregular tremolo mark, used by Stockhausen (U+E232)
+– Added square brackets for editorial accidentals (U+E26C, U+E26D)
+– Added equal-tempered quarter-tone flat and quarter-tone sharp, combining glyphs to raise and lower by a 53-limit comma, and tilde and equals characters to indicate enharmonic equivalence, to the 'Extended Helmholtz-Ellis (Just Intonation) accidentals' range (U+E2F5-U+E2FB)
+– Added quarter-tone sharp and flat accidentals, used by Ferneyhough (U+E48E, U+E48F)
+– Added parentheses and brackets for hairpins (U+E542–U+E545)
+– Added hyphen, colon, and space separators for use in combined dynamics, e.g. p-mp (U+E546–U+E548)
+– Added brass valve trill to 'Brass techniques' range (U+E5EF)
+– Added wind mouthpiece pop and rim only to 'Wind techniques' range (U+E60A, U+E60B)
+– Added bow behind bridge on one, two, three, or four strings to 'String techniques' range (U+E627–U+E62A)
+– Added nasal voice, tongue click, finger click, and tongue and finger click (as used by Stockhausen) to 'Voical techniques' range (U+E648–U+E64A)
+– Added L and reversed-L hooks used instead of Ped. to start and stop sustain pedal indications to 'Keyboard techniques' range (U+E672, U+E673)
+– Added pedal-to-heel and heel-to-pedal transitions to 'Keyboard techniques' range (U+E674, U+E675)
+– Added damp low strings, damp with both hands, damp below, damp above, metallic sounds on a single string, isolated sounds, and snare drum techniques as used by Salzedo to 'Harp techniques' range (U+E697–U+E69D)
+– Added clockwise variant of scrape around rim to 'Percussion playing technique pictograms' range (U+E80E)
+- Added full barré and half-barré to 'Guitar' range (U+E848, U+E849), plus recommended stylistic alternate with horizontal fraction slash for half-barré
+– Added unconducted/free passages to 'Conductor symbols' range (U+E89A)
+– Added upper case F, I, K, L, and lower case i, k, l, glyphs to existing 'Function theory symbols' range (U+EA99–U+EA9F), plus a new 'Function theory symbols supplement' range including upper case M and N, and lower case m and r (U+ED00–U+ED03)
+– Added "cut 3" to 'Time signature supplement' range (U+EC86)
+– Added diminished 7 to new 'Figured bass supplement' range (U+ECC0)
+– Added new 'Shape note noteheads supplement' range containing double whole note versions of all of the different notehead shapes in the existing 'Shape note noteheads' range (U+ECD0–U+ECDD)
+– Added turned time signature digits, common time and cut common time (U+ECE0–U+ECEB)
+– Added reversed time signature digits, common time and cut common time (U+ECF0–U+ECFB)
+– Added new 'Fingering' range, containing digits bold 0–5 suitable for keyboard fingering, and a variety of symbols used in guitar fingering (U+ED10–U+ED23)
+– Added new 'Arabic accidentals' range (U+ED30–U+ED38)
+– Added new 'Articulation supplement' range containing so-called "soft accent", plus combinations with staccato and tenuto (U+ED40–U+ED47)
+– Added new 'Stockhausen accidentals (24-EDO)' range (U+ED50–U+ED5E)
+– Added stylistic alternates for cClef and cClefChange in the style of 20th century French publishers
+– Added stylistic alternates for 15/22 octave markings using 16/24, as used by some 20th century French publishers
+– Added stylistic alternates for wiggleArpeggiatoUpSwash and wiggleArpeggiatoDownSwash based on Couperin's 'L'Art de Toucher Le Clavecin'
+– Changed the appearance of clefBridge (U+E078) to match the design used by Lachenmann in "...zwei Gefühle..." and added a stylistic alternate with the previous design
+– Fixed the appearance of figBassRaised5 to have a forward slash rather than a backward slash, the correct appearance for a diminished fifth (U+EA5A)
