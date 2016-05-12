@@ -1,11 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>data/shortcuts.xml</file>
-        <file>data/paper1.png</file>
-        <file>data/paper2.png</file>
-        <file>data/paper3.png</file>
-        <file>data/paper4.png</file>
-        <file>data/paper5.png</file>
         <file>data/icons/edit.svg</file>
         <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
