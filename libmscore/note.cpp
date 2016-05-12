@@ -1656,12 +1656,14 @@ void Note::setDotY(Direction pos)
             dot->setTrack(track());  // needed to know the staff it belongs to (and detect tablature)
             dot->setVisible(visible());
             score()->undoAddElement(dot);
-            dot->layout();
-            dot->rypos() = y;
             }
       if (n < 0) {
             for (int i = 0; i < -n; ++i)
                   score()->undoRemoveElement(_dots.back());
+            }
+      for (NoteDot* dot : _dots) {
+            dot->layout();
+            dot->rypos() = y;
             }
       }
 
@@ -2154,7 +2156,7 @@ void Note::setNval(const NoteVal& nval, int tick)
 
 QVariant Note::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::PITCH:
                   return pitch();
             case P_ID::TPC1:
@@ -2226,7 +2228,8 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::DOT_POSITION:
                   setUserDotPosition(v.value<Direction>());
-                  break;
+                  score()->setLayout(tick());
+                  return true;
             case P_ID::HEAD_GROUP:
                   setHeadGroup(NoteHead::Group(v.toInt()));
                   break;
@@ -2371,7 +2374,7 @@ void Note::undoSetUserMirror(MScore::DirectionH val)
 
 void Note::undoSetUserDotPosition(Direction val)
       {
-      undoChangeProperty(P_ID::DOT_POSITION, int(val));
+      undoChangeProperty(P_ID::DOT_POSITION, val);
       }
 
 //---------------------------------------------------------
