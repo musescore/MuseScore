@@ -40,7 +40,7 @@ release:
 		$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);    \
 
 debug:
-	mkdir build.release;                               \
+	mkdir build.debug;                               \
     cd build.debug;                            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
           .. -G Xcode; 			       \
