@@ -55,7 +55,7 @@ cd "$(dirname "$(readlink -f "${0}")")/../../../.."
 yum -y install epel-release
 
 # basic dependencies (needed by Docker image)
-yum -y install git wget which automake
+yum -y install git wget which automake unzip
 
 if [ "${OS}" == "CentOS 6" ]; then
   # Get newer compiler than available by default
@@ -74,9 +74,23 @@ cd AppImageKit
 cd ..
 
 # MuseScore's dependencies:
+
+# get CMAKE 3.5 (Centos 6 only has CMAKE 2.8.12.2)
+CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.1-Linux-x86_64.tar.gz"
+mkdir cmake && wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+export PATH=${PWD}/cmake/bin:${PATH}
+
+# get Qt5.6 (Centos 6 doesn't have QtWebEngine)
+mkdir qt5 && wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt560.zip
+unzip -qq qt5.zip -d qt5
+export PATH="${PWD}/qt5/bin:$PATH"
+export QT_PLUGIN_PATH="${PWD}/qt5/plugins"
+export QML2_IMPORT_PATH="${PWD}/qt5/qml"
+export LD_LIBRARY_PATH="/qt5/lib:${LD_LIBRARY_PATH}"
+
 #yum -y install epel-release
 #wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-yum -y install cmake mesa-libGL-devel pulseaudio-libs-devel alsa-lib-devel jack-audio-connection-kit-devel portaudio-devel libsndfile-devel libvorbis-devel qt5-qtbase-devel qt5-qttools-libs-designercomponents qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtscript-devel qt5-qtwebkit-devel qt5-qtxmlpatterns-devel qt5-qtquick1-devel qt5-qtsvg-devel qt5-qttools-devel qt5-qttools-static qt5-qtmultimedia-devel qt5-qtwebchannel-devel qt5-qtimageformats qt5-qtquickcontrols
+yum -y install mesa-libGL-devel pulseaudio-libs-devel alsa-lib-devel jack-audio-connection-kit-devel portaudio-devel libsndfile-devel libvorbis-devel fontconfig libxslt libXcomposite libXcursor libXrender zlib-devel cups-libs mesa-libEGL
 
 # Install LAME (get this dependency last because rpmforge and epel-release conflict)
 wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.$(arch).rpm
