@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="2.06">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -272,7 +272,7 @@
               <program value="52"/>
               </Channel>
             </Instrument>
-          <pos x="-0.308899" y="-2.0733"/>
+          <pos x="-0.308899" y="-2.0633"/>
           <text>Voice</text>
           </InstrumentChange>
         <Chord>

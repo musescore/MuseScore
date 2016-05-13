@@ -64,7 +64,7 @@ void TempoText::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      if (score()->mscVersion() < 119) {
+      if (score()->mscVersion() <= 114) {
             //
             // Reset text in old version to
             // style.

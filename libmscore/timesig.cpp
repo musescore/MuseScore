@@ -201,14 +201,7 @@ void TimeSig::read(XmlReader& e)
                   }
             else if (tag == "subtype") {
                   int i = e.readInt();
-                  if (score()->mscVersion() < 122 && score()->mscVersion() > 114) {
-                        setSig(Fraction(
-                             ((i >> 24) & 0x3f)
-                           + ((i >> 18) & 0x3f)
-                           + ((i >> 12) & 0x3f)
-                           + ((i >>  6) & 0x3f), i & 0x3f), TimeSigType::NORMAL);
-                        }
-                  else if (score()->mscVersion() <= 114) {
+                  if (score()->mscVersion() <= 114) {
                         if (i == 0x40000104)
                               _timeSigType = TimeSigType::FOUR_FOUR;
                         else if (i == 0x40002084)

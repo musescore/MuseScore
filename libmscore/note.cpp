@@ -853,7 +853,7 @@ void Note::read(XmlReader& e)
                   a->read(e);
                   if (!hasAccidental)           // only the new accidental, if it has been added previously
                         add(a);
-                  if (score()->mscVersion() < 117)
+                  if (score()->mscVersion() <= 114)
                         hasAccidental = true;   // we now have an accidental
                   }
             else if (tag == "Tie") {
@@ -1122,7 +1122,7 @@ void Note::read(XmlReader& e)
       // ensure sane values:
       _pitch = limit(_pitch, 0, 127);
 
-      if (score()->mscVersion() < 117) {
+      if (score()->mscVersion() <= 114) {
             if (concertPitch()) {
                   _tpc[1]  = Tpc::TPC_INVALID;
                   }
