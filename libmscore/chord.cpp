@@ -624,12 +624,12 @@ void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool 
 
 void Chord::addLedgerLines()
       {
-      LedgerLineData lld;
       // initialize for palette
       int track = 0;                            // the track lines belong to
       // the line pos corresponding to the bottom line of the staff
       int lineBelow = 8;                        // assuming 5-lined "staff"
-      qreal lineDistance = 1, _mag = 1;
+      qreal lineDistance = 1;
+      qreal _mag = 1;
       bool staffVisible = true;
 
       if (segment()) { //not palette
@@ -642,6 +642,11 @@ void Chord::addLedgerLines()
             staffVisible = !staff()->invisible();
             }
 
+      // need ledger lines?
+      if (downLine() <= lineBelow + 1 && upLine() >= -1)
+            return;
+
+      LedgerLineData lld;
       // the extra length of a ledger line with respect to notehead (half of it on each side)
       qreal extraLen = score()->styleP(StyleIdx::ledgerLineLength) * _mag * 0.5;
       qreal hw = _notes[0]->headWidth();
@@ -671,14 +676,16 @@ void Chord::addLedgerLines()
                   }
             for (int i = from; i < n && i >=0 ; i += delta) {
                   const Note* note = _notes.at(i);
-
                   int l = note->physicalLine();
-                  if ( (!j && l < lineBelow) || // if 1st pass and note not below staff
-                       (j && l >= 0) )          // or 2nd pass and note not above staff
+
+                  // if 1st pass and note not below staff or 2nd pass and note not above staff
+                  if ((!j && l <= lineBelow + 1) || (j && l >= -1))
                         break;                  // stop this pass
                   // round line number to even number toward 0
-                  if (l < 0)        l = (l+1) & ~ 1;
-                  else              l = l & ~ 1;
+                  if (l < 0)
+                        l = (l + 1) & ~ 1;
+                  else
+                        l = l & ~ 1;
 
                   if (note->visible())          // if one note is visible,
                         visible = true;         // all lines between it and the staff are visible
