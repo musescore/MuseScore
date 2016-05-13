@@ -273,7 +273,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         setDuration(actualDurationType().fraction());
                   }
             else {
-                  if (score()->mscVersion() < 115) {
+                  if (score()->mscVersion() <= 114) {
                         SigEvent event = score()->sigmap()->timesig(e.tick());
                         setDuration(event.timesig());
                         }
