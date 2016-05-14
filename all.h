@@ -167,6 +167,8 @@
 #include <QHelpIndexModel>
 #include <QTextBrowser>
 
+#include <QJsonDocument>
+
 
 // change Q_ASSERT to NOP if not debugging
 
