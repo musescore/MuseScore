@@ -242,7 +242,7 @@ void Dynamic::read(XmlReader& e)
 void Dynamic::layout()
       {
       if (!readPos().isNull()) {
-            if (score()->mscVersion() < 118) {
+            if (score()->mscVersion() <= 114) {
                   setReadPos(QPointF());
                   // hack: 1.2 boundingBoxes are a bit wider which results
                   // in symbols moved right

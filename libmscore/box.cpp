@@ -220,7 +220,7 @@ void Box::read(XmlReader& e)
       // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
       // for backward compatibility set them to 0 in all other cases
 
-      if (score()->mscVersion() < 117 && (type() == Element::Type::HBOX || type() == Element::Type::VBOX) && !keepMargins)  {
+      if (score()->mscVersion() <= 114 && (type() == Element::Type::HBOX || type() == Element::Type::VBOX) && !keepMargins)  {
             _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
             }
       }
@@ -238,12 +238,12 @@ bool Box::readProperties(XmlReader& e)
             _boxWidth = Spatium(e.readDouble());
       else if (tag == "topGap") {
             _topGap = e.readDouble();
-            if (score()->mscVersion() >= 203)
+            if (score()->mscVersion() >= 206)
                   _topGap *= score()->spatium();
             }
       else if (tag == "bottomGap") {
             _bottomGap = e.readDouble();
-             if (score()->mscVersion() >= 203)
+             if (score()->mscVersion() >= 206)
                   _bottomGap *= score()->spatium();
             }
       else if (tag == "leftMargin")

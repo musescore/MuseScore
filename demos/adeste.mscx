@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>5524:5526M</programRevision>
+<museScore version="2.06">
+  <programVersion>2.0.2</programVersion>
+  <programRevision>f51dc11</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <SyntiSettings>
-      <s name="soundfont" val="/Users/admin/musescore/applebuild/mscore.app/Contents/Resources/sound/TimGM6mb.sf2"/>
-      <f name="RevRoomsize" val="0.5"/>
-      <f name="RevDamp" val="0.5"/>
-      <f name="RevWidth" val="1"/>
-      <f name="RevGain" val="0.499015"/>
-      <f name="ChoType" val="0"/>
-      <f name="ChoSpeed" val="0.002"/>
-      <f name="ChoDepth" val="0.8"/>
-      <f name="ChoBlocks" val="0.03"/>
-      <f name="ChoGain" val="0.499015"/>
-      </SyntiSettings>
+    <Synthesizer>
+      <s>
+        </s>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -35,51 +45,62 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2016-05-02</metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Microsoft Windows</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="0" span="2"/>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="60"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="60"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="1"/>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="60"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="60"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -103,20 +124,6 @@
           </Clef>
         <KeySig>
           <accidental>3</accidental>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -127,7 +134,6 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>A</text>
             </Lyrics>
           <Note>
@@ -146,19 +152,17 @@
           <durationType>half</durationType>
           <Lyrics>
             <syllabic>middle</syllabic>
-            <style>Lyrics odd lines</style>
             <text>des</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>Can</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>Er</text>
             </Lyrics>
           <Note>
@@ -174,19 +178,17 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>te,</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>end</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>tet</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>go</text>
             </Lyrics>
           <Note>
@@ -198,17 +200,15 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>fi</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>nunc</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
-            <style>Lyrics odd lines</style>
             <text>qui</text>
             </Lyrics>
           <Note>
@@ -238,19 +238,17 @@
           <durationType>half</durationType>
           <Lyrics>
             <syllabic>middle</syllabic>
-            <style>Lyrics odd lines</style>
             <text>del</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>hym</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>na</text>
             </Lyrics>
           <Note>
@@ -266,19 +264,17 @@
           <durationType>half</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>es,</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>end</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>nos</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>tus</text>
             </Lyrics>
           <Note>
@@ -304,19 +300,17 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>Lae</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>Cho</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>di</text>
             </Lyrics>
           <Note>
@@ -332,19 +326,17 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>ti</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>end</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>rus</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>e</text>
             </Lyrics>
           <Note>
@@ -360,19 +352,17 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>tri</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>ang</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
             <text>ho</text>
             </Lyrics>
           <Note>
@@ -388,19 +378,17 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>middle</syllabic>
-            <style>Lyrics odd lines</style>
             <text>um</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>middle</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>el</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>middle</syllabic>
-            <style>Lyrics odd lines</style>
             <text>di</text>
             </Lyrics>
           <Note>
@@ -418,19 +406,17 @@
           <durationType>half</durationType>
           <Lyrics>
             <syllabic>middle</syllabic>
-            <style>Lyrics odd lines</style>
             <text>phan</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>middle</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>or</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>middle</syllabic>
-            <style>Lyrics odd lines</style>
             <text>er</text>
             </Lyrics>
           <Note>
@@ -446,19 +432,17 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>tes</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <syllabic>end</syllabic>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>um;</text>
             </Lyrics>
           <Lyrics>
             <no>2</no>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
             <text>na</text>
             </Lyrics>
           <Note>
@@ -473,7 +457,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
             <text>Ven</text>
             </Lyrics>
           <Note>
@@ -485,10 +468,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -499,20 +478,6 @@
           </Clef>
         <KeySig>
           <accidental>3</accidental>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="1"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -687,10 +652,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

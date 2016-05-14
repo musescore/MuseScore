@@ -1734,7 +1734,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   breath->setTrack(e.track());
                   int tick = e.tick();
                   breath->read(e);
-                  if (score()->mscVersion() < 205) {
+                  if (score()->mscVersion() <= 206) {
                         // older scores placed the breath segment right after the chord to which it applies
                         // rather than before the next chordrest segment with an element for the staff
                         // result would be layout too far left if there are other segments due to notes in other staves
@@ -2129,39 +2129,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             }
 #endif
-      //
-      // for compatibility with 1.22:
-      //
-      if (score()->mscVersion() == 122) {
-            int ticks1 = 0;
-            for (Segment* s = last(); s; s = s->prev()) {
-                  if (s->segmentType() == Segment::Type::ChordRest) {
-                        if (s->element(0)) {
-                              ChordRest* cr = static_cast<ChordRest*>(s->element(0));
-                              if (cr->type() == Element::Type::REPEAT_MEASURE)
-                                    ticks1 = ticks();
-                              else
-                                    ticks1 = s->rtick() + cr->actualTicks();
-                              break;
-                              }
-                        }
-                  }
-            if (ticks() != ticks1) {
-                  // this is a irregular measure
-                  _len = Fraction::fromTicks(ticks1);
-                  _len.reduce();
-                  for (Segment* s = last(); s; s = s->prev()) {
-                        if (s->tick() < tick() + ticks())
-                              break;
-                        if (s->segmentType() == Segment::Type::BarLine) {
-                              qDebug("reduce BarLine to EndBarLine");
-                              s->setSegmentType(Segment::Type::EndBarLine);
-                              }
-                        }
-
-                  }
-            }
-      foreach (Tuplet* tuplet, e.tuplets()) {
+      for (Tuplet* tuplet : e.tuplets()) {
             if (tuplet->elements().empty()) {
                   // this should not happen and is a sign of input file corruption
                   qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
