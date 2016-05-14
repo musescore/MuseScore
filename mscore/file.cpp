@@ -2403,7 +2403,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             if (!rv)
                   break;
             }
-      cs->setPrinting(false);
+      score->setPrinting(false);
       return rv;
       }
 

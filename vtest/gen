@@ -12,11 +12,11 @@ if [ -n "$VTEST_MSCORE" ]; then
       MSCORE="$VTEST_MSCORE"
 fi
 
-case "$MSCORE" in
-      /*) ;;
-      ~*) ;;
-      *) MSCORE="../$MSCORE" ;;
-esac
+#case "$MSCORE" in
+#      /*) ;;
+#      ~*) ;;
+#      *) MSCORE="../$MSCORE" ;;
+#esac
 
 if [ -n "$VTEST_BROWSER" ]; then
       BROWSER="$VTEST_BROWSER"
@@ -55,21 +55,17 @@ else
 fi
 
 DPI=130
-F=vtest.html
 
-rm -rf html
-mkdir html
-cd html
+if test -f LOG; then
+      rm LOG
+      fi
 
+$MSCORE -j vtestjob.json -r $DPI 2> LOG
 for src in $SRC; do
-      echo process ../$src
-      cp ../$src-ref.png .
-      $MSCORE ../$src.mscz -r $DPI -o $src.png > /dev/null 2>&1
       compare $src-1.png $src-ref.png $src-diff.png
       done
 
-cp -f ../style.css .
-
+F=vtest.html
 rm -f $F
 echo "<html>" >> $F
 echo "  <head>" >> $F
