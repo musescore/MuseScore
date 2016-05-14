@@ -674,7 +674,7 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             xml.tag("programRevision", revision);
             }
       else {
-            xml.stag("museScore version=\"2.00\"");
+            xml.stag("museScore version=\"2.06\"");
             }
       write(xml, onlySelection);
       xml.etag();
@@ -905,7 +905,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         QString message;
                         if (mscVersion() > MSCVERSION)
                               return FileError::FILE_TOO_NEW;
-                        if (mscVersion() < 200)
+                        if (mscVersion() < 206)
                               return FileError::FILE_TOO_OLD;
                         }
 

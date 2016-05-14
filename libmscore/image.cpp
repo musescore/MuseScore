@@ -370,7 +370,7 @@ void Image::write(Xml& xml) const
 
 void Image::read(XmlReader& e)
       {
-      if (score()->mscVersion() <= 123)
+      if (score()->mscVersion() <= 114)
             _sizeIsSpatium = false;
 
       while (e.readNextStartElement()) {

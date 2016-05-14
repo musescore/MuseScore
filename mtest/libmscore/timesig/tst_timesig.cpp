@@ -80,7 +80,7 @@ void TestTimesig::timesig02()
       score->doLayout();
       score->endCmd();
 
-      QVERIFY(saveCompareScore(score, "timesig-02a.mscx", DIR + "timesig-02-ref.mscx"));
+      QVERIFY(saveCompareScore(score, "timesig-02.mscx", DIR + "timesig-02-ref.mscx"));
       delete score;
 
       }
