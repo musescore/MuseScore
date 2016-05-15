@@ -1794,8 +1794,8 @@ void Note::updateAccidental(AccidentalState* as)
             if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   acci = Accidental::value2subtype(accVal);
-                  // if previous tied note has same accidental, don't show this one's
-                  if (_tieBack && _tieBack->startNote()->accidentalType() == acci)
+                  // if previous tied note has same tpc, don't show accidental
+                  if (_tieBack && _tieBack->startNote()->tpc1() == tpc1())
                         acci = AccidentalType::NONE;
                   else if (acci == AccidentalType::NONE)
                         acci = AccidentalType::NATURAL;
