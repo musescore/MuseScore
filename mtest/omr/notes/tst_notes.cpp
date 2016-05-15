@@ -31,8 +31,8 @@ class TestNotes : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void notes2() { omrFileTest("notes2"); }
-      void notes1() { omrFileTest("notes1"); }
+      //void notes2() { omrFileTest("notes2"); }
+      //void notes1() { omrFileTest("notes1"); }
       };
 
 //---------------------------------------------------------
@@ -54,7 +54,7 @@ void TestNotes::initTestCase()
 
 void TestNotes::omrFileTest(QString file)
       {
-      Score* score = readScore(DIR + file + ".mscx");
+      MasterScore* score = readScore(DIR + file + ".mscx");
       score->doLayout();
       QVERIFY(score);
       savePdf(score, file + ".pdf");

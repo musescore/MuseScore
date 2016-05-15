@@ -231,7 +231,7 @@ void createExcerpt(Excerpt* excerpt)
       // layout score
       //
       score->setPlaylistDirty();
-      oscore->rebuildMidiMapping();
+      oscore->masterScore()->rebuildMidiMapping();
       oscore->updateChannel();
 
       score->setLayoutAll();

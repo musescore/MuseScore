@@ -87,7 +87,7 @@ endif (NOT APPLE AND NOT MINGW)
 option(AEOLUS        "enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "enable experimental sfz sampler"    ON)
 option(OSC           "enable OSC remote control protocol" ON)
-option(OMR           "enable PDF import"  OFF)                 # OMR - optical music recognition
+option(OMR           "enable PDF import"  ON)                 # OMR - optical music recognition
 # for installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "enable OCR, requires OMR" OFF)           # requires tesseract 3.0, needs work on mac/win
 option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
@@ -556,7 +556,7 @@ if (ZERBERUS)
 endif (ZERBERUS)
 
 if (OMR)
-      subdirs (omr)
+      subdirs (omr thirdparty/poppler)
 endif (OMR)
 
 if (OSC)
@@ -582,6 +582,11 @@ include_directories(
 #   ${FREETYPE_INCLUDE_DIRS}
    ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
 )
+
+if (OMR)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
+endif (OMR)
 
 ##
 ##  Include packaging
@@ -615,4 +620,3 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
    DEPENDS genManual
    )
-

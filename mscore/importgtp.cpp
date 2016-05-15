@@ -2443,7 +2443,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             pscore->doLayout();
             }
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->updateChannel();
 
 //      album

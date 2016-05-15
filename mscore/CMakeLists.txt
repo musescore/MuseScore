@@ -283,6 +283,7 @@ add_executable ( ${ExecutableName}
       logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
 
+
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
@@ -389,7 +390,11 @@ if (MINGW)
       )
 
    if (OMR)
-      target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
+      # target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg openjpeg)
+	#set(LIB_LIBZ /usr/local/lib/libz.a)
+	#set(LIB_GLFW /usr/local/lib/libglfw.a)
+      #target_link_libraries(mscore omr poppler mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+      target_link_libraries(mscore omr poppler)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -490,7 +495,7 @@ else (MINGW)
       )
 
    if (OMR)
-      target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
+      target_link_libraries(mscore omr poppler)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)

@@ -46,7 +46,7 @@ Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
 namespace Ms {
 
 #ifdef OMR
-extern Score::FileError importPdf(Score*, const QString&);
+extern Score::FileError importPdf(MasterScore*, const QString&);
 #endif
 
 extern Score::FileError importBB(MasterScore*, const QString&);

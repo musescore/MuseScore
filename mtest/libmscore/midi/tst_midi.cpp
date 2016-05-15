@@ -240,7 +240,7 @@ void TestMidi::midi01()
       MasterScore* score = c.score();
 
       score->doLayout();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       c.saveScore();
       saveMidi(score, "test1.mid");
 
@@ -280,7 +280,7 @@ void TestMidi::midi02()
       MasterScore* score = c.score();
 
       score->doLayout();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       c.saveScore();
       saveMidi(score, "test2.mid");
 
@@ -322,7 +322,7 @@ void TestMidi::midi03()
       MasterScore* score = c.score();
 
       score->doLayout();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       c.saveScore();
       saveMidi(score, "test3.mid");
 
@@ -393,7 +393,7 @@ void TestMidi::midiExportTestRef(const QString& file)
       MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       score->doLayout();
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       QVERIFY(saveMidi(score, QString(file) + ".mid"));
       QVERIFY(compareFiles(QString(file) + ".mid", DIR + QString(file) + "-ref.mid"));
       delete score;

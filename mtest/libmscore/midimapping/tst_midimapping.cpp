@@ -87,7 +87,7 @@ void TestMidiMapping::testReadWrite(const char* f1)
       MasterScore* score = readScore(DIR + f1);
       score->doLayout();
       QVERIFY(score);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       QVERIFY(saveCompareScore(score, f1, DIR + QString(f1)));
       delete score;
       }
@@ -102,9 +102,9 @@ void TestMidiMapping::testReadChangeWrite(const char* f1, const char* ref, int p
       MasterScore* score = readScore(DIR + f1 +QString(".mscx"));
       score->doLayout();
       QVERIFY(score);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->cmdRemovePart(score->parts()[p]);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       QVERIFY(saveCompareScore(score, f1+QString("_changed.mscx"), DIR + ref));
       delete score;
       }
@@ -119,12 +119,12 @@ void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
       MasterScore* score = readScore(DIR + f1 +QString(".mscx"));
       score->doLayout();
       QVERIFY(score);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       MeasureBase* mb = score->measures()->last();
       while (mb && mb->type() != Element::Type::MEASURE)
             mb = mb->prev();
       score->deleteItem(static_cast<Measure*>(mb));
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       QVERIFY(saveCompareScore(score, f1+QString("_changed.mscx"), DIR + ref));
       delete score;
       }
@@ -139,7 +139,7 @@ void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, 
       MasterScore* score = readScore(DIR + f1+QString(".mscx"));
       score->doLayout();
       QVERIFY(score);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
 
       QList<int> dl;
       for(Staff* staff : score->staves()) {
@@ -154,7 +154,7 @@ void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, 
             }
       dl.swap(p1, p2);
       score->sortStaves(dl);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       QVERIFY(saveCompareScore(score, f1+QString("_changed3.mscx"), DIR + ref));
       delete score;
       }
@@ -171,7 +171,7 @@ void TestMidiMapping::testReadWriteMusicXML(const char* file, const char* ref)
       preferences.musicxmlImportBreaks = true;
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->doLayout();
       QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
       QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + ref + ".xml"));
@@ -197,7 +197,7 @@ void TestMidiMapping::testReadWriteOther(const char* f1, const char* ref)
             score = readScore(DIR + f1);
       score->doLayout();
       QVERIFY(score);
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       QVERIFY(saveCompareScore(score, qf.completeBaseName()+QString(".mscx"), DIR + ref));
       delete score;
       }

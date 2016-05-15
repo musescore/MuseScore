@@ -277,7 +277,7 @@ void MuseScore::loadFiles()
          tr("Capella Files") + " (*.cap *.capx);;" +
          tr("BB Files <experimental>") + " (*.mgu *.MGU *.sgu *.SGU);;" +
 #ifdef OMR
-         tr("PDF Files <experimental OMR>)" + " (*.pdf);;" +
+         tr("PDF Files <experimental OMR>") + " (*.pdf);;" +
 #endif
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
@@ -746,7 +746,7 @@ void MuseScore::newFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->doLayout();
       setCurrentScoreView(appendScore(score));
 
@@ -2086,7 +2086,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             score->setCreated(true); // force save as for imported files
             }
 
-      score->rebuildMidiMapping();
+      score->masterScore()->rebuildMidiMapping();
       score->setSoloMute();
       for (Score* s : score->scoreList()) {
             s->setPlaylistDirty();
