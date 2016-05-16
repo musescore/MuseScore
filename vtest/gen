@@ -1,22 +1,16 @@
 #!/bin/sh
 
 if [ "`uname`" = 'Darwin' ]; then
-      MSCORE=../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+      MSCORE=../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
       BROWSER=open
 else
-      MSCORE=../build.debug/mscore/mscore
+      MSCORE=../../build.debug/mscore/mscore
       BROWSER=rekonq
 fi
 
 if [ -n "$VTEST_MSCORE" ]; then
       MSCORE="$VTEST_MSCORE"
 fi
-
-#case "$MSCORE" in
-#      /*) ;;
-#      ~*) ;;
-#      *) MSCORE="../$MSCORE" ;;
-#esac
 
 if [ -n "$VTEST_BROWSER" ]; then
       BROWSER="$VTEST_BROWSER"
@@ -28,7 +22,7 @@ fi
 if test -n "$1"; then
       SRC=$1
 else
-      SRC="mmrest-1 bravura-mmrest gonville-mmrest mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
+      SRC=("mmrest-1 bravura-mmrest gonville-mmrest mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
        mmrest-10 fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5 fmrest-6 measure-repeat-1\
        noteheadposition-1 valign-1 valign-2 valign-3 emmentaler-1 bravura-1 gonville-1 emmentaler-2 bravura-2 gonville-2\
        emmentaler-3 bravura-3 gonville-3 emmentaler-4 bravura-4 gonville-4 emmentaler-5 bravura-5 gonville-5\
@@ -45,28 +39,49 @@ else
        accidental-1 accidental-2 accidental-3 accidental-4 accidental-5\
        accidental-6 accidental-7 accidental-8 accidental-9 accidental-10\
        tie-1 tie-2 tie-3 grace-1 grace-2 grace-3 grace-4 tuplets-1 tuplets-2 breath-1\
-       harmony-1 harmony-2 harmony-3 harmony-4 harmony-5 harmony-6 harmony-7
+       harmony-1 harmony-2 harmony-3 harmony-4 harmony-5 harmony-6 harmony-7\
        harmony-8 harmony-9 harmony-10 harmony-11 harmony-12\
        beams-1 beams-2 beams-3 beams-4 beams-5 beams-6 beams-7 beams-8 beams-9 beams-10\
        beams-11 beams-12 beams-13 beams-14 beams-15 beams-16 beams-17\
        user-offset-1 user-offset-2 chord-space-1 chord-space-2 tablature-1 image-1\
        lyrics-1 lyrics-2 lyrics-3 lyrics-4 lyrics-5 lyrics-6 lyrics-7 voice-1 voice-2 slash-1 slash-2\
-       system-1 system-2 system-3 system-4 system-5 small-1 tremolo-1"
+       system-1 system-2 system-3 system-4 system-5 small-1 tremolo-1")
 fi
 
 DPI=130
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR/html
 
 if test -f LOG; then
       rm LOG
       fi
 
-$MSCORE -j vtestjob.json -r $DPI 2> LOG
+# make sure we don't put a , at the end of last line
+echo "Generate JSON job file"
+JSON_FILE=vtestjob.json
+rm -f $JSON_FILE
+IFS=' ' read -r -a SRC_ARRAY <<< "$SRC"
+echo "[" >> $JSON_FILE
+for src in "${SRC_ARRAY[@]::${#SRC_ARRAY[@]}-1}" ; do
+    echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE
+done
+echo "{ \"in\" : \"../${SRC_ARRAY[@]: -1:1}.mscz\",         \"out\" : \"${SRC_ARRAY[@]: -1:1}.png\" }" >> $JSON_FILE
+echo "]" >> $JSON_FILE
+
+echo "Generate PNG files"
+$MSCORE -j $JSON_FILE -r $DPI 2> LOG
+
+echo "Compare PNG files and references"
 for src in $SRC; do
+      cp ../$src-ref.png .
       compare $src-1.png $src-ref.png $src-diff.png
       done
 
+echo "Generate report"
 F=vtest.html
 rm -f $F
+cp ../style.css .
 echo "<html>" >> $F
 echo "  <head>" >> $F
 echo "   <link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" >> $F
