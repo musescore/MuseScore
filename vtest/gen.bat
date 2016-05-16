@@ -1,5 +1,4 @@
-
-
+@echo off
 
 rem "compare" - image magick compare program
 
@@ -36,16 +35,30 @@ rd /s/q html
 md html
 cd html
 
+set JSON_FILE=vtestjob.json
+
+FOR /D %%a IN (%SRC%) DO set LAST=%%A
+
+echo [ >> %JSON_FILE%
 FOR /D %%a IN (%SRC%) DO (
-      echo process %%a
-      xcopy ..\%%a-ref.png .
-      ..\%MSCORE% ..\%%a.mscz -r %DPI% -o %%a.png
-      compare -metric AE -fuzz 50%% %%a-1.png %%a-ref.png %%a-diff.png
+      if /I NOT %%a==%LAST% (
+            echo { "in": "..\\%%a.mscz",    "out": "%%a.png"}, >> %JSON_FILE%
+      ) else (
+            echo { "in": "..\\%%a.mscz",    "out": "%%a.png"} >> %JSON_FILE%
+            )
+)
+echo ] >> %JSON_FILE%
+
+..\%MSCORE% -j %JSON_FILE% -r %DPI%
+
+FOR /D %%a IN (%SRC%) DO (
+      xcopy ..\%%a-ref.png . /Q > nul
+      compare %%a-1.png %%a-ref.png %%a-diff.png
 )
 
-xcopy ..\style.css .
+xcopy ..\style.css . /Q > nul
 
-del /q %F%
+IF EXIST %F%  del /q %F% >
 
 echo ^<html^> >> %F%
 echo   ^<head^> >> %F%
@@ -71,4 +84,4 @@ echo ^</html^> >> %F%
 
 %F%
 cd ..
-
+@echo on
