@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 if [ "`uname`" = 'Darwin' ]; then
       MSCORE=../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
@@ -51,6 +51,7 @@ fi
 DPI=130
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+mkdir -p $DIR/html
 cd $DIR/html
 
 if test -f LOG; then

@@ -37,17 +37,12 @@ cd html
 
 set JSON_FILE=vtestjob.json
 
-FOR /D %%a IN (%SRC%) DO set LAST=%%A
-
 echo [ >> %JSON_FILE%
 FOR /D %%a IN (%SRC%) DO (
-      if /I NOT %%a==%LAST% (
-            echo { "in": "..\\%%a.mscz",    "out": "%%a.png"}, >> %JSON_FILE%
-      ) else (
-            echo { "in": "..\\%%a.mscz",    "out": "%%a.png"} >> %JSON_FILE%
-            )
+      echo { "in": "..\\%%a.mscz",    "out": "%%a.png"}, >> %JSON_FILE%
+
 )
-echo ] >> %JSON_FILE%
+echo {}] >> %JSON_FILE%
 
 ..\%MSCORE% -j %JSON_FILE% -r %DPI%
 
@@ -58,7 +53,7 @@ FOR /D %%a IN (%SRC%) DO (
 
 xcopy ..\style.css . /Q > nul
 
-IF EXIST %F%  del /q %F% >
+IF EXIST %F%  del /q %F% > nul
 
 echo ^<html^> >> %F%
 echo   ^<head^> >> %F%
