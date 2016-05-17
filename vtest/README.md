@@ -4,6 +4,7 @@ MuseScore Visual Tests
 The shell script "gen" creates a subdirectory `html` with the
 HTML file `vtest.html` for visual compare including all needed
 image files.
+Travis generates this too and then uploads to http://vtest.musescore.org/index.html
 
 Requirements
 ---
