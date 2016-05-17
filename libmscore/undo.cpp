@@ -3487,4 +3487,14 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
             }
       }
 
+//---------------------------------------------------------
+//   undoChangeGap
+//---------------------------------------------------------
+
+void ChangeGap::flip()
+      {
+      rest->setGap(v);
+      v = !v;
+      }
+
 }

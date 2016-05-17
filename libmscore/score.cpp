@@ -3317,9 +3317,15 @@ ChordRest* Score::findCR(int tick, int track) const
       for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
             if (ns == 0 || ns->tick() > tick)
                   break;
-            if (ns->element(track))
+            Element* el = ns->element(track);
+            if (el && el->isRest() && toRest(el)->isGap())
+                  continue;
+            else if (el)
                   s = ns;
             }
+      Element* el = s->element(track);
+      if (el && el->isRest() && toRest(el)->isGap())
+            s = 0;
       if (s)
             return static_cast<ChordRest*>(s->element(track));
       return nullptr;

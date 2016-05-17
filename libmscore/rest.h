@@ -43,6 +43,7 @@ class Rest : public ChordRest {
 
    protected:
       ElementList _el;              ///< symbols or images
+      bool _gap;         ///< invisible and not selectable for user
 
    public:
       Rest(Score* s = 0);
@@ -63,6 +64,10 @@ class Rest : public ChordRest {
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
       virtual void layout() override;
+
+      bool isGap() const               { return _gap;     }
+      virtual void setGap(bool f);
+      void undoChangeGap(bool v);
 
       virtual void reset() override;
 
