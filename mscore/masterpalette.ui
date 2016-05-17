@@ -15,131 +15,27 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QListWidget" name="listWidget">
+    <widget class="QTreeWidget" name="treeWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="resizeMode">
-      <enum>QListView::Adjust</enum>
+     <property name="rootIsDecorated">
+      <bool>false</bool>
      </property>
-     <item>
+     <property name="allColumnsShowFocus">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
       <property name="text">
-       <string>Grace Notes</string>
+       <string notr="true">1</string>
       </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Clefs</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Key Signatures</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Time Signatures</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Barlines</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Lines</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Arpeggios &amp; Glissandi</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Breaths &amp; Pauses</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Brackets</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Articulations &amp; Ornaments</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Accidentals</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Dynamics</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Fingering</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Note Heads</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tremolo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Repeats &amp; Jumps</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tempo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Text</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Breaks &amp; Spacers</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Bagpipe Embellishments</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Beam Properties</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Frames &amp; Measures</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Symbols</string>
-      </property>
-     </item>
+     </column>
     </widget>
    </item>
    <item>
@@ -148,22 +44,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>listWidget</sender>
-   <signal>currentRowChanged(int)</signal>
-   <receiver>stack</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>161</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>331</x>
-     <y>104</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

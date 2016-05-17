@@ -40,6 +40,10 @@ class MasterPalette : public QWidget, Ui::MasterPalette
    signals:
       void closed(bool);
 
+   private slots:
+      void currentChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+      void clicked(QTreeWidgetItem*, int);
+
    public:
       MasterPalette(QWidget* parent = 0);
       void selectItem(const QString& s);

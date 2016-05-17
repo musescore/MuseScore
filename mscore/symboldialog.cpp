@@ -53,15 +53,15 @@ void SymbolDialog::createSymbols()
       // init the font if not done yet
       ScoreFont::fontFactory(f->name());
       sp->clear();
-      for (int i = 0; i < int(SymId::lastSym); ++i) {
-            if (f->isValid(SymId(i))) {
+      for (auto j : a) {
+            QString name = j.toString();
+            SymId id     = Sym::name2id(name);
+
+            if (search->text().isEmpty()
+               || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
                   Symbol* s = new Symbol(gscore);
-                  s->setSym(SymId(i), f);
-                  bool match = true;
-                  if (!search->text().isEmpty())
-                        match = Sym::id2userName(SymId(i)).contains(search->text(), Qt::CaseInsensitive);
-                  if (match)
-                        sp->append(s, Sym::id2userName(SymId(i)));
+                  s->setSym(SymId(id), f);
+                  sp->append(s, Sym::id2userName(SymId(id)));
                   }
             }
       }
@@ -70,10 +70,11 @@ void SymbolDialog::createSymbols()
 //   SymbolDialog
 //---------------------------------------------------------
 
-SymbolDialog::SymbolDialog(QWidget* parent)
+SymbolDialog::SymbolDialog(QJsonArray* _a, QWidget* parent)
    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
+      a = *_a;
       int idx = 0;
       int currentIndex = 0;
       for (const ScoreFont& f : ScoreFont::scoreFonts()) {
