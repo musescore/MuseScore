@@ -28,7 +28,6 @@ namespace Ms {
 class Palette;
 class Element;
 
-
 //---------------------------------------------------------
 //   SymbolDialog
 //---------------------------------------------------------
@@ -36,6 +35,7 @@ class Element;
 class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
       Q_OBJECT
 
+      QJsonArray a;
       Palette* sp;
       void createSymbolPalette();
       void createSymbols();
@@ -47,7 +47,7 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
       void on_clearSearch_clicked();
 
    public:
-      SymbolDialog(QWidget* parent = 0);
+      SymbolDialog(QJsonArray*, QWidget* parent = 0);
       };
 }
 

@@ -100,9 +100,9 @@ Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
 
 void MasterPalette::selectItem(const QString& s)
       {
-      for (int idx = 0; idx < listWidget->count(); ++idx) {
-            if (listWidget->item(idx)->text() == s) {
-                  listWidget->setCurrentItem(listWidget->item(idx));
+      for (int idx = 0; idx < treeWidget->topLevelItemCount(); ++idx) {
+            if (treeWidget->topLevelItem(idx)->text(0) == s) {
+                  treeWidget->setCurrentItem(treeWidget->topLevelItem(idx));
                   break;
                   }
             }
@@ -114,7 +114,7 @@ void MasterPalette::selectItem(const QString& s)
 
 QString MasterPalette::selectedItem()
       {
-      return listWidget->currentItem()->text();
+      return treeWidget->currentItem()->text(0);
       }
 
 //---------------------------------------------------------
@@ -126,7 +126,10 @@ void MasterPalette::addPalette(Palette* sp)
       sp->setReadOnly(true);
       PaletteScrollArea* psa = new PaletteScrollArea(sp);
       psa->setRestrictHeight(false);
+      QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(sp->name()));
+      item->setData(0, Qt::UserRole, stack->count());
       stack->addWidget(psa);
+      treeWidget->addTopLevelItem(item);
       }
 
 //---------------------------------------------------------
@@ -139,13 +142,22 @@ MasterPalette::MasterPalette(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+      treeWidget->clear();
+
       addPalette(MuseScore::newGraceNotePalette(false));
       addPalette(MuseScore::newClefsPalette(false));
       keyEditor = new KeyEditor;
-      stack->addWidget(keyEditor);
 
+      QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(tr("Key Signatures")));
+      item->setData(0, Qt::UserRole, stack->count());
+      stack->addWidget(keyEditor);
+      treeWidget->addTopLevelItem(item);
+
+      item = new QTreeWidgetItem(QStringList(tr("Time Signatures")));
+      item->setData(0, Qt::UserRole, stack->count());
       timeDialog = new TimeDialog;
       stack->addWidget(timeDialog);
+      treeWidget->addTopLevelItem(item);
 
       addPalette(MuseScore::newBarLinePalette(false));
       addPalette(MuseScore::newLinesPalette(false));
@@ -168,7 +180,50 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newBeamPalette(false));
       addPalette(MuseScore::newFramePalette());
 
-      stack->addWidget(new SymbolDialog);
+      item = new QTreeWidgetItem(QStringList(tr("Symbols")));
+      item->setData(0, Qt::UserRole, -1);
+      treeWidget->addTopLevelItem(item);
+
+      QFile f(":fonts/bravura/classes.json");
+      if (!f.open(QIODevice::ReadOnly))
+            qDebug("cannot open classes.json");
+      else {
+            QJsonDocument d = QJsonDocument::fromJson(f.readAll());
+            QJsonObject o = d.object();
+            for (const QString& s : o.keys()) {
+                  QJsonValue v = o.value(s);
+                  QJsonArray a = v.toArray();
+                  QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
+                  child->setData(0, Qt::UserRole, stack->count());
+                  item->addChild(child);
+                  stack->addWidget(new SymbolDialog(&a));
+                  }
+            }
+
+      connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
+      connect(treeWidget, &QTreeWidget::itemClicked, this, &MasterPalette::clicked);
+      }
+
+//---------------------------------------------------------
+//   currentChanged
+//---------------------------------------------------------
+
+void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
+      {
+      int idx = item->data(0, Qt::UserRole).toInt();
+      if (idx != -1)
+            stack->setCurrentIndex(idx);
+      }
+
+//---------------------------------------------------------
+//   clicked
+//---------------------------------------------------------
+
+void MasterPalette::clicked(QTreeWidgetItem* item, int)
+      {
+      int idx = item->data(0, Qt::UserRole).toInt();
+      if (idx == -1)
+            item->setExpanded(!item->isExpanded());
       }
 
 //---------------------------------------------------------
