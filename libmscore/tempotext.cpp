@@ -31,6 +31,8 @@ TempoText::TempoText(Score* s)
       {
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
+      _relative = 1.0;
+      _isRelative = false;
       setPlacement(Element::Placement::ABOVE);
       setTextStyleType(TextStyleType::TEMPO);
       }
@@ -164,6 +166,26 @@ QString TempoText::duration2tempoTextString(const TDuration dur)
       }
 
 //---------------------------------------------------------
+// updateScore
+//---------------------------------------------------------
+void TempoText::updateScore()
+      {
+      if (segment())
+            score()->setTempo(segment(), _tempo);
+      score()->fixTicks();
+      score()->setPlaylistDirty();
+      }
+
+//---------------------------------------------------------
+// updateRelative
+//---------------------------------------------------------
+void TempoText::updateRelative()
+      {
+      qreal tempoBefore = score()->tempo(tick() - 1);
+      setTempo(tempoBefore * _relative);
+      }
+
+//---------------------------------------------------------
 //   textChanged
 //    text may have changed
 //---------------------------------------------------------
@@ -182,13 +204,24 @@ void TempoText::textChanged()
                         qreal nt = qreal(sl[1].toDouble()) * pa.f;
                         if (nt != _tempo) {
                               setTempo(qreal(sl[1].toDouble()) * pa.f);
-                              if(segment())
-                                    score()->setTempo(segment(), _tempo);
-                              score()->fixTicks();
-                              score()->setPlaylistDirty();
+                              _relative = 1.0;
+                              _isRelative = false;
+                              updateScore();
                               }
                         break;
                         }
+                  }
+            else {
+                 for (const TempoPattern& pa2 : tp) {
+                       QRegExp re(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern).arg(pa2.pattern));
+                       if (re.indexIn(s) != -1) {
+                             _relative = pa2.f / pa.f;
+                             _isRelative = true;
+                             updateRelative();
+                             updateScore();
+                             return;
+                             }
+                       }
                   }
             }
       }
