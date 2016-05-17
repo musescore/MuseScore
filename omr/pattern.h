@@ -21,8 +21,11 @@
 #ifndef __PATTERN_H__
 #define __PATTERN_H__
 
+#include "libmscore/score.h"
+
 namespace Ms {
 
+enum class SymId;
 class Sym;
 
 //---------------------------------------------------------
@@ -33,26 +36,31 @@ class Sym;
 class Pattern {
    protected:
       QImage _image;
-      Sym* _sym = 0;
-      int _id;
+      SymId _id;
       QPoint _base;
+      Score *_score;
+      float **model;
+      int rows;
+      int cols;
 
    public:
       Pattern();
       ~Pattern();
-      Pattern(int id, Sym* symbol, double spatium);
+      Pattern(Score *s, SymId id, double spatium);
+      Pattern(Score *s, QString name);
       Pattern(QImage*, int, int, int, int);
 
       double match(const Pattern*) const;
-      double match(const QImage* img, int col, int row) const;
+      double match(const QImage* , int , int ) const;
+      double match(const QImage* img, int col, int row, double bg_parm) const;
 
       void dump() const;
       const QImage* image() const { return &_image; }
-      int w() const       { return _image.width(); }
-      int h() const       { return _image.height(); }
+      int w() const       { return cols; /*_image.width();*/ }
+      int h() const       { return rows; /*_image.height();*/ }
       bool dot(int x, int y) const;
-      int id() const      { return _id; }
-      void setId(int val) { _id = val; }
+      SymId id() const      { return _id; }
+      void setId(SymId val) { _id = val; }
       const QPoint& base() const { return _base; }
       void setBase(const QPoint& v) { _base = v; }
       };
