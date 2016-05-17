@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 if [ "`uname`" = 'Darwin' ]; then
       MSCORE=../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
@@ -50,7 +50,7 @@ fi
 
 DPI=130
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p $DIR/html
 cd $DIR/html
 
@@ -62,13 +62,11 @@ if test -f LOG; then
 echo "Generate JSON job file"
 JSON_FILE=vtestjob.json
 rm -f $JSON_FILE
-IFS=' ' read -r -a SRC_ARRAY <<< "$SRC"
 echo "[" >> $JSON_FILE
-for src in "${SRC_ARRAY[@]::${#SRC_ARRAY[@]}-1}" ; do
+for src in $SRC ; do
     echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE
 done
-echo "{ \"in\" : \"../${SRC_ARRAY[@]: -1:1}.mscz\",         \"out\" : \"${SRC_ARRAY[@]: -1:1}.png\" }" >> $JSON_FILE
-echo "]" >> $JSON_FILE
+echo "{}]" >> $JSON_FILE
 
 echo "Generate PNG files"
 $MSCORE -j $JSON_FILE -r $DPI 2> LOG
@@ -106,5 +104,5 @@ echo "  </body>" >> $F
 echo "</html>" >> $F
 
 
-$BROWSER $F
+$BROWSER $F 2>/dev/null
 
