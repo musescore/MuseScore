@@ -173,9 +173,8 @@ Pattern::Pattern(Score *s, QString name)
       {
       _score = s;
 
-      QFile f(":/data/solid_note_head.dat");
+      QFile f(QString(":/data/%1.dat").arg(name));
       if (!f.open(QIODevice::ReadOnly)) {
-      //if(!f.open(QFile::ReadOnly| QIODevice::Text)) {
             rows = 0;
             cols = 0;
             }
@@ -187,7 +186,7 @@ Pattern::Pattern(Score *s, QString name)
                   model[i] = new float[cols];
             for(int i = 0; i < rows; i++) {
                   for(int j = 0; j < cols; j++)
-                        in>>model[i][j];
+                        in >> model[i][j];
                   }
             }
       f.close();

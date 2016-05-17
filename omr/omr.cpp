@@ -55,7 +55,7 @@ Omr::Omr(Score* s)
 #ifdef OCR
       _ocr = 0;
 #endif
-      ActionNames = QList<QString>()<< QWidget::tr("Loading Pdf") << QWidget::tr("Initializing Staves") << QWidget::tr("Identifying Systems");
+      ActionNames = QList<QString>() << QWidget::tr("Loading PDF") << QWidget::tr("Initializing Staves") << QWidget::tr("Identifying Systems");
       initUtils();
       }
 
@@ -64,7 +64,7 @@ Omr::Omr(const QString& p, Score* s)
       _score        = s;
       _path         = p;
       _ocr          = 0;
-      ActionNames = QList<QString>()<< QWidget::tr("Loading Pdf") << QWidget::tr("Initializing Staves") << QWidget::tr("Load Parameters") << QWidget::tr("Identifying Systems");
+      ActionNames = QList<QString>()<< QWidget::tr("Loading PDF") << QWidget::tr("Initializing Staves") << QWidget::tr("Load Parameters") << QWidget::tr("Identifying Systems");
       initUtils();
       }
 
@@ -163,7 +163,7 @@ bool Omr::readPdf()
                   }
             else {
                   progress->setLabelText(QWidget::tr("%1 at Page %2").arg(ActionNames.at(ID)).arg(page+1));
-                  val = omrActions(ID,page);
+                  val = omrActions(ID, page);
                   page++;
                   }
 
@@ -172,12 +172,15 @@ bool Omr::readPdf()
                   return false;
                   }
             else {
-                  if (ID < ACTION_NUM) progress->setValue(ID);
-                  else progress->setValue(ACTION_NUM - 1);
+                  if (ID < ACTION_NUM)
+                        progress->setValue(ID);
+                  else
+                        progress->setValue(ACTION_NUM - 1);
                   qApp->processEvents();
                   }
             }
       progress->close();
+      delete progress;
       return true;
       }
 
@@ -212,13 +215,14 @@ bool Omr::omrActions(int &ID, int page)
             _pages[page]->read();
 
             //do the rescaling of image here
-            int new_w = _pages[page]->image().width()*_spatium/_pages[page]->spatium();
-            int new_h = _pages[page]->image().height()*_spatium/_pages[page]->spatium();
+            int new_w = _pages[page]->image().width() * _spatium/_pages[page]->spatium();
+            int new_h = _pages[page]->image().height() * _spatium/_pages[page]->spatium();
             QImage image = _pages[page]->image().scaled(new_w,new_h, Qt::KeepAspectRatio);
             _pages[page]->setImage(image);
             _pages[page]->read();
 
-            if(page == _pages.size()-1) ID++;
+            if(page == _pages.size()-1)
+                  ID++;
             return true;
             }
       else if(ID == FINALIZE_PARMS) {
@@ -230,7 +234,6 @@ bool Omr::omrActions(int &ID, int page)
             w       /= n;
             _dpmm    = w / 210.0;            // PaperSize A4
 
-            //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
             quartheadPattern  = new Pattern(_score, "solid_note_head");
             halfheadPattern   = new Pattern(_score, SymId::noteheadHalf,  _spatium);
             sharpPattern      = new Pattern(_score, SymId::accidentalSharp, _spatium);

@@ -42,7 +42,7 @@ add_library (
 set_target_properties (
       omr
       PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unused-private-field"
       )
 
 xcode_pch(omr all)
