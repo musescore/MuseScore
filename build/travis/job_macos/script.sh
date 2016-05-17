@@ -31,3 +31,5 @@ fi
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 
 mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
+
+scp $DMGFILE musescore-nightlies@ftp.osuosl.org:ftp/macosx
