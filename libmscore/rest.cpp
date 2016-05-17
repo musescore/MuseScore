@@ -42,6 +42,7 @@ Rest::Rest(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
+      _gap       = false;
       _sym       = SymId::restQuarter;
       }
 
@@ -51,6 +52,7 @@ Rest::Rest(Score* s, const TDuration& d)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
+      _gap       = false;
       setDurationType(d);
       if (d.fraction().isValid())
             setDuration(d.fraction());
@@ -61,6 +63,7 @@ Rest::Rest(const Rest& r, bool link)
       {
       if (link)
             score()->undo(new Link(const_cast<Rest*>(&r), this));
+      _gap     = r._gap;
       _sym     = r._sym;
       dotline  = r.dotline;
       _mmWidth = r._mmWidth;
@@ -329,6 +332,10 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
 
 void Rest::layout()
       {
+      if (_gap) {
+            setPos(0.0, 0.0);
+            return;
+            }
       for (Element* e : _el)
             e->layout();
       if (measure() && measure()->isMMRest()) {
@@ -437,7 +444,7 @@ int Rest::computeLineOffset()
       if (offsetVoices && voice() == 0) {
             // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
             Element* e = s->element(track() + 1);
-            if (e && e->type() == Element::Type::REST && !e->visible()) {
+            if (e && e->isRest() && (!e->visible() || toRest(e)->isGap())) {
                   Rest* r = static_cast<Rest*>(e);
                   if (r->globalDuration() == globalDuration()) {
                         offsetVoices = false;
@@ -617,10 +624,11 @@ qreal Rest::downPos() const
 
 void Rest::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      func(data, this);
       ChordRest::scanElements(data, func, all);
       for (Element* e : _el)
             e->scanElements(data, func, all);
+      if (!isGap())
+            func(data, this);
       }
 
 //---------------------------------------------------------
@@ -806,6 +814,8 @@ void Rest::remove(Element* e)
 
 void Rest::write(Xml& xml) const
       {
+      if (_gap)
+            return;
       xml.stag(name());
       ChordRest::writeProperties(xml);
       _el.write(xml);
@@ -878,5 +888,21 @@ Shape Rest::shape() const
             shape.add(bbox().translated(pos()));
       return shape;
       }
-}
 
+//---------------------------------------------------------
+//   setGap
+//---------------------------------------------------------
+void Rest::setGap(bool f){
+      _gap = f;
+      score()->setLayout(tick());
+      }
+
+//---------------------------------------------------------
+//   undoChangeGap
+//---------------------------------------------------------
+
+void Rest::undoChangeGap(bool v){
+      score()->undo(new ChangeGap(this, v));
+      }
+
+}

@@ -154,8 +154,13 @@ Segment* InputState::nextInputPos() const
       Measure* m = _segment->measure();
       Segment* s = _segment->next1(Segment::Type::ChordRest);
       for (; s; s = s->next1(Segment::Type::ChordRest)) {
-            if (s->element(_track) || s->measure() != m)
+            if (s->element(_track) || s->measure() != m) {
+                  if (s->element(_track)) {
+                        if (s->element(_track)->isRest() && toRest(s->element(_track))->isGap())
+                              continue;
+                        }
                   return s;
+                  }
             }
       return 0;
       }
