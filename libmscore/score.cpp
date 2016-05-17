@@ -434,9 +434,11 @@ void Score::fixTicks()
                               }
                         }
                   else if (isMaster() && (s->segmentType() == Segment::Type::ChordRest)) {
-                        foreach (Element* e, s->annotations()) {
+                        for (Element* e : s->annotations()) {
                               if (e->type() == Element::Type::TEMPO_TEXT) {
-                                    const TempoText* tt = static_cast<const TempoText*>(e);
+                                    TempoText* tt = toTempoText(e);
+                                    if (tt->isRelative())
+                                          tt->updateRelative();
                                     setTempo(tt->segment(), tt->tempo());
                                     }
                               }

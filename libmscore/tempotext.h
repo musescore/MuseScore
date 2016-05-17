@@ -33,6 +33,9 @@ class TempoText : public Text  {
 
       qreal _tempo;          // beats per second
       bool _followText;       // parse text to determine tempo
+      qreal _relative;
+      bool _isRelative;
+      void updateScore();
 
    public:
       TempoText(Score*);
@@ -46,10 +49,12 @@ class TempoText : public Text  {
       qreal tempo() const        { return _tempo;      }
       void setTempo(qreal v);
       void undoSetTempo(qreal v);
+      bool isRelative()          { return _isRelative; }
 
       bool followText() const    { return _followText; }
       void setFollowText(bool v) { _followText = v;    }
       void undoSetFollowText(bool v);
+      void updateRelative();
 
       virtual void textChanged() override;
       virtual void layout();
