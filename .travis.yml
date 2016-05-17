@@ -105,6 +105,7 @@ matrix:
         directories:
           - $HOME/qt
       before_install:
+        - openssl aes-256-cbc -K $encrypted_99b076488ab1_key -iv $encrypted_99b076488ab1_iv -in build/travis/resources/osuosl_nighlies_rsa.enc -out build/travis/resources/osuosl_nighlies_rsa -d
         - source build/travis/job_macos/before_install.sh
       install:
         - "./build/travis/job_macos/install.sh"
