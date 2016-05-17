@@ -5791,7 +5791,13 @@ ScoreFont* ScoreFont::fontFactory(QString s)
                   break;
                   }
             }
-      Q_ASSERT(f);
+      if (!f) {
+            qDebug("ScoreFont <%s> not found in list", qPrintable(s));
+            for (ScoreFont& sf : _scoreFonts)
+                  qDebug("   %s", qPrintable(sf.name()));
+            qDebug("Using fallback font <%s> instead", qPrintable(_scoreFonts[FALLBACK_FONT].name()));
+            return fallbackFont();
+            }
 
       if (!f->face)
             f->load();
