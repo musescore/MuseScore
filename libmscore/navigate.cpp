@@ -197,7 +197,7 @@ Element* Score::upAlt(Element* element)
             Chord* chord = note->chord();
             const std::vector<Note*>& notes = chord->notes();
             auto i = std::find(notes.begin(), notes.end(), note);
-            if (i != notes.end()) {
+            if (i != notes.begin()) {
                   ++i;
                   re = i != notes.end() ? *i : 0;
                   }
