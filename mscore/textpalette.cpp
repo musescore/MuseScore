@@ -31,6 +31,8 @@
 
 namespace Ms {
 
+extern QMap<QString, QStringList>* smuflRanges();
+
 //const int buttonSize = 40;
 //const int iconSize   = 20;
 //const int fontSize   = 20;
@@ -568,30 +570,7 @@ TextPalette::TextPalette(QWidget* parent)
       QSplitter* ws = new QSplitter;
       lws = new QListWidget;
 
-      ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
-      QFile fi(scoreFont->fontPath() + "ranges.json");
-      if (!fi.open(QIODevice::ReadOnly))
-            qDebug("ScoreFont: open ranges file <%s> failed", qPrintable(fi.fileName()));
-      QJsonParseError error;
-      QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
-      if (error.error != QJsonParseError::NoError)
-            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
-               error.offset, qPrintable(error.errorString()));
-	int i = 0;
-      QStringList smuflRangeNames;
-      for (auto s : o.keys()) {
-            QJsonObject range = o.value(s).toObject();
-            QString desc = range.value("description").toString();
-            QJsonArray glyphs = range.value("glyphs").toArray();
-            if (glyphs.size() > 0) {
-                  for (QJsonValue g : glyphs)
-                        smuflMap[i].append(g.toString());
-                  smuflRangeNames.append(desc);
-                  i++;
-                  }
-            }
-
-      lws->addItems(smuflRangeNames);
+      lws->addItems(smuflRanges()->keys());
       lws->setCurrentRow(0);
 
       ws->addWidget(lws);
@@ -605,7 +584,7 @@ TextPalette::TextPalette(QWidget* parent)
       QSplitter* wu = new QSplitter;
       lwu = new QListWidget;
       lwu->setSortingEnabled(true);
-      for (i = 0; i < unicodeRangeNames.length(); i++) {
+      for (int i = 0; i < unicodeRangeNames.length(); i++) {
             QListWidgetItem* newItem = new QListWidgetItem(qApp->translate("accidental", unicodeRangeNames.at(i).toUtf8().constData()));
             newItem->setData(Qt::UserRole, i);
             lwu->addItem(newItem);
@@ -811,7 +790,8 @@ void TextPalette::populateCommon()
 void TextPalette::populateSmufl()
       {
       int row = lws->currentRow();
-      QStringList smuflNames = smuflMap[row];
+      QString key = smuflRanges()->keys().at(row);
+      QStringList smuflNames = (*smuflRanges())[key];
 
       pSmufl->clear();
       for (QString name : smuflNames) {

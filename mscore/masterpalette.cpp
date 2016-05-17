@@ -46,6 +46,7 @@ extern Palette* newKeySigPalette();
 extern Palette* newBarLinePalette(bool);
 extern Palette* newLinesPalette(bool);
 extern Palette* newAccidentalsPalette();
+extern QMap<QString, QStringList>* smuflRanges();
 
 //---------------------------------------------------------
 //   showMasterPalette
@@ -184,20 +185,11 @@ MasterPalette::MasterPalette(QWidget* parent)
       item->setData(0, Qt::UserRole, -1);
       treeWidget->addTopLevelItem(item);
 
-      QFile f(":fonts/bravura/classes.json");
-      if (!f.open(QIODevice::ReadOnly))
-            qDebug("cannot open classes.json");
-      else {
-            QJsonDocument d = QJsonDocument::fromJson(f.readAll());
-            QJsonObject o = d.object();
-            for (const QString& s : o.keys()) {
-                  QJsonValue v = o.value(s);
-                  QJsonArray a = v.toArray();
-                  QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
-                  child->setData(0, Qt::UserRole, stack->count());
-                  item->addChild(child);
-                  stack->addWidget(new SymbolDialog(&a));
-                  }
+      for (const QString& s : smuflRanges()->keys()) {
+            QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
+            child->setData(0, Qt::UserRole, stack->count());
+            item->addChild(child);
+            stack->addWidget(new SymbolDialog(s));
             }
 
       connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);

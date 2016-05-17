@@ -35,7 +35,7 @@ class Element;
 class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
       Q_OBJECT
 
-      QJsonArray a;
+      QString range;
       Palette* sp;
       void createSymbolPalette();
       void createSymbols();
@@ -47,7 +47,7 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
       void on_clearSearch_clicked();
 
    public:
-      SymbolDialog(QJsonArray*, QWidget* parent = 0);
+      SymbolDialog(const QString&, QWidget* parent = 0);
       };
 }
 
