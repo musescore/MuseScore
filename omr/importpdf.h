@@ -25,7 +25,7 @@
 
 namespace Ms {
 
-      extern Score::FileError importPdf(Score*, const QString&);
+      extern Score::FileError importPdf(MasterScore*, const QString&);
       }
 
 #endif
