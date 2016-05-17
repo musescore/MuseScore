@@ -42,8 +42,6 @@ class TextPalette : public QWidget, public Ui::TextPaletteBase {
       Palette* pUnicode;
 
       QListWidget* lws;
-      QMap<int, QStringList> smuflMap;
-
       QListWidget* lwu;
 
       void closeEvent(QCloseEvent* ev);

@@ -31,6 +31,7 @@
 namespace Ms {
 
 extern MasterScore* gscore;
+extern QMap<QString, QStringList>* smuflRanges();
 
 //---------------------------------------------------------
 //   createSymbolPalette
@@ -53,8 +54,7 @@ void SymbolDialog::createSymbols()
       // init the font if not done yet
       ScoreFont::fontFactory(f->name());
       sp->clear();
-      for (auto j : a) {
-            QString name = j.toString();
+      for (auto name : (*smuflRanges())[range]) {
             SymId id     = Sym::name2id(name);
 
             if (search->text().isEmpty()
@@ -70,11 +70,11 @@ void SymbolDialog::createSymbols()
 //   SymbolDialog
 //---------------------------------------------------------
 
-SymbolDialog::SymbolDialog(QJsonArray* _a, QWidget* parent)
+SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
-      a = *_a;
+      range = s;        // smufl symbol range
       int idx = 0;
       int currentIndex = 0;
       for (const ScoreFont& f : ScoreFont::scoreFonts()) {
