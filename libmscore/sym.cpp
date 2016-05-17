@@ -6048,8 +6048,9 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             qDebug("ScoreFont <%s> not found in list", qPrintable(s));
             for (ScoreFont& sf : _scoreFonts)
                   qDebug("   %s", qPrintable(sf.name()));
+            qDebug("Using fallback font <%s> instead", qPrintable(_scoreFonts[FALLBACK_FONT].name()));
+            return fallbackFont();
             }
-      Q_ASSERT(f);
 
       if (!f->face)
             f->load();
