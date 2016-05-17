@@ -95,7 +95,7 @@ static void process(const QString& cmd)
 //---------------------------------------------------------
 //   scanDir
 //---------------------------------------------------------
-
+#if 0
 static void scanDir(QDir d)
       {
       QFileInfoList l = d.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs);
@@ -110,6 +110,7 @@ static void scanDir(QDir d)
                   }
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   main

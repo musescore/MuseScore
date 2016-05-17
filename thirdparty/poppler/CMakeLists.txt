@@ -122,7 +122,7 @@ add_library(poppler STATIC
 set_target_properties(poppler
       PROPERTIES
       COMPILE_FLAGS
-            "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual"
+            "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field"
       )
 
 include_directories(
