@@ -992,15 +992,16 @@ void MuseScore::showPalette(bool visible)
 struct TempoPattern {
       QString pattern;
       double f;
+      bool relative;
 
-      TempoPattern(const QString& s, double v) : pattern(s), f(v) {}
+      TempoPattern(const QString& s, double v, bool relative) : pattern(s), f(v), relative(relative) {}
       };
 
 //---------------------------------------------------------
 //   newTempoPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTempoPalette()
+Palette* MuseScore::newTempoPalette(bool basic)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Tempo"));
@@ -1008,24 +1009,34 @@ Palette* MuseScore::newTempoPalette()
       sp->setGrid(60, 30);
       sp->setDrawGrid(true);
 
-      static const TempoPattern tp[] = {
-            TempoPattern("<sym>metNoteHalfUp</sym> = 80", 80.0/30.0),                    // 1/2
-            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/60.0),                 // 1/4
-            TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/120.0),       // dotted 1/8
+      static const TempoPattern tps[] = {
+            TempoPattern("<sym>metNoteHalfUp</sym> = 80", 80.0/30.0, false),                    // 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/60.0, false),                 // 1/4
+            TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0, false),                    // 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0, false),       // dotted 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0, false),    // dotted 1/4
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/120.0, false),       // dotted 1/8
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 3.0/2.0, true),
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", 2.0/3.0, true),
+            TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/2.0, true),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>", 2.0/1.0, true),
+            TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>", 1.0/1.0, true),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/1.0, true),
             };
-      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
+      for (TempoPattern tp : tps) {
+            if (tp.relative && basic)
+                  continue;
             TempoText* tt = new TempoText(gscore);
             tt->setFollowText(true);
-            // leave track at default (-1) to make it possible
-            // for drop() to tell that this came from palette
-            // (it will then be set to 0 there)
-            //tt->setTrack(0);
-            tt->setTempo(tp[i].f);
-            tt->setXmlText(tp[i].pattern);
-            sp->append(tt, tr("Tempo text"), QString(), 1.5);
+            tt->setXmlText(tp.pattern);
+            if (tp.relative) {
+                  tt->setRelative(tp.f);
+                  sp->append(tt, tr("Metric modulation"), QString(), 1.5);
+                  }
+            else {
+                  tt->setTempo(tp.f);
+                  sp->append(tt, tr("Tempo text"), QString(), 1.5);
+                  }
             }
       return sp;
       }
@@ -1135,7 +1146,7 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newNoteHeadsPalette());
       paletteBox->addPalette(newTremoloPalette());
       paletteBox->addPalette(newRepeatsPalette());
-      paletteBox->addPalette(newTempoPalette());
+      paletteBox->addPalette(newTempoPalette(false));
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newBagpipeEmbellishmentPalette());
@@ -1258,7 +1269,7 @@ void MuseScore::setBasicPalette()
 //      paletteBox->addPalette(newNoteHeadsPalette());
 //      paletteBox->addPalette(newTremoloPalette());
       paletteBox->addPalette(newRepeatsPalette());
-      paletteBox->addPalette(newTempoPalette());
+      paletteBox->addPalette(newTempoPalette(true));
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newBeamPalette(true));
