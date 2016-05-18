@@ -63,15 +63,8 @@
         </attributes>
       <note>
         <rest/>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        </note>
-      <note print-object="no">
-        <rest/>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
         </note>
       </measure>
     <measure number="2">
@@ -122,6 +115,12 @@
         <voice>1</voice>
         <type>half</type>
         <stem>down</stem>
+        </note>
+      <note print-object="no">
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
         </note>
       </measure>
     <measure number="2">
