@@ -2103,6 +2103,24 @@ void MusicXMLParserPass2::measure(const QString& partId,
                               }
                         }
                   }
+            else if (_e.name() == "sound") {
+                  QString tempo = _e.attributes().value("tempo").toString();
+
+                  if (!tempo.isEmpty()) {
+                        double tpo = tempo.toDouble() / 60;
+                        int tick = (time + mTime).ticks();
+
+                        TempoText * t = new TempoText(_score);
+                        t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(tempo));
+                        t->setTempo(tpo);
+                        t->setFollowText(true);
+
+                        _score->setTempo(tick, tpo);
+
+                        addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
+                        }
+                  _e.skipCurrentElement();
+                  }
             else if (_e.name() == "barline")
                   barline(partId, measure);
             else if (_e.name() == "print")
@@ -2321,7 +2339,6 @@ void MusicXMLParserDirection::direction(const QString& partId,
       //       qPrintable(_wordsText), qPrintable(_rehearsalText), qPrintable(_metroText), _tpoSound);
 
       // create text if any text was found
-      // TODO TBD what to do if _tpoSound > 0 but no text at all
 
       if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             Text* t = 0;
@@ -2361,6 +2378,17 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
 
             if (_hasDefaultY) t->textStyle().setYoff(_defaultY);
+            addElemOffset(t, track, placement, measure, tick);
+            }
+      else if (_tpoSound > 0) {
+            double tpo = _tpoSound / 60;
+            TempoText * t = new TempoText(_score);
+            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(_tpoSound));
+            t->setTempo(tpo);
+            t->setFollowText(true);
+
+            _score->setTempo(tick, tpo);
+
             addElemOffset(t, track, placement, measure, tick);
             }
 
