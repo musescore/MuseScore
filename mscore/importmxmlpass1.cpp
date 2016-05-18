@@ -2750,8 +2750,8 @@ void MusicXMLParserPass1::note(const QString& partId,
                   }
             }
       else {
-            errorStr = "calculated and specified duration invalid, using 1/4";
-            dura = Fraction(1, 4);
+            errorStr = "calculated and specified duration invalid, using 4/4";
+            dura = Fraction(4, 4);
       }
 
       if (errorStr != "")

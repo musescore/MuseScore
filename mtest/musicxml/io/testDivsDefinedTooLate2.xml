@@ -21,7 +21,7 @@
         Logic Pro X may export notes before duration is defined.
         This happens when a part starts with a whole measure rest.
         Attributes are exported in the first non-rest measure.
-        MuseScore will convert the whole measure to a quarter rest.
+        MuseScore will convert the whole measure to a four quarter rest.
         Note that by reading further ahead, it could be concluded
         that two quarters are actually needed.
         </miscellaneous-field>
