@@ -1665,6 +1665,10 @@ void MusicXMLParserPass2::scorePartwise()
             else
                   skipLogCurrElem();
             }
+      // set last measure barline to normal or MuseScore will generate light-heavy EndBarline
+      // TODO, handle other tracks?
+      if (_score->lastMeasure()->endBarLineType() == BarLineType::NORMAL)
+            _score->lastMeasure()->setEndBarLineType(BarLineType::NORMAL, 0);
       }
 
 //---------------------------------------------------------
@@ -3127,10 +3131,11 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                   measure->setRepeatEnd(true);
                   }
             else {
-//TODO                  if (loc == "right")
-//                        measure->setEndBarLineType(type, false, visible);
-//                  else if (measure->prevMeasure())
-//                        measure->prevMeasure()->setEndBarLineType(type, false, visible);
+                  int track = _pass1.trackForPart(partId);
+                  if (loc == "right")
+                        measure->setEndBarLineType(type, track, visible);
+                  else if (measure->prevMeasure())
+                        measure->prevMeasure()->setEndBarLineType(type, track, visible);
                   }
             }
 

@@ -786,7 +786,7 @@ public:
       };
 
 //---------------------------------------------------------
-// trill hadling
+// trill handling
 //---------------------------------------------------------
 
 // Find chords to attach trills to. This is necessary because in MuseScore
@@ -1447,13 +1447,11 @@ void ExportMusicXml::barlineLeft(Measure* m)
 
 void ExportMusicXml::barlineRight(Measure* m)
       {
-//      const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
-//      const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
+      const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
+      const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
-//TODO-WS      BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
-//      bool visible = m->endBarLineVisible();
-      BarLineType bst = BarLineType::NORMAL;
-      bool visible = true;
+      BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
+      bool visible = m->endBarLineVisible();
 
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
