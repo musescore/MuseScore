@@ -1217,7 +1217,9 @@ void Score::addElement(Element* element)
 
             case Element::Type::TEMPO_TEXT:
                   {
-                  TempoText* tt = static_cast<TempoText*>(element);
+                  TempoText* tt = toTempoText(element);
+                  if (tt->isRelative())
+                        tt->updateRelative();
                   setTempo(tt->segment(), tt->tempo());
                   }
                   break;

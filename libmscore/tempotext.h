@@ -50,6 +50,7 @@ class TempoText : public Text  {
       void setTempo(qreal v);
       void undoSetTempo(qreal v);
       bool isRelative()          { return _isRelative; }
+      void setRelative(qreal v)  { _isRelative = true; _relative = v; }
 
       bool followText() const    { return _followText; }
       void setFollowText(bool v) { _followText = v;    }
@@ -61,6 +62,7 @@ class TempoText : public Text  {
 
       static int findTempoDuration(const QString& s, int& len, TDuration& dur);
       static QString duration2tempoTextString(const TDuration dur);
+      static QString duration2userName(const TDuration t);
 
       QVariant getProperty(P_ID propertyId) const override;
       bool setProperty(P_ID propertyId, const QVariant&) override;
