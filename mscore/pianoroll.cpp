@@ -633,7 +633,7 @@ void PianorollEditor::startEdit(Element*, Grip)
 //   elementNear
 //---------------------------------------------------------
 
-Element* PianorollEditor::elementNear(QPointF)
+Element* PianorollEditor::elementNear(QPointF, bool)
       {
       return 0;
       }

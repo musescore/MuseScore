@@ -72,7 +72,7 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void cmdAddHairpin(bool) {}
       virtual void startEdit();
       virtual void startEdit(Element*, Grip);
-      virtual Element* elementNear(QPointF);
+      virtual Element* elementNear(QPointF, bool);
       virtual void drawBackground(QPainter*, const QRectF&) const;
       };
 

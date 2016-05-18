@@ -448,7 +448,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       Lasso* fotoLasso() const    { return _foto;    }
       Element* getEditObject()    { return editObject; }
       void setEditObject(Element* e) { editObject = e; }
-      virtual Element* elementNear(QPointF);
+      virtual Element* elementNear(QPointF, bool first = true);
       void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);
       void editTremoloBarProperties(TremoloBar*);

@@ -113,7 +113,7 @@ void ExampleView::startEdit(Element*, Grip /*startGrip*/)
       {
       }
 
-Element* ExampleView::elementNear(QPointF)
+Element* ExampleView::elementNear(QPointF, bool)
       {
       return 0;
       }

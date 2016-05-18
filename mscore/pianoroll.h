@@ -101,7 +101,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void cmdAddHairpin(bool) {}
       virtual void startEdit();
       virtual void startEdit(Element*, Grip);
-      virtual Element* elementNear(QPointF);
+      virtual Element* elementNear(QPointF, bool);
       virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
 
       void setLocator(POS pos, int tick) { locator[int(pos)].setTick(tick); }
