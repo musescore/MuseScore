@@ -577,7 +577,7 @@ MuseScore::MuseScore()
 #endif
       viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
-      viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
+      viewModeCombo->addItem(tr("Page View"),       int(LayoutMode::PAGE));
       viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
       if (enableExperimental)
             viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
@@ -2136,6 +2136,12 @@ static bool doConvert(Score* cs, QString fn)
       bool rv = true;
 
       LayoutMode layoutMode = cs->layoutMode();
+      cs->setLayoutMode(LayoutMode::PAGE);
+      if (cs->layoutMode() != layoutMode) {
+            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->doLayout();
+            }
+
       if (!styleFile.isEmpty()) {
             QFile f(styleFile);
             if (f.open(QIODevice::ReadOnly))
@@ -2162,18 +2168,15 @@ static bool doConvert(Score* cs, QString fn)
             return true;
             }
       else if (fn.endsWith(".xml")) {
-            cs->switchToPageMode();
             rv = saveXml(cs, fn);
             }
       else if (fn.endsWith(".mxl")) {
-            cs->switchToPageMode();
             rv = saveMxl(cs, fn);
             }
       else if (fn.endsWith(".mid"))
             return mscore->saveMidi(cs, fn);
       else if (fn.endsWith(".pdf")) {
             if (!exportScoreParts) {
-                  cs->switchToPageMode();
                   rv = mscore->savePdf(fn);
                   }
             else {
@@ -2199,7 +2202,6 @@ static bool doConvert(Score* cs, QString fn)
                   }
             }
       else if (fn.endsWith(".png")) {
-            cs->switchToPageMode();
             if (!exportScoreParts)
                   return mscore->savePng(cs, fn);
             else {
@@ -2232,7 +2234,6 @@ static bool doConvert(Score* cs, QString fn)
                   }
             }
       else if (fn.endsWith(".svg")) {
-            cs->switchToPageMode();
             rv = mscore->saveSvg(cs, fn);
             }
 #ifdef HAS_AUDIOFILE
@@ -2244,11 +2245,9 @@ static bool doConvert(Score* cs, QString fn)
                   return mscore->saveMp3(cs, fn);
 #endif
       else if (fn.endsWith(".spos")) {
-            cs->switchToPageMode();
             rv = savePositions(cs, fn, true);
             }
       else if (fn.endsWith(".mpos")) {
-            cs->switchToPageMode();
             rv = savePositions(cs, fn, false);
             }
       else if (fn.endsWith(".mlog"))
@@ -2257,8 +2256,10 @@ static bool doConvert(Score* cs, QString fn)
             qDebug("dont know how to convert to %s", qPrintable(outFileName));
             return false;
             }
-      if (layoutMode != cs->layoutMode())
-            cs->endCmd(true);       // rollback
+      if (layoutMode != cs->layoutMode()) {
+            cs->setLayoutMode(layoutMode);
+            cs->doLayout();
+            }
       return rv;
       }
 
@@ -2344,19 +2345,21 @@ static bool processNonGui(const QStringList& argv)
             bool res = false;
             if (mscore->loadPlugin(pn)){
                   Score* cs = mscore->currentScore();
-                  LayoutMode layoutMode = cs->layoutMode();
                   if (!styleFile.isEmpty()) {
                         QFile f(styleFile);
                         if (f.open(QIODevice::ReadOnly))
                               cs->style()->load(&f);
                         }
-                  cs->startCmd();
-                  cs->setLayoutAll();
-                  cs->endCmd();
-                  cs->switchToPageMode();
+                  LayoutMode layoutMode = cs->layoutMode();
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->setLayoutMode(LayoutMode::PAGE);
+                        cs->doLayout();
+                        }
                   mscore->pluginTriggered(0);
-                  if (layoutMode != cs->layoutMode())
-                        cs->endCmd(true);       // rollback
+                  if (layoutMode != cs->layoutMode()) {
+                        cs->setLayoutMode(layoutMode);
+                        cs->doLayout();
+                        }
                   res = true;
                   }
             if (!converterMode)
@@ -4506,12 +4509,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "viewmode") {
             if (cs) {
-                  int mode;
                   if (cs->layoutMode() == LayoutMode::PAGE)
-                        mode = 1;
+                        switchLayoutMode(LayoutMode::LINE);
                   else
-                        mode = 0;
-                  switchLayoutMode(mode);
+                        switchLayoutMode(LayoutMode::PAGE);
                   }
             }
       else {
@@ -4665,20 +4666,23 @@ void MuseScore::switchLayoutMode(int val)
       {
       if (!cs)
             return;
+      switchLayoutMode(static_cast<LayoutMode>(viewModeCombo->itemData(val).toInt()));
+      }
 
-      cs->startCmd();
-
+void MuseScore::switchLayoutMode(LayoutMode mode)
+      {
       // find a measure to use as reference, if possible
       QRectF view = cv->toLogical(QRect(0.0, 0.0, width(), height()));
       Measure* m = cs->firstMeasure();
       while (m && !view.intersects(m->canvasBoundingRect()))
             m = m->nextMeasureMM();
 
-      LayoutMode mode = static_cast<LayoutMode>(viewModeCombo->itemData(val).toInt());
-      cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(mode));
-
       cv->loopUpdate(getAction("loop")->isChecked());
-      cs->endCmd();
+
+      if (mode != cs->layoutMode()) {
+            cs->setLayoutMode(mode);
+            cs->doLayout();
+            }
 
       // adjustCanvasPosition often tries to preserve Y position
       // but this doesn't make sense when switching modes

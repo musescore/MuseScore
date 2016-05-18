@@ -420,6 +420,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void updateNewWizard();
       void updateViewModeCombo();
+      void switchLayoutMode(LayoutMode);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);

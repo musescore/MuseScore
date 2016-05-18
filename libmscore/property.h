@@ -237,7 +237,7 @@ enum class P_ID : unsigned char {
 
       GLISSANDO_STYLE,
 
-      LAYOUT_MODE,
+//      LAYOUT_MODE,
 
       FRET_STRINGS,
       FRET_FRETS,

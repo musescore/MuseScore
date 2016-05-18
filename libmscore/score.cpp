@@ -3937,28 +3937,14 @@ void Score::cropPage(qreal margins)
       }
 
 //---------------------------------------------------------
-//   switchToPageMode
-//    switch to layout mode PAGE
-//---------------------------------------------------------
-
-void Score::switchToPageMode()
-      {
-      if (layoutMode() != LayoutMode::PAGE) {
-            startCmd();
-            ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
-            doLayout();
-            }
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Score::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_ID::LAYOUT_MODE:
-                  return QVariant(static_cast<int>(_layoutMode));
+//            case P_ID::LAYOUT_MODE:
+//                  return QVariant(static_cast<int>(_layoutMode));
             default:
                   qDebug("Score::getProperty: unhandled id");
                   return QVariant();
@@ -3972,14 +3958,14 @@ QVariant Score::getProperty(P_ID id) const
 bool Score::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::LAYOUT_MODE:
-                  setLayoutMode(LayoutMode(v.toInt()));
+//            case P_ID::LAYOUT_MODE:
+//                  setLayoutMode(LayoutMode(v.toInt()));
                   break;
             default:
                   qDebug("Score::setProperty: unhandled id");
                   break;
             }
-      score()->setLayoutAll();
+      setLayoutAll();
       return true;
       }
 
@@ -3990,8 +3976,8 @@ bool Score::setProperty(P_ID id, const QVariant& v)
 QVariant Score::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_ID::LAYOUT_MODE:
-                  return static_cast<int>(LayoutMode::PAGE);
+//            case P_ID::LAYOUT_MODE:
+//                  return static_cast<int>(LayoutMode::PAGE);
             default:
                   return QVariant();
             }

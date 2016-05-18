@@ -44,7 +44,7 @@ add_library (
       harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp
       instrtemplate.cpp instrument.cpp interval.cpp
       key.cpp keyfinder.cpp keysig.cpp lasso.cpp
-      layoutbreak.cpp layout.cpp layoutLinear.cpp line.cpp lyrics.cpp measurebase.cpp
+      layoutbreak.cpp layout.cpp line.cpp lyrics.cpp measurebase.cpp
       measure.cpp navigate.cpp note.cpp noteevent.cpp ottava.cpp
       page.cpp part.cpp pedal.cpp pitch.cpp pitchspelling.cpp
       rendermidi.cpp repeat.cpp repeatlist.cpp rest.cpp
