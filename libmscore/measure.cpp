@@ -1184,9 +1184,8 @@ Element* Measure::drop(const DropData& data)
 
             case Element::Type::KEYSIG:
                   {
-                  KeySig* ks    = static_cast<KeySig*>(e);
-                  KeySigEvent k = ks->keySigEvent();
-                  delete ks;
+                  KeySigEvent k = toKeySig(e)->keySigEvent();
+                  delete e;
 
                   if (data.modifiers & Qt::ControlModifier) {
                         // apply only to this stave
@@ -1194,7 +1193,7 @@ Element* Measure::drop(const DropData& data)
                         }
                   else {
                         // apply to all staves:
-                        for(Staff* s : score()->staves())
+                        for (Staff* s : score()->staves())
                               score()->undoChangeKeySig(s, tick(), k);
                         }
 
