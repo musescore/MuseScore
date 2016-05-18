@@ -477,7 +477,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             _score->startCmd();
             dragElement->setScore(_score);      // CHECK: should already be ok
             _score->addRefresh(dragElement->canvasBoundingRect());
-            switch(dragElement->type()) {
+            switch (dragElement->type()) {
                   case Element::Type::VOLTA:
                   case Element::Type::OTTAVA:
                   case Element::Type::TRILL:

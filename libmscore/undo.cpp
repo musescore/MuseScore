@@ -456,7 +456,8 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
       {
       KeySig* lks = 0;
-      foreach (Staff* staff, ostaff->staffList()) {
+
+      for (Staff* staff : ostaff->staffList()) {
             if (staff->isDrumStaff())
                   continue;
 
@@ -469,10 +470,10 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             Segment* s   = measure->undoGetSegment(Segment::Type::KeySig, tick);
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
-            KeySig* ks   = static_cast<KeySig*>(s->element(track));
+            KeySig* ks   = toKeySig(s->element(track));
 
             Interval interval = staff->part()->instrument(tick)->transpose();
-            KeySigEvent nkey = key;
+            KeySigEvent nkey  = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
                   interval.flip();
@@ -489,7 +490,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                   nks->setKeySigEvent(nkey);
                   undo(new AddElement(nks));
                   if (lks)
-                        lks->linkTo(nks);
+                        undo(new Link(lks, nks));
                   else
                         lks = nks;
                   }
