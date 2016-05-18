@@ -122,7 +122,7 @@ class VBox : public Box {
    public:
       VBox(Score* score);
       virtual ~VBox() {}
-      virtual VBox* clone() const override        { return new VBox(*this); }
+      virtual VBox* clone() const override        { return new VBox(*this);           }
       virtual Element::Type type() const override { return Element::Type::VBOX;       }
 
       virtual void layout() override;

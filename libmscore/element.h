@@ -76,6 +76,7 @@ class Beam;
 class Hook;
 class StemSlash;
 class Spacer;
+class StaffLines;
 
 enum class SymId;
 
@@ -415,6 +416,7 @@ class Element : public QObject, public ScoreElement {
       virtual int subtype() const   { return -1; }  // for select gui
 
       virtual void draw(QPainter*) const {}
+      void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
 
       virtual void writeProperties(Xml& xml) const;
       virtual bool readProperties(XmlReader&);
@@ -666,6 +668,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(StemSlash,     STEM_SLASH);
       CONVERT(SlurSegment,   SLUR_SEGMENT);
       CONVERT(Spacer,        SPACER);
+      CONVERT(StaffLines,    STAFF_LINES);
 #undef CONVERT
       };
 
@@ -729,6 +732,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(StemSlash,     STEM_SLASH);
       CONVERT(SlurSegment,   SLUR_SEGMENT);
       CONVERT(Spacer,        SPACER);
+      CONVERT(StaffLines,    STAFF_LINES);
 #undef CONVERT
 
 //---------------------------------------------------------

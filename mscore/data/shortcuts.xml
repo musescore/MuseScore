@@ -970,5 +970,10 @@
     <key>startcenter</key>
     <seq>F4</seq>
     </SC>
+  <SC>
+    <key>viewmode</key>
+    <seq>Ctrl+Shift+V</seq>
+    </SC>
+
   </Shortcuts>
 

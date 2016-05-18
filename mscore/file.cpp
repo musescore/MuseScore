@@ -1495,7 +1495,10 @@ void MuseScore::printFile()
             return;
 
       LayoutMode layoutMode = cs->layoutMode();
-      cs->switchToPageMode();
+      if (layoutMode != LayoutMode::PAGE) {
+            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->doLayout();
+            }
 
       QPainter p(&printerDev);
       p.setRenderHint(QPainter::Antialiasing, true);
@@ -1524,8 +1527,10 @@ void MuseScore::printFile()
                   }
             }
       p.end();
-      if (layoutMode != cs->layoutMode())
-            cs->endCmd(true);       // rollback
+      if (layoutMode != cs->layoutMode()) {
+            cs->setLayoutMode(layoutMode);
+            cs->doLayout();
+            }
       }
 
 //---------------------------------------------------------
@@ -1759,6 +1764,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             fn += suffix;
 
       LayoutMode layoutMode = cs->layoutMode();
+      if (layoutMode != LayoutMode::PAGE) {
+            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->doLayout();
+            }
       if (ext == "mscx" || ext == "mscz") {
             // save as mscore *.msc[xz] file
             QFileInfo fi(fn);
@@ -1803,17 +1812,14 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       else if (ext == "pdf") {
             // save as pdf file *.pdf
-            cs->switchToPageMode();
             rv = savePdf(cs, fn);
             }
       else if (ext == "png") {
             // save as png file *.png
-            cs->switchToPageMode();
             rv = savePng(cs, fn);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
-            cs->switchToPageMode();
             rv = saveSvg(cs, fn);
             }
 #ifdef HAS_AUDIOFILE
@@ -1825,12 +1831,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = saveMp3(cs, fn);
 #endif
       else if (ext == "spos") {
-            cs->switchToPageMode();
             // save positions of segments
             rv = savePositions(cs, fn, true);
             }
       else if (ext == "mpos") {
-            cs->switchToPageMode();
             // save positions of measures
             rv = savePositions(cs, fn, false);
             }
@@ -1844,8 +1848,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       if (!rv && !MScore::noGui)
             QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into %1").arg(fn));
-      if (layoutMode != cs->layoutMode())
-            cs->endCmd(true);       // rollback
+      if (layoutMode != cs->layoutMode()) {
+            cs->setLayoutMode(layoutMode);
+            cs->doLayout();
+            }
       return rv;
       }
 
@@ -1937,7 +1943,10 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       bool firstPage = true;
       for (Score* s : cs) {
             LayoutMode layoutMode = s->layoutMode();
-            s->switchToPageMode();
+            if (layoutMode != LayoutMode::PAGE) {
+                  s->setLayoutMode(LayoutMode::PAGE);
+                  s->doLayout();
+                  }
             s->setPrinting(true);
             MScore::pdfPrinting = true;
 
@@ -1956,8 +1965,10 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->setPrinting(false);
             MScore::pdfPrinting = false;
 
-            if (layoutMode != s->layoutMode())
-                  s->endCmd(true);       // rollback
+            if (layoutMode != s->layoutMode()) {
+                  s->setLayoutMode(layoutMode);
+                  s->doLayout();
+                  }
             }
       p.end();
       return true;

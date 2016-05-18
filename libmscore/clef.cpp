@@ -312,8 +312,6 @@ void Clef::layout()
 
       // clefs are right aligned to Segment
 
-//      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
-//      QPointF off(-r.right() - clefKeyRightMargin, 0);
       QPointF off(-r.right(), 0);
       for (Element* e : elements)
             e->move(off);

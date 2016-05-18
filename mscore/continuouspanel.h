@@ -27,30 +27,7 @@ class ContinuousPanel {
       QRectF _rect;
       bool _active;            // Used to active or desactive the panel
       bool _visible;           // False if beginning of the score is visible
-      const Measure* _currentMeasure;
-      int _currentMeasureTick;
-      int _currentMeasureNo;
-      int _mmRestCount;       // Used for showing mmRest interval in the panel
-      Fraction _currentTimeSig;
-      qreal _offsetPanel;
-      qreal _x;
-      qreal _y;
       qreal _width;           // Actual panel width (final or transitional)
-      qreal _oldWidth;        // The last final panel width
-      qreal _newWidth;        // New panel width
-      qreal _measureWidth;
-      qreal _height;
-      qreal _widthClef;
-      qreal _widthKeySig;
-      qreal _widthTimeSig;
-      qreal _leftMarginTotal; // Sum of all elments left margin
-      qreal _panelRightPadding;  // Extra space for the panel after last element
-      qreal _xPosTimeSig;     // X position of the time signature (because it is centered
-      qreal _xPosMeasure;     // Position of the coming measure
-
-   protected:
-      void findElementWidths(const QList<Element*>& el);
-      void draw(QPainter& painter, const QList<Element*>& el);
 
    public:
       ContinuousPanel(ScoreView* sv);

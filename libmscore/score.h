@@ -1074,8 +1074,6 @@ class Score : public QObject, public ScoreElement {
       bool checkKeys();
       bool checkClefs();
 
-      void switchToPageMode();
-
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }
       void setName(const QString& s);
