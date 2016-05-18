@@ -2319,6 +2319,34 @@ void Measure::setStartRepeatBarLine()
       }
 
 //---------------------------------------------------------
+//   setEndBarLineType
+//     Create a *generated* barline with the given type and
+//     properties if none exists. Modify if it exists.
+//     Useful for import filters.
+//---------------------------------------------------------
+
+void Measure::setEndBarLineType(BarLineType val, int track, bool visible, QColor color)
+      {
+      Segment* seg = undoGetSegment(Segment::Type::EndBarLine, endTick());
+      // get existing bar line for this staff, if any
+      BarLine* bl = toBarLine(seg->element(track));
+      if (!bl) {
+            // no suitable bar line: create a new one
+            bl = new BarLine(score());
+            bl->setParent(seg);
+            bl->setTrack(track);
+            score()->addElement(bl);
+            }
+      bl->setGenerated(false);
+      bl->setBarLineType(val);
+      bl->setVisible(visible);
+      if (color.isValid())
+            bl->setColor(color);
+      else
+            bl->setColor(curColor());
+      }
+
+//---------------------------------------------------------
 //   createEndBarLines
 //    actually creates or modifies barlines
 //    return the width change for measure
@@ -3423,6 +3451,32 @@ BarLineType Measure::endBarLineType() const
             }
       return BarLineType::NORMAL;
       }
+
+//---------------------------------------------------------
+//   endBarLineType
+//    Assume all barlines have same visiblity if there is more
+//    than one.
+//---------------------------------------------------------
+
+bool Measure::endBarLineVisible() const
+      {
+      // search barline segment:
+
+      Segment* s = last();
+      while (s && s->segmentType() != Segment::Type::EndBarLine)
+            s = s->prev();
+
+      // search first element
+
+      if (s) {
+            for (const Element* e : s->elist()) {
+                  if (e)
+                        return toBarLine(e)->visible();
+                  }
+            }
+      return true;
+      }
+
 
 }
 
