@@ -69,6 +69,8 @@ private slots:
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
       void directions1() { mxmlIoTest("testDirections1"); }
+      void divisionsDefinedTooLate1() { mxmlIoTestRef("testDivsDefinedTooLate1"); }
+      void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
       void drumset2() { mxmlIoTest("testDrumset2"); }
       void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
