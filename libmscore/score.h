@@ -500,6 +500,7 @@ class Score : public QObject, public ScoreElement {
       void getNextMeasure(LayoutContext&);      // get next measure for layout
       bool collectPage(LayoutContext&);
       System* collectSystem(LayoutContext&);
+      void createBeams(Measure*);
 
    protected:
       QFileInfo info;

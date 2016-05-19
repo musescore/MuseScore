@@ -1269,8 +1269,7 @@ qreal Chord::defaultStemLength()
                   qreal sel = ul * .5 - normalStemLen;      // stem end vert. pos
 
                   // if stem ends above top line (with some exceptions), shorten it
-                  if (shortenStem && (sel < 0.0)
-                              && (hookIdx == 0 || tab || !downnote->mirror()))
+                  if (shortenStem && (sel < 0.0) && (hookIdx == 0 || tab || !downnote->mirror()))
                         sel -= sel  * progression.val();
                   if (sel > staffHlfHgt)                    // if stem ends below ('>') staff mid position,
                         sel = staffHlfHgt;                  // stretch it to mid position
@@ -1283,8 +1282,7 @@ qreal Chord::defaultStemLength()
                   qreal sel = dl * .5 + normalStemLen;      // stem end vert. pos.
 
                   // if stem ends below bottom line (with some exceptions), shorten it
-                  if (shortenStem && (sel > staffHeight)
-                     && (hookIdx == 0 || tab || downnote->mirror()))
+                  if (shortenStem && (sel > staffHeight) && (hookIdx == 0 || tab || downnote->mirror()))
                         sel -= (sel - staffHeight)  * progression.val();
                   if (sel < staffHlfHgt)                    // if stem ends above ('<') staff mid position,
                         sel = staffHlfHgt;                  // stretch it to mid position
@@ -1297,7 +1295,7 @@ qreal Chord::defaultStemLength()
       // adjust stem len for tremolo
       if (_tremolo && !_tremolo->twoNotes()) {
             // hook up odd lines
-            int tab[2][2][2][4] = {
+            static const int tab[2][2][2][4] = {
                   { { { 0, 0, 0,  1 },  // stem - down - even - lines
                       { 0, 0, 0,  2 }   // stem - down - odd - lines
                       },
@@ -1373,8 +1371,25 @@ void Chord::layoutStem()
       {
       for (Chord* c : _graceNotes)
             c->layoutStem();
-      if (beam())
+      if (_beam)
             return;
+
+      // create hooks for unbeamed chords
+
+      int hookIdx  = durationType().hooks();
+
+      if (hookIdx && !(noStem() || measure()->slashStyle(staffIdx()))) {
+            if (!hook()) {
+                  Hook* hook = new Hook(score());
+                  hook->setParent(this);
+                  hook->setGenerated(true);
+                  score()->undoAddElement(hook);
+                  }
+            hook()->setHookType(up() ? hookIdx : -hookIdx);
+            }
+      else if (hook())
+            score()->undoRemoveElement(hook());
+
       //
       // TAB
       //
