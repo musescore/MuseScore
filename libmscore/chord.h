@@ -207,7 +207,7 @@ class Chord : public ChordRest {
 
       virtual void setTrack(int val) override;
 
-      void computeUp();
+      virtual void computeUp() override;
 
       qreal dotPosX() const;
 
