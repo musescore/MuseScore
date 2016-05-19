@@ -113,7 +113,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetHeight">
        <property name="accessibleName">
-        <string>Reset Height value</string>
+        <string>Reset 'Height' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

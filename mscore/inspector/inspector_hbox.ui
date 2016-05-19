@@ -177,7 +177,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Left gap value</string>
+        <string>Reset 'Left gap' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -190,7 +190,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Right gap value</string>
+        <string>Reset 'Right gap' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

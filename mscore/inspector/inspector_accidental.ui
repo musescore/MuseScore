@@ -84,7 +84,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Small value</string>
+        <string>Reset 'Small' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
