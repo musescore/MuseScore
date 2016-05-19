@@ -97,7 +97,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetMag">
        <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
+        <string>Reset 'Size in staff space units' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

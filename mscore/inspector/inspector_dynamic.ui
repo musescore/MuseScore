@@ -88,7 +88,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity value</string>
+        <string>Reset 'Velocity' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -140,7 +140,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dynamic range value</string>
+        <string>Reset 'Dynamic range' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

@@ -30,7 +30,7 @@
    <item row="3" column="2">
     <widget class="QPushButton" name="createScore">
      <property name="text">
-      <string>Create New Score</string>
+      <string>Create New Score...</string>
      </property>
     </widget>
    </item>
@@ -110,7 +110,7 @@
    <item row="4" column="2">
     <widget class="QPushButton" name="loadScore">
      <property name="text">
-      <string>Load Score</string>
+      <string>Load Score...</string>
      </property>
     </widget>
    </item>

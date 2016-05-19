@@ -103,7 +103,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Show courtesy value</string>
+        <string>Reset 'Show courtesy' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
