@@ -2325,10 +2325,10 @@ bool Text::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   textStyleChanged
+//   styleChanged
 //---------------------------------------------------------
 
-void Text::textStyleChanged()
+void Text::styleChanged()
       {
       setTextStyle(score()->textStyle(_styleIndex));
       score()->setLayoutAll();

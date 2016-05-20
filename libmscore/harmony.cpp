@@ -1459,7 +1459,7 @@ void Harmony::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 void Harmony::textStyleChanged()
       {
-      Text::textStyleChanged();
+      Text::styleChanged();
       render();
       }
 
