@@ -513,9 +513,9 @@ void PianorollEditor::moveLocator(int i, const Pos& pos)
 
 void PianorollEditor::cmd(QAction* a)
       {
-      score()->startCmd();
+      //score()->startCmd();
       gv->setStaff(staff, locator);
-      score()->endCmd();
+      //score()->endCmd();
       }
 
 //---------------------------------------------------------
