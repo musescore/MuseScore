@@ -196,7 +196,7 @@ subdirs (
         importmidi
         capella
         biab
-#        musicxml                      # FAIL
+        musicxml                      # FAIL
 #        guitarpro
 #        scripting
 #        testoves                      # FAIL

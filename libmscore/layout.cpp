@@ -3412,9 +3412,6 @@ bool Score::collectPage(LayoutContext& lc)
                   }
             }
 
-      for (Staff* staff : _staves)
-            staff->pitchOffsets().clear();
-
       if (etick != -1) {
             for (auto s : _spanner.map()) {
                   Spanner* sp = s.second;
