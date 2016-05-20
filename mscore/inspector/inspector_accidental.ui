@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>197</width>
-    <height>50</height>
+    <height>65</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -112,11 +112,61 @@
      </item>
     </layout>
    </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout1">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="2">
+      <widget class="QToolButton" name="resetHasBracket">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Has bracket' value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="hasBracket">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Has bracket</string>
+       </property>
+       <property name="text">
+        <string>Has bracket</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <tabstops>
   <tabstop>small</tabstop>
   <tabstop>resetSmall</tabstop>
+  <tabstop>hasBracket</tabstop>
+  <tabstop>resetHasBracket</tabstop>
  </tabstops>
  <resources/>
  <connections/>
