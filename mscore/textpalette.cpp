@@ -678,112 +678,122 @@ SymId commonScoreSymbols[] = {
       };
 
 int commonTextSymbols[] = {
-      0xa9,
-      0x00c0,
-      0x00c1,
-      0x00c2,
-      0x00c3,
-      0x00c4,
-      0x00c5,
-      0x00c6,
-      0x00c7,
-      0x00c8,
-      0x00c9,
-      0x00ca,
-      0x00cb,
-      0x00cc,
-      0x00cd,
-      0x00ce,
-      0x00cf,
+      0x266d,    // flat
+      0x266e,    // natural
+      0x266f,    // sharp
 
-      0x00d0,
-      0x00d1,
-      0x00d2,
-      0x00d3,
-      0x00d4,
-      0x00d5,
-      0x00d6,
-      0x00d7,
-      0x00d8,
-      0x00d9,
-      0x00da,
-      0x00db,
-      0x00dc,
-      0x00dd,
-      0x00de,
-      0x00df,
+      0x00a9,    // &copy;
 
-      //capital letters esperanto
-      0x0108,
-      0x011c,
-      0x0124,
-      0x0134,
-      0x015c,
-      0x016c,
+      // upper case ligatures
+      0x00c0,    // &Agrave;
+      0x00c1,    // &Aacute;
+      0x00c2,    // &Acirc;
+      0x00c3,    // &Atilde;
+      0x00c4,    // &Auml;
+      0x00c5,    // &Aring;
+      0x00c6,    // &AElig;
+      0x00c7,    // &Ccedil;
+      0x00c8,    // &Egrave;
+      0x00c9,    // &Eacute;
+      0x00ca,    // &Ecirc;
+      0x00cb,    // &Euml;
+      0x00cc,    // %Igrave;
+      0x00cd,    // &Iacute;
+      0x00ce,    // &Icirc;
+      0x00cf,    // &Iuml
 
-      0x00e0,
-      0x00e1,
-      0x00e2,
-      0x00e3,
-      0x00e4,
-      0x00e5,
-      0x00e6,
-      0x00e7,
-      0x00e8,
-      0x00e9,
-      0x00ea,
-      0x00eb,
-      0x00ec,
-      0x00ed,
-      0x00ee,
-      0x00ef,
+      0x00d0,    // &ETH;
+      0x00d1,    // &Ntilde;
+      0x00d2,    // &Ograve;
+      0x00d3,    // &Oacute;
+      0x00d4,    // &Ocirc;
+      0x00d5,    // &Otilde;
+      0x00d6,    // &Ouml;
+      0x00d7,    // &times;
+      0x00d8,    // &Oslash;
+      0x00d9,    // &Ugrave;
+      0x00da,    // &Uacute;
+      0x00db,    // &Ucirc;
+      0x00dc,    // &Uuml;
+      0x00dd,    // &Yacute;
+      0x00de,    // &THORN;
+      0x00df,    // &szlig;
 
-      0x00f0,
-      0x00f1,
-      0x00f2,
-      0x00f3,
-      0x00f4,
-      0x00f5,
-      0x00f6,
-      0x00f7,
-      0x00f8,
-      0x00f9,
-      0x00fa,
-      0x00fb,
-      0x00fc,
-      0x00fd,
-      0x00fe,
-      0x00ff,
-      //small letters esperanto
-      0x0109,
-      0x011d,
-      0x0125,
-      0x0135,
-      0x015d,
-      0x016d,
+      // upper case letters esperanto
+      0x0108,    // &Ccirc; ?
+      0x011c,    // &Gcirc; ?
+      0x0124,    // &Hcirc; ?
+      0x0134,    // &Jcirc; ?
+      0x0152,    // &OElig;
+      0x015c,    // &Scirc; ?
+      0x0160,    // &Scaron;
+      0x016c,    // &Ucaron; ?
+      0x0178,    // &Yuml;
 
-      0x00BC,
-      0x00BD,
-      0x00BE,
-      0x2153,
-      0x2154,
-      0x2155,
-      0x2156,
-      0x2157,
-      0x2158,
-      0x2159,
-      0x215A,
-      0x215B,
-      0x215C,
-      0x215D,
-      0x215E,
+      // lower case ligatures
+      0x00e0,    // &agrave;
+      0x00e1,    // &aacute;
+      0x00e2,    // &acirc;
+      0x00e3,    // &atilde;
+      0x00e4,    // &auml;
+      0x00e5,    // &aring;
+      0x00e6,    // &aelig;
+      0x00e7,    // &ccdil;
+      0x00e8,    // &egrave;
+      0x00e9,    // &eacute;
+      0x00ea,    // &ecirc;
+      0x00eb,    // &euml;
+      0x00ec,    // igrave;
+      0x00ed,    // &iacute;
+      0x00ee,    // &icirc;
+      0x00ef,    // &iuml;
 
-      0x0152,
-      0x0153,
+      0x00f0,    // &eth;
+      0x00f1,    // &ntilde;
+      0x00f2,    // &ograve;
+      0x00f3,    // &oacute;
+      0x00f4,    // &ocirc;
+      0x00f5,    // &otilde;
+      0x00f6,    // &ouml;
+      0x00f7,    // &divide;
+      0x00f8,    // &oslash;
+      0x00f9,    // &ugrave;
+      0x00fa,    // &uacute;
+      0x00fb,    // &ucirc;
+      0x00fc,    // &uuml;
+      0x00fd,    // &yacute;
+      0x00fe,    // &thorn;
+      0x00ff,    // &yuml;
+
+      // lower case letters esperanto
+      0x0109,    // &ccirc; ?
+      0x011d,    // &gcirc; ?
+      0x0125,    // &hcirc; ?
+      0x0135,    // &jcirc; ?
+      0x0153,    // &oelig;
+      0x015d,    // &scirc; ?
+      0x0161,    // &scaron;
+      0x016d,    // &ucaron; ?
+
+      0x00BC,    // &frac14;
+      0x00BD,    // &frac12;
+      0x00BE,    // &frac34;
+      0x2153,    // &frac13; ?
+      0x2154,    // &frac23; ?
+      0x2155,    // &frac15; ?
+      0x2156,    // &frac25; ?
+      0x2157,    // &frac35; ?
+      0x2158,    // &frac45; ?
+      0x2159,    // &frac16; ?
+      0x215A,    // &frac56; ?
+      0x215B,    // &frac18; ?
+      0x215C,    // &frac38; ?
+      0x215D,    // &frac58; ?
+      0x215E,    // &frac78; ?
 
       // 0x203F,    // curved ligature to connect two syllables
-      0x35c,    // curved ligature to connect two syllables
-      0x361    // curved ligature (top)
+      0x035c,    // curved ligature to connect two syllables
+      0x0361     // curved ligature (top)
       };
 
 void TextPalette::populateCommon()
