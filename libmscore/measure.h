@@ -211,6 +211,7 @@ class Measure : public MeasureBase {
       Segment* findSegment(Segment::Type st, int t);
 
       qreal createEndBarLines(bool);
+      void setEndBarLineType(BarLineType val, int track, bool visible = true, QColor color = QColor());
       void setStartRepeatBarLine();
 
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
@@ -264,6 +265,7 @@ class Measure : public MeasureBase {
       void removeSystemTrailer();
 
       BarLineType endBarLineType() const;
+      bool endBarLineVisible() const;
       };
 
 }     // namespace Ms
