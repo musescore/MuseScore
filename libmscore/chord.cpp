@@ -2897,7 +2897,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
 void Chord::reset()
       {
-      score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
       score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
@@ -2937,8 +2937,8 @@ void Chord::setSlash(bool flag, bool stemless)
                         const Drumset* ds = part()->instrument()->drumset();
                         int pitch = n->pitch();
                         if (ds && ds->isValid(pitch)) {
-                              undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(ds->stemDirection(pitch)));
-                              n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(ds->noteHead(pitch)));
+                              undoChangeProperty(P_ID::STEM_DIRECTION, Direction(ds->stemDirection(pitch)));
+                              n->undoChangeProperty(P_ID::HEAD_GROUP, int(ds->noteHead(pitch)));
                               }
                         }
                   }
@@ -2946,7 +2946,7 @@ void Chord::setSlash(bool flag, bool stemless)
             }
 
       // set stem to auto (mostly important for rhythmic notation on drum staves)
-      undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(Direction::AUTO));
+      undoChangeProperty(P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
 
       // make stemless if asked
       if (stemless)
