@@ -2597,7 +2597,7 @@ QVariant Chord::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::NO_STEM:        return noStem();
             case P_ID::SMALL:          return small();
-            case P_ID::STEM_DIRECTION: return int(stemDirection());
+            case P_ID::STEM_DIRECTION: return stemDirection();
             default:
                   return ChordRest::getProperty(propertyId);
             }
@@ -2612,7 +2612,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::NO_STEM:        return false;
             case P_ID::SMALL:          return false;
-            case P_ID::STEM_DIRECTION: return int(Direction::AUTO);
+            case P_ID::STEM_DIRECTION: return Direction(Direction::AUTO);
             default:
                   return ChordRest::propertyDefault(propertyId);
             }
@@ -2634,7 +2634,7 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
                   score()->setLayoutAll();
                   break;
             case P_ID::STEM_DIRECTION:
-                  setStemDirection(Direction(v.toInt()));
+                  setStemDirection(v.value<Direction>());
                   score()->setLayoutAll();
                   break;
             default:
