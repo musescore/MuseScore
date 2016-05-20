@@ -1454,16 +1454,6 @@ void Harmony::localSpatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
-//   textStyleChanged
-//---------------------------------------------------------
-
-void Harmony::textStyleChanged()
-      {
-      Text::styleChanged();
-      render();
-      }
-
-//---------------------------------------------------------
 //   extensionName
 //---------------------------------------------------------
 
