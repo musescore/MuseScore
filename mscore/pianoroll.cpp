@@ -205,15 +205,15 @@ PianorollEditor::PianorollEditor(QWidget* parent)
             settings.endGroup();
             }
 
-      QActionGroup* ag = new QActionGroup(this);
-      ag->addAction(getAction("delete"));
-      ag->addAction(getAction("pitch-up"));
-      ag->addAction(getAction("pitch-down"));
-      ag->addAction(getAction("pitch-up-octave"));
-      ag->addAction(getAction("pitch-down-octave"));
+      actions.append(getAction("delete"));
+      actions.append(getAction("pitch-up"));
+      actions.append(getAction("pitch-down"));
+      actions.append(getAction("pitch-up-octave"));
+      actions.append(getAction("pitch-down-octave"));
+      addActions(actions);
+      for (auto* action : actions)
+            connect(action, &QAction::triggered, this, [this, action](bool){ cmd(action); });
 
-      addActions(ag->actions());
-      connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
       setXpos(0);
       }
 
@@ -225,6 +225,8 @@ PianorollEditor::~PianorollEditor()
       {
       if (_score)
             _score->removeViewer(this);
+      for (auto* action : actions)
+            action->disconnect(this);
       }
 
 //---------------------------------------------------------
@@ -512,13 +514,6 @@ void PianorollEditor::moveLocator(int i, const Pos& pos)
 void PianorollEditor::cmd(QAction* a)
       {
       score()->startCmd();
-
-      if (a->data() == "delete") {
-            _score->cmdDeleteSelection();
-            }
-      else {
-            _score->cmd(a);
-            }
       gv->setStaff(staff, locator);
       score()->endCmd();
       }
