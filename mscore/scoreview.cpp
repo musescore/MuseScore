@@ -2639,7 +2639,7 @@ bool ScoreView::normalPaste()
 
       _score->endCmd();
 
-      if (status == PasteState::PS_NO_ERROR)
+      if (status == PasteStatus::PS_NO_ERROR)
           return true;
       else
           return false;
