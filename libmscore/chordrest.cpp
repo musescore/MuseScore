@@ -72,8 +72,8 @@ ChordRest::ChordRest(Score* s)
       _staffMove   = 0;
       _beam        = 0;
       _tabDur      = 0;
-      _beamMode    = Beam::Mode::AUTO;
       _up          = true;
+      _beamMode    = Beam::Mode::AUTO;
       _small       = false;
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
@@ -460,6 +460,49 @@ void ChordRest::setSmall(bool val)
 void ChordRest::undoSetSmall(bool val)
       {
       undoChangeProperty(P_ID::SMALL, val);
+      }
+
+//---------------------------------------------------------
+//   layout0
+//---------------------------------------------------------
+
+void ChordRest::layout0(AccidentalState* as)
+      {
+      qreal m = staff()->mag();
+      if (small())
+            m *= score()->styleD(StyleIdx::smallNoteMag);
+
+      if (isChord()) {
+            Chord* chord = toChord(this);
+            for (Chord* c : chord->graceNotes())
+                  c->layout0(as);
+            if (chord->isGrace())
+                  m *= score()->styleD(StyleIdx::graceNoteMag);
+            else
+                  chord->cmdUpdateNotes(as);
+
+            const Drumset* drumset = 0;
+            if (part()->instrument()->useDrumset())
+                  drumset = part()->instrument()->drumset();
+            if (drumset) {
+                  for (Note* note : chord->notes()) {
+                        int pitch = note->pitch();
+                        if (!drumset->isValid(pitch)) {
+                              // qDebug("unmapped drum note %d", pitch);
+                              }
+                        else if (!note->fixed()) {
+                              note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                              // note->setHeadGroup(drumset->noteHead(pitch));
+                              note->setLine(drumset->line(pitch));
+                              continue;
+                              }
+                        }
+                  }
+//            chord->computeUp();
+//            chord->layoutStem1();   // create stems needed to calculate spacing
+                             // stem direction can change later during beam processing
+            }
+      setMag(m);
       }
 
 //---------------------------------------------------------
@@ -1169,24 +1212,8 @@ void ChordRest::removeDeleteBeam(bool beamed)
             if (b->empty())
                   score()->undoRemoveElement(b);
             }
-      if (!beamed && isChord()) {
-            Chord* chord = toChord(this);
-            int hookIdx  = durationType().hooks();
-
-            if (hookIdx && !(chord->noStem() || measure()->slashStyle(staffIdx()))) {
-                  if (!chord->hook()) {
-                        Hook* hook = new Hook(score());
-                        hook->setParent(chord);
-                        hook->setGenerated(true);
-                        score()->undoAddElement(hook);
-                        }
-                  chord->hook()->setHookType(up() ? hookIdx : -hookIdx);
-                  chord->layoutStem();
-                  return;
-                  }
-            if (chord->hook())
-                  score()->undoRemoveElement(chord->hook());
-            }
+      if (!beamed && isChord())
+            toChord(this)->layoutStem();
       }
 
 //---------------------------------------------------------

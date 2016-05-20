@@ -125,6 +125,7 @@ class ChordRest : public DurationElement {
       void setStaffMove(int val)                { _staffMove = val; }
       virtual int vStaffIdx() const override    { return staffIdx() + _staffMove;  }
 
+      void layout0(AccidentalState*);
       void layoutArticulations();
 
       const TDuration durationType() const      { return _crossMeasure == CrossMeasure::FIRST ?
@@ -176,6 +177,7 @@ class ChordRest : public DurationElement {
       virtual QString accessibleExtraInfo() const override;
       virtual Shape shape() const override;
       virtual void layoutStem1() {};
+      virtual void computeUp()   { _up = true; };
       };
 
 

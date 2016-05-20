@@ -271,6 +271,8 @@ bool Beam::twoBeamedNotes()
 
 //---------------------------------------------------------
 //   layout1
+//    - remove beam segments
+//    - calculate stem direction and set chord
 //---------------------------------------------------------
 
 void Beam::layout1()
@@ -289,8 +291,8 @@ void Beam::layout1()
             //    UP or DOWN according to TAB duration position
             //    slope 0
             _up   = !staff()->staffType()->stemsDown();
-            slope = 0.0;
-            _cross = false;
+            slope   = 0.0;
+            _cross  = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
             for (ChordRest* cr : _elements) {
                   if (cr->isChord()) {
@@ -381,7 +383,6 @@ void Beam::layout1()
                         _up = true;
                   }
 
-
             _cross = minMove < maxMove;
             if (minMove == 1 && maxMove == 1)
                   setTrack(staffIdx * VOICES + voice());
@@ -389,18 +390,19 @@ void Beam::layout1()
             // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
             slope = 0.0;
 
+            // leave initial guess alone for moved chords within a beam that crosses staves
+            // otherwise, assume beam direction is stem direction
+
             for (ChordRest* cr : _elements) {
-                  // leave initial guess alone for moved chords within a beam that crosses staves
-                  // otherwise, assume beam direction is stem direction
-                  if (!_cross || !cr->staffMove()) {
-                        if (cr->isChord()) {
-                              if (cr->up() != _up) {
-                                    cr->setUp(_up);
-                                    toChord(cr)->layoutStem1();
-                                    }
+                  if (!cr->isChord())
+                        continue;
+                  Chord* chord = toChord(cr);
+                  if (!(_cross || chord->staffMove())) {
+                        if (chord->up() != _up) {
+                              chord->setUp(_up);
+                              chord->layoutStem1();
                               }
                         }
-
                   }
             }     // end of if/else(tablature)
       }

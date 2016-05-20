@@ -237,7 +237,6 @@ class Measure : public MeasureBase {
       bool empty() const;
       bool isOnlyRests(int track) const;
 
-      void layoutCR0(ChordRest* cr, qreal m, AccidentalState*);
 
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
