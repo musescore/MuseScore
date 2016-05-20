@@ -141,13 +141,15 @@ static QString createDefaultFileName(QString fn)
       fn = fn.simplified();
       fn = fn.replace(QChar(' '),  "_");
       fn = fn.replace(QChar('\n'), "_");
-      fn = fn.replace(QChar(0xe4), "ae");
-      fn = fn.replace(QChar(0xf6), "oe");
-      fn = fn.replace(QChar(0xfc), "ue");
-      fn = fn.replace(QChar(0xdf), "ss");
-      fn = fn.replace(QChar(0xc4), "Ae");
-      fn = fn.replace(QChar(0xd6), "Oe");
-      fn = fn.replace(QChar(0xdc), "Ue");
+      fn = fn.replace(QChar(0xe4), "ae"); // &auml;
+      fn = fn.replace(QChar(0xf6), "oe"); // &ouml;
+      fn = fn.replace(QChar(0xfc), "ue"); // &uuml;
+      fn = fn.replace(QChar(0xdf), "ss"); // &szlig;
+      fn = fn.replace(QChar(0xc4), "Ae"); // &Auml;
+      fn = fn.replace(QChar(0xd6), "Oe"); // &Ouml;
+      fn = fn.replace(QChar(0xdc), "Ue"); // &Uuml;
+      fn = fn.replace(QChar(0x266d),"b"); // musical flat sign, happen in instrument names, so can happen in part (file) names
+      fn = fn.replace(QChar(0x266f),"#"); // musical sharp sign, can happen in titles, so can happen in score (file) names
       fn = fn.replace( QRegExp( "[" + QRegExp::escape( "\\/:*?\"<>|" ) + "]" ), "_" ); //FAT/NTFS special chars
       return fn;
       }
