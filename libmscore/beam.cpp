@@ -2187,7 +2187,7 @@ void Beam::reset()
             score()->undoChangeProperty(this, P_ID::USER_MODIFIED, false);
             }
       if (beamDirection() != Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
+            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
       if (noSlopeStyle == PropertyStyle::UNSTYLED)
             score()->undoChangeProperty(this, P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
 

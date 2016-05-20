@@ -1943,7 +1943,7 @@ void Note::reset()
       {
       score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_ID::USER_OFF, QPointF());
-      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
       }
 
 //---------------------------------------------------------
