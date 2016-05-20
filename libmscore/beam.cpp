@@ -2392,7 +2392,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_ID::STEM_DIRECTION: return Direction(Direction::AUTO);
+            case P_ID::STEM_DIRECTION: return Direction::AUTO;
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;
