@@ -3955,7 +3955,7 @@ QVariant Score::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Score::setProperty(P_ID id, const QVariant& v)
+bool Score::setProperty(P_ID id, const QVariant& /*v*/)
       {
       switch (id) {
 //            case P_ID::LAYOUT_MODE:
