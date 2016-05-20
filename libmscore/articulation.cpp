@@ -501,7 +501,7 @@ void Articulation::setDirection(Direction d)
 void Articulation::reset()
       {
       if (_direction != Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::DIRECTION, Direction::AUTO);
+            score()->undoChangeProperty(this, P_ID::DIRECTION, Direction(Direction::AUTO));
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ID::ARTICULATION_ANCHOR, int(a));
