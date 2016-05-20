@@ -549,6 +549,7 @@ MuseScore::MuseScore()
       getAction("undo")->setEnabled(false);
       getAction("redo")->setEnabled(false);
       getAction("paste")->setEnabled(false);
+      getAction("swap")->setEnabled(false);
       selectionChanged(SelState::NONE);
 
       //---------------------------------------------------
@@ -709,6 +710,7 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("cut"));
       menuEdit->addAction(getAction("copy"));
       menuEdit->addAction(getAction("paste"));
+      menuEdit->addAction(getAction("swap"));
 
       menuEdit->addSeparator();
       menuEdit->addAction(getAction("select-all"));
@@ -2638,6 +2640,7 @@ void MuseScore::clipboardChanged()
 
       bool flag = true;
       getAction("paste")->setEnabled(flag);
+      getAction("swap")->setEnabled(flag);
       }
 
 //---------------------------------------------------------
