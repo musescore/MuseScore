@@ -636,11 +636,12 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       a.setupUi(addWidget());
 
       iList = {
-            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
-            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
-            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
-            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
-            { P_ID::SMALL,        0, 0, a.small,       a.resetSmall       }
+            { P_ID::COLOR,               0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,             0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,            0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,            1, 0, e.offsetY,     e.resetY           },
+            { P_ID::SMALL,               0, 0, a.small,       a.resetSmall       },
+            { P_ID::ACCIDENTAL_BRACKET,  0, 0, a.hasBracket,  a.resetHasBracket  }
             };
       mapSignals();
       }
