@@ -4303,7 +4303,7 @@
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-60</aPitchRange>
-                  <pPitchRange>38-60</pPitchRange>
+                  <pPitchRange>36-62</pPitchRange>
                   <Channel>
                         <program value="47"/>
                   </Channel>
@@ -4333,7 +4333,7 @@
                   <concertClef>G15ma</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>79-108</aPitchRange>
-                  <pPitchRange>79-108</pPitchRange>
+                  <pPitchRange>76-108</pPitchRange>
                   <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
                   <Channel>
@@ -4493,7 +4493,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-79</aPitchRange>
-                  <pPitchRange>60-79</pPitchRange>
+                  <pPitchRange>53-79</pPitchRange>
                   <Channel>
                         <program value="14"/>
                   </Channel>
@@ -4688,8 +4688,8 @@
                   <transposingClef>G</transposingClef>
                   <concertClef>G8va</concertClef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>53-96</aPitchRange>
-                  <pPitchRange>48-96</pPitchRange>
+                  <aPitchRange>65-96</aPitchRange>
+                  <pPitchRange>60-108</pPitchRange>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
                   <Channel>
@@ -4760,7 +4760,8 @@
             <Instrument id="marimba">
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
-                  <description>Marimba</description>
+                  <description>Marimba (grand staff)</description>
+                  <trackName>Marimba (Grand Staff)</trackName>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>2</staves>
                   <clef>G</clef>
@@ -4768,8 +4769,26 @@
                   <bracketSpan>2</bracketSpan>
                   <barlineSpan>2</barlineSpan>
                   <clef staff="2">F</clef>
-                  <aPitchRange>48-96</aPitchRange>
-                  <pPitchRange>41-96</pPitchRange>
+                  <aPitchRange>45-96</aPitchRange>
+                  <pPitchRange>33-108</pPitchRange>
+                  <Channel>
+                        <program value="12"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="marimba-single">
+                  <longName>Marimba</longName>
+                  <shortName>Mrm.</shortName>
+                  <description>Single-staff marimba</description>
+                  <trackName>Marimba (Single Staff)</trackName>
+                  <musicXMLid>pitched-percussion.marimba</musicXMLid>
+                  <staves>1</staves>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>45-96</aPitchRange>
+                  <pPitchRange>33-108</pPitchRange>
                   <Channel>
                         <program value="12"/>
                   </Channel>
@@ -4784,10 +4803,24 @@
                   <musicXMLid>pitched-percussion.marimba.bass</musicXMLid>
                   <staves>1</staves>
                   <clef>F</clef>
-                  <bracket>1</bracket>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>36-53</aPitchRange>
-                  <pPitchRange>36-536</pPitchRange>
+                  <aPitchRange>36-65</aPitchRange>
+                  <pPitchRange>33-72</pPitchRange>
+                  <Channel>
+                        <program value="12"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="contrabass-marimba">
+                  <longName>Contrabass Marimba</longName>
+                  <shortName>Cb. Mrm.</shortName>
+                  <description>Contrabass Marimba</description>
+                  <musicXMLid>pitched-percussion.marimba.bass</musicXMLid>
+                  <staves>1</staves>
+                  <clef>F8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>21-60</aPitchRange>
+                  <pPitchRange>21-60</pPitchRange>
                   <Channel>
                         <program value="12"/>
                   </Channel>
@@ -8675,6 +8708,12 @@
                   <Channel>
                         <program value="46"/>
                   </Channel>
+                  <Channel name ="staccato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="flageoletti">
+                        <program value="11"/>
+                  </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
@@ -9077,7 +9116,7 @@
                         <program value="24"/>
                   </Channel>
             </Instrument>
-            <Instrument id="OctaveMandolin">
+            <Instrument id="octave-mandolin">
                   <longName>Octave Mandolin</longName>
                   <shortName>OM.</shortName>
                   <description>Octave Mandolin</description>
@@ -9627,7 +9666,7 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="contrabasss">
+            <Instrument id="contrabasses">
                   <longName>Contrabasses</longName>
                   <shortName>Cbs.</shortName>
                   <description>Contrabasses</description>
