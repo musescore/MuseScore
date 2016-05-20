@@ -2798,8 +2798,8 @@ void Score::getNextMeasure(LayoutContext& lc)
                               ChordRest* cr = segment.cr(t);
                               if (cr) {
                                     cr->layout0(&as);
-                                    cr->computeUp();     // set stem direction
-                                    cr->layoutStem1();
+//                                    cr->computeUp();     // set stem direction
+//                                    cr->layoutStem1();
                                     cr->layoutArticulations();
                                     }
                               }

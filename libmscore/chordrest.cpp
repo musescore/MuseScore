@@ -498,9 +498,9 @@ void ChordRest::layout0(AccidentalState* as)
                               }
                         }
                   }
-//            chord->computeUp();
-//            chord->layoutStem1();   // create stems needed to calculate spacing
-                             // stem direction can change later during beam processing
+            chord->computeUp();
+            chord->layoutStem1();   // create stems needed to calculate spacing
+                                    // stem direction can change later during beam processing
             }
       setMag(m);
       }
