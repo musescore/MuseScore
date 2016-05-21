@@ -77,7 +77,10 @@ install(FILES
 
 install(FILES
       07-Band_and_Percussion/01-Concert_Band.mscz
-      07-Band_and_Percussion/02-Marching_Percussion.mscz
+      07-Band_and_Percussion/02-Marching_Band.mscz
+      07-Band_and_Percussion/03-Battery_Percussion.mscz
+      07-Band_and_Percussion/04-Small_Pit.mscz
+      07-Band_and_Percussion/05-Large_Pit.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/07-Band_and_Percussion
       )
 
