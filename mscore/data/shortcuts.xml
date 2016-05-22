@@ -53,6 +53,10 @@
     <seq>Ctrl+V</seq>
     </SC>
   <SC>
+    <key>swap</key>
+    <seq>Ctrl+Shift+X</seq>
+    </SC>
+  <SC>
     <key>instruments</key>
     <seq>I</seq>
     </SC>
