@@ -651,13 +651,13 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = pf->height() * 10 * DPI / score->spatium();
+      const double ph  = pf->height() * PageFormat::SCALE_XML;
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
       /*
-      const double pw  = pf->width() * 10 * DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * DPI / score->spatium();
+      const double pw  = pf->width() * PageFormat::SCALE_XML;
+      const double tm  = pf->oddTopMargin() * PageFormat::SCALE_XML;
       const double tov = ph - tm;
       qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
       qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
@@ -1374,7 +1374,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                   }
             else if (_e.name() == "page-layout") {
                   PageFormat pf;
-                  pageLayout(pf, millimeter / (tenths * INCH), pageWidth, pageHeight);
+                  pageLayout(pf, 1/PageFormat::SCALE_XML, pageWidth, pageHeight);
                   if (preferences.musicxmlImportLayout)
                         _score->setPageFormat(pf);
                   }

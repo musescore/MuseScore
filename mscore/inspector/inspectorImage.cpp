@@ -15,6 +15,7 @@
 #include "musescore.h"
 #include "libmscore/image.h"
 #include "libmscore/score.h"
+#include "libmscore/page.h"
 
 namespace Ms {
 
@@ -176,18 +177,21 @@ void InspectorImage::valueChanged(int idx)
             qreal _spatium = inspector->element()->spatium();
             b1->blockSignals(true);
             b2->blockSignals(true);
+            QString suff;
+            double  mult;
             if (cb->isChecked()) {
-                  b1->setSuffix("sp");
-                  b2->setSuffix("sp");
-                  b1->setValue(b1->value() * DPMM / _spatium);
-                  b2->setValue(b2->value() * DPMM / _spatium);
+                  suff = qApp->translate(TRANSLATE_CTX_UNITS, unitSuffixes[int(Units::SP)]);
+                  mult = DPMM / _spatium;
                   }
             else {
-                  b1->setSuffix("mm");
-                  b2->setSuffix("mm");
-                  b1->setValue(b1->value() * _spatium / DPMM);
-                  b2->setValue(b2->value() * _spatium / DPMM);
+                  suff = qApp->translate(TRANSLATE_CTX_UNITS, unitSuffixes[int(Units::MM)]);
+                  mult = DPMM / _spatium;
                   }
+            b1->setSuffix(suff);
+            b2->setSuffix(suff);
+            b1->setValue(b1->value() * mult);
+            b2->setValue(b2->value() * mult);
+
             b1->blockSignals(false);
             b2->blockSignals(false);
             }
@@ -203,14 +207,12 @@ void InspectorImage::setElement(Element* e)
       Image* image = static_cast<Image*>(e);
       QDoubleSpinBox* b1 = static_cast<QDoubleSpinBox*>(iList[SIZE_W].w);
       QDoubleSpinBox* b2 = static_cast<QDoubleSpinBox*>(iList[SIZE_H].w);
-      if (image->sizeIsSpatium()) {
-            b1->setSuffix("sp");
-            b2->setSuffix("sp");
-            }
-      else {
-            b1->setSuffix("mm");
-            b2->setSuffix("mm");
-            }
+
+      Units u = image->sizeIsSpatium() ? Units::SP : Units::MM;
+      QString suff = qApp->translate(TRANSLATE_CTX_UNITS, unitSuffixes[int(u)]);
+      b1->setSuffix(suff);
+      b2->setSuffix(suff);
+
       bool v = !image->autoScale();
       b1->setEnabled(v);
       b2->setEnabled(v);
