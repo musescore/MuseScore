@@ -60,6 +60,7 @@ install(FILES
       04-Solo/02-Guitar_+_Tablature.mscz
       04-Solo/03-Guitar_Tablature.mscz
       04-Solo/04-Piano.mscz
+      04-Solo/05-4_Hands_Piano.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/04-Solo
       )
 
