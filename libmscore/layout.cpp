@@ -3204,7 +3204,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       // stretch incomplete row
       qreal rest;
-      if (MScore::layoutDebug)
+      if (lineMode || MScore::layoutDebug)
             rest = 0;
       else {
             rest = systemWidth - minWidth;
@@ -3232,8 +3232,10 @@ System* Score::collectSystem(LayoutContext& lc)
                         ww  = m->width() + rest * m->ticks() * stretch;
                         m->stretchMeasure(ww);
                         }
-                  else
+                  else {
+                        m->stretchMeasure(m->width());
                         ww = m->width();
+                        }
                   }
             else if (mb->isHBox()) {
                   mb->setPos(pos);
@@ -3481,8 +3483,7 @@ void Score::doLayout()
             ;
       if (_layoutMode == LayoutMode::LINE) {
             Page* page = _pages[0];
-            System* system = page->system(0);
-            page->setWidth(system->width());
+            page->setWidth(page->system(0)->width());
             }
 
       // TODO: remove remaining systems from lc.systemList
