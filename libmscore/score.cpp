@@ -2983,7 +2983,7 @@ qreal Score::tempo(int tick) const
 
 qreal Score::loWidth() const
       {
-      return pageFormat()->size().width() * DPI;
+      return pageFormat()->size().width();
       }
 
 //---------------------------------------------------------
@@ -2992,7 +2992,7 @@ qreal Score::loWidth() const
 
 qreal Score::loHeight() const
       {
-      return pageFormat()->size().height() * DPI;
+      return pageFormat()->size().height();
       }
 
 //---------------------------------------------------------
@@ -3906,7 +3906,9 @@ void Score::changeVoice(int voice)
 
 //---------------------------------------------------------
 //   cropPage - crop a single page score to the content
-///    margins will be applied on the 4 sides
+// Margins will be applied on the 4 sides
+// This function is called by plugins via external script
+// The margins arg is expecting millimeters
 //---------------------------------------------------------
 
 void Score::cropPage(qreal margins)
@@ -3920,18 +3922,20 @@ void Score::cropPage(qreal margins)
                   PageFormat f;
                   f.copy(*curFormat);
 
-                  qreal margin = margins / INCH;
-                  f.setSize(QSizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height()/ DPI) + 2 * margin));
+                  const qreal marginPX  = margins * DPMM;
+                  const qreal marginPX2 = marginPX * 2;
+                  f.setSize(QSizeF(ttbox.width()  + marginPX2,
+                                   ttbox.height() + marginPX2));
 
-                  qreal offset = curFormat->oddLeftMargin() - ttbox.x() / DPI;
+                  qreal offset = curFormat->oddLeftMargin() - ttbox.x();
                   if (offset < 0)
-                        offset = 0.0;
-                  f.setOddLeftMargin(margin + offset);
-                  f.setEvenLeftMargin(margin + offset);
-                  f.setOddBottomMargin(margin);
-                  f.setOddTopMargin(margin);
-                  f.setEvenBottomMargin(margin);
-                  f.setEvenTopMargin(margin);
+                        offset = 0;
+                  f.setOddLeftMargin(marginPX + offset);
+                  f.setEvenLeftMargin(marginPX + offset);
+                  f.setOddBottomMargin(marginPX);
+                  f.setOddTopMargin(marginPX);
+                  f.setEvenBottomMargin(marginPX);
+                  f.setEvenTopMargin(marginPX);
 
                   undoChangePageFormat(&f, spatium(), pageNumberOffset());
                   }
