@@ -47,371 +47,326 @@ namespace Ms {
         bool operator< (const Hv& a) const { return a.val < val; }
     };
     
-    struct Peak {
-        int x;
-        double val;
-        int sym;
+struct Peak {
+      int x;
+      double val;
+      int sym;
         
-        bool operator<(const Peak& p) const { return p.val < val; }
-        Peak(int _x, double _val) : x(_x), val(_val) {}
-        Peak(int _x, double _val, int s) : x(_x), val(_val), sym(s) {}
-    };
+      bool operator<(const Peak& p) const { return p.val < val; }
+      Peak(int _x, double _val) : x(_x), val(_val) {}
+      Peak(int _x, double _val, int s) : x(_x), val(_val), sym(s) {}
+      };
     
-    //---------------------------------------------------------
-    //   Lv
-    //    line + value
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   Lv
+//    line + value
+//---------------------------------------------------------
     
-    struct Lv {
-        int line;
-        double val;
-        Lv(int a, double b) : line(a), val(b) {}
-        bool operator< (const Lv& a) const {
+struct Lv {
+      int line;
+      double val;
+      Lv(int a, double b) : line(a), val(b) {}
+      bool operator< (const Lv& a) const {
             return a.val < val;
-        }
-    };
+            }
+      };
     
-    //---------------------------------------------------------
-    //   OmrPage
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   OmrPage
+//---------------------------------------------------------
     
-    OmrPage::OmrPage(Omr* parent)
-    {
-        _omr = parent;
-        cropL = cropR = cropT = cropB = 0;
-    }
+OmrPage::OmrPage(Omr* parent)
+{
+      _omr = parent;
+      cropL = cropR = cropT = cropB = 0;
+      }
     
-    //---------------------------------------------------------
-    //   dot
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   dot
+//---------------------------------------------------------
     
-    bool OmrPage::dot(int x, int y) const
-    {
-        const uint* p = scanLine(y) + (x / 32);
-        return (*p) & (0x1 << (x % 32));
-    }
+bool OmrPage::dot(int x, int y) const
+{
+      const uint* p = scanLine(y) + (x / 32);
+      return (*p) & (0x1 << (x % 32));
+      }
     
-    //---------------------------------------------------------
-    //   isBlack
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   isBlack
+//---------------------------------------------------------
     
-    bool OmrPage::isBlack(int x, int y) const
-    {
-        QRgb c = _image.pixel(x,y);
-        return (qGray(c) < 100);
-    }
-    
-    
-    //---------------------------------------------------------
-    //   read
-    //---------------------------------------------------------
-    
-    void OmrPage::read()
-    {
-        crop();
-        slice();
-        deSkew();
-        crop();
-        slice();
-        getStaffLines();
-        getRatio();
-    }
-    
-    struct SysState{
-        int status;// 0 for start_staff, 1 for end_staff
-        int index;//staff index
-    };
+bool OmrPage::isBlack(int x, int y) const
+{
+      QRgb c = _image.pixel(x,y);
+      return (qGray(c) < 100);
+      }
     
     
-    struct BAR_STATE{
-        int x;
-        int status;//0 represents white space, 1 represents bar
-    };
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
     
-    //---------------------------------------------------------
-    //   searchBarLines
-    //---------------------------------------------------------
-    float OmrPage::searchBarLines(int start_staff, int end_staff)
-    {
-        OmrStaff& r1 = staves[start_staff];
-        OmrStaff& r2 = staves[end_staff];
+void OmrPage::read()
+{
+      crop();
+      slice();
+      deSkew();
+      crop();
+      slice();
+      getStaffLines();
+      getRatio();
+      }
+    
+struct SysState{
+      int status;// 0 for start_staff, 1 for end_staff
+      int index;//staff index
+      };
+    
+    
+struct BAR_STATE{
+      int x;
+      int status;//0 represents white space, 1 represents bar
+      };
+    
+//---------------------------------------------------------
+//   searchBarLines
+//---------------------------------------------------------
+float OmrPage::searchBarLines(int start_staff, int end_staff)
+{
+      OmrStaff& r1 = staves[start_staff];
+      OmrStaff& r2 = staves[end_staff];
         
-        int x1  = r1.x();
-        int x2  = x1 + r1.width();
-        int y1  = r1.y();
-        int y2  = r2.y() + r2.height();
+      int x1  = r1.x();
+      int x2  = x1 + r1.width();
+      int y1  = r1.y();
+      int y2  = r2.y() + r2.height();
         
-        int th = 0;
-        for(int i  = start_staff; i <= end_staff; ++i){
+      int th = 0;
+      for(int i  = start_staff; i <= end_staff; ++i){
             th += staves[i].height()/2;
-        }
+            }
         
-        int vpw = x2-x1;
-        float vp[vpw];
-        memset(vp, 0, sizeof(float) * vpw);
+      int vpw = x2-x1;
+      float vp[vpw];
+      memset(vp, 0, sizeof(float) * vpw);
         
-        //using note constraints
-        //searchNotes();
+      //using note constraints
+      //searchNotes();
         
-        int note_constraints[x2-x1];
-        foreach(OmrNote* n, r1.notes()){
+      int note_constraints[x2-x1];
+      foreach (OmrNote* n, r1.notes()) {
             for(int x = n->x(); x <= n->x() + n->width(); ++x)
-                note_constraints[x-x1] = 1;
-        }
-        foreach(OmrNote* n, r2.notes()){
+                  note_constraints[x-x1] = 1;
+            }
+      foreach (OmrNote* n, r2.notes()) {
             for(int x = n->x(); x <= n->x() + n->width(); ++x)
-                note_constraints[x-x1] = 1;
-        }
+                  note_constraints[x-x1] = 1;
+            }
         
-        //
-        // compute vertical projections
-        //
+      //
+      // compute vertical projections
+      //
         
-        for (int x = x1; x < x2; ++x) {
+      for (int x = x1; x < x2; ++x) {
             int dots = 0;
             for (int y = y1; y < y2; ++y) {
-                if (this->dot(x, y))
-                    ++dots;
+                  if (this->dot(x, y))
+                        ++dots;
             }
             if(!note_constraints[x-x1])
-                vp[x - x1] = dots - th;
-            else vp[x - x1] = -HUGE_VAL;
-        }
-        
-        float scores[x2-x1+1][2];
-        BAR_STATE pred[x2-x1+1][2];
-        BAR_STATE bs;
-        
-        //initialization
-        bs.x = -1; bs.status = -1;
-        for (int x = x1; x <= x2; ++x) {
-            int i = x - x1;
-            for(int status = 0; status <= 1; ++status){
-                scores[i][status] = -HUGE_VAL;
-                pred[i][status] = bs;
+                  vp[x - x1] = dots - th;
+            else
+                  vp[x - x1] = -HUGE_VAL;
             }
-        }
-        scores[0][0] = 0;
         
-        //forward pass
+      float scores[x2-x1+1][2];
+      BAR_STATE pred[x2-x1+1][2];
+      BAR_STATE bs;
         
-        for (int x = x1; x <= x2; ++x) {
+      //initialization
+      bs.x = -1; bs.status = -1;
+      for (int x = x1; x <= x2; ++x) {
+            int i = x - x1;
+            for (int status = 0; status <= 1; ++status) {
+                  scores[i][status] = -HUGE_VAL;
+                  pred[i][status] = bs;
+                  }
+            }
+      scores[0][0] = 0;
+        
+      //forward pass
+        
+      for (int x = x1; x <= x2; ++x) {
             int i = x - x1;
             
-            for(int cur = 0; cur <= 1; ++cur){
-                //current state
-                if(scores[i][cur] < -1000) continue;
+            for (int cur = 0; cur <= 1; ++cur) {
+                  //current state
+                  if (scores[i][cur] < -1000)
+                        continue;
                 
-                if(cur){
-                    scores[i][cur] += vp[i];
-                    int next = 0;
-                    int step = 3*_spatium;//constraints between adjacent barlines
-                    if(step + i <= x2 - x1){
-                        if(scores[step + i][next] < scores[i][cur]){
-                            scores[step + i][next] = scores[i][cur];
-                            bs.x = x; bs.status = cur;
-                            pred[step + i][next] = bs;
+                  if (cur) {
+                        scores[i][cur] += vp[i];
+                        int next = 0;
+                        int step = 3*_spatium;//constraints between adjacent barlines
+                        if (step + i <= x2 - x1) {
+                              if (scores[step + i][next] < scores[i][cur]) {
+                                    scores[step + i][next] = scores[i][cur];
+                                    bs.x = x; bs.status = cur;
+                                    pred[step + i][next] = bs;
+                                    }
+                              }
                         }
-                    }
-                    
-                }
-                else{
-                    for(int next = 0; next <= 1; ++next){
-                        int step = 1;
-                        if(step + i <= x2 - x1){
-                            if(scores[step + i][next] < scores[i][cur]){
-                                scores[step + i][next] = scores[i][cur];
-                                bs.x = x; bs.status = cur;
-                                pred[step + i][next] = bs;
-                            }
+                  else{
+                        for (int next = 0; next <= 1; ++next) {
+                              int step = 1;
+                              if (step + i <= x2 - x1) {
+                                    if (scores[step + i][next] < scores[i][cur]) {
+                                          scores[step + i][next] = scores[i][cur];
+                                          bs.x = x; bs.status = cur;
+                                          pred[step + i][next] = bs;
+                                          }
+                                    }
+                              }
                         }
-                    }
-                }
+                  }
             }
-        }
-        
-        //trace back
-        //        int state = 0;
-        //        for (int x = x2; x > x1; ){
-        //            int i = x - x1;
-        //            bs = pred[i][state];
-        //            state = bs.status;
-        //            x = bs.x;
-        //
-        //            if(state){
-        //                barLines.append(QLine(x, y1, x, y2));
-        //            }
-        //        }
-        
-        return(scores[x2][0]);
-    }
+      
+      return(scores[x2][0]);
+      }
     
-    //---------------------------------------------------------
-    //   identifySystems
-    //---------------------------------------------------------
-    void OmrPage::identifySystems(){
-        int numStaves    = staves.size();
-        if(numStaves == 0) return;
+//---------------------------------------------------------
+//   identifySystems
+//---------------------------------------------------------
+void OmrPage::identifySystems(){
+      int numStaves    = staves.size();
+      if(numStaves == 0) return;
         
-        //memory allocation
-        float **temp_scores = new float*[numStaves];
-        for(int i = 0; i < numStaves; i++) temp_scores[i] = new float[numStaves];
+      //memory allocation
+      float **temp_scores = new float*[numStaves];
+      for (int i = 0; i < numStaves; i++)
+            temp_scores[i] = new float[numStaves];
         
-        int **hashed = new int*[numStaves];
-        for(int i = 0; i < numStaves; i++) hashed[i] = new int[numStaves];
+      int **hashed = new int*[numStaves];
+      for (int i = 0; i < numStaves; i++)
+            hashed[i] = new int[numStaves];
         
-        float **scores = new float*[numStaves];
-        for(int i = 0; i < numStaves; i++) scores[i] = new float[2];
-        SysState **pred = new SysState*[numStaves];
-        for(int i = 0; i < numStaves; i++) pred[i] = new SysState[2];
-        
-        //        float **bar_score_matrix = new float*[height()];//save bar column scores for re-use
-        //        for(int i = 0; i < height(); i++) bar_score_matrix[i] = new float[wordsPerLine()];
-        //        float *bar_score_vector = new float[wordsPerLine()];
-        //
-        //        for(int i = 0; i < height(); i++){
-        //            for(int j = 0; j < wordsPerLine(); j++){
-        //                if(i == 0) bar_score_matrix[i][j] = 0;
-        //                else{
-        //                    const uint* p = scanLine(i) + j;
-        //
-        //                    if(*p) bar_score_matrix[i][j] = 1 + bar_score_matrix[i-1][j];
-        //                    else bar_score_matrix[i][j] = bar_score_matrix[i-1][j];
-        //                }
-        //            }
-        //        }
-        
-        
-        //initialization
-        for(int i = 0; i < numStaves; i++){
+      float **scores = new float*[numStaves];
+      for (int i = 0; i < numStaves; i++)
+            scores[i] = new float[2];
+      SysState **pred = new SysState*[numStaves];
+      for(int i = 0; i < numStaves; i++)
+            pred[i] = new SysState[2];
+      
+      //initialization
+      for(int i = 0; i < numStaves; i++){
             for(int j = 0; j < numStaves; j++){
-                hashed[i][j] = 0;
+                  hashed[i][j] = 0;
+                  }
             }
-        }
         
-        SysState ss;
-        ss.index = -1; ss.status = -1;
+      SysState ss;
+      ss.index = -1; ss.status = -1;
         
-        for(int i = 0; i < numStaves; ++i){
-            for(int j = 0; j < 2; j++){
-                scores[i][j] = -HUGE_VAL;
-                pred[i][j] = ss;
+      for (int i = 0; i < numStaves; ++i) {
+            for (int j = 0; j < 2; j++) {
+                  scores[i][j] = -HUGE_VAL;
+                  pred[i][j] = ss;
+                  }
             }
-        }
-        scores[0][0] = 0;
+      scores[0][0] = 0;
         
-        int status;
-        float cur_score;
-        int cur_staff,next_staff;
-        for(cur_staff = 0; cur_staff < numStaves; ++cur_staff){
+      int status;
+      float cur_score;
+      int cur_staff,next_staff;
+      for (cur_staff = 0; cur_staff < numStaves; ++cur_staff) {
             status = 0;//start_staff
-            for(next_staff = cur_staff; next_staff < numStaves; ++next_staff){ //connects to end_staff
-                if(hashed[cur_staff][next_staff]){
-                    cur_score = temp_scores[cur_staff][next_staff];
-                }
-                else{
-                    //evaluate staff segment [c,n], dp here
-                    OmrSystem omrSystem(this);
-                    for (int i = cur_staff; i <= next_staff; ++i) {
-                        omrSystem.staves().append(staves[i]);
-                    }
-                    
-                    //                    int y1 = staves[cur_staff].top();
-                    //                    int y2 = staves[next_staff].bottom();
-                    //
-                    //                    for(int x = 0; x < wordsPerLine(); x++){
-                    //                        bar_score_vector[x] = bar_score_matrix[y2][x] - bar_score_matrix[y1-1][x];
-                    //                    }
-                    
-                    cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1/*, bar_score_vector*/);
-                    temp_scores[cur_staff][next_staff] = cur_score;
-                    hashed[cur_staff][next_staff] = 1;
-                }
+            for (next_staff = cur_staff; next_staff < numStaves; ++next_staff) { //connects to end_staff
+                  if (hashed[cur_staff][next_staff]) {
+                        cur_score = temp_scores[cur_staff][next_staff];
+                        }
+                  else {
+                        //evaluate staff segment [c,n], dp here
+                        OmrSystem omrSystem(this);
+                        for (int i = cur_staff; i <= next_staff; ++i) {
+                              omrSystem.staves().append(staves[i]);
+                              }
+                        cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1/*, bar_score_vector*/);
+                        temp_scores[cur_staff][next_staff] = cur_score;
+                        hashed[cur_staff][next_staff] = 1;
+                        }
                 
                 //forward pass
-                if(scores[cur_staff][status] + cur_score > scores[next_staff][1-status]){
-                    scores[next_staff][1-status] = scores[cur_staff][status] + cur_score;
-                    ss.status = status; ss.index = cur_staff;
-                    pred[next_staff][1-status] = ss;
-                }
-            }
+                  if(scores[cur_staff][status] + cur_score > scores[next_staff][1-status]){
+                        scores[next_staff][1-status] = scores[cur_staff][status] + cur_score;
+                        ss.status = status; ss.index = cur_staff;
+                        pred[next_staff][1-status] = ss;
+                        }
+                  }
             
             status = 1;//end_staff
             next_staff = cur_staff + 1;
-            if(next_staff < numStaves){
-                //forward pass
-                if(scores[cur_staff][status] > scores[next_staff][1-status]){
-                    scores[next_staff][1-status] = scores[cur_staff][status];
-                    ss.status = status; ss.index = cur_staff;
-                    pred[next_staff][1-status] = ss;
-                }
+            if (next_staff < numStaves) {
+                  //forward pass
+                  if (scores[cur_staff][status] > scores[next_staff][1-status]) {
+                        scores[next_staff][1-status] = scores[cur_staff][status];
+                        ss.status = status; ss.index = cur_staff;
+                        pred[next_staff][1-status] = ss;
+                        }
+                  }
             }
-        }
         
-        //backtrack
-        status = 1;//end_staff
-        cur_staff = numStaves - 1;//last staff index
-        while(cur_staff > 0 || status != 0){
+            //backtrack
+            status = 1;//end_staff
+            cur_staff = numStaves - 1;//last staff index
+            while (cur_staff > 0 || status != 0) {
             ss = pred[cur_staff][status];
             
             if(!ss.status){
-                //add system here
-                OmrSystem omrSystem(this);
-                for (int i = ss.index; i <= cur_staff; ++i) {
-                    omrSystem.staves().append(staves[i]);
-                }
-                //                int y1 = staves[ss.index].top();
-                //                int y2 = staves[cur_staff].bottom();
-                //
-                //                for(int x = 0; x < wordsPerLine(); x++){
-                //                    bar_score_vector[x] = bar_score_matrix[y2][x] - bar_score_matrix[y1-1][x];
-                //                }
-                omrSystem.searchBarLinesvar(cur_staff - ss.index + 1/*, bar_score_vector*/);
-                _systems.append(omrSystem);
-            }
+                  //add system here
+                  OmrSystem omrSystem(this);
+                  for (int i = ss.index; i <= cur_staff; ++i) {
+                        omrSystem.staves().append(staves[i]);
+                        }
+                  omrSystem.searchBarLinesvar(cur_staff - ss.index + 1/*, bar_score_vector*/);
+                  _systems.append(omrSystem);
+                  }
             
             cur_staff = ss.index;
             status = ss.status;
-        }
-        int systems = _systems.size();
-        
-        for (int i = 0; i < systems; ++i) {
-            OmrSystem* system = &_systems[i];
-            int n = system->barLines.size();
-            for (int k = 0; k < n-1; ++k) {
-                const QLine& l1 = system->barLines[k];
-                const QLine& l2 = system->barLines[k+1];
-                OmrMeasure m(l1.x1(), l2.x1());
-                system->measures().append(m);
             }
-        }
+            int systems = _systems.size();
         
-        //delete allocated space
-        for(int i = 0; i < numStaves; i++){
-            delete [] scores[i];
-            delete [] pred[i];
-            delete [] temp_scores[i];
-            delete [] hashed[i];
-        }
+            for (int i = 0; i < systems; ++i) {
+                  OmrSystem* system = &_systems[i];
+                  int n = system->barLines.size();
+                  for (int k = 0; k < n-1; ++k) {
+                        const QLine& l1 = system->barLines[k];
+                        const QLine& l2 = system->barLines[k+1];
+                        OmrMeasure m(l1.x1(), l2.x1());
+                        system->measures().append(m);
+                        }
+                  }
         
-        delete []scores;
-        delete []pred;
-        delete []temp_scores;
-        delete []hashed;
+            //delete allocated space
+            for(int i = 0; i < numStaves; i++){
+                  delete [] scores[i];
+                  delete [] pred[i];
+                  delete [] temp_scores[i];
+                  delete [] hashed[i];
+                  }
         
-        //        for(int i = 0; i < height(); i++){
-        //            delete [] bar_score_matrix[i];
-        //        }
-        //delete []bar_score_matrix;
-        //delete []bar_score_vector;
-    }
+            delete []scores;
+            delete []pred;
+            delete []temp_scores;
+            delete []hashed;
+      }
     
     
-    //---------------------------------------------------------
-    //   readBarLines
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   readBarLines
+//---------------------------------------------------------
     
-    void OmrPage::readBarLines()
+void OmrPage::readBarLines()
     {
         //QFuture<void> bl = QtConcurrent::run(_systems, &OmrSystem::searchSysBarLines());
         //bl.waitForFinished();
@@ -467,37 +422,13 @@ namespace Ms {
             }
         }
         
-        //        //--------------------------------------------------
-        //        //    search clef/keysig
-        //        //--------------------------------------------------
-        //
-        //        if (pageNo == 0) {
-        //            OmrSystem* s = &_systems[0];
-        //            for (int i = 0; i < s->staves().size(); ++i) {
-        //                OmrStaff* staff = &s->staves()[i];
-        //                OmrClef clef = searchClef(s, staff);
-        //                staff->setClef(clef);
-        //
-        //                searchKeySig(s, staff);
-        //            }
-        //
-        //
-        //            //--------------------------------------------------
-        //            //    search time signature
-        //            //--------------------------------------------------
-        //
-        //            if (!s->staves().isEmpty()) {
-        //                OmrTimesig* ts = searchTimeSig(s);
-        //                s->measures()[0].setTimesig(ts);
-        //            }
-        //        }
-    }
+      }
     
-    //---------------------------------------------------------
-    //   searchClef
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   searchClef
+//---------------------------------------------------------
     
-    OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
+OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
     {
         std::vector<Pattern*> pl = {
             Omr::trebleclefPattern,
@@ -520,11 +451,11 @@ namespace Ms {
         return clef;
     }
     
-    //---------------------------------------------------------
-    //   searchPattern
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   searchPattern
+//---------------------------------------------------------
     
-    OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
+OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
     {
         OmrPattern p;
         p.sym  = SymId::noSym;
@@ -552,11 +483,11 @@ namespace Ms {
         return p;
     }
     
-    //---------------------------------------------------------
-    //   searchTimeSig
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   searchTimeSig
+//---------------------------------------------------------
     
-    OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
+OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
     {
         
         
@@ -631,11 +562,11 @@ namespace Ms {
         return ts;
     }
     
-    //---------------------------------------------------------
-    //   searchKeySig
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   searchKeySig
+//---------------------------------------------------------
     
-    void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
+void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
     {
         Pattern* pl[2];
         pl[0] = Omr::sharpPattern;
@@ -673,11 +604,11 @@ namespace Ms {
         }
     }
     
-    //---------------------------------------------------------
-    //   maxP
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   maxP
+//---------------------------------------------------------
     
-    int maxP(int* projection, int x1, int x2)
+int maxP(int* projection, int x1, int x2)
     {
         int xx = x1;
         int max = 0;
@@ -690,17 +621,17 @@ namespace Ms {
         return xx;
     }
     
-    struct BSTATE{
-        int x;
-        int status;//0 represents white space, 1 represents bar
-    };
+struct BSTATE{
+      int x;
+      int status;//0 represents white space, 1 represents bar
+      };
     
     
-    //---------------------------------------------------------
-    //   searchSysBarLines
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   searchSysBarLines
+//---------------------------------------------------------
     
-    void OmrSystem::searchSysBarLines()
+void OmrSystem::searchSysBarLines()
     {
         OmrStaff& r1 = _staves[0];
         OmrStaff& r2 = _staves[_staves.size() - 1];//[1];
@@ -812,10 +743,10 @@ namespace Ms {
         }
     }
     
-    //-------------------------------------------------------------------
-    //   searchBarLinesvar: dynamic programming for system identification
-    //-------------------------------------------------------------------
-    float OmrSystem::searchBarLinesvar(int n_staff/*, float *bar_score_vector*/)
+//-------------------------------------------------------------------
+//   searchBarLinesvar: dynamic programming for system identification
+//-------------------------------------------------------------------
+float OmrSystem::searchBarLinesvar(int n_staff/*, float *bar_score_vector*/)
     {
         OmrStaff& r1 = _staves[0];
         OmrStaff& r2 = _staves[n_staff - 1];
@@ -834,14 +765,14 @@ namespace Ms {
         
         int *note_constraints = new int[x2-x1+1];
         memset(note_constraints, 0, sizeof(int) * (x2-x1+1));
-        for(int i = 0; i < n_staff; ++i){
+        for (int i = 0; i < n_staff; ++i) {
             OmrStaff& r = _staves[i];
-            foreach(OmrNote* n, r.notes()){
-                for(int x = n->x(); x <= n->x() + n->width(); ++x){
-                    if(x >= x1 && x <= x2) note_constraints[x-x1] = 1;
-                }
+            foreach (OmrNote* n, r.notes()) {
+                  for (int x = n->x(); x <= n->x() + n->width(); ++x) {
+                        if(x >= x1 && x <= x2) note_constraints[x-x1] = 1;
+                        }
+                  }
             }
-        }
         
         //
         // compute vertical projections
@@ -849,43 +780,33 @@ namespace Ms {
         
         int vpw = x2-x1+1;
         float vp[vpw];
-        //new way, save time, not working yet
         
-        //
-        //        for(int x = 0; x < vpw; x++){
-        //            vp[x] = -HUGE_VAL;
-        //
-        //            if(!note_constraints[x]){
-        //                vp[x] = bar_score_vector[x+x1]-th;
-        //            }
-        //        }
-        
-        //old way, more computationally expensive
         for(int i = 0; i < vpw; i++) vp[i] = -HUGE_VAL;
         
         int bar_max_width = 3;
         for (int x = x1+bar_max_width; x < x2-bar_max_width; ++x) {
             int dots = 0;
             for (int y = y1; y < y2; ++y) {
-                for(int w = -bar_max_width; w <= bar_max_width; w++){
-                    if(_page->dot(x+w, y)){
-                        ++dots;
-                        break;
-                    }
-                }
-            }
+                  for (int w = -bar_max_width; w <= bar_max_width; w++) {
+                        if (_page->dot(x+w, y)) {
+                              ++dots;
+                              break;
+                              }
+                        }
+                  }
             
-            if(!note_constraints[x-x1])
-                vp[x - x1] = dots - th;
-            else vp[x - x1] = -HUGE_VAL;
-        }
+            if (!note_constraints[x-x1])
+                  vp[x - x1] = dots - th;
+            else
+                  vp[x - x1] = -HUGE_VAL;
+            }
         
         float **scores = new float *[x2-x1+1];
         BSTATE **pred = new BSTATE *[x2-x1+1];
-        for(int i =0; i< x2-x1+1; i++){
+        for (int i =0; i< x2-x1+1; i++) {
             scores[i] = new float[2];
             pred[i] = new BSTATE[2];
-        }
+            }
         
         BSTATE bs;
         
@@ -893,11 +814,11 @@ namespace Ms {
         bs.x = -1; bs.status = -1;
         for (int x = x1; x <= x2; ++x) {
             int i = x - x1;
-            for(int status = 0; status <= 1; ++status){
-                scores[i][status] = -HUGE_VAL;
-                pred[i][status] = bs;
+            for (int status = 0; status <= 1; ++status) {
+                  scores[i][status] = -HUGE_VAL;
+                  pred[i][status] = bs;
+                  }
             }
-        }
         scores[0][0] = 0;
         
         //forward pass
@@ -906,65 +827,66 @@ namespace Ms {
             int i = x - x1;
             
             for(int cur = 0; cur <= 1; ++cur){
-                //current state
-                if(scores[i][cur] < -1000) continue;
+                  //current state
+                  if (scores[i][cur] < -1000)
+                        continue;
                 
-                if(cur){
-                    scores[i][cur] += vp[i];
-                    int next = 0;
-                    int step = 8*_page->spatium();//minimum distance between adjacent barlines
-                    if(step + i <= x2 - x1){
-                        if(scores[step + i][next] < scores[i][cur]){
-                            scores[step + i][next] = scores[i][cur];
-                            bs.x = x; bs.status = cur;
-                            pred[step + i][next] = bs;
-                        }
-                    }
-                    else{
-                        if(scores[x2 - x1][next] < scores[i][cur]){
-                            scores[x2 - x1][next] = scores[i][cur];
-                            bs.x = x; bs.status = cur;
-                            pred[x2 - x1][next] = bs;
-                        }
-                    }
+                  if (cur) {
+                        scores[i][cur] += vp[i];
+                        int next = 0;
+                        int step = 8*_page->spatium();//minimum distance between adjacent barlines
+                        if (step + i <= x2 - x1) {
+                              if (scores[step + i][next] < scores[i][cur]) {
+                                    scores[step + i][next] = scores[i][cur];
+                                    bs.x = x; bs.status = cur;
+                                    pred[step + i][next] = bs;
+                                    }
+                              }
+                        else {
+                              if (scores[x2 - x1][next] < scores[i][cur]) {
+                                    scores[x2 - x1][next] = scores[i][cur];
+                                    bs.x = x; bs.status = cur;
+                                    pred[x2 - x1][next] = bs;
+                                    }
+                              }
                     
-                }
-                else{
-                    for(int next = 0; next <= 1; ++next){
-                        int step = 1;
-                        if(step + i <= x2 - x1){
-                            if(scores[step + i][next] < scores[i][cur]){
-                                scores[step + i][next] = scores[i][cur];
-                                bs.x = x; bs.status = cur;
-                                pred[step + i][next] = bs;
-                            }
                         }
-                    }
-                }
+                  else {
+                        for (int next = 0; next <= 1; ++next) {
+                              int step = 1;
+                              if (step + i <= x2 - x1) {
+                                    if (scores[step + i][next] < scores[i][cur]) {
+                                          scores[step + i][next] = scores[i][cur];
+                                          bs.x = x; bs.status = cur;
+                                          pred[step + i][next] = bs;
+                                          }
+                                    }
+                              }
+                        }
+                  }
             }
-        }
         
         //trace back
         int state = 0;
         
-        for (int x = x2; x > x1; ){
+        for (int x = x2; x > x1; ) {
             int i = x - x1;
             bs = pred[i][state];
             state = bs.status;
             x = bs.x;
             
-            if(state){
-                barLines.append(QLine(x, y1, x, y2));
-            }
+            if(state) {
+                  barLines.append(QLine(x, y1, x, y2));
+                  }
         }
         
         float best_score = scores[x2-x1][0];
         
         delete []note_constraints;
-        for(int i =0; i< x2-x1+1; i++){
+        for (int i =0; i< x2-x1+1; i++) {
             delete []scores[i];
             delete []pred[i];
-        }
+            }
         delete []scores;
         delete []pred;
         
@@ -972,17 +894,17 @@ namespace Ms {
         return(best_score);
     }
     
-    //---------------------------------------------------------
-    //   noteCompare
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   noteCompare
+//---------------------------------------------------------
     
-    static bool noteCompare(OmrNote* n1, OmrNote* n2)
-    {
-        return n1->x() < n2->x();
-    }
+static bool noteCompare(OmrNote* n1, OmrNote* n2)
+      {
+            return n1->x() < n2->x();
+      }
     
-    static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
-    {
+static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
+      {
         int xfuzz = fuzz;
         int yfuzz = fuzz;
         if (a.x() > b.x())
@@ -991,16 +913,17 @@ namespace Ms {
             yfuzz = -yfuzz;
         
         return (a.intersects(b.translated(xfuzz, yfuzz)));
-    }
+      }
     
-    //---------------------------------------------------------
-    //   searchNotes
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   searchNotes
+//---------------------------------------------------------
     
-    void OmrSystem::searchNotes()
+void OmrSystem::searchNotes()
     {
         //place holder for note detection, doesn't work well for now if using pixel-based template matching
         //return;
+        
         for (int i = 0; i < _staves.size(); ++i) {
             OmrStaff* r = &_staves[i];
             int x1 = r->x();
@@ -1061,12 +984,12 @@ namespace Ms {
     }
 #endif
     
-    //---------------------------------------------------------
-    //   readHeader
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   readHeader
+//---------------------------------------------------------
     
-    void OmrPage::readHeader(Score*)
-    {
+void OmrPage::readHeader(Score*)
+{
         if (_slices.isEmpty())
             return;
         double maxHeight = _spatium * 4 * 2;
@@ -1124,67 +1047,67 @@ namespace Ms {
 #endif
     }
     
-    //---------------------------------------------------------
-    //   crop
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   crop
+//---------------------------------------------------------
     
-    void OmrPage::crop()
-    {
-        int wl  = wordsPerLine();
-        cropT = cropB = cropL = cropR = 0;
-        for (int y = 0; y < height(); ++y) {
+void OmrPage::crop()
+{
+      int wl  = wordsPerLine();
+      cropT = cropB = cropL = cropR = 0;
+      for (int y = 0; y < height(); ++y) {
             const uint* p = scanLine(y);
             for (int k = 0; k < wl; ++k) {
-                if (*p++) {
-                    cropT = y;
-                    break;
-                }
-            }
+                  if (*p++) {
+                        cropT = y;
+                        break;
+                        }
+                  }
             if (cropT)
                 break;
-        }
-        for (int y = height()-1; y >= cropT; --y) {
+            }
+      for (int y = height()-1; y >= cropT; --y) {
             const uint* p = scanLine(y);
             for (int k = 0; k < wl; ++k) {
-                if (*p++) {
-                    cropB = height() - y - 1;
-                    break;
-                }
-            }
+                  if (*p++) {
+                        cropB = height() - y - 1;
+                        break;
+                        }
+                  }
             if (cropB)
                 break;
-        }
-        int y1 = cropT;
-        int y2 = height() - cropT - cropB;
-        for (int x = 0; x < wl; ++x) {
-            for (int y = y1; y < y2; ++y) {
-                if (*(scanLine(y) + x)) {
-                    cropL = x;
-                    break;
-                }
             }
+      int y1 = cropT;
+      int y2 = height() - cropT - cropB;
+      for (int x = 0; x < wl; ++x) {
+            for (int y = y1; y < y2; ++y) {
+                  if (*(scanLine(y) + x)) {
+                        cropL = x;
+                        break;
+                        }
+                  }
             if (cropL)
                 break;
-        }
-        for (int x = wl-1; x >= cropL; --x) {
-            for (int y = y1; y < y2; ++y) {
-                if (*(scanLine(y) + x)) {
-                    cropR = wl - x - 1;
-                    break;
-                }
             }
+      for (int x = wl-1; x >= cropL; --x) {
+            for (int y = y1; y < y2; ++y) {
+                  if (*(scanLine(y) + x)) {
+                        cropR = wl - x - 1;
+                        break;
+                        }
+                  }
             if (cropR)
                 break;
-        }
-        //      printf("*** crop: T%d B%d L%d R:%d\n", cropT, cropB, cropL, cropR);
-    }
+            }
+      //      printf("*** crop: T%d B%d L%d R:%d\n", cropT, cropB, cropL, cropR);
+      }
     
-    //---------------------------------------------------------
-    //   slice
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   slice
+//---------------------------------------------------------
     
-    void OmrPage::slice()
-    {
+void OmrPage::slice()
+{
         _slices.clear();
         int y1    = cropT;
         int y2    = height() - cropB;
@@ -1234,12 +1157,12 @@ namespace Ms {
 #endif
     }
     
-    //---------------------------------------------------------
-    //    deSkew
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//    deSkew
+//---------------------------------------------------------
     
-    void OmrPage::deSkew()
-    {
+void OmrPage::deSkew()
+{
         int wl    = wordsPerLine();
         int h     = height();
         uint* db  = new uint[wl * h];
@@ -1299,25 +1222,25 @@ namespace Ms {
         delete[] db;
     }
     
-    struct ScanLine {
-        int run;
-        int x1, x2;
-        ScanLine() { run = 0; x1 = 100000; x2 = 0; }
-    };
+struct ScanLine {
+      int run;
+      int x1, x2;
+      ScanLine() { run = 0; x1 = 100000; x2 = 0; }
+      };
     
-    struct H {
-        int y;
-        int bits;
+struct H {
+      int y;
+      int bits;
         
-        H(int a, int b) : y(a), bits(b) {}
-    };
+      H(int a, int b) : y(a), bits(b) {}
+      };
     
-    //---------------------------------------------------------
-    //   xproject
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   xproject
+//---------------------------------------------------------
     
-    int OmrPage::xproject(const uint* p, int wl)
-    {
+int OmrPage::xproject(const uint* p, int wl)
+{
         int run = 0;
         int w   = wl - cropL - cropR;
         int x1 = cropL + w/4;         // only look at part of page
@@ -1332,11 +1255,11 @@ namespace Ms {
         return run;
     }
     
-    //---------------------------------------------------------
-    //   xproject2
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   xproject2
+//---------------------------------------------------------
     
-    double OmrPage::xproject2(int y1)
+double OmrPage::xproject2(int y1)
     {
         int wl          = wordsPerLine();
         const uint* db  = bits();
@@ -1419,197 +1342,152 @@ namespace Ms {
         return val;
     }
     
-    static bool sortLvStaves(const Lv& a, const Lv& b)
-    {
-        return a.line < b.line;
-    }
+static bool sortLvStaves(const Lv& a, const Lv& b)
+{
+      return a.line < b.line;
+      }
     
-    //---------------------------------------------------------
-    //   getStaffLines
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   getStaffLines
+//---------------------------------------------------------
     
-    void OmrPage::getStaffLines()
-    {
-        staves.clear();
-        int h  = height();
-        int wl = wordsPerLine();
-        // printf("getStaffLines %d %d  crop %d %d\n", h, wl, cropT, cropB);
-        if (h < 1)
+void OmrPage::getStaffLines()
+{
+      staves.clear();
+      int h  = height();
+      int wl = wordsPerLine();
+      // printf("getStaffLines %d %d  crop %d %d\n", h, wl, cropT, cropB);
+      if (h < 1)
             return;
         
-        int y1 = cropT;
-        int y2 = h - cropB;
-        if (y2 >= h)
+      int y1 = cropT;
+      int y2 = h - cropB;
+      if (y2 >= h)
             --y2;
         
-        double projection[h];
-        for (int y = 0; y < y1; ++y)
+      double projection[h];
+      for (int y = 0; y < y1; ++y)
             projection[y] = 0;
-        for (int y = y2; y < h; ++y)
+      for (int y = y2; y < h; ++y)
             projection[y] = 0;
-        for (int y = y1; y < y2; ++y)
+      for (int y = y1; y < y2; ++y)
             projection[y] = xproject2(y);
-        int autoTableSize = (wl * 32) / 10;       // 1/10 page width
-        if (autoTableSize > y2-y1)
+      int autoTableSize = (wl * 32) / 10;       // 1/10 page width
+      if (autoTableSize > y2-y1)
             autoTableSize = y2 - y1;
-        double autoTable[autoTableSize];
-        memset(autoTable, 0, sizeof(autoTable));
-        for (int i = 0; i < autoTableSize; ++i) {
+      double autoTable[autoTableSize];
+      memset(autoTable, 0, sizeof(autoTable));
+      for (int i = 0; i < autoTableSize; ++i) {
             autoTable[i] = covariance(projection+y1, projection+i+y1, y2-y1-i);
-        }
+            }
         
-        //
-        // search for first maximum in covariance starting at 10 to skip
-        // line width. Staff line distance (spatium) must be at least 10 dots
-        //
-        double maxCorrelation = 0;
-        _spatium = 0;
-        for (int i = 10; i < autoTableSize; ++i) {
+      //
+      // search for first maximum in covariance starting at 10 to skip
+      // line width. Staff line distance (spatium) must be at least 10 dots
+      //
+      double maxCorrelation = 0;
+      _spatium = 0;
+      for (int i = 10; i < autoTableSize; ++i) {
             if (autoTable[i] > maxCorrelation) {
                 maxCorrelation = autoTable[i];
                 _spatium = i;
+                  }
             }
-        }
-        if (_spatium == 0) {
+      if (_spatium == 0) {
             printf("*** no staff lines found\n");
             return;
-        }
+            }
         
-        //---------------------------------------------------
-        //    look for staves
-        //---------------------------------------------------
+      //---------------------------------------------------
+      //    look for staves
+      //---------------------------------------------------
         
-        QList<Lv> lv;
-        int ly = 0;
-        int lval = -1000.0;
-        for (int y = y1; y < (y2 - _spatium * 4); ++y) {
+      QList<Lv> lv;
+      int ly = 0;
+      int lval = -1000.0;
+      for (int y = y1; y < (y2 - _spatium * 4); ++y) {
             double val = 0.0;
             for (int i = 0; i < 5; ++i)
-                val += projection[y + i * int(_spatium)];
+                  val += projection[y + i * int(_spatium)];
             if (val < lval) {
-                lv.append(Lv(ly, lval));
-            }
+                  lv.append(Lv(ly, lval));
+                  }
             lval = val;
             ly   = y;
-        }
-        qSort(lv);
+            }
+      qSort(lv);
         
-        QList<Lv> staveTop;
-        int staffHeight = _spatium * 6;
-        foreach(Lv a, lv) {
+      QList<Lv> staveTop;
+      int staffHeight = _spatium * 6;
+      foreach (Lv a, lv) {
             if (a.val < 500)   // MAGIC to avoid false positives
-                continue;
+                  continue;
             int line = a.line;
             bool ok  = true;
-            foreach(Lv b, staveTop) {
-                if ((line > (b.line - staffHeight)) && (line < (b.line + staffHeight))) {
-                    ok = false;
-                    break;
-                }
-            }
+            foreach (Lv b, staveTop) {
+                  if ((line > (b.line - staffHeight)) && (line < (b.line + staffHeight))) {
+                        ok = false;
+                        break;
+                        }
+                  }
             if (ok)
                 staveTop.append(a);
-        }
-        qSort(staveTop.begin(), staveTop.end(), sortLvStaves);
-        foreach(Lv a, staveTop) {
+            }
+      qSort(staveTop.begin(), staveTop.end(), sortLvStaves);
+      foreach (Lv a, staveTop) {
             staves.append(OmrStaff(cropL * 32, a.line, width() - cropR*32, _spatium*4));
-        }
-    }
-    
-    //---------------------------------------------------------
-    //   getRatio
-    //---------------------------------------------------------
-    
-    void OmrPage::getRatio()
-    {
-        double num_black;
-        double num_white;
-        _ratio = 0.0;
-        
-        num_black = 1;
-        num_white = 1;
-        for (int x = 0; x < width(); ++x) {
-            for(int y = 0; y < height(); ++y){
-                if(isBlack(x,y)) num_black++;
-                else num_white++;
             }
-        }
-        _ratio = num_black/(num_black + num_white);
-    }
+      }
     
-    //---------------------------------------------------------
-    //   searchNotes
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   getRatio
+//---------------------------------------------------------
     
-    void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
-    {
-        double _spatium = _page->spatium();
-        y += line * _spatium * .5;
+void OmrPage::getRatio()
+{
+      double num_black;
+      double num_white;
+      _ratio = 0.0;
         
-        //Pattern* patternList[2];
-        //patternList[0] = Omr::quartheadPattern;
-        //patternList[1] = Omr::halfheadPattern;
-        
-        Pattern* pattern = Omr::quartheadPattern;
-        
-        QList<Peak> notePeaks;
-        
-        int hh = pattern->h();
-        int hw = pattern->w();
-        bool found = false;
-        int xx1;
-        double val;
-        
-        for (int x = x1; x < (x2 - hw); ++x) {
-            double val1 = pattern->match(&_page->image(), x, y - hh/2, _page->ratio());
-            if (val1 >= noteTH) {
-                if (!found || (val1 > val)) {
-                    xx1 = x;
-                    val = val1;
-                    found = true;
-                }
+      num_black = 1;
+      num_white = 1;
+      for (int x = 0; x < width(); ++x) {
+            for (int y = 0; y < height(); ++y) {
+                  if(isBlack(x,y)) num_black++;
+                  else num_white++;
+                  }
             }
-            else {
-                if (found) {
-                    notePeaks.append(Peak(xx1, val, 0));
-                    found = false;
-                }
+            _ratio = num_black/(num_black + num_white);
+      }
+    
+//---------------------------------------------------------
+//   searchNotes
+//---------------------------------------------------------
+    
+void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
+{
+      //a simple and cheap note detector (heuristic approach)
+      double _spatium = _page->spatium();
+      y += line * _spatium * .5;
+        
+      QList<Peak> notePeaks;
+      Pattern* pattern = Omr::quartheadPattern;
+      int hh = pattern->h();
+      int hw = pattern->w();
+      double val;
+      int step_size = 2;
+      int note_thresh = 75;
+        
+      for (int x = x1; x < (x2 - hw); x += step_size) {
+            val = pattern->match(&_page->image(), x, y - hh/2, _page->ratio());
+            if (val >= note_thresh) {
+                  notePeaks.append(Peak(x, val, 0));
+                  }
             }
-        }
-        
-        //        for (int k = 0; k < 2; ++k) {
-        //            Pattern* pattern = patternList[k];
-        //            int hh = pattern->h();
-        //            int hw = pattern->w();
-        //            bool found = false;
-        //            int xx1;
-        //            double val;
-        //
-        //            for (int x = x1; x < (x2 - hw); ++x) {
-        //                double val1 = pattern->match(&_page->image(), x, y - hh/2);
-        //                if (val1 >= noteTH) {
-        //                    if (!found || (val1 > val)) {
-        //                        xx1 = x;
-        //                        val = val1;
-        //                        found = true;
-        //                    }
-        //                }
-        //                else {
-        //                    if (found) {
-        //                        notePeaks.append(Peak(xx1, val, k));
-        //                        found = false;
-        //                    }
-        //                }
-        //            }
-        //        }
-        
-        qSort(notePeaks);
-        int n = notePeaks.size();
-        for (int i = 0; i < n; ++i) {
-            if (notePeaks[i].val < noteTH)
-                break;
+    
+      int n = notePeaks.size();
+      for (int i = 0; i < n; ++i) {
             OmrNote* note = new OmrNote;
-            //int sym = notePeaks[i].sym;
             int hh = pattern->h();
             int hw = pattern->w();
             note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
@@ -1617,37 +1495,40 @@ namespace Ms {
             note->sym  = pattern->id();
             note->prob = notePeaks[i].val;
             noteList->append(note);
-        }
-    }
+            }
+        
+      return;
+        
+      }
     
-    //---------------------------------------------------------
-    //   staffDistance
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   staffDistance
+//---------------------------------------------------------
     
-    double OmrPage::staffDistance() const
-    {
-        if (staves.size() < 2)
+double OmrPage::staffDistance() const
+{
+      if (staves.size() < 2)
             return 5;
-        return ((staves[1].y() - staves[0].y()) / _spatium) - 4.0;
-    }
+      return ((staves[1].y() - staves[0].y()) / _spatium) - 4.0;
+      }
     
-    //---------------------------------------------------------
-    //   systemDistance
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   systemDistance
+//---------------------------------------------------------
     
-    double OmrPage::systemDistance() const
-    {
-        if (staves.size() < 3)
+double OmrPage::systemDistance() const
+{
+      if (staves.size() < 3)
             return 6.0;
-        return ((staves[2].y() - staves[1].y()) / _spatium) - 4.0;
-    }
+      return ((staves[2].y() - staves[1].y()) / _spatium) - 4.0;
+      }
     
-    //---------------------------------------------------------
-    //   write
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
     
-    void OmrPage::write(Xml& xml) const
-    {
+void OmrPage::write(Xml& xml) const
+{
         xml.stag("OmrPage");
         xml.tag("cropL", cropL);
         xml.tag("cropR", cropR);
@@ -1658,13 +1539,13 @@ namespace Ms {
         xml.etag();
     }
     
-    //---------------------------------------------------------
-    //   read
-    //---------------------------------------------------------
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
     
-    void OmrPage::read(XmlReader& e)
-    {
-        while (e.readNextStartElement()) {
+void OmrPage::read(XmlReader& e)
+{
+      while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             
             if (tag == "cropL")
@@ -1678,9 +1559,9 @@ namespace Ms {
             else if (tag == "staff") {
                 OmrStaff r(e.readRect().toRect());
                 staves.append(r);
-            }
+                  }
             else
                 e.unknown();
-        }
-    }
+            }
+      }
 }
