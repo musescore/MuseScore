@@ -207,8 +207,6 @@ void MScore::init()
       qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
 #endif
 
-//      DPMM = DPI / INCH;       // dots/mm
-
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       _globalShare = dir.absolutePath() + "/";

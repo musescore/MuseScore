@@ -344,7 +344,7 @@ static const QString ff("FreeSerif");
 
 void initStyle(MStyle* s)
       {
-#define MM(x) ((x)/INCH)
+#define MM(x) ((x)*DPMM)
 
       // this is an empty style, no offsets are allowed
       // never show this style
