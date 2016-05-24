@@ -159,7 +159,7 @@ bool Omr::readPdf()
             if(ID != INIT_PAGE && ID != SYSTEM_IDENTIFICATION) {
                   page = 0;
                   progress->setLabelText(QWidget::tr("%1 at Page %2").arg(ActionNames.at(ID+1)).arg(1));
-                  val = omrActions(ID);
+                  val = omrActions(ID, page);
                   }
             else {
                   progress->setLabelText(QWidget::tr("%1 at Page %2").arg(ActionNames.at(ID)).arg(page+1));
