@@ -3041,7 +3041,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         pbreak = false;
                         break;
                   }
-
             if (lc.rangeLayout && lc.endTick < lc.curMeasure->tick()) {
                   // TODO: we may check if another measure fits in this system
                   if (lc.curMeasure == lc.systemOldMeasure) {
@@ -3049,7 +3048,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                         }
                   }
-
             getNextMeasure(lc);
             minWidth += ww;
 
@@ -3328,8 +3326,9 @@ bool Score::collectPage(LayoutContext& lc)
                   if (s)
                         _systems.append(lc.curSystem);
                   }
-            else
+            else {
                   collectSystem(lc);
+                  }
             System* s3     = lc.curSystem;
             bool breakPage = !s3 || (breakPages && s2->pageBreak());
 
@@ -3510,7 +3509,7 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-      qDebug(" %d-%d  systems %d", stick, etick, _systems.size());
+      qDebug("%d-%d", stick, etick);
       LayoutContext lc;
 
 #if 0
@@ -3540,19 +3539,20 @@ void Score::doLayoutRange(int stick, int etick)
 
       Measure* m = tick2measure(stick);
       // start layout one measure earlier to handle clefs and cautionary elements
-      if (m->prevMeasure())
+      if (m->prevMeasure()) {
             m = m->prevMeasure();
+            }
       Page* p    = m->system()->page();
       System* s  = p->systems().front();
 
       int systemIndex  = _systems.indexOf(s);
-      lc.systemList    =  _systems.mid(systemIndex);
+      lc.systemList    = _systems.mid(systemIndex);
       _systems.erase(_systems.begin() + systemIndex, _systems.end());
       lc.curPage       = _pages.indexOf(p);
       lc.curSystem     = systemIndex > 0 ? _systems[systemIndex-1] : 0;
       lc.prevMeasure   = 0;
-      lc.nextMeasure   = s->measure(0);
       lc.curMeasure    = s->measure(0)->prev();
+      lc.nextMeasure   = s->measure(0);
       lc.measureNo     = lc.nextMeasure->no();
       lc.tick          = lc.nextMeasure->tick();
 
@@ -3564,8 +3564,12 @@ void Score::doLayoutRange(int stick, int etick)
       //---------------------------------------------------
 
       while (collectPage(lc)) {
-            if (lc.rangeDone)
+            Page* page     = _pages[lc.curPage-1];
+            System* s      = page->system(0);
+            MeasureBase* m = s->measures().back();
+            if (lc.rangeDone && m->tick() > etick) {
                   break;
+                  }
             }
       if (!lc.curSystem) {
             while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
