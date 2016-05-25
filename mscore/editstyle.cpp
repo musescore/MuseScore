@@ -291,12 +291,15 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             }
       connect(anchorMapper, SIGNAL(mapped(int)), SLOT(anchorChanged(int)));
 
-      dividerLeftSym->addItem( tr("System Divider"),            Sym::symNames[int(SymId::systemDivider)]);
-      dividerLeftSym->addItem( tr("Long System Divider"),       Sym::symNames[int(SymId::systemDividerLong)]);
-      dividerLeftSym->addItem( tr("Extra Long System Divider"), Sym::symNames[int(SymId::systemDividerExtraLong)]);
-      dividerRightSym->addItem(tr("System Divider"),            Sym::symNames[int(SymId::systemDivider)]);
-      dividerRightSym->addItem(tr("Long System Divider"),       Sym::symNames[int(SymId::systemDividerLong)]);
-      dividerRightSym->addItem(tr("Extra Long System Divider"), Sym::symNames[int(SymId::systemDividerExtraLong)]);
+      static const SymId ids[] = {
+            SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
+            };
+      for (SymId id : ids) {
+            const QString& un = Sym::id2userName(id);
+            const char* n  = Sym::id2name(id);
+            dividerLeftSym->addItem(un,  QVariant(QString(n)));
+            dividerRightSym->addItem(un, QVariant(QString(n)));
+            }
 
       // figured bass init
       QList<QString> fbFontNames = FiguredBass::fontNames();
@@ -482,9 +485,9 @@ QVariant EditStyle::getValue(StyleIdx idx)
       const StyleWidget& sw = styleWidget(idx);
       const char* type = MStyle::valueType(sw.idx);
 
-      printf("getValue widget %s value %s\n",
-         sw.widget->metaObject()->className(),
-         MStyle::valueName(sw.idx));
+//      printf("getValue widget %s value %s\n",
+//         sw.widget->metaObject()->className(),
+//         MStyle::valueName(sw.idx));
 
       if (!strcmp("Ms::Spatium", type)) {
             QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
@@ -594,8 +597,14 @@ void EditStyle::setValues()
                   }
             else if (!strcmp("QString", type)) {
                   QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
-                  if (cb)
-                        ;
+                  if (cb) {
+                        for (int i = 0; i < cb->count(); ++i) {
+                              if (cb->itemData(i) == lstyle.value(sw.idx).toString()) {
+                                    cb->setCurrentIndex(i);
+                                    break;
+                                    }
+                              }
+                        }
                   else {
                         QTextEdit* te = qobject_cast<QTextEdit*>(sw.widget);
                         if (!te)
@@ -876,8 +885,6 @@ void EditStyle::valueChanged(int i)
       QVariant val = getValue(idx);
       cs->undo(new ChangeStyleVal(cs, idx, val));
       cs->update();
-
-// printf("valueChanged <%s>\n", qPrintable(val.toString()));
 
       const StyleWidget& sw = styleWidget(idx);
       if (sw.reset)

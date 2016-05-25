@@ -1759,12 +1759,12 @@ static void checkDivider(bool left, System* s, qreal sdd)
             divider->adjustReadPos();
             }
       else if (divider) {
-            if (divider->generated())
-                  s->score()->undoRemoveElement(divider);
-            else {
+            if (divider->generated()) {
                   s->remove(divider);
                   delete divider;
                   }
+            else
+                  s->score()->undoRemoveElement(divider);
             }
       }
 
