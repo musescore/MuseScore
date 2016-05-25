@@ -380,6 +380,23 @@ Palette* MuseScore::newRepeatsPalette()
             sp->append(jp, qApp->translate("jumpType", jumpTypeTable[i].userText.toUtf8().constData()));
             }
 
+      for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
+            BarLineTableItem bti = BarLine::barLineTableItem(i);
+            switch (bti.type) {
+                  case BarLineType::START_REPEAT:
+                  case BarLineType::END_REPEAT:
+                  case BarLineType::END_START_REPEAT:
+                        break;
+                  default:
+                        continue;
+                  }
+
+            BarLine* b = new BarLine(gscore);
+            b->setBarLineType(bti.type);
+            PaletteCell* cell= sp->append(b, qApp->translate("Palette", bti.name));
+            cell->drawStaff = false;
+            }
+
       return sp;
       }
 
