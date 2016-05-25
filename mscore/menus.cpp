@@ -325,28 +325,28 @@ Palette* MuseScore::newBarLinePalette(bool basic)
             const BarLineTableItem* bti = BarLine::barLineTableItem(i);
             if (!bti)
                   break;
-            BarLine* b  = new BarLine(gscore);
+            BarLine* b = new BarLine(gscore);
             b->setBarLineType(bti->type);
-            sp->append(b, qApp->translate("Palette", bti->name));
+            sp->append(b, BarLine::userTypeName(bti->type));
             }
 
       if (!basic) {
       // bar line spans
             struct {
                   int         from, to;
-                  const char* name;
-                  } span[] = {
+                  const char* userName;
+                  } spans[] = {
                   { BARLINE_SPAN_TICK1_FROM, BARLINE_SPAN_TICK1_TO, QT_TRANSLATE_NOOP("Palette", "Tick 1 span") },
                   { BARLINE_SPAN_TICK2_FROM, BARLINE_SPAN_TICK2_TO, QT_TRANSLATE_NOOP("Palette", "Tick 2 span") },
                   { BARLINE_SPAN_SHORT1_FROM,BARLINE_SPAN_SHORT1_TO,QT_TRANSLATE_NOOP("Palette", "Short 1 span") },
                   { BARLINE_SPAN_SHORT2_FROM,BARLINE_SPAN_SHORT2_TO,QT_TRANSLATE_NOOP("Palette", "Short 2 span") },
                   };
-            for (unsigned i = 0; i < sizeof(span)/sizeof(*span); ++i) {
-                  BarLine* b  = new BarLine(gscore);
+            for (auto span : spans) {
+                  BarLine* b = new BarLine(gscore);
                   b->setBarLineType(BarLineType::NORMAL);
-                  b->setSpanFrom(span[i].from);
-                  b->setSpanTo(span[i].to);
-                  sp->append(b, qApp->translate("Palette", span[i].name));
+                  b->setSpanFrom(span.from);
+                  b->setSpanTo(span.to);
+                  sp->append(b, qApp->translate("Palette", span.userName));
                   }
             }
       return sp;
@@ -380,6 +380,25 @@ Palette* MuseScore::newRepeatsPalette()
             Jump* jp = new Jump(gscore);
             jp->setJumpType(jumpTypeTable[i].type);
             sp->append(jp, qApp->translate("jumpType", jumpTypeTable[i].userText.toUtf8().constData()));
+            }
+
+      for (unsigned i = 0;; ++i) {
+            const BarLineTableItem* bti = BarLine::barLineTableItem(i);
+            if (!bti)
+                  break;
+            switch (bti->type) {
+                  case BarLineType::START_REPEAT:
+                  case BarLineType::END_REPEAT:
+                  case BarLineType::END_START_REPEAT:
+                        break;
+                  default:
+                        continue;
+                  }
+
+            BarLine* b = new BarLine(gscore);
+            b->setBarLineType(bti->type);
+            PaletteCell* cell= sp->append(b, BarLine::userTypeName(bti->type));
+            cell->drawStaff = false;
             }
 
       return sp;
