@@ -96,7 +96,7 @@ class Segment : public Element {
 
       Spatium _extraLeadingSpace;
       qreal _stretch;
-      int _tick;
+      int _tick;                          // tick offset to measure
       int _ticks;
       Type _segmentType { Type::Invalid };
 

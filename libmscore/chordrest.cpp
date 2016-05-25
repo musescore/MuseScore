@@ -1231,7 +1231,7 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
 
 QVariant ChordRest::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:      return QVariant(small());
             case P_ID::BEAM_MODE:  return int(beamMode());
             case P_ID::STAFF_MOVE: return staffMove();
@@ -1246,7 +1246,7 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
 
 bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:      setSmall(v.toBool()); break;
             case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
             case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
@@ -1270,7 +1270,7 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:      return false;
             case P_ID::BEAM_MODE:  return int(Beam::Mode::AUTO);
             case P_ID::STAFF_MOVE: return 0;

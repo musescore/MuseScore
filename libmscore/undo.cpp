@@ -778,15 +778,6 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
       }
 
 //---------------------------------------------------------
-//   undoChangeChordRestSize
-//---------------------------------------------------------
-
-void Score::undoChangeChordRestSize(ChordRest* cr, bool small)
-      {
-      undo(new ChangeChordRestSize(cr, small));
-      }
-
-//---------------------------------------------------------
 //   undoChangeChordNoStem
 //---------------------------------------------------------
 
@@ -2036,23 +2027,6 @@ void ChangeMeasureLen::flip()
       measure->setLen(len);
       measure->score()->fixTicks();
       len = oLen;
-      }
-
-//---------------------------------------------------------
-//   ChangeChordRestSize
-//---------------------------------------------------------
-
-ChangeChordRestSize::ChangeChordRestSize(ChordRest* _cr, bool _small)
-      {
-      cr = _cr;
-      small = _small;
-      }
-
-void ChangeChordRestSize::flip()
-      {
-      bool s = cr->small();
-      cr->setSmall(small);
-      small = s;
       }
 
 //---------------------------------------------------------

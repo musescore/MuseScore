@@ -380,20 +380,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeChordRestSize
-//---------------------------------------------------------
-
-class ChangeChordRestSize : public UndoCommand {
-      ChordRest* cr;
-      bool small;
-      void flip();
-
-   public:
-      ChangeChordRestSize(ChordRest*, bool small);
-      UNDO_NAME("ChangeChordRestSize")
-      };
-
-//---------------------------------------------------------
 //   ChangeChordNoStem
 //---------------------------------------------------------
 
