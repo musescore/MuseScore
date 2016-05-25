@@ -834,21 +834,6 @@ class ChangeImage : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeDuration
-//---------------------------------------------------------
-
-class ChangeDuration : public UndoCommand {
-      ChordRest* cr;
-      Fraction d;
-
-      void flip();
-
-   public:
-      ChangeDuration(ChordRest* _cr, Fraction _d) : cr(_cr), d(_d) {}
-      UNDO_NAME("ChangeDuration")
-      };
-
-//---------------------------------------------------------
 //   AddExcerpt
 //---------------------------------------------------------
 
