@@ -53,15 +53,24 @@ void Bracket::setHeight(qreal h)
 
 qreal Bracket::width() const
       {
-      qreal w = 0;
-      if (bracketType() == BracketType::BRACE)
-            w = point(score()->styleS(StyleIdx::akkoladeWidth) + score()->styleS(StyleIdx::akkoladeBarDistance));
-      else if (bracketType() == BracketType::NORMAL)
-            w = point(score()->styleS(StyleIdx::bracketWidth) + score()->styleS(StyleIdx::bracketDistance));
-      else if (bracketType() == BracketType::SQUARE)
-            w = point(score()->styleS(StyleIdx::staffLineWidth) + Spatium(0.5));
-      else if (bracketType() == BracketType::LINE)
-            w = point(0.67f * score()->styleS(StyleIdx::bracketWidth) + score()->styleS(StyleIdx::bracketDistance));
+      qreal w;
+      switch (bracketType()) {
+            case BracketType::BRACE:
+                  w = score()->styleP(StyleIdx::akkoladeWidth) + score()->styleP(StyleIdx::akkoladeBarDistance);
+                  break;
+            case BracketType::NORMAL:
+                  w = score()->styleP(StyleIdx::bracketWidth) + score()->styleP(StyleIdx::bracketDistance);
+                  break;
+            case BracketType::SQUARE:
+                  w = score()->styleP(StyleIdx::staffLineWidth) + spatium() * .5;
+                  break;
+            case BracketType::LINE:
+                  w = 0.67f * score()->styleP(StyleIdx::bracketWidth) + score()->styleP(StyleIdx::bracketDistance);
+                  break;
+            case BracketType::NO_BRACKET:
+                  w = 0.0;
+                  break;
+            }
       return w;
       }
 
@@ -75,62 +84,69 @@ void Bracket::layout()
       if (h2 == 0.0)
             return;
 
-      if (bracketType() == BracketType::BRACE) {
-            qreal w = point(score()->styleS(StyleIdx::akkoladeWidth));
+      switch (bracketType()) {
+           case BracketType::BRACE: {
+                  qreal w = score()->styleP(StyleIdx::akkoladeWidth);
 
 #define XM(a) (a+700)*w/700
 #define YM(a) (a+7100)*h2/7100
 
-            path.moveTo( XM(   -8), YM(-2048));
-            path.cubicTo(XM(   -8), YM(-3192), XM(-360), YM(-4304), XM( -360), YM(-5400)); // c 0
-            path.cubicTo(XM( -360), YM(-5952), XM(-264), YM(-6488), XM(   32), YM(-6968)); // c 1
-            path.cubicTo(XM(   36), YM(-6974), XM(  38), YM(-6984), XM(   38), YM(-6990)); // c 0
-            path.cubicTo(XM(   38), YM(-7008), XM(  16), YM(-7024), XM(    0), YM(-7024)); // c 0
-            path.cubicTo(XM(   -8), YM(-7024), XM( -22), YM(-7022), XM(  -32), YM(-7008)); // c 1
-            path.cubicTo(XM( -416), YM(-6392), XM(-544), YM(-5680), XM( -544), YM(-4960)); // c 0
-            path.cubicTo(XM( -544), YM(-3800), XM(-168), YM(-2680), XM( -168), YM(-1568)); // c 0
-            path.cubicTo(XM( -168), YM(-1016), XM(-264), YM( -496), XM( -560), YM(  -16)); // c 1
-            path.lineTo( XM( -560), YM(    0));  //  l 1
-            path.lineTo( XM( -560), YM(   16));  //  l 1
-            path.cubicTo(XM( -264), YM(  496), XM(-168), YM( 1016), XM( -168), YM( 1568)); // c 0
-            path.cubicTo(XM( -168), YM( 2680), XM(-544), YM( 3800), XM( -544), YM( 4960)); // c 0
-            path.cubicTo(XM( -544), YM( 5680), XM(-416), YM( 6392), XM(  -32), YM( 7008)); // c 1
-            path.cubicTo(XM(  -22), YM( 7022), XM(  -8), YM( 7024), XM(    0), YM( 7024)); // c 0
-            path.cubicTo(XM(   16), YM( 7024), XM(  38), YM( 7008), XM(   38), YM( 6990)); // c 0
-            path.cubicTo(XM(   38), YM( 6984), XM(  36), YM( 6974), XM(   32), YM( 6968)); // c 1
-            path.cubicTo(XM( -264), YM( 6488), XM(-360), YM( 5952), XM( -360), YM( 5400)); // c 0
-            path.cubicTo(XM( -360), YM( 4304), XM(  -8), YM( 3192), XM(   -8), YM( 2048)); // c 0
-            path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
-            path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0
-            setbbox(path.boundingRect());
-            }
-      else if (bracketType() == BracketType::NORMAL) {
-            qreal _spatium = spatium();
-            qreal w = score()->styleS(StyleIdx::bracketWidth).val() * _spatium * .5;
-            qreal x = -w;
-            w      += symWidth(SymId::bracketTop);
-            qreal bd = _spatium * .25;
-            qreal y = - symHeight(SymId::bracketTop) - bd;
-            qreal h = (-y + h2) * 2;
-            bbox().setRect(x, y, w, h);
-            }
-      else if (bracketType() == BracketType::SQUARE) {
-            qreal _spatium = spatium();
-            qreal w = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium * .5;
-            qreal x = -w;
-            qreal y = -w;
-            qreal h = (h2 + w) * 2 ;
-            w      += (.5 * spatium() + 3* w);
-            bbox().setRect(x, y, w, h);
-            }
-      else if (bracketType() == BracketType::LINE) {
-            qreal _spatium = spatium();
-            qreal w = 0.67 * score()->styleS(StyleIdx::bracketWidth).val() * _spatium * .5;
-            qreal x = -w;
-            qreal bd = _spatium * .25;
-            qreal y = -bd;
-            qreal h = (-y + h2) * 2;
-            bbox().setRect(x, y, w, h);
+                  path.moveTo( XM(   -8), YM(-2048));
+                  path.cubicTo(XM(   -8), YM(-3192), XM(-360), YM(-4304), XM( -360), YM(-5400)); // c 0
+                  path.cubicTo(XM( -360), YM(-5952), XM(-264), YM(-6488), XM(   32), YM(-6968)); // c 1
+                  path.cubicTo(XM(   36), YM(-6974), XM(  38), YM(-6984), XM(   38), YM(-6990)); // c 0
+                  path.cubicTo(XM(   38), YM(-7008), XM(  16), YM(-7024), XM(    0), YM(-7024)); // c 0
+                  path.cubicTo(XM(   -8), YM(-7024), XM( -22), YM(-7022), XM(  -32), YM(-7008)); // c 1
+                  path.cubicTo(XM( -416), YM(-6392), XM(-544), YM(-5680), XM( -544), YM(-4960)); // c 0
+                  path.cubicTo(XM( -544), YM(-3800), XM(-168), YM(-2680), XM( -168), YM(-1568)); // c 0
+                  path.cubicTo(XM( -168), YM(-1016), XM(-264), YM( -496), XM( -560), YM(  -16)); // c 1
+                  path.lineTo( XM( -560), YM(    0));  //  l 1
+                  path.lineTo( XM( -560), YM(   16));  //  l 1
+                  path.cubicTo(XM( -264), YM(  496), XM(-168), YM( 1016), XM( -168), YM( 1568)); // c 0
+                  path.cubicTo(XM( -168), YM( 2680), XM(-544), YM( 3800), XM( -544), YM( 4960)); // c 0
+                  path.cubicTo(XM( -544), YM( 5680), XM(-416), YM( 6392), XM(  -32), YM( 7008)); // c 1
+                  path.cubicTo(XM(  -22), YM( 7022), XM(  -8), YM( 7024), XM(    0), YM( 7024)); // c 0
+                  path.cubicTo(XM(   16), YM( 7024), XM(  38), YM( 7008), XM(   38), YM( 6990)); // c 0
+                  path.cubicTo(XM(   38), YM( 6984), XM(  36), YM( 6974), XM(   32), YM( 6968)); // c 1
+                  path.cubicTo(XM( -264), YM( 6488), XM(-360), YM( 5952), XM( -360), YM( 5400)); // c 0
+                  path.cubicTo(XM( -360), YM( 4304), XM(  -8), YM( 3192), XM(   -8), YM( 2048)); // c 0
+                  path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
+                  path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0
+                  setbbox(path.boundingRect());
+                  }
+                  break;
+            case BracketType::NORMAL: {
+                  qreal _spatium = spatium();
+                  qreal w = score()->styleP(StyleIdx::bracketWidth) * .5;
+                  qreal x = -w;
+                  w      += symWidth(SymId::bracketTop);
+                  qreal bd = _spatium * .25;
+                  qreal y = - symHeight(SymId::bracketTop) - bd;
+                  qreal h = (-y + h2) * 2;
+                  bbox().setRect(x, y, w, h);
+                  }
+                  break;
+            case BracketType::SQUARE: {
+                  qreal w = score()->styleP(StyleIdx::staffLineWidth) * .5;
+                  qreal x = -w;
+                  qreal y = -w;
+                  qreal h = (h2 + w) * 2 ;
+                  w      += (.5 * spatium() + 3* w);
+                  bbox().setRect(x, y, w, h);
+                  }
+                  break;
+            case BracketType::LINE: {
+                  qreal _spatium = spatium();
+                  qreal w = 0.67 * score()->styleP(StyleIdx::bracketWidth) * .5;
+                  qreal x = -w;
+                  qreal bd = _spatium * .25;
+                  qreal y = -bd;
+                  qreal h = (-y + h2) * 2;
+                  bbox().setRect(x, y, w, h);
+                  }
+                  break;
+            case BracketType::NO_BRACKET:
+                  break;
             }
       }
 
@@ -142,43 +158,50 @@ void Bracket::draw(QPainter* painter) const
       {
       if (h2 == 0.0)
             return;
-      if (bracketType() == BracketType::BRACE) {
-            painter->setPen(Qt::NoPen);
-            painter->setBrush(QBrush(curColor()));
-            painter->drawPath(path);
-            }
-      else if (bracketType() == BracketType::NORMAL) {
-            qreal h = 2 * h2;
-            qreal _spatium = spatium();
-            qreal w = score()->styleS(StyleIdx::bracketWidth).val() * _spatium;
-            QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
-            painter->setPen(pen);
-            qreal bd   = _spatium * .25;
-            painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
-            qreal x    =  -w * .5;
-            qreal y1   = -bd;
-            qreal y2   = h + bd;
-            drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
-            drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
-            }
-      else if (bracketType() == BracketType::SQUARE) {
-            qreal h = 2 * h2;
-            qreal _spatium = spatium();
-            qreal w = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
-            QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
-            painter->setPen(pen);
-            painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
-            painter->drawLine(QLineF(0.0, 0.0, w + .5 *_spatium, 0.0));
-            painter->drawLine(QLineF(0.0, h  , w + .5 *_spatium, h));
-            }
-      else if (bracketType() == BracketType::LINE) {
-            qreal h = 2 * h2;
-            qreal _spatium = spatium();
-            qreal w = 0.67 * score()->styleS(StyleIdx::bracketWidth).val() * _spatium;
-            QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
-            painter->setPen(pen);
-            qreal bd   = _spatium * .25;
-            painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
+      switch (bracketType()) {
+            case BracketType::BRACE:
+                  painter->setPen(Qt::NoPen);
+                  painter->setBrush(QBrush(curColor()));
+                  painter->drawPath(path);
+                  break;
+            case BracketType::NORMAL: {
+                  qreal h = 2 * h2;
+                  qreal _spatium = spatium();
+                  qreal w = score()->styleP(StyleIdx::bracketWidth);
+                  QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
+                  painter->setPen(pen);
+                  qreal bd   = _spatium * .25;
+                  painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
+                  qreal x    =  -w * .5;
+                  qreal y1   = -bd;
+                  qreal y2   = h + bd;
+                  drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
+                  drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
+                  }
+                  break;
+            case BracketType::SQUARE: {
+                  qreal h = 2 * h2;
+                  qreal _spatium = spatium();
+                  qreal w = score()->styleP(StyleIdx::staffLineWidth);
+                  QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
+                  painter->setPen(pen);
+                  painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
+                  painter->drawLine(QLineF(0.0, 0.0, w + .5 *_spatium, 0.0));
+                  painter->drawLine(QLineF(0.0, h  , w + .5 *_spatium, h));
+                  }
+                  break;
+            case BracketType::LINE: {
+                  qreal h = 2 * h2;
+                  qreal _spatium = spatium();
+                  qreal w = 0.67 * score()->styleP(StyleIdx::bracketWidth);
+                  QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
+                  painter->setPen(pen);
+                  qreal bd = _spatium * .25;
+                  painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
+                  }
+                  break;
+            case BracketType::NO_BRACKET:
+                  break;
             }
       }
 
@@ -188,7 +211,7 @@ void Bracket::draw(QPainter* painter) const
 
 void Bracket::write(Xml& xml) const
       {
-      switch(bracketType()) {
+      switch (bracketType()) {
             case BracketType::BRACE:
                   xml.stag("Bracket type=\"Brace\"");
                   break;
@@ -245,7 +268,6 @@ void Bracket::read(XmlReader& e)
 
 void Bracket::startEdit(MuseScoreView*, const QPointF&)
       {
-
       }
 
 //---------------------------------------------------------
@@ -339,9 +361,9 @@ bool Bracket::acceptDrop(const DropData& data) const
 Element* Bracket::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == Element::Type::BRACKET) {
-            Bracket* b = static_cast<Bracket*>(e);
-            score()->undoChangeBracketType(this, b->bracketType());
+      if (e->isBracket()) {
+            Bracket* b = toBracket(e);
+            undoChangeProperty(P_ID::SYSTEM_BRACKET, int(b->bracketType()));
             delete e;
             return this;
             }
@@ -393,6 +415,52 @@ bool Bracket::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifier
             return true;
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Bracket::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SYSTEM_BRACKET:
+                  return int(bracketType());
+            default:
+                  return Element::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Bracket::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::SYSTEM_BRACKET:
+                  staff()->setBracket(level(), BracketType(v.toInt()));   // change bracket type global
+                  // setBracketType(BracketType(v.toInt()));
+                  score()->setLayoutAll();
+                  break;
+            default:
+                  return Element::setProperty(id, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Bracket::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SYSTEM_BRACKET:
+                  return int(BracketType::NORMAL);
+            default:
+                  return Element::propertyDefault(id);
+            }
       }
 
 }

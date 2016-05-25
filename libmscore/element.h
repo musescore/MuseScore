@@ -78,6 +78,7 @@ class StemSlash;
 class Spacer;
 class StaffLines;
 class Ambitus;
+class Bracket;
 
 enum class SymId;
 
@@ -671,6 +672,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Spacer,        SPACER)
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
+      CONVERT(Bracket,       BRACKET)
 #undef CONVERT
       };
 
@@ -736,6 +738,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Spacer,        SPACER)
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
+      CONVERT(Bracket,       BRACKET)
 #undef CONVERT
 
 //---------------------------------------------------------

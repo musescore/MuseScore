@@ -26,17 +26,6 @@ enum class PropertyStyle : char {
       NOSTYLE, UNSTYLED, STYLED
       };
 
-#if 0
-//---------------------------------------------------------
-//   Property
-//---------------------------------------------------------
-
-class Property {
-      PropertyStyle _style;
-      QVariant _value;
-      };
-#endif
-
 //------------------------------------------------------------------------
 //   Element Properties
 //------------------------------------------------------------------------
@@ -237,12 +226,12 @@ enum class P_ID : unsigned char {
 
       GLISSANDO_STYLE,
 
-//      LAYOUT_MODE,
-
       FRET_STRINGS,
       FRET_FRETS,
       FRET_BARRE,
       FRET_OFFSET,
+
+      SYSTEM_BRACKET,
 
       END
       };

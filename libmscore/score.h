@@ -590,7 +590,6 @@ class Score : public QObject, public ScoreElement {
       void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
       void undoChangeInvisible(Element*, bool);
       void undoChangeBracketSpan(Staff* staff, int column, int span);
-      void undoChangeBracketType(Bracket* bracket, BracketType type);
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);

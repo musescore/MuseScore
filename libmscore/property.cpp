@@ -239,7 +239,9 @@ static const PropertyData propertyList[] = {
       { P_ID::FRET_BARRE,          false, "barre",                 P_TYPE::INT },
       { P_ID::FRET_OFFSET,         false, "fretOffset",            P_TYPE::INT },
 
-      { P_ID::END,                 false, "",                      P_TYPE::INT }
+      { P_ID::SYSTEM_BRACKET,      false, "type",           P_TYPE::INT },
+
+      { P_ID::END,                 false, "",               P_TYPE::INT }
       };
 
 //---------------------------------------------------------
