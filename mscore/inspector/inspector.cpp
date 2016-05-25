@@ -151,7 +151,6 @@ void Inspector::setElements(const QList<Element*>& l)
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
             else if (_element) {
-                  Breath* breath;
                   switch(_element->type()) {
                         case Element::Type::FBOX:
                         case Element::Type::VBOX:
