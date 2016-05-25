@@ -54,7 +54,6 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/bend.h"
 #include "libmscore/tremolobar.h"
-#include "libmscore/breath.h"
 
 namespace Ms {
 
