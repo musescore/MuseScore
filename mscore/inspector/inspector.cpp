@@ -259,11 +259,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorArpeggio(this);
                               break;
                         case Element::Type::BREATH:
-                              breath = static_cast<Breath*>(_element);
-                              if (breath->breathType() > 1)
-                                    ie = new InspectorCaesura(this);
-                              else
-                                    ie = new InspectorElement(this);
+                              ie = new InspectorCaesura(this);
                               break;
                         default:
                               if (_element->isText()) {
