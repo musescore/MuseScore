@@ -1002,22 +1002,6 @@ class MoveStaff : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeDurationType
-//---------------------------------------------------------
-
-class ChangeDurationType : public UndoCommand {
-      ChordRest* cr;
-      TDuration t;
-
-      void flip();
-
-   public:
-      ChangeDurationType(ChordRest* _cr, TDuration _t)
-         : cr(_cr), t(_t) {}
-      UNDO_NAME("ChangeDurationType")
-      };
-
-//---------------------------------------------------------
 //   ChangeStaffUserDist
 //---------------------------------------------------------
 

@@ -3090,17 +3090,6 @@ void MoveStaff::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeDurationType::flip
-//---------------------------------------------------------
-
-void ChangeDurationType::flip()
-      {
-      TDuration type = cr->durationType();
-      cr->setDurationType(t);
-      t = type;
-      }
-
-//---------------------------------------------------------
 //   ChangeStaffUserDist::flip
 //---------------------------------------------------------
 
