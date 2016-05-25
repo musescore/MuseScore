@@ -787,15 +787,6 @@ void Score::undoChangeBracketSpan(Staff* staff, int column, int span)
       }
 
 //---------------------------------------------------------
-//   undoChangeBracketType
-//---------------------------------------------------------
-
-void Score::undoChangeBracketType(Bracket* bracket, BracketType type)
-      {
-      undo(new ChangeBracketType(bracket, type));
-      }
-
-//---------------------------------------------------------
 //   undoChangeInvisible
 //---------------------------------------------------------
 
@@ -2176,25 +2167,6 @@ void ChangeBracketSpan::flip()
       staff->setBracketSpan(column, span);
       span = oSpan;
       staff->score()->setLayoutAll();
-      }
-
-//---------------------------------------------------------
-//   ChangeBracketType
-//---------------------------------------------------------
-
-ChangeBracketType::ChangeBracketType(Bracket* b, BracketType t)
-      {
-      bracket  = b;
-      type = t;
-      }
-
-void ChangeBracketType::flip()
-      {
-      BracketType oType  = bracket->bracketType();
-      bracket->setBracketType(type);
-      type = oType;
-      bracket->staff()->setBracket(bracket->level(), bracket->bracketType());
-      bracket->staff()->score()->setLayoutAll();
       }
 
 //---------------------------------------------------------

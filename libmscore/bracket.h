@@ -80,6 +80,10 @@ class Bracket : public Element {
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 
