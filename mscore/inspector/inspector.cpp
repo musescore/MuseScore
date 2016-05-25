@@ -909,17 +909,17 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       if (inspector != nullptr) {
             Element* e = inspector->element();
             bool sameType = true;
-            int subtype = static_cast<int>(Element::Type::INVALID);
+            Element::Type subtype = Element::Type::INVALID;
 
             if (e->type() == Element::Type::SLUR_SEGMENT)
-                  subtype = static_cast<int>(static_cast<SlurSegment*>(e)->spanner()->type());
+                  subtype = static_cast<SlurSegment*>(e)->spanner()->type();
 
             for (const auto& ee : inspector->el()) {
                   if (ee->type() != Element::Type::SLUR_SEGMENT) {
                         sameType = false;
                         break;
                         }
-                  if (static_cast<int>(static_cast<SlurSegment*>(ee)->spanner()->type()) != subtype) {
+                  if (static_cast<SlurSegment*>(ee)->spanner()->type() != subtype) {
                         sameType = false;
                         break;
                         }
@@ -927,9 +927,9 @@ InspectorSlur::InspectorSlur(QWidget* parent)
 
             if (!sameType)
                   s.elementName->setText("Slur/Tie");
-            else if (subtype == static_cast<int>(Element::Type::SLUR))
+            else if (subtype == Element::Type::SLUR)
                   s.elementName->setText(tr("Slur"));
-            else if (subtype == static_cast<int>(Element::Type::TIE))
+            else if (subtype == Element::Type::TIE)
                   s.elementName->setText(tr("Tie"));
             }
 
