@@ -1431,6 +1431,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w += score()->styleP(StyleIdx::clefTimesigDistance);
             else if (nst & (Segment::Type::EndBarLine | Segment::Type::StartRepeatBarLine))
                   w += score()->styleP(StyleIdx::clefBarlineDistance);
+            else if (nst == Segment::Type::Ambitus)
+                  w += score()->styleP(StyleIdx::ambitusMargin);
             }
       else if ((st & (Segment::Type::KeySig | Segment::Type::KeySigAnnounce))
          && (nst & (Segment::Type::TimeSig | Segment::Type::TimeSigAnnounce))) {
@@ -1452,6 +1454,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             w += score()->styleP(StyleIdx::timesigBarlineDistance);
       else if (st == Segment::Type::Breath)
             w += spatium() * 1.5;
+      else if (st == Segment::Type::Ambitus)
+            w += score()->styleP(StyleIdx::ambitusMargin);
 
       if (w < 0.0)
             w = 0.0;

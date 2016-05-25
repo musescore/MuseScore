@@ -78,6 +78,7 @@ enum class StyleIdx : unsigned char {
 
       clefLeftMargin,
       keysigLeftMargin,
+      ambitusMargin,
       timesigLeftMargin,
 
       clefKeyRightMargin,

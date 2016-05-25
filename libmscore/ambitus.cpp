@@ -46,13 +46,30 @@ Ambitus::Ambitus(Score* s)
       _dir              = DIR_DEFAULT;
       _hasLine          = HASLINE_DEFAULT;
       _lineWidth        = LINEWIDTH_DEFAULT;
-      _topPitch = _bottomPitch = INVALID_PITCH;
-      _topTpc = _bottomTpc = Tpc::TPC_INVALID;
+      _topPitch         = INVALID_PITCH;
+      _bottomPitch      = INVALID_PITCH;
+      _topTpc           = Tpc::TPC_INVALID;
+      _bottomTpc        = Tpc::TPC_INVALID;
       _topAccid.setParent(this);
       _bottomAccid.setParent(this);
-//      _topAccid.setFlags(0);
-//      _bottomAccid.setFlags(0);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
+      }
+
+//---------------------------------------------------------
+//   initFrom
+//---------------------------------------------------------
+
+void Ambitus::initFrom(Ambitus* a)
+      {
+      _noteHeadGroup   = a->_noteHeadGroup;
+      _noteHeadType    = a->_noteHeadType;
+      _dir             = a->_dir;
+      _hasLine         = a->_hasLine;
+      _lineWidth       = a->_lineWidth;
+      _topPitch        = a->_topPitch;
+      _bottomPitch     = a->_bottomPitch;
+      _topTpc          = a->_topTpc;
+      _bottomTpc       = a->_bottomTpc;
       }
 
 //---------------------------------------------------------

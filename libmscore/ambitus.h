@@ -49,6 +49,8 @@ class Ambitus : public Element {
       Ambitus(Score* s);
       virtual Ambitus* clone() const override         { return new Ambitus(*this); }
 
+      void initFrom(Ambitus* a);
+
       // getters and setters
       virtual Element::Type type() const override     { return Element::Type::AMBITUS;    }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
@@ -94,6 +96,7 @@ class Ambitus : public Element {
       QVariant getProperty(P_ID ) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
+
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
       };

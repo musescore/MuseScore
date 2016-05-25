@@ -77,6 +77,7 @@ class Hook;
 class StemSlash;
 class Spacer;
 class StaffLines;
+class Ambitus;
 
 enum class SymId;
 
@@ -669,6 +670,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(SlurSegment,   SLUR_SEGMENT)
       CONVERT(Spacer,        SPACER)
       CONVERT(StaffLines,    STAFF_LINES)
+      CONVERT(Ambitus,       AMBITUS)
 #undef CONVERT
       };
 
@@ -733,6 +735,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(SlurSegment,   SLUR_SEGMENT)
       CONVERT(Spacer,        SPACER)
       CONVERT(StaffLines,    STAFF_LINES)
+      CONVERT(Ambitus,       AMBITUS)
 #undef CONVERT
 
 //---------------------------------------------------------

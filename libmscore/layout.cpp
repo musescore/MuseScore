@@ -55,6 +55,7 @@
 #include "tempotext.h"
 #include "systemdivider.h"
 #include "hook.h"
+#include "ambitus.h"
 
 namespace Ms {
 
@@ -2293,6 +2294,34 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             undo(new RemoveElement(ns));
 
       //
+      // check for ambitus
+      //
+      cs = m->findSegment(Segment::Type::Ambitus, m->tick());
+      ns = mmr->findSegment(Segment::Type::Ambitus, m->tick());
+      if (cs) {
+            if (ns == 0)
+                  ns = mmr->undoGetSegment(Segment::Type::Ambitus, m->tick());
+            for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                  int track = staffIdx * VOICES;
+                  Ambitus* a = toAmbitus(cs->element(track));
+                  if (a) {
+                        Ambitus* na = toAmbitus(ns->element(track));
+                        if (!na) {
+                              na = a->clone();
+                              na->setParent(ns);
+                              undo(new AddElement(na));
+                              }
+                        else {
+                              na->initFrom(a);
+                              na->layout();
+                              }
+                        }
+                  }
+            }
+      else if (ns)
+            undo(new RemoveElement(ns));
+
+      //
       // check for key signature
       //
       cs = m->findSegment(Segment::Type::KeySig, m->tick());
@@ -2803,7 +2832,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                                     }
                               }
                         }
-                  else if (segment.isType(Segment::Type::Clef | Segment::Type::TimeSig)) {
+                  else if (segment.isType(Segment::Type::Clef | Segment::Type::TimeSig | Segment::Type::Ambitus)) {
                         Element* e = segment.element(staffIdx * VOICES);
                         if (e)
                               e->layout();
