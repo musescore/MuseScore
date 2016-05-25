@@ -778,15 +778,6 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
       }
 
 //---------------------------------------------------------
-//   undoChangeChordNoStem
-//---------------------------------------------------------
-
-void Score::undoChangeChordNoStem(Chord* cr, bool noStem)
-      {
-      undo(new ChangeChordNoStem(cr, noStem));
-      }
-
-//---------------------------------------------------------
 //   undoChangeBracketSpan
 //---------------------------------------------------------
 
@@ -2027,23 +2018,6 @@ void ChangeMeasureLen::flip()
       measure->setLen(len);
       measure->score()->fixTicks();
       len = oLen;
-      }
-
-//---------------------------------------------------------
-//   ChangeChordNoStem
-//---------------------------------------------------------
-
-ChangeChordNoStem::ChangeChordNoStem(Chord* c, bool f)
-      {
-      chord = c;
-      noStem = f;
-      }
-
-void ChangeChordNoStem::flip()
-      {
-      bool ns = chord->noStem();
-      chord->setNoStem(noStem);
-      noStem = ns;
       }
 
 //---------------------------------------------------------
