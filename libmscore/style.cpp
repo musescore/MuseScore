@@ -88,8 +88,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::dividerRightSym,         "dividerRightSym",         QVariant(QString("systemDivider")) },
       { StyleIdx::dividerRightX,           "dividerRightX",           QVariant(0.0) },
       { StyleIdx::dividerRightY,           "dividerRightY",           QVariant(0.0) },
+
       { StyleIdx::clefLeftMargin,          "clefLeftMargin",          Spatium(0.8) },     // 0.64 (gould: <= 1)
       { StyleIdx::keysigLeftMargin,        "keysigLeftMargin",        Spatium(0.5) },
+      { StyleIdx::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 
       { StyleIdx::timesigLeftMargin,       "timesigLeftMargin",       Spatium(0.5) },
       { StyleIdx::clefKeyRightMargin,      "clefKeyRightMargin",      Spatium(0.8) },

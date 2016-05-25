@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
-    <height>218</height>
+    <width>331</width>
+    <height>266</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -241,6 +241,9 @@
          <property name="accessibleName">
           <string>Bottom note</string>
          </property>
+         <property name="currentText">
+          <string notr="true">---</string>
+         </property>
          <property name="maxVisibleItems">
           <number>15</number>
          </property>
@@ -249,7 +252,7 @@
          </property>
          <item>
           <property name="text">
-           <string>[Undefined]</string>
+           <string notr="true">---</string>
           </property>
          </item>
          <item>
@@ -519,6 +522,12 @@
          <property name="accessibleName">
           <string>Top note</string>
          </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentText">
+          <string notr="true">---</string>
+         </property>
          <property name="maxVisibleItems">
           <number>15</number>
          </property>
@@ -527,7 +536,7 @@
          </property>
          <item>
           <property name="text">
-           <string>[Undefined]</string>
+           <string notr="true">---</string>
           </property>
          </item>
          <item>
@@ -838,6 +847,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="updateRange">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="focusPolicy">
           <enum>Qt::TabFocus</enum>
          </property>
