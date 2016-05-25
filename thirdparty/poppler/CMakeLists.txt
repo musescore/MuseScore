@@ -121,8 +121,18 @@ add_library(poppler STATIC
 
 set_target_properties(poppler
       PROPERTIES
-      COMPILE_FLAGS
-            "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field"
+      if (APPLE)
+         COMPILE_FLAGS
+            "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field -Wno-return-stack-address -Wno-shift-negative-value"
+      else (APPLE)
+         if (MINGW)
+            COMPILE_FLAGS
+               "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format"
+         else (MINGW)
+             COMPILE_FLAGS
+                "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable"
+         endif(MINGW)
+      endif(APPLE)
       )
 
 include_directories(
