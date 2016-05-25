@@ -27,7 +27,7 @@ class SystemDivider : public Symbol {
       Q_ENUMS(Type)
 
    public:
-      enum class Type : char { LEFT, RIGHT };
+      enum Type { LEFT, RIGHT };
 
    private:
       Type _dividerType;
@@ -45,6 +45,7 @@ class SystemDivider : public Symbol {
       virtual QRectF drag(EditData*) override;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
+      virtual void layout() override;
 
       virtual Segment* segment() const override       { return 0; }
       System* system() const                          { return (System*)parent(); }

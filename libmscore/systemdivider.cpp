@@ -34,9 +34,33 @@ SystemDivider::SystemDivider(Score* s) : Symbol(s)
 //   SystemDivider
 //---------------------------------------------------------
 
-SystemDivider::SystemDivider(const SystemDivider& sd) : Symbol(sd)
+SystemDivider::SystemDivider(const SystemDivider& sd)
+   : Symbol(sd)
       {
       _dividerType = sd._dividerType;
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void SystemDivider::layout()
+      {
+      SymId sid;
+      ScoreFont* sf = score()->scoreFont();
+
+      switch (_dividerType) {
+            case SystemDivider::LEFT:
+                  sid = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
+                  break;
+            case SystemDivider::RIGHT:
+                  sid = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
+                  break;
+            }
+      if (!symIsValid(sid))
+            sf = sf->fallbackFont();
+      setSym(sid, sf);
+      Symbol::layout();
       }
 
 //---------------------------------------------------------
@@ -45,26 +69,17 @@ SystemDivider::SystemDivider(const SystemDivider& sd) : Symbol(sd)
 
 void SystemDivider::setDividerType(SystemDivider::Type v)
       {
-      ScoreFont* sf = score()->scoreFont();
-       _dividerType = v;
-       if (v == SystemDivider::Type::LEFT) {
-             SymId symLeft = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
-             if (!symIsValid(symLeft))
-                   sf = sf->fallbackFont();
-             setSym(symLeft, sf);
-             setXoff(score()->styleD(StyleIdx::dividerLeftX));
-             setYoff(score()->styleD(StyleIdx::dividerLeftY));
-             setAlign(AlignmentFlags::LEFT | AlignmentFlags::VCENTER);
-             }
-       else {
-             SymId symRight = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
-             if (!symIsValid(symRight))
-                   sf = sf->fallbackFont();
-             setSym(symRight, sf);
-             setXoff(score()->styleD(StyleIdx::dividerRightX));
-             setYoff(score()->styleD(StyleIdx::dividerRightY));
-             setAlign(AlignmentFlags::RIGHT | AlignmentFlags::VCENTER);
-             }
+      _dividerType = v;
+      if (v == SystemDivider::LEFT) {
+            setXoff(score()->styleD(StyleIdx::dividerLeftX));
+            setYoff(score()->styleD(StyleIdx::dividerLeftY));
+            setAlign(AlignmentFlags::LEFT | AlignmentFlags::VCENTER);
+            }
+      else {
+            setXoff(score()->styleD(StyleIdx::dividerRightX));
+            setYoff(score()->styleD(StyleIdx::dividerRightY));
+            setAlign(AlignmentFlags::RIGHT | AlignmentFlags::VCENTER);
+            }
       }
 
 //---------------------------------------------------------
