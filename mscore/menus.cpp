@@ -325,7 +325,7 @@ Palette* MuseScore::newBarLinePalette(bool basic)
             const BarLineTableItem* bti = BarLine::barLineTableItem(i);
             if (!bti)
                   break;
-            BarLine* b  = new BarLine(gscore);
+            BarLine* b = new BarLine(gscore);
             b->setBarLineType(bti->type);
             sp->append(b, qApp->translate("Palette", bti->name));
             }
@@ -380,6 +380,25 @@ Palette* MuseScore::newRepeatsPalette()
             Jump* jp = new Jump(gscore);
             jp->setJumpType(jumpTypeTable[i].type);
             sp->append(jp, qApp->translate("jumpType", jumpTypeTable[i].userText.toUtf8().constData()));
+            }
+
+      for (unsigned i = 0;; ++i) {
+            const BarLineTableItem* bti = BarLine::barLineTableItem(i);
+            if (!bti)
+                  break;
+            switch (bti->type) {
+                  case BarLineType::START_REPEAT:
+                  case BarLineType::END_REPEAT:
+                  case BarLineType::END_START_REPEAT:
+                        break;
+                  default:
+                        continue;
+                  }
+
+            BarLine* b = new BarLine(gscore);
+            b->setBarLineType(bti->type);
+            PaletteCell* cell= sp->append(b, qApp->translate("Palette", bti->name));
+            cell->drawStaff = false;
             }
 
       return sp;
