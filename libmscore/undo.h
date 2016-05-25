@@ -380,20 +380,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeChordNoStem
-//---------------------------------------------------------
-
-class ChangeChordNoStem : public UndoCommand {
-      Chord* chord;
-      bool noStem;
-      void flip();
-
-   public:
-      ChangeChordNoStem(Chord*, bool noStem);
-      UNDO_NAME("ChangeChordNoStem")
-      };
-
-//---------------------------------------------------------
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 

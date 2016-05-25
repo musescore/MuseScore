@@ -2594,7 +2594,7 @@ qreal Chord::dotPosX() const
 
 QVariant Chord::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::NO_STEM:        return noStem();
             case P_ID::SMALL:          return small();
             case P_ID::STEM_DIRECTION: return stemDirection();
@@ -2609,7 +2609,7 @@ QVariant Chord::getProperty(P_ID propertyId) const
 
 QVariant Chord::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::NO_STEM:        return false;
             case P_ID::SMALL:          return false;
             case P_ID::STEM_DIRECTION: return Direction(Direction::AUTO);
@@ -2624,7 +2624,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
 
 bool Chord::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::NO_STEM:
                   setNoStem(v.toBool());
                   score()->setLayoutAll();
