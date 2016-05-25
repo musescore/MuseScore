@@ -2727,10 +2727,9 @@ void Score::getNextMeasure(LayoutContext& lc)
                   ++n;
                   len += nm->len();
                   lm = nm;
-                  nm = toMeasure(mb);
-                  if (!nm || !nm->isMeasure())
+                  if (!(mb && mb->isMeasure()))
                         break;
-
+                  nm = toMeasure(mb);
                   }
             if (n >= styleI(StyleIdx::minEmptyMeasures)) {
                   createMMRest(m, lm, len);
