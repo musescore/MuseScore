@@ -613,11 +613,11 @@ void EditStyle::setValues()
                         }
                   }
             else if (!strcmp("Ms::Direction", type)) {
-                        QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
-                        if (cb)
-                              cb->setCurrentIndex(int(lstyle.value(sw.idx).value<Direction>()));
-                        else
-                              abort();
+                  QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                  if (cb)
+                        cb->setCurrentIndex(int(lstyle.value(sw.idx).value<Direction>()));
+                  else
+                        abort();
                   }
             else {
                   qFatal("EditStyle::setValues: unhandled type <%s>", type);
