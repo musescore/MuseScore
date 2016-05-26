@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "shadownote.h"
+#include "shadownotesymbol.h"
 #include "score.h"
 #include "drumset.h"
 #include "sym.h"
@@ -23,11 +24,23 @@ namespace Ms {
 //---------------------------------------------------------
 
 ShadowNote::ShadowNote(Score* s)
-   : Element(s)
+   : Element(s),
+     symbols()
       {
       _line = 1000;
-      sym   = SymId::noSym;
       }
+
+void ShadowNote::setSymbols(TDuration::DurationType type, SymId noteSymbol)
+      {
+      this->symbols.setSymbols(type,noteSymbol);
+      }
+
+void ShadowNote::setSym(SymId id)
+      {
+      this->symbols.setSymbols(TDuration::DurationType::V_INVALID, id);
+      }
+
+
 
 //---------------------------------------------------------
 //   draw
@@ -35,7 +48,9 @@ ShadowNote::ShadowNote(Score* s)
 
 void ShadowNote::draw(QPainter* painter) const
       {
-      if (!visible() || sym == SymId::noSym)
+
+
+      if (!visible() || symbols.isValid()==false )
             return;
 
       QPointF ap(pagePos());
@@ -55,11 +70,23 @@ void ShadowNote::draw(QPainter* painter) const
       QPen pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
       painter->setPen(pen);
 
-      drawSymbol(sym, painter);
+      qreal width=0.0;
+
+      if(this->symbols.noFlag()) {
+            drawSymbol(this->symbols.getNoteId(), painter);
+            }
+      else {
+            QList<SymId> symbolList;
+            symbolList.append(symbols.getNoteId());
+            symbolList.append(symbols.getFlagId());
+            drawShadowSymbols(symbolList, painter);
+            }
+
+      width = symWidth(symbols.getNoteId());
 
       qreal ms = spatium();
 
-      qreal x1 = symWidth(sym) * .5 - (ms * mag());
+      qreal x1 = width * .5 - (ms * mag());
       qreal x2 = x1 + 2 * ms * mag();
 
       ms *= .5;
@@ -82,15 +109,46 @@ void ShadowNote::draw(QPainter* painter) const
 
 void ShadowNote::layout()
       {
-      if (sym == SymId::noSym) {
+      if (!this->symbols.isValid()) {
             setbbox(QRectF());
             return;
             }
-      QRectF b(symBbox(sym));
+
+
+      QRectF b(0,0,0,0);
+      qreal x(0),y(0),height(0),width(0);
+      SymId symNoteHead=symbols.getNoteId();
+      SymId symFlag=symbols.getFlagId();
+
+      if(symbols.noFlag()) {
+            b.setRect(symBbox(symNoteHead).x(),symBbox(symNoteHead).y(),symBbox(symNoteHead).width(),symBbox(symNoteHead).height());
+            }
+      else {
+           x=symBbox(symNoteHead).x();
+           height+=symBbox(symNoteHead).height();
+           width+=symBbox(symNoteHead).width();
+           height += ((symBbox(symNoteHead).height()/4)+1);
+
+           if(symFlag!=SymId::flagInternalUp) {
+                y-=symBbox(symFlag).height();
+                height+=symBbox(symFlag).height();
+                width+=symBbox(symFlag).width();
+                }
+          else {
+               y-=20;
+               height+=(-y);
+               }
+
+          b.setRect(x,y,width,height);
+          }
+
       qreal _spatium = spatium();
       qreal lw = point(score()->styleS(StyleIdx::ledgerLineWidth));
 
-      qreal x1 = symWidth(sym) * .5 - (_spatium * mag()) - lw * .5;
+      qreal x1;
+
+      x1 = (symWidth(symNoteHead)) * .5 - (_spatium * mag()) - lw * .5 ;
+
       qreal x2 = x1 + 2 * _spatium * mag() + lw * .5;
 
       InputState ps = score()->inputState();
@@ -103,7 +161,6 @@ void ShadowNote::layout()
             }
       setbbox(b);
       }
-
 
 }
 
