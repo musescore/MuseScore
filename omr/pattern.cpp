@@ -74,14 +74,22 @@ double Pattern::match(const Pattern* a) const
 
 double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
       {
-//      int rows      = h();
-//      int bytes     = ((w() + 7) / 8) - 1;
-//      int shift     = col & 7;
-//      int k         = 0;
-//      int eshift    = (col + w()) & 7;
+          double scr = 0;
+          for (int y = 0; y < rows; ++y) {
+              
+              for(int x = 0; x < cols; x++){
+                  if(col+x >= img->size().width() || row+y >= img->size().height()) continue;
+                  QRgb c = img->pixel(col+x, row+y);
+                  bool black = (qGray(c) < 125);
+                  scr += black?1:0;
+              }
+          }
+
+#if 0
           double k = 0;
           if(bg_parm == 0) bg_parm = 1e-10;
           if(bg_parm == 1) bg_parm = 1-1e-10;
+          
 
       for (int y = 0; y < rows; ++y) {
             //const uchar* p1 = image()->scanLine(y);
@@ -100,6 +108,8 @@ double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
               k += black?(log(model[y][x]) - log(bg_parm)):(log(1.0 - model[y][x]) - log(1-bg_parm));
           }
       }
+          return k;
+#endif
 #if 0
             for (int x = 0; x < bytes; ++x) {
                   uchar a = *p1++;
@@ -119,7 +129,7 @@ double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
             }
 #endif
 
-          return k;
+    
       }
 
 //---------------------------------------------------------
