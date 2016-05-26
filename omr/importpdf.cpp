@@ -38,6 +38,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/keysig.h"
 #include "libmscore/spacer.h"
+#include "libmscore/box.h"
+#include "libmscore/spatium.h"
 
 namespace Ms {
 
@@ -47,11 +49,11 @@ namespace Ms {
 
 class OmrState {
    public:
-      Score* score = 0;
+      MasterScore* score = 0;
       Fraction timesig { 4, 4};
       int tick = 0;
 
-      void importPdfPage(OmrPage* omrPage, int top);
+      void importPdfPage(OmrPage* omrPage, qreal top);
       int importPdfSystem(OmrSystem* omrSystem);
       void importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem);
       };
@@ -185,13 +187,25 @@ int OmrState::importPdfSystem(OmrSystem* omrSystem)
 //   importPdfPage
 //---------------------------------------------------------
 
-void OmrState::importPdfPage(OmrPage* omrPage, int top)
+void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
       {
       TDuration d(TDuration::DurationType::V_MEASURE);
       int tick = 0;
           
       int nsystems = omrPage->systems().size();
       if(nsystems == 0) return;
+      
+      //add top margin for alignment
+      MeasureBase* first_measure = score->first();
+      if (first_measure == 0 || first_measure->type() != Element::Type::VBOX) {
+            VBox* vbox = new VBox(score);
+            vbox->setNext(score->first());
+            vbox->setTick(0);
+            vbox->setBoxHeight(Spatium(top));
+            vbox->setBottomMargin(0);
+            vbox->setBottomGap(0);
+            score->measures()->add(vbox);
+      }
           
       //int n = nsystems == 0 ? 1 : nsystems;
       for (int k = 0; k < nsystems; ++k) {
@@ -245,10 +259,7 @@ void OmrState::importPdfPage(OmrPage* omrPage, int top)
             sp->layout();
             sp->setPos(sp->rxpos(), top);
             }
-          
       }
-    
-    
 
 //---------------------------------------------------------
 //   importPdf
@@ -270,6 +281,7 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
       score->style()->set(StyleIdx::lastSystemFillLimit, 0.0);
       score->style()->set(StyleIdx::staffLowerBorder, 0.0);
       score->style()->set(StyleIdx::measureSpacing, 1.0);
+      score->style()->set(StyleIdx::frameSystemDistance, 0);
 
       PageFormat pF;
       pF.copy(*score->pageFormat());
@@ -285,7 +297,6 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
       score->style()->set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
       score->style()->set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
 
-      //incomplete implementation for musescore skeletion creation
       Part* part   = new Part(score);
       OmrPage* omrPage = omr->pages().front();
       
@@ -304,7 +315,7 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
       state.score = score;
       foreach (OmrPage* omrPage, omr->pages()) {
             OmrStaff staff = omrPage->systems().last().staves().first();
-            int top = staff.top();
+            qreal top = staff.top()/omr->spatium();
             state.importPdfPage(omrPage, top);
             }
 
