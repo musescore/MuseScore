@@ -162,7 +162,7 @@ class OmrSystem {
       OmrPage* _page;
       QList<OmrStaff>  _staves;
       QList<OmrMeasure>_measures;
-    
+
       void searchNotes(QList<OmrNote*>*, int x1, int x2, int y, int line);
 
    public:
@@ -238,7 +238,7 @@ class OmrPage {
       void readBarLines();
       float searchBarLines(int start_staff, int end_staff);
       void identifySystems();
-    
+
       const QList<OmrSystem>& systems() const { return _systems; }
       //QList<OmrSystem>& systems() { return _systems; }
       OmrSystem* system(int idx)  { return &_systems[idx]; }

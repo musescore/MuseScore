@@ -36,9 +36,9 @@ Pattern::Pattern()
 Pattern::~Pattern()
       {
 #if 0
-          for(int i = 0; i < rows; ++i)
-              delete []model[i];
-          delete []model;
+      for(int i = 0; i < rows; ++i)
+            delete []model[i];
+      delete []model;
 #endif
       }
 
@@ -66,24 +66,23 @@ double Pattern::match(const Pattern* a) const
       return 1.0 - (double(k) / (h() * w()));
       }
 
-    double Pattern::match(const QImage*, int , int ) const
+double Pattern::match(const QImage*, int , int) const
     {
-        //QImage *image, int col, int row
-        return 0.0;
+    //QImage *image, int col, int row
+    return 0.0;
     }
 
-double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
+double Pattern::match(const QImage* img, int col, int row, double /*bg_parm*/) const
       {
-          double scr = 0;
-          for (int y = 0; y < rows; ++y) {
-              
-              for(int x = 0; x < cols; x++){
+      double scr = 0;
+      for (int y = 0; y < rows; ++y) {
+            for (int x = 0; x < cols; x++) {
                   if(col+x >= img->size().width() || row+y >= img->size().height()) continue;
                   QRgb c = img->pixel(col+x, row+y);
                   bool black = (qGray(c) < 125);
-                  scr += black?1:0;
-              }
-          }
+                  scr += black ? 1 : 0;
+                  }
+            }
 
 #if 0
           double k = 0;
@@ -129,7 +128,7 @@ double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
             }
 #endif
 
-    
+      return scr;
       }
 
 //---------------------------------------------------------
