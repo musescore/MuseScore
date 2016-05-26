@@ -344,6 +344,7 @@ void Rest::layout()
             return;
             }
 
+      rxpos() = 0.0;
       if (staff() && staff()->isTabStaff()) {
             StaffType* tab = staff()->staffType();
             // if rests are shown and note values are shown as duration symbols
