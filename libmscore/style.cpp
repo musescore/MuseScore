@@ -640,9 +640,13 @@ void MStyle::set(const StyleIdx t, const QVariant& val)
       {
       const int idx = int(t);
       _values[idx] = val;
-      qreal _spatium = value(StyleIdx::spatium).toDouble();
-      if (!strcmp(styleTypes[idx].valueType(), "Ms::Spatium"))
-            _precomputedValues[idx] = _values[idx].value<Spatium>().val() * _spatium;
+      if (t == StyleIdx::spatium)
+            precomputeValues();
+      else {
+            qreal _spatium = value(StyleIdx::spatium).toDouble();
+            if (!strcmp(styleTypes[idx].valueType(), "Ms::Spatium"))
+                  _precomputedValues[idx] = _values[idx].value<Spatium>().val() * _spatium;
+            }
       }
 
 //---------------------------------------------------------
