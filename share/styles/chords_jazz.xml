@@ -107,11 +107,18 @@
     <sym name="maj"/>
     <sym name="m"/>
     <sym name="min"/>
+    <sym name="Mi"/>
+    <sym name="Min"/>
     <sym name="aug"/>
+    <sym name="Aug"/>
     <sym name="dim"/>
+    <sym name="Dim"/>
     <sym name="alt"/>
+    <sym name="Alt"/>
     <sym name="bass"/>
+    <sym name="Bass"/>
     <sym name="pedal"/>
+    <sym name="Pedal"/>
 
     </font>
 
