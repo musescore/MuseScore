@@ -132,6 +132,7 @@ bool pluginMode = false;
 static bool startWithNewScore = false;
 double converterDpi = 0;
 double guiScaling = 0.0;
+static double userDPI = 0.0;
 int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
@@ -355,6 +356,7 @@ MuseScore::MuseScore()
    : QMainWindow()
       {
       QScreen* screen      = QGuiApplication::primaryScreen();
+      if (userDPI == 0.0) {
 #if defined(Q_OS_WIN)
       if (QSysInfo::WindowsVersion <= QSysInfo::WV_WINDOWS7)
             _physicalDotsPerInch = screen->logicalDotsPerInch() * screen->devicePixelRatio();
@@ -363,6 +365,10 @@ MuseScore::MuseScore()
 #else
       _physicalDotsPerInch = screen->physicalDotsPerInch();        // physical resolution
 #endif
+            }
+      else {
+            _physicalDotsPerInch = userDPI;
+            }
       if (guiScaling == 0.0) {
             // set scale for icons, palette elements, window sizes, etc
             // the default values are hard coded in pixel sizes and assume ~96 DPI
@@ -4832,6 +4838,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Set output resolution for image export", "dpi"));
       parser.addOption(QCommandLineOption({"T", "trim-image"}, "Trim exported image with specified margin (in pixels)", "margin"));
       parser.addOption(QCommandLineOption({"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"));
+      parser.addOption(QCommandLineOption({"D", "monitor-resolution"}, "Specify monitor resolution", "dpi"));
       parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
       parser.addOption(QCommandLineOption({"p", "plugin"}, "Execure named plugin", "name"));
       parser.addOption(QCommandLineOption(      "template-mode", "Save template mode, no page size"));
@@ -4902,13 +4909,28 @@ int main(int argc, char* av[])
             QString temp = parser.value("T");
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
-            trimMargin = temp.toInt(); // ToDo: check whether conversion went OK, set to -1 if not
+            bool ok = false;
+            trimMargin = temp.toInt(&ok);
+            if (!ok)
+                  trimMargin = -1;
            }
       if (parser.isSet("x")) {
             QString temp = parser.value("x");
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
-            guiScaling = temp.toDouble(); // ToDo: check whether conversion went OK, set to 1.0 if not
+            bool ok = false;
+            guiScaling = temp.toDouble(&ok);
+            if (!ok)
+                  guiScaling = 0.0;
+            }
+      if (parser.isSet("D")) {
+            QString temp = parser.value("D");
+            if (temp.isEmpty())
+                   parser.showHelp(EXIT_FAILURE);
+            bool ok = 0.0;
+            userDPI = temp.toDouble(&ok);
+            if (!ok)
+                  userDPI = 0.0;
             }
       if (parser.isSet("S")) {
             styleFile = parser.value("S");
