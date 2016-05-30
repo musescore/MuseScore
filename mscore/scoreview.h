@@ -394,9 +394,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       void pagePrev();
       void pageTop();
       void pageEnd();
-      QPointF toLogical(const QPoint& p) const { return imatrix.map(QPointF(p)); }
-      QRectF toLogical(const QRectF& r) const  { return imatrix.mapRect(r); }
-      QRect toPhysical(const QRectF& r) const  { return _matrix.mapRect(r).toRect(); }
+      QPointF toLogical(const QPoint& p) const   { return imatrix.map(QPointF(p)); }
+      QPointF toPhysical(const QPointF& p) const {return _matrix.map(p); }
+      QRectF toLogical(const QRectF& r) const    { return imatrix.mapRect(r); }
+      QRect toPhysical(const QRectF& r) const    { return _matrix.mapRect(r).toRect(); }
 
       bool searchMeasure(int i);
       bool searchPage(int i);
@@ -442,6 +443,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void setCursor(const QCursor& c) { QWidget::setCursor(c); }
       virtual QCursor cursor() const { return QWidget::cursor(); }
       void loopUpdate(bool val)   {  loopToggled(val); }
+
+      void updateShadowNotes();
 
       OmrView* omrView() const    { return _omrView; }
       void setOmrView(OmrView* v) { _omrView = v;    }
