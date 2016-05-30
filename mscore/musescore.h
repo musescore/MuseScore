@@ -551,6 +551,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreState state() const { return _sstate; }
       void changeState(ScoreState);
       void updateInputState(Score*);
+      void updateShadowNote();
 
       bool readLanguages(const QString& path);
       void setRevision(QString& r)  {rev = r;}

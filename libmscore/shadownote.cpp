@@ -23,10 +23,68 @@ namespace Ms {
 //---------------------------------------------------------
 
 ShadowNote::ShadowNote(Score* s)
-   : Element(s)
+   : Element(s), _notehead(SymId::noSym),
+        _flag(SymId::noSym)
       {
       _line = 1000;
-      sym   = SymId::noSym;
+      }
+
+bool ShadowNote::isValid() const
+      {
+      return _notehead != SymId::noSym;
+      }
+
+bool ShadowNote::noFlag() const
+      {
+      return _flag == SymId::noSym;
+      }
+
+void ShadowNote::setSym(SymId id)
+      {
+      setSymbols(TDuration::DurationType::V_INVALID, id);
+      }
+
+void ShadowNote::setSymbols(TDuration::DurationType type, SymId noteSymbol)
+      {
+      // clear symbols
+      _notehead = SymId::noSym;
+      _flag = SymId::noSym;
+      _notehead = noteSymbol;
+
+      switch(type) {
+            case TDuration::DurationType::V_LONG:
+                  _flag = SymId::flagInternalUp;
+                  break;
+            case TDuration::DurationType::V_BREVE:
+                  _flag = SymId::noSym;
+                  break;
+            case TDuration::DurationType::V_WHOLE:
+                  _flag = SymId::noSym;
+                  break;
+            case TDuration::DurationType::V_HALF:
+                  _flag = SymId::flagInternalUp;
+                  break;
+            case TDuration::DurationType::V_QUARTER:
+                  _flag = SymId::flagInternalUp;
+                  break;
+            case TDuration::DurationType::V_EIGHTH:
+                  _flag = SymId::flag8thUp;
+                  break;
+            case TDuration::DurationType::V_16TH:
+                  _flag = SymId::flag16thUp;
+                  break;
+            case TDuration::DurationType::V_32ND:
+                  _flag = SymId::flag32ndUp;
+                  break;
+            case TDuration::DurationType::V_64TH:
+                  _flag = SymId::flag64thUp;
+                  break;
+            case TDuration::DurationType::V_128TH:
+                  _flag = SymId::flag128thUp;
+                  break;
+            default:
+                  _flag = SymId::noSym;
+            }
       }
 
 //---------------------------------------------------------
@@ -35,16 +93,11 @@ ShadowNote::ShadowNote(Score* s)
 
 void ShadowNote::draw(QPainter* painter) const
       {
-      if (!visible() || sym == SymId::noSym)
+      if (!visible() || !isValid())
             return;
 
       QPointF ap(pagePos());
-#if 0 // yet(?) unused
-      QRect r(abbox().toRect());
-#endif
-
       painter->translate(ap);
-      qreal lw = point(score()->styleS(StyleIdx::ledgerLineWidth));
       InputState ps = score()->inputState();
       int voice;
       if (ps.drumNote() != -1 && ps.drumset() && ps.drumset()->isValid(ps.drumNote()))
@@ -52,17 +105,37 @@ void ShadowNote::draw(QPainter* painter) const
       else
             voice = ps.voice();
 
-      QPen pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
+      qreal lw = score()->styleP(StyleIdx::stemWidth);
+      QPen pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::RoundCap);
       painter->setPen(pen);
 
-      drawSymbol(sym, painter);
+      drawSymbol(_notehead, painter);
+
+      qreal noteheadWidth = symWidth(_notehead);
+      if (!noFlag()) {
+            QPointF pos;
+            pos.rx() = noteheadWidth - (lw / 2);
+            qreal yOffset = symStemUpSE(_notehead).y() * magS();
+            if(_flag != SymId::flagInternalUp) {
+                  pos.ry() -= symHeight(_flag);
+                  painter->drawLine(QLineF(pos.x(), yOffset, pos.x(), pos.y() - yOffset - lw/2));
+                  pos.rx() -= (lw / 2); // flag offset?
+                  drawSymbol(_flag, painter, pos, 1);
+                  }
+            else {
+                  painter->drawLine(QLineF(pos.x(), yOffset, pos.x(), -3 * spatium() * mag() + yOffset));
+                  }
+            }
 
       qreal ms = spatium();
-
-      qreal x1 = symWidth(sym) * .5 - (ms * mag());
+      qreal x1 = noteheadWidth * .5 - (ms * mag());
       qreal x2 = x1 + 2 * ms * mag();
-
       ms *= .5;
+
+      lw = score()->styleP(StyleIdx::ledgerLineWidth);
+      QPen penL(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
+      painter->setPen(penL);
+
       if (_line < 100 && _line > -100 && !ps.rest()) {
             for (int i = -2; i >= _line; i -= 2) {
                   qreal y = ms * mag() * (i - _line);
@@ -82,15 +155,40 @@ void ShadowNote::draw(QPainter* painter) const
 
 void ShadowNote::layout()
       {
-      if (sym == SymId::noSym) {
+      if (!isValid()) {
             setbbox(QRectF());
             return;
             }
-      QRectF b(symBbox(sym));
       qreal _spatium = spatium();
+      QRectF b;
+      QRectF noteheadBbox = symBbox(_notehead);
+      if(noFlag()) {
+            b = noteheadBbox.toRect();
+            }
+      else {
+            qreal x = noteheadBbox.x();
+            qreal height = noteheadBbox.height();
+            qreal width = noteheadBbox.width();
+            qreal y = 0;
+            if (_flag != SymId::flagInternalUp) {
+                  QRectF flagBbox = symBbox(_flag);
+                  qreal lw = score()->styleP(StyleIdx::stemWidth);
+                  y -= flagBbox.height();
+                  height += flagBbox.height() + lw / 2;
+                  width += flagBbox.width();
+                  }
+            else {
+                  y -= 4 * spatium() * mag();
+                  height += (-y);
+                  }
+
+            b.setRect(x, y, width, height);
+            }
+
       qreal lw = point(score()->styleS(StyleIdx::ledgerLineWidth));
 
-      qreal x1 = symWidth(sym) * .5 - (_spatium * mag()) - lw * .5;
+      qreal x1 = (noteheadBbox.width()) * .5 - (_spatium * mag()) - lw * .5;
+
       qreal x2 = x1 + 2 * _spatium * mag() + lw * .5;
 
       InputState ps = score()->inputState();
@@ -103,7 +201,5 @@ void ShadowNote::layout()
             }
       setbbox(b);
       }
-
-
 }
 

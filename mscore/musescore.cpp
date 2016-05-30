@@ -1240,6 +1240,16 @@ void MuseScore::updateInspector()
       }
 
 //---------------------------------------------------------
+//   updateShadowNote
+//   update the shadow note in the current ScoreView
+//---------------------------------------------------------
+
+void MuseScore::updateShadowNote()
+      {
+      currentScoreView()->updateShadowNotes();
+      }
+
+//---------------------------------------------------------
 //   appendScore
 //    append score to project list
 //---------------------------------------------------------

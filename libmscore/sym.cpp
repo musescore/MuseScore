@@ -5700,6 +5700,7 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, cons
             pos.rx() += (sym(id).advance() * mag);
             }
       }
+
 void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
       {
       qreal scale = p->worldTransform().m11();
