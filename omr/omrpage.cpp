@@ -34,19 +34,18 @@
 #include "pattern.h"
 
 namespace Ms {
-
-//static const double noteTH = 1.0;
-static const double timesigTH = 0.7;
-//static const double clefTH = 0.7;
-static const double keysigTH = 0.8;
-
-struct Hv {
-      int x;
-      int val;
-      Hv(int a, int b) : x(a), val(b) {}
-      bool operator< (const Hv& a) const { return a.val < val; }
-      };
-
+    //static const double noteTH = 1.0;
+    static const double timesigTH = 0.7;
+    //static const double clefTH = 0.7;
+    static const double keysigTH = 0.8;
+    
+    struct Hv {
+        int x;
+        int val;
+        Hv(int a, int b) : x(a), val(b) {}
+        bool operator< (const Hv& a) const { return a.val < val; }
+    };
+    
 struct Peak {
       int x;
       double val;
@@ -231,10 +230,11 @@ float OmrPage::searchBarLines(int start_staff, int end_staff)
 //---------------------------------------------------------
 //   identifySystems
 //---------------------------------------------------------
-void OmrPage::identifySystems(){
-      int numStaves = staves.size();
-      if (numStaves == 0) return;
-
+void OmrPage::identifySystems()
+      {
+      int numStaves    = staves.size();
+      if(numStaves == 0) return;
+        
       //memory allocation
       float **temp_scores = new float*[numStaves];
       for (int i = 0; i < numStaves; i++)
@@ -487,11 +487,11 @@ OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
       double zval = 0;
       double nval = 0;
       QRect rz, rn;
-
-      int y = system->staves().front().y();
+        
+      int y         = system->staves().front().y();
       OmrMeasure* m = &system->measures().front();
-      int x1 = m->x1();
-
+      int x1        = m->x1();
+        
       for (int i = 0; i < 10; ++i) {
             Pattern* pattern = Omr::timesigPattern[i];
             double val = 0.0;
@@ -938,14 +938,14 @@ void OmrSystem::searchNotes()
             qSort(r->notes().begin(), r->notes().end(), noteCompare);
             }
       }
-
+    
 //---------------------------------------------------------
 //   addText
 //---------------------------------------------------------
-
+    
 #ifdef OCR
 static void addText(Score* score, int subtype, const QString& s)
-      {
+{
 #if 0 //TODO-1
       MeasureBase* measure = score->first();
       if (measure == 0 || measure->type() != Element::VBOX) {
