@@ -19,7 +19,7 @@
 // Copyright (C) 2007 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2008, 2010, 2015 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2010 Brian Ewins <brian.ewins@gmail.com>
-// Copyright (C) 2012, 2013, 2015 Jason Crain <jason@aquaticape.us>
+// Copyright (C) 2012, 2013, 2015, 2016 Jason Crain <jason@aquaticape.us>
 // Copyright (C) 2013 Thomas Freitag <Thomas.Freitag@alfa.de>
 //
 // To see a description of the changes please see the Changelog file that
@@ -396,6 +396,10 @@ private:
   int visitDepthFirst(TextBlock *blkList, int pos1,
 		      TextBlock **sorted, int sortPos,
 		      GBool* visited);
+  int visitDepthFirst(TextBlock *blkList, int pos1,
+		      TextBlock **sorted, int sortPos,
+		      GBool* visited,
+		      TextBlock **cache, int cacheSize);
 
   TextPage *page;		// the parent page
   int rot;			// text rotation
@@ -781,11 +785,11 @@ public:
   virtual void updateFont(GfxState *state);
 
   //----- text drawing
-  virtual void beginString(GfxState *, GooString *);
-  virtual void endString(GfxState *);
+  virtual void beginString(GfxState *state, GooString *s);
+  virtual void endString(GfxState *state);
   virtual void drawChar(GfxState *state, double x, double y,
 			double dx, double dy,
-			double , double ,
+			double originX, double originY,
 			CharCode c, int nBytes, Unicode *u, int uLen);
   virtual void incCharCount(int nChars);
   virtual void beginActualText(GfxState *state, GooString *text);

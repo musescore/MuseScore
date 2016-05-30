@@ -20,7 +20,7 @@
 // Copyright (C) 2006 Jeff Muizelaar <jeff@infidigm.net>
 // Copyright (C) 2007, 2008, 2012 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2008 Koji Otani <sho@bbr.jp>
-// Copyright (C) 2008, 2010-2012, 2014, 2015 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2008, 2010-2012, 2014-2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2008 Pino Toscano <pino@kde.org>
 // Copyright (C) 2008, 2010 Hib Eris <hib@hiberis.nl>
 // Copyright (C) 2009 Ross Moore <ross@maths.mq.edu.au>
@@ -30,7 +30,7 @@
 // Copyright (C) 2010 Suzuki Toshiya <mpsuzuki@hiroshima-u.ac.jp>
 // Copyright (C) 2011 Sam Liao <phyomh@gmail.com>
 // Copyright (C) 2012 Horst Prote <prote@fmi.uni-stuttgart.de>
-// Copyright (C) 2012, 2013-2015 Jason Crain <jason@aquaticape.us>
+// Copyright (C) 2012, 2013-2016 Jason Crain <jason@aquaticape.us>
 // Copyright (C) 2012 Peter Breitenlohner <peb@mppmu.mpg.de>
 // Copyright (C) 2013 José Aliste <jaliste@src.gnome.org>
 // Copyright (C) 2013 Thomas Freitag <Thomas.Freitag@alfa.de>
@@ -54,6 +54,7 @@
 #include <math.h>
 #include <float.h>
 #include <ctype.h>
+#include <algorithm>
 #ifdef _WIN32
 #include <fcntl.h> // for O_BINARY
 #include <io.h>    // for setmode
@@ -2064,7 +2065,8 @@ GBool TextBlock::isBeforeByRule2(TextBlock *blk1) {
 // http://en.wikipedia.org/wiki/Topological_sorting
 int TextBlock::visitDepthFirst(TextBlock *blkList, int pos1,
 			       TextBlock **sorted, int sortPos,
-			       GBool* visited) {
+			       GBool* visited,
+			       TextBlock **cache, int cacheSize) {
   int pos2;
   TextBlock *blk1, *blk2, *blk3;
   GBool before;
@@ -2119,14 +2121,28 @@ int TextBlock::visitDepthFirst(TextBlock *blkList, int pos1,
         //          such that blk1 is before blk3 by rule 1,
         //          and blk3 is before blk2 by rule 1.
         before = gTrue;
-        for (blk3 = blkList; blk3; blk3 = blk3->next) {
-	  if (blk3 == blk2 || blk3 == blk1) {
-	    continue;
-	  }
-	  if (blk1->isBeforeByRule1(blk3) &&
-	      blk3->isBeforeByRule1(blk2)) {
+	for (int i = 0; i < cacheSize && cache[i]; ++i) {
+	  if (blk1->isBeforeByRule1(cache[i]) &&
+	      cache[i]->isBeforeByRule1(blk2)) {
 	    before = gFalse;
+	    std::rotate(cache, cache + i, cache + i + 1);
 	    break;
+	  }
+	}
+
+	if (before) {
+	  for (blk3 = blkList; blk3; blk3 = blk3->next) {
+	    if (blk3 == blk2 || blk3 == blk1) {
+	      continue;
+	    }
+	    if (blk1->isBeforeByRule1(blk3) &&
+		blk3->isBeforeByRule1(blk2)) {
+	      before = gFalse;
+	      std::copy_backward(cache, cache + cacheSize - 1,
+				 cache + cacheSize);
+	      cache[0] = blk3;
+	      break;
+	    }
 	  }
         }
 #if 0 // for debugging
@@ -2141,7 +2157,7 @@ int TextBlock::visitDepthFirst(TextBlock *blkList, int pos1,
     if (before) {
       // blk2 is before blk1, so it needs to be visited
       // before we can add blk1 to the sorted list.
-      sortPos = blk2->visitDepthFirst(blkList, pos2, sorted, sortPos, visited);
+      sortPos = blk2->visitDepthFirst(blkList, pos2, sorted, sortPos, visited, cache, cacheSize);
     }
   }
 #if 0 // for debugging
@@ -2150,6 +2166,16 @@ int TextBlock::visitDepthFirst(TextBlock *blkList, int pos1,
 #endif
   sorted[sortPos++] = blk1;
   return sortPos;
+}
+
+int TextBlock::visitDepthFirst(TextBlock *blkList, int pos1,
+			       TextBlock **sorted, int sortPos,
+			       GBool* visited) {
+  const int blockCacheSize = 4;
+  TextBlock *blockCache[blockCacheSize];
+  std::fill(blockCache, blockCache + blockCacheSize, (TextBlock*)NULL);
+  return visitDepthFirst(blkList, pos1, sorted, sortPos, visited, blockCache,
+			 blockCacheSize);
 }
 
 //------------------------------------------------------------------------
@@ -3737,12 +3763,12 @@ void TextPage::coalesce(GBool physLayout, double fixedPitch, GBool doHTML) {
   // build the flows
   //~ this needs to be adjusted for writing mode (vertical text)
   //~ this also needs to account for right-to-left column ordering
-  flow = NULL;
   while (flows) {
     flow = flows;
     flows = flows->next;
     delete flow;
   }
+  flow = NULL;
   flows = lastFlow = NULL;
   // assume blocks are already in reading order,
   // and construct flows accordingly.
@@ -5482,7 +5508,7 @@ void ActualText::addChar(GfxState *state, double x, double y,
   actualTextNBytes += nBytes;
 }
 
-void ActualText::begin(GfxState *, GooString *text) {
+void ActualText::begin(GfxState *state, GooString *text) {
   if (actualText)
     delete actualText;
   actualText = new GooString(text);
@@ -5605,15 +5631,15 @@ void TextOutputDev::updateFont(GfxState *state) {
   text->updateFont(state);
 }
 
-void TextOutputDev::beginString(GfxState *, GooString *) {
+void TextOutputDev::beginString(GfxState *state, GooString *s) {
 }
 
-void TextOutputDev::endString(GfxState *) {
+void TextOutputDev::endString(GfxState *state) {
 }
 
 void TextOutputDev::drawChar(GfxState *state, double x, double y,
 			     double dx, double dy,
-			     double , double ,
+			     double originX, double originY,
 			     CharCode c, int nBytes, Unicode *u, int uLen) {
   actualText->addChar(state, x, y, dx, dy, c, nBytes, u, uLen);
 }

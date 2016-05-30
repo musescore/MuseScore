@@ -14,14 +14,14 @@
 // under GPL version 2 or later
 //
 // Copyright (C) 2005 Takashi Iwai <tiwai@suse.de>
-// Copyright (C) 2009-2015 Thomas Freitag <Thomas.Freitag@alfa.de>
+// Copyright (C) 2009-2016 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
 // Copyright (C) 2011 Andreas Hartmetz <ahartmetz@gmail.com>
 // Copyright (C) 2011 Andrea Canciani <ranma42@gmail.com>
 // Copyright (C) 2011 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2012, 2015 Albert Astals Cid <aacid@kde.org>
-// Copyright (C) 2015 William Bader <williambader@hotmail.com>
+// Copyright (C) 2015, 2016 William Bader <williambader@hotmail.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -58,6 +58,34 @@ struct SplashTransparencyGroup;
 //------------------------------------------------------------------------
 // Splash dynamic pattern
 //------------------------------------------------------------------------
+
+class SplashFunctionPattern: public SplashPattern {
+public:
+
+  SplashFunctionPattern(SplashColorMode colorMode, GfxState *state, GfxFunctionShading *shading);
+
+  virtual SplashPattern *copy() { return new SplashFunctionPattern(colorMode, state, (GfxFunctionShading *) shading); }
+
+  virtual ~SplashFunctionPattern();
+
+  virtual GBool testPosition(int x, int y) { return gTrue; }
+
+  virtual GBool isStatic() { return gFalse; }
+
+  virtual GBool getColor(int x, int y, SplashColorPtr c);
+
+  virtual GfxFunctionShading *getShading() { return shading; }
+
+  virtual GBool isCMYK() { return gfxMode == csDeviceCMYK; }
+
+protected:
+  Matrix ictm;
+  double xMin, yMin, xMax, yMax;
+  GfxFunctionShading *shading;
+  GfxState *state;
+  SplashColorMode colorMode;
+  GfxColorSpaceMode gfxMode;
+};
 
 class SplashUnivariatePattern: public SplashPattern {
 public:
@@ -188,7 +216,7 @@ public:
   // radialShadedFill()?  If this returns false, these shaded fills
   // will be reduced to a series of other drawing operations.
   virtual GBool useShadedFills(int type)
-  { return (type >= 2 && type <= 5) ? gTrue : gFalse; }
+  { return (type >= 1 && type <= 5) ? gTrue : gFalse; }
 
   // Does this device use upside-down coordinates?
   // (Upside-down means (0,0) is the top left corner of the page.)
@@ -250,6 +278,7 @@ public:
 				  double *mat, double *bbox,
 				  int x0, int y0, int x1, int y1,
 				  double xStep, double yStep);
+  virtual GBool functionShadedFill(GfxState *state, GfxFunctionShading *shading);
   virtual GBool axialShadedFill(GfxState *state, GfxAxialShading *shading, double tMin, double tMax);
   virtual GBool radialShadedFill(GfxState *state, GfxRadialShading *shading, double tMin, double tMax);
   virtual GBool gouraudTriangleShadedFill(GfxState *state, GfxGouraudTriangleShading *shading);
@@ -379,6 +408,7 @@ private:
   SplashPattern *getColor(GfxCMYK *cmyk);
   SplashPattern *getColor(GfxColor *deviceN);
 #endif
+  void getMatteColor( SplashColorMode colorMode, GfxImageColorMap *colorMap, GfxColor * matteColor, SplashColor splashMatteColor);
   void setOverprintMask(GfxColorSpace *colorSpace, GBool overprintFlag,
 			int overprintMode, GfxColor *singleColor, GBool grayIndexed = gFalse);
   SplashPath *convertPath(GfxState *state, GfxPath *path,

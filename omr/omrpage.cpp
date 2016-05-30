@@ -105,6 +105,7 @@ bool OmrPage::isBlack(int x, int y) const
 
 void OmrPage::read()
       {
+      removeBorder();
       crop();
       slice();
       deSkew();
@@ -232,10 +233,12 @@ float OmrPage::searchBarLines(int start_staff, int end_staff)
 //---------------------------------------------------------
 void OmrPage::identifySystems()
       {
-      int numStaves    = staves.size();
+      int numStaves = staves.size();
       if(numStaves == 0) return;
-
+      
+      //
       //memory allocation
+      //
       float **temp_scores = new float*[numStaves];
       for (int i = 0; i < numStaves; i++)
             temp_scores[i] = new float[numStaves];
@@ -250,8 +253,10 @@ void OmrPage::identifySystems()
       SysState **pred = new SysState*[numStaves];
       for (int i = 0; i < numStaves; i++)
             pred[i] = new SysState[2];
-
+      
+      //
       //initialization
+      //
       for (int i = 0; i < numStaves; i++) {
             for (int j = 0; j < numStaves; j++) {
                   hashed[i][j] = 0;
@@ -268,7 +273,32 @@ void OmrPage::identifySystems()
                   }
             }
       scores[0][0] = 0;
-
+      
+      //
+      //identify solid note heads
+      //
+      int **note_labels = new int*[numStaves];
+      for (int i = 0; i < numStaves; i++)
+            note_labels[i] = new int[width()];
+      for (int i = 0; i < numStaves; i++){
+            for (int j = 0; j < width(); j++){
+                  note_labels[i][j] = 0;
+                  }
+            }
+      
+      //
+      // search notes for each system
+      //
+//      int note_ran = spatium()/4.0;
+//      for (int i = 0; i < numStaves; i++){
+//            OmrSystem omrSystem(this);
+//            omrSystem.staves().append(staves[i]);
+//            omrSystem.searchNotes(note_labels[i], note_ran);
+//            }
+      
+      //
+      // System Identification
+      //
       int status;
       float cur_score;
       int cur_staff,next_staff;
@@ -284,7 +314,8 @@ void OmrPage::identifySystems()
                         for (int i = cur_staff; i <= next_staff; ++i) {
                               omrSystem.staves().append(staves[i]);
                               }
-                        cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1 /*, bar_score_vector*/);
+                        
+                        cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1, note_labels + cur_staff);
                         temp_scores[cur_staff][next_staff] = cur_score;
                         hashed[cur_staff][next_staff] = 1;
                         }
@@ -321,7 +352,7 @@ void OmrPage::identifySystems()
                   for (int i = ss.index; i <= cur_staff; ++i) {
                         omrSystem.staves().append(staves[i]);
                         }
-                  omrSystem.searchBarLinesvar(cur_staff - ss.index + 1 /*, bar_score_vector*/);
+                  omrSystem.searchBarLinesvar(cur_staff - ss.index + 1, note_labels + ss.index);
                   _systems.append(omrSystem);
                   }
             cur_staff = ss.index;
@@ -346,8 +377,10 @@ void OmrPage::identifySystems()
             delete[] pred[i];
             delete[] temp_scores[i];
             delete[] hashed[i];
+            delete[] note_labels[i];
             }
-
+      
+      delete[] note_labels;
       delete[] scores;
       delete[] pred;
       delete[] temp_scores;
@@ -612,6 +645,9 @@ int maxP(int* projection, int x1, int x2)
       return xx;
       }
 
+//---------------------------------------------------------
+//   BSTATE
+//---------------------------------------------------------
 struct BSTATE {
       int x;
       int status;//0 represents white space, 1 represents bar
@@ -730,7 +766,7 @@ void OmrSystem::searchSysBarLines()
 //-------------------------------------------------------------------
 //   searchBarLinesvar: dynamic programming for system identification
 //-------------------------------------------------------------------
-float OmrSystem::searchBarLinesvar(int n_staff /*, float *bar_score_vector*/)
+float OmrSystem::searchBarLinesvar(int n_staff, int **note_labels)
       {
       OmrStaff& r1 = _staves[0];
       OmrStaff& r2 = _staves[n_staff - 1];
@@ -745,16 +781,12 @@ float OmrSystem::searchBarLinesvar(int n_staff /*, float *bar_score_vector*/)
       //
       //compute note constraints
       //
-      //searchNotes();
-
       int *note_constraints = new int[x2 - x1 + 1];
       memset(note_constraints, 0, sizeof(int) * (x2 - x1 + 1));
       for (int i = 0; i < n_staff; ++i) {
-            OmrStaff& r = _staves[i];
-            foreach (OmrNote* n, r.notes()) {
-                  for (int x = n->x(); x <= n->x() + n->width(); ++x) {
-                        if(x >= x1 && x <= x2) note_constraints[x - x1] = 1;
-                        }
+            for (int j = x1; j <= x2; ++j) {
+                  if (note_labels[i][j] == 1)
+                        note_constraints[j - x1] = 1;
                   }
             }
 
@@ -905,9 +937,6 @@ static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
 
 void OmrSystem::searchNotes()
       {
-      //place holder for note detection, doesn't work well for now if using pixel-based template matching
-      //return;
-
       for (int i = 0; i < _staves.size(); ++i) {
             OmrStaff* r = &_staves[i];
             int x1 = r->x();
@@ -916,7 +945,7 @@ void OmrSystem::searchNotes()
             //
             // search notes on a range of vertical line position
             //
-            for (int line = -5; line < 14; ++line)
+            for (int line = 0; line < 8; ++line)
                   searchNotes(&r->notes(), x1, x2, r->y(), line);
 
             //
@@ -938,7 +967,37 @@ void OmrSystem::searchNotes()
             qSort(r->notes().begin(), r->notes().end(), noteCompare);
             }
       }
+      
+//---------------------------------------------------------
+//   searchNotes
+//---------------------------------------------------------
 
+void OmrSystem::searchNotes(int *note_labels, int ran)
+      {
+      for (int i = 0; i < _staves.size(); ++i) {
+            OmrStaff* r = &_staves[i];
+            int x1 = r->x();
+            int x2 = x1 + r->width();
+
+            //
+            // search notes on a range of vertical line position
+            //
+            for (int line = -5; line < 14; ++line)
+                  searchNotes(&r->notes(), x1, x2, r->y(), line);
+
+            //
+            // save detected note horizontal positions into note_labels
+            //
+            foreach(OmrNote* n, r->notes()) {
+                  QPoint p = n->center();
+                  int h_cent = p.x();
+                  for(int h = h_cent - ran; h <= h_cent + ran; h++){
+                        if(h >= x1 && h < x2) note_labels[h] = 1;
+                        }
+                  }
+            }
+      }
+    
 //---------------------------------------------------------
 //   addText
 //---------------------------------------------------------
@@ -1029,6 +1088,63 @@ void OmrPage::readHeader(Score*)
       if (!s.isEmpty())
             addText(score, TEXT_COMPOSER, s);
 #endif
+      }
+
+//---------------------------------------------------------
+//   removeBorder
+//---------------------------------------------------------
+
+void OmrPage::removeBorder()
+      {
+      cropT = cropB = cropL = cropR = 0;
+      for (int y = 0; y < height(); ++y) {
+            for (int x = 0; x < width(); ++x) {
+                  QRgb c = _image.pixel(x,y);
+                  if(qGray(c) > 0){
+                        cropT = y;
+                        break;
+                        }
+                  }
+            if (cropT)
+                  break;
+            }
+      for (int y = height() - 1; y >= cropT; --y) {
+            for (int x = 0; x < width(); ++x) {
+                  QRgb c = _image.pixel(x,y);
+                  if(qGray(c) > 0){
+                        cropB = y;
+                        break;
+                        }
+                  }
+            if (cropB)
+                  break;
+            }
+      int y1 = cropT;
+      int y2 = cropB;
+      for (int x = 0; x < width(); ++x) {
+            for (int y = y1; y < y2; ++y) {
+                  QRgb c = _image.pixel(x,y);
+                  if(qGray(c) > 0){
+                        cropL = x;
+                        break;
+                        }
+                  }
+            if (cropL)
+                  break;
+            }
+      for (int x = width() - 1; x >= cropL; --x) {
+            for (int y = y1; y < y2; ++y) {
+                  QRgb c = _image.pixel(x,y);
+                  if(qGray(c) > 0){
+                        cropR = x;
+                        break;
+                        }
+                  }
+            if (cropR)
+                  break;
+            }
+            
+      _image = _image.copy(cropL, cropT, cropR - cropL + 1, cropB - cropT + 1);
       }
 
 //---------------------------------------------------------
@@ -1459,11 +1575,11 @@ void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, in
       int hw = pattern->w();
       double val;
       int step_size = 2;
-      int note_thresh = 75;
+      int note_thresh = 50;
 
       for (int x = x1; x < (x2 - hw); x += step_size) {
             val = pattern->match(&_page->image(), x, y - hh / 2, _page->ratio());
-            if (val >= note_thresh) {
+            if (val > note_thresh) {
                   notePeaks.append(Peak(x, val, 0));
                   }
             }

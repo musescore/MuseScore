@@ -50,7 +50,14 @@
         abort(); \
     }
 
-#define OBJECT_3TYPES_CHECK(wanted_type1, wanted_type2, wanted_type3) \
+#define OBJECT_2TYPES_CHECK(wanted_type1, wanted_type2) \
+    if (unlikely(type != wanted_type1) && unlikely(type != wanted_type2)) { \
+        error(errInternal, 0, "Call to Object where the object was type {0:d}, " \
+	      "not the expected type {1:d} or {2:d}", type, wanted_type1, wanted_type2); \
+        abort(); \
+    }
+
+#define OBJECT_3TYPES_CHECK(wanted_type1, wanted_type2, wanted_type3)	\
     if (unlikely(type != wanted_type1) && unlikely(type != wanted_type2) && unlikely(type != wanted_type3)) { \
         error(errInternal, 0, "Call to Object where the object was type {0:d}, " \
 	      "not the expected type {1:d}, {2:d} or {3:d}", type, wanted_type1, wanted_type2, wanted_type3); \
@@ -181,6 +188,7 @@ public:
   GBool isEOF() { return type == objEOF; }
   GBool isNone() { return type == objNone; }
   GBool isInt64() { return type == objInt64; }
+  GBool isIntOrInt64() { return type == objInt || type == objInt64; }
 
   // Special type checking.
   GBool isName(const char *nameA)
@@ -213,6 +221,8 @@ public:
   int getRefGen() { OBJECT_TYPE_CHECK(objRef); return ref.gen; }
   char *getCmd() { OBJECT_TYPE_CHECK(objCmd); return cmd; }
   long long getInt64() { OBJECT_TYPE_CHECK(objInt64); return int64g; }
+  long long getIntOrInt64() { OBJECT_2TYPES_CHECK(objInt, objInt64);
+    return type == objInt ? intg : int64g; }
 
   // Array accessors.
   int arrayGetLength();

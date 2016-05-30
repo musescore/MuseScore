@@ -19,6 +19,8 @@
 // Copyright (C) 2009 David Benjamin <davidben@mit.edu>
 // Copyright (C) 2012 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2013 Adrian Johnson <ajohnson@redneon.com>
+// Copyright (C) 2016 Alok Anand <alok4nand@gmail.com>
+// Copyright (C) 2016 Thomas Freitag <Thomas.Freitag@alfa.de>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -34,6 +36,7 @@
 #include <string.h>
 #include "goo/gmem.h"
 #include "goo/grandom.h"
+#include "goo/gtypes_p.h"
 #include "Decrypt.h"
 #include "Error.h"
 
@@ -46,16 +49,20 @@ static void aesKeyExpansion(DecryptAESState *s, Guchar *objKey, int objKeyLen, G
 static void aesEncryptBlock(DecryptAESState *s, Guchar *in);
 static void aesDecryptBlock(DecryptAESState *s, Guchar *in, GBool last);
 
-static void aes256KeyExpansion(DecryptAES256State *s, Guchar *objKey, int , GBool decrypt);
+static void aes256KeyExpansion(DecryptAES256State *s, Guchar *objKey, int objKeyLen, GBool decrypt);
 static void aes256EncryptBlock(DecryptAES256State *s, Guchar *in);
 static void aes256DecryptBlock(DecryptAES256State *s, Guchar *in, GBool last);
 
 static void sha256(Guchar *msg, int msgLen, Guchar *hash);
+static void sha384(Guchar *msg, int msgLen, Guchar *hash);
+static void sha512(Guchar *msg, int msgLen, Guchar *hash);
+
+static void revision6Hash(GooString *inputPassword, Guchar *K, char *userKey);
 
 static const Guchar passwordPad[32] = {
   0x28, 0xbf, 0x4e, 0x5e, 0x4e, 0x75, 0x8a, 0x41,
-  0x64, 0x00, 0x4e, 0x56, 0xff, 0xfa, 0x01, 0x08, 
-  0x2e, 0x2e, 0x00, 0xb6, 0xd0, 0x68, 0x3e, 0x80, 
+  0x64, 0x00, 0x4e, 0x56, 0xff, 0xfa, 0x01, 0x08,
+  0x2e, 0x2e, 0x00, 0xb6, 0xd0, 0x68, 0x3e, 0x80,
   0x2f, 0x0c, 0xa9, 0xfe, 0x64, 0x53, 0x69, 0x7a
 };
 
@@ -80,7 +87,7 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
 
   *ownerPasswordOk = gFalse;
 
-  if (encRevision == 5) {
+  if (encRevision == 5 || encRevision == 6) {
 
     // check the owner password
     if (ownerPassword) {
@@ -93,6 +100,10 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
       memcpy(test + len, ownerKey->getCString() + 32, 8);
       memcpy(test + len + 8, userKey->getCString(), 48);
       sha256(test, len + 56, test);
+      if (encRevision == 6) {
+	//test contains the initial SHA-256 hash as input K.
+	revision6Hash(ownerPassword, test, userKey->getCString());
+      }
       if (!memcmp(test, ownerKey->getCString(), 32)) {
 
 	// compute the file key from the owner password
@@ -100,6 +111,10 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
 	memcpy(test + len, ownerKey->getCString() + 40, 8);
 	memcpy(test + len + 8, userKey->getCString(), 48);
 	sha256(test, len + 56, test);
+	if (encRevision == 6) {
+	  //test contains the initial SHA-256 hash input K.
+	  revision6Hash(ownerPassword, test, userKey->getCString());
+	}
 	aes256KeyExpansion(&state, test, 32, gTrue);
 	for (i = 0; i < 16; ++i) {
 	  state.cbc[i] = 0;
@@ -125,12 +140,22 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
       memcpy(test, userPassword->getCString(), len);
       memcpy(test + len, userKey->getCString() + 32, 8);
       sha256(test, len + 8, test);
+      if(encRevision == 6) {
+	// test contains the initial SHA-256 hash input K.
+	// user key is not used in checking user password.
+	revision6Hash(userPassword, test, NULL);
+      }
       if (!memcmp(test, userKey->getCString(), 32)) {
 
 	// compute the file key from the user password
 	memcpy(test, userPassword->getCString(), len);
 	memcpy(test + len, userKey->getCString() + 40, 8);
 	sha256(test, len + 8, test);
+	if(encRevision == 6) {
+	  //test contains the initial SHA-256 hash input K.
+	  //user key is not used in computing intermediate user key.
+	  revision6Hash(userPassword, test, NULL);
+	}
 	aes256KeyExpansion(&state, test, 32, gTrue);
 	for (i = 0; i < 16; ++i) {
 	  state.cbc[i] = 0;
@@ -141,7 +166,7 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
 			   gFalse);
 	memcpy(fileKey + 16, state.buf, 16);
 
-	return gTrue; 
+	return gTrue;
       }
     }
 
@@ -200,7 +225,7 @@ GBool Decrypt::makeFileKey(int encVersion, int encRevision, int keyLength,
   }
 }
 
-GBool Decrypt::makeFileKey2(int , int encRevision, int keyLength,
+GBool Decrypt::makeFileKey2(int encVersion, int encRevision, int keyLength,
 			    GooString *ownerKey, GooString *userKey,
 			    int permissions, GooString *fileID,
 			    GooString *userPassword, Guchar *fileKey,
@@ -958,7 +983,7 @@ static void aesDecryptBlock(DecryptAESState *s, Guchar *in, GBool last) {
 //------------------------------------------------------------------------
 
 static void aes256KeyExpansion(DecryptAES256State *s,
-			       Guchar *objKey, int , GBool decrypt) {
+			       Guchar *objKey, int objKeyLen, GBool decrypt) {
   Guint temp;
   int i, round;
 
@@ -1414,4 +1439,329 @@ static void sha256(Guchar *msg, int msgLen, Guchar *hash) {
     hash[i*4 + 2] = (Guchar)(H[i] >> 8);
     hash[i*4 + 3] = (Guchar)H[i];
   }
+}
+//------------------------------------------------------------------------
+// SHA-512 hash (see FIPS 180-4)
+//------------------------------------------------------------------------
+// SHA 384 and SHA 512 use the same sequence of eighty constant 64 bit words.
+static const uint64_t K[80] = {
+  0x428a2f98d728ae22ull, 0x7137449123ef65cdull, 0xb5c0fbcfec4d3b2full, 0xe9b5dba58189dbbcull, 0x3956c25bf348b538ull,
+  0x59f111f1b605d019ull, 0x923f82a4af194f9bull, 0xab1c5ed5da6d8118ull, 0xd807aa98a3030242ull, 0x12835b0145706fbeull,
+  0x243185be4ee4b28cull, 0x550c7dc3d5ffb4e2ull, 0x72be5d74f27b896full, 0x80deb1fe3b1696b1ull, 0x9bdc06a725c71235ull,
+  0xc19bf174cf692694ull, 0xe49b69c19ef14ad2ull, 0xefbe4786384f25e3ull, 0x0fc19dc68b8cd5b5ull, 0x240ca1cc77ac9c65ull,
+  0x2de92c6f592b0275ull, 0x4a7484aa6ea6e483ull, 0x5cb0a9dcbd41fbd4ull, 0x76f988da831153b5ull, 0x983e5152ee66dfabull,
+  0xa831c66d2db43210ull, 0xb00327c898fb213full, 0xbf597fc7beef0ee4ull, 0xc6e00bf33da88fc2ull, 0xd5a79147930aa725ull,
+  0x06ca6351e003826full, 0x142929670a0e6e70ull, 0x27b70a8546d22ffcull, 0x2e1b21385c26c926ull, 0x4d2c6dfc5ac42aedull,
+  0x53380d139d95b3dfull, 0x650a73548baf63deull, 0x766a0abb3c77b2a8ull, 0x81c2c92e47edaee6ull, 0x92722c851482353bull,
+  0xa2bfe8a14cf10364ull, 0xa81a664bbc423001ull, 0xc24b8b70d0f89791ull, 0xc76c51a30654be30ull, 0xd192e819d6ef5218ull,
+  0xd69906245565a910ull, 0xf40e35855771202aull, 0x106aa07032bbd1b8ull, 0x19a4c116b8d2d0c8ull, 0x1e376c085141ab53ull,
+  0x2748774cdf8eeb99ull, 0x34b0bcb5e19b48a8ull, 0x391c0cb3c5c95a63ull, 0x4ed8aa4ae3418acbull, 0x5b9cca4f7763e373ull,
+  0x682e6ff3d6b2b8a3ull, 0x748f82ee5defb2fcull, 0x78a5636f43172f60ull, 0x84c87814a1f0ab72ull, 0x8cc702081a6439ecull,
+  0x90befffa23631e28ull, 0xa4506cebde82bde9ull, 0xbef9a3f7b2c67915ull, 0xc67178f2e372532bull, 0xca273eceea26619cull,
+  0xd186b8c721c0c207ull, 0xeada7dd6cde0eb1eull, 0xf57d4f7fee6ed178ull, 0x06f067aa72176fbaull, 0x0a637dc5a2c898a6ull,
+  0x113f9804bef90daeull, 0x1b710b35131c471bull, 0x28db77f523047d84ull, 0x32caab7b40c72493ull, 0x3c9ebe0a15c9bebcull,
+  0x431d67c49c100d4cull, 0x4cc5d4becb3e42b6ull, 0x597f299cfc657e2aull, 0x5fcb6fab3ad6faecull, 0x6c44198c4a475817ull
+};
+
+static inline uint64_t rotr(uint64_t x, uint64_t n) {
+  return (x >> n) | (x << (64 - n));
+}
+static inline uint64_t rotl(uint64_t x, uint64_t n){
+  return (x << n) | (x >> (64 - n));
+}
+static inline uint64_t sha512Ch(uint64_t x, uint64_t y, uint64_t z) {
+  return (x & y) ^ (~x & z);
+}
+static inline uint64_t sha512Maj(uint64_t x, uint64_t y, uint64_t z) {
+  return (x & y) ^ (x & z) ^ (y & z);
+}
+static inline uint64_t sha512Sigma0(uint64_t x) {
+  return rotr(x, 28) ^ rotr(x, 34) ^ rotr(x, 39);
+}
+static inline uint64_t sha512Sigma1(uint64_t x) {
+  return rotr(x, 14) ^ rotr(x, 18) ^ rotr(x, 41);
+}
+static inline uint64_t sha512sigma0(uint64_t x) {
+  return rotr(x, 1) ^ rotr(x, 8) ^ (x >> 7);
+}
+static inline uint64_t sha512sigma1(uint64_t x) {
+  return rotr(x, 19) ^ rotr(x, 61) ^ (x >> 6);
+}
+
+static void sha512HashBlock(Guchar *blk, uint64_t *H) {
+  uint64_t W[80];
+  uint64_t a, b, c, d, e, f, g, h;
+  uint64_t T1, T2;
+  Guint t;
+
+  // 1. prepare the message schedule
+  for (t = 0; t < 16; ++t) {
+    W[t] = (((uint64_t)blk[t*8] << 56) |
+        ((uint64_t)blk[t*8 + 1] << 48) |
+        ((uint64_t)blk[t*8 + 2] << 40) |
+        ((uint64_t)blk[t*8 + 3] << 32) |
+        ((uint64_t)blk[t*8 + 4] << 24) |
+        ((uint64_t)blk[t*8 + 5] << 16) |
+        ((uint64_t)blk[t*8 + 6] << 8 ) |
+        ((uint64_t)blk[t*8 + 7]));
+  }
+  for (t = 16; t < 80; ++t) {
+    W[t] = sha512sigma1(W[t-2]) + W[t-7] + sha512sigma0(W[t-15]) + W[t-16];
+  }
+
+  // 2. initialize the eight working variables
+  a = H[0];
+  b = H[1];
+  c = H[2];
+  d = H[3];
+  e = H[4];
+  f = H[5];
+  g = H[6];
+  h = H[7];
+
+  // 3.
+  for (t = 0; t < 80; ++t) {
+    T1 = h + sha512Sigma1(e) + sha512Ch(e,f,g) + K[t] + W[t];
+    T2 = sha512Sigma0(a) + sha512Maj(a,b,c);
+    h = g;
+    g = f;
+    f = e;
+    e = d + T1;
+    d = c;
+    c = b;
+    b = a;
+    a = T1 + T2;
+  }
+
+  // 4. compute the intermediate hash value
+  H[0] += a;
+  H[1] += b;
+  H[2] += c;
+  H[3] += d;
+  H[4] += e;
+  H[5] += f;
+  H[6] += g;
+  H[7] += h;
+}
+
+static void sha512(Guchar *msg, int msgLen, Guchar *hash) {
+  Guchar blk[128];
+  uint64_t H[8];
+  int blkLen = 0, i;
+ // setting the initial hash value.
+  H[0] = 0x6a09e667f3bcc908ull;
+  H[1] = 0xbb67ae8584caa73bull;
+  H[2] = 0x3c6ef372fe94f82bull;
+  H[3] = 0xa54ff53a5f1d36f1ull;
+  H[4] = 0x510e527fade682d1ull;
+  H[5] = 0x9b05688c2b3e6c1full;
+  H[6] = 0x1f83d9abfb41bd6bull;
+  H[7] = 0x5be0cd19137e2179ull;
+
+  for (i = 0; i + 128 <= msgLen; i += 128) {
+    sha512HashBlock(msg + i, H);
+  }
+  blkLen = msgLen - i;
+  if (blkLen > 0) {
+    memcpy(blk, msg + i, blkLen);
+  }
+
+  // pad the message
+  blk[blkLen++] = 0x80;
+  if (blkLen > 112) {
+    while (blkLen < 128) {
+      blk[blkLen++] = 0;
+    }
+    sha512HashBlock(blk, H);
+    blkLen = 0;
+  }
+  while (blkLen < 112) {
+    blk[blkLen++] = 0;
+  }
+  blk[112] = 0;
+  blk[113] = 0;
+  blk[114] = 0;
+  blk[115] = 0;
+  blk[116] = 0;
+  blk[117] = 0;
+  blk[118] = 0;
+  blk[119] = 0;
+  blk[120] = 0;
+  blk[121] = 0;
+  blk[122] = 0;
+  blk[123] = 0;
+  blk[124] = (Guchar)(msgLen >> 21);
+  blk[125] = (Guchar)(msgLen >> 13);
+  blk[126] = (Guchar)(msgLen >> 5);
+  blk[127] = (Guchar)(msgLen << 3);
+
+  sha512HashBlock(blk, H);
+
+  // copy the output into the buffer (convert words to bytes)
+  for (i = 0; i < 8; ++i) {
+    hash[i*8]     = (Guchar)(H[i] >> 56);
+    hash[i*8 + 1] = (Guchar)(H[i] >> 48);
+    hash[i*8 + 2] = (Guchar)(H[i] >> 40);
+    hash[i*8 + 3] = (Guchar)(H[i] >> 32);
+    hash[i*8 + 4] = (Guchar)(H[i] >> 24);
+    hash[i*8 + 5] = (Guchar)(H[i] >> 16);
+    hash[i*8 + 6] = (Guchar)(H[i] >> 8);
+    hash[i*8 + 7] = (Guchar)H[i];
+  }
+}
+
+//------------------------------------------------------------------------
+// SHA-384 (see FIPS 180-4)
+//------------------------------------------------------------------------
+//The algorithm is defined in the exact same manner as SHA 512 with 2 exceptions
+//1.Initial hash value is different.
+//2.A 384 bit message digest is obtained by truncating the final hash value.
+static void sha384(Guchar *msg, int msgLen, Guchar *hash) {
+  Guchar blk[128];
+  uint64_t H[8];
+  int blkLen, i;
+//setting initial hash values
+  H[0] = 0xcbbb9d5dc1059ed8ull;
+  H[1] = 0x629a292a367cd507ull;
+  H[2] = 0x9159015a3070dd17ull;
+  H[3] = 0x152fecd8f70e5939ull;
+  H[4] = 0x67332667ffc00b31ull;
+  H[5] = 0x8eb44a8768581511ull;
+  H[6] = 0xdb0c2e0d64f98fa7ull;
+  H[7] = 0x47b5481dbefa4fa4ull;
+//SHA 384 will use the same sha512HashBlock function.
+  blkLen = 0;
+  for (i = 0; i + 128 <= msgLen; i += 128) {
+    sha512HashBlock(msg + i, H);
+  }
+  blkLen = msgLen - i;
+  if (blkLen > 0) {
+    memcpy(blk, msg + i, blkLen);
+  }
+
+  // pad the message
+  blk[blkLen++] = 0x80;
+  if (blkLen > 112) {
+    while (blkLen < 128) {
+      blk[blkLen++] = 0;
+    }
+    sha512HashBlock(blk, H);
+    blkLen = 0;
+  }
+  while (blkLen < 112) {
+    blk[blkLen++] = 0;
+  }
+  blk[112] = 0;
+  blk[113] = 0;
+  blk[114] = 0;
+  blk[115] = 0;
+  blk[116] = 0;
+  blk[117] = 0;
+  blk[118] = 0;
+  blk[119] = 0;
+  blk[120] = 0;
+  blk[121] = 0;
+  blk[122] = 0;
+  blk[123] = 0;
+  blk[124] = (Guchar)(msgLen >> 21);
+  blk[125] = (Guchar)(msgLen >> 13);
+  blk[126] = (Guchar)(msgLen >> 5);
+  blk[127] = (Guchar)(msgLen << 3);
+
+  sha512HashBlock(blk, H);
+
+ // copy the output into the buffer (convert words to bytes)
+ // hash is truncated to 384 bits.
+  for (i = 0; i < 6; ++i) {
+    hash[i*8]     = (Guchar)(H[i] >> 56);
+    hash[i*8 + 1] = (Guchar)(H[i] >> 48);
+    hash[i*8 + 2] = (Guchar)(H[i] >> 40);
+    hash[i*8 + 3] = (Guchar)(H[i] >> 32);
+    hash[i*8 + 4] = (Guchar)(H[i] >> 24);
+    hash[i*8 + 5] = (Guchar)(H[i] >> 16);
+    hash[i*8 + 6] = (Guchar)(H[i] >> 8);
+    hash[i*8 + 7] = (Guchar)H[i];
+  }
+}
+
+//------------------------------------------------------------------------
+// Section 7.6.3.3 (Encryption Key algorithm) of ISO/DIS 32000-2
+// Algorithm 2.B:Computing a hash (for revision 6).
+//------------------------------------------------------------------------
+static void revision6Hash(GooString *inputPassword, Guchar *K, char *userKey) {
+  Guchar K1[64*(127+64+48)];
+  Guchar  E[64*(127+64+48)];
+  DecryptAESState state;
+  Guchar aesKey[16];
+  Guchar BE16byteNumber[16];
+
+  int inputPasswordLength = inputPassword->getLength();
+  int KLength = 32;
+  int userKeyLength = 0;
+  if (userKey) {
+    userKeyLength = 48;
+  }
+  int sequenceLength;
+  int totalLength;
+  int rounds = 0;
+
+  while(rounds < 64 || rounds < E[totalLength-1] + 32 ) {
+    sequenceLength = inputPasswordLength + KLength + userKeyLength;
+    totalLength = 64 * sequenceLength;
+    //a.make the string K1
+    memcpy(K1, inputPassword, inputPasswordLength);
+    memcpy(K1 + inputPasswordLength, K , KLength);
+    memcpy(K1 + inputPasswordLength + KLength, userKey, userKeyLength);
+    for(int i = 1; i < 64 ; ++i) {
+      memcpy(K1 + (i * sequenceLength),K1,sequenceLength);
+    }
+    //b.Encrypt K1
+    memcpy(aesKey,K,16);
+    memcpy(state.cbc,K + 16,16);
+    memcpy(state.buf, state.cbc, 16); // Copy CBC IV to buf
+    state.bufIdx = 0;
+    state.paddingReached = gFalse;
+    aesKeyExpansion(&state,aesKey,16,gFalse);
+
+    for(int i = 0; i < (4 * sequenceLength); i++) {
+      aesEncryptBlock(&state,K1 + (16 * i));
+      memcpy(E +(16 * i),state.buf,16);
+    }
+    memcpy(BE16byteNumber,E,16);
+    //c.Taking the first 16 Bytes of E as unsigned big-endian integer,
+    //compute the remainder,modulo 3.
+    uint64_t N1 = 0,N2 = 0,N3 = 0;
+    // N1 contains first 8 bytes of BE16byteNumber
+    N1 = ((uint64_t)BE16byteNumber[0] << 56 | (uint64_t)BE16byteNumber[1] << 48
+         |(uint64_t)BE16byteNumber[2] << 40 | (uint64_t)BE16byteNumber[3] << 32
+         |(uint64_t)BE16byteNumber[4] << 24 | (uint64_t)BE16byteNumber[5] << 16
+         |(uint64_t)BE16byteNumber[6] << 8  | (uint64_t)BE16byteNumber[7] );
+    uint64_t rem = N1 % 3 ;
+    // N2 conatains 0s in higer 4 bytes and 9th to 12 th bytes of BE16byteNumber in lower 4 bytes.
+    N2 = ((uint64_t)BE16byteNumber[8] << 24 | (uint64_t)BE16byteNumber[9] << 16
+         |(uint64_t)BE16byteNumber[10] << 8 | (uint64_t)BE16byteNumber[11] );
+         rem = ((rem << 32 ) | N2) % 3 ;
+    // N3 conatains 0s in higer 4 bytes and 13th to 16th bytes of BE16byteNumber in lower 4 bytes.
+    N3 = ((uint64_t)BE16byteNumber[12] << 24 | (uint64_t)BE16byteNumber[13] << 16
+         |(uint64_t)BE16byteNumber[14] << 8  | (uint64_t)BE16byteNumber[15] );
+         rem = ((rem << 32 ) | N3) % 3 ;
+
+    //d.If remainder is 0 perform SHA-256
+    if(rem == 0) {
+      KLength = 32;
+      sha256(E, totalLength, K);
+    }
+    // remainder is 1 perform SHA-384
+    else if(rem == 1) {
+      KLength = 48;
+      sha384(E, totalLength, K);
+    }
+    // remainder is 2 perform SHA-512
+    else if(rem == 2) {
+      KLength = 64;
+      sha512(E, totalLength, K);
+    }
+    rounds++;
+  }
+  // the first 32 bytes of the final K are the output of the function.
 }

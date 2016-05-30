@@ -89,8 +89,8 @@ FoFiType1C::~FoFiType1C() {
     delete name;
   }
   if (encoding &&
-      const_cast<const char**>(encoding) != fofiType1StandardEncoding &&
-      const_cast<const char**>(encoding) != fofiType1ExpertEncoding) {
+      encoding != fofiType1StandardEncoding &&
+      encoding != fofiType1ExpertEncoding) {
     for (i = 0; i < 256; ++i) {
       gfree(encoding[i]);
     }
@@ -304,7 +304,7 @@ void FoFiType1C::convertToType1(char *psName, const char **newEncoding, GBool as
 
   // write the encoding
   (*outputFunc)(outputStream, "/Encoding ", 10);
-  if (!newEncoding && const_cast<const char**>(encoding) == fofiType1StandardEncoding) {
+  if (!newEncoding && encoding == fofiType1StandardEncoding) {
     (*outputFunc)(outputStream, "StandardEncoding def\n", 21);
   } else {
     (*outputFunc)(outputStream, "256 array\n", 10);

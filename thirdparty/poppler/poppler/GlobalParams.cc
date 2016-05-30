@@ -1324,11 +1324,11 @@ fin:
 #elif WITH_FONTCONFIGURATION_WIN32
 #include "GlobalParamsWin.cc"
 
-GooString *GlobalParams::findBase14FontFile(GooString *base14Name, GfxFont *) {
+GooString *GlobalParams::findBase14FontFile(GooString *base14Name, GfxFont *font) {
   return findFontFile(base14Name);
 }
 #else
-GooString *GlobalParams::findBase14FontFile(GooString *base14Name, GfxFont *) {
+GooString *GlobalParams::findBase14FontFile(GooString *base14Name, GfxFont *font) {
   return findFontFile(base14Name);
 }
 

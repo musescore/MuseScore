@@ -403,7 +403,7 @@ AnnotCalloutMultiLine::AnnotCalloutMultiLine(double x1, double y1, double x2,
 // AnnotQuadrilateral
 //------------------------------------------------------------------------
 
-AnnotQuadrilaterals::AnnotQuadrilaterals(Array *array, PDFRectangle *) {
+AnnotQuadrilaterals::AnnotQuadrilaterals(Array *array, PDFRectangle *rect) {
   int arrayLength = array->getLength();
   GBool correct = gTrue;
   int quadsLength = 0;
@@ -1942,7 +1942,7 @@ AnnotPopup::~AnnotPopup() {
   parent.free();
 }
 
-void AnnotPopup::initialize(PDFDoc *, Dict *dict) {
+void AnnotPopup::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   if (!dict->lookupNF("Parent", &parent)->isRef()) {
@@ -2003,7 +2003,7 @@ AnnotMarkup::~AnnotMarkup() {
     delete subject;
 }
 
-void AnnotMarkup::initialize(PDFDoc *docA, Dict *dict, Object *) {
+void AnnotMarkup::initialize(PDFDoc *docA, Dict *dict, Object *obj) {
   Object obj1, obj2;
 
   if (dict->lookup("T", &obj1)->isString()) {
@@ -2188,7 +2188,7 @@ AnnotText::~AnnotText() {
   delete icon;
 }
 
-void AnnotText::initialize(PDFDoc *, Dict *dict) {
+void AnnotText::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   if (dict->lookup("Open", &obj1)->isBool())
@@ -2640,7 +2640,7 @@ AnnotLink::~AnnotLink() {
     delete quadrilaterals;
 }
 
-void AnnotLink::initialize(PDFDoc *, Dict *dict) {
+void AnnotLink::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   action = NULL;
@@ -2753,7 +2753,7 @@ AnnotFreeText::~AnnotFreeText() {
     delete rectangle;
 }
 
-void AnnotFreeText::initialize(PDFDoc *, Dict *dict) {
+void AnnotFreeText::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   if (dict->lookup("DA", &obj1)->isString()) {
@@ -3186,7 +3186,7 @@ AnnotLine::~AnnotLine() {
     delete measure;
 }
 
-void AnnotLine::initialize(PDFDoc *, Dict *dict) {
+void AnnotLine::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   if (dict->lookup("L", &obj1)->isArray() && obj1.arrayGetLength() == 4) {
@@ -3669,7 +3669,7 @@ AnnotTextMarkup::AnnotTextMarkup(PDFDoc *docA, Dict *dict, Object *obj) :
   initialize(docA, dict);
 }
 
-void AnnotTextMarkup::initialize(PDFDoc *, Dict *dict) {
+void AnnotTextMarkup::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   if (dict->lookup("Subtype", &obj1)->isName()) {
@@ -3956,7 +3956,7 @@ AnnotWidget::~AnnotWidget() {
     delete parent;
 }
 
-void AnnotWidget::initialize(PDFDoc *, Dict *dict) {
+void AnnotWidget::initialize(PDFDoc *docA, Dict *dict) {
   Object obj1;
 
   form = doc->getCatalog()->getForm();
@@ -5235,7 +5235,7 @@ AnnotMovie::~AnnotMovie() {
   delete movie;
 }
 
-void AnnotMovie::initialize(PDFDoc *, Dict* dict) {
+void AnnotMovie::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("T", &obj1)->isString()) {
@@ -5389,7 +5389,7 @@ AnnotScreen::~AnnotScreen() {
   additionalActions.free();
 }
 
-void AnnotScreen::initialize(PDFDoc *, Dict* dict) {
+void AnnotScreen::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   title = NULL;
@@ -5449,7 +5449,7 @@ AnnotStamp::~AnnotStamp() {
   delete icon;
 }
 
-void AnnotStamp::initialize(PDFDoc *, Dict* dict) {
+void AnnotStamp::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("Name", &obj1)->isName()) {
@@ -5510,7 +5510,7 @@ AnnotGeometry::~AnnotGeometry() {
   delete geometryRect;
 }
 
-void AnnotGeometry::initialize(PDFDoc *, Dict* dict) {
+void AnnotGeometry::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("Subtype", &obj1)->isName()) {
@@ -5740,7 +5740,7 @@ AnnotPolygon::~AnnotPolygon() {
     delete borderEffect;
 }
 
-void AnnotPolygon::initialize(PDFDoc *, Dict* dict) {
+void AnnotPolygon::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("Subtype", &obj1)->isName()) {
@@ -5999,7 +5999,7 @@ AnnotCaret::~AnnotCaret() {
   delete caretRect;
 }
 
-void AnnotCaret::initialize(PDFDoc *, Dict* dict) {
+void AnnotCaret::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   symbol = symbolNone;
@@ -6062,7 +6062,7 @@ AnnotInk::~AnnotInk() {
   freeInkList();
 }
 
-void AnnotInk::initialize(PDFDoc *, Dict* dict) {
+void AnnotInk::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("InkList", &obj1)->isArray()) {
@@ -6231,7 +6231,7 @@ AnnotFileAttachment::~AnnotFileAttachment() {
     delete name;
 }
 
-void AnnotFileAttachment::initialize(PDFDoc *, Dict* dict) {
+void AnnotFileAttachment::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("FS", &obj1)->isDict() || dict->lookup("FS", &obj1)->isString()) {
@@ -6448,7 +6448,7 @@ AnnotSound::~AnnotSound() {
   delete name;
 }
 
-void AnnotSound::initialize(PDFDoc *, Dict* dict) {
+void AnnotSound::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   sound = Sound::parseSound(dict->lookup("Sound", &obj1));
@@ -6603,7 +6603,7 @@ Annot3D::~Annot3D() {
     delete activation;
 }
 
-void Annot3D::initialize(PDFDoc *, Dict* dict) {
+void Annot3D::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("3DA", &obj1)->isDict()) {
@@ -6723,7 +6723,7 @@ AnnotRichMedia::~AnnotRichMedia() {
   delete settings;
 }
 
-void AnnotRichMedia::initialize(PDFDoc *, Dict* dict) {
+void AnnotRichMedia::initialize(PDFDoc *docA, Dict* dict) {
   Object obj1;
 
   if (dict->lookup("RichMediaContent", &obj1)->isDict()) {
