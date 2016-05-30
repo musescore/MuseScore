@@ -92,7 +92,7 @@ protected:
 		SplashCoord x2, SplashCoord y2,
 		SplashCoord x3, SplashCoord y3,
 		SplashCoord flatness,
-		GBool , GBool , GBool , GBool );
+		GBool first, GBool last, GBool end0, GBool end1);
   void addSegment(SplashCoord x0, SplashCoord y0,
 		  SplashCoord x1, SplashCoord y1);
 

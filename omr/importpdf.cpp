@@ -190,7 +190,6 @@ int OmrState::importPdfSystem(OmrSystem* omrSystem)
 void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
       {
       TDuration d(TDuration::DurationType::V_MEASURE);
-      int tick = 0;
           
       int nsystems = omrPage->systems().size();
       if(nsystems == 0) return;
@@ -206,37 +205,9 @@ void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
             vbox->setBottomGap(0);
             score->measures()->add(vbox);
       }
-          
-      //int n = nsystems == 0 ? 1 : nsystems;
+      
       for (int k = 0; k < nsystems; ++k) {
-            int numMeasures = 1;
-            if (k < nsystems) {
-                  tick = importPdfSystem(omrPage->system(k));
-                  }
-            else {
-                  Measure* measure;
-                  for (int i = 0; i < numMeasures; ++i) {
-                        measure = new Measure(score);
-                        measure->setTick(tick);
-                      
-                        Rest* rest = new Rest(score, d);
-                        rest->setDuration(Fraction(4,4));
-                        rest->setTrack(0);
-                        Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
-                        s->add(rest);
-                        rest = new Rest(score, d);
-                        rest->setDuration(Fraction(4,4));
-                        rest->setTrack(4);
-                        s->add(rest);
-                        score->measures()->add(measure);
-                        tick += MScore::division * 4;
-                        }
-                  if (k < (nsystems-1)) {
-                        LayoutBreak* b = new LayoutBreak(score);
-                        b->setLayoutBreakType(LayoutBreak::Type::LINE);
-                        measure->add(b);
-                        }
-                  }
+            importPdfSystem(omrPage->system(nsystems - k - 1));
             }
           
       Measure* measure = score->lastMeasure();

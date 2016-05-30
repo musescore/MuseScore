@@ -70,9 +70,9 @@ public:
 
   virtual ~SplashSolidColor();
 
-  virtual GBool getColor(int , int , SplashColorPtr c);
+  virtual GBool getColor(int x, int y, SplashColorPtr c);
 
-  virtual GBool testPosition(int , int ) { return gFalse; }
+  virtual GBool testPosition(int x, int y) { return gFalse; }
 
   virtual GBool isStatic() { return gTrue; }
 

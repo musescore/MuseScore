@@ -49,7 +49,7 @@ SplashSolidColor::SplashSolidColor(SplashColorPtr colorA) {
 SplashSolidColor::~SplashSolidColor() {
 }
 
-GBool SplashSolidColor::getColor(int , int , SplashColorPtr c) {
+GBool SplashSolidColor::getColor(int x, int y, SplashColorPtr c) {
   splashColorCopy(c, color);
   return gTrue;
 }

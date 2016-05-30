@@ -119,7 +119,7 @@ bool MarkedContentOutputDev::needFontChange(GfxFont* font) const
 void MarkedContentOutputDev::drawChar(GfxState *state,
                                       double xx, double yy,
                                       double dx, double dy,
-                                      double , double ,
+                                      double ox, double oy,
                                       CharCode c, int nBytes,
                                       Unicode *u, int uLen)
 {

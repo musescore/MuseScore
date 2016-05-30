@@ -20,7 +20,7 @@
 // Copyright (C) 2009-2011, 2013 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
 // Copyright (C) 2011 Andrea Canciani <ranma42@gmail.com>
-// Copyright (C) 2011-2014 Thomas Freitag <Thomas.Freitag@alfa.de>
+// Copyright (C) 2011-2014, 2016 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2013 Lu Wang <coolwanglu@gmail.com>
 // Copyright (C) 2015 Adrian Johnson <ajohnson@redneon.com>
 //
@@ -229,7 +229,7 @@ public:
   virtual void getDeviceNLine(Guchar * /*in*/, Guchar * /*out*/, int /*length*/) {  error(errInternal, -1, "GfxColorSpace::getDeviceNLine this should not happen"); }
 
   // create mapping for spot colorants
-  virtual void createMapping(GooList *, int );
+  virtual void createMapping(GooList *separationList, int maxSepComps);
 
   // Does this ColorSpace support getRGBLine?
   virtual GBool useGetRGBLine() { return gFalse; }
@@ -734,10 +734,10 @@ public:
   // Construct a Pattern color space.  Returns NULL if unsuccessful.
   static GfxColorSpace *parse(GfxResources *res, Array *arr, OutputDev *out, GfxState *state, int recursion);
 
-  virtual void getGray(GfxColor *, GfxGray *gray);
-  virtual void getRGB(GfxColor *, GfxRGB *rgb);
-  virtual void getCMYK(GfxColor *, GfxCMYK *cmyk);
-  virtual void getDeviceN(GfxColor *, GfxColor *deviceN);
+  virtual void getGray(GfxColor *color, GfxGray *gray);
+  virtual void getRGB(GfxColor *color, GfxRGB *rgb);
+  virtual void getCMYK(GfxColor *color, GfxCMYK *cmyk);
+  virtual void getDeviceN(GfxColor *color, GfxColor *deviceN);
 
   virtual int getNComps() { return 0; }
   virtual void getDefaultColor(GfxColor *color);
@@ -1194,6 +1194,9 @@ public:
   void getDeviceN(Guchar *x, GfxColor *deviceN);
   void getColor(Guchar *x, GfxColor *color);
 
+  // Matte color ops
+  void setMatteColor(GfxColor *color) { useMatte = gTrue; matteColor = *color; }
+  GfxColor *getMatteColor() { return (useMatte) ? &matteColor : NULL; }
 private:
 
   GfxImageColorMap(GfxImageColorMap *colorMap);
@@ -1212,6 +1215,8 @@ private:
     decodeLow[gfxColorMaxComps];
   double			// max - min value for each component
     decodeRange[gfxColorMaxComps];
+  GBool useMatte;
+  GfxColor matteColor;
   GBool ok;
 };
 

@@ -41,7 +41,7 @@ NetPBMWriter::NetPBMWriter(Format formatA) : format(formatA)
 {
 }
 
-bool NetPBMWriter::init(FILE *f, int widthA, int heightA, int , int )
+bool NetPBMWriter::init(FILE *f, int widthA, int heightA, int hDPI, int vDPI)
 {
   file = f;
   width = widthA;

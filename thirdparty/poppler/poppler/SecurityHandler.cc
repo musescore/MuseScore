@@ -16,6 +16,7 @@
 // Copyright (C) 2010, 2012, 2015 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2013 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2014 Fabio D'Urso <fabiodurso@hotmail.it>
+// Copyright (C) 2016 Alok Anand <alok4nand@gmail.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -186,7 +187,7 @@ StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
     if ((encRevision <= 4 &&
 	 ownerKeyObj.getString()->getLength() == 32 &&
 	 userKeyObj.getString()->getLength() == 32) ||
-	(encRevision == 5 &&
+	((encRevision == 5 || encRevision == 6) &&
 	 // the spec says 48 bytes, but Acrobat pads them out longer
 	 ownerKeyObj.getString()->getLength() >= 48 &&
 	 userKeyObj.getString()->getLength() >= 48 &&
@@ -208,7 +209,7 @@ StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
       //~ doesn't handle the case where StmF, StrF, and EFF are not all the
       //~ same)
       if ((encVersion == 4 || encVersion == 5) &&
-	  (encRevision == 4 || encRevision == 5)) {
+	  (encRevision == 4 || encRevision == 5 || encRevision == 6)) {
 	encryptDictA->dictLookup("CF", &cryptFiltersObj);
 	encryptDictA->dictLookup("StmF", &streamFilterObj);
 	encryptDictA->dictLookup("StrF", &stringFilterObj);
@@ -244,7 +245,7 @@ StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
 		cfLengthObj.free();
 	      } else if (cfmObj.isName("AESV3")) {
 		encVersion = 5;
-		encRevision = 5;
+		// let encRevision be 5 or 6
 		encAlgorithm = cryptAES256;
 		if (cryptFilterObj.dictLookup("Length",
 					      &cfLengthObj)->isInt()) {
@@ -286,7 +287,7 @@ StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
 	  fileKeyLength = 16;
 	}
 	ok = gTrue;
-      } else if (encVersion == 5 && encRevision == 5) {
+      } else if (encVersion == 5 && (encRevision == 5 || encRevision == 6)) {
 	fileID = new GooString(); // unused for V=R=5
 	if (ownerEncObj.isString() && userEncObj.isString()) {
 	  ownerEnc = ownerEncObj.getString()->copy();

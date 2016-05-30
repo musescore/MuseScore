@@ -76,7 +76,7 @@ FoFiType1::~FoFiType1() {
   if (name) {
     gfree(name);
   }
-  if (encoding && const_cast<const char**>(encoding) != fofiType1StandardEncoding) {
+  if (encoding && encoding != fofiType1StandardEncoding) {
     for (i = 0; i < 256; ++i) {
       gfree(encoding[i]);
     }

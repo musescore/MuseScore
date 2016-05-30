@@ -1032,14 +1032,12 @@ static int decomp_compat(Unicode u, Unicode *buf, GBool reverseRTL = false) {
 	  break;
 	else {
 	  int length = decomp_table[midpoint].length, i;
-        if (buf){
-            for (i = 0; i < length; ++i){
-                if (unicodeTypeR(u) && reverseRTL)
-                    buf[i] = decomp_expansion[offset + length - i - 1];
-                else
-                    buf[i] = decomp_expansion[offset + i];
-            }
-        }
+	  if (buf)
+	    for (i = 0; i < length; ++i)
+		if (unicodeTypeR(u) && reverseRTL)
+		  buf[i] = decomp_expansion[offset + length - i - 1];
+		else
+		  buf[i] = decomp_expansion[offset + i];
 	  return length;
 	}
       } else if (midpoint == start)

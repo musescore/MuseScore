@@ -280,7 +280,7 @@ void SplashXPath::addCurve(SplashCoord x0, SplashCoord y0,
 			   SplashCoord x2, SplashCoord y2,
 			   SplashCoord x3, SplashCoord y3,
 			   SplashCoord flatness,
-			   GBool , GBool , GBool , GBool ) {
+			   GBool first, GBool last, GBool end0, GBool end1) {
   SplashCoord *cx = new SplashCoord[(splashMaxCurveSplits + 1) * 3];
   SplashCoord *cy = new SplashCoord[(splashMaxCurveSplits + 1) * 3];
   int *cNext = new int[splashMaxCurveSplits + 1];

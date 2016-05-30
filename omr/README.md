@@ -3,7 +3,7 @@
 
 ###Graphical Model for System Identification
 
-1. We can treat bar line detection simply as vertical edge detection. But the performance is quite unreliable because this process is sensitive to noise such as note stems or lines in text. The other problem of solely relying on edge detection is that we can hardly interpret the structure of systems based on what has been detected. The solution to this problem is to apply a graphical model to represent the system structure and encode useful distance or non-overlapping constraints, with which we can determine the grouping of staves into systems and the location of barlines in each system at the same time (simultaneously estimate both).
+1. We can simply use vertical line detection to find bar lines. But the detection performance is unreliable due to noise such as note stems or lines in text. The other problem of solely relying on line detection is that we can hardly interpret the structure of systems based on what has been detected. The solution to this problem is using a graphical model to represent the system structure and encode useful distance or non-overlapping constraints, with which we can determine the grouping of staves into systems and the location of barlines in each system at the same time (simultaneously estimate both).
 
 2. Suppose we have n staves (n-1 gaps), then there'll be 2^(n-1) ways of grouping systems if taking each gap as a binary switch connecting or not connecting the adjacent staves. In each system (staff group), barline positions will be commonly shared (a very strong and useful constriant!). We can use a nested dynamic programming to solve this problem. The optimal hypothesis (how the staves are grouped together) until the k-th stave yielding the max score h(k) = max(h(i) + system(i+1, ..., k)), based on previous optimal hypotheses h(i), i= 1,2,...,k-1.
 In each hypothesized system(i,...,j) from i-th to j-th staves, we recognize shared barlines from left to right by finding the best scoring configuration
@@ -39,11 +39,9 @@ S(I(i,j)) = log(P(I(i,j)|M) / P(I(i,j)|B)) = Sum( log(P(p(i+ii,j+jj)|M)) - log(P
 If S(I(i,j)) is larger than 0, we say at position (i,j) there's a symbols candidate. This threshold 0 is automatically determined by our background model, but can also be tuned according to our request (e.g. for higher precision than recall the threshold should be larger).-->
 
 ###Demo
-[data and screenshots of results](https://github.com/liang-chen/MuseScore/tree/omr_dev/omr/data)
+[Screenshots of some results](https://musescore.org/en/node/110306#comment-500796)
 
 ###Todo
-
-	Add pagebreak to generated skeleton
-	Align skeleton to OMR
-	Fix pdf loading for vector graphs
-	Optimize OMR performance and add clef/key recognitions
+* Add robust note detector to impose negative constraints for bar line identification. (see [here](https://github.com/liang-chen/MuseScore/blob/omr/omr/omrpage.cpp#L288))
+* Fix staff detection for vector graphs
+* Optimize OMR performance and add clef/key recognitions
