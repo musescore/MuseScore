@@ -57,6 +57,11 @@ enum fluid_voice_envelope_index_t {
 	FLUID_VOICE_ENVLAST
       };
 
+struct VolEnvValSection {
+      qreal val;
+      int volenv_section;
+      };
+
 //---------------------------------------------------------
 //   Voice
 //---------------------------------------------------------
@@ -96,7 +101,7 @@ class Voice
 
 	// Temporary variables used in write()
 	float phase_incr;	      /* the phase increment for the next 64 samples */
-	float amp_incr;		/* amplitude increment value */
+    qreal amp_incr;		/* amplitude increment value */
 	float* dsp_buf;	      /* buffer to store interpolated sample data to */
 
 	/* basic parameters */
@@ -116,6 +121,7 @@ class Voice
 	fluid_env_data_t volenv_data[FLUID_VOICE_ENVLAST];
 	unsigned int volenv_count;
 	int volenv_section;
+   std::map<int, struct VolEnvValSection> Sample2AmpInc;
 	float volenv_val;
 	float amplitude_that_reaches_noise_floor_nonloop;
 	float amplitude_that_reaches_noise_floor_loop;
@@ -131,8 +137,9 @@ class Voice
 	/* mod lfo */
 	float modlfo_val;          /* the value of the modulation LFO */
 	unsigned int modlfo_delay;       /* the delay of the lfo in samples */
-	float modlfo_incr;         /* the lfo frequency is converted to a per-buffer increment */
-	float modlfo_to_fc;
+   unsigned int modlfo_pos;
+   unsigned int modlfo_dur; // duration in samples
+   float modlfo_to_fc;
 	float modlfo_to_pitch;
 	float modlfo_to_vol;
 
@@ -227,6 +234,7 @@ class Voice
       bool ON() const          { return (status == FLUID_VOICE_ON) && (volenv_section < FLUID_VOICE_ENVRELEASE); }
       int SAMPLEMODE() const   { return ((int)gen[GEN_SAMPLEMODE].val); }
 
+      void calcVolEnv(int n, fluid_env_data_t *env_data);
       void write(unsigned n, float* out, float* reverb, float* chorus);
       void add_mod(const Mod* mod, int mode);
 
