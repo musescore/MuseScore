@@ -22,6 +22,8 @@ namespace Ms {
 
 static int getDots(int base, int rest, char* dots)
       {
+      if (base < 16)
+           return rest;
       *dots = 0;
       if (rest >= base / 2) {
             *dots = *dots + 1;
