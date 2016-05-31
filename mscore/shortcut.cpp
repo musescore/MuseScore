@@ -3323,6 +3323,17 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
+         },
+
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         "edit-toolbars",
+         QT_TRANSLATE_NOOP("action","Edit Toolbars"),
+         QT_TRANSLATE_NOOP("action","Edit Toolbars"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          }
 
       };

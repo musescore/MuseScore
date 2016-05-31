@@ -163,6 +163,99 @@ QString revision;
 QErrorMessage* errorMessage;
 const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
+const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
+            "note-input",
+            "repitch",
+            "pad-note-128",
+            "pad-note-64",
+            "pad-note-32",
+            "pad-note-16",
+            "pad-note-8",
+            "pad-note-4",
+            "pad-note-2",
+            "pad-note-1",
+            "note-breve",
+            "note-longa",
+            "pad-dot",
+            "pad-dotdot",
+            "tie",
+            "",
+            "pad-rest",
+            "",
+            "sharp2",
+            "sharp",
+            "nat",
+            "flat",
+            "flat2",
+            "flip",
+            "",
+            "voice-1",
+            "voice-2",
+            "voice-3",
+            "voice-4"
+            };
+
+const std::list<const char*> MuseScore::_advancedNoteInputMenuEntries {
+            "note-input",
+            "repitch",
+            "pad-note-128",
+            "pad-note-64",
+            "pad-note-32",
+            "pad-note-16",
+            "pad-note-8",
+            "pad-note-4",
+            "pad-note-2",
+            "pad-note-1",
+            "note-breve",
+            "note-longa",
+            "pad-dot",
+            "pad-dotdot",
+            "tie",
+            "",
+            "pad-rest",
+            "",
+            "sharp2",
+            "sharp",
+            "nat",
+            "flat",
+            "flat2",
+            "flip",
+            "",
+            "voice-1",
+            "voice-2",
+            "voice-3",
+            "voice-4"
+            };
+
+const std::list<const char*> MuseScore::_basicNoteInputMenuEntries {
+            "note-input",
+            "pad-note-64",
+            "pad-note-32",
+            "pad-note-16",
+            "pad-note-8",
+            "pad-note-4",
+            "pad-note-2",
+            "pad-note-1",
+            "pad-dot",
+            "pad-dotdot",
+            "tie",
+            "",
+            "pad-rest",
+            "",
+            "sharp2",
+            "sharp",
+            "nat",
+            "flat",
+            "flat2",
+            "flip",
+            "",
+            "voice-1",
+            "voice-2",
+            "voice-3",
+            "voice-4"
+            };
+
+
 extern bool savePositions(Score*, const QString& name, bool segments );
 extern TextPalette* textPalette;
 
@@ -354,6 +447,40 @@ void MuseScore::preferencesChanged()
       _statusBar->setVisible(preferences.showStatusBar);
 
       updateNewWizard();
+      }
+
+//---------------------------------------------------------
+//   populateNoteInputMenu
+//---------------------------------------------------------
+
+void MuseScore::populateNoteInputMenu()
+      {
+      entryTools->clear();
+      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
+
+      for (const auto s : _noteInputMenuEntries) {
+            if (!*s)
+                  entryTools->addSeparator();
+            else {
+                  QAction* a = getAction(s);
+                  if (strncmp(s, "voice-", 6) == 0) {
+                        QToolButton* tb = new QToolButton(this);
+                        tb->setFocusPolicy(Qt::ClickFocus);
+                        tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
+                        if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
+                              tb->setStyleSheet(vbsh);
+                        QPalette p(tb->palette());
+                        int i = atoi(s+6);
+                        p.setColor(QPalette::Base, MScore::selectColor[i]);
+                        tb->setPalette(p);
+                        a->setCheckable(true);
+                        tb->setDefaultAction(a);
+                        entryTools->addWidget(tb);
+                        }
+                  else
+                        entryTools->addAction(a);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -625,40 +752,7 @@ MuseScore::MuseScore()
       entryTools = addToolBar(tr("Note Input"));
       entryTools->setObjectName("entry-tools");
 
-      static const char* sl1[] = {
-            "note-input",
-            "repitch", "pad-note-128", "pad-note-64", "pad-note-32", "pad-note-16",
-            "pad-note-8",
-            "pad-note-4", "pad-note-2", "pad-note-1", "note-breve", "note-longa",
-            "pad-dot",
-            "pad-dotdot", "tie", "", "pad-rest", "",
-            "sharp2", "sharp", "nat", "flat", "flat2", "flip", ""
-            };
-
-      for (auto s : sl1) {
-            if (!*s)
-                  entryTools->addSeparator();
-            else
-                  entryTools->addAction(getAction(s));
-            }
-
-      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
-
-      for (int i = 0; i < VOICES; ++i) {
-            QToolButton* tb = new QToolButton(this);
-            if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
-                  tb->setStyleSheet(vbsh);
-            tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
-            QPalette p(tb->palette());
-            p.setColor(QPalette::Base, MScore::selectColor[i]);
-            tb->setPalette(p);
-            QAction* a = getAction(voiceActions[i]);
-            a->setCheckable(true);
-            tb->setDefaultAction(a);
-            tb->setFocusPolicy(Qt::ClickFocus);
-            entryTools->addWidget(tb);
-            }
-
+      populateNoteInputMenu();
 
       //---------------------
       //    Menus
@@ -755,6 +849,7 @@ MuseScore::MuseScore()
       menuWorkspaces = new QMenu(tr("W&orkspaces"));
       connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
       menuEdit->addMenu(menuWorkspaces);
+      menuEdit->addAction(getAction("edit-toolbars"));
 
       QAction* pref = menuEdit->addAction(tr("&Preferences..."), this, SLOT(startPreferenceDialog()));
       pref->setMenuRole(QAction::PreferencesRole);
@@ -4531,6 +4626,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_textTools)
                   _textTools->toggleUnderline();
             }
+      else if (cmd == "edit-toolbars")
+            showToolbarEditor();
       else if (cmd == "viewmode") {
             if (cs) {
                   if (cs->layoutMode() == LayoutMode::PAGE)

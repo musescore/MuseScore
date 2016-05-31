@@ -93,6 +93,7 @@ class Seq;
 class ImportMidiPanel;
 class Startcenter;
 class HelpBrowser;
+class ToolbarEditor;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -215,6 +216,7 @@ class MuseScoreApplication : public QtSingleApplication {
       virtual bool event(QEvent *ev) override;
       };
 
+
 //---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
@@ -226,6 +228,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreView* cv                        { 0 };
       ScoreState _sstate;
       UpdateChecker* ucheck;
+
+      static const std::list<const char*> _allNoteInputMenuEntries;
+      static const std::list<const char*> _basicNoteInputMenuEntries;
+      static const std::list<const char*> _advancedNoteInputMenuEntries;
+      std::list<const char*> _noteInputMenuEntries { _allNoteInputMenuEntries };
 
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
@@ -350,6 +357,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* vRasterAction;
 
       QMenu* menuWorkspaces;
+      ToolbarEditor* editToolbars        { 0 };
       QActionGroup* workspaces           { 0 };
 
       bool inChordEditor                 { false };
@@ -402,6 +410,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showNavigator(bool);
       void showSelectionWindow(bool);
       void showSearchDialog();
+      void showToolbarEditor();
       void splitWindow(bool horizontal);
       void removeSessionFile();
       void editChordStyle();
@@ -702,7 +711,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showSynthControl(bool);
       void showMixer(bool);
 
-      qreal physicalDotsPerInch() const { return _physicalDotsPerInch; }
+      qreal physicalDotsPerInch() const                              { return _physicalDotsPerInch; }
+      static const std::list<const char*>& allNoteInputMenuEntries() { return _allNoteInputMenuEntries; }
+      static const std::list<const char*>& basicNoteInputMenuEntries() { return _basicNoteInputMenuEntries; }
+      static const std::list<const char*>& advancedNoteInputMenuEntries() { return _advancedNoteInputMenuEntries; }
+      std::list<const char*>* noteInputMenuEntries()                 { return &_noteInputMenuEntries; }
+
+      void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; };
+      void populateNoteInputMenu();
       };
 
 extern MuseScore* mscore;

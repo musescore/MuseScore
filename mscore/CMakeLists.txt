@@ -50,6 +50,7 @@ QT5_WRAP_UI (ui_headers
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
+      toolbarEditor.ui
 
       importmidi/importmidi_panel.ui
 
@@ -283,6 +284,7 @@ add_executable ( ${ExecutableName}
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
       logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
+      toolbarEditor.cpp toolbarEditor.h
 
 
       ${OMR_FILES}
