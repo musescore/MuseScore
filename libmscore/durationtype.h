@@ -72,7 +72,7 @@ class TDuration {
       };
 
 extern std::vector<TDuration> toDurationList(
-            Fraction, bool useDots, int maxDots = 2, bool printRestRemains = true);
+      Fraction, bool useDots, int maxDots = 4, bool printRestRemains = true);
 
 
 }     // namespace Ms
