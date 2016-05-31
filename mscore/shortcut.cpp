@@ -1353,6 +1353,28 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-dot3",
+         QT_TRANSLATE_NOOP("action","Triple Augmentation Dot"),
+         QT_TRANSLATE_NOOP("action","Note duration: Triple augmentation dot"),
+         QT_TRANSLATE_NOOP("action","Triple augmentation dot"),
+         Icons::dot3_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-dot4",
+         QT_TRANSLATE_NOOP("action","Quadrupel Augmentation Dot"),
+         QT_TRANSLATE_NOOP("action","Note duration: Quadrupel augmentation dot"),
+         QT_TRANSLATE_NOOP("action","Quadrupel augmentation dot"),
+         Icons::dot4_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "tie",
          QT_TRANSLATE_NOOP("action","Tie"),
          QT_TRANSLATE_NOOP("action","Note duration: Tie"),

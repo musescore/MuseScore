@@ -44,7 +44,7 @@ class StaffType;
 enum class SymId;
 enum class AccidentalType : char;
 
-static const int MAX_DOTS = 3;
+static const int MAX_DOTS = 4;
 
 //---------------------------------------------------------
 //   @@ NoteHead

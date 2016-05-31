@@ -1007,7 +1007,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       //keep selected element if any
       Element* selElement = selection().isSingle() ? getSelectedElement() : 0;
 
-      int track = cr->track();
+      int track      = cr->track();
       Tuplet* tuplet = cr->tuplet();
 
       if (srcF > dstF) {
@@ -2392,6 +2392,10 @@ void Score::cmd(const QAction* a)
             padToggle(Pad::DOT);
       else if (cmd == "pad-dotdot")
             padToggle(Pad::DOTDOT);
+      else if (cmd == "pad-dot3")
+            padToggle(Pad::DOT3);
+      else if (cmd == "pad-dot4")
+            padToggle(Pad::DOT4);
       else if (cmd == "beam-start")
             cmdSetBeamMode(Beam::Mode::BEGIN);
       else if (cmd == "beam-mid")
