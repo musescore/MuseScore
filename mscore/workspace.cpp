@@ -179,7 +179,7 @@ void MuseScore::deleteWorkspace()
 
 void MuseScore::changeWorkspace(QAction* a)
       {
-      foreach(Workspace* p, Workspace::workspaces()) {
+      for (Workspace* p :Workspace::workspaces()) {
             if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == a->text()) {
                   changeWorkspace(p);
                   preferences.workspace = Workspace::currentWorkspace->name();
@@ -303,6 +303,13 @@ void Workspace::write()
       // xml.tag("name", _name);
       PaletteBox* pb = mscore->getPaletteBox();
       pb->write(xml);
+
+      // write toolbar settings
+      xml.stag("Toolbar name=\"noteInput\"");
+      for (auto i : *mscore->noteInputMenuEntries())
+            xml.tag("action", i);
+      xml.etag();
+
       xml.etag();
       xml.etag();
       f.addFile("workspace.xml", cbuf.data());
@@ -325,12 +332,16 @@ void Workspace::read()
             mscore->setAdvancedPalette();
             for (Palette* p : mscore->getPaletteBox()->palettes())
                   p->setSystemPalette(true);
+            mscore->setNoteInputMenuEntries(MuseScore::advancedNoteInputMenuEntries());
+            mscore->populateNoteInputMenu();
             return;
             }
       if (_path == "Basic") {
             mscore->setBasicPalette();
             for (Palette* p : mscore->getPaletteBox()->palettes())
                   p->setSystemPalette(true);
+            mscore->setNoteInputMenuEntries(MuseScore::basicNoteInputMenuEntries());
+            mscore->populateNoteInputMenu();
             return;
             }
       if (_path.isEmpty() || !QFile(_path).exists()) {
@@ -372,6 +383,7 @@ void Workspace::read()
 
 void Workspace::read(XmlReader& e)
       {
+      bool niToolbar = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -386,8 +398,35 @@ void Workspace::read(XmlReader& e)
                         connect(paletteBox, SIGNAL(changed()), SLOT(setDirty()));
                         }
                   }
+            else if (tag == "Toolbar") {
+                  QString name = e.attribute("name");
+                  std::list<const char*> l;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "action") {
+                              QString s = e.readElementText();
+                              for (auto k : mscore->allNoteInputMenuEntries()) {
+                                    if (k == s) {
+                                          l.push_back(k);
+                                          break;
+                                          }
+                                    }
+                              }
+                        else
+                              e.unknown();
+                        }
+                  if (name == "noteInput") {
+                        mscore->setNoteInputMenuEntries(l);
+                        mscore->populateNoteInputMenu();
+                        niToolbar = true;
+                        }
+                  }
             else
                   e.unknown();
+            }
+      if (!niToolbar) {
+            mscore->setNoteInputMenuEntries(mscore->allNoteInputMenuEntries());
+            mscore->populateNoteInputMenu();
             }
       }
 

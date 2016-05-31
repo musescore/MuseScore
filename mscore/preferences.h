@@ -184,7 +184,6 @@ struct Preferences {
       void writePluginList();
       void updatePluginList();
 
-
       Preferences();
       void write();
       void read();
