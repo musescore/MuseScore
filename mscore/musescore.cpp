@@ -3690,8 +3690,11 @@ void MuseScore::excerptsChanged(Score* s)
 
 void MuseScore::scorePageLayoutChanged()
       {
-      if (mainWindow)
-             mainWindow->setOrientation(MScore::verticalOrientation() ? Qt::Horizontal : Qt::Vertical);
+      if (mainWindow) {
+            mainWindow->setOrientation(MScore::verticalOrientation() ? Qt::Horizontal : Qt::Vertical);
+            if (navigatorScrollArea())
+                  navigatorScrollArea()->orientationChanged();
+            }
       }
 
 //---------------------------------------------------------
