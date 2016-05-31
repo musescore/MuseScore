@@ -44,10 +44,27 @@ void MuseScore::showNavigator(bool visible)
 NScrollArea::NScrollArea(QWidget* w)
    : QScrollArea(w)
       {
-
+      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       setMinimumHeight(40);
       setLineWidth(0);
+      }
+
+//---------------------------------------------------------
+//   orientationChanged
+//---------------------------------------------------------
+
+void NScrollArea::orientationChanged()
+      {
+      if (MScore::verticalOrientation()) {
+            setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            }
+      else {
+            setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            }
       }
 
 //---------------------------------------------------------
