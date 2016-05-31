@@ -1272,10 +1272,11 @@ QString BarLine::accessibleExtraInfo() const
                   for (const Element* e : nextM->el()) {
                         if (!score()->selectionFilter().canSelect(e))
                               continue;
-                        if (e->isMarker())
+                        if (e->isMarker()) {
                               if (toMarker(e)->markerType() == Marker::Type::FINE)
                                     continue; //added above^
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                              }
                         }
                   }
             }
