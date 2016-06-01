@@ -2856,8 +2856,10 @@ void Score::getNextMeasure(LayoutContext& lc)
                   // find longest pause
                   for (int i = 0, n = ntracks(); i < n; ++i) {
                         Breath* b = toBreath(segment.element(i));
-                        if (b && b->isBreath())
+                        if (b && b->isBreath()) {
+                              b->layout();
                               length = qMax(length, b->pause());
+                              }
                         }
                   if (length != 0.0)
                         setPause(tick, length);
