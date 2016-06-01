@@ -343,6 +343,8 @@ QString TempoText::duration2userName(const TDuration t)
                   break;
             case 3: dots = tr("Triple dotted %1").arg(t.durationTypeUserName());
                   break;
+            case 4: dots = tr("Quadruple dotted %1").arg(t.durationTypeUserName());
+                  break;
             default:
                   dots = t.durationTypeUserName();
                   break;
