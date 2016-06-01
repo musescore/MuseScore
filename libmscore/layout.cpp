@@ -3286,8 +3286,10 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (Element* e : s->elist()) {
                         if (e && e->isChordRest()) {
                               ChordRest* cr = toChordRest(e);
-                              if (isTopBeam(cr))
+                              if (isTopBeam(cr)) {
                                     cr->beam()->layout();
+                                    s->staffShape(cr->staffIdx()).add(cr->beam()->shape());
+                                    }
                               }
                         }
                   for (Element* e : s->annotations()) {
@@ -3297,6 +3299,8 @@ System* Score::collectSystem(LayoutContext& lc)
                               tt->layout();
                               s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
+                        else if (e->isRehearsalMarl() || e->isStaffText())
+                              s->staffShape(e->staffIdx()).add(e->shape());
                         }
                   }
             }
