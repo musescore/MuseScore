@@ -456,10 +456,6 @@
         </Measure>
       <Measure number="7">
         <startRepeat/>
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
         <endSpanner id="5"/>
         <Volta id="6">
           <lid>117</lid>
@@ -1275,10 +1271,6 @@
           </Measure>
         <Measure number="7">
           <startRepeat/>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            <span>1</span>
-            </BarLine>
           <endSpanner id="12"/>
           <Volta id="13">
             <lid>117</lid>
@@ -1895,10 +1887,6 @@
             </Chord>
           </Measure>
         <Measure number="7">
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            <span>1</span>
-            </BarLine>
           <Chord>
             <lid>59</lid>
             <durationType>quarter</durationType>
