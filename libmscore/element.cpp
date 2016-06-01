@@ -343,7 +343,7 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Element::reset()
       {
       if (!_userOff.isNull())
-            score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
+            undoChangeProperty(P_ID::USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -1446,7 +1446,7 @@ void collectElements(void* data, Element* e)
 
 void Element::undoSetPlacement(Placement v)
       {
-      score()->undoChangeProperty(this, P_ID::PLACEMENT, int(v));
+      undoChangeProperty(P_ID::PLACEMENT, int(v));
       }
 
 //---------------------------------------------------------
@@ -1502,8 +1502,8 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                      propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
                   return false;
             }
+      score()->setLayout(tick());
       setGenerated(false);
-      score()->addRefresh(canvasBoundingRect());
       return true;
       }
 

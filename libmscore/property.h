@@ -41,8 +41,8 @@ enum class P_ID : unsigned char {
       LINE_TYPE,
       PITCH,
       TPC1,
-      TPC2,
 
+      TPC2,
       LINE,
       FIXED,
       FIXED_LINE,
@@ -52,8 +52,8 @@ enum class P_ID : unsigned char {
       VELO_OFFSET,
       ARTICULATION_ANCHOR,
       DIRECTION,
-      STEM_DIRECTION,
 
+      STEM_DIRECTION,
       NO_STEM,
       SLUR_DIRECTION,
       LEADING_SPACE,
@@ -62,12 +62,11 @@ enum class P_ID : unsigned char {
       DOT_POSITION,
       TUNING,
       PAUSE,
-
       BARLINE_TYPE,
+
       BARLINE_SPAN,
       BARLINE_SPAN_FROM,
       BARLINE_SPAN_TO,
-
       USER_OFF,
       FRET,
       STRING,
@@ -75,8 +74,8 @@ enum class P_ID : unsigned char {
       PLAY,
       TIMESIG_NOMINAL,
       TIMESIG_ACTUAL,
-      NUMBER_TYPE,
 
+      NUMBER_TYPE,
       BRACKET_TYPE,
       NORMAL_NOTES,
       ACTUAL_NOTES,
