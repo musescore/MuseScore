@@ -202,6 +202,8 @@ bool Omr::omrActions(int &ID, int page)
             for (int i = 0; i < n; ++i) {
                   OmrPage* page = new OmrPage(this);
                   QImage image = _doc->page(i);
+                  if (image.isNull())
+                        return false;
                   page->setImage(image);
                   _pages.append(page);
                   }
