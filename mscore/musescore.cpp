@@ -474,7 +474,7 @@ void MuseScore::populateNoteInputMenu()
                         if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
                               tb->setStyleSheet(vbsh);
                         QPalette p(tb->palette());
-                        int i = atoi(s+6);
+                        int i = atoi(s+6) - 1;
                         p.setColor(QPalette::Base, MScore::selectColor[i]);
                         tb->setPalette(p);
                         a->setCheckable(true);
