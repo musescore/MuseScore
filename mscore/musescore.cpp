@@ -482,7 +482,7 @@ void MuseScore::populateNoteInputMenu()
                         entryTools->addWidget(tb);
                         }
                   else
-                        entryTools->addAction(a);
+                        entryTools->addWidget(new AccessibleToolButton(entryTools, a));
                   }
             }
       }
