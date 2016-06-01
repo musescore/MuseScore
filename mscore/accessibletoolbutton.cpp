@@ -7,11 +7,11 @@ namespace Ms {
 
 AccessibleToolButton::AccessibleToolButton(QWidget* parent, QAction* defaultQAction ): QToolButton(parent)
       {
-      this->setDefaultAction(defaultQAction);
-      this->setFocusPolicy(Qt::TabFocus);
+      setDefaultAction(defaultQAction);
+      setFocusPolicy(Qt::TabFocus);
 
-      this->setAccessibleName(defaultQAction->text());
-      this->setAccessibleDescription(defaultQAction->toolTip());
+      setAccessibleName(defaultQAction->text());
+      setAccessibleDescription(defaultQAction->toolTip());
       }
 
 
@@ -27,7 +27,7 @@ void AccessibleToolButton::focusInEvent(QFocusEvent* e)
 
 void AccessibleToolButton::focusOutEvent(QFocusEvent* e)
       {
-      this->setGraphicsEffect(NULL);
+      setGraphicsEffect(nullptr);
       QToolButton::focusInEvent(e);
       }
 
@@ -35,7 +35,7 @@ void AccessibleToolButton::keyPressEvent(QKeyEvent *e)
       {
       //Pressing Enter or Return button triggers the default action
       if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
-            this->animateClick();
+            animateClick();
             return;
             }
 

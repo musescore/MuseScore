@@ -349,6 +349,7 @@ void MuseScore::preferencesChanged()
       }
 
 //---------------------------------------------------------
+//---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
 
@@ -630,7 +631,7 @@ MuseScore::MuseScore()
             if (!*s)
                   entryTools->addSeparator();
             else
-                  entryTools->addAction(getAction(s));
+                  entryTools->addWidget(new AccessibleToolButton(entryTools, getAction(s)));
             }
 
       static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
