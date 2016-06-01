@@ -470,7 +470,7 @@ void Channel::write(Xml& xml, Part* part) const
             xml.tag("mute", mute);
       if (solo)
             xml.tag("solo", solo);
-      if (part && part->masterScore()->exportMidiMapping()) {
+      if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
             xml.tag("midiPort",    part->masterScore()->midiMapping(channel)->port);
             xml.tag("midiChannel", part->masterScore()->midiMapping(channel)->channel);
             }

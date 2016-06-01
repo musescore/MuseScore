@@ -224,7 +224,7 @@ void Score::write(Xml& xml, bool selectionOnly)
                   xml.curTick  = measureStart->tick();
                   xml.tickDiff = xml.curTick;
                   xml.curTrack = staffIdx * VOICES;
-                  bool writeSystemElements = staffIdx == staffStart;
+                  bool writeSystemElements = (staffIdx == staffStart);
                   for (MeasureBase* m = measureStart; m != measureEnd; m = m->next())
                         writeMeasure(xml, m, staffIdx, writeSystemElements);
                   xml.etag();
