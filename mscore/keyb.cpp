@@ -325,6 +325,7 @@ void MuseScore::updateInputState(Score* score)
             getAction("pad-dot")->setEnabled(true);
             getAction("pad-dotdot")->setEnabled(true);
             getAction("pad-dot3")->setEnabled(true);
+            getAction("pad-dot4")->setEnabled(true);
             }
       switch (is.duration().type()) {
             case TDuration::DurationType::V_128TH:

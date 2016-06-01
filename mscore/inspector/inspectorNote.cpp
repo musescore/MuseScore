@@ -110,17 +110,21 @@ InspectorNote::InspectorNote(QWidget* parent)
 
       QHBoxLayout* hbox = new QHBoxLayout;
       dot1 = new QToolButton(this);
-      dot1->setText(tr("Dot1"));
+      dot1->setText(tr("Dot 1"));
       dot1->setEnabled(false);
       hbox->addWidget(dot1);
       dot2 = new QToolButton(this);
-      dot2->setText(tr("Dot2"));
+      dot2->setText(tr("Dot 2"));
       dot2->setEnabled(false);
       hbox->addWidget(dot2);
       dot3 = new QToolButton(this);
-      dot3->setText(tr("Dot3"));
+      dot3->setText(tr("Dot 3"));
       dot3->setEnabled(false);
       hbox->addWidget(dot3);
+      dot4 = new QToolButton(this);
+      dot4->setText(tr("Dot 4"));
+      dot4->setEnabled(false);
+      hbox->addWidget(dot4);
       _layout->addLayout(hbox);
 
       hbox = new QHBoxLayout;
@@ -148,6 +152,7 @@ InspectorNote::InspectorNote(QWidget* parent)
       connect(dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
       connect(dot2,     SIGNAL(clicked()),     SLOT(dot2Clicked()));
       connect(dot3,     SIGNAL(clicked()),     SLOT(dot3Clicked()));
+      connect(dot4,     SIGNAL(clicked()),     SLOT(dot4Clicked()));
       connect(hook,     SIGNAL(clicked()),     SLOT(hookClicked()));
       connect(stem,     SIGNAL(clicked()),     SLOT(stemClicked()));
       connect(beam,     SIGNAL(clicked()),     SLOT(beamClicked()));
@@ -160,12 +165,13 @@ InspectorNote::InspectorNote(QWidget* parent)
 
 void InspectorNote::setElement()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
 
       int n = note->dots().size();
       dot1->setEnabled(n > 0);
       dot2->setEnabled(n > 1);
       dot3->setEnabled(n > 2);
+      dot4->setEnabled(n > 3);
       stem->setEnabled(note->chord()->stem());
       hook->setEnabled(note->chord()->hook());
       beam->setEnabled(note->chord()->beam());
@@ -221,6 +227,23 @@ void InspectorNote::dot3Clicked()
             return;
       if (note->dots().size() > 2) {
             NoteDot* dot = note->dot(2);
+            dot->score()->select(dot);
+            inspector->setElement(dot);
+            dot->score()->update();
+            }
+      }
+
+//---------------------------------------------------------
+//   dot4Clicked
+//---------------------------------------------------------
+
+void InspectorNote::dot4Clicked()
+      {
+      Note* note = toNote(inspector->element());
+      if (note == 0)
+            return;
+      if (note->dots().size() > 3) {
+            NoteDot* dot = note->dot(3);
             dot->score()->select(dot);
             inspector->setElement(dot);
             dot->score()->update();

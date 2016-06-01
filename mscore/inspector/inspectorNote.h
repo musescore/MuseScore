@@ -36,6 +36,7 @@ class InspectorNote : public InspectorBase {
       QToolButton* dot1;
       QToolButton* dot2;
       QToolButton* dot3;
+      QToolButton* dot4;
       QToolButton* hook;
       QToolButton* stem;
       QToolButton* beam;
@@ -47,6 +48,7 @@ class InspectorNote : public InspectorBase {
       void dot1Clicked();
       void dot2Clicked();
       void dot3Clicked();
+      void dot4Clicked();
       void hookClicked();
       void stemClicked();
       void beamClicked();
