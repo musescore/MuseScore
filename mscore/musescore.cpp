@@ -1066,7 +1066,7 @@ MuseScore::MuseScore()
       //---------------------
 
 #ifndef NDEBUG
-      QMenu* menuDebug = mb->addMenu("Debug");
+      QMenu* menuDebug = mb->addMenu(tr("Debug"));
       menuDebug->setObjectName("Debug");
       a = getAction("no-horizontal-stretch");
       a->setCheckable(true);
