@@ -62,12 +62,12 @@ namespace Ms {
 bool MScore::debugMode;
 bool MScore::testMode = false;
 
-#ifndef NDEBUG
+// #ifndef NDEBUG
 bool MScore::showSegmentShapes = false;
 bool MScore::showMeasureShapes = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch = false;
-#endif
+// #endif
 
 bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;

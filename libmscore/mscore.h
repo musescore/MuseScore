@@ -484,12 +484,12 @@ class MScore : public QObject {
       static int defaultPlayDuration;
       static QString lastError;
 
-#ifndef NDEBUG
+// #ifndef NDEBUG
       static bool noHorizontalStretch;
       static bool noVerticalStretch;
       static bool showSegmentShapes;
       static bool showMeasureShapes;
-#endif
+// #endif
       static bool debugMode;
       static bool testMode;
 
