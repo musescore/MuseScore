@@ -1061,6 +1061,27 @@ MuseScore::MuseScore()
 
       menuPlugins->addSeparator();
 
+      //---------------------
+      //    Menu Debug
+      //---------------------
+
+#ifndef NDEBUG
+      QMenu* menuDebug = mb->addMenu("Debug");
+      menuDebug->setObjectName("Debug");
+      a = getAction("no-horizontal-stretch");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("no-vertical-stretch");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      menuDebug->addSeparator();
+      a = getAction("show-segment-shapes");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("show-measure-shapes");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+#endif
 
       //---------------------
       //    Menu Help
@@ -4640,6 +4661,36 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         switchLayoutMode(LayoutMode::PAGE);
                   }
             }
+#ifndef NDEBUG
+      else if (cmd == "no-horizontal-stretch") {
+            MScore::noHorizontalStretch = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "no-vertical-stretch") {
+            MScore::noVerticalStretch = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-segment-shapes") {
+            MScore::showSegmentShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-measure-shapes") {
+            MScore::showMeasureShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+#endif
       else {
             if (cv) {
                   //isAncestorOf is called to see if a widget from inspector has focus
@@ -5026,7 +5077,7 @@ int main(int argc, char* av[])
             return EXIT_SUCCESS;
             }
       MScore::debugMode = parser.isSet("d");
-      MScore::layoutDebug = parser.isSet("L");
+      MScore::noHorizontalStretch = MScore::noVerticalStretch = parser.isSet("L");
       noSeq = parser.isSet("s");
       noMidi = parser.isSet("m");
       if (parser.isSet("a")) {
