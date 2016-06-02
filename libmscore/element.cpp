@@ -896,7 +896,7 @@ void StaffLines::layout()
             setColor(MScore::defaultColor);
             }
       lw = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
-      bbox().setRect(0.0, -lw*.5, width(), lines * dist + lw);
+      bbox().setRect(0.0, -lw*.5, measure()->width(), (lines-1) * dist + lw);
       }
 
 //---------------------------------------------------------

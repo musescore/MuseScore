@@ -3254,8 +3254,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   qreal stretch = m->userStretch();
                   if (stretch < 1.0)
                         stretch = 1.0;
-                  for (MStaff* ms : m->mstaves())
-                        ms->lines->layout();
                   if (!lineMode) {
                         ww  = m->width() + rest * m->ticks() * stretch;
                         m->stretchMeasure(ww);
@@ -3264,6 +3262,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         m->stretchMeasure(m->width());
                         ww = m->width();
                         }
+                  for (MStaff* ms : m->mstaves())
+                        ms->lines->layout();
                   }
             else if (mb->isHBox()) {
                   mb->setPos(pos);
@@ -3288,7 +3288,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               ChordRest* cr = toChordRest(e);
                               if (isTopBeam(cr)) {
                                     cr->beam()->layout();
-                                    s->staffShape(cr->staffIdx()).add(cr->beam()->shape());
+                                    s->staffShape(cr->staffIdx()).add(cr->beam()->shape().translated(-(cr->segment()->pos()+mb->pos())));
                                     }
                               }
                         }
@@ -3297,9 +3297,10 @@ System* Score::collectSystem(LayoutContext& lc)
                               TempoText* tt = toTempoText(e);
                               setTempo(tt->segment(), tt->tempo());
                               tt->layout();
-                              s->staffShape(tt->staffIdx()).add(tt->shape());
+                              if (e->visible())
+                                    s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
-                        else if (e->isRehearsalMarl() || e->isStaffText())
+                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText()))
                               s->staffShape(e->staffIdx()).add(e->shape());
                         }
                   }

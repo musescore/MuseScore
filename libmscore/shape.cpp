@@ -45,8 +45,8 @@ Shape Shape::translated(const QPointF& pt) const
 void Shape::draw(QPainter* p) const
       {
       p->save();
-      p->setPen(QPen(QBrush(Qt::darkYellow), 0.5));
-      p->setBrush(QBrush(Qt::NoBrush));
+//      p->setPen(QPen(QBrush(Qt::darkYellow), 0.5));
+      p->setBrush(QBrush(QColor(0, 0, 255, 60)));
       for (const QRectF& r : *this)
             p->drawRect(r);
       p->restore();
