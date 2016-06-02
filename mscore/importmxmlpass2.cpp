@@ -3629,6 +3629,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const in
       QString beats;
       QString beatType;
       QString timeSymbol = _e.attributes().value("symbol").toString();
+      bool printObject = _e.attributes().value("print-object") != "no";
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "beats")
@@ -3653,6 +3654,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const in
                   //int staves = part->nstaves();
                   for (int i = 0; i < _pass1.getPart(partId)->nstaves(); ++i) {
                         TimeSig* timesig = new TimeSig(_score);
+                        timesig->setVisible(printObject);
                         int track = _pass1.trackForPart(partId) + i * VOICES;
                         timesig->setTrack(track);
                         timesig->setSig(fractionTSig, st);

@@ -1543,6 +1543,8 @@ void ExportMusicXml::timesig(TimeSig* tsig)
             tagName += " symbol=\"common\"";
       else if (st == TimeSigType::ALLA_BREVE)
             tagName += " symbol=\"cut\"";
+      if (!tsig->visible())
+            tagName += " print-object=\"no\"";
       tagName += color2xml(tsig);
       xml.stag(tagName);
 
