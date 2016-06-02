@@ -1353,6 +1353,28 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-dot3",
+         QT_TRANSLATE_NOOP("action","Triple Augmentation Dot"),
+         QT_TRANSLATE_NOOP("action","Note duration: Triple augmentation dot"),
+         QT_TRANSLATE_NOOP("action","Triple augmentation dot"),
+         Icons::dot3_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-dot4",
+         QT_TRANSLATE_NOOP("action","Quadrupel Augmentation Dot"),
+         QT_TRANSLATE_NOOP("action","Note duration: Quadrupel augmentation dot"),
+         QT_TRANSLATE_NOOP("action","Quadrupel augmentation dot"),
+         Icons::dot4_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "tie",
          QT_TRANSLATE_NOOP("action","Tie"),
          QT_TRANSLATE_NOOP("action","Note duration: Tie"),
@@ -2542,7 +2564,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_FOTO | STATE_EDIT,
          "toggle-piano",
          QT_TRANSLATE_NOOP("action","Piano Keyboard"),
          QT_TRANSLATE_NOOP("action","Piano keyboard")
@@ -3345,8 +3367,61 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
-         }
+         },
 
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         "edit-toolbars",
+         QT_TRANSLATE_NOOP("action","Edit Toolbars"),
+         QT_TRANSLATE_NOOP("action","Edit Toolbars"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+
+#ifndef NDEBUG
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "no-horizontal-stretch",
+         QT_TRANSLATE_NOOP("action","no horizontal stretch"),
+         QT_TRANSLATE_NOOP("action","no horizontal stretch"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "no-vertical-stretch",
+         QT_TRANSLATE_NOOP("action","no vertical stretch"),
+         QT_TRANSLATE_NOOP("action","no vertical stretch"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "show-segment-shapes",
+         QT_TRANSLATE_NOOP("action","show segment shapes"),
+         QT_TRANSLATE_NOOP("action","show segment shapes"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "show-measure-shapes",
+         QT_TRANSLATE_NOOP("action","show measure shapes"),
+         QT_TRANSLATE_NOOP("action","show measure shapes"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         }
+#endif
       };
 
 

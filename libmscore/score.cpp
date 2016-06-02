@@ -2417,10 +2417,31 @@ void Score::padToggle(Pad n)
                         _is.setDots(1);
                   break;
             case Pad::DOTDOT:
-                  if ((_is.duration().dots() == 2) || (_is.duration() == TDuration::DurationType::V_64TH) || (_is.duration() == TDuration::DurationType::V_128TH))
+                  if ((_is.duration().dots() == 2)
+                     || (_is.duration() == TDuration::DurationType::V_64TH)
+                     || (_is.duration() == TDuration::DurationType::V_128TH))
                         _is.setDots(0);
                   else
                         _is.setDots(2);
+                  break;
+            case Pad::DOT3:
+                  if ((_is.duration().dots() == 3)
+                     || (_is.duration() == TDuration::DurationType::V_32ND)
+                     || (_is.duration() == TDuration::DurationType::V_64TH)
+                     || (_is.duration() == TDuration::DurationType::V_128TH))
+                        _is.setDots(0);
+                  else
+                        _is.setDots(3);
+                  break;
+            case Pad::DOT4:
+                  if ((_is.duration().dots() == 4)
+                     || (_is.duration() == TDuration::DurationType::V_16TH)
+                     || (_is.duration() == TDuration::DurationType::V_32ND)
+                     || (_is.duration() == TDuration::DurationType::V_64TH)
+                     || (_is.duration() == TDuration::DurationType::V_128TH))
+                        _is.setDots(0);
+                  else
+                        _is.setDots(4);
                   break;
             case Pad::RAISE:
                   if (_is.pitchMod() == 1)
@@ -2445,9 +2466,8 @@ void Score::padToggle(Pad n)
                   _is.setRest(false);
             }
 
-      if (noteEntryMode() || !selection().isSingle()) {
+      if (noteEntryMode() || !selection().isSingle())
             return;
-            }
 
       //do not allow to add a dot on a full measure rest
       Element* e = selection().element();
@@ -2464,7 +2484,7 @@ void Score::padToggle(Pad n)
       if (!cr)
             return;
 
-      if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
+      if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -2472,7 +2492,6 @@ void Score::padToggle(Pad n)
             }
       else
             changeCRlen(cr, _is.duration());
-
       }
 
 //---------------------------------------------------------

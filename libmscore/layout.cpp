@@ -1787,7 +1787,7 @@ static void layoutPage(Page* page, qreal restHeight)
             ++gaps;
             }
 
-      if (!gaps || MScore::layoutDebug || score->layoutMode() == LayoutMode::SYSTEM) {
+      if (!gaps || MScore::noVerticalStretch || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   for (System* system : page->systems())
@@ -2855,9 +2855,12 @@ void Score::getNextMeasure(LayoutContext& lc)
                   int tick = segment.tick();
                   // find longest pause
                   for (int i = 0, n = ntracks(); i < n; ++i) {
-                        Breath* b = toBreath(segment.element(i));
-                        if (b && b->isBreath())
+                        Element* e = segment.element(i);
+                        if (e && e->isBreath()) {
+                              Breath* b = toBreath(e);
+                              b->layout();
                               length = qMax(length, b->pause());
+                              }
                         }
                   if (length != 0.0)
                         setPause(tick, length);
@@ -2974,7 +2977,7 @@ System* Score::collectSystem(LayoutContext& lc)
             lc.curSystem = 0;
             return 0;
             }
-      bool raggedRight = MScore::layoutDebug;
+      bool raggedRight = MScore::noHorizontalStretch;
 
       System* system = getNextSystem(lc);
       system->setInstrumentNames(lc.startWithLongNames);
@@ -3230,7 +3233,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       // stretch incomplete row
       qreal rest;
-      if (lineMode || MScore::layoutDebug)
+      if (lineMode || MScore::noHorizontalStretch)
             rest = 0;
       else {
             rest = systemWidth - minWidth;
@@ -3252,8 +3255,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   qreal stretch = m->userStretch();
                   if (stretch < 1.0)
                         stretch = 1.0;
-                  for (MStaff* ms : m->mstaves())
-                        ms->lines->layout();
                   if (!lineMode) {
                         ww  = m->width() + rest * m->ticks() * stretch;
                         m->stretchMeasure(ww);
@@ -3262,6 +3263,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         m->stretchMeasure(m->width());
                         ww = m->width();
                         }
+                  for (MStaff* ms : m->mstaves())
+                        ms->lines->layout();
                   }
             else if (mb->isHBox()) {
                   mb->setPos(pos);
@@ -3284,8 +3287,10 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (Element* e : s->elist()) {
                         if (e && e->isChordRest()) {
                               ChordRest* cr = toChordRest(e);
-                              if (isTopBeam(cr))
+                              if (isTopBeam(cr)) {
                                     cr->beam()->layout();
+                                    s->staffShape(cr->staffIdx()).add(cr->beam()->shape().translated(-(cr->segment()->pos()+mb->pos())));
+                                    }
                               }
                         }
                   for (Element* e : s->annotations()) {
@@ -3293,8 +3298,11 @@ System* Score::collectSystem(LayoutContext& lc)
                               TempoText* tt = toTempoText(e);
                               setTempo(tt->segment(), tt->tempo());
                               tt->layout();
-                              s->staffShape(tt->staffIdx()).add(tt->shape());
+                              if (e->visible())
+                                    s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
+                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText()))
+                              s->staffShape(e->staffIdx()).add(e->shape());
                         }
                   }
             }

@@ -759,7 +759,8 @@ void GuitarPro::createMeasures()
                         }
                   }
             readVolta(&bars[i].volta, m);
-//TODO-WS            m->setRepeatFlags(bars[i].repeatFlags);
+            m->setRepeatEnd(bars[i].repeatFlags & Repeat::END);
+            m->setRepeatStart(bars[i].repeatFlags & Repeat::START);
             m->setRepeatCount(bars[i].repeats);       // supported in gp5
 
             // reset the volta sequence if we have an opening repeat
@@ -1877,7 +1878,8 @@ void GuitarPro3::read(QFile* fp)
                   }
 
             readVolta(&bars[i].volta, m);
-//TODO-WS            m->setRepeatFlags(bars[i].repeatFlags);
+            m->setRepeatEnd(bars[i].repeatFlags & Repeat::END);
+            m->setRepeatStart(bars[i].repeatFlags & Repeat::START);
             m->setRepeatCount(bars[i].repeats);
 
             // reset the volta sequence if we have an opening repeat
@@ -2363,12 +2365,10 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       int idx = 0;
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure(), ++idx) {
-            //const GpBar& bar = gp->bars[idx];
-//TODO            if (bar.barLine != BarLineType::NORMAL)
-//                  m->setEndBarLineType(bar.barLine, false);
+            const GpBar& bar = gp->bars[idx];
+            if (bar.barLine != BarLineType::NORMAL && bar.barLine != BarLineType::END_REPEAT && bar.barLine != BarLineType::START_REPEAT && bar.barLine != BarLineType::END_START_REPEAT)
+                  m->setEndBarLineType(bar.barLine, 0);
             }
-//TODO      if (score->lastMeasure())
-//            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // create parts (excerpts)

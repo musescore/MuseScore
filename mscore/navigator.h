@@ -40,6 +40,7 @@ class NScrollArea : public QScrollArea {
 
    public:
       NScrollArea(QWidget* w = 0);
+      void orientationChanged();
       };
 
 //---------------------------------------------------------

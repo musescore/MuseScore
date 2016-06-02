@@ -22,6 +22,8 @@ namespace Ms {
 
 static int getDots(int base, int rest, char* dots)
       {
+      if (base < 16)
+           return rest;
       *dots = 0;
       if (rest >= base / 2) {
             *dots = *dots + 1;
@@ -30,6 +32,14 @@ static int getDots(int base, int rest, char* dots)
       if (rest >= base / 4) {
             *dots = *dots + 1;
             rest -= base / 4;
+            }
+      if (rest >= base / 8) {
+            *dots = *dots + 1;
+            rest -= base / 8;
+            }
+      if (rest >= base / 16) {
+            *dots = *dots + 1;
+            rest -= base / 16;
             }
       if (*dots > MAX_DOTS)
             *dots = MAX_DOTS;
@@ -387,7 +397,7 @@ TDuration::TDuration(const Fraction& _f)
       _dots = 0;
       if (f.numerator() == 0) {
             _val  = DurationType::V_ZERO;
-            _dots = 0;
+           //  _dots = 0;
             return;
             }
       switch(f.denominator()) {
@@ -418,7 +428,7 @@ TDuration::TDuration(const Fraction& _f)
             }
 
       if (f.numerator() != 1) {
-            switch(f.numerator()) {
+            switch (f.numerator()) {
                   case 3:
                         _val = DurationType(int(_val) - 1);
                         _dots = 1;
@@ -426,6 +436,14 @@ TDuration::TDuration(const Fraction& _f)
                   case 7:
                         _val = DurationType(int(_val) - 2);
                         _dots = 2;
+                        break;
+                  case 15:
+                        _val = DurationType(int(_val) - 3);
+                        _dots = 3;
+                        break;
+                  case 31:
+                        _val = DurationType(int(_val) - 4);
+                        _dots = 4;
                         break;
                   default:
                         qDebug("TDuration(%d/%d): not implemented", f.numerator(), f.denominator());
@@ -488,9 +506,8 @@ std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, boo
                         continue;
                   d.setDots(0);
                   Fraction ff = l - d.fraction();
-                  if (ff.numerator() < 0) {
+                  if (ff.numerator() < 0)
                         d = d.shift(1);
-                        }
                   else {
                         dList.push_back(d);
                         l -= d.fraction();

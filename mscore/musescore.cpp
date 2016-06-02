@@ -163,6 +163,112 @@ QString revision;
 QErrorMessage* errorMessage;
 const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
+const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
+            "note-input",
+            "repitch",
+            "pad-note-128",
+            "pad-note-64",
+            "pad-note-32",
+            "pad-note-16",
+            "pad-note-8",
+            "pad-note-4",
+            "pad-note-2",
+            "pad-note-1",
+            "note-breve",
+            "note-longa",
+            "pad-dot",
+            "pad-dotdot",
+            "pad-dot3",
+            "pad-dot4",
+            "tie",
+            "",
+            "pad-rest",
+            "",
+            "pad-raise",
+            "pad-lower",
+            "",
+            "sharp2",
+            "sharp",
+            "nat",
+            "flat",
+            "flat2",
+            "flip",
+            "",
+            "voice-1",
+            "voice-2",
+            "voice-3",
+            "voice-4"
+            };
+
+const std::list<const char*> MuseScore::_advancedNoteInputMenuEntries {
+            "note-input",
+            "repitch",
+            "pad-note-128",
+            "pad-note-64",
+            "pad-note-32",
+            "pad-note-16",
+            "pad-note-8",
+            "pad-note-4",
+            "pad-note-2",
+            "pad-note-1",
+            "note-breve",
+            "note-longa",
+            "pad-dot",
+            "pad-dotdot",
+            "pad-dot3",
+            "pad-dot4",
+            "tie",
+            "",
+            "pad-rest",
+            "",
+            "pad-raise",
+            "pad-lower",
+            "",
+            "sharp2",
+            "sharp",
+            "nat",
+            "flat",
+            "flat2",
+            "flip",
+            "",
+            "voice-1",
+            "voice-2",
+            "voice-3",
+            "voice-4"
+            };
+
+const std::list<const char*> MuseScore::_basicNoteInputMenuEntries {
+            "note-input",
+            "pad-note-64",
+            "pad-note-32",
+            "pad-note-16",
+            "pad-note-8",
+            "pad-note-4",
+            "pad-note-2",
+            "pad-note-1",
+            "pad-dot",
+            "pad-dotdot",
+            "tie",
+            "",
+            "pad-rest",
+            "",
+            "pad-raise",
+            "pad-lower",
+            "",
+            "sharp2",
+            "sharp",
+            "nat",
+            "flat",
+            "flat2",
+            "flip",
+            "",
+            "voice-1",
+            "voice-2",
+            "voice-3",
+            "voice-4"
+            };
+
+
 extern bool savePositions(Score*, const QString& name, bool segments );
 extern TextPalette* textPalette;
 
@@ -354,6 +460,40 @@ void MuseScore::preferencesChanged()
       _statusBar->setVisible(preferences.showStatusBar);
 
       updateNewWizard();
+      }
+
+//---------------------------------------------------------
+//   populateNoteInputMenu
+//---------------------------------------------------------
+
+void MuseScore::populateNoteInputMenu()
+      {
+      entryTools->clear();
+      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
+
+      for (const auto s : _noteInputMenuEntries) {
+            if (!*s)
+                  entryTools->addSeparator();
+            else {
+                  QAction* a = getAction(s);
+                  if (strncmp(s, "voice-", 6) == 0) {
+                        QToolButton* tb = new QToolButton(this);
+                        tb->setFocusPolicy(Qt::ClickFocus);
+                        tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
+                        if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
+                              tb->setStyleSheet(vbsh);
+                        QPalette p(tb->palette());
+                        int i = atoi(s+6) - 1;
+                        p.setColor(QPalette::Base, MScore::selectColor[i]);
+                        tb->setPalette(p);
+                        a->setCheckable(true);
+                        tb->setDefaultAction(a);
+                        entryTools->addWidget(tb);
+                        }
+                  else
+                        entryTools->addWidget(new AccessibleToolButton(entryTools, a));
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -625,41 +765,7 @@ MuseScore::MuseScore()
       entryTools = addToolBar(tr("Note Input"));
       entryTools->setObjectName("entry-tools");
 
-      static const char* sl1[] = {
-            "note-input",
-            "repitch", "pad-note-128", "pad-note-64", "pad-note-32", "pad-note-16",
-            "pad-note-8",
-            "pad-note-4", "pad-note-2", "pad-note-1", "note-breve", "note-longa",
-            "pad-dot",
-            "pad-dotdot", "tie", "", "pad-rest", "",
-            "pad-raise", "pad-lower", "",
-            "sharp2", "sharp", "nat", "flat", "flat2", "flip", ""
-            };
-
-      for (auto s : sl1) {
-            if (!*s)
-                  entryTools->addSeparator();
-            else
-                  entryTools->addAction(getAction(s));
-            }
-
-      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
-
-      for (int i = 0; i < VOICES; ++i) {
-            QToolButton* tb = new QToolButton(this);
-            if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
-                  tb->setStyleSheet(vbsh);
-            tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
-            QPalette p(tb->palette());
-            p.setColor(QPalette::Base, MScore::selectColor[i]);
-            tb->setPalette(p);
-            QAction* a = getAction(voiceActions[i]);
-            a->setCheckable(true);
-            tb->setDefaultAction(a);
-            tb->setFocusPolicy(Qt::ClickFocus);
-            entryTools->addWidget(tb);
-            }
-
+      populateNoteInputMenu();
 
       //---------------------
       //    Menus
@@ -756,6 +862,7 @@ MuseScore::MuseScore()
       menuWorkspaces = new QMenu(tr("W&orkspaces"));
       connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
       menuEdit->addMenu(menuWorkspaces);
+      menuEdit->addAction(getAction("edit-toolbars"));
 
       QAction* pref = menuEdit->addAction(tr("&Preferences..."), this, SLOT(startPreferenceDialog()));
       pref->setMenuRole(QAction::PreferencesRole);
@@ -963,6 +1070,27 @@ MuseScore::MuseScore()
 
       menuPlugins->addSeparator();
 
+      //---------------------
+      //    Menu Debug
+      //---------------------
+
+#ifndef NDEBUG
+      QMenu* menuDebug = mb->addMenu("Debug");
+      menuDebug->setObjectName("Debug");
+      a = getAction("no-horizontal-stretch");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("no-vertical-stretch");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      menuDebug->addSeparator();
+      a = getAction("show-segment-shapes");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("show-measure-shapes");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+#endif
 
       //---------------------
       //    Menu Help
@@ -1501,8 +1629,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
 
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
-      if (_navigator && _navigator->widget())
+      if (_navigator && _navigator->widget()) {
             navigator()->setScoreView(view);
+            navigator()->setScore(cs);
+            }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
 
@@ -3740,8 +3870,11 @@ void MuseScore::excerptsChanged(MasterScore* s)
 
 void MuseScore::scorePageLayoutChanged()
       {
-      if (mainWindow)
-             mainWindow->setOrientation(MScore::verticalOrientation() ? Qt::Horizontal : Qt::Vertical);
+      if (mainWindow) {
+            mainWindow->setOrientation(MScore::verticalOrientation() ? Qt::Horizontal : Qt::Vertical);
+            if (navigatorScrollArea())
+                  navigatorScrollArea()->orientationChanged();
+            }
       }
 
 //---------------------------------------------------------
@@ -4527,6 +4660,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_textTools)
                   _textTools->toggleUnderline();
             }
+      else if (cmd == "edit-toolbars")
+            showToolbarEditor();
       else if (cmd == "viewmode") {
             if (cs) {
                   if (cs->layoutMode() == LayoutMode::PAGE)
@@ -4535,6 +4670,36 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         switchLayoutMode(LayoutMode::PAGE);
                   }
             }
+#ifndef NDEBUG
+      else if (cmd == "no-horizontal-stretch") {
+            MScore::noHorizontalStretch = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "no-vertical-stretch") {
+            MScore::noVerticalStretch = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-segment-shapes") {
+            MScore::showSegmentShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-measure-shapes") {
+            MScore::showMeasureShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+#endif
       else {
             if (cv) {
                   //isAncestorOf is called to see if a widget from inspector has focus
@@ -4921,7 +5086,7 @@ int main(int argc, char* av[])
             return EXIT_SUCCESS;
             }
       MScore::debugMode = parser.isSet("d");
-      MScore::layoutDebug = parser.isSet("L");
+      MScore::noHorizontalStretch = MScore::noVerticalStretch = parser.isSet("L");
       noSeq = parser.isSet("s");
       noMidi = parser.isSet("m");
       if (parser.isSet("a")) {

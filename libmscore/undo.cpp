@@ -3096,9 +3096,8 @@ void ChangeStaffUserDist::flip()
 
 void ChangeProperty::flip()
       {
-// #ifndef QT_NO_DEBUG
       qCDebug(undoRedo) << "ChangeProperty::flip():" << element->name() << propertyName(id) << element->getProperty(id) << "->" << property;
-// #endif
+
       if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
             static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 

@@ -153,6 +153,7 @@ class Beam : public Element {
       virtual void styleChanged() override;
       bool isGrace() const { return _isGrace; }  // for debugger
       bool cross() const   { return _cross; }
+      virtual Shape shape() const override;
       };
 
 
