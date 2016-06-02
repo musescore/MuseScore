@@ -3356,8 +3356,50 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
-         }
+         },
 
+#ifndef NDEBUG
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "no-horizontal-stretch",
+         QT_TRANSLATE_NOOP("action","no horizontal stretch"),
+         QT_TRANSLATE_NOOP("action","no horizontal stretch"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "no-vertical-stretch",
+         QT_TRANSLATE_NOOP("action","no vertical stretch"),
+         QT_TRANSLATE_NOOP("action","no vertical stretch"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "show-segment-shapes",
+         QT_TRANSLATE_NOOP("action","show segment shapes"),
+         QT_TRANSLATE_NOOP("action","show segment shapes"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "show-measure-shapes",
+         QT_TRANSLATE_NOOP("action","show measure shapes"),
+         QT_TRANSLATE_NOOP("action","show measure shapes"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         }
+#endif
       };
 
 

@@ -59,8 +59,16 @@
 
 namespace Ms {
 
-bool  MScore::debugMode;
-bool  MScore::testMode = false;
+bool MScore::debugMode;
+bool MScore::testMode = false;
+
+#ifndef NDEBUG
+bool MScore::showSegmentShapes = false;
+bool MScore::showMeasureShapes = false;
+bool MScore::noHorizontalStretch = false;
+bool MScore::noVerticalStretch = false;
+#endif
+
 bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
@@ -91,7 +99,6 @@ qreal   MScore::nudgeStep50;
 int     MScore::defaultPlayDuration;
 // QString MScore::partStyle;
 QString MScore::lastError;
-bool    MScore::layoutDebug = false;
 int     MScore::division    = 480; // 3840;   // pulses per quarter note (PPQ) // ticks per beat
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;

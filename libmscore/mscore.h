@@ -483,15 +483,21 @@ class MScore : public QObject {
       static qreal nudgeStep50;
       static int defaultPlayDuration;
       static QString lastError;
-      static bool layoutDebug;
+
+#ifndef NDEBUG
+      static bool noHorizontalStretch;
+      static bool noVerticalStretch;
+      static bool showSegmentShapes;
+      static bool showMeasureShapes;
+#endif
+      static bool debugMode;
+      static bool testMode;
 
       static int division;
       static int sampleRate;
       static int mtcType;
       static Sequencer* seq;
 
-      static bool debugMode;
-      static bool testMode;
       static bool saveTemplateMode;
       static bool noGui;
 

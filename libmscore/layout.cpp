@@ -1787,7 +1787,7 @@ static void layoutPage(Page* page, qreal restHeight)
             ++gaps;
             }
 
-      if (!gaps || MScore::layoutDebug || score->layoutMode() == LayoutMode::SYSTEM) {
+      if (!gaps || MScore::noVerticalStretch || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   for (System* system : page->systems())
@@ -2977,7 +2977,7 @@ System* Score::collectSystem(LayoutContext& lc)
             lc.curSystem = 0;
             return 0;
             }
-      bool raggedRight = MScore::layoutDebug;
+      bool raggedRight = MScore::noHorizontalStretch;
 
       System* system = getNextSystem(lc);
       system->setInstrumentNames(lc.startWithLongNames);
@@ -3233,7 +3233,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       // stretch incomplete row
       qreal rest;
-      if (lineMode || MScore::layoutDebug)
+      if (lineMode || MScore::noHorizontalStretch)
             rest = 0;
       else {
             rest = systemWidth - minWidth;
