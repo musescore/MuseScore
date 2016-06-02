@@ -154,5 +154,7 @@
         <file>data/icons/clef-bass.svg</file>
         <file>data/solid_note_head.dat</file>
         <file>data/icons/edit-swap.svg</file>
+        <file>data/icons/note-lower.svg</file>
+        <file>data/icons/note-raise.svg</file>
     </qresource>
 </RCC>

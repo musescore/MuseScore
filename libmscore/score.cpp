@@ -2422,6 +2422,18 @@ void Score::padToggle(Pad n)
                   else
                         _is.setDots(2);
                   break;
+            case Pad::RAISE:
+                  if (_is.pitchMod() == 1)
+                        _is.setPitchMod(0);
+                  else
+                        _is.setPitchMod(1);
+                  break;
+            case Pad::LOWER:
+                  if (_is.pitchMod() == -1)
+                        _is.setPitchMod(0);
+                  else
+                        _is.setPitchMod(-1);
+                  break;
             }
       if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
             _is.setDots(0);

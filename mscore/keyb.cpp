@@ -335,6 +335,9 @@ void MuseScore::updateInputState(Score* score)
                   break;
             }
 
+      getAction("pad-raise")->setChecked(is.pitchMod() == 1);
+      getAction("pad-lower")->setChecked(is.pitchMod() == -1);
+
       getAction("note-longa")->setChecked(is.duration()  == TDuration::DurationType::V_LONG);
       getAction("note-breve")->setChecked(is.duration()  == TDuration::DurationType::V_BREVE);
       getAction("pad-note-1")->setChecked(is.duration()  == TDuration::DurationType::V_WHOLE);

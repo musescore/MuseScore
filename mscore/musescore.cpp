@@ -632,6 +632,7 @@ MuseScore::MuseScore()
             "pad-note-4", "pad-note-2", "pad-note-1", "note-breve", "note-longa",
             "pad-dot",
             "pad-dotdot", "tie", "", "pad-rest", "",
+            "pad-raise", "pad-lower", "",
             "sharp2", "sharp", "nat", "flat", "flat2", "flip", ""
             };
 
