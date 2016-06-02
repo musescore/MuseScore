@@ -1013,7 +1013,36 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   }
 
             case StaffGroup::STANDARD: {
-                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line, error);
+                  AccidentalVal acci;
+                  if (! _is.pitchMod())  // if no raise or lower
+                        acci = s->measure()->findAccidental(s, staffIdx, line, error);
+                  else  // raise or lower half step
+                  {
+                        // find what this note would be just from the key signature
+                        // (first ChordRest segment in the measure)
+                        acci = s->measure()->findAccidental(s->measure()->first(Segment::Type::ChordRest), staffIdx, line, error);
+                        // add pitchMod to that
+                        switch (static_cast<int>(acci) + _is.pitchMod())
+                        {
+                              case -2:
+                                    acci = AccidentalVal::FLAT2;
+                                    break;
+                              case -1:
+                                    acci = AccidentalVal::FLAT;
+                                    break;
+                              case 0:
+                                    acci = AccidentalVal::NATURAL;
+                                    break;
+                              case 1:
+                                    acci = AccidentalVal::SHARP;
+                                    break;
+                              case 2:
+                                    acci = AccidentalVal::SHARP2;
+                                    break;
+                              default:
+                                    error = true;
+                        }
+                  }
                   if (error)
                         return nval;
                   int step           = absStep(line, clef);
