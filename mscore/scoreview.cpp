@@ -1657,6 +1657,13 @@ void ScoreView::setShadowNote(const QPointF& p)
             }
 
       shadowNote->setLine(line);
+
+      int voice;
+      if (is.drumNote() != -1 && is.drumset() && is.drumset()->isValid(is.drumNote()))
+            voice = is.drumset()->voice(is.drumNote());
+      else
+            voice = is.voice();
+
       SymId symNotehead;
       TDuration d(is.duration());
 
@@ -1665,11 +1672,11 @@ void ScoreView::setShadowNote(const QPointF& p)
             Rest rest(gscore, d.type());
             rest.setDuration(d.fraction());
             symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
-            shadowNote->setSym(symNotehead);
+            shadowNote->setState(symNotehead, voice, d, true);
             }
       else {
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
-            shadowNote->setSymbols(d.type(), symNotehead);
+            shadowNote->setState(symNotehead, voice, d);
             }
 
       shadowNote->layout();

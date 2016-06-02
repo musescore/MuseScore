@@ -381,21 +381,8 @@ void Rest::layout()
                   }
             }
 
-      switch(durationType().type()) {
-            case TDuration::DurationType::V_64TH:
-            case TDuration::DurationType::V_32ND:
-                  dotline = -3;
-                  break;
-            case TDuration::DurationType::V_1024TH:
-            case TDuration::DurationType::V_512TH:
-            case TDuration::DurationType::V_256TH:
-            case TDuration::DurationType::V_128TH:
-                  dotline = -5;
-                  break;
-            default:
-                  dotline = -1;
-                  break;
-            }
+      dotline = Rest::getDotline(durationType().type());
+
       // DEBUG: no longer needed now that computeLineOffset returns an appropriate value?
       //int stepOffset = 0;
       //if (staff())
@@ -424,6 +411,31 @@ void Rest::layout()
                + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       setbbox(symBbox(_sym));
+      }
+
+//---------------------------------------------------------
+//   getDotline
+//---------------------------------------------------------
+
+int Rest::getDotline(TDuration::DurationType durationType)
+      {
+      int dl = -1;
+      switch(durationType) {
+            case TDuration::DurationType::V_64TH:
+            case TDuration::DurationType::V_32ND:
+                  dl = -3;
+                  break;
+            case TDuration::DurationType::V_1024TH:
+            case TDuration::DurationType::V_512TH:
+            case TDuration::DurationType::V_256TH:
+            case TDuration::DurationType::V_128TH:
+                  dl = -5;
+                  break;
+            default:
+                  dl = -1;
+                  break;
+            }
+      return dl;
       }
 
 //---------------------------------------------------------

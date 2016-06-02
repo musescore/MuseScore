@@ -34,7 +34,9 @@ class ShadowNote : public Element {
 
       int _line;
       SymId _notehead;
-      SymId _flag;
+      TDuration _duration;
+      int _voice;
+      bool _rest;
 
    public:
       ShadowNote(Score*);
@@ -45,13 +47,13 @@ class ShadowNote : public Element {
       void setLine(int n)                { _line = n;      }
       virtual void draw(QPainter*) const;
 
-      void setSym(SymId id);
-      void setSymbols(TDuration::DurationType type, SymId noteSymbol);
+      void setState(SymId noteSymbol, int voice, TDuration duration, bool rest = false);
+
+      SymId getNoteFlag() const;
+      bool computeUp() const;
 
       SymId notehead() const { return _notehead; }
-      SymId flag() const { return _flag; }
       bool isValid() const;
-      bool noFlag() const;
       };
 
 
