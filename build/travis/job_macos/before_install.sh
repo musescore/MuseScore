@@ -16,7 +16,7 @@ chmod 600 $HOME/.ssh/osuosl_nighlies_rsa
 # Create known_hosts
 touch $HOME/.ssh/known_hosts
 # Add osuosl key to known host
-ssh-keyscan ftp.osuosl.org >> $HOME/.ssh/known_hosts
+ssh-keyscan ftp-osl.osuosl.org >> $HOME/.ssh/known_hosts
 
 expect << EOF
   spawn ssh-add $HOME/.ssh/osuosl_nighlies_rsa
