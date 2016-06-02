@@ -364,7 +364,7 @@ void Measure::layout2()
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             MStaff* ms = _mstaves[staffIdx];
-            ms->lines->setWidth(width());
+//            ms->lines->setWidth(width());
             Spacer* sp = ms->_vspacerDown;
             if (sp) {
                   sp->layout();

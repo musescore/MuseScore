@@ -334,7 +334,7 @@ void Beam::layout1()
             int staffIdx = -1;
             for (ChordRest* cr : _elements) {
                   qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
-                  mag = qMax(mag, m);
+                  mag     = qMax(mag, m);
                   if (cr->isChord()) {
                         c2 = toChord(cr);
                         staffIdx = c2->vStaffIdx();
@@ -364,6 +364,8 @@ void Beam::layout1()
                   }
             else {
                   if (maxMove > 0)            // cross staff beaming down
+                        _up = true;
+                  else if (minMove < 0)
                         _up = false;
                   else if (c1) {
                         Measure* m = c1->measure();
@@ -2446,5 +2448,15 @@ void Beam::styleChanged()
             setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape Beam::shape() const
+      {
+      Shape shape;
+      shape.add(bbox());
+      return shape;
+      }
 }
 

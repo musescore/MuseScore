@@ -1026,7 +1026,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       QMenu* popup = new QMenu(this);
       popup->setSeparatorsCollapsible(false);
       QAction* a = popup->addSeparator();
-      
+
       // Set Slur or Tie according to the selected object
       if (obj->type() != Element::Type::SLUR_SEGMENT)
             a->setText(obj->userName());
@@ -1926,6 +1926,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         for (const MeasureBase* mb : system->measures()) {
                               if (mb->type() == Element::Type::MEASURE) {
                                     const Measure* m = static_cast<const Measure*>(mb);
+                                    p.setBrush(Qt::NoBrush);
+                                    p.setPen(QPen(QBrush(Qt::darkYellow), 0.5));
                                     for (const Segment* s = m->first(); s; s = s->next()) {
                                           for (int i = 0; i < score()->nstaves(); ++i) {
                                                 QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
@@ -1934,6 +1936,16 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                                 s->shapes().at(i).draw(&p);
                                                 p.translate(-pt);
                                                 }
+                                          }
+                                    p.setPen(Qt::NoPen);
+                                    p.setBrush(QBrush(QColor(0, 0, 255, 60)));
+                                    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                          const MStaff* ms = m->mstaff(staffIdx);
+                                          QPointF pt(m->pos().x() + system->pos().x(), 0);
+                                          p.translate(pt);
+                                          QPointF o(0.0, m->system()->staffYpage(staffIdx));
+                                          ms->shape().translated(o).draw(&p);
+                                          p.translate(-pt);
                                           }
                                     }
                               }

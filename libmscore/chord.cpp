@@ -3216,7 +3216,8 @@ QString Chord::accessibleExtraInfo() const
             rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
       foreach (Element* e, el()) {
-            if (!score()->selectionFilter().canSelect(e)) continue;
+            if (!score()->selectionFilter().canSelect(e))
+                  continue;
             rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
             }
 
