@@ -3460,15 +3460,13 @@ bool Score::collectPage(LayoutContext& lc)
                         }
                   sp->layout();
                   }
-            }
 
-#if 0
-      for (Spanner* sp : _unmanagedSpanner) {
-            //if (sp->tick() >= etick || sp->tick2() < stick)
-            //     continue;
-            sp->layout();
+            for (Spanner* sp : _unmanagedSpanner) {
+                  if (sp->tick() >= etick || sp->tick2() < stick)
+                        continue;
+                  sp->layout();
+                  }
             }
-#endif
 
       page->rebuildBspTree();
       lc.pageChanged = lc.systemChanged || (lc.pageOldSystem != (page->systems().empty() ? 0 : page->systems().back()));
