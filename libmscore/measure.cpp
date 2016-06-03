@@ -100,6 +100,9 @@ MStaff::MStaff(const MStaff& m)
       _vspacerDown = 0;
       _visible     = m._visible;
       _slashStyle  = m._slashStyle;
+#ifndef NDEBUG
+      _corrupted   = m._corrupted;
+#endif
       }
 
 //---------------------------------------------------------

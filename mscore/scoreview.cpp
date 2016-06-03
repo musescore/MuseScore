@@ -1929,40 +1929,62 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   drawElements(p, ell);
 
 #ifndef NDEBUG
-                  if (MScore::showSegmentShapes) {
-                        for (const System* system : page->systems()) {
-                              for (const MeasureBase* mb : system->measures()) {
-                                    if (mb->type() == Element::Type::MEASURE) {
-                                          const Measure* m = static_cast<const Measure*>(mb);
-                                          p.setBrush(Qt::NoBrush);
-                                          p.setPen(QPen(QBrush(Qt::darkYellow), 0.5));
-                                          for (const Segment* s = m->first(); s; s = s->next()) {
-                                                for (int i = 0; i < score()->nstaves(); ++i) {
-                                                      QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
-                                                         system->staffYpage(i));
+                  if (!score()->printing()) {
+                        if (MScore::showSegmentShapes) {
+                              for (const System* system : page->systems()) {
+                                    for (const MeasureBase* mb : system->measures()) {
+                                          if (mb->type() == Element::Type::MEASURE) {
+                                                const Measure* m = static_cast<const Measure*>(mb);
+                                                p.setBrush(Qt::NoBrush);
+                                                p.setPen(QPen(QBrush(Qt::darkYellow), 0.5));
+                                                for (const Segment* s = m->first(); s; s = s->next()) {
+                                                      for (int i = 0; i < score()->nstaves(); ++i) {
+                                                            QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
+                                                               system->staffYpage(i));
+                                                            p.translate(pt);
+                                                            s->shapes().at(i).draw(&p);
+                                                            p.translate(-pt);
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        if (MScore::showMeasureShapes) {
+                              for (const System* system : page->systems()) {
+                                    for (const MeasureBase* mb : system->measures()) {
+                                          if (mb->type() == Element::Type::MEASURE) {
+                                                const Measure* m = static_cast<const Measure*>(mb);
+                                                p.setPen(Qt::NoPen);
+                                                p.setBrush(QBrush(QColor(0, 0, 255, 60)));
+                                                for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                                      const MStaff* ms = m->mstaff(staffIdx);
+                                                      QPointF pt(m->pos().x() + system->pos().x(), 0);
                                                       p.translate(pt);
-                                                      s->shapes().at(i).draw(&p);
+                                                      QPointF o(0.0, m->system()->staffYpage(staffIdx));
+                                                      ms->shape().translated(o).draw(&p);
                                                       p.translate(-pt);
                                                       }
                                                 }
                                           }
                                     }
                               }
-                        }
-                  if (MScore::showMeasureShapes) {
-                        for (const System* system : page->systems()) {
-                              for (const MeasureBase* mb : system->measures()) {
-                                    if (mb->type() == Element::Type::MEASURE) {
-                                          const Measure* m = static_cast<const Measure*>(mb);
-                                          p.setPen(Qt::NoPen);
-                                          p.setBrush(QBrush(QColor(0, 0, 255, 60)));
-                                          for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                                                const MStaff* ms = m->mstaff(staffIdx);
-                                                QPointF pt(m->pos().x() + system->pos().x(), 0);
-                                                p.translate(pt);
-                                                QPointF o(0.0, m->system()->staffYpage(staffIdx));
-                                                ms->shape().translated(o).draw(&p);
-                                                p.translate(-pt);
+                        if (MScore::showCorruptedMeasures) {
+                              double _spatium = score()->spatium();
+                              QPen pen;
+                              pen.setColor(Qt::red);
+                              pen.setWidthF(1);
+                              pen.setStyle(Qt::SolidLine);
+                              p.setPen(pen);
+                              for (const System* system : page->systems()) {
+                                    for (const MeasureBase* mb : system->measures()) {
+                                          if (mb->type() == Element::Type::MEASURE) {
+                                                const Measure* m = static_cast<const Measure*>(mb);
+                                                for (int staffIdx = 0; staffIdx < _score->nstaves(); staffIdx++) {
+                                                      if (m->mstaff(staffIdx)->_corrupted) {
+                                                            p.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
+                                                            }
+                                                      }
                                                 }
                                           }
                                     }

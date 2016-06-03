@@ -57,7 +57,9 @@ struct MStaff {
                                           ///< this changes some layout rules
       bool _visible        { true };
       bool _slashStyle     { false };
-
+#ifndef NDEBUG
+      bool _corrupted      { false };
+#endif
       MStaff()  {}
       ~MStaff();
       MStaff(const MStaff&);
