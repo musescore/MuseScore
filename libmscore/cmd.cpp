@@ -1804,7 +1804,7 @@ Element* Score::move(const QString& cmd)
             // also use it if we are moving to next chord
             // to catch up with the cursor and not move the selection by 2 positions
             cr = selection().cr();
-            if (cr && (cr->isGrace() || cmd == "next-chord"))
+            if (cr && (cr->isGrace() || cmd == "next-chord" || cmd == "prev-chord"))
                   ;
             else
                   cr = inputState().cr();
@@ -1833,17 +1833,17 @@ Element* Score::move(const QString& cmd)
             switch (el->type()) {
                   case Element::Type::NOTE:           // a note is a valid target
                         trg = el;
-                        cr  = static_cast<Note*>(el)->chord();
+                        cr  = toNote(el)->chord();
                         break;
                   case Element::Type::CHORD:          // a chord or a rest are valid targets
                   case Element::Type::REST:
                         trg = el;
-                        cr  = static_cast<ChordRest*>(trg);
+                        cr  = toChordRest(trg);
                         break;
                   case Element::Type::SEGMENT: {      // from segment go to top chordrest in segment
-                        Segment* seg  = static_cast<Segment*>(el);
+                        Segment* seg  = toSegment(el);
                         // if segment is not chord/rest or grace, move to next chord/rest or grace segment
-                        if (!seg->isChordRest()) {
+                        if (!seg->isChordRest1()) {
                               seg = seg->next1(Segment::Type::ChordRest);
                               if (seg == 0)     // if none found, return failure
                                     return 0;
@@ -1853,14 +1853,14 @@ Element* Score::move(const QString& cmd)
                         // if segment has a chord/rest in original element track, use it
                         if (track > -1 && track < size && seg->element(track)) {
                               trg  = seg->element(track);
-                              cr = static_cast<ChordRest*>(trg);
+                              cr = toChordRest(trg);
                               break;
                               }
                         // if not, get topmost chord/rest
                         for (int i = 0; i < size; i++)
                               if (seg->element(i)) {
                                     trg  = seg->element(i);
-                                    cr = static_cast<ChordRest*>(trg);
+                                    cr = toChordRest(trg);
                                     break;
                                     }
                         break;
@@ -1873,7 +1873,7 @@ Element* Score::move(const QString& cmd)
             if (trg && cmd == "next-chord") {
                   // if chord, go to topmost note
                   if (trg->type() == Element::Type::CHORD)
-                        trg = static_cast<Chord*>(trg)->upNote();
+                        trg = toChord(trg)->upNote();
                   setPlayNote(true);
                   select(trg, SelectType::SINGLE, 0);
                   return trg;
@@ -1897,9 +1897,11 @@ Element* Score::move(const QString& cmd)
             // find next chordrest, which might be a grace note
             // this may override note input cursor
             el = nextChordRest(cr);
+            while (el && el->isRest() && toRest(el)->isGap())
+                  el = nextChordRest(toChordRest(el));
             if (el && noteEntryMode()) {
                   // do not use if not in original or new measure (don't skip measures)
-                  Measure* m = static_cast<ChordRest*>(el)->measure();
+                  Measure* m = toChordRest(el)->measure();
                   Segment* nis = _is.segment();
                   Measure* nim = nis ? nis->measure() : nullptr;
                   if (m != oim && m != nim)
@@ -1913,36 +1915,20 @@ Element* Score::move(const QString& cmd)
                   el = cr;
             }
       else if (cmd == "prev-chord") {
-
             // note input cursor
             if (noteEntryMode() && _is.segment()) {
-
-                  // back up until we find a ChordRest segment
-                  Segment* s = _is.segment()->prev1();
-                  while (s && s->segmentType() != Segment::Type::ChordRest)
-                        s = s->prev1();
-                  if (s == 0)
-                        return 0;
-
-                  // this is the right measure
-                  Measure* m = s->measure();
-
-                  // keep backing up until we find a chordrest in right track
-                  // or until we leave the right measure
+                  Measure* m = _is.segment()->measure();
+                  Segment* s = _is.segment()->prev1(Segment::Type::ChordRest);
                   int track = _is.track();
-                  for ( ; s; s = s->prev1()) {
-                        if (s->segmentType() != Segment::Type::ChordRest)
-                              continue;
-                        if (s->element(track) || s->measure() != m)
+                  for (; s; s = s->prev1(Segment::Type::ChordRest)) {
+                        if (s->element(track) || s->measure() != m) {
+                              if (s->element(track)) {
+                                    if (s->element(track)->isRest() && toRest(s->element(track))->isGap())
+                                          continue;
+                                    }
                               break;
+                              }
                         }
-
-                  // if we did not find a chordrest in right track in right measure
-                  // then use first chordrest segment of right measure
-                  if (!s || s->measure() != m)
-                        s = m->first(Segment::Type::ChordRest);
-
-                  // move input cursor
                   _is.moveInputPos(s);
                   }
 
@@ -1950,9 +1936,11 @@ Element* Score::move(const QString& cmd)
             // find previous chordrest, which might be a grace note
             // this may override note input cursor
             el = prevChordRest(cr);
+            while (el && el->isRest() && toRest(el)->isGap())
+                  el = prevChordRest(toChordRest(el));
             if (el && noteEntryMode()) {
                   // do not use if not in original or new measure (don't skip measures)
-                  Measure* m = static_cast<ChordRest*>(el)->measure();
+                  Measure* m = toChordRest(el)->measure();
                   Segment* nis = _is.segment();
                   Measure* nim = nis ? nis->measure() : nullptr;
                   if (m != oim && m != nim)
@@ -1989,7 +1977,7 @@ Element* Score::move(const QString& cmd)
 
       if (el) {
             if (el->type() == Element::Type::CHORD)
-                  el = static_cast<Chord*>(el)->upNote();       // originally downNote
+                  el = toChord(el)->upNote();       // originally downNote
             setPlayNote(true);
             if (noteEntryMode()) {
                   // if cursor moved into a gap, selection cannot follow

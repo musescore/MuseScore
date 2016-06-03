@@ -175,7 +175,7 @@ Segment* Selection::firstChordRestSegment() const
       if (!isRange()) return 0;
 
       for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
-            if (s->segmentType() == Segment::Type::ChordRest)
+            if (s->isChordRestType())
                   return s;
             }
       return 0;
@@ -189,25 +189,25 @@ ChordRest* Selection::firstChordRest(int track) const
       {
       if (_el.size() == 1) {
             Element* el = _el[0];
-            if (el->type() == Element::Type::NOTE)
-                  return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == Element::Type::REST)
-                  return static_cast<ChordRest*>(el);
+            if (el->isNote())
+                  return toChordRest(el->parent());
+            else if (el->isRest())
+                  return toChordRest(el);
             return 0;
             }
       ChordRest* cr = 0;
       foreach (Element* el, _el) {
-            if (el->type() == Element::Type::NOTE)
+            if (el->isNote())
                   el = el->parent();
             if (el->isChordRest()) {
                   if (track != -1 && el->track() != track)
                         continue;
                   if (cr) {
-                        if (static_cast<ChordRest*>(el)->tick() < cr->tick())
-                              cr = static_cast<ChordRest*>(el);
+                        if (toChordRest(el)->tick() < cr->tick())
+                              cr = toChordRest(el);
                         }
                   else
-                        cr = static_cast<ChordRest*>(el);
+                        cr = toChordRest(el);
                   }
             }
       return cr;
@@ -221,25 +221,25 @@ ChordRest* Selection::lastChordRest(int track) const
       {
       if (_el.size() == 1) {
             Element* el = _el[0];
-            if (el && el->type() == Element::Type::NOTE)
-                  return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST || el->type() == Element::Type::REPEAT_MEASURE)
-                  return static_cast<ChordRest*>(el);
+            if (el && el->isNote())
+                  return toChordRest(el->parent());
+            else if (el->isChord() || el->isRest() || el->type() == Element::Type::REPEAT_MEASURE)
+                  return toChordRest(el);
             return 0;
             }
       ChordRest* cr = 0;
       for (auto el : _el) {
-            if (el->type() == Element::Type::NOTE)
-                  el = ((Note*)el)->chord();
-            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == Segment::Type::ChordRest) {
+            if (el->isNote())
+                  el = toNote(el)->chord();
+            if (el->isChordRest() && toChordRest(el)->segment()->isChordRestType()) {
                   if (track != -1 && el->track() != track)
                         continue;
                   if (cr) {
-                        if (((ChordRest*)el)->tick() >= cr->tick())
-                              cr = (ChordRest*)el;
+                        if (toChordRest(el)->tick() >= cr->tick())
+                              cr = toChordRest(el);
                         }
                   else
-                        cr = (ChordRest*)el;
+                        cr = toChordRest(el);
                   }
             }
       return cr;
