@@ -468,7 +468,8 @@ void MuseScore::populateNoteInputMenu()
             else {
                   QAction* a = getAction(s);
                   if (strncmp(s, "voice-", 6) == 0) {
-                        QToolButton* tb = new QToolButton(this);
+//                        QButton* tb = new QToolButton(this);
+                        AccessibleToolButton* tb = new AccessibleToolButton(this, a);
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
                         if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
@@ -478,7 +479,7 @@ void MuseScore::populateNoteInputMenu()
                         p.setColor(QPalette::Base, MScore::selectColor[i]);
                         tb->setPalette(p);
                         a->setCheckable(true);
-                        tb->setDefaultAction(a);
+                        // tb->setDefaultAction(a);
                         entryTools->addWidget(tb);
                         }
                   else
@@ -690,12 +691,8 @@ MuseScore::MuseScore()
       selectionChanged(SelState::NONE);
 
       //---------------------------------------------------
-      //    File Action
+      //    File Tool Bar
       //---------------------------------------------------
-
-      //---------------------
-      //    Tool Bar
-      //---------------------
 
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
@@ -722,6 +719,10 @@ MuseScore::MuseScore()
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
+      //---------------------
+      //    Transport Tool Bar
+      //---------------------
+
       transportTools = addToolBar(tr("Transport Tools"));
       transportTools->setObjectName("transport-tools");
 #ifdef HAS_MIDI
@@ -739,9 +740,17 @@ MuseScore::MuseScore()
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("pan")));
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
+      //-------------------------------
+      //    Concert Pitch Tool Bar
+      //-------------------------------
+
       cpitchTools = addToolBar(tr("Concert Pitch"));
       cpitchTools->setObjectName("pitch-tools");
       cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
+
+      //-------------------------------
+      //    Image Capture Tool Bar
+      //-------------------------------
 
       QToolBar* foto = addToolBar(tr("Image Capture"));
       foto->setObjectName("foto-tools");

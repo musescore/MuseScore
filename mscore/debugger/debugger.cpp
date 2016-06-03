@@ -1211,10 +1211,10 @@ RestView::RestView()
 
       rb.setupUi(addWidget());
 
-      connect(crb.beamButton, SIGNAL(clicked()), SLOT(beamClicked()));
+      connect(crb.beamButton,   SIGNAL(clicked()), SLOT(beamClicked()));
       connect(crb.tupletButton, SIGNAL(clicked()), SLOT(tupletClicked()));
-      connect(crb.attributes, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
-      connect(crb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(crb.attributes,   SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(crb.lyrics,       SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -1223,7 +1223,7 @@ RestView::RestView()
 
 void RestView::setElement(Element* e)
       {
-      Rest* rest = (Rest*)e;
+      Rest* rest = toRest(e);
       ShowElementBase::setElement(e);
 
       crb.tick->setValue(rest->tick());
@@ -1239,7 +1239,7 @@ void RestView::setElement(Element* e)
       crb.move->setValue(rest->staffMove());
 
       crb.attributes->clear();
-      foreach(Articulation* a, rest->articulations()) {
+      for (Articulation* a : rest->articulations()) {
             QString s;
             s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1247,7 +1247,7 @@ void RestView::setElement(Element* e)
             crb.attributes->addItem(item);
             }
       crb.lyrics->clear();
-      foreach(Lyrics* lyrics, rest->lyricsList()) {
+      for (Lyrics* lyrics : rest->lyricsList()) {
             QString s;
             s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1255,22 +1255,10 @@ void RestView::setElement(Element* e)
             crb.lyrics->addItem(item);
             }
 
-      Measure* m = rest->measure();
-      int seg = 0;
-      int tracks = 0; // TODO cs->nstaves() * VOICES;
-      for (Segment* s = m->first(); s; s = s->next(), ++seg) {
-            int track;
-            for (track = 0; track < tracks; ++track) {
-                  Element* e = s->element(track);
-                  if (e == rest)
-                        break;
-                  }
-            if (track < tracks)
-                  break;
-            }
       rb.sym->setValue(int(rest->sym()));
       rb.dotline->setValue(rest->getDotline());
       rb.mmWidth->setValue(rest->mmWidth());
+      rb.gap->setChecked(rest->isGap());
       }
 
 //---------------------------------------------------------
@@ -1774,7 +1762,7 @@ void ShowElementBase::setElement(Element* e)
       eb.selectable->setChecked(e->selectable());
       eb.droptarget->setChecked(e->dropTarget());
       eb.generated->setChecked(e->generated());
-      eb.visible->setChecked(e->visible() && el->isRest() && !toRest(el)->isGap());
+      eb.visible->setChecked(e->visible());
       eb.track->setValue(e->track());
       eb.z->setValue(e->z());
       eb.posx->setValue(e->ipos().x());
