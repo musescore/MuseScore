@@ -1936,9 +1936,10 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
       for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
-                  Chord* c = toChord(s->element(strack + voice));
-                  if (c == 0 || c->type() != Element::Type::CHORD)
+                  Element* e = s->element(strack + voice);
+                  if (!(e && e->isChord()))
                         continue;
+                  Chord* c = toChord(e);
                   QList<Note*> removeNotes;
                   foreach(Note* note, c->notes()) {
                         if (note->pitch() >= splitPoint)
