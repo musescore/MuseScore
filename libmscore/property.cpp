@@ -239,6 +239,7 @@ static const PropertyData propertyList[] = {
 
       { P_ID::SYSTEM_BRACKET,      false, "type",                  P_TYPE::INT  },
       { P_ID::GAP,                 false, 0,                       P_TYPE::BOOL },
+      { P_ID::AUTOPLACE,           false, 0,                       P_TYPE::BOOL },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT  }
       };

@@ -317,6 +317,7 @@ class Element : public QObject, public ScoreElement {
       Placement _placement;
 
       mutable ElementFlags _flags;
+      bool _autoplace;
 
       int _track;                 ///< staffIdx * VOICES + voice
       qreal _mag;                 ///< standard magnification (derived value)
@@ -569,6 +570,8 @@ class Element : public QObject, public ScoreElement {
       bool isSegmentFlag() const           { return flag(ElementFlag::SEGMENT);     }
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
+      bool autoplace() const           { return _autoplace; }
+      void setAutoplace(bool v)        { _autoplace = v; }
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;

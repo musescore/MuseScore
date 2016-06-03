@@ -29,6 +29,9 @@ class InspectorText : public InspectorBase {
       UiInspectorElement e;
       Ui::InspectorText t;
 
+   private slots:
+      void autoplaceChanged(bool val);
+
    public:
       InspectorText(QWidget* parent);
       virtual void setElement() override;

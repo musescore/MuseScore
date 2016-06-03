@@ -340,12 +340,11 @@ InspectorElement::InspectorElement(QWidget* parent)
       b.setupUi(addWidget());
 
       iList = {
-            { P_ID::COLOR,    0, 0, b.color,      b.resetColor   },
-            { P_ID::VISIBLE,  0, 0, b.visible,    b.resetVisible },
-            { P_ID::USER_OFF, 0, 0, b.offsetX,    b.resetX       },
-            { P_ID::USER_OFF, 1, 0, b.offsetY,    b.resetY       }
+            { P_ID::COLOR,     0, 0, b.color,      b.resetColor     },
+            { P_ID::VISIBLE,   0, 0, b.visible,    b.resetVisible   },
+            { P_ID::USER_OFF,  0, 0, b.offsetX,    b.resetX         },
+            { P_ID::USER_OFF,  1, 0, b.offsetY,    b.resetY         },
             };
-
       mapSignals();
       }
 
