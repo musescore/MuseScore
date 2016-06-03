@@ -3398,6 +3398,16 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "show-bounding-rect",
+         QT_TRANSLATE_NOOP("action","Show Bounding Rectangles"),
+         QT_TRANSLATE_NOOP("action","Show Bounding Rectangles for selected Elements"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          }
 #endif
       };

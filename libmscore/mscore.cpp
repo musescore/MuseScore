@@ -63,10 +63,11 @@ bool MScore::debugMode;
 bool MScore::testMode = false;
 
 // #ifndef NDEBUG
-bool MScore::showSegmentShapes = false;
-bool MScore::showMeasureShapes = false;
+bool MScore::showSegmentShapes   = false;
+bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
-bool MScore::noVerticalStretch = false;
+bool MScore::noVerticalStretch   = false;
+bool MScore::showBoundingRect    = false;
 // #endif
 
 bool  MScore::saveTemplateMode = false;
