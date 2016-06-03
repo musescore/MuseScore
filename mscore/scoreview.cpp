@@ -2412,6 +2412,8 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
             e->itemDiscovered = 0;
             if (!e->visible() && (score()->printing() || !score()->showInvisible()))
                   continue;
+            if (e->isRest() && toRest(e)->isGap())
+                  continue;
             QPointF pos(e->pagePos());
             painter.translate(pos);
             e->draw(&painter);
@@ -2959,13 +2961,28 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "up-chord") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
+            if (el && (el->isNote() || el->isRest()))
                   cmdGotoElement(score()->upAlt(el));
+            el = score()->selection().element();
+            while (el->isRest() && toRest(el)->isGap() && el->voice() != 0) {
+                  el = score()->upAlt(el);
+                  cmdGotoElement(el);
+                  }
             }
       else if (cmd == "down-chord") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
+            Element* oel = el;
+            if (el && (el->isNote() || el->isRest()))
                   cmdGotoElement(score()->downAlt(el));
+            el = score()->selection().element();
+            while (el->isRest() && toRest(el)->isGap() && el->voice() != 3) {
+                  if (score()->downAlt(el) == el) {
+                        cmdGotoElement(oel);
+                        break;
+                        }
+                  el = score()->downAlt(el);
+                  cmdGotoElement(el);
+                  }
             }
       else if (cmd == "top-chord" ) {
             Element* el = score()->selection().element();
@@ -2982,7 +2999,6 @@ void ScoreView::cmd(const QAction* a)
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
 
-            //cmdGotoElement(score()->nextElement(el));
             if (el)
                   cmdGotoElement(el->nextElement());
             else
@@ -5113,7 +5129,7 @@ void ScoreView::harmonyTicksTab(int ticks)
             }
 
       // look for a segment at this tick; if none, create one
-      while(segment && segment->tick() < newTick)
+      while (segment && segment->tick() < newTick)
             segment = segment->next1(Segment::Type::ChordRest);
       if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
             segment = new Segment(measure, Segment::Type::ChordRest, newTick);

@@ -2147,6 +2147,77 @@ void Measure::read(XmlReader& e, int staffIdx)
       }
 
 //---------------------------------------------------------
+//   checkMeasure
+//    after opening / paste and every read operation
+//    this method checks for gaps and fills them
+//    with invisible rests
+//---------------------------------------------------------
+
+void Measure::checkMeasue(int staffIdx)
+      {
+      for (int track = staffIdx * VOICES + 1; track % VOICES && hasVoice(track); track++) {
+            Segment* seg = first();
+            if (!seg->element(track))
+                  seg = seg->nextCR(track, false);
+            if (!seg->element(track))
+                  continue;
+
+            Segment* pseg = 0;
+            int stick = tick();
+            int ticks = seg->tick() - stick;
+
+            while (seg) {
+                  if (ticks) {
+                        Fraction f = Fraction::fromTicks(ticks);
+
+                        Rest* rest = new Rest(score());
+                        rest->setDuration(f);
+                        rest->setTrack(track);
+                        Segment* segment = getSegment(rest, stick);
+                        segment->add(rest);
+                        rest->setGap(true);
+                        seg = segment;
+                        }
+
+                  pseg = seg;
+                  stick = seg->tick() + toChordRest(seg->element(track))->actualTicks();
+                  for (Segment* s = seg->nextCR(track, true); s; s = s->nextCR(track, true)) {
+                        if (!s->element(track))
+                              continue;
+                        if (s->parent() != this) {
+                              stick = -1;
+                              break;
+                              }
+
+                        seg = s;
+                        if (seg->tick() == stick) {
+                              pseg = seg;
+                              stick = seg->tick() + toChordRest(seg->element(track))->actualTicks();
+                              continue;
+                              }
+                        else {
+                              ticks = seg->tick() - stick;
+                              break;
+                              }
+                        }
+
+                  if (stick == -1) {
+                        break;
+                        }
+                  //reached last segment in measure
+                  if (pseg == seg || stick == tick() + _len.ticks()) {
+                        if (stick + ticks < tick() + _len.ticks()) {
+                              ticks = tick() + _len.ticks() - stick;
+                              if (ticks > 0)
+                                    continue;
+                              }
+                        break;
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   visible
 //---------------------------------------------------------
 
@@ -2771,7 +2842,7 @@ bool Measure::empty() const
             return false;
       int n = 0;
       int tracks = _mstaves.size() * VOICES;
-      static const Segment::Type st { Segment::Type::ChordRest };
+      static const Segment::Type st = Segment::Type::ChordRest ;
       for (const Segment* s = first(st); s; s = s->next(st)) {
             bool restFound = false;
             for (int track = 0; track < tracks; ++track) {
@@ -2800,11 +2871,27 @@ bool Measure::empty() const
 
 bool Measure::isOnlyRests(int track) const
       {
-      static const Segment::Type st { Segment::Type::ChordRest };
+      static const Segment::Type st = Segment::Type::ChordRest;
       for (const Segment* s = first(st); s; s = s->next(st)) {
-            if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
+            if (s->segmentType() != st || !s->element(track))
                   continue;
             if (s->element(track)->type() != Element::Type::REST)
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   isOnlyDeletedRests
+//---------------------------------------------------------
+
+bool Measure::isOnlyDeletedRests(int track) const
+      {
+      static const Segment::Type st { Segment::Type::ChordRest };
+      for (const Segment* s = first(st); s; s = s->next(st)) {
+            if (s->segmentType() != st || !s->element(track))
+                  continue;
+            if (s->element(track)->isRest() ? !toRest(s->element(track))->isGap() : !s->element(track)->isRest())
                   return false;
             }
       return true;

@@ -22,6 +22,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/keysig.h"
 #include "libmscore/barline.h"
+#include "libmscore/rest.h"
 
 #include "preferences.h"
 #include "scoreview.h"
@@ -140,6 +141,9 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       for (const Element* e : el) {
             e->itemDiscovered = 0;
             if (!e->visible() && !_score->showInvisible())
+                  continue;
+
+            if (e->isRest() && toRest(e)->isGap())
                   continue;
 
             if (e->isStaffLines()) {
@@ -308,7 +312,10 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
             if (!e->visible() && !_score->showInvisible())
                   continue;
 
-           if (e->isStaffLines()) {
+            if (e->isRest() && toRest(e)->isGap())
+                  continue;
+
+            if (e->isStaffLines()) {
                   painter.save();
                   Staff* currentStaff = _score->staff(e->staffIdx());
                   Segment* parent = _score->tick2segmentMM(tick);
