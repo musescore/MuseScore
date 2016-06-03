@@ -332,10 +332,8 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
 
 void Rest::layout()
       {
-      if (_gap) {
-            setPos(0.0, 0.0);
+      if (_gap)
             return;
-            }
       for (Element* e : _el)
             e->layout();
       if (measure() && measure()->isMMRest()) {
@@ -659,7 +657,7 @@ void Rest::setMMWidth(qreal val)
 
 void Rest::reset()
       {
-      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
+      undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
       ChordRest::reset();
       }
 
@@ -866,19 +864,52 @@ void Rest::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Rest::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::GAP:
+                  return _gap;
+            default:
+                  return ChordRest::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Rest::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::GAP:
+                  return false;
+            default:
+                  return ChordRest::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
 bool Rest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case P_ID::GAP:
+                  _gap = v.toBool();
+                  score()->setLayout(tick());
+                  break;
+
             case P_ID::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
                   setUserOff(v.toPointF());
                   layout();
                   score()->addRefresh(canvasBoundingRect());
                   if (beam())
-                        score()->setLayoutAll();
+                        score()->setLayout(tick());
                   break;
             default:
                   return ChordRest::setProperty(propertyId, v);
@@ -899,22 +930,6 @@ Shape Rest::shape() const
       else
             shape.add(bbox().translated(pos()));
       return shape;
-      }
-
-//---------------------------------------------------------
-//   setGap
-//---------------------------------------------------------
-void Rest::setGap(bool f){
-      _gap = f;
-      score()->setLayout(tick());
-      }
-
-//---------------------------------------------------------
-//   undoChangeGap
-//---------------------------------------------------------
-
-void Rest::undoChangeGap(bool v){
-      score()->undo(new ChangeGap(this, v));
       }
 
 }

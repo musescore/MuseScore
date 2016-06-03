@@ -1828,7 +1828,7 @@ void Score::deleteItem(Element* el)
                   if (rest->tuplet() && rest->tuplet()->elements().empty())
                         undoRemoveElement(rest->tuplet());
                   if (el->voice() != 0) {
-                        rest->undoChangeGap(true);
+                        rest->undoChangeProperty(P_ID::GAP, true);
 
                         // delete them really when only gap rests are in the actual measure.
                         Measure* m = toRest(el)->measure();
