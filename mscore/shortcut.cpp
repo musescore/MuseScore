@@ -3352,7 +3352,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL,
          "edit-toolbars",
          QT_TRANSLATE_NOOP("action","Edit Toolbars"),
-         QT_TRANSLATE_NOOP("action","Edit Toolbars"),
+         QT_TRANSLATE_NOOP("action","Edit toolbars"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
@@ -3363,8 +3363,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "no-horizontal-stretch",
-         QT_TRANSLATE_NOOP("action","no horizontal stretch"),
-         QT_TRANSLATE_NOOP("action","no horizontal stretch"),
+         QT_TRANSLATE_NOOP("action","No Horizontal Stretch"),
+         QT_TRANSLATE_NOOP("action","No horizontal stretch"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
@@ -3373,8 +3373,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "no-vertical-stretch",
-         QT_TRANSLATE_NOOP("action","no vertical stretch"),
-         QT_TRANSLATE_NOOP("action","no vertical stretch"),
+         QT_TRANSLATE_NOOP("action","No Vertical stretch"),
+         QT_TRANSLATE_NOOP("action","No vertical stretch"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
@@ -3383,8 +3383,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "show-segment-shapes",
-         QT_TRANSLATE_NOOP("action","show segment shapes"),
-         QT_TRANSLATE_NOOP("action","show segment shapes"),
+         QT_TRANSLATE_NOOP("action","Show Segment Shapes"),
+         QT_TRANSLATE_NOOP("action","Show segment shapes"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
@@ -3393,8 +3393,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "show-measure-shapes",
-         QT_TRANSLATE_NOOP("action","show measure shapes"),
-         QT_TRANSLATE_NOOP("action","show measure shapes"),
+         QT_TRANSLATE_NOOP("action","Show Measure Shapes"),
+         QT_TRANSLATE_NOOP("action","Show measure shapes"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
