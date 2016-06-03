@@ -1122,6 +1122,9 @@ QString ChordRest::durationUserName() const
             case 3:
                   dotString += tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
+            case 4:
+                  dotString += tr("Quadruple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  break;
             default:
                   dotString += durationType().durationTypeUserName();
             }
