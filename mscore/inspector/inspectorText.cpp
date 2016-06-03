@@ -20,35 +20,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorText::InspectorText(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       t.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,              0, 0, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,            0, 0, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,           0, 0, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,           1, 0, e.offsetY,  e.resetY        },
-            { P_ID::AUTOPLACE,          0, 0, e.autoplace,  e.resetAutoplace },
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    }
-            };
-      mapSignals();
-      connect(e.autoplace, SIGNAL(toggled(bool)), SLOT(autoplaceChanged(bool)));
+      iList.push_back({ P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    });
+
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      }
-
-//---------------------------------------------------------
-//   autoplaceChanged
-//---------------------------------------------------------
-
-void InspectorText::autoplaceChanged(bool val)
-      {
-      val = !val;
-      e.offsetX->setEnabled(val);
-      e.offsetY->setEnabled(val);
-      e.resetX->setEnabled(val);
-      e.resetY->setEnabled(val);
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -69,8 +48,7 @@ void InspectorText::setElement()
                   t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
             }
       t.style->blockSignals(false);
-      InspectorBase::setElement();
-      autoplaceChanged(e->autoplace());
+      InspectorElementBase::setElement();
       }
 
 }
