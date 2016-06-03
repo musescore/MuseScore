@@ -424,6 +424,7 @@ Channel::Channel()
       pan      = 64; // actually 63.5 for center
       chorus   = 0;
       reverb   = 0;
+      vel2vol  = 127;
 
       mute     = false;
       solo     = false;
@@ -522,6 +523,9 @@ void Channel::read(XmlReader& e, Part* part)
                         case CTRL_REVERB_SEND:
                               reverb = value;
                               break;
+                        case CTRL_VEL2VOL:
+                              vel2vol = value;
+                              break;
                         default:
                               {
                               Event e(ME_CONTROLLER);
@@ -607,6 +611,9 @@ void Channel::updateInitList() const
 
       e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb);
       init[int(A::REVERB)] = e;
+
+      e.setData(ME_CONTROLLER, CTRL_VEL2VOL, vel2vol);
+      init[int(A::VELOCITY_TO_VOL)] = e;
       }
 
 //---------------------------------------------------------

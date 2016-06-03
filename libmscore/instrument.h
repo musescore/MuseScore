@@ -96,7 +96,7 @@ struct Channel {
       // Channel init EventList (maybe zero)
 
       enum class A : char {
-            HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
+            HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB, VELOCITY_TO_VOL,
             INIT_COUNT
             };
       QString name;
@@ -111,6 +111,7 @@ struct Channel {
       char pan;
       char chorus;
       char reverb;
+      char vel2vol;
 
       bool mute;
       bool solo;

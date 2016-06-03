@@ -46,6 +46,7 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       void panChanged(double, bool syncControls = true);
       void reverbChanged(double, bool syncControls = true);
       void chorusChanged(double, bool syncControls = true);
+      void vel2volChanged(double, bool syncControls = true);
       void muteChanged(bool, bool syncControls = true);
       void soloToggled(bool, bool syncControls = true);
       void drumsetToggled(bool, bool syncControls = true);

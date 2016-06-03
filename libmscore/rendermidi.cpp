@@ -365,7 +365,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   if (staff->score()->useCC11() && velocity1!=velocity2)
                         {
-                        velocity=127;
+                        //velocity=127;
 
                         int cc11EndTick = seg->tick()+seg->ticks()-1;
 

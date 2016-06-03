@@ -56,6 +56,7 @@ PartEdit::PartEdit(QWidget* parent)
       connect(pan,      SIGNAL(valueChanged(double,int)), SLOT(panChanged(double)));
       connect(chorus,   SIGNAL(valueChanged(double,int)), SLOT(chorusChanged(double)));
       connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
+      connect(vel2vol,  SIGNAL(valueChanged(double,int)), SLOT(vel2volChanged(double)));
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
       connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
@@ -97,6 +98,8 @@ void PartEdit::setPart(Part* p, Channel* a)
       reverb->setDclickValue1(dummy.reverb);
       reverb->setDclickValue2(dummy.reverb);
       _setValue(chorus, a->chorus);
+
+      _setValue(vel2vol, a->vel2vol);
 
       chorus->setDclickValue1(dummy.chorus);
       chorus->setDclickValue2(dummy.chorus);
@@ -383,6 +386,20 @@ void PartEdit::chorusChanged(double val, bool syncControls)
       }
 
 //---------------------------------------------------------
+//   vel2volChanged
+//---------------------------------------------------------
+
+void PartEdit::vel2volChanged(double val, bool syncControls)
+      {
+      int iv = lrint(val);
+      qDebug("vel2vol %d", iv);
+      seq->setController(channel->channel, CTRL_VEL2VOL, iv);
+      channel->vel2vol = iv;
+      channel->updateInitList();
+      sync(syncControls);
+      }
+
+//---------------------------------------------------------
 //   muteChanged
 //---------------------------------------------------------
 
@@ -539,6 +556,10 @@ void PartEdit::sync(bool syncControls)
                   if (chorus->value() != pe->chorus->value()) {
                         _setValue(pe->chorus, this->chorus->value());
                        emit pe->chorusChanged(this->chorus->value(), false);
+                        }
+                  if (vel2vol->value() != pe->vel2vol->value()) {
+                        _setValue(pe->vel2vol, this->vel2vol->value());
+                       emit pe->vel2volChanged(this->vel2vol->value(), false);
                         }
                   if (mute->isChecked() != pe->mute->isChecked()) {
                         _setChecked(pe->mute, channel->mute);
