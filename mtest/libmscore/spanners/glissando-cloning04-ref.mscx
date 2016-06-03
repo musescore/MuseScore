@@ -201,6 +201,10 @@
       <metaTag name="partName">Flute</metaTag>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -298,7 +302,7 @@
               </Note>
             </Chord>
           </Measure>
-        <Measure number="1">
+        <Measure number="2">
           <Rest>
             <lid>7</lid>
             <durationType>measure</durationType>
