@@ -68,6 +68,7 @@ qreal Bracket::width() const
                   w = 0.67f * score()->styleP(StyleIdx::bracketWidth) + score()->styleP(StyleIdx::bracketDistance);
                   break;
             case BracketType::NO_BRACKET:
+            default:
                   w = 0.0;
                   break;
             }

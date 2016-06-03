@@ -3069,6 +3069,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
+                  default:
                         pbreak = false;
                         break;
                   }
