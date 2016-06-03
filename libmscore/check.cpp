@@ -178,6 +178,9 @@ bool Score::sanityCheck(const QString& name)
             for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
                   Rest* fmrest0 = 0;      // full measure rest in voice 0
                   Fraction voices[VOICES] = {};
+#ifndef NDEBUG
+                  m->mstaff(staffIdx)->_corrupted = false;
+#endif
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                         for (int v = 0; v < VOICES; ++v) {
                               ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
@@ -196,6 +199,9 @@ bool Score::sanityCheck(const QString& name)
                         QString msg = tr("Measure %1 Staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg( staffIdx+1).arg(mLen.print()).arg(voices[0].print());
                         qDebug() << msg;
                         error += QString("%1\n").arg(msg);
+#ifndef NDEBUG
+                        m->mstaff(staffIdx)->_corrupted = true;
+#endif
                         result = false;
                         // try to fix a bad full measure rest
                         if (fmrest0) {
@@ -210,6 +216,9 @@ bool Score::sanityCheck(const QString& name)
                               QString msg = tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg( mNumber).arg(staffIdx + 1).arg(v+1).arg(mLen.print()).arg(voices[v].print());
                               qDebug() << msg;
                               error += QString("%1\n").arg(msg);
+#ifndef NDEBUG
+                              m->mstaff(staffIdx)->_corrupted = true;
+#endif
                               result = false;
                               }
                         }

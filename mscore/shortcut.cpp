@@ -3408,6 +3408,16 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "show-corrupted-measures",
+         QT_TRANSLATE_NOOP("action","Show Corrupted Measures"),
+         QT_TRANSLATE_NOOP("action","Show corrupted measures"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          }
 #endif
       };

@@ -68,6 +68,7 @@ bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;
 bool MScore::showBoundingRect    = false;
+bool MScore::showCorruptedMeasures = true;
 // #endif
 
 bool  MScore::saveTemplateMode = false;
