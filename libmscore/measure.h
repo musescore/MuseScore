@@ -142,6 +142,7 @@ class Measure : public MeasureBase {
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
       virtual bool isEditable() const override { return false; }
+      void checkMeasue(int idx);
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
@@ -242,6 +243,7 @@ class Measure : public MeasureBase {
 
       bool empty() const;
       bool isOnlyRests(int track) const;
+      bool isOnlyDeletedRests(int track) const;
 
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }

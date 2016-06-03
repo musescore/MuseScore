@@ -1824,13 +1824,89 @@ void Score::deleteItem(Element* el)
                   //    e.g. voice 0 rests cannot be removed
                   //
                   {
-                  Rest* rest = static_cast<Rest*>(el);
+                  Rest* rest = toRest(el);
                   if (rest->tuplet() && rest->tuplet()->elements().empty())
                         undoRemoveElement(rest->tuplet());
                   if (el->voice() != 0) {
-                        undoRemoveElement(el);
-                        if (noteEntryMode())
-                              _is.moveToNextInputPos();
+                        rest->undoChangeGap(true);
+
+                        // delete them really when only gap rests are in the actual measure.
+                        Measure* m = toRest(el)->measure();
+                        int track = el->track();
+                        if (m->isOnlyDeletedRests(track)) {
+                              static const Segment::Type st { Segment::Type::ChordRest };
+                              for (const Segment* s = m->first(st); s; s = s->next(st)) {
+                                    Element* del = s->element(track);
+                                    if (s->segmentType() != st || !del)
+                                          continue;
+                                    if (toRest(del)->isGap())
+                                          undoRemoveElement(del);
+                                    }
+                              }
+                        else {
+                              // check if the other rest could be combined
+                              Segment* s = toRest(el)->segment();
+
+                              std::vector<Rest*> rests;
+                              // find previous segment with cr in this track
+                              Element* pe = 0;
+                              for (Segment* ps = s->prev(Segment::Type::ChordRest); ps; ps = ps->prev(Segment::Type::ChordRest)) {
+                                    Element* el = ps->element(track);
+                                    if (el && el->isRest() && toRest(el)->isGap()) {
+                                          pe = el;
+                                          rests.push_back(toRest(el));
+                                          }
+                                    else if (el)
+                                          break;
+                                    }
+                              // find next segment with cr in this track
+                              Segment* ns;
+                              Element* ne = 0;
+                              for (ns = s->next(Segment::Type::ChordRest); ns; ns = ns->next(Segment::Type::ChordRest)) {
+                                    Element* el = ns->element(track);
+                                    if (el && el->isRest() && toRest(el)->isGap()) {
+                                          ne = el;
+                                          rests.push_back(toRest(el));
+                                          }
+                                    else if (el)
+                                          break;
+                                    }
+
+                              int stick = 0;
+                              int ticks = 0;
+
+                              if (pe)
+                                    stick = pe->tick();
+                              else
+                                    stick = s->tick();
+
+                              if (ne)
+                                    ticks = ne->tick() - stick + toRest(ne)->actualTicks();
+                              else if (ns)
+                                    ticks = ns->tick() - stick;
+                              else
+                                    ticks = m->ticks() + m->tick() - stick;
+
+                              if (ticks != m->ticks() && ticks != s->ticks()) {
+                                    undoRemoveElement(rest);
+                                    for (Rest* r : rests) {
+                                          undoRemoveElement(r);
+                                          }
+
+                                    Fraction f = Fraction::fromTicks(ticks);
+
+                                    Rest* rest = new Rest(score());
+                                    rest->setDuration(f);
+                                    rest->setTrack(track);
+                                    Segment* segment = m->getSegment(rest, stick);
+                                    segment->add(rest);
+                                    rest->setGap(true);
+                                    }
+                              }
+                        // Set input position
+                        // TODO If deleted element is last of a sequence, use prev?
+                        if (_is.noteEntryMode())
+                              score()->move("prev-chord");
                         }
                   }
                   break;
@@ -3019,4 +3095,3 @@ void Score::checkSpanner(int startTick, int endTick)
       }
 
 }
-

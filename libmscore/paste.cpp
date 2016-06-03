@@ -421,6 +421,14 @@ PasteState Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
                   endStaff = nstaves();
+            //check and add truly invisible rests insted of gaps
+            //TODO: look if this could be done different
+            Measure* dstM = tick2measureMM(dstTick);
+            Measure* endM = tick2measureMM(dstTick + tickLen);
+            for (int i = dstStaff; i < endStaff; i++) {
+                  for (Measure* m = dstM; m && m != endM->nextMeasureMM(); m = m->nextMeasureMM())
+                        m->checkMeasue(i);
+                  }
             _selection.setRange(s1, s2, dstStaff, endStaff);
             _selection.updateSelectedElements();
 
