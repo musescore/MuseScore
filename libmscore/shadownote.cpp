@@ -110,7 +110,6 @@ void ShadowNote::draw(QPainter* painter) const
 
       QPointF ap(pagePos());
       painter->translate(ap);
-      painter->drawRect(bbox());
       qreal lw = score()->styleP(StyleIdx::stemWidth);
       QPen pen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::RoundCap);
       painter->setPen(pen);
