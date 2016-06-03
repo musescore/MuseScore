@@ -3373,7 +3373,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "no-vertical-stretch",
-         QT_TRANSLATE_NOOP("action","No Vertical stretch"),
+         QT_TRANSLATE_NOOP("action","No Vertical Stretch"),
          QT_TRANSLATE_NOOP("action","No vertical stretch"),
          0,
          Icons::Invalid_ICON,
@@ -3404,7 +3404,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_ALL,
          "show-bounding-rect",
          QT_TRANSLATE_NOOP("action","Show Bounding Rectangles"),
-         QT_TRANSLATE_NOOP("action","Show Bounding Rectangles for selected Elements"),
+         QT_TRANSLATE_NOOP("action","Show bounding rectangles for selected elements"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
