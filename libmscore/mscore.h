@@ -340,6 +340,7 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //    Enumerate the list of build in text styles.
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
+
 MS_QML_ENUM(TextStyleType, signed char,\
       DEFAULT = 0,\
       TITLE,\
@@ -489,6 +490,7 @@ class MScore : public QObject {
       static bool noVerticalStretch;
       static bool showSegmentShapes;
       static bool showMeasureShapes;
+      static bool showBoundingRect;
 // #endif
       static bool debugMode;
       static bool testMode;

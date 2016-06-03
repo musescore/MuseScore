@@ -3304,7 +3304,8 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         else if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
                               e->layout();
-                              s->staffShape(e->staffIdx()).add(e->shape().translated(s->pos()));
+                              // s->staffShape(e->staffIdx()).add(e->shape().translated(s->pos()));
+                              s->staffShape(e->staffIdx()).add(e->shape());
                               }
                         }
                   }

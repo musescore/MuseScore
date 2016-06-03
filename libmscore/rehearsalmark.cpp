@@ -57,10 +57,7 @@ void RehearsalMark::layout()
             qreal d  = s2.minVerticalDistance(s1);
             if (d > 0)
                   setUserOff(QPointF(0.0, -d));
-printf("autoplace vertical distance %f\n", d);
             }
-      else
-            printf("no autoplace rehearsal mark\n");
       }
 
 }

@@ -2334,12 +2334,15 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
       *dyy = dy;
       }
 
+#ifndef NDEBUG
 //---------------------------------------------------------
 //   drawDebugInfo
 //---------------------------------------------------------
 
 static void drawDebugInfo(QPainter& p, const Element* _e)
       {
+      if (!MScore::showBoundingRect)
+            return;
       const Element* e = _e;
 #if 0
       if (e->type() == Element::Type::NOTE) {
@@ -2401,6 +2404,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
                   }
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   drawElements
@@ -2418,8 +2422,10 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
             painter.translate(pos);
             e->draw(&painter);
             painter.translate(-pos);
-            if (MScore::debugMode && e->selected())
+#ifndef NDEBUG
+            if (e->selected())
                   drawDebugInfo(painter, e);
+#endif
             }
       }
 

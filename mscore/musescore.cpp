@@ -1090,6 +1090,9 @@ MuseScore::MuseScore()
       a = getAction("show-measure-shapes");
       a->setCheckable(true);
       menuDebug->addAction(a);
+      a = getAction("show-bounding-rect");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
 #endif
 
       //---------------------
@@ -4680,6 +4683,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "show-measure-shapes") {
             MScore::showMeasureShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-bounding-rect") {
+            MScore::showBoundingRect = a->isChecked();
             if (cs) {
                   cs->setLayoutAll();
                   cs->update();
