@@ -2293,9 +2293,7 @@ void Measure::setStartRepeatBarLine()
                   score()->undoAddElement(bl);
                   }
             else if (bl && !val) {
-                  // barline were we do not need one:
-                  if (!score()->undoRedo())                       // DEBUG
-                        score()->undoRemoveElement(bl);
+                  score()->undoRemoveElement(bl);     // barline were we do not need one
                   }
             if (bl && val && span) {
                   bl->setSpan(span);

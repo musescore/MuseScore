@@ -294,9 +294,7 @@ void UndoStack::pop()
 
 void UndoStack::setClean()
       {
-      if (cleanIdx != curIdx) {
-            cleanIdx = curIdx;
-            }
+      cleanIdx = curIdx;
       }
 
 //---------------------------------------------------------
@@ -320,9 +318,8 @@ void UndoStack::undo()
 void UndoStack::redo()
       {
       qCDebug(undoRedo) << "===";
-      if (canRedo()) {
+      if (canRedo())
             list[curIdx++]->redo();
-            }
       }
 
 //---------------------------------------------------------
@@ -1808,9 +1805,8 @@ void ChangePitch::flip()
       int f_tpc1  = note->tpc1();
       int f_tpc2  = note->tpc2();
       // do not change unless necessary
-      if (f_pitch == pitch && f_tpc1 == tpc1 && f_tpc2 == tpc2) {
+      if (f_pitch == pitch && f_tpc1 == tpc1 && f_tpc2 == tpc2)
             return;
-            }
 
       note->setPitch(pitch, tpc1, tpc2);
       pitch = f_pitch;
@@ -1859,7 +1855,7 @@ void ChangeFretting::flip()
       fret  = f_fret;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
-      note->score()->setLayoutAll();
+      note->score()->setLayout(note->tick());
       }
 
 //---------------------------------------------------------
@@ -3026,7 +3022,8 @@ void SwapCR::flip()
       Element* cr = s1->element(track);
       s1->setElement(track, s2->element(track));
       s2->setElement(track, cr);
-      cr1->score()->setLayoutAll();
+      cr1->score()->setLayout(s1->tick());
+      cr1->score()->setLayout(s2->tick());
       }
 
 //---------------------------------------------------------
@@ -3293,7 +3290,8 @@ void ChangeSpannerElements::flip()
             static_cast<Note*>(startElement)->setTieFor(0);
             tie->startNote()->setTieFor(tie);
             }
-      spanner->score()->setLayoutAll();
+      spanner->score()->setLayout(spanner->tick());
+      spanner->score()->setLayout(spanner->tick2());
       }
 
 //---------------------------------------------------------

@@ -245,8 +245,7 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       if (unhide) {
             endCmd();
-            undoStack()->undo();
-            endUndoRedo();
+            undoRedo(true);   // undo
             }
       }
 

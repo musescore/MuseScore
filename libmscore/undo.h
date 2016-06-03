@@ -83,8 +83,6 @@ class BarLine;
 enum class ClefType : signed char;
 enum class PlayEventType : char;
 
-// #define DEBUG_UNDO
-
 #define UNDO_NAME(a)  virtual const char* name() const override { return a; }
 
 enum class LayoutMode : char;

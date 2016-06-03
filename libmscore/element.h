@@ -79,6 +79,8 @@ class Spacer;
 class StaffLines;
 class Ambitus;
 class Bracket;
+class InstrumentChange;
+class Text;
 
 enum class SymId;
 
@@ -673,6 +675,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
+      CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
 #undef CONVERT
       };
 
@@ -696,7 +699,7 @@ static inline const ChordRest* toChordRest(const Element* e) {
       }
 
 #define CONVERT(a,b) \
-static inline a* to##a(Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (a*)e; } \
+static inline a* to##a(Element* e)             { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (a*)e; } \
 static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (const a*)e; }
 
       CONVERT(Note,          NOTE)
@@ -739,6 +742,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
+      CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(Text,          TEXT)
 #undef CONVERT
 
 //---------------------------------------------------------

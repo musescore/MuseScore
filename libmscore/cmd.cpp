@@ -83,14 +83,8 @@ namespace Ms {
 
 void CmdState::reset()
       {
-//      refresh             = QRectF();     ///< area to update, canvas coordinates
       layoutFlags         = LayoutFlag::NO_FLAGS;
       _updateMode         = UpdateMode::DoNothing;
-//      _playNote           = false;        ///< play selected note after command
-//      _playChord          = false;        ///< play whole chord for the selected note
-//      _excerptsChanged    = false;
-//      _instrumentsChanged = false;
-//      _selectionChanged   = false;
       _startTick          = -1;
       _endTick            = -1;
       }
@@ -142,6 +136,21 @@ void Score::startCmd()
             }
       undoStack()->beginMacro();
       undo(new SaveState(this));
+      }
+
+//---------------------------------------------------------
+//   undoRedo
+//---------------------------------------------------------
+
+void Score::undoRedo(bool undo)
+      {
+      cmdState().reset();
+      if (undo)
+            undoStack()->undo();
+      else
+            undoStack()->redo();
+      update();
+      updateSelection();
       }
 
 //---------------------------------------------------------
@@ -223,17 +232,6 @@ void Score::update()
       }
 
 //---------------------------------------------------------
-//   endUndoRedo
-///   Common handling for ending undo or redo
-//---------------------------------------------------------
-
-void Score::endUndoRedo()
-      {
-      update();
-      updateSelection();
-      }
-
-//---------------------------------------------------------
 //   cmdAddSpanner
 //   drop VOLTA, OTTAVA, TRILL, PEDAL, DYNAMIC
 //        HAIRPIN, and TEXTLINE
@@ -272,7 +270,6 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             spanner->setTick(m->tick());
             spanner->setTick2(m->endTick());
             }
-
       undoAddElement(spanner);
       select(spanner, SelectType::SINGLE, 0);
       }
