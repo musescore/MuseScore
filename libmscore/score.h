@@ -382,6 +382,7 @@ class Score : public QObject, public ScoreElement {
 
       MeasureBaseList _measures;          // here are the notes
       SpannerMap _spanner;
+      // https://github.com/musescore/MuseScore/commit/c69d2a9262051be314768e24686d14913c45da47
       std::set<Spanner*> _unmanagedSpanner;
 
       UpdateState _updateState;
