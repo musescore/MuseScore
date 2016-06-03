@@ -62,8 +62,7 @@ void TestSelectionRangeDelete::verifyDelete(MasterScore* score, size_t spanners)
       score->endCmd();
 
       QVERIFY(score->spanner().size() == spanners -1);
-      score->undoStack()->undo();
-      score->endUndoRedo();
+      score->undoRedo(true);
       QVERIFY(score->spanner().size() == spanners);
       }
 
@@ -78,8 +77,7 @@ void TestSelectionRangeDelete::verifyNoDelete(MasterScore* score, size_t spanner
       score->endCmd();
 
       QVERIFY(score->spanner().size() == spanners);
-      score->undoStack()->undo();
-      score->endUndoRedo();
+      score->undoRedo(true);
       QVERIFY(score->spanner().size() == spanners);
       }
 

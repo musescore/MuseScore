@@ -3546,6 +3546,10 @@ void Score::doLayout()
 void Score::doLayoutRange(int stick, int etick)
       {
       qDebug("%d-%d", stick, etick);
+      if (stick == -1 || etick == -1) {
+            doLayout();
+            return;
+            }
       LayoutContext lc;
 
 #if 0
