@@ -199,7 +199,7 @@ subdirs (
         musicxml
         guitarpro
 #        scripting
-#        testoves                      # FAIL
+        testoves
         )
 
 

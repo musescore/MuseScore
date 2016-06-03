@@ -206,10 +206,6 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         <tick>0</tick>
         <Rest>
           <offset x="0" y="2"/>

@@ -210,10 +210,6 @@
           <offset x="0" y="-4.5"/>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         <tick>0</tick>
         <Beam id="3">
           <track>1</track>

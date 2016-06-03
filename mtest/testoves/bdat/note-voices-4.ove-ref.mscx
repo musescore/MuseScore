@@ -107,10 +107,6 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         <tick>0</tick>
         <Chord>
           <track>1</track>
