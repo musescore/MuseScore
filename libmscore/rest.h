@@ -34,6 +34,7 @@ class Rest : public ChordRest {
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol
       qreal _mmWidth { 0.0 };       // width of multi measure rest
+      bool _gap;                    ///< invisible and not selectable for user
 
       virtual QRectF drag(EditData*) override;
       virtual qreal upPos()   const override;
@@ -43,7 +44,6 @@ class Rest : public ChordRest {
 
    protected:
       ElementList _el;              ///< symbols or images
-      bool _gap;         ///< invisible and not selectable for user
 
    public:
       Rest(Score* s = 0);
@@ -66,8 +66,7 @@ class Rest : public ChordRest {
       virtual void layout() override;
 
       bool isGap() const               { return _gap;     }
-      virtual void setGap(bool f);
-      void undoChangeGap(bool v);
+      virtual void setGap(bool v)      { _gap = v;        }
 
       virtual void reset() override;
 
@@ -98,7 +97,9 @@ class Rest : public ChordRest {
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
 
-      bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
