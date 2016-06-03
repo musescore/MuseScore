@@ -232,6 +232,7 @@ enum class P_ID : unsigned char {
 
       SYSTEM_BRACKET,
       GAP,
+      AUTOPLACE,
 
       END
       };

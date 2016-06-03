@@ -30,10 +30,25 @@ InspectorText::InspectorText(QWidget* parent)
             { P_ID::VISIBLE,            0, 0, e.visible,  e.resetVisible  },
             { P_ID::USER_OFF,           0, 0, e.offsetX,  e.resetX        },
             { P_ID::USER_OFF,           1, 0, e.offsetY,  e.resetY        },
+            { P_ID::AUTOPLACE,          0, 0, e.autoplace,  e.resetAutoplace },
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    }
             };
       mapSignals();
+      connect(e.autoplace, SIGNAL(toggled(bool)), SLOT(autoplaceChanged(bool)));
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
+      }
+
+//---------------------------------------------------------
+//   autoplaceChanged
+//---------------------------------------------------------
+
+void InspectorText::autoplaceChanged(bool val)
+      {
+      val = !val;
+      e.offsetX->setEnabled(val);
+      e.offsetY->setEnabled(val);
+      e.resetX->setEnabled(val);
+      e.resetY->setEnabled(val);
       }
 
 //---------------------------------------------------------
@@ -55,6 +70,7 @@ void InspectorText::setElement()
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();
+      autoplaceChanged(e->autoplace());
       }
 
 }

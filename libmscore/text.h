@@ -248,6 +248,8 @@ class Text : public Element {
       void setTextStyleType(TextStyleType);
       void restyle(TextStyleType);
 
+      Align align() const { return _textStyle.align(); }
+
       Ms::MSQE_TextStyleType::E qmlTextStyleType() const { return static_cast<Ms::MSQE_TextStyleType::E>(_styleIndex); }
       void qmlUndoSetTextStyleType(Ms::MSQE_TextStyleType::E st) { undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(st)); }
 
