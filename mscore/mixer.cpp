@@ -392,7 +392,6 @@ void PartEdit::chorusChanged(double val, bool syncControls)
 void PartEdit::vel2volChanged(double val, bool syncControls)
       {
       int iv = lrint(val);
-      qDebug("vel2vol %d", iv);
       seq->setController(channel->channel, CTRL_VEL2VOL, iv);
       channel->vel2vol = iv;
       channel->updateInitList();
