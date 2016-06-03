@@ -3386,33 +3386,20 @@ void MuseScore::setPos(int t)
 
 void MuseScore::undoRedo(bool undo)
       {
-      if (_sstate == STATE_EDIT
-         || _sstate == STATE_TEXT_EDIT
-         || _sstate == STATE_HARMONY_FIGBASS_EDIT
-         || _sstate == STATE_LYRICS_EDIT) {
+      if (_sstate & (STATE_EDIT | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT | STATE_LYRICS_EDIT)) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
-      if (cv)
-            cv->startUndoRedo();
-      if (cs) {
-            if (undo)
-                  cs->undoStack()->undo();
-            else
-                  cs->undoStack()->redo();
-            }
       if (cv) {
+            Q_ASSERT(cs);
+            cv->startUndoRedo();
+            cs->undoRedo(undo);
             if (cs->inputState().segment())
                   setPos(cs->inputState().tick());
-            if (cs->noteEntryMode() && !cv->noteEntryMode()) {
-                  // enter note entry mode
-                  cv->postCmd("note-input");
-                  }
-            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
-                  // leave note entry mode
-                  cv->postCmd("escape");
-                  }
-            cs->endUndoRedo();
+            if (cs->noteEntryMode() && !cv->noteEntryMode())
+                  cv->postCmd("note-input");    // enter note entry mode
+            else if (!cs->noteEntryMode() && cv->noteEntryMode())
+                  cv->postCmd("escape");        // leave note entry mode
             updateInputState(cs);
             }
       endCmd();
@@ -4358,7 +4345,6 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             updateViewModeCombo();
-//            cs->update();
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
       else {

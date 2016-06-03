@@ -655,6 +655,7 @@ class Score : public QObject, public ScoreElement {
       void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command
       void update();
+      void undoRedo(bool undo);
 
       void cmdRemoveTimeSig(TimeSig*);
       void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
@@ -851,7 +852,6 @@ class Score : public QObject, public ScoreElement {
       void adjustBracketsIns(int sidx, int eidx);
       void adjustKeySigs(int sidx, int eidx, KeyList km);
 
-      void endUndoRedo();
       Measure* searchLabel(const QString& s);
       Measure* searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure);
       virtual inline RepeatList* repeatList() const;
@@ -1082,7 +1082,7 @@ class Score : public QObject, public ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
-      virtual inline bool undoRedo() const;
+//      virtual inline bool undoRedo() const;
       virtual inline QQueue<MidiInputEvent>* midiInputQueue();
 
       friend class ChangeSynthesizerState;
@@ -1107,7 +1107,7 @@ class MasterScore : public Score {
       Omr* _omr;
       bool _showOmr;
 
-      bool _undoRedo;               ///< true if in processing a undo/redo
+//      bool _undoRedo;               ///< true if in processing a undo/redo
       int _midiPortCount { 0 };     // A count of JACK/ALSA midi out ports
       QQueue<MidiInputEvent> _midiInputQueue;
       QList<MidiMapping> _midiMapping;
@@ -1128,9 +1128,9 @@ class MasterScore : public Score {
       virtual ~MasterScore();
       MasterScore* clone();
 
-      void setUndoRedo(bool val)              { _undoRedo = val;    }
+//      void setUndoRedo(bool val)              { _undoRedo = val;    }
+//      virtual bool undoRedo() const override                    { return _undoRedo;   }
 
-      virtual bool undoRedo() const override                    { return _undoRedo;   }
       virtual bool isMaster() const override                    { return true;        }
       virtual UndoStack* undoStack() const override             { return _undo;       }
       virtual TimeSigMap* sigmap() const override               { return _sigmap;     }
@@ -1189,7 +1189,7 @@ class MasterScore : public Score {
       void removeExcerpt(Score*);
       };
 
-inline bool Score::undoRedo() const                    { return _masterScore->undoRedo();       }
+// inline bool Score::undoRedo() const                    { return _masterScore->undoRedo();       }
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }
 inline RepeatList* Score::repeatList()  const          { return _masterScore->repeatList();     }
 inline TempoMap* Score::tempomap() const               { return _masterScore->tempomap();       }
