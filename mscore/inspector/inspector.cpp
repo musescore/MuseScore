@@ -331,20 +331,55 @@ void UiInspectorElement::setupUi(QWidget *InspectorElement)
       }
 
 //---------------------------------------------------------
+//   InspectorElementBase
+//---------------------------------------------------------
+
+InspectorElementBase::InspectorElementBase(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+
+      iList = {
+            { P_ID::COLOR,     0, 0, e.color,      e.resetColor     },
+            { P_ID::VISIBLE,   0, 0, e.visible,    e.resetVisible   },
+            { P_ID::USER_OFF,  0, 0, e.offsetX,    e.resetX         },
+            { P_ID::USER_OFF,  1, 0, e.offsetY,    e.resetY         },
+            { P_ID::AUTOPLACE, 0, 0, e.autoplace,  e.resetAutoplace },
+            };
+      connect(e.autoplace, SIGNAL(toggled(bool)), SLOT(autoplaceChanged(bool)));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorElementBase::setElement()
+      {
+      Element* e = inspector->element();
+      autoplaceChanged(e->autoplace());
+      InspectorBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   autoplaceChanged
+//---------------------------------------------------------
+
+void InspectorElementBase::autoplaceChanged(bool val)
+      {
+      val = !val;
+      e.offsetX->setEnabled(val);
+      e.offsetY->setEnabled(val);
+      e.resetX->setEnabled(val);
+      e.resetY->setEnabled(val);
+      }
+
+//---------------------------------------------------------
 //   InspectorElement
 //---------------------------------------------------------
 
 InspectorElement::InspectorElement(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      b.setupUi(addWidget());
-
-      iList = {
-            { P_ID::COLOR,     0, 0, b.color,      b.resetColor     },
-            { P_ID::VISIBLE,   0, 0, b.visible,    b.resetVisible   },
-            { P_ID::USER_OFF,  0, 0, b.offsetX,    b.resetX         },
-            { P_ID::USER_OFF,  1, 0, b.offsetY,    b.resetY         },
-            };
       mapSignals();
       }
 

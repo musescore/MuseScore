@@ -51,8 +51,9 @@ class Inspector;
 class Segment;
 class Chord;
 
+
 //---------------------------------------------------------
-//   InspectorElement
+//   UiInspectorElement
 //---------------------------------------------------------
 
 class UiInspectorElement: public Ui::InspectorElement {
@@ -60,9 +61,30 @@ class UiInspectorElement: public Ui::InspectorElement {
       void setupUi(QWidget *InspectorElement);
       };
 
-class InspectorElement : public InspectorBase {
+//---------------------------------------------------------
+//   InspectorElementBase
+//---------------------------------------------------------
+
+class InspectorElementBase : public InspectorBase {
       Q_OBJECT
-      UiInspectorElement b;
+
+   protected:
+      UiInspectorElement e;
+
+   private slots:
+      void autoplaceChanged(bool val);
+
+   public:
+      InspectorElementBase(QWidget* parent);
+      virtual void setElement() override;
+      };
+
+//---------------------------------------------------------
+//   InspectorElement
+//---------------------------------------------------------
+
+class InspectorElement : public InspectorElementBase {
+      Q_OBJECT
 
    public:
       InspectorElement(QWidget* parent);
