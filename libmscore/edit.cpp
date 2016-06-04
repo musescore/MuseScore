@@ -1024,7 +1024,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                         // (first ChordRest segment in the measure)
                         acci = s->measure()->findAccidental(s->measure()->first(Segment::Type::ChordRest), staffIdx, line, error);
                         // add pitchMod to that
-                        switch ((int)acci + _is.pitchMod())
+                        switch (static_cast<int>(acci) + _is.pitchMod())
                         {
                               case -2:
                                     acci = AccidentalVal::FLAT2;
