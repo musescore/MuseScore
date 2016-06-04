@@ -477,7 +477,8 @@ void MuseScore::populateNoteInputMenu()
             else {
                   QAction* a = getAction(s);
                   if (strncmp(s, "voice-", 6) == 0) {
-                        QToolButton* tb = new QToolButton(this);
+//                        QButton* tb = new QToolButton(this);
+                        AccessibleToolButton* tb = new AccessibleToolButton(this, a);
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
                         if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
@@ -487,7 +488,7 @@ void MuseScore::populateNoteInputMenu()
                         p.setColor(QPalette::Base, MScore::selectColor[i]);
                         tb->setPalette(p);
                         a->setCheckable(true);
-                        tb->setDefaultAction(a);
+                        // tb->setDefaultAction(a);
                         entryTools->addWidget(tb);
                         }
                   else
@@ -699,12 +700,8 @@ MuseScore::MuseScore()
       selectionChanged(SelState::NONE);
 
       //---------------------------------------------------
-      //    File Action
+      //    File Tool Bar
       //---------------------------------------------------
-
-      //---------------------
-      //    Tool Bar
-      //---------------------
 
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
@@ -731,6 +728,10 @@ MuseScore::MuseScore()
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
+      //---------------------
+      //    Transport Tool Bar
+      //---------------------
+
       transportTools = addToolBar(tr("Transport Tools"));
       transportTools->setObjectName("transport-tools");
 #ifdef HAS_MIDI
@@ -748,9 +749,17 @@ MuseScore::MuseScore()
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("pan")));
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
+      //-------------------------------
+      //    Concert Pitch Tool Bar
+      //-------------------------------
+
       cpitchTools = addToolBar(tr("Concert Pitch"));
       cpitchTools->setObjectName("pitch-tools");
       cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
+
+      //-------------------------------
+      //    Image Capture Tool Bar
+      //-------------------------------
 
       QToolBar* foto = addToolBar(tr("Image Capture"));
       foto->setObjectName("foto-tools");
@@ -1075,7 +1084,7 @@ MuseScore::MuseScore()
       //---------------------
 
 #ifndef NDEBUG
-      QMenu* menuDebug = mb->addMenu("Debug");
+      QMenu* menuDebug = mb->addMenu(tr("Debug"));
       menuDebug->setObjectName("Debug");
       a = getAction("no-horizontal-stretch");
       a->setCheckable(true);
@@ -1089,6 +1098,13 @@ MuseScore::MuseScore()
       menuDebug->addAction(a);
       a = getAction("show-measure-shapes");
       a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("show-bounding-rect");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("show-corrupted-measures");
+      a->setCheckable(true);
+      a->setChecked(true);
       menuDebug->addAction(a);
 #endif
 
@@ -3395,33 +3411,20 @@ void MuseScore::setPos(int t)
 
 void MuseScore::undoRedo(bool undo)
       {
-      if (_sstate == STATE_EDIT
-         || _sstate == STATE_TEXT_EDIT
-         || _sstate == STATE_HARMONY_FIGBASS_EDIT
-         || _sstate == STATE_LYRICS_EDIT) {
+      if (_sstate & (STATE_EDIT | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT | STATE_LYRICS_EDIT)) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
-      if (cv)
-            cv->startUndoRedo();
-      if (cs) {
-            if (undo)
-                  cs->undoStack()->undo();
-            else
-                  cs->undoStack()->redo();
-            }
       if (cv) {
+            Q_ASSERT(cs);
+            cv->startUndoRedo();
+            cs->undoRedo(undo);
             if (cs->inputState().segment())
                   setPos(cs->inputState().tick());
-            if (cs->noteEntryMode() && !cv->noteEntryMode()) {
-                  // enter note entry mode
-                  cv->postCmd("note-input");
-                  }
-            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
-                  // leave note entry mode
-                  cv->postCmd("escape");
-                  }
-            cs->endUndoRedo();
+            if (cs->noteEntryMode() && !cv->noteEntryMode())
+                  cv->postCmd("note-input");    // enter note entry mode
+            else if (!cs->noteEntryMode() && cv->noteEntryMode())
+                  cv->postCmd("escape");        // leave note entry mode
             updateInputState(cs);
             }
       endCmd();
@@ -4367,7 +4370,6 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             updateViewModeCombo();
-//            cs->update();
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
       else {
@@ -4694,6 +4696,20 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "show-measure-shapes") {
             MScore::showMeasureShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-bounding-rect") {
+            MScore::showBoundingRect = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-corrupted-measures") {
+            MScore::showCorruptedMeasures = a->isChecked();
             if (cs) {
                   cs->setLayoutAll();
                   cs->update();

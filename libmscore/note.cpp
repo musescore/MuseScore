@@ -2283,7 +2283,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      score()->setLayout(tick());
       return true;
       }
 

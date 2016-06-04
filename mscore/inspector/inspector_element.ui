@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>303</width>
-    <height>133</height>
+    <height>148</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -316,6 +316,29 @@
        </property>
        <property name="accessibleName">
         <string>Reset Visible value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QCheckBox" name="autoplace">
+       <property name="text">
+        <string>Automatic Placement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QToolButton" name="resetAutoplace">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Vertical offset value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

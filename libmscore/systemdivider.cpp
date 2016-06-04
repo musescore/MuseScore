@@ -54,6 +54,7 @@ void SystemDivider::layout()
                   sid = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
                   break;
             case SystemDivider::RIGHT:
+            default:
                   sid = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
                   break;
             }

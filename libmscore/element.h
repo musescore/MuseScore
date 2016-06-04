@@ -79,6 +79,8 @@ class Spacer;
 class StaffLines;
 class Ambitus;
 class Bracket;
+class InstrumentChange;
+class Text;
 
 enum class SymId;
 
@@ -315,6 +317,7 @@ class Element : public QObject, public ScoreElement {
       Placement _placement;
 
       mutable ElementFlags _flags;
+      bool _autoplace;
 
       int _track;                 ///< staffIdx * VOICES + voice
       qreal _mag;                 ///< standard magnification (derived value)
@@ -567,6 +570,8 @@ class Element : public QObject, public ScoreElement {
       bool isSegmentFlag() const           { return flag(ElementFlag::SEGMENT);     }
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
+      bool autoplace() const           { return _autoplace; }
+      void setAutoplace(bool v)        { _autoplace = v; }
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
@@ -673,6 +678,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
+      CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
 #undef CONVERT
       };
 
@@ -696,7 +702,7 @@ static inline const ChordRest* toChordRest(const Element* e) {
       }
 
 #define CONVERT(a,b) \
-static inline a* to##a(Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (a*)e; } \
+static inline a* to##a(Element* e)             { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (a*)e; } \
 static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() == Element::Type::b); return (const a*)e; }
 
       CONVERT(Note,          NOTE)
@@ -739,6 +745,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
+      CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(Text,          TEXT)
 #undef CONVERT
 
 //---------------------------------------------------------

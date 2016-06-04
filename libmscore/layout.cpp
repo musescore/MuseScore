@@ -2874,7 +2874,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             else if (isMaster() && segment.isChordRestType()) {
                   for (Element* e : segment.annotations()) {
-                        if (!e->isTempoText())  // layout tempotext after stretchMeasure
+                        if (!(e->isTempoText() || e->isRehearsalMark() || e->isStaffText()))
                               e->layout();
                         }
                   qreal stretch = 0.0;
@@ -3069,6 +3069,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
+                  default:
                         pbreak = false;
                         break;
                   }
@@ -3301,8 +3302,11 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (e->visible())
                                     s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
-                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText()))
+                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
+                              e->layout();
+                              // s->staffShape(e->staffIdx()).add(e->shape().translated(s->pos()));
                               s->staffShape(e->staffIdx()).add(e->shape());
+                              }
                         }
                   }
             }
@@ -3460,15 +3464,13 @@ bool Score::collectPage(LayoutContext& lc)
                         }
                   sp->layout();
                   }
-            }
 
-#if 0
-      for (Spanner* sp : _unmanagedSpanner) {
-            //if (sp->tick() >= etick || sp->tick2() < stick)
-            //     continue;
-            sp->layout();
+            for (Spanner* sp : _unmanagedSpanner) {
+                  if (sp->tick() >= etick || sp->tick2() < stick)
+                        continue;
+                  sp->layout();
+                  }
             }
-#endif
 
       page->rebuildBspTree();
       lc.pageChanged = lc.systemChanged || (lc.pageOldSystem != (page->systems().empty() ? 0 : page->systems().back()));
@@ -3537,6 +3539,10 @@ void Score::doLayout()
       // _mscVersion is used during read and first layout
       // but then it's used for drag and drop and should be set to new version
       _mscVersion = MSCVERSION;     // for later drag & drop usage
+#ifndef NDEBUG
+      if (MScore::showCorruptedMeasures)
+            sanityCheck();
+#endif
       }
 
 //---------------------------------------------------------
@@ -3546,6 +3552,10 @@ void Score::doLayout()
 void Score::doLayoutRange(int stick, int etick)
       {
       qDebug("%d-%d", stick, etick);
+      if (stick == -1 || etick == -1) {
+            doLayout();
+            return;
+            }
       LayoutContext lc;
 
 #if 0

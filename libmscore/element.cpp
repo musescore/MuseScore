@@ -281,6 +281,7 @@ Element::Element(Score* s) :
       _mag           = 1.0;
       _tag           = 1;
       itemDiscovered = false;
+      _autoplace     = true;
       }
 
 Element::Element(const Element& e)
@@ -301,6 +302,7 @@ Element::Element(const Element& e)
       _bbox       = e._bbox;
       _tag        = e._tag;
       itemDiscovered = false;
+      _autoplace  = e._autoplace;
       }
 
 //---------------------------------------------------------
@@ -342,8 +344,8 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Element::reset()
       {
-      if (!_userOff.isNull())
-            undoChangeProperty(P_ID::USER_OFF, QPointF());
+      undoChangeProperty(P_ID::AUTOPLACE, propertyDefault(P_ID::AUTOPLACE));
+      undoChangeProperty(P_ID::USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -644,9 +646,10 @@ void Element::writeProperties(Xml& xml) const
       //copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
-      if (!userOff().isNull()) {
+      if (!_autoplace && !userOff().isNull()) {
             if (type() == Element::Type::VOLTA_SEGMENT
-                || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest()
+                || type() == Element::Type::GLISSANDO_SEGMENT
+                || isChordRest()
                 || type() == Element::Type::SYSTEM_DIVIDER
                 || (xml.clipboardmode && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
@@ -687,8 +690,10 @@ bool Element::readProperties(XmlReader& e)
             setVisible(e.readInt());
       else if (tag == "selected") // obsolete
             e.readInt();
-      else if (tag == "userOff")
+      else if (tag == "userOff") {
             _userOff = e.readPoint();
+            _autoplace = false;
+            }
       else if (tag == "lid") {
             int id = e.readInt();
             _links = e.linkIds().value(id);
@@ -738,11 +743,12 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "offset") {
             setUserOff(e.readPoint() * spatium());
+            _autoplace = false;
             }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
-            if (score()->mscVersion() > 114)
-                  _readPos = pt * score()->spatium();
+            _readPos = pt * score()->spatium();
+            _autoplace = false;
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
@@ -1463,6 +1469,7 @@ QVariant Element::getProperty(P_ID propertyId) const
             case P_ID::SELECTED:  return _selected;
             case P_ID::USER_OFF:  return _userOff;
             case P_ID::PLACEMENT: return int(_placement);
+            case P_ID::AUTOPLACE: return autoplace();
             default:
                   return QVariant();
             }
@@ -1497,6 +1504,9 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::PLACEMENT:
                   _placement = Placement(v.toInt());
                   break;
+            case P_ID::AUTOPLACE:
+                  setAutoplace(v.toBool());
+                  break;
             default:
                   qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
                      propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
@@ -1526,6 +1536,8 @@ QVariant Element::propertyDefault(P_ID id) const
                   return false;
             case P_ID::USER_OFF:
                   return QPointF();
+            case P_ID::AUTOPLACE:
+                  return true;
             default:    // not all properties have a default
                   break;
             }

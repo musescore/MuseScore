@@ -34,6 +34,7 @@ class Rest : public ChordRest {
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol
       qreal _mmWidth { 0.0 };       // width of multi measure rest
+      bool _gap;                    ///< invisible and not selectable for user
 
       virtual QRectF drag(EditData*) override;
       virtual qreal upPos()   const override;
@@ -64,6 +65,9 @@ class Rest : public ChordRest {
       virtual Element* drop(const DropData&) override;
       virtual void layout() override;
 
+      bool isGap() const               { return _gap;     }
+      virtual void setGap(bool v)      { _gap = v;        }
+
       virtual void reset() override;
 
       virtual void add(Element*);
@@ -77,6 +81,7 @@ class Rest : public ChordRest {
       SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
 
       int getDotline() const   { return dotline; }
+      static int getDotline(TDuration::DurationType durationType);
       SymId sym() const        { return _sym;    }
       int computeLineOffset();
       bool isFullMeasureRest() const { return durationType() == TDuration::DurationType::V_MEASURE; }
@@ -92,7 +97,9 @@ class Rest : public ChordRest {
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
 
-      bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>130</height>
+    <height>133</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -130,6 +130,13 @@
         </property>
         <property name="maximum">
          <double>9999.989999999999782</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QCheckBox" name="gap">
+        <property name="text">
+         <string>gap</string>
         </property>
        </widget>
       </item>

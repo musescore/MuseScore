@@ -185,7 +185,7 @@ subdirs (
         libmscore/repeat
         libmscore/selectionfilter
         libmscore/selectionrangedelete
-#        libmscore/spanners            # FAIL
+        libmscore/spanners
         libmscore/split
         libmscore/splitstaff
         libmscore/timesig
@@ -199,7 +199,7 @@ subdirs (
         musicxml
         guitarpro
 #        scripting
-#        testoves                      # FAIL
+        testoves
         )
 
 

@@ -1657,6 +1657,13 @@ void ScoreView::setShadowNote(const QPointF& p)
             }
 
       shadowNote->setLine(line);
+
+      int voice;
+      if (is.drumNote() != -1 && is.drumset() && is.drumset()->isValid(is.drumNote()))
+            voice = is.drumset()->voice(is.drumNote());
+      else
+            voice = is.voice();
+
       SymId symNotehead;
       TDuration d(is.duration());
 
@@ -1665,11 +1672,11 @@ void ScoreView::setShadowNote(const QPointF& p)
             Rest rest(gscore, d.type());
             rest.setDuration(d.fraction());
             symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
-            shadowNote->setSym(symNotehead);
+            shadowNote->setState(symNotehead, voice, d, true);
             }
       else {
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
-            shadowNote->setSymbols(d.type(), symNotehead);
+            shadowNote->setState(symNotehead, voice, d);
             }
 
       shadowNote->layout();
@@ -1922,40 +1929,62 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   drawElements(p, ell);
 
 #ifndef NDEBUG
-                  if (MScore::showSegmentShapes) {
-                        for (const System* system : page->systems()) {
-                              for (const MeasureBase* mb : system->measures()) {
-                                    if (mb->type() == Element::Type::MEASURE) {
-                                          const Measure* m = static_cast<const Measure*>(mb);
-                                          p.setBrush(Qt::NoBrush);
-                                          p.setPen(QPen(QBrush(Qt::darkYellow), 0.5));
-                                          for (const Segment* s = m->first(); s; s = s->next()) {
-                                                for (int i = 0; i < score()->nstaves(); ++i) {
-                                                      QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
-                                                         system->staffYpage(i));
+                  if (!score()->printing()) {
+                        if (MScore::showSegmentShapes) {
+                              for (const System* system : page->systems()) {
+                                    for (const MeasureBase* mb : system->measures()) {
+                                          if (mb->type() == Element::Type::MEASURE) {
+                                                const Measure* m = static_cast<const Measure*>(mb);
+                                                p.setBrush(Qt::NoBrush);
+                                                p.setPen(QPen(QBrush(Qt::darkYellow), 0.5));
+                                                for (const Segment* s = m->first(); s; s = s->next()) {
+                                                      for (int i = 0; i < score()->nstaves(); ++i) {
+                                                            QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
+                                                               system->staffYpage(i));
+                                                            p.translate(pt);
+                                                            s->shapes().at(i).draw(&p);
+                                                            p.translate(-pt);
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        if (MScore::showMeasureShapes) {
+                              for (const System* system : page->systems()) {
+                                    for (const MeasureBase* mb : system->measures()) {
+                                          if (mb->type() == Element::Type::MEASURE) {
+                                                const Measure* m = static_cast<const Measure*>(mb);
+                                                p.setPen(Qt::NoPen);
+                                                p.setBrush(QBrush(QColor(0, 0, 255, 60)));
+                                                for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                                      const MStaff* ms = m->mstaff(staffIdx);
+                                                      QPointF pt(m->pos().x() + system->pos().x(), 0);
                                                       p.translate(pt);
-                                                      s->shapes().at(i).draw(&p);
+                                                      QPointF o(0.0, m->system()->staffYpage(staffIdx));
+                                                      ms->shape().translated(o).draw(&p);
                                                       p.translate(-pt);
                                                       }
                                                 }
                                           }
                                     }
                               }
-                        }
-                  if (MScore::showMeasureShapes) {
-                        for (const System* system : page->systems()) {
-                              for (const MeasureBase* mb : system->measures()) {
-                                    if (mb->type() == Element::Type::MEASURE) {
-                                          const Measure* m = static_cast<const Measure*>(mb);
-                                          p.setPen(Qt::NoPen);
-                                          p.setBrush(QBrush(QColor(0, 0, 255, 60)));
-                                          for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                                                const MStaff* ms = m->mstaff(staffIdx);
-                                                QPointF pt(m->pos().x() + system->pos().x(), 0);
-                                                p.translate(pt);
-                                                QPointF o(0.0, m->system()->staffYpage(staffIdx));
-                                                ms->shape().translated(o).draw(&p);
-                                                p.translate(-pt);
+                        if (MScore::showCorruptedMeasures) {
+                              double _spatium = score()->spatium();
+                              QPen pen;
+                              pen.setColor(Qt::red);
+                              pen.setWidthF(1);
+                              pen.setStyle(Qt::SolidLine);
+                              p.setPen(pen);
+                              for (const System* system : page->systems()) {
+                                    for (const MeasureBase* mb : system->measures()) {
+                                          if (mb->type() == Element::Type::MEASURE) {
+                                                const Measure* m = static_cast<const Measure*>(mb);
+                                                for (int staffIdx = 0; staffIdx < _score->nstaves(); staffIdx++) {
+                                                      if (m->mstaff(staffIdx)->_corrupted) {
+                                                            p.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
+                                                            }
+                                                      }
                                                 }
                                           }
                                     }
@@ -2327,12 +2356,15 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
       *dyy = dy;
       }
 
+#ifndef NDEBUG
 //---------------------------------------------------------
 //   drawDebugInfo
 //---------------------------------------------------------
 
 static void drawDebugInfo(QPainter& p, const Element* _e)
       {
+      if (!MScore::showBoundingRect)
+            return;
       const Element* e = _e;
 #if 0
       if (e->type() == Element::Type::NOTE) {
@@ -2394,6 +2426,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
                   }
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   drawElements
@@ -2405,12 +2438,16 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
             e->itemDiscovered = 0;
             if (!e->visible() && (score()->printing() || !score()->showInvisible()))
                   continue;
+            if (e->isRest() && toRest(e)->isGap())
+                  continue;
             QPointF pos(e->pagePos());
             painter.translate(pos);
             e->draw(&painter);
             painter.translate(-pos);
-            if (MScore::debugMode && e->selected())
+#ifndef NDEBUG
+            if (e->selected())
                   drawDebugInfo(painter, e);
+#endif
             }
       }
 
@@ -2952,13 +2989,28 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "up-chord") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
+            if (el && (el->isNote() || el->isRest()))
                   cmdGotoElement(score()->upAlt(el));
+            el = score()->selection().element();
+            while (el->isRest() && toRest(el)->isGap() && el->voice() != 0) {
+                  el = score()->upAlt(el);
+                  cmdGotoElement(el);
+                  }
             }
       else if (cmd == "down-chord") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
+            Element* oel = el;
+            if (el && (el->isNote() || el->isRest()))
                   cmdGotoElement(score()->downAlt(el));
+            el = score()->selection().element();
+            while (el->isRest() && toRest(el)->isGap() && el->voice() != 3) {
+                  if (score()->downAlt(el) == el) {
+                        cmdGotoElement(oel);
+                        break;
+                        }
+                  el = score()->downAlt(el);
+                  cmdGotoElement(el);
+                  }
             }
       else if (cmd == "top-chord" ) {
             Element* el = score()->selection().element();
@@ -2975,7 +3027,6 @@ void ScoreView::cmd(const QAction* a)
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
 
-            //cmdGotoElement(score()->nextElement(el));
             if (el)
                   cmdGotoElement(el->nextElement());
             else
@@ -5113,7 +5164,7 @@ void ScoreView::harmonyTicksTab(int ticks)
             }
 
       // look for a segment at this tick; if none, create one
-      while(segment && segment->tick() < newTick)
+      while (segment && segment->tick() < newTick)
             segment = segment->next1(Segment::Type::ChordRest);
       if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
             segment = new Segment(measure, Segment::Type::ChordRest, newTick);

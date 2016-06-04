@@ -197,6 +197,7 @@
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
+        <tick>1920</tick>
         <tick>2400</tick>
         <Chord>
           <track>1</track>

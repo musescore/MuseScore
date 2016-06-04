@@ -76,7 +76,7 @@ static constexpr qreal DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES  = 4;
 
-static const int  SHADOW_NOTE_LIGHT       = 120;
+static const int  SHADOW_NOTE_LIGHT       = 150;
 
 static const char mimeSymbolFormat[]      = "application/musescore/symbol";
 static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
@@ -340,6 +340,7 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //    Enumerate the list of build in text styles.
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
+
 MS_QML_ENUM(TextStyleType, signed char,\
       DEFAULT = 0,\
       TITLE,\
@@ -489,6 +490,8 @@ class MScore : public QObject {
       static bool noVerticalStretch;
       static bool showSegmentShapes;
       static bool showMeasureShapes;
+      static bool showBoundingRect;
+      static bool showCorruptedMeasures;
 // #endif
       static bool debugMode;
       static bool testMode;

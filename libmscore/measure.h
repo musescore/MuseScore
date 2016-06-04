@@ -57,7 +57,9 @@ struct MStaff {
                                           ///< this changes some layout rules
       bool _visible        { true };
       bool _slashStyle     { false };
-
+#ifndef NDEBUG
+      bool _corrupted      { false };
+#endif
       MStaff()  {}
       ~MStaff();
       MStaff(const MStaff&);
@@ -142,6 +144,7 @@ class Measure : public MeasureBase {
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
       virtual bool isEditable() const override { return false; }
+      void checkMeasue(int idx);
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
@@ -242,6 +245,7 @@ class Measure : public MeasureBase {
 
       bool empty() const;
       bool isOnlyRests(int track) const;
+      bool isOnlyDeletedRests(int track) const;
 
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }

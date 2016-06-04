@@ -245,8 +245,7 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       if (unhide) {
             endCmd();
-            undoStack()->undo();
-            endUndoRedo();
+            undoRedo(true);   // undo
             }
       }
 
@@ -283,6 +282,7 @@ void Score::readStaff(XmlReader& e)
                               measure->setTimesig(f);
                               }
                         measure->read(e, staff);
+                        measure->checkMeasue(staff);
                         if (!measure->isMMRest()) {
                               measures()->add(measure);
                               e.setLastMeasure(measure);
@@ -325,6 +325,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         e.initTick(measure->tick());
                         measure->read(e, staff);
+                        measure->checkMeasue(staff);
                         if (measure->isMMRest())
                               measure = e.lastMeasure()->nextMeasure();
                         else {

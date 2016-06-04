@@ -231,6 +231,8 @@ enum class P_ID : unsigned char {
       FRET_OFFSET,
 
       SYSTEM_BRACKET,
+      GAP,
+      AUTOPLACE,
 
       END
       };
