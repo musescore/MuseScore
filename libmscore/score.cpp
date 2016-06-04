@@ -2474,6 +2474,7 @@ void Score::padToggle(Pad n)
             }
       if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
             _is.setDots(0);
+            _is.setPitchMod(0);  // reset raise lower buttons when duration is changed
             //
             // if in "note enter" mode, reset
             // rest flag
