@@ -144,6 +144,9 @@ class Instrument {
       Drumset* _drumset;
       StringData  _stringData;
 
+      char _fixedVelocity;
+      bool _useExpression;
+
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
       QList<Channel*> _channel;      // at least one entry
@@ -184,6 +187,11 @@ class Instrument {
       const Channel* channel(int idx) const                  { return _channel[idx];  }
       ClefTypeList clefType(int staffIdx) const;
       void setClefType(int staffIdx, const ClefTypeList& c);
+
+      int getFixedVelocity()                                 { return _fixedVelocity;  }
+      void setFixedVelocity(int v)                           { _fixedVelocity = v;     }
+      bool getUseExpression()                                { return _useExpression;  }
+      void setUseExpression(bool v)                          { _useExpression = v;     }
 
       const QList<NamedEventList>& midiActions() const       { return _midiActions; }
       const QList<MidiArticulation>& articulation() const    { return _articulation; }

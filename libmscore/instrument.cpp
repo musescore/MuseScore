@@ -93,6 +93,9 @@ Instrument::Instrument()
       _maxPitchP   = 127;
       _useDrumset  = false;
       _drumset     = 0;
+
+      _useExpression = false;
+      _fixedVelocity = 0;
       }
 
 Instrument::Instrument(const Instrument& i)
@@ -212,6 +215,11 @@ void Instrument::write(Xml& xml, Part* part) const
             xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
+      if (_useExpression)
+            xml.tag("dynamics", "expression");
+      else
+            xml.tag("dynamics", "velocity");
+      xml.tag("fixedVelocity", _fixedVelocity);
       for (int i = 0; i < _clefType.size(); ++i) {
             ClefTypeList ct = _clefType[i];
             if (ct._concertClef == ct._transposingClef) {
@@ -367,6 +375,15 @@ void Instrument::read(XmlReader& e, Part* part)
                   pan = e.readInt();
             else if (tag == "midiChannel")      // obsolete
                   e.skipCurrentElement();
+            else if (tag == "dynamics") {
+                 QString dynType = e.readXml();
+                 if (dynType == "expression")
+                       _useExpression = true;
+                 else
+                       _useExpression = false;
+            }
+            else if (tag == "fixedVelocity")
+                  _fixedVelocity = e.readInt();
             else
                   e.unknown();
             }
