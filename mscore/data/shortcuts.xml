@@ -491,6 +491,14 @@
     <seq>+</seq>
     </SC>
   <SC>
+    <key>pad-raise</key>
+    <seq>NumPad++</seq>
+    </SC>
+  <SC>
+    <key>pad-lower</key>
+    <seq>NumPad+-</seq>
+    </SC>
+  <SC>
     <key>acciaccatura</key>
     <seq>/</seq>
     </SC>
