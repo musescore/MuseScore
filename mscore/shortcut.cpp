@@ -1395,6 +1395,28 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
+         "pad-raise",
+         QT_TRANSLATE_NOOP("action","Raise half step"),
+         QT_TRANSLATE_NOOP("action","Note input: Raise half step"),
+         QT_TRANSLATE_NOOP("action","Raise half step"),
+         Icons::raise_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
+         "pad-lower",
+         QT_TRANSLATE_NOOP("action","Lower half step"),
+         QT_TRANSLATE_NOOP("action","Note input: Lower half step"),
+         QT_TRANSLATE_NOOP("action","Lower half step"),
+         Icons::lower_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "sharp2",
          QT_TRANSLATE_NOOP("action","Double Sharp"),
          QT_TRANSLATE_NOOP("action","Note input: Double sharp"),

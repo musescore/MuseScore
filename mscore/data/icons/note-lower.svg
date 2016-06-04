@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <g>
+  <title>Layer 1</title>
+  <g stroke="null" id="svg_1">
+   <path stroke="null" id="svg_2" fill="#3b3f45" d="m14.709819,4.404241c-0.884743,-0.000026 -1.769045,0.870064 -1.769045,0.870064l0,14.356064c0,0 5.858704,-3.042033 6.412786,-5.465093c0.554074,-2.423069 -1.229769,-3.439852 -2.598284,-3.181173c-1.368506,0.25867 -2.045458,0.679738 -2.045458,0.679738c0,0 0.000018,-4.839734 0,-7.259601zm1.437349,8.455939c0.678959,-0.072041 1.159679,0.285442 1.133294,0.978823c-0.026447,0.693372 -0.647028,1.222345 -1.188577,1.712939c-0.545255,0.44335 -1.382066,1.14196 -1.382066,1.14196l0,-3.018036c0,0 0.758398,-0.743601 1.437349,-0.815685z"/>
+  </g>
+  <rect id="svg_3" height="13.794846" width="1.616978" y="4.852957" x="7.025771" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="5" stroke="null" fill="#3b3f45"/>
+  <rect transform="rotate(45 6.798384189605712,17.33401107788086) " id="svg_4" height="1.515917" width="4.497221" y="16.576049" x="4.549773" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="5" stroke="null" fill="#3b3f45"/>
+  <rect transform="rotate(-45 9.046993255615233,17.25821304321289) " id="svg_5" height="1.515917" width="4.497221" y="16.500252" x="6.798383" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="5" stroke="null" fill="#3b3f45"/>
+ </g>
+</svg>

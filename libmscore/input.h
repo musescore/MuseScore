@@ -45,6 +45,7 @@ class InputState {
       Beam::Mode _beamMode       { Beam::Mode::AUTO };
       bool _noteEntryMode      { false };
       Slur* _slur              { 0     };
+      int         _pitchMod    { 0 };                       // buttons for raise/lower by half step
 
       Segment* nextInputPos() const;
 
@@ -98,6 +99,9 @@ class InputState {
 
       Slur* slur() const                  { return _slur; }
       void setSlur(Slur* s)               { _slur = s; }
+
+      int pitchMod() const                { return _pitchMod; }
+      void setPitchMod(const int& v)      { _pitchMod = v; }
 
       void update(Element* e);
       void moveInputPos(Element* e);

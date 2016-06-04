@@ -116,7 +116,9 @@ enum class Pad : char {
       DOT,
       DOTDOT,
       DOT3,
-      DOT4
+      DOT4,
+      RAISE,
+      LOWER
       };
 
 //---------------------------------------------------------
