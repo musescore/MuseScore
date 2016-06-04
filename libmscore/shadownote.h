@@ -54,6 +54,7 @@ class ShadowNote : public Element {
       bool noFlag() const;
       };
 
+// TODO: add pitchMod (raise lower) accidental to shadow note?
 
 }     // namespace Ms
 #endif
