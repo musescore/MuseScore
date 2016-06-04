@@ -3522,6 +3522,13 @@ void ScoreView::endNoteEntry()
       {
       InputState& is = _score->inputState();
       is.setNoteEntryMode(false);
+
+      // un-press raise and lower buttons
+      // (since these buttons behave differently outside of note entry mode)
+      is.setPitchMod(0);
+      getAction("pad-raise")->setChecked(false);
+      getAction("pad-lower")->setChecked(false);
+
       if (is.slur()) {
             const QList<SpannerSegment*>& el = is.slur()->spannerSegments();
             if (!el.isEmpty())

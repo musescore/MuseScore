@@ -2444,16 +2444,32 @@ void Score::padToggle(Pad n)
                         _is.setDots(4);
                   break;
             case Pad::RAISE:
-                  if (_is.pitchMod() == 1)
+                  if (_is.noteEntryMode())
+                  {
+                        if (_is.pitchMod() == 1)
+                              _is.setPitchMod(0);
+                        else
+                              _is.setPitchMod(1);
+                  }
+                  else  // if not note entry mode, this button behaves like pitch-up
+                  {
                         _is.setPitchMod(0);
-                  else
-                        _is.setPitchMod(1);
+                        upDown(true, UpDownMode::CHROMATIC);
+                  }
                   break;
             case Pad::LOWER:
-                  if (_is.pitchMod() == -1)
+                  if (_is.noteEntryMode())
+                  {
+                        if (_is.pitchMod() == -1)
+                              _is.setPitchMod(0);
+                        else
+                              _is.setPitchMod(-1);
+                  }
+                  else  // if not note entry mode, this button behaves like pitch-down
+                  {
                         _is.setPitchMod(0);
-                  else
-                        _is.setPitchMod(-1);
+                        upDown(false, UpDownMode::CHROMATIC);
+                  }
                   break;
             }
       if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
