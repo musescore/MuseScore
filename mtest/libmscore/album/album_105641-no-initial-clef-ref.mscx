@@ -171,7 +171,7 @@
           </BarLine>
         </Measure>
       <Measure number="1">
-        <irregular>1</irregular>
+        <irregular/>
         <stretch>0</stretch>
         <Clef>
           <concertClefType>G8vb</concertClefType>
@@ -246,7 +246,7 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>2</span>
+          <span from="0" to="8">2</span>
           </BarLine>
         </Measure>
       </Staff>
