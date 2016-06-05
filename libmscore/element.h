@@ -378,10 +378,10 @@ class Element : public QObject, public ScoreElement {
       qreal pageX() const;
       qreal canvasX() const;
 
-      const QPointF& userOff() const          { return _userOff;  }
-      virtual void setUserOff(const QPointF& o)       { _userOff = o;     }
-      void setUserXoffset(qreal v)            { _userOff.setX(v); }
-      void setUserYoffset(qreal v)            { _userOff.setY(v); }
+      const QPointF& userOff() const             { return _userOff;  }
+      virtual void setUserOff(const QPointF& o)  { _userOff = o;     }
+      void setUserXoffset(qreal v)               { _userOff.setX(v); }
+      void setUserYoffset(qreal v)               { _userOff.setY(v); }
 
       qreal& rUserXoffset()                   { return _userOff.rx(); }
       qreal& rUserYoffset()                   { return _userOff.ry(); }

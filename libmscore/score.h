@@ -259,8 +259,8 @@ enum class UpdateMode {
 
 class CmdState {
       UpdateMode _updateMode { UpdateMode::DoNothing };
-      int _startTick;            // start tick for mode LayoutTick
-      int _endTick;              // end tick for mode LayoutTick
+      int _startTick {-1};            // start tick for mode LayoutTick
+      int _endTick   {-1};              // end tick for mode LayoutTick
 
    public:
       LayoutFlags layoutFlags;
@@ -277,8 +277,8 @@ class CmdState {
       bool updateAll() const   { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
       bool updateRange() const { return _updateMode == UpdateMode::Update; }
       void setTick(int t);
-      int startTick() const { return _startTick; }
-      int endTick() const   { return _endTick; }
+      int startTick() const    { return _startTick; }
+      int endTick() const      { return _endTick; }
       };
 
 class UpdateState {
