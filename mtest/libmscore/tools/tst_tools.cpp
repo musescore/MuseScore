@@ -1,4 +1,3 @@
-//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -258,7 +257,6 @@ void TestTools::undoSlashFill()
       QString reference2(DIR  + "undoSlashFill02-ref.mscx");
 
       MasterScore* score = readScore(readFile);
-      score->doLayout();
 
       // select
       Segment* s = score->firstMeasure()->findSegment(Segment::Type::ChordRest, MScore::division * 2);

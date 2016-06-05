@@ -21,7 +21,6 @@
 #include "debugger.h"
 #include "musescore.h"
 #include "icons.h"
-// #include "textstyle.h"
 #include "globals.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"
@@ -47,7 +46,6 @@
 #include "libmscore/textline.h"
 #include "libmscore/system.h"
 #include "libmscore/arpeggio.h"
-//#include "libmscore/glissando.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/articulation.h"
 #include "libmscore/ottava.h"
@@ -1773,6 +1771,7 @@ void ShowElementBase::setElement(Element* e)
       eb.offsety->setValue(e->userOff().y());
       eb.readPosX->setValue(e->readPos().x());
       eb.readPosY->setValue(e->readPos().y());
+      eb.autoplace->setChecked(e->autoplace());
       eb.placement->setCurrentIndex(int(e->placement()));
 
       eb.bboxx->setValue(e->bbox().x());

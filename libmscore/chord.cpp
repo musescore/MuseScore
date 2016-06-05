@@ -2964,7 +2964,7 @@ void Chord::setSlash(bool flag, bool stemless)
             qreal y = 0.0;
             if (track() % 2) {
                   line = staff()->bottomLine() + 1;
-                  y = 0.5 * spatium();
+                  y    = 0.5 * spatium();
                   }
             else {
                   line = -1;

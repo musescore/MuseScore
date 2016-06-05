@@ -719,27 +719,8 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "tick") {
             int val = e.readInt();
-            // certain elements should not be allowed to reset tick
-            // these include any elements that occur within context of a Chord in a 1.X score
-            if (val >= 0) {
-                  // if tick is valid, we should honor it
-                  // but there are certain cases where we cannot
-                  // - in 1.X scores, copy & paste of gliss resulted in invalid tick value on the new copy (#21211)
-                  //   the tick is not needed for glissandi anyhow, so we can ignore it
-                  // - another bug allowed text items attached to notes or chords to also have invalid tick values (#25616)
-                  //   the text might be of any type, but we are now converting any text elements within notes into FINGERING
-                  // - another bug allowed copy & paste of symbols attached to notes to produce invalid tick values (#56146)
-                  //   we can't ignore tick for all symbols, because it is needed for correct positioning of symbols attached to measures
-                  //   and it also can be relied upon by subsequent elements (http://musescore.org/en/node/25572)
-                  //   so honor tick only for elements attached to measures
-                  //   symbols attached to notes or other elements don't need the tick anyhow
-                  if (score()->mscVersion() <= 114 && type() == Element::Type::SYMBOL) {
-                        if (!parent() || parent()->type() != Element::Type::MEASURE)
-                              val = -1;
-                        }
-                  if (score()->mscVersion() > 114 || (type() != Element::Type::GLISSANDO && type() != Element::Type::FINGERING && val >= 0))
-                        e.initTick(score()->fileDivision(val));
-                  }
+            if (val >= 0)
+                  e.initTick(score()->fileDivision(val));
             }
       else if (tag == "offset") {
             setUserOff(e.readPoint() * spatium());
