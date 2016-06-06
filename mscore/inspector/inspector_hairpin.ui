@@ -84,7 +84,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -121,7 +121,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Height value</string>
+        <string>Reset 'Height' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -165,7 +165,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity change value</string>
+        <string>Reset 'Velocity change' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -198,7 +198,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Continue height value</string>
+        <string>Reset 'Continue height' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -211,7 +211,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dynamic range value</string>
+        <string>Reset 'Dynamic range' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -244,7 +244,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Circled tip value</string>
+        <string>Reset 'Circled tip' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

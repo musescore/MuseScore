@@ -109,7 +109,7 @@
      <item row="0" column="1">
       <widget class="QToolButton" name="resetPlayBend">
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Play' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

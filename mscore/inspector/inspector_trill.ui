@@ -124,7 +124,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Trill type</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -140,7 +140,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Ornament Style</string>
+        <string>Ornament style</string>
        </property>
       </widget>
      </item>
@@ -170,7 +170,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetOrnamentStyle">
        <property name="accessibleName">
-        <string>Reset Ornament Type value</string>
+        <string>Reset 'Ornament style' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -190,7 +190,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetPlayArticulation">
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Play' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
