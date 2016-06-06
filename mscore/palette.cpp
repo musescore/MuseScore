@@ -514,10 +514,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   for (int i = sel.staffStart(); i < endStaff; ++i) {
                         Spanner* spanner = static_cast<Spanner*>(element->clone());
                         spanner->setScore(score);
-                        if (spanner->type() == Element::Type::HAIRPIN) {
-                              Hairpin* h = toHairpin(spanner);
-                              h->setSingleNoteCrescendo(h->getDefaultSingleNote());
-                              }
                         score->cmdAddSpanner(spanner, i, startSegment, endSegment);
                         }
                   }

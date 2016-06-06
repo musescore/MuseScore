@@ -328,7 +328,7 @@ Hairpin::Hairpin(Score* s)
       hairpinHeightStyle     = PropertyStyle::STYLED;
       _hairpinContHeight     = score()->styleS(StyleIdx::hairpinContHeight);
       hairpinContHeightStyle = PropertyStyle::STYLED;
-      _singleNoteCrescendo   = getDefaultSingleNote();
+      _singleNoteCrescendo   = true;
       }
 
 //---------------------------------------------------------
