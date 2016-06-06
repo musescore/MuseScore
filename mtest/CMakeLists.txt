@@ -194,12 +194,12 @@ subdirs (
         libmscore/tuplet
         libmscore/text
         importmidi
-        capella
+#ws        capella
         biab
         musicxml
-        guitarpro
+#ws        guitarpro
 #        scripting
-        testoves
+#ws        testoves
         )
 
 

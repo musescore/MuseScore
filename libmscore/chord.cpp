@@ -60,6 +60,8 @@ namespace Ms {
 
 Note* Chord::upNote() const
       {
+      Q_ASSERT(!_notes.empty());
+
       Note* result = _notes.back();
       if (!staff())
             return result;
@@ -89,6 +91,8 @@ Note* Chord::upNote() const
 
 Note* Chord::downNote() const
       {
+      Q_ASSERT(!_notes.empty());
+
       Note* result = _notes.front();
       if (!staff())
             return result;
@@ -789,6 +793,7 @@ void Chord::addLedgerLines()
 
 void Chord::computeUp()
       {
+      Q_ASSERT(!_notes.empty());
       StaffType* tab = 0;
       // TAB STAVES
       if (staff() && staff()->isTabStaff()) {
