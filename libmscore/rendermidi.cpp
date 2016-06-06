@@ -338,6 +338,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick();
+            int tick2 = seg->tick()+seg->ticks()-1;
             for (int track = strack; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
@@ -360,8 +361,20 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         instr->updateVelocity(&velocity, channel, a->subtypeName());
                         }
 
-                  if (instr->getUseExpression()) {
-                        int tick2 = seg->tick()+seg->ticks()-1;
+                  bool singleNoteCrescendo = false;
+                  for (auto it : staff->score()->spannerMap().findOverlapping(tick, tick2)) {
+                        Spanner *s = it.value;
+                        if (it.stop == tick)
+                              continue;
+                        if (s->type() == Element::Type::HAIRPIN && s->staff() == chord->staff()) {
+                              Hairpin* h = toHairpin(s);
+                              singleNoteCrescendo = h->singleNoteCrescendo();
+                              break;
+                              }
+                        }
+
+                  if (instr->getUseExpression() && singleNoteCrescendo) {
+
                         int velocityEnd = staff->velocities().velo(tick2);
 
                         foreach (Articulation* a, chord->articulations()) {
@@ -385,6 +398,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               else
                                     cc11Value--;
                               }
+                        }
+                  else if (instr->getUseExpression()) {
+                        NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, velocity);
+                        events->insert(std::pair<int,NPlayEvent>(seg->tick(), cc11event));
                         }
 
                   if (instr->getFixedVelocity() > 0)
