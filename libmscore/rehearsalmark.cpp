@@ -51,7 +51,7 @@ void RehearsalMark::layout()
                   }
             }
 
-      if (autoplace()) {
+      if (s && autoplace()) {
             Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
             Shape s2 = shape().translated(s->pos());
             qreal d  = s2.minVerticalDistance(s1);
