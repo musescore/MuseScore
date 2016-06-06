@@ -152,6 +152,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Horizontal offset' value</string>
        </property>
@@ -193,6 +196,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Vertical offset' value</string>
        </property>
@@ -227,6 +233,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Color' value</string>
@@ -314,6 +323,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Visible' value</string>
        </property>
@@ -325,7 +337,7 @@
      <item row="5" column="0" colspan="2">
       <widget class="QCheckBox" name="autoplace">
        <property name="text">
-        <string>Automatic Placement</string>
+        <string>Automatic placement</string>
        </property>
       </widget>
      </item>
@@ -337,8 +349,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
-        <string>Reset Vertical offset value</string>
+        <string>Reset 'Automatic placement' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -368,8 +383,6 @@
   <tabstop>vRaster</tabstop>
   <tabstop>resetY</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

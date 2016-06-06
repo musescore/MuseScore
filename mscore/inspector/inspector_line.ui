@@ -228,6 +228,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Line visible' value</string>
        </property>
