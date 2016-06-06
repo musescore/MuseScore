@@ -81,6 +81,8 @@ class Ambitus;
 class Bracket;
 class InstrumentChange;
 class Text;
+class Hairpin;
+class HairpinSegment;
 
 enum class SymId;
 
@@ -679,6 +681,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
       CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(Hairpin,       HAIRPIN)
+      CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
 #undef CONVERT
       };
 
@@ -747,6 +751,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Bracket,       BRACKET)
       CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
       CONVERT(Text,          TEXT)
+      CONVERT(Hairpin,       HAIRPIN)
+      CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
 #undef CONVERT
 
 //---------------------------------------------------------
