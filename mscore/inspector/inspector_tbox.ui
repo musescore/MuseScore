@@ -101,7 +101,7 @@
         <string/>
        </property>
        <property name="accessibleName">
-        <string>Reset Top gap value</string>
+        <string>Reset 'Top gap' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -114,7 +114,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Bottom gap value</string>
+        <string>Reset 'Bottom gap' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -156,7 +156,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Right margin value</string>
+        <string>Reset 'Right margin' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -198,7 +198,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Bottom margin value</string>
+        <string>Reset 'Bottom margin' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -240,7 +240,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Top margin value</string>
+        <string>Reset 'Top margin' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -253,7 +253,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Left margin value</string>
+        <string>Reset 'Left margin' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

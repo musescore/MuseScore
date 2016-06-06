@@ -90,7 +90,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Tuning value</string>
+        <string>Reset 'Tuning' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -135,7 +135,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity value</string>
+        <string>Reset 'Velocity' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -398,7 +398,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity type value</string>
+        <string>Reset 'Velocity type' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -433,7 +433,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dot position value</string>
+        <string>Reset 'Dot position' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -459,7 +459,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Play' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -478,7 +478,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Small value</string>
+        <string>Reset 'Small' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -542,7 +542,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Mirror head value</string>
+        <string>Reset 'Mirror head' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -577,7 +577,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Head group value</string>
+        <string>Reset 'Head group' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -596,7 +596,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Head type value</string>
+        <string>Reset 'Head type' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -609,7 +609,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Fix to line</string>
+        <string>Reset 'Fix to line' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -622,7 +622,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line</string>
+        <string>Reset 'Line' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

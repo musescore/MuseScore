@@ -464,12 +464,12 @@
            </property>
            <item>
             <property name="text">
-             <string>Single Sharps and Flats Only</string>
+             <string>Single ♯ and ♭ Only</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Use Double Sharps and Flats</string>
+             <string>Use Double ♯ and ♭</string>
             </property>
            </item>
           </widget>

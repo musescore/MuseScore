@@ -101,7 +101,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetText">
        <property name="accessibleName">
-        <string>Reset Text value</string>
+        <string>Reset 'Text' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -111,7 +111,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetType">
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -128,7 +128,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetGlissandoStyle">
        <property name="accessibleName">
-        <string>Reset Style value</string>
+        <string>Reset 'Style' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -189,7 +189,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetShowText">
        <property name="accessibleName">
-        <string>Reset Show text value</string>
+        <string>Reset 'Show text' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -222,7 +222,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetPlayGlissando">
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Play' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

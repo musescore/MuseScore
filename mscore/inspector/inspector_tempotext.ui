@@ -84,7 +84,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Follow text value</string>
+        <string>Reset 'Follow text' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -104,7 +104,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Tempo value</string>
+        <string>Reset 'Tempo' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

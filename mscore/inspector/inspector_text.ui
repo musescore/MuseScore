@@ -101,7 +101,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Style value</string>
+        <string>Reset 'Style' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

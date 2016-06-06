@@ -81,7 +81,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line color value</string>
+        <string>Reset 'Line color' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -121,7 +121,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Allow diagonal value</string>
+        <string>Reset 'Allow diagonal' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -200,7 +200,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line thickness value</string>
+        <string>Reset 'Line thickness' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -213,7 +213,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line style value</string>
+        <string>Reset 'Line style' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -229,7 +229,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Line visible value</string>
+        <string>Reset 'Line visible' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>

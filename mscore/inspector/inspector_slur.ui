@@ -87,7 +87,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line type value</string>
+        <string>Reset 'Line type' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -147,7 +147,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Direction value</string>
+        <string>Reset 'Direction' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
