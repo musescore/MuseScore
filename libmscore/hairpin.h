@@ -126,7 +126,8 @@ class Hairpin : public TextLine {
       void setHairpinContHeight(Spatium val) { _hairpinContHeight = val; }
 
       bool singleNoteCrescendo() const           { return _singleNoteCrescendo; }
-      void setSingleNoteCrescnedo(bool val)      { _singleNoteCrescendo = val; }
+      void setSingleNoteCrescendo(bool val)      { _singleNoteCrescendo = val; }
+      bool getDefaultSingleNote() const;
 
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;

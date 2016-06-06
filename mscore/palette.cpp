@@ -32,6 +32,7 @@
 #include "libmscore/page.h"
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
+#include "libmscore/hairpin.h"
 #include "preferences.h"
 #include "seq.h"
 #include "libmscore/part.h"
@@ -513,6 +514,10 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   for (int i = sel.staffStart(); i < endStaff; ++i) {
                         Spanner* spanner = static_cast<Spanner*>(element->clone());
                         spanner->setScore(score);
+                        if (spanner->type() == Element::Type::HAIRPIN) {
+                              Hairpin* h = toHairpin(spanner);
+                              h->setSingleNoteCrescendo(h->getDefaultSingleNote());
+                              }
                         score->cmdAddSpanner(spanner, i, startSegment, endSegment);
                         }
                   }

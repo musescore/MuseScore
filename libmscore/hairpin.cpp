@@ -328,11 +328,7 @@ Hairpin::Hairpin(Score* s)
       hairpinHeightStyle     = PropertyStyle::STYLED;
       _hairpinContHeight     = score()->styleS(StyleIdx::hairpinContHeight);
       hairpinContHeightStyle = PropertyStyle::STYLED;
-
-      if (part() && part()->instrument(tick()))
-            _singleNoteCrescendo   = part()->instrument(ticks())->getUseExpression();
-      else
-            _singleNoteCrescendo = false;
+      _singleNoteCrescendo   = getDefaultSingleNote();
       }
 
 //---------------------------------------------------------
@@ -353,6 +349,13 @@ void Hairpin::layout()
 LineSegment* Hairpin::createLineSegment()
       {
       return new HairpinSegment(score());
+      }
+
+bool Hairpin::getDefaultSingleNote() const {
+      if (part() && part()->instrument(tick()))
+            return part()->instrument(tick())->getUseExpression();
+      else
+            return false;
       }
 
 //---------------------------------------------------------
@@ -550,7 +553,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
             case P_ID::HAIRPIN_HEIGHT:      return score()->style(StyleIdx::hairpinHeight);
             case P_ID::HAIRPIN_CONT_HEIGHT: return score()->style(StyleIdx::hairpinContHeight);
             case P_ID::LINE_STYLE:          return _useTextLine ? int(Qt::CustomDashLine) : int(Qt::SolidLine);
-            case P_ID::HAIRPIN_SINGLENOTE:  return part()->instrument(ticks())->getUseExpression();
+            case P_ID::HAIRPIN_SINGLENOTE:  return getDefaultSingleNote();
 
             default:
                   return TextLine::propertyDefault(id);
@@ -595,7 +598,7 @@ void Hairpin::resetProperty(P_ID id)
                   break;
 
             case P_ID::HAIRPIN_SINGLENOTE:
-                  setSingleNoteCrescnedo(part()->instrument(ticks())->getUseExpression());
+                  setSingleNoteCrescendo(getDefaultSingleNote());
                   break;
 
             default:
