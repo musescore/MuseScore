@@ -539,7 +539,6 @@
           </Rest>
         <tick>3840</tick>
         <Rest>
-          <offset x="0" y="-1.28125"/>
           <track>2</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -550,7 +549,6 @@
           <l2>-15</l2>
           </Beam>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -566,7 +564,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -590,7 +587,6 @@
           <l2>-15</l2>
           </Beam>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -607,7 +603,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -623,7 +618,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -652,7 +646,6 @@
           </BarLine>
         <tick>5760</tick>
         <Chord>
-          <offset x="0" y="0.5"/>
           <track>3</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -672,7 +665,6 @@
           <l2>31</l2>
           </Beam>
         <Chord>
-          <offset x="0" y="0.5"/>
           <track>3</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -688,7 +680,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="0.5"/>
           <track>3</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -712,7 +703,6 @@
           <l2>31</l2>
           </Beam>
         <Chord>
-          <offset x="0" y="0.5"/>
           <track>3</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -729,7 +719,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="0.5"/>
           <track>3</track>
           <small>1</small>
           <durationType>eighth</durationType>
@@ -745,7 +734,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="0.5"/>
           <track>3</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -960,7 +948,6 @@
           </Rest>
         <tick>3840</tick>
         <Rest>
-          <offset x="0" y="-1.28125"/>
           <track>6</track>
           <small>1</small>
           <durationType>quarter</durationType>

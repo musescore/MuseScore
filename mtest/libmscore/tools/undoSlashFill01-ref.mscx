@@ -470,7 +470,6 @@
           </Chord>
         <tick>3840</tick>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -486,7 +485,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -502,7 +500,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>quarter</durationType>
@@ -518,7 +515,6 @@
             </Note>
           </Chord>
         <Chord>
-          <offset x="0" y="-0.5"/>
           <track>2</track>
           <small>1</small>
           <durationType>quarter</durationType>
