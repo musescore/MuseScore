@@ -119,7 +119,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Leading space value</string>
+        <string>Reset 'Pause' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
