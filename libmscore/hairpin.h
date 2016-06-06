@@ -82,6 +82,7 @@ class Hairpin : public TextLine {
       int _veloChange;
       Dynamic::Range _dynRange;
       PropertyStyle lineWidthStyle;
+      bool _singleNoteCrescendo;
 
       Spatium _hairpinHeight;
       Spatium _hairpinContHeight;
@@ -123,6 +124,9 @@ class Hairpin : public TextLine {
 
       Spatium hairpinContHeight() const      { return _hairpinContHeight; }
       void setHairpinContHeight(Spatium val) { _hairpinContHeight = val; }
+
+      bool singleNoteCrescendo() const           { return _singleNoteCrescendo; }
+      void setSingleNoteCrescnedo(bool val)      { _singleNoteCrescendo = val; }
 
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
