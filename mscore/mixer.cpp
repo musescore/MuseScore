@@ -68,6 +68,9 @@ PartEdit::PartEdit(QWidget* parent)
       channelSpinBox->setVisible(preferences.showMidiControls);
       portSpinBox   ->setVisible(preferences.showMidiControls);
 
+      vel2vol->setVisible(preferences.showMidiControls);
+      vel2volLabel->setVisible(preferences.showMidiControls);
+
       if (!preferences.showMidiControls)
             hboxLayout->setSpacing(20);
       else
@@ -282,10 +285,13 @@ void Mixer::midiPrefsChanged(bool showMidiControls)
             pe->channelSpinBox->setVisible(showMidiControls);
             pe->portSpinBox   ->setVisible(showMidiControls);
 
+            pe->vel2vol->setVisible(showMidiControls);
+            pe->vel2volLabel->setVisible(showMidiControls);
+
             if (!showMidiControls)
                   pe->hboxLayout->setSpacing(20);
             else
-                  pe->hboxLayout->setSpacing(5);
+                  pe->hboxLayout1->setSpacing(5);
             }
       }
 
