@@ -15,6 +15,7 @@
 #include "musescore.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/score.h"
+#include "libmscore/part.h"
 
 namespace Ms {
 
@@ -64,6 +65,16 @@ void InspectorHairpin::postInit()
       h.hairpinHeight->setDisabled(useTextLine);
       h.hairpinContHeight->setDisabled(useTextLine);
       }
+
+void InspectorHairpin::setElement()
+      {
+      InspectorBase::setElement();
+      HairpinSegment* hs = toHairpinSegment(inspector->element());
+      Hairpin* hp = hs->hairpin();
+      Instrument* inst = hp->part()->instrument(hp->tick());
+      h.hairpinSingleNote->setHidden(!inst->getUseExpression());
+      }
+
 
 }
 
