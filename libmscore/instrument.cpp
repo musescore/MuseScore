@@ -476,6 +476,8 @@ void Channel::write(Xml& xml, Part* part) const
                         continue;
                   if (e.dataA() == CTRL_CHORUS_SEND && e.dataB() == 0)
                         continue;
+                  if (e.dataA() == CTRL_VEL2VOL && e.dataB() == 127)
+                        continue;
                   }
 
             e.write(xml);
