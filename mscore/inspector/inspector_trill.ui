@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>68</height>
+    <height>84</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,9 +63,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -76,6 +73,9 @@
       <number>0</number>
      </property>
      <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
       <number>0</number>
      </property>
      <item row="0" column="0">
@@ -169,6 +169,9 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetOrnamentStyle">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Ornament style' value</string>
        </property>
@@ -189,6 +192,9 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetPlayArticulation">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Play' value</string>
        </property>

@@ -138,7 +138,7 @@ void Inspector::setElements(const QList<Element*>& l)
                   ie = new InspectorEmpty(this);
 
             bool sameTypes = true;
-            foreach(Element* ee, _el) {
+            for (Element* ee : _el) {
                   if (_element->type() != ee->type())
                         sameTypes = false;
                   else {
@@ -876,7 +876,7 @@ void InspectorTempoText::postInit()
       bool followText = tt.followText->isChecked();
       //tt.resetFollowText->setDisabled(followText);
       tt.tempo->setDisabled(followText);
-      tt.resetTempo->setDisabled(followText);
+      tt.resetTempo->setDisabled(followText || tt.tempo->value() == 120.0);  // a default of 120 BPM is assumed all over the place
       }
 
 //---------------------------------------------------------
@@ -993,7 +993,7 @@ QSize InspectorEmpty::sizeHint() const
       return QSize(255 * guiScaling, 170 * guiScaling);
       }
 
-static const BarLineType types[8] = {
+static const BarLineType types[] = {
       BarLineType::NORMAL,
       BarLineType::BROKEN,
       BarLineType::DOTTED,

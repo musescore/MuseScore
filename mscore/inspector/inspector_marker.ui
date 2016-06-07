@@ -77,6 +77,9 @@
      </property>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetMarkerType">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Marker type' value</string>
        </property>
@@ -101,6 +104,9 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetJumpLabel">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Label' value</string>
        </property>

@@ -337,16 +337,12 @@ class InspectorDynamic : public InspectorBase {
 //   InspectorBarLine
 //---------------------------------------------------------
 
-#define BARLINE_BUILTIN_SPANS 5
-
 class InspectorBarLine : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorBarLine b;
-
-      static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
 
       void  blockSpanDataSignals(bool val);
 

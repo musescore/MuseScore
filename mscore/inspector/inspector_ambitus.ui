@@ -796,6 +796,9 @@
        <property name="accessibleName">
         <string>Reset 'Head group' value</string>
        </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
       </widget>
      </item>
      <item row="1" column="0">
