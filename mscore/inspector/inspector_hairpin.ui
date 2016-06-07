@@ -306,7 +306,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset playing hairpin on single notes</string>
+        <string>Reset 'Play hairpin on single notes' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
