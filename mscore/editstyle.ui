@@ -4179,6 +4179,9 @@
             <property name="toolTip">
              <string>Reset value</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Default vertical position' value</string>
+            </property>
             <property name="text">
              <string notr="true">...</string>
             </property>
@@ -4194,6 +4197,9 @@
             </property>
             <property name="toolTip">
              <string>Reset value</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Line thickness' value</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -4211,6 +4217,9 @@
             <property name="toolTip">
              <string>Reset value</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Height' value</string>
+            </property>
             <property name="text">
              <string notr="true">...</string>
             </property>
@@ -4226,6 +4235,9 @@
             </property>
             <property name="toolTip">
              <string>Reset value</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Continue height' value</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -4380,6 +4392,9 @@
             <property name="toolTip">
              <string>Reset value</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Default vertical position' value</string>
+            </property>
             <property name="text">
              <string notr="true">...</string>
             </property>
@@ -4395,6 +4410,9 @@
             </property>
             <property name="toolTip">
              <string>Reset value</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Hook height' value</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -4412,6 +4430,9 @@
             <property name="toolTip">
              <string>Reset value</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Line thickness' value</string>
+            </property>
             <property name="text">
              <string notr="true">...</string>
             </property>
@@ -4427,6 +4448,9 @@
             </property>
             <property name="toolTip">
              <string>Reset value</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Line style' value</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -4461,6 +4485,9 @@
             </property>
             <property name="toolTip">
              <string>Reset value</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Default vertical position' value</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -4587,6 +4614,9 @@
             <property name="toolTip">
              <string>Reset value</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Hook height' value</string>
+            </property>
             <property name="text">
              <string notr="true">...</string>
             </property>
@@ -4603,6 +4633,9 @@
             <property name="toolTip">
              <string>Reset value</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Line thickness' value</string>
+            </property>
             <property name="text">
              <string notr="true">...</string>
             </property>
@@ -4618,6 +4651,9 @@
             </property>
             <property name="toolTip">
              <string>Reset value</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Line style' value</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
