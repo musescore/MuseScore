@@ -119,6 +119,8 @@ Instrument::Instrument(const Instrument& i)
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
+      _fixedVelocity = i.fixedVelocity();
+      _useExpression = i.useExpression();
       }
 
 void Instrument::operator=(const Instrument& i)
