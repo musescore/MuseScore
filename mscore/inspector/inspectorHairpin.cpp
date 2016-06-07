@@ -72,7 +72,7 @@ void InspectorHairpin::setElement()
       HairpinSegment* hs = toHairpinSegment(inspector->element());
       Hairpin* hp = hs->hairpin();
       Instrument* inst = hp->part()->instrument(hp->tick());
-      h.hairpinSingleNote->setHidden(!inst->getUseExpression());
+      h.hairpinSingleNote->setHidden(!inst->useExpression());
       }
 
 

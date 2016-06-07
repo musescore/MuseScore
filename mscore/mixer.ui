@@ -298,10 +298,10 @@
            <enum>Qt::TabFocus</enum>
           </property>
           <property name="toolTip">
-           <string>Velocity 2 Volume</string>
+           <string>Velocity to volume</string>
           </property>
           <property name="accessibleName">
-           <string>Velocity to Volume</string>
+           <string>Velocity to volume</string>
           </property>
           <property name="accessibleDescription">
            <string>Use arrows to modify</string>

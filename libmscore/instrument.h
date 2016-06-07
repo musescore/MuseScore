@@ -188,9 +188,9 @@ class Instrument {
       ClefTypeList clefType(int staffIdx) const;
       void setClefType(int staffIdx, const ClefTypeList& c);
 
-      int getFixedVelocity()                                 { return _fixedVelocity;  }
+      int  fixedVelocity()                                   { return _fixedVelocity;  }
       void setFixedVelocity(int v)                           { _fixedVelocity = v;     }
-      bool getUseExpression()                                { return _useExpression;  }
+      bool useExpression()                                   { return _useExpression;  }
       void setUseExpression(bool v)                          { _useExpression = v;     }
 
       const QList<NamedEventList>& midiActions() const       { return _midiActions; }

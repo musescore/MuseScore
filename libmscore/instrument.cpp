@@ -217,9 +217,8 @@ void Instrument::write(Xml& xml, Part* part) const
             }
       if (_useExpression)
             xml.tag("dynamics", "expression");
-      else
-            xml.tag("dynamics", "velocity");
-      xml.tag("fixedVelocity", _fixedVelocity);
+      if (_fixedVelocity > 0)
+            xml.tag("fixedVelocity", _fixedVelocity);
       for (int i = 0; i < _clefType.size(); ++i) {
             ClefTypeList ct = _clefType[i];
             if (ct._concertClef == ct._transposingClef) {

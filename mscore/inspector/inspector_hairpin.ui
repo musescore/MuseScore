@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
+    <width>298</width>
     <height>252</height>
    </rect>
   </property>
@@ -296,14 +296,20 @@
      <item row="2" column="0">
       <widget class="QCheckBox" name="hairpinSingleNote">
        <property name="text">
-        <string>Single note (de)crescendo</string>
+        <string>Play hairpin on single notes</string>
        </property>
       </widget>
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetHairpinSingleNote">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset playing hairpin on single notes</string>
+       </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

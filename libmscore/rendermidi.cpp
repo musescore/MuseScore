@@ -50,6 +50,7 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
+#include "element.h"
 
 namespace Ms {
 
@@ -366,18 +367,18 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         Spanner *s = it.value;
                         if (it.stop == tick)
                               continue;
-                        if (s->type() == Element::Type::HAIRPIN && s->staff() == chord->staff()) {
+                        if (s->isHairpin() && s->staff() == chord->staff()) {
                               Hairpin* h = toHairpin(s);
                               singleNoteCrescendo = h->singleNoteCrescendo();
                               break;
                               }
                         }
 
-                  if (instr->getUseExpression() && singleNoteCrescendo) {
+                  if (instr->useExpression() && singleNoteCrescendo) {
 
                         int velocityEnd = staff->velocities().velo(tick2);
 
-                        foreach (Articulation* a, chord->articulations()) {
+                        for (Articulation* a : chord->articulations()) {
                               instr->updateVelocity(&velocityEnd, channel, a->subtypeName());
                               }
 
@@ -390,22 +391,22 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         // TODO find out good update intervals!
                         int tickInc = cc11Ticks/abs(cc11Amount);
 
-                        for(int i=0; i < abs(cc11Amount) ;++i) {
+                        for (int i=0; i < abs(cc11Amount) ;++i) {
                               NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, cc11Value);
-                              events->insert(std::pair<int,NPlayEvent>(seg->tick()+i*tickInc,cc11event));
-                              if (cc11Amount>0)
+                              events->insert(std::pair<int, NPlayEvent>(seg->tick()+i*tickInc,cc11event));
+                              if (cc11Amount > 0)
                                     cc11Value++;
                               else
                                     cc11Value--;
                               }
                         }
-                  else if (instr->getUseExpression()) {
+                  else if (instr->useExpression()) {
                         NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, velocity);
-                        events->insert(std::pair<int,NPlayEvent>(seg->tick(), cc11event));
+                        events->insert(std::pair<int, NPlayEvent>(seg->tick(), cc11event));
                         }
 
-                  if (instr->getFixedVelocity() > 0)
-                        velocity = instr->getFixedVelocity();
+                  if (instr->fixedVelocity() > 0)
+                        velocity = instr->fixedVelocity();
 
                   for (Chord* c : chord->graceNotesBefore()) {
                         for (const Note* note : c->notes())

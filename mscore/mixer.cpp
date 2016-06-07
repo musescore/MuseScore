@@ -564,7 +564,7 @@ void PartEdit::sync(bool syncControls)
                         }
                   if (vel2vol->value() != pe->vel2vol->value()) {
                         _setValue(pe->vel2vol, this->vel2vol->value());
-                       emit pe->vel2volChanged(this->vel2vol->value(), false);
+                        emit pe->vel2volChanged(this->vel2vol->value(), false);
                         }
                   if (mute->isChecked() != pe->mute->isChecked()) {
                         _setChecked(pe->mute, channel->mute);

@@ -353,7 +353,7 @@ LineSegment* Hairpin::createLineSegment()
 
 bool Hairpin::getDefaultSingleNote() const {
       if (part() && part()->instrument(tick()))
-            return part()->instrument(tick())->getUseExpression();
+            return part()->instrument(tick())->useExpression();
       else
             return false;
       }
