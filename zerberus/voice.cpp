@@ -102,6 +102,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       data      = s->data() + z->offset * audioChan;
       eidx      = s->frames() * audioChan;
       _loopMode = z->loopMode;
+      _loopStart = s->loopStart();
+      _loopEnd   = s->loopEnd();
 
       _offMode  = z->offMode;
       _offBy    = z->offBy;
@@ -234,14 +236,19 @@ void Voice::process(int frames, float* p)
 
       if (audioChan == 1) {
             while (frames--) {
+
+                  short minusOne;
+                  updateLoop(&minusOne);
+
                   int idx = phase.index();
+
                   if (idx >= eidx) {
                         off();
                         break;
                         }
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f;
-                  f =  (coeffs[0] * data[idx-1]
+                  f =  (coeffs[0] * minusOne
                       + coeffs[1] * data[idx+0]
                       + coeffs[2] * data[idx+1]
                       + coeffs[3] * data[idx+2]) * gain
@@ -276,6 +283,10 @@ void Voice::process(int frames, float* p)
             // handle interleaved stereo samples
             //
             while (frames--) {
+
+                  short minusOne, minusTwo;
+                  updateLoop(&minusOne, &minusTwo);
+
                   int idx = phase.index() * 2;
                   if (idx >= eidx) {
                         off();
@@ -286,13 +297,13 @@ void Voice::process(int frames, float* p)
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f1, f2;
 
-                  f1 = (coeffs[0] * data[idx-2]
+                  f1 = (coeffs[0] * minusTwo
                       + coeffs[1] * data[idx]
                       + coeffs[2] * data[idx+2]
                       + coeffs[3] * data[idx+4])
                       * gain * _channel->panLeftGain();
 
-                  f2 = (coeffs[0] * data[idx-1]
+                  f2 = (coeffs[0] *minusOne
                       + coeffs[1] * data[idx+1]
                       + coeffs[2] * data[idx+3]
                       + coeffs[3] * data[idx+5])
@@ -337,6 +348,49 @@ void Voice::process(int frames, float* p)
                   *p++  += vr;
                   phase += phaseIncr;
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   updateIndex
+//---------------------------------------------------------
+
+void Voice::updateLoop(short* minusOne, short* minusTwo)
+      {
+      int idx = phase.index();
+      if (minusTwo) {
+            if (idx == 0) {
+                  *minusOne = 0;
+                  *minusTwo = 0;
+                  }
+            else if (idx == 1) {
+                  *minusOne = data[0];
+                  *minusTwo = 0;
+                  }
+            else {
+                  *minusOne = data[(idx*2)-1];
+                  *minusTwo = data[(idx*2)-2];
+                  }
+            }
+      else {
+            if (idx == 0)
+                  *minusOne = 0;
+            else if (idx == 1)
+                  *minusOne = data[0];
+            else
+                  *minusOne = data[idx-1];
+            }
+
+      if (!(loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && _state == VoiceState::PLAYING)))
+            return;
+
+      if (idx >= _loopEnd) {
+            *minusOne = data[_loopEnd];
+            if (minusTwo) {
+                  *minusOne = data[(_loopEnd*2)+1];
+                  *minusTwo = data[(_loopEnd*2)];
+                  }
+            phase.setIndex(_loopStart);
             }
       }
 

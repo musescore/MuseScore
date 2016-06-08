@@ -22,8 +22,8 @@ class Sample {
       short* _data;
       int _frames;
       int _sampleRate;
-      int _loopStart {-1};
-      int _loopEnd {-1};
+      int _loopStart;
+      int _loopEnd;
 
    public:
       Sample(int ch, short* val, int f, int sr)
