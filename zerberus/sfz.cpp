@@ -47,6 +47,7 @@ struct SfzRegion {
       double volume;
       int octave_offset, note_offset;
       int tune, transpose;
+      int loopStart, loopEnd;
       Trigger trigger;
       LoopMode loop_mode;
       OffMode off_mode;
@@ -86,9 +87,11 @@ void SfzRegion::init(const QString& _path)
       seq_length      = 1;
       seq_position    = 1;
       trigger         = Trigger::ATTACK;
-      loop_mode       = LoopMode::NO_LOOP;
+      loop_mode       = LoopMode::CONTINUOUS;
       tune            = 0;
       transpose       = 0;
+      loopStart       = -1;
+      loopEnd         = -1;
       for (int i = 0; i < 128; ++i) {
             on_locc[i] = -1;
             on_hicc[i] = -1;
@@ -130,6 +133,8 @@ void SfzRegion::setZone(Zone* z) const
       z->offMode      = off_mode;
       z->offBy        = off_by;
       z->group        = group;
+      z->loopEnd      = loopEnd;
+      z->loopStart    = loopStart;
       if (note_offset || octave_offset) {
             qDebug("=========================offsets %d %d", note_offset, octave_offset);
             }
@@ -188,8 +193,16 @@ void ZInstrument::addRegion(SfzRegion& r)
                   }
             }
       Zone* z = new Zone;
-      r.setZone(z);
       z->sample = readSample(r.sample, 0);
+      if (z->sample) {
+            qDebug("Sample Loop - start %d, end %d, mode %d", z->sample->loopStart(), z->sample->loopEnd(), z->sample->loopMode());
+            // if there is no opcode defining loop ranges, use sample definitions as fallback (according to spec)
+            if (r.loopStart == -1)
+                  r.loopStart = z->sample->loopStart();
+            if (r.loopEnd == -1)
+                  r.loopEnd = z->sample->loopEnd();
+            }
+      r.setZone(z);
       if (z->sample)
             addZone(z);
       }
@@ -204,6 +217,18 @@ static void readDouble(const QString& data, double* val)
       double d = data.toDouble(&ok);
       if (ok)
             *val = d;
+      }
+
+//---------------------------------------------------------
+//   readInt
+//---------------------------------------------------------
+
+static void readInt(const QString& data, int* val)
+      {
+      bool ok;
+      int i = data.toInt(&ok);
+      if (ok)
+            *val = i;
       }
 
 //---------------------------------------------------------
@@ -253,6 +278,10 @@ void SfzRegion::readOp(const QString& b, const QString& data)
             if (loop_mode != LoopMode::ONE_SHOT)
                   qDebug("SfzRegion: loop_mode <%s>", qPrintable(data));
             }
+      else if(b == "loop_start")
+            readInt(data, &loopStart);
+      else if(b == "loop_end")
+            readInt(data, &loopEnd);
       else if (b.startsWith("on_locc")) {
             int idx = b.mid(7).toInt();
             if (idx >= 0 && idx < 128)
