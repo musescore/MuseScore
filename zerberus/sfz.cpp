@@ -190,6 +190,8 @@ void ZInstrument::addRegion(SfzRegion& r)
       Zone* z = new Zone;
       r.setZone(z);
       z->sample = readSample(r.sample, 0);
+      qDebug("Loop Start %d", z->sample->loopStart());
+      qDebug("Loop End %d", z->sample->loopEnd());
       if (z->sample)
             addZone(z);
       }

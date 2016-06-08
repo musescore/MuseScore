@@ -22,6 +22,8 @@ class Sample {
       short* _data;
       int _frames;
       int _sampleRate;
+      int _loopStart {-1};
+      int _loopEnd {-1};
 
    public:
       Sample(int ch, short* val, int f, int sr)
@@ -32,6 +34,11 @@ class Sample {
       short* data() const    { return _data + _channel; }
       int channel() const    { return _channel;         }
       int sampleRate() const { return _sampleRate;      }
+
+      void setLoopStart (int v) { _loopStart = v; }
+      void setLoopEnd (int v)   { _loopEnd = v; }
+      int loopStart()           { return _loopStart; }
+      int loopEnd()             { return _loopEnd; }
       };
 
 #endif
