@@ -73,6 +73,7 @@ struct Phase {
       void operator+=(const Phase& p) { data += p.data;   }
       void set(int b)                 { data = b * 256;   }
       void set(double b)              { data = b * 256.0; }
+      void setIndex(int b)            { data = b * 256 + _fract; }
       int index() const               { return data >> 8; }
       unsigned fract() const          { return _fract;    }
 
@@ -107,6 +108,9 @@ class Voice {
       LoopMode _loopMode;
       OffMode _offMode;
       int _offBy;
+      int _loopStart;
+      int _loopEnd;
+      bool _looping;
 
       float gain;
 
@@ -155,6 +159,8 @@ class Voice {
 
       void start(Channel* channel, int key, int velo, const Zone*);
       void process(int frames, float*);
+      void updateLoop();
+      short getData(int pos);
 
       Channel* channel() const    { return _channel; }
       int key() const             { return _key;     }

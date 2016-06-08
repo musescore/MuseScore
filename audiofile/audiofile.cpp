@@ -43,6 +43,7 @@ static SF_VIRTUAL_IO sfio = {
 AudioFile::AudioFile()
       {
       memset(&info, 0, sizeof(info));
+      memset(&inst, 0, sizeof(inst));
       sf = 0;
       }
 
@@ -61,6 +62,8 @@ bool AudioFile::open(const QByteArray& b)
       buf = b;
       idx = 0;
       sf  = sf_open_virtual(&sfio, SFM_READ, &info, this);
+      hasInstrument = sf_command(sf, SFC_GET_INSTRUMENT, &inst, sizeof(inst)) == SF_TRUE;
+
       return sf != 0;
       }
 

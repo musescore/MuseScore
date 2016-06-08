@@ -69,6 +69,7 @@ struct Zone {
       OffMode offMode = OffMode::FAST;
       int group = 0;
       int offBy = 0;
+      int loopStart, loopEnd;
 
       int onLocc[128];
       int onHicc[128];
