@@ -1142,6 +1142,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
       popup->addAction(getAction("insert-measure"));
+      popup->addAction(getAction("delete-measures"));
       popup->addSeparator();
 
       a = popup->addAction(tr("Measure Properties..."));
