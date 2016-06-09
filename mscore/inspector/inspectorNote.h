@@ -25,10 +25,9 @@ namespace Ms {
 //   InspectorNote
 //---------------------------------------------------------
 
-class InspectorNote : public InspectorBase {
+class InspectorNote : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement b;
       Ui::InspectorNote    n;
       Ui::InspectorChord   c;
       Ui::InspectorSegment s;

@@ -731,60 +731,60 @@ QVariant FiguredBassItem::propertyDefault(P_ID id) const
 void FiguredBassItem::undoSetPrefix(Modifier pref)
       {
       if(pref <= Modifier::CROSS) {
-            score()->undoChangeProperty(this, P_ID::FBPREFIX, (int)pref);
+            undoChangeProperty(P_ID::FBPREFIX, (int)pref);
             // if setting some prefix and there is a suffix already, clear suffix
             if(pref != Modifier::NONE && _suffix != Modifier::NONE)
-                  score()->undoChangeProperty(this, P_ID::FBSUFFIX, int(Modifier::NONE));
+                  undoChangeProperty(P_ID::FBSUFFIX, int(Modifier::NONE));
             layout();                     // re-generate displayText
             }
       }
 
 void FiguredBassItem::undoSetDigit(int digit)
       {
-      if(digit >= 0 && digit <= 9) {
-            score()->undoChangeProperty(this, P_ID::FBDIGIT, digit);
+      if (digit >= 0 && digit <= 9) {
+            undoChangeProperty(P_ID::FBDIGIT, digit);
             layout();                     // re-generate displayText
             }
       }
 
 void FiguredBassItem::undoSetSuffix(Modifier suff)
       {
-      score()->undoChangeProperty(this, P_ID::FBSUFFIX, int(suff));
+      undoChangeProperty(P_ID::FBSUFFIX, int(suff));
       // if setting some suffix and there is a prefix already, clear prefix
       if(suff != Modifier::NONE && _prefix != Modifier::NONE)
-            score()->undoChangeProperty(this, P_ID::FBPREFIX, int(Modifier::NONE));
+            undoChangeProperty(P_ID::FBPREFIX, int(Modifier::NONE));
       layout();                     // re-generate displayText
       }
 
 void FiguredBassItem::undoSetContLine(ContLine val)
       {
-      score()->undoChangeProperty(this, P_ID::FBCONTINUATIONLINE, int(val));
+      undoChangeProperty(P_ID::FBCONTINUATIONLINE, int(val));
       layout();                     // re-generate displayText
       }
 
 void FiguredBassItem::undoSetParenth1(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS1, int(par));
+      undoChangeProperty(P_ID::FBPARENTHESIS1, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth2(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS2, int(par));
+      undoChangeProperty(P_ID::FBPARENTHESIS2, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth3(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS3, int(par));
+      undoChangeProperty(P_ID::FBPARENTHESIS3, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth4(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS4, int(par));
+      undoChangeProperty(P_ID::FBPARENTHESIS4, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth5(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS5, int(par));
+      undoChangeProperty(P_ID::FBPARENTHESIS5, int(par));
       layout();                     // re-generate displayText
       }
 

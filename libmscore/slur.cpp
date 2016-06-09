@@ -76,7 +76,7 @@ void SlurSegment::move(const QPointF& s)
 void SlurSegment::draw(QPainter* painter) const
       {
       // hide tie toward the second chord of a cross-measure value
-      if ((slurTie()->type() == Element::Type::TIE)
+      if ((slurTie()->isTie())
          && (static_cast<Tie*>(slurTie())->endNote())
          && (static_cast<Tie*>(slurTie())->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND))
             return;
@@ -161,7 +161,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
             sl->layout();
             return true;
             }
-      if (slurTie()->type() != Element::Type::SLUR)
+      if (!slurTie()->isSlur())
             return false;
 
       if (!((modifiers & Qt::ShiftModifier)
@@ -193,6 +193,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
             }
       if (cr && cr != e1)
             changeAnchor(viewer, curGrip, cr);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
       return true;
       }
 
@@ -369,7 +370,7 @@ void SlurSegment::editDrag(const EditData& ed)
                       || (ed.curGrip == Grip::START && note->chord()->tick() < slurTie()->tick2()))
                      ) {
                         if (ed.curGrip == Grip::END && spanner->type() == Element::Type::TIE) {
-                              Tie* tie = static_cast<Tie*>(spanner);
+                              Tie* tie = toTie(spanner);
                               if (tie->startNote()->pitch() == note->pitch()
                                  && tie->startNote()->chord()->tick() < note->chord()->tick()) {
                                     ed.view->setDropTarget(note);
@@ -384,8 +385,6 @@ void SlurSegment::editDrag(const EditData& ed)
                               ed.view->setDropTarget(note);
                               if (c != spanner->endCR()) {
                                     changeAnchor(ed.view, ed.curGrip, c);
-//                                    QPointF p1 = ed.pos - ups(ed.curGrip).p - canvasPos();
-//                                    ups(ed.curGrip).off = p1 / _spatium;
                                     slurTie()->layout();
                                     }
                               }
@@ -413,6 +412,7 @@ void SlurSegment::editDrag(const EditData& ed)
             setAutoAdjust(0.0, 0.0);
             setUserOff(userOff() + offset);
             }
+      undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -594,6 +594,11 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
 
 void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
+      if (autoplace()) {
+            // TODO: must be saved when switching to autoplace
+            for (UP& up : _ups)
+                  up.off = QPointF();
+            }
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
       slurTie()->computeBezier(this);
@@ -1117,10 +1122,8 @@ void SlurTie::writeProperties(Xml& xml) const
       int idx = 0;
       for (const SpannerSegment* ss : spannerSegments())
             ((SlurSegment*)ss)->writeSlur(xml, idx++);
-      if (_slurDirection != Direction::AUTO)
-            xml.tag("up", int(_slurDirection));
-      if (_lineType)
-            xml.tag("lineType", _lineType);
+      writeProperty(xml, P_ID::SLUR_DIRECTION);
+      writeProperty(xml, P_ID::LINE_TYPE);
       }
 
 //---------------------------------------------------------
@@ -1137,14 +1140,9 @@ bool SlurTie::readProperties(XmlReader& e)
             for (int i = n; i < idx; ++i)
                   add(new SlurSegment(score()));
             SlurSegment* segment = new SlurSegment(score());
+            segment->setAutoplace(false);
             segment->read(e);
             add(segment);
-            // in v1.x "visible" is a property of the segment only;
-            // we must ensure that it propagates also to the parent element
-            // That's why the visibility is set after adding the segment
-            // to the corresponding spanner
-            if (score()->mscVersion() <= 114)
-                  segment->SpannerSegment::setVisible(segment->visible());
             }
       else if (tag == "up")
             _slurDirection = Direction(e.readInt());
@@ -1161,7 +1159,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
 void SlurTie::undoSetLineType(int t)
       {
-      score()->undoChangeProperty(this, P_ID::LINE_TYPE, t);
+      undoChangeProperty(P_ID::LINE_TYPE, t);
       }
 
 //---------------------------------------------------------
@@ -1170,16 +1168,7 @@ void SlurTie::undoSetLineType(int t)
 
 void SlurTie::undoSetSlurDirection(Direction d)
       {
-      score()->undoChangeProperty(this, P_ID::SLUR_DIRECTION, int(d));
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void SlurTie::reset()
-      {
-      score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
+      undoChangeProperty(P_ID::SLUR_DIRECTION, int(d));
       }
 
 //---------------------------------------------------------
@@ -1188,9 +1177,11 @@ void SlurTie::reset()
 
 QVariant SlurTie::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
-            case P_ID::LINE_TYPE:      return lineType();
-            case P_ID::SLUR_DIRECTION: return slurDirection();
+      switch (propertyId) {
+            case P_ID::LINE_TYPE:
+                  return lineType();
+            case P_ID::SLUR_DIRECTION:
+                  return slurDirection();
             default:
                   return Spanner::getProperty(propertyId);
             }
@@ -1202,9 +1193,13 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
 
 bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
-            case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_ID::SLUR_DIRECTION: setSlurDirection(v.value<Direction>()); break;
+      switch (propertyId) {
+            case P_ID::LINE_TYPE:
+                  setLineType(v.toInt());
+                  break;
+            case P_ID::SLUR_DIRECTION:
+                  setSlurDirection(v.value<Direction>());
+                  break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
@@ -1234,7 +1229,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
 
 QVariant SlurSegment::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
@@ -1306,14 +1301,15 @@ QVariant SlurSegment::propertyDefault(P_ID id) const
 
 void SlurSegment::reset()
       {
-      score()->undoChangeProperty(this, P_ID::USER_OFF,   QPointF());
-      score()->undoChangeProperty(this, P_ID::SLUR_UOFF1, QPointF());
-      score()->undoChangeProperty(this, P_ID::SLUR_UOFF2, QPointF());
-      score()->undoChangeProperty(this, P_ID::SLUR_UOFF3, QPointF());
-      score()->undoChangeProperty(this, P_ID::SLUR_UOFF4, QPointF());
+      Element::reset();
+      undoResetProperty(P_ID::SLUR_UOFF1);
+      undoResetProperty(P_ID::SLUR_UOFF2);
+      undoResetProperty(P_ID::SLUR_UOFF3);
+      undoResetProperty(P_ID::SLUR_UOFF4);
+      undoResetProperty(P_ID::AUTOPLACE);
 
       parent()->reset();
-      parent()->layout();
+//      parent()->layout();
       }
 
 //---------------------------------------------------------
@@ -1675,7 +1671,7 @@ void SlurTie::startEdit(MuseScoreView* view, const QPointF& pt)
 void SlurTie::endEdit()
       {
       Spanner::endEdit();
-      if (type() == Element::Type::SLUR) {
+      if (isSlur()) {
             if ((editStartElement != startElement()) || (editEndElement != endElement())) {
                   //
                   // handle parts:

@@ -758,7 +758,7 @@ bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
                   if (parent() && parent()->type() == Element::Type::LYRICS
                               && static_cast<Lyrics*>(parent())->ticks() > 0) {
                         int newTicks   = static_cast<Lyrics*>(parent())->ticks() + v.toInt() - ticks();
-                        score()->undoChangeProperty(parent(), P_ID::LYRIC_TICKS, newTicks);
+                        parent()->undoChangeProperty(P_ID::LYRIC_TICKS, newTicks);
                         }
                   setTicks(v.toInt());
                   }

@@ -36,29 +36,30 @@ void RehearsalMark::layout()
       setPos(textStyle().offset(spatium()));
       Text::layout1();
       Segment* s = segment();
-      if (s && !s->rtick()) {
-            // first CR of measure, decide whether to align to barline
-            if (!s->prev() && align() & AlignmentFlags::CENTER) {
-                  // measure with no clef / keysig / timesig
-                  rxpos() -= s->x();
+      if (s) {
+            if (!s->rtick()) {
+                  // first CR of measure, decide whether to align to barline
+                  if (!s->prev() && align() & AlignmentFlags::CENTER) {
+                        // measure with no clef / keysig / timesig
+                        rxpos() -= s->x();
+                        }
+                  else if (align() & AlignmentFlags::RIGHT) {
+                        // measure with clef / keysig / timesig, rehearsal mark right aligned
+                        // align left edge of rehearsal to barline if that is further to left
+                        qreal leftX = bbox().x();
+                        qreal barlineX = -s->x();
+                        rxpos() += qMin(leftX, barlineX) + width();
+                        }
                   }
-            else if (align() & AlignmentFlags::RIGHT) {
-                  // measure with clef / keysig / timesig, rehearsal mark right aligned
-                  // align left edge of rehearsal to barline if that is further to left
-                  qreal leftX = bbox().x();
-                  qreal barlineX = -s->x();
-                  rxpos() += qMin(leftX, barlineX) + width();
+            if (autoplace()) {
+                  Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
+                  Shape s2 = shape().translated(s->pos());
+                  qreal d  = s2.minVerticalDistance(s1);
+                  if (d > 0)
+                        setUserOff(QPointF(0.0, -d));
                   }
-            }
-
-      if (s && autoplace()) {
-            Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
-            Shape s2 = shape().translated(s->pos());
-            qreal d  = s2.minVerticalDistance(s1);
-            if (d > 0)
-                  setUserOff(QPointF(0.0, -d));
             }
       }
 
-}
+} // namespace Ms
 

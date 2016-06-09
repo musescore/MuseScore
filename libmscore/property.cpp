@@ -60,7 +60,7 @@ static const PropertyData propertyList[] = {
       { P_ID::STEM_DIRECTION,      true,  "StemDirection", P_TYPE::DIRECTION },
 
       { P_ID::NO_STEM,             false, "noStem",        P_TYPE::INT },
-      { P_ID::SLUR_DIRECTION,      false, "slurDirection", P_TYPE::INT },
+      { P_ID::SLUR_DIRECTION,      false, "slurDirection", P_TYPE::DIRECTION },
       { P_ID::LEADING_SPACE,       false, "leadingSpace",  P_TYPE::SPATIUM },
       { P_ID::DISTRIBUTE,          false, "distribute",    P_TYPE::BOOL },
       { P_ID::MIRROR_HEAD,         false, "mirror",        P_TYPE::DIRECTION_H },
@@ -250,9 +250,8 @@ static const PropertyData propertyList[] = {
 
 P_TYPE propertyType(P_ID id)
       {
-          Q_ASSERT( propertyList[int(id)].id == id);
-
-          return propertyList[int(id)].type;
+      Q_ASSERT( propertyList[int(id)].id == id);
+      return propertyList[int(id)].type;
       }
 
 //---------------------------------------------------------
@@ -261,8 +260,8 @@ P_TYPE propertyType(P_ID id)
 
 bool propertyLink(P_ID id)
       {
-          Q_ASSERT( propertyList[int(id)].id == id);
-          return propertyList[int(id)].link;
+      Q_ASSERT( propertyList[int(id)].id == id);
+      return propertyList[int(id)].link;
       }
 
 //---------------------------------------------------------
@@ -271,8 +270,8 @@ bool propertyLink(P_ID id)
 
 const char* propertyName(P_ID id)
       {
-          Q_ASSERT( propertyList[int(id)].id == id);
-          return propertyList[int(id)].name;
+      Q_ASSERT( propertyList[int(id)].id == id);
+      return propertyList[int(id)].name;
       }
 
 //---------------------------------------------------------

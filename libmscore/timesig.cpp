@@ -423,7 +423,7 @@ void TimeSig::setSSig(const QString& s)
 
 void TimeSig::undoSetShowCourtesySig(bool v)
       {
-      score()->undoChangeProperty(this, P_ID::SHOW_COURTESY, v);
+      undoChangeProperty(P_ID::SHOW_COURTESY, v);
       }
 
 //---------------------------------------------------------
@@ -432,7 +432,7 @@ void TimeSig::undoSetShowCourtesySig(bool v)
 
 void TimeSig::undoSetNumeratorString(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::NUMERATOR_STRING, s);
+      undoChangeProperty(P_ID::NUMERATOR_STRING, s);
       }
 
 //---------------------------------------------------------
@@ -441,7 +441,7 @@ void TimeSig::undoSetNumeratorString(const QString& s)
 
 void TimeSig::undoSetDenominatorString(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::DENOMINATOR_STRING, s);
+      undoChangeProperty(P_ID::DENOMINATOR_STRING, s);
       }
 
 //---------------------------------------------------------
@@ -450,7 +450,7 @@ void TimeSig::undoSetDenominatorString(const QString& s)
 
 void TimeSig::undoSetGroups(const Groups& g)
       {
-      score()->undoChangeProperty(this, P_ID::GROUPS, QVariant::fromValue(g));
+      undoChangeProperty(P_ID::GROUPS, QVariant::fromValue(g));
       }
 
 //---------------------------------------------------------

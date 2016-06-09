@@ -126,7 +126,7 @@ void Jump::write(Xml& xml) const
 
 void Jump::undoSetJumpTo(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::JUMP_TO, s);
+      undoChangeProperty(P_ID::JUMP_TO, s);
       }
 
 //---------------------------------------------------------
@@ -135,7 +135,7 @@ void Jump::undoSetJumpTo(const QString& s)
 
 void Jump::undoSetPlayUntil(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::PLAY_UNTIL, s);
+      undoChangeProperty(P_ID::PLAY_UNTIL, s);
       }
 
 //---------------------------------------------------------
@@ -144,7 +144,7 @@ void Jump::undoSetPlayUntil(const QString& s)
 
 void Jump::undoSetContinueAt(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::CONTINUE_AT, s);
+      undoChangeProperty(P_ID::CONTINUE_AT, s);
       }
 
 //---------------------------------------------------------

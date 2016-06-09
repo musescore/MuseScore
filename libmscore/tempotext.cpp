@@ -240,7 +240,7 @@ void TempoText::setTempo(qreal v)
 
 void TempoText::undoSetTempo(qreal v)
       {
-      score()->undoChangeProperty(this, P_ID::TEMPO, v);
+      undoChangeProperty(P_ID::TEMPO, v);
       }
 
 //---------------------------------------------------------
@@ -249,7 +249,7 @@ void TempoText::undoSetTempo(qreal v)
 
 void TempoText::undoSetFollowText(bool v)
       {
-      score()->undoChangeProperty(this, P_ID::TEMPO_FOLLOW_TEXT, v);
+      undoChangeProperty(P_ID::TEMPO_FOLLOW_TEXT, v);
       }
 
 //---------------------------------------------------------

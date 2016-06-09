@@ -191,7 +191,7 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
 
 bool InspectorBase::dirty() const
       {
-      foreach(const InspectorItem& ii, iList) {
+      for (const InspectorItem& ii : iList) {
             Element* e = inspector->element();
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
@@ -207,7 +207,7 @@ bool InspectorBase::dirty() const
 
 void InspectorBase::setElement()
       {
-      foreach (const InspectorItem& ii, iList) {
+      for  (const InspectorItem& ii : iList) {
             P_ID id    = ii.t;
             P_TYPE pt  = propertyType(id);
 
@@ -262,7 +262,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             P_TYPE pt    = propertyType(id);
             QVariant val = getValue(ii);
 
-            foreach(Element* e, inspector->el()) {
+            for (Element* e : inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
                   if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
@@ -339,7 +339,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
       Score* score  = inspector->element()->score();
 
       score->startCmd();
-      foreach (Element* e, inspector->el()) {
+      for (Element* e : inspector->el()) {
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
 
@@ -358,11 +358,11 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   QSizeF sz = val1.toSizeF();
                   if (ii.sv == 0) {
                         if (sz.width() != v)
-                              score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())), ps);
+                              e->undoChangeProperty(id, QVariant(QSizeF(v, sz.height())), ps);
                         }
                   else {
                         if (sz.height() != v)
-                              score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)), ps);
+                              e->undoChangeProperty(id, QVariant(QSizeF(sz.width(), v)), ps);
                         }
                   }
             else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
@@ -370,11 +370,11 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   QPointF sz = val1.toPointF();
                   if (ii.sv == 0) {
                         if (sz.x() != v)
-                              score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())), ps);
+                              e->undoChangeProperty(id, QVariant(QPointF(v, sz.y())), ps);
                         }
                   else {
                         if (sz.y() != v)
-                              score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)), ps);
+                              e->undoChangeProperty(id, QVariant(QPointF(sz.x(), v)), ps);
                         }
                   }
             else if (pt == P_TYPE::FRACTION) {
@@ -384,20 +384,20 @@ void InspectorBase::valueChanged(int idx, bool reset)
                         if (f.numerator() != v) {
                               QVariant va;
                               va.setValue(Fraction(v, f.denominator()));
-                              score->undoChangeProperty(e, id, va, ps);
+                              e->undoChangeProperty(id, va, ps);
                               }
                         }
                   else {
                         if (f.denominator() != v) {
                               QVariant va;
                               va.setValue(Fraction(f.numerator(), v));
-                              score->undoChangeProperty(e, id, va, ps);
+                              e->undoChangeProperty(id, va, ps);
                               }
                         }
                   }
             else {
                   if (val1 != val2 || (reset && ps != PropertyStyle::NOSTYLE))
-                        score->undoChangeProperty(e, id, val2, ps);
+                        e->undoChangeProperty(id, val2, ps);
                   }
             }
       inspector->setInspectorEdit(true);
@@ -434,8 +434,10 @@ void InspectorBase::resetClicked(int i)
 //    initialize inspector panel
 //---------------------------------------------------------
 
-void InspectorBase::mapSignals()
+void InspectorBase::mapSignals(const std::vector<InspectorItem>& il)
       {
+      for (auto& i : il)
+            iList.push_back(i);
       int i = 0;
       for (const InspectorItem& ii : iList) {
             QToolButton* resetButton = ii.r;
@@ -509,7 +511,7 @@ void InspectorBase::resetToStyle()
       Score* score = inspector->element()->score();
       score->startCmd();
       for (Element* e : inspector->el()) {
-            Text* text = static_cast<Text*>(e);
+            Text* text = toText(e);
             text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(score->textStyle(text->textStyleType())));
             // Preserve <sym> tags
             text->undoChangeProperty(P_ID::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));

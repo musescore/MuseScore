@@ -389,10 +389,9 @@ class Inspector : public QDockWidget {
 //   InspectorSlur
 //---------------------------------------------------------
 
-class InspectorSlur : public InspectorBase {
+class InspectorSlur : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorSlur s;
 
    public:

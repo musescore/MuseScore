@@ -273,7 +273,7 @@ void Stem::editDrag(const EditData& ed)
 
 void Stem::reset()
       {
-      score()->undoChangeProperty(this, P_ID::USER_LEN, 0.0);
+      undoChangeProperty(P_ID::USER_LEN, 0.0);
       Element::reset();
       }
 

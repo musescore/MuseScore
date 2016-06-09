@@ -155,7 +155,7 @@ void TremoloBar::read(XmlReader& e)
 
 void TremoloBar::undoSetUserMag(qreal val)
       {
-      score()->undoChangeProperty(this, P_ID::MAG, val);
+      undoChangeProperty(P_ID::MAG, val);
       }
 
 //---------------------------------------------------------

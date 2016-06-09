@@ -226,7 +226,7 @@ void Marker::write(Xml& xml) const
 
 void Marker::undoSetLabel(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::LABEL, s);
+      undoChangeProperty(P_ID::LABEL, s);
       }
 
 //---------------------------------------------------------
@@ -235,7 +235,7 @@ void Marker::undoSetLabel(const QString& s)
 
 void Marker::undoSetMarkerType(Type t)
       {
-      score()->undoChangeProperty(this, P_ID::MARKER_TYPE, int(t));
+      undoChangeProperty(P_ID::MARKER_TYPE, int(t));
       }
 
 //---------------------------------------------------------

@@ -143,8 +143,7 @@ void Inspector::setElements(const QList<Element*>& l)
                         sameTypes = false;
                   else {
                         // HACK:
-                        if (ee->type() == Element::Type::NOTE
-                           && static_cast<Note*>(ee)->chord()->isGrace() != static_cast<Note*>(_element)->chord()->isGrace())
+                        if (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(_element)->chord()->isGrace())
                               sameTypes = false;
                         }
                   }
@@ -550,7 +549,7 @@ InspectorRest::InspectorRest(QWidget* parent)
 
 void InspectorRest::setElement()
       {
-      Rest* rest = static_cast<Rest*>(inspector->element());
+      Rest* rest = toRest(inspector->element());
       tuplet->setEnabled(rest->tuplet());
       InspectorBase::setElement();
       }
@@ -561,7 +560,7 @@ void InspectorRest::setElement()
 
 void InspectorRest::tupletClicked()
       {
-      Rest* rest = static_cast<Rest*>(inspector->element());
+      Rest* rest = toRest(inspector->element());
       if (rest == 0)
             return;
       Tuplet* tuplet = rest->tuplet();
@@ -603,7 +602,7 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
 void InspectorTimeSig::setElement()
       {
       InspectorBase::setElement();
-      TimeSig* ts = static_cast<TimeSig*>(inspector->element());
+      TimeSig* ts = toTimeSig(inspector->element());
       if (ts->generated())
             t.showCourtesy->setEnabled(false);
       }
@@ -636,7 +635,7 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
 void InspectorKeySig::setElement()
       {
       InspectorBase::setElement();
-      KeySig* ks = static_cast<KeySig*>(inspector->element());
+      KeySig* ks = toKeySig(inspector->element());
       if (ks->generated())
             k.showCourtesy->setEnabled(false);
       }
@@ -712,7 +711,7 @@ InspectorBend::InspectorBend(QWidget* parent)
 
 void InspectorBend::propertiesClicked()
       {
-      Bend* b = static_cast<Bend*>(inspector->element());
+      Bend* b = toBend(inspector->element());
       Score* score = b->score();
       score->startCmd();
       mscore->currentScoreView()->editBendProperties(b);
@@ -749,7 +748,7 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
 
 void InspectorTremoloBar::propertiesClicked()
       {
-      Bend* b = static_cast<Bend*>(inspector->element());
+      Bend* b = toBend(inspector->element());
       Score* score = b->score();
       score->startCmd();
       mscore->currentScoreView()->editBendProperties(b);
@@ -787,16 +786,16 @@ void InspectorClef::setElement()
       InspectorBase::setElement();
 
       // try to locate the 'other clef' of a courtesy / main pair
-      Clef* clef = static_cast<Clef*>(inspector->element());
+      Clef* clef = toClef(inspector->element());
       // if not in a clef-segment-measure hierachy, do nothing
       if (!clef->parent() || clef->parent()->type() != Element::Type::SEGMENT)
             return;
-      Segment*    segm = static_cast<Segment*>(clef->parent());
+      Segment*    segm = toSegment(clef->parent());
       int         segmTick = segm->tick();
       if (!segm->parent() || segm->parent()->type() != Element::Type::MEASURE)
             return;
 
-      Measure* meas = static_cast<Measure*>(segm->parent());
+      Measure* meas = toMeasure(segm->parent());
       Measure* otherMeas = nullptr;
       Segment* otherSegm = nullptr;
       if (segmTick == meas->tick())                         // if clef segm is measure-initial
@@ -808,7 +807,7 @@ void InspectorClef::setElement()
             otherSegm = otherMeas->findSegment(Segment::Type::Clef, segmTick);
       // if any 'other' segment found, look for a clef in the same track as this
       if (otherSegm)
-            otherClef = static_cast<Clef*>(otherSegm->element(clef->track()));
+            otherClef = toClef(otherSegm->element(clef->track()));
       }
 
 //   InspectorClef::valueChanged
@@ -929,49 +928,38 @@ void InspectorDynamic::setElement()
 //---------------------------------------------------------
 
 InspectorSlur::InspectorSlur(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       s.setupUi(addWidget());
 
-      Inspector* inspector = static_cast<Inspector*>(parent);
+      Element* e = inspector->element();
+      bool sameType = true;
+      Element::Type subtype = Element::Type::INVALID;
 
-      if (inspector != nullptr) {
-            Element* e = inspector->element();
-            bool sameType = true;
-            Element::Type subtype = Element::Type::INVALID;
-
-            if (e->type() == Element::Type::SLUR_SEGMENT)
-                  subtype = toSlurSegment(e)->spanner()->type();
-
-            for (const auto& ee : inspector->el()) {
-                  if (ee->type() != Element::Type::SLUR_SEGMENT) {
-                        sameType = false;
-                        break;
-                        }
-                  if (toSlurSegment(ee)->spanner()->type() != subtype) {
-                        sameType = false;
-                        break;
-                        }
+      if (e->type() == Element::Type::SLUR_SEGMENT)
+            subtype = toSlurSegment(e)->spanner()->type();
+      for (const auto& ee : inspector->el()) {
+            if (ee->type() != Element::Type::SLUR_SEGMENT) {
+                  sameType = false;
+                  break;
                   }
-
-            if (!sameType)
-                  s.elementName->setText("Slur/Tie");
-            else if (subtype == Element::Type::SLUR)
-                  s.elementName->setText(tr("Slur"));
-            else if (subtype == Element::Type::TIE)
-                  s.elementName->setText(tr("Tie"));
+            if (toSlurSegment(ee)->spanner()->type() != subtype) {
+                  sameType = false;
+                  break;
+                  }
             }
+      if (!sameType)
+            s.elementName->setText("Slur/Tie");
+      else if (subtype == Element::Type::SLUR)
+            s.elementName->setText(tr("Slur"));
+      else if (subtype == Element::Type::TIE)
+            s.elementName->setText(tr("Tie"));
 
-      iList = {
-            { P_ID::COLOR,           0, 0, e.color,         e.resetColor         },
-            { P_ID::VISIBLE,         0, 0, e.visible,       e.resetVisible       },
-            { P_ID::USER_OFF,        0, 0, e.offsetX,       e.resetX             },
-            { P_ID::USER_OFF,        1, 0, e.offsetY,       e.resetY             },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::LINE_TYPE,       0, 0, s.lineType,      s.resetLineType      },
             { P_ID::SLUR_DIRECTION,  0, 0, s.slurDirection, s.resetSlurDirection }
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //---------------------------------------------------------
@@ -1051,7 +1039,7 @@ void InspectorBarLine::setElement()
       {
       blockSpanDataSignals(true);
       InspectorBase::setElement();
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
 
       // enable / disable individual type combo items according to score and selected bar line status
       bool bMultiStaff  = bl->score()->nstaves() > 1;
@@ -1091,7 +1079,7 @@ void InspectorBarLine::setElement()
 
 void InspectorBarLine::presetDefaultClicked()
       {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
       Score* score = bl->score();
       score->startCmd();
 
@@ -1109,7 +1097,7 @@ void InspectorBarLine::presetDefaultClicked()
 
 void InspectorBarLine::presetTick1Clicked()
       {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
       Score* score = bl->score();
       score->startCmd();
 
@@ -1127,7 +1115,7 @@ void InspectorBarLine::presetTick1Clicked()
 
 void InspectorBarLine::presetTick2Clicked()
       {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
       Score* score = bl->score();
       score->startCmd();
 
@@ -1145,7 +1133,7 @@ void InspectorBarLine::presetTick2Clicked()
 
 void InspectorBarLine::presetShort1Clicked()
       {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
       Score* score = bl->score();
       score->startCmd();
 
@@ -1164,7 +1152,7 @@ void InspectorBarLine::presetShort1Clicked()
 
 void InspectorBarLine::presetShort2Clicked()
       {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
       Score* score = bl->score();
       score->startCmd();
 
@@ -1185,7 +1173,7 @@ void InspectorBarLine::presetShort2Clicked()
 
 void InspectorBarLine::manageSpanData()
       {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = toBarLine(inspector->element());
 
       // determine MIN and MAX for SPANFROM and SPANTO
       Staff* staffFrom  = bl->staff();
