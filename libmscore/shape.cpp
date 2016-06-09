@@ -50,22 +50,6 @@ void Shape::draw(QPainter* p) const
       p->restore();
       }
 
-//---------------------------------------------------------
-//   create
-//---------------------------------------------------------
-
-void Shape::create(int staffIdx, Segment* s)
-      {
-      clear();
-      for (int voice = 0; voice < VOICES; ++voice) {
-            Element* e = s->element(staffIdx * VOICES + voice);
-            if (e) {
-                  e->layout();
-                  add(e->shape());
-                  }
-            }
-      }
-
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
@@ -82,7 +66,8 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
             for (const QRectF& r1 : *this) {
                   qreal ay1 = r1.top();
                   qreal ay2 = r1.bottom();
-                  if ((ay1 >= by1 && ay1 < by2) || (ay2 >= by1 && ay2 < by2) || (ay1 < by1 && ay2 >= by2))
+                  // if ((ay1 >= by1 && ay1 < by2) || (ay2 >= by1 && ay2 < by2) || (ay1 < by1 && ay2 >= by2))
+                  if (intersects(ay1, ay2, by1, by2))
                         dist = qMax(dist, r1.right() - r2.left());
                   }
             }
@@ -92,8 +77,7 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
 //-------------------------------------------------------------------
 //   minVerticalDistance
 //    a is located below of this shape.
-//    Calculates the minimum distance between the two shapes
-//    so they dont touch.
+//    Calculates the minimum distance between two shapes.
 //-------------------------------------------------------------------
 
 qreal Shape::minVerticalDistance(const Shape& a) const
@@ -105,7 +89,8 @@ qreal Shape::minVerticalDistance(const Shape& a) const
             for (const QRectF& r1 : *this) {
                   qreal ax1 = r1.left();
                   qreal ax2 = r1.right();
-                  if ((ax1 >= bx1 && ax1 < bx2) || (ax2 >= bx1 && ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2))
+                  // if ((ax1 >= bx1 && ax1 < bx2) || (ax2 >= bx1 && ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2))
+                  if (intersects(ax1, ax2, bx1, bx2))
                         dist = qMax(dist, r1.bottom() - r2.top());
                   }
             }
