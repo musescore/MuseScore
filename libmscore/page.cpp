@@ -47,8 +47,8 @@ const PaperSize paperSizes[] = {
       PaperSize(QT_TRANSLATE_NOOP("paperSizes","Concert Part (9 x 12 in)"),
                 9,          12),
       //: Do not translate "6.75 x 5.25 in"
-      PaperSize(QT_TRANSLATE_NOOP("paperSizes","Flip Folder (6.75 x 5.25 in)"),
-                6.75,       5.25),
+      PaperSize(QT_TRANSLATE_NOOP("paperSizes","Flip Folder (7 x 5.25 in)"),
+                7,          5.25),
       //: Do not translate "6.75 x 10.5 in"
       PaperSize(QT_TRANSLATE_NOOP("paperSizes","Choral Octavo (6.75 x 10.5 in)"),
                 6.75,       10.5),
