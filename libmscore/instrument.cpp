@@ -125,7 +125,7 @@ Instrument::Instrument(const Instrument& i)
 
 void Instrument::operator=(const Instrument& i)
       {
-      qDeleteAll(_channel);
+      //qDeleteAll(_channel);
       _channel.clear();
       delete _drumset;
 

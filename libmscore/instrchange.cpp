@@ -58,9 +58,9 @@ InstrumentChange::~InstrumentChange()
 
 void InstrumentChange::setInstrument(const Instrument& i)
       {
-      //*_instrument = i;
-      delete _instrument;
-      _instrument = new Instrument(i);
+      (*_instrument) = i;
+      //delete _instrument;
+      //_instrument = new Instrument(i);
       }
 
 //---------------------------------------------------------
