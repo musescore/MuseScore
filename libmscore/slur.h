@@ -112,7 +112,7 @@ class SlurSegment : public SpannerSegment {
 
       void writeSlur(Xml& xml, int no) const;
       void read(XmlReader&);
-      virtual void reset();
+      virtual void reset() override;
       void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val;  }
       const struct UP& ups(Grip i) const             { return _ups[int(i)]; }
       struct UP& ups(Grip i)                         { return _ups[int(i)]; }
@@ -165,8 +165,6 @@ class SlurTie : public Spanner {
 
       void writeProperties(Xml& xml) const;
       bool readProperties(XmlReader&);
-
-      virtual void reset();
 
       int lineType() const                { return _lineType; }
       void setLineType(int val)           { _lineType = val;  }

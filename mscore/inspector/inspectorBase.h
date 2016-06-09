@@ -59,7 +59,7 @@ class InspectorBase : public QWidget {
       virtual void setValue(const InspectorItem&, QVariant);
       QVariant getValue(const InspectorItem&) const;
       bool isDefault(const InspectorItem&);
-      void mapSignals();
+      void mapSignals(const std::vector<InspectorItem>& il = std::vector<InspectorItem>());
       void setupLineStyle(QComboBox*);
 
    private slots:

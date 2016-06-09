@@ -538,7 +538,7 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
 
 void Trill::undoSetTrillType(Type val)
       {
-      score()->undoChangeProperty(this, P_ID::TRILL_TYPE, int(val));
+      undoChangeProperty(P_ID::TRILL_TYPE, int(val));
       }
 
 //---------------------------------------------------------

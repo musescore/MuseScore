@@ -289,7 +289,7 @@ void Note::setPitch(int pitch, int tpc1, int tpc2)
 
 void Note::undoSetPitch(int p)
       {
-      score()->undoChangeProperty(this, P_ID::PITCH, p);
+      undoChangeProperty(P_ID::PITCH, p);
       }
 
 //---------------------------------------------------------
@@ -1426,14 +1426,14 @@ Element* Note::drop(const DropData& data)
                   if (group != _headGroup) {
                         if (links()) {
                               for (ScoreElement* e : *links()) {
-                                    e->score()->undoChangeProperty(e, P_ID::HEAD_GROUP, int(group));
+                                    e->undoChangeProperty(P_ID::HEAD_GROUP, int(group));
                                     Note* note = static_cast<Note*>(e);
                                     if (note->staff() && note->staff()->isTabStaff() && group == NoteHead::Group::HEAD_CROSS)
-                                          e->score()->undoChangeProperty(e, P_ID::GHOST, true);
+                                          e->undoChangeProperty(P_ID::GHOST, true);
                                     }
                               }
                         else
-                              score()->undoChangeProperty(this, P_ID::HEAD_GROUP, int(group));
+                              undoChangeProperty(P_ID::HEAD_GROUP, int(group));
                         score()->select(this);
                         }
                   }
@@ -1941,9 +1941,9 @@ void Note::setTrack(int val)
 
 void Note::reset()
       {
-      score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
-      score()->undoChangeProperty(chord(), P_ID::USER_OFF, QPointF());
-      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
+      undoChangeProperty(P_ID::USER_OFF, QPointF());
+      chord()->undoChangeProperty(P_ID::USER_OFF, QPointF());
+      chord()->undoChangeProperty(P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
       }
 
 //---------------------------------------------------------
@@ -2070,7 +2070,7 @@ void Note::endEdit()
       {
       Chord* ch = chord();
       if (ch->notes().size() == 1) {
-            score()->undoChangeProperty(ch, P_ID::USER_OFF, ch->userOff() + userOff());
+            ch->undoChangeProperty(P_ID::USER_OFF, ch->userOff() + userOff());
             setUserOff(QPointF());
             score()->setLayoutAll();
             }

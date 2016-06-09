@@ -28,9 +28,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorNote::InspectorNote(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      b.setupUi(addWidget());
       s.setupUi(addWidget());
       c.setupUi(addWidget());
       n.setupUi(addWidget());
@@ -64,12 +63,7 @@ InspectorNote::InspectorNote(QWidget* parent)
       for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i)
             n.noteHeadType->setItemData(i, i-1);
 
-      iList = {
-            { P_ID::COLOR,          0, 0, b.color,         b.resetColor         },
-            { P_ID::VISIBLE,        0, 0, b.visible,       b.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, b.offsetX,       b.resetX             },
-            { P_ID::USER_OFF,       1, 0, b.offsetY,       b.resetY             },
-
+      const std::vector<InspectorItem> iiList = {
             { P_ID::SMALL,          0, 0, n.small,         n.resetSmall         },
             { P_ID::HEAD_GROUP,     0, 0, n.noteHeadGroup, n.resetNoteHeadGroup },
             { P_ID::HEAD_TYPE,      0, 0, n.noteHeadType,  n.resetNoteHeadType  },
@@ -90,8 +84,7 @@ InspectorNote::InspectorNote(QWidget* parent)
 
             { P_ID::LEADING_SPACE,  0, 2, s.leadingSpace,  s.resetLeadingSpace  },
             };
-
-      mapSignals();
+      mapSignals(iiList);
 
       //
       // Select
@@ -256,7 +249,7 @@ void InspectorNote::dot4Clicked()
 
 void InspectorNote::hookClicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
       Hook* hook = note->chord()->hook();
@@ -273,7 +266,7 @@ void InspectorNote::hookClicked()
 
 void InspectorNote::stemClicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
       Stem* stem = note->chord()->stem();
@@ -290,7 +283,7 @@ void InspectorNote::stemClicked()
 
 void InspectorNote::beamClicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
       Beam* beam = note->chord()->beam();
@@ -307,7 +300,7 @@ void InspectorNote::beamClicked()
 
 void InspectorNote::tupletClicked()
       {
-      Note* note = static_cast<Note*>(inspector->element());
+      Note* note = toNote(inspector->element());
       if (note == 0)
             return;
       Tuplet* tuplet = note->chord()->tuplet();

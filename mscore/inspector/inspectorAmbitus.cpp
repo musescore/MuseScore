@@ -115,7 +115,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
 /*
 void InspectorAmbitus::setElement()
       {
-      Ambitus* range = static_cast<Range*>(inspector->element());
+      Ambitus* range = toRange(inspector->element());
 
 //      int octave = range->topPitch() / 12;
 //      static_cast<QSpinBox*>(iList[AmbitusControl::TOPOCTAVE].w)->setValue(octave);
@@ -146,7 +146,7 @@ void InspectorAmbitus::valueChanged(int idx)
 
 void Ms::InspectorAmbitus::updateRange()
 {
-      Ambitus* range = static_cast<Ambitus*>(inspector->element());
+      Ambitus* range = toAmbitus(inspector->element());
       range->updateRange();
       range->layout();              // redo layout
       setElement();                 // set Inspector values to range properties

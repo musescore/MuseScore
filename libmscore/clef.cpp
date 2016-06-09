@@ -573,7 +573,7 @@ void Clef::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Clef::undoSetShowCourtesy(bool v)
       {
-      score()->undoChangeProperty(this, P_ID::SHOW_COURTESY, v);
+      undoChangeProperty(P_ID::SHOW_COURTESY, v);
       }
 
 //---------------------------------------------------------

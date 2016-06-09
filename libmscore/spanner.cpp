@@ -144,7 +144,7 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
 
 void SpannerSegment::reset()
       {
-      score()->undoChangeProperty(this, P_ID::USER_OFF2, QPointF());
+      undoChangeProperty(P_ID::USER_OFF2, QPointF());
       Element::reset();
       spanner()->reset();
       }

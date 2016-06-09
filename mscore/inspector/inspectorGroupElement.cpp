@@ -74,9 +74,9 @@ void InspectorGroupElement::setColor()
             return;
       Score* score = inspector->el().front()->score();
       score->startCmd();
-      foreach(Element* e, inspector->el()) {
+      for (Element* e : inspector->el()) {
             if (e->getProperty(P_ID::COLOR) != QVariant(ge.color->color()))
-                  score->undoChangeProperty(e, P_ID::COLOR, ge.color->color());
+                  e->undoChangeProperty(P_ID::COLOR, ge.color->color());
             }
       score->endCmd();
       }
@@ -91,9 +91,9 @@ void InspectorGroupElement::setVisible()
             return;
       Score* score = inspector->el().front()->score();
       score->startCmd();
-      foreach(Element* e, inspector->el()) {
+      for (Element* e : inspector->el()) {
             if (!e->getProperty(P_ID::VISIBLE).toBool())
-                  e->score()->undoChangeProperty(e, P_ID::VISIBLE, true);
+                  e->undoChangeProperty(P_ID::VISIBLE, true);
             }
       score->endCmd();
       }
@@ -108,9 +108,9 @@ void InspectorGroupElement::setInvisible()
             return;
       Score* score = inspector->el().front()->score();
       score->startCmd();
-      foreach(Element* e, inspector->el()) {
+      for (Element* e : inspector->el()) {
             if (e->getProperty(P_ID::VISIBLE).toBool())
-                  e->score()->undoChangeProperty(e, P_ID::VISIBLE, false);
+                  e->undoChangeProperty(P_ID::VISIBLE, false);
             }
       score->endCmd();
       }

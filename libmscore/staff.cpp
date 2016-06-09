@@ -1097,7 +1097,7 @@ void Staff::updateOttava()
 
 void Staff::undoSetColor(const QColor& /*val*/)
       {
-//      score()->undoChangeProperty(this, P_ID::COLOR, val);
+//      undoChangeProperty(P_ID::COLOR, val);
       }
 
 //---------------------------------------------------------

@@ -83,6 +83,7 @@ class InstrumentChange;
 class Text;
 class Hairpin;
 class HairpinSegment;
+class Bend;
 
 enum class SymId;
 
@@ -578,7 +579,7 @@ class Element : public QObject, public ScoreElement {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      void undoChangeProperty(P_ID, const QVariant&);
+      void undoChangeProperty(P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
       void resetProperty(P_ID);
       void undoResetProperty(P_ID);
       bool custom(P_ID) const;
@@ -683,6 +684,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
+      CONVERT(Bend,          BEND)
 #undef CONVERT
       };
 
@@ -753,6 +755,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Text,          TEXT)
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
+      CONVERT(Bend,          BEND)
 #undef CONVERT
 
 //---------------------------------------------------------

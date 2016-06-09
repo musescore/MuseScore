@@ -2179,19 +2179,19 @@ void Beam::setBeamDirection(Direction d)
 void Beam::reset()
       {
       if (distribute())
-            score()->undoChangeProperty(this, P_ID::DISTRIBUTE, false);
+            undoChangeProperty(P_ID::DISTRIBUTE, false);
       if (growLeft() != 1.0)
-            score()->undoChangeProperty(this, P_ID::GROW_LEFT, 1.0);
+            undoChangeProperty(P_ID::GROW_LEFT, 1.0);
       if (growRight() != 1.0)
-            score()->undoChangeProperty(this, P_ID::GROW_RIGHT, 1.0);
+            undoChangeProperty(P_ID::GROW_RIGHT, 1.0);
       if (userModified()) {
-            score()->undoChangeProperty(this, P_ID::BEAM_POS, QVariant(beamPos()));
-            score()->undoChangeProperty(this, P_ID::USER_MODIFIED, false);
+            undoChangeProperty(P_ID::BEAM_POS, QVariant(beamPos()));
+            undoChangeProperty(P_ID::USER_MODIFIED, false);
             }
       if (beamDirection() != Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
+            undoChangeProperty(P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
       if (noSlopeStyle == PropertyStyle::UNSTYLED)
-            score()->undoChangeProperty(this, P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
+            undoChangeProperty(P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
 
       setGenerated(true);
       }
@@ -2267,9 +2267,9 @@ Element* Beam::drop(const DropData& data)
       else
             return 0;
       if (g1 != growLeft())
-            score()->undoChangeProperty(this, P_ID::GROW_LEFT, g1);
+            undoChangeProperty(P_ID::GROW_LEFT, g1);
       if (g2 != growRight())
-            score()->undoChangeProperty(this, P_ID::GROW_RIGHT, g2);
+            undoChangeProperty(P_ID::GROW_RIGHT, g2);
       return 0;
       }
 

@@ -345,7 +345,6 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Element::reset()
       {
       undoChangeProperty(P_ID::AUTOPLACE, propertyDefault(P_ID::AUTOPLACE));
-      undoChangeProperty(P_ID::USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -1529,9 +1528,20 @@ QVariant Element::propertyDefault(P_ID id) const
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Element::undoChangeProperty(P_ID id, const QVariant& v)
+void Element::undoChangeProperty(P_ID id, const QVariant& v, PropertyStyle ps)
       {
-      score()->undoChangeProperty(this, id, v);
+      if (id == P_ID::AUTOPLACE && v.toBool()) {
+            // special case: if we switch to autoplace, we must save
+            // user offset values
+            undoResetProperty(P_ID::USER_OFF);
+            if (isSlurSegment()) {
+                  undoResetProperty(P_ID::SLUR_UOFF1);
+                  undoResetProperty(P_ID::SLUR_UOFF2);
+                  undoResetProperty(P_ID::SLUR_UOFF3);
+                  undoResetProperty(P_ID::SLUR_UOFF4);
+                  }
+            }
+      score()->undoChangeProperty(this, id, v, ps);
       }
 
 //---------------------------------------------------------
@@ -1559,7 +1569,7 @@ bool Element::custom(P_ID id) const
 
 void Element::undoResetProperty(P_ID id)
       {
-      score()->undoChangeProperty(this, id, propertyDefault(id));
+      undoChangeProperty(id, propertyDefault(id));
       }
 
 //---------------------------------------------------------
@@ -1660,7 +1670,7 @@ Element* Element::findMeasure()
 
 void Element::undoSetColor(const QColor& c)
       {
-      score()->undoChangeProperty(this, P_ID::COLOR, c);
+      undoChangeProperty(P_ID::COLOR, c);
       }
 
 //---------------------------------------------------------
@@ -1669,7 +1679,7 @@ void Element::undoSetColor(const QColor& c)
 
 void Element::undoSetVisible(bool v)
       {
-      score()->undoChangeProperty(this, P_ID::VISIBLE, v);
+      undoChangeProperty(P_ID::VISIBLE, v);
       }
 
 //---------------------------------------------------------
@@ -1705,7 +1715,7 @@ QPointF Element::scriptPos() const
 
 void Element::scriptSetPos(const QPointF& p)
       {
-      score()->undoChangeProperty(this, P_ID::USER_OFF, p*spatium() - ipos());
+      undoChangeProperty(P_ID::USER_OFF, p*spatium() - ipos());
       }
 
 QPointF Element::scriptUserOff() const
@@ -1715,7 +1725,7 @@ QPointF Element::scriptUserOff() const
 
 void Element::scriptSetUserOff(const QPointF& o)
       {
-      score()->undoChangeProperty(this, P_ID::USER_OFF, o * spatium());
+      undoChangeProperty(P_ID::USER_OFF, o * spatium());
       }
 
 //void Element::draw(SymId id, QPainter* p) const { score()->scoreFont()->draw(id, p, magS()); }

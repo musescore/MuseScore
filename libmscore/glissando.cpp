@@ -473,7 +473,7 @@ void Glissando::computeStartElement()
 
 void Glissando::undoSetGlissandoType(Type t)
       {
-      score()->undoChangeProperty(this, P_ID::GLISS_TYPE, int(t));
+      undoChangeProperty(P_ID::GLISS_TYPE, int(t));
       }
 
 //---------------------------------------------------------
@@ -482,7 +482,7 @@ void Glissando::undoSetGlissandoType(Type t)
 
 void Glissando::undoSetText(const QString& s)
       {
-      score()->undoChangeProperty(this, P_ID::GLISS_TEXT, s);
+      undoChangeProperty(P_ID::GLISS_TEXT, s);
       }
 
 //---------------------------------------------------------
@@ -491,7 +491,7 @@ void Glissando::undoSetText(const QString& s)
 
 void Glissando::undoSetShowText(bool f)
       {
-      score()->undoChangeProperty(this, P_ID::GLISS_SHOW_TEXT, f);
+      undoChangeProperty(P_ID::GLISS_SHOW_TEXT, f);
       }
 
 //---------------------------------------------------------
