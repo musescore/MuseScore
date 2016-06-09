@@ -835,7 +835,7 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("instruments"));
 
       QMenu* menuMeasure = new QMenu(tr("&Measure"));
-      for (auto i : { "delete-measures", "split-measure", "join-measure" })
+      for (auto i : { "delete-measures", "split-measure", "join-measures" })
             menuMeasure->addAction(getAction(i));
       menuEdit->addMenu(menuMeasure);
 
@@ -1613,7 +1613,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("show-frames")->setChecked(cs->showFrames());
       getAction("show-pageborders")->setChecked(cs->showPageborders());
       getAction("fotomode")->setChecked(cv->fotoMode());
-      getAction("join-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
+      getAction("join-measures")->setEnabled(cs->masterScore()->excerpts().size() == 0);
       getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
       updateUndoRedo();
 
@@ -2881,8 +2881,8 @@ void MuseScore::changeState(ScoreState val)
 
       if (getAction("file-part-export")->isEnabled())
             getAction("file-part-export")->setEnabled(cs && cs->masterScore()->excerpts().size() > 0);
-      if (getAction("join-measure")->isEnabled())
-            getAction("join-measure")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
+      if (getAction("join-measures")->isEnabled())
+            getAction("join-measures")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
       if (getAction("split-measure")->isEnabled())
             getAction("split-measure")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
 

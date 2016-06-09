@@ -3206,7 +3206,7 @@ void ScoreView::cmd(const QAction* a)
                         _score->cmdSplitMeasure(cr);
                   }
             }
-      else if (cmd == "join-measure") {
+      else if (cmd == "join-measures") {
             Measure* m1;
             Measure* m2;
             if (!_score->selection().measureRange(&m1, &m2) || m1 == m2) {
