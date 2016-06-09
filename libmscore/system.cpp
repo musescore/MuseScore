@@ -1072,7 +1072,7 @@ qreal System::minDistance(System* s2) const
                   qreal ax2 = mb2->x() + mb2->width();
                   if (ax2 < bx1)
                         continue;
-                  if ((ax1 >= bx1) || (ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2)) {
+                  if (Ms::intersects(ax1, ax2, bx1, bx2)) {
                         qreal d = m1->shape(0).minVerticalDistance(m2->shape(lastStaff)) + minVerticalDistance;
                         dist = qMax(dist, d - height());
                         }
