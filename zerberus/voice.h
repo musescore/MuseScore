@@ -110,6 +110,7 @@ class Voice {
       int _offBy;
       int _loopStart;
       int _loopEnd;
+      bool _looping;
 
       float gain;
 
@@ -158,7 +159,8 @@ class Voice {
 
       void start(Channel* channel, int key, int velo, const Zone*);
       void process(int frames, float*);
-      void updateLoop(short *minusOne, short *minusTwo = 0);
+      void updateLoop();
+      short getData(int pos);
 
       Channel* channel() const    { return _channel; }
       int key() const             { return _key;     }

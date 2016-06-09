@@ -84,6 +84,7 @@ void Voice::init()
             Envelope::egPow[EG_SIZE-i-1] = pow(10.0, (dbStep * i)/20.0);
             Envelope::egLin[i]           = 1.0 - (double(i) / double(EG_SIZE));
             }
+
       }
 
 //---------------------------------------------------------
@@ -138,6 +139,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
 
       attackEnv.setTime(1, _zerberus->sampleRate());        // 1 ms attack
       stopEnv.setTime(z->ampegRelease, _zerberus->sampleRate());
+
+      _looping = false;
       }
 
 //---------------------------------------------------------
@@ -237,8 +240,7 @@ void Voice::process(int frames, float* p)
       if (audioChan == 1) {
             while (frames--) {
 
-                  short minusOne;
-                  updateLoop(&minusOne);
+                  updateLoop();
 
                   int idx = phase.index();
 
@@ -248,10 +250,10 @@ void Voice::process(int frames, float* p)
                         }
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f;
-                  f =  (coeffs[0] * minusOne
-                      + coeffs[1] * data[idx+0]
-                      + coeffs[2] * data[idx+1]
-                      + coeffs[3] * data[idx+2]) * gain
+                  f =  (coeffs[0] * getData(idx)
+                      + coeffs[1] * getData(idx+0)
+                      + coeffs[2] * getData(idx+1)
+                      + coeffs[3] * getData(idx+2)) * gain
                       - a1 * hist1l
                       - a2 * hist2l;
                   float v = b02 * (f + hist2l) + b1 * hist1l;
@@ -284,8 +286,7 @@ void Voice::process(int frames, float* p)
             //
             while (frames--) {
 
-                  short minusOne, minusTwo;
-                  updateLoop(&minusOne, &minusTwo);
+                  updateLoop();
 
                   int idx = phase.index() * 2;
                   if (idx >= eidx) {
@@ -297,16 +298,16 @@ void Voice::process(int frames, float* p)
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f1, f2;
 
-                  f1 = (coeffs[0] * minusTwo
-                      + coeffs[1] * data[idx]
-                      + coeffs[2] * data[idx+2]
-                      + coeffs[3] * data[idx+4])
+                  f1 = (coeffs[0] * getData(idx-2)
+                      + coeffs[1] * getData(idx)
+                      + coeffs[2] * getData(idx+2)
+                      + coeffs[3] * getData(idx+4))
                       * gain * _channel->panLeftGain();
 
-                  f2 = (coeffs[0] *minusOne
-                      + coeffs[1] * data[idx+1]
-                      + coeffs[2] * data[idx+3]
-                      + coeffs[3] * data[idx+5])
+                  f2 = (coeffs[0] * getData(idx-1)
+                      + coeffs[1] * getData(idx+1)
+                      + coeffs[2] * getData(idx+3)
+                      + coeffs[3] * getData(idx+5))
                       * gain * _channel->panRightGain();
 
                   if (_state == VoiceState::ATTACK) {
@@ -352,46 +353,41 @@ void Voice::process(int frames, float* p)
       }
 
 //---------------------------------------------------------
-//   updateIndex
+//   updateLoop
 //---------------------------------------------------------
 
-void Voice::updateLoop(short* minusOne, short* minusTwo)
+void Voice::updateLoop()
       {
       int idx = phase.index();
-      if (minusTwo) {
-            if (idx == 0) {
-                  *minusOne = 0;
-                  *minusTwo = 0;
-                  }
-            else if (idx == 1) {
-                  *minusOne = data[0];
-                  *minusTwo = 0;
-                  }
-            else {
-                  *minusOne = data[(idx*2)-1];
-                  *minusTwo = data[(idx*2)-2];
-                  }
-            }
-      else {
-            if (idx == 0)
-                  *minusOne = 0;
-            else if (idx == 1)
-                  *minusOne = data[0];
-            else
-                  *minusOne = data[idx-1];
-            }
 
-      if (!(loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && _state == VoiceState::PLAYING)))
+      if (_looping && loopMode() == LoopMode::SUSTAIN && (_state != VoiceState::PLAYING || _state != VoiceState::SUSTAINED))
+            _looping = false;
+
+      if (!(loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state == VoiceState::PLAYING || _state == VoiceState::SUSTAINED))))
             return;
 
-      if (idx >= _loopEnd) {
-            *minusOne = data[_loopEnd];
-            if (minusTwo) {
-                  *minusOne = data[(_loopEnd*2)+1];
-                  *minusTwo = data[(_loopEnd*2)];
-                  }
-            phase.setIndex(_loopStart);
+      if (idx > _loopEnd) {
+            _looping = true;
+            phase.setIndex(_loopStart+(idx-_loopEnd-1));
             }
+      }
+
+short Voice::getData(int pos) {
+      if (pos < 0)
+            return 0;
+
+      if (!_looping)
+            return data[pos];
+
+      int loopEnd = _loopEnd * audioChan;
+      int loopStart = _loopStart * audioChan;
+
+      if (pos < loopStart)
+            return data[loopEnd+(pos-loopStart)+audioChan];
+      else if (pos > (loopEnd+audioChan-1))
+            return data[loopStart+(pos-loopEnd)-audioChan];
+      else
+            return data[pos];
       }
 
 //---------------------------------------------------------
