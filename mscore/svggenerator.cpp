@@ -1133,8 +1133,16 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
     // other transformations such as rotation. Qt translates everything, but
     // other transformations do occur, and must be handled here.
     QTransform t = state.transform();
-    if (t.m11() == 1 && t.m22() == 1 // No scaling
-     && t.m12() == t.m21()) {        // No rotation, etc.
+
+    // Tablature Note Text:
+    // m11 and m22 have floating point flotsam, for example: 1.000000629
+    // Both values should be == integer 1, because no scaling is intended.
+    // So round them to three decimal places, as MuseScore does elsewhere.
+    const qreal m11 = qRound(t.m11() * 1000) / 1000;
+    const qreal m22 = qRound(t.m22() * 1000) / 1000;
+
+    if (m11 == 1 && m22 == 1   // No scaling
+      && t.m12() == t.m21()) { // No rotation, etc.
           // No transformation except translation
           _dx = t.m31();
           _dy = t.m32();
