@@ -151,7 +151,7 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
             }
       // loop over all segments
       for (Segment* segment = m->first(Segment::Type::ChordRest); segment; segment = segment->next(Segment::Type::ChordRest)) {
-            ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+            ChordRest* cr = toChordRest(segment->element(track));
             if (!cr)
                   continue;
             // TODO LVI: check if following is correct, see exceptions in
@@ -307,13 +307,13 @@ Note* nextChordNote(Note* note)
       while (seg) {
             Element*    targetElement = seg->elementAt(track);
             // if a chord exists in the same track, return its top note
-            if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
-                  return static_cast<Chord*>(targetElement)->upNote();
+            if (targetElement && targetElement->isChord())
+                  return toChord(targetElement)->upNote();
             // if not, return topmost chord in track range
             for (int i = fromTrack ; i < toTrack; i++) {
                   targetElement = seg->elementAt(i);
-                  if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
-                        return static_cast<Chord*>(targetElement)->upNote();
+                  if (targetElement && targetElement->isChord())
+                        return toChord(targetElement)->upNote();
                   }
             seg = seg->nextCR(track, true);
             }
@@ -331,13 +331,13 @@ Note* prevChordNote(Note* note)
             if (seg->segmentType() == Segment::Type::ChordRest) {
                   Element*    targetElement = seg->elementAt(track);
                   // if a chord exists in the same track, return its top note
-                  if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
-                        return static_cast<Chord*>(targetElement)->upNote();
+                  if (targetElement && targetElement->isChord())
+                        return toChord(targetElement)->upNote();
                   // if not, return topmost chord in track range
                   for (int i = fromTrack ; i < toTrack; i++) {
                         targetElement = seg->elementAt(i);
-                        if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
-                              return static_cast<Chord*>(targetElement)->upNote();
+                        if (targetElement && targetElement->isChord())
+                              return toChord(targetElement)->upNote();
                         }
                   }
             seg = seg->prev1();
@@ -774,7 +774,7 @@ Note* searchTieNote(Note* note)
       if (chord->isGraceBefore()) {
             // grace before
             // try to tie to note in parent chord
-            chord = static_cast<Chord*>(chord->parent());
+            chord = toChord(chord->parent());
             note2 = chord->findNote(note->pitch());
             if (note2)
                   return note2;
@@ -783,7 +783,7 @@ Note* searchTieNote(Note* note)
             // grace after
             // we will try to tie to note in next normal chord, below
             // meanwhile, set chord to parent chord so the endTick calculation will make sense
-            chord = static_cast<Chord*>(chord->parent());
+            chord = toChord(chord->parent());
             }
       else {
             // normal chord
@@ -809,8 +809,8 @@ Note* searchTieNote(Note* note)
             if (seg->tick() < endTick  && !seg->element(chord->track()))
                   continue;
             for (int track = strack; track < etrack; ++track) {
-                  Chord* c = static_cast<Chord*>(seg->element(track));
-                  if (c == 0 || c->type() != Element::Type::CHORD)
+                  Chord* c = toChord(seg->element(track));
+                  if (c == 0 || !c->isChord())
                         continue;
                   // if there are grace notes before, try to tie to first one
                   QVector<Chord*> gnb = c->graceNotesBefore();
@@ -853,8 +853,8 @@ Note* searchTieNote114(Note* note)
 
       while ((seg = seg->next1(Segment::Type::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
-                  Chord* c = static_cast<Chord*>(seg->element(track));
-                  if (c == 0 || (c->type() != Element::Type::CHORD) || (c->track() != chord->track()))
+                  Chord* c = toChord(seg->element(track));
+                  if (c == 0 || (!c->isChord()) || (c->track() != chord->track()))
                         continue;
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
