@@ -339,11 +339,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick();
-            int tick2 = seg->tick()+seg->ticks()-1;
+            int tick2 = seg->tick() + seg->ticks() - 1;
             for (int track = strack; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
-                        track += VOICES-1;
+                        track += VOICES - 1;
                         continue;
                         }
                   Element* cr = seg->element(track);
@@ -358,7 +358,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
-                  foreach (Articulation* a, chord->articulations()) {
+                  for (Articulation* a : chord->articulations()) {
                         instr->updateVelocity(&velocity, channel, a->subtypeName());
                         }
 
