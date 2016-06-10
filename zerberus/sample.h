@@ -24,6 +24,7 @@ class Sample {
       int _sampleRate;
       int _loopStart;
       int _loopEnd;
+      int _loopMode;
 
    public:
       Sample(int ch, short* val, int f, int sr)
@@ -37,8 +38,10 @@ class Sample {
 
       void setLoopStart (int v) { _loopStart = v; }
       void setLoopEnd (int v)   { _loopEnd = v; }
+      void setLoopMode (int v)  { _loopMode = v; }
       int loopStart()           { return _loopStart; }
       int loopEnd()             { return _loopEnd; }
+      int loopMode()            { return _loopMode; }
       };
 
 #endif

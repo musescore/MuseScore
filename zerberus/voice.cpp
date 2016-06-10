@@ -103,8 +103,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       data      = s->data() + z->offset * audioChan;
       eidx      = s->frames() * audioChan;
       _loopMode = z->loopMode;
-      _loopStart = s->loopStart();
-      _loopEnd   = s->loopEnd();
+      _loopStart = z->loopStart;
+      _loopEnd   = z->loopEnd;
 
       _offMode  = z->offMode;
       _offBy    = z->offBy;
@@ -359,11 +359,13 @@ void Voice::process(int frames, float* p)
 void Voice::updateLoop()
       {
       int idx = phase.index();
+      bool validLoop = _loopEnd > 0 && _loopStart >= 0 && (_loopEnd <= (eidx/audioChan));
+      bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state == VoiceState::PLAYING || _state == VoiceState::SUSTAINED));
 
       if (_looping && loopMode() == LoopMode::SUSTAIN && (_state != VoiceState::PLAYING || _state != VoiceState::SUSTAINED))
             _looping = false;
 
-      if (!(loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state == VoiceState::PLAYING || _state == VoiceState::SUSTAINED))))
+      if (!(validLoop && shallLoop))
             return;
 
       if (idx > _loopEnd) {
@@ -373,7 +375,7 @@ void Voice::updateLoop()
       }
 
 short Voice::getData(int pos) {
-      if (pos < 0)
+      if (pos < 0 && !_looping)
             return 0;
 
       if (!_looping)
