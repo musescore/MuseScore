@@ -94,9 +94,9 @@ class BarLine : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual QPainterPath outline() const override;
-
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
+      virtual bool isEditable() const override    { return true; }
 
       Segment* segment() const        { return (Segment*)parent(); }
 
