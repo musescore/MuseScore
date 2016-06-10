@@ -7,15 +7,15 @@
 #  CMAKE_CXX_COMPILER_PATCH  patch level (e.g. gcc 4.1.0)
 #
 
-# check the version of the compiler
+# Check the version of the compiler
 set(CMAKE_CXX_COMPILER_MAJOR "CMAKE_CXX_COMPILER_MAJOR-NOTFOUND")
 set(CMAKE_CXX_COMPILER_MINOR "CMAKE_CXX_COMPILER_MINOR-NOTFOUND")
 set(CMAKE_CXX_COMPILER_PATCH "CMAKE_CXX_COMPILER_PATCH-NOTFOUND")
 
-# only available in Cmake 2.8.9, 
+# Only available in CMake 2.8.9,
 # extract version from command line if not available
-if(NOT CMAKE_CXX_COMPILER_VERSION) 
-  # extract the version of the compiler
+if(NOT CMAKE_CXX_COMPILER_VERSION)
+  # Extract the version of the compiler
   if( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
     execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
         OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
@@ -47,7 +47,7 @@ else(NOT CMAKE_CXX_COMPILER_VERSION)
 endif(NOT CMAKE_CXX_COMPILER_VERSION)
 
 
-# just print the results if requested
+# Just print the results if requested
 function(info_compiler)
   message(STATUS "CMAKE_FORCE_CXX_COMPILER  = '${CMAKE_FORCE_CXX_COMPILER}'")
   message(STATUS "CMAKE_CXX_COMPILER        = '${CMAKE_CXX_COMPILER}'")
