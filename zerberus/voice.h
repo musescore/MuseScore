@@ -73,7 +73,7 @@ struct Phase {
       void operator+=(const Phase& p) { data += p.data;   }
       void set(int b)                 { data = b * 256;   }
       void set(double b)              { data = b * 256.0; }
-      void setIndex(int b)            { data = b *256 + _fract; }
+      void setIndex(int b)            { data = b * 256 + _fract; }
       int index() const               { return data >> 8; }
       unsigned fract() const          { return _fract;    }
 

@@ -250,7 +250,7 @@ void Voice::process(int frames, float* p)
                         }
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f;
-                  f =  (coeffs[0] * getData(idx)
+                  f =  (coeffs[0] * getData(idx-1)
                       + coeffs[1] * getData(idx+0)
                       + coeffs[2] * getData(idx+1)
                       + coeffs[3] * getData(idx+2)) * gain
@@ -385,9 +385,9 @@ short Voice::getData(int pos) {
       int loopStart = _loopStart * audioChan;
 
       if (pos < loopStart)
-            return data[loopEnd+(pos-loopStart)+audioChan];
-      else if (pos > (loopEnd+audioChan-1))
-            return data[loopStart+(pos-loopEnd)-audioChan];
+            return data[loopEnd + (pos - loopStart) + audioChan];
+      else if (pos > (loopEnd + audioChan - 1))
+            return data[loopStart + (pos - loopEnd) - audioChan];
       else
             return data[pos];
       }
