@@ -62,10 +62,7 @@ bool AudioFile::open(const QByteArray& b)
       buf = b;
       idx = 0;
       sf  = sf_open_virtual(&sfio, SFM_READ, &info, this);
-      if (sf_command(sf, SFC_GET_INSTRUMENT, &inst, sizeof(inst)) == SF_TRUE)
-            hasInstrument = true;
-      else
-            hasInstrument = false;
+      hasInstrument = sf_command(sf, SFC_GET_INSTRUMENT, &inst, sizeof(inst)) == SF_TRUE;
 
       return sf != 0;
       }
