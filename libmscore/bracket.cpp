@@ -307,7 +307,6 @@ void Bracket::editDrag(const EditData& ed)
       {
       h2 += ed.delta.y() * .5;
       layout();
-      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
