@@ -3,7 +3,7 @@
 #  Music Composition & Notation
 #  $Id:$
 #
-#  Copyright (C) 2011-2013 Werner Schweer
+#  Copyright (C) 2011-2016 Werner Schweer
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2
@@ -79,23 +79,23 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_instrument.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chordname.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # Required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # Required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp    # required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp # required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp   # required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Agent.cpp           # required by importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # required by importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # required by importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp    # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp   # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Agent.cpp           # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # Required by importmidi.cpp
       ${OMR_SRC}
       omr
       )
@@ -157,7 +157,7 @@ add_custom_target(reporthtml
       )
 
 subdirs (
-#        libmscore/compat              # expected not to work
+#        libmscore/compat              # Expected not to work
         libmscore/album
         libmscore/barline
         libmscore/beam
@@ -189,7 +189,7 @@ subdirs (
         libmscore/split
         libmscore/splitstaff
         libmscore/timesig
-        libmscore/tools                # some tests disabled
+        libmscore/tools                # Some tests disabled
         libmscore/transpose
         libmscore/tuplet
         libmscore/text

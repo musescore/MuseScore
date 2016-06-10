@@ -1,5 +1,5 @@
 #
-#     toolchain file for windows on windows
+#     Toolchain file for Windows on Windows
 #
 
 set (CMAKE_SYSTEM_NAME "Windows")
