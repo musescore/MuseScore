@@ -56,6 +56,7 @@
 #include "fraction.h"
 #include "excerpt.h"
 #include "spatium.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -205,6 +206,7 @@ void MScore::init()
 
       //classed enumerations
       qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
+      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
 
 //      DPMM = DPI / INCH;       // dots/mm
@@ -415,6 +417,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
             qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
+            qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
             qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
             qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
@@ -423,6 +426,7 @@ QQmlEngine* MScore::qml()
 
             //classed enumerations
             qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
+            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();
