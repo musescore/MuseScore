@@ -387,9 +387,13 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                         int cc11Value = velocity;
 
+                        int tickInc;
                         // Do a update for every signle little step - maybe that is a bit too much
                         // TODO find out good update intervals!
-                        int tickInc = cc11Ticks/abs(cc11Amount);
+                        if (cc11Amount != 0)
+                              tickInc = cc11Ticks/abs(cc11Amount);
+                        else
+                              tickInc = 0;
 
                         for (int i=0; i < abs(cc11Amount) ;++i) {
                               NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, cc11Value);
