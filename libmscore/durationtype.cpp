@@ -281,7 +281,7 @@ TDuration TDuration::shift(int v) const
       if (_val == DurationType::V_MEASURE || _val == DurationType::V_INVALID || _val == DurationType::V_ZERO)
             return TDuration();
       int newValue = int(_val) + v;
-      if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_256TH)))
+      if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_128TH)))
             return TDuration();
       return TDuration(DurationType(newValue));
       }
