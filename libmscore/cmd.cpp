@@ -2095,7 +2095,7 @@ void Score::cmdHalfDuration()
 
       ChordRest* cr = static_cast<ChordRest*>(el);
       TDuration d = _is.duration().shift(1);
-      if (!d.isValid() || (d.type() > TDuration::DurationType::V_64TH))
+      if (!d.isValid())
             return;
       if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
@@ -2125,7 +2125,7 @@ void Score::cmdDoubleDuration()
 
       ChordRest* cr = static_cast<ChordRest*>(el);
       TDuration d = _is.duration().shift(-1);
-      if (!d.isValid() || (d.type() < TDuration::DurationType::V_WHOLE))
+      if (!d.isValid())
             return;
       if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
