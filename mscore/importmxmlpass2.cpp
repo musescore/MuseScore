@@ -308,9 +308,9 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
       int restLen = tend - tstart;
       // qDebug("\nfillGIFV     fillGap(measure %p track %d tstart %d tend %d) restLen %d len",
       //        measure, track, tstart, tend, restLen);
-      // note: as MScore::division (#ticks in a quarter note) equals 480
-      // MScore::division / 64 (#ticks in a 256th note) uequals 7.5 but is rounded down to 7
-      while (restLen > MScore::division / 64) {
+      // note: MScore::division is the number of ticks in a quarter note
+      // MScore::division / 256 = 1024th Note Value
+      while (restLen > MScore::division / 256) {
             int len = restLen;
             TDuration d(TDuration::DurationType::V_INVALID);
             if (measure->ticks() == restLen)

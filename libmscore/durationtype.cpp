@@ -112,8 +112,7 @@ int TDuration::ticks() const
             case DurationType::V_ZERO:
             case DurationType::V_MEASURE:
                   return 0;
-            default:
-            case DurationType::V_INVALID:
+            default:  // DurationType::V_INVALID
                   return -1;
             }
       int tmp = t;
@@ -129,24 +128,23 @@ int TDuration::ticks() const
 QString TDuration::name() const
       {
       switch(_val) {
+            case DurationType::V_LONG:      return "long";
+            case DurationType::V_BREVE:     return "breve";
+            case DurationType::V_MEASURE:   return "measure";
+            case DurationType::V_WHOLE:     return "whole";
+            case DurationType::V_HALF:      return "half";
             case DurationType::V_QUARTER:   return "quarter";
             case DurationType::V_EIGHTH:    return "eighth";
-            case DurationType::V_1024TH:    return "1024th";
-            case DurationType::V_512TH:     return "512th";
-            case DurationType::V_256TH:     return "256th";
-            case DurationType::V_128TH:     return "128th";
-            case DurationType::V_64TH:      return "64th";
-            case DurationType::V_32ND:      return "32nd";
             case DurationType::V_16TH:      return "16th";
-            case DurationType::V_HALF:      return "half";
-            case DurationType::V_WHOLE:     return "whole";
-            case DurationType::V_MEASURE:   return "measure";
-            case DurationType::V_BREVE:     return "breve";
-            case DurationType::V_LONG:      return "long";
-            default:
-qDebug("TDuration::name(): invalid duration type %d", static_cast<int>(_val));
-            case DurationType::V_ZERO:
-            case DurationType::V_INVALID:   return "";
+            case DurationType::V_32ND:      return "32nd";
+            case DurationType::V_64TH:      return "64th";
+            case DurationType::V_128TH:     return "128th";
+            case DurationType::V_256TH:     return "256th";
+            case DurationType::V_512TH:     return "512th";
+            case DurationType::V_1024TH:    return "1024th";
+            default: // V_ZERO or V_INVALID
+                  qDebug("TDuration::name(): invalid duration type %d", static_cast<int>(_val));
+                  return "";
             }
       }
 
@@ -177,14 +175,10 @@ NoteHead::Type TDuration::headType() const
                   headType = NoteHead::Type::HEAD_WHOLE;
                   break;
             case DurationType::V_BREVE:
-                  headType = NoteHead::Type::HEAD_BREVIS;
-                  break;
             case DurationType::V_LONG:
                   headType = NoteHead::Type::HEAD_BREVIS;
                   break;
-            default:
-            case DurationType::V_INVALID:
-            case DurationType::V_ZERO:
+	    default:  // V_ZERO or V_INVALID
                   headType = NoteHead::Type::HEAD_QUARTER;
                   break;
             }
@@ -198,12 +192,12 @@ NoteHead::Type TDuration::headType() const
 int TDuration::hooks() const
       {
       static const int table[] = {
-         // V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
-            0,      0,       0,       0,      0,         1,        2,
-         // V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
-            3,      4,       5,       6,      7,       8,
+         // V_LONG, V_BREVE, V_WHOLE, V_HALF,  V_QUARTER, V_EIGHTH, V_16TH,
+            0,      0,       0,       0,       0,         1,        2,
+         // V_32ND, V_64TH,  V_128TH, V_256TH, V_512TH,   V_1024TH,
+            3,      4,       5,       6,       7,         8,
          // V_ZERO, V_MEASURE, V_INVALID
-            0,      0,       0
+            0,      0,         0
             };
       return table[int(_val)];
       }
@@ -248,34 +242,34 @@ TDuration::TDuration(const QString& s)
 
 void TDuration::setType(const QString& s)
       {
-      if (s == "quarter")
-            _val = DurationType::V_QUARTER;
-      else if (s == "eighth")
-            _val = DurationType::V_EIGHTH;
-      else if (s == "1024th")
-            _val = DurationType::V_1024TH;
-      else if (s == "512th")
-            _val = DurationType::V_512TH;
-      else if (s == "256th")
-            _val = DurationType::V_256TH;
-      else if (s == "128th")
-            _val = DurationType::V_128TH;
-      else if (s == "64th")
-            _val = DurationType::V_64TH;
-      else if (s == "32nd")
-            _val = DurationType::V_32ND;
-      else if (s == "16th")
-            _val = DurationType::V_16TH;
-      else if (s == "half")
-            _val = DurationType::V_HALF;
-      else if (s == "whole")
-            _val = DurationType::V_WHOLE;
-      else if (s == "breve")
-            _val = DurationType::V_BREVE;
-      else if (s == "long")
+      if (s == "long")
             _val = DurationType::V_LONG;
       else if (s == "measure")
             _val = DurationType::V_MEASURE;
+      else if (s == "breve")
+            _val = DurationType::V_BREVE;
+      else if (s == "whole")
+            _val = DurationType::V_WHOLE;
+      else if (s == "half")
+            _val = DurationType::V_HALF;
+      else if (s == "quarter")
+            _val = DurationType::V_QUARTER;
+      else if (s == "eighth")
+            _val = DurationType::V_EIGHTH;
+      else if (s == "16th")
+            _val = DurationType::V_16TH;
+      else if (s == "32nd")
+            _val = DurationType::V_32ND;
+      else if (s == "64th")
+            _val = DurationType::V_64TH;
+      else if (s == "128th")
+            _val = DurationType::V_128TH;
+      else if (s == "256th")
+            _val = DurationType::V_256TH;
+      else if (s == "512th")
+            _val = DurationType::V_512TH;
+      else if (s == "1024th")
+            _val = DurationType::V_1024TH;
       else {
             // _val = V_INVALID;
             _val = DurationType::V_QUARTER;
@@ -294,7 +288,7 @@ void TDuration::shiftType(int v)
             setType(DurationType::V_INVALID);
       else {
             int newValue = int(_val) + v;
-            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_128TH)))
+            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_1024TH)))
                   setType(DurationType::V_INVALID);
             else
                   setType(DurationType(newValue));

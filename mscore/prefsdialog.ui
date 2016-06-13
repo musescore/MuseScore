@@ -3265,6 +3265,26 @@
               <string>64th</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>128th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>256th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>512th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1024th</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item>

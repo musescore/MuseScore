@@ -38,21 +38,23 @@ void Hook::setHookType(int i)
       _hookType = i;
       switch(i) {
             case 0:    break;
-            case 1:    setSym(SymId::flag8thUp);     break;
-            case 2:    setSym(SymId::flag16thUp);    break;
-            case 3:    setSym(SymId::flag32ndUp);    break;
-            case 4:    setSym(SymId::flag64thUp);    break;
-            case 5:    setSym(SymId::flag128thUp);   break;
-            case 6:    setSym(SymId::flag256thUp);   break;
-            case 7:    setSym(SymId::flag512thUp);   break;
+            case 1:    setSym(SymId::flag8thUp);       break;
+            case 2:    setSym(SymId::flag16thUp);      break;
+            case 3:    setSym(SymId::flag32ndUp);      break;
+            case 4:    setSym(SymId::flag64thUp);      break;
+            case 5:    setSym(SymId::flag128thUp);     break;
+            case 6:    setSym(SymId::flag256thUp);     break;
+            case 7:    setSym(SymId::flag512thUp);     break;
+            case 8:    setSym(SymId::flag1024thUp);    break;
 
-            case -1:   setSym(SymId::flag8thDown);   break;
-            case -2:   setSym(SymId::flag16thDown);  break;
-            case -3:   setSym(SymId::flag32ndDown);  break;
-            case -4:   setSym(SymId::flag64thDown);  break;
-            case -5:   setSym(SymId::flag128thDown); break;
-            case -6:   setSym(SymId::flag256thDown); break;
-            case -7:   setSym(SymId::flag512thDown); break;
+            case -1:   setSym(SymId::flag8thDown);     break;
+            case -2:   setSym(SymId::flag16thDown);    break;
+            case -3:   setSym(SymId::flag32ndDown);    break;
+            case -4:   setSym(SymId::flag64thDown);    break;
+            case -5:   setSym(SymId::flag128thDown);   break;
+            case -6:   setSym(SymId::flag256thDown);   break;
+            case -7:   setSym(SymId::flag512thDown);   break;
+            case -8:   setSym(SymId::flag1024thDown);  break;
             default:
                   qDebug("no hook for subtype %d", i);
                   break;

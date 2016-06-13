@@ -102,7 +102,11 @@ qreal   MScore::nudgeStep50;
 int     MScore::defaultPlayDuration;
 // QString MScore::partStyle;
 QString MScore::lastError;
-int     MScore::division    = 480; // 3840;   // pulses per quarter note (PPQ) // ticks per beat
+
+// Pulses per quarter. Must be divisible by 256 to support 1024th notes
+//       with current handling of ticks safely
+int     MScore::division    = 512;
+
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;
 

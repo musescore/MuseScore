@@ -166,7 +166,7 @@ void Preferences::init()
       importCharsetOve        = "GBK";
       importCharsetGP         = "UTF-8";
       importStyleFile         = "";
-      shortestNote            = MScore::division/4;
+      shortestNote            = MScore::division / 32;  // 128th Note
 
       useOsc                  = false;
       oscPort                 = 5282;
@@ -182,11 +182,11 @@ void Preferences::init()
 
       QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
 
-      myScoresPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("scores_directory",     "Scores"))).absoluteFilePath();
-      myStylesPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory",     "Styles"))).absoluteFilePath();
-      myImagesPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absoluteFilePath();
-      myTemplatesPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
-      myPluginsPath   = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
+      myScoresPath     = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("scores_directory",     "Scores"))).absoluteFilePath();
+      myStylesPath     = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory",     "Styles"))).absoluteFilePath();
+      myImagesPath     = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absoluteFilePath();
+      myTemplatesPath  = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
+      myPluginsPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
       mySoundfontsPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath();
 
       MScore::setNudgeStep(.1);         // cursor key (default 0.1)
@@ -912,14 +912,19 @@ void PreferenceDialog::updateValues()
 
       defaultPlayDuration->setValue(MScore::defaultPlayDuration);
       importStyleFile->setText(prefs.importStyleFile);
-      int shortestNoteIndex = 2;
-      int nn = (prefs.shortestNote * 16)/MScore::division;
-      switch(nn) {
-            case 16: shortestNoteIndex = 0; break;
-            case 8:  shortestNoteIndex = 1; break;
-            case 4:  shortestNoteIndex = 2; break;
-            case 2:  shortestNoteIndex = 3; break;
-            case 1:  shortestNoteIndex = 4; break;
+      int shortestNoteIndex;
+      if (prefs.shortestNote == MScore::division) shortestNoteIndex = 0;           // Quarter
+      else if (prefs.shortestNote == MScore::division / 2) shortestNoteIndex = 1;  // Eighth
+      else if (prefs.shortestNote == MScore::division / 4) shortestNoteIndex = 2;  // etc.
+      else if (prefs.shortestNote == MScore::division / 8) shortestNoteIndex = 3;
+      else if (prefs.shortestNote == MScore::division / 16) shortestNoteIndex = 4;
+      else if (prefs.shortestNote == MScore::division / 32) shortestNoteIndex = 5;
+      else if (prefs.shortestNote == MScore::division / 64) shortestNoteIndex = 6;
+      else if (prefs.shortestNote == MScore::division / 128) shortestNoteIndex = 7;
+      else if (prefs.shortestNote == MScore::division / 256) shortestNoteIndex = 8;
+      else {
+            qDebug("Unknown shortestNote value of %d, defaulting to 16th", prefs.shortestNote);
+            shortestNoteIndex = 2;
             }
       shortestNote->setCurrentIndex(shortestNoteIndex);
       useImportBuildinStyle->setChecked(prefs.importStyleFile.isEmpty());
@@ -1445,13 +1450,22 @@ void PreferenceDialog::apply()
       else
             prefs.importStyleFile.clear();
 
-      int ticks = MScore::division/4;
+      int ticks = MScore::division / 4;
       switch(shortestNote->currentIndex()) {
-            case 0: ticks = MScore::division;    break;
-            case 1: ticks = MScore::division/2;  break;
-            case 2: ticks = MScore::division/4;  break;
-            case 3: ticks = MScore::division/8;  break;
-            case 4: ticks = MScore::division/16; break;
+            case 0: ticks = MScore::division;       break;
+            case 1: ticks = MScore::division / 2;   break;
+            case 2: ticks = MScore::division / 4;   break;
+            case 3: ticks = MScore::division / 8;   break;
+            case 4: ticks = MScore::division / 16;  break;
+            case 5: ticks = MScore::division / 32;  break;
+            case 6: ticks = MScore::division / 64;  break;
+            case 7: ticks = MScore::division / 128; break;
+            case 8: ticks = MScore::division / 256; break;
+            default: {
+                  qDebug("Unknown index for shortestNote: %d, defaulting to 16th",
+                         shortestNote->currentIndex());
+                  ticks = MScore::division / 4;
+                  }
             }
       prefs.shortestNote = ticks;
 

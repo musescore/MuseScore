@@ -71,19 +71,28 @@ SymId ShadowNote::getNoteFlag() const
                   flag = SymId::lastSym;
                   break;
             case TDuration::DurationType::V_EIGHTH:
-                  flag = computeUp() ? SymId::flag8thUp : SymId::flag8thDown;
+                  flag = computeUp() ? SymId::flag8thUp    : SymId::flag8thDown;
                   break;
             case TDuration::DurationType::V_16TH:
-                  flag = computeUp() ? SymId::flag16thUp : SymId::flag16thDown;
+                  flag = computeUp() ? SymId::flag16thUp   : SymId::flag16thDown;
                   break;
             case TDuration::DurationType::V_32ND:
-                  flag = computeUp() ? SymId::flag32ndUp : SymId::flag32ndDown;
+                  flag = computeUp() ? SymId::flag32ndUp   : SymId::flag32ndDown;
                   break;
             case TDuration::DurationType::V_64TH:
-                  flag = computeUp() ? SymId::flag64thUp : SymId::flag64thDown;
+                  flag = computeUp() ? SymId::flag64thUp   : SymId::flag64thDown;
                   break;
             case TDuration::DurationType::V_128TH:
-                  flag = computeUp() ? SymId::flag128thUp : SymId::flag128thDown;
+                  flag = computeUp() ? SymId::flag128thUp  : SymId::flag128thDown;
+                  break;
+            case TDuration::DurationType::V_256TH:
+                  flag = computeUp() ? SymId::flag256thUp  : SymId::flag256thDown;
+                  break;
+            case TDuration::DurationType::V_512TH:
+                  flag = computeUp() ? SymId::flag512thUp  : SymId::flag512thDown;
+                  break;
+            case TDuration::DurationType::V_1024TH:
+                  flag = computeUp() ? SymId::flag1024thUp : SymId::flag1024thDown;
                   break;
             default:
                   flag = SymId::noSym;

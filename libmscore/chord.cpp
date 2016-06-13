@@ -1245,9 +1245,12 @@ qreal Chord::defaultStemLength()
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
       switch(hookIdx) {
-            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
-            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
-            case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
+            case 3: normalStemLen += small() ? .5  : 0.75; break; // 32nd notes
+            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; // 64th notes
+            case 5: normalStemLen += small() ? 1.5 : 2.25; break; // 128th notes
+            case 6: normalStemLen += small() ? 2   : 3;    break; // 256th notes
+            case 7: normalStemLen += small() ? 2.5 : 3.75; break; // 512th notes
+            case 8: normalStemLen += small() ? 3   : 4.5;  break; // 1024th notes
             }
       if (_hook && tab == 0) {
             if (up() && durationType().dots()) {

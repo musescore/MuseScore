@@ -81,6 +81,7 @@ QMap<QString, QString> nmap {
       { "rests.5",                  "rest32nd" },
       { "rests.6",                  "rest64th" },
       { "rests.7",                  "rest128th" },
+      { "rests.8",                  "rest256th" },
 
       { "accidentals.sharp",                 "accidentalSharp"         },
       { "accidentals.sharp.slashslash.stem", "accidentalQuarterSharp4" },
