@@ -345,7 +345,8 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
             { P_ID::USER_OFF,  1, 0, e.offsetY,    e.resetY         },
             { P_ID::AUTOPLACE, 0, 0, e.autoplace,  e.resetAutoplace },
             };
-      connect(e.autoplace, SIGNAL(toggled(bool)), SLOT(autoplaceChanged(bool)));
+      connect(e.resetAutoplace, SIGNAL(clicked()), SLOT(resetAutoplace()));
+      connect(e.autoplace, SIGNAL(toggled(bool)),  SLOT(autoplaceChanged(bool)));
       }
 
 //---------------------------------------------------------
@@ -354,9 +355,8 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
 
 void InspectorElementBase::setElement()
       {
-      Element* e = inspector->element();
-      autoplaceChanged(e->autoplace());
       InspectorBase::setElement();
+      autoplaceChanged(inspector->element()->autoplace());
       }
 
 //---------------------------------------------------------
@@ -365,11 +365,17 @@ void InspectorElementBase::setElement()
 
 void InspectorElementBase::autoplaceChanged(bool val)
       {
-      val = !val;
-      e.offsetX->setEnabled(val);
-      e.offsetY->setEnabled(val);
-      e.resetX->setEnabled(val);
-      e.resetY->setEnabled(val);
+      for (auto i : std::vector<QWidget*> { e.offsetX, e.offsetY, e.resetX, e.resetY, e.hRaster, e.vRaster })
+            i->setEnabled(!val);
+      }
+
+//---------------------------------------------------------
+//   resetAutoplace
+//---------------------------------------------------------
+
+void InspectorElementBase::resetAutoplace()
+      {
+      autoplaceChanged(true);
       }
 
 //---------------------------------------------------------
@@ -981,43 +987,27 @@ QSize InspectorEmpty::sizeHint() const
       return QSize(255 * guiScaling, 170 * guiScaling);
       }
 
-static const BarLineType types[] = {
-      BarLineType::NORMAL,
-      BarLineType::BROKEN,
-      BarLineType::DOTTED,
-      BarLineType::DOUBLE,
-      BarLineType::END,
-      BarLineType::START_REPEAT,          // repeat types cannot be set for a single bar line
-      BarLineType::END_REPEAT,            // of a multi-staff scores
-      BarLineType::END_START_REPEAT,
-      };
-
 //---------------------------------------------------------
 //   InspectorBarLine
 //---------------------------------------------------------
 
 InspectorBarLine::InspectorBarLine(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       s.setupUi(addWidget());
       b.setupUi(addWidget());
 
-      for (BarLineType t : types)
-            b.type->addItem(BarLine::userTypeName(t), int(t));
+      for (auto i : BarLine::barLineTable)
+            b.type->addItem(qApp->translate("Palette", i.userName), int(i.type));
 
-      iList = {
-            { P_ID::COLOR,             0, 0, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,           0, 0, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,          0, 0, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,          1, 0, e.offsetY,  e.resetY        },
+      std::vector<InspectorItem> il = {
             { P_ID::LEADING_SPACE,     0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::BARLINE_TYPE,      0, 0, b.type,     b.resetType     },
             { P_ID::BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
             { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
             { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
             };
-      mapSignals();
+      mapSignals(il);
       // when any of the span parameters is changed, span data need to be managed
       connect(b.span,          SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
       connect(b.spanFrom,      SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
@@ -1038,25 +1028,20 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
 void InspectorBarLine::setElement()
       {
       blockSpanDataSignals(true);
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       BarLine* bl = toBarLine(inspector->element());
 
       // enable / disable individual type combo items according to score and selected bar line status
       bool bMultiStaff  = bl->score()->nstaves() > 1;
       BarLineType blt   = bl->barLineType();
-      bool isRepeat    = (blt == BarLineType::START_REPEAT
-         || blt == BarLineType::END_REPEAT
-         || blt == BarLineType::END_START_REPEAT);
+      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT);
 
       const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(b.type->model());
-      for (unsigned i = 0; i < sizeof(types)/sizeof(*types); ++i) {
-            BarLineType type = types[i];
-
+      int i = 0;
+      for (auto& k : BarLine::barLineTable) {
             QStandardItem* item = model->item(i);
             // if combo item is repeat type, should be disabled for multi-staff scores
-            if (type == BarLineType::START_REPEAT
-                        || type == BarLineType::END_REPEAT
-                        || type == BarLineType::END_START_REPEAT) {
+            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
                   // disable / enable
                   item->setFlags(bMultiStaff ?
                         item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled) :
@@ -1068,6 +1053,7 @@ void InspectorBarLine::setElement()
                         item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled) :
                         item->flags() | (Qt::ItemFlags)(Qt::ItemIsSelectable|Qt::ItemIsEnabled) );
                   }
+            ++i;
             }
       manageSpanData();
       blockSpanDataSignals(false);

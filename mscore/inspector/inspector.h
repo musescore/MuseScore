@@ -50,7 +50,7 @@ class Note;
 class Inspector;
 class Segment;
 class Chord;
-
+class Clef;
 
 //---------------------------------------------------------
 //   UiInspectorElement
@@ -72,7 +72,8 @@ class InspectorElementBase : public InspectorBase {
       UiInspectorElement e;
 
    private slots:
-      void autoplaceChanged(bool val);
+      void resetAutoplace();
+      void autoplaceChanged(bool);
 
    public:
       InspectorElementBase(QWidget* parent);
@@ -188,7 +189,6 @@ class InspectorRest : public InspectorBase {
 //   InspectorClef
 //---------------------------------------------------------
 
-class Clef;
 
 class InspectorClef : public InspectorBase {
       Q_OBJECT
@@ -337,10 +337,9 @@ class InspectorDynamic : public InspectorBase {
 //   InspectorBarLine
 //---------------------------------------------------------
 
-class InspectorBarLine : public InspectorBase {
+class InspectorBarLine : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorBarLine b;
 

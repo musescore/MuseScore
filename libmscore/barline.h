@@ -148,6 +148,8 @@ class BarLine : public Element {
 
       virtual QString accessibleInfo() const override;
       virtual QString accessibleExtraInfo() const override;
+
+      static const std::vector<BarLineTableItem> barLineTable;
       };
 }     // namespace Ms
 #endif
