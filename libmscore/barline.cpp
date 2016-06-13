@@ -41,7 +41,7 @@ int BarLine::_origSpanTo;
 //   BarLineTable
 //---------------------------------------------------------
 
-static const BarLineTableItem barLineTable[] {
+const std::vector<BarLineTableItem> BarLine::barLineTable {
       { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal barline"),   "normal" },
       { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double barline"),   "double" },
       { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat"),     "start-repeat" },
@@ -58,7 +58,7 @@ static const BarLineTableItem barLineTable[] {
 
 const BarLineTableItem* BarLine::barLineTableItem(unsigned i)
       {
-      if (i >= sizeof(barLineTable)/sizeof(*barLineTable))
+      if (i >= barLineTable.size())
             return 0;
       return &barLineTable[i];
       }
