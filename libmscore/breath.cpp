@@ -138,7 +138,7 @@ bool Breath::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayout();
       setGenerated(false);
       return true;
       }

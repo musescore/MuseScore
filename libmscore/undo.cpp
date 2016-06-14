@@ -1909,7 +1909,9 @@ void ChangeElement::flip()
                   ns->system()->add(ns);
             }
       qSwap(oldElement, newElement);
-      score->setLayoutAll();
+      oldElement->triggerLayout();
+      newElement->triggerLayout();
+      // score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -1974,7 +1976,7 @@ void ChangeKeySig::flip()
 
       showCourtesy = sc;
       ks           = oe;
-      keysig->score()->setLayoutAll();
+      keysig->score()->setLayoutAll();  //TODO: reduce update to range covered by keysig
       }
 
 //---------------------------------------------------------
@@ -2203,7 +2205,7 @@ void EditText::undoRedo()
       QString s = text->xmlText();
       text->setXmlText(oldText);
       oldText = s;
-      text->score()->setLayoutAll();
+      text->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -2543,18 +2545,11 @@ ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v)
 
 void ChangeChordStaffMove::flip()
       {
-      const LinkedElements* l = chordRest->links();
       int v = chordRest->staffMove();
-      if (l) {
-            for (ScoreElement* e : *l) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
-                  cr->setStaffMove(staffMove);
-                  cr->score()->setLayoutAll();
-                  }
-            }
-      else {
-            chordRest->setStaffMove(staffMove);
-            chordRest->score()->setLayoutAll();
+      for (ScoreElement* e : chordRest->linkList()) {
+            ChordRest* cr = static_cast<ChordRest*>(e);
+            cr->setStaffMove(staffMove);
+            cr->triggerLayout();
             }
       staffMove = v;
       }
@@ -3052,7 +3047,7 @@ void ChangeClefType::flip()
       clef->staff()->setClef(clef);
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
-      clef->score()->setLayoutAll();
+      clef->score()->setLayoutAll();      // TODO: reduce layout to clef range
 
       concertClef     = ocl;
       transposingClef = otc;
@@ -3198,7 +3193,6 @@ void AddBracket::undo()
       staff->setBracket(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll();
       }
-
 
 void RemoveBracket::redo()
       {

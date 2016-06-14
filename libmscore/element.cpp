@@ -2067,4 +2067,13 @@ int Element::rtick() const
       return -1;
       }
 
+//---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Element::triggerLayout() const
+      {
+      score()->setLayout(tick());
+      }
+
 }

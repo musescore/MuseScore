@@ -635,10 +635,7 @@ QVariant Ambitus::getProperty(P_ID propertyId) const
 
 bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       {
-      bool  rv = true;
-
-      score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::HEAD_GROUP:
                   setNoteHeadGroup( NoteHead::Group(v.toInt()) );
                   break;
@@ -673,12 +670,10 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
                   setBottomPitch(bottomPitch() % 12 + v.toInt() * 12);
                   break;
             default:
-                  rv = Element::setProperty(propertyId, v);
-                  break;
+                  return Element::setProperty(propertyId, v);
             }
-      if (rv)
-            score()->setLayoutAll();
-      return rv;
+      triggerLayout();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -688,11 +683,16 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Ambitus::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::HEAD_GROUP:      return int(NOTEHEADGROUP_DEFAULT);
-            case P_ID::HEAD_TYPE:       return int(NOTEHEADTYPE_DEFAULT);
-            case P_ID::MIRROR_HEAD:     return int(DIR_DEFAULT);
-            case P_ID::GHOST:           return HASLINE_DEFAULT;
-            case P_ID::LINE_WIDTH:      return Spatium(LINEWIDTH_DEFAULT);
+            case P_ID::HEAD_GROUP:
+                  return int(NOTEHEADGROUP_DEFAULT);
+            case P_ID::HEAD_TYPE:
+                  return int(NOTEHEADTYPE_DEFAULT);
+            case P_ID::MIRROR_HEAD:
+                  return int(DIR_DEFAULT);
+            case P_ID::GHOST:
+                  return HASLINE_DEFAULT;
+            case P_ID::LINE_WIDTH:
+                  return Spatium(LINEWIDTH_DEFAULT);
             case P_ID::TPC1:                  // no defaults for pitches, tpc's and octaves
             case P_ID::FBPARENTHESIS1:
             case P_ID::PITCH:
@@ -700,7 +700,8 @@ QVariant Ambitus::propertyDefault(P_ID id) const
             case P_ID::FBPARENTHESIS3:
             case P_ID::FBPARENTHESIS4:
                   break;
-            default:                return Element::propertyDefault(id);
+            default:
+                  return Element::propertyDefault(id);
             }
       return QVariant();
       }

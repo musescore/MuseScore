@@ -1083,7 +1083,6 @@ class Score : public QObject, public ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
-//      virtual inline bool undoRedo() const;
       virtual inline QQueue<MidiInputEvent>* midiInputQueue();
 
       friend class ChangeSynthesizerState;

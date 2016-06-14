@@ -1200,10 +1200,10 @@ QRectF Note::drag(EditData* data)
       QRectF bb(chord()->bbox());
 
       qreal _spatium = spatium();
-      bool tab = staff()->isTabStaff();
-      qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
-      _lineOffset = lrint(data->delta.y() / step);
-      score()->setLayoutAll();
+      bool tab       = staff()->isTabStaff();
+      qreal step     = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
+      _lineOffset    = lrint(data->delta.y() / step);
+      triggerLayout();
       return bb.translated(chord()->pagePos());
       }
 
@@ -2072,7 +2072,7 @@ void Note::endEdit()
       if (ch->notes().size() == 1) {
             ch->undoChangeProperty(P_ID::USER_OFF, ch->userOff() + userOff());
             setUserOff(QPointF());
-            score()->setLayoutAll();
+            triggerLayout();
             }
       }
 

@@ -227,6 +227,15 @@ void SpannerSegment::styleChanged()
       }
 
 //---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void SpannerSegment::triggerLayout() const
+      {
+      _spanner->triggerLayout();
+      }
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 
@@ -889,6 +898,16 @@ void Spanner::setTicks(int v)
       _ticks = v;
       if (score())
             score()->spannerMap().setDirty();
+      }
+
+//---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Spanner::triggerLayout() const
+      {
+      score()->setLayout(_tick);
+      score()->setLayout(_tick + _ticks);
       }
 
 }

@@ -3525,7 +3525,15 @@ bool Measure::endBarLineVisible() const
             }
       return true;
       }
+//---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
 
+void Measure::triggerLayout() const
+      {
+      score()->setLayout(first()->tick());
+      score()->setLayout(last()->tick());
+      }
 
 }
 

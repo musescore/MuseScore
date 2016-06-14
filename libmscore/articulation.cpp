@@ -451,17 +451,6 @@ Page* Articulation::page() const
       }
 
 //---------------------------------------------------------
-//   canvasBoundingRectChanged
-//---------------------------------------------------------
-
-void Articulation::canvasBoundingRectChanged()
-      {
-      Page* p = page();
-      if (p)
-            p->rebuildBspTree();
-      }
-
-//---------------------------------------------------------
 //   subtypeUserName
 //---------------------------------------------------------
 
@@ -543,7 +532,6 @@ QVariant Articulation::getProperty(P_ID propertyId) const
 
 bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       {
-      score()->addRefresh(canvasBoundingRect());
       switch (propertyId) {
             case P_ID::DIRECTION:
                   setDirection(v.value<Direction>());
@@ -565,16 +553,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-
-      // layout:
-      if (chordRest())
-            chordRest()->layoutArticulations();
-      else if (parent() && parent()->isBarLine())
-            toBarLine(parent())->layout();
-
-      score()->addRefresh(canvasBoundingRect());
-      score()->setLayoutAll();            // DEBUG
-      canvasBoundingRectChanged();        // rebuild bsp tree
+      triggerLayout();
       return true;
       }
 

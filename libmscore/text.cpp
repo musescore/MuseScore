@@ -2331,7 +2331,7 @@ bool Text::readProperties(XmlReader& e)
 void Text::styleChanged()
       {
       setTextStyle(score()->textStyle(_styleIndex));
-      score()->setLayoutAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -2498,7 +2498,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return rv;
       }
 
@@ -2618,7 +2618,7 @@ void Text::paste()
       score()->setUpdateAll();
       if (type() == Element::Type::INSTRUMENT_NAME)
             score()->setLayoutAll();
-      score()->update();
+      triggerLayout();
       }
 
 //---------------------------------------------------------

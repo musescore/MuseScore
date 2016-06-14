@@ -1241,9 +1241,15 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
 bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::SMALL:      setSmall(v.toBool()); break;
-            case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
-            case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
+            case P_ID::SMALL:
+                  setSmall(v.toBool());
+                  break;
+            case P_ID::BEAM_MODE:
+                  setBeamMode(Beam::Mode(v.toInt()));
+                  break;
+            case P_ID::STAFF_MOVE:
+                  setStaffMove(v.toInt());
+                  break;
             case P_ID::VISIBLE:
                   setVisible(v.toBool());
                   measure()->checkMultiVoices(staffIdx());
@@ -1254,7 +1260,7 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return DurationElement::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
@@ -1265,12 +1271,16 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SMALL:      return false;
-            case P_ID::BEAM_MODE:  return int(Beam::Mode::AUTO);
-            case P_ID::STAFF_MOVE: return 0;
-            default:          return DurationElement::propertyDefault(propertyId);
+            case P_ID::SMALL:
+                  return false;
+            case P_ID::BEAM_MODE:
+                  return int(Beam::Mode::AUTO);
+            case P_ID::STAFF_MOVE:
+                  return 0;
+            default:
+                  return DurationElement::propertyDefault(propertyId);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1279,7 +1289,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
 
 bool ChordRest::isGrace() const
       {
-      return type() == Element::Type::CHORD && ((Chord*)this)->noteType() != NoteType::NORMAL;
+      return isChord() && toChord(this)->noteType() != NoteType::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -1288,11 +1298,10 @@ bool ChordRest::isGrace() const
 
 bool ChordRest::isGraceBefore() const
       {
-      return (type() == Element::Type::CHORD && (((Chord*)this)->noteType() == NoteType::ACCIACCATURA
-                                          || ((Chord*)this)->noteType() == NoteType::APPOGGIATURA
-                                          || ((Chord*)this)->noteType() == NoteType::GRACE4
-                                          || ((Chord*)this)->noteType() == NoteType::GRACE16
-                                          || ((Chord*)this)->noteType() == NoteType::GRACE32));
+      return isChord()
+         && (toChord(this)->noteType() & (
+           NoteType::ACCIACCATURA | NoteType::APPOGGIATURA | NoteType::GRACE4 | NoteType::GRACE16 | NoteType::GRACE32
+           ));
       }
 
 //---------------------------------------------------------
@@ -1301,9 +1310,8 @@ bool ChordRest::isGraceBefore() const
 
 bool ChordRest::isGraceAfter() const
       {
-      return (type() == Element::Type::CHORD && (((Chord*)this)->noteType() == NoteType::GRACE8_AFTER
-                                          || ((Chord*)this)->noteType() == NoteType::GRACE16_AFTER
-                                          || ((Chord*)this)->noteType() == NoteType::GRACE32_AFTER));
+      return isChord()
+         && (toChord(this)->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER));
       }
 
 //---------------------------------------------------------

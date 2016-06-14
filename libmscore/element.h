@@ -84,6 +84,14 @@ class Text;
 class Hairpin;
 class HairpinSegment;
 class Bend;
+class RepeatMeasure;
+class Tuplet;
+class NoteDot;
+class Dynamic;
+class InstrumentName;
+class DurationElement;
+class Accidental;
+class TextLine;
 
 enum class SymId;
 
@@ -620,6 +628,8 @@ class Element : public QObject, public ScoreElement {
             return QString();                          // and passed only to the screen-reader
             }
 
+      virtual void triggerLayout() const;
+
       //---------------------------------------------------
       // check type
       //
@@ -685,6 +695,13 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
       CONVERT(Bend,          BEND)
+      CONVERT(RepeatMeasure, REPEAT_MEASURE)
+      CONVERT(Tuplet,        TUPLET)
+      CONVERT(NoteDot,       NOTEDOT)
+      CONVERT(Dynamic,       DYNAMIC)
+      CONVERT(InstrumentName, INSTRUMENT_NAME)
+      CONVERT(Accidental,    ACCIDENTAL)
+      CONVERT(TextLine,     TEXTLINE)
 #undef CONVERT
       };
 
@@ -705,6 +722,11 @@ static inline const ChordRest* toChordRest(const Element* e) {
       Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
          || e->type() == Element::Type::REPEAT_MEASURE);
       return (const ChordRest*)e;
+      }
+static inline const DurationElement* toDurationElement(const Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::REPEAT_MEASURE || e->type() == Element::Type::TUPLET);
+      return (const DurationElement*)e;
       }
 
 #define CONVERT(a,b) \
@@ -756,6 +778,13 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
       CONVERT(Bend,          BEND)
+      CONVERT(RepeatMeasure, REPEAT_MEASURE)
+      CONVERT(Tuplet,        TUPLET)
+      CONVERT(NoteDot,       NOTEDOT)
+      CONVERT(Dynamic,       DYNAMIC)
+      CONVERT(InstrumentName, INSTRUMENT_NAME)
+      CONVERT(Accidental,    ACCIDENTAL)
+      CONVERT(TextLine,     TEXTLINE)
 #undef CONVERT
 
 //---------------------------------------------------------
