@@ -72,6 +72,7 @@ class System;
 class Lyrics;
 class Stem;
 class SlurSegment;
+class OttavaSegment;
 class Beam;
 class Hook;
 class StemSlash;
@@ -704,6 +705,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Accidental,    ACCIDENTAL)
       CONVERT(TextLine,      TEXTLINE)
       CONVERT(Pedal,         PEDAL)
+      CONVERT(OttavaSegment, OTTAVA_SEGMENT)
 #undef CONVERT
       };
 
@@ -788,6 +790,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Accidental,    ACCIDENTAL)
       CONVERT(TextLine,     TEXTLINE)
       CONVERT(Pedal,         PEDAL)
+      CONVERT(OttavaSegment, OTTAVA_SEGMENT)
 #undef CONVERT
 
 //---------------------------------------------------------

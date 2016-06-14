@@ -1691,10 +1691,11 @@ void Score::cmdFlip()
                   Note* note = toNote(e->parent());
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(note, P_ID::DOT_POSITION, d);
-                  // undo(new FlipNoteDotDirection(toNote(e->parent())));
                   }
-            else if (e->isTempoText() || e->isDynamic() || e->isHairpin()) {
-                  Element::Placement p = e->placement() == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;
+            else if (e->isTempoText() || e->isDynamic() || e->isHairpin() || e->isOttavaSegment()) {
+                  // getProperty() delegates call from spannerSegment to Spanner
+                  Element::Placement p = Element::Placement(e->getProperty(P_ID::PLACEMENT).toInt());
+                  p = p == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;
                   undoChangeProperty(e, P_ID::PLACEMENT, int(p));
                   }
             }
