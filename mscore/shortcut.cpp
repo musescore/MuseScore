@@ -2558,13 +2558,13 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "split-measure",
-         QT_TRANSLATE_NOOP("action","Split Measure Before Selected Note"),
-         QT_TRANSLATE_NOOP("action","Split measure before selected note")
+         QT_TRANSLATE_NOOP("action","Split Measure Before Selected Note/Rest"),
+         QT_TRANSLATE_NOOP("action","Split measure before selected note/rest")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
-         "join-measure",
+         "join-measures",
          QT_TRANSLATE_NOOP("action","Join Selected Measures"),
          QT_TRANSLATE_NOOP("action","Join selected measures")
          },
