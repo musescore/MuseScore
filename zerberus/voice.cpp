@@ -44,8 +44,8 @@ void Envelope::setTime(float ms, int sampleRate)
 //---------------------------------------------------------
 
 Voice::Voice(Zerberus* z)
-   : _zerberus(z), attackEnv(Envelope::egLin), stopEnv(Envelope::egPow)
       {
+      _zerberus = z;
       }
 
 //---------------------------------------------------------
@@ -55,7 +55,10 @@ Voice::Voice(Zerberus* z)
 void Voice::stop(float time)
       {
       _state = VoiceState::STOP;
-      stopEnv.setTime(time, _zerberus->sampleRate());
+      envelopes[V1Envelopes::RELEASE].setTime(time, _zerberus->sampleRate());
+      envelopes[currentEnvelope].step();
+      envelopes[V1Envelopes::RELEASE].max = envelopes[currentEnvelope].val;
+      currentEnvelope = V1Envelopes::RELEASE;
       }
 
 //---------------------------------------------------------
@@ -137,8 +140,34 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       modenv_val = 0.0;
       modlfo_val = 0.0;
 
-      attackEnv.setTime(1, _zerberus->sampleRate());        // 1 ms attack
-      stopEnv.setTime(z->ampegRelease, _zerberus->sampleRate());
+      currentEnvelope = V1Envelopes::DELAY;
+
+      envelopes[V1Envelopes::DELAY].setTable(Envelope::egLin);
+      envelopes[V1Envelopes::DELAY].setTime(z->ampegDelay, _zerberus->sampleRate());
+      envelopes[V1Envelopes::DELAY].setConstant(0.0);
+
+      envelopes[V1Envelopes::ATTACK].setTable(Envelope::egLin);
+      envelopes[V1Envelopes::ATTACK].setVariable();
+      envelopes[V1Envelopes::ATTACK].setTime(z->ampegAttack, _zerberus->sampleRate());
+      envelopes[V1Envelopes::ATTACK].offset = z->ampegStart;
+
+      envelopes[V1Envelopes::HOLD].setTable(Envelope::egLin);
+      envelopes[V1Envelopes::HOLD].setTime(z->ampegHold, _zerberus->sampleRate());
+      envelopes[V1Envelopes::HOLD].setConstant(1.0);
+
+      envelopes[V1Envelopes::DECAY].setTable(Envelope::egPow);
+      envelopes[V1Envelopes::DECAY].setVariable();
+      envelopes[V1Envelopes::DECAY].setTime(z->ampegDecay, _zerberus->sampleRate());
+      envelopes[V1Envelopes::DECAY].offset = z->ampegSustain;
+
+      envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
+      envelopes[V1Envelopes::SUSTAIN].setTime(std::numeric_limits<float>::infinity(), _zerberus->sampleRate());
+      envelopes[V1Envelopes::SUSTAIN].setConstant(z->ampegSustain);
+
+      envelopes[V1Envelopes::RELEASE].setTable(Envelope::egPow);
+      envelopes[V1Envelopes::RELEASE].setVariable();
+      envelopes[V1Envelopes::RELEASE].setTime(z->ampegRelease, _zerberus->sampleRate());
+      envelopes[V1Envelopes::RELEASE].max = z->ampegSustain;
 
       _looping = false;
       }
@@ -214,6 +243,24 @@ void Voice::updateFilter(float _fres)
       }
 
 //---------------------------------------------------------
+//   updateEnvelopes
+//---------------------------------------------------------
+
+void Voice::updateEnvelopes() {
+      if (_state == VoiceState::ATTACK) {
+            while (envelopes[currentEnvelope].step() && currentEnvelope != V1Envelopes::SUSTAIN)
+                  currentEnvelope++;
+            if (currentEnvelope == V1Envelopes::SUSTAIN)
+                  _state = VoiceState::PLAYING;
+            }
+      else if (_state == VoiceState::STOP) {
+            if (envelopes[V1Envelopes::RELEASE].step()) {
+                  off();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   process
 //---------------------------------------------------------
 
@@ -268,13 +315,11 @@ void Voice::process(int frames, float* p)
                         b1  += b1_incr;
                         }
 
-                  if (_state == VoiceState::STOP) {
-                        if (stopEnv.step()) {
-                              off();
-                              break;
-                              }
-                        v *= stopEnv.val;
-                        }
+                  updateEnvelopes();
+                  if (_state == VoiceState::OFF)
+                        break;
+                  v *= envelopes[currentEnvelope].val;
+
                   *p++  += v * _channel->panLeftGain();
                   *p++  += v * _channel->panRightGain();
                   phase += phaseIncr;
@@ -310,22 +355,12 @@ void Voice::process(int frames, float* p)
                       + coeffs[3] * getData(idx+5))
                       * gain * _channel->panRightGain();
 
-                  if (_state == VoiceState::ATTACK) {
-                        if (attackEnv.step())
-                              _state = VoiceState::PLAYING;
-                        else {
-                              f1 *= attackEnv.val;
-                              f2 *= attackEnv.val;
-                              }
-                        }
-                  else if (_state == VoiceState::STOP) {
-                        if (stopEnv.step()) {
-                              off();
-                              break;
-                              }
-                        f1 *= stopEnv.val;
-                        f2 *= stopEnv.val;
-                        }
+                  updateEnvelopes();
+                  if (_state == VoiceState::OFF)
+                        break;
+
+                  f1 *= envelopes[currentEnvelope].val;
+                  f2 *= envelopes[currentEnvelope].val;
 
                   f1      += -a1 * hist1l - a2 * hist2l;
                   float vl = b02 * (f1 + hist2l) + b1 * hist1l;

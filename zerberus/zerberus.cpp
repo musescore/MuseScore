@@ -136,7 +136,8 @@ void Zerberus::processNoteOff(Channel* cp, int key)
                && (v->loopMode() != LoopMode::ONE_SHOT)
                ) {
                   if (cp->sustain() < 0x40) {
-                        v->stop();
+                        if (!v->isStopped())
+                              v->stop();
                         trigger(cp, key, v->velocity(), Trigger::RELEASE);
                         }
                   else {

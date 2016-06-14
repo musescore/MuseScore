@@ -36,20 +36,26 @@ struct Envelope {
       static float egLin[EG_SIZE];
 
       int steps, count;
+      bool constant = false;
+      float offset = 0.0;
+      float max = 1.0;
       float val;
       float* table;
 
-      Envelope(float* f) { table = f; }
+      void setTable(float* f) { table = f; }
       bool step() {
             if (count) {
                   --count;
-                  val = table[EG_SIZE * count/steps];
+                  if (!constant)
+                        val = table[EG_SIZE * count/steps]*(max-offset)+offset;
                   return false;
                   }
             else
                   return true;
             }
       void setTime(float ms, int sampleRate);
+      void setConstant(float v) { constant = true; val = v; }
+      void setVariable()        { constant = false; }
       };
 
 //-----------------------------------------------------------------------------
@@ -87,6 +93,16 @@ enum class VoiceState : char {
       PLAYING,
       SUSTAINED,
       STOP
+      };
+
+enum V1Envelopes : int {
+      DELAY,
+      ATTACK,
+      HOLD,
+      DECAY,
+      SUSTAIN,
+      RELEASE,
+      COUNT
       };
 
 //---------------------------------------------------------
@@ -146,8 +162,8 @@ class Voice {
       float modenv_val;
       float modlfo_val;
 
-      Envelope attackEnv;
-      Envelope stopEnv;
+      int currentEnvelope;
+      Envelope envelopes[V1Envelopes::COUNT];
       static float interpCoeff[INTERP_MAX][4];
 
       void updateFilter(float fres);
@@ -158,6 +174,7 @@ class Voice {
       void setNext(Voice* v)      { _next = v; }
 
       void start(Channel* channel, int key, int velo, const Zone*);
+      void updateEnvelopes();
       void process(int frames, float*);
       void updateLoop();
       short getData(int pos);
@@ -170,7 +187,7 @@ class Voice {
       bool isSustained() const    { return _state == VoiceState::SUSTAINED; }
       bool isOff() const          { return _state == VoiceState::OFF; }
       bool isStopped() const      { return _state == VoiceState::STOP; }
-      void stop()                 { _state = VoiceState::STOP;      }
+      void stop()                 { envelopes[currentEnvelope].step(); envelopes[V1Envelopes::RELEASE].max = envelopes[currentEnvelope].val; currentEnvelope = V1Envelopes::RELEASE; _state = VoiceState::STOP;      }
       void stop(float time);
       void sustained()            { _state = VoiceState::SUSTAINED; }
       void off()                  { _state = VoiceState::OFF;       }

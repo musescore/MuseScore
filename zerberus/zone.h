@@ -60,8 +60,14 @@ struct Zone {
       float volume = 1.0;
       float lVol   = .5;
       float rVol   = .5;
-      float ampVeltrack = 100;      // amplifier velocity tracking
-      float ampegRelease = 200;     // release time in ms
+      float ampVeltrack  = 100;      // amplifier velocity tracking
+      float ampegDelay   = 0.0;
+      float ampegStart   = 0.0;
+      float ampegAttack  = 1.0;
+      float ampegHold    = 0.0;
+      float ampegDecay   = 0.0;
+      float ampegSustain = 1.0;
+      float ampegRelease = 200.0;     // release time in ms
       float rtDecay = 0.0;
 
       Trigger trigger = Trigger::ATTACK;

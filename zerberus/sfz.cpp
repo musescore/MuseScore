@@ -31,6 +31,15 @@
 struct SfzRegion {
       QString path;
       double amp_veltrack;
+      // amp envelope all in seconds
+      // but the level ones
+      // they are in percent
+      double ampeg_delay;
+      double ampeg_start; // level
+      double ampeg_attack;
+      double ampeg_hold;
+      double ampeg_decay;
+      double ampeg_sustain; // level
       double ampeg_release;
       double rt_decay;
       QString sample;
@@ -69,7 +78,13 @@ void SfzRegion::init(const QString& _path)
       lochan          = 1;
       hichan          = 16;
       amp_veltrack    = 100;
-      ampeg_release   = 0.0;  // in sec
+      ampeg_delay     = 0.0;
+      ampeg_start     = 0.0; //percent
+      ampeg_attack    = 0.001;
+      ampeg_hold      = 0.0;
+      ampeg_decay     = 0.0;
+      ampeg_sustain   = 100.0; // percent
+      ampeg_release   = 0.200;  // in sec
       rt_decay        = 0.0;  // dB /sec
       lokey           = 0;
       hikey           = 127;
@@ -116,6 +131,12 @@ void SfzRegion::setZone(Zone* z) const
       z->offset       = 0;
       z->volume       = pow(10.0, volume / 20.0);
       z->ampVeltrack  = amp_veltrack;
+      z->ampegAttack  = ampeg_attack * 1000;
+      z->ampegDelay   = ampeg_delay * 1000;
+      z->ampegStart   = ampeg_start / 100.0;
+      z->ampegHold    = ampeg_hold * 1000;
+      z->ampegDecay   = ampeg_decay * 1000;
+      z->ampegSustain = ampeg_sustain / 100.0;
       z->ampegRelease = ampeg_release * 1000;
       z->seqPos       = seq_position - 1;
       z->seqLen       = seq_length - 1;
@@ -241,6 +262,18 @@ void SfzRegion::readOp(const QString& b, const QString& data)
 
       if (b == "amp_veltrack")
             readDouble(data, &amp_veltrack);
+      else if (b == "ampeg_delay")
+            readDouble(data, &ampeg_delay);
+      else if (b == "ampeg_start")
+            readDouble(data, &ampeg_start);
+      else if (b == "ampeg_attack")
+            readDouble(data, &ampeg_attack);
+      else if (b == "ampeg_hold")
+            readDouble(data, &ampeg_hold);
+      else if (b == "ampeg_decay")
+            readDouble(data, &ampeg_decay);
+      else if (b == "ampeg_sustain")
+            readDouble(data, &ampeg_sustain);
       else if (b == "ampeg_release")
             readDouble(data, &ampeg_release);
       else if (b == "sample") {
