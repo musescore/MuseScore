@@ -642,13 +642,15 @@ bool Element::intersects(const QRectF& rr) const
 
 void Element::writeProperties(Xml& xml) const
       {
-      //copy paste should not keep links
+      // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
       if (!_autoplace && !userOff().isNull()) {
             if (type() == Element::Type::VOLTA_SEGMENT
                 || type() == Element::Type::GLISSANDO_SEGMENT
                 || isChordRest()
+                || isRehearsalMark()
+                || isDynamic()
                 || type() == Element::Type::SYSTEM_DIVIDER
                 || (xml.clipboardmode && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
