@@ -2872,7 +2872,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             else if (isMaster() && segment.isChordRestType()) {
                   for (Element* e : segment.annotations()) {
-                        if (!(e->isTempoText() || e->isRehearsalMark() || e->isStaffText()))
+                        if (!(e->isTempoText() || e->isDynamic() || e->isRehearsalMark() || e->isStaffText()))
                               e->layout();
                         }
                   qreal stretch = 0.0;
@@ -3300,9 +3300,8 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (e->visible())
                                     s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
-                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
+                        else if (e->visible() && (e->isRehearsalMark() || e->isDynamic() || e->isStaffText())) {
                               e->layout();
-                              // s->staffShape(e->staffIdx()).add(e->shape().translated(s->pos()));
                               s->staffShape(e->staffIdx()).add(e->shape());
                               }
                         }

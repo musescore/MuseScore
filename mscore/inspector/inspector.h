@@ -321,7 +321,7 @@ class InspectorTempoText : public InspectorBase {
 //   InspectorDynamic
 //---------------------------------------------------------
 
-class InspectorDynamic : public InspectorBase {
+class InspectorDynamic : public InspectorElementBase {
       Q_OBJECT
 
       UiInspectorElement e;

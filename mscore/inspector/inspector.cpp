@@ -889,22 +889,17 @@ void InspectorTempoText::postInit()
 //---------------------------------------------------------
 
 InspectorDynamic::InspectorDynamic(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       t.setupUi(addWidget());
       d.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,              0, 0, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,            0, 0, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,           0, 0, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,           1, 0, e.offsetY,  e.resetY        },
+      std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
             { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange, d.resetDynRange },
             { P_ID::VELOCITY,           0, 0, d.velocity, d.resetVelocity }
             };
-      mapSignals();
+      mapSignals(il);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
@@ -926,7 +921,7 @@ void InspectorDynamic::setElement()
                   t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
             }
       t.style->blockSignals(false);
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       }
 
 //---------------------------------------------------------
