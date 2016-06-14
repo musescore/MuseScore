@@ -2875,6 +2875,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::REHEARSAL_MARK);
       else if (cmd == "instrument-change-text")
             cmdAddText(TEXT::INSTRUMENT_CHANGE);
+      else if (cmd == "text-annotation")
+            cmdAddAnnotation();
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5441,6 +5443,40 @@ void ScoreView::cmdAddChordName()
       _score->setLayoutAll();
       _score->update();
       }
+
+//---------------------------------------------------------
+//   cmdAddAnnotation
+//---------------------------------------------------------
+
+void ScoreView::cmdAddAnnotation()
+      {
+      if (!_score->checkHasMeasures())
+            return;
+      if (noteEntryMode())          // force out of entry mode
+            sm->postEvent(new CommandEvent("note-input"));
+
+      Text* s = 0;
+      _score->startCmd();
+      ChordRest* cr = _score->getSelectedChordRest();
+      if (!cr)
+            return;
+      s = new StaffText(_score);
+      s->setTrack(cr->track());
+      s->setTextStyleType(TextStyleType::ANNOTATION);
+      s->setParent(cr->segment());
+      if (s) {
+            _score->undoAddElement(s);
+            _score->select(s, SelectType::SINGLE, 0);
+            _score->endCmd();
+            startEdit(s);
+            }
+      else
+            _score->endCmd();
+
+      }
+
+
+
 
 //---------------------------------------------------------
 //   cmdAddText

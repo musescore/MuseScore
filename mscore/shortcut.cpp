@@ -1805,6 +1805,13 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "text-annotation",
+         QT_TRANSLATE_NOOP("action","Text Annotation"),
+         QT_TRANSLATE_NOOP("action","Add text annotation")
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "frame-text",
          QT_TRANSLATE_NOOP("action","Text"),

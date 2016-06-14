@@ -359,6 +359,7 @@ MS_QML_ENUM(TextStyleType, signed char,\
       INSTRUMENT_EXCERPT,\
       DYNAMICS,\
       TECHNIQUE,\
+      ANNOTATION,\
       TEMPO,\
       METRONOME,\
       MEASURE_NUMBER,\
