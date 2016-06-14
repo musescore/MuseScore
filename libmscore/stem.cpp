@@ -302,7 +302,6 @@ Element* Stem::drop(const DropData& data)
       switch(e->type()) {
             case Element::Type::TREMOLO:
                   e->setParent(ch);
-                  score()->setLayoutAll();
                   score()->undoAddElement(e);
                   return e;
             default:
@@ -331,15 +330,14 @@ QVariant Stem::getProperty(P_ID propertyId) const
 
 bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       {
-      score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
-            case P_ID::USER_LEN:  setUserLen(v.toDouble()); break;
+      switch (propertyId) {
+            case P_ID::USER_LEN:
+                  setUserLen(v.toDouble());
+                  break;
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->addRefresh(canvasBoundingRect());
-      layout();
-      score()->addRefresh(canvasBoundingRect());
+      triggerLayout();
       return true;
       }
 

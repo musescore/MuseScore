@@ -484,8 +484,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      layout();
-      score()->setLayoutAll();  // spacing changes
+      triggerLayout();
       return true;
       }
 

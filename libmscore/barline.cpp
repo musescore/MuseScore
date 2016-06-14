@@ -1166,7 +1166,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
                   return Element::setProperty(id, v);
             }
       setGenerated(false);
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 

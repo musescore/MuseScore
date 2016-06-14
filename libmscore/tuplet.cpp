@@ -939,9 +939,11 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             default:
                   return DurationElement::setProperty(propertyId, v);
-                  break;
             }
-      score()->setLayoutAll();
+      if (!_elements.empty()) {
+            _elements.front()->triggerLayout();
+            _elements.back()->triggerLayout();
+            }
       return true;
       }
 

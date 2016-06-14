@@ -125,7 +125,6 @@ class Articulation : public Element {
       Measure* measure() const;
       System* system() const;
       Page* page() const;
-      void canvasBoundingRectChanged();
 
       static ArticulationInfo articulationList[];
 

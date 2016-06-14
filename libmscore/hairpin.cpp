@@ -165,7 +165,7 @@ void HairpinSegment::editDrag(const EditData& ed)
             if (newHeight < 0.5)
                   newHeight = 0.5;
             hairpin()->setHairpinHeight(Spatium(newHeight));
-            score()->setLayoutAll();
+            triggerLayout();
             }
       LineSegment::editDrag(ed);
       }
@@ -511,7 +511,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
             default:
                   return TextLine::setProperty(id, v);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
@@ -578,9 +578,8 @@ void Hairpin::resetProperty(P_ID id)
             default:
                   return TextLine::resetProperty(id);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       }
-
 
 //---------------------------------------------------------
 //   setYoff

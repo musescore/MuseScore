@@ -302,7 +302,6 @@ QVariant Volta::getProperty(P_ID propertyId) const
 
 bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       {
-      score()->addRefresh(pageBoundingRect());
       switch (propertyId) {
             case P_ID::VOLTA_TYPE:
                   setVoltaType(Type(val.toInt()));
@@ -323,9 +322,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      // layout();
-      // score()->addRefresh(pageBoundingRect());
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
@@ -335,7 +332,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
 
 QVariant Volta::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_STYLE:
                   return score()->styleI(StyleIdx::voltaLineStyle);
 

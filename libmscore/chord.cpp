@@ -2632,19 +2632,17 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
       switch (propertyId) {
             case P_ID::NO_STEM:
                   setNoStem(v.toBool());
-                  score()->setLayoutAll();
                   break;
             case P_ID::SMALL:
                   setSmall(v.toBool());
-                  score()->setLayoutAll();
                   break;
             case P_ID::STEM_DIRECTION:
                   setStemDirection(v.value<Direction>());
-                  score()->setLayoutAll();
                   break;
             default:
                   return ChordRest::setProperty(propertyId, v);
             }
+      triggerLayout();
       return true;
       }
 

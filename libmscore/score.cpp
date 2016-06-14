@@ -1144,20 +1144,18 @@ Measure* Score::getCreateMeasure(int tick)
 void Score::addElement(Element* element)
       {
       Element* parent = element->parent();
+      element->triggerLayout();
 
 //      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
 
       Element::Type et = element->type();
-      if (et == Element::Type::TREMOLO)
-            setLayoutAll();
-      else if (et == Element::Type::MEASURE
+      if (et == Element::Type::MEASURE
          || (et == Element::Type::HBOX && element->parent()->type() != Element::Type::VBOX)
          || et == Element::Type::VBOX
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
          ) {
-            setLayoutAll();
             measures()->add(static_cast<MeasureBase*>(element));
             return;
             }
@@ -1274,6 +1272,7 @@ void Score::addElement(Element* element)
 void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
+      setLayout(element->tick());
 
 //      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
@@ -1282,17 +1281,14 @@ void Score::removeElement(Element* element)
       // their parent is not static
 
       Element::Type et = element->type();
-      if (et == Element::Type::TREMOLO)
-            setLayoutAll();
 
-      else if (et == Element::Type::MEASURE
+      if (et == Element::Type::MEASURE
          || (et == Element::Type::HBOX && !parent->isVBox())
          || et == Element::Type::VBOX
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
             ) {
             measures()->remove(static_cast<MeasureBase*>(element));
-            setLayoutAll();
             return;
             }
 
@@ -1397,7 +1393,6 @@ void Score::removeElement(Element* element)
             default:
                   break;
             }
-      setLayout(element->tick());
       }
 
 //---------------------------------------------------------
@@ -3965,8 +3960,6 @@ void Score::cropPage(qreal margins)
 QVariant Score::getProperty(P_ID id) const
       {
       switch (id) {
-//            case P_ID::LAYOUT_MODE:
-//                  return QVariant(static_cast<int>(_layoutMode));
             default:
                   qDebug("Score::getProperty: unhandled id");
                   return QVariant();
@@ -3980,9 +3973,6 @@ QVariant Score::getProperty(P_ID id) const
 bool Score::setProperty(P_ID id, const QVariant& /*v*/)
       {
       switch (id) {
-//            case P_ID::LAYOUT_MODE:
-//                  setLayoutMode(LayoutMode(v.toInt()));
-                  break;
             default:
                   qDebug("Score::setProperty: unhandled id");
                   break;
@@ -3998,8 +3988,6 @@ bool Score::setProperty(P_ID id, const QVariant& /*v*/)
 QVariant Score::propertyDefault(P_ID id) const
       {
       switch (id) {
-//            case P_ID::LAYOUT_MODE:
-//                  return static_cast<int>(LayoutMode::PAGE);
             default:
                   return QVariant();
             }

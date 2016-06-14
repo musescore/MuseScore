@@ -272,7 +272,7 @@ QVariant TempoText::getProperty(P_ID propertyId) const
 
 bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TEMPO:
                   setTempo(v.toDouble());
                   score()->setTempo(segment(), _tempo);
@@ -286,7 +286,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 

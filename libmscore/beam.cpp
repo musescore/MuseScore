@@ -2229,8 +2229,19 @@ void Beam::endEdit()
       {
       Element::endEdit();
       editFragment = -1;
-      // we need a full relayout to trigger stems to be redrawn
-      score()->setLayoutAll();
+      triggerLayout();
+      }
+
+//---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Beam::triggerLayout() const
+      {
+      if (!_elements.empty()) {
+            _elements.front()->triggerLayout();
+            _elements.back()->triggerLayout();
+            }
       }
 
 //---------------------------------------------------------
