@@ -15,10 +15,10 @@
 #
 if (NOT MINGW AND NOT APPLE)
   if (PULSEAUDIO_LIBRARIES AND PULSEAUDIO_INCLUDE_DIRS)
-    # in cache already
+    # In cache already
     set(PULSEAUDIO_FOUND TRUE)
   else (PULSEAUDIO_LIBRARIES AND PULSEAUDIO_INCLUDE_DIRS)
-    # use pkg-config to get the directories and then use these values
+    # Use 'pkg-config' to get the directories and then use these values
     # in the FIND_PATH() and FIND_LIBRARY() calls
     if (CMAKE_TOOLCHAIN_FILE)
       include (UsePkgConfig)
@@ -99,7 +99,7 @@ if (NOT MINGW AND NOT APPLE)
       endif (PULSEAUDIO_FIND_REQUIRED)
     endif (PULSEAUDIO_FOUND)
 
-    # show the PULSEAUDIO_INCLUDE_DIRS and PULSEAUDIO_LIBRARIES variables only in the advanced view
+    # Show the PULSEAUDIO_INCLUDE_DIRS and PULSEAUDIO_LIBRARIES variables only in the advanced view
     mark_as_advanced(PULSEAUDIO_INCLUDE_DIRS PULSEAUDIO_LIBRARIES)
 
   endif (PULSEAUDIO_LIBRARIES AND PULSEAUDIO_INCLUDE_DIRS)

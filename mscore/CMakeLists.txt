@@ -2,7 +2,7 @@
 #  MuseScore
 #  Linux Music Score Editor
 #
-#  Copyright (C) 2002-2013 by Werner Schweer and others
+#  Copyright (C) 2002-2016 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -175,14 +175,14 @@ if (USE_JACK)
 endif (USE_JACK)
 
 if (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
-      # include some cmake support file
+      # Include some cmake support file
       INCLUDE (Platform/GNU)
       set ( USE_ALSA 0 )
       set ( USE_PORTMIDI 0 )
 endif (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
 
 if (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
-      # include some cmake support file
+      # Include some cmake support file
       INCLUDE (Platform/kFreeBSD)
       set ( USE_ALSA 0 )
       set ( USE_PORTMIDI 0 )
@@ -318,9 +318,9 @@ elseif (MSCORE_INSTALL_SUFFIX)
       set(MSCORE_OUTPUT_NAME "${ExecutableName}${MSCORE_INSTALL_SUFFIX}")
 endif (MINGW)
 
-#if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
-#called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
-#both installed in the same prefix on a Linux system.
+# If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
+# called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
+# both installed in the same prefix on a Linux system.
 if (MSCORE_OUTPUT_NAME)
   set_target_properties(
       ${ExecutableName}
@@ -347,10 +347,10 @@ if (APPLE)
       set_target_properties (mscore
           PROPERTIES
           MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
-      #enable dSym generation
+      # Enable dSym generation
       #set_target_properties (mscore
-      #   PROPERTIES
-      #      XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
+      #    PROPERTIES
+      #       XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
 endif(APPLE)
 
 if (OSC)
@@ -369,7 +369,7 @@ if (MINGW)
       ${PROJECT_BINARY_DIR}/resfile.o
       PROPERTIES generated true
       )
-   # Windows: add -mconsole to LINK_FLAGS to get a console window for debug output
+   # Windows: Add -mconsole to LINK_FLAGS to get a console window for debug output
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
         PROPERTIES
@@ -509,7 +509,7 @@ else (MINGW)
        target_link_libraries(mscore rt)
    endif (APPLE)
 
-   # gold does not use indirect shared libraries for symbol resolution, Linux only
+   # 'gold' does not use indirect shared libraries for symbol resolution, Linux only
    if (NOT APPLE)
       if(USE_JACK)
          target_link_libraries(mscore dl)
@@ -528,7 +528,7 @@ else (MINGW)
      install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
    else (APPLE)
      #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
-     # install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
+     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
      install( TARGETS mscore RUNTIME DESTINATION bin )
      if (LN_EXECUTABLE)
         add_custom_target(mscore_alias ALL
@@ -543,15 +543,15 @@ else (MINGW)
             VERBATIM
             )
      endif (LN_EXECUTABLE)
-     # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
+     # Install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
      if (MSCORE_UNSTABLE)
-         set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # square icons on development builds
+         set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # Square icons on development builds
      else (MSCORE_UNSTABLE)
-         set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # round icons on stable releases
+         set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # Round icons on stable releases
      endif (MSCORE_UNSTABLE)
      install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
      install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
-     # install MIME (filetype) icons for each mimetype on Linux
+     # Install MIME (filetype) icons for each mimetype on Linux
      install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
      install( FILES   ../assets/mscz-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
@@ -569,7 +569,7 @@ else (MINGW)
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
      install( FILES   ../assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
         DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
-     # Note: must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
+     # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
    endif (APPLE)
 endif (MINGW)
 
