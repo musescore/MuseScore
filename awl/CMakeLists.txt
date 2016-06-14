@@ -3,7 +3,7 @@
 #  Linux Music Editor
 #  $Id:$
 #
-#  Copyright (C) 2002-2006 by Werner Schweer and others
+#  Copyright (C) 2002-2016 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -72,7 +72,7 @@ add_library (
 ##  "-D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
 
 #
-# we cannot use our precompiled headers because of -fPIC
+# We cannot use our precompiled headers because of -fPIC
 #
 set_target_properties(awlplugin
       PROPERTIES
@@ -80,8 +80,8 @@ set_target_properties(awlplugin
          "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
       )
 
-# dont install awlplugin on default
-# install( TARGETS awlplugin DESTINATION ${designerPlugins}/plugins/designer/ )
+# Don't install awlplugin on default
+#install( TARGETS awlplugin DESTINATION ${designerPlugins}/plugins/designer/ )
 
 #add_executable(ltest ltest.cpp)
 #target_link_libraries (ltest awlplugin msynth al ${QT_LIBRARIES})

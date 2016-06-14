@@ -3,7 +3,7 @@
 #  Music Composition & Notation
 #  $Id:$
 #
-#  Copyright (C) 2011 Werner Schweer
+#  Copyright (C) 2016 Werner Schweer
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2
@@ -11,9 +11,9 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-# if (SCRIPT_INTERFACE)
+#if (SCRIPT_INTERFACE)
       set (LIB_SCRIPT_FILES plugins.cpp)
-# endif (SCRIPT_INTERFACE)
+#endif (SCRIPT_INTERFACE)
 
 add_custom_command(
    OUTPUT ${PROJECT_BINARY_DIR}/all.h
@@ -73,7 +73,7 @@ set_target_properties (
       libmscore
       PROPERTIES
          COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch"
-#         COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch -Woverloaded-virtual"
+         #COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch -Woverloaded-virtual"
       )
 
 xcode_pch(libmscore all)
