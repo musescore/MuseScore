@@ -842,11 +842,19 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
       // move to correct position
       // TODO: handle rx, ry
       qreal y = 0;
-      if (placement == "above") y += offsAbove;
-      if (placement == "below") y += offsBelow;
-      //qDebug("   y = %g", y);
-      y *= el->score()->spatium();
-      el->setUserOff(QPoint(0, y));
+      if (el->isDynamic()) {
+            el->setPlacement(placement == "above"
+               ? Element::Placement::ABOVE : Element::Placement::BELOW);
+            }
+      else {
+            if (placement == "above")
+                  y += offsAbove;
+            if (placement == "below")
+                  y += offsBelow;
+            //qDebug("   y = %g", y);
+            y *= el->score()->spatium();
+            el->setUserOff(QPoint(0, y));
+            }
       el->setTrack(track);
       Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);

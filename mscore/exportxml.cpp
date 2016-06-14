@@ -2909,8 +2909,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                   qDebug("directionTag()  center diff=%g", el->y() + el->height() / 2 - bb.y() - bb.height() / 2);
                    */
 
-                  if (el->type() == Element::Type::HAIRPIN || el->type() == Element::Type::OTTAVA
-                      || el->type() == Element::Type::PEDAL || el->type() == Element::Type::TEXTLINE) {
+                  if (el->isHairpin() || el->isOttava() || el->isPedal() || el->isTextLine()) {
                         // for the line type elements the reference point is vertically centered
                         // actual position info is in the segments
                         // compare the segment's canvas ypos with the staff's center height
@@ -2918,6 +2917,12 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                               tagname += " placement=\"above\"";
                         else
                               tagname += " placement=\"below\"";
+                        }
+                  else if (el->isDynamic()) {
+                        tagname += " placement=\"";
+                        tagname += el->placement() == Element::Placement::ABOVE
+                           ? "above" : "below";
+                        tagname += "\"";
                         }
                   else {
                         /*

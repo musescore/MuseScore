@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>125</height>
+    <width>316</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -144,6 +144,40 @@
        </property>
        <property name="text">
         <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QToolButton" name="resetPlacement">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Velocity' value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="placement">
+       <item>
+        <property name="text">
+         <string>Below</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Above</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Placement</string>
        </property>
       </widget>
      </item>
