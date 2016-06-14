@@ -41,15 +41,14 @@ const PaperSize paperSizes[] = {
       PaperSize("Letter (8.5 x 11 in)",                     8.5,        11),
       PaperSize("Legal (8.5 x 14 in)",                      8.5,        14),
       PaperSize("Tabloid (11 x 17 in)",                     11,         17),
-      PaperSize("B5 (176 x 250 mm)",                        MM(176),    MM(250)),
       PaperSize("Statement (5.5 x 8.5 in)",                 5.5,        8.25),
       PaperSize("Executive (7.25 x 10.5 in)",               7.25,       10.5),
       //: Do not translate "9 x 12 in"
       PaperSize(QT_TRANSLATE_NOOP("paperSizes","Concert Part (9 x 12 in)"),
                 9,          12),
       //: Do not translate "6.75 x 5.25 in"
-      PaperSize(QT_TRANSLATE_NOOP("paperSizes","Flip Folder (6.75 x 5.25 in)"),
-                6.75,       5.25),
+      PaperSize(QT_TRANSLATE_NOOP("paperSizes","Flip Folder (7 x 5.25 in)"),
+                7,          5.25),
       //: Do not translate "6.75 x 10.5 in"
       PaperSize(QT_TRANSLATE_NOOP("paperSizes","Choral Octavo (6.75 x 10.5 in)"),
                 6.75,       10.5),
@@ -71,6 +70,7 @@ const PaperSize paperSizes[] = {
       PaperSize("B2 (500 x 707 mm)",                        MM(500),    MM(707)),
       PaperSize("B3 (353 x 500 mm)",                        MM(353),    MM(500)),
       PaperSize("B4 (250 x 353 mm)",                        MM(250),    MM(353)),
+      PaperSize("B5 (176 x 250 mm)",                        MM(176),    MM(250)),
       PaperSize("B6 (125 x 176 mm)",                        MM(125),    MM(176)),
       PaperSize("B7 (88 x 125 mm)",                         MM(88),     MM(125)),
       PaperSize("B8 (62 x 88 mm)",                          MM(62),     MM(88)),
