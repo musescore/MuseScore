@@ -92,6 +92,7 @@ class InstrumentName;
 class DurationElement;
 class Accidental;
 class TextLine;
+class Pedal;
 
 enum class SymId;
 
@@ -701,7 +702,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Dynamic,       DYNAMIC)
       CONVERT(InstrumentName, INSTRUMENT_NAME)
       CONVERT(Accidental,    ACCIDENTAL)
-      CONVERT(TextLine,     TEXTLINE)
+      CONVERT(TextLine,      TEXTLINE)
+      CONVERT(Pedal,         PEDAL)
 #undef CONVERT
       };
 
@@ -785,6 +787,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(InstrumentName, INSTRUMENT_NAME)
       CONVERT(Accidental,    ACCIDENTAL)
       CONVERT(TextLine,     TEXTLINE)
+      CONVERT(Pedal,         PEDAL)
 #undef CONVERT
 
 //---------------------------------------------------------

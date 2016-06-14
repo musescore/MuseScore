@@ -75,45 +75,6 @@ static Dyn dynList[] = {
       {  0,   true,  "n",      "<sym>dynamicNiente</sym>" }
       };
 
-#if 0
-// variant with precomposed symbols, available only in bravura:
-static Dyn dynList[] = {
-      // dynamic:
-      {  -1,  true,  "other-dynamics", ""     },
-      {   1,  false, "pppppp", "<sym>dynamicPPPPPP</sym>" },
-      {   5,  false, "ppppp",  "<sym>dynamicPPPPP</sym>" },
-      {  10,  false, "pppp",   "<sym>dynamicPPPP</sym>" },
-      {  16,  false, "ppp",    "<sym>dynamicPPP</sym>" },
-      {  33,  false, "pp",     "<sym>dynamicPP</sym>" },
-      {  49,  false, "p",      "<sym>dynamicPiano</sym>" },
-      {  64,  false, "mp",     "<sym>dynamicMP</sym>" },
-      {  80,  false, "mf",     "<sym>dynamicMF</sym>" },
-      {  96,  false, "f",      "<sym>dynamicForte</sym>" },
-      { 112,  false, "ff",     "<sym>dynamicFF</sym>" },
-      { 126,  false, "fff",    "<sym>dynamicFFF</sym>" },
-      { 127,  false, "ffff",   "<sym>dynamicFFFF</sym>" },
-      { 127,  false, "fffff",  "<sym>dynamicFFFFF</sym>" },
-      { 127,  false, "ffffff", "<sym>dynamicFFFFFF</sym>" },
-
-      // accents:
-      {  0,   true,  "fp",     "<sym>dynamicFortePiano</sym>" },
-      {  0,   true,  "sf",     "<sym>dynamicSforzando1</sym>" },
-      {  0,   true,  "sfz",    "<sym>dynamicSforzato</sym>" },
-      {  0,   true,  "sff",    "<sym>dynamicSforzando</sym><sym>dynamicFF</sym>" },
-      {  0,   true,  "sffz",   "<sym>dynamicSforzatoFF</sym>" },
-      {  0,   true,  "sfp",    "<sym>dynamicSforzandoPiano</sym>" },
-      {  0,   true,  "sfpp",   "<sym>dynamicSforzandoPianissimo</sym>" },
-      {  0,   true,  "rfz",    "<sym>dynamicRinforzando2</sym>" },
-      {  0,   true,  "rf",     "<sym>dynamicRinforzando1</sym>" },
-      {  0,   true,  "fz",     "<sym>dynamicForzando</sym>" },
-      {  0,   true,  "m",      "<sym>dynamicMezzo</sym>" },
-      {  0,   true,  "r",      "<sym>dynamicRinforzando</sym>" },
-      {  0,   true,  "s",      "<sym>dynamicSforzando</sym>" },
-      {  0,   true,  "z",      "<sym>dynamicZ</sym>" },
-      {  0,   true,  "n",      "<sym>dynamicNiente</sym>" }
-      };
-#endif
-
 //---------------------------------------------------------
 //   Dynamic
 //---------------------------------------------------------
@@ -200,7 +161,10 @@ void Dynamic::layout()
       if (autoplace())
             setUserOff(QPointF());
 
-      setPos(textStyle().offset(spatium()));
+      QPointF p(textStyle().offset(spatium()));
+      if (placement() == Element::Placement::ABOVE)
+            p.ry() = staff()->height() - p.ry();
+      setPos(p);
       Text::layout1();
 
       Segment* s = segment();
@@ -224,9 +188,16 @@ void Dynamic::layout()
                   qreal minDistance = spatium();
                   Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
                   Shape s2 = shape().translated(s->pos());
-                  qreal d  = s1.minVerticalDistance(s2);
-                  if (d > -minDistance)
-                        setUserOff(QPointF(0.0, d + minDistance));
+                  if (placement() == Element::Placement::ABOVE) {
+                        qreal d  = s2.minVerticalDistance(s1);
+                        if (d > -minDistance)
+                              setUserOff(QPointF(0.0, -d - minDistance));
+                        }
+                  else {
+                        qreal d  = s1.minVerticalDistance(s2);
+                        if (d > -minDistance)
+                              setUserOff(QPointF(0.0, d + minDistance));
+                        }
                   }
             }
       }
@@ -374,10 +345,14 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::TEXT_STYLE_TYPE: return int(TextStyleType::DYNAMICS);
-            case P_ID::DYNAMIC_RANGE:   return int(Range::PART);
-            case P_ID::VELOCITY:        return -1;
-            default:                    return Text::propertyDefault(id);
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(TextStyleType::DYNAMICS);
+            case P_ID::DYNAMIC_RANGE:
+                  return int(Range::PART);
+            case P_ID::VELOCITY:
+                  return -1;
+            default:
+                  return Text::propertyDefault(id);
             }
       }
 

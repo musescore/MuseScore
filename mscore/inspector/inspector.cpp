@@ -895,10 +895,14 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       d.setupUi(addWidget());
 
       std::vector<InspectorItem> il = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
-            { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange, d.resetDynRange },
-            { P_ID::VELOCITY,           0, 0, d.velocity, d.resetVelocity }
+            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
+            { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange,  d.resetDynRange  },
+            { P_ID::VELOCITY,           0, 0, d.velocity,  d.resetVelocity  },
+            { P_ID::PLACEMENT,          0, 0, d.placement, d.resetPlacement }
             };
+      d.placement->clear();
+      d.placement->addItem(tr("Above"), 0);
+      d.placement->addItem(tr("Below"), 1);
       mapSignals(il);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
