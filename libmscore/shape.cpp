@@ -59,7 +59,7 @@ void Shape::draw(QPainter* p) const
 
 qreal Shape::minHorizontalDistance(const Shape& a) const
       {
-      qreal dist = 0.0;
+      qreal dist = -1000000.0;      // min real
       for (const QRectF& r2 : a) {
             qreal by1 = r2.top();
             qreal by2 = r2.bottom();
@@ -82,7 +82,7 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
 
 qreal Shape::minVerticalDistance(const Shape& a) const
       {
-      qreal dist = 0.0;
+      qreal dist = -1000000.0;      // min real
       for (const QRectF& r2 : a) {
             qreal bx1 = r2.left();
             qreal bx2 = r2.right();

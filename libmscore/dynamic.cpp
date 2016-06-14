@@ -37,49 +37,6 @@ struct Dyn {
       const char* text;  // utf8 text of dynamic
       };
 
-#if 0
-
-// variant with ligatures, using bravura-text
-
-static Dyn dynList[] = {
-      // dynamic:
-      {  -1,  true,  "other-dynamics", ""                              },
-      {   1,  false, "pppppp", "\ue520\ue520\ue520\ue520\ue520\ue520" },
-      {   5,  false, "ppppp",  "\ue520\ue520\ue520\ue520\ue520"       },
-      {  10,  false, "pppp",   "\ue520\ue520\ue520\ue520"             },
-      {  16,  false, "ppp",    "\ue520\ue520\ue520"                   },
-      {  33,  false, "pp",     "\ue520\ue520"                         },
-      {  49,  false, "p",      "\ue520"                               },
-      {  64,  false, "mp",     "\ue521\ue520"                         },
-      {  80,  false, "mf",     "\ue521\ue522"                         },
-      {  96,  false, "f",      "\ue522"                               },
-      { 112,  false, "ff",     "\ue522\ue522"                          },
-      { 126,  false, "fff",    "\ue522\ue522\ue522"                    },
-      { 127,  false, "ffff",   "\ue522\ue522\ue522\ue522"              },
-      { 127,  false, "fffff",  "\ue522\ue522\ue522\ue522\ue522"        },
-      { 127,  false, "ffffff", "\ue522\ue522\ue522\ue522\ue522\ue522"  },
-
-      // accents:
-      {  0,   true,  "fp",     "\ue522\ue520"                          },
-      {  0,   true,  "sf",     "\ue524\ue522"                          },
-      {  0,   true,  "sfz",    "\ue524\ue522\ue525"                    },
-      {  0,   true,  "sff",    "\ue524\ue522\ue522"                    },
-      {  0,   true,  "sffz",   "\ue524\ue522\ue522\ue525"              },
-      {  0,   true,  "sfp",    "\ue524\ue522\ue520"                    },
-      {  0,   true,  "sfpp",   "\ue524\ue522\ue520\ue520"              },
-      {  0,   true,  "rfz",    "\ue523\ue522\ue525"                    },
-      {  0,   true,  "rf",     "\ue523\ue522"                          },
-      {  0,   true,  "fz",     "\ue522\ue525"                          },
-      {  0,   true,  "m",      "\ue521"                                },
-      {  0,   true,  "r",      "\ue523"                                },
-      {  0,   true,  "s",      "\ue524"                                },
-      {  0,   true,  "z",      "\ue525"                                },
-      {  0,   true,  "n",      "\ue526"                                },
-      };
-#endif
-
-#if 1
-
 // variant with ligatures, works for both emmentaler and bravura:
 
 static Dyn dynList[] = {
@@ -117,7 +74,6 @@ static Dyn dynList[] = {
       {  0,   true,  "z",      "<sym>dynamicZ</sym>"},
       {  0,   true,  "n",      "<sym>dynamicNiente</sym>" }
       };
-#endif
 
 #if 0
 // variant with precomposed symbols, available only in bravura:
@@ -241,37 +197,38 @@ void Dynamic::read(XmlReader& e)
 
 void Dynamic::layout()
       {
-      if (!readPos().isNull()) {
-            if (score()->mscVersion() <= 114) {
-                  setReadPos(QPointF());
-                  // hack: 1.2 boundingBoxes are a bit wider which results
-                  // in symbols moved right
-                  setUserXoffset(userOff().x() - spatium() * .6);
-                  }
-            }
+      if (autoplace())
+            setUserOff(QPointF());
+
       setPos(textStyle().offset(spatium()));
       Text::layout1();
 
       Segment* s = segment();
-      if (!s)
-            return;
-      for (int voice = 0; voice < VOICES; ++voice) {
-            int t = (track() & ~0x3) + voice;
-            Chord* c = static_cast<Chord*>(s->element(t));
-            if (!c)
-                  continue;
-            if (c->type() == Element::Type::CHORD) {
-                  qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
-                  if (c->stem() && !c->up())  // stem down
-                        rxpos() += noteHeadWidth * .25;  // center on stem + optical correction
+      if (s) {
+            int t = track() & ~0x3;
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  Element* e = s->element(t + voice);
+                  if (e && e->isChord()) {
+                        Chord* c = toChord(e);
+                        qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
+                        if (c->stem() && !c->up())  // stem down
+                              rxpos() += noteHeadWidth * .25;  // center on stem + optical correction
+                        else
+                              rxpos() += noteHeadWidth * .5;   // center on notehead
+                        }
                   else
-                        rxpos() += noteHeadWidth * .5;   // center on notehead
+                        rxpos() += e->width() * .5;
+                  break;
                   }
-            else
-                  rxpos() += c->width() * .5;
-            break;
+            if (autoplace()) {
+                  qreal minDistance = spatium();
+                  Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
+                  Shape s2 = shape().translated(s->pos());
+                  qreal d  = s1.minVerticalDistance(s2);
+                  if (d > -minDistance)
+                        setUserOff(QPointF(0.0, d + minDistance));
+                  }
             }
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

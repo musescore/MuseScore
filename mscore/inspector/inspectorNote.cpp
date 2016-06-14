@@ -169,7 +169,7 @@ void InspectorNote::setElement()
       hook->setEnabled(note->chord()->hook());
       beam->setEnabled(note->chord()->beam());
       tuplet->setEnabled(note->chord()->tuplet());
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
       s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
