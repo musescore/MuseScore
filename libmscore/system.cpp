@@ -1082,6 +1082,39 @@ qreal System::minDistance(System* s2) const
       }
 
 //---------------------------------------------------------
+//   topDistance
+//    return minimum distance to the shape above
+//---------------------------------------------------------
+
+qreal System::topDistance(int staffIdx, const Shape& s) const
+      {
+      qreal dist = -1000000.0;
+      for (MeasureBase* mb1 : ml) {
+            if (!mb1->isMeasure())
+                  continue;
+            Measure* m1 = toMeasure(mb1);
+            dist = qMax(dist, s.minVerticalDistance(m1->shape(staffIdx).translated(m1->pos())));
+            }
+      return dist;
+      }
+
+//---------------------------------------------------------
+//   bottomDistance
+//---------------------------------------------------------
+
+qreal System::bottomDistance(int staffIdx, const Shape& s) const
+      {
+      qreal dist = -1000000.0;
+      for (MeasureBase* mb1 : ml) {
+            if (!mb1->isMeasure())
+                  continue;
+            Measure* m1 = toMeasure(mb1);
+            dist = qMax(dist, m1->shape(staffIdx).translated(m1->pos()).minVerticalDistance(s));
+            }
+      return dist;
+      }
+
+//---------------------------------------------------------
 //   minTop
 //    Return the minimum top margin.
 //---------------------------------------------------------

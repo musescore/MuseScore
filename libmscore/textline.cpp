@@ -70,9 +70,6 @@ void TextLineSegment::draw(QPainter* painter) const
       TextLine* tl   = textLine();
       qreal _spatium = spatium();
 
-      qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
-      qreal textlineTextDistance = _spatium * .5;
-
       QPointF pp2(pos2());
 
       // color for line (text color comes from the text properties)
@@ -84,88 +81,57 @@ void TextLineSegment::draw(QPainter* painter) const
       else
             color = tl->lineColor();
 
-      qreal l = 0.0;
       if (_text) {
-            SpannerSegmentType st = spannerSegmentType();
-            if (
-               ((st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN) && (tl->beginTextPlace() == PlaceText::LEFT))
-               || ((st == SpannerSegmentType::MIDDLE || st == SpannerSegmentType::END) && (tl->continueTextPlace() == PlaceText::LEFT))
-               ) {
-                  QRectF bb(_text->bbox());
-                  l = _text->pos().x() + bb.width() + textlineTextDistance;
-                  }
+//            if (((isSingleType() || isBeginType()) && (tl->beginTextPlace() == PlaceText::LEFT)) || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT)))
+//                  l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
             painter->translate(_text->pos());
             _text->setVisible(tl->visible());
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
 
-      if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
-            if (_endText) {
-                  painter->translate(_endText->pos());
-                  _endText->setVisible(tl->visible());
-                  _endText->draw(painter);
-                  painter->translate(-_endText->pos());
-                  }
+      if (_endText) {
+            painter->translate(_endText->pos());
+            _endText->setVisible(tl->visible());
+            _endText->draw(painter);
+            painter->translate(-_endText->pos());
             }
-      if (!tl->lineVisible() && !score()->showInvisible())
+
+      if (npoints == 0)
             return;
-      if (tl->lineVisible() || !score()->printing()) {
-            QPen pen(color, textlineLineWidth, tl->lineStyle());
-            if (tl->lineStyle() == Qt::CustomDashLine) {
-                  bool palette = !(parent() && parent()->parent());     // hack for palette
-                  QVector<qreal> pattern;
-                  if (palette)
-                        pattern << 5.0 << 5.0;
-                  else
-                        pattern << 5.0 << 20.0;
-                  pen.setDashPattern(pattern);
-                  if (!palette)
-                        pen.setDashOffset(15.0);
-                  }
-            painter->setPen(pen);
-
-            QPointF pp1(l, 0.0);
-
-            qreal beginHookWidth;
-            qreal endHookWidth;
-
-            if (tl->beginHook() && tl->beginHookType() == HookType::HOOK_45) {
-                  beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
-                  pp1.rx() += beginHookWidth;
-                  }
+      qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
+      QPen pen(color, textlineLineWidth, tl->lineStyle());
+      if (tl->lineStyle() == Qt::CustomDashLine) {
+            bool palette = !(parent() && parent()->parent());     // hack for palette
+            QVector<qreal> pattern;
+            if (palette)
+                  pattern << 5.0 << 5.0;
             else
-                  beginHookWidth = 0;
-
-            if (tl->endHook() && tl->endHookType() == HookType::HOOK_45) {
-                  endHookWidth = fabs(tl->endHookHeight().val() * _spatium * .4);
-                  pp2.rx() -= endHookWidth;
-                  }
-            else
-                  endHookWidth = 0;
-
-            // don't draw backwards lines (or hooks) if text is longer than nominal line length
-            bool backwards = _text && pp1.x() > pp2.x() && !tl->diagonal();
-
-            if (!backwards)
-                  painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
-
-            if (tl->beginHook()
-               && (spannerSegmentType() == SpannerSegmentType::SINGLE
-                   || spannerSegmentType() == SpannerSegmentType::BEGIN)
-               ) {
-                  qreal hh = tl->beginHookHeight().val() * _spatium;
-                  painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - beginHookWidth, pp1.y() + hh));
-                  }
-
-            if (tl->endHook() && !backwards
-               && (spannerSegmentType() == SpannerSegmentType::SINGLE
-                   || spannerSegmentType() == SpannerSegmentType::END)
-               ) {
-                  qreal hh = tl->endHookHeight().val() * _spatium;
-                  painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
-                  }
+                  pattern << 5.0 << 20.0;
+            pen.setDashPattern(pattern);
+            if (!palette)
+                  pen.setDashOffset(15.0);
             }
+      painter->setPen(pen);
+
+      for (int i = 0; i < npoints; ++i)
+            painter->drawLines(&points[i], 1);
+      }
+
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape TextLineSegment::shape() const
+      {
+      Shape shape;
+      if (_text)
+            shape.add(_text->bbox().translated(_text->pos()));
+      if (_endText)
+            shape.add(_endText->bbox().translated(_endText->pos()));
+      for (int i = 0; i < npoints; ++i)
+            shape.add(QRectF(points[i].x(), points[i].y(), points[i+1].x() - points[i].x(), points[i+1].y() - points[i].y()));
+      return shape.translated(pos());
       }
 
 //---------------------------------------------------------
@@ -209,14 +175,13 @@ void TextLineSegment::setText(Text* t)
 void TextLineSegment::layout1()
       {
       TextLine* tl = textLine();
-      if (parent() && tl && tl->type() != Element::Type::OTTAVA
-                  && tl->type() != Element::Type::PEDAL
-                  && tl->type() != Element::Type::HAIRPIN
-                  && tl->type() != Element::Type::VOLTA)
-            rypos() += -5.0 * spatium();
+      qreal _spatium = spatium();
+      if (parent() && tl && tl->isOttava() && tl->isPedal() && tl->isHairpin() && tl->isVolta())
+            rypos() += -5.0 * _spatium;
 
       if (!tl->diagonal())
             _userOff2.setY(0);
+
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
             case SpannerSegmentType::BEGIN:
@@ -227,7 +192,11 @@ void TextLineSegment::layout1()
                   setText(tl->_continueText);
                   break;
             }
-      if (tl->_endText) {
+      if (_text) {
+            _text->setTrack(track());
+            _text->layout();
+            }
+      if ((isSingleType() || isEndType()) && tl->_endText) {
             if (_endText == 0) {
                   _endText = new Text(*tl->_endText);
                   _endText->setFlag(ElementFlag::MOVABLE, false);
@@ -238,20 +207,14 @@ void TextLineSegment::layout1()
                   _endText->setTextStyle(tl->_endText->textStyle());
                   _endText->setXmlText(tl->_endText->xmlText());
                   }
+            _endText->setTrack(track());
+            _endText->layout();
             }
       else {
             delete _endText;
             _endText = 0;
             }
 
-      if (_text) {
-            _text->setTrack(track());
-            _text->layout();
-            }
-      if (_endText) {
-            _endText->setTrack(track());
-            _endText->layout();
-            }
 
       QPointF pp1;
       QPointF pp2(pos2());
@@ -263,13 +226,18 @@ void TextLineSegment::layout1()
             }
 
       // line has text or is not diagonal - calculate reasonable bbox
+
       qreal x1 = qMin(0.0, pp2.x());
       qreal x2 = qMax(0.0, pp2.x());
       qreal y0 = point(-textLine()->lineWidth());
       qreal y1 = qMin(0.0, pp2.y()) + y0;
       qreal y2 = qMax(0.0, pp2.y()) - y0;
 
+      qreal l = 0.0;
       if (_text) {
+            qreal textlineTextDistance = _spatium * .5;
+            if (((isSingleType() || isBeginType()) && (tl->beginTextPlace() == PlaceText::LEFT)) || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT)))
+                  l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
             qreal h = _text->height();
             if (textLine()->beginTextPlace() == PlaceText::ABOVE)
                   y1 = qMin(y1, -h);
@@ -281,6 +249,7 @@ void TextLineSegment::layout1()
                   }
             x2 = qMax(x2, _text->width());
             }
+
       if (textLine()->endHook()) {
             qreal h = pp2.y() + point(textLine()->endHookHeight());
             if (h > y2)
@@ -288,6 +257,7 @@ void TextLineSegment::layout1()
             else if (h < y1)
                   y1 = h;
             }
+
       if (textLine()->beginHook()) {
             qreal h = point(textLine()->beginHookHeight());
             if (h > y2)
@@ -300,6 +270,56 @@ void TextLineSegment::layout1()
       if (_endText) {
             _endText->setPos(bbox().right(), 0);
             bbox() |= _endText->bbox().translated(_endText->pos());
+            }
+
+
+      npoints = 0;
+      if (!(tl->lineVisible() || score()->showInvisible()))
+            return;
+
+      if (tl->lineVisible() || !score()->printing()) {
+            QPointF pp1(l, 0.0);
+
+            qreal beginHookWidth;
+            qreal endHookWidth;
+
+            if (tl->beginHook() && tl->beginHookType() == HookType::HOOK_45) {
+                  beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
+                  pp1.rx() += beginHookWidth;
+                  }
+            else
+                  beginHookWidth = 0;
+
+            if (tl->endHook() && tl->endHookType() == HookType::HOOK_45) {
+                  endHookWidth = fabs(tl->endHookHeight().val() * _spatium * .4);
+                  pp2.rx() -= endHookWidth;
+                  }
+            else
+                  endHookWidth = 0;
+
+            // don't draw backwards lines (or hooks) if text is longer than nominal line length
+            bool backwards = _text && pp1.x() > pp2.x() && !tl->diagonal();
+
+            if (tl->beginHook() && (isSingleType() || isBeginType())) {
+                  qreal hh = tl->beginHookHeight().val() * _spatium;
+                  points[npoints] = QPointF(pp1.x() - beginHookWidth, pp1.y() + hh);
+//                  painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - beginHookWidth, pp1.y() + hh));
+                  ++npoints;
+                  points[npoints] = pp1;
+                  }
+            if (!backwards) {
+                  points[npoints] = pp1;
+                  ++npoints;
+                  points[npoints] = pp2;
+                  // painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
+
+                  if (tl->endHook() && (isSingleType() || isEndType())) {
+                        ++npoints;
+                        qreal hh = tl->endHookHeight().val() * _spatium;
+                        // painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
+                        points[npoints] = QPointF(pp2.x() + endHookWidth, pp2.y() + hh);
+                        }
+                  }
             }
       }
 

@@ -3428,7 +3428,6 @@ bool Score::collectPage(LayoutContext& lc)
                                                       if (e->isSlur())
                                                             e->layout();
                                                       }
-                                                // cc->layoutArticulations();
                                                 }
                                           c->layoutArpeggio2();
                                           for (Note* n : c->notes()) {
@@ -3439,7 +3438,6 @@ bool Score::collectPage(LayoutContext& lc)
                                                       sp->layout();
                                                 }
                                           }
-//TODO-ws                                    cr->layoutArticulations();
                                     }
                               else if (e->isBarLine())
                                     e->layout();

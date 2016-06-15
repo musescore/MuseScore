@@ -57,6 +57,10 @@ class SpannerSegment : public Element {
 
       void setSpannerSegmentType(SpannerSegmentType s) { _spannerSegmentType = s;               }
       SpannerSegmentType spannerSegmentType() const    { return _spannerSegmentType;            }
+      bool isSingleType() const                        { return spannerSegmentType() == SpannerSegmentType::SINGLE; }
+      bool isBeginType() const                         { return spannerSegmentType() == SpannerSegmentType::BEGIN;  }
+      bool isMiddleType() const                        { return spannerSegmentType() == SpannerSegmentType::MIDDLE; }
+      bool isEndType() const                           { return spannerSegmentType() == SpannerSegmentType::END;    }
 
       void setSystem(System* s);
       System* system() const                { return (System*)parent();   }

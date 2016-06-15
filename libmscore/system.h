@@ -148,6 +148,8 @@ class System : public Element {
       virtual Element* prevElement() override;
 
       qreal minDistance(System*) const;
+      qreal topDistance(int staffIdx, const Shape&) const;
+      qreal bottomDistance(int staffIdx, const Shape&) const;
       qreal minTop() const;
       qreal minBottom() const;
       void removeGeneratedElements();

@@ -188,13 +188,14 @@ void Dynamic::layout()
                   qreal minDistance = spatium();
                   Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
                   Shape s2 = shape().translated(s->pos());
+
                   if (placement() == Element::Placement::ABOVE) {
-                        qreal d  = s2.minVerticalDistance(s1);
+                        qreal d = s2.minVerticalDistance(s1);
                         if (d > -minDistance)
                               setUserOff(QPointF(0.0, -d - minDistance));
                         }
                   else {
-                        qreal d  = s1.minVerticalDistance(s2);
+                        qreal d = s1.minVerticalDistance(s2);
                         if (d > -minDistance)
                               setUserOff(QPointF(0.0, d + minDistance));
                         }
