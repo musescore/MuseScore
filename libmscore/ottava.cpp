@@ -60,22 +60,22 @@ void OttavaSegment::layout()
 
       TextLineSegment::layout1();
       if (parent()) {
-            qreal yo(score()->styleS(StyleIdx::ottavaY).val() * spatium());
+            qreal yo = score()->styleP(StyleIdx::ottavaY);
             if (ottava()->placement() == Element::Placement::BELOW)
                   yo = -yo + staff()->height();
             rypos() += yo;
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
-                  const Shape& s1 = shape();
+                  Shape s1 = shape().translated(pos());
                   if (ottava()->placement() == Element::Placement::ABOVE) {
                         qreal d  = system()->topDistance(staffIdx(), s1);
                         if (d > -minDistance)
-                              setUserOff(QPointF(0.0, -d - minDistance));
+                              rUserYoffset() = -d - minDistance;
                         }
                   else {
                         qreal d  = system()->bottomDistance(staffIdx(), s1);
                         if (d > -minDistance)
-                              setUserOff(QPointF(0.0, d + minDistance));
+                              rUserYoffset() = d + minDistance;
                         }
                   }
             }

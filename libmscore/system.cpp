@@ -328,7 +328,6 @@ void System::layout2()
       for (int i = 0; i < _staves.size(); ++i) {
             Staff*    s  = score()->staff(i);
             SysStaff* ss = _staves[i];
-//DEBUG            ss->setShow(true);
             if (s->show() && ss->show()) {
                   visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
                   if (firstStaffIdx == -1)
@@ -358,19 +357,6 @@ void System::layout2()
 
       if (visibleStaves.empty()) {
             qDebug("====no visible staves, staves %d, score staves %d", _staves.size(), score()->nstaves());
-            }
-
-      for (auto i = visibleStaves.begin(); i != visibleStaves.end(); ++i) {
-            int si = i->first;
-            for (MeasureBase* mb : ml) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  m->shape(si).clear();
-                  for (Segment& s : m->segments())
-                        m->shape(si).add(s.staffShape(si).translated(s.pos()));
-                  m->shape(si).add(m->mstaff(si)->lines->bbox());
-                  }
             }
 
       for (auto i = visibleStaves.begin();; ++i) {
@@ -1056,11 +1042,11 @@ qreal System::minDistance(System* s2) const
             }
 
       for (MeasureBase* mb1 : ml) {
-            qreal bx1 = mb1->x();
-            qreal bx2 = mb1->x() + mb1->width();
             if (!mb1->isMeasure())
                   continue;
             Measure* m1 = toMeasure(mb1);
+            qreal bx1 = m1->x();
+            qreal bx2 = m1->x() + m1->width();
 
             for (MeasureBase* mb2 : s2->measures()) {
                   if (!mb2->isMeasure())
@@ -1072,10 +1058,10 @@ qreal System::minDistance(System* s2) const
                   qreal ax2 = mb2->x() + mb2->width();
                   if (ax2 < bx1)
                         continue;
-                  if (Ms::intersects(ax1, ax2, bx1, bx2)) {
-                        qreal d = m1->shape(0).minVerticalDistance(m2->shape(lastStaff)) + minVerticalDistance;
-                        dist = qMax(dist, d - height());
-                        }
+                  Shape s1 = m1->shape(lastStaff).translated(m1->pos());
+                  Shape s2 = m2->shape(0).translated(m2->pos());
+                  qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
+                  dist = qMax(dist, d - m1->mstaff(lastStaff)->lines->height());
                   }
             }
       return dist;
