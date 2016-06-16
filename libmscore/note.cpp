@@ -1223,7 +1223,7 @@ int Note::transposition() const
 
 void Note::endDrag()
       {
-      dragMode     = false;
+      dragMode = false;
       if (_lineOffset == 0)
             return;
 

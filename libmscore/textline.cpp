@@ -131,7 +131,7 @@ Shape TextLineSegment::shape() const
             shape.add(_endText->bbox().translated(_endText->pos()));
       for (int i = 0; i < npoints; ++i)
             shape.add(QRectF(points[i].x(), points[i].y(), points[i+1].x() - points[i].x(), points[i+1].y() - points[i].y()));
-      return shape.translated(pos());
+      return shape;
       }
 
 //---------------------------------------------------------

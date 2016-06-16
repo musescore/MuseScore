@@ -3279,9 +3279,14 @@ System* Score::collectSystem(LayoutContext& lc)
             system->setWidth(pos.x());
 
       // layout beams and update the segment shape
+      int stick = -1;
+      int etick = -1;
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
+            if (stick == -1)
+                  stick = mb->tick();
+            etick = mb->endTick();
             for (Segment* s = toMeasure(mb)->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                   for (Element* e : s->elist()) {
                         if (e && e->isChordRest()) {
@@ -3307,7 +3312,66 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   }
             }
-      system->layout2();
+      //
+      // compute shape of measures
+      //
+      // for (auto i = visibleStaves.begin(); i != visibleStaves.end(); ++i) {
+      for (int si = 0; si < score()->nstaves(); ++si) {
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  m->shape(si).clear();
+                  for (Segment& s : m->segments())
+                        m->shape(si).add(s.staffShape(si).translated(s.pos()));
+                  m->shape(si).add(m->mstaff(si)->lines->bbox());
+                  }
+            }
+
+      //
+      //    layout SpannerSegments for current system
+      //
+
+      if (etick != -1) {
+            auto spanners = score()->spannerMap().findOverlapping(stick, etick);
+            for (auto interval : spanners) {
+                  Spanner* sp = interval.value;
+                  if (sp->tick() >= etick || sp->tick2() < stick)
+                       continue;
+                  if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
+                        sp->setTick2(lastMeasure()->endTick());
+                        sp->staff()->updateOttava();
+                        }
+                  sp->layout();     // TODO: create/layout only segments for this system
+                  }
+
+            for (Spanner* sp : _unmanagedSpanner) {
+                  if (sp->tick() >= etick || sp->tick2() < stick)
+                        continue;
+                  sp->layout();
+                  }
+            }
+
+      //
+      // add SpannerSegment shapes to staff shapes
+      //
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            for (SpannerSegment* ss : system->spannerSegments()) {
+                  // DEBUG: only ottava for now
+                  Spanner* sp = ss->spanner();
+                  if (ss->isOttavaSegment()) {
+                        if (sp->tick() < m->endTick() && sp->tick2() >= m->tick()) {
+                              // spanner shape must be translated from system coordinate space to measure coordinate space
+                              m->shape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
+                              }
+                        }
+                  }
+            }
+      system->layout2();   // compute staff distances
 
       Measure* lm           = system->lastMeasure();
       lc.firstSystem        = lm && lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
@@ -3340,8 +3404,9 @@ bool Score::collectPage(LayoutContext& lc)
             // calculate distance to previous system
             //
             qreal distance;
-            if (s1)
+            if (s1) {
                   distance = s1->minDistance(s2);
+                  }
             else {
                   // this is the first system on page
                   VBox* vbox = s2->vbox();
@@ -3390,7 +3455,6 @@ bool Score::collectPage(LayoutContext& lc)
             }
 
       int stick = -1;
-      int etick = -1;
       int tracks = nstaves() * VOICES;
       for (System* s : page->systems()) {
             for (MeasureBase* mb : s->measures()) {
@@ -3444,29 +3508,8 @@ bool Score::collectPage(LayoutContext& lc)
                               }
                         }
                   m->layout2();
-                  etick = m->endTick();
                   }
             }
-
-      if (etick != -1) {
-            for (auto s : _spanner.map()) {
-                  Spanner* sp = s.second;
-                  if (sp->tick() >= etick || sp->tick2() < stick)
-                       continue;
-                  if (sp->isOttava() && sp->ticks() == 0) {
-                        sp->setTick2(lastMeasure()->endTick());
-                        sp->staff()->updateOttava();
-                        }
-                  sp->layout();
-                  }
-
-            for (Spanner* sp : _unmanagedSpanner) {
-                  if (sp->tick() >= etick || sp->tick2() < stick)
-                        continue;
-                  sp->layout();
-                  }
-            }
-
       page->rebuildBspTree();
       lc.pageChanged = lc.systemChanged || (lc.pageOldSystem != (page->systems().empty() ? 0 : page->systems().back()));
       return true;

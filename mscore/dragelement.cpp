@@ -106,35 +106,23 @@ void ScoreView::doDragElement(QMouseEvent* ev)
 
       bool dragNotes = false;
       for (Element* e : _score->selection().elements()) {
-            if (e->type() == Element::Type::NOTE) {
+            if (e->isNote()) {
                   dragNotes = true;
                   break;
                   }
             }
-
-      QList<Element*> el;
       for (Element* e : _score->selection().elements()) {
-            if (dragNotes) {
-                  if (e->type() == Element::Type::STEM || e->type() == Element::Type::HOOK)
-                        continue;
-                  }
-            el.append(e);
-            }
-
-      for (Element* e : el) {
-            QRectF r = e->drag(&data);
-            _score->addRefresh(r);
-            }
-
-      if (_score->playNote()) {
-            Element* e = _score->selection().element();
-            if (e)
-                  mscore->play(e);
-            _score->setPlayNote(false);
+            if (dragNotes && (e->isStem() || e->isHook()))
+                  continue;
+            _score->addRefresh(e->drag(&data));
             }
 
       Element* e = _score->getSelectedElement();
       if (e) {
+            if (_score->playNote()) {
+                  mscore->play(e);
+                  _score->setPlayNote(false);
+                  }
             QLineF anchor = e->dragAnchor();
 
             if (!anchor.isNull())
