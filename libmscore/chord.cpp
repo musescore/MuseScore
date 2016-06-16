@@ -1663,11 +1663,14 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             ch->sortNotes();
             }
 
-      QList<Note*> lnotes(notes());  // we need a copy!
-      for (Note* note : lnotes) {
-            if (staffGroup == StaffGroup::STANDARD) {
-                  if (note->tieBack()) {
-                        if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+      std::vector<Note*> lnotes(notes());  // we need a copy!
+
+      if (staffGroup == StaffGroup::STANDARD) {
+            for (Note* note : lnotes) {
+                  if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+                        // same pitch
+                        if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
+                              // not courtesy
                               // TODO: remove accidental only if note is not
                               // on new system
                               score()->undoRemoveElement(note->accidental());

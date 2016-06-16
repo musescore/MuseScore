@@ -1454,15 +1454,17 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             tpc1 = tpc2;
             tpc2 = tpc;
             }
-      score->undoChangePitch(n, pitch, tpc1, tpc2);
+
       if (!st->isTabStaff()) {
             //
             // handle ties
             //
             if (n->tieBack()) {
-                  score->undoRemoveElement(n->tieBack());
-                  if (n->tieFor())
-                        score->undoRemoveElement(n->tieFor());
+                  if (pitch != n->pitch()) {
+                        score->undoRemoveElement(n->tieBack());
+                        if (n->tieFor())
+                              score->undoRemoveElement(n->tieFor());
+                        }
                   }
             else {
                   Note* nn = n;
@@ -1472,6 +1474,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                         }
                   }
             }
+      score->undoChangePitch(n, pitch, tpc1, tpc2);
       }
 
 //---------------------------------------------------------
@@ -1523,7 +1526,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
       // precautionary or microtonal accidental
       // either way, we display it unconditionally
       // both for this note and for any linked notes
-      else if (acc == acc2 || accidental > AccidentalType::NATURAL)
+      else if (acc == acc2 || pitch == note->pitch() || accidental > AccidentalType::NATURAL)
             forceAdd = true;
 
       for (ScoreElement* se : note->linkList()) {
