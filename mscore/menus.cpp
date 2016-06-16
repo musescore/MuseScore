@@ -1012,41 +1012,66 @@ struct TempoPattern {
       QString pattern;
       double f;
       bool relative;
+      bool followText;
+      bool masterOnly;
 
-      TempoPattern(const QString& s, double v, bool relative) : pattern(s), f(v), relative(relative) {}
+      TempoPattern(const QString& s, double v, bool r, bool f, bool m) : pattern(s), f(v), relative(r), followText(f), masterOnly(m) {}
       };
 
 //---------------------------------------------------------
 //   newTempoPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTempoPalette(bool basic)
+Palette* MuseScore::newTempoPalette(bool basic, bool master)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Tempo"));
       sp->setMag(0.65);
-      sp->setGrid(60, 30);
+      if (master)
+            sp->setGrid(116, 28);
+      else
+            sp->setGrid(66, 28);
       sp->setDrawGrid(true);
 
       static const TempoPattern tps[] = {
-            TempoPattern("<sym>metNoteHalfUp</sym> = 80", 80.0/30.0, false),                    // 1/2
-            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/60.0, false),                 // 1/4
-            TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0, false),                    // 1/8
-            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0, false),       // dotted 1/2
-            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0, false),    // dotted 1/4
-            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/120.0, false),       // dotted 1/8
-            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 3.0/2.0, true),
-            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", 2.0/3.0, true),
-            TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/2.0, true),
-            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>", 2.0/1.0, true),
-            TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>", 1.0/1.0, true),
-            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/1.0, true),
+            TempoPattern("<sym>metNoteHalfUp</sym> = 80",    80.0/ 30.0, false, true, false),                // 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/ 60.0, false, true, false),                // 1/4
+            TempoPattern("<sym>metNote8thUp</sym> = 80",     80.0/120.0, false, true, false),                // 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",    120/ 30.0, false, true, false),   // dotted 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/ 60.0, false, true, false),   // dotted 1/4
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",     120/120.0, false, true, false),   // dotted 1/8
+
+            TempoPattern("Grave",             35.0/60.0, false, false, false),
+            TempoPattern("Largo",             50.0/60.0, false, false, false),
+            TempoPattern("Lento",             52.5/60.0, false, false, false),
+            TempoPattern("Larghetto",         63.0/60.0, false, false, true),
+            TempoPattern("Adagio",            71.0/60.0, false, false, false),
+            TempoPattern("Andante",           92.0/60.0, false, false, false),
+            TempoPattern("Andantino",         94.0/60.0, false, false, true),
+            TempoPattern("Moderato",         114.0/60.0, false, false, false),
+            TempoPattern("Allegretto",       116.0/60.0, false, false, false),
+            TempoPattern("Allegro moderato", 118.0/60.0, false, false, true),
+            TempoPattern("Allegro",          144.0/60.0, false, false, false),
+            TempoPattern("Vivace",           172.0/60.0, false, false, false),
+            TempoPattern("Presto",           187.0/60.0, false, false, false),
+            TempoPattern("Prestissimo",      200.0/60.0, false, false, true),
+
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 3.0/2.0, true, true, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", 2.0/3.0, true, true, false),
+            TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",    1.0/2.0, true, true, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",    2.0/1.0, true, true, false),
+            TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",         1.0/1.0, true, true, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/1.0, true, true, false),
             };
       for (TempoPattern tp : tps) {
             if (tp.relative && basic)
                   continue;
+            if (!tp.followText && basic)
+                  continue;
+            if (tp.masterOnly && !master)
+                  continue;
             TempoText* tt = new TempoText(gscore);
-            tt->setFollowText(true);
+            tt->setFollowText(tp.followText);
             tt->setXmlText(tp.pattern);
             if (tp.relative) {
                   tt->setRelative(tp.f);
