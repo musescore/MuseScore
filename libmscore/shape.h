@@ -16,7 +16,7 @@
 namespace Ms {
 
 #ifndef NDEBUG
-#define DEBUG_SHAPES    // enable shape debugging
+//#define DEBUG_SHAPES    // enable shape debugging
 #endif
 
 class Segment;
