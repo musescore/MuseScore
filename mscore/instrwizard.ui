@@ -253,12 +253,12 @@
      </property>
      <column>
       <property name="text">
-       <string>0</string>
+       <string notr="true">0</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>1</string>
+       <string notr="true">1</string>
       </property>
      </column>
      <column>
@@ -268,12 +268,12 @@
      </column>
      <column>
       <property name="text">
-       <string>3</string>
+       <string notr="true">3</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>4</string>
+       <string notr="true">4</string>
       </property>
      </column>
     </widget>

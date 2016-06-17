@@ -595,9 +595,6 @@
           </item>
           <item row="0" column="1">
            <widget class="QSpinBox" name="lines">
-            <property name="statusTip">
-             <string notr="true">stafflines</string>
-            </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
