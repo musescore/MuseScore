@@ -196,6 +196,7 @@ void ZInstrument::addRegion(SfzRegion& r)
       z->sample = readSample(r.sample, 0);
       if (z->sample) {
             qDebug("Sample Loop - start %d, end %d, mode %d", z->sample->loopStart(), z->sample->loopEnd(), z->sample->loopMode());
+            // if there is no opcode defining loop ranges, use sample definitions as fallback (according to spec)
             if (r.loopStart == -1)
                   r.loopStart = z->sample->loopStart();
             if (r.loopEnd == -1)
