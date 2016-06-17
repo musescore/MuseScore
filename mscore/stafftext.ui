@@ -362,7 +362,7 @@
           <bool>true</bool>
          </property>
          <property name="title">
-          <string notr="true">Change Stops:</string>
+          <string>Change Stops:</string>
          </property>
          <property name="flat">
           <bool>true</bool>

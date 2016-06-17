@@ -219,7 +219,7 @@
           <string>Up</string>
          </property>
          <property name="text">
-          <string/>
+          <string notr="true" extracomment="gets replaced with arrowUp icon">↑</string>
          </property>
         </widget>
        </item>
@@ -238,7 +238,7 @@
           <string>Down</string>
          </property>
          <property name="text">
-          <string/>
+          <string notr="true" extracomment="gets replaced with arrowDown icon">↓</string>
          </property>
         </widget>
        </item>

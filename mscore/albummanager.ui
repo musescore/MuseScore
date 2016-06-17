@@ -85,7 +85,7 @@
         <string>Move current score up in list</string>
        </property>
        <property name="text">
-        <string notr="true"/>
+        <string notr="true" extracomment="gets replaced with arrowUp Icon">↑</string>
        </property>
       </widget>
      </item>
@@ -114,7 +114,7 @@
         <string>Move current score down in list</string>
        </property>
        <property name="text">
-        <string notr="true"/>
+        <string notr="true" extracomment="gets replaced with arrowDown Icon">↓</string>
        </property>
       </widget>
      </item>

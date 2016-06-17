@@ -111,7 +111,7 @@
          <item>
           <widget class="QLabel" name="versionLabel">
            <property name="text">
-            <string notr="true" comment="do not translate">Version: X.Y.Z</string>
+            <string notr="true" extracomment="gets replaced programatically">Version: X.Y.Z</string>
            </property>
           </widget>
          </item>
@@ -120,7 +120,7 @@
            <item>
             <widget class="QLabel" name="revisionLabel">
              <property name="text">
-              <string notr="true" comment="do not translate">Revision: nnnnnnn</string>
+              <string notr="true" extracomment="gets replaced programatically">Revision: nnnnnnn</string>
              </property>
             </widget>
            </item>
