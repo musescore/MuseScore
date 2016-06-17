@@ -52,7 +52,7 @@
              <string>Move part up</string>
             </property>
             <property name="text">
-             <string notr="true">Up</string>
+             <string notr="true" extracomment="gets replaced with arrowUp icon">↑</string>
             </property>
            </widget>
           </item>
@@ -71,7 +71,7 @@
              <string>Move part down</string>
             </property>
             <property name="text">
-             <string notr="true">Down</string>
+             <string notr="true" extracomment="gets replaced with arrowDown icon">↓</string>
             </property>
            </widget>
           </item>

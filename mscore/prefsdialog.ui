@@ -403,7 +403,7 @@
              </font>
             </property>
             <property name="text">
-             <string notr="true">The language will be changed once you restart MuseScore.</string>
+             <string>The language will be changed once you restart MuseScore.</string>
             </property>
             <property name="textFormat">
              <enum>Qt::PlainText</enum>
