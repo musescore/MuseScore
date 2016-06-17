@@ -28,6 +28,7 @@ class InspectorGroupElement : public InspectorBase {
 
       Ui::InspectorGroupElement ge;
       QToolButton* notes;
+      QToolButton* graceNotes;
       QToolButton* rests;
 
    private slots:
@@ -35,6 +36,7 @@ class InspectorGroupElement : public InspectorBase {
       void setVisible();
       void setInvisible();
       void notesClicked();
+      void graceNotesClicked();
       void restsClicked();
 
    public:
