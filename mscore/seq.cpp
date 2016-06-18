@@ -763,8 +763,9 @@ void Seq::process(unsigned n, float* buffer)
                               }
                         if (mscore->loop()) {
                               int utickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
-                              if (utickLoop < utickEnd)
-                                    if ((*pPlayPos)->first >= utickLoop) {
+                              if (utickLoop < utickEnd) {
+                                    // Also make sure we are not "before" the loop
+                                    if ((*pPlayPos)->first >= utickLoop || cs->repeatList()->utick2tick((*pPlayPos)->first) < cs->loopInTick()) {
                                           qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
                                              (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
                                           if (preferences.useJackTransport) {
@@ -781,6 +782,7 @@ void Seq::process(unsigned n, float* buffer)
                                           // Exit this function to avoid segmentation fault in Scoreview
                                           return;
                                           }
+                                    }
                               }
                         }
                   if (n) {
