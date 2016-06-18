@@ -344,7 +344,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>B♭ Trumpet</trackName>
         <Instrument>
           <longName>B♭ Trumpet</longName>
           <shortName>B♭ Tpt.</shortName>
@@ -533,7 +533,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>C Trumpet</trackName>
         <Instrument>
           <longName>C Trumpet</longName>
           <shortName>C Tpt.</shortName>

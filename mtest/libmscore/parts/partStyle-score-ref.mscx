@@ -369,7 +369,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Flute</trackName>
         <Instrument>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
@@ -567,7 +567,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Oboe</trackName>
         <Instrument>
           <shortName>Ob.</shortName>
           <trackName>Oboe</trackName>

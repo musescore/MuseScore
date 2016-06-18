@@ -215,7 +215,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Flute</trackName>
         <Instrument>
           <longName>Flute</longName>
           <shortName>Fl.</shortName>

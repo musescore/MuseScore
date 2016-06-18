@@ -732,7 +732,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Alto</trackName>
         <Instrument>
           <longName>Alto</longName>
           <shortName>A.</shortName>
@@ -1106,7 +1106,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Tenor</trackName>
         <Instrument>
           <longName>Tenor</longName>
           <shortName>T.</shortName>

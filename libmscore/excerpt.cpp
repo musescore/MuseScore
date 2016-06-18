@@ -136,6 +136,7 @@ void createExcerpt(Excerpt* excerpt)
       foreach (Part* part, parts) {
             Part* p = new Part(score);
             p->setInstrument(*part->instrument());
+            p->setPartName(part->partName());
 
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score);

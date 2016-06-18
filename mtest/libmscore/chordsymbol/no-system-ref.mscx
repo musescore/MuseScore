@@ -289,7 +289,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Flute</trackName>
         <Instrument>
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
@@ -428,7 +428,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Alto Saxophone</trackName>
         <Instrument>
           <longName>Alto Saxophone</longName>
           <shortName>A. Sax.</shortName>
