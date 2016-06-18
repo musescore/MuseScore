@@ -21,6 +21,7 @@
 #include "arpeggio.h"
 #include "articulation.h"
 #include "bagpembell.h"
+#include "annotation.h"
 #include "barline.h"
 #include "bend.h"
 #include "box.h"
@@ -103,9 +104,9 @@ static const ElementName elementNames[] = {
       ElementName("SystemDivider",        QT_TRANSLATE_NOOP("elementName", "System Divider")),
       ElementName("StemSlash",            QT_TRANSLATE_NOOP("elementName", "Stem Slash")),
       ElementName("Line",                 QT_TRANSLATE_NOOP("elementName", "Line")),
-
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
+      ElementName("Annotation",           QT_TRANSLATE_NOOP("elementName", "Annotation")),
       ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
       ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),
@@ -1260,6 +1261,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::TEXTLINE:          return new TextLine(score);
             case Element::Type::NOTELINE:          return new NoteLine(score);
             case Element::Type::LYRICSLINE:        return new LyricsLine(score);
+            case Element::Type::ANNOTATION:        return new Annotation(score);
             case Element::Type::TRILL:             return new Trill(score);
             case Element::Type::PEDAL:             return new Pedal(score);
             case Element::Type::HAIRPIN:           return new Hairpin(score);

@@ -1261,7 +1261,6 @@ void Score::addElement(Element* element)
             }
       setLayout(element->tick());
       }
-
 //---------------------------------------------------------
 //   removeElement
 ///   Remove \a element from its parent.

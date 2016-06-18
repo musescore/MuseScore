@@ -68,6 +68,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/annotation.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
@@ -2876,7 +2877,7 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "instrument-change-text")
             cmdAddText(TEXT::INSTRUMENT_CHANGE);
       else if (cmd == "text-annotation")
-            cmdAddAnnotation();
+            cmdAddAnnotation2();
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5445,7 +5446,7 @@ void ScoreView::cmdAddChordName()
       }
 
 //---------------------------------------------------------
-//   cmdAddAnnotation
+//   cmdAdd
 //---------------------------------------------------------
 
 void ScoreView::cmdAddAnnotation()
@@ -5475,8 +5476,36 @@ void ScoreView::cmdAddAnnotation()
 
       }
 
+//---------------------------------------------------------
+//   cmdAddAnnotation2
+//---------------------------------------------------------
 
+void ScoreView::cmdAddAnnotation2()
+      {
 
+      if (!_score->checkHasMeasures())
+            return;
+      if (noteEntryMode())          // force out of entry mode
+            sm->postEvent(new CommandEvent("note-input"));
+
+      _score->startCmd();
+      ChordRest* cr = _score->getSelectedChordRest();
+      if (!cr)
+            return;
+      Annotation* annotation = new Annotation(_score);
+      annotation->setTrack(cr->track());
+      annotation->textAnnotation()->setTextStyleType(TextStyleType::ANNOTATION);
+      annotation->setParent(cr->segment());
+      if (annotation) {
+            _score->undoAddElement(annotation);
+            _score->select(annotation, SelectType::SINGLE, 0);
+            _score->endCmd();
+            startEdit(annotation);
+            }
+      else
+            _score->endCmd();
+
+      }
 
 //---------------------------------------------------------
 //   cmdAddText

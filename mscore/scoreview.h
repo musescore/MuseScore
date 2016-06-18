@@ -27,6 +27,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
+#include "libmscore/annotation.h"
 
 namespace Ms {
 
@@ -240,6 +241,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAddChordName();
       void cmdAddText(TEXT style);
       void cmdAddAnnotation();
+      void cmdAddAnnotation2();
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);
