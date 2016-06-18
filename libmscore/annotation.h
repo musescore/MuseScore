@@ -55,12 +55,12 @@ class Annotation : public Element {
    //   void setBgColor();
    //   void addShape();
       void setTextAnnotation(Text text);
-      Text* textAnnotation()                          { return _text; }
+      Text* textAnnotation()                          { return _text ; }
       AnnotationType annotationType();
       AnchorType anchorType();
 
-      virtual void      draw(QPainter*) const override;
-      virtual void      layout() override;
+      void      draw(QPainter*) const override;
+      void      layout() override;
 
 
    //   virtual Element* nextElement() override;

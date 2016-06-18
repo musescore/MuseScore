@@ -5492,7 +5492,7 @@ void ScoreView::cmdAddAnnotation2()
       ChordRest* cr = _score->getSelectedChordRest();
       if (!cr)
             return;
-      Annotation* annotation = new Annotation(_score);
+      Annotation* annotation = new Annotation(score());
       annotation->setTrack(cr->track());
       annotation->textAnnotation()->setTextStyleType(TextStyleType::ANNOTATION);
       annotation->setParent(cr->segment());

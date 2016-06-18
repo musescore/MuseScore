@@ -35,7 +35,7 @@ add_library (
       ${INCS}
       ${LIB_SCRIPT_FILES}
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
-      articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
+      articulation.cpp annotation.cpp barline.cpp beam.cpp bend.cpp box.cpp
       bracket.cpp breath.cpp bsp.cpp chord.cpp chordline.cpp
       chordlist.cpp chordrest.cpp clef.cpp cleflist.cpp
       drumset.cpp durationtype.cpp dynamic.cpp edit.cpp

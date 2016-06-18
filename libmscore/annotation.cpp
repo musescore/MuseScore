@@ -48,7 +48,7 @@ void Annotation::write(Xml& xml) const
       Element::writeProperties(xml);
       xml.tag("AnnotationType", int(_annotationType));
       xml.tag("AnchorType", int(_anchorType));
-      xml.tag("TextVal", _text->write(); );
+      xml.tag("TextVal", _text->plainText());
       xml.etag();
       }
 
@@ -65,7 +65,7 @@ void Annotation::read(XmlReader& e)
             else if (tag == "AnchorType")
                   _anchorType = AnchorType(e.readInt());
             else if (tag == "TextVal")
-                  _text = _text->read();
+                  _text->setPlainText(e.readXml());
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -76,9 +76,9 @@ void Annotation::read(XmlReader& e)
 //---------------------------------------------------------
 
 
-void Annotation::draw() const
+void Annotation::draw(QPainter* p) const
       {
-      _text->draw();
+      _text->draw(p);
       }
 
 
@@ -87,7 +87,7 @@ void Annotation::draw() const
 //---------------------------------------------------------
 
 
-void Annotation::layout() const
+void Annotation::layout()
       {
       _text->layout();
       }
