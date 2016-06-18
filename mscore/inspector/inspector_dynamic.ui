@@ -153,7 +153,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Velocity' value</string>
+        <string>Reset 'Placement' value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
