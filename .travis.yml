@@ -55,6 +55,7 @@ matrix:
       script:
         - "./build/travis/job1_Tests/run_tests.sh"
       after_script:
+        - ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
         - 'ARTIFACTS_PATHS="$(ls vtest/html | tr "\n" ":")" artifacts upload'
 
     # 2nd parallel build job - portable Linux AppImage 64-bit x86 build on CentOS
