@@ -174,7 +174,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newNoteHeadsPalette());
       addPalette(MuseScore::newTremoloPalette());
       addPalette(MuseScore::newRepeatsPalette());
-      addPalette(MuseScore::newTempoPalette(false));
+      addPalette(MuseScore::newTempoPalette(false, true));
       addPalette(MuseScore::newTextPalette());
       addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
