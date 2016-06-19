@@ -1,0 +1,4 @@
+#ifndef TEXTANNOTATION_H
+#define TEXTANNOTATION_H
+
+#endif // TEXTANNOTATION_H
