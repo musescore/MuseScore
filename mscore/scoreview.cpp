@@ -5438,7 +5438,6 @@ void ScoreView::cmdAddChordName()
       harmony->setTrack(cr->track());
       harmony->setParent(cr->segment());
       _score->undoAddElement(harmony);
-
       _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony);
       _score->setLayoutAll();
@@ -5482,7 +5481,6 @@ void ScoreView::cmdAddAnnotation()
 
 void ScoreView::cmdAddAnnotation2()
       {
-
       if (!_score->checkHasMeasures())
             return;
       if (noteEntryMode())          // force out of entry mode
@@ -5492,19 +5490,19 @@ void ScoreView::cmdAddAnnotation2()
       ChordRest* cr = _score->getSelectedChordRest();
       if (!cr)
             return;
-      Annotation* annotation = new Annotation(score());
+      Annotation* annotation = new Annotation(_score);
       annotation->setTrack(cr->track());
       annotation->textAnnotation()->setTextStyleType(TextStyleType::ANNOTATION);
       annotation->setParent(cr->segment());
+
       if (annotation) {
-            _score->undoAddElement(annotation);
+//            _score->undoAddElement(annotation);
             _score->select(annotation, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(annotation);
             }
       else
             _score->endCmd();
-
       }
 
 //---------------------------------------------------------

@@ -549,7 +549,11 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   _empty = false;
                   break;
-
+            case Element::Type::ANNOTATION:
+                  checkElement(el, track);
+                  _elist[track] = el;
+                  _empty = false;
+                  break;
             default:
                   qFatal("Segment::add() unknown %s", el->name());
             }

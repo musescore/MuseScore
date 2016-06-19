@@ -39,6 +39,7 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
+class Annotation;
 class BarLine;
 class Articulation;
 class Marker;

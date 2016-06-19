@@ -54,8 +54,8 @@ class Annotation : public Element {
    //   void setFgColor();
    //   void setBgColor();
    //   void addShape();
-      void setTextAnnotation(Text text);
-      Text* textAnnotation()                          { return _text ; }
+      void setTextAnnotation(Text* text)              {  _text = text;}
+      Text* textAnnotation()                         { return _text ; }
       AnnotationType annotationType();
       AnchorType anchorType();
 

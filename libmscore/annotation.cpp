@@ -32,9 +32,11 @@ namespace Ms {
 Annotation::Annotation(Score* s)
   : Element(s)
       {
+      _text = new Text(s);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _annotationType = AnnotationType::TEXT;
       _anchorType = AnchorType::SEGMENT;
+     //_text->setPlainText("Test text");
       }
 //---------------------------------------------------------
 //   write
@@ -48,7 +50,7 @@ void Annotation::write(Xml& xml) const
       Element::writeProperties(xml);
       xml.tag("AnnotationType", int(_annotationType));
       xml.tag("AnchorType", int(_anchorType));
-      xml.tag("TextVal", _text->plainText());
+ //     xml.tag("TextVal", _text->plainText());
       xml.etag();
       }
 
