@@ -648,7 +648,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       for (int idx = 0; idx < n; ++idx)
             exportAudioSampleRate->addItem(QString("%1").arg(exportAudioSampleRates[idx]));
 
-      restartWarningLanguage->setText("");
+      restartWarningLanguage->hide();
       connect(language, SIGNAL(currentIndexChanged(int)), SLOT(languageChanged(int)));
 
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
@@ -688,7 +688,7 @@ PreferenceDialog::~PreferenceDialog()
 
 void PreferenceDialog::languageChanged(int /*val*/)
       {
-      restartWarningLanguage->setText(tr("The language will be changed once you restart MuseScore."));
+      restartWarningLanguage->show();
       }
 
 //---------------------------------------------------------
