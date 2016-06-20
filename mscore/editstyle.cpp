@@ -245,9 +245,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       };
 
 
-      const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
-      chordDescriptionFileButton->setIcon(editIcon);
-
       pageList->setCurrentRow(0);
 
       articulationTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -389,8 +386,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   Direction::fillComboBox(cb);
                   }
             if (sw.reset) {
-                  sw.reset->setIcon(*icons[int(Icons::reset_ICON)]);
-                  sw.reset->setToolTip(tr("reset to default"));
                   connect(sw.reset, SIGNAL(clicked()), mapper, SLOT(map()));
                   mapper->setMapping(sw.reset, int(sw.idx));
                   }

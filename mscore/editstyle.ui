@@ -2348,8 +2348,11 @@
             </item>
             <item row="0" column="2">
              <widget class="QToolButton" name="resetMinMeasureWidth">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2359,8 +2362,11 @@
             </item>
             <item row="8" column="2">
              <widget class="QToolButton" name="resetKeysigLeftMargin">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2370,8 +2376,11 @@
             </item>
             <item row="11" column="2">
              <widget class="QToolButton" name="resetClefBarlineDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2381,8 +2390,11 @@
             </item>
             <item row="2" column="2">
              <widget class="QToolButton" name="resetBarNoteDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2392,8 +2404,11 @@
             </item>
             <item row="3" column="2">
              <widget class="QToolButton" name="resetBarGraceDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2403,8 +2418,11 @@
             </item>
             <item row="4" column="2">
              <widget class="QToolButton" name="resetBarAccidentalDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2414,8 +2432,11 @@
             </item>
             <item row="5" column="2">
              <widget class="QToolButton" name="resetNoteBarDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2425,8 +2446,11 @@
             </item>
             <item row="6" column="2">
              <widget class="QToolButton" name="resetMinNoteDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2436,8 +2460,11 @@
             </item>
             <item row="7" column="2">
              <widget class="QToolButton" name="resetClefLeftMargin">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2447,8 +2474,11 @@
             </item>
             <item row="9" column="2">
              <widget class="QToolButton" name="resetTimesigLeftMargin">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2458,8 +2488,11 @@
             </item>
             <item row="10" column="2">
              <widget class="QToolButton" name="resetClefKeyRightMargin">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2469,8 +2502,11 @@
             </item>
             <item row="18" column="2">
              <widget class="QToolButton" name="resetMultiMeasureRestMargin">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2480,8 +2516,11 @@
             </item>
             <item row="19" column="2">
              <widget class="QToolButton" name="resetStaffLineWidth">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2541,8 +2580,11 @@
             </item>
             <item row="12" column="2">
              <widget class="QToolButton" name="resetClefKeyDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2552,8 +2594,11 @@
             </item>
             <item row="13" column="2">
              <widget class="QToolButton" name="resetClefTimesigDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2563,8 +2608,11 @@
             </item>
             <item row="14" column="2">
              <widget class="QToolButton" name="resetKeyTimesigDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2584,8 +2632,11 @@
             </item>
             <item row="15" column="2">
              <widget class="QToolButton" name="resetKeyBarlineDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2625,8 +2676,11 @@
             </item>
             <item row="16" column="2">
              <widget class="QToolButton" name="resetSystemHeaderDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2655,8 +2709,11 @@
             </item>
             <item row="0" column="6">
              <widget class="QToolButton" name="resetMeasureSpacing">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2727,8 +2784,11 @@
             </item>
             <item row="16" column="6">
              <widget class="QToolButton" name="resetSystemHeaderTimeSigDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -2779,8 +2839,11 @@
             </item>
             <item row="9" column="6">
              <widget class="QToolButton" name="resetTimesigBarlineDistance">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string notr="true"/>
               </property>
               <property name="icon">
                <iconset resource="musescore.qrc">
@@ -4177,13 +4240,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Default vertical position' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4196,13 +4263,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Line thickness' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4215,13 +4286,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Height' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4234,13 +4309,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Continue height' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4390,13 +4469,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Default vertical position' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4409,13 +4492,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Hook height' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4428,13 +4515,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Line thickness' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4447,13 +4538,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Line style' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4484,13 +4579,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Default vertical position' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4612,13 +4711,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Hook height' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4631,13 +4734,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Line thickness' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4650,13 +4757,17 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="accessibleName">
              <string>Reset 'Line style' value</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4689,10 +4800,14 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset value</string>
+             <string>Reset to default</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4819,8 +4934,15 @@
           </item>
           <item row="3" column="3">
            <widget class="QToolButton" name="resetPedalLineStyle">
+            <property name="toolTip">
+             <string>Reset to default</string>
+            </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
             </property>
            </widget>
           </item>
@@ -4977,7 +5099,11 @@
              <item row="0" column="2">
               <widget class="QToolButton" name="chordDescriptionFileButton">
                <property name="text">
-                <string notr="true">...</string>
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
                </property>
               </widget>
              </item>
@@ -5021,7 +5147,7 @@
                <item>
                 <widget class="QRadioButton" name="useStandardNoteNames">
                  <property name="toolTip">
-                  <string>A, B♭, B, C, C♯, ...</string>
+                  <string notr="true">A, B♭, B, C, C♯, ...</string>
                  </property>
                  <property name="text">
                   <string>Standard</string>
@@ -5031,7 +5157,7 @@
                <item>
                 <widget class="QRadioButton" name="useGermanNoteNames">
                  <property name="toolTip">
-                  <string>A, B♭, H, C, C♯, ...</string>
+                  <string notr="true">A, B♭, H, C, C♯, ...</string>
                  </property>
                  <property name="text">
                   <string>German</string>
@@ -5041,7 +5167,7 @@
                <item>
                 <widget class="QRadioButton" name="useFullGermanNoteNames">
                  <property name="toolTip">
-                  <string>A, B, H, C, Cis</string>
+                  <string notr="true">A, B, H, C, Cis</string>
                  </property>
                  <property name="text">
                   <string>Full German</string>
@@ -5051,7 +5177,7 @@
                <item>
                 <widget class="QRadioButton" name="useSolfeggioNoteNames">
                  <property name="toolTip">
-                  <string>Do, Do♯, Re♭, Re, ...</string>
+                  <string notr="true">Do, Do♯, Re♭, Re, ...</string>
                  </property>
                  <property name="text">
                   <string>Solfeggio</string>
@@ -5061,7 +5187,7 @@
                <item>
                 <widget class="QRadioButton" name="useFrenchNoteNames">
                  <property name="toolTip">
-                  <string>Do, Do♯, Ré♭, Ré, ...</string>
+                  <string notr="true">Do, Do♯, Ré♭, Ré, ...</string>
                  </property>
                  <property name="text">
                   <string>French</string>

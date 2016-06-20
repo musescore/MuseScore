@@ -188,7 +188,11 @@
         <item>
          <widget class="QToolButton" name="minPitchASelect">
           <property name="text">
-           <string notr="true">...</string>
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -209,7 +213,11 @@
         <item>
          <widget class="QToolButton" name="maxPitchASelect">
           <property name="text">
-           <string notr="true">...</string>
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -249,7 +257,11 @@
         <item>
          <widget class="QToolButton" name="minPitchPSelect">
           <property name="text">
-           <string notr="true">...</string>
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -270,7 +282,11 @@
         <item>
          <widget class="QToolButton" name="maxPitchPSelect">
           <property name="text">
-           <string notr="true">...</string>
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -920,7 +936,9 @@
   <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

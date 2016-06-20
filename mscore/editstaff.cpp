@@ -55,12 +55,6 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
-      const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
-      minPitchASelect->setIcon(editIcon);
-      maxPitchASelect->setIcon(editIcon);
-      minPitchPSelect->setIcon(editIcon);
-      maxPitchPSelect->setIcon(editIcon);
-
       Part* part        = orgStaff->part();
       instrument        = *part->instrument(/*tick*/);
       Score* score      = part->score();

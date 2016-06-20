@@ -547,21 +547,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
-      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-
-      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       shortcutsChanged        = false;
 
 #ifndef USE_JACK
