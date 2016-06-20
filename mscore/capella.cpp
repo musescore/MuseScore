@@ -2471,6 +2471,12 @@ void Capella::readStaff(CapSystem* system)
       uchar d          = readByte();
       staff->log2Denom = (d & 0x7f) - 1;
       staff->allaBreve = d & 0x80;
+      qDebug("   CapStaff meter %d/%d allaBreve %d", staff->numerator, staff->log2Denom, staff->allaBreve);
+      if (staff->log2Denom > 7 || staff->log2Denom < 0) {
+            qDebug("   illegal fraction");
+            staff->log2Denom = 2;
+            staff->numerator = 4;
+            }
 
       staff->iLayout   = readByte();
       staff->topDistX  = readInt();
