@@ -79,7 +79,7 @@
            <string>Close MIDI import panel</string>
           </property>
           <property name="text">
-           <string notr="true">...</string>
+           <string notr="true"/>
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
@@ -121,7 +121,7 @@
            <string>Move track up</string>
           </property>
           <property name="text">
-           <string/>
+           <string notr="true"/>
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
@@ -144,7 +144,7 @@
            <string>Move track down</string>
           </property>
           <property name="text">
-           <string/>
+           <string notr="true"/>
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">

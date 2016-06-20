@@ -196,7 +196,7 @@ void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc,
       tags->setText(tag);
       updateExistingCb->setChecked(true);
       updateExistingCb->setVisible(true);
-      linkToScore->setText(tr("[%1link%2]")
+      linkToScore->setText(tr("[%1Link%2]")
                            .arg("<a href=\"" + url + "\">")
                            .arg("</a>"));
       setVisible(true);

@@ -85,7 +85,11 @@
         <string>Move current score up in list</string>
        </property>
        <property name="text">
-        <string notr="true" extracomment="gets replaced with arrowUp Icon">↑</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
        </property>
       </widget>
      </item>
@@ -114,7 +118,11 @@
         <string>Move current score down in list</string>
        </property>
        <property name="text">
-        <string notr="true" extracomment="gets replaced with arrowDown Icon">↓</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
        </property>
       </widget>
      </item>
@@ -248,7 +256,9 @@
   <tabstop>checkBoxAddPageBreak</tabstop>
   <tabstop>createScore</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

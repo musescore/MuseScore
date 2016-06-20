@@ -76,9 +76,6 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
             partList->addItem(item);
             }
 
-      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
-      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
-
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
       connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));

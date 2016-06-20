@@ -337,7 +337,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1">
         <widget class="QLabel" name="linkToScore">
          <property name="text">
-          <string extracomment="Hyperlink">Link</string>
+          <string notr="true" extracomment="Hyperlink, gets set/unset programatically">Link</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
