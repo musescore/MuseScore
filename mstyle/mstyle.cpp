@@ -2902,7 +2902,7 @@ void MgStyle::renderCheckBox(
                   if ( MgStyleConfigData_checkBoxStyle_CS_CHECK) {
 
                         dashes << 1.0 << 2.0;
-                        penThickness = 1.3;
+                        penThickness = 1.5;
                         pen.setWidthF(penThickness);
                         contrastPen.setWidthF(penThickness);
 
