@@ -36,7 +36,7 @@ Annotation::Annotation(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _annotationType = AnnotationType::TEXT;
       _anchorType = AnchorType::SEGMENT;
-     //_text->setPlainText("Test text");
+      _text->setPlainText("Text annotation");
       }
 //---------------------------------------------------------
 //   write
@@ -50,7 +50,7 @@ void Annotation::write(Xml& xml) const
       Element::writeProperties(xml);
       xml.tag("AnnotationType", int(_annotationType));
       xml.tag("AnchorType", int(_anchorType));
- //     xml.tag("TextVal", _text->plainText());
+      xml.tag("TextVal", _text->plainText());
       xml.etag();
       }
 

@@ -5495,10 +5495,9 @@ void ScoreView::cmdAddAnnotation2()
       annotation->setTrack(cr->track());
       annotation->textAnnotation()->setTextStyleType(TextStyleType::ANNOTATION);
       annotation->setParent(cr->segment());
-      cr->segment()->add(annotation);
 
       if (annotation) {
-//            _score->undoAddElement(annotation);
+            _score->undoAddElement(annotation);
             _score->select(annotation, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(annotation);
