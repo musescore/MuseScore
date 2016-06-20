@@ -81,7 +81,9 @@ QMap<QString, QString> nmap {
       { "rests.5",                  "rest32nd" },
       { "rests.6",                  "rest64th" },
       { "rests.7",                  "rest128th" },
-      { "rests.8",                  "rest256th" },
+//    { "rests.8",                  "rest256th" },  // Glyphs currently don't exist in Emmentaler
+//    { "rests.9",                  "rest512th" },
+//    { "rests.10",                  "rest1024th" },
 
       { "accidentals.sharp",                 "accidentalSharp"         },
       { "accidentals.sharp.slashslash.stem", "accidentalQuarterSharp4" },
