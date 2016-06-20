@@ -5455,20 +5455,21 @@ void ScoreView::cmdAddAnnotation()
       if (noteEntryMode())          // force out of entry mode
             sm->postEvent(new CommandEvent("note-input"));
 
-      Text* s = 0;
       _score->startCmd();
       ChordRest* cr = _score->getSelectedChordRest();
       if (!cr)
             return;
-      s = new StaffText(_score);
-      s->setTrack(cr->track());
-      s->setTextStyleType(TextStyleType::ANNOTATION);
-      s->setParent(cr->segment());
-      if (s) {
-            _score->undoAddElement(s);
-            _score->select(s, SelectType::SINGLE, 0);
+      Text* t = 0;
+
+      t = new StaffText(_score);
+      t->setTrack(cr->track());
+      t->setTextStyleType(TextStyleType::ANNOTATION);
+      t->setParent(cr->segment());
+      if (t) {
+            _score->undoAddElement(t);
+            _score->select(t, SelectType::SINGLE, 0);
             _score->endCmd();
-            startEdit(s);
+            startEdit(t);
             }
       else
             _score->endCmd();
@@ -5494,6 +5495,7 @@ void ScoreView::cmdAddAnnotation2()
       annotation->setTrack(cr->track());
       annotation->textAnnotation()->setTextStyleType(TextStyleType::ANNOTATION);
       annotation->setParent(cr->segment());
+      cr->segment()->add(annotation);
 
       if (annotation) {
 //            _score->undoAddElement(annotation);
