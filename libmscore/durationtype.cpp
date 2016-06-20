@@ -143,7 +143,6 @@ QString TDuration::name() const
             case DurationType::V_512TH:     return "512th";
             case DurationType::V_1024TH:    return "1024th";
             default: // V_ZERO or V_INVALID
-                  qDebug("TDuration::name(): invalid duration type %d", static_cast<int>(_val));
                   return "";
             }
       }
