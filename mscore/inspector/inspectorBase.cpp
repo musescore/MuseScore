@@ -237,9 +237,6 @@ void InspectorBase::setElement()
                         val = QVariant(f.denominator());
                   }
 
-	      if (ii.r)
-		      ii.r->setIcon(*icons[int(Icons::reset_ICON)]);
-
             ii.w->blockSignals(true);
             setValue(ii, val);
             ii.w->blockSignals(false);

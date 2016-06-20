@@ -457,7 +457,11 @@
             <string>Go to previous measure</string>
            </property>
            <property name="text">
-            <string notr="true" extracomment="&amp;larr;">←</string>
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="musescore.qrc">
+             <normaloff>:/data/icons/go-previous.svg</normaloff>:/data/icons/go-previous.svg</iconset>
            </property>
           </widget>
          </item>
@@ -467,7 +471,11 @@
             <string>Go to next measure</string>
            </property>
            <property name="text">
-            <string notr="true" extracomment="&amp;rarr;">→</string>
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="musescore.qrc">
+             <normaloff>:/data/icons/go-next.svg</normaloff>:/data/icons/go-next.svg</iconset>
            </property>
           </widget>
          </item>
@@ -502,7 +510,9 @@
   <tabstop>previousButton</tabstop>
   <tabstop>nextButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

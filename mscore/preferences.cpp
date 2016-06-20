@@ -547,21 +547,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
-      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-
-      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       shortcutsChanged        = false;
 
 #ifndef USE_JACK
@@ -648,7 +633,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       for (int idx = 0; idx < n; ++idx)
             exportAudioSampleRate->addItem(QString("%1").arg(exportAudioSampleRates[idx]));
 
-      restartWarningLanguage->setText("");
+      restartWarningLanguage->hide();
       connect(language, SIGNAL(currentIndexChanged(int)), SLOT(languageChanged(int)));
 
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
@@ -688,7 +673,7 @@ PreferenceDialog::~PreferenceDialog()
 
 void PreferenceDialog::languageChanged(int /*val*/)
       {
-      restartWarningLanguage->setText(tr("The language will be changed once you restart MuseScore."));
+      restartWarningLanguage->show();
       }
 
 //---------------------------------------------------------

@@ -198,7 +198,11 @@
         <string>Reset 'Direction' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -264,7 +268,11 @@
         <string>Reset 'Grow right' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -283,7 +291,11 @@
         <string>Reset 'Grow left' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -321,7 +333,11 @@
         <string>Reset 'User position' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -353,7 +369,11 @@
         <string>Reset 'Local relayout' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -398,7 +418,11 @@
         <string>Reset 'Horizontal' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -422,6 +446,8 @@
   <tabstop>y1</tabstop>
   <tabstop>y2</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

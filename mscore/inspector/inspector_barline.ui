@@ -110,7 +110,11 @@
         <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -179,7 +183,11 @@
         <string>Reset 'Span' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -205,7 +213,11 @@
         <string>Reset 'Span from' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -218,7 +230,11 @@
         <string>Reset 'Span to' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -289,6 +305,8 @@
   <tabstop>spanTo</tabstop>
   <tabstop>resetSpanTo</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

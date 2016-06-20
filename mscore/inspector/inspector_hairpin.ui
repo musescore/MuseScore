@@ -87,7 +87,11 @@
         <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -124,7 +128,11 @@
         <string>Reset 'Height' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -168,7 +176,11 @@
         <string>Reset 'Velocity change' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -201,7 +213,11 @@
         <string>Reset 'Continue height' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -214,7 +230,11 @@
         <string>Reset 'Dynamic range' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -247,7 +267,11 @@
         <string>Reset 'Circled tip' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -291,8 +315,15 @@
        <property name="toolTip">
         <string>Reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset 'Text line' vslue</string>
+       </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -316,6 +347,8 @@
   <tabstop>hairpinContHeight</tabstop>
   <tabstop>resetHairpinContHeight</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

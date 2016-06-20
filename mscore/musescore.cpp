@@ -3253,8 +3253,6 @@ AboutBoxDialog::AboutBoxDialog()
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
-
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>")
                               .arg(tr(   "Visit %1www.musescore.org%2 for new versions and more information.\n"
                                          "Support MuseScore with your %3donation%4.\n\n"
