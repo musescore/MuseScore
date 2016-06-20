@@ -1552,7 +1552,7 @@ void Slur::layout()
                   segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
                   qreal x1 = firstNoteRestSegmentX(system);
                   qreal x2 = system->bbox().width();
-                  qreal y  = system->staff(staffIdx())->y();
+                  qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
                   segment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
                   }
             // case 4: end segment
