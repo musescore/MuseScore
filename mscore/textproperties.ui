@@ -582,7 +582,7 @@
             <string>Align left edge of text to reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">
@@ -605,7 +605,7 @@
             <string>Center text on reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">
@@ -628,7 +628,7 @@
             <string>Align top edge of text to reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">
@@ -651,7 +651,7 @@
             <string>Align right edge of text to reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">
@@ -684,7 +684,7 @@
             <string>Align baseline of text to reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">
@@ -707,7 +707,7 @@
             <string>Center text vertical to reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">
@@ -730,7 +730,7 @@
             <string>Align bottom edge of text to reference point</string>
            </property>
            <property name="text">
-            <string notr="true">...</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="musescore.qrc">

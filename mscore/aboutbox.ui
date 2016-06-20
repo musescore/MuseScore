@@ -132,6 +132,10 @@
              <property name="text">
               <string notr="true"/>
              </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-copy.svg</normaloff>:/data/icons/edit-copy.svg</iconset>
+             </property>
             </widget>
            </item>
            <item>

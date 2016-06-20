@@ -100,7 +100,11 @@
      <item>
       <widget class="QPushButton" name="fileButton">
        <property name="text">
-        <string>Load...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
        </property>
       </widget>
      </item>
@@ -136,7 +140,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

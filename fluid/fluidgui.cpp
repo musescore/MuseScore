@@ -85,8 +85,6 @@ FluidGui::FluidGui(Synthesizer* s)
       connect(soundFontDelete, SIGNAL(clicked()), SLOT(soundFontDeleteClicked()));
       connect(soundFonts,      SIGNAL(itemSelectionChanged ()),  SLOT(updateUpDownButtons()));
       updateUpDownButtons();
-      soundFontUp->setIcon(*icons[int(Icons::arrowUp_ICON)]);
-      soundFontDown->setIcon(*icons[int(Icons::arrowDown_ICON)]);
       }
 
 //---------------------------------------------------------

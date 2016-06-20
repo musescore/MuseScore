@@ -52,7 +52,11 @@
              <string>Move part up</string>
             </property>
             <property name="text">
-             <string notr="true" extracomment="gets replaced with arrowUp icon">↑</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
             </property>
            </widget>
           </item>
@@ -71,7 +75,11 @@
              <string>Move part down</string>
             </property>
             <property name="text">
-             <string notr="true" extracomment="gets replaced with arrowDown icon">↓</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
             </property>
            </widget>
           </item>
@@ -168,7 +176,9 @@
   <tabstop>newAllButton</tabstop>
   <tabstop>newButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
