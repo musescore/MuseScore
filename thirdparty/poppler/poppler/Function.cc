@@ -555,7 +555,7 @@ GBool SampledFunction::hasDifferentResultSet(Function *func) {
 // ExponentialFunction
 //------------------------------------------------------------------------
 
-ExponentialFunction::ExponentialFunction(Object *, Dict *dict) {
+ExponentialFunction::ExponentialFunction(Object *funcObj, Dict *dict) {
   Object obj1, obj2;
   int i;
 
@@ -684,7 +684,7 @@ void ExponentialFunction::transform(double *in, double *out) {
 // StitchingFunction
 //------------------------------------------------------------------------
 
-StitchingFunction::StitchingFunction(Object *, Dict *dict, std::set<int> *usedParents) {
+StitchingFunction::StitchingFunction(Object *funcObj, Dict *dict, std::set<int> *usedParents) {
   Object obj1, obj2;
   int i;
 

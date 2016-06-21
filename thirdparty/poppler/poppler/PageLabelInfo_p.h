@@ -75,7 +75,7 @@ static void toRoman(int number, GooString *str, GBool uppercase) {
   const char *wh;
 
   if (number >= 4000) {
-    error(errUnimplemented, -1, "Conversion to roman numberals of numbers >= 4000 not implemented");
+    error(errUnimplemented, -1, "Conversion to roman numerals of numbers >= 4000 not implemented");
     return;
   }
 

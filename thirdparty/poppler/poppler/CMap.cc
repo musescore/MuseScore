@@ -63,7 +63,7 @@ static int getCharFromStream(void *data) {
 
 //------------------------------------------------------------------------
 
-CMap *CMap::parse(CMapCache *, GooString *collectionA, Object *obj) {
+CMap *CMap::parse(CMapCache *cache, GooString *collectionA, Object *obj) {
   CMap *cMap;
   GooString *cMapNameA;
 

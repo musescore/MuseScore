@@ -21,13 +21,13 @@
 // Copyright (C) 2006, 2007, 2010, 2011 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2007 Koji Otani <sho@bbr.jp>
 // Copyright (C) 2008, 2009 Chris Wilson <chris@chris-wilson.co.uk>
-// Copyright (C) 2008, 2012, 2014 Adrian Johnson <ajohnson@redneon.com>
+// Copyright (C) 2008, 2012, 2014, 2016 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2009 Darren Kenny <darren.kenny@sun.com>
 // Copyright (C) 2010 Suzuki Toshiya <mpsuzuki@hiroshima-u.ac.jp>
 // Copyright (C) 2010 Jan Kümmel <jan+freedesktop@snorc.org>
 // Copyright (C) 2012 Hib Eris <hib@hiberis.nl>
 // Copyright (C) 2013 Thomas Freitag <Thomas.Freitag@alfa.de>
-// Copyright (C) 2015 Jason Crain <jason@aquaticape.us>
+// Copyright (C) 2015, 2016 Jason Crain <jason@aquaticape.us>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -113,7 +113,7 @@ CairoFont::getGlyph(CharCode code,
 double
 CairoFont::getSubstitutionCorrection(GfxFont *gfxFont)
 {
-  double w1, w2;
+  double w1, w2, w3;
   CharCode code;
   char *name;
 
@@ -143,7 +143,8 @@ CairoFont::getSubstitutionCorrection(GfxFont *gfxFont)
 	cairo_font_options_destroy(options);
 	w2 = extents.x_advance;
       }
-      if (!gfxFont->isSymbolic()) {
+      w3 = ((Gfx8BitFont *)gfxFont)->getWidth(0);
+      if (!gfxFont->isSymbolic() && w2 > 0 && w1 > w3) {
 	// if real font is substantially narrower than substituted
 	// font, reduce the font size accordingly
 	if (w1 > 0.01 && w1 < 0.9 * w2) {
@@ -499,6 +500,7 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref,
     codeToGIDLen = n;
     /* Fall through */
   case fontTrueType:
+  case fontTrueTypeOT:
     if (font_data != NULL) {
       ff = FoFiTrueType::make(font_data, font_data_len);
     } else {
@@ -509,7 +511,7 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref,
       goto err2;
     }
     /* This might be set already for the CIDType2 case */
-    if (fontType == fontTrueType) {
+    if (fontType == fontTrueType || fontType == fontTrueTypeOT) {
       codeToGID = ((Gfx8BitFont *)gfxFont)->getCodeToGIDMap(ff);
       codeToGIDLen = 256;
     }
@@ -544,7 +546,41 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref,
       goto err2;
     }
     break;
-    
+
+  case fontCIDType0COT:
+    codeToGID = NULL;
+    n = 0;
+    if (((GfxCIDFont *)gfxFont)->getCIDToGID()) {
+      n = ((GfxCIDFont *)gfxFont)->getCIDToGIDLen();
+      if (n) {
+	codeToGID = (int *)gmallocn(n, sizeof(int));
+	memcpy(codeToGID, ((GfxCIDFont *)gfxFont)->getCIDToGID(),
+	       n * sizeof(int));
+      }
+    }
+    codeToGIDLen = n;
+
+    if (!codeToGID) {
+      if (!useCIDs) {
+	if (font_data != NULL) {
+	  ff = FoFiTrueType::make(font_data, font_data_len);
+	} else {
+	  ff = FoFiTrueType::load(fileNameC);
+	}
+	if (ff) {
+	  if (ff->isOpenTypeCFF()) {
+	    codeToGID = ff->getCIDToGIDMap((int *)&codeToGIDLen);
+	  }
+	  delete ff;
+	}
+      }
+    }
+    if (! _ft_new_face (lib, fileNameC, font_data, font_data_len, &face, &font_face)) {
+      error(errSyntaxError, -1, "could not create cid (OT) face\n");
+      goto err2;
+    }
+    break;
+
   default:
     fprintf (stderr, "font type %d not handled\n", (int)fontType);
     goto err2;

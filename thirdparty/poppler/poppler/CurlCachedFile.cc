@@ -30,7 +30,7 @@ CurlCachedFileLoader::~CurlCachedFileLoader() {
 }
 
 static size_t
-noop_cb(char *, size_t size, size_t nmemb, void *)
+noop_cb(char *ptr, size_t size, size_t nmemb, void *ptr2)
 {
   return size*nmemb;
 }

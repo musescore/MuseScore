@@ -286,7 +286,7 @@ protected:
   virtual ~GfxFont();
 
   static GfxFontType getFontType(XRef *xref, Dict *fontDict, Ref *embID);
-  void readFontDescriptor(XRef *, Dict *fontDict);
+  void readFontDescriptor(XRef *xref, Dict *fontDict);
   CharCodeToUnicode *readToUnicodeCMap(Dict *fontDict, int nBits,
 				       CharCodeToUnicode *ctu);
   static GfxFontLoc *getExternalFont(GooString *path, GBool cid);
@@ -322,7 +322,7 @@ public:
   Gfx8BitFont(XRef *xref, const char *tagA, Ref idA, GooString *nameA,
 	      GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
 
-  virtual int getNextChar(char *s, int , CharCode *code,
+  virtual int getNextChar(char *s, int len, CharCode *code,
 			  Unicode **u, int *uLen,
 			  double *dx, double *dy, double *ox, double *oy);
 

@@ -22,6 +22,7 @@
 #include "utils.h"
 #include "libmscore/sym.h"
 #include "omr.h"
+#include <math.h>
 
 namespace Ms {
 
@@ -72,8 +73,9 @@ double Pattern::match(const QImage*, int , int) const
     return 0.0;
     }
 
-double Pattern::match(const QImage* img, int col, int row, double /*bg_parm*/) const
+double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
       {
+#if 0
       double scr = 0;
       for (int y = 0; y < rows; ++y) {
             for (int x = 0; x < cols; x++) {
@@ -83,52 +85,60 @@ double Pattern::match(const QImage* img, int col, int row, double /*bg_parm*/) c
                   scr += black ? 1 : 0;
                   }
             }
-
-#if 0
-          double k = 0;
-          if(bg_parm == 0) bg_parm = 1e-10;
-          if(bg_parm == 1) bg_parm = 1-1e-10;
-          
-
-      for (int y = 0; y < rows; ++y) {
-            //const uchar* p1 = image()->scanLine(y);
-            //const uchar* p2 = img->scanLine(row + y) + (col/8);
-
-
-
-          for(int x = 0; x < cols; x++){
-              //const uchar* p = img->scanLine(row + y) + ((col+x) / 32);
-              //bool black = (*p) & (0x1 << ((col+x) % 32));
-              if(col+x >= img->size().width() || row+y >= img->size().height()) continue;
-              QRgb c = img->pixel(col+x, row+y);
-              bool black = (qGray(c) < 100);
-              //if(black)
-                  //printf("here");
-              k += black?(log(model[y][x]) - log(bg_parm)):(log(1.0 - model[y][x]) - log(1-bg_parm));
-          }
-      }
-          return k;
+      return scr;
 #endif
-#if 0
-            for (int x = 0; x < bytes; ++x) {
-                  uchar a = *p1++;
-                  uchar b1 = *p2;
-                  uchar b2 = *(p2 + 1);
-                  p2++;
-                  uchar b  = (b1 >> shift) | (b2 << (7 - shift));
-                  uchar v = a ^ b;
-                  k += Omr::bitsSetTable[v];
+      double k = 0;
+      
+      //return k;
+      if (bg_parm < 0.00001)
+            bg_parm = 0.00001;
+      if (bg_parm > 0.99999)
+            bg_parm = 0.99999;
+            
+      double log_bg_black = log(bg_parm);
+      double log_bg_white = log(1.0-bg_parm);
+      
+      for (int y = 0; y < rows; ++y) {
+            for (int x = 0; x < cols; x++) {
+                  if (col+x >= img->size().width() || row+y >= img->size().height())
+                        continue;
+                  QRgb c = img->pixel(col+x, row+y);
+                  bool black = (qGray(c) < 125);
+
+                  double bs_scr = model[y][x];
+                  if (bs_scr < 0.00001)
+                        bs_scr = 0.00001;
+                  if (bs_scr > 0.99999)
+                        bs_scr = 0.99999;
+                  
+                  double log_black = log(bs_scr) - log_bg_black;
+                  double log_white = log(1.0 - bs_scr) - log_bg_white;
+                  
+                  k += black?log_black:log_white;
+                  
                   }
+            }
+      return k;
+#if 0
+      for (int x = 0; x < bytes; ++x) {
             uchar a = *p1++;
             uchar b1 = *p2;
-            uchar b2 = *(p2 + 1) & (0xff << eshift);
+            uchar b2 = *(p2 + 1);
+            p2++;
             uchar b  = (b1 >> shift) | (b2 << (7 - shift));
             uchar v = a ^ b;
             k += Omr::bitsSetTable[v];
             }
+      uchar a = *p1++;
+      uchar b1 = *p2;
+      uchar b2 = *(p2 + 1) & (0xff << eshift);
+      uchar b  = (b1 >> shift) | (b2 << (7 - shift));
+      uchar v = a ^ b;
+      k += Omr::bitsSetTable[v];
+      }
 #endif
 
-      return scr;
+      
       }
 
 //---------------------------------------------------------

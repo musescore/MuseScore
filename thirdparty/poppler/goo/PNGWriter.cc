@@ -150,7 +150,7 @@ bool PNGWriter::init(FILE *f, int width, int height, int hDPI, int vDPI)
   return true;
 }
 
-bool PNGWriter::writePointers(unsigned char **rowPointers, int )
+bool PNGWriter::writePointers(unsigned char **rowPointers, int rowCount)
 {
   png_write_image(priv->png_ptr, rowPointers);
   /* write bytes */

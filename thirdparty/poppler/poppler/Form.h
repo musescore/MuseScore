@@ -6,11 +6,13 @@
 //
 // Copyright 2006 Julien Rebetez <julienr@svn.gnome.org>
 // Copyright 2007, 2008, 2011 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright 2007-2010, 2012 Albert Astals Cid <aacid@kde.org>
+// Copyright 2007-2010, 2012, 2015 Albert Astals Cid <aacid@kde.org>
 // Copyright 2010 Mark Riedesel <mark@klowner.com>
 // Copyright 2011 Pino Toscano <pino@kde.org>
 // Copyright 2012 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright 2013 Adrian Johnson <ajohnson@redneon.com>
+// Copyright 2015 André Guerreiro <aguerreiro1985@gmail.com>
+// Copyright 2015 André Esser <bepandre@hotmail.com>
 //
 //========================================================================
 
@@ -35,6 +37,8 @@ class Annots;
 class LinkAction;
 class GfxResources;
 class PDFDoc;
+class SignatureInfo;
+class SignatureHandler;
 
 enum FormFieldType {
   formButton,
@@ -245,6 +249,9 @@ class FormWidgetSignature: public FormWidget {
 public:
   FormWidgetSignature(PDFDoc *docA, Object *dict, unsigned num, Ref ref, FormField *p);
   void updateWidgetAppearance();
+
+  SignatureInfo *validateSignature(bool doVerifyCert, bool forceRevalidation);
+
 protected:
   FormFieldSignature *parent;
 };
@@ -487,7 +494,16 @@ class FormFieldSignature: public FormField {
 public:
   FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents);
 
+  SignatureInfo *validateSignature(bool doVerifyCert, bool forceRevalidation);
+
   virtual ~FormFieldSignature();
+
+private:
+  void parseInfo();
+  void hashSignedDataBlock(SignatureHandler *handler, Goffset block_len);
+  Object byte_range;
+  GooString *signature;
+  SignatureInfo *signature_info;
 
 #ifdef DEBUG_FORMS
   void print(int indent = 0);

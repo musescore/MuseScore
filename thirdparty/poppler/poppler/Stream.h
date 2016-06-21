@@ -19,7 +19,7 @@
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2009 Stefan Thomas <thomas@eload24.com>
 // Copyright (C) 2010 Hib Eris <hib@hiberis.nl>
-// Copyright (C) 2011, 2012 William Bader <williambader@hotmail.com>
+// Copyright (C) 2011, 2012, 2016 William Bader <williambader@hotmail.com>
 // Copyright (C) 2012, 2013 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2012, 2013 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2013 Adrian Johnson <ajohnson@redneon.com>
@@ -198,7 +198,7 @@ public:
   virtual void setPos(Goffset pos, int dir = 0) = 0;
 
   // Get PostScript command for the filter(s).
-  virtual GooString *getPSFilter(int , const char *);
+  virtual GooString *getPSFilter(int psLevel, const char *indent);
 
   // Does this stream type potentially contain non-printable chars?
   virtual GBool isBinary(GBool last = gTrue) = 0;
@@ -942,7 +942,7 @@ private:
 
 #endif
 
-#ifndef ENABLE_ZLIB
+#ifndef ENABLE_ZLIB_UNCOMPRESS
 //------------------------------------------------------------------------
 // FlateStream
 //------------------------------------------------------------------------
@@ -1072,7 +1072,7 @@ public:
   virtual void reset();
   virtual int getChar();
   virtual int lookChar();
-  virtual GooString *getPSFilter(int, const char *)
+  virtual GooString *getPSFilter(int psLevel, const char *indent)
     { return NULL; }
   virtual GBool isBinary(GBool last = gTrue);
 
@@ -1195,6 +1195,44 @@ private:
   GBool eof;
 
   GBool fillBuf();
+};
+
+//------------------------------------------------------------------------
+// LZWEncoder
+//------------------------------------------------------------------------
+
+struct LZWEncoderNode {
+  int byte;
+  LZWEncoderNode *next;		// next sibling
+  LZWEncoderNode *children;	// first child
+};
+
+class LZWEncoder: public FilterStream {
+public:
+
+  LZWEncoder(Stream *strA);
+  virtual ~LZWEncoder();
+  virtual StreamKind getKind() { return strWeird; }
+  virtual void reset();
+  virtual int getChar();
+  virtual int lookChar();
+  virtual GooString *getPSFilter(int psLevel, const char *indent)
+    { return NULL; }
+  virtual GBool isBinary(GBool last = gTrue) { return gTrue; }
+  virtual GBool isEncoder() { return gTrue; }
+
+private:
+
+  LZWEncoderNode table[4096];
+  int nextSeq;
+  int codeLen;
+  Guchar inBuf[4096];
+  int inBufLen;
+  int outBuf;
+  int outBufLen;
+  GBool needEOD;
+
+  void fillBuf();
 };
 
 //------------------------------------------------------------------------
