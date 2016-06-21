@@ -34,9 +34,6 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
       <property name="title">
        <string>Create Key Signature</string>
       </property>

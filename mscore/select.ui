@@ -33,9 +33,6 @@
        <property name="title">
         <string>Select</string>
        </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QLabel" name="label">
@@ -100,9 +97,6 @@
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
         <string>Action</string>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">

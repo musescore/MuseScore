@@ -29,12 +29,6 @@
             <property name="text">
              <string>Direction:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
-            </property>
            </widget>
           </item>
           <item>
@@ -60,12 +54,6 @@
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Anchor:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
             </property>
            </widget>
           </item>
@@ -106,9 +94,6 @@
          <property name="title">
           <string>Channel</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -123,9 +108,6 @@
         <widget class="QGroupBox" name="midiAction">
          <property name="title">
           <string>MIDI Action</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>

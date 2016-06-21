@@ -19,9 +19,6 @@
      <property name="title">
       <string>Select Part</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
      <layout class="QVBoxLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -132,9 +129,6 @@
     <widget class="QGroupBox" name="editGroup">
      <property name="title">
       <string>Edit Part</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
      </property>
      <layout class="QGridLayout">
       <item row="0" column="0">

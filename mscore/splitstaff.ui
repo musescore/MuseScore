@@ -35,9 +35,6 @@
          <property name="title">
           <string>Split Staff</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
            <layout class="QHBoxLayout">
@@ -107,9 +104,7 @@
  <tabstops>
   <tabstop>buttonBox</tabstop>
  </tabstops>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
