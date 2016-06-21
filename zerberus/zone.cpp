@@ -50,7 +50,7 @@ bool Zone::match(Channel* c, int k, int v, Trigger et)
          && (k <= keyHi)
          && (v >= veloLo)
          && (v <= veloHi)
-         && (seq == seqPos)
+         //&& (seq == seqPos)
          && (et == trigger)
          && (cc64 >= locc[64] && cc64 <= hicc[64])
          ) {
@@ -58,10 +58,11 @@ bool Zone::match(Channel* c, int k, int v, Trigger et)
 //         k, v, et, keyLo, keyHi, veloLo, veloHi, keyBase, trigger);
             if (et == Trigger::ATTACK) {
                   ++seq;
-                  if (seq >= seqLen)
+                  if (seq > seqLen)
                         seq = 0;
                   }
-            return true;
+            qDebug("seq %d seqPos %d seqLen %d", seq, seqPos, seqLen);
+            return seq == seqPos;
             }
       return false;
       }
