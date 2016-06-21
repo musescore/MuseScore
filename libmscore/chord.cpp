@@ -1665,8 +1665,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       QList<Note*> lnotes(notes());  // we need a copy!
 
-      if (staffGroup == StaffGroup::STANDARD) {
-            for (Note* note : lnotes) {
+      for (Note* note : lnotes) {
+            if (staffGroup == StaffGroup::STANDARD) {
                   if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                         // same pitch
                         if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
