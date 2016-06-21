@@ -95,28 +95,44 @@
      <item>
       <widget class="QPushButton" name="add">
        <property name="text">
-        <string>&lt;--</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/go-previous.svg</normaloff>:/data/icons/go-previous.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="remove">
        <property name="text">
-        <string>--&gt;</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/go-next.svg</normaloff>:/data/icons/go-next.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="up">
        <property name="text">
-        <string>Up</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="down">
        <property name="text">
-        <string>Down</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
        </property>
       </widget>
      </item>
@@ -134,7 +150,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
