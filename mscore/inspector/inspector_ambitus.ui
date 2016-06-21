@@ -205,7 +205,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Line thickness' value</string>
@@ -484,7 +484,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Has line' value</string>
@@ -800,7 +800,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Head group' value</string>
@@ -836,7 +836,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Direction' value</string>
@@ -908,7 +908,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Head type' value</string>
