@@ -1663,7 +1663,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             ch->sortNotes();
             }
 
-      std::vector<Note*> lnotes(notes());  // we need a copy!
+      QList<Note*> lnotes(notes());  // we need a copy!
 
       if (staffGroup == StaffGroup::STANDARD) {
             for (Note* note : lnotes) {
