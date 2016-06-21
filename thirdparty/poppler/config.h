@@ -158,7 +158,7 @@
 #define HAVE_ZLIB_H 1
 
 /* Define as const if the declaration of iconv() needs const. */
-#define ICONV_CONST 
+#define ICONV_CONST
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -179,7 +179,7 @@
 #define PACKAGE_NAME "poppler"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "poppler 0.44.0"
+#define PACKAGE_STRING "poppler 0.45.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "poppler"
@@ -188,7 +188,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.44.0"
+#define PACKAGE_VERSION "0.45.0"
 
 /* Poppler data dir */
 #define POPPLER_DATADIR "/opt/local/share/poppler"
@@ -197,7 +197,7 @@
 /* #undef POPPLER_HAS_CURL_SUPPORT */
 
 /* Defines the poppler version */
-#define POPPLER_VERSION "0.44.0"
+//#define POPPLER_VERSION "0.45.0"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
@@ -231,7 +231,7 @@
 /* #undef USE_OPENJPEG2 */
 
 /* Version number of package */
-#define VERSION "0.44.0"
+#define VERSION "0.45.0"
 
 /* Use fontconfig font configuration backend */
 /* #undef WITH_FONTCONFIGURATION_FONTCONFIG */

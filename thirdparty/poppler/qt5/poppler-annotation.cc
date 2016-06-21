@@ -3936,6 +3936,11 @@ void LinkAnnotation::store( QDomNode & node, QDomDocument & document ) const
                 // FIXME: implement me
                 break;
             }
+            case Poppler::Link::JavaScript:
+            {
+                // FIXME: implement me
+                break;
+            }
             case Poppler::Link::None:
                 break;
         }

@@ -21,7 +21,7 @@
 // Copyright (C) 2008 Hugo Mercier <hmercier31@gmail.com>
 // Copyright (C) 2008 Pino Toscano <pino@kde.org>
 // Copyright (C) 2008 Tomas Are Haavet <tomasare@gmail.com>
-// Copyright (C) 2009-2011, 2013 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2009-2011, 2013, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2012, 2013 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2012, 2015 Tobias Koenig <tokoe@kdab.com>
 // Copyright (C) 2013 Thomas Freitag <Thomas.Freitag@alfa.de>
@@ -847,8 +847,8 @@ class AnnotScreen: public Annot {
   GooString* getTitle() { return title; }
 
   AnnotAppearanceCharacs *getAppearCharacs() { return appearCharacs; }
-  LinkAction* getAction() { return action; }
-  LinkAction *getAdditionalAction(AdditionalActionsType type);
+  LinkAction* getAction() { return action; } // The caller should now delete the result
+  LinkAction *getAdditionalAction(AdditionalActionsType type); // The caller should delete the result
 
  private:
   void initialize(PDFDoc *docA, Dict *dict);
@@ -1322,9 +1322,9 @@ public:
 
   AnnotWidgetHighlightMode getMode() { return mode; }
   AnnotAppearanceCharacs *getAppearCharacs() { return appearCharacs; }
-  LinkAction *getAction() { return action; }
-  LinkAction *getAdditionalAction(AdditionalActionsType type);
-  LinkAction *getFormAdditionalAction(FormAdditionalActionsType type);
+  LinkAction *getAction() { return action; }  // The caller should not delete the result
+  LinkAction *getAdditionalAction(AdditionalActionsType type); // The caller should delete the result
+  LinkAction *getFormAdditionalAction(FormAdditionalActionsType type); // The caller should delete the result
   Dict *getParent() { return parent; }
 
 private:

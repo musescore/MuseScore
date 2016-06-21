@@ -3278,17 +3278,17 @@ void SplashOutputDev::iccTransform(void *data, SplashBitmap *bitmap) {
       Guchar *q;
       Guchar *b = p;
       int x;
-      for (x = 0, q = rgbxLine; x < bitmap->getWidth(); ++x, ++b) {
-        *q++ = *b++;
-        *q++ = *b++;
-        *q++ = *b++;
+      for (x = 0, q = rgbxLine; x < bitmap->getWidth(); ++x, b+=4) {
+        *q++ = b[2];
+        *q++ = b[1];
+        *q++ = b[0];
       }
       imgData->colorMap->getRGBLine(rgbxLine, colorLine, bitmap->getWidth());
       b = p;
-      for (x = 0, q = colorLine; x < bitmap->getWidth(); ++x, ++b) {
-        *b++ = *q++;
-        *b++ = *q++;
-        *b++ = *q++;
+      for (x = 0, q = colorLine; x < bitmap->getWidth(); ++x, b+=4) {
+        b[2] = *q++;
+        b[1] = *q++;
+        b[0] = *q++;
       }
       break;
     }

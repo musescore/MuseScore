@@ -15,7 +15,7 @@
 //
 // Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
 // Copyright (C) 2007, 2008 Julien Rebetez <julienr@svn.gnome.org>
-// Copyright (C) 2007-2013, 2015 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2007-2013, 2015, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2007-2013 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2007, 2008 Iñigo Martínez <inigomartinez@gmail.com>
 // Copyright (C) 2007 Jeff Muizelaar <jeff@infidigm.net>
@@ -6849,6 +6849,7 @@ AnnotRichMedia::Content::Content(Dict *dict) {
       obj2.free();
     }
   } else {
+    nConfigurations = 0;
     configurations = NULL;
   }
   obj1.free();
@@ -6879,6 +6880,7 @@ AnnotRichMedia::Content::Content(Dict *dict) {
     obj2.free();
 
   } else {
+    nAssets = 0;
     assets = NULL;
   }
   obj1.free();
@@ -7064,6 +7066,7 @@ AnnotRichMedia::Instance::Instance(Dict *dict)
   } else {
     params = NULL;
   }
+  obj1.free();
 }
 
 AnnotRichMedia::Instance::~Instance()

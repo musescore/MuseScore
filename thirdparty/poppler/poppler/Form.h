@@ -6,7 +6,7 @@
 //
 // Copyright 2006 Julien Rebetez <julienr@svn.gnome.org>
 // Copyright 2007, 2008, 2011 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright 2007-2010, 2012, 2015 Albert Astals Cid <aacid@kde.org>
+// Copyright 2007-2010, 2012, 2015, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright 2010 Mark Riedesel <mark@klowner.com>
 // Copyright 2011 Pino Toscano <pino@kde.org>
 // Copyright 2012 Fabio D'Urso <fabiodurso@hotmail.it>
@@ -106,8 +106,8 @@ public:
 
   bool isReadOnly() const;
 
-  LinkAction *getActivationAction();
-  LinkAction *getAdditionalAction(Annot::FormAdditionalActionsType type);
+  LinkAction *getActivationAction(); // The caller should not delete the result
+  LinkAction *getAdditionalAction(Annot::FormAdditionalActionsType type); // The caller should delete the result
 
   // return the unique ID corresponding to pageNum/fieldNum
   static int encodeID (unsigned pageNum, unsigned fieldNum);

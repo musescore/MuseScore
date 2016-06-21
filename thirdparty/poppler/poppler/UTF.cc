@@ -16,6 +16,7 @@
 // Copyright (C) 2008 Koji Otani <sho@bbr.jp>
 // Copyright (C) 2012 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2012 Hib Eris <hib@hiberis.nl>
+// Copyright (C) 2016 Albert Astals Cid <aacid@kde.org>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -89,8 +90,10 @@ int TextStringToUCS4(GooString *textStr, Unicode **ucs4)
 
   len = textStr->getLength();
   s = textStr->getCString();
-  if (len == 0)
+  if (len == 0) {
+    *ucs4 = 0;
     return 0;
+  }
 
   if (textStr->hasUnicodeMarker()) {
     Unicode *utf16;

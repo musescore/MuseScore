@@ -4571,7 +4571,7 @@ public:
 
 private:
   OutputDev *out;
-  GfxColor *box_color, *glyph_color;
+  GfxColor *glyph_color;
   GfxState *state;
   GooList *selectionList;
   Matrix ctm, ictm;
@@ -4585,7 +4585,6 @@ TextSelectionPainter::TextSelectionPainter(TextPage *page,
 					   GfxColor *glyph_color)
   : TextSelectionVisitor(page),
     out(out),
-    box_color(box_color),
     glyph_color(glyph_color)
 {
   PDFRectangle box(0, 0, page->pageWidth, page->pageHeight);

@@ -467,7 +467,7 @@ private:
 
   SplashTransparencyGroup *	// transparency group stack
     transpGroupStack;
-  SplashBitmap *maskBitmap; // for image masks in pattern colorspace
+//  SplashBitmap *maskBitmap; // for image masks in pattern colorspace
   int nestCount;
 };
 

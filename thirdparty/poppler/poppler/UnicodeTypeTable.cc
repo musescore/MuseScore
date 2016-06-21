@@ -15,7 +15,7 @@
 //
 // Copyright (C) 2006, 2007 Ed Catmur <ed@catmur.co.uk>
 // Copyright (C) 2007 Jeff Muizelaar <jeff@infidigm.net>
-// Copyright (C) 2008 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2008, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2012 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2016 Khaled Hosny <khaledhosny@eglug.org>
 //
@@ -1028,16 +1028,19 @@ static int decomp_compat(Unicode u, Unicode *buf, GBool reverseRTL = false) {
       int midpoint = (start + end) / 2;
       if (u == decomp_table[midpoint].character) {
 	int offset = decomp_table[midpoint].offset;
-	if (offset == -1)
+	if (offset == -1) {
 	  break;
-	else {
+	} else {
 	  int length = decomp_table[midpoint].length, i;
-	  if (buf)
-	    for (i = 0; i < length; ++i)
-		if (unicodeTypeR(u) && reverseRTL)
-		  buf[i] = decomp_expansion[offset + length - i - 1];
-		else
-		  buf[i] = decomp_expansion[offset + i];
+	  if (buf) {
+	    for (i = 0; i < length; ++i) {
+	      if (unicodeTypeR(u) && reverseRTL) {
+		buf[i] = decomp_expansion[offset + length - i - 1];
+	      } else {
+		buf[i] = decomp_expansion[offset + i];
+	      }
+	    }
+	  }
 	  return length;
 	}
       } else if (midpoint == start)

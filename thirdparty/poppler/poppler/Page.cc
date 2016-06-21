@@ -15,7 +15,7 @@
 //
 // Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
 // Copyright (C) 2005 Jeff Muizelaar <jeff@infidigm.net>
-// Copyright (C) 2005-2013 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2005-2013, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2006-2008 Pino Toscano <pino@kde.org>
 // Copyright (C) 2006 Nickolay V. Shmyrev <nshmyrev@yandex.ru>
 // Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
@@ -325,6 +325,7 @@ Page::Page(PDFDoc *docA, int numA, Dict *pageDict, Ref pageRefA, PageAttrs *attr
   if (!(thumb.isStream() || thumb.isNull() || thumb.isRef())) {
       error(errSyntaxError, -1, "Page thumb object (page {0:d}) is wrong type ({1:s})",
             num, thumb.getTypeName());
+      thumb.free();
       thumb.initNull(); 
   }
 
@@ -333,6 +334,7 @@ Page::Page(PDFDoc *docA, int numA, Dict *pageDict, Ref pageRefA, PageAttrs *attr
   if (!(actions.isDict() || actions.isNull())) {
       error(errSyntaxError, -1, "Page additional action object (page {0:d}) is wrong type ({1:s})",
             num, actions.getTypeName());
+      actions.free();
       actions.initNull();
   }
   
