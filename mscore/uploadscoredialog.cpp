@@ -55,11 +55,11 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       license->addItem(tr("All Rights reserved"), "all-rights-reserved");
       license->addItem(tr("Creative Commons Attribution"), "cc-by");
-	license->addItem(tr("Creative Commons Attribution Share Alike"), "cc-by-sa");
+      license->addItem(tr("Creative Commons Attribution Share Alike"), "cc-by-sa");
       license->addItem(tr("Creative Commons Attribution No Derivative Works"), "cc-by-nd");
       license->addItem(tr("Creative Commons Attribution Noncommercial"), "cc-by-nc");
       license->addItem(tr("Creative Commons Attribution Noncommercial Share Alike"), "cc-by-nc-sa");
-	license->addItem(tr("Creative Commons Attribution Noncommercial Non Derivate Works"), "cc-by-nc-nd");
+      license->addItem(tr("Creative Commons Attribution Noncommercial Non Derivate Works"), "cc-by-nc-nd");
       license->addItem(tr("Public Domain"), "publicdomain");
       license->addItem(tr("Creative Commons Zero"), "cc-zero");
 
@@ -74,9 +74,6 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
                            .arg("<a href=\"http://musescore.com/community-guidelines\">")
                            .arg("</a>"));
       privateHelp->setFont(font);
-
-      tagsHelp->setText(tr("Use a comma to separate the tags"));
-      tagsHelp->setFont(font);
 
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       chkSignoutOnExit->setVisible(false);

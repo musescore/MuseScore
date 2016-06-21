@@ -28,9 +28,6 @@
      <property name="title">
       <string>Enter Time Signature:</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -184,9 +181,6 @@
      <property name="title">
       <string>Pickup Measure</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
@@ -302,9 +296,6 @@
      <property name="title">
       <string>Enter Number of Measures:</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
      <layout class="QGridLayout">
       <property name="topMargin">
        <number>3</number>
@@ -364,12 +355,6 @@
         </property>
         <property name="text">
          <string>Hint: You can also add or remove measures after creation of the score.</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::AutoText</enum>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
         </property>
        </widget>
       </item>

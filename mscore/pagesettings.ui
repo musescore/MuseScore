@@ -130,9 +130,6 @@
           <property name="text">
            <string>Height:</string>
           </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
           <property name="buddy">
            <cstring>pageHeight</cstring>
           </property>
@@ -142,9 +139,6 @@
          <widget class="QLabel" name="label_2">
           <property name="text">
            <string>Width:</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
           </property>
           <property name="buddy">
            <cstring>pageWidth</cstring>
@@ -173,9 +167,6 @@
           </property>
           <property name="text">
            <string>Staff space (sp):</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
           </property>
           <property name="buddy">
            <cstring>spatiumEntry</cstring>
@@ -472,9 +463,6 @@
         <widget class="QLabel" name="label_12">
          <property name="text">
           <string>First page number:</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::PlainText</enum>
          </property>
          <property name="buddy">
           <cstring>pageOffsetEntry</cstring>

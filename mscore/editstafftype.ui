@@ -104,9 +104,6 @@
          <property name="text">
           <string>Lines:</string>
          </property>
-         <property name="margin">
-          <number>5</number>
-         </property>
          <property name="buddy">
           <cstring>lines</cstring>
          </property>
@@ -141,12 +138,6 @@
          </property>
          <property name="text">
           <string>Line distance:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>5</number>
          </property>
          <property name="buddy">
           <cstring>lineDistance</cstring>
@@ -394,9 +385,6 @@
                       <property name="text">
                        <string>Font:</string>
                       </property>
-                      <property name="textFormat">
-                       <enum>Qt::PlainText</enum>
-                      </property>
                       <property name="buddy">
                        <cstring>fretFontName</cstring>
                       </property>
@@ -413,12 +401,6 @@
                      <widget class="QLabel" name="fretFontSizeLabel">
                       <property name="text">
                        <string>Size:</string>
-                      </property>
-                      <property name="textFormat">
-                       <enum>Qt::PlainText</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
                       <property name="buddy">
                        <cstring>fretFontSize</cstring>
@@ -449,12 +431,6 @@
                      <widget class="QLabel" name="fretYLabel">
                       <property name="text">
                        <string>Vertical offset:</string>
-                      </property>
-                      <property name="textFormat">
-                       <enum>Qt::PlainText</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
                       <property name="buddy">
                        <cstring>fretY</cstring>
@@ -877,9 +853,6 @@
                      <property name="text">
                       <string>Repeat:</string>
                      </property>
-                     <property name="textFormat">
-                      <enum>Qt::PlainText</enum>
-                     </property>
                      <property name="buddy">
                       <cstring>valuesRepeatNever</cstring>
                      </property>
@@ -979,9 +952,6 @@
                      <property name="text">
                       <string>Stem style:</string>
                      </property>
-                     <property name="textFormat">
-                      <enum>Qt::PlainText</enum>
-                     </property>
                      <property name="buddy">
                       <cstring>stemBesideRadio</cstring>
                      </property>
@@ -1055,9 +1025,6 @@
                      <property name="text">
                       <string>Stem position:</string>
                      </property>
-                     <property name="textFormat">
-                      <enum>Qt::PlainText</enum>
-                     </property>
                      <property name="buddy">
                       <cstring>stemAboveRadio</cstring>
                      </property>
@@ -1130,9 +1097,6 @@
                      </property>
                      <property name="text">
                       <string>Half notes:</string>
-                     </property>
-                     <property name="textFormat">
-                      <enum>Qt::PlainText</enum>
                      </property>
                      <property name="buddy">
                       <cstring>minimNoneRadio</cstring>

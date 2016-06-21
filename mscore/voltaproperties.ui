@@ -21,9 +21,6 @@
        <property name="title">
         <string>Volta Properties</string>
        </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout">
@@ -79,9 +76,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
