@@ -70,7 +70,7 @@ void TextLineSegment::draw(QPainter* painter) const
       TextLine* tl   = textLine();
       qreal _spatium = spatium();
 
-      QPointF pp2(pos2());
+      //QPointF pp2(pos2());
 
       // color for line (text color comes from the text properties)
       QColor color;

@@ -391,8 +391,8 @@ void System::layout2()
                   if (!mb->isMeasure())
                         continue;
                   Measure* m = toMeasure(mb);
-                  Shape& s1 = m->shape(si1);
-                  Shape& s2 = m->shape(si2);
+                  Shape& s1 = m->staffShape(si1);
+                  Shape& s2 = m->staffShape(si2);
 
                   qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
                   dist    = qMax(dist, d);
@@ -1058,8 +1058,8 @@ qreal System::minDistance(System* s2) const
                   qreal ax2 = mb2->x() + mb2->width();
                   if (ax2 < bx1)
                         continue;
-                  Shape s1 = m1->shape(lastStaff).translated(m1->pos());
-                  Shape s2 = m2->shape(0).translated(m2->pos());
+                  Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
+                  Shape s2 = m2->staffShape(0).translated(m2->pos());
                   qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
                   dist = qMax(dist, d - m1->mstaff(lastStaff)->lines->height());
                   }
@@ -1079,7 +1079,7 @@ qreal System::topDistance(int staffIdx, const Shape& s) const
             if (!mb1->isMeasure())
                   continue;
             Measure* m1 = toMeasure(mb1);
-            dist = qMax(dist, s.minVerticalDistance(m1->shape(staffIdx).translated(m1->pos())));
+            dist = qMax(dist, s.minVerticalDistance(m1->staffShape(staffIdx).translated(m1->pos())));
             }
       return dist;
       }
@@ -1095,7 +1095,7 @@ qreal System::bottomDistance(int staffIdx, const Shape& s) const
             if (!mb1->isMeasure())
                   continue;
             Measure* m1 = toMeasure(mb1);
-            dist = qMax(dist, m1->shape(staffIdx).translated(m1->pos()).minVerticalDistance(s));
+            dist = qMax(dist, m1->staffShape(staffIdx).translated(m1->pos()).minVerticalDistance(s));
             }
       return dist;
       }

@@ -274,7 +274,7 @@ class Measure : public MeasureBase {
 
       BarLineType endBarLineType() const;
       bool endBarLineVisible() const;
-      Shape& shape(int staffIdx) { return mstaff(staffIdx)->shape(); }
+      Shape& staffShape(int staffIdx) { return mstaff(staffIdx)->shape(); }
       virtual void triggerLayout() const override;
       };
 

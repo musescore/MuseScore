@@ -3321,10 +3321,10 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (!mb->isMeasure())
                         continue;
                   Measure* m = toMeasure(mb);
-                  m->shape(si).clear();
+                  m->staffShape(si).clear();
                   for (Segment& s : m->segments())
-                        m->shape(si).add(s.staffShape(si).translated(s.pos()));
-                  m->shape(si).add(m->mstaff(si)->lines->bbox());
+                        m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
+                  m->staffShape(si).add(m->mstaff(si)->lines->bbox());
                   }
             }
 
@@ -3366,7 +3366,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (ss->isOttavaSegment()) {
                         if (sp->tick() < m->endTick() && sp->tick2() >= m->tick()) {
                               // spanner shape must be translated from system coordinate space to measure coordinate space
-                              m->shape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
+                              m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
                               }
                         }
                   }
