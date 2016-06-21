@@ -21,6 +21,8 @@
 #ifndef __PDF_H__
 #define __PDF_H__
 
+#include "qt5/poppler-qt5.h"
+
 class PDFDoc;
 class QImageOutputDev;
 
@@ -34,6 +36,7 @@ class Pdf {
       static int references;
       PDFDoc* _doc;
       QImageOutputDev* imgOut;
+      Poppler::Document* _document;
    public:
       Pdf();
       bool open(const QString& path);
@@ -41,6 +44,7 @@ class Pdf {
 
       int numPages() const;
       QImage page(int);
+      QImage binarization(QImage image);
       };
 }
 

@@ -81,7 +81,7 @@ public:
   double getRangeMin(int i) { return range[i][0]; }
   double getRangeMax(int i) { return range[i][1]; }
   GBool getHasRange() { return hasRange; }
-  virtual GBool hasDifferentResultSet(Function *) { return gFalse; }
+  virtual GBool hasDifferentResultSet(Function *func) { return gFalse; }
 
   // Transform an input tuple into an output tuple.
   virtual void transform(double *in, double *out) = 0;
@@ -169,7 +169,7 @@ private:
 class ExponentialFunction: public Function {
 public:
 
-  ExponentialFunction(Object *, Dict *dict);
+  ExponentialFunction(Object *funcObj, Dict *dict);
   virtual ~ExponentialFunction();
   virtual Function *copy() { return new ExponentialFunction(this); }
   virtual int getType() { return 2; }
@@ -198,7 +198,7 @@ private:
 class StitchingFunction: public Function {
 public:
 
-  StitchingFunction(Object *, Dict *dict, std::set<int> *usedParents);
+  StitchingFunction(Object *funcObj, Dict *dict, std::set<int> *usedParents);
   virtual ~StitchingFunction();
   virtual Function *copy() { return new StitchingFunction(this); }
   virtual int getType() { return 3; }

@@ -21,6 +21,7 @@
 // Copyright (C) 2012-2014 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2013 Jason Crain <jason@aquaticape.us>
 // Copyright (C) 2015 Adam Reichold <adam.reichold@t-online.de>
+// Copyright (C) 2016 Jakub Kucharski <jakubkucharski97@gmail.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -65,11 +66,10 @@ public:
   // Create a string from <lengthA> chars at <idx> in <str>.
   GooString(GooString *str, int idx, int lengthA);
 
-  // Set content of a string to concatination of <s1> and <s2>. They can both
-  // be NULL. if <s1Len> or <s2Len> is CALC_STRING_LEN, then length of the string
-  // will be calculated with strlen(). Otherwise we assume they are a valid
-  // length of string (or its substring)
-  GooString* Set(const char *s1, int s1Len=CALC_STRING_LEN, const char *s2=NULL, int s2Len=CALC_STRING_LEN);
+  // Set content of a string to <newStr>. If <newLen> is CALC_STRING_LEN, then
+  // length of the string will be calculated with strlen(). Otherwise we assume
+  // this is a valid length of <newStr> (or its substring)
+  GooString* Set(const char *newStr, int newLen=CALC_STRING_LEN);
 
   // Copy a string.
   explicit GooString(const GooString *str);

@@ -55,7 +55,7 @@ public:
   virtual Goffset getPos();
   virtual int getChar();
   virtual int lookChar();
-  virtual GooString *getPSFilter(int , const char *);
+  virtual GooString *getPSFilter(int psLevel, const char *indent);
   virtual GBool isBinary(GBool last = gTrue);
   virtual Object *getGlobalsStream() { return &globalsStream; }
   virtual Ref getGlobalsStreamRef() { return globalsStreamRef; }
@@ -68,7 +68,7 @@ private:
   GBool readSymbolDictSeg(Guint segNum, Guint length,
 			  Guint *refSegs, Guint nRefSegs);
   void readTextRegionSeg(Guint segNum, GBool imm,
-			 GBool , Guint ,
+			 GBool lossless, Guint length,
 			 Guint *refSegs, Guint nRefSegs);
   JBIG2Bitmap *readTextRegion(GBool huff, GBool refine,
 			      int w, int h,
@@ -93,7 +93,7 @@ private:
 			      int *atx, int *aty);
   void readPatternDictSeg(Guint segNum, Guint length);
   void readHalftoneRegionSeg(Guint segNum, GBool imm,
-			     GBool , Guint ,
+			     GBool lossless, Guint length,
 			     Guint *refSegs, Guint nRefSegs);
   void readGenericRegionSeg(Guint segNum, GBool imm,
 			    GBool lossless, Guint length);
@@ -107,7 +107,7 @@ private:
 				 int *atx, int *aty,
 				 int mmrDataLength);
   void readGenericRefinementRegionSeg(Guint segNum, GBool imm,
-				      GBool , Guint ,
+				      GBool lossless, Guint length,
 				      Guint *refSegs,
 				      Guint nRefSegs);
   JBIG2Bitmap *readGenericRefinementRegion(int w, int h,

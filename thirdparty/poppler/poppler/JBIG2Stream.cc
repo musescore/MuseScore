@@ -1316,7 +1316,7 @@ int JBIG2Stream::getChars(int nChars, Guchar *buffer) {
   return n;
 }
 
-GooString *JBIG2Stream::getPSFilter(int , const char *) {
+GooString *JBIG2Stream::getPSFilter(int psLevel, const char *indent) {
   return NULL;
 }
 
@@ -1996,7 +1996,7 @@ GBool JBIG2Stream::readSymbolDictSeg(Guint segNum, Guint length,
 }
 
 void JBIG2Stream::readTextRegionSeg(Guint segNum, GBool imm,
-				    GBool , Guint ,
+				    GBool lossless, Guint length,
 				    Guint *refSegs, Guint nRefSegs) {
   JBIG2Bitmap *bitmap;
   JBIG2HuffmanTable runLengthTab[36];
@@ -2631,7 +2631,7 @@ void JBIG2Stream::readPatternDictSeg(Guint segNum, Guint length) {
 }
 
 void JBIG2Stream::readHalftoneRegionSeg(Guint segNum, GBool imm,
-					GBool , Guint ,
+					GBool lossless, Guint length,
 					Guint *refSegs, Guint nRefSegs) {
   JBIG2Bitmap *bitmap;
   JBIG2Segment *seg;
@@ -3711,7 +3711,7 @@ JBIG2Bitmap *JBIG2Stream::readGenericBitmap(GBool mmr, int w, int h,
 }
 
 void JBIG2Stream::readGenericRefinementRegionSeg(Guint segNum, GBool imm,
-						 GBool , Guint ,
+						 GBool lossless, Guint length,
 						 Guint *refSegs,
 						 Guint nRefSegs) {
   JBIG2Bitmap *bitmap, *refBitmap;

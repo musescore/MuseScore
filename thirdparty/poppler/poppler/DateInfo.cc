@@ -4,6 +4,8 @@
 //
 // Copyright (C) 2008 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2015 André Guerreiro <aguerreiro1985@gmail.com>
+// Copyright (C) 2015 André Esser <bepandre@hotmail.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -116,3 +118,27 @@ GooString *timeToDateString(time_t *timet) {
   return dateString;
 }
 
+time_t pdfTimeToInteger(GooString *time_str)
+{
+  int year, mon, day, hour, min, sec, tz_hour, tz_minute;
+  char tz;
+  struct tm time_struct;
+
+  if (!parseDateString (time_str->getCString(), &year,
+        &mon, &day, &hour, &min, &sec, &tz, &tz_hour, &tz_minute))
+    return 0;
+
+  time_struct.tm_year = year - 1900;
+  time_struct.tm_mon = mon - 1;
+  time_struct.tm_mday = day;
+  time_struct.tm_hour = hour;
+  time_struct.tm_min = min;
+  time_struct.tm_sec = sec;
+  time_struct.tm_wday = -1;
+  time_struct.tm_yday = -1;
+  time_struct.tm_isdst = -1;
+
+  time_t unix_time = mktime(&time_struct);
+
+  return unix_time;
+}

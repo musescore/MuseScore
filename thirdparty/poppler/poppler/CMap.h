@@ -50,7 +50,7 @@ public:
 
   // Parse a CMap from <obj>, which can be a name or a stream.  Sets
   // the initial reference count to 1.  Returns NULL on failure.
-  static CMap *parse(CMapCache *, GooString *collectionA, Object *obj);
+  static CMap *parse(CMapCache *cache, GooString *collectionA, Object *obj);
 
   // Create the CMap specified by <collection> and <cMapName>.  Sets
   // the initial reference count to 1.  Returns NULL on failure.

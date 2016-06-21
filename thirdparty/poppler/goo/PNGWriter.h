@@ -44,7 +44,7 @@ public:
 
   bool init(FILE *f, int width, int height, int hDPI, int vDPI);
 
-  bool writePointers(unsigned char **rowPointers, int);
+  bool writePointers(unsigned char **rowPointers, int rowCount);
   bool writeRow(unsigned char **row);
 
   bool close();

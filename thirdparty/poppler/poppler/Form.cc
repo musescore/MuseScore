@@ -5,7 +5,7 @@
 // This file is licensed under the GPLv2 or later
 //
 // Copyright 2006-2008 Julien Rebetez <julienr@svn.gnome.org>
-// Copyright 2007-2012 Albert Astals Cid <aacid@kde.org>
+// Copyright 2007-2012, 2015, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright 2007-2008, 2011 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright 2007, 2013 Adrian Johnson <ajohnson@redneon.com>
 // Copyright 2007 Iñigo Martínez <inigomartinez@gmail.com>
@@ -15,7 +15,9 @@
 // Copyright 2009 KDAB via Guillermo Amaral <gamaral@amaral.com.mx>
 // Copyright 2010, 2012 Mark Riedesel <mark@klowner.com>
 // Copyright 2012 Fabio D'Urso <fabiodurso@hotmail.it>
-// 
+// Copyright 2015 André Guerreiro <aguerreiro1985@gmail.com>
+// Copyright 2015 André Esser <bepandre@hotmail.com>
+//
 //========================================================================
 
 #include <config.h>
@@ -36,6 +38,11 @@
 #include "Gfx.h"
 #include "Form.h"
 #include "PDFDoc.h"
+#include "DateInfo.h"
+#ifdef ENABLE_NSS3
+#include "SignatureHandler.h"
+#endif
+#include "SignatureInfo.h"
 #include "XRef.h"
 #include "PDFDocEncoding.h"
 #include "Annot.h"
@@ -439,6 +446,11 @@ FormWidgetSignature::FormWidgetSignature(PDFDoc *docA, Object *aobj, unsigned nu
 {
   type = formSignature;
   parent = static_cast<FormFieldSignature*>(field);
+}
+
+SignatureInfo *FormWidgetSignature::validateSignature(bool doVerifyCert, bool forceRevalidation)
+{
+  return parent->validateSignature(doVerifyCert, forceRevalidation);
 }
 
 void FormWidgetSignature::updateWidgetAppearance()
@@ -1370,11 +1382,162 @@ GooString *FormFieldChoice::getSelectedChoice() {
 FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents)
   : FormField(docA, dict, ref, parent, usedParents, formSignature)
 {
+  signature = NULL;
+
+  signature_info = new SignatureInfo();
+  parseInfo();
 }
 
 FormFieldSignature::~FormFieldSignature()
 {
+  byte_range.free();
+  delete signature_info;
+  delete signature;
+}
 
+void FormFieldSignature::parseInfo()
+{
+  if (!obj.isDict())
+    return;
+
+  Object sig_dict, contents_obj, time_of_signing, subfilterName;
+
+  // retrieve PKCS#7
+  obj.dictLookup("V", &sig_dict);
+  if (!sig_dict.isDict()) {
+    sig_dict.free();
+    return;
+  }
+
+  sig_dict.dictLookup("Contents", &contents_obj);
+  if (contents_obj.isString()) {
+    signature = contents_obj.getString()->copy();
+  }
+  contents_obj.free();
+
+  sig_dict.dictLookup("ByteRange", &byte_range);
+
+  // retrieve SigningTime
+  sig_dict.dictLookup("M", &time_of_signing);
+  if (time_of_signing.isString()) {
+    GooString *time_str = time_of_signing.getString();
+    signature_info->setSigningTime(pdfTimeToInteger(time_str)); // Put this information directly in SignatureInfo object
+    time_of_signing.free();
+  }
+
+  // check if subfilter is supported for signature validation, only detached signatures work for now
+  sig_dict.dictLookup("SubFilter", &subfilterName);
+  if (subfilterName.isName("adbe.pkcs7.detached") || subfilterName.isName("adbe.pkcs7.sha1")) {
+    signature_info->setSubFilterSupport(true);
+  }
+
+  subfilterName.free();
+  sig_dict.free();
+}
+
+void FormFieldSignature::hashSignedDataBlock(SignatureHandler *handler, Goffset block_len)
+{
+#ifdef ENABLE_NSS3
+  const int BLOCK_SIZE = 4096;
+  unsigned char signed_data_buffer[BLOCK_SIZE];
+
+  Goffset i = 0;
+  while(i < block_len)
+  {
+    Goffset bytes_left = block_len - i;
+    if (bytes_left < BLOCK_SIZE)
+    {
+      doc->getBaseStream()->doGetChars(bytes_left, signed_data_buffer);
+      handler->updateHash(signed_data_buffer, bytes_left);
+      i = block_len;
+    }
+    else
+    {
+      doc->getBaseStream()->doGetChars(BLOCK_SIZE, signed_data_buffer);
+      handler->updateHash(signed_data_buffer, BLOCK_SIZE);
+      i += BLOCK_SIZE;
+    }
+  }
+#endif
+}
+
+
+SignatureInfo *FormFieldSignature::validateSignature(bool doVerifyCert, bool forceRevalidation)
+{
+#ifdef ENABLE_NSS3
+  if (!signature_info->isSubfilterSupported()) {
+    error(errUnimplemented, 0, "Unable to validate this type of signature");
+    return signature_info;
+  }
+
+  if (signature_info->getSignatureValStatus() != SIGNATURE_NOT_VERIFIED && !forceRevalidation) {
+    return signature_info;
+  }
+
+  if (signature == NULL) {
+    error(errSyntaxError, 0, "Invalid or missing Signature string");
+    return signature_info;
+  }
+
+  if (!byte_range.isArray()) {
+    error(errSyntaxError, 0, "Invalid or missing ByteRange array");
+    return signature_info;
+  }
+
+  int arrayLen = byte_range.arrayGetLength();
+  if (arrayLen < 2) {
+    error(errSyntaxError, 0, "Too few elements in ByteRange array");
+    return signature_info;
+  }
+
+  NSSCMSVerificationStatus sig_val_state;
+  SECErrorCodes cert_val_state;
+  const int signature_len = signature->getLength();
+  unsigned char *signatureuchar = (unsigned char *)gmalloc(signature_len);
+  memcpy(signatureuchar, signature->getCString(), signature_len);
+  SignatureHandler signature_handler(signatureuchar, signature_len);
+
+  Goffset fileLength = doc->getBaseStream()->getLength();
+  for (int i = 0; i < arrayLen/2; i++) {
+    Object offsetObj, lenObj;
+    byte_range.arrayGet(i*2, &offsetObj);
+    byte_range.arrayGet(i*2+1, &lenObj);
+
+    if (!offsetObj.isIntOrInt64() || !lenObj.isIntOrInt64()) {
+      error(errSyntaxError, 0, "Illegal values in ByteRange array");
+      return signature_info;
+    }
+
+    Goffset offset = offsetObj.getIntOrInt64();
+    Goffset len = lenObj.getIntOrInt64();
+
+    if (offset < 0 || offset >= fileLength || len < 0 || len > fileLength || offset + len > fileLength) {
+      error(errSyntaxError, 0, "Illegal values in ByteRange array");
+      return signature_info;
+    }
+
+    doc->getBaseStream()->setPos(offset);
+    hashSignedDataBlock(&signature_handler, len);
+  }
+
+  sig_val_state = signature_handler.validateSignature();
+  signature_info->setSignatureValStatus(SignatureHandler::NSS_SigTranslate(sig_val_state));
+  signature_info->setSignerName(signature_handler.getSignerName());
+
+  // verify if signature contains a 'signing time' attribute
+  if (signature_handler.getSigningTime() != 0) {
+    signature_info->setSigningTime(signature_handler.getSigningTime());
+  }
+
+  if (sig_val_state != NSSCMSVS_GoodSignature || !doVerifyCert) {
+    return signature_info;
+  }
+
+  cert_val_state = signature_handler.validateCertificate();
+  signature_info->setCertificateValStatus(SignatureHandler::NSS_CertTranslate(cert_val_state));
+
+#endif
+  return signature_info;
 }
 
 #ifdef DEBUG_FORMS
@@ -1475,7 +1638,7 @@ Form::Form(PDFDoc *docA, Object* acroFormA)
 
 Form::~Form() {
   int i;
-  for(i = 0; i< numFields; ++i)
+  for(i = 0; i < numFields; ++i)
     delete rootFields[i];
   gfree (rootFields);
   delete defaultAppearance;

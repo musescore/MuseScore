@@ -100,7 +100,7 @@ public:
 
   // Does this device support specific shading types?
   // see gouraudTriangleShadedFill() and patchMeshShadedFill()
-  virtual GBool useShadedFills(int ) { return gFalse; }
+  virtual GBool useShadedFills(int type) { return gFalse; }
 
   // Does this device use FillColorStop()?
   virtual GBool useFillColorStop() { return gFalse; }
@@ -133,18 +133,18 @@ public:
   // returns false, the page display is aborted.  Typically, an
   // OutputDev will use some alternate means to display the page
   // before returning false.
-  virtual GBool checkPageSlice(Page *, double , double ,
-			       int , GBool , GBool ,
-			       int , int , int , int ,
-			       GBool ,
-			       GBool (* )(void *) = NULL,
-			       void *  = NULL,
-			       GBool (*)(Annot *, void *) = NULL,
-			       void * = NULL)
+  virtual GBool checkPageSlice(Page *page, double hDPI, double vDPI,
+			       int rotate, GBool useMediaBox, GBool crop,
+			       int sliceX, int sliceY, int sliceW, int sliceH,
+			       GBool printing,
+			       GBool (* abortCheckCbk)(void *data) = NULL,
+			       void * abortCheckCbkData = NULL,
+			       GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = NULL,
+			       void *annotDisplayDecideCbkData = NULL)
     { return gTrue; }
 
   // Start a page.
-  virtual void startPage(int , GfxState *, XRef *) {}
+  virtual void startPage(int pageNum, GfxState *state, XRef *xref) {}
 
   // End a page.
   virtual void endPage() {}
@@ -227,9 +227,9 @@ public:
     { return gFalse; }
   virtual GBool radialShadedSupportExtend(GfxState * /*state*/, GfxRadialShading * /*shading*/)
     { return gFalse; }
-  virtual GBool gouraudTriangleShadedFill(GfxState *, GfxGouraudTriangleShading *)
+  virtual GBool gouraudTriangleShadedFill(GfxState *state, GfxGouraudTriangleShading *shading)
     { return gFalse; }
-  virtual GBool patchMeshShadedFill(GfxState *, GfxPatchMeshShading *)
+  virtual GBool patchMeshShadedFill(GfxState *state, GfxPatchMeshShading *shading)
     { return gFalse; }
 
   //----- path clipping

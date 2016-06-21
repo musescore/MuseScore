@@ -153,7 +153,7 @@ public:
   FILE *findCMapFile(GooString *collection, GooString *cMapName);
   FILE *findToUnicodeFile(GooString *name);
   GooString *findFontFile(GooString *fontName);
-  GooString *findBase14FontFile(GooString *base14Name, GfxFont *);
+  GooString *findBase14FontFile(GooString *base14Name, GfxFont *font);
   GooString *findSystemFontFile(GfxFont *font, SysFontType *type,
 			      int *fontNum, GooString *substituteFontName = NULL, 
 		              GooString *base14Name = NULL);

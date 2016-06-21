@@ -19,7 +19,7 @@
 // Copyright (C) 2007 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2010 Ilya Gorenbein <igorenbein@finjan.com>
 // Copyright (C) 2010 Hib Eris <hib@hiberis.nl>
-// Copyright (C) 2012, 2013 Thomas Freitag <Thomas.Freitag@kabelmail.de>
+// Copyright (C) 2012, 2013, 2016 Thomas Freitag <Thomas.Freitag@kabelmail.de>
 // Copyright (C) 2012, 2013 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2013 Adrian Johnson <ajohnson@redneon.com>
 //
@@ -201,6 +201,7 @@ private:
   int rootNum, rootGen;		// catalog dict
   GBool ok;			// true if xref table is valid
   int errCode;			// error code (if <ok> is false)
+  GBool xrefReconstructed;	// marker, true if xref was already reconstructed
   Object trailerDict;		// trailer dictionary
   Goffset *streamEnds;		// 'endstream' positions - only used in
 				//   damaged files
@@ -269,8 +270,8 @@ private:
   class XRefPreScanWriter: public XRefWriter {
   public:
     XRefPreScanWriter();
-    void startSection(int , int );
-    void writeEntry(Goffset offset, int , XRefEntryType );
+    void startSection(int first, int count);
+    void writeEntry(Goffset offset, int gen, XRefEntryType type);
 
     GBool hasOffsetsBeyond4GB;
   };

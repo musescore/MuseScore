@@ -59,7 +59,7 @@ public:
 
 private:
 
-  static GBool makeFileKey2(int , int encRevision, int keyLength,
+  static GBool makeFileKey2(int encVersion, int encRevision, int keyLength,
 			    GooString *ownerKey, GooString *userKey,
 			    int permissions, GooString *fileID,
 			    GooString *userPassword, Guchar *fileKey,

@@ -16,9 +16,9 @@
 // Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
 // Copyright (C) 2006, 2007 Jeff Muizelaar <jeff@infidigm.net>
 // Copyright (C) 2006, 2010 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright (C) 2006-2015 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2006-2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2009, 2012 Koji Otani <sho@bbr.jp>
-// Copyright (C) 2009, 2011-2015 Thomas Freitag <Thomas.Freitag@alfa.de>
+// Copyright (C) 2009, 2011-2016 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2009 Christian Persch <chpe@gnome.org>
 // Copyright (C) 2010 Paweł Wiejacha <pawel.wiejacha@gmail.com>
 // Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
@@ -467,7 +467,7 @@ GfxColorSpace *GfxColorSpace::parse(GfxResources *res, Object *csObj, OutputDev 
   return cs;
 }
 
-void GfxColorSpace::createMapping(GooList *, int ) {
+void GfxColorSpace::createMapping(GooList *separationList, int maxSepComps) {
   return;
 }
 
@@ -809,6 +809,9 @@ GfxColorSpace *GfxCalGrayColorSpace::copy() {
   cs->blackY = blackY;
   cs->blackZ = blackZ;
   cs->gamma = gamma;
+  cs->kr = kr;
+  cs->kg = kg;
+  cs->kb = kb;
 #ifdef USE_CMS
   cs->transform = transform;
   if (transform != NULL) transform->ref();
@@ -1190,6 +1193,9 @@ GfxColorSpace *GfxCalRGBColorSpace::copy() {
   cs->gammaR = gammaR;
   cs->gammaG = gammaG;
   cs->gammaB = gammaB;
+  cs->kr = kr;
+  cs->kg = kg;
+  cs->kb = kb;
   for (i = 0; i < 9; ++i) {
     cs->mat[i] = mat[i];
   }
@@ -2027,7 +2033,6 @@ GfxColorSpace *GfxICCBasedColorSpace::parse(Array *arr, OutputDev *out, GfxState
 
 #ifdef USE_CMS
   arr->get(1, &obj1);
-  dict = obj1.streamGetDict();
   Guchar *profBuf;
   Stream *iccStream = obj1.getStream();
   int length = 0;
@@ -3402,20 +3407,20 @@ GfxColorSpace *GfxPatternColorSpace::parse(GfxResources *res, Array *arr, Output
   return cs;
 }
 
-void GfxPatternColorSpace::getGray(GfxColor *, GfxGray *gray) {
+void GfxPatternColorSpace::getGray(GfxColor *color, GfxGray *gray) {
   *gray = 0;
 }
 
-void GfxPatternColorSpace::getRGB(GfxColor *, GfxRGB *rgb) {
+void GfxPatternColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
   rgb->r = rgb->g = rgb->b = 0;
 }
 
-void GfxPatternColorSpace::getCMYK(GfxColor *, GfxCMYK *cmyk) {
+void GfxPatternColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
   cmyk->c = cmyk->m = cmyk->y = 0;
   cmyk->k = 1;
 }
 
-void GfxPatternColorSpace::getDeviceN(GfxColor *, GfxColor *deviceN) {
+void GfxPatternColorSpace::getDeviceN(GfxColor *color, GfxColor *deviceN) {
   for (int i = 0; i < gfxColorMaxComps; i++)
     deviceN->c[i] = 0;
   deviceN->c[3] = 1;
@@ -5542,7 +5547,7 @@ GfxPatchMeshShading *GfxPatchMeshShading::parse(GfxResources *res, int typeA, Di
 	p->x[1][0] = x[7];
 	p->y[1][0] = y[7];
 	for (j = 0; j < nComps; ++j) {
-	  p->color[0][1].c[j] = patchesA[nPatchesA-1].color[1][0].c[j];
+	  p->color[0][0].c[j] = patchesA[nPatchesA-1].color[1][0].c[j];
 	  p->color[0][1].c[j] = patchesA[nPatchesA-1].color[0][0].c[j];
 	  p->color[1][1].c[j] = c[0][j];
 	  p->color[1][0].c[j] = c[1][j];
@@ -5821,6 +5826,7 @@ GfxImageColorMap::GfxImageColorMap(int bitsA, Object *decode,
   GBool useByteLookup;
 
   ok = gTrue;
+  useMatte = gFalse;
 
   // bits per component and color space
   bits = bitsA;
@@ -5983,6 +5989,8 @@ GfxImageColorMap::GfxImageColorMap(GfxImageColorMap *colorMap) {
   bits = colorMap->bits;
   nComps = colorMap->nComps;
   nComps2 = colorMap->nComps2;
+  useMatte = colorMap->useMatte;
+  matteColor = colorMap->matteColor;
   colorSpace2 = NULL;
   for (k = 0; k < gfxColorMaxComps; ++k) {
     lookup[k] = NULL;
@@ -6570,7 +6578,7 @@ void GfxPath::offset(double dx, double dy) {
 }
 
 //------------------------------------------------------------------------
-// GfxState
+//
 //------------------------------------------------------------------------
 GfxState::ReusablePathIterator::ReusablePathIterator(GfxPath *path)
  : path(path),

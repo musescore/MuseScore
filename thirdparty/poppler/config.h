@@ -14,16 +14,22 @@
 #define ENABLE_LIBOPENJPEG 1
 
 /* Build against libpng. */
-//#define ENABLE_LIBPNG 1
+/* #undef ENABLE_LIBPNG */
 
 /* Build against libtiff. */
 /* #undef ENABLE_LIBTIFF */
 
+/* Build Poppler against NSS for digital signature support. */
+/* #undef ENABLE_NSS3 */
+
 /* Do not hardcode the library location */
 /* #undef ENABLE_RELOCATABLE */
 
-/* Use zlib instead of builtin zlib decoder. */
+/* Build against zlib. */
 /* #undef ENABLE_ZLIB */
+
+/* Use zlib instead of builtin zlib decoder to uncompress flate streams. */
+/* #undef ENABLE_ZLIB_UNCOMPRESS */
 
 /* Use cairo for rendering. */
 /* #undef HAVE_CAIRO */
@@ -36,7 +42,7 @@
 #define HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the <fcntl.h> header file. */
-/* #undef HAVE_FCNTL_H */
+#define HAVE_FCNTL_H 1
 
 /* Have FreeType2 include files */
 #define HAVE_FREETYPE_H 1
@@ -54,7 +60,7 @@
 #define HAVE_GETTIMEOFDAY 1
 
 /* Defines if gmtime_r is available on your system */
-//#define HAVE_GMTIME_R 1
+/* #undef HAVE_GMTIME_R 1*/
 
 /* Define if you have the iconv() function and it works. */
 #define HAVE_ICONV 1
@@ -102,7 +108,7 @@
 #define HAVE_PTHREAD_PRIO_INHERIT 1
 
 /* Defines if rand_r is available on your system */
-//#define HAVE_RAND_R 1
+/* #undef HAVE_RAND_R 1*/
 
 /* Use splash for rendering. */
 #define HAVE_SPLASH 1
@@ -149,13 +155,12 @@
 #define HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the <zlib.h> header file. */
-/* #undef HAVE_ZLIB_H */
+#define HAVE_ZLIB_H 1
 
 /* Define as const if the declaration of iconv() needs const. */
-#define ICONV_CONST
+#define ICONV_CONST 
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
 
 /* Enable multithreading support. */
@@ -174,7 +179,7 @@
 #define PACKAGE_NAME "poppler"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "poppler 0.38.0"
+#define PACKAGE_STRING "poppler 0.44.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "poppler"
@@ -183,16 +188,16 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.38.0"
+#define PACKAGE_VERSION "0.44.0"
 
 /* Poppler data dir */
-#define POPPLER_DATADIR "/usr/share/poppler"
+#define POPPLER_DATADIR "/opt/local/share/poppler"
 
 /* Support for curl based doc builder is compiled in. */
 /* #undef POPPLER_HAS_CURL_SUPPORT */
 
 /* Defines the poppler version */
-#define POPPLER_VERSION "0.38.0"
+#define POPPLER_VERSION "0.44.0"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
@@ -208,7 +213,7 @@
 #define TEXTOUT_WORD_LIST 1
 
 /* Defines if use cms */
-//#define USE_CMS 1
+/* #undef USE_CMS */
 
 /* Use fixed point arithmetic in the Splash backend */
 /* #undef USE_FIXEDPOINT */
@@ -226,10 +231,10 @@
 /* #undef USE_OPENJPEG2 */
 
 /* Version number of package */
-#define VERSION "0.40.0"
+#define VERSION "0.44.0"
 
 /* Use fontconfig font configuration backend */
-//#define WITH_FONTCONFIGURATION_FONTCONFIG 1
+/* #undef WITH_FONTCONFIGURATION_FONTCONFIG */
 
 /* Use win32 font configuration backend */
 /* #undef WITH_FONTCONFIGURATION_WIN32 */

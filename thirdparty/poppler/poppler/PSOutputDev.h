@@ -20,7 +20,7 @@
 // Copyright (C) 2009-2013 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2009 Till Kamppeter <till.kamppeter@gmail.com>
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright (C) 2009, 2011, 2015 William Bader <williambader@hotmail.com>
+// Copyright (C) 2009, 2011, 2015-2016 William Bader <williambader@hotmail.com>
 // Copyright (C) 2010 Hib Eris <hib@hiberis.nl>
 // Copyright (C) 2011, 2014 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2012 Fabio D'Urso <fabiodurso@hotmail.it>
@@ -320,6 +320,13 @@ public:
   GBool getEmbedCIDTrueType() const { return embedCIDTrueType; }
   GBool getFontPassthrough() const { return fontPassthrough; }
   GBool getOptimizeColorSpace() const { return optimizeColorSpace; }
+  GBool getEnableLZW() const { return enableLZW; };
+  GBool getEnableFlate() const
+#if ENABLE_ZLIB
+    { return enableFlate; }
+#else
+    { return gFalse; }
+#endif
   void setEmbedType1(GBool b) { embedType1 = b; }
   void setEmbedTrueType(GBool b) { embedTrueType = b; }
   void setEmbedCIDPostScript(GBool b) { embedCIDPostScript = b; }
@@ -330,6 +337,8 @@ public:
   void setGenerateOPI(GBool b) { generateOPI = b; }
   void setUseASCIIHex(GBool b) { useASCIIHex = b; }
   void setUseBinary(GBool b) { useBinary = b; }
+  void setEnableLZW(GBool b) { enableLZW = b; }
+  void setEnableFlate(GBool b) { enableFlate = b; }
 
 private:
 
@@ -532,6 +541,8 @@ private:
   GBool generateOPI;		// generate PostScript OPI comments?
   GBool useASCIIHex;		// use ASCIIHex instead of ASCII85?
   GBool useBinary;		// use binary instead of hex
+  GBool enableLZW;		// enable LZW compression
+  GBool enableFlate;		// enable Flate compression
 
 #if OPI_SUPPORT
   int opi13Nest;		// nesting level of OPI 1.3 objects

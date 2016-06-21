@@ -36,7 +36,7 @@ public:
   NetPBMWriter(Format formatA = RGB);
   ~NetPBMWriter() {};
 
-  bool init(FILE *f, int width, int height, int , int );
+  bool init(FILE *f, int width, int height, int hDPI, int vDPI);
 
   bool writePointers(unsigned char **rowPointers, int rowCount);
   bool writeRow(unsigned char **row);

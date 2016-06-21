@@ -14,7 +14,7 @@
 // under GPL version 2 or later
 //
 // Copyright (C) 2005, 2006, 2008 Brad Hards <bradh@frogmouth.net>
-// Copyright (C) 2005, 2007-2009, 2011-2014 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2005, 2007-2009, 2011-2015 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2008 Julien Rebetez <julienr@svn.gnome.org>
 // Copyright (C) 2008, 2010 Pino Toscano <pino@kde.org>
 // Copyright (C) 2008, 2010, 2011 Carlos Garcia Campos <carlosgc@gnome.org>
@@ -26,12 +26,14 @@
 // Copyright (C) 2010 Ilya Gorenbein <igorenbein@finjan.com>
 // Copyright (C) 2010 Srinivas Adicherla <srinivas.adicherla@geodesic.com>
 // Copyright (C) 2010 Philip Lorenz <lorenzph+freedesktop@gmail.com>
-// Copyright (C) 2011-2015 Thomas Freitag <Thomas.Freitag@alfa.de>
+// Copyright (C) 2011-2016 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2012, 2013 Fabio D'Urso <fabiodurso@hotmail.it>
 // Copyright (C) 2013, 2014 Adrian Johnson <ajohnson@redneon.com>
 // Copyright (C) 2013 Adam Reichold <adamreichold@myopera.com>
 // Copyright (C) 2014 Bogdan Cristea <cristeab@gmail.com>
 // Copyright (C) 2015 Li Junling <lijunling@sina.com>
+// Copyright (C) 2015 André Guerreiro <aguerreiro1985@gmail.com>
+// Copyright (C) 2015 André Esser <bepandre@hotmail.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -452,6 +454,27 @@ GBool PDFDoc::checkEncryption(GooString *ownerPassword, GooString *userPassword)
   return ret;
 }
 
+std::vector<FormWidgetSignature*> PDFDoc::getSignatureWidgets()
+{
+  int num_pages = getNumPages();
+  FormPageWidgets *page_widgets = NULL;
+  std::vector<FormWidgetSignature*> widget_vector;
+
+  for (int i = 1; i <= num_pages; i++) {
+    Page *p = getCatalog()->getPage(i);
+    if (p) {
+      page_widgets = p->getFormWidgets();
+      for (int j = 0; page_widgets != NULL && j < page_widgets->getNumWidgets(); j++) {
+	if (page_widgets->getWidget(j)->getType() == formSignature) {
+	    widget_vector.push_back(static_cast<FormWidgetSignature*>(page_widgets->getWidget(j)));
+	}
+      }
+      delete page_widgets;
+    }
+  }
+  return widget_vector;
+}
+
 void PDFDoc::displayPage(OutputDev *out, int page,
 			 double hDPI, double vDPI, int rotate,
 			 GBool useMediaBox, GBool crop, GBool printing,
@@ -521,8 +544,48 @@ Linearization *PDFDoc::getLinearization()
 {
   if (!linearization) {
     linearization = new Linearization(str);
+    linearizationState = 0;
   }
   return linearization;
+}
+
+GBool PDFDoc::checkLinearization() {
+  if (linearization == NULL)
+    return gFalse;
+  if (linearizationState == 1)
+    return gTrue;
+  if (linearizationState == 2)
+    return gFalse;
+  if (!hints) {
+    hints = new Hints(str, linearization, getXRef(), secHdlr);
+  }
+  for (int page = 1; page <= linearization->getNumPages(); page++) {
+    Object obj;
+    Ref pageRef;
+
+    pageRef.num = hints->getPageObjectNum(page);
+    if (!pageRef.num) {
+      linearizationState = 2;
+      return gFalse;
+    }
+
+    // check for bogus ref - this can happen in corrupted PDF files
+    if (pageRef.num < 0 || pageRef.num >= xref->getNumObjects()) {
+      linearizationState = 2;
+      return gFalse;
+    }
+
+    pageRef.gen = xref->getEntry(pageRef.num)->gen;
+    xref->fetch(pageRef.num, pageRef.gen, &obj);
+    if (!obj.isDict("Page")) {
+      obj.free();
+      linearizationState = 2;
+      return gFalse;
+    }
+    obj.free();
+  }
+  linearizationState = 1;
+  return gTrue;
 }
 
 GBool PDFDoc::isLinearized(GBool tryingToReconstruct) {
@@ -701,6 +764,13 @@ int PDFDoc::savePageAs(GooString *name, int pageNo)
   markPageObjects(catDict, yRef, countRef, 0, refPage->num, rootNum + 2);
 
   Dict *pageDict = page.getDict();
+  if (resourcesObj.isNull() && !pageDict->hasKey("Resources")) {
+    Dict *resourceDict = getCatalog()->getPage(pageNo)->getResourceDict();
+    if (resourceDict != NULL) {
+      resourcesObj.initDict(resourceDict);
+      markPageObjects(resourcesObj.getDict(), yRef, countRef, 0, refPage->num, rootNum + 2);
+    }
+  }
   markPageObjects(pageDict, yRef, countRef, 0, refPage->num, rootNum + 2);
   pageDict->lookupNF("Annots", &annotsObj);
   if (!annotsObj.isNull()) {
@@ -1933,7 +2003,7 @@ Page *PDFDoc::getPage(int page)
 {
   if ((page < 1) || page > getNumPages()) return NULL;
 
-  if (isLinearized()) {
+  if (isLinearized() && checkLinearization()) {
     pdfdocLocker();
     if (!pageCache) {
       pageCache = (Page **) gmallocn(getNumPages(), sizeof(Page *));
