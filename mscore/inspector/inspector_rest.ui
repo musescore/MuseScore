@@ -78,7 +78,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetSmall">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Small' value</string>
