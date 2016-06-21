@@ -19,6 +19,11 @@
 
 class QProgressDialog;
 
+struct SfzNamePath {
+      QString name;
+      QString path;
+      };
+
 //---------------------------------------------------------
 //   SfzListDialog
 //---------------------------------------------------------
@@ -26,15 +31,18 @@ class QProgressDialog;
 class SfzListDialog : public QDialog {
       Q_OBJECT
       int _idx = -1;
+      std::vector<struct SfzNamePath> _namePaths;
       QListWidget* list;
+      QPushButton* okButton;
+      QPushButton* cancelButton;
 
    private slots:
-      void itemSelected(QListWidgetItem*);
+      void okClicked();
+      void cancelClicked();
 
    public:
       SfzListDialog(QWidget* parent = 0);
-      QString name();
-      QString path();
+      std::vector<struct SfzNamePath> getNamePaths() { return _namePaths; }
       void add(const QString& name, const QString& path);
       };
 
@@ -50,6 +58,8 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       QString _loadedSfName;
       QProgressDialog* _progressDialog;
       QTimer * _progressTimer;
+      std::vector<struct SfzNamePath> _sfzToLoad;
+      void loadSfz();
 
    private slots:
       void addClicked();
