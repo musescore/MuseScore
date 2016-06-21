@@ -210,6 +210,9 @@ Link* PageData::convertLinkActionToLink(::LinkAction * a, DocumentData *parentDo
     }
     break;
 
+    case actionOCGState:
+    break;
+    
     case actionUnknown:
     break;
   }

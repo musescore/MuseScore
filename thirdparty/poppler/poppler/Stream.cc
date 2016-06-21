@@ -14,7 +14,7 @@
 // under GPL version 2 or later
 //
 // Copyright (C) 2005 Jeff Muizelaar <jeff@infidigm.net>
-// Copyright (C) 2006-2010, 2012-2014 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2006-2010, 2012-2014, 2016 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2007 Krzysztof Kowalczyk <kkowalczyk@gmail.com>
 // Copyright (C) 2008 Julien Rebetez <julien@fhtagn.net>
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
@@ -178,12 +178,12 @@ Stream *Stream::addFilters(Object *dict, int recursion) {
   dict->dictLookup("Filter", &obj, recursion);
   if (obj.isNull()) {
     obj.free();
-    dict->dictLookup("F", &obj);
+    dict->dictLookup("F", &obj, recursion);
   }
   dict->dictLookup("DecodeParms", &params, recursion);
   if (params.isNull()) {
     params.free();
-    dict->dictLookup("DP", &params);
+    dict->dictLookup("DP", &params, recursion);
   }
   if (obj.isName()) {
     str = makeFilter(obj.getName(), str, &params, recursion, dict);

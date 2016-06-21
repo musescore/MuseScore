@@ -6,6 +6,7 @@
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2015 André Guerreiro <aguerreiro1985@gmail.com>
 // Copyright (C) 2015 André Esser <bepandre@hotmail.com>
+// Copyright (C) 2016 Adrian Johnson <ajohnson@redneon.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -33,6 +34,10 @@ GBool parseDateString(const char *string, int *year, int *month, int *day, int *
  * If timet is NULL, current time is used.
  */
 GooString *timeToDateString(time_t *timet);
-time_t pdfTimeToInteger(GooString *time_str);
+
+/* Convert PDF date string to time.
+ * Returns -1 if conversion fails.
+ */
+time_t dateStringToTime(GooString *dateString);
 
 #endif

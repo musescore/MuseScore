@@ -311,7 +311,7 @@ private:
   GBool printCommands;		// print the drawing commands
   GBool profileCommands;	// profile the drawing commands
   GBool errQuiet;		// suppress error messages?
-  double splashResolution;	// resolution when rasterizing images
+//  double splashResolution;	// resolution when rasterizing images
 
   CharCodeToUnicodeCache *cidToUnicodeCache;
   CharCodeToUnicodeCache *unicodeToUnicodeCache;

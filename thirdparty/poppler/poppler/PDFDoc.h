@@ -65,7 +65,6 @@ class Linearization;
 class SecurityHandler;
 class Hints;
 class StructTreeRoot;
-class FormWidgetSignature;
 
 enum PDFWriteMode {
   writeStandard,

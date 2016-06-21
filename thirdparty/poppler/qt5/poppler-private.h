@@ -36,14 +36,14 @@
 #include <QtCore/QVector>
 
 #include <config.h>
-#include "GfxState.h"
-#include "GlobalParams.h"
-#include "PDFDoc.h"
-#include "FontInfo.h"
-#include "OutputDev.h"
-#include "Error.h"
+#include <GfxState.h>
+#include <GlobalParams.h>
+#include <PDFDoc.h>
+#include <FontInfo.h>
+#include <OutputDev.h>
+#include <Error.h>
 #if defined(HAVE_SPLASH)
-#include "SplashOutputDev.h"
+#include <SplashOutputDev.h>
 #endif
 
 #include "poppler-qt5.h"
