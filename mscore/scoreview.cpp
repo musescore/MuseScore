@@ -5500,7 +5500,7 @@ void ScoreView::cmdAddAnnotation2()
             _score->undoAddElement(annotation);
             _score->select(annotation, SelectType::SINGLE, 0);
             _score->endCmd();
-            startEdit(annotation);
+            startEdit(annotation->textAnnotation());
             }
       else
             _score->endCmd();
