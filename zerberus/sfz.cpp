@@ -31,6 +31,15 @@
 struct SfzRegion {
       QString path;
       double amp_veltrack;
+      // amp envelope all in seconds
+      // but the level ones
+      // they are in percent
+      double ampeg_delay;
+      double ampeg_start; // level
+      double ampeg_attack;
+      double ampeg_hold;
+      double ampeg_decay;
+      double ampeg_sustain; // level
       double ampeg_release;
       double rt_decay;
       QString sample;
@@ -47,6 +56,7 @@ struct SfzRegion {
       double volume;
       int octave_offset, note_offset;
       int tune, transpose;
+      int loopStart, loopEnd;
       Trigger trigger;
       LoopMode loop_mode;
       OffMode off_mode;
@@ -68,7 +78,13 @@ void SfzRegion::init(const QString& _path)
       lochan          = 1;
       hichan          = 16;
       amp_veltrack    = 100;
-      ampeg_release   = 0.0;  // in sec
+      ampeg_delay     = 0.0;
+      ampeg_start     = 0.0; //percent
+      ampeg_attack    = 0.001;
+      ampeg_hold      = 0.0;
+      ampeg_decay     = 0.0;
+      ampeg_sustain   = 100.0; // percent
+      ampeg_release   = 0.200;  // in sec
       rt_decay        = 0.0;  // dB /sec
       lokey           = 0;
       hikey           = 127;
@@ -86,9 +102,11 @@ void SfzRegion::init(const QString& _path)
       seq_length      = 1;
       seq_position    = 1;
       trigger         = Trigger::ATTACK;
-      loop_mode       = LoopMode::NO_LOOP;
+      loop_mode       = LoopMode::CONTINUOUS;
       tune            = 0;
       transpose       = 0;
+      loopStart       = -1;
+      loopEnd         = -1;
       for (int i = 0; i < 128; ++i) {
             on_locc[i] = -1;
             on_hicc[i] = -1;
@@ -113,6 +131,12 @@ void SfzRegion::setZone(Zone* z) const
       z->offset       = 0;
       z->volume       = pow(10.0, volume / 20.0);
       z->ampVeltrack  = amp_veltrack;
+      z->ampegAttack  = ampeg_attack * 1000;
+      z->ampegDelay   = ampeg_delay * 1000;
+      z->ampegStart   = ampeg_start / 100.0;
+      z->ampegHold    = ampeg_hold * 1000;
+      z->ampegDecay   = ampeg_decay * 1000;
+      z->ampegSustain = ampeg_sustain / 100.0;
       z->ampegRelease = ampeg_release * 1000;
       z->seqPos       = seq_position - 1;
       z->seqLen       = seq_length - 1;
@@ -130,6 +154,8 @@ void SfzRegion::setZone(Zone* z) const
       z->offMode      = off_mode;
       z->offBy        = off_by;
       z->group        = group;
+      z->loopEnd      = loopEnd;
+      z->loopStart    = loopStart;
       if (note_offset || octave_offset) {
             qDebug("=========================offsets %d %d", note_offset, octave_offset);
             }
@@ -188,8 +214,16 @@ void ZInstrument::addRegion(SfzRegion& r)
                   }
             }
       Zone* z = new Zone;
-      r.setZone(z);
       z->sample = readSample(r.sample, 0);
+      if (z->sample) {
+            qDebug("Sample Loop - start %d, end %d, mode %d", z->sample->loopStart(), z->sample->loopEnd(), z->sample->loopMode());
+            // if there is no opcode defining loop ranges, use sample definitions as fallback (according to spec)
+            if (r.loopStart == -1)
+                  r.loopStart = z->sample->loopStart();
+            if (r.loopEnd == -1)
+                  r.loopEnd = z->sample->loopEnd();
+            }
+      r.setZone(z);
       if (z->sample)
             addZone(z);
       }
@@ -207,6 +241,18 @@ static void readDouble(const QString& data, double* val)
       }
 
 //---------------------------------------------------------
+//   readInt
+//---------------------------------------------------------
+
+static void readInt(const QString& data, int* val)
+      {
+      bool ok;
+      int i = data.toInt(&ok);
+      if (ok)
+            *val = i;
+      }
+
+//---------------------------------------------------------
 //   readOp
 //---------------------------------------------------------
 
@@ -216,6 +262,18 @@ void SfzRegion::readOp(const QString& b, const QString& data)
 
       if (b == "amp_veltrack")
             readDouble(data, &amp_veltrack);
+      else if (b == "ampeg_delay")
+            readDouble(data, &ampeg_delay);
+      else if (b == "ampeg_start")
+            readDouble(data, &ampeg_start);
+      else if (b == "ampeg_attack")
+            readDouble(data, &ampeg_attack);
+      else if (b == "ampeg_hold")
+            readDouble(data, &ampeg_hold);
+      else if (b == "ampeg_decay")
+            readDouble(data, &ampeg_decay);
+      else if (b == "ampeg_sustain")
+            readDouble(data, &ampeg_sustain);
       else if (b == "ampeg_release")
             readDouble(data, &ampeg_release);
       else if (b == "sample") {
@@ -253,6 +311,10 @@ void SfzRegion::readOp(const QString& b, const QString& data)
             if (loop_mode != LoopMode::ONE_SHOT)
                   qDebug("SfzRegion: loop_mode <%s>", qPrintable(data));
             }
+      else if(b == "loop_start")
+            readInt(data, &loopStart);
+      else if(b == "loop_end")
+            readInt(data, &loopEnd);
       else if (b.startsWith("on_locc")) {
             int idx = b.mid(7).toInt();
             if (idx >= 0 && idx < 128)
