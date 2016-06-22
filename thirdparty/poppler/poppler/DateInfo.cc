@@ -23,6 +23,7 @@
 
 #include <config.h>
 
+#include "glibc.h"
 #include "DateInfo.h"
 
 #include <stdio.h>
