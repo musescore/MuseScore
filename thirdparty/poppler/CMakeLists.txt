@@ -133,20 +133,20 @@ add_library(poppler STATIC
 	qt5/poppler-textbox.cc
    )
 
+if (APPLE)
+   set ( POPPLER_COMPILE_FLAGS "-O2 -Wno-unknown-warning-option -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field -Wno-return-stack-address -Wno-shift-negative-value")
+else (APPLE)
+   if (MINGW)
+      set (POPPLER_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format")
+   else (MINGW)
+      set (POPPLER_COMPILE_FLAGS "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable")
+   endif(MINGW)
+endif(APPLE)
+
 set_target_properties(poppler
       PROPERTIES
-      if (APPLE)
          COMPILE_FLAGS
-            "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field -Wno-return-stack-address -Wno-shift-negative-value"
-      else (APPLE)
-         if (MINGW)
-            COMPILE_FLAGS
-               "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format"
-         else (MINGW)
-             COMPILE_FLAGS
-                "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable"
-         endif(MINGW)
-      endif(APPLE)
+            ${POPPLER_COMPILE_FLAGS}
       )
 
 include_directories(
