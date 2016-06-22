@@ -4765,6 +4765,10 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         }
                   }
             }
+
+      selection.clear();
+      for (Note* n : notes)
+            selection.add(n);
       _score->endCmd();
       }
 
