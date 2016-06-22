@@ -13,7 +13,7 @@
 #include "mscore.h"
 #include "segment.h"
 #include "element.h"
-#include "annotation.h"
+#include "textannotation.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"
