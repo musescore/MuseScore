@@ -13,6 +13,7 @@
 
 #include "libmscore/score.h"
 #include "libmscore/element.h"
+#include "libmscore/chord.h"
 #include "inspector.h"
 #include "inspectorGroupElement.h"
 
@@ -54,6 +55,11 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       notes->setEnabled(true);
       hbox->addWidget(notes);
 
+      graceNotes = new QToolButton(this);
+      graceNotes->setText(tr("Grace Notes"));
+      graceNotes->setEnabled(true);
+      hbox->addWidget(graceNotes);
+
       rests = new QToolButton(this);
       rests->setText(tr("Rests"));
       rests->setEnabled(true);
@@ -61,6 +67,7 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
 
       _layout->addLayout(hbox);
       connect(notes, SIGNAL(clicked()), SLOT(notesClicked()));
+      connect(graceNotes, SIGNAL(clicked()), SLOT(graceNotesClicked()));
       connect(rests, SIGNAL(clicked()), SLOT(restsClicked()));
       }
 
@@ -126,9 +133,37 @@ void InspectorGroupElement::notesClicked()
       QList<Element*> nel;
       score->deselectAll();
       for (Element* e : el) {
-            if (e->type() == Element::Type::NOTE) {
-                  nel.append(e);
-                  score->selection().add(e);
+            if (e->isNote()) {
+                  Note* note = toNote(e);
+                  //if note is not grace note, then add to selection
+                  if (!note->chord()->isGrace()) {
+                        nel.append(note);
+                        score->selection().add(note);
+                        }
+                  }
+            }
+      inspector->setElements(nel);
+      score->update();
+      }
+
+//---------------------------------------------------------
+//   graceNotesClicked
+//---------------------------------------------------------
+
+void InspectorGroupElement::graceNotesClicked()
+      {
+      Score* score = inspector->el().front()->score();
+      QList<Element*> el = score->selection().elements();
+      QList<Element*> nel;
+      score->deselectAll();
+      for (Element* e : el) {
+            if (e->isNote()) {
+                  Note* note = toNote(e);
+                  //if note is grace note, then add to selection
+                  if (note->chord()->isGrace()) {
+                        nel.append(note);
+                        score->selection().add(note);
+                        }
                   }
             }
       inspector->setElements(nel);
@@ -146,7 +181,7 @@ void InspectorGroupElement::restsClicked()
       QList<Element*> nel;
       score->deselectAll();
       for (Element* e : el) {
-            if (e->type() == Element::Type::REST) {
+            if (e->isRest()) {
                   nel.append(e);
                   score->selection().add(e);
                   }
