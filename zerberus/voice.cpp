@@ -84,6 +84,7 @@ void Voice::init()
             Envelope::egPow[EG_SIZE-i-1] = pow(10.0, (dbStep * i)/20.0);
             Envelope::egLin[i]           = 1.0 - (double(i) / double(EG_SIZE));
             }
+
       }
 
 //---------------------------------------------------------
@@ -102,6 +103,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       data      = s->data() + z->offset * audioChan;
       eidx      = s->frames() * audioChan;
       _loopMode = z->loopMode;
+      _loopStart = z->loopStart;
+      _loopEnd   = z->loopEnd;
 
       _offMode  = z->offMode;
       _offBy    = z->offBy;
@@ -136,6 +139,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
 
       attackEnv.setTime(1, _zerberus->sampleRate());        // 1 ms attack
       stopEnv.setTime(z->ampegRelease, _zerberus->sampleRate());
+
+      _looping = false;
       }
 
 //---------------------------------------------------------
@@ -234,17 +239,21 @@ void Voice::process(int frames, float* p)
 
       if (audioChan == 1) {
             while (frames--) {
+
+                  updateLoop();
+
                   int idx = phase.index();
+
                   if (idx >= eidx) {
                         off();
                         break;
                         }
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f;
-                  f =  (coeffs[0] * data[idx-1]
-                      + coeffs[1] * data[idx+0]
-                      + coeffs[2] * data[idx+1]
-                      + coeffs[3] * data[idx+2]) * gain
+                  f =  (coeffs[0] * getData(idx-1)
+                      + coeffs[1] * getData(idx+0)
+                      + coeffs[2] * getData(idx+1)
+                      + coeffs[3] * getData(idx+2)) * gain
                       - a1 * hist1l
                       - a2 * hist2l;
                   float v = b02 * (f + hist2l) + b1 * hist1l;
@@ -276,6 +285,9 @@ void Voice::process(int frames, float* p)
             // handle interleaved stereo samples
             //
             while (frames--) {
+
+                  updateLoop();
+
                   int idx = phase.index() * 2;
                   if (idx >= eidx) {
                         off();
@@ -286,16 +298,16 @@ void Voice::process(int frames, float* p)
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f1, f2;
 
-                  f1 = (coeffs[0] * data[idx-2]
-                      + coeffs[1] * data[idx]
-                      + coeffs[2] * data[idx+2]
-                      + coeffs[3] * data[idx+4])
+                  f1 = (coeffs[0] * getData(idx-2)
+                      + coeffs[1] * getData(idx)
+                      + coeffs[2] * getData(idx+2)
+                      + coeffs[3] * getData(idx+4))
                       * gain * _channel->panLeftGain();
 
-                  f2 = (coeffs[0] * data[idx-1]
-                      + coeffs[1] * data[idx+1]
-                      + coeffs[2] * data[idx+3]
-                      + coeffs[3] * data[idx+5])
+                  f2 = (coeffs[0] * getData(idx-1)
+                      + coeffs[1] * getData(idx+1)
+                      + coeffs[2] * getData(idx+3)
+                      + coeffs[3] * getData(idx+5))
                       * gain * _channel->panRightGain();
 
                   if (_state == VoiceState::ATTACK) {
@@ -338,6 +350,46 @@ void Voice::process(int frames, float* p)
                   phase += phaseIncr;
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   updateLoop
+//---------------------------------------------------------
+
+void Voice::updateLoop()
+      {
+      int idx = phase.index();
+      bool validLoop = _loopEnd > 0 && _loopStart >= 0 && (_loopEnd <= (eidx/audioChan));
+      bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state == VoiceState::PLAYING || _state == VoiceState::SUSTAINED));
+
+      if (_looping && loopMode() == LoopMode::SUSTAIN && (_state != VoiceState::PLAYING || _state != VoiceState::SUSTAINED))
+            _looping = false;
+
+      if (!(validLoop && shallLoop))
+            return;
+
+      if (idx > _loopEnd) {
+            _looping = true;
+            phase.setIndex(_loopStart+(idx-_loopEnd-1));
+            }
+      }
+
+short Voice::getData(int pos) {
+      if (pos < 0 && !_looping)
+            return 0;
+
+      if (!_looping)
+            return data[pos];
+
+      int loopEnd = _loopEnd * audioChan;
+      int loopStart = _loopStart * audioChan;
+
+      if (pos < loopStart)
+            return data[loopEnd + (pos - loopStart) + audioChan];
+      else if (pos > (loopEnd + audioChan - 1))
+            return data[loopStart + (pos - loopEnd) - audioChan];
+      else
+            return data[pos];
       }
 
 //---------------------------------------------------------
