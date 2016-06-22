@@ -39,11 +39,12 @@ if [[ "$QMAKE_VERSION" != "${QT_LONG_VERSION}" ]]; then
   echo "Downloading Qt"
   wget -c --no-check-certificate -nv https://download.qt.io/archive/qt/${QT_SHORT_VERSION}/${QT_LONG_VERSION}/${QT_INSTALLER_FILENAME}
   hdiutil mount ${QT_INSTALLER_FILENAME}
-
-  QT_INSTALLER_EXE=/Volumes/${QT_INSTALLER_ROOT}/${QT_INSTALLER_ROOT}.app/Contents/MacOS/${QT_INSTALLER_ROOT}
+  cp /Volumes/${QT_INSTALLER_ROOT}/${QT_INSTALLER_ROOT}.app $HOME/${QT_INSTALLER_ROOT}.app
+  QT_INSTALLER_EXE=$HOME/${QT_INSTALLER_ROOT}.app/Contents/MacOS/${QT_INSTALLER_ROOT}
 
   echo "Installing Qt"
   ./build/travis/job_macos/extract-qt-installer $QT_INSTALLER_EXE $QT_PATH
+  rm $HOME/${QT_INSTALLER_ROOT}.app
 else
   echo "Qt ${QT_LONG_VERSION} already installed"
 fi
