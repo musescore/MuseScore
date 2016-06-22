@@ -19,6 +19,7 @@
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
+#include "textannotation.h"
 #include "articulation.h"
 #include "bagpembell.h"
 #include "barline.h"
@@ -134,6 +135,7 @@ static const ElementName elementNames[] = {
       ElementName("InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change")),
       ElementName("Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol")),
       ElementName("FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram")),
+      ElementName("TextAnnotation",       QT_TRANSLATE_NOOP("elementName", "TextAnnotation")),
       ElementName("Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend")),
       ElementName("TremoloBar",           QT_TRANSLATE_NOOP("elementName", "Tremolo Bar")),
       ElementName("Volta",                QT_TRANSLATE_NOOP("elementName", "Volta")),
@@ -150,6 +152,8 @@ static const ElementName elementNames[] = {
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
       ElementName("LedgerLine",           QT_TRANSLATE_NOOP("elementName", "Ledger Line")),
       ElementName("NoteHead",             QT_TRANSLATE_NOOP("elementName", "Notehead")),
+      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
+      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
       ElementName("NoteDot",              QT_TRANSLATE_NOOP("elementName", "Note Dot")),
       ElementName("Tremolo",              QT_TRANSLATE_NOOP("elementName", "Tremolo")),
       ElementName("Measure",              QT_TRANSLATE_NOOP("elementName", "Measure")),
@@ -1284,6 +1288,8 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::BAR_LINE:          return new BarLine(score);
             case Element::Type::SYSTEM_DIVIDER:    return new SystemDivider(score);
             case Element::Type::ARPEGGIO:          return new Arpeggio(score);
+            case Element::Type::TEXT_ANNOTATION:   return new TextAnnotation(score);
+            case Element::Type::RANGEANNOTATION:   return new RangeAnnotation(score);
             case Element::Type::BREATH:            return new Breath(score);
             case Element::Type::GLISSANDO:         return new Glissando(score);
             case Element::Type::BRACKET:           return new Bracket(score);
@@ -1336,6 +1342,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::GLISSANDO_SEGMENT:
 
             case Element::Type::SLUR_SEGMENT:
+            case Element::Type::RANGEANNOTATION_SEGMENT:
             case Element::Type::STEM_SLASH:
             case Element::Type::LINE:
             case Element::Type::TIE:
@@ -1384,11 +1391,11 @@ const char* Element::name(Element::Type type)
 
 Element::Type Element::name2type(const QStringRef& s)
       {
-      for (int i = 0; i < int(Element::Type::MAXTYPE); ++i) {
+      for (int i = 0; i < int(Element::Type::MAXTYPE); ++i)
             if (s == elementNames[i].name)
                   return Element::Type(i);
-            }
-qDebug("name2type: invalid type <%s>", s.toUtf8().data());
+
+      qDebug("name2type: invalid type <%s>", s.toUtf8().data());
       return Element::Type::INVALID;
       }
 

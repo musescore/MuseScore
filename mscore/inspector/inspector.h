@@ -29,6 +29,7 @@
 #include "ui_inspector_rest.h"
 #include "ui_inspector_clef.h"
 #include "ui_inspector_timesig.h"
+#include "ui_inspector_rangeannotation.h"
 #include "ui_inspector_keysig.h"
 #include "ui_inspector_volta.h"
 #include "ui_inspector_barline.h"
@@ -153,6 +154,20 @@ class InspectorArticulation : public InspectorBase {
    public:
       InspectorArticulation(QWidget* parent);
       };
+
+//---------------------------------------------------------
+//   InspectorRangeAnnotation
+//---------------------------------------------------------
+
+class InspectorRangeAnnotation : public InspectorBase {
+      Q_OBJECT
+      UiInspectorElement e;
+      Ui::InspectorRangeAnnotation ra;
+
+   public:
+      InspectorRangeAnnotation(QWidget* parent);
+      };
+
 
 //---------------------------------------------------------
 //   InspectorSpacer
