@@ -111,9 +111,6 @@
          <property name="title">
           <string>Program Start</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QRadioButton" name="emptySession">
@@ -246,9 +243,6 @@
          <property name="title">
           <string>OSC Remote Control</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -260,9 +254,6 @@
            <widget class="QLabel" name="label">
             <property name="text">
              <string extracomment="The UDP port number on which the MuseScore OSC server will listen on">Port number:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -305,9 +296,6 @@
          </property>
          <property name="title">
           <string>Auto Save</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -376,9 +364,6 @@
          <property name="title">
           <string>Language</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <property name="checkable">
           <bool>false</bool>
          </property>
@@ -400,6 +385,43 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="palette">
+             <palette>
+              <active>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>1</green>
+                  <blue>39</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </active>
+              <inactive>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>1</green>
+                  <blue>39</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </inactive>
+              <disabled>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>106</red>
+                  <green>104</green>
+                  <blue>100</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </disabled>
+             </palette>
             </property>
             <property name="font">
              <font>
@@ -431,9 +453,6 @@
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
           <string>Folders</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout">
           <property name="leftMargin">
@@ -472,9 +491,6 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
-            <property name="indent">
-             <number>5</number>
-            </property>
            </widget>
           </item>
           <item row="0" column="0">
@@ -485,9 +501,6 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
-            <property name="indent">
-             <number>5</number>
-            </property>
            </widget>
           </item>
           <item row="1" column="0">
@@ -497,9 +510,6 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
             </property>
            </widget>
           </item>
@@ -520,9 +530,6 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
             </property>
            </widget>
           </item>
@@ -573,9 +580,6 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
             </property>
            </widget>
           </item>
@@ -636,9 +640,6 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
             </property>
            </widget>
           </item>
@@ -830,9 +831,6 @@
          <property name="title">
           <string>Background</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout">
           <property name="leftMargin">
            <number>9</number>
@@ -960,9 +958,6 @@
          </property>
          <property name="title">
           <string>Paper</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout">
           <property name="leftMargin">
@@ -1114,9 +1109,6 @@
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
           <string>Miscellaneous</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0">
@@ -1312,9 +1304,6 @@
          </property>
          <property name="title">
           <string>MIDI Remote Control</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2234,9 +2223,6 @@
          <property name="title">
           <string>View</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="scale">
@@ -2303,9 +2289,6 @@
         <widget class="QGroupBox" name="groupBox_39">
          <property name="title">
           <string>Default Files</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="_23">
           <property name="leftMargin">
@@ -2527,7 +2510,7 @@
           <string>PulseAudio</string>
          </property>
          <property name="flat">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2547,9 +2530,6 @@
          </property>
          <property name="title">
           <string>PortAudio</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2665,9 +2645,6 @@
          </property>
          <property name="title">
           <string>ALSA audio</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2862,9 +2839,6 @@
          <property name="title">
           <string>JACK audio server</string>
          </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -3043,9 +3017,6 @@
          <property name="title">
           <string>Style Used for Import</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QVBoxLayout">
           <item>
            <widget class="QRadioButton" name="useImportBuildinStyle">
@@ -3106,9 +3077,6 @@
          <property name="title">
           <string>Character Set Used When Importing Binary Files</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
            <layout class="QFormLayout" name="formLayout">
@@ -3164,9 +3132,6 @@
          </property>
          <property name="title">
           <string>MusicXML</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
@@ -3309,9 +3274,6 @@
          <property name="title">
           <string>PNG/SVG</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
@@ -3378,9 +3340,6 @@
          </property>
          <property name="title">
           <string>MIDI</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -3468,9 +3427,6 @@
          </property>
          <property name="title">
           <string>MusicXML</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
@@ -3749,9 +3705,6 @@
          </property>
          <property name="title">
           <string>Automatic Update Check</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
           <item row="1" column="0">

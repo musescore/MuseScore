@@ -170,7 +170,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetDirection">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Direction' value</string>
@@ -216,7 +216,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetAnchor">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Anchor' value</string>
@@ -233,7 +233,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetTimeStretch">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Time stretch' value</string>
@@ -286,7 +286,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetOrnamentStyle">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Ornament style' value</string>
@@ -313,7 +313,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetPlayArticulation">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Play' value</string>

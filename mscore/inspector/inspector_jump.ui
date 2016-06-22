@@ -126,7 +126,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetJumpTo">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Jump to' value</string>
@@ -143,7 +143,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetPlayUntil">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Play until' value</string>
@@ -160,7 +160,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetContinueAt">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Continue at' value</string>

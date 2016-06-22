@@ -125,9 +125,6 @@
             <property name="title">
              <string>Create multimeasure rests</string>
             </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
             <property name="checkable">
              <bool>true</bool>
             </property>
@@ -314,9 +311,6 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
                  </property>
                  <property name="suffix">
                   <string>%</string>
@@ -964,9 +958,6 @@
          <property name="title">
           <string>Header Text</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -1194,9 +1185,6 @@
          <property name="title">
           <string>Footer Text</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -1369,9 +1357,6 @@
         <widget class="QGroupBox" name="showMeasureNumber">
          <property name="title">
           <string>Measure Numbers</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1821,9 +1806,6 @@
          <property name="title">
           <string>Measure</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_99">
@@ -1837,9 +1819,6 @@
              <widget class="QLabel" name="label_108">
               <property name="text">
                <string>Clef to time signature distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1870,15 +1849,6 @@
               <property name="text">
                <string>Minimum measure width:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
               <property name="buddy">
                <cstring>minMeasureWidth_2</cstring>
               </property>
@@ -1905,15 +1875,6 @@
               <property name="text">
                <string>Note to barline distance:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
               <property name="buddy">
                <cstring>noteBarDistance</cstring>
               </property>
@@ -1929,15 +1890,6 @@
               </property>
               <property name="text">
                <string>Note left margin:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
               <property name="buddy">
                <cstring>barNoteDistance</cstring>
@@ -1987,15 +1939,6 @@
               <property name="text">
                <string>Clef left margin:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
               <property name="buddy">
                <cstring>clefLeftMargin</cstring>
               </property>
@@ -2011,15 +1954,6 @@
               </property>
               <property name="text">
                <string>Minimum note distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
               <property name="buddy">
                <cstring>minNoteDistance</cstring>
@@ -2085,15 +2019,6 @@
               <property name="text">
                <string>Key signature left margin:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
               <property name="buddy">
                <cstring>keysigLeftMargin</cstring>
               </property>
@@ -2109,15 +2034,6 @@
               </property>
               <property name="text">
                <string>Time signature left margin:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
               <property name="buddy">
                <cstring>timesigLeftMargin</cstring>
@@ -2154,15 +2070,6 @@
               <property name="textFormat">
                <enum>Qt::PlainText</enum>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
               <property name="buddy">
                <cstring>clefKeyRightMargin</cstring>
               </property>
@@ -2178,15 +2085,6 @@
               </property>
               <property name="text">
                <string>Clef to barline distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
               <property name="buddy">
                <cstring>clefBarlineDistance</cstring>
@@ -2214,14 +2112,8 @@
               <property name="text">
                <string>Staff line thickness:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
               <property name="wordWrap">
                <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
               <property name="buddy">
                <cstring>staffLineWidth</cstring>
@@ -2238,15 +2130,6 @@
               </property>
               <property name="text">
                <string>Barline to accidental distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
              </widget>
             </item>
@@ -2280,12 +2163,6 @@
              <widget class="QLabel" name="label_103">
               <property name="text">
                <string>Multimeasure rest margin:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
              </widget>
             </item>
@@ -2332,15 +2209,6 @@
               <property name="text">
                <string>Barline to grace note distance:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
               <property name="buddy">
                <cstring>barNoteDistance</cstring>
               </property>
@@ -2350,6 +2218,9 @@
              <widget class="QToolButton" name="resetMinMeasureWidth">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Minimum measure width' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2365,6 +2236,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Key signature left margin' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2378,6 +2252,9 @@
              <widget class="QToolButton" name="resetClefBarlineDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Clef to barline distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2393,6 +2270,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Note left margin' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2406,6 +2286,9 @@
              <widget class="QToolButton" name="resetBarGraceDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Barline to grace note distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2421,6 +2304,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Barline to accidental distance' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2434,6 +2320,9 @@
              <widget class="QToolButton" name="resetNoteBarDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Note to barline distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2449,6 +2338,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Minimum note distance' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2462,6 +2354,9 @@
              <widget class="QToolButton" name="resetClefLeftMargin">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Clef left margin' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2477,6 +2372,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Time signature left margin' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2490,6 +2388,9 @@
              <widget class="QToolButton" name="resetClefKeyRightMargin">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Clef/Key right margin' valua</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2505,6 +2406,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Multimeasure rest margin' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2518,6 +2422,9 @@
              <widget class="QToolButton" name="resetStaffLineWidth">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Staffline thickness' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2533,18 +2440,12 @@
               <property name="text">
                <string>Clef to key distance:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
              </widget>
             </item>
             <item row="14" column="0">
              <widget class="QLabel" name="label_109">
               <property name="text">
                <string>Key to time signature distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -2583,6 +2484,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Clef to key distance' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2597,6 +2501,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Clef to time signature distance' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2610,6 +2517,9 @@
              <widget class="QToolButton" name="resetKeyTimesigDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Key to time signature distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2635,6 +2545,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Key to barline distance' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2649,18 +2562,12 @@
               <property name="text">
                <string>Key to barline distance:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
              </widget>
             </item>
             <item row="16" column="0">
              <widget class="QLabel" name="label_111">
               <property name="text">
                <string>System header distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -2678,6 +2585,9 @@
              <widget class="QToolButton" name="resetSystemHeaderDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'System header distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2712,6 +2622,9 @@
               <property name="toolTip">
                <string>Reset to default</string>
               </property>
+              <property name="accessibleName">
+               <string>Reset 'Spacing' value</string>
+              </property>
               <property name="text">
                <string notr="true"/>
               </property>
@@ -2731,18 +2644,6 @@
               </property>
               <property name="text">
                <string>Spacing (1=tight):</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::AutoText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
               </property>
               <property name="buddy">
                <cstring>measureSpacing</cstring>
@@ -2765,10 +2666,7 @@
             <item row="16" column="4">
              <widget class="QLabel" name="label_112">
               <property name="text">
-               <string>System header time signature distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <string>System header to time signature distance:</string>
               </property>
              </widget>
             </item>
@@ -2786,6 +2684,9 @@
              <widget class="QToolButton" name="resetSystemHeaderTimeSigDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'System header to time signature distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -2805,16 +2706,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Time signature barline distance:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
+               <string>Time signature to barline distance:</string>
               </property>
               <property name="buddy">
                <cstring>timesigLeftMargin</cstring>
@@ -2841,6 +2733,9 @@
              <widget class="QToolButton" name="resetTimesigBarlineDistance">
               <property name="toolTip">
                <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Time signature to barline distance' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -3095,9 +2990,6 @@
            <widget class="QGroupBox" name="shortenStem">
             <property name="title">
              <string>Shorten stems</string>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -4937,6 +4829,9 @@
             <property name="toolTip">
              <string>Reset to default</string>
             </property>
+            <property name="accessibleName">
+             <string>Reset 'Line style' value</string>
+            </property>
             <property name="text">
              <string notr="true"/>
             </property>
@@ -5021,9 +4916,6 @@
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
           <string>Chord Symbols</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_36">
           <item>
@@ -5449,9 +5341,6 @@
          <property name="title">
           <string>Fretboard Diagrams</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QGridLayout" name="gridLayout_131">
           <property name="verticalSpacing">
            <number>3</number>
@@ -5623,9 +5512,6 @@
              <layout class="QGridLayout" name="gridLayout_16">
               <item row="3" column="1">
                <widget class="QSpinBox" name="spinFBLineHeight">
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
                 <property name="suffix">
                  <string notr="true">%</string>
                 </property>
@@ -5651,9 +5537,6 @@
                 <property name="textFormat">
                  <enum>Qt::PlainText</enum>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
                 <property name="buddy">
                  <cstring>comboFBFont</cstring>
                 </property>
@@ -5661,9 +5544,6 @@
               </item>
               <item row="2" column="1">
                <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -5689,9 +5569,6 @@
                 <property name="textFormat">
                  <enum>Qt::PlainText</enum>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
                 <property name="buddy">
                  <cstring>doubleSpinFBSize</cstring>
                 </property>
@@ -5699,9 +5576,6 @@
               </item>
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="doubleSpinFBSize">
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
                 <property name="suffix">
                  <string>pt</string>
                 </property>
@@ -5724,9 +5598,6 @@
                 <property name="textFormat">
                  <enum>Qt::PlainText</enum>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
                 <property name="buddy">
                  <cstring>spinFBLineHeight</cstring>
                 </property>
@@ -5739,9 +5610,6 @@
                 </property>
                 <property name="textFormat">
                  <enum>Qt::PlainText</enum>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                 <property name="buddy">
                  <cstring>doubleSpinFBVertPos</cstring>

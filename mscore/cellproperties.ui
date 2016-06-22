@@ -19,9 +19,6 @@
      <property name="title">
       <string>Palette Cell Properties</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">

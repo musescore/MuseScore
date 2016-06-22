@@ -33,9 +33,6 @@
        <property name="title">
         <string>Show Text</string>
        </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
@@ -67,9 +64,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

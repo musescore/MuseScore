@@ -33,9 +33,6 @@
        <property name="title">
         <string>Time Signature Properties</string>
        </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
         <property name="rightMargin">
          <number>24</number>
