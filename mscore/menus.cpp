@@ -1320,6 +1320,64 @@ void MuseScore::setBasicPalette()
       }
 
 //---------------------------------------------------------
+//   genCreateMenu
+//---------------------------------------------------------
+
+QMenu* MuseScore::genCreateMenu(QWidget* parent)
+      {
+      QMenu* popup = new QMenu(tr("&Add"), parent);
+      popup->setObjectName("Add");
+
+      QMenu* measures = popup->addMenu(tr("&Measures"));
+      measures->addAction(getAction("insert-measure"));
+      measures->addAction(getAction("insert-measures"));
+      measures->addSeparator();
+      measures->addAction(getAction("append-measure"));
+      measures->addAction(getAction("append-measures"));
+
+      QMenu* frames = popup->addMenu(tr("&Frames"));
+      frames->addAction(getAction("insert-hbox"));
+      frames->addAction(getAction("insert-vbox"));
+      frames->addAction(getAction("insert-textframe"));
+      if (enableExperimental)
+            frames->addAction(getAction("insert-fretframe"));
+      frames->addSeparator();
+      frames->addAction(getAction("append-hbox"));
+      frames->addAction(getAction("append-vbox"));
+      frames->addAction(getAction("append-textframe"));
+
+      QMenu* text = popup->addMenu(tr("&Text"));
+      text->addAction(getAction("title-text"));
+      text->addAction(getAction("subtitle-text"));
+      text->addAction(getAction("composer-text"));
+      text->addAction(getAction("poet-text"));
+      text->addAction(getAction("part-text"));
+      text->addSeparator();
+      text->addAction(getAction("system-text"));
+      text->addAction(getAction("staff-text"));
+      text->addAction(getAction("chord-text"));
+      text->addAction(getAction("rehearsalmark-text"));
+      text->addAction(getAction("instrument-change-text"));
+      text->addSeparator();
+      text->addAction(getAction("lyrics"));
+      text->addAction(getAction("figured-bass"));
+      text->addAction(getAction("tempo"));
+      QMenu* annotation = popup->addMenu(tr("&Annotation"));
+      annotation->addAction(getAction("text-annotation"));
+      annotation->addAction(getAction("range-annotation"));
+
+      QMenu* lines = popup->addMenu(tr("&Lines"));
+      lines->addSeparator();
+      lines->addAction(getAction("add-slur"));
+      lines->addAction(getAction("add-hairpin"));
+      lines->addAction(getAction("add-hairpin-reverse"));
+      lines->addAction(getAction("add-8va"));
+      lines->addAction(getAction("add-8vb"));
+      lines->addAction(getAction("add-noteline"));
+      return popup;
+      }
+
+//---------------------------------------------------------
 //   addTempo
 //---------------------------------------------------------
 
