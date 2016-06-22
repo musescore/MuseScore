@@ -19,6 +19,7 @@
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
+#include "textannotation.h"
 #include "articulation.h"
 #include "bagpembell.h"
 #include "barline.h"
@@ -106,6 +107,7 @@ static const ElementName elementNames[] = {
 
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
+      ElementName("Annotation",           QT_TRANSLATE_NOOP("elementName", "Annotation")),
       ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
       ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),
@@ -1269,6 +1271,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::BAR_LINE:          return new BarLine(score);
             case Element::Type::SYSTEM_DIVIDER:    return new SystemDivider(score);
             case Element::Type::ARPEGGIO:          return new Arpeggio(score);
+            case Element::Type::ANNOTATION:        return new TextAnnotation(score);
             case Element::Type::BREATH:            return new Breath(score);
             case Element::Type::GLISSANDO:         return new Glissando(score);
             case Element::Type::BRACKET:           return new Bracket(score);
@@ -1370,8 +1373,9 @@ const char* Element::name(Element::Type type)
 Element::Type Element::name2type(const QStringRef& s)
       {
       for (int i = 0; i < int(Element::Type::MAXTYPE); ++i) {
-            if (s == elementNames[i].name)
+            if (s == elementNames[i].name) {
                   return Element::Type(i);
+                  }
             }
 qDebug("name2type: invalid type <%s>", s.toUtf8().data());
       return Element::Type::INVALID;
