@@ -153,6 +153,8 @@ void SfzRegion::setZone(Zone* z) const
             }
       z->offMode      = off_mode;
       z->offBy        = off_by;
+      z->loRand       = lorand;
+      z->hiRand       = hirand;
       z->group        = group;
       z->loopEnd      = loopEnd;
       z->loopStart    = loopStart;
