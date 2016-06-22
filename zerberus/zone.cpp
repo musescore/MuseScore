@@ -42,7 +42,7 @@ Zone::~Zone()
 //   match
 //---------------------------------------------------------
 
-bool Zone::match(Channel* c, int k, int v, Trigger et)
+bool Zone::match(Channel* c, int k, int v, Trigger et, double rand)
       {
       int cc64 = c->sustain();
 
@@ -50,7 +50,7 @@ bool Zone::match(Channel* c, int k, int v, Trigger et)
          && (k <= keyHi)
          && (v >= veloLo)
          && (v <= veloHi)
-         //&& (seq == seqPos)
+         && (loRand <= rand && hiRand > rand)
          && (et == trigger)
          && (cc64 >= locc[64] && cc64 <= hicc[64])
          ) {
