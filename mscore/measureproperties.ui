@@ -26,9 +26,6 @@
          <property name="title">
           <string>Staves</string>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QTableWidget" name="staves">
@@ -103,9 +100,6 @@
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Measure Duration</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout">
           <property name="verticalSpacing">
@@ -273,9 +267,6 @@
          </property>
          <property name="title">
           <string>Other</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout1">
           <property name="horizontalSpacing">

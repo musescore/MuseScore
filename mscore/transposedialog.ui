@@ -31,9 +31,6 @@
            <property name="title">
             <string>By Key</string>
            </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
            <property name="checkable">
             <bool>true</bool>
            </property>
@@ -160,9 +157,6 @@
           <widget class="QGroupBox" name="transposeByInterval">
            <property name="title">
             <string>By Interval</string>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -436,9 +430,6 @@
        <widget class="QGroupBox" name="groupBox_3">
         <property name="title">
          <string>Options</string>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <property name="spacing">

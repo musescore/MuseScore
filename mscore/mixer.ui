@@ -479,9 +479,6 @@
           <property name="text">
            <string>Sound:</string>
           </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
          </widget>
         </item>
         <item>

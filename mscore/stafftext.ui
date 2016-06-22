@@ -364,9 +364,6 @@
          <property name="title">
           <string>Change Stops:</string>
          </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
