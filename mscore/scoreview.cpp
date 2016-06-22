@@ -68,7 +68,6 @@
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
-#include "libmscore/annotation.h"
 #include "libmscore/textannotation.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/slur.h"
