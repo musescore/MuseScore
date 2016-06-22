@@ -1379,7 +1379,6 @@ void Score::upDown(bool up, UpDownMode mode)
       _selection.clear();
       for (Note* note : el)
             _selection.add(note);
-      _selection.updateState();     // accidentals may have changed
       }
 
 //---------------------------------------------------------
