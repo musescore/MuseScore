@@ -443,7 +443,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="previousButton">
+          <widget class="QToolButton" name="previousButton">
            <property name="toolTip">
             <string>Go to previous measure</string>
            </property>
@@ -457,7 +457,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="nextButton">
+          <widget class="QToolButton" name="nextButton">
            <property name="toolTip">
             <string>Go to next measure</string>
            </property>
