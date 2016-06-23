@@ -444,6 +444,12 @@
          </property>
          <item>
           <widget class="QToolButton" name="previousButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Go to previous measure</string>
            </property>
@@ -458,6 +464,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="nextButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Go to next measure</string>
            </property>
