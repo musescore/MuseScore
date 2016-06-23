@@ -35,7 +35,7 @@ namespace Ms {
 TextAnnotation::TextAnnotation(Score* s)
   : Text(s)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::HAS_TAG);
       setTextStyleType(TextStyleType::ANNOTATION);
       _anchorType = textAnchorType::SEGMENT;
       }

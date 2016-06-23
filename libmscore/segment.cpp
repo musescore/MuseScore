@@ -1046,9 +1046,11 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   e->scanElements(data, func, all);
                   }
       for (Element* e : annotations()) {
-            if (all || e->systemFlag() || measure()->visible(e->staffIdx()))
-                  e->scanElements(data,  func, all);
-            }
+             if (score()->tagIsValid(e->tag())) {
+                   if (all || e->systemFlag()  || measure()->visible(e->staffIdx()))
+                         e->scanElements(data,  func, all);
+                   }
+             }
       }
 
 //---------------------------------------------------------
