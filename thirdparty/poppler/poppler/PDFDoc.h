@@ -65,6 +65,7 @@ class Linearization;
 class SecurityHandler;
 class Hints;
 class StructTreeRoot;
+class FormWidgetSignature;
 
 enum PDFWriteMode {
   writeStandard,
@@ -99,7 +100,7 @@ public:
   // Get the error code (if isOk() returns false).
   int getErrorCode() { return errCode; }
 
-  // Get the error code returned by fopen() (if getErrorCode() == 
+  // Get the error code returned by fopen() (if getErrorCode() ==
   // errOpenFile).
   int getFopenErrno() { return fopenErrno; }
 
@@ -170,7 +171,7 @@ public:
 
   // Display part of a page.
   void displayPageSlice(OutputDev *out, int page,
-			double hDPI, double vDPI, int rotate, 
+			double hDPI, double vDPI, int rotate,
 			GBool useMediaBox, GBool crop, GBool printing,
 			int sliceX, int sliceY, int sliceW, int sliceH,
 			GBool (*abortCheckCbk)(void *data) = NULL,
@@ -340,7 +341,7 @@ private:
 
   GBool ok;
   int errCode;
-  //If there is an error opening the PDF file with fopen() in the constructor, 
+  //If there is an error opening the PDF file with fopen() in the constructor,
   //then the POSIX errno will be here.
   int fopenErrno;
 

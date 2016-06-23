@@ -23,7 +23,6 @@
 
 #include <QtCore/QSizeF>
 
-#include <Form.h>
 #include <Object.h>
 #include <Link.h>
 
@@ -384,7 +383,7 @@ void FormFieldChoice::setCurrentChoices( const QList<int> &choice )
 QString FormFieldChoice::editChoice() const
 {
   FormWidgetChoice* fwc = static_cast<FormWidgetChoice*>(m_formData->fm);
-  
+
   if ( fwc->isCombo() && fwc->hasEdit() )
     return UnicodeParsedString(fwc->getEditChoice());
   else
@@ -394,7 +393,7 @@ QString FormFieldChoice::editChoice() const
 void FormFieldChoice::setEditChoice(const QString& text)
 {
   FormWidgetChoice* fwc = static_cast<FormWidgetChoice*>(m_formData->fm);
-  
+
   if ( fwc->isCombo() && fwc->hasEdit() )
   {
     GooString* goo = QStringToUnicodeGooString( text );
