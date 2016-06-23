@@ -103,9 +103,11 @@ int     MScore::defaultPlayDuration;
 // QString MScore::partStyle;
 QString MScore::lastError;
 
-// Pulses per quarter. Must be divisible by 256 to support 1024th notes
-//       with current handling of ticks safely
-int     MScore::division    = 512;
+// Pulses per quarter.
+// This number is arbitrarily high because tests show it is
+// fairly stable with unusual tuplets, but later if ticks distanced
+// further from libmscore for safer tuplet support, this can be reduced
+int     MScore::division    = 65536;
 
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;

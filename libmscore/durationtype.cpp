@@ -177,7 +177,7 @@ NoteHead::Type TDuration::headType() const
             case DurationType::V_LONG:
                   headType = NoteHead::Type::HEAD_BREVIS;
                   break;
-	    default:  // V_ZERO or V_INVALID
+            default:  // V_ZERO or V_INVALID
                   headType = NoteHead::Type::HEAD_QUARTER;
                   break;
             }

@@ -4849,7 +4849,7 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
             mscore->noteTooShortForTupletDialog();
             return;
             }
-      
+
       Tuplet* tuplet = new Tuplet(_score);
       tuplet->setRatio(ratio);
 
