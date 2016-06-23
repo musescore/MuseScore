@@ -226,6 +226,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::Type::TEXT
                || e->type() == Element::Type::REHEARSAL_MARK
+               || e->type() == Element::Type::ANNOTATION
                || e->type() == Element::Type::MARKER
                || e->type() == Element::Type::JUMP
                || e->type() == Element::Type::FINGERING

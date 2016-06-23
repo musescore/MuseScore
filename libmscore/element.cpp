@@ -1616,6 +1616,7 @@ bool Element::isText() const
          || type() == Element::Type::LYRICS
          || type() == Element::Type::DYNAMIC
          || type() == Element::Type::FINGERING
+         || type() == Element::Type::ANNOTATION
          || type() == Element::Type::HARMONY
          || type() == Element::Type::MARKER
          || type() == Element::Type::JUMP
