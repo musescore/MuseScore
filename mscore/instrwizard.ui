@@ -160,7 +160,11 @@
         <string>Up</string>
        </property>
        <property name="text">
-        <string>Up</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
        </property>
       </widget>
      </item>
@@ -176,7 +180,11 @@
         <string>Down</string>
        </property>
        <property name="text">
-        <string>Down</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
        </property>
       </widget>
      </item>
@@ -293,6 +301,8 @@
   <tabstop>linkedButton</tabstop>
   <tabstop>partiturList</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>
