@@ -93,7 +93,7 @@
    <item row="2" column="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="add">
+      <widget class="QToolButton" name="add">
        <property name="text">
         <string notr="true"/>
        </property>
@@ -104,7 +104,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="remove">
+      <widget class="QToolButton" name="remove">
        <property name="text">
         <string notr="true"/>
        </property>
@@ -115,7 +115,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="up">
+      <widget class="QToolButton" name="up">
        <property name="text">
         <string notr="true"/>
        </property>
@@ -126,7 +126,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="down">
+      <widget class="QToolButton" name="down">
        <property name="text">
         <string/>
        </property>
