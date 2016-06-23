@@ -4834,11 +4834,6 @@ void ScoreView::setCursorVisible(bool v)
 
 void ScoreView::cmdTuplet(int n, ChordRest* cr)
       {
-      if (cr->durationType() < TDuration(TDuration::DurationType::V_512TH) && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
-            mscore->noteTooShortForTupletDialog();
-            return;
-            }
-
       Fraction f(cr->duration());
       int tick    = cr->tick();
       Tuplet* ot  = cr->tuplet();
@@ -4850,7 +4845,11 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
             ratio /= 2;
             fr    /= 2;
             }
-
+      if (fr.denominator() > 1024) {
+            mscore->noteTooShortForTupletDialog();
+            return;
+            }
+      
       Tuplet* tuplet = new Tuplet(_score);
       tuplet->setRatio(ratio);
 
@@ -4894,6 +4893,10 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
                   sm->postEvent(new CommandEvent("note-input"));
             _score->inputState().setDuration(tuplet->baseLen());
             }
+#ifndef NDEBUG
+      if (MScore::showCorruptedMeasures)
+            _score->sanityCheck();
+#endif
       }
 
 //---------------------------------------------------------
