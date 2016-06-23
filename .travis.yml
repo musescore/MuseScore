@@ -24,7 +24,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
-            - alsa
+            # not white listed - alsa
             - libsndfile1
             - wget
             - make
