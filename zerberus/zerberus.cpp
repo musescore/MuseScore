@@ -93,8 +93,9 @@ void Zerberus::programChange(int channel, int program)
 void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
       {
       ZInstrument* i = channel->instrument();
+      double random = (double) rand() / (double) RAND_MAX;
       for (Zone* z : i->zones()) {
-            if (z->match(channel, key, velo, trigger)) {
+            if (z->match(channel, key, velo, trigger, random)) {
                   if (freeVoices.empty()) {
                         qDebug("Zerberus: out of voices...");
                         return;

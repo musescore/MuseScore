@@ -76,6 +76,8 @@ struct Zone {
       int group = 0;
       int offBy = 0;
       int loopStart, loopEnd;
+      double loRand = 0.0;
+      double hiRand = 1.0;
 
       int onLocc[128];
       int onHicc[128];
@@ -84,7 +86,7 @@ struct Zone {
 
       Zone();
       ~Zone();
-      bool match(Channel*, int key, int velo, Trigger);
+      bool match(Channel*, int key, int velo, Trigger, double rand);
       };
 
 #endif
