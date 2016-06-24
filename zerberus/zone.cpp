@@ -44,7 +44,6 @@ Zone::~Zone()
 
 bool Zone::match(Channel* c, int k, int v, Trigger et, double rand)
       {
-      int cc64 = c->sustain();
 
       if ((k >= keyLo)
          && (k <= keyHi)
@@ -52,10 +51,17 @@ bool Zone::match(Channel* c, int k, int v, Trigger et, double rand)
          && (v <= veloHi)
          && (loRand <= rand && hiRand > rand)
          && (et == trigger)
-         && (cc64 >= locc[64] && cc64 <= hicc[64])
          ) {
 //printf("   Zone match %d %d %d -- %d %d  %d %d  center %d trigger %d\n",
 //         k, v, et, keyLo, keyHi, veloLo, veloHi, keyBase, trigger);
+            if (useCC) {
+                  for (int i = 0; i < 128; i++) {
+                        if (locc[i] == 0 && hicc[i] == 127)
+                              continue;
+                        if (locc[i] > c->getCtrl(i) || hicc[i] < c->getCtrl(i))
+                              return false;
+                        }
+                  }
             if (et == Trigger::ATTACK) {
                   ++seq;
                   if (seq > seqLen)
