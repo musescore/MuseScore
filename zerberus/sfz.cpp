@@ -56,6 +56,7 @@ struct SfzRegion {
       double volume;
       int octave_offset, note_offset;
       int tune, transpose;
+      double pitch_keytrack;
       int loopStart, loopEnd;
       Trigger trigger;
       LoopMode loop_mode;
@@ -105,6 +106,7 @@ void SfzRegion::init(const QString& _path)
       loop_mode       = LoopMode::CONTINUOUS;
       tune            = 0;
       transpose       = 0;
+      pitch_keytrack  = 100.0;
       loopStart       = -1;
       loopEnd         = -1;
       for (int i = 0; i < 128; ++i) {
@@ -144,6 +146,7 @@ void SfzRegion::setZone(Zone* z) const
       z->trigger      = trigger;
       z->loopMode     = loop_mode;
       z->tune         = tune + transpose * 100;
+      z->pitchKeytrack = pitch_keytrack / (double) 100.0;
       z->rtDecay      = rt_decay;
       for (int i = 0; i < 128; ++i) {
             z->onLocc[i] = on_locc[i];
@@ -288,7 +291,7 @@ void SfzRegion::readOp(const QString& b, const QString& data)
             pitch_keycenter = lokey;
             }
       else if (b == "pitch_keytrack")
-            ;
+            readDouble(data, &pitch_keytrack);
       else if (b == "trigger") {
             if (data == "attack")
                   trigger = Trigger::ATTACK;

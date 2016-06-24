@@ -57,6 +57,7 @@ struct Zone {
       char veloHi  = 127;
       char keyBase = 60;
       int tune     = 0;       // fine tuning in cent (-100 - +100)
+      double pitchKeytrack = 100.0;
       float volume = 1.0;
       float lVol   = .5;
       float rVol   = .5;
