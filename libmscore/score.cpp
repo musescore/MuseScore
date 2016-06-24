@@ -433,6 +433,7 @@ void Score::fixTicks()
                                     staff(staffIdx)->addTimeSig(ts);
                               }
                         }
+                  // TODO: all done in doLayout, getNextMeasure, collectSystem... Do we keep?
                   else if (isMaster() && (s->segmentType() == Segment::Type::ChordRest)) {
                         for (Element* e : s->annotations()) {
                               if (e->type() == Element::Type::TEMPO_TEXT) {
@@ -477,6 +478,7 @@ void Score::fixTicks()
 
             tick += measureTicks;
             }
+      // Now done in getNextMeasure(), do we keep?
       if (tempomap()->empty())
             tempomap()->setTempo(0, 2.0);
       }
