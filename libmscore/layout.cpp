@@ -2792,6 +2792,7 @@ void Score::getNextMeasure(LayoutContext& lc)
             // this is the first measure of a score
             lc.sig = measure->len();
             tempomap()->clear();
+            tempomap()->setTempo(0, 2.0);
             sigmap()->clear();
             sigmap()->add(0, SigEvent(lc.sig,  measure->timesig(), 0));
             }
@@ -2875,6 +2876,9 @@ void Score::getNextMeasure(LayoutContext& lc)
                         if (!(e->isTempoText() || e->isDynamic() || e->isRehearsalMark() || e->isStaffText()))
                               e->layout();
                         }
+                  // TODO, this is not going to work, we just cleaned the tempomap
+                  // it breaks the test midi/testBaroqueOrnaments.mscx where first note has stretch 2
+                  // Also see fixTicks
                   qreal stretch = 0.0;
                   for (Element* e : segment.elist()) {
                         if (!e || !e->isChordRest())
