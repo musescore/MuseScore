@@ -178,7 +178,7 @@ subdirs (
         libmscore/layout
         libmscore/parts
         libmscore/measure
-#        libmscore/midi                # FAIL
+        libmscore/midi
 #        libmscore/midimapping         # FAIL
         libmscore/note
 #        libmscore/plugins
