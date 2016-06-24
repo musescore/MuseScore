@@ -103,8 +103,6 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
                   Voice* voice = freeVoices.pop();
                   Q_ASSERT(voice->isOff());
                   voice->start(channel, key, velo, z);
-                  if (trigger == Trigger::RELEASE)
-                        voice->stop();    // start voice in stop mode
                   voice->setNext(activeVoices);
                   activeVoices = voice;
 
