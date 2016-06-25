@@ -136,6 +136,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       hist1l = 0;
       hist2l = 0;
 
+      trigger = z->trigger;
+
       filter_startup = true;
 
       modenv_val = 0.0;
@@ -162,7 +164,15 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       envelopes[V1Envelopes::DECAY].offset = z->ampegSustain;
 
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
-      envelopes[V1Envelopes::SUSTAIN].setTime(std::numeric_limits<float>::infinity(), _zerberus->sampleRate());
+      if (trigger == Trigger::RELEASE) {
+            // Sample is played on noteoff. We need to stop the voice when it's done. Set the sustain duration accordingly.
+            double sampleDur = ((z->sample->frames()/z->sample->channel()) / z->sample->sampleRate()) * 1000; // in ms
+            double scaledSampleDur = sampleDur / (phaseIncr.data / 256.0);
+            double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease);
+            envelopes[V1Envelopes::SUSTAIN].setTime(sustainDur, _zerberus->sampleRate());
+            }
+      else
+            envelopes[V1Envelopes::SUSTAIN].setTime(std::numeric_limits<float>::infinity(), _zerberus->sampleRate());
       envelopes[V1Envelopes::SUSTAIN].setConstant(z->ampegSustain);
 
       envelopes[V1Envelopes::RELEASE].setTable(Envelope::egPow);
@@ -248,11 +258,21 @@ void Voice::updateFilter(float _fres)
 //---------------------------------------------------------
 
 void Voice::updateEnvelopes() {
-      if (_state == VoiceState::ATTACK) {
+      if (_state == VoiceState::ATTACK && trigger != Trigger::RELEASE) {
             while (envelopes[currentEnvelope].step() && currentEnvelope != V1Envelopes::SUSTAIN)
                   currentEnvelope++;
+
+            // triggered by noteon enter virtually infinite sustain (play state)
             if (currentEnvelope == V1Envelopes::SUSTAIN)
                   _state = VoiceState::PLAYING;
+            }
+      else if (_state == VoiceState::ATTACK && trigger == Trigger::RELEASE) {
+            while (envelopes[currentEnvelope].step() && currentEnvelope != V1Envelopes::RELEASE)
+                  currentEnvelope++;
+
+            // triggered by noteoff stop sample when entering release
+            if (currentEnvelope == V1Envelopes::RELEASE)
+                  _state = VoiceState::STOP;
             }
       else if (_state == VoiceState::STOP) {
             if (envelopes[V1Envelopes::RELEASE].step()) {

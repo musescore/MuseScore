@@ -23,6 +23,7 @@ class Zerberus;
 
 enum class LoopMode : char;
 enum class OffMode : char;
+enum class Trigger : char;
 
 static const int INTERP_MAX = 256;
 static const int EG_SIZE    = 256;
@@ -167,6 +168,8 @@ class Voice {
       static float interpCoeff[INTERP_MAX][4];
 
       void updateFilter(float fres);
+
+      Trigger trigger;
 
    public:
       Voice(Zerberus*);
