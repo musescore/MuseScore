@@ -84,6 +84,7 @@ struct Zone {
       int onHicc[128];
       int locc[128];
       int hicc[128];
+      bool useCC = false;
 
       Zone();
       ~Zone();

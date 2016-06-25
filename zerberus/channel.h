@@ -47,6 +47,7 @@ class Channel {
       float panLeftGain() const  { return _panLeftGain; }
       float panRightGain() const { return _panRightGain; }
       int idx() const            { return _idx; }
+      int getCtrl(int CTRL) const;
       };
 
 

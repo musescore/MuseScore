@@ -100,3 +100,8 @@ int Channel::sustain() const
       return ctrl[Ms::CTRL_SUSTAIN];
       }
 
+int Channel::getCtrl(int CTRL) const
+      {
+      return ctrl[CTRL];
+      }
+

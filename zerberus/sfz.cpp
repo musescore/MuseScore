@@ -50,6 +50,7 @@ struct SfzRegion {
       int on_hicc[128];
       int locc[128];
       int hicc[128];
+      bool use_cc;
       int off_by;
       int group;
       int seq_length, seq_position;
@@ -115,6 +116,7 @@ void SfzRegion::init(const QString& _path)
             locc[i]    = 0;
             hicc[i]    = 127;
             }
+      use_cc         = false;
       off_mode = OffMode::FAST;
       }
 
@@ -154,6 +156,7 @@ void SfzRegion::setZone(Zone* z) const
             z->locc[i]   = locc[i];
             z->hicc[i]   = hicc[i];
             }
+      z->useCC        = use_cc;
       z->offMode      = off_mode;
       z->offBy        = off_by;
       z->loRand       = lorand;
@@ -331,12 +334,16 @@ void SfzRegion::readOp(const QString& b, const QString& data)
                   on_hicc[idx] = i;
             }
       else if (b.startsWith("locc")) {
-            int idx = b.mid(7).toInt();
+            int idx = b.mid(4).toInt();
+            if (!use_cc)
+                  use_cc = i != 0;
             if (idx >= 0 && idx < 128)
                   locc[idx] = i;
             }
       else if (b.startsWith("hicc")) {
-            int idx = b.mid(7).toInt();
+            int idx = b.mid(4).toInt();
+            if (!use_cc)
+                  use_cc = i != 127;
             if (idx >= 0 && idx < 128)
                   hicc[idx] = i;
             }
