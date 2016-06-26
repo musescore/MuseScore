@@ -940,26 +940,15 @@ InspectorSlur::InspectorSlur(QWidget* parent)
 
       Element* e = inspector->element();
       bool sameType = true;
-      Element::Type subtype = Element::Type::INVALID;
 
-      if (e->type() == Element::Type::SLUR_SEGMENT)
-            subtype = toSlurSegment(e)->spanner()->type();
       for (const auto& ee : inspector->el()) {
-            if (ee->type() != Element::Type::SLUR_SEGMENT) {
-                  sameType = false;
-                  break;
-                  }
-            if (toSlurSegment(ee)->spanner()->type() != subtype) {
+            if (ee->accessibleInfo() != e->accessibleInfo()) {
                   sameType = false;
                   break;
                   }
             }
-      if (!sameType)
-            s.elementName->setText("Slur/Tie");
-      else if (subtype == Element::Type::SLUR)
-            s.elementName->setText(tr("Slur"));
-      else if (subtype == Element::Type::TIE)
-            s.elementName->setText(tr("Tie"));
+      if (sameType)
+            s.elementName->setText(e->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
             { P_ID::LINE_TYPE,       0, 0, s.lineType,      s.resetLineType      },
