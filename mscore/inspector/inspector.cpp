@@ -55,6 +55,7 @@
 #include "libmscore/bend.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/slur.h"
+#include "libmscore/breath.h"
 
 namespace Ms {
 
@@ -1214,13 +1215,24 @@ void InspectorBarLine::blockSpanDataSignals(bool val)
       }
 
 //---------------------------------------------------------
-//   InspectorRest
+//   InspectorCaesura
 //---------------------------------------------------------
 
 InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorBase(parent)
       {
       e.setupUi(addWidget());
       c.setupUi(addWidget());
+
+      Breath* b = toBreath(inspector->element());
+      bool sameType = true;
+      for (const auto& ee : inspector->el()) {
+            if (ee->accessibleInfo() != b->accessibleInfo()) {
+                  sameType = false;
+                  break;
+                  }
+            }
+      if (sameType)
+            c.elementName->setText(b->accessibleInfo());
 
       iList = {
             { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
