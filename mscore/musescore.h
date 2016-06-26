@@ -436,6 +436,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void autoSaveTimerTimeout();
       void helpBrowser1() const;
       void resetAndRestart();
+      void restart();
       void about();
       void aboutQt();
       void aboutMusicXML();
