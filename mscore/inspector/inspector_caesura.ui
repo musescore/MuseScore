@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Caesura</string>
+      <string>Breath/Caesura</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -87,7 +87,7 @@
         <string>Leading space</string>
        </property>
        <property name="suffix">
-        <string extracomment="spatium unit">sec</string>
+        <string extracomment="seconds">sec</string>
        </property>
        <property name="minimum">
         <double>0.000000000000000</double>
