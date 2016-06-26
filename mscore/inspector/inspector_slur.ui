@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string notr="true">Slur/Tie</string>
+      <string>Slur/Tie</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

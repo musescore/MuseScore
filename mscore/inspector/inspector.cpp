@@ -905,34 +905,17 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       e.setupUi(addWidget());
       s.setupUi(addWidget());
 
-      Inspector* inspector = static_cast<Inspector*>(parent);
+      Element* e = inspector->element();
+      bool sameType = true;
 
-      if (inspector != nullptr) {
-            Element* e = inspector->element();
-            bool sameType = true;
-            Element::Type subtype = Element::Type::INVALID;
-
-            if (e->type() == Element::Type::SLUR_SEGMENT)
-                  subtype = static_cast<SlurSegment*>(e)->spanner()->type();
-
-            for (const auto& ee : inspector->el()) {
-                  if (ee->type() != Element::Type::SLUR_SEGMENT) {
-                        sameType = false;
-                        break;
-                        }
-                  if (static_cast<SlurSegment*>(ee)->spanner()->type() != subtype) {
-                        sameType = false;
-                        break;
-                        }
+      for (const auto& ee : inspector->el()) {
+            if (ee->accessibleInfo() != e->accessibleInfo()) {
+                  sameType = false;
+                  break;
                   }
-
-            if (!sameType)
-                  s.elementName->setText("Slur/Tie");
-            else if (subtype == Element::Type::SLUR)
-                  s.elementName->setText(tr("Slur"));
-            else if (subtype == Element::Type::TIE)
-                  s.elementName->setText(tr("Tie"));
             }
+      if (sameType)
+            s.elementName->setText(e->accessibleInfo());
 
       iList = {
             { P_ID::COLOR,           0, 0, e.color,         e.resetColor         },
