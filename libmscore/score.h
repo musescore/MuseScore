@@ -376,6 +376,7 @@ class Score : public QObject, public ScoreElement {
       QString _layerTagComments[32];
       QList<Layer> _layer;
       int _currentLayer { 0 };
+      int _isAnnotation { 0 };
 
       ScoreFont* _scoreFont;
       int _pageNumberOffset { 0 };        ///< Offset for page numbers.
@@ -541,7 +542,10 @@ class Score : public QObject, public ScoreElement {
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
       bool read(XmlReader&);
-
+      void setAnnotation()          { _isAnnotation = 1 ; }
+      int isAnnotation() const      { return _isAnnotation; }
+      Segment* rss() const          { return _selection.startSegment(); }
+      int rst() const               { return _selection.tickStart();    }
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);
