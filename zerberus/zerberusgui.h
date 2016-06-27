@@ -17,6 +17,7 @@
 #include "ui_zerberus_gui.h"
 #include "zerberus.h"
 #include <QDialogButtonBox>
+#include <QProgressBar>
 
 class QProgressDialog;
 
@@ -59,6 +60,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       QString _loadedSfPath;
       QString _loadedSfName;
       QProgressDialog* _progressDialog;
+      QProgressBar* _progressBar;
       QTimer * _progressTimer;
       std::vector<struct SfzNamePath> _sfzToLoad;
       void loadSfz();
