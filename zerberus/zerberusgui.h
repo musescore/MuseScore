@@ -16,6 +16,7 @@
 #include "synthesizer/synthesizergui.h"
 #include "ui_zerberus_gui.h"
 #include "zerberus.h"
+#include <QDialogButtonBox>
 
 class QProgressDialog;
 
@@ -33,6 +34,7 @@ class SfzListDialog : public QDialog {
       int _idx = -1;
       std::vector<struct SfzNamePath> _namePaths;
       QListWidget* list;
+      QDialogButtonBox* buttonBox;
       QPushButton* okButton;
       QPushButton* cancelButton;
 
