@@ -172,7 +172,9 @@ void Dynamic::layout()
             int t = track() & ~0x3;
             for (int voice = 0; voice < VOICES; ++voice) {
                   Element* e = s->element(t + voice);
-                  if (e && e->isChord()) {
+                  if (!e)
+                        continue;
+                  if (e->isChord()) {
                         Chord* c = toChord(e);
                         qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
                         if (c->stem() && !c->up())  // stem down
