@@ -4593,7 +4593,9 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
 void ScoreView::cmdChangeEnharmonic(bool up)
       {
       _score->startCmd();
-      for (Note* n : _score->selection().noteList()) {
+      Selection selection = _score->selection();
+      QList<Note*> notes = selection.uniqueNotes();
+      for (Note* n : notes) {
             Staff* staff = n->staff();
             if (staff->part()->instrument()->useDrumset())
                   continue;
@@ -4620,28 +4622,18 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         24, 24, 12,  // 70  A#   A#  Bb
                         31, 19,  7,  // 71  A##  B   Cb
                         };
-                  int tpc  = n->tpc();
-                  int line = n->line();
+                  int tpc = n->tpc();
                   int i;
                   for (i = 0; i < 36; ++i) {
                         if (tab[i] == tpc) {
-                              int k = i % 3;
-                              i-= k;
-                              if ((k < 2) && tab[i] == tab[i+1])
-                                    ++k;
-                              if (k < 2) {
-                                    ++k;
-                                    tpc = tab[i + k];
-                                    ++line;
+                              if ((i % 3) < 2) {
+                                    if (tab[i] == tab[i + 1])
+                                          tpc = tab[i + 2];
+                                    else
+                                          tpc = tab[i + 1];
                                     }
                               else {
-                                    if (tab[i + 2] != tab[i + 1])
-                                          --line;
-                                    --k;
-                                    if (tab[i + 1] != tab[i])
-                                          --line;
-                                    --k;
-                                    tpc = tab[i];
+                                    tpc = tab[i - 2];
                                     }
                               break;
                               }
