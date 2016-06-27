@@ -241,6 +241,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAddChordName();
       void cmdAddText(TEXT style);
       void cmdAddAnnotation();
+      void cmdAddRangeAnnotation();
+
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);

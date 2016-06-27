@@ -1361,6 +1361,8 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("figured-bass"));
       text->addAction(getAction("tempo"));
       text->addAction(getAction("text-annotation"));
+      text->addAction(getAction("range-annotation"));
+
 
       QMenu* lines = popup->addMenu(tr("&Lines"));
       lines->addSeparator();
