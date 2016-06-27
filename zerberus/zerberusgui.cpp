@@ -30,9 +30,11 @@ SfzListDialog::SfzListDialog(QWidget* parent)
       okButton->setText(tr("Load"));
       cancelButton->setText(tr("Cancel"));
       QVBoxLayout* layout = new QVBoxLayout;
+      buttonBox = new QDialogButtonBox;
       layout->addWidget(list);
-      layout->addWidget(okButton);
-      layout->addWidget(cancelButton);
+      layout->addWidget(buttonBox);
+      buttonBox->addButton(okButton, QDialogButtonBox::AcceptRole);
+      buttonBox->addButton(cancelButton, QDialogButtonBox::RejectRole);
       setLayout(layout);
       connect(okButton, SIGNAL(clicked()), SLOT(okClicked()));
       connect(cancelButton, SIGNAL(clicked()), SLOT(cancelClicked()));
