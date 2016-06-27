@@ -69,6 +69,7 @@
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/textannotation.h"
+#include "libmscore/rangeannotation.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
@@ -2878,6 +2879,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::INSTRUMENT_CHANGE);
       else if (cmd == "text-annotation")
             cmdAddAnnotation();
+      else if (cmd == "range-annotation")
+            cmdAddRangeAnnotation();
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5468,6 +5471,27 @@ void ScoreView::cmdAddAnnotation()
             }
       else
             _score->endCmd();
+
+      }
+
+//---------------------------------------------------------
+//   cmdAddRangeAnnotation
+//---------------------------------------------------------
+
+void ScoreView::cmdAddRangeAnnotation()
+      {
+      if (!_score->checkHasMeasures())
+            return;
+      if (noteEntryMode())          // force out of entry mode
+            sm->postEvent(new CommandEvent("note-input"));
+
+      _score->startCmd();
+      ChordRest* cr = _score->getSelectedChordRest();
+      if (!cr)
+            return;
+      RangeAnnotation* range = new RangeAnnotation();
+      range->setRange(cr->segment(),cr->segment()->next()->next(),1,3);
+      _score->endCmd();
 
       }
 
