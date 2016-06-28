@@ -136,9 +136,10 @@ class Chord : public ChordRest {
       void layoutStem();
       void layoutArpeggio2();
 
-      QQmlListProperty<Ms::Note> qmlNotes()       { return QQmlListProperty<Ms::Note>(this, _notes);        }
-      QQmlListProperty<Ms::Lyrics> qmlLyrics()    { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
-      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes);  }
+      QQmlListProperty<Ms::Note> qmlNotes()           { return QmlListAccess<Ms::Note>(this, _notes); }
+      QQmlListProperty<Ms::Lyrics> qmlLyrics()        { return QmlListAccess<Ms::Lyrics>(this, _lyricsList); }
+      QQmlListProperty<Ms::Chord> qmlGraceNotes()     { return QmlListAccess<Ms::Chord>(this, _graceNotes); }
+
       QList<Note*>& notes()                       { return _notes; }
       const QList<Note*>& notes() const           { return _notes; }
 

@@ -187,7 +187,7 @@ public:
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(Element::Type type, int minTrack, int maxTrack);
 
-      QQmlListProperty<Ms::Element> qmlAnnotations();
+      QQmlListProperty<Ms::Element> qmlAnnotations()  { return QmlListAccess<Ms::Element>(this, _annotations); }
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }

@@ -369,7 +369,8 @@ class Note : public Element {
 
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
-      QQmlListProperty<Ms::Element> qmlElements() { return QQmlListProperty<Ms::Element>(this, _el); }
+
+      QQmlListProperty<Ms::Element> qmlElements() { return QmlListAccess<Ms::Element>(this, _el); }
 
       int subchannel() const                    { return _subchannel; }
       void setSubchannel(int val)               { _subchannel = val;  }
@@ -392,8 +393,9 @@ class Note : public Element {
       void setOffTimeOffset(int v);
 
       int customizeVelocity(int velo) const;
+
       NoteDot* dot(int n)                       { return _dots[n];           }
-      QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
+      QQmlListProperty<Ms::NoteDot> qmlDots() { return QmlListAccess<Ms::NoteDot>(this, _dots);  }
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);
       void updateLine();
