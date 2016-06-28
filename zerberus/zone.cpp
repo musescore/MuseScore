@@ -42,13 +42,13 @@ Zone::~Zone()
 //   match
 //---------------------------------------------------------
 
-bool Zone::match(Channel* c, int k, int v, Trigger et, double rand)
+bool Zone::match(Channel* c, int k, int v, Trigger et, double rand, int cc, int ccVal)
       {
 
-      if ((k >= keyLo)
-         && (k <= keyHi)
-         && (v >= veloLo)
-         && (v <= veloHi)
+      if ((k >= keyLo || et == Trigger::CC)
+         && (k <= keyHi || et == Trigger::CC)
+         && (v >= veloLo || et == Trigger::CC)
+         && (v <= veloHi || et == Trigger::CC)
          && (loRand <= rand && hiRand > rand)
          && (et == trigger)
          ) {
@@ -62,12 +62,20 @@ bool Zone::match(Channel* c, int k, int v, Trigger et, double rand)
                               return false;
                         }
                   }
-            if (et == Trigger::ATTACK) {
-                  ++seq;
-                  if (seq > seqLen)
-                        seq = 0;
+
+
+            if (trigger == Trigger::CC) {
+                  if (onLocc[cc] <= ccVal && onHicc[cc] >= ccVal) {
+                        seq++;
+                        return seq == seqPos;
+                        }
+                  else
+                        return false;
                   }
-            qDebug("seq %d seqPos %d seqLen %d", seq, seqPos, seqLen);
+
+            ++seq;
+            if (seq > seqLen)
+                  seq = 0;
             return seq == seqPos;
             }
       return false;
