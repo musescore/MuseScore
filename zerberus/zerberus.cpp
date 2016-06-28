@@ -90,12 +90,12 @@ void Zerberus::programChange(int channel, int program)
 //    gui
 //---------------------------------------------------------
 
-void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
+void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger, int cc, int ccVal)
       {
       ZInstrument* i = channel->instrument();
       double random = (double) rand() / (double) RAND_MAX;
       for (Zone* z : i->zones()) {
-            if (z->match(channel, key, velo, trigger, random)) {
+            if (z->match(channel, key, velo, trigger, random, cc, ccVal)) {
                   if (freeVoices.empty()) {
                         qDebug("Zerberus: out of voices...");
                         return;
@@ -137,7 +137,7 @@ void Zerberus::processNoteOff(Channel* cp, int key)
                   if (cp->sustain() < 0x40) {
                         if (!v->isStopped())
                               v->stop();
-                        trigger(cp, key, v->velocity(), Trigger::RELEASE);
+                        trigger(cp, key, v->velocity(), Trigger::RELEASE, -1, -1);
                         }
                   else {
                         if (v->isPlaying())
@@ -162,7 +162,7 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
                         }
                   }
             }
-      trigger(cp, key, velo, Trigger::ATTACK);
+      trigger(cp, key, velo, Trigger::ATTACK, -1, -1);
       }
 
 //---------------------------------------------------------
@@ -196,6 +196,7 @@ void Zerberus::play(const Ms::PlayEvent& event)
 
             case Ms::ME_CONTROLLER:
                   cp->controller(event.dataA(), event.dataB());
+                  trigger(cp, -1, -1, Trigger::CC, event.dataA(), event.dataB());
                   break;
 
             default:
