@@ -240,6 +240,7 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKey,
   int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
       {
+      qDebug() << selection().startSegment();
       bool rangeSelection = selection().isRange();
       int startStaffIdx = 0;
       int endStaffIdx   = 0;

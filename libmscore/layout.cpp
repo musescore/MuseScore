@@ -3309,7 +3309,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (e->visible())
                                     s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
-                        else if (e->visible() && (e->isRehearsalMark() || e->isDynamic() || e->isStaffText())) {
+                        else if (e->visible() && (e->isRehearsalMark() || e->isDynamic() || e->isStaffText() ||  e->type() == Element::Type::ANNOTATION)) {
                               e->layout();
                               s->staffShape(e->staffIdx()).add(e->shape());
                               }
