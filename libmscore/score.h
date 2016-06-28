@@ -326,7 +326,7 @@ class Score : public QObject, public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(QString                        composer          READ composer)
       Q_PROPERTY(int                            duration          READ duration)
-//TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
+      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
       Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
       Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
@@ -498,7 +498,7 @@ class Score : public QObject, public ScoreElement {
       void selectAdd(Element* e);
       void selectRange(Element* e, int staffIdx);
 
-      QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
+      QQmlListProperty<Ms::Part> qmlParts() { return QmlListAccess<Ms::Part>(this, _parts); }
 
       void getNextMeasure(LayoutContext&);      // get next measure for layout
       bool collectPage(LayoutContext&);
@@ -528,6 +528,8 @@ class Score : public QObject, public ScoreElement {
 
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
+
+      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QmlListAccess<Ms::Excerpt>(this, excerpts()); }
 
       virtual const char* name() const override { return "Score"; }
 
@@ -1116,7 +1118,6 @@ class MasterScore : public Score {
       QSet<int> occupiedMidiChannels;     // each entry is port*16+channel, port range: 0-inf, channel: 0-15
       unsigned int searchMidiMappingFrom; // makes getting next free MIDI mapping faster
 
-      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QQmlListProperty<Ms::Excerpt>(this, _excerpts); }
       void parseVersion(const QString&);
       void reorderMidiMapping();
       void removeDeletedMidiMapping();
