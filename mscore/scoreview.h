@@ -195,6 +195,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void objectPopup(const QPoint&, Element*);
       void measurePopup(const QPoint&, Measure*);
+      void noteEntryPopup(const QPoint&);
 
       void saveChord(Xml&);
 
@@ -455,6 +456,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);
       void editTremoloBarProperties(TremoloBar*);
+
+      QToolBar* entryContxtToolbar;
+      QMenu*    entryContxtMenu;
+
       };
 
 //---------------------------------------------------------

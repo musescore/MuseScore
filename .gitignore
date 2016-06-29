@@ -27,3 +27,6 @@ vtest/html
 thirdparty/mupdf-qt
 vtest/LOG
 
+/BuildRelease.bat
+/BuildClean.bat
+/BuildInstall.bat
