@@ -325,9 +325,9 @@ void EditStaff::apply()
 void EditStaff::minPitchAClicked()
       {
       int         newCode;
-      EditPitch* ep = new EditPitch(this, instrument.minPitchA() );
-      ep->setWindowModality(Qt::WindowModal);
-      if ( (newCode=ep->exec()) != -1) {
+      EditPitch ep(this, instrument.minPitchA());
+      ep.setWindowModality(Qt::WindowModal);
+      if ( (newCode = ep.exec()) != -1) {
             minPitchA->setText(midiCodeToStr(newCode));
             _minPitchA = newCode;
             }
@@ -336,9 +336,9 @@ void EditStaff::minPitchAClicked()
 void EditStaff::maxPitchAClicked()
       {
       int         newCode;
-      EditPitch* ep = new EditPitch(this, instrument.maxPitchA() );
-      ep->setWindowModality(Qt::WindowModal);
-      if ( (newCode=ep->exec()) != -1) {
+      EditPitch ep(this, instrument.maxPitchA());
+      ep.setWindowModality(Qt::WindowModal);
+      if ( (newCode = ep.exec()) != -1) {
             maxPitchA->setText(midiCodeToStr(newCode));
             _maxPitchA = newCode;
             }
@@ -347,9 +347,9 @@ void EditStaff::maxPitchAClicked()
 void EditStaff::minPitchPClicked()
       {
       int         newCode;
-      EditPitch* ep = new EditPitch(this, instrument.minPitchP() );
-      ep->setWindowModality(Qt::WindowModal);
-      if ( (newCode=ep->exec()) != -1) {
+      EditPitch ep(this, instrument.minPitchP());
+      ep.setWindowModality(Qt::WindowModal);
+      if ( (newCode = ep.exec()) != -1) {
             minPitchP->setText(midiCodeToStr(newCode));
             _minPitchP = newCode;
             }
@@ -358,9 +358,9 @@ void EditStaff::minPitchPClicked()
 void EditStaff::maxPitchPClicked()
       {
       int         newCode;
-      EditPitch* ep = new EditPitch(this, instrument.maxPitchP() );
-      ep->setWindowModality(Qt::WindowModal);
-      if ( (newCode=ep->exec()) != -1) {
+      EditPitch ep(this, instrument.maxPitchP());
+      ep.setWindowModality(Qt::WindowModal);
+      if ( (newCode = ep.exec()) != -1) {
             maxPitchP->setText(midiCodeToStr(newCode));
             _maxPitchP = newCode;
             }
