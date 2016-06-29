@@ -905,17 +905,17 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       e.setupUi(addWidget());
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* element = inspector->element();
       bool sameType = true;
 
       for (const auto& ee : inspector->el()) {
-            if (ee->accessibleInfo() != e->accessibleInfo()) {
+            if (ee->accessibleInfo() != element->accessibleInfo()) {
                   sameType = false;
                   break;
                   }
             }
       if (sameType)
-            s.elementName->setText(e->accessibleInfo());
+            s.elementName->setText(element->accessibleInfo());
 
       iList = {
             { P_ID::COLOR,           0, 0, e.color,         e.resetColor         },
