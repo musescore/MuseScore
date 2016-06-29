@@ -720,6 +720,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; };
       void populateNoteInputMenu();
+      void restartAfterSettingsChange();
       };
 
 extern MuseScore* mscore;

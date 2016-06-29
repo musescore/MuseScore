@@ -1289,6 +1289,19 @@ void MuseScore::resetAndRestart()
       }
 
 //---------------------------------------------------------
+//   restartAfterSettingsChange
+//---------------------------------------------------------
+
+void MuseScore::restartAfterSettingsChange()
+      {
+      int ret = QMessageBox::question(0, tr("Are you sure?"),
+                  tr("You have changed settings that require a restart of MuseScore in order to take effect\n"
+                   "Do you want to restart MuseScore now?"),
+                   QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+      if (ret == QMessageBox::Yes )
+            restart();
+      }
+//---------------------------------------------------------
 //   restart
 //---------------------------------------------------------
 
