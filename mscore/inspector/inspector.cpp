@@ -1206,7 +1206,7 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorBase(parent)
       e.setupUi(addWidget());
       c.setupUi(addWidget());
 
-      Breath* b = toBreath(inspector->element());
+      Breath* b = static_cast<Breath*>(inspector->element());
       bool sameType = true;
       for (const auto& ee : inspector->el()) {
             if (ee->accessibleInfo() != b->accessibleInfo()) {
