@@ -55,6 +55,7 @@
 #include "libmscore/bend.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/slur.h"
+#include "libmscore/breath.h"
 
 namespace Ms {
 
@@ -939,26 +940,15 @@ InspectorSlur::InspectorSlur(QWidget* parent)
 
       Element* e = inspector->element();
       bool sameType = true;
-      Element::Type subtype = Element::Type::INVALID;
 
-      if (e->type() == Element::Type::SLUR_SEGMENT)
-            subtype = toSlurSegment(e)->spanner()->type();
       for (const auto& ee : inspector->el()) {
-            if (ee->type() != Element::Type::SLUR_SEGMENT) {
-                  sameType = false;
-                  break;
-                  }
-            if (toSlurSegment(ee)->spanner()->type() != subtype) {
+            if (ee->accessibleInfo() != e->accessibleInfo()) {
                   sameType = false;
                   break;
                   }
             }
-      if (!sameType)
-            s.elementName->setText("Slur/Tie");
-      else if (subtype == Element::Type::SLUR)
-            s.elementName->setText(tr("Slur"));
-      else if (subtype == Element::Type::TIE)
-            s.elementName->setText(tr("Tie"));
+      if (sameType)
+            s.elementName->setText(e->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
             { P_ID::LINE_TYPE,       0, 0, s.lineType,      s.resetLineType      },
@@ -1206,13 +1196,24 @@ void InspectorBarLine::blockSpanDataSignals(bool val)
       }
 
 //---------------------------------------------------------
-//   InspectorRest
+//   InspectorCaesura
 //---------------------------------------------------------
 
 InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorBase(parent)
       {
       e.setupUi(addWidget());
       c.setupUi(addWidget());
+
+      Breath* b = toBreath(inspector->element());
+      bool sameType = true;
+      for (const auto& ee : inspector->el()) {
+            if (ee->accessibleInfo() != b->accessibleInfo()) {
+                  sameType = false;
+                  break;
+                  }
+            }
+      if (sameType)
+            c.elementName->setText(b->accessibleInfo());
 
       iList = {
             { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
