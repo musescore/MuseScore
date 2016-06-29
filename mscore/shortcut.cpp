@@ -219,7 +219,7 @@ Shortcut Shortcut::_sc[] = {
        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT
           | STATE_HARMONY_FIGBASS_EDIT,
        "swap",
-       QT_TRANSLATE_NOOP("action","Swap Clipboard and Selection"),
+       QT_TRANSLATE_NOOP("action","Swap with Clipboard"),
        0,
        0,
        Icons::swap_ICON,
@@ -2489,8 +2489,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "show-omr",
-         QT_TRANSLATE_NOOP("action","Show OMR Image"),
-         QT_TRANSLATE_NOOP("action","Show OMR image")
+         QT_TRANSLATE_NOOP("action","Show PDF Image"),
+         QT_TRANSLATE_NOOP("action","Show PDF image")
          },
 #endif
       {
@@ -2657,8 +2657,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT ,
          "omr",
-         QT_TRANSLATE_NOOP("action","OMR Panel"),
-         QT_TRANSLATE_NOOP("action","Show OMR panel")
+         QT_TRANSLATE_NOOP("action","PDF Transcribing Assistant"),
+         QT_TRANSLATE_NOOP("action","Show PDF transcribing assistant")
          },
 #endif
       {
