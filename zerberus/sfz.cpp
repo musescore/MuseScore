@@ -42,6 +42,12 @@ struct SfzRegion {
       double ampeg_sustain; // level
       double ampeg_release;
       double rt_decay;
+      double ampeg_vel2delay;
+      double ampeg_vel2attack;
+      double ampeg_vel2hold;
+      double ampeg_vel2decay;
+      double ampeg_vel2sustain;
+      double ampeg_vel2release;
       QString sample;
       int lochan, hichan;
       int lokey, hikey, lovel, hivel, pitch_keycenter;
@@ -87,6 +93,12 @@ void SfzRegion::init(const QString& _path)
       ampeg_decay     = 0.0;
       ampeg_sustain   = 100.0; // percent
       ampeg_release   = 0.200;  // in sec
+      ampeg_vel2delay    = 0.0;
+      ampeg_vel2attack   = 0.0;
+      ampeg_vel2hold     = 0.0;
+      ampeg_vel2decay    = 0.0;
+      ampeg_vel2sustain  = 0.0;
+      ampeg_vel2release  = 0.0;
       rt_decay        = 0.0;  // dB /sec
       lokey           = 0;
       hikey           = 127;
@@ -142,6 +154,13 @@ void SfzRegion::setZone(Zone* z) const
       z->ampegDecay   = ampeg_decay * 1000;
       z->ampegSustain = ampeg_sustain / 100.0;
       z->ampegRelease = ampeg_release * 1000;
+      // all vel2* but vel2sustain are time values in seconds
+      z->ampegVel2Delay    = ampeg_vel2delay * 1000;
+      z->ampegVel2Attack   = ampeg_vel2attack * 1000;
+      z->ampegVel2Hold     = ampeg_vel2hold * 1000;
+      z->ampegVel2Decay    = ampeg_vel2decay * 1000;
+      z->ampegVel2Sustain  = ampeg_vel2sustain / 100; // level in percent
+      z->ampegVel2Release  = ampeg_vel2release * 1000;
       z->seqPos       = seq_position - 1;
       z->seqLen       = seq_length - 1;
       z->seq          = 0;
@@ -284,6 +303,18 @@ void SfzRegion::readOp(const QString& b, const QString& data)
             readDouble(data, &ampeg_sustain);
       else if (b == "ampeg_release")
             readDouble(data, &ampeg_release);
+      else if (b == "ampeg_vel2delay")
+            readDouble(data, &ampeg_vel2delay);
+      else if (b == "ampeg_vel2attack")
+            readDouble(data, &ampeg_vel2attack);
+      else if (b == "ampeg_vel2hold")
+            readDouble(data, &ampeg_vel2hold);
+      else if (b == "ampeg_vel2decay")
+            readDouble(data, &ampeg_vel2decay);
+      else if (b == "ampeg_vel2sustain")
+            readDouble(data, &ampeg_vel2sustain);
+      else if (b == "ampeg_vel2release")
+            readDouble(data, &ampeg_vel2release);
       else if (b == "sample") {
             sample = path + "/" + data;
             sample.replace("\\", "/");
