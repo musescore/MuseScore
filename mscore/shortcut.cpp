@@ -219,7 +219,7 @@ Shortcut Shortcut::_sc[] = {
        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT
           | STATE_HARMONY_FIGBASS_EDIT,
        "swap",
-       QT_TRANSLATE_NOOP("action","Swap Clipboard and Selection"),
+       QT_TRANSLATE_NOOP("action","Swap with Clipboard"),
        0,
        0,
        Icons::swap_ICON,
