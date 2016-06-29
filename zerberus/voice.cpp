@@ -112,9 +112,13 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       _offMode  = z->offMode;
       _offBy    = z->offBy;
 
+      trigger = z->trigger;
+
       float offset = -z->ampVeltrack;
       if (offset <= 0)
             offset += 100;
+      if (trigger == Trigger::CC)
+            _velocity = 127;
       float curve = _velocity * _velocity / (127.0 * 127.0);
       gain        = z->volume * (offset + z->ampVeltrack * curve)
                     * .005 * c->gain();
@@ -122,6 +126,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       phase.set(0);
       float sr = float(s->sampleRate()) / _zerberus->sampleRate();
       double targetcents = ((((key - z->keyBase) * z->pitchKeytrack) + z->keyBase) * 100.0) + z->tune;
+      if (trigger == Trigger::CC)
+            targetcents = z->keyBase * 100;
       phaseIncr.set(_zerberus->ct2hz(targetcents) * sr/_zerberus->ct2hz(z->keyBase * 100.0));
 
       fres        = 13500.0;
@@ -135,8 +141,6 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       hist2r = 0;
       hist1l = 0;
       hist2l = 0;
-
-      trigger = z->trigger;
 
       filter_startup = true;
 
@@ -164,7 +168,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       envelopes[V1Envelopes::DECAY].offset = z->ampegSustain;
 
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
-      if (trigger == Trigger::RELEASE) {
+      if (trigger == Trigger::RELEASE || trigger == Trigger::CC) {
             // Sample is played on noteoff. We need to stop the voice when it's done. Set the sustain duration accordingly.
             double sampleDur = ((z->sample->frames()/z->sample->channel()) / z->sample->sampleRate()) * 1000; // in ms
             double scaledSampleDur = sampleDur / (phaseIncr.data / 256.0);

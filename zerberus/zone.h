@@ -88,7 +88,7 @@ struct Zone {
 
       Zone();
       ~Zone();
-      bool match(Channel*, int key, int velo, Trigger, double rand);
+      bool match(Channel*, int key, int velo, Trigger, double rand, int cc, int ccVal);
       };
 
 #endif
