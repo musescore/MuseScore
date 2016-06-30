@@ -35,6 +35,8 @@ static const char* voiceStateNames[] = {
 void Envelope::setTime(float ms, int sampleRate)
       {
       val   = 1.0;
+      if (ms < 0.0f)
+            ms = 0.0f;
       steps = int(ms * sampleRate / 1000);
       count = steps;
       }
@@ -149,22 +151,24 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
 
       currentEnvelope = V1Envelopes::DELAY;
 
+      float velPercent = _velocity / 127.0;
+
       envelopes[V1Envelopes::DELAY].setTable(Envelope::egLin);
-      envelopes[V1Envelopes::DELAY].setTime(z->ampegDelay, _zerberus->sampleRate());
+      envelopes[V1Envelopes::DELAY].setTime(z->ampegDelay + (z->ampegVel2Delay * velPercent), _zerberus->sampleRate());
       envelopes[V1Envelopes::DELAY].setConstant(0.0);
 
       envelopes[V1Envelopes::ATTACK].setTable(Envelope::egLin);
       envelopes[V1Envelopes::ATTACK].setVariable();
-      envelopes[V1Envelopes::ATTACK].setTime(z->ampegAttack, _zerberus->sampleRate());
+      envelopes[V1Envelopes::ATTACK].setTime(z->ampegAttack + (z->ampegVel2Attack * velPercent), _zerberus->sampleRate());
       envelopes[V1Envelopes::ATTACK].offset = z->ampegStart;
 
       envelopes[V1Envelopes::HOLD].setTable(Envelope::egLin);
-      envelopes[V1Envelopes::HOLD].setTime(z->ampegHold, _zerberus->sampleRate());
+      envelopes[V1Envelopes::HOLD].setTime(z->ampegHold + (z->ampegVel2Hold * velPercent), _zerberus->sampleRate());
       envelopes[V1Envelopes::HOLD].setConstant(1.0);
 
       envelopes[V1Envelopes::DECAY].setTable(Envelope::egPow);
       envelopes[V1Envelopes::DECAY].setVariable();
-      envelopes[V1Envelopes::DECAY].setTime(z->ampegDecay, _zerberus->sampleRate());
+      envelopes[V1Envelopes::DECAY].setTime(z->ampegDecay + (z->ampegVel2Decay * velPercent), _zerberus->sampleRate());
       envelopes[V1Envelopes::DECAY].offset = z->ampegSustain;
 
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
@@ -177,12 +181,12 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
             }
       else
             envelopes[V1Envelopes::SUSTAIN].setTime(std::numeric_limits<float>::infinity(), _zerberus->sampleRate());
-      envelopes[V1Envelopes::SUSTAIN].setConstant(z->ampegSustain);
+      envelopes[V1Envelopes::SUSTAIN].setConstant(qBound(0.0f, z->ampegSustain + (z->ampegVel2Sustain * velPercent), 1.0f));
 
       envelopes[V1Envelopes::RELEASE].setTable(Envelope::egPow);
       envelopes[V1Envelopes::RELEASE].setVariable();
-      envelopes[V1Envelopes::RELEASE].setTime(z->ampegRelease, _zerberus->sampleRate());
-      envelopes[V1Envelopes::RELEASE].max = z->ampegSustain;
+      envelopes[V1Envelopes::RELEASE].setTime(z->ampegRelease + (z->ampegVel2Release * velPercent), _zerberus->sampleRate());
+      envelopes[V1Envelopes::RELEASE].max = envelopes[V1Envelopes::SUSTAIN].val;
 
       _looping = false;
       }
