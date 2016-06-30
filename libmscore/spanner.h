@@ -163,6 +163,8 @@ class Spanner : public Element {
       const QList<SpannerSegment*>& spannerSegments() const { return segments; }
       QList<SpannerSegment*>& spannerSegments()             { return segments; }
 
+      virtual void layoutSystem(System*);
+
       virtual void triggerLayout() const override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;

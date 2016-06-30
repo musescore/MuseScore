@@ -25,7 +25,7 @@ namespace Ms {
 void VoltaSegment::layout()
       {
       rypos() = 0.0;
-      TextLineSegment::layout1();
+      TextLineSegment::layout();
       if (parent())     // for palette
             rypos() += score()->styleP(StyleIdx::voltaY) * mag();
       adjustReadPos();

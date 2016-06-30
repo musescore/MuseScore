@@ -910,5 +910,14 @@ void Spanner::triggerLayout() const
       score()->setLayout(_tick + _ticks);
       }
 
+//---------------------------------------------------------
+//   layoutSystem
+//---------------------------------------------------------
+
+void Spanner::layoutSystem(System*)
+      {
+      qDebug("Spanner::layoutSystem");
+      }
+
 }
 

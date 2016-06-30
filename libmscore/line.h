@@ -97,6 +97,8 @@ class SLine : public Spanner {
       SLine(const SLine&);
 
       virtual void layout() override;
+      virtual void layoutSystem(System*) override;
+
       bool readProperties(XmlReader& node);
       void writeProperties(Xml& xml) const;
       virtual LineSegment* createLineSegment() = 0;

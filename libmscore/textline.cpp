@@ -30,7 +30,7 @@ namespace Ms {
 TextLineSegment::TextLineSegment(const TextLineSegment& seg)
    : LineSegment(seg)
       {
-      layout1();    // set the right _text
+      layout();    // set the right _text
       }
 
 TextLineSegment::~TextLineSegment()
@@ -135,16 +135,6 @@ Shape TextLineSegment::shape() const
       }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TextLineSegment::layout()
-      {
-      layout1();
-      adjustReadPos();
-      }
-
-//---------------------------------------------------------
 //   setText
 //---------------------------------------------------------
 
@@ -169,10 +159,10 @@ void TextLineSegment::setText(Text* t)
       }
 
 //---------------------------------------------------------
-//   layout1
+//   layout
 //---------------------------------------------------------
 
-void TextLineSegment::layout1()
+void TextLineSegment::layout()
       {
       TextLine* tl = textLine();
       qreal _spatium = spatium();

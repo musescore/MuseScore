@@ -28,7 +28,7 @@ namespace Ms {
 
 void PedalSegment::layout()
       {
-      TextLineSegment::layout1();
+      TextLineSegment::layout();
       if (parent())     // for palette
             rypos() += score()->styleS(StyleIdx::pedalY).val() * spatium();
       adjustReadPos();

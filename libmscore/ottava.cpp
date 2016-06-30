@@ -58,7 +58,7 @@ void OttavaSegment::layout()
       if (autoplace())
             setUserOff(QPointF());
 
-      TextLineSegment::layout1();
+      TextLineSegment::layout();
       if (parent()) {
             qreal yo = score()->styleP(StyleIdx::ottavaY);
             if (ottava()->placement() == Element::Placement::BELOW)
@@ -78,6 +78,8 @@ void OttavaSegment::layout()
                               rUserYoffset() = d + minDistance;
                         }
                   }
+            else
+                  adjustReadPos();
             }
       }
 

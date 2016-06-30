@@ -49,7 +49,6 @@ class TextLineSegment : public LineSegment {
       virtual void draw(QPainter*) const override;
 
       virtual void layout() override;
-      void layout1();
       virtual void setSelected(bool f);
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
