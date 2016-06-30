@@ -96,7 +96,7 @@ void Voice::init()
 //   start
 //---------------------------------------------------------
 
-void Voice::start(Channel* c, int key, int v, const Zone* z)
+void Voice::start(Channel* c, int key, int v, const Zone* z, double durSinceNoteOn)
       {
       _state    = VoiceState::ATTACK;
       //_state    = VoiceState::PLAYING;
@@ -110,6 +110,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       _loopMode = z->loopMode;
       _loopStart = z->loopStart;
       _loopEnd   = z->loopEnd;
+      _samplesSinceStart = 0;
 
       _offMode  = z->offMode;
       _offBy    = z->offBy;
@@ -122,8 +123,12 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       if (trigger == Trigger::CC)
             _velocity = 127;
       float curve = _velocity * _velocity / (127.0 * 127.0);
+
+      double rt_decay_value = 1.0;
+      if (trigger == Trigger::RELEASE)
+            rt_decay_value = pow(10, (-z->rtDecay * durSinceNoteOn)/20);
       gain        = z->volume * (offset + z->ampVeltrack * curve)
-                    * .005 * c->gain();
+                    * .005 * c->gain() * rt_decay_value;
 
       phase.set(0);
       float sr = float(s->sampleRate()) / _zerberus->sampleRate();
@@ -352,6 +357,7 @@ void Voice::process(int frames, float* p)
                   *p++  += v * _channel->panLeftGain();
                   *p++  += v * _channel->panRightGain();
                   phase += phaseIncr;
+                  _samplesSinceStart++;
                   }
             }
       else {
@@ -412,6 +418,7 @@ void Voice::process(int frames, float* p)
                   *p++  += vl;
                   *p++  += vr;
                   phase += phaseIncr;
+                  _samplesSinceStart++;
                   }
             }
       }

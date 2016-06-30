@@ -128,6 +128,7 @@ class Voice {
       int _loopStart;
       int _loopEnd;
       bool _looping;
+      int _samplesSinceStart;
 
       float gain;
 
@@ -176,7 +177,7 @@ class Voice {
       Voice* next() const         { return _next; }
       void setNext(Voice* v)      { _next = v; }
 
-      void start(Channel* channel, int key, int velo, const Zone*);
+      void start(Channel* channel, int key, int velo, const Zone*, double durSinceNoteOn);
       void updateEnvelopes();
       void process(int frames, float*);
       void updateLoop();
@@ -196,6 +197,7 @@ class Voice {
       void off()                  { _state = VoiceState::OFF;       }
       const char* state() const;
       LoopMode loopMode() const   { return _loopMode; }
+      int getSamplesSinceStart()  { return _samplesSinceStart;    }
 
       OffMode offMode() const     { return _offMode;  }
       int offBy() const           { return _offBy;    }
