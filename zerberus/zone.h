@@ -69,6 +69,12 @@ struct Zone {
       float ampegDecay   = 0.0;
       float ampegSustain = 1.0;
       float ampegRelease = 200.0;     // release time in ms
+      float ampegVel2Delay    = 0.0;
+      float ampegVel2Attack   = 0.0;
+      float ampegVel2Hold     = 0.0;
+      float ampegVel2Decay    = 0.0;
+      float ampegVel2Sustain  = 0.0;
+      float ampegVel2Release  = 0.0;
       float rtDecay = 0.0;
 
       Trigger trigger = Trigger::ATTACK;

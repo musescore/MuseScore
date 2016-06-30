@@ -42,6 +42,12 @@ struct SfzRegion {
       double ampeg_sustain; // level
       double ampeg_release;
       double rt_decay;
+      double ampeg_vel2delay;
+      double ampeg_vel2attack;
+      double ampeg_vel2hold;
+      double ampeg_vel2decay;
+      double ampeg_vel2sustain;
+      double ampeg_vel2release;
       QString sample;
       int lochan, hichan;
       int lokey, hikey, lovel, hivel, pitch_keycenter;
@@ -87,6 +93,12 @@ void SfzRegion::init(const QString& _path)
       ampeg_decay     = 0.0;
       ampeg_sustain   = 100.0; // percent
       ampeg_release   = 0.200;  // in sec
+      ampeg_vel2delay    = 0.0;
+      ampeg_vel2attack   = 0.0;
+      ampeg_vel2hold     = 0.0;
+      ampeg_vel2decay    = 0.0;
+      ampeg_vel2sustain  = 0.0;
+      ampeg_vel2release  = 0.0;
       rt_decay        = 0.0;  // dB /sec
       lokey           = 0;
       hikey           = 127;
@@ -142,6 +154,13 @@ void SfzRegion::setZone(Zone* z) const
       z->ampegDecay   = ampeg_decay * 1000;
       z->ampegSustain = ampeg_sustain / 100.0;
       z->ampegRelease = ampeg_release * 1000;
+      // all vel2* but vel2sustain are time values in seconds
+      z->ampegVel2Delay    = ampeg_vel2delay * 1000;
+      z->ampegVel2Attack   = ampeg_vel2attack * 1000;
+      z->ampegVel2Hold     = ampeg_vel2hold * 1000;
+      z->ampegVel2Decay    = ampeg_vel2decay * 1000;
+      z->ampegVel2Sustain  = ampeg_vel2sustain / 100; // level in percent
+      z->ampegVel2Release  = ampeg_vel2release * 1000;
       z->seqPos       = seq_position - 1;
       z->seqLen       = seq_length - 1;
       z->seq          = 0;
@@ -266,63 +285,76 @@ static void readInt(const QString& data, int* val)
 
 void SfzRegion::readOp(const QString& b, const QString& data)
       {
-      int i = data.toInt();
+      QStringList splitData = data.split(" "); // no spaces in opcode values except for sample definition
+      int i = splitData[0].toInt();
 
       if (b == "amp_veltrack")
-            readDouble(data, &amp_veltrack);
+            readDouble(splitData[0], &amp_veltrack);
       else if (b == "ampeg_delay")
-            readDouble(data, &ampeg_delay);
+            readDouble(splitData[0], &ampeg_delay);
       else if (b == "ampeg_start")
-            readDouble(data, &ampeg_start);
+            readDouble(splitData[0], &ampeg_start);
       else if (b == "ampeg_attack")
-            readDouble(data, &ampeg_attack);
+            readDouble(splitData[0], &ampeg_attack);
       else if (b == "ampeg_hold")
-            readDouble(data, &ampeg_hold);
+            readDouble(splitData[0], &ampeg_hold);
       else if (b == "ampeg_decay")
-            readDouble(data, &ampeg_decay);
+            readDouble(splitData[0], &ampeg_decay);
       else if (b == "ampeg_sustain")
-            readDouble(data, &ampeg_sustain);
+            readDouble(splitData[0], &ampeg_sustain);
       else if (b == "ampeg_release")
-            readDouble(data, &ampeg_release);
+            readDouble(splitData[0], &ampeg_release);
+      else if (b == "ampeg_vel2delay")
+            readDouble(splitData[0], &ampeg_vel2delay);
+      else if (b == "ampeg_vel2attack")
+            readDouble(splitData[0], &ampeg_vel2attack);
+      else if (b == "ampeg_vel2hold")
+            readDouble(splitData[0], &ampeg_vel2hold);
+      else if (b == "ampeg_vel2decay")
+            readDouble(splitData[0], &ampeg_vel2decay);
+      else if (b == "ampeg_vel2sustain")
+            readDouble(splitData[0], &ampeg_vel2sustain);
+      else if (b == "ampeg_vel2release")
+            readDouble(splitData[0], &ampeg_vel2release);
       else if (b == "sample") {
-            sample = path + "/" + data;
+            sample = path + "/" + data; // spaces are allowed
             sample.replace("\\", "/");
             }
       else if (b == "key") {
-            lokey = readKey(data);
+            lokey = readKey(splitData[0]);
             hikey = lokey;
             pitch_keycenter = lokey;
             }
       else if (b == "pitch_keytrack")
-            readDouble(data, &pitch_keytrack);
+            readDouble(splitData[0], &pitch_keytrack);
       else if (b == "trigger") {
-            if (data == "attack")
+            if (splitData[0] == "attack")
                   trigger = Trigger::ATTACK;
-            else if (data == "release")
+            else if (splitData[0] == "release")
                   trigger = Trigger::RELEASE;
-            else if (data == "first")
+            else if (splitData[0] == "first")
                   trigger = Trigger::FIRST;
-            else if (data == "legato")
+            else if (splitData[0] == "legato")
                   trigger = Trigger::LEGATO;
             else
-                  qDebug("SfzRegion: bad trigger value: %s", qPrintable(data));
+                  qDebug("SfzRegion: bad trigger value: %s", qPrintable(splitData[0]));
             }
       else if (b == "loop_mode") {
-            if (data == "no_loop")
+            if (splitData[0] == "no_loop")
                   loop_mode = LoopMode::NO_LOOP;
-            else if (data == "one_shot")
+            else if (splitData[0] == "one_shot")
                   loop_mode = LoopMode::ONE_SHOT;
-            else if (data == "loop_continuous")
+            else if (splitData[0] == "loop_continuous")
                   loop_mode = LoopMode::CONTINUOUS;
-            else if (data == "loop_sustain")
+            else if (splitData[0] == "loop_sustain")
                   loop_mode = LoopMode::SUSTAIN;
             if (loop_mode != LoopMode::ONE_SHOT)
-                  qDebug("SfzRegion: loop_mode <%s>", qPrintable(data));
+                  qDebug("SfzRegion: loop_mode <%s>", qPrintable(splitData[0]));
             }
       else if(b == "loop_start")
-            readInt(data, &loopStart);
+            readInt(splitData[0], &loopStart);
       else if(b == "loop_end")
-            readInt(data, &loopEnd);
+            readInt(splitData[0], &loopEnd);
       else if (b.startsWith("on_locc")) {
             int idx = b.mid(7).toInt();
             if (idx >= 0 && idx < 128)
@@ -348,27 +380,27 @@ void SfzRegion::readOp(const QString& b, const QString& data)
                   hicc[idx] = i;
             }
       else if (b == "off_mode") {
-            if (data == "fast")
+            if (splitData[0] == "fast")
                   off_mode = OffMode::FAST;
-            else if (data == "normal")
+            else if (splitData[0] == "normal")
                   off_mode = OffMode::NORMAL;
             }
       else if (b == "tune")
             tune = i;
       else if (b == "rt_decay")
-            readDouble(data, &rt_decay);
+            readDouble(splitData[0], &rt_decay);
       else if (b == "hirand")
-            readDouble(data, &hirand);
+            readDouble(splitData[0], &hirand);
       else if (b == "lorand")
-            readDouble(data, &lorand);
+            readDouble(splitData[0], &lorand);
       else if (b == "volume")
-            readDouble(data, &volume);
+            readDouble(splitData[0], &volume);
       else if (b == "pitch_keycenter")
-            pitch_keycenter = readKey(data);
+            pitch_keycenter = readKey(splitData[0]);
       else if (b == "lokey")
-            lokey = readKey(data);
+            lokey = readKey(splitData[0]);
       else if (b == "hikey")
-            hikey = readKey(data);
+            hikey = readKey(splitData[0]);
       else if (b == "lovel")
             lovel = i;
       else if (b == "hivel")
