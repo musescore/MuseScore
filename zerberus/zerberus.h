@@ -80,7 +80,7 @@ class Zerberus : public Ms::Synthesizer {
       bool _loadWasCanceled = false;
 
       void programChange(int channel, int program);
-      void trigger(Channel*, int key, int velo, Trigger, int cc, int ccVal);
+      void trigger(Channel*, int key, int velo, Trigger, int cc, int ccVal, double durSinceNoteOn);
       void processNoteOff(Channel*, int pitch);
       void processNoteOn(Channel* cp, int key, int velo);
 
