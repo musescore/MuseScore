@@ -352,13 +352,13 @@ MS_QML_ENUM(TextStyleType, signed char,\
       FINGERING,\
       LH_GUITAR_FINGERING,\
       RH_GUITAR_FINGERING,\
-      \
       STRING_NUMBER,\
       INSTRUMENT_LONG,\
       INSTRUMENT_SHORT,\
       INSTRUMENT_EXCERPT,\
       DYNAMICS,\
       TECHNIQUE,\
+      ANNOTATION,\
       TEMPO,\
       METRONOME,\
       MEASURE_NUMBER,\

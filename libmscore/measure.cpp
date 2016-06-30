@@ -1989,12 +1989,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Symbol"
                || tag == "Tempo"
                || tag == "StaffText"
+               || tag == "Annotation"
                || tag == "RehearsalMark"
                || tag == "InstrumentChange"
                || tag == "StaffState"
                || tag == "FiguredBass"
                ) {
                   Element* el = Element::name2Element(tag, score());
+
                   // hack - needed because tick tags are unreliable in 1.3 scores
                   // for symbols attached to anything but a measure
                   if (score()->mscVersion() <= 114 && el->type() == Element::Type::SYMBOL)

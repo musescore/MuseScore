@@ -388,6 +388,8 @@ void initStyle(MStyle* s)
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Annotation"), ff, 16, false, true, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM,
