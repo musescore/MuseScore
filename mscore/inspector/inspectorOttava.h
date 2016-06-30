@@ -30,7 +30,6 @@ class InspectorOttava : public InspectorElementBase {
       Q_OBJECT
 
       Ui::InspectorLine     l;
-      //Ui::InspectorTextLine tl;
       Ui::InspectorOttava   o;
 
    public:

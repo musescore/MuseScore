@@ -453,6 +453,8 @@ QVariant LineSegment::getProperty(P_ID id) const
             case P_ID::LINE_COLOR:
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
+            case P_ID::DASH_LINE_LEN:
+            case P_ID::DASH_GAP_LEN:
                   return line()->getProperty(id);
             default:
                   return SpannerSegment::getProperty(id);
@@ -470,6 +472,8 @@ bool LineSegment::setProperty(P_ID id, const QVariant& val)
             case P_ID::LINE_COLOR:
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
+            case P_ID::DASH_LINE_LEN:
+            case P_ID::DASH_GAP_LEN:
                   return line()->setProperty(id, val);
             default:
                   return SpannerSegment::setProperty(id, val);
@@ -507,20 +511,18 @@ QLineF LineSegment::dragAnchor() const
 SLine::SLine(Score* s)
    : Spanner(s)
       {
-      _diagonal  = false;
-      _lineColor = MScore::defaultColor;
-      _lineWidth = Spatium(0.15);
-      _lineStyle = Qt::SolidLine;
       setTrack(0);
       }
 
 SLine::SLine(const SLine& s)
    : Spanner(s)
       {
-      _diagonal  = s._diagonal;
-      _lineWidth = s._lineWidth;
-      _lineColor = s._lineColor;
-      _lineStyle = s._lineStyle;
+      _diagonal    = s._diagonal;
+      _lineWidth   = s._lineWidth;
+      _lineColor   = s._lineColor;
+      _lineStyle   = s._lineStyle;
+      _dashLineLen = s._dashLineLen;
+      _dashGapLen  = s._dashGapLen;
       }
 
 //---------------------------------------------------------
@@ -1060,6 +1062,8 @@ void SLine::writeProperties(Xml& xml) const
             xml.tag("lineColor", lineColor());
 
       writeProperty(xml, P_ID::ANCHOR);
+      writeProperty(xml, P_ID::DASH_LINE_LEN);
+      writeProperty(xml, P_ID::DASH_GAP_LEN);
       if (score() == gscore) {
             // when used as icon
             if (!spannerSegments().empty()) {
@@ -1137,6 +1141,10 @@ bool SLine::readProperties(XmlReader& e)
             _lineWidth = Spatium(e.readDouble());
       else if (tag == "lineStyle")
             _lineStyle = Qt::PenStyle(e.readInt());
+      else if (tag == "dashLineLength")
+            _dashLineLen = e.readDouble();
+      else if (tag == "dashGapLength")
+            _dashGapLen = e.readDouble();
       else if (tag == "lineColor")
             _lineColor = e.readColor();
       else if (Element::readProperties(e))
@@ -1218,6 +1226,10 @@ QVariant SLine::getProperty(P_ID id) const
                   return _lineWidth;
             case P_ID::LINE_STYLE:
                   return QVariant(int(_lineStyle));
+            case P_ID::DASH_LINE_LEN:
+                  return dashLineLen();
+            case P_ID::DASH_GAP_LEN:
+                  return dashGapLen();
             default:
                   return Spanner::getProperty(id);
             }
@@ -1242,6 +1254,12 @@ bool SLine::setProperty(P_ID id, const QVariant& v)
             case P_ID::LINE_STYLE:
                   _lineStyle = Qt::PenStyle(v.toInt());
                   break;
+            case P_ID::DASH_LINE_LEN:
+                  setDashLineLen(v.toDouble());
+                  break;
+            case P_ID::DASH_GAP_LEN:
+                  setDashGapLen(v.toDouble());
+                  break;
             default:
                   return Spanner::setProperty(id, v);
             }
@@ -1263,6 +1281,9 @@ QVariant SLine::propertyDefault(P_ID id) const
                   return Spatium(0.15);
             case P_ID::LINE_STYLE:
                   return int(Qt::SolidLine);
+            case P_ID::DASH_LINE_LEN:
+            case P_ID::DASH_GAP_LEN:
+                  return 5.0;
             default:
                   return Spanner::propertyDefault(id);
             }

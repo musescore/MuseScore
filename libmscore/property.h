@@ -233,6 +233,8 @@ enum class P_ID : unsigned char {
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,
+      DASH_LINE_LEN,
+      DASH_GAP_LEN,
 
       END
       };

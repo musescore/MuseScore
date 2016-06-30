@@ -82,8 +82,6 @@ void TextLineSegment::draw(QPainter* painter) const
             color = tl->lineColor();
 
       if (_text) {
-//            if (((isSingleType() || isBeginType()) && (tl->beginTextPlace() == PlaceText::LEFT)) || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT)))
-//                  l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
             painter->translate(_text->pos());
             _text->setVisible(tl->visible());
             _text->draw(painter);
@@ -102,15 +100,8 @@ void TextLineSegment::draw(QPainter* painter) const
       qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       if (tl->lineStyle() == Qt::CustomDashLine) {
-            bool palette = !(parent() && parent()->parent());     // hack for palette
-            QVector<qreal> pattern;
-            if (palette)
-                  pattern << 5.0 << 5.0;
-            else
-                  pattern << 5.0 << 20.0;
-            pen.setDashPattern(pattern);
-            if (!palette)
-                  pen.setDashOffset(15.0);
+            QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
+            pen.setDashPattern(dashes);
             }
       painter->setPen(pen);
 

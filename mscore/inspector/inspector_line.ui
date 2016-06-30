@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>284</width>
-    <height>154</height>
+    <width>309</width>
+    <height>227</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -152,19 +152,6 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QDoubleSpinBox" name="lineWidth">
-       <property name="accessibleName">
-        <string>Line thickness</string>
-       </property>
-       <property name="suffix">
-        <string extracomment="Staff space unit">sp</string>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="1">
       <widget class="QComboBox" name="lineStyle">
        <property name="accessibleName">
@@ -197,9 +184,32 @@
        </item>
        <item>
         <property name="text">
-         <string>Wide dashed</string>
+         <string>Custom dashed</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QToolButton" name="resetLineVisible">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Line visible' value</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
       </widget>
      </item>
      <item row="4" column="2">
@@ -236,19 +246,82 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QToolButton" name="resetLineVisible">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="lineVisible">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
        </property>
+       <property name="text">
+        <string>Line visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Dash gap length</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Dash line length</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDoubleSpinBox" name="lineWidth">
+       <property name="accessibleName">
+        <string>Line thickness</string>
+       </property>
+       <property name="suffix">
+        <string extracomment="Staff space unit">sp</string>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QDoubleSpinBox" name="dashLineLength">
+       <property name="accessibleName">
+        <string>Line thickness</string>
+       </property>
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>20.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QDoubleSpinBox" name="dashGapLength">
+       <property name="accessibleName">
+        <string>Line thickness</string>
+       </property>
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>20.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QToolButton" name="resetDashLineLength">
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Line visible' value</string>
+        <string>Reset 'Line style' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -259,13 +332,20 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="lineVisible">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
+     <item row="7" column="2">
+      <widget class="QToolButton" name="resetDashGapLength">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Line style' value</string>
        </property>
        <property name="text">
-        <string>Line visible</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
