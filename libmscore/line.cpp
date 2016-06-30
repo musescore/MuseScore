@@ -49,20 +49,18 @@ bool LineSegment::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
       if (tag == "subtype")
             setSpannerSegmentType(SpannerSegmentType(e.readInt()));
-      else if (tag == "off1")        // off1 is obsolete
-            setUserOff(e.readPoint() * spatium());
-      else if (tag == "off2")
+      else if (tag == "off2") {
             setUserOff2(e.readPoint() * spatium());
+            if (!userOff2().isNull())
+                  setAutoplace(false);
+            }
       else if (tag == "pos") {
-            if (score()->mscVersion() > 114) {
-                  qreal _spatium = score()->spatium();
-                  setUserOff(QPointF());
-                  setReadPos(e.readPoint() * _spatium);
-                  if (e.pasteMode())      // x position will be wrong
-                        setReadPos(QPointF());
-                  }
-            else
-                  e.readNext();
+            qreal _spatium = score()->spatium();
+            setUserOff(QPointF());
+            setReadPos(e.readPoint() * _spatium);
+            if (e.pasteMode())      // x position will be wrong
+                  setReadPos(QPointF());
+            setAutoplace(false);
             }
       else if (!SpannerSegment::readProperties(e)) {
             e.unknown();
@@ -762,12 +760,151 @@ QPointF SLine::linePos(Grip grip, System** sys) const
       }
 
 //---------------------------------------------------------
+//   layoutSystem
+//    layout spannersegment for system
+//---------------------------------------------------------
+
+void SLine::layoutSystem(System* s)
+      {
+      int stick = s->firstMeasure()->tick();
+      int etick = s->lastMeasure()->endTick();
+      if (etick < tick() || stick >= tick2()) {
+            qDebug("SLine::layoutSystem: no match: system: %d-%d  spanner %d-%d", stick, etick, tick(), tick2());
+            return;
+            }
+
+      LineSegment* lineSegm;
+      SpannerSegmentType sst;
+
+      if (tick() >= stick) {
+            //
+            // this is the first call to layoutSystem,
+            // processing the first line segment
+            //
+            computeStartElement();
+            computeEndElement();
+            for (SpannerSegment* ss : segments)    // mark all segments as unused
+                  ss->setSpanner(0);
+            if (spannerSegments().empty()) {
+                  lineSegm = createLineSegment();
+                  add(lineSegm);
+                  }
+            else {
+                  lineSegm = static_cast<LineSegment*>(segments.front());
+                  lineSegm->setSpanner(this);
+                  }
+            sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+            }
+      else if (tick() < stick && tick2() > etick) {
+            lineSegm = 0;
+            for (SpannerSegment* ss : segments) {    // search for first unused segment
+                  if (!ss->spanner()) {
+                        lineSegm = static_cast<LineSegment*>(ss);
+                        break;
+                        }
+                  }
+            if (!lineSegm) {
+                  lineSegm = createLineSegment();
+                  add(lineSegm);
+                  }
+            else
+                  lineSegm->setSpanner(this);
+            sst = SpannerSegmentType::MIDDLE;
+            }
+      else {
+            //
+            // this is the last call to layoutSystem
+            // processing the last line segment
+            //
+            lineSegm = 0;
+            for (SpannerSegment* ss : segments) {    // search for first unused segment
+                  if (!ss->spanner()) {
+                        lineSegm = static_cast<LineSegment*>(ss);
+                        break;
+                        }
+                  }
+            if (!lineSegm) {
+                  lineSegm = createLineSegment();
+                  add(lineSegm);
+                  }
+            else
+                  lineSegm->setSpanner(this);
+
+            // remove all unused spanner segments
+            QList<SpannerSegment*> sl;
+            for (auto i : segments) {
+                  if (i->spanner())
+                        sl.push_back(i);
+                  else {
+                        // TODO: undo/redo
+                        qDebug("delete spanner segment %s", i->name());
+                        delete i;
+                        }
+                  }
+            segments.swap(sl);
+            sst = SpannerSegmentType::END;
+            }
+
+      lineSegm->setSpannerSegmentType(sst);
+      lineSegm->setSystem(s);
+
+      switch (sst) {
+            case SpannerSegmentType::SINGLE: {
+                  QPointF p1(linePos(Grip::START, &s));
+                  QPointF p2(linePos(Grip::END,   &s));
+                  qreal len = p2.x() - p1.x();
+                  lineSegm->setPos(p1);
+                  lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
+                  }
+                  break;
+            case SpannerSegmentType::BEGIN: {
+                  QPointF p1(linePos(Grip::START, &s));
+                  lineSegm->setPos(p1);
+                  qreal x2 = s->bbox().right();
+                  lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
+                  }
+                  break;
+            case SpannerSegmentType::MIDDLE: {
+                  Measure* firstMeasure = s->firstMeasure();
+                  Segment* firstCRSeg   = firstMeasure->first(Segment::Type::ChordRest);
+                  qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
+                  qreal x2              = s->bbox().right();
+                  QPointF p1(linePos(Grip::START, &s));
+                  lineSegm->setPos(QPointF(x1, p1.y()));
+                  lineSegm->setPos2(QPointF(x2 - x1, 0.0));
+                  }
+                  break;
+            case SpannerSegmentType::END: {
+                  qreal offset = 0.0;
+                  QPointF p2(linePos(Grip::END,   &s));
+                  Measure* firstMeas  = s->firstMeasure();
+                  Segment* firstCRSeg = firstMeas->first(Segment::Type::ChordRest);
+                  if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
+                        // start line just after previous element (eg, key signature)
+                        firstCRSeg = firstCRSeg->prev();
+                        Element* e = firstCRSeg ? firstCRSeg->element(staffIdx() * VOICES) : nullptr;
+                        if (e)
+                              offset = e->width();
+                        }
+                  qreal x1  = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal len = p2.x() - x1;
+                  lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
+                  lineSegm->setPos2(QPointF(len, 0.0));
+                  }
+                  break;
+            }
+      lineSegm->layout();
+      }
+
+//---------------------------------------------------------
 //   layout
 //    compute segments from tick1 tick2
+//    (obsolete)
 //---------------------------------------------------------
 
 void SLine::layout()
       {
+      qDebug("=====SLine::layout");
       if (score() == gscore || tick() == -1 || tick2() == 1) {
             //
             // when used in a palette or while dragging from palette,
@@ -909,9 +1046,8 @@ void SLine::layout()
 
 void SLine::writeProperties(Xml& xml) const
       {
-      if (!endElement()) {
+      if (!endElement())
             xml.tag("ticks", ticks());
-            }
       Spanner::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
@@ -938,12 +1074,8 @@ void SLine::writeProperties(Xml& xml) const
       // check if user has modified the default layout
       //
       bool modified = false;
-      int n = spannerSegments().size();
-      for (int i = 0; i < n; ++i) {
-            const LineSegment* seg = segmentAt(i);
-            if (!seg->userOff().isNull()
-               || !seg->userOff2().isNull()
-               || !seg->visible()) {
+      for (const SpannerSegment* seg : spannerSegments()) {
+            if (!seg->autoplace() || !seg->visible()) {
                   modified = true;
                   break;
                   }
@@ -955,8 +1087,7 @@ void SLine::writeProperties(Xml& xml) const
       // write user modified layout
       //
       qreal _spatium = spatium();
-      for (int i = 0; i < n; ++i) {
-            const LineSegment* seg = segmentAt(i);
+      for (const SpannerSegment* seg : spannerSegments()) {
             xml.stag("Segment");
             xml.tag("subtype", int(seg->spannerSegmentType()));
             xml.tag("off2", seg->userOff2() / _spatium);

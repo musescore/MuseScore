@@ -3346,7 +3346,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         sp->setTick2(lastMeasure()->endTick());
                         sp->staff()->updateOttava();
                         }
-                  sp->layout();     // TODO: create/layout only segments for this system
+                  sp->layoutSystem(system);     // create/layout spanner segment for this system
                   }
 
             for (Spanner* sp : _unmanagedSpanner) {
