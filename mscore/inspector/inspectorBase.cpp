@@ -439,6 +439,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il)
       for (const InspectorItem& ii : iList) {
             QToolButton* resetButton = ii.r;
             if (resetButton) {
+                  resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
                   connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));
                   resetMapper->setMapping(resetButton, i);
                   }
