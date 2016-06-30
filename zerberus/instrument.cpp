@@ -96,6 +96,8 @@ Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
 ZInstrument::ZInstrument(Zerberus* z)
       {
       zerberus  = z;
+      for (int i =0; i < 128; i++)
+            _setcc[i] = -1;
       _program  = -1;
       _refCount = 0;
       }

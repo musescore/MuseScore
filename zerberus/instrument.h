@@ -34,6 +34,7 @@ class ZInstrument {
       int _program;
       QString instrumentPath;
       std::list<Zone*> _zones;
+      int _setcc[128];
 
       bool loadFromFile(const QString&);
       bool loadSfz(const QString&);
@@ -55,6 +56,7 @@ class ZInstrument {
       Sample* readSample(const QString& s, MQZipReader* uz);
       void addZone(Zone* z)                 { _zones.push_back(z); }
       void addRegion(SfzRegion&);
+      int getSetCC(int v)                   { return _setcc[v]; }
 
       static QByteArray buf;  // used during read of Sample
       static int idx;
