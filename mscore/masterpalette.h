@@ -1,9 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: score.h 5242 2012-01-23 17:25:56Z wschweer $
+//  $Id: masterpalette.h 5242 2012-01-23 17:25:56Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -32,6 +32,9 @@ class MasterPalette : public QWidget, Ui::MasterPalette
 
       TimeDialog* timeDialog;
       KeyEditor* keyEditor;
+      QTreeWidgetItem* keyItem;
+      QTreeWidgetItem* timeItem;
+      QTreeWidgetItem* symbolItem;
 
       virtual void closeEvent(QCloseEvent*);
       Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
@@ -43,6 +46,10 @@ class MasterPalette : public QWidget, Ui::MasterPalette
    private slots:
       void currentChanged(QTreeWidgetItem*, QTreeWidgetItem*);
       void clicked(QTreeWidgetItem*, int);
+
+   protected:
+      virtual void changeEvent(QEvent *event);
+      void retranslate(bool firstTime = false);
 
    public:
       MasterPalette(QWidget* parent = 0);

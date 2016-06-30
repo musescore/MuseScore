@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2013 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -407,5 +407,17 @@ void SynthControl::writeSettings()
       settings.setValue("tab", tabWidget->currentIndex());
       settings.endGroup();
       }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void SynthControl::changeEvent(QEvent *event)
+      {
+      QWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
+      }
+
 }
 

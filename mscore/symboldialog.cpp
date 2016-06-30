@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: symboldialog.cpp 5384 2012-02-27 12:21:49Z wschweer $
 //
-//  Copyright (C) 2007 Werner Schweer and others
+//  Copyright (C) 2007-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -85,7 +85,6 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
             }
       fontList->setCurrentIndex(currentIndex);
 
-      setWindowTitle(tr("MuseScore: Symbols"));
       QLayout* l = new QVBoxLayout();
       frame->setLayout(l);
       createSymbolPalette();
@@ -136,6 +135,17 @@ void SymbolDialog::on_clearSearch_clicked()
       {
       search->clear();
       createSymbols();
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void SymbolDialog::changeEvent(QEvent *event)
+      {
+      QWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 
 }
