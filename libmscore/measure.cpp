@@ -3179,7 +3179,7 @@ void Measure::layoutX(qreal stretch)
       int hLastIdx   = -1;
       int ntick      = ticks();   // position of next measure
 
-      if (system()->firstMeasure() == this && system()->barLine()) {
+      if (system() && system()->firstMeasure() == this && system()->barLine()) {
             BarLine* bl = system()->barLine();
             x += BarLine::layoutWidth(score(), bl->barLineType(), bl->magS());
             }
@@ -3311,7 +3311,7 @@ void Measure::layoutX(qreal stretch)
 
                               if (cr->type() == Element::Type::CHORD) {
                                     Chord* c = static_cast<Chord*>(cr);
-                                    if (system()->firstMeasure() == this && c->tick() == tick()) {
+                                    if (system() && system()->firstMeasure() == this && c->tick() == tick()) {
                                           if (c->endsGlissando()) {
                                                 minDistance = qMax(minDistance, _spatium * GLISS_STARTOFSYSTEM_WIDTH);
                                                 }
@@ -3778,7 +3778,7 @@ void Measure::layoutX(qreal stretch)
                               qreal       delta = barLineWidth - bl->width();
                               // right-align end bar lines, end-repeat bar lines and bar lines in last system measure
                               if (bl->barLineType() == BarLineType::END || bl->barLineType() == BarLineType::END_REPEAT
-                                    || this == system()->lastMeasure())
+                                    || (system() && this == system()->lastMeasure()))
                                     bl->rxpos() = delta;
                               // centre-align all other bar lines except start-repeat
                               else if (bl->barLineType() != BarLineType::START_REPEAT)
