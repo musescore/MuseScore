@@ -1,3 +1,23 @@
+//=============================================================================
+//  MuseScore
+//  Linux Music Score Editor
+//  $Id: selectionwindow.cpp 4775 2011-09-12 14:25:31Z wschweer $
+//
+//  Copyright (C) 2002-2016 Werner Schweer and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+
 #include "selectionwindow.h"
 #include "musescore.h"
 #include "libmscore/score.h"
@@ -44,20 +64,30 @@ SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
       setTabKeyNavigation(true);
 
       for (int row = 0; row < numLabels; row++) {
-            QListWidgetItem *listItem = new QListWidgetItem(qApp->translate("selectionfilter", labels[row]),this);
+            QListWidgetItem *listItem = new QListWidgetItem(this);
             listItem->setData(Qt::UserRole, row == 0 ? QVariant(-1) : QVariant(1 << (row - 1)));
-            listItem->setData(Qt::AccessibleTextRole, qApp->translate("selectionfilter", labels[row]));
             listItem->setCheckState(Qt::Unchecked);
             addItem(listItem);
             }
+      retranslate();
       }
+
+void SelectionListWidget::retranslate()
+      {
+      for (int row = 0; row < numLabels; row++) {
+            QListWidgetItem *listItem = item(row);
+            listItem->setText(qApp->translate("selectionfilter", labels[row]));
+            listItem->setData(Qt::AccessibleTextRole, qApp->translate("selectionfilter", labels[row]));
+            }
+      }
+
 void SelectionListWidget::focusInEvent(QFocusEvent* e) {
       setCurrentRow(0);
       QListWidget::focusInEvent(e);
       }
 
 SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
-      QDockWidget(tr("Selection"),parent)
+      QDockWidget(parent)
       {
       setObjectName("selection-window");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
@@ -68,6 +98,13 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
 
       updateFilteredElements();
       connect(_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(changeCheckbox(QListWidgetItem*)));
+      retranslate();
+      }
+
+void SelectionWindow::retranslate()
+      {
+      setWindowTitle(tr("Selection"));
+      _listWidget->retranslate();
       }
 
 SelectionWindow::~SelectionWindow()
@@ -176,6 +213,17 @@ void SelectionWindow::setScore(Score* score)
 QSize SelectionWindow::sizeHint() const
       {
       return QSize(170 * guiScaling, 170 * guiScaling);
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void SelectionWindow::changeEvent(QEvent *event)
+      {
+      QDockWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 
 }

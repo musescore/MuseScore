@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: mixer.cpp 5651 2012-05-19 15:57:26Z lasconic $
 //
-//  Copyright (C) 2002-2010 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -123,7 +123,6 @@ void PartEdit::setPart(Part* p, Channel* a)
 Mixer::Mixer(QWidget* parent)
    : QScrollArea(parent)
       {
-      setWindowTitle(tr("MuseScore: Mixer"));
       setWidgetResizable(true);
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -142,6 +141,22 @@ Mixer::Mixer(QWidget* parent)
             resize(settings.value("size", QSize(484, 184)).toSize());
             move(settings.value("pos", QPoint(10, 10)).toPoint());
             settings.endGroup();
+            }
+      retranslate(true);
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void Mixer::retranslate(bool firstTime)
+      {
+      setWindowTitle(tr("MuseScore: Mixer"));
+      if (!firstTime) {
+            for (int i = 0; i < vb->count(); i++) {
+                  PartEdit* p = partEdit(i);
+                  if (p) p->retranslateUi(p);
+                  }
             }
       }
 
@@ -186,6 +201,16 @@ void Mixer::keyPressEvent(QKeyEvent* ev) {
       QWidget::keyPressEvent(ev);
       }
 
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void Mixer::changeEvent(QEvent *event)
+      {
+      QScrollArea::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
+      }
 
 //---------------------------------------------------------
 //   updateAll

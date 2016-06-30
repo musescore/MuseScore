@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: preferences.cpp 5660 2012-05-22 14:17:39Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -542,7 +542,7 @@ void MuseScore::startPreferenceDialog()
 //---------------------------------------------------------
 
 PreferenceDialog::PreferenceDialog(QWidget* parent)
-   : QDialog(parent)
+   : AbstractDialog(parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -633,9 +633,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       for (int idx = 0; idx < n; ++idx)
             exportAudioSampleRate->addItem(QString("%1").arg(exportAudioSampleRates[idx]));
 
-      restartWarningLanguage->hide();
-      connect(language, SIGNAL(currentIndexChanged(int)), SLOT(languageChanged(int)));
-
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
       connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
       connect(portaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
@@ -664,16 +661,6 @@ void PreferenceDialog::setPreferences(const Preferences& p)
 PreferenceDialog::~PreferenceDialog()
       {
       qDeleteAll(localShortcuts);
-      }
-
-
-//---------------------------------------------------------
-//   recordButtonClicked
-//---------------------------------------------------------
-
-void PreferenceDialog::languageChanged(int /*val*/)
-      {
-      restartWarningLanguage->show();
       }
 
 //---------------------------------------------------------

@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -85,6 +85,10 @@ class PianoTools : public QDockWidget {
    signals:
       void keyPressed(int pitch, bool ctrl, int vel);
       void keyReleased(int pitch, bool ctrl, int vel);
+
+   protected:
+      virtual void changeEvent(QEvent *event);
+      void retranslate();
 
    public:
       PianoTools(QWidget* parent = 0);

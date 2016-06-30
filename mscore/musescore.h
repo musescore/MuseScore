@@ -243,16 +243,24 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
 
-      QMenu* menuView;
-      QMenu* openRecent;
-
       MagBox* mag;
       QComboBox* viewModeCombo;
       QAction* playId;
 
+      QAction* pref;
+      QAction* onlineHandbookAction;
+      QAction* aboutAction;
+      QAction* aboutQtAction;
+      QAction* aboutMusicXMLAction;
+      QAction* checkForUpdateAction;
+      QAction* askForHelpAction;
+      QAction* reportBugAction;
+      QAction* revertToFactoryAction;
+
       QProgressBar* _progressBar           { 0 };
       PreferenceDialog* preferenceDialog   { 0 };
       QToolBar* cpitchTools;
+      QToolBar* fotoTools;
       QToolBar* fileTools;
       QToolBar* transportTools;
       QToolBar* entryTools;
@@ -269,10 +277,28 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginManager* pluginManager         { 0 };
       SelectionWindow* selectionWindow     { 0 };
 
-      QMenu* _fileMenu;
+      QMenu* menuFile;
+      QMenu* openRecent;
       QMenu* menuEdit;
-      QMenu* menuCreate;
+      QMenu* menuEditMeasure;
+      QMenu* menuView;
+      QMenu* menuWorkspaces;
+      
+      QMenu* menuAdd;
+      QMenu* menuAddMeasures;
+      QMenu* menuAddFrames;
+      QMenu* menuAddText;
+      QMenu* menuAddLines;
+      QMenu* menuAddPitch;
+      QMenu* menuAddInterval;
+      QMenu* menuTuplet;
+      
       QMenu* menuFormat;
+      QMenu* menuTools;
+      QMenu* menuVoices;
+      
+      QMenu* menuPlugins;
+      QMenu* menuHelp;
       AlbumManager* albumManager           { 0 };
 
       QWidget* _searchDialog               { 0 };
@@ -301,6 +327,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteBox* paletteBox         { 0 };
       Inspector* _inspector          { 0 };
       OmrPanel* omrPanel             { 0 };
+      
+      QPushButton* showMidiImportButton {0};
 
       bool _midiinEnabled            { true };
       QList<QString> plugins;
@@ -355,7 +383,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* hRasterAction;
       QAction* vRasterAction;
 
-      QMenu* menuWorkspaces;
       ToolbarEditor* editToolbars        { 0 };
       QActionGroup* workspaces           { 0 };
 
@@ -387,6 +414,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void closeEvent(QCloseEvent*);
       virtual void dragEnterEvent(QDragEnterEvent*);
       virtual void dropEvent(QDropEvent*);
+      virtual void changeEvent(QEvent *e);
+
+      void retranslate(bool firstStart = false);
 
       void playVisible(bool flag);
       void launchBrowser(const QString whereTo);
@@ -491,7 +521,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setNormalState()    { changeState(STATE_NORMAL); }
       void setPlayState()      { changeState(STATE_PLAY); }
       void checkForUpdate();
-      QMenu* fileMenu() const  { return _fileMenu; }
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl, int velo);
       void instrumentChanged();
