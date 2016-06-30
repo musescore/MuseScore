@@ -25,18 +25,6 @@ class System;
 class MuseScoreView;
 
 //---------------------------------------------------------
-//   LineStyle
-//---------------------------------------------------------
-
-enum class LineStyle : char {
-      Solid      = Qt::SolidLine,
-      Dash       = Qt::DashLine,
-      Dot        = Qt::DotLine,
-      DashDot    = Qt::DashDotLine,
-      DashDotDot = Qt::DashDotDotLine
-      };
-
-//---------------------------------------------------------
 //   @@ LineSegment
 ///    Virtual base class for segmented lines segments
 ///    (OttavaSegment, HairpinSegment, TrillSegment...)
@@ -84,10 +72,12 @@ class LineSegment : public SpannerSegment {
 class SLine : public Spanner {
       Q_OBJECT
 
-      Spatium _lineWidth;
-      QColor _lineColor;
-      Qt::PenStyle _lineStyle;
-      bool _diagonal;
+      Spatium _lineWidth      { 0.15 };
+      QColor _lineColor       { MScore::defaultColor };
+      Qt::PenStyle _lineStyle { Qt::SolidLine };
+      qreal _dashLineLen      { 5.0   };
+      qreal _dashGapLen       { 5.0   };
+      bool _diagonal          { false };
 
    protected:
       virtual QPointF linePos(Grip, System** system) const;
@@ -117,6 +107,11 @@ class SLine : public Spanner {
       void setLineWidth(const Spatium& v) { _lineWidth = v;               }
       void setLineColor(const QColor& v)  { _lineColor = v;               }
       void setLineStyle(Qt::PenStyle v)   { _lineStyle = v;               }
+
+      qreal dashLineLen() const           { return _dashLineLen; }
+      void setDashLineLen(qreal val)      { _dashLineLen = val; }
+      qreal dashGapLen() const            { return _dashGapLen; }
+      void setDashGapLen(qreal val)       { _dashGapLen = val; }
 
       LineSegment* frontSegment() const   { return (LineSegment*)spannerSegments().front(); }
       LineSegment* backSegment() const    { return (LineSegment*)spannerSegments().back();  }

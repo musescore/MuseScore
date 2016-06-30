@@ -240,6 +240,8 @@ static const PropertyData propertyList[] = {
       { P_ID::SYSTEM_BRACKET,      false, "type",                  P_TYPE::INT  },
       { P_ID::GAP,                 false, 0,                       P_TYPE::BOOL },
       { P_ID::AUTOPLACE,           false, 0,                       P_TYPE::BOOL },
+      { P_ID::DASH_LINE_LEN,       false, "dashLineLength",        P_TYPE::REAL },
+      { P_ID::DASH_GAP_LEN,        false, "dashGapLength",         P_TYPE::REAL },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT  }
       };
