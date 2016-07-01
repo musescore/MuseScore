@@ -256,8 +256,9 @@ void MuseScore::editInstrList()
                   masterScore->cmdRemovePart(pli->part);
             else if (pli->op == ListItemOp::ADD) {
                   const InstrumentTemplate* t = ((PartListItem*)item)->it;
+                  const SoundBank* sb = ((PartListItem*)item)->sbnk;
                   part = new Part(masterScore);
-                  part->initFromInstrTemplate(t);
+                  part->initFromInstrTemplate(t, sb);
                   masterScore->undo(new InsertPart(part, staffIdx));
 
                   pli->part = part;

@@ -17,6 +17,7 @@
 #include "instrument.h"
 #include "clef.h"
 #include "stringdata.h"
+#include "soundbank.h"
 
 namespace Ms {
 
@@ -75,6 +76,8 @@ class InstrumentTemplate {
       QList<Channel>          channel;
       QList<InstrumentGenre*> genres;     //; list of genres this instrument belongs to
 
+      std::vector<SoundBank *> matchedSoundbanks;
+
       ClefTypeList clefTypes[MAX_STAVES];
       int staffLines[MAX_STAVES];
       BracketType bracket[MAX_STAVES];            // bracket type (NO_BRACKET)
@@ -91,6 +94,7 @@ class InstrumentTemplate {
       void linkGenre(const QString &);
       void addGenre(QList<InstrumentGenre *>);
       bool genreMember(const QString &);
+      bool groupMember(const QString& name);
 
       void setPitchRange(const QString& s, char* a, char* b) const;
       void write(Xml& xml) const;
@@ -120,6 +124,7 @@ extern QList<InstrumentGroup*> instrumentGroups;
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
+extern InstrumentTemplate* searchTemplateFromMusicXMLid(const QString& name);
 
 }     // namespace Ms
 #endif

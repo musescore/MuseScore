@@ -41,6 +41,10 @@
 
 namespace Ms {
 
+midiSpannerSettings::midiSpannerSettings(QWidget* parent) : QDialog(parent) {
+      setupUi(this);
+      }
+
 //---------------------------------------------------------
 //   EditStaff
 //---------------------------------------------------------
@@ -101,6 +105,7 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       updateInstrument();
 
       MuseScore::restoreGeometry(this);
+      spannerSettings = new midiSpannerSettings(this);
 
       connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
@@ -115,6 +120,7 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
       connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
       connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
+      connect(changeDefaults,       SIGNAL(clicked()),            SLOT(changeDefaultsClicked()));
       addAction(getAction("help"));  // why is this needed?
       }
 
@@ -399,6 +405,47 @@ void EditStaff::showBarlinesChanged()
       staff->staffType()->setShowBarlines(showBarlines->checkState() == Qt::Checked);
       }
 
+void EditStaff::changeDefaultsClicked()
+      {
+
+      SoundBankSpannerDefaults *defaults = &instrument.spannerDefaults();
+
+      spannerSettings->slurDefaults->clear();
+      int i = 0;
+      for (SoundBankSpannerDefault *sbsd : defaults->getSpannerDefaults(Element::Type::SLUR)) {
+            spannerSettings->slurDefaults->addItem(sbsd->name, i);
+            i++;
+            }
+
+      spannerSettings->hairpinDefaults->clear();
+      i = 0;
+      for (SoundBankSpannerDefault *sbsd : defaults->getSpannerDefaults(Element::Type::HAIRPIN)) {
+            spannerSettings->hairpinDefaults->addItem(sbsd->name, i);
+            i++;
+            }
+
+      spannerSettings->pedalDefaults->clear();
+      i = 0;
+      for (SoundBankSpannerDefault *sbsd : defaults->getSpannerDefaults(Element::Type::PEDAL)) {
+            spannerSettings->pedalDefaults->addItem(sbsd->name, i);
+            i++;
+            }
+
+      spannerSettings->exec();
+
+      if (spannerSettings->result() == QDialog::Accepted) {
+            if (spannerSettings->slurDefaults->currentData().isValid())
+                  defaults->setSelected(spannerSettings->slurDefaults->currentData().toInt(), Element::Type::SLUR);
+
+            if (spannerSettings->hairpinDefaults->currentData().isValid())
+                  defaults->setSelected(spannerSettings->hairpinDefaults->currentData().toInt(), Element::Type::HAIRPIN);
+
+            if (spannerSettings->pedalDefaults->currentData().isValid())
+                  defaults->setSelected(spannerSettings->pedalDefaults->currentData().toInt(), Element::Type::PEDAL);
+            }
+
+      }
+
 //---------------------------------------------------------
 //   showInstrumentDialog
 //---------------------------------------------------------
@@ -408,7 +455,7 @@ void EditStaff::showInstrumentDialog()
       SelectInstrument si(&instrument, this);
       si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
-            instrument = Instrument::fromTemplate(si.instrTemplate());
+            instrument = Instrument::fromTemplate(si.instrTemplate(), si.soundbank());
             updateInstrument();
             }
       }

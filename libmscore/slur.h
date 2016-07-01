@@ -206,6 +206,7 @@ class Slur : public SlurTie {
       virtual void setTrack(int val) override;
       virtual void slurPos(SlurPos*) override;
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF()) override;
+
       friend SlurSegment;
       };
 

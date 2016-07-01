@@ -30,6 +30,7 @@ class InspectorHairpin : public InspectorElementBase {
 
       Ui::InspectorLine l;
       Ui::InspectorHairpin h;
+      Ui::InspectorSpanner s;
 
    public:
       InspectorHairpin(QWidget* parent);

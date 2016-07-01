@@ -44,6 +44,7 @@
 #include "ui_inspector_fret.h"
 #include "ui_inspector_tremolo.h"
 #include "ui_inspector_caesura.h"
+#include "ui_inspector_spanner.h"
 
 namespace Ms {
 
@@ -103,6 +104,18 @@ class InspectorBreak : public InspectorBase {
 
    public:
       InspectorBreak(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorSpanner
+//---------------------------------------------------------
+
+class InspectorSpanner : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorSpanner b;
+
+   public:
+      InspectorSpanner(QWidget* parent);
       };
 
 //---------------------------------------------------------

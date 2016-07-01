@@ -104,6 +104,7 @@ class Zerberus : public Ms::Synthesizer {
       void setLoadProgress(int val) { _loadProgress = val; }
       bool loadWasCanceled()        { return _loadWasCanceled; }
       void setLoadWasCanceled(bool status)     { _loadWasCanceled = status; }
+      int getProgramByFilename(QString filename);
 
       virtual void setMasterTuning(double val) { _masterTuning = val;  }
       virtual double masterTuning() const      { return _masterTuning; }

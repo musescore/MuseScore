@@ -143,6 +143,7 @@ static const PropertyData propertyList[] = {
       { P_ID::HAIRPIN_TYPE,        true,  "",                  P_TYPE::INT      },
       { P_ID::HAIRPIN_HEIGHT,      false, "hairpinHeight",     P_TYPE::SPATIUM  },
       { P_ID::HAIRPIN_CONT_HEIGHT, false, "hairpinContHeight", P_TYPE::SPATIUM  },
+      { P_ID::SPANNER_MIDI_SETTINGS,false, "spannerMidiSettings", P_TYPE::INT },
       { P_ID::VELO_CHANGE,         true,  "veloChange",        P_TYPE::INT     },
       { P_ID::DYNAMIC_RANGE,       true,  "dynType",       P_TYPE::INT     },
       { P_ID::PLACEMENT,           false, "placement",     P_TYPE::PLACEMENT     },

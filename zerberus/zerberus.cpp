@@ -449,6 +449,7 @@ bool Zerberus::loadInstrument(const QString& s)
                               _channel[i]->setInstrument(instr);
                         }
                   busy = false;
+                  gui()->synthesizerChanged();
                   return true;
                   }
             }
@@ -461,5 +462,17 @@ bool Zerberus::loadInstrument(const QString& s)
       busy = false;
       delete instr;
       return false;
+      }
+
+
+int Zerberus::getProgramByFilename(QString filename)
+      {
+      QFileInfo fInf(filename);
+      QString name = fInf.completeBaseName();
+      for (ZInstrument *i : instruments) {
+            if (i->name() == name)
+                  return i->program();
+            }
+      return -1;
       }
 

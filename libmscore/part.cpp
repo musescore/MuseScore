@@ -42,10 +42,10 @@ Part::Part(Score* s)
 //   initFromInstrTemplate
 //---------------------------------------------------------
 
-void Part::initFromInstrTemplate(const InstrumentTemplate* t)
+void Part::initFromInstrTemplate(const InstrumentTemplate* t, const SoundBank *sb)
       {
       _partName = t->trackName;
-      setInstrument(Instrument::fromTemplate(t));
+      setInstrument(Instrument::fromTemplate(t, sb));
       }
 
 //---------------------------------------------------------

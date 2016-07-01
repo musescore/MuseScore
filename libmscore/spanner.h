@@ -23,6 +23,7 @@ class System;
 class Chord;
 class ChordRest;
 class Note;
+struct SoundBankSpannerDefault;
 
 //---------------------------------------------------------
 //   SpannerSegmentType
@@ -99,6 +100,14 @@ class SpannerSegment : public Element {
       virtual void triggerLayout() const override;
       };
 
+enum class ccType : char {
+      NONE, SWITCH, CONTINUOUS, CON_EVERY_CHORD, ON_CHORD
+      };
+
+enum class ccBind : char {
+      NONE, VELOCITY, TEMPO, ARTICULATION, PITCH
+      };
+
 //----------------------------------------------------------------------------------
 //   @@ Spanner
 ///   Virtual base class for slurs, ties, lines etc.
@@ -133,6 +142,12 @@ class Spanner : public Element {
       int _ticks             {  0 };
       int _track2            { -1 };
 
+      int _ccNumber          { -1 };
+      int _ccStart           { -1 };
+      int _ccEnd             { -1 };
+      ccType _ccType         { ccType::NONE };
+      ccBind _ccBind         { ccBind::NONE };
+
       static QList<QPointF> userOffsets;
       static QList<QPointF> userOffsets2;
 
@@ -142,6 +157,7 @@ class Spanner : public Element {
       // and detect edit changes when edit is over
       static int editTick, editTick2, editTrack2;
       static Note * editEndNote, * editStartNote;
+      int _selectedMidiSetting { -1 };
 
    public:
       Spanner(Score* = 0);
@@ -161,6 +177,22 @@ class Spanner : public Element {
 
       int track2() const       { return _track2;        }
       void setTrack2(int v)    { _track2 = v;           }
+
+      int ccNumber()          { return _ccNumber; }
+      int ccStart()           { return _ccStart;  }
+      int ccEnd()             { return _ccEnd;    }
+      ccType getccType()      { return _ccType;   }
+      ccBind getccBind()      { return _ccBind;   }
+
+      void setccNumber(int v)      { _ccNumber = v; }
+      void setccStart(int v)       { _ccStart = v;  }
+      void setccEnd(int v)         { _ccEnd = v;    }
+      void setccType(ccType v)     { _ccType = v;   }
+      void setccBind(ccBind v)     { _ccBind = v;   }
+      void updateCCFromDefault(Ms::SoundBankSpannerDefault s);
+      void updateFromBind();
+      virtual void updateCCSettings();
+      virtual void updateMidiComboBox (QComboBox*& c);
 
       Anchor anchor() const    { return _anchor;   }
       void setAnchor(Anchor a) { _anchor = a;      }

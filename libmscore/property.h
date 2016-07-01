@@ -135,6 +135,7 @@ enum class P_ID : int {
       HAIRPIN_TYPE,
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,
+      SPANNER_MIDI_SETTINGS,
       VELO_CHANGE,
       DYNAMIC_RANGE,
       PLACEMENT,

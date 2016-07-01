@@ -163,7 +163,7 @@ void MCursor::addPart(const QString& instrument)
       if (it == 0) {
             qFatal("Did not find instrument <%s>", qPrintable(instrument));
             }
-      part->initFromInstrTemplate(it);
+      part->initFromInstrTemplate(it, nullptr);
       _score->appendPart(part);
       _score->insertStaff(staff, 0);
       }

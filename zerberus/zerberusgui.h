@@ -77,6 +77,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
    public:
       ZerberusGui(Ms::Synthesizer*);
       Zerberus* zerberus() { return (Zerberus*)synthesizer(); }
+      void loadSfz(QString sfzFile);
       };
 
 #endif

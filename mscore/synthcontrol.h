@@ -28,6 +28,7 @@ namespace Ms {
 
 class Score;
 
+
 //---------------------------------------------------------
 //   SynthControl
 //---------------------------------------------------------
@@ -57,12 +58,15 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void storeButtonClicked();
       void recallButtonClicked();
       void setDirty();
+      void addSoundBankClicked();
+      void deleteSoundBankClicked();
 
    signals:
       void gainChanged(float);
       void metronomeGainChanged(float);
       void soundFontChanged();
       void closed(bool);
+      void soundbanksChanged();
 
    protected:
       virtual void changeEvent(QEvent *event);
@@ -77,6 +81,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void stop();
       void setScore(Score* s) { _score = s; }
       void writeSettings();
+      void updateSoundbanks();
       };
 }
 

@@ -412,7 +412,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                         QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
                         auto it = instrumentMapping.find(ref);
                         if (it != instrumentMapping.end()) {
-                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate(it->second)));
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate(it->second), nullptr));
                               }
                         else
                               qDebug() << "Unknown instrument: " << ref;

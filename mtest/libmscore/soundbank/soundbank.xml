@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SoundBank name="Testbank">
+     <match> <!-- matches must at least contain one value but any of these values would be enough -->
+        <Genre id="common" />
+        <InstrumentGroup id="woodwinds" />
+        <Instrument id="piccolo" />
+    </match>
+    <spanners>
+        <slur name="legato">
+            <ccValue val="68" />
+            <ccRange from="0" to="127" />
+            <ccType name="SWITCH" />
+            <ccBind type="NONE" />
+        </slur>
+        <slur name="No Midi">
+            <ccType name="NONE" />
+        </slur>
+        <hairpin name="single note (de)crescendo">
+            <ccValue val="11" />
+            <ccRange from="0" to="127" />
+            <ccType name="CONTINUOUS" />
+            <ccBind type="VELOCITY" />
+        </hairpin>
+        <hairpin name="No Midi">
+            <ccType name="NONE" />
+        </hairpin>
+    </spanners>
+    <Channel>
+            <synti>Zerberus</synti>
+            <soundfont>Woodwinds - Piccolo Solo.sfz</soundfont>
+            <program name="Woodwinds - Piccolo Solo" value="-2"/>
+    </Channel>
+    <!-- <sound name="legato" >
+        <synth name="Zerberus" />
+        <soundfont file="Piccolo-Legato.sfz" />
+        <program number="1" />
+        <assign program="1" />
+</sound> -->
+    <options>
+            <fixedVelocity value="127" />
+            <dynamic type="expression" />
+    </options>
+    <MidiAction name="testaction">
+        <!-- define normal midi actions here -->
+        <program value="0" />
+    </MidiAction>
+</SoundBank>

@@ -23,10 +23,13 @@
 
 #include "libmscore/instrument.h"
 #include "libmscore/instrtemplate.h"
+#include "musescore.h"
+#include "synthcontrol.h"
 
 namespace Ms {
 
 extern void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
+extern MuseScore* mscore;
 
 //---------------------------------------------------------
 //   SelectInstrument
@@ -41,6 +44,7 @@ SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
+      connect(mscore->getSynthControl(), SIGNAL(soundbanksChanged()), SLOT(buildTemplateList()));
       }
 
 //---------------------------------------------------------
@@ -102,6 +106,19 @@ const InstrumentTemplate* SelectInstrument::instrTemplate() const
             return 0;
       InstrumentTemplateListItem* item = (InstrumentTemplateListItem*)wi.front();
       return item->instrumentTemplate();
+      }
+
+//---------------------------------------------------------
+//   soundbank
+//---------------------------------------------------------
+
+const SoundBank* SelectInstrument::soundbank() const
+      {
+      QList<QTreeWidgetItem*> wi = instrumentList->selectedItems();
+      if (wi.isEmpty())
+            return 0;
+      InstrumentTemplateListItem* item = (InstrumentTemplateListItem*)wi.front();
+      return item->sb();
       }
 
 //---------------------------------------------------------

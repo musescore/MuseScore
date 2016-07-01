@@ -28,6 +28,9 @@
 #include "spannermap.h"
 #include "rehearsalmark.h"
 #include "tremolo.h"
+#include "soundbank.h"
+
+#include <map>
 
 class QPainter;
 
@@ -67,6 +70,7 @@ class PageFormat;
 class Parameter;
 class Part;
 class RepeatList;
+class RepeatSegment;
 class Rest;
 class Revisions;
 class ScoreFont;
@@ -294,6 +298,11 @@ class UpdateState {
 
 
 class MasterScore;
+
+typedef std::pair<int, int> midiTimeVal;
+typedef std::vector<midiTimeVal> midiValList;
+typedef std::map<int, midiValList> midiChanValMap;
+typedef std::map<int, midiChanValMap> midiCCMap;
 
 //---------------------------------------------------------------------------------------
 //   @@ Score
@@ -831,6 +840,8 @@ class Score : public QObject, public ScoreElement {
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
+      void gatherSpanners(midiCCMap& channelSwitchEvents, Spanner* s, const RepeatSegment* rs);
+      void renderSpannerMidi(EventMap* events, midiCCMap CCEvents);
       void renderSpanners(EventMap* events, int staffIdx);
       void renderMetronome(EventMap* events, Measure* m, int tickOffset);
 

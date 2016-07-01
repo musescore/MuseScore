@@ -26,127 +26,10 @@
    <property name="horizontalSpacing">
     <number>10</number>
    </property>
-   <item row="2" column="0">
-    <layout class="QGridLayout" name="gridLayout_4">
-     <item row="0" column="3">
-      <widget class="QPushButton" name="storeButton">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="text">
-        <string>Set as Default</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="saveButton">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="toolTip">
-        <string>Save to score</string>
-       </property>
-       <property name="text">
-        <string>Save to Score</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="loadButton">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="toolTip">
-        <string>Load from score</string>
-       </property>
-       <property name="text">
-        <string>Load from Score</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QPushButton" name="recallButton">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="text">
-        <string>Load Default</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="2" rowspan="3">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="Awl::MeterSlider" name="gain">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="statusTip">
-        <string>Master volume</string>
-       </property>
-       <property name="accessibleName">
-        <string>Master volume</string>
-       </property>
-       <property name="accessibleDescription">
-        <string>Use up and down arrows to modify</string>
-       </property>
-       <property name="channel">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Vol</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="1">
-    <widget class="Awl::VolSlider" name="mgain">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="accessibleName">
-      <string>Metronome gain</string>
-     </property>
-     <property name="accessibleDescription">
-      <string>Use up and down arrows to modify</string>
-     </property>
-     <property name="center">
-      <bool>true</bool>
+   <item row="1" column="1">
+    <widget class="QToolButton" name="metronome">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>
@@ -155,6 +38,53 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="SoundBankControl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Soundbanks</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QListWidget" name="soundbanksList"/>
+       </item>
+       <item row="1" column="2">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="addSoundBank">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="deleteSoundBank">
+           <property name="text">
+            <string>Delete</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="masterEffectsTab">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -166,50 +96,10 @@
        <string>Master Effects</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="1" column="0" colspan="6">
-        <widget class="QStackedWidget" name="effectStackA">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="3">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Effect B:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="effectA">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="accessibleName">
-          <string>Effect A</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="6">
-        <widget class="QStackedWidget" name="effectStackB">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Effect A:</string>
          </property>
         </widget>
        </item>
@@ -226,6 +116,16 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0" colspan="6">
+        <widget class="QStackedWidget" name="effectStackB">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
@@ -238,6 +138,36 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Effect A:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="effectA">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Effect A</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="6">
+        <widget class="QStackedWidget" name="effectStackA">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -324,10 +254,127 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QToolButton" name="metronome">
-     <property name="text">
-      <string/>
+   <item row="2" column="0">
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="3">
+      <widget class="QPushButton" name="storeButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="text">
+        <string>Set as Default</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="saveButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Save to score</string>
+       </property>
+       <property name="text">
+        <string>Save to Score</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="loadButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Load from score</string>
+       </property>
+       <property name="text">
+        <string>Load from Score</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QPushButton" name="recallButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="text">
+        <string>Load Default</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="2" rowspan="3">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="Awl::MeterSlider" name="gain" native="true">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="statusTip">
+        <string>Master volume</string>
+       </property>
+       <property name="accessibleName">
+        <string>Master volume</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Use up and down arrows to modify</string>
+       </property>
+       <property name="channel" stdset="0">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Vol</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <widget class="Awl::VolSlider" name="mgain" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="accessibleName">
+      <string>Metronome gain</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Use up and down arrows to modify</string>
+     </property>
+     <property name="center" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

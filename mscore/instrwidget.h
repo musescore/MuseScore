@@ -15,6 +15,7 @@
 
 #include "ui_instrwidget.h"
 #include "libmscore/clef.h"
+#include "libmscore/soundbank.h"
 
 namespace Ms {
 
@@ -40,9 +41,10 @@ class PartListItem : public QTreeWidgetItem {
       ListItemOp op;
       Part* part;
       const InstrumentTemplate* it;
+      const SoundBank* sbnk;
 
       PartListItem(Part* p, QTreeWidget* lv);
-      PartListItem(const InstrumentTemplate* i, QTreeWidget* lv);
+      PartListItem(const InstrumentTemplate* i, const SoundBank* sb, QTreeWidget* lv);
       bool visible() const;
       void setVisible(bool val);
       void updateClefs();
@@ -100,14 +102,17 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
 
 class InstrumentTemplateListItem : public QTreeWidgetItem {
       InstrumentTemplate* _instrumentTemplate;
+      SoundBank* _sb = nullptr;
       QString _group;
 
    public:
       InstrumentTemplateListItem(QString group, QTreeWidget* parent);
       InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* parent);
+      InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* parent, SoundBank *sb);
       InstrumentTemplateListItem(InstrumentTemplate* i, QTreeWidget* parent);
 
       InstrumentTemplate* instrumentTemplate() const { return _instrumentTemplate; }
+      SoundBank* sb() const { return _sb; }
       virtual QString text(int col) const;
       };
 

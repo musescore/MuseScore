@@ -17,6 +17,7 @@
 #include "synthesizergui.h"
 #include "libmscore/xml.h"
 #include "midipatch.h"
+#include "libmscore/instrument.h"
 
 namespace Ms {
 
@@ -408,6 +409,38 @@ void MasterSynthesizer::setMasterTuning(double val)
       _masterTuning = val;
       for (Synthesizer* s : _synthesizer)
             s->setMasterTuning(_masterTuning);
+      }
+
+bool checkPatchInfo(Channel* c, QList<MidiPatch*> pl)
+      {
+      for (MidiPatch* mp : pl) {
+            if (mp->name == c->program_name && mp->synti == c->synti) {
+                  c->program = mp->prog;
+                  c->bank = mp->bank;
+                  c->updateInitList();
+                  return true;
+                  }
+            }
+      return false;
+      }
+
+void MasterSynthesizer::updateChannel(Channel* c)
+      {
+      if (c->program != -2)
+            return;
+
+      if (checkPatchInfo(c, getPatchInfo()))
+            return;
+
+      // no patch found try to load
+      Synthesizer* synth = synthesizer(c->synti);
+
+      if (!synth)
+            return;
+
+      if (synth->addSoundFont(c->soundfont)) {
+            checkPatchInfo(c, synth->getPatchInfo());
+            }
       }
 }
 

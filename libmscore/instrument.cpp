@@ -20,10 +20,12 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
+#include "synthesizer/msynthesizer.h"
 
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   write
@@ -113,14 +115,18 @@ Instrument::Instrument(const Instrument& i)
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
-      for (Channel* c : i._channel)
+      for (Channel* c : i._channel) {
             _channel.append(new Channel(*c));
+            synti->updateChannel(_channel.back());
+            }
       _clefType     = i._clefType;
+      _spannerDefaults = i._spannerDefaults;
+      _sbOptions = i._sbOptions;
       }
 
 void Instrument::operator=(const Instrument& i)
       {
-      qDeleteAll(_channel);
+      //qDeleteAll(_channel);
       _channel.clear();
       delete _drumset;
 
@@ -140,9 +146,13 @@ void Instrument::operator=(const Instrument& i)
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
-      for (Channel* c : i._channel)
+      for (Channel* c : i._channel) {
             _channel.append(new Channel(*c));
+            synti->updateChannel(_channel.back());
+            }
       _clefType     = i._clefType;
+      _spannerDefaults = i._spannerDefaults;
+      _sbOptions = i._sbOptions;
       }
 
 //---------------------------------------------------------
@@ -236,6 +246,9 @@ void Instrument::write(Xml& xml, Part* part) const
                         }
                   }
             }
+
+      _sbOptions.write(xml);
+      _spannerDefaults.write(xml);
 
       if (!(_stringData == StringData()))
             _stringData.write(xml);
@@ -354,6 +367,10 @@ void Instrument::read(XmlReader& e, Part* part)
                   QString val(e.readElementText());
                   setClefType(idx, ClefTypeList(clefType(idx)._concertClef, Clef::clefType(val)));
                   }
+            else if (tag == "spanners")
+                  _spannerDefaults.read(e);
+            else if (tag == "options")
+                  _sbOptions.read(e);
 
             else if (tag == "chorus")           // obsolete
                   chorus = e.readInt();
@@ -461,7 +478,10 @@ void Channel::write(Xml& xml, Part* part) const
                         continue;
                   }
 
-            e.write(xml);
+            if (program_name != "" && e.type() == ME_CONTROLLER && e.dataA() == CTRL_PROGRAM)
+                  xml.tagE(QString("program name=\"%1\" value=\"-2\"").arg(program_name));
+            else
+                  e.write(xml);
             }
       if (!MScore::testMode)
             // xml.tag("synti", ::synti->name(synti));
@@ -474,6 +494,8 @@ void Channel::write(Xml& xml, Part* part) const
             xml.tag("midiPort",    part->masterScore()->midiMapping(channel)->port);
             xml.tag("midiChannel", part->masterScore()->midiMapping(channel)->channel);
             }
+      if (soundfont != "")
+            xml.tag("soundfont", soundfont);
       for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
       for (const MidiArticulation& a : articulation)
@@ -495,6 +517,7 @@ void Channel::read(XmlReader& e, Part* part)
             const QStringRef& tag(e.name());
             if (tag == "program") {
                   program = e.intAttribute("value", -1);
+                  program_name = e.attribute("name");
                   if (program == -1)
                         program = e.readInt();
                   else
@@ -547,6 +570,8 @@ void Channel::read(XmlReader& e, Part* part)
                   }
             else if (tag == "synti")
                   synti = e.readElementText();
+            else if (tag == "soundfont")
+                  soundfont = e.readElementText();
             else if (tag == "descr")
                   descr = e.readElementText();
             else if (tag == "mute")
@@ -977,7 +1002,7 @@ void Instrument::setTrackName(const QString& s)
 //   fromTemplate
 //---------------------------------------------------------
 
-Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
+Instrument Instrument::fromTemplate(const InstrumentTemplate* t, const SoundBank *sb)
       {
       Instrument instr;
       instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
@@ -986,7 +1011,10 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
             instr.addLongName(StaffName(sn.name(), sn.pos()));
       for (StaffName sn : t->shortNames)
             instr.addShortName(StaffName(sn.name(), sn.pos()));
-      instr.setTrackName(t->trackName);
+      if (sb)
+            instr.setTrackName(t->trackName + QString(" (%1)").arg(sb->getName()));
+      else
+            instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       instr.setInstrumentId(t->musicXMLid);
       if (t->useDrumset)
@@ -998,8 +1026,38 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr._channel.clear();
       for (const Channel& c : t->channel)
             instr._channel.append(new Channel(c));
+      if (sb) {
+            instr.setSoundBank(sb);
+            }
       instr.setStringData(t->stringData);
       return instr;
+      }
+
+void Instrument::setSoundBank(const SoundBank *sb)
+      {
+      _spannerDefaults = sb->sbSpannerDefaults();
+
+     for (NamedEventList ma : sb->midiActions())
+           _midiActions.push_back(ma);
+
+     _sbOptions.fixedVelocity = sb->sbOptions().fixedVelocity;
+     _sbOptions.useExpression = sb->sbOptions().useExpression;
+
+      for (const Channel *c : sb->soundBankChannels()) {
+            bool channelReplace = false;
+            int pos = 0;
+            for (Channel* ic : _channel) {
+                  if (ic->name == c->name) {
+                        channelReplace = true;
+                        delete ic;
+                        break;
+                        }
+                  pos++;
+                  }
+            if (channelReplace)
+                  _channel.removeAt(pos);
+            _channel.append(new Channel(*c));
+            }
       }
 
 //---------------------------------------------------------
@@ -1011,5 +1069,6 @@ void StaffNameList::write(Xml& xml, const char* name) const
       for (const StaffName& sn : *this)
             sn.write(xml, name);
       }
+
 }
 

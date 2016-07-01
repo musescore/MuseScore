@@ -386,7 +386,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                                                                     track.indexOfOperation);
                   instr = instrList[instrIndex];
                   if (instr)
-                        part->initFromInstrTemplate(instr);
+                        part->initFromInstrTemplate(instr, nullptr);
                   }
 
             if (areNext3OrganStaff(idx, tracks))

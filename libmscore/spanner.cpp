@@ -19,6 +19,7 @@
 #include "measure.h"
 #include "undo.h"
 #include "staff.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -92,6 +93,7 @@ QVariant SpannerSegment::getProperty(P_ID id) const
       switch (id) {
             case P_ID::COLOR:
             case P_ID::VISIBLE:
+            case P_ID::SPANNER_MIDI_SETTINGS:
                   return spanner()->getProperty(id);
             case P_ID::USER_OFF2:
                   return _userOff2;
@@ -110,6 +112,7 @@ bool SpannerSegment::setProperty(P_ID id, const QVariant& v)
       switch (id) {
             case P_ID::COLOR:
             case P_ID::VISIBLE:
+            case P_ID::SPANNER_MIDI_SETTINGS:
                  return spanner()->setProperty(id, v);
             case P_ID::USER_OFF2:
                   _userOff2 = v.toPointF();
@@ -130,6 +133,7 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::COLOR:
             case P_ID::VISIBLE:
+            case P_ID::SPANNER_MIDI_SETTINGS:
                   return spanner()->propertyDefault(id);
             case P_ID::USER_OFF2:
                   return QVariant();
@@ -253,6 +257,10 @@ Spanner::Spanner(const Spanner& s)
       _tick         = s._tick;
       _ticks        = s._ticks;
       _track2       = s._track2;
+      _ccNumber     = s._ccNumber;
+      _ccStart      = s._ccStart;
+      _ccEnd        = s._ccEnd;
+      _ccType       = s._ccType;
       }
 
 Spanner::~Spanner()
@@ -466,6 +474,8 @@ QVariant Spanner::getProperty(P_ID propertyId) const
                   return track2();
             case P_ID::ANCHOR:
                   return int(anchor());
+            case P_ID::SPANNER_MIDI_SETTINGS:
+                  return _selectedMidiSetting;
             default:
                   break;
             }
@@ -496,6 +506,9 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::ANCHOR:
                   setAnchor(Anchor(v.toInt()));
                   break;
+            case P_ID::SPANNER_MIDI_SETTINGS:
+                  _selectedMidiSetting = v.toInt();
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -514,6 +527,8 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::ANCHOR:
                   return int(Anchor::SEGMENT);
+            case P_ID::SPANNER_MIDI_SETTINGS:
+                  return -1;
             default:
                   break;
             }
@@ -904,6 +919,22 @@ void Spanner::setTicks(int v)
             score()->spannerMap().setDirty();
       }
 
+void Spanner::updateCCFromDefault(SoundBankSpannerDefault s)
+      {
+      setccType(s.type);
+      setccNumber(s.value);
+      setccStart(s.from);
+      setccEnd(s.to);
+      setccBind(s.bind);
+      }
+
+void Spanner::updateFromBind() {
+      if (getccBind() == ccBind::VELOCITY) {
+            setccStart(staff()->velocities().velo(tick()));
+            setccEnd(staff()->velocities().velo(tick2()));
+            }
+      }
+
 //---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
@@ -922,6 +953,31 @@ SpannerSegment* Spanner::layoutSystem(System*)
       {
       qDebug(" %s", name());
       return 0;
+      }
+
+void Spanner::updateCCSettings()
+      {
+      SoundBankSpannerDefault *sbsd;
+
+      if (_selectedMidiSetting == -1)
+            sbsd = staff()->part()->instrument(tick())->spannerDefaults().getSpannerDefault(type());
+      else
+            sbsd = staff()->part()->instrument(tick())->spannerDefaults().getSpannerDefaults(type())[_selectedMidiSetting];
+
+      if (sbsd)
+            updateCCFromDefault(*sbsd);
+
+      updateFromBind();
+      }
+
+void Spanner::updateMidiComboBox (QComboBox*& c)
+      {
+      c->addItem("default", -1);
+      int i = 0;
+       for (SoundBankSpannerDefault *sbsd : staff()->part()->instrument(tick())->spannerDefaults().getSpannerDefaults(type())) {
+             c->addItem(sbsd->name, i);
+             i++;
+             }
       }
 
 }

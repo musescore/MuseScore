@@ -72,7 +72,7 @@ class Part : public QObject, public ScoreElement {
 
    public:
       Part(Score* = 0);
-      void initFromInstrTemplate(const InstrumentTemplate*);
+      void initFromInstrTemplate(const InstrumentTemplate*, const SoundBank* sb);
 
       virtual const char* name() const override { return "Part"; }
 

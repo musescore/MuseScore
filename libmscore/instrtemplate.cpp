@@ -667,6 +667,20 @@ InstrumentTemplate* searchTemplate(const QString& name)
       return 0;
       }
 
+//---------------------------------------------------------
+//   searchTemplateFromMusicXMLid
+//---------------------------------------------------------
+
+InstrumentTemplate* searchTemplateFromMusicXMLid(const QString& name)
+      {
+      foreach(InstrumentGroup* g, instrumentGroups) {
+            foreach(InstrumentTemplate* it, g->instrumentTemplates) {
+                  if (it->musicXMLid == name)
+                        return it;
+                  }
+            }
+      return 0;
+      }
 
 //---------------------------------------------------------
 //   linkGenre
@@ -697,6 +711,24 @@ bool InstrumentTemplate::genreMember(const QString& name)
                 }
             }
             return rVal;
+      }
+
+//---------------------------------------------------------
+//   groupMember
+//      is this instrument template a member of the supplied genre
+//---------------------------------------------------------
+
+bool InstrumentTemplate::groupMember(const QString& name)
+      {
+            for(InstrumentGroup *instrumentGroup : instrumentGroups ) {
+                if(instrumentGroup->id == name) {
+                      for(InstrumentTemplate* it : instrumentGroup->instrumentTemplates) {
+                            if (it == this)
+                                  return true;
+                            }
+                }
+            }
+            return false;
       }
 
 void InstrumentGenre::write(Xml& xml) const

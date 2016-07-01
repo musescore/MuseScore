@@ -37,9 +37,13 @@
 #include "libmscore/undo.h"
 #include "libmscore/keysig.h"
 
+#include "musescore.h"
+#include "synthcontrol.h"
+
 namespace Ms {
 
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString());
+extern MuseScore *mscore;
 
 //---------------------------------------------------------
 //   filterInstruments
@@ -299,11 +303,12 @@ PartListItem::PartListItem(Part* p, QTreeWidget* lv)
       setFlags(flags() | Qt::ItemIsUserCheckable);
       }
 
-PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv)
+PartListItem::PartListItem(const InstrumentTemplate* i, const SoundBank* sb, QTreeWidget* lv)
    : QTreeWidgetItem(lv, PART_LIST_ITEM)
       {
       part = 0;
       it   = i;
+      sbnk = sb;
       op   = ListItemOp::ADD;
       setText(0, it->trackName);
       }
@@ -323,6 +328,13 @@ InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, In
    : QTreeWidgetItem(item) {
       _instrumentTemplate = i;
       setText(0, i->trackName);
+      }
+
+InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* item, SoundBank* sb)
+   : QTreeWidgetItem(item) {
+      _instrumentTemplate = i;
+      _sb = sb;
+      setText(0, i->trackName + " (" + _sb->getName() + ")");
       }
 
 InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, QTreeWidget* parent)
@@ -376,6 +388,7 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
       linkedButton->setEnabled(false);
 
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
+      connect(mscore->getSynthControl(), SIGNAL(soundbanksChanged()), SLOT(buildTemplateList()));
       }
 
 //---------------------------------------------------------
@@ -410,6 +423,8 @@ void populateInstrumentList(QTreeWidget* instrumentList)
             group->setFlags(Qt::ItemIsEnabled);
             foreach(InstrumentTemplate* t, g->instrumentTemplates) {
                   new InstrumentTemplateListItem(t, group);
+                  for (SoundBank* sb : t->matchedSoundbanks)
+                        new InstrumentTemplateListItem(t, group, sb);
                   }
             }
       }
@@ -556,9 +571,10 @@ void InstrumentsWidget::on_addButton_clicked()
       foreach(QTreeWidgetItem* i, instrumentList->selectedItems()) {
             InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
             const InstrumentTemplate* it     = item->instrumentTemplate();
+            const SoundBank* sb     = item->sb();
             if (it == 0)
                   continue;
-            PartListItem* pli = new PartListItem(it, partiturList);
+            PartListItem* pli = new PartListItem(it, sb, partiturList);
             pli->setFirstColumnSpanned(true);
             pli->op = ListItemOp::ADD;
 
@@ -957,8 +973,9 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   continue;
                   }
             const InstrumentTemplate* t = ((PartListItem*)item)->it;
+            const SoundBank* sb = ((PartListItem*)item)->sbnk;
             part = new Part(cs);
-            part->initFromInstrTemplate(t);
+            part->initFromInstrTemplate(t, sb);
 
             pli->part = part;
             QTreeWidgetItem* ci = 0;

@@ -199,6 +199,22 @@ void ZerberusGui::addClicked()
       loadSfz();
       }
 
+void ZerberusGui::loadSfz(QString sfzFile)
+      {
+      zerberus()->setLoadWasCanceled(false);
+
+      QFileInfoList l = Zerberus::sfzFiles();
+
+      for (const QFileInfo fi : l) {
+            if (sfzFile == fi.fileName()) {
+                  _sfzToLoad.push_back({fi.fileName(), fi.absoluteFilePath()});
+                  break;
+                  }
+            }
+
+      loadSfz();
+      }
+
 //---------------------------------------------------------
 //   cancelLoad
 //---------------------------------------------------------
@@ -238,10 +254,10 @@ void ZerberusGui::onSoundFontLoaded()
       _progressTimer->stop();
       _progressDialog->reset();
       if (loaded) {
-            QListWidgetItem* item = new QListWidgetItem;
+            /*QListWidgetItem* item = new QListWidgetItem;
             item->setText(_loadedSfName);
             item->setData(Qt::UserRole, _loadedSfPath);
-            files->insertItem(0, item);
+            files->insertItem(0, item);*/
             emit valueChanged();
             emit sfChanged();
             }

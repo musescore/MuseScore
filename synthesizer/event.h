@@ -107,6 +107,7 @@ enum {
       CTRL_PORTAMENTO         = 0x41,
       CTRL_SOSTENUTO          = 0x42,
       CTRL_SOFT_PEDAL         = 0x43,
+      CTRL_LEGATO             = 0x44,
       CTRL_HARMONIC_CONTENT   = 0x47,
       CTRL_RELEASE_TIME       = 0x48,
       CTRL_ATTACK_TIME        = 0x49,

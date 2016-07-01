@@ -16,6 +16,10 @@
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"
+#include "synthesizer/event.h"
+#include "staff.h"
+#include "part.h"
+#include "instrument.h"
 
 #include "score.h"
 
@@ -130,6 +134,9 @@ Pedal::Pedal(Score* s)
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
+
+      setccType(ccType::SWITCH);
+      setccNumber(CTRL_SUSTAIN);
       }
 
 //---------------------------------------------------------

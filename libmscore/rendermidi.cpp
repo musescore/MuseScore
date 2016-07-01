@@ -16,6 +16,7 @@
 */
 
 #include <set>
+#include "element.h"
 
 #include "score.h"
 #include "volta.h"
@@ -182,7 +183,21 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       if (!note->play())
             return;
       velo = note->customizeVelocity(velo);
+
+
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
+      Instrument* noteInstrument = note->staff()->part()->instrument(note->tick());
+
+      SoundBankOptions sb = noteInstrument->soundBankOptions();
+
+      if (sb.fixedVelocity > 0) // if note should have a fixed velocity
+            ev.setVelo(sb.fixedVelocity);
+
+      if (sb.useExpression) {
+            NPlayEvent exprEv(ME_CONTROLLER, channel, CTRL_EXPRESSION, velo);
+            events->insert(std::pair<int, NPlayEvent>(onTime, exprEv));
+            }
+
       ev.setTuning(note->tuning());
       ev.setNote(note);
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
@@ -648,61 +663,187 @@ void Score::renderStaff(EventMap* events, Staff* staff)
       }
 
 //---------------------------------------------------------
+//   gatherSpanners
+//---------------------------------------------------------
+
+void Score::gatherSpanners(midiCCMap &CCEvents, Spanner *s, const RepeatSegment *rs)
+      {
+     int tickOffset = rs->utick - rs->tick;
+     int utick1 = rs->utick;
+     int tick1 = repeatList()->utick2tick(utick1);
+     int tick2 = tick1 + rs->len;
+
+     midiChanValMap *channelMap = &CCEvents.at(s->ccNumber());
+
+     int idx = s->staff()->channel(s->tick(), 0);
+     int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
+     if (channelMap->find(channel) == channelMap->end())
+           channelMap->insert({channel, midiValList()});
+
+     if (s->getccType() == ccType::SWITCH) {
+           midiValList switchEventList = channelMap->at(channel);
+           midiTimeVal lastEvent;
+
+           if (!switchEventList.empty())
+                 lastEvent = switchEventList.back();
+           else
+                 lastEvent = midiTimeVal(0, 127);
+
+           if (s->tick() >= tick1 && s->tick() < tick2) {
+                 // Handle "overlapping" pedal segments (usual case for connected pedal line)
+                 if (lastEvent.second == 0 && lastEvent.first >= (s->tick() + tickOffset + 2)) {
+                       channelMap->at(channel).pop_back();
+                       channelMap->at(channel).push_back(midiTimeVal(s->tick() + tickOffset + 1, 0));
+                       }
+                 channelMap->at(channel).push_back(midiTimeVal(s->tick() + tickOffset + 2, 127));
+                 }
+           if (s->tick2() >= tick1 && s->tick2() <= tick2) {
+                 int t = s->tick2() + tickOffset + 1;
+                 if (t > repeatList()->last()->utick + repeatList()->last()->len)
+                       t = repeatList()->last()->utick + repeatList()->last()->len;
+                 channelMap->at(channel).push_back(midiTimeVal(t, 0));
+                 }
+           }
+
+     int startTick;
+     int endTick;
+     int spannerOffset;
+     int ticksPerMidiInc;
+     int curMidiVal;
+     bool inc;
+
+     if (s->getccType() == ccType::CONTINUOUS || s->getccType() == ccType::CON_EVERY_CHORD || s->getccType() == ccType::ON_CHORD) {
+            // Borders in which modulation takes place
+            startTick = -1;
+            endTick   = -1;
+            spannerOffset = 0; // Ticks offset sice spanner take on
+
+            if (s->tick() >= tick1 && s->tick() < tick2)
+                  startTick = s->tick();
+
+            if (s->tick2() <= tick2 && s->tick2() > tick1)
+                  endTick = s->tick2();
+
+            // Spanner is outside of this RepeatSegment
+            if (startTick == -1 && endTick == -1)
+                  return;
+
+            // Spanner starts before this RepeatSegment
+            if (startTick == -1) {
+                  startTick = tick1;
+                  spannerOffset = tick1 - startTick;
+                  }
+
+            // Spanner ends outside this RepeatSegment
+            if (endTick == -1)
+                  endTick = tick2;
+
+            // if nothing changes we have nothing to do!
+            if (s->ccEnd() - s->ccStart() == 0)
+                  return;
+
+            if (s->ccEnd() > s->ccStart()) {
+                  ticksPerMidiInc = s->ticks() / (s->ccEnd() - s->ccStart());
+                  if (ticksPerMidiInc < 1)
+                        ticksPerMidiInc = 1;
+                  inc = true;
+                  }
+            else if (s->ccStart() > s->ccEnd()) {
+                  ticksPerMidiInc = s->ticks() / (s->ccStart() - s->ccEnd());
+                  if (ticksPerMidiInc < 1)
+                        ticksPerMidiInc = 1;
+                  inc = false;
+                  }
+            curMidiVal = (spannerOffset * ticksPerMidiInc) + s->ccStart();
+            }
+
+     if (s->getccType() == ccType::CONTINUOUS || s->getccType() == ccType::CON_EVERY_CHORD) {
+            for(int pos = startTick; pos < endTick; pos += ticksPerMidiInc) {
+                  channelMap->at(channel).push_back(midiTimeVal(pos + tickOffset, curMidiVal));
+                  if (inc)
+                        curMidiVal++;
+                  else
+                        curMidiVal--;
+                  }
+
+            // make sure we have an end value
+            channelMap->at(channel).push_back(midiTimeVal(endTick - 1, s->ccEnd()));
+            }
+
+     if (s->getccType() == ccType::ON_CHORD || s->getccType() == ccType::CON_EVERY_CHORD) {
+           int staffIdx = s->staff()->idx();
+
+           Segment* curSegment = tick2rightSegment(startTick);
+           std::set<int> alreadyInsertedAt;
+
+           for (;curSegment && curSegment->tick() < tick2; curSegment = curSegment->next1(Segment::Type::ChordRest)) {
+                 Chord *curChord;
+
+                 if (curSegment->element(staffIdx * 4)->type() != Element::Type::CHORD)
+                       continue;
+
+                 curChord = toChord(curSegment->element(staffIdx * 4));
+                 for (Note *note : curChord->notes()) {
+                       int baseTick = note->tick();
+                       int lastVal = -1;
+                       for (NoteEvent ev : note->playEvents()) {
+                             int tick = baseTick + ev.ontime();
+                             if (alreadyInsertedAt.find(tick) != alreadyInsertedAt.end())
+                                   continue;
+                             alreadyInsertedAt.insert(tick);
+                             int val = ((tick - s->tick()) / ticksPerMidiInc) + s->ccStart();
+                             if (lastVal == val)
+                                   continue;
+                             channelMap->at(channel).push_back(midiTimeVal(tick + tickOffset, val));
+                             lastVal = val;
+                             }
+                       }
+                 }
+           }
+
+      }
+
+//---------------------------------------------------------
+//   renderSpannerMidi
+//---------------------------------------------------------
+
+void Score::renderSpannerMidi(EventMap* events, midiCCMap CCEvents) {
+      for (auto CCEvent : CCEvents) {
+            int cc = CCEvent.first;
+            midiChanValMap channelEvents = CCEvent.second;
+            for (const auto& channelEvent : channelEvents) {
+                  int channel = channelEvent.first;
+                  for (const auto& pe : channelEvent.second) {
+                        NPlayEvent event;
+                        event = NPlayEvent(ME_CONTROLLER, channel, cc, pe.second > 127 ? 127 : pe.second);
+                        events->insert(std::pair<int,NPlayEvent>(pe.first, event));
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   renderSpanners
 //---------------------------------------------------------
 
 void Score::renderSpanners(EventMap* events, int staffIdx)
       {
+      midiCCMap CCEvents = midiCCMap();
       for (const RepeatSegment* rs : *repeatList()) {
-            int tickOffset = rs->utick - rs->tick;
-            int utick1 = rs->utick;
-            int tick1 = repeatList()->utick2tick(utick1);
-            int tick2 = tick1 + rs->len;
-            std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
-                  if (s->type() != Element::Type::PEDAL || (staffIdx != -1 && s->staffIdx() != staffIdx))
+                  if ((s->ccNumber() > 127 && s->ccNumber() < 0) || (staffIdx != -1 && s->staffIdx() != staffIdx))
                         continue;
 
-                  int idx = s->staff()->channel(s->tick(), 0);
-                  int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
-                  channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
-                  std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
-                  std::pair<int, bool> lastEvent;
+                  s->updateCCSettings();
 
-                  if (!pedalEventList.empty())
-                        lastEvent = pedalEventList.back();
-                  else
-                        lastEvent = std::pair<int, bool>(0, true);
+                  if (CCEvents.find(s->ccNumber()) == CCEvents.end())
+                        CCEvents.insert({s->ccNumber(), midiChanValMap()});
 
-                  if (s->tick() >= tick1 && s->tick() < tick2) {
-                        // Handle "overlapping" pedal segments (usual case for connected pedal line)
-                        if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
-                              channelPedalEvents.at(channel).pop_back();
-                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 1, false));
-                              }
-                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
-                        }
-                  if (s->tick2() >= tick1 && s->tick2() <= tick2) {
-                        int t = s->tick2() + tickOffset + 1;
-                        if (t > repeatList()->last()->utick + repeatList()->last()->len)
-                              t = repeatList()->last()->utick + repeatList()->last()->len;
-                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
-                        }
-                  }
-
-            for (const auto& pedalEvents : channelPedalEvents) {
-                  int channel = pedalEvents.first;
-                  for (const auto& pe : pedalEvents.second) {
-                        NPlayEvent event;
-                        if (pe.second == true)
-                              event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
-                        else
-                              event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
-                        events->insert(std::pair<int,NPlayEvent>(pe.first, event));
-                        }
+                  gatherSpanners(CCEvents, s, rs);
                   }
             }
+      renderSpannerMidi(events, CCEvents);
       }
 
 //--------------------------------------------------------

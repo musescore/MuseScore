@@ -50,7 +50,7 @@ QT5_WRAP_UI (ui_headers
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
-      toolbarEditor.ui
+      toolbarEditor.ui midispannersettings.ui
 
       importmidi/importmidi_panel.ui
 
@@ -131,7 +131,9 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_arpeggio.ui
       inspector/inspector_tremolo.ui
       inspector/inspector_caesura.ui
+      inspector/inspector_spanner.ui
       ${SCRIPT_UI}
+     ../zerberus/zerberus_gui.ui
       )
 
 if (APPLE)

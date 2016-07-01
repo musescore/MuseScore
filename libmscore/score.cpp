@@ -3335,7 +3335,7 @@ void Score::appendPart(const QString& name)
             t->channel.append(a);
             }
       Part* part = new Part(this);
-      part->initFromInstrTemplate(t);
+      part->initFromInstrTemplate(t, nullptr);
       int n = nstaves();
       for (int i = 0; i < t->nstaves(); ++i) {
             Staff* staff = new Staff(this);
@@ -4337,6 +4337,5 @@ int Score::staffIdx(const Part* part) const
             }
       return idx;
       }
-
 }
 

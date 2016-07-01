@@ -25,9 +25,11 @@ namespace Ms {
 InspectorHairpin::InspectorHairpin(QWidget* parent)
    : InspectorElementBase(parent)
       {
+      s.setupUi(addWidget());
       l.setupUi(addWidget());
       setupLineStyle(l.lineStyle);
       h.setupUi(addWidget());
+      toHairpinSegment(inspector->element())->hairpin()->updateMidiComboBox(s.midiSettings);
 
       h.hairpinType->clear();
       h.hairpinType->addItem(tr("Crescendo Hairpin"),   int(HairpinType::CRESC_HAIRPIN));
@@ -48,7 +50,8 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { P_ID::DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
             { P_ID::VELO_CHANGE,         0, 0, h.veloChange,        h.resetVeloChange        },
             { P_ID::HAIRPIN_HEIGHT,      0, 0, h.hairpinHeight,     h.resetHairpinHeight     },
-            { P_ID::HAIRPIN_CONT_HEIGHT, 0, 0, h.hairpinContHeight, h.resetHairpinContHeight }
+            { P_ID::HAIRPIN_CONT_HEIGHT, 0, 0, h.hairpinContHeight, h.resetHairpinContHeight },
+            { P_ID::SPANNER_MIDI_SETTINGS, 0, 0, s.midiSettings,    s.resetMidiSettings      }
             };
       mapSignals(il);
       }

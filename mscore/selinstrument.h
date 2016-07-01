@@ -27,6 +27,7 @@ namespace Ms {
 
 class Instrument;
 class InstrumentTemplate;
+class SoundBank;
 
 //---------------------------------------------------------
 //   SelectInstrument
@@ -50,6 +51,7 @@ class SelectInstrument : public QDialog, private Ui::SelectInstrument {
    public:
       SelectInstrument(const Instrument*, QWidget* parent = 0);
       const InstrumentTemplate* instrTemplate() const;
+      const SoundBank* soundbank() const;
       };
 
 

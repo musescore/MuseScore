@@ -486,9 +486,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             SelectInstrument si(ss->instrument(), 0);
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
+                  const SoundBank* sb = si.soundbank();
                   if (it) {
                         // TODO: undo/redo
-                        ss->setInstrument(Instrument::fromTemplate(it));
+                        ss->setInstrument(Instrument::fromTemplate(it, sb));
                         ss->staff()->part()->setInstrument(ss->instrument(), ss->segment()->tick());
                         score()->masterScore()->rebuildMidiMapping();
                         seq->initInstruments();
@@ -528,9 +529,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             SelectInstrument si(ic->instrument(), 0);
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
+                  const SoundBank* sb = si.soundbank();
                   if (it) {
                         //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                        ic->setInstrument(Instrument::fromTemplate(it));
+                        ic->setInstrument(Instrument::fromTemplate(it, sb));
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
                         score()->masterScore()->updateChannel();
                         }

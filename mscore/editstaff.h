@@ -23,6 +23,7 @@
 
 #include "ui_editstaff.h"
 #include "ui_selectinstr.h"
+#include "ui_midispannersettings.h"
 #include "libmscore/instrument.h"
 #include "libmscore/stafftype.h"
 
@@ -30,6 +31,11 @@ namespace Ms {
 
 class Staff;
 class InstrumentTemplate;
+
+class midiSpannerSettings : public QDialog, public Ui::MidiSpannerSettings {
+      public:
+            midiSpannerSettings(QWidget* parent);
+      };
 
 //---------------------------------------------------------
 //   EditStaff
@@ -44,6 +50,8 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       Instrument  instrument;
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
       int         _tickStart, _tickEnd;
+
+      midiSpannerSettings* spannerSettings;
 
       virtual void hideEvent(QHideEvent*);
       void apply();
@@ -68,6 +76,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void showClefChanged();
       void showTimeSigChanged();
       void showBarlinesChanged();
+      void changeDefaultsClicked();
 
    signals:
       void instrumentChanged();

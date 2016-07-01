@@ -23,7 +23,11 @@
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
 #include "libmscore/undo.h"
+#include "libmscore/soundbank.h"
 #include "effects/effectgui.h"
+#include "zerberus/zerberusgui.h"
+#include "libmscore/soundbank.h"
+#include "instrwidget.h"
 
 namespace Ms {
 
@@ -85,6 +89,7 @@ SynthControl::SynthControl(QWidget* parent)
       recallButton->setEnabled(false);
       changeTuningButton->setEnabled(false);
 
+
       enablePlay = new EnablePlayForWidget(this);
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
@@ -97,6 +102,9 @@ SynthControl::SynthControl(QWidget* parent)
       connect(storeButton,  SIGNAL(clicked()),                SLOT(storeButtonClicked()));
       connect(recallButton, SIGNAL(clicked()),                SLOT(recallButtonClicked()));
       connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(setDirty()));
+
+      connect(addSoundBank, SIGNAL(clicked()),                SLOT(addSoundBankClicked()));
+      connect(deleteSoundBank, SIGNAL(clicked()),             SLOT(deleteSoundBankClicked()));
       }
 
 //---------------------------------------------------------
@@ -207,6 +215,39 @@ void SynthControl::changeMasterTuning()
       changeTuningButton->setEnabled(false);
       setDirty();
       }
+
+void SynthControl::updateSoundbanks()
+      {
+      soundbanksList->clear();
+      for (SoundBank* sb: soundbanks) {
+            soundbanksList->addItem(sb->getName());
+            }
+      }
+
+
+void SynthControl::addSoundBankClicked()
+      {
+      QFileDialog dialog(this);
+      dialog.setMimeTypeFilters(QStringList("text/xml"));
+      dialog.exec();
+      for (auto file : dialog.selectedFiles()) {
+            addToSoundBanks(file);
+            }
+      updateSoundbanks();
+      soundbankMatchInstrumentTemplates();
+      emit soundbanksChanged();
+      }
+
+
+void SynthControl::deleteSoundBankClicked()
+      {
+      for (QListWidgetItem* item : soundbanksList->selectedItems()) {
+            removeSoundBank(item->text());
+            }
+      updateSoundbanks();
+      emit soundbanksChanged();
+      }
+
 
 //---------------------------------------------------------
 //   setMeter
@@ -429,6 +470,7 @@ void SynthControl::changeEvent(QEvent *event)
       if (event->type() == QEvent::LanguageChange)
             retranslate();
       }
+
 
 }
 

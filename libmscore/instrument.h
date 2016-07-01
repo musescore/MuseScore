@@ -18,6 +18,7 @@
 #include "synthesizer/event.h"
 #include "interval.h"
 #include "clef.h"
+#include "soundbank.h"
 
 namespace Ms {
 
@@ -105,6 +106,8 @@ struct Channel {
       mutable std::vector<MidiCoreEvent> init;
 
       QString synti;
+      QString soundfont;
+      QString program_name;
       int program;     // current values as shown in mixer
       int bank;        // initialized from "init"
       char volume;
@@ -142,6 +145,9 @@ class Instrument {
       bool _useDrumset;
       Drumset* _drumset;
       StringData  _stringData;
+
+      SoundBankSpannerDefaults _spannerDefaults;
+      SoundBankOptions _sbOptions;
 
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
@@ -184,7 +190,7 @@ class Instrument {
       ClefTypeList clefType(int staffIdx) const;
       void setClefType(int staffIdx, const ClefTypeList& c);
 
-      const QList<NamedEventList>& midiActions() const       { return _midiActions; }
+      const QList<NamedEventList> midiActions() const { return _midiActions; }
       const QList<MidiArticulation>& articulation() const    { return _articulation; }
 
       const QList<Channel*>& channel() const                 { return _channel; }
@@ -200,6 +206,10 @@ class Instrument {
       void addLongName(const StaffName& f);
       void addShortName(const StaffName& f);
 
+      void setSoundBank(const SoundBank* sb);
+
+      SoundBankSpannerDefaults &spannerDefaults() { return _spannerDefaults; }
+      SoundBankOptions &soundBankOptions() { return _sbOptions; }
       int minPitchP() const;
       int maxPitchP() const;
       int minPitchA() const;
@@ -213,7 +223,7 @@ class Instrument {
       QList<StaffName>& shortNames();
       QString trackName() const;
       void setTrackName(const QString& s);
-      static Instrument fromTemplate(const InstrumentTemplate* t);
+      static Instrument fromTemplate(const InstrumentTemplate* t, const SoundBank* sb);
       };
 
 //---------------------------------------------------------

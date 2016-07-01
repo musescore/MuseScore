@@ -437,6 +437,21 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   InspectorSpanner
+//---------------------------------------------------------
+
+InspectorSpanner::InspectorSpanner(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      b.setupUi(addWidget());
+
+      iList = {         // currently empty
+            };
+
+      mapSignals();
+      }
+
+//---------------------------------------------------------
 //   InspectorVBox
 //---------------------------------------------------------
 

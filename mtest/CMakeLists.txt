@@ -196,6 +196,7 @@ subdirs (
         libmscore/transpose
         libmscore/tuplet
         libmscore/text
+        libmscore/soundbank
         importmidi
         capella
         biab

@@ -22,6 +22,7 @@
 #include "staff.h"
 #include "mscore.h"
 #include "chord.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -847,5 +848,14 @@ void Hairpin::endEdit()
       TextLineBase::endEdit();
       }
 
-}
+void Hairpin::updateCCSettings()
+      {
+      Spanner::updateCCSettings();
 
+      if (_veloChange) {
+            int endVelo = ccStart() + _veloChange;
+            setccEnd(endVelo > 127 ? 127 : endVelo);
+            }
+      }
+
+}

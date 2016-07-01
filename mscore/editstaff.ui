@@ -50,6 +50,9 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="partName"/>
+        </item>
         <item row="2" column="2">
          <widget class="QToolButton" name="changeInstrument">
           <property name="text">
@@ -77,8 +80,12 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="partName"/>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="changeDefaults">
+          <property name="text">
+           <string>Change defaults</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
