@@ -3565,8 +3565,19 @@ void Score::doLayout()
             page->setWidth(page->system(0)->width());
             }
 
-      // TODO: remove remaining systems from lc.systemList
-      while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
+      // remove not needed systems
+      // TODO: make undoable
+      for (System* system : lc.systemList) {
+            qDebug("delete system");
+            for (SpannerSegment* ss : system->spannerSegments()) {
+                  qDebug("   delete spanner segment\n");
+                  Spanner* spanner = ss->spanner();
+                  spanner->spannerSegments().removeOne(ss);
+                  }
+            }
+      // remove not needed pages
+      // TODO: make undoable
+      while (_pages.size() > lc.curPage)
             _pages.takeLast();
 
       for (auto s : _spanner.map()) {     // TODO: this invalidates the bsp tree

@@ -775,9 +775,23 @@ void SLine::layoutSystem(System* s)
             return;
             }
 
-      LineSegment* lineSegm;
-      SpannerSegmentType sst;
+//      printf("SLine::layoutSystem (%d)====\n", segments.size());
+      LineSegment* lineSegm = 0;
+      for (SpannerSegment* ss : segments) {
+            if (!ss->system()) {
+                  lineSegm = static_cast<LineSegment*>(ss);
+//                  printf("    found free segment\n");
+                  break;
+                  }
+            }
+      if (!lineSegm) {
+            lineSegm = createLineSegment();
+            add(lineSegm);
+            }
+      lineSegm->setSystem(s);
+      lineSegm->setSpanner(this);
 
+      SpannerSegmentType sst;
       if (tick() >= stick) {
             //
             // this is the first call to layoutSystem,
@@ -785,32 +799,9 @@ void SLine::layoutSystem(System* s)
             //
             computeStartElement();
             computeEndElement();
-            for (SpannerSegment* ss : segments)    // mark all segments as unused
-                  ss->setSpanner(0);
-            if (spannerSegments().empty()) {
-                  lineSegm = createLineSegment();
-                  add(lineSegm);
-                  }
-            else {
-                  lineSegm = static_cast<LineSegment*>(segments.front());
-                  lineSegm->setSpanner(this);
-                  }
             sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
             }
       else if (tick() < stick && tick2() > etick) {
-            lineSegm = 0;
-            for (SpannerSegment* ss : segments) {    // search for first unused segment
-                  if (!ss->spanner()) {
-                        lineSegm = static_cast<LineSegment*>(ss);
-                        break;
-                        }
-                  }
-            if (!lineSegm) {
-                  lineSegm = createLineSegment();
-                  add(lineSegm);
-                  }
-            else
-                  lineSegm->setSpanner(this);
             sst = SpannerSegmentType::MIDDLE;
             }
       else {
@@ -818,37 +809,9 @@ void SLine::layoutSystem(System* s)
             // this is the last call to layoutSystem
             // processing the last line segment
             //
-            lineSegm = 0;
-            for (SpannerSegment* ss : segments) {    // search for first unused segment
-                  if (!ss->spanner()) {
-                        lineSegm = static_cast<LineSegment*>(ss);
-                        break;
-                        }
-                  }
-            if (!lineSegm) {
-                  lineSegm = createLineSegment();
-                  add(lineSegm);
-                  }
-            else
-                  lineSegm->setSpanner(this);
-
-            // remove all unused spanner segments
-            QList<SpannerSegment*> sl;
-            for (auto i : segments) {
-                  if (i->spanner())
-                        sl.push_back(i);
-                  else {
-                        // TODO: undo/redo
-                        qDebug("delete spanner segment %s", i->name());
-                        delete i;
-                        }
-                  }
-            segments.swap(sl);
             sst = SpannerSegmentType::END;
             }
-
       lineSegm->setSpannerSegmentType(sst);
-      lineSegm->setSystem(s);
 
       switch (sst) {
             case SpannerSegmentType::SINGLE: {
@@ -896,6 +859,16 @@ void SLine::layoutSystem(System* s)
                   break;
             }
       lineSegm->layout();
+      QList<SpannerSegment*> sl;
+      for (SpannerSegment* ss : segments) {
+            if (ss->system())
+                  sl.push_back(ss);
+            else {
+                  qDebug("delete spanner segment %s", ss->name());
+                  delete ss;
+                  }
+            }
+      segments.swap(sl);
       }
 
 //---------------------------------------------------------

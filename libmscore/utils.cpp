@@ -809,9 +809,10 @@ Note* searchTieNote(Note* note)
             if (seg->tick() < endTick  && !seg->element(chord->track()))
                   continue;
             for (int track = strack; track < etrack; ++track) {
-                  Chord* c = toChord(seg->element(track));
-                  if (c == 0 || !c->isChord())
+                  Element* e = seg->element(track);
+                  if (e == 0 || !e->isChord())
                         continue;
+                  Chord* c = toChord(e);
                   // if there are grace notes before, try to tie to first one
                   QVector<Chord*> gnb = c->graceNotesBefore();
                   if (!gnb.empty()) {
