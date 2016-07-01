@@ -916,7 +916,7 @@ void Spanner::triggerLayout() const
 
 void Spanner::layoutSystem(System*)
       {
-      qDebug("Spanner::layoutSystem");
+      qDebug(" %s", name());
       }
 
 }
