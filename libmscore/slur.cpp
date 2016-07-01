@@ -1405,6 +1405,132 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
       }
 
 //---------------------------------------------------------
+//   layoutSystem
+//---------------------------------------------------------
+
+void Slur::layoutSystem(System* system)
+      {
+      int stick = system->firstMeasure()->tick();
+      int etick = system->lastMeasure()->endTick();
+
+      SlurSegment* slurSegment = 0;
+      for (SpannerSegment* ss : segments) {
+            if (!ss->system()) {
+                  slurSegment = static_cast<SlurSegment*>(ss);
+                  break;
+                  }
+            }
+      if (!slurSegment) {
+            slurSegment = new SlurSegment(score());
+            add(slurSegment);
+            }
+      slurSegment->setSystem(system);
+      slurSegment->setSpanner(this);
+
+      SpannerSegmentType sst;
+      if (tick() >= stick) {
+            //
+            // this is the first call to layoutSystem,
+            // processing the first line segment
+            //
+            if (track2() == -1)
+                  setTrack2(track());
+            if (startCR() == 0 || startCR()->measure() == 0) {
+                  qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
+                     track(), track2(), startCR(), endCR(), tick(), tick2());
+                  return;
+                  }
+            if (endCR() == 0) {     // sanity check
+                  setEndElement(startCR());
+                  setTick2(tick());
+                  }
+            switch (_slurDirection) {
+                  case Direction::UP:
+                        _up = true;
+                        break;
+                  case Direction::DOWN:
+                        _up = false;
+                        break;
+                  case Direction::AUTO:
+                        {
+                        //
+                        // assumption:
+                        // slurs have only chords or rests as start/end elements
+                        //
+                        if (startCR() == 0 || endCR() == 0) {
+                              _up = true;
+                              break;
+                              }
+                        Chord* c1   = startCR()->isChord() ? toChord(startCR()) : 0;
+                        Chord* c2   = endCR()->isChord()   ? toChord(endCR())   : 0;
+
+                        _up = !(startCR()->up());
+
+                        Measure* m1 = startCR()->measure();
+                        if ((endCR()->tick() - startCR()->tick()) > m1->ticks()) // long slurs are always above
+                              _up = true;
+                        else
+                              _up = !startCR()->up();
+
+                        if (c1 && c2 && isDirectionMixture(c1, c2) && !c1->isGrace()) {
+                              // slurs go above if start and end note have different stem directions,
+                              // but grace notes are exceptions
+                              _up = true;
+                              }
+                        else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && !c1->isGrace()) {
+                              // in polyphonic passage, slurs go on the stem side
+                              _up = startCR()->up();
+                              }
+                        else if (c1 && c2 && chordsHaveTie(c1, c2)) {
+                              // could confuse slur with tie, put slur on stem side
+                              _up = startCR()->up();
+                              }
+                        }
+                        break;
+                  }
+            sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+            }
+      else if (tick() < stick && tick2() > etick)
+            sst = SpannerSegmentType::MIDDLE;
+      else
+            sst = SpannerSegmentType::END;
+      slurSegment->setSpannerSegmentType(sst);
+
+      SlurPos sPos;
+      slurPos(&sPos);
+
+      switch (sst) {
+            case SpannerSegmentType::SINGLE:
+                  slurSegment->layoutSegment(sPos.p1, sPos.p2);
+                  break;
+            case SpannerSegmentType::BEGIN:
+                  slurSegment->layoutSegment(sPos.p1, QPointF(system->bbox().width(), sPos.p1.y()));
+                  break;
+            case SpannerSegmentType::MIDDLE: {
+                  qreal x1 = firstNoteRestSegmentX(system);
+                  qreal x2 = system->bbox().width();
+                  qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
+                  slurSegment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
+                  }
+                  break;
+            case SpannerSegmentType::END:
+                  slurSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), sPos.p2.y()), sPos.p2);
+                  break;
+            }
+
+      QList<SpannerSegment*> sl;
+      for (SpannerSegment* ss : segments) {
+            if (ss->system())
+                  sl.push_back(ss);
+            else {
+                  qDebug("delete spanner segment %s", ss->name());
+                  delete ss;
+                  }
+            }
+      segments.swap(sl);
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 

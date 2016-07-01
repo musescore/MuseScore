@@ -3336,7 +3336,7 @@ System* Score::collectSystem(LayoutContext& lc)
       //    layout SpannerSegments for current system
       //
 
-      if (etick != -1) {
+      if (etick > stick) {    // ignore vbox
             auto spanners = score()->spannerMap().findOverlapping(stick, etick);
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;

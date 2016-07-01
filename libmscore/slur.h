@@ -197,14 +197,15 @@ class Slur : public SlurTie {
    public:
       Slur(Score* = 0);
       ~Slur();
-      virtual Slur* clone() const      { return new Slur(*this); }
-      virtual Element::Type type() const { return Element::Type::SLUR; }
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void layout();
-      virtual void setTrack(int val);
-      virtual void slurPos(SlurPos*);
-      virtual void computeBezier(SlurSegment*, QPointF so = QPointF());
+      virtual Slur* clone() const override        { return new Slur(*this); }
+      virtual Element::Type type() const override { return Element::Type::SLUR; }
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual void layout() override;
+      virtual void layoutSystem(System*) override;
+      virtual void setTrack(int val) override;
+      virtual void slurPos(SlurPos*) override;
+      virtual void computeBezier(SlurSegment*, QPointF so = QPointF()) override;
       friend SlurSegment;
       };
 

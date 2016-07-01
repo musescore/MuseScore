@@ -770,17 +770,11 @@ void SLine::layoutSystem(System* s)
       {
       int stick = s->firstMeasure()->tick();
       int etick = s->lastMeasure()->endTick();
-      if (etick < tick() || stick >= tick2()) {
-            qDebug("SLine::layoutSystem: no match: system: %d-%d  spanner %d-%d", stick, etick, tick(), tick2());
-            return;
-            }
 
-//      printf("SLine::layoutSystem (%d)====\n", segments.size());
       LineSegment* lineSegm = 0;
       for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
                   lineSegm = static_cast<LineSegment*>(ss);
-//                  printf("    found free segment\n");
                   break;
                   }
             }
@@ -879,7 +873,7 @@ void SLine::layoutSystem(System* s)
 
 void SLine::layout()
       {
-      qDebug("=====SLine::layout");
+      qDebug("=====SLine::layout %s", name());
       if (score() == gscore || tick() == -1 || tick2() == 1) {
             //
             // when used in a palette or while dragging from palette,
