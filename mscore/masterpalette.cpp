@@ -1,9 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
+//  $Id: masterpalette.cpp
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -149,16 +149,16 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newClefsPalette(false));
       keyEditor = new KeyEditor;
 
-      QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(tr("Key Signatures")));
-      item->setData(0, Qt::UserRole, stack->count());
+      keyItem = new QTreeWidgetItem();
+      keyItem->setData(0, Qt::UserRole, stack->count());
       stack->addWidget(keyEditor);
-      treeWidget->addTopLevelItem(item);
+      treeWidget->addTopLevelItem(keyItem);
 
-      item = new QTreeWidgetItem(QStringList(tr("Time Signatures")));
-      item->setData(0, Qt::UserRole, stack->count());
+      timeItem = new QTreeWidgetItem();
+      timeItem->setData(0, Qt::UserRole, stack->count());
       timeDialog = new TimeDialog;
       stack->addWidget(timeDialog);
-      treeWidget->addTopLevelItem(item);
+      treeWidget->addTopLevelItem(timeItem);
 
       addPalette(MuseScore::newBarLinePalette(false));
       addPalette(MuseScore::newLinesPalette(false));
@@ -181,19 +181,33 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newBeamPalette(false));
       addPalette(MuseScore::newFramePalette());
 
-      item = new QTreeWidgetItem(QStringList(tr("Symbols")));
-      item->setData(0, Qt::UserRole, -1);
-      treeWidget->addTopLevelItem(item);
+      symbolItem = new QTreeWidgetItem();
+      symbolItem->setData(0, Qt::UserRole, -1);
+      treeWidget->addTopLevelItem(symbolItem);
 
       for (const QString& s : smuflRanges()->keys()) {
             QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
             child->setData(0, Qt::UserRole, stack->count());
-            item->addChild(child);
+            symbolItem->addChild(child);
             stack->addWidget(new SymbolDialog(s));
             }
 
       connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
       connect(treeWidget, &QTreeWidget::itemClicked, this, &MasterPalette::clicked);
+      retranslate(true);
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void MasterPalette::retranslate(bool firstTime)
+      {
+      keyItem->setText(0, tr("Key Signatures"));
+      timeItem->setText(0, tr("Time Signatures"));
+      symbolItem->setText(0, tr("Symbols"));
+      if (!firstTime)
+            retranslateUi(this);
       }
 
 //---------------------------------------------------------
@@ -230,6 +244,17 @@ void MasterPalette::closeEvent(QCloseEvent* ev)
             keyEditor->save();
       emit closed(false);
       QWidget::closeEvent(ev);
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void MasterPalette::changeEvent(QEvent *event)
+      {
+      QWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 
 }

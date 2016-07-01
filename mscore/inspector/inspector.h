@@ -1,9 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
+//  $Id: inspector.h
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -374,6 +374,10 @@ class Inspector : public QDockWidget {
 
    public slots:
       void reset();
+
+   protected:
+      virtual void changeEvent(QEvent *event);
+      void retranslate();
 
    public:
       Inspector(QWidget* parent = 0);

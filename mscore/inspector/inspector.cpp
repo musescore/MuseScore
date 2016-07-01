@@ -1,9 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
+//  $Id: inspector.cpp
 //
-//  Copyright (C) 2011 Werner Schweer
+//  Copyright (C) 2011-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -82,12 +82,11 @@ void MuseScore::showInspector(bool visible)
 //---------------------------------------------------------
 
 Inspector::Inspector(QWidget* parent)
-   : QDockWidget(tr("Inspector"), parent)
+   : QDockWidget(parent)
       {
       setObjectName("inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       sa = new QScrollArea;
-      sa->setAccessibleName(tr("Inspector Subwindow"));
       sa->setFrameShape(QFrame::NoFrame);
       sa->setWidgetResizable(true);
       setWidget(sa);
@@ -96,6 +95,20 @@ Inspector::Inspector(QWidget* parent)
       _inspectorEdit = false;
       ie             = 0;
       _element       = 0;
+      retranslate();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void Inspector::retranslate()
+      {
+      setWindowTitle(tr("Inspector"));
+      sa->setAccessibleName(tr("Inspector Subwindow"));
+      QList<Element*> el = _el;
+      setElements(QList<Element*>());
+      setElements(el);
       }
 
 //---------------------------------------------------------
@@ -307,6 +320,17 @@ void Inspector::setElements(const QList<Element*>& l)
             }
       _element = e;
       ie->setElement();
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void Inspector::changeEvent(QEvent *event)
+      {
+      QDockWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 
 //---------------------------------------------------------

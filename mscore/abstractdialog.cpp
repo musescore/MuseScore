@@ -1,7 +1,7 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
-//  $Id: editpitch.h 3775 2010-12-17 23:55:35Z miwarre $
+//  MuseScore
+//  Music Composition & Notation
+//  $Id: abstractdialog.cpp 4220 2011-04-22 10:31:26Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -18,31 +18,25 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef EDITPITCH_H
-#define EDITPITCH_H
-
-#include "ui_editpitch.h"
+#include "abstractdialog.h"
 
 namespace Ms {
 
-//---------------------------------------------------------
-//   EditPitch
-//---------------------------------------------------------
+AbstractDialog::AbstractDialog(QWidget * parent, Qt::WindowFlags f)
+    : QDialog(parent, f)
+      {
+      }
 
-class EditPitch : public QDialog, private Ui::EditPitchBase {
-      Q_OBJECT
+AbstractDialog::~AbstractDialog()
+      {
 
-   private slots:
-      void on_tableWidget_cellDoubleClicked(int row, int column);
-      void accept();
-      void reject() { done(-1); }                             // return an invalid pitch MIDI code
+      }
 
-   public:
-      EditPitch(QWidget *parent);
-      EditPitch(QWidget * parent, int midiCode);
-      ~EditPitch();
-      };
-
+void AbstractDialog::changeEvent(QEvent *event)
+      {
+      QDialog::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
+      }
 }
 
-#endif // EDITPITCH_H

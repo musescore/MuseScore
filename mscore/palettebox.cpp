@@ -1,9 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: palette.cpp 5576 2012-04-24 19:15:22Z wschweer $
+//  $Id: palettebox.cpp 5576 2012-04-24 19:15:22Z wschweer $
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -31,12 +31,11 @@ PaletteBox::PaletteBox(QWidget* parent)
       setObjectName("palette-box");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
-      QAction* a = new QAction(this);
-      a->setText(tr("Single Palette"));
-      a->setCheckable(true);
-      a->setChecked(preferences.singlePalette);
-      addAction(a);
-      connect(a, SIGNAL(toggled(bool)), SLOT(setSinglePalette(bool)));
+      singlePaletteAction = new QAction(this);
+      singlePaletteAction->setCheckable(true);
+      singlePaletteAction->setChecked(preferences.singlePalette);
+      addAction(singlePaletteAction);
+      connect(singlePaletteAction, SIGNAL(toggled(bool)), SLOT(setSinglePalette(bool)));
 
       QWidget* w = new QWidget(this);
       w->setContextMenuPolicy(Qt::NoContextMenu);
@@ -46,15 +45,11 @@ PaletteBox::PaletteBox(QWidget* parent)
       hl->setContentsMargins(5,5,5,0);
 
       workspaceList = new QComboBox;
-      workspaceList->setToolTip(tr("Select workspace"));
-      updateWorkspaces();
       hl->addWidget(workspaceList);
-      QToolButton* nb = new QToolButton;
+      addWorkspaceButton = new QToolButton;
 
-      nb->setMinimumHeight(27);
-      nb->setText(tr("+"));
-      nb->setToolTip(tr("Add new workspace"));
-      hl->addWidget(nb);
+      addWorkspaceButton->setMinimumHeight(27);
+      hl->addWidget(addWorkspaceButton);
 
       setWidget(w);
 
@@ -78,8 +73,23 @@ PaletteBox::PaletteBox(QWidget* parent)
       vbox->addStretch();
       paletteList->show();
 
-      connect(nb, SIGNAL(clicked()), SLOT(newWorkspaceClicked()));
+      connect(addWorkspaceButton, SIGNAL(clicked()), SLOT(newWorkspaceClicked()));
       connect(workspaceList, SIGNAL(activated(int)), SLOT(workspaceSelected(int)));
+      retranslate();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void PaletteBox::retranslate()
+      {
+      setWindowTitle(tr("Palettes"));
+      singlePaletteAction->setText(tr("Single Palette"));
+      workspaceList->setToolTip(tr("Select workspace"));
+      addWorkspaceButton->setText(tr("+"));
+      addWorkspaceButton->setToolTip(tr("Add new workspace"));
+      updateWorkspaces();
       }
 
 //---------------------------------------------------------
@@ -375,6 +385,17 @@ void PaletteBox::setSinglePalette(bool val)
       {
       preferences.singlePalette = val;
       preferences.dirty = true;
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void PaletteBox::changeEvent(QEvent *event)
+      {
+      QDockWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 }
 

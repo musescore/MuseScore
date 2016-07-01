@@ -1,9 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: mscore.cpp 4220 2011-04-22 10:31:26Z wschweer $
+//  $Id: albummanager.cpp 4220 2011-04-22 10:31:26Z wschweer $
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -22,6 +22,7 @@
 #define __ALBUMMANAGER_H__
 
 #include "ui_albummanager.h"
+#include "abstractdialog.h"
 #include "album.h"
 
 namespace Ms {
@@ -30,7 +31,7 @@ namespace Ms {
 //   AlbumManager
 //---------------------------------------------------------
 
-class AlbumManager : public QDialog, public Ui::AlbumManager {
+class AlbumManager : public AbstractDialog, public Ui::AlbumManager {
       Q_OBJECT
       Album* album;
 
@@ -50,6 +51,10 @@ class AlbumManager : public QDialog, public Ui::AlbumManager {
       void currentScoreChanged(int);
       void itemChanged(QListWidgetItem*);   // score name in list is edited
       void buttonBoxClicked(QAbstractButton*);
+
+   protected:
+      virtual void retranslate() { retranslateUi(this); }
+
    private:
       void writeAlbum();
 

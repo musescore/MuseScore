@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -312,7 +312,6 @@ PianoTools::PianoTools(QWidget* parent)
    : QDockWidget(parent)
       {
       setObjectName("piano");
-      setWindowTitle(tr("Piano Keyboard"));
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       _piano = new HPiano;
@@ -321,6 +320,16 @@ PianoTools::PianoTools(QWidget* parent)
 
       connect(_piano, SIGNAL(keyPressed(int, bool, int)), SIGNAL(keyPressed(int, bool, int)));
       connect(_piano, SIGNAL(keyReleased(int, bool, int)), SIGNAL(keyReleased(int, bool, int)));
+      retranslate();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void PianoTools::retranslate()
+      {
+      setWindowTitle(tr("Piano Keyboard"));
       }
 
 //---------------------------------------------------------
@@ -334,6 +343,17 @@ void PianoTools::heartBeat(QList<const Ms::Note *> notes)
           pitches.insert(note->ppitch());
           }
       _piano->pressKeys(pitches);
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void PianoTools::changeEvent(QEvent *event)
+      {
+      QDockWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 
 //---------------------------------------------------------
