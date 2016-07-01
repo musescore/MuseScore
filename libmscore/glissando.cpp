@@ -159,11 +159,11 @@ bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
 QVariant GlissandoSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
-      case P_ID::GLISS_TYPE:
-      case P_ID::GLISS_TEXT:
-      case P_ID::GLISS_SHOW_TEXT:
-      case P_ID::GLISSANDO_STYLE:
-      case P_ID::PLAY:
+            case P_ID::GLISS_TYPE:
+            case P_ID::GLISS_TEXT:
+            case P_ID::GLISS_SHOW_TEXT:
+            case P_ID::GLISSANDO_STYLE:
+            case P_ID::PLAY:
                   return glissando()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -231,10 +231,9 @@ void Glissando::scanElements(void* data, void (*func)(void*, Element*), bool all
 
 void Glissando::layout()
       {
-      qreal       _spatium    = spatium();
+      qreal _spatium    = spatium();
 
-      if (score() == gscore                                                   // for use in palettes
-                  || startElement() == nullptr || endElement() == nullptr) {  // or while dragging
+      if (score() == gscore || !startElement() || !endElement()) {  // for use in palettes or while dragging
             if (spannerSegments().empty())
                   add(createLineSegment());
             LineSegment* s = frontSegment();
@@ -299,10 +298,10 @@ void Glissando::layout()
                         || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
                   // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
                   && !(cr1->parent() == cr2))
-      {
+            {
             segm2->rxpos() -= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
             segm2->rxpos2()+= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
-      }
+            }
 
       // INTERPOLATION OF INTERMEDIATE POINTS
       // This probably belongs to SLine class itself; currently it does not seem
@@ -318,8 +317,7 @@ void Glissando::layout()
       // interpolate y-coord of intermediate points across total width and height
       qreal xCurr = 0.0;
       qreal yCurr;
-      for (int i = 0; i < spannerSegments().count()-1; i++)
-      {
+      for (int i = 0; i < spannerSegments().count()-1; i++) {
            SpannerSegment* segm = segmentAt(i);
            xCurr += segm->ipos2().x();
            yCurr = y0 + ratio * xCurr;
@@ -328,7 +326,7 @@ void Glissando::layout()
            segm = segmentAt(i+1);
            segm->rypos2() += segm->ipos().y() - yCurr;      // adjust next segm. vertical length
            segm->rypos() = yCurr;                           // position next segm. start point at yCurr
-      }
+            }
 
       // STAY CLEAR OF NOTE APPENDAGES
 

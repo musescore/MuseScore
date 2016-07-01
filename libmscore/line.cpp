@@ -766,10 +766,10 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 //    layout spannersegment for system
 //---------------------------------------------------------
 
-void SLine::layoutSystem(System* s)
+void SLine::layoutSystem(System* system)
       {
-      int stick = s->firstMeasure()->tick();
-      int etick = s->lastMeasure()->endTick();
+      int stick = system->firstMeasure()->tick();
+      int etick = system->lastMeasure()->endTick();
 
       LineSegment* lineSegm = 0;
       for (SpannerSegment* ss : segments) {
@@ -782,7 +782,7 @@ void SLine::layoutSystem(System* s)
             lineSegm = createLineSegment();
             add(lineSegm);
             }
-      lineSegm->setSystem(s);
+      lineSegm->setSystem(system);
       lineSegm->setSpanner(this);
 
       SpannerSegmentType sst;
@@ -809,34 +809,38 @@ void SLine::layoutSystem(System* s)
 
       switch (sst) {
             case SpannerSegmentType::SINGLE: {
-                  QPointF p1(linePos(Grip::START, &s));
-                  QPointF p2(linePos(Grip::END,   &s));
+                  System* s;
+                  QPointF p1 = linePos(Grip::START, &s);
+                  QPointF p2 = linePos(Grip::END,   &s);
                   qreal len = p2.x() - p1.x();
                   lineSegm->setPos(p1);
                   lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
                   }
                   break;
             case SpannerSegmentType::BEGIN: {
-                  QPointF p1(linePos(Grip::START, &s));
+                  System* s;
+                  QPointF p1 = linePos(Grip::START, &s);
                   lineSegm->setPos(p1);
-                  qreal x2 = s->bbox().right();
+                  qreal x2 = system->bbox().right();
                   lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
                   }
                   break;
             case SpannerSegmentType::MIDDLE: {
-                  Measure* firstMeasure = s->firstMeasure();
+                  Measure* firstMeasure = system->firstMeasure();
                   Segment* firstCRSeg   = firstMeasure->first(Segment::Type::ChordRest);
                   qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
-                  qreal x2              = s->bbox().right();
-                  QPointF p1(linePos(Grip::START, &s));
+                  qreal x2              = system->bbox().right();
+                  System* s;
+                  QPointF p1 = linePos(Grip::START, &s);
                   lineSegm->setPos(QPointF(x1, p1.y()));
                   lineSegm->setPos2(QPointF(x2 - x1, 0.0));
                   }
                   break;
             case SpannerSegmentType::END: {
                   qreal offset = 0.0;
-                  QPointF p2(linePos(Grip::END,   &s));
-                  Measure* firstMeas  = s->firstMeasure();
+                  System* s;
+                  QPointF p2 = linePos(Grip::END,   &s);
+                  Measure* firstMeas  = system->firstMeasure();
                   Segment* firstCRSeg = firstMeas->first(Segment::Type::ChordRest);
                   if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
                         // start line just after previous element (eg, key signature)
