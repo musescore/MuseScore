@@ -776,6 +776,9 @@ MuseScore::MuseScore()
       _fileMenu = mb->addMenu(tr("&File"));
       _fileMenu->setObjectName("File");
 
+      a = getAction("startcenter");
+      a->setCheckable(true);
+      _fileMenu->addAction(a);
       _fileMenu->addAction(getAction("file-new"));
       _fileMenu->addAction(getAction("file-open"));
 
@@ -835,16 +838,6 @@ MuseScore::MuseScore()
             menuMeasure->addAction(getAction(i));
       menuEdit->addMenu(menuMeasure);
 
-      QMenu* menuTools = new QMenu(tr("&Tools"));
-      for (auto i : { "add-remove-breaks", "explode", "implode", "slash-fill", "slash-rhythm", "resequence-rehearsal-marks", "copy-lyrics-to-clipboard" })
-            menuTools->addAction(getAction(i));
-      menuEdit->addMenu(menuTools);
-
-      QMenu* menuVoices = new QMenu(tr("&Voices"));
-      for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
-            menuVoices->addAction(getAction(i));
-      menuEdit->addMenu(menuVoices);
-
 #ifdef NDEBUG
       if (enableExperimental) {
 #endif
@@ -855,11 +848,6 @@ MuseScore::MuseScore()
 #endif
 
       menuEdit->addSeparator();
-      menuWorkspaces = new QMenu(tr("W&orkspaces"));
-      connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
-      menuEdit->addMenu(menuWorkspaces);
-      menuEdit->addAction(getAction("edit-toolbars"));
-
       QAction* pref = menuEdit->addAction(tr("&Preferences..."), this, SLOT(startPreferenceDialog()));
       pref->setMenuRole(QAction::PreferencesRole);
 
@@ -869,10 +857,6 @@ MuseScore::MuseScore()
 
       menuView = mb->addMenu(tr("&View"));
       menuView->setObjectName("View");
-
-      a = getAction("startcenter");
-      a->setCheckable(true);
-      menuView->addAction(a);
 
       a = getAction("toggle-palette");
       a->setCheckable(true);
@@ -885,13 +869,11 @@ MuseScore::MuseScore()
       a = getAction("inspector");
       a->setCheckable(true);
       menuView->addAction(a);
-
 #ifdef OMR
       a = getAction("omr");
       a->setCheckable(true);
       menuView->addAction(a);
 #endif
-
       playId = getAction("toggle-playpanel");
       playId->setCheckable(true);
       menuView->addAction(playId);
@@ -932,6 +914,11 @@ MuseScore::MuseScore()
 //      a->setCheckable(true);
 //      a->setChecked(true);
 //      menuView->addAction(a);
+        
+      menuView->addAction(getAction("edit-toolbars"));
+      menuWorkspaces = new QMenu(tr("W&orkspaces"));
+      connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
+      menuView->addMenu(menuWorkspaces);
 
       a = getAction("toggle-statusbar");
       a->setCheckable(true);
@@ -964,38 +951,28 @@ MuseScore::MuseScore()
       //    Menu Create
       //---------------------
 
-      mb->addMenu(genCreateMenu(mb));
-
-      //---------------------
-      //    Menu Notes
-      //---------------------
-
-      menuNotes = mb->addMenu(qApp->translate("MenuNotes", "&Notes"));
-      menuNotes->setObjectName("Notes");
-
-      menuNotes->addAction(getAction("note-input"));
-      menuNotes->addAction(getAction("pitch-spell"));
-      menuNotes->addSeparator();
-
-      QMenu* menuAddPitch = new QMenu(tr("Add N&ote"));
-
+      menuCreate = mb->addMenu(tr("&Add"));
+      menuCreate->setObjectName("Add");
+          
+      QMenu* menuAddPitch = new QMenu(tr("N&otes"));
+      menuAddPitch->addAction(getAction("note-input"));
+      menuAddPitch->addSeparator();
       for (int i = 0; i < 7; ++i) {
             char buffer[8];
             sprintf(buffer, "note-%c", "cdefgab"[i]);
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
-
-      menuNotes->addMenu(menuAddPitch);
-
+      menuAddPitch->addSeparator();
       for (int i = 0; i < 7; ++i) {
             char buffer[8];
             sprintf(buffer, "chord-%c", "cdefgab"[i]);
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
-
-      QMenu* menuAddInterval = new QMenu(tr("Add &Interval"));
+      menuCreate->addMenu(menuAddPitch);
+          
+      QMenu* menuAddInterval = new QMenu(tr("&Intervals"));
       for (int i = 1; i < 10; ++i) {
             char buffer[16];
             sprintf(buffer, "interval%d", i);
@@ -1009,47 +986,122 @@ MuseScore::MuseScore()
             a = getAction(buffer);
             menuAddInterval->addAction(a);
             }
-      menuNotes->addMenu(menuAddInterval);
+      menuCreate->addMenu(menuAddInterval);
 
-      QMenu* menuNtole = new QMenu(tr("T&uplets"));
+      QMenu* menuTuplet = new QMenu(tr("T&uplets"));
       for (auto i : { "duplet", "triplet", "quadruplet", "quintuplet", "sextuplet",
-         "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
-            menuNtole->addAction(getAction(i));
-      menuNotes->addMenu(menuNtole);
-
-      menuNotes->addSeparator();
-      menuNotes->addAction(getAction("transpose"));
-      a = getAction("concert-pitch");
-      a->setCheckable(true);
-      menuNotes->addAction(a);
-
-      //---------------------
-      //    Menu Layout
-      //---------------------
-
-      menuLayout = mb->addMenu(tr("&Layout"));
-      menuLayout->setObjectName("Layout");
-
-      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode" }) {
-            QAction* action = getAction(i);
-            action->setMenuRole(QAction::NoRole);
-            menuLayout->addAction(action);
-            }
-
-      //---------------------
-      //    Menu Style
-      //---------------------
-
-      menuStyle = mb->addMenu(tr("&Style"));
-      menuStyle->setObjectName("Style");
-      menuStyle->addAction(getAction("edit-style"));
-      menuStyle->addAction(getAction("edit-text-style"));
+            "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
+            menuTuplet->addAction(getAction(i));
+      menuCreate->addMenu(menuTuplet);
+          
+      menuCreate->addSeparator();
+          
+      QMenu* menuAddMeasures = new QMenu(tr("&Measures"));
+      menuAddMeasures->addAction(getAction("insert-measure"));
+      menuAddMeasures->addAction(getAction("insert-measures"));
+      menuAddMeasures->addSeparator();
+      menuAddMeasures->addAction(getAction("append-measure"));
+      menuAddMeasures->addAction(getAction("append-measures"));
+      menuCreate->addMenu(menuAddMeasures);
+          
+      QMenu* menuAddFrames = new QMenu(tr("&Frames"));
+      menuAddFrames->addAction(getAction("insert-hbox"));
+      menuAddFrames->addAction(getAction("insert-vbox"));
+      menuAddFrames->addAction(getAction("insert-textframe"));
       if (enableExperimental)
-            menuStyle->addAction(getAction("edit-harmony"));
+            menuAddFrames->addAction(getAction("insert-fretframe"));
+      menuAddFrames->addSeparator();
+      menuAddFrames->addAction(getAction("append-hbox"));
+      menuAddFrames->addAction(getAction("append-vbox"));
+      menuAddFrames->addAction(getAction("append-textframe"));
+      menuCreate->addMenu(menuAddFrames);
+          
+      QMenu* menuAddText = new QMenu(tr("&Text"));
+      menuAddText->addAction(getAction("title-text"));
+      menuAddText->addAction(getAction("subtitle-text"));
+      menuAddText->addAction(getAction("composer-text"));
+      menuAddText->addAction(getAction("poet-text"));
+      menuAddText->addAction(getAction("part-text"));
+      menuAddText->addSeparator();
+      menuAddText->addAction(getAction("system-text"));
+      menuAddText->addAction(getAction("staff-text"));
+      menuAddText->addAction(getAction("chord-text"));
+      menuAddText->addAction(getAction("rehearsalmark-text"));
+      menuAddText->addAction(getAction("instrument-change-text"));
+      menuAddText->addSeparator();
+      menuAddText->addAction(getAction("lyrics"));
+      menuAddText->addAction(getAction("figured-bass"));
+      menuAddText->addAction(getAction("tempo"));
+      menuCreate->addMenu(menuAddText);
+          
+      QMenu* menuAddLines = new QMenu(tr("&Lines"));
+      menuAddLines->addAction(getAction("add-slur"));
+      menuAddLines->addAction(getAction("add-hairpin"));
+      menuAddLines->addAction(getAction("add-hairpin-reverse"));
+      menuAddLines->addAction(getAction("add-8va"));
+      menuAddLines->addAction(getAction("add-8vb"));
+      menuAddLines->addAction(getAction("add-noteline"));
+      menuCreate->addMenu(menuAddLines);
 
-      menuStyle->addSeparator();
-      menuStyle->addAction(getAction("load-style"));
-      menuStyle->addAction(getAction("save-style"));
+      //---------------------
+      //    Menu Format
+      //---------------------
+
+      menuFormat = mb->addMenu(tr("&Format"));
+      menuFormat->setObjectName("Format");
+
+      menuFormat->addAction(getAction("edit-style"));
+      menuFormat->addAction(getAction("edit-text-style"));
+      menuFormat->addAction(getAction("page-settings"));
+      menuFormat->addSeparator();
+          
+      menuFormat->addAction(getAction("add-remove-breaks"));
+          
+      QMenu* menuStretch = new QMenu(tr("&Stretch"));
+      for (auto i : { "stretch+", "stretch-", "reset-stretch" })
+            menuStretch->addAction(getAction(i));
+      menuFormat->addMenu(menuStretch);
+      menuFormat->addSeparator();
+          
+      menuFormat->addAction(getAction("reset-beammode"));
+      menuFormat->addAction(getAction("reset"));
+      menuFormat->addSeparator();
+          
+      if (enableExperimental)
+            menuFormat->addAction(getAction("edit-harmony"));
+
+      menuFormat->addSeparator();
+      menuFormat->addAction(getAction("load-style"));
+      menuFormat->addAction(getAction("save-style"));
+          
+      //---------------------
+      //    Menu Tools
+      //---------------------
+          
+      QMenu* menuTools = mb->addMenu(tr("&Tools"));
+      menuTools->setObjectName("Tools");
+          
+      menuTools->addAction(getAction("transpose"));
+      menuTools->addSeparator();
+      menuTools->addAction(getAction("explode"));
+      menuTools->addAction(getAction("implode"));
+          
+      QMenu* menuVoices = new QMenu(tr("&Voices"));
+      for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
+            menuVoices->addAction(getAction(i));
+      menuTools->addMenu(menuVoices);
+      menuTools->addSeparator();
+          
+      menuTools->addAction(getAction("slash-fill"));
+      menuTools->addAction(getAction("slash-rhythm"));
+      menuTools->addSeparator();
+          
+      menuTools->addAction(getAction("pitch-spell"));
+      menuTools->addAction(getAction("resequence-rehearsal-marks"));
+      menuTools->addSeparator();
+          
+      menuTools->addAction(getAction("copy-lyrics-to-clipboard"));
+      menuTools->addAction(getAction("fotomode"));
 
       //---------------------
       //    Menu Plugins
