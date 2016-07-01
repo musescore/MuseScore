@@ -90,7 +90,7 @@ void Zerberus::programChange(int channel, int program)
 //    gui
 //---------------------------------------------------------
 
-void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger, int cc, int ccVal)
+void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger, int cc, int ccVal, double durSinceNoteOn)
       {
       ZInstrument* i = channel->instrument();
       double random = (double) rand() / (double) RAND_MAX;
@@ -102,7 +102,7 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger, int
                         }
                   Voice* voice = freeVoices.pop();
                   Q_ASSERT(voice->isOff());
-                  voice->start(channel, key, velo, z);
+                  voice->start(channel, key, velo, z, durSinceNoteOn);
                   voice->setNext(activeVoices);
                   activeVoices = voice;
 
@@ -137,7 +137,8 @@ void Zerberus::processNoteOff(Channel* cp, int key)
                   if (cp->sustain() < 0x40) {
                         if (!v->isStopped())
                               v->stop();
-                        trigger(cp, key, v->velocity(), Trigger::RELEASE, -1, -1);
+                        double durSinceNoteOn = v->getSamplesSinceStart() / sampleRate();
+                        trigger(cp, key, v->velocity(), Trigger::RELEASE, -1, -1, durSinceNoteOn);
                         }
                   else {
                         if (v->isPlaying())
@@ -162,7 +163,7 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
                         }
                   }
             }
-      trigger(cp, key, velo, Trigger::ATTACK, -1, -1);
+      trigger(cp, key, velo, Trigger::ATTACK, -1, -1, 0);
       }
 
 //---------------------------------------------------------
@@ -196,7 +197,7 @@ void Zerberus::play(const Ms::PlayEvent& event)
 
             case Ms::ME_CONTROLLER:
                   cp->controller(event.dataA(), event.dataB());
-                  trigger(cp, -1, -1, Trigger::CC, event.dataA(), event.dataB());
+                  trigger(cp, -1, -1, Trigger::CC, event.dataA(), event.dataB(), 0);
                   break;
 
             default:
