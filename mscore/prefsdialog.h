@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id:$
 //
-//  Copyright (C) 2002-2010 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -23,6 +23,7 @@
 
 #include "ui_prefsdialog.h"
 #include "preferences.h"
+#include "abstractdialog.h"
 
 namespace Ms {
 
@@ -32,7 +33,7 @@ class Shortcut;
 //   PreferenceDialog
 //---------------------------------------------------------
 
-class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
+class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       Q_OBJECT
 
       QMap<QString, Shortcut*> localShortcuts;
@@ -74,13 +75,15 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void printShortcutsClicked();
       void filterShortcutsTextChanged(const QString &);
 
-      void languageChanged(int);
       void changeSoundfontPaths();
       void updateTranslationClicked();
 
    signals:
       void preferencesChanged();
       void mixerPreferencesChanged(bool showMidiControls);
+
+   protected:
+      virtual void retranslate() { retranslateUi(this); updateValues(); }
 
    public:
       PreferenceDialog(QWidget* parent);

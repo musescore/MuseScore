@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: debugger.h 5383 2012-02-27 07:38:15Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -59,6 +59,7 @@
 #include "globals.h"
 #include "libmscore/element.h"
 #include "libmscore/mscore.h"
+#include "abstractdialog.h"
 
 namespace Ms {
 
@@ -76,7 +77,7 @@ class ShowNoteWidget;
 //   Debugger
 //---------------------------------------------------------
 
-class Debugger : public QDialog, public Ui::DebuggerBase {
+class Debugger : public AbstractDialog, public Ui::DebuggerBase {
       Q_OBJECT;
 
       QStack<Element*>backStack;
@@ -92,6 +93,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
    protected:
       Score* cs;
       Element* curElement;
+      virtual void retranslate() { retranslateUi(this); }
 
    private slots:
       void itemClicked(QTreeWidgetItem*, int);

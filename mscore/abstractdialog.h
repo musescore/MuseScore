@@ -1,7 +1,7 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
-//  $Id: symboldialog.h 4341 2011-06-06 08:18:18Z lasconic $
+//  MuseScore
+//  Music Composition & Notation
+//  $Id: abstractdialog.h 4220 2011-04-22 10:31:26Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -18,41 +18,32 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __SYMBOLDIALOG_H__
-#define __SYMBOLDIALOG_H__
-
-#include "ui_symboldialog.h"
+#ifndef __QABSTRACTDIALOG_H__
+#define __QABSTRACTDIALOG_H__
 
 namespace Ms {
 
-class Palette;
-class Element;
-
 //---------------------------------------------------------
-//   SymbolDialog
+//   AbstractDialog
 //---------------------------------------------------------
 
-class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
-      Q_OBJECT
+class AbstractDialog : public QDialog
+      {
 
-      QString range;
-      Palette* sp;
-      void createSymbolPalette();
-      void createSymbols();
-
-   private slots:
-      void systemFlagChanged(int);
-      void systemFontChanged(int);
-      void on_search_textChanged(const QString &searchPhrase);
-      void on_clearSearch_clicked();
-
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate()  { retranslateUi(this); }
+   Q_OBJECT
 
    public:
-      SymbolDialog(const QString&, QWidget* parent = 0);
-      };
-}
+      AbstractDialog(QWidget * parent = 0, Qt::WindowFlags f = 0);
+      virtual ~AbstractDialog();
 
+   protected:
+      // change language event
+      virtual void changeEvent(QEvent *event);
+
+      // translate all strings
+      virtual void retranslate() = 0;
+      };
+
+}
 #endif
+

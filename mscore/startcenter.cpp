@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2014 Werner Schweer
+//  Copyright (C) 2014-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -40,7 +40,7 @@ void MuseScore::showStartcenter(bool val)
 //---------------------------------------------------------
 
 Startcenter::Startcenter()
- : QDialog(0)
+ : AbstractDialog(0)
       {
       setupUi(this);
       setBackgroundRole(QPalette::Base);

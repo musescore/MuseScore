@@ -3530,7 +3530,7 @@ QAction* Shortcut::action() const
       if (_state == STATE_NEVER)
             return 0;
 
-      _action = new QAction(text(), 0);
+      _action = new QAction(0);
       _action->setData(_key);
       _action->setIconVisibleInMenu (false);
       if (isCheckable()) {
@@ -3544,18 +3544,33 @@ QAction* Shortcut::action() const
             _action->setShortcuts(_keys);
 
       _action->setShortcutContext(_context);
+      translateAction(_action);
+
+      if (_icon != Icons::Invalid_ICON)
+            _action->setIcon(*icons[int(_icon)]);
+
+      return _action;
+      }
+
+//---------------------------------------------------------
+//   translateAction
+//---------------------------------------------------------
+
+void Shortcut::translateAction(QAction* action) const
+      {
+      action->setText(text());
       if (!_help.isEmpty()) {
-            _action->setToolTip(help());
-            _action->setWhatsThis(help());
+            action->setToolTip(help());
+            action->setWhatsThis(help());
             }
       else {
-            _action->setToolTip(descr());
-            _action->setWhatsThis(descr());
+            action->setToolTip(descr());
+            action->setWhatsThis(descr());
             }
-      _action->setStatusTip(QString("action:%1").arg(_key.data()));
-      QList<QKeySequence> kl = _action->shortcuts();
+      action->setStatusTip(QString("action:%1").arg(_key.data()));
+      QList<QKeySequence> kl = action->shortcuts();
       if (!kl.isEmpty()) {
-            QString s(_action->toolTip());
+            QString s(action->toolTip());
             s += " (";
             for (int i = 0; i < kl.size(); ++i) {
                   if (i)
@@ -3563,13 +3578,8 @@ QAction* Shortcut::action() const
                   s += Shortcut::keySeqToString(kl[i], QKeySequence::NativeText);
                   }
             s += ")";
-            _action->setToolTip(s);
+            action->setToolTip(s);
             }
-
-      if (_icon != Icons::Invalid_ICON)
-            _action->setIcon(*icons[int(_icon)]);
-
-      return _action;
       }
 
 //---------------------------------------------------------
@@ -3639,6 +3649,19 @@ void Shortcut::init()
             _shortcuts.insert(i._key, &i);
       if (!MScore::noGui)
             load();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void Shortcut::retranslate()
+      {
+      for (const Shortcut& i : _sc) {
+            if (i._action) {
+                  i.translateAction(i._action);
+                  }
+            }
       }
 
 //---------------------------------------------------------

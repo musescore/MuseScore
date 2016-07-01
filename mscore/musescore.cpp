@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2012 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -154,6 +154,8 @@ static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
 static bool scoresOnCommandline { false };
+
+static QList<QTranslator*> translatorList;
 
 QString localeName;
 bool useFactorySettings = false;
@@ -551,7 +553,6 @@ MuseScore::MuseScore()
 
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
-      _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
 
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);
@@ -577,8 +578,8 @@ MuseScore::MuseScore()
             layerSwitch->setToolTip(tr("Switch layer"));
             connect(layerSwitch, SIGNAL(activated(const QString&)), SLOT(switchLayer(const QString&)));
             playMode = new QComboBox(this);
-            playMode->addItem(tr("synthesizer"));
-            playMode->addItem(tr("audio track"));
+            playMode->addItem(tr("Synthesizer"));
+            playMode->addItem(tr("Audio track"));
             playMode->setToolTip(tr("Switch play mode"));
             connect(playMode, SIGNAL(activated(int)), SLOT(switchPlayMode(int)));
 
@@ -634,12 +635,12 @@ MuseScore::MuseScore()
       hl->setMargin(0);
       hl->setSpacing(0);
       importmidiShowPanel->setLayout(hl);
-      QPushButton *b = new QPushButton(tr("Show MIDI import panel"));
-      b->setFocusPolicy(Qt::ClickFocus);
+      showMidiImportButton = new QPushButton();
+      showMidiImportButton->setFocusPolicy(Qt::ClickFocus);
       importmidiShowPanel->setVisible(false);
-      connect(b, SIGNAL(clicked()), SLOT(showMidiImportPanel()));
+      connect(showMidiImportButton, SIGNAL(clicked()), SLOT(showMidiImportPanel()));
       connect(importmidiPanel, SIGNAL(closeClicked()), importmidiShowPanel, SLOT(show()));
-      hl->addWidget(b);
+      hl->addWidget(showMidiImportButton);
       QSpacerItem *item = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
       hl->addSpacerItem(item);
       envelope->addWidget(importmidiShowPanel);
@@ -690,7 +691,7 @@ MuseScore::MuseScore()
       //    File Tool Bar
       //---------------------------------------------------
 
-      fileTools = addToolBar(tr("File Operations"));
+      fileTools = addToolBar("");
       fileTools->setObjectName("file-operations");
 
       for (auto i : { "file-new", "file-open", "file-save", "print", "undo", "redo"})
@@ -706,12 +707,10 @@ MuseScore::MuseScore()
 #else
       viewModeCombo->setFocusPolicy(Qt::TabFocus);
 #endif
-      viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
-      viewModeCombo->addItem(tr("Page View"),       int(LayoutMode::PAGE));
-      viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
-      if (enableExperimental)
-            viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
+      viewModeCombo->addItem("",       int(LayoutMode::PAGE));
+      viewModeCombo->addItem("", int(LayoutMode::LINE));
+      viewModeCombo->addItem("", int(LayoutMode::SYSTEM));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
@@ -719,7 +718,7 @@ MuseScore::MuseScore()
       //    Transport Tool Bar
       //---------------------
 
-      transportTools = addToolBar(tr("Transport Tools"));
+      transportTools = addToolBar("");
       transportTools->setObjectName("transport-tools");
 #ifdef HAS_MIDI
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("midi-on")));
@@ -740,7 +739,7 @@ MuseScore::MuseScore()
       //    Concert Pitch Tool Bar
       //-------------------------------
 
-      cpitchTools = addToolBar(tr("Concert Pitch"));
+      cpitchTools = addToolBar("");
       cpitchTools->setObjectName("pitch-tools");
       cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
 
@@ -748,9 +747,9 @@ MuseScore::MuseScore()
       //    Image Capture Tool Bar
       //-------------------------------
 
-      QToolBar* foto = addToolBar(tr("Image Capture"));
-      foto->setObjectName("foto-tools");
-      foto->addWidget(new AccessibleToolButton(foto, getAction("fotomode")));
+      fotoTools = addToolBar("");
+      fotoTools->setObjectName("foto-tools");
+      fotoTools->addWidget(new AccessibleToolButton(fotoTools, getAction("fotomode")));
 
       addToolBarBreak();
 
@@ -758,7 +757,7 @@ MuseScore::MuseScore()
       //    Note Input Tool Bar
       //-------------------------------
 
-      entryTools = addToolBar(tr("Note Input"));
+      entryTools = addToolBar("");
       entryTools->setObjectName("entry-tools");
 
       populateNoteInputMenu();
@@ -773,16 +772,16 @@ MuseScore::MuseScore()
       //    Menu File
       //---------------------
 
-      _fileMenu = mb->addMenu(tr("&File"));
-      _fileMenu->setObjectName("File");
+      menuFile = mb->addMenu("");
+      menuFile->setObjectName("File");
 
       a = getAction("startcenter");
       a->setCheckable(true);
-      _fileMenu->addAction(a);
-      _fileMenu->addAction(getAction("file-new"));
-      _fileMenu->addAction(getAction("file-open"));
+      menuFile->addAction(a);
+      menuFile->addAction(getAction("file-new"));
+      menuFile->addAction(getAction("file-open"));
 
-      openRecent = _fileMenu->addMenu(tr("Open &Recent"));
+      openRecent = menuFile->addMenu("");
 
       connect(openRecent, SIGNAL(aboutToShow()), SLOT(openRecentMenu()));
       connect(openRecent, SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
@@ -792,28 +791,28 @@ MuseScore::MuseScore()
             "file-save-selection", "file-save-online", "file-export", "file-part-export", "file-import-pdf",
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
-                  _fileMenu->addSeparator();
+                  menuFile->addSeparator();
             else
-                  _fileMenu->addAction(getAction(i));
+                  menuFile->addAction(getAction(i));
             }
       if (enableExperimental)
-            _fileMenu->addAction(getAction("layer"));
-      _fileMenu->addSeparator();
-      _fileMenu->addAction(getAction("edit-info"));
+            menuFile->addAction(getAction("layer"));
+      menuFile->addSeparator();
+      menuFile->addAction(getAction("edit-info"));
       if (enableExperimental)
-            _fileMenu->addAction(getAction("media"));
-      _fileMenu->addSeparator();
-      _fileMenu->addAction(getAction("print"));
+            menuFile->addAction(getAction("media"));
+      menuFile->addSeparator();
+      menuFile->addAction(getAction("print"));
 #ifndef Q_OS_MAC
-      _fileMenu->addSeparator();
-      _fileMenu->addAction(getAction("quit"));
+      menuFile->addSeparator();
+      menuFile->addAction(getAction("quit"));
 #endif
 
       //---------------------
       //    Menu Edit
       //---------------------
 
-      menuEdit = mb->addMenu(tr("&Edit"));
+      menuEdit = mb->addMenu("");
       menuEdit->setObjectName("Edit");
       menuEdit->addAction(getAction("undo"));
       menuEdit->addAction(getAction("redo"));
@@ -833,10 +832,10 @@ MuseScore::MuseScore()
 
       menuEdit->addAction(getAction("instruments"));
 
-      QMenu* menuMeasure = new QMenu(tr("&Measure"));
+      menuEditMeasure = new QMenu("");
       for (auto i : { "delete-measures", "split-measure", "join-measures" })
-            menuMeasure->addAction(getAction(i));
-      menuEdit->addMenu(menuMeasure);
+            menuEditMeasure->addAction(getAction(i));
+      menuEdit->addMenu(menuEditMeasure);
 
 #ifdef NDEBUG
       if (enableExperimental) {
@@ -848,14 +847,14 @@ MuseScore::MuseScore()
 #endif
 
       menuEdit->addSeparator();
-      QAction* pref = menuEdit->addAction(tr("&Preferences..."), this, SLOT(startPreferenceDialog()));
+      pref = menuEdit->addAction("", this, SLOT(startPreferenceDialog()));
       pref->setMenuRole(QAction::PreferencesRole);
 
       //---------------------
       //    Menu View
       //---------------------
 
-      menuView = mb->addMenu(tr("&View"));
+      menuView = mb->addMenu("");
       menuView->setObjectName("View");
 
       a = getAction("toggle-palette");
@@ -914,9 +913,9 @@ MuseScore::MuseScore()
 //      a->setCheckable(true);
 //      a->setChecked(true);
 //      menuView->addAction(a);
-        
+
       menuView->addAction(getAction("edit-toolbars"));
-      menuWorkspaces = new QMenu(tr("W&orkspaces"));
+      menuWorkspaces = new QMenu();
       connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
       menuView->addMenu(menuWorkspaces);
 
@@ -948,15 +947,16 @@ MuseScore::MuseScore()
 #endif
 
       //---------------------
-      //    Menu Create
+      //    Menu Add
       //---------------------
 
-      menuCreate = mb->addMenu(tr("&Add"));
-      menuCreate->setObjectName("Add");
-          
-      QMenu* menuAddPitch = new QMenu(tr("N&otes"));
+      menuAdd = mb->addMenu("");
+      menuAdd->setObjectName("Add");
+
+      menuAddPitch = new QMenu();
       menuAddPitch->addAction(getAction("note-input"));
       menuAddPitch->addSeparator();
+
       for (int i = 0; i < 7; ++i) {
             char buffer[8];
             sprintf(buffer, "note-%c", "cdefgab"[i]);
@@ -970,9 +970,9 @@ MuseScore::MuseScore()
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
-      menuCreate->addMenu(menuAddPitch);
-          
-      QMenu* menuAddInterval = new QMenu(tr("&Intervals"));
+      menuAdd->addMenu(menuAddPitch);
+
+      menuAddInterval = new QMenu();
       for (int i = 1; i < 10; ++i) {
             char buffer[16];
             sprintf(buffer, "interval%d", i);
@@ -986,25 +986,25 @@ MuseScore::MuseScore()
             a = getAction(buffer);
             menuAddInterval->addAction(a);
             }
-      menuCreate->addMenu(menuAddInterval);
+      menuAdd->addMenu(menuAddInterval);
 
-      QMenu* menuTuplet = new QMenu(tr("T&uplets"));
+      menuTuplet = new QMenu();
       for (auto i : { "duplet", "triplet", "quadruplet", "quintuplet", "sextuplet",
             "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
             menuTuplet->addAction(getAction(i));
-      menuCreate->addMenu(menuTuplet);
-          
-      menuCreate->addSeparator();
-          
-      QMenu* menuAddMeasures = new QMenu(tr("&Measures"));
+      menuAdd->addMenu(menuTuplet);
+
+      menuAdd->addSeparator();
+
+      menuAddMeasures = new QMenu("");
       menuAddMeasures->addAction(getAction("insert-measure"));
       menuAddMeasures->addAction(getAction("insert-measures"));
       menuAddMeasures->addSeparator();
       menuAddMeasures->addAction(getAction("append-measure"));
       menuAddMeasures->addAction(getAction("append-measures"));
-      menuCreate->addMenu(menuAddMeasures);
-          
-      QMenu* menuAddFrames = new QMenu(tr("&Frames"));
+      menuAdd->addMenu(menuAddMeasures);
+
+      menuAddFrames = new QMenu();
       menuAddFrames->addAction(getAction("insert-hbox"));
       menuAddFrames->addAction(getAction("insert-vbox"));
       menuAddFrames->addAction(getAction("insert-textframe"));
@@ -1014,9 +1014,9 @@ MuseScore::MuseScore()
       menuAddFrames->addAction(getAction("append-hbox"));
       menuAddFrames->addAction(getAction("append-vbox"));
       menuAddFrames->addAction(getAction("append-textframe"));
-      menuCreate->addMenu(menuAddFrames);
-          
-      QMenu* menuAddText = new QMenu(tr("&Text"));
+      menuAdd->addMenu(menuAddFrames);
+
+      menuAddText = new QMenu();
       menuAddText->addAction(getAction("title-text"));
       menuAddText->addAction(getAction("subtitle-text"));
       menuAddText->addAction(getAction("composer-text"));
@@ -1032,74 +1032,74 @@ MuseScore::MuseScore()
       menuAddText->addAction(getAction("lyrics"));
       menuAddText->addAction(getAction("figured-bass"));
       menuAddText->addAction(getAction("tempo"));
-      menuCreate->addMenu(menuAddText);
-          
-      QMenu* menuAddLines = new QMenu(tr("&Lines"));
+      menuAdd->addMenu(menuAddText);
+
+      menuAddLines = new QMenu();
       menuAddLines->addAction(getAction("add-slur"));
       menuAddLines->addAction(getAction("add-hairpin"));
       menuAddLines->addAction(getAction("add-hairpin-reverse"));
       menuAddLines->addAction(getAction("add-8va"));
       menuAddLines->addAction(getAction("add-8vb"));
       menuAddLines->addAction(getAction("add-noteline"));
-      menuCreate->addMenu(menuAddLines);
+      menuAdd->addMenu(menuAddLines);
 
       //---------------------
       //    Menu Format
       //---------------------
 
-      menuFormat = mb->addMenu(tr("&Format"));
+      menuFormat = mb->addMenu("");
       menuFormat->setObjectName("Format");
 
       menuFormat->addAction(getAction("edit-style"));
       menuFormat->addAction(getAction("edit-text-style"));
       menuFormat->addAction(getAction("page-settings"));
       menuFormat->addSeparator();
-          
+
       menuFormat->addAction(getAction("add-remove-breaks"));
-          
+
       QMenu* menuStretch = new QMenu(tr("&Stretch"));
       for (auto i : { "stretch+", "stretch-", "reset-stretch" })
             menuStretch->addAction(getAction(i));
       menuFormat->addMenu(menuStretch);
       menuFormat->addSeparator();
-          
+
       menuFormat->addAction(getAction("reset-beammode"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();
-          
+
       if (enableExperimental)
             menuFormat->addAction(getAction("edit-harmony"));
 
       menuFormat->addSeparator();
       menuFormat->addAction(getAction("load-style"));
       menuFormat->addAction(getAction("save-style"));
-          
+
       //---------------------
       //    Menu Tools
       //---------------------
-          
-      QMenu* menuTools = mb->addMenu(tr("&Tools"));
+
+      menuTools = mb->addMenu("");
       menuTools->setObjectName("Tools");
-          
+
       menuTools->addAction(getAction("transpose"));
       menuTools->addSeparator();
       menuTools->addAction(getAction("explode"));
       menuTools->addAction(getAction("implode"));
-          
-      QMenu* menuVoices = new QMenu(tr("&Voices"));
+
+      menuVoices = new QMenu("");
       for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
             menuVoices->addAction(getAction(i));
       menuTools->addMenu(menuVoices);
       menuTools->addSeparator();
-          
+
       menuTools->addAction(getAction("slash-fill"));
       menuTools->addAction(getAction("slash-rhythm"));
       menuTools->addSeparator();
-          
+
       menuTools->addAction(getAction("pitch-spell"));
       menuTools->addAction(getAction("resequence-rehearsal-marks"));
       menuTools->addSeparator();
-          
+
       menuTools->addAction(getAction("copy-lyrics-to-clipboard"));
       menuTools->addAction(getAction("fotomode"));
 
@@ -1107,7 +1107,7 @@ MuseScore::MuseScore()
       //    Menu Plugins
       //---------------------
 
-      QMenu* menuPlugins = mb->addMenu(tr("&Plugins"));
+      menuPlugins = mb->addMenu("");
       menuPlugins->setObjectName("Plugins");
 
       menuPlugins->addAction(getAction("plugin-manager"));
@@ -1152,7 +1152,7 @@ MuseScore::MuseScore()
       //---------------------
 
       mb->addSeparator();
-      QMenu* menuHelp = mb->addMenu(tr("&Help"));
+      menuHelp = mb->addMenu("");
       menuHelp->setObjectName("Help");
 
 #if 0
@@ -1163,38 +1163,41 @@ MuseScore::MuseScore()
             }
 #endif
       //menuHelp->addAction(getAction("local-help"));
-      menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
+      onlineHandbookAction = menuHelp->addAction("", this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
 
-      QAction* aboutAction = new QAction(tr("&About..."), 0);
+      aboutAction = new QAction("", 0);
 
       aboutAction->setMenuRole(QAction::AboutRole);
       connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
       menuHelp->addAction(aboutAction);
 
-      QAction* aboutQtAction = new QAction(tr("About &Qt..."), 0);
+      aboutQtAction = new QAction("", 0);
       aboutQtAction->setMenuRole(QAction::AboutQtRole);
       connect(aboutQtAction, SIGNAL(triggered()), this, SLOT(aboutQt()));
       menuHelp->addAction(aboutQtAction);
 
-      QAction* aboutMusicXMLAction = new QAction(tr("About &MusicXML..."), 0);
+      aboutMusicXMLAction = new QAction("", 0);
       aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);
       connect(aboutMusicXMLAction, SIGNAL(triggered()), this, SLOT(aboutMusicXML()));
       menuHelp->addAction(aboutMusicXMLAction);
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-      menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
+      checkForUpdateAction = menuHelp->addAction("", this, SLOT(checkForUpdate()));
 #endif
 
       menuHelp->addSeparator();
-      menuHelp->addAction(tr("Ask for Help"), this, SLOT(askForHelp()));
-      menuHelp->addAction(tr("Report a Bug"), this, SLOT(reportBug()));
+      askForHelpAction = menuHelp->addAction("", this, SLOT(askForHelp()));
+      reportBugAction = menuHelp->addAction("", this, SLOT(reportBug()));
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
       menuHelp->addSeparator();
-      menuHelp->addAction(tr("Revert to Factory Settings"), this, SLOT(resetAndRestart()));
+      revertToFactoryAction = menuHelp->addAction("", this, SLOT(resetAndRestart()));
+
+      if (!MScore::noGui)
+            retranslate(true);
 
       //accessibility for menus
       foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
@@ -1236,6 +1239,61 @@ MuseScore::MuseScore()
 MuseScore::~MuseScore()
       {
       delete synti;
+      }
+
+void MuseScore::retranslate(bool firstStart)
+      {
+      _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
+
+      // retranslate the menu
+      menuFile->setTitle(tr("&File"));
+      openRecent->setTitle(tr("Open &Recent"));
+      menuEdit->setTitle(tr("&Edit"));
+      menuEditMeasure->setTitle(tr("&Measure"));
+      menuView->setTitle(tr("&View"));
+      menuWorkspaces->setTitle(tr("W&orkspaces"));
+      pref->setText(tr("&Preferences..."));
+      menuAdd->setTitle(tr("&Add"));
+      menuAddMeasures->setTitle(tr("&Measures"));
+      menuAddFrames->setTitle(tr("&Frames"));
+      menuAddText->setTitle(tr("&Text"));
+      menuAddLines->setTitle(tr("&Lines"));
+      menuAddPitch->setTitle(tr("N&ote"));
+      menuAddInterval->setTitle(tr("Add &Interval"));
+      menuTuplet->setTitle(tr("T&uplets"));
+      menuFormat->setTitle(tr("&Format"));
+      menuTools->setTitle(tr("&Tools"));
+      menuVoices->setTitle(tr("&Voices"));
+      menuPlugins->setTitle(tr("&Plugins"));
+      menuHelp->setTitle(tr("&Help"));
+
+      aboutAction->setText(tr("&About..."));
+      aboutQtAction->setText(tr("About &Qt..."));
+      aboutMusicXMLAction->setText(tr("About &MusicXML..."));
+      onlineHandbookAction->setText(tr("&Online Handbook"));
+      if (checkForUpdateAction)
+            checkForUpdateAction->setText(tr("Check for &Update"));
+      askForHelpAction->setText(tr("Ask for Help"));
+      reportBugAction->setText(tr("Report a Bug"));
+      revertToFactoryAction->setText(tr("Revert to Factory Settings"));
+
+      fileTools->setWindowTitle(tr("File Operations"));
+      transportTools->setWindowTitle(tr("Transport Tools"));
+      cpitchTools->setWindowTitle(tr("Concert Pitch"));
+      fotoTools->setWindowTitle(tr("Image Capture"));
+      entryTools->setWindowTitle(tr("Note Input"));
+
+      viewModeCombo->setAccessibleName(tr("View Mode"));
+      viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::PAGE)), tr("Page View"));
+      viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::LINE)), tr("Continuous View"));
+      viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::SYSTEM)), tr("Single Page"));
+      
+      showMidiImportButton->setText(tr("Show MIDI import panel"));
+      
+      Shortcut::retranslate();
+      if (!firstStart && Workspace::currentWorkspace->readOnly()) {
+            changeWorkspace(Workspace::currentWorkspace);
+            }
       }
 
 //---------------------------------------------------------
@@ -1834,6 +1892,22 @@ void MuseScore::dropEvent(QDropEvent* event)
       }
 
 //---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+void MuseScore::changeEvent(QEvent *e)
+      {
+      QMainWindow::changeEvent(e);
+      switch (e->type()) {
+            case QEvent::LanguageChange:
+                  retranslate();
+                  break;
+            default:
+                  break;
+            }
+      }
+
+
+//---------------------------------------------------------
 //   showPageSettings
 //---------------------------------------------------------
 
@@ -2158,7 +2232,6 @@ void MuseScore::removeTab(int i)
 
 void loadTranslation(QString filename, QString localeName)
       {
-      static QList<QTranslator*> translatorList;
       QTranslator* translator = new QTranslator;
       QString userPrefix = dataPath + "/locale/"+ filename +"_";
       QString defaultPrefix = mscoreGlobalShare + "locale/"+ filename +"_";
@@ -2208,9 +2281,7 @@ void loadTranslation(QString filename, QString localeName)
 
 void setMscoreLocale(QString localeName)
       {
-      static QList<QTranslator*> translatorList;
-
-      foreach(QTranslator* t, translatorList) {
+      for(QTranslator* t : translatorList) {
             qApp->removeTranslator(t);
             delete t;
             }

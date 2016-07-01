@@ -285,7 +285,7 @@ add_executable ( ${ExecutableName}
       logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
       toolbarEditor.cpp toolbarEditor.h
-
+      abstractdialog.cpp abstractdialog.h
 
       ${OMR_FILES}
       ${AUDIO}
