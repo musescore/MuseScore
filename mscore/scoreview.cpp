@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2015 Werner Schweer & others
+//  Copyright (C) 2002-2016 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -3614,9 +3614,13 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
                   }
             }
       else {
-            QMenu* popup = mscore->genCreateMenu();
-            _score->setLayoutAll();
-            _score->update();
+            QMenu* popup = new QMenu();
+            popup->addAction(getAction("edit-style"));
+            popup->addAction(getAction("edit-text-style"));          
+            popup->addAction(getAction("page-settings"));         
+            popup->addAction(getAction("load-style"));          
+            _score->setLayoutAll();     
+            _score->update();  
             popup->popup(gp);
             }
       }

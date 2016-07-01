@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -214,17 +214,17 @@ Shortcut Shortcut::_sc[] = {
          Icons::paste_ICON,
          Qt::ApplicationShortcut
          },
-    {
-       MsWidget::SCORE_TAB,
-       STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT
-          | STATE_HARMONY_FIGBASS_EDIT,
-       "swap",
-       QT_TRANSLATE_NOOP("action","Swap with Clipboard"),
-       0,
-       0,
-       Icons::swap_ICON,
-       Qt::ApplicationShortcut
-       },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT
+            | STATE_HARMONY_FIGBASS_EDIT,
+         "swap",
+         QT_TRANSLATE_NOOP("action","Swap with Clipboard"),
+         0,
+         0,
+         Icons::swap_ICON,
+         Qt::ApplicationShortcut
+         },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -426,49 +426,49 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-a",
-         QT_TRANSLATE_NOOP("action","Add A"),
+         QT_TRANSLATE_NOOP("action","Add A to Chord"),
          QT_TRANSLATE_NOOP("action","Add note A to chord")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-b",
-         QT_TRANSLATE_NOOP("action","Add B"),
+         QT_TRANSLATE_NOOP("action","Add B to Chord"),
          QT_TRANSLATE_NOOP("action","Add note B to chord")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-c",
-         QT_TRANSLATE_NOOP("action","Add C"),
+         QT_TRANSLATE_NOOP("action","Add C to Chord"),
          QT_TRANSLATE_NOOP("action","Add note C to chord")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-d",
-         QT_TRANSLATE_NOOP("action","Add D"),
+         QT_TRANSLATE_NOOP("action","Add D to Chord"),
          QT_TRANSLATE_NOOP("action","Add note D to chord")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-e",
-         QT_TRANSLATE_NOOP("action","Add E"),
+         QT_TRANSLATE_NOOP("action","Add E to Chord"),
          QT_TRANSLATE_NOOP("action","Add note E to chord")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-f",
-         QT_TRANSLATE_NOOP("action","Add F"),
+         QT_TRANSLATE_NOOP("action","Add F to Chord"),
          QT_TRANSLATE_NOOP("action","Add note F to chord")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "chord-g",
-         QT_TRANSLATE_NOOP("action","Add G"),
+         QT_TRANSLATE_NOOP("action","Add G to Chord"),
          QT_TRANSLATE_NOOP("action","Add note G to chord")
          },
       {
@@ -610,9 +610,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "reset-beammode",
-         QT_TRANSLATE_NOOP("action","Reset Beam Mode"),
-         QT_TRANSLATE_NOOP("action","Reset beam mode"),
-         QT_TRANSLATE_NOOP("action","Reset beam mode of selected measures"),
+         QT_TRANSLATE_NOOP("action","Reset Beams"),
+         QT_TRANSLATE_NOOP("action","Reset beams"),
+         QT_TRANSLATE_NOOP("action","Reset beams of selected measures"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CMD
@@ -2179,8 +2179,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_EDIT,
          "reset",
-         QT_TRANSLATE_NOOP("action","Reset"),
-         QT_TRANSLATE_NOOP("action","Reset user settings")
+         QT_TRANSLATE_NOOP("action","Reset Shape and Position"),
+         QT_TRANSLATE_NOOP("action","Reset shape and position")
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -2334,7 +2334,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-style",
-         QT_TRANSLATE_NOOP("action","General..."),
+         QT_TRANSLATE_NOOP("action","General Style..."),
          QT_TRANSLATE_NOOP("action","Edit general style"),
          0,
          Icons::Invalid_ICON,
@@ -2344,8 +2344,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-text-style",
-         QT_TRANSLATE_NOOP("action","Text..."),
-         QT_TRANSLATE_NOOP("action","Edit text style"),
+         QT_TRANSLATE_NOOP("action","Text Styles..."),
+         QT_TRANSLATE_NOOP("action","Edit text styles"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
@@ -2477,8 +2477,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_FOTO,
          "fotomode",
-         QT_TRANSLATE_NOOP("action","Toggle Image Capture"),
-         QT_TRANSLATE_NOOP("action","Toggle image capture"),
+         QT_TRANSLATE_NOOP("action","Image Capture"),
+         QT_TRANSLATE_NOOP("action","Image capture"),
          0,
          Icons::fotomode_ICON,
          Qt::WindowShortcut,
@@ -3340,7 +3340,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
          "startcenter",
-         QT_TRANSLATE_NOOP("action","Start Center"),
+         QT_TRANSLATE_NOOP("action","Start Center..."),
          QT_TRANSLATE_NOOP("action","Start center"),
          0,
          Icons::Invalid_ICON,
@@ -3351,8 +3351,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL,
          "edit-toolbars",
-         QT_TRANSLATE_NOOP("action","Edit Toolbars"),
-         QT_TRANSLATE_NOOP("action","Edit toolbars"),
+         QT_TRANSLATE_NOOP("action","Customize Toolbars..."),
+         QT_TRANSLATE_NOOP("action","Customize toolbars"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
