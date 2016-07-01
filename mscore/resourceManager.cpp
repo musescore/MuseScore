@@ -70,7 +70,7 @@ void ResourceManager::displayLanguages()
       languagesTable->verticalHeader()->show();
 
       // move current language to first row
-	QStringList languages = result.object().keys();
+      QStringList languages = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
       int index = languages.indexOf(lang);
       if (index < 0 &&  lang.size() > 2) {
@@ -137,7 +137,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       QString global = mscoreGlobalShare + "locale/" + filename;
       QFileInfo fileLocal(local);
       QFileInfo fileGlobal(global);
-      if(!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()) )
+      if (!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()) )
             local = mscoreGlobalShare + "locale/" + filename;
 
       return verifyFile(local, hash);
@@ -149,7 +149,7 @@ void ResourceManager::download()
       QString data = buttonMap[button];
       QString hash = buttonHashMap[button];
       button->setText(tr("Updating"));
-      button->setDisabled(1);
+      button->setDisabled(true);
       QString baseAddress = baseAddr + data;
       DownloadUtils *dl = new DownloadUtils(this);
       dl->setTarget(baseAddress);
@@ -157,9 +157,9 @@ void ResourceManager::download()
       QString localPath = dataPath + "/locale/" + data.split('/')[1];
       dl->setLocalFile(localPath);
       dl->download();
-      if( !dl->saveFile() || !verifyFile(localPath, hash)) {
+      if (!dl->saveFile() || !verifyFile(localPath, hash)) {
             button->setText(tr("Failed, try again"));
-            button->setEnabled(1);
+            button->setEnabled(true);
             }
       else {
             // unzip and delete
@@ -168,7 +168,7 @@ void ResourceManager::download()
             QString destinationDir(zfi.absolutePath());
             QList<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
             bool result = true;
-            foreach (MQZipReader::FileInfo fi, allFiles) {
+            for (MQZipReader::FileInfo fi : allFiles) {
                   const QString absPath = destinationDir + QDir::separator() + fi.filePath;
                   if (fi.isFile) {
                         QFile f(absPath);
@@ -185,10 +185,12 @@ void ResourceManager::download()
             if (result) {
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
+                  if (data == buttonMap.first())
+                        mscore->restartAfterSettingsChange();
                   }
             else {
                   button->setText(tr("Failed, try again"));
-                  button->setEnabled(1);
+                  button->setEnabled(true);
                   }
             }
       }
@@ -198,11 +200,11 @@ bool ResourceManager::verifyFile(QString path, QString hash)
       {
       QFile file(path);
       QCryptographicHash localHash(QCryptographicHash::Sha1);
-      if(file.open(QIODevice::ReadOnly)) {
+      if (file.open(QIODevice::ReadOnly)) {
             localHash.reset();
             localHash.addData(file.readAll());
             QString hashValue2 = QString(localHash.result().toHex());
-            if(hash == hashValue2)
+            if (hash == hashValue2)
                   return true;
             }
       return false;

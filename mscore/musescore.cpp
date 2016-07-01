@@ -1195,6 +1195,7 @@ MuseScore::MuseScore()
       menuHelp->addAction(getAction("resource-manager"));
       menuHelp->addSeparator();
       menuHelp->addAction(tr("Revert to Factory Settings"), this, SLOT(resetAndRestart()));
+      menuHelp->addAction(tr("Restart MuseScore"), this, SLOT(restart()));
 
       //accessibility for menus
       foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
@@ -1337,6 +1338,29 @@ void MuseScore::resetAndRestart()
              QStringList args("-F");
              QProcess::startDetached(qApp->arguments()[0], args);
              }
+      }
+
+//---------------------------------------------------------
+//   restartAfterSettingsChange
+//---------------------------------------------------------
+
+void MuseScore::restartAfterSettingsChange()
+      {
+      int ret = QMessageBox::question(0, tr("Are you sure?"),
+                  tr("You have changed settings that require a restart of MuseScore in order to take effect\n"
+                   "Do you want to restart MuseScore now?"),
+                   QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+      if (ret == QMessageBox::Yes )
+            restart();
+      }
+//---------------------------------------------------------
+//   restart
+//---------------------------------------------------------
+
+void MuseScore::restart()
+      {
+      close();
+      QProcess::startDetached(qApp->arguments()[0]);
       }
 
 //---------------------------------------------------------

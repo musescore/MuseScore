@@ -435,6 +435,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void autoSaveTimerTimeout();
       void helpBrowser1() const;
       void resetAndRestart();
+      void restart();
       void about();
       void aboutQt();
       void aboutMusicXML();
@@ -718,6 +719,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; };
       void populateNoteInputMenu();
+      void restartAfterSettingsChange();
       };
 
 extern MuseScore* mscore;
