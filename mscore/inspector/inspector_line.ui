@@ -259,7 +259,7 @@
      <item row="7" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Dash gap length</string>
+        <string>Dash gap width</string>
        </property>
       </widget>
      </item>
@@ -321,7 +321,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Line style' value</string>
+        <string>Reset 'Dash line length' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -338,7 +338,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Line style' value</string>
+        <string>Reset 'Dash gap width' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
