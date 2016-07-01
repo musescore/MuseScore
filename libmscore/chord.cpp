@@ -3237,7 +3237,7 @@ Shape Chord::shape() const
       {
       Shape shape;
       processSiblings([&shape, this] (Element* e) {
-//            if (!(e->isStem() && beam()))
+            if (!e->isLedgerLine())             // dont add ledger lines to shape
                   shape.add(e->shape());
             });
       shape.add(ChordRest::shape());      // add articulation + lyrics

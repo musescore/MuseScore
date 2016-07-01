@@ -94,6 +94,7 @@ class DurationElement;
 class Accidental;
 class TextLine;
 class Pedal;
+class LedgerLine;
 
 enum class SymId;
 
@@ -706,6 +707,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(TextLine,      TEXTLINE)
       CONVERT(Pedal,         PEDAL)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
+      CONVERT(LedgerLine,    LEDGER_LINE)
 #undef CONVERT
       };
 
@@ -791,6 +793,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(TextLine,     TEXTLINE)
       CONVERT(Pedal,         PEDAL)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
+      CONVERT(LedgerLine,    LEDGER_LINE)
 #undef CONVERT
 
 //---------------------------------------------------------

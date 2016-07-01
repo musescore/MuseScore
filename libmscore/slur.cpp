@@ -1461,8 +1461,8 @@ void Slur::layoutSystem(System* system)
                               _up = true;
                               break;
                               }
-                        Chord* c1   = startCR()->isChord() ? toChord(startCR()) : 0;
-                        Chord* c2   = endCR()->isChord()   ? toChord(endCR())   : 0;
+                        Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
+                        Chord* c2 = endCR()->isChord()   ? toChord(endCR())   : 0;
 
                         _up = !(startCR()->up());
 
