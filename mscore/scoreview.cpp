@@ -2018,115 +2018,107 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.setBrush(QBrush(Qt::NoBrush));
             p.drawRect(r);
             }
+      // Begin drawing range based annotations
       if(_score->isAnnotation()) {
+            for (const RangeAnnotation* rangeAnn : _score->rangeAnnotations ) {
+                  Segment* rss = rangeAnn->startSegment();
+                  Segment* res = rangeAnn->endSegment();
+                  if (!rss)
+                        return;
 
-            Segment* rss = _score->tick2segment(0);
-            Segment* res = _score->tick2segment(3840);
-
-          if (!rss)
-                return;
-
-          if (!rss->measure()->system()) {
+                  if (!rss->measure()->system()) {
                 // segment is in a measure that has not been laid out yet
                 // this can happen in mmrests
                 // first chordrest segment of mmrest instead
-                const Measure* mmr = rss->measure()->mmRest1();
-                if (mmr && mmr->system())
-                      rss = mmr->first(Segment::Type::ChordRest);
-                else
-                      return;                 // still no system?
-                if (!rss)
-                      return;                 // no chordrest segment?
-                }
+                        const Measure* mmr = rss->measure()->mmRest1();
+                        if (mmr && mmr->system())
+                              rss = mmr->first(Segment::Type::ChordRest);
+                        else
+                              return;                 // still no system?
+                        if (!rss)
+                              return;                 // no chordrest segment?
+                        }
+                  p.setBrush(Qt::NoBrush);
+                  QPen pen;
+                  pen.setColor(MScore::selectColor[2]);
+                  pen.setWidthF(2.0 / p.matrix().m11());
+                  pen.setStyle(Qt::SolidLine);
+                  p.setPen(pen);
+                  double _spatium = score()->spatium();
+                  double x2      = rss->pagePos().x() - _spatium;
+                  int staffStart = 0;
+                  int staffEnd   = 1;
 
-          p.setBrush(Qt::NoBrush);
+                  System* system2 = rss->measure()->system();
+                  QPointF pt      = rss->pagePos();
+                  double y        = pt.y();
+                  SysStaff* ss1   = system2->staff(staffStart);
 
-          QPen pen;
-          pen.setColor(MScore::selectColor[2]);
-          pen.setWidthF(2.0 / p.matrix().m11());
+                  // find last visible staff:
+                  int lastStaff = 0;
+                  for (int i = staffEnd-1; i >= 0; --i) {
+                        if (score()->staff(i)->show()) {
+                              lastStaff = i;
+                              break;
+                              }
+                        }
+                  SysStaff* ss2 = system2->staff(lastStaff);
 
-          pen.setStyle(Qt::SolidLine);
+                  double y1 = ss1->y() - 2 * score()->staff(staffStart)->spatium() + y;
+                  double y2 = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium() + y;
+                  System* system1 = system2;
+                  double x1;
 
-          p.setPen(pen);
-          double _spatium = score()->spatium();
-          double x2      = rss->pagePos().x() - _spatium;
-          int staffStart = 0;
-          int staffEnd   = 1;
+                  for (Segment* s = rss; s && (s != res); ) {
+                        Segment* ns = s->next1MM();
+                        system1  = system2;
+                        system2  = s->measure()->system();
+                        if (!system2) {
+                              // as before, use mmrest if necessary
+                              const Measure* mmr = s->measure()->mmRest1();
+                              if (mmr)
+                                    system2 = mmr->system();
+                              if (!system2)
+                                    break;
+                              // extend rectangle to end of mmrest
+                              pt = mmr->last()->pagePos();
+                              }
+                        else
+                              pt = s->pagePos();
+                        x1  = x2;
+                        x2  = pt.x() + _spatium * 2;
 
-          System* system2 = rss->measure()->system();
-          QPointF pt      = rss->pagePos();
-          double y        = pt.y();
-          SysStaff* ss1   = system2->staff(staffStart);
+                        if (ns == 0 || ns == res) {    // last segment?
+                              // if any staff in selection has measure rest or repeat measure in last measure,
+                              // extend rectangle to bar line
+                              Segment* fs = s->measure()->first(Segment::Type::ChordRest);
+                              for (int i = staffStart; i < staffEnd; ++i) {
+                                    if (!score()->staff(i)->show())
+                                          continue;
+                                    ChordRest* cr = static_cast<ChordRest*>(fs->element(i * VOICES));
+                                    if (cr && (cr->type() == Element::Type::REPEAT_MEASURE || cr->durationType() == TDuration::DurationType::V_MEASURE)) {
+                                          x2 = s->measure()->abbox().right() - _spatium * 0.5;
+                                          break;
+                                          }
+                                    }
+                              }
 
-          // find last visible staff:
-          int lastStaff = 0;
-          for (int i = staffEnd-1; i >= 0; --i) {
-                if (score()->staff(i)->show()) {
-                      lastStaff = i;
-                      break;
-                      }
-                }
-          SysStaff* ss2 = system2->staff(lastStaff);
-
-          double y1 = ss1->y() - 2 * score()->staff(staffStart)->spatium() + y;
-          double y2 = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium() + y;
-
-          // drag vertical start line
-          p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
-
-          System* system1 = system2;
-          double x1;
-
-          for (Segment* s = rss; s && (s != res); ) {
-                Segment* ns = s->next1MM();
-                system1  = system2;
-                system2  = s->measure()->system();
-                if (!system2) {
-                      // as before, use mmrest if necessary
-                      const Measure* mmr = s->measure()->mmRest1();
-                      if (mmr)
-                            system2 = mmr->system();
-                      if (!system2)
-                            break;
-                      // extend rectangle to end of mmrest
-                      pt = mmr->last()->pagePos();
-                      }
-                else
-                      pt = s->pagePos();
-                x1  = x2;
-                x2  = pt.x() + _spatium * 2;
-
-                if (ns == 0 || ns == res) {    // last segment?
-                      // if any staff in selection has measure rest or repeat measure in last measure,
-                      // extend rectangle to bar line
-                      Segment* fs = s->measure()->first(Segment::Type::ChordRest);
-                      for (int i = staffStart; i < staffEnd; ++i) {
-                            if (!score()->staff(i)->show())
-                                  continue;
-                            ChordRest* cr = static_cast<ChordRest*>(fs->element(i * VOICES));
-                            if (cr && (cr->type() == Element::Type::REPEAT_MEASURE || cr->durationType() == TDuration::DurationType::V_MEASURE)) {
-                                  x2 = s->measure()->abbox().right() - _spatium * 0.5;
-                                  break;
-                                  }
-                            }
-                      }
-
-                if (system2 != system1)
-                      x1  = x2 - 2 * _spatium;
-                y   = pt.y();
-                ss1 = system2->staff(staffStart);
-                ss2 = system2->staff(lastStaff);
-                y1  = ss1->y() - 2 * score()->staff(staffStart)->spatium() + y;
-                y2  = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium() + y;
-                p.drawLine(QLineF(x1, y1, x2, y1).translated(system2->page()->pos()));
-                p.drawLine(QLineF(x1, y2, x2, y2).translated(system2->page()->pos()));
-                s = ns;
-                }
-          //
-          // draw vertical end line
-          //
-          p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
-      }
+                        if (system2 != system1)
+                              x1  = x2 - 2 * _spatium;
+                        y   = pt.y();
+                        ss1 = system2->staff(staffStart);
+                        ss2 = system2->staff(lastStaff);
+                        y1  = ss1->y() - 2 * score()->staff(staffStart)->spatium() + y;
+                        y2  = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium() + y;
+                        QRectF rangeRect = QRectF(x1, y1, x2-x1, y2-y1);
+                        p.setOpacity(0.4);
+                        p.setBackgroundMode(Qt::OpaqueMode);
+                        p.fillRect(rangeRect, Qt::yellow );
+                        s = ns;
+                        }
+                  }
+            }
+      // End drawing range based annotations
       const Selection& sel = _score->selection();
       if (sel.isRange()) {
             Segment* ss = sel.startSegment();
@@ -5563,7 +5555,7 @@ void ScoreView::cmdAddAnnotation()
             sm->postEvent(new CommandEvent("note-input"));
 
       _score->startCmd();
-      ChordRest* cr = _score->getSelectedChordRest();
+        ChordRest* cr = _score->getSelectedChordRest();
       if (!cr)
             return;
 
@@ -5594,6 +5586,8 @@ void ScoreView::cmdAddRangeAnnotation()
             sm->postEvent(new CommandEvent("note-input"));
 
       _score->startCmd();
+      Selection selection = _score->selection();
+      if (selection.isSingle()) {
       ChordRest* cr = _score->getSelectedChordRest();
       if (!cr)
             return;
@@ -5601,7 +5595,18 @@ void ScoreView::cmdAddRangeAnnotation()
       range->setRange(cr->segment(),cr->segment()->next()->next(),1,3);
       _score->setAnnotation();
       _score->endCmd();
-
+      }
+      else if (selection.isRange()) {
+            RangeAnnotation* range = new RangeAnnotation();
+            Segment* startSegment = selection.startSegment();
+            Segment* endSegment = selection.endSegment();
+            int staffStart = selection.staffStart();
+            int staffEnd = selection.staffEnd();
+            range->setRange(startSegment, endSegment, staffStart, staffEnd);
+            _score->addRangeAnnotation(range);
+            _score->setAnnotation();
+            _score->endCmd();
+        }
       }
 
 //---------------------------------------------------------
