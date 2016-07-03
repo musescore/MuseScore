@@ -205,14 +205,22 @@ void Beam::draw(QPainter* painter) const
       {
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * staff()->mag();
       for (const QLineF* bs : beamSegments) {
-            QPolygonF pg;
-               pg << QPointF(bs->x1(), bs->y1()-lw2)
-                  << QPointF(bs->x2(), bs->y2()-lw2)
-                  << QPointF(bs->x2(), bs->y2()+lw2)
-                  << QPointF(bs->x1(), bs->y1()+lw2);
-            painter->drawPolygon(pg, Qt::OddEvenFill);
+            // make beam thickness independent of slant
+            // (expression can be simplified?)
+            double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
+            double w  = atan(d);
+            double ww = lw2 / sin(M_PI_2 - w);
+
+            painter->drawPolygon(
+               QPolygonF({
+                  QPointF(bs->x1(), bs->y1() - ww),
+                  QPointF(bs->x2(), bs->y2() - ww),
+                  QPointF(bs->x2(), bs->y2() + ww),
+                  QPointF(bs->x1(), bs->y1() + ww),
+                  }),
+               Qt::OddEvenFill);
             }
       }
 
