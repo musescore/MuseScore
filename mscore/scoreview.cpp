@@ -5592,7 +5592,7 @@ void ScoreView::cmdAddRangeAnnotation()
       if (!cr)
             return;
       RangeAnnotation* range = new RangeAnnotation();
-      range->setRange(cr->segment(),cr->segment()->next()->next(),1,3);
+      range->setRange(cr->segment(), _score->tick2segment(cr->segment()->tick() + 480), selection.staffStart(), selection.staffEnd());
       _score->setAnnotation();
       _score->endCmd();
       }
