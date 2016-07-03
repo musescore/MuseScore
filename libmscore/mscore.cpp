@@ -107,7 +107,7 @@ QString MScore::lastError;
 // This number is arbitrarily high because tests show it is
 // fairly stable with unusual tuplets, but later if ticks distanced
 // further from libmscore for safer tuplet support, this can be reduced
-int     MScore::division    = 65536;
+int     MScore::division    = 4096;
 
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;
