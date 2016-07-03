@@ -134,12 +134,12 @@ add_library(poppler STATIC
    )
 
 if (APPLE)
-   set ( POPPLER_COMPILE_FLAGS "-O2 -Wno-unknown-warning-option -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field -Wno-return-stack-address -Wno-shift-negative-value")
+   set ( POPPLER_COMPILE_FLAGS "-O2 -Wno-unknown-warning-option -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field -Wno-return-stack-address -Wno-shift-negative-value -std=c++11")
 else (APPLE)
    if (MINGW)
-      set (POPPLER_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format")
+      set (POPPLER_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format -std=c++11")
    else (MINGW)
-      set (POPPLER_COMPILE_FLAGS "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable")
+      set (POPPLER_COMPILE_FLAGS "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -std=c++11")
    endif(MINGW)
 endif(APPLE)
 
