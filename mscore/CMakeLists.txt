@@ -286,6 +286,7 @@ add_executable ( ${ExecutableName}
       help.cpp help.h
       toolbarEditor.cpp toolbarEditor.h
       abstractdialog.cpp abstractdialog.h
+      toolbuttonmenu.cpp
 
       ${OMR_FILES}
       ${AUDIO}
