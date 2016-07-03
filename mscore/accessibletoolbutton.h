@@ -1,4 +1,7 @@
 
+#ifndef __ACCESSIBLETOOLBUTTON_H__
+#define __ACCESSIBLETOOLBUTTON_H__
+
 namespace Ms {
 
 /*
@@ -14,3 +17,5 @@ public:
       };
 
 }
+
+#endif // __ACCESSIBLETOOLBUTTON_H__
