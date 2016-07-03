@@ -1258,8 +1258,8 @@ void MuseScore::retranslate(bool firstStart)
       menuAddFrames->setTitle(tr("&Frames"));
       menuAddText->setTitle(tr("&Text"));
       menuAddLines->setTitle(tr("&Lines"));
-      menuAddPitch->setTitle(tr("N&ote"));
-      menuAddInterval->setTitle(tr("Add &Interval"));
+      menuAddPitch->setTitle(tr("N&otes"));
+      menuAddInterval->setTitle(tr("&Intervals"));
       menuTuplet->setTitle(tr("T&uplets"));
       menuFormat->setTitle(tr("&Format"));
       menuTools->setTitle(tr("&Tools"));
