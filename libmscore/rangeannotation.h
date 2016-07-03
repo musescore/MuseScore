@@ -20,7 +20,6 @@ class RangeAnnotation : public Text {
       Score* _score;
       int _staffStart;
       int _staffEnd;
-      int _isAnnotation = 0;
       Segment* _startSegment;
       Segment* _endSegment;
 
