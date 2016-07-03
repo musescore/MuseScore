@@ -252,7 +252,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* aboutAction;
       QAction* aboutQtAction;
       QAction* aboutMusicXMLAction;
-      QAction* checkForUpdateAction;
+      QAction* checkForUpdateAction        { 0 };
       QAction* askForHelpAction;
       QAction* reportBugAction;
       QAction* revertToFactoryAction;
@@ -283,7 +283,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuEditMeasure;
       QMenu* menuView;
       QMenu* menuWorkspaces;
-      
+
       QMenu* menuAdd;
       QMenu* menuAddMeasures;
       QMenu* menuAddFrames;
@@ -292,11 +292,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuAddPitch;
       QMenu* menuAddInterval;
       QMenu* menuTuplet;
-      
+
       QMenu* menuFormat;
       QMenu* menuTools;
       QMenu* menuVoices;
-      
+
       QMenu* menuPlugins;
       QMenu* menuHelp;
       AlbumManager* albumManager           { 0 };
@@ -327,7 +327,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteBox* paletteBox         { 0 };
       Inspector* _inspector          { 0 };
       OmrPanel* omrPanel             { 0 };
-      
+
       QPushButton* showMidiImportButton {0};
 
       bool _midiinEnabled            { true };
