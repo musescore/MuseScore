@@ -102,6 +102,7 @@
 #include "fluid/fluid.h"
 #include "qmlplugin.h"
 #include "accessibletoolbutton.h"
+#include "toolbuttonmenu.h"
 #include "searchComboBox.h"
 #include "startcenter.h"
 #include "help.h"
@@ -167,7 +168,6 @@ const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
 const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
             "note-input",
-            "repitch",
             "pad-note-128",
             "pad-note-64",
             "pad-note-32",
@@ -201,7 +201,6 @@ const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
 
 const std::list<const char*> MuseScore::_advancedNoteInputMenuEntries {
             "note-input",
-            "repitch",
             "pad-note-128",
             "pad-note-64",
             "pad-note-32",
@@ -465,7 +464,28 @@ void MuseScore::populateNoteInputMenu()
                   entryTools->addSeparator();
             else {
                   QAction* a = getAction(s);
-                  if (strncmp(s, "voice-", 6) == 0) {
+                  if (strcmp(s, "note-input") == 0) {
+                        //-----------------------------------------------------------------
+                        // Note Entry Modes menu
+                        // ToolButtonMenu to swap between Note Entry Methods
+                        //-----------------------------------------------------------------
+                        QActionGroup* noteEntryMethods = new QActionGroup(entryTools);
+
+                        noteEntryMethods->addAction(getAction("note-input-steptime"));
+                        noteEntryMethods->addAction(getAction("note-input-repitch"));
+                        noteEntryMethods->addAction(getAction("note-input-rhythm"));
+                        noteEntryMethods->addAction(getAction("note-input-realtime-auto"));
+                        noteEntryMethods->addAction(getAction("note-input-realtime-manual"));
+
+                        ToolButtonMenu* noteInputModes = new ToolButtonMenu(tr("Note Entry Methods"),
+                                                                            ToolButtonMenu::TYPES::ICON_CHANGED,
+                                                                            getAction("note-input"),
+                                                                            noteEntryMethods,
+                                                                            this);
+
+                        entryTools->addWidget(noteInputModes);
+                        }
+                  else if (strncmp(s, "voice-", 6) == 0) {
 //                        QButton* tb = new QToolButton(this);
                         AccessibleToolButton* tb = new AccessibleToolButton(this, a);
                         tb->setFocusPolicy(Qt::ClickFocus);
