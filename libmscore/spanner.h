@@ -59,6 +59,8 @@ class SpannerSegment : public Element {
       SpannerSegmentType spannerSegmentType() const    { return _spannerSegmentType;            }
       bool isSingleType() const                        { return spannerSegmentType() == SpannerSegmentType::SINGLE; }
       bool isBeginType() const                         { return spannerSegmentType() == SpannerSegmentType::BEGIN;  }
+      bool isSingleBeginType() const                   { return isSingleType() || isBeginType(); }
+      bool isSingleEndType() const                     { return isSingleType() || isEndType(); }
       bool isMiddleType() const                        { return spannerSegmentType() == SpannerSegmentType::MIDDLE; }
       bool isEndType() const                           { return spannerSegmentType() == SpannerSegmentType::END;    }
 
