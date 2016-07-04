@@ -42,6 +42,6 @@ If S(I(i,j)) is larger than 0, we say at position (i,j) there's a symbols candid
 [Screenshots of some results](https://musescore.org/en/node/110306#comment-500796)
 
 ###Todo
-* Add robust note detector to impose negative constraints for bar line identification. (see [here](https://github.com/liang-chen/MuseScore/blob/omr/omr/omrpage.cpp#L288))
+* Add robust note detector to impose negative constraints for bar line identification. (see [here](https://github.com/musescore/MuseScore/blob/master/omr/omrpage.cpp#L292))
 * Fix staff detection for vector graphs
 * Optimize OMR performance and add clef/key recognitions
