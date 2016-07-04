@@ -4948,7 +4948,7 @@ void ExportMusicXml::write(QIODevice* dev)
       bool concertPitch = score()->styleB(StyleIdx::concertPitch);
       if (concertPitch) {
             score()->startCmd();
-            score()->undo(new ChangeConcertPitch(score(), false));
+            score()->undo(new ChangeStyleVal(score(), StyleIdx::concertPitch, false));
             score()->doLayout();    // this is only allowed in a cmd context to not corrupt the undo/redo stack
             }
 
