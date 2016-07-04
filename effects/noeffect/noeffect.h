@@ -33,7 +33,7 @@ class NoEffect : public Effect
       virtual void init(float) override {}
       virtual void process(int, float*, float*) override;
 
-      virtual void setValue(int, double) override {}
+//      virtual void setValue(int, double) override {}
       virtual void setNValue(int, double) override {}
       virtual double value(int) const override { return 0.0; }
       virtual double nvalue(int) const override { return 0.0; }

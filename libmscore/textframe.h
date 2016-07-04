@@ -35,6 +35,7 @@ class TBox : public VBox {
       virtual TBox* clone() const        { return new TBox(*this); }
       virtual Element::Type type() const { return Element::Type::TBOX;       }
       virtual void write(Xml&) const override;
+      using VBox::write;
       virtual void read(XmlReader&) override;
       virtual Element* drop(const DropData&) override;
       virtual void add(Element* e) override;
