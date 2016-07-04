@@ -216,7 +216,7 @@ bool Omr::omrActions(int &ID, int page)
             //load one page and rescale
             _pages[page]->read();
 
-            //do the rescaling of image here
+            //do the rescaling here
             int new_w = _pages[page]->image().width() * _spatium/_pages[page]->spatium();
             int new_h = _pages[page]->image().height() * _spatium/_pages[page]->spatium();
             QImage image = _pages[page]->image().scaled(new_w,new_h, Qt::KeepAspectRatio);
