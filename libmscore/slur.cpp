@@ -218,6 +218,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
                         }
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick(static_cast<Chord*>(element)->tick());
+                        spanner()->setTick2(spanner()->endElement()->tick());
                         spanner()->setTrack(element->track());
                         break;
                   case Spanner::Anchor::SEGMENT:
