@@ -547,20 +547,6 @@ class RemoveElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeConcertPitch
-//---------------------------------------------------------
-
-class ChangeConcertPitch : public UndoCommand {
-      Score* score;
-      bool val;
-      void flip();
-
-   public:
-      ChangeConcertPitch(Score* s, bool val);
-      UNDO_NAME("ChangeConcertPitch")
-      };
-
-//---------------------------------------------------------
 //   EditText
 //---------------------------------------------------------
 

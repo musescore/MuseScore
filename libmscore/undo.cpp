@@ -1620,28 +1620,6 @@ const char* RemoveElement::name() const
       }
 
 //---------------------------------------------------------
-//   ChangeConcertPitch
-//---------------------------------------------------------
-
-ChangeConcertPitch::ChangeConcertPitch(Score* s, bool v)
-      {
-      score = s;
-      val   = v;
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeConcertPitch::flip()
-      {
-      int oval = int(score->styleB(StyleIdx::concertPitch));
-      score->style()->set(StyleIdx::concertPitch, val);
-      score->setLayoutAll();
-      val = oval;
-      }
-
-//---------------------------------------------------------
 //   InsertPart
 //---------------------------------------------------------
 

@@ -741,7 +741,9 @@ MuseScore::MuseScore()
 
       cpitchTools = addToolBar("");
       cpitchTools->setObjectName("pitch-tools");
-      cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
+      a = getAction("concert-pitch");
+      a->setCheckable(true);
+      cpitchTools->addWidget(new AccessibleToolButton(cpitchTools, a));
 
       //-------------------------------
       //    Image Capture Tool Bar
@@ -1287,9 +1289,9 @@ void MuseScore::retranslate(bool firstStart)
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::PAGE)), tr("Page View"));
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::LINE)), tr("Continuous View"));
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::SYSTEM)), tr("Single Page"));
-      
+
       showMidiImportButton->setText(tr("Show MIDI import panel"));
-      
+
       Shortcut::retranslate();
       if (!firstStart && Workspace::currentWorkspace->readOnly()) {
             changeWorkspace(Workspace::currentWorkspace);

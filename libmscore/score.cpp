@@ -2314,7 +2314,7 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       {
-      undo(new ChangeConcertPitch(this, flag));       // change style flag
+      undo(new ChangeStyleVal(this, StyleIdx::concertPitch, flag));       // change style flag
 
       for (Staff* staff : _staves) {
             if (staff->staffType()->group() == StaffGroup::PERCUSSION)
@@ -2337,7 +2337,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                   if (!flag)
                         interval.flip();
                   for (Element* e : segment->annotations()) {
-                        if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                        if (!e->isHarmony() || (e->track() < startTrack) || (e->track() >= endTrack))
                               continue;
                         Harmony* h  = toHarmony(e);
                         int rootTpc = transposeTpc(h->rootTpc(), interval, true);
