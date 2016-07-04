@@ -2391,7 +2391,7 @@ void Score::cmd(const QAction* a)
             changeAccidental(AccidentalType::FLAT);
       else if (cmd == "flat2")
             changeAccidental(AccidentalType::FLAT2);
-      else if (cmd == "repitch")
+      else if (cmd == "note-input-repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")
             cmdFlip();
