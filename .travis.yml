@@ -112,18 +112,18 @@ matrix:
       script:
         - "./build/travis/job_macos/script.sh"
 
-
 notifications:
-  recipients:
-    - $NOTIFICATION_EMAIL
   email:
+    recipients:
+      - "build@musescore.org"
     on_success: change
     on_failure: always
   irc:
     channels:
-      - $NOTIFICATION_IRC
+      - "chat.freenode.net#musescore"
     on_success: change
     on_failure: change
+    skip_join: true # reduces spam. Channel must not have mode +n set.
   webhooks:
     # trigger Buildtime Trend Service to parse Travis CI log
     - https://buildtimetrend.herokuapp.com/travis
