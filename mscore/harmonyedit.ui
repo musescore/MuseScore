@@ -76,12 +76,12 @@
        </property>
        <widget class="QWidget" name="tab1">
         <attribute name="title">
-         <string>Tab 1</string>
+         <string notr="true">Tab 1</string>
         </attribute>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>Tab 2</string>
+         <string notr="true">Tab 2</string>
         </attribute>
        </widget>
       </widget>

@@ -33,7 +33,7 @@
        </size>
       </property>
       <attribute name="title">
-       <string>Tab 1</string>
+       <string>Languages</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -99,9 +99,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="plugins">
       <attribute name="title">
-       <string>Tab 2</string>
+       <string>Plugins</string>
       </attribute>
       <widget class="QTextBrowser" name="textBrowser">
        <property name="geometry">
