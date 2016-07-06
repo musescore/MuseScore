@@ -75,7 +75,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>001.01</string>
+             <string notr="true">001.01</string>
             </property>
             <property name="textFormat">
              <enum>Qt::PlainText</enum>
@@ -115,7 +115,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>0:00:00</string>
+             <string notr="true">0:00:00</string>
             </property>
             <property name="textFormat">
              <enum>Qt::PlainText</enum>
@@ -447,7 +447,7 @@
         <number>2</number>
        </property>
        <property name="text">
-        <string>120BPM</string>
+        <string notr="true">120 BPM</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

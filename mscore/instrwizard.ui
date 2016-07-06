@@ -54,7 +54,7 @@
        </attribute>
        <column>
         <property name="text">
-         <string>0</string>
+         <string notr="true">0</string>
         </property>
        </column>
       </widget>
