@@ -1463,6 +1463,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               yOffset -= qreal(lineOffset + stepOffset);
                               yOffset *= score_->spatium()/2.0;
                               cr->setUserYoffset(yOffset);
+                              cr->setAutoplace(false);
                               }
                         }
                   }

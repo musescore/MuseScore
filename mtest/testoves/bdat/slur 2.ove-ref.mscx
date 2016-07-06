@@ -111,7 +111,7 @@
           </Rest>
         <Slur id="2">
           <track>0</track>
-          <up>1</up>
+          <slurDirection>up</slurDirection>
           </Slur>
         <Chord>
           <BeamMode>no</BeamMode>
