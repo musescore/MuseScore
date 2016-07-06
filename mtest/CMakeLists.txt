@@ -167,9 +167,9 @@ subdirs (
         libmscore/clef_courtesy
         libmscore/concertpitch
         libmscore/copypaste
-        libmscore/copypastesymbollist # FAIL
+        libmscore/copypastesymbollist
         libmscore/dynamic
-#        libmscore/earlymusic          # FAIL
+        libmscore/earlymusic
         libmscore/element
         libmscore/hairpin
         libmscore/instrumentchange
@@ -178,10 +178,9 @@ subdirs (
         libmscore/layout
         libmscore/parts
         libmscore/measure
-        libmscore/midi
-#        libmscore/midimapping         # FAIL
+        libmscore/midi                 # one disabled
+        libmscore/midimapping
         libmscore/note
-#        libmscore/plugins
         libmscore/repeat
         libmscore/selectionfilter
         libmscore/selectionrangedelete
@@ -194,12 +193,12 @@ subdirs (
         libmscore/tuplet
         libmscore/text
         importmidi
-#ws        capella
+        capella
         biab
         musicxml
-#ws        guitarpro
-#        scripting
-#ws        testoves
+        guitarpro
+        scripting
+        testoves
         )
 
 
