@@ -91,7 +91,7 @@ void TestEarlymusic::earlymusic01()
 
       // UNDO AND VERIFY
       score->undoStack()->undo();
-//      score->doLayout();
+      score->doLayout();
       QVERIFY(chord->crossMeasure() == CrossMeasure::UNKNOWN);
       cmDur = chord->crossMeasureDurationType();
 //      QVERIFY(cmDur.type() == TDuration::DurationType::V_LONG);    // irrelevant if crossMeasure() == UNKNOWN
