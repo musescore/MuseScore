@@ -1,11 +1,9 @@
 import QtQuick 2.0
 import MuseScore 1.0
-import MuseScore 1.0 as Ms
 
 MuseScore {
       onRun: {
             var seg = curScore.firstSegment();
-            curScore.startCmd();
             while (seg) {
                   for (var i = seg.annotations.length; i--; ) {
                         if (seg.annotations[i].type === Element.STAFF_TEXT) {
@@ -19,7 +17,6 @@ MuseScore {
                   }
                   seg = seg.next;
             }
-            curScore.endCmd();
             Qt.quit();
             }
       }

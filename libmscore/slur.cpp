@@ -1152,7 +1152,7 @@ bool SlurTie::readProperties(XmlReader& e)
             segment->read(e);
             add(segment);
             }
-      else if (tag == "up")
+      else if (tag == "up") //obsolete
             _slurDirection = Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();

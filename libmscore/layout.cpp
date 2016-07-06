@@ -1738,6 +1738,8 @@ void Score::layoutFingering(Fingering* f)
             x -= spatium();
             }
       f->setUserOff(QPointF(x, y));
+      if (x != 0 && y != 0)
+            f->setAutoplace(false);
       }
 
 //---------------------------------------------------------
