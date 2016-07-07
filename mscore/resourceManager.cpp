@@ -38,14 +38,11 @@ ResourceManager::ResourceManager(QWidget *parent) :
 
 void ResourceManager::displayPlugins()
       {
-      tabs->setTabText(1, "Plugins");
       textBrowser->setText("hello");
       }
 
 void ResourceManager::displayLanguages()
       {
-      tabs->setTabText(0,tr("Languages"));
-      
       // Download details.json
       DownloadUtils *js = new DownloadUtils(this);
       js->setTarget(baseAddr + "languages/details.json");
