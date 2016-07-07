@@ -1275,18 +1275,6 @@ QString Segment::accessibleExtraInfo() const
       return rez + " " + startSpanners + " " + endSpanners;
       }
 
-//--------------------------------------------------------
-//   qmlAnnotations
-//--------------------------------------------------------
-
-QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
-      {
-      QList<Element*> qmlAnnotations;
-      for (Element* e : _annotations)
-            qmlAnnotations.append(e);
-      return QQmlListProperty<Ms::Element>(this, qmlAnnotations);
-      }
-
 //---------------------------------------------------------
 //   createShapes
 //---------------------------------------------------------
