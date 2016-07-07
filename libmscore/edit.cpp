@@ -2171,7 +2171,7 @@ void Score::cmdDeleteSelectedMeasures()
                         for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
                               KeySigEvent nkse = lastDeletedKeySigEvent;
                               if (transposeKeySigEvent) {
-                                    Interval v = staff(staffIdx)->part()->instrument(0)->transpose();
+                                    Interval v = score->staff(staffIdx)->part()->instrument(0)->transpose();
                                     v.flip();
                                     nkse.setKey(transposeKey(nkse.key(), v));
                                     }
