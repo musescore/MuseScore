@@ -559,7 +559,7 @@
             <string>4</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>8</lid>
           <track>1</track>
@@ -615,7 +615,7 @@
             <string>3</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>19</lid>
           <track>5</track>
@@ -671,7 +671,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>29</lid>
           <track>9</track>
@@ -727,7 +727,7 @@
             <string>1</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>39</lid>
           <track>13</track>
@@ -781,7 +781,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>49</lid>
           <track>17</track>
@@ -971,7 +971,7 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>8</lid>
             <track>1</track>
@@ -1011,7 +1011,7 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>8</lid>
             <track>5</track>
@@ -1203,7 +1203,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>19</lid>
             <track>1</track>
@@ -1243,7 +1243,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>19</lid>
             <track>5</track>
@@ -1435,7 +1435,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>29</lid>
             <track>1</track>
@@ -1475,7 +1475,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>29</lid>
             <track>5</track>
@@ -1667,7 +1667,7 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>39</lid>
             <track>1</track>
@@ -1707,7 +1707,7 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>39</lid>
             <track>5</track>
@@ -2042,7 +2042,7 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>49</lid>
             <track>1</track>
