@@ -197,7 +197,7 @@ subdirs (
         biab
         musicxml
 #        guitarpro
-#        scripting
+        scripting
 #        testoves
         )
 
