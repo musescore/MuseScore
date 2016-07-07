@@ -129,7 +129,7 @@
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -177,7 +177,7 @@
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -204,7 +204,7 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -214,7 +214,7 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

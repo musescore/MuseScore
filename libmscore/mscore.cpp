@@ -208,6 +208,7 @@ void MScore::init()
       qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
       qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
+      qRegisterMetaType<Fraction>("Fraction");
 
 //      DPMM = DPI / INCH;       // dots/mm
 
@@ -418,6 +419,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
             qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
             qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
+
             qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
             qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 

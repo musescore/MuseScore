@@ -1607,7 +1607,9 @@ void Measure::read(XmlReader& e, int staffIdx)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "tick") {
+            if (tag == "move")
+                  e.initTick(e.readFraction().ticks() + tick());
+            else if (tag == "tick") {
                   e.initTick(score()->fileDivision(e.readInt()));
                   lastTick = e.tick();
                   }

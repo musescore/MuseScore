@@ -156,14 +156,26 @@ QRectF XmlReader::readRect()
 
 //---------------------------------------------------------
 //   readFraction
+//    recognizes this two styles:
+//    <move z="2" n="4"/>     (old style)
+//    <move>2/4</move>        (new style)
 //---------------------------------------------------------
 
 Fraction XmlReader::readFraction()
       {
       Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
       int z = attribute("z", "0").toInt();
-      int n = attribute("n", "0").toInt();
-      skipCurrentElement();
+      int n = attribute("n", "1").toInt();
+      const QString& s(readElementText());
+      if (!s.isEmpty()) {
+            int i = s.indexOf('/');
+            if (i == -1)
+                  qFatal("illegal fraction <%s>", qPrintable(s));
+            else {
+                  z = s.left(i).toInt();
+                  n = s.mid(i+1).toInt();
+                  }
+            }
       return Fraction(z, n);
       }
 
@@ -285,15 +297,6 @@ PlaceText readPlacement(XmlReader& e)
             return PlaceText::LEFT;
       qDebug("unknown placement value <%s>", qPrintable(s));
       return PlaceText::AUTO;
-      }
-
-//---------------------------------------------------------
-//   fTag
-//---------------------------------------------------------
-
-void Xml::fTag(const char* name, const Fraction& f)
-      {
-      tagE(QString("%1 z=\"%2\" n=\"%3\"").arg(name).arg(f.numerator()).arg(f.denominator()));
       }
 
 //---------------------------------------------------------
@@ -542,25 +545,25 @@ void Xml::tag(const QString& name, QVariant data)
                   break;
             case QVariant::Rect:
                   {
-                  QRect r(data.value<QRect>());
+                  const QRect& r(data.value<QRect>());
                   *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
                   }
                   break;
             case QVariant::RectF:
                   {
-                  QRectF r(data.value<QRectF>());
+                  const QRectF& r(data.value<QRectF>());
                   *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
                   }
                   break;
             case QVariant::PointF:
                   {
-                  QPointF p(data.value<QPointF>());
+                  const QPointF& p(data.value<QPointF>());
                   *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
                   }
                   break;
             case QVariant::SizeF:
                   {
-                  QSizeF p(data.value<QSizeF>());
+                  const QSizeF& p(data.value<QSizeF>());
                   *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
                   }
                   break;
@@ -571,9 +574,12 @@ void Xml::tag(const QString& name, QVariant data)
                         *this << data.value<Spatium>().val();
                         *this << "</" << ename << ">\n";
                         }
+                  else if (strcmp(type, "Ms::Fraction") == 0) {
+                        const Fraction& f = data.value<Fraction>();
+                        *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
+                        }
                   else {
-                        qDebug("Xml::tag: unsupported type %d %s", data.type(), type);
-                        // abort();
+                        qFatal("Xml::tag: unsupported type %d %s", data.type(), type);
                         }
                   }
                   break;
@@ -584,7 +590,6 @@ void Xml::tag(const char* name, const QWidget* g)
       {
       tag(name, QRect(g->pos(), g->size()));
       }
-
 
 //---------------------------------------------------------
 //   xmlString

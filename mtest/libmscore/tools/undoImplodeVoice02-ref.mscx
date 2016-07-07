@@ -143,7 +143,7 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -198,7 +198,7 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>half</durationType>
@@ -279,7 +279,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -311,7 +311,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>quarter</durationType>
@@ -369,7 +369,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -384,7 +384,7 @@
           <track>1</track>
           <durationType>half</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>half</durationType>
@@ -415,7 +415,7 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -429,7 +429,7 @@
           <track>1</track>
           <durationType>half</durationType>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>half</durationType>

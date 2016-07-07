@@ -104,7 +104,7 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -140,7 +140,7 @@
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -171,7 +171,7 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -211,7 +211,7 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>

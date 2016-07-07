@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -42,8 +42,6 @@
     <metaTag name="workTitle"></metaTag>
     <PageList>
       <Page>
-        <System>
-          </System>
         <System>
           </System>
         <System>
@@ -599,9 +597,6 @@
         </Measure>
       <Measure number="17" len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
           <duration z="16" n="4"/>
@@ -625,15 +620,15 @@
           </Rest>
         </Measure>
       <Measure number="20">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="21">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -874,9 +869,6 @@
           </Chord>
         </Measure>
       <Measure number="29">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

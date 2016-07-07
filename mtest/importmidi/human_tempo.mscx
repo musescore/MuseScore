@@ -152,7 +152,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Rest>
           <track>1</track>
           <durationType>eighth</durationType>
@@ -310,7 +310,7 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Rest>
           <track>1</track>
           <durationType>32nd</durationType>
@@ -452,7 +452,7 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>eighth</durationType>
@@ -632,7 +632,7 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>7680</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>eighth</durationType>

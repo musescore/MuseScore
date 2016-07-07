@@ -170,7 +170,6 @@ class Xml : public QTextStream {
 
       void sTag(const char* name, Spatium sp) { Xml::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);
-      void fTag(const char* name, const Fraction&);
 
       void header();
 

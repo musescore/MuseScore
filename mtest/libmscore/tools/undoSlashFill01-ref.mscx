@@ -382,7 +382,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -458,7 +458,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>whole</durationType>
@@ -468,7 +468,7 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <small>1</small>

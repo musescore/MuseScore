@@ -121,7 +121,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>eighth</durationType>

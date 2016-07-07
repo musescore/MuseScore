@@ -187,7 +187,7 @@
         <Rest>
           <durationType>16th</durationType>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -260,7 +260,7 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Beam id="4">
           <track>1</track>
           <l1>28</l1>

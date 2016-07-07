@@ -225,7 +225,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>quarter</durationType>

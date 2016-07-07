@@ -142,7 +142,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>1577</tick>
+        <move>137/1920</move>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>32nd</durationType>
@@ -163,7 +163,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>1714</tick>
+        <move>137/960</move>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>32nd</durationType>
@@ -184,7 +184,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>1851</tick>
+        <move>137/640</move>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>32nd</durationType>
