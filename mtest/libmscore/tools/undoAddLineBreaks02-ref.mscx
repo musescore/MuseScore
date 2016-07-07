@@ -597,37 +597,36 @@
       <Measure number="17">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="17" len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="16" n="4"/>
+          <duration>16/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
-      <tick>32640</tick>
       <Measure number="18">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="19">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="20">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="21">
@@ -933,25 +932,24 @@
       <Measure number="31">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="31" len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="8" n="4"/>
+          <duration>8/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
-      <tick>59520</tick>
       <Measure number="32">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

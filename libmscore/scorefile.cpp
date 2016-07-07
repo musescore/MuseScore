@@ -64,26 +64,13 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       //
       // special case multi measure rest
       //
-      Measure* mm = 0;
-      if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->isMeasure()) {
-            mm = static_cast<Measure*>(m);
-#if 0 // TODO
-            Segment* s = mm->findSegment(Segment::Type::EndBarLine, mm->endTick());
-            if (s == 0)
-                  mm->createEndBarLines();
-#endif
-            }
-
       if (m->isMeasure() || staffIdx == 0)
             m->write(xml, staffIdx, writeSystemElements);
 
-      if (mm && mm->mmRest()) {
-            mm->mmRest()->write(xml, staffIdx, writeSystemElements);
-            xml.tag("tick", mm->tick() + mm->ticks());         // rewind tick
-            }
+      if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest())
+            toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements);
 
-      if (m->isMeasure())
-            xml.curTick = m->tick() + m->ticks();
+      xml.curTick = m->endTick();
       }
 
 //---------------------------------------------------------
@@ -305,6 +292,8 @@ void Score::readStaff(XmlReader& e)
                         mb->setTick(e.tick());
                         measures()->add(mb);
                         }
+//                  else if (tag == "move")
+//                        e.initTick(e.readFraction().ticks());
                   else if (tag == "tick")
                         e.initTick(fileDivision(e.readInt()));
                   else
@@ -336,6 +325,8 @@ void Score::readStaff(XmlReader& e)
                                     measure = measure->nextMeasure();
                               }
                         }
+//                  else if (tag == "move")
+//                        e.initTick(e.readFraction().ticks());
                   else if (tag == "tick")
                         e.initTick(fileDivision(e.readInt()));
                   else
@@ -1359,10 +1350,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   //               - part (excerpt) staff starts after
                   //                 barline element
                   bool needTick = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick);
-                  if ((segment->segmentType() == Segment::Type::EndBarLine)
-                     && (e == 0)
-                     && writeSystemElements
-                     && ((track % VOICES) == 0)) {
+                  if ((segment->isEndBarLineType()) && (e == 0) && writeSystemElements && ((track % VOICES) == 0)) {
                         // search barline:
                         for (int idx = track - VOICES; idx >= 0; idx -= VOICES) {
                               if (segment->element(idx)) {
@@ -1375,12 +1363,12 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               }
                         }
                   for (Element* e : segment->annotations()) {
-                        if (e->track() != track || e->generated()
-                           || (e->systemFlag() && !writeSystemElements)) {
+                        if (e->track() != track || e->generated() || (e->systemFlag() && !writeSystemElements))
                               continue;
-                              }
                         if (needTick) {
-                              xml.tag("tick", segment->tick() - xml.tickDiff);
+                              // xml.tag("tick", segment->tick() - xml.tickDiff);
+                              int tick = xml.clipboardmode ? segment->tick() : segment->rtick();
+                              xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff));
                               xml.curTick = segment->tick();
                               needTick = false;
                               }
@@ -1396,7 +1384,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     continue;
 
                               // don't write voltas to clipboard
-                              if (clip && s->type() == Element::Type::VOLTA)
+                              if (clip && s->isVolta())
                                     continue;
 
                               if (s->track() == track) {
@@ -1407,7 +1395,9 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           end = s->tick2() <= endTick;
                                     if (s->tick() == segment->tick() && (!clip || end)) {
                                           if (needTick) {
-                                                xml.tag("tick", segment->tick() - xml.tickDiff);
+                                                // xml.tag("tick", segment->tick() - xml.tickDiff);
+                                                int tick = xml.clipboardmode ? segment->tick() : segment->rtick();
+                                                xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff));
                                                 xml.curTick = segment->tick();
                                                 needTick = false;
                                                 }
@@ -1420,7 +1410,9 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                  && (!clip || s->tick() >= fs->tick())
                                  ) {
                                     if (needTick) {
-                                          xml.tag("tick", segment->tick() - xml.tickDiff);
+                                          // xml.tag("tick", segment->tick() - xml.tickDiff);
+                                          int tick = xml.clipboardmode ? segment->tick() : segment->rtick();
+                                          xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff));
                                           xml.curTick = segment->tick();
                                           needTick = false;
                                           }
@@ -1431,34 +1423,22 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
 
                   if (!e || !xml.canWrite(e))
                         continue;
-
-                  if (e->generated()) {
-#if 0
-                        if ((xml.curTick - xml.tickDiff) == 0) {
-                              if (e->type() == Element::Type::CLEF) {
-                                    if (needTick) {
-                                          xml.tag("tick", segment->tick() - xml.tickDiff);
-                                          xml.curTick = segment->tick();
-                                          needTick = false;
-                                          }
-                                    e->write(xml);
-                                    }
-                              }
-#endif
+                  if (e->generated())
                         continue;
-                        }
                   if (needTick) {
-                        xml.tag("tick", segment->tick() - xml.tickDiff);
+                        // xml.tag("tick", segment->tick() - xml.tickDiff);
+                        int tick = xml.clipboardmode ? segment->tick() : segment->rtick();
+                        xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff));
                         xml.curTick = segment->tick();
                         needTick = false;
                         }
                   if (e->isChordRest()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
 //                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
-//                        BarLine* bl = static_cast<BarLine*>(e);
+//                        BarLine* bl = toBarLine(e);
 //TODO                        bl->setBarLineType(m->endBarLineType());
 //                        bl->setVisible(m->endBarLineVisible());
 //                        }
@@ -1473,7 +1453,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         if (s->generated() || !xml.canWrite(s))
                               continue;
                         if ((s->tick2() == endTick)
-                          && s->type() != Element::Type::SLUR
+                          && s->isSlur()
                           && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                           && (!clip || s->tick() >= fs->tick())
                           ) {

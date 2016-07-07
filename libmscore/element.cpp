@@ -1165,8 +1165,8 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
       Xml xml(&buffer);
       xml.clipboardmode = true;
       xml.stag("Element");
-      if (type() == Element::Type::NOTE)
-            xml.fTag("duration", static_cast<const Note*>(this)->chord()->duration());
+      if (isNote())
+            xml.tag("duration", toNote(this)->chord()->duration());
       if (!dragOffset.isNull())
             xml.tag("dragOffset", dragOffset);
       write(xml);

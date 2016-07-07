@@ -312,7 +312,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Tuplet id="1">
           <track>1</track>
           <normalNotes>2</normalNotes>

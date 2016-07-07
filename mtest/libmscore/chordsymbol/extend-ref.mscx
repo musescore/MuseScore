@@ -110,12 +110,12 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>960</tick>
+        <move>1/2</move>
         <Harmony>
           <root>16</root>
           <name>7</name>
           </Harmony>
-        <tick>1920</tick>
+        <move>1/1</move>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
@@ -124,7 +124,7 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

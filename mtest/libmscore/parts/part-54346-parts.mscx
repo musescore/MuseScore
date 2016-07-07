@@ -605,7 +605,7 @@
             <lid>19</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <tick>240</tick>
+          <move>1/8</move>
           <StaffText>
             <swing unit="eighth" ratio= "60"/>
             <lid>4</lid>

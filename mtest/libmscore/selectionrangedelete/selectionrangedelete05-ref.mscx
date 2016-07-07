@@ -120,9 +120,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>960</tick>
+        <move>1/2</move>
         <Harmony>
           <root>16</root>
           <name>7</name>
@@ -135,9 +135,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>2880</tick>
+        <move>1/2</move>
         <Harmony>
           <root>13</root>
           <name>7</name>
@@ -146,13 +146,13 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>

@@ -120,7 +120,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>half</durationType>
-          <duration z="3" n="8"/>
+          <duration>3/8</duration>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -132,13 +132,13 @@
         <Chord>
           <dots>1</dots>
           <durationType>half</durationType>
-          <duration z="3" n="8"/>
+          <duration>3/8</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -190,7 +190,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -217,13 +217,13 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

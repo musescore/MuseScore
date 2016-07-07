@@ -141,7 +141,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Tuplet id="2">
           <track>1</track>
           <normalNotes>4</normalNotes>
@@ -241,7 +241,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Tuplet id="3">
           <track>2</track>
           <normalNotes>8</normalNotes>
@@ -272,7 +272,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>137</tick>
+        <move>137/1920</move>
         <Chord>
           <track>2</track>
           <Tuplet>3</Tuplet>
@@ -297,7 +297,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>274</tick>
+        <move>137/960</move>
         <Chord>
           <track>2</track>
           <Tuplet>3</Tuplet>
@@ -322,7 +322,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>411</tick>
+        <move>137/640</move>
         <Chord>
           <track>2</track>
           <Tuplet>3</Tuplet>

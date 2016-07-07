@@ -354,7 +354,7 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>12480</tick>
+        <move>1/2</move>
         <Harmony>
           <root>15</root>
           </Harmony>

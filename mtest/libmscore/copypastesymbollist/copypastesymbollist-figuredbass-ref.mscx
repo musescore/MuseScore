@@ -154,7 +154,7 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <tick>2400</tick>
+        <move>1/4</move>
         <FiguredBass>
           <onNote>0</onNote>
           <ticks>480</ticks>
@@ -167,7 +167,7 @@
             <digit>3</digit>
             </FiguredBassItem>
           </FiguredBass>
-        <tick>2880</tick>
+        <move>1/2</move>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -349,7 +349,7 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <tick>9360</tick>
+        <move>7/8</move>
         <FiguredBass>
           <onNote>0</onNote>
           <ticks>240</ticks>

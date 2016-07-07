@@ -205,8 +205,10 @@ void ChordRest::writeProperties(Xml& xml) const
             xml.tag("durationType", actualDurationType().name());
 
       if (!duration().isZero() && (!actualDurationType().fraction().isValid()
-         || (actualDurationType().fraction() != duration())))
-            xml.fTag("duration", duration());
+         || (actualDurationType().fraction() != duration()))) {
+            xml.tag("duration", duration());
+            //xml.tagE("duration z=\"%d\" n=\"%d\"", duration().numerator(), duration().denominator());
+            }
 
       for (const Articulation* a : _articulations)
             a->write(xml);

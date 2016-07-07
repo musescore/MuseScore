@@ -328,7 +328,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>

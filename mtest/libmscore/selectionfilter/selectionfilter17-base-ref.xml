@@ -3,7 +3,7 @@
   <Staff id="0">
     <voice id="0">0</voice>
     <voice id="1">0</voice>
-    <tick>0</tick>
+    <move>0/1</move>
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
@@ -40,7 +40,7 @@
         <tpc>16</tpc>
         </Note>
       </Chord>
-    <tick>0</tick>
+    <move>0/1</move>
     <Chord>
       <track>1</track>
       <durationType>half</durationType>

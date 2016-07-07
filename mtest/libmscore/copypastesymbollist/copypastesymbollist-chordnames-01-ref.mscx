@@ -96,9 +96,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>960</tick>
+        <move>1/2</move>
         <Harmony>
           <root>16</root>
           <name>7</name>
@@ -111,9 +111,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>2880</tick>
+        <move>1/2</move>
         <Harmony>
           <root>13</root>
           <name>7</name>
@@ -126,9 +126,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>4800</tick>
+        <move>1/2</move>
         <Harmony>
           <root>16</root>
           <name>7</name>
@@ -141,9 +141,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>6720</tick>
+        <move>1/2</move>
         <Harmony>
           <root>13</root>
           <name>7</name>
@@ -156,9 +156,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>8640</tick>
+        <move>1/2</move>
         <Harmony>
           <root>16</root>
           <name>7</name>
@@ -171,9 +171,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>10560</tick>
+        <move>1/2</move>
         <Harmony>
           <root>13</root>
           <name>7</name>
@@ -186,9 +186,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>12480</tick>
+        <move>1/2</move>
         <Harmony>
           <root>16</root>
           <name>7</name>
@@ -201,9 +201,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>14400</tick>
+        <move>1/2</move>
         <Harmony>
           <root>13</root>
           <name>7</name>

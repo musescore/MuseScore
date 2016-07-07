@@ -340,7 +340,7 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="12" n="8"/>
+          <duration>12/8</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -374,7 +374,7 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="12" n="8"/>
+          <duration>12/8</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -472,7 +472,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>2880</tick>
+        <move>0/1</move>
         <Chord>
           <track>5</track>
           <dots>1</dots>
