@@ -1,7 +1,16 @@
 #!/bin/bash
 
+cp ../../../build.debug/mtest/libmscore/midimapping/test2.mscx   test2.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test3withMapping.mscx   test3withMapping.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test3withoutMapping.mscx   test3withoutMapping.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test1withDrums_changed.mscx   test6-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test3withMapping_changed.mscx   test7-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test2_changed3.mscx   test8-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test1withDrums_changed3.mscx   test9-ref.mscx
 cp ../../../build.debug/mtest/libmscore/midimapping/test14.mscx   test14-ref.mscx
 cp ../../../build.debug/mtest/libmscore/midimapping/test15.mscx   test15-ref.mscx
 cp ../../../build.debug/mtest/libmscore/midimapping/test16.mscx   test16-ref.mscx
 cp ../../../build.debug/mtest/libmscore/midimapping/test17.mscx   test17-ref.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test1withoutDrums.mscx   test1withoutDrums.mscx
+cp ../../../build.debug/mtest/libmscore/midimapping/test1withDrums.mscx   test1withDrums.mscx
 
