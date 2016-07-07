@@ -166,15 +166,15 @@ void MuseScore::oscCloseAll()
 
 void MuseScore::oscTempo(int val)
       {
-      if (val < 0)
-            val = 0;
-      if (val > 127)
-            val = 127;
-      val = (val * 240) / 128;
+      if (val < 10)
+            val = 10;
+      if (val > 300)
+            val = 300;
+      qreal t = val * .01;
       if (playPanel)
-            playPanel->setRelTempo(val);
+            playPanel->setRelTempo(t);
       if (seq)
-            seq->setRelTempo(double(val));
+            seq->setRelTempo(double(t));
       }
 
 //---------------------------------------------------------
