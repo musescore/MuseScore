@@ -14,6 +14,7 @@
 #include "libmscore/score.h"
 #include "libmscore/element.h"
 #include "libmscore/beam.h"
+#include "libmscore/undo.h"
 #include "musescore.h"
 #include "inspectorBase.h"
 #include "inspector.h"
@@ -32,6 +33,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       setAccessibleName(tr("Inspector"));
       resetMapper  = new QSignalMapper(this);
       valueMapper  = new QSignalMapper(this);
+      styleMapper  = new QSignalMapper(this);
 
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout;
@@ -39,6 +41,9 @@ InspectorBase::InspectorBase(QWidget* parent)
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
       setLayout(_layout);
+      connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
+      connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
+      connect(styleMapper, SIGNAL(mapped(int)), SLOT(setStyleClicked(int)));
       }
 
 //---------------------------------------------------------
@@ -427,6 +432,26 @@ void InspectorBase::resetClicked(int i)
       }
 
 //---------------------------------------------------------
+//   setStyleClicked
+//---------------------------------------------------------
+
+void InspectorBase::setStyleClicked(int i)
+      {
+      Element* e   = inspector->element();
+      const InspectorItem& ii = iList[i];
+
+      StyleIdx sidx = propertyStyle(ii.t);
+      if (sidx == StyleIdx::NOSTYLE)
+            return;
+      e->score()->startCmd();
+      QVariant val = getValue(ii);
+      e->undoChangeProperty(ii.t, val, PropertyStyle::STYLED);
+      e->score()->undo(new ChangeStyleVal(e->score(), sidx, val));
+      checkDifferentValues(ii);
+      e->score()->endCmd();
+      }
+
+//---------------------------------------------------------
 //   mapSignals
 //    initialize inspector panel
 //---------------------------------------------------------
@@ -441,7 +466,17 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il)
             if (resetButton) {
                   resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
                   connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));
+
                   resetMapper->setMapping(resetButton, i);
+                  StyleIdx sidx = propertyStyle(ii.t);
+                  if (sidx != StyleIdx::NOSTYLE) {
+                        QMenu* menu = new QMenu(this);
+                        resetButton->setMenu(menu);
+                        resetButton->setPopupMode(QToolButton::MenuButtonPopup);
+                        QAction* a = menu->addAction(tr("set style"));
+                        styleMapper->setMapping(a, i);
+                        connect(a, SIGNAL(triggered()), styleMapper, SLOT(map()));
+                        }
                   }
             QWidget* w = ii.w;
             valueMapper->setMapping(w, i);
@@ -461,8 +496,6 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il)
                   qFatal("not supported widget %s", w->metaObject()->className());
             ++i;
             }
-      connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
-      connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       }
 
 //---------------------------------------------------------
