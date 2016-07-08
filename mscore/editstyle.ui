@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1117</width>
-    <height>823</height>
+    <width>1125</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>18</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -5990,37 +5990,7 @@
             <property name="title">
              <string>Vertical Distance from the Notes</string>
             </property>
-            <layout class="QFormLayout" name="formLayout_5">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_48">
-               <property name="text">
-                <string>Maximum slope:</string>
-               </property>
-               <property name="buddy">
-                <cstring>tupletMaxSlope</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_49">
-               <property name="text">
-                <string>Vertical distance from stem:</string>
-               </property>
-               <property name="buddy">
-                <cstring>tupletVStemDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_50">
-               <property name="text">
-                <string>Vertical distance from note head:</string>
-               </property>
-               <property name="buddy">
-                <cstring>tupletVHeadDistance</cstring>
-               </property>
-              </widget>
-             </item>
+            <layout class="QGridLayout" name="gridLayout_20">
              <item row="3" column="0">
               <widget class="QCheckBox" name="tupletOutOfStaff">
                <property name="text">
@@ -6047,25 +6017,6 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="tupletVHeadDistance">
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="minimum">
-                <double>-5.000000000000000</double>
-               </property>
-               <property name="maximum">
-                <double>5.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.050000000000000</double>
-               </property>
-               <property name="value">
-                <double>0.500000000000000</double>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="1">
               <widget class="QDoubleSpinBox" name="tupletMaxSlope">
                <property name="suffix">
@@ -6085,6 +6036,155 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_48">
+               <property name="text">
+                <string>Maximum slope:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+               <property name="buddy">
+                <cstring>tupletMaxSlope</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_50">
+               <property name="text">
+                <string>Vertical distance from note head:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+               <property name="buddy">
+                <cstring>tupletVHeadDistance</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="tupletVHeadDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_49">
+               <property name="text">
+                <string>Vertical distance from stem:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+               <property name="buddy">
+                <cstring>tupletVStemDistance</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_28">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="2">
+              <widget class="QToolButton" name="resetTupletVHeadDistance">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QToolButton" name="resetTupletVStemDistance">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="resetTupletMaxSlope">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -6093,44 +6193,20 @@
             <property name="title">
              <string>Horizontal Distance from the Notes</string>
             </property>
-            <layout class="QFormLayout" name="formLayout_8">
+            <layout class="QGridLayout" name="gridLayout_17">
              <item row="0" column="0">
               <widget class="QLabel" name="label_51">
                <property name="text">
                 <string>Distance before the stem of the first note:</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
                <property name="buddy">
                 <cstring>tupletStemLeftDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_55">
-               <property name="text">
-                <string>Distance before the head of the first note:</string>
-               </property>
-               <property name="buddy">
-                <cstring>tupletNoteLeftDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_56">
-               <property name="text">
-                <string>Distance after the stem of the last note:</string>
-               </property>
-               <property name="buddy">
-                <cstring>tupletStemRightDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_58">
-               <property name="text">
-                <string>Distance after the head of the last note:</string>
-               </property>
-               <property name="buddy">
-                <cstring>tupletNoteRightDistance</cstring>
                </property>
               </widget>
              </item>
@@ -6153,6 +6229,25 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_55">
+               <property name="text">
+                <string>Distance before the head of the first note:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+               <property name="buddy">
+                <cstring>tupletNoteLeftDistance</cstring>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="tupletNoteLeftDistance">
                <property name="suffix">
@@ -6166,6 +6261,25 @@
                </property>
                <property name="singleStep">
                 <double>0.050000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_56">
+               <property name="text">
+                <string>Distance after the stem of the last note:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+               <property name="buddy">
+                <cstring>tupletStemRightDistance</cstring>
                </property>
               </widget>
              </item>
@@ -6188,6 +6302,25 @@
                </property>
               </widget>
              </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_58">
+               <property name="text">
+                <string>Distance after the head of the last note:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+               <property name="buddy">
+                <cstring>tupletNoteRightDistance</cstring>
+               </property>
+              </widget>
+             </item>
              <item row="3" column="1">
               <widget class="QDoubleSpinBox" name="tupletNoteRightDistance">
                <property name="suffix">
@@ -6204,6 +6337,111 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_27">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="3" column="2">
+              <widget class="QToolButton" name="resetTupletNoteRightDistance">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QToolButton" name="resetTupletStemRightDistance">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QToolButton" name="resetTupletNoteLeftDistance">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="resetTupletStemLeftDistance">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -6212,11 +6450,20 @@
             <property name="title">
              <string>Appearance</string>
             </property>
-            <layout class="QFormLayout" name="formLayout_10">
+            <layout class="QGridLayout" name="gridLayout_21">
              <item row="0" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
                 <string>Tuplet bracket thickness:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
                </property>
               </widget>
              </item>
@@ -6236,6 +6483,238 @@
                </property>
                <property name="value">
                 <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_29">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="resetTupletBracketWidth">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_30">
+            <property name="title">
+             <string>Properties</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_19">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_114">
+               <property name="text">
+                <string>Direction:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_26">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_115">
+               <property name="text">
+                <string>Number Type:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="tupletDirection">
+               <item>
+                <property name="text">
+                 <string>Automatic</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Up</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Down</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_116">
+               <property name="text">
+                <string>Bracket Type:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <property name="indent">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="tupletNumberType">
+               <item>
+                <property name="text">
+                 <string>Number</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Relation</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Nothing</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="tupletBracketType">
+               <item>
+                <property name="text">
+                 <string>Automatic</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Bracket</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Nothing</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="resetTupletDirection">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QToolButton" name="resetTupletNumberType">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QToolButton" name="resetTupletBracketType">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Line style' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                </property>
               </widget>
              </item>

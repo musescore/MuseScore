@@ -32,15 +32,6 @@ class InspectorNote : public InspectorElementBase {
       Ui::InspectorChord   c;
       Ui::InspectorSegment s;
 
-      QToolButton* dot1;
-      QToolButton* dot2;
-      QToolButton* dot3;
-      QToolButton* dot4;
-      QToolButton* hook;
-      QToolButton* stem;
-      QToolButton* beam;
-      QToolButton* tuplet;
-
       void block(bool);
 
    private slots:

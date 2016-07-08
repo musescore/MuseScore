@@ -47,19 +47,24 @@ Tuplet::Tuplet(const Tuplet& t)
    : DurationElement(t)
       {
       _tick         = t._tick;
-      _numberType   = t._numberType;
-      _bracketType  = t._bracketType;
       _hasBracket   = t._hasBracket;
       _ratio        = t._ratio;
       _baseLen      = t._baseLen;
 
       _direction    = t._direction;
-      _isUp         = t._isUp;
+      _numberType   = t._numberType;
+      _bracketType  = t._bracketType;
 
-      p1            = t.p1;
-      p2            = t.p2;
-      _p1           = t._p1;
-      _p2           = t._p2;
+      directionStyle = t.directionStyle;
+      numberStyle    = t.numberStyle;
+      bracketStyle   = t.bracketStyle;
+
+      _isUp          = t._isUp;
+
+      p1             = t.p1;
+      p2             = t.p2;
+      _p1            = t._p1;
+      _p2            = t._p2;
 
       if (t._number)
             _number = new Text(*t._number);
@@ -140,14 +145,14 @@ void Tuplet::layout()
       if (_direction == Direction::AUTO) {
             int up = 1;
             foreach (const DurationElement* e, _elements) {
-                  if (e->type() == Element::Type::CHORD) {
-                        const Chord* c = static_cast<const Chord*>(e);
+                  if (e->isChord()) {
+                        const Chord* c = toChord(e);
                         if (c->stemDirection() != Direction::AUTO)
                               up += c->stemDirection() == Direction::UP ? 1000 : -1000;
                         else
                               up += c->up() ? 1 : -1;
                         }
-                  else if (e->type() == Element::Type::TUPLET) {
+                  else if (e->isTuplet()) {
                         // TODO
                         }
                   }
@@ -157,15 +162,15 @@ void Tuplet::layout()
             _isUp = _direction == Direction::UP;
 
       const DurationElement* cr1 = _elements.front();
-      while (cr1->type() == Element::Type::TUPLET) {
-            const Tuplet* t = static_cast<const Tuplet*>(cr1);
+      while (cr1->isTuplet()) {
+            const Tuplet* t = toTuplet(cr1);
             if (t->elements().empty())
                   break;
             cr1 = t->elements().front();
             }
       const DurationElement* cr2 = _elements.back();
-      while (cr2->type() == Element::Type::TUPLET) {
-            const Tuplet* t = static_cast<const Tuplet*>(cr2);
+      while (cr2->isTuplet()) {
+            const Tuplet* t = toTuplet(cr2);
             if (t->elements().empty())
                   break;
             cr2 = t->elements().back();
@@ -177,12 +182,12 @@ void Tuplet::layout()
       if (_bracketType == BracketType::AUTO_BRACKET) {
             _hasBracket = false;
             foreach (DurationElement* e, _elements) {
-                  if (e->type() == Element::Type::TUPLET || e->type() == Element::Type::REST) {
+                  if (e->isTuplet() || e->isRest()) {
                         _hasBracket = true;
                         break;
                         }
                   else if (e->isChordRest()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         //
                         // maybe we should check for more than one beam
                         //
@@ -213,8 +218,8 @@ void Tuplet::layout()
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
             // account for staff move when adjusting bracket to avoid staff
             // but don't attempt adjustment unless both endpoints are in same staff
-            if (static_cast<const ChordRest*>(cr1)->staffMove() == static_cast<const ChordRest*>(cr2)->staffMove())
-                  move = static_cast<const ChordRest*>(cr1)->staffMove();
+            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove())
+                  move = toChordRest(cr1)->staffMove();
             else
                   outOfStaff = false;
             }
@@ -244,8 +249,8 @@ void Tuplet::layout()
             }
 
       if (_isUp) {
-            if (cr1->type() == Element::Type::CHORD) {
-                  const Chord* chord1 = static_cast<const Chord*>(cr1);
+            if (cr1->isChord()) {
+                  const Chord* chord1 = toChord(cr1);
                   Stem* stem = chord1->stem();
                   if (stem)
                         xx1 = stem->abbox().x();
@@ -270,8 +275,8 @@ void Tuplet::layout()
                         }
                   }
 
-            if (cr2->type() == Element::Type::CHORD) {
-                  const Chord* chord2 = static_cast<const Chord*>(cr2);
+            if (cr2->isChord()) {
+                  const Chord* chord2 = toChord(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && chord2->up()) {
                         if (followBeam)
@@ -291,13 +296,13 @@ void Tuplet::layout()
             // special case: one of the bracket endpoints is
             // a rest
             //
-            if (cr1->type() != Element::Type::CHORD && cr2->type() == Element::Type::CHORD) {
+            if (cr1->isChord() && cr2->isChord()) {
                   if (p2.y() < p1.y())
                         p1.setY(p2.y());
                   else
                         p2.setY(p1.y());
                   }
-            else if (cr1->type() == Element::Type::CHORD && cr2->type() != Element::Type::CHORD) {
+            else if (cr1->isChord() && !cr2->isChord()) {
                   if (p1.y() < p2.y())
                         p2.setY(p1.y());
                   else
@@ -335,8 +340,8 @@ void Tuplet::layout()
                   d = (p2.y() - p1.y())/(p2.x() - p1.x());
                   for (int i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
-                        if (e->type() == Element::Type::CHORD) {
-                              const Chord* chord = static_cast<const Chord*>(e);
+                        if (e->isChord()) {
+                              const Chord* chord = toChord(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
                                     QRectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
@@ -354,8 +359,8 @@ void Tuplet::layout()
                   }
             }
       else {
-            if (cr1->type() == Element::Type::CHORD) {
-                  const Chord* chord1 = static_cast<const Chord*>(cr1);
+            if (cr1->isChord()) {
+                  const Chord* chord1 = toChord(cr1);
                   Stem* stem = chord1->stem();
                   if (stem)
                         xx1 = stem->abbox().x();
@@ -379,8 +384,8 @@ void Tuplet::layout()
                         }
                   }
 
-            if (cr2->type() == Element::Type::CHORD) {
-                  const Chord* chord2 = static_cast<const Chord*>(cr2);
+            if (cr2->isChord()) {
+                  const Chord* chord2 = toChord(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
@@ -403,13 +408,13 @@ void Tuplet::layout()
             // special case: one of the bracket endpoints is
             // a rest
             //
-            if (cr1->type() != Element::Type::CHORD && cr2->type() == Element::Type::CHORD) {
+            if (!cr1->isChord() && cr2->isChord()) {
                   if (p2.y() > p1.y())
                         p1.setY(p2.y());
                   else
                         p2.setY(p1.y());
                   }
-            else if (cr1->type() == Element::Type::CHORD && cr2->type() != Element::Type::CHORD) {
+            else if (cr1->isChord() && !cr2->isChord()) {
                   if (p1.y() > p2.y())
                         p2.setY(p1.y());
                   else
@@ -445,8 +450,8 @@ void Tuplet::layout()
                   qreal d  = (p2.y() - p1.y())/(p2.x() - p1.x());
                   for (int i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
-                        if (e->type() == Element::Type::CHORD) {
-                              const Chord* chord = static_cast<const Chord*>(e);
+                        if (e->isChord()) {
+                              const Chord* chord = toChord(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
                                     QRectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
@@ -486,7 +491,7 @@ void Tuplet::layout()
             // for beamed tuplets, center number on beam
             //
             if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
-                  const ChordRest* crr = static_cast<const ChordRest*>(cr1);
+                  const ChordRest* crr = toChordRest(cr1);
                   if(_isUp == crr->up()) {
                         qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
                         x3 = xx1 + deltax * .5;
@@ -715,7 +720,7 @@ void Tuplet::add(Element* e)
             }
 #endif
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::TEXT:
                   _number = static_cast<Text*>(e);
                   break;
@@ -756,7 +761,7 @@ void Tuplet::add(Element* e)
 
 void Tuplet::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::TEXT:
                   if (e == _number)
                         _number = 0;
@@ -816,6 +821,13 @@ void Tuplet::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
 
 void Tuplet::reset()
       {
+      if (directionStyle == PropertyStyle::UNSTYLED)
+            undoChangeProperty(P_ID::DIRECTION, propertyDefault(P_ID::DIRECTION), PropertyStyle::STYLED);
+      if (numberStyle == PropertyStyle::UNSTYLED)
+            undoChangeProperty(P_ID::NUMBER_TYPE, propertyDefault(P_ID::NUMBER_TYPE), PropertyStyle::STYLED);
+      if (bracketStyle == PropertyStyle::UNSTYLED)
+            undoChangeProperty(P_ID::BRACKET_TYPE, propertyDefault(P_ID::BRACKET_TYPE), PropertyStyle::STYLED);
+
       score()->addRefresh(canvasBoundingRect());
 
       undoChangeProperty(P_ID::P1,        QPointF());
@@ -914,15 +926,18 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
 
 bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
-      score()->addRefresh(canvasBoundingRect());
+      printf("setProperty %s\n", propertyName(propertyId));
       switch (propertyId) {
             case P_ID::DIRECTION:
+                  directionStyle = PropertyStyle::UNSTYLED;
                   setDirection(v.value<Direction>());
                   break;
             case P_ID::NUMBER_TYPE:
+                  numberStyle = PropertyStyle::UNSTYLED;
                   setNumberType(NumberType(v.toInt()));
                   break;
             case P_ID::BRACKET_TYPE:
+                  bracketStyle = PropertyStyle::UNSTYLED;
                   setBracketType(BracketType(v.toInt()));
                   break;
             case P_ID::NORMAL_NOTES:
@@ -955,11 +970,11 @@ QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::DIRECTION:
-                  return Direction(Direction::AUTO);
+                  return score()->style(StyleIdx::tupletDirection);
             case P_ID::NUMBER_TYPE:
-                  return int(Tuplet::NumberType::SHOW_NUMBER);
+                  return score()->style(StyleIdx::tupletNumberType);
             case P_ID::BRACKET_TYPE:
-                  return int(Tuplet::BracketType::AUTO_BRACKET);
+                  return score()->style(StyleIdx::tupletBracketType);
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
                   return 0;
@@ -971,5 +986,78 @@ QVariant Tuplet::propertyDefault(P_ID id) const
             }
       }
 
-}
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyStyle Tuplet::propertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::DIRECTION:
+                  return directionStyle;
+            case P_ID::NUMBER_TYPE:
+                  return numberStyle;
+            case P_ID::BRACKET_TYPE:
+                  return bracketStyle;
+            case P_ID::NORMAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
+            case P_ID::P1:
+            case P_ID::P2:
+                  return PropertyStyle::NOSTYLE;
+            default:
+                  return DurationElement::propertyStyle(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Tuplet::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_ID::DIRECTION:
+                  setProperty(id, propertyDefault(id));
+                  directionStyle = PropertyStyle::STYLED;
+                  break;
+            case P_ID::NUMBER_TYPE:
+                  setProperty(id, propertyDefault(id));
+                  numberStyle = PropertyStyle::STYLED;
+                  break;
+            case P_ID::BRACKET_TYPE:
+                  setProperty(id, propertyDefault(id));
+                  bracketStyle = PropertyStyle::STYLED;
+                  break;
+            case P_ID::NORMAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
+                  break;
+            case P_ID::P1:
+            case P_ID::P2:
+                  setProperty(id, propertyDefault(id));
+                  break;
+            default:
+                  return DurationElement::resetProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Tuplet::styleChanged()
+      {
+      if (directionStyle == PropertyStyle::STYLED)
+            setDirection(score()->style(StyleIdx::tupletDirection).value<Direction>());
+      if (numberStyle == PropertyStyle::STYLED)
+            setNumberType(NumberType(score()->styleI(StyleIdx::tupletNumberType)));
+      if (bracketStyle == PropertyStyle::STYLED)
+            setBracketType(BracketType(score()->styleI(StyleIdx::tupletBracketType)));
+      if (!_elements.empty()) {
+            _elements.front()->triggerLayout();
+            _elements.back()->triggerLayout();
+            }
+      }
+
+}  // namespace Ms
 

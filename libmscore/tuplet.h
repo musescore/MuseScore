@@ -44,14 +44,19 @@ class Tuplet : public DurationElement {
 
    private:
       QList<DurationElement*> _elements;
+
+      Direction _direction;
       NumberType _numberType;
       BracketType _bracketType;
+      PropertyStyle directionStyle  { PropertyStyle::STYLED };
+      PropertyStyle numberStyle     { PropertyStyle::STYLED };
+      PropertyStyle bracketStyle    { PropertyStyle::STYLED };
+
       bool _hasBracket;
 
       Fraction _ratio;
       TDuration _baseLen;      // 1/8 for a triplet of 1/8
 
-      Direction _direction;
       bool _isUp;
 
       QPointF p1, p2;
@@ -66,15 +71,15 @@ class Tuplet : public DurationElement {
       Tuplet(Score*);
       Tuplet(const Tuplet&);
       ~Tuplet();
-      virtual Tuplet* clone() const      { return new Tuplet(*this); }
-      virtual Element::Type type() const { return Element::Type::TUPLET; }
-      virtual void setTrack(int val);
+      virtual Tuplet* clone() const override      { return new Tuplet(*this); }
+      virtual Element::Type type() const override { return Element::Type::TUPLET; }
+      virtual void setTrack(int val) override;
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
 
-      virtual bool isEditable() const;
-      virtual void editDrag(const EditData&);
+      virtual bool isEditable() const override;
+      virtual void editDrag(const EditData&) override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 2; }
 
@@ -94,16 +99,16 @@ class Tuplet : public DurationElement {
       const QList<DurationElement*>& elements() const { return _elements; }
       void clear()                                    { _elements.clear(); }
 
-      virtual void layout();
+      virtual void layout() override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       Text* number() const { return _number; }
 
-      void read(XmlReader&);
-      void write(Xml&) const;
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml&) const override;
 
-      virtual void reset();
+      virtual void reset() override;
 
-      virtual void draw(QPainter*) const;
+      virtual void draw(QPainter*) const override;
       int id() const                       { return _id;          }
       void setId(int i) const              { _id = i;             }
 
@@ -120,10 +125,13 @@ class Tuplet : public DurationElement {
       void sortElements();
       Fraction elementsDuration();
 
-      virtual void setVisible(bool f);
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant& v);
-      QVariant propertyDefault(P_ID id) const;
+      virtual void setVisible(bool f) override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
       };
 
 
