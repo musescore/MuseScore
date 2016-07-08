@@ -824,7 +824,7 @@ void LyricsLineSegment::layout()
       // B) if line follows a syllable, advance line start to after the syllable text
       lyr   = lyricsLine()->lyrics();
       sys   = lyr->segment()->system();
-      if (spannerSegmentType() == SpannerSegmentType::BEGIN || spannerSegmentType() == SpannerSegmentType::SINGLE) {
+      if (sys && (spannerSegmentType() == SpannerSegmentType::BEGIN || spannerSegmentType() == SpannerSegmentType::SINGLE)) {
             qreal lyrX        = lyr->bbox().x();
             qreal lyrXp       = lyr->pagePos().x();
             qreal lyrW        = lyr->bbox().width();
