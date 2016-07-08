@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export QT_SHORT_VERSION=5.6
 export QT_LONG_VERSION=5.6.0
 export QT_INSTALLER_ROOT=qt-opensource-mac-x64-clang-${QT_LONG_VERSION}
@@ -7,6 +9,8 @@ export QT_PATH=$HOME/qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
 export PATH=$PATH:$QT_MACOS/bin
 
+if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+openssl aes-256-cbc -K $encrypted_99b076488ab1_key -iv $encrypted_99b076488ab1_iv -in build/travis/resources/osuosl_nighlies_rsa.enc -out build/travis/resources/osuosl_nighlies_rsa -d
 # Make ssh dir
 mkdir $HOME/.ssh/
 # Copy over private key, and set permissions
@@ -24,3 +28,4 @@ expect << EOF
   send "${OSUOSL_NIGHTLY_PASSPHRASE}\r"
   expect eof
 EOF
+fi
