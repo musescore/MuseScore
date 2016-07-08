@@ -20,11 +20,13 @@
 #include "musescore.h"
 #include "libmscore/undo.h"
 #include "texteditor.h"
+#include "icons.h"
 #include "libmscore/harmony.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/clef.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/tuplet.h"
 
 namespace Ms {
 
@@ -172,13 +174,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::harmonyFretDist,         false, harmonyFretDist,         0 },
       { StyleIdx::minHarmonyDistance,      false, minHarmonyDistance,      0 },
       { StyleIdx::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
-      { StyleIdx::tupletVHeadDistance,     false, tupletVHeadDistance,     0 },
-      { StyleIdx::tupletVStemDistance,     false, tupletVStemDistance,     0 },
-      { StyleIdx::tupletStemLeftDistance,  false, tupletStemLeftDistance,  0 },
-      { StyleIdx::tupletStemRightDistance, false, tupletStemRightDistance, 0 },
-      { StyleIdx::tupletNoteLeftDistance,  false, tupletNoteLeftDistance,  0 },
-      { StyleIdx::tupletNoteRightDistance, false, tupletNoteRightDistance, 0 },
-      { StyleIdx::tupletBracketWidth,      false, tupletBracketWidth,      0 },
+
+      { StyleIdx::tupletVHeadDistance,     false, tupletVHeadDistance,     resetTupletVHeadDistance      },
+      { StyleIdx::tupletVStemDistance,     false, tupletVStemDistance,     resetTupletVStemDistance      },
+      { StyleIdx::tupletStemLeftDistance,  false, tupletStemLeftDistance,  resetTupletStemLeftDistance   },
+      { StyleIdx::tupletStemRightDistance, false, tupletStemRightDistance, resetTupletStemRightDistance  },
+      { StyleIdx::tupletNoteLeftDistance,  false, tupletNoteLeftDistance,  resetTupletNoteLeftDistance   },
+      { StyleIdx::tupletNoteRightDistance, false, tupletNoteRightDistance, resetTupletNoteRightDistance  },
+      { StyleIdx::tupletBracketWidth,      false, tupletBracketWidth,      resetTupletBracketWidth       },
+      { StyleIdx::tupletDirection,         false, tupletDirection,         resetTupletDirection          },
+      { StyleIdx::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType         },
+      { StyleIdx::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType        },
+
       { StyleIdx::lyricsLineHeight,        true,  lyricsLineHeight,             0 },
       { StyleIdx::repeatBarTips,           false, showRepeatBarTips,            0 },
       { StyleIdx::startBarlineSingle,      false, showStartBarlineSingle,       0 },
@@ -244,6 +251,15 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::MusicalTextFont,         false, musicalTextFont,              0 },
       };
 
+      tupletNumberType->clear();
+      tupletNumberType->addItem(tr("Number"), int(Tuplet::NumberType::SHOW_NUMBER));
+      tupletNumberType->addItem(tr("Relation"), int(Tuplet::NumberType::SHOW_RELATION));
+      tupletNumberType->addItem(tr("Nothing"), int(Tuplet::NumberType::NO_TEXT));
+
+      tupletBracketType->clear();
+      tupletBracketType->addItem(tr("Automatic"), int(Tuplet::BracketType::AUTO_BRACKET));
+      tupletBracketType->addItem(tr("Bracket"), int(Tuplet::BracketType::SHOW_BRACKET));
+      tupletBracketType->addItem(tr("Nothing"), int(Tuplet::BracketType::SHOW_NO_BRACKET));
 
       pageList->setCurrentRow(0);
 
@@ -386,6 +402,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   Direction::fillComboBox(cb);
                   }
             if (sw.reset) {
+                  sw.reset->setIcon(*icons[int(Icons::reset_ICON)]);
                   connect(sw.reset, SIGNAL(clicked()), mapper, SLOT(map()));
                   mapper->setMapping(sw.reset, int(sw.idx));
                   }
@@ -552,6 +569,8 @@ void EditStyle::setValues()
 
       const MStyle& lstyle = *cs->style();
       for (const StyleWidget& sw : styleWidgets) {
+            if (sw.widget)
+                  sw.widget->blockSignals(true);
             const char* type = MStyle::valueType(sw.idx);
             if (sw.reset)
                   sw.reset->setEnabled(!lstyle.isDefault(sw.idx));
@@ -617,6 +636,8 @@ void EditStyle::setValues()
             else {
                   qFatal("EditStyle::setValues: unhandled type <%s>", type);
                   }
+            if (sw.widget)
+                  sw.widget->blockSignals(false);
             }
 
       //TODO: convert the rest:
@@ -894,8 +915,8 @@ void EditStyle::resetStyleValue(int i)
       {
       StyleIdx idx = (StyleIdx)i;
       cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle()->value(idx)));
-      cs->update();
       setValues();
+      cs->update();
       }
 
 //---------------------------------------------------------

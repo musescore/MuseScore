@@ -21,6 +21,7 @@
 #include "page.h"
 #include "mscore.h"
 #include "clef.h"
+#include "tuplet.h"
 
 namespace Ms {
 
@@ -251,16 +252,20 @@ static const StyleType styleTypes[] {
       { StyleIdx::linearStretch,           "linearStretch",           QVariant(qreal(1.5)) },
       { StyleIdx::crossMeasureValues,      "crossMeasureValues",      QVariant(false) },
       { StyleIdx::keySigNaturals,          "keySigNaturals",          QVariant(int(KeySigNatural::NONE)) },
+
       { StyleIdx::tupletMaxSlope,          "tupletMaxSlope",          QVariant(qreal(0.5)) },
       { StyleIdx::tupletOufOfStaff,        "tupletOufOfStaff",        QVariant(true) },
       { StyleIdx::tupletVHeadDistance,     "tupletVHeadDistance",     Spatium(.5) },
       { StyleIdx::tupletVStemDistance,     "tupletVStemDistance",     Spatium(.25) },
       { StyleIdx::tupletStemLeftDistance,  "tupletStemLeftDistance",  Spatium(.5) },
-
       { StyleIdx::tupletStemRightDistance, "tupletStemRightDistance", Spatium(.5) },
       { StyleIdx::tupletNoteLeftDistance,  "tupletNoteLeftDistance",  Spatium(0.0) },
       { StyleIdx::tupletNoteRightDistance, "tupletNoteRightDistance", Spatium(0.0) },
       { StyleIdx::tupletBracketWidth,      "tupletBracketWidth",      Spatium(0.1) },
+      { StyleIdx::tupletDirection,         "tupletDirection",         Direction(Direction::AUTO) },
+      { StyleIdx::tupletNumberType,        "tupletNumberType",        int(Tuplet::NumberType::SHOW_NUMBER) },
+      { StyleIdx::tupletBracketType,       "tupletBracketType",       int(Tuplet::BracketType::AUTO_BRACKET) },
+
       { StyleIdx::barreLineWidth,          "barreLineWidth",          QVariant(1.0) },
       { StyleIdx::fretMag,                 "fretMag",                 QVariant(1.0) },
       { StyleIdx::scaleBarlines,           "scaleBarlines",           QVariant(true) },
