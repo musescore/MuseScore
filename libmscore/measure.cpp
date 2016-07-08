@@ -3400,9 +3400,8 @@ void Measure::stretchMeasure(qreal targetWidth)
                               qreal w = x2 - x1 - 2 * d;
 
                               rest->setMMWidth(w);
-                              StaffLines* sl = _mstaves[staffIdx]->lines;
                               qreal x = x1 - s.x() + d;
-                              e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
+                              e->setPos(x, e->staff()->height() * .5);   // center vertically in measure
                               rest->layout();
                               s.createShape(staffIdx);
                               }
