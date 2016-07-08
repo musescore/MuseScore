@@ -646,6 +646,10 @@ void Voice::voice_start()
 
       for (int i = 0; i < mod_count; i++) {
             Mod* m              = &mod[i];
+            if (m->get_dest() == GEN_ATTENUATION && m->get_source1() == FLUID_MOD_VELOCITY) {
+                  float amount = (channel->getCC(VELOCITY_TO_VOLUME_AMOUNT)/127.0f) * 960.0f;
+                  m->set_amount(amount);
+                  }
             float modval        = m->get_value(channel, this);
             int dest_gen_index  = m->dest;
             Generator* dest_gen = &gen[dest_gen_index];

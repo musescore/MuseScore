@@ -21,6 +21,7 @@
 #include "undo.h"
 #include "staff.h"
 #include "mscore.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -220,6 +221,7 @@ QVariant HairpinSegment::getProperty(P_ID id) const
             case P_ID::DIAGONAL:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
+            case P_ID::HAIRPIN_SINGLENOTE:
                   return hairpin()->getProperty(id);
             default:
                   return TextLineSegment::getProperty(id);
@@ -242,6 +244,7 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
+            case P_ID::HAIRPIN_SINGLENOTE:
                   return hairpin()->setProperty(id, v);
             default:
                   return TextLineSegment::setProperty(id, v);
@@ -264,6 +267,7 @@ QVariant HairpinSegment::propertyDefault(P_ID id) const
             case P_ID::DIAGONAL:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
+            case P_ID::HAIRPIN_SINGLENOTE:
                   return hairpin()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
@@ -297,6 +301,7 @@ void HairpinSegment::resetProperty(P_ID id)
             case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
+            case P_ID::HAIRPIN_SINGLENOTE:
                   return hairpin()->resetProperty(id);
 
             default:
@@ -323,6 +328,7 @@ Hairpin::Hairpin(Score* s)
       hairpinHeightStyle     = PropertyStyle::STYLED;
       _hairpinContHeight     = score()->styleS(StyleIdx::hairpinContHeight);
       hairpinContHeightStyle = PropertyStyle::STYLED;
+      _singleNoteCrescendo   = true;
       }
 
 //---------------------------------------------------------
@@ -364,6 +370,7 @@ void Hairpin::write(Xml& xml) const
       writeProperty(xml, P_ID::PLACEMENT);
       writeProperty(xml, P_ID::HAIRPIN_HEIGHT);
       writeProperty(xml, P_ID::HAIRPIN_CONT_HEIGHT);
+      writeProperty(xml, P_ID::HAIRPIN_SINGLENOTE);
       TextLine::writeProperties(xml);
       xml.etag();
       }
@@ -405,6 +412,8 @@ void Hairpin::read(XmlReader& e)
                   _dynRange = Dynamic::Range(e.readInt());
             else if (tag == "useTextLine")
                   _useTextLine = e.readInt();
+            else if (tag == "hairpinSingleNote")
+                  _singleNoteCrescendo = e.readBool();
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
@@ -468,6 +477,8 @@ QVariant Hairpin::getProperty(P_ID id) const
                   return _hairpinHeight;
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return _hairpinContHeight;
+            case P_ID::HAIRPIN_SINGLENOTE:
+                  return _singleNoteCrescendo;
             default:
                   return TextLine::getProperty(id);
             }
@@ -508,6 +519,9 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
                   hairpinContHeightStyle = PropertyStyle::UNSTYLED;
                   _hairpinContHeight = v.value<Spatium>();
                   break;
+            case P_ID::HAIRPIN_SINGLENOTE:
+                  _singleNoteCrescendo = v.toBool();
+                  break;
             default:
                   return TextLine::setProperty(id, v);
             }
@@ -532,6 +546,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
             case P_ID::HAIRPIN_HEIGHT:      return score()->style(StyleIdx::hairpinHeight);
             case P_ID::HAIRPIN_CONT_HEIGHT: return score()->style(StyleIdx::hairpinContHeight);
             case P_ID::LINE_STYLE:          return _useTextLine ? int(Qt::CustomDashLine) : int(Qt::SolidLine);
+            case P_ID::HAIRPIN_SINGLENOTE:  return true;
 
             default:
                   return TextLine::propertyDefault(id);
@@ -573,6 +588,10 @@ void Hairpin::resetProperty(P_ID id)
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
                   hairpinContHeightStyle = PropertyStyle::STYLED;
+                  break;
+
+            case P_ID::HAIRPIN_SINGLENOTE:
+                  setSingleNoteCrescendo(true);
                   break;
 
             default:

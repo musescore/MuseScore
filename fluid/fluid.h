@@ -66,6 +66,7 @@ enum fluid_midi_control_change {
       BANK_SELECT_MSB = 0x00,
       MODULATION_MSB = 0x01,
       BREATH_MSB = 0x02,
+      VELOCITY_TO_VOLUME_AMOUNT = 0x03, /* not standard */
       FOOT_MSB = 0x04,
       PORTAMENTO_TIME_MSB = 0x05,
       DATA_ENTRY_MSB = 0x06,

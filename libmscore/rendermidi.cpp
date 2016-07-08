@@ -50,6 +50,7 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
+#include "element.h"
 
 namespace Ms {
 
@@ -338,10 +339,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick();
+            int tick2 = seg->tick() + seg->ticks() - 1;
             for (int track = strack; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
-                        track += VOICES-1;
+                        track += VOICES - 1;
                         continue;
                         }
                   Element* cr = seg->element(track);
@@ -350,13 +352,65 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   Chord* chord = static_cast<Chord*>(cr);
                   Staff* staff = chord->staff();
+
                   int velocity = staff->velocities().velo(seg->tick());
+
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
-                  foreach (Articulation* a, chord->articulations()) {
-                        instr->updateVelocity(&velocity,channel, a->subtypeName());
+                  for (Articulation* a : chord->articulations()) {
+                        instr->updateVelocity(&velocity, channel, a->subtypeName());
                         }
+
+                  bool singleNoteCrescendo = false;
+                  for (auto it : staff->score()->spannerMap().findOverlapping(tick, tick2)) {
+                        Spanner *s = it.value;
+                        if (it.stop == tick)
+                              continue;
+                        if (s->isHairpin() && s->staff() == chord->staff()) {
+                              Hairpin* h = toHairpin(s);
+                              singleNoteCrescendo = h->singleNoteCrescendo();
+                              break;
+                              }
+                        }
+
+                  if (instr->useExpression() && singleNoteCrescendo) {
+
+                        int velocityEnd = staff->velocities().velo(tick2);
+
+                        for (Articulation* a : chord->articulations()) {
+                              instr->updateVelocity(&velocityEnd, channel, a->subtypeName());
+                              }
+
+                        int cc11Ticks = seg->ticks();
+                        int cc11Amount = velocityEnd-velocity;
+
+                        int cc11Value = velocity;
+
+                        int tickInc;
+                        // Do a update for every signle little step - maybe that is a bit too much
+                        // TODO find out good update intervals!
+                        if (cc11Amount != 0)
+                              tickInc = cc11Ticks/abs(cc11Amount);
+                        else
+                              tickInc = 0;
+
+                        for (int i=0; i < abs(cc11Amount) ;++i) {
+                              NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, cc11Value);
+                              events->insert(std::pair<int, NPlayEvent>(seg->tick()+i*tickInc,cc11event));
+                              if (cc11Amount > 0)
+                                    cc11Value++;
+                              else
+                                    cc11Value--;
+                              }
+                        }
+                  else if (instr->useExpression()) {
+                        NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, velocity);
+                        events->insert(std::pair<int, NPlayEvent>(seg->tick(), cc11event));
+                        }
+
+                  if (instr->fixedVelocity() > 0)
+                        velocity = instr->fixedVelocity();
 
                   for (Chord* c : chord->graceNotesBefore()) {
                         for (const Note* note : c->notes())

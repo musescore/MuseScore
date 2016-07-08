@@ -93,6 +93,9 @@ Instrument::Instrument()
       _maxPitchP   = 127;
       _useDrumset  = false;
       _drumset     = 0;
+
+      _useExpression = false;
+      _fixedVelocity = 0;
       }
 
 Instrument::Instrument(const Instrument& i)
@@ -116,11 +119,13 @@ Instrument::Instrument(const Instrument& i)
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
+      _fixedVelocity = i._fixedVelocity;
+      _useExpression = i._useExpression;
       }
 
 void Instrument::operator=(const Instrument& i)
       {
-      qDeleteAll(_channel);
+      //qDeleteAll(_channel);
       _channel.clear();
       delete _drumset;
 
@@ -143,6 +148,8 @@ void Instrument::operator=(const Instrument& i)
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
+      _fixedVelocity = i._fixedVelocity;
+      _useExpression = i._useExpression;
       }
 
 //---------------------------------------------------------
@@ -212,6 +219,10 @@ void Instrument::write(Xml& xml, Part* part) const
             xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
+      if (_useExpression)
+            xml.tag("dynamics", "expression");
+      if (_fixedVelocity > 0)
+            xml.tag("fixedVelocity", _fixedVelocity);
       for (int i = 0; i < _clefType.size(); ++i) {
             ClefTypeList ct = _clefType[i];
             if (ct._concertClef == ct._transposingClef) {
@@ -367,6 +378,15 @@ void Instrument::read(XmlReader& e, Part* part)
                   pan = e.readInt();
             else if (tag == "midiChannel")      // obsolete
                   e.skipCurrentElement();
+            else if (tag == "dynamics") {
+                 QString dynType = e.readXml();
+                 if (dynType == "expression")
+                       _useExpression = true;
+                 else
+                       _useExpression = false;
+            }
+            else if (tag == "fixedVelocity")
+                  _fixedVelocity = e.readInt();
             else
                   e.unknown();
             }
@@ -424,6 +444,7 @@ Channel::Channel()
       pan      = 64; // actually 63.5 for center
       chorus   = 0;
       reverb   = 0;
+      vel2vol  = 127;
 
       mute     = false;
       solo     = false;
@@ -458,6 +479,8 @@ void Channel::write(Xml& xml, Part* part) const
                   if (e.dataA() == CTRL_REVERB_SEND && e.dataB() == 0)
                         continue;
                   if (e.dataA() == CTRL_CHORUS_SEND && e.dataB() == 0)
+                        continue;
+                  if (e.dataA() == CTRL_VEL2VOL && e.dataB() == 127)
                         continue;
                   }
 
@@ -521,6 +544,9 @@ void Channel::read(XmlReader& e, Part* part)
                               break;
                         case CTRL_REVERB_SEND:
                               reverb = value;
+                              break;
+                        case CTRL_VEL2VOL:
+                              vel2vol = value;
                               break;
                         default:
                               {
@@ -607,6 +633,9 @@ void Channel::updateInitList() const
 
       e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb);
       init[int(A::REVERB)] = e;
+
+      e.setData(ME_CONTROLLER, CTRL_VEL2VOL, vel2vol);
+      init[int(A::VELOCITY_TO_VOL)] = e;
       }
 
 //---------------------------------------------------------

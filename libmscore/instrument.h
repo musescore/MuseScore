@@ -96,7 +96,7 @@ struct Channel {
       // Channel init EventList (maybe zero)
 
       enum class A : char {
-            HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
+            HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB, VELOCITY_TO_VOL,
             INIT_COUNT
             };
       QString name;
@@ -111,6 +111,7 @@ struct Channel {
       char pan;
       char chorus;
       char reverb;
+      char vel2vol;
 
       bool mute;
       bool solo;
@@ -142,6 +143,9 @@ class Instrument {
       bool _useDrumset;
       Drumset* _drumset;
       StringData  _stringData;
+
+      char _fixedVelocity;
+      bool _useExpression;
 
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
@@ -183,6 +187,11 @@ class Instrument {
       const Channel* channel(int idx) const                  { return _channel[idx];  }
       ClefTypeList clefType(int staffIdx) const;
       void setClefType(int staffIdx, const ClefTypeList& c);
+
+      int  fixedVelocity()                                   { return _fixedVelocity;  }
+      void setFixedVelocity(int v)                           { _fixedVelocity = v;     }
+      bool useExpression()                                   { return _useExpression;  }
+      void setUseExpression(bool v)                          { _useExpression = v;     }
 
       const QList<NamedEventList>& midiActions() const       { return _midiActions; }
       const QList<MidiArticulation>& articulation() const    { return _articulation; }

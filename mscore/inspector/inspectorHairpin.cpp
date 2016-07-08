@@ -15,6 +15,7 @@
 #include "musescore.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/score.h"
+#include "libmscore/part.h"
 
 namespace Ms {
 
@@ -42,6 +43,7 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { P_ID::LINE_STYLE,          0, 0, l.lineStyle,         l.resetLineStyle         },
             { P_ID::HAIRPIN_TEXTLINE,    0, 0, h.useTextLine,       h.resetUseTextLine       },
             { P_ID::HAIRPIN_CIRCLEDTIP,  0, 0, h.hairpinCircledTip, h.resetHairpinCircledTip },
+            { P_ID::HAIRPIN_SINGLENOTE,  0, 0, h.hairpinSingleNote, h.resetHairpinSingleNote },
             { P_ID::HAIRPIN_TYPE,        0, 0, h.hairpinType,       h.resetHairpinType       },
             { P_ID::DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
             { P_ID::VELO_CHANGE,         0, 0, h.veloChange,        h.resetVeloChange        },
@@ -63,6 +65,16 @@ void InspectorHairpin::postInit()
       h.hairpinHeight->setDisabled(useTextLine);
       h.hairpinContHeight->setDisabled(useTextLine);
       }
+
+void InspectorHairpin::setElement()
+      {
+      InspectorBase::setElement();
+      HairpinSegment* hs = toHairpinSegment(inspector->element());
+      Hairpin* hp = hs->hairpin();
+      Instrument* inst = hp->part()->instrument(hp->tick());
+      h.hairpinSingleNote->setHidden(!inst->useExpression());
+      }
+
 
 }
 

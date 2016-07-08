@@ -132,6 +132,7 @@ enum class P_ID : unsigned char {
 
       HAIRPIN_TEXTLINE,
       HAIRPIN_CIRCLEDTIP,
+      HAIRPIN_SINGLENOTE,
       HAIRPIN_TYPE,
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,

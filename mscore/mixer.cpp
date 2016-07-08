@@ -56,6 +56,7 @@ PartEdit::PartEdit(QWidget* parent)
       connect(pan,      SIGNAL(valueChanged(double,int)), SLOT(panChanged(double)));
       connect(chorus,   SIGNAL(valueChanged(double,int)), SLOT(chorusChanged(double)));
       connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
+      connect(vel2vol,  SIGNAL(valueChanged(double,int)), SLOT(vel2volChanged(double)));
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
       connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
@@ -66,6 +67,9 @@ PartEdit::PartEdit(QWidget* parent)
       portLabel     ->setVisible(preferences.showMidiControls);
       channelSpinBox->setVisible(preferences.showMidiControls);
       portSpinBox   ->setVisible(preferences.showMidiControls);
+
+      vel2vol->setVisible(preferences.showMidiControls);
+      vel2volLabel->setVisible(preferences.showMidiControls);
 
       if (!preferences.showMidiControls)
             hboxLayout->setSpacing(20);
@@ -97,6 +101,8 @@ void PartEdit::setPart(Part* p, Channel* a)
       reverb->setDclickValue1(dummy.reverb);
       reverb->setDclickValue2(dummy.reverb);
       _setValue(chorus, a->chorus);
+
+      _setValue(vel2vol, a->vel2vol);
 
       chorus->setDclickValue1(dummy.chorus);
       chorus->setDclickValue2(dummy.chorus);
@@ -304,10 +310,13 @@ void Mixer::midiPrefsChanged(bool showMidiControls)
             pe->channelSpinBox->setVisible(showMidiControls);
             pe->portSpinBox   ->setVisible(showMidiControls);
 
+            pe->vel2vol->setVisible(showMidiControls);
+            pe->vel2volLabel->setVisible(showMidiControls);
+
             if (!showMidiControls)
                   pe->hboxLayout->setSpacing(20);
             else
-                  pe->hboxLayout->setSpacing(5);
+                  pe->hboxLayout1->setSpacing(5);
             }
       }
 
@@ -403,6 +412,19 @@ void PartEdit::chorusChanged(double val, bool syncControls)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_CHORUS_SEND, iv);
       channel->chorus = iv;
+      channel->updateInitList();
+      sync(syncControls);
+      }
+
+//---------------------------------------------------------
+//   vel2volChanged
+//---------------------------------------------------------
+
+void PartEdit::vel2volChanged(double val, bool syncControls)
+      {
+      int iv = lrint(val);
+      seq->setController(channel->channel, CTRL_VEL2VOL, iv);
+      channel->vel2vol = iv;
       channel->updateInitList();
       sync(syncControls);
       }
@@ -564,6 +586,10 @@ void PartEdit::sync(bool syncControls)
                   if (chorus->value() != pe->chorus->value()) {
                         _setValue(pe->chorus, this->chorus->value());
                        emit pe->chorusChanged(this->chorus->value(), false);
+                        }
+                  if (vel2vol->value() != pe->vel2vol->value()) {
+                        _setValue(pe->vel2vol, this->vel2vol->value());
+                        emit pe->vel2volChanged(this->vel2vol->value(), false);
                         }
                   if (mute->isChecked() != pe->mute->isChecked()) {
                         _setChecked(pe->mute, channel->mute);

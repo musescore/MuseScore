@@ -274,6 +274,62 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="4">
+         <widget class="Awl::Knob" name="vel2vol" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Velocity to volume</string>
+          </property>
+          <property name="accessibleName">
+           <string>Velocity to volume</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
+          </property>
+          <property name="invertedAppearance" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="scaleWidth" stdset="0">
+           <number>5</number>
+          </property>
+          <property name="scaleValueColor" stdset="0">
+           <color>
+            <red>238</red>
+            <green>80</green>
+            <blue>54</blue>
+           </color>
+          </property>
+          <property name="maxValue" stdset="0">
+           <double>127.000000000000000</double>
+          </property>
+          <property name="lineStep" stdset="0">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="pageStep" stdset="0">
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label">
           <property name="sizePolicy">
@@ -380,6 +436,34 @@
           </property>
           <property name="text">
            <string>Cho</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="vel2volLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Vel2Vol</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -519,6 +603,7 @@
   <tabstop>pan</tabstop>
   <tabstop>reverb</tabstop>
   <tabstop>chorus</tabstop>
+  <tabstop>vel2vol</tabstop>
  </tabstops>
  <resources/>
  <connections/>

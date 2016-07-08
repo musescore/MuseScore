@@ -32,6 +32,7 @@
 #include "libmscore/page.h"
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
+#include "libmscore/hairpin.h"
 #include "preferences.h"
 #include "seq.h"
 #include "libmscore/part.h"

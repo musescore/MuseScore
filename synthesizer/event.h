@@ -126,7 +126,8 @@ enum {
       CTRL_PROGRAM   = 0x81,
       /*             = 0x82,*/
       CTRL_PRESS     = 0x83,
-      CTRL_POLYAFTER = 0x84
+      CTRL_POLYAFTER = 0x84,
+      CTRL_VEL2VOL   = 0x03
       };
 
 //---------------------------------------------------------
