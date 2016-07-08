@@ -31,7 +31,8 @@ class Element;
 //   StyleIdx
 //---------------------------------------------------------
 
-enum class StyleIdx : unsigned char {
+enum class StyleIdx : int {
+      NOSTYLE = -1,
       staffUpperBorder,
       staffLowerBorder,
       staffDistance,

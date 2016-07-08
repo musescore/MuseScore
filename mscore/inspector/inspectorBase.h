@@ -15,6 +15,7 @@
 #define __INSPECTOR_BASE_H__
 
 #include "libmscore/property.h"
+#include "libmscore/style.h"
 
 namespace Ms {
 
@@ -42,6 +43,7 @@ class InspectorBase : public QWidget {
 
       QSignalMapper* resetMapper;
       QSignalMapper* valueMapper;
+      QSignalMapper* styleMapper;
 
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);
@@ -50,6 +52,7 @@ class InspectorBase : public QWidget {
       virtual void valueChanged(int idx, bool reset);
       virtual void valueChanged(int idx);
       void resetClicked(int);
+      void setStyleClicked(int);
 
    protected:
       std::vector<InspectorItem> iList;

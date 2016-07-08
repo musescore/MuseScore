@@ -357,12 +357,12 @@ void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st, Prop
       {
       if (propertyLink(t)) {
             for (ScoreElement* ee : e->linkList()) {
-                  if (ee->getProperty(t) != st)
+                  if (ee->getProperty(t) != st || ee->propertyStyle(t) != ps)
                         undo(new ChangeProperty(ee, t, st, ps));
                   }
             }
       else {
-            if (e->getProperty(t) != st)
+            if (e->getProperty(t) != st || e->propertyStyle(t) != ps)
                   undo(new ChangeProperty(e, t, st, ps));
             }
       }

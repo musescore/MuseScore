@@ -926,7 +926,6 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
 
 bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
-      printf("setProperty %s\n", propertyName(propertyId));
       switch (propertyId) {
             case P_ID::DIRECTION:
                   directionStyle = PropertyStyle::UNSTYLED;

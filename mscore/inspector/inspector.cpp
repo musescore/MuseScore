@@ -690,6 +690,7 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { P_ID::NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
             { P_ID::BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
             };
+
       mapSignals();
       }
 
