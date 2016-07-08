@@ -41,7 +41,6 @@ void SfzControl::init()
       {
       defaultPath.clear();
       octave_offset = 0;
-      defines.clear();
       }
 
 //---------------------------------------------------------
@@ -351,7 +350,7 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
             sample.replace("\\", "/");
             }
       else if (opcode == "default_path") {
-            c.defaultPath = opcode_data;
+            c.defaultPath = opcode_data_full;
             }
       else if (opcode == "key") {
             lokey = readKey(opcode_data, c);
@@ -465,6 +464,19 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
             qDebug("SfzRegion: unknown opcode <%s>", qPrintable(opcode));
       }
 
+QStringList readFile(QString const fn)
+      {
+            QFile f(fn);
+            QStringList list;
+            if (!f.open(QIODevice::ReadOnly)) {
+                  qDebug("ZInstrument: cannot load %s", qPrintable(fn));
+                  return list;
+                  }
+            while (!f.atEnd())
+                  list.append(QString(f.readLine().simplified()));
+            return list;
+      }
+
 //---------------------------------------------------------
 //   loadSfz
 //---------------------------------------------------------
@@ -472,69 +484,130 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
 bool ZInstrument::loadSfz(const QString& s)
       {
       _program = 0;
-      QFile f(s);
-      if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("ZInstrument: cannot load %s", qPrintable(s));
+      QFileInfo fi(s);
+      QString path = fi.absolutePath();
+
+      QStringList fileContents = readFile(s);
+
+      if (fileContents.empty()) {
             return false;
             }
-      QFileInfo fi(f);
-      QString path = fi.absolutePath();
-      qint64 total = fi.size();
-
-      QString sample;
-
-      SfzRegion r;
-      SfzRegion g;      // group
-      r.init(path);
-      g.init(path);
 
       SfzControl c;
       c.init();
       for (int i = 0;i < 128; i++)
             c.set_cc[i] = -1;
 
+      int idx = 0;
+      // preprocessor
+      while(idx < fileContents.size()) {
+            QRegularExpression findWithSpaces("\"(.+)\"");
+            QRegularExpression comment("//.*$");
+            QRegularExpressionMatch foundWithSpaces;
+            QString curLine = fileContents[idx];
+            curLine = curLine.remove(comment);
+            fileContents[idx] = curLine;
+
+            if (curLine.startsWith("#define")) {
+                  QStringList define = curLine.split(" ");
+                  foundWithSpaces = findWithSpaces.match(curLine);
+                  if (define.size() == 3)
+                        c.defines.insert(std::pair<QString, QString>(define[1], define[2]));
+                  else if(foundWithSpaces.hasMatch())
+                        c.defines.insert(std::pair<QString, QString>(define[1], foundWithSpaces.captured(1)));
+                  fileContents.removeAt(idx);
+                  }
+            else if (curLine.startsWith("#include")) {
+                  foundWithSpaces = findWithSpaces.match(curLine);
+                  if (foundWithSpaces.hasMatch()) {
+                        QString newFilename = foundWithSpaces.captured(1);
+
+                        for(auto define : c.defines) {
+                              newFilename.replace(define.first, define.second);
+                              }
+
+                        QStringList newFileContents = readFile(path + "/" + newFilename);
+                        if (newFileContents.empty())
+                              return false;
+
+                        int offset = 1;
+                        for (QString newFileLine : newFileContents) {
+                              fileContents.insert(idx+offset, newFileLine);
+                              offset++;
+                              }
+
+                        fileContents.removeAt(idx);
+                        }
+                  }
+            else if (curLine.isEmpty())
+                  fileContents.removeAt(idx);
+            else
+                  idx++;
+            }
+
+      int total = fileContents.size();
+      SfzRegion r;
+      SfzRegion g;      // group
+      SfzRegion glob;
+      r.init(path);
+      g.init(path);
+      glob.init(path);
+
+
       bool groupMode = false;
+      bool globMode = false;
       zerberus->setLoadProgress(0);
 
-      while (!f.atEnd()) {
-            QByteArray ba = f.readLine();
-            zerberus->setLoadProgress(((qreal)f.pos() * 100) / total);
-            ba = ba.simplified();
+      for (int idx = 0; idx < fileContents.size(); idx++) {
+            QString curLine = fileContents[idx];
+            zerberus->setLoadProgress(((qreal) idx * 100) /  (qreal) total);
 
-            if (ba.isEmpty() || ba.startsWith("//"))
-                  continue;
             if (zerberus->loadWasCanceled())
                   return false;
-            if (ba.startsWith("<group>")) {
-                  if (!groupMode && !r.isEmpty())
+            if (curLine.startsWith("<global>")) {
+                  if (!globMode && !groupMode && !r.isEmpty())
+                        addRegion(r);
+                  glob.init(path);
+                  g.init(path); // global also resets group
+                  r.init(path);
+                  globMode = true;
+                  }
+            if (curLine.startsWith("<group>")) {
+                  if (!groupMode && !globMode && !r.isEmpty())
                         addRegion(r);
                   g.init(path);
-                  r.init(path);
+                  if (globMode) {
+                        glob = r;
+                        globMode = false;
+                        }
+                  else {
+                        r = glob; // initalize group with global values
+                        }
                   groupMode = true;
-                  ba = ba.mid(7);
+                  curLine = curLine.mid(7);
                   }
-            else if (ba.startsWith("<region>")) {
+            else if (curLine.startsWith("<region>")) {
                   if (groupMode) {
                         g = r;
                         groupMode = false;
+                        }
+                  else if (globMode) {
+                        glob = r;
+                        g = glob;
+                        globMode = false;
                         }
                   else {
                         if (!r.isEmpty())
                               addRegion(r);
                         r = g;  // initialize next region with group values
                         }
-                  ba = ba.mid(8);
+                  curLine = curLine.mid(8);
                   }
-            else if (ba.startsWith("<control>"))
+            else if (curLine.startsWith("<control>"))
                   c.init();
-            else if (ba.startsWith("#define")) {
-                  QStringList define = QString(ba).split(" ");
-                  if (define.size() == 3)
-                        c.defines.insert(std::pair<QString, QString>(define[1], define[2]));
-                  }
 
             QRegularExpression re("\\s?([\\w\\$]+)="); // defines often use the $-sign
-            QRegularExpressionMatchIterator i = re.globalMatch(ba);
+            QRegularExpressionMatchIterator i = re.globalMatch(curLine);
 
             while (i.hasNext()) {
                   QRegularExpressionMatch match = i.next();
@@ -545,8 +618,8 @@ bool ZInstrument::loadSfz(const QString& s)
                         ei = nextMatch.capturedStart();
                         }
                   else
-                        ei = ba.size();
-                  QString s = ba.mid(si, ei-si);
+                        ei = curLine.size();
+                  QString s = curLine.mid(si, ei-si);
                   r.readOp(match.captured(1), s, c);
                   }
             }
@@ -555,7 +628,7 @@ bool ZInstrument::loadSfz(const QString& s)
             _setcc[i] = c.set_cc[i];
 
       zerberus->setLoadProgress(100);
-      if (!groupMode && !r.isEmpty())
+      if (!groupMode && !globMode && !r.isEmpty())
             addRegion(r);
       return true;
       }
