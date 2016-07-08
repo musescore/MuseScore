@@ -158,6 +158,13 @@ class MgStyle : public QCommonStyle {
                   Header_TextToIconSpace = 3,
                   Header_ContentsMargin = 3,
 
+                  // icon
+                  Icon_SizeSmall = 16,
+                  Icon_SizeButton = Icon_SizeSmall,
+                  Icon_SizeToolBar = 22,
+                  Icon_SizeLarge = 32,
+                  Icon_SizeMessageBox = 48,
+
                   // line edit
                   LineEdit_FrameWidth = 3,
 
@@ -166,11 +173,12 @@ class MgStyle : public QCommonStyle {
                   MenuItem_ArrowWidth = 11,
                   MenuItem_ArrowSpace = 3,
                   MenuItem_CheckWidth = 16,
-                  MenuItem_CheckSpace = 3,
-                  MenuItem_IconWidth = 12,
-                  MenuItem_IconSpace = 3,
+                  MenuItem_CheckSpace = 8,
+                  MenuItem_IconWidth = Icon_SizeToolBar,
+                  MenuItem_IconSpace = 8,
                   MenuItem_Margin = 2,
                   MenuItem_MinHeight = 20,
+                  MenuItem_MinLeftColWidth = 10,
 
                   // menu bar item
                   MenuBarItem_Margin = 3,
