@@ -40,7 +40,7 @@ class Channel {
       void pitchBend(int);
       void controller(int ctrl, int val);
       ZInstrument* instrument() const    { return _instrument; }
-      void setInstrument(ZInstrument* i) { _instrument = i; }
+      void setInstrument(ZInstrument* i) { _instrument = i; resetCC(); }
       Zerberus* msynth() const          { return _msynth; }
       int sustain() const;
       float gain() const         { return _gain * _midiVolume;  }
@@ -48,6 +48,7 @@ class Channel {
       float panRightGain() const { return _panRightGain; }
       int idx() const            { return _idx; }
       int getCtrl(int CTRL) const;
+      void resetCC();
       };
 
 
