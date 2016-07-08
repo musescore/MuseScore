@@ -92,13 +92,13 @@ void Rest::draw(QPainter* painter) const
 
       painter->setPen(curColor());
 
-      if (parent() && measure() && measure()->isMMRest()) {
+      if (measure() && measure()->isMMRest()) {
             //only on voice 1
-            if ((track() % VOICES) != 0)
+            if (track() % VOICES)
                   return;
             Measure* m = measure();
             int n      = m->mmRestCount();
-            qreal pw = _spatium * .7;
+            qreal pw   = _spatium * .7;
             QPen pen(painter->pen());
             pen.setWidthF(pw);
             painter->setPen(pen);
