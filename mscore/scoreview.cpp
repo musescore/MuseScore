@@ -2046,8 +2046,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.setPen(pen);
             double _spatium = score()->spatium();
             double x2      = rss->pagePos().x() - _spatium;
-            int staffStart = 0;
-            int staffEnd   = 1;
+            int staffStart = rangeAnn->staffStart();
+            int staffEnd   = rangeAnn->staffEnd();
 
             System* system2 = rss->measure()->system();
             QPointF pt      = rss->pagePos();
@@ -5584,14 +5584,14 @@ void ScoreView::cmdAddRangeAnnotation()
       _score->startCmd();
       Selection selection = _score->selection();
       if (selection.isSingle()) {
-      ChordRest* cr = _score->getSelectedChordRest();
-      if (!cr)
-            return;
-      RangeAnnotation* range = new RangeAnnotation();
-      range->setRange(cr->segment(), _score->tick2segment(cr->segment()->tick() + 480), selection.staffStart(), selection.staffEnd());
-      _score->addRangeAnnotation(range);
-      _score->endCmd();
-      }
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (!cr)
+                  return;
+            RangeAnnotation* range = new RangeAnnotation();
+            range->setRange(cr->segment(), _score->tick2segment(cr->segment()->tick() + 480), selection.staffStart(), selection.staffEnd());
+            _score->addRangeAnnotation(range);
+            _score->endCmd();
+            }
       else if (selection.isRange()) {
             RangeAnnotation* range = new RangeAnnotation();
             Segment* startSegment = selection.startSegment();
@@ -5601,7 +5601,7 @@ void ScoreView::cmdAddRangeAnnotation()
             range->setRange(startSegment, endSegment, staffStart, staffEnd);
             _score->addRangeAnnotation(range);
             _score->endCmd();
-        }
+            }
       }
 
 //---------------------------------------------------------
