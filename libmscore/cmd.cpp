@@ -291,14 +291,9 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
       else
             tick2 = endSegment->tick();
       spanner->setTick2(tick2);
-      if (spanner->type() == Element::Type::TEXTLINE
-          || spanner->type() == Element::Type::NOTELINE
-          || spanner->type() == Element::Type::OTTAVA
-          || spanner->type() == Element::Type::PEDAL
-          || spanner->type() == Element::Type::HAIRPIN
-          || spanner->type() == Element::Type::VOLTA) {
+      if (spanner->isTextLineType()) {
             // rebase text elements to score style
-            TextLine* tl = toTextLine(spanner);
+            TextLine* tl = toTextLineType(spanner);
             TextStyleType st;
             Text* t;
             // begin

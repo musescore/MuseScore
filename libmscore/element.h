@@ -98,6 +98,7 @@ class Pedal;
 class LedgerLine;
 class Icon;
 class VoltaSegment;
+class NoteLine;
 
 enum class SymId;
 
@@ -654,6 +655,11 @@ class Element : public QObject, public ScoreElement {
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
       bool isSLine() const;
       bool isSLineSegment() const;
+      bool isTextLineType() const {
+            return type() == Element::Type::TEXTLINE || type() == Element::Type::NOTELINE
+                        || type() == Element::Type::OTTAVA || type() == Element::Type::PEDAL
+                        || type() == Element::Type::HAIRPIN || type() == Element::Type::VOLTA;
+            }
 
 #define CONVERT(a,b) \
       bool is##a() const { return type() == Element::Type::b; }
@@ -714,6 +720,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(LedgerLine,    LEDGER_LINE)
       CONVERT(Icon,          ICON)
       CONVERT(VoltaSegment,  VOLTA_SEGMENT)
+      CONVERT(NoteLine,      NOTELINE)
 #undef CONVERT
       };
 
@@ -739,6 +746,18 @@ static inline const DurationElement* toDurationElement(const Element* e) {
       Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
          || e->type() == Element::Type::REPEAT_MEASURE || e->type() == Element::Type::TUPLET);
       return (const DurationElement*)e;
+      }
+static inline TextLine* toTextLineType(Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::TEXTLINE || e->type() == Element::Type::NOTELINE
+         || e->type() == Element::Type::OTTAVA || e->type() == Element::Type::PEDAL
+         || e->type() == Element::Type::HAIRPIN || e->type() == Element::Type::VOLTA);
+      return (TextLine*)e;
+      }
+static inline const TextLine* toTextLineType(const Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::TEXTLINE || e->type() == Element::Type::NOTELINE
+         || e->type() == Element::Type::OTTAVA || e->type() == Element::Type::PEDAL
+         || e->type() == Element::Type::HAIRPIN || e->type() == Element::Type::VOLTA);
+      return (const TextLine*)e;
       }
 
 #define CONVERT(a,b) \
@@ -796,12 +815,13 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Dynamic,       DYNAMIC)
       CONVERT(InstrumentName, INSTRUMENT_NAME)
       CONVERT(Accidental,    ACCIDENTAL)
-      CONVERT(TextLine,     TEXTLINE)
+      CONVERT(TextLine,      TEXTLINE)
       CONVERT(Pedal,         PEDAL)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
       CONVERT(LedgerLine,    LEDGER_LINE)
       CONVERT(Icon,          ICON)
       CONVERT(VoltaSegment,  VOLTA_SEGMENT)
+      CONVERT(NoteLine,      NOTELINE)
 #undef CONVERT
 
 //---------------------------------------------------------
