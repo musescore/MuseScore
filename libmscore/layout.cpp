@@ -1367,14 +1367,18 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             }
       m->setStartRepeatBarLine();
 
-      // create system barline
+      //
+      // create systemic barline
+      // new behaviour: depends on number of total staves
+      // old behaviour: depends on number of visible staves
 
       BarLine* bl = 0;
       Segment* s = m->findSegment(Segment::Type::BeginBarLine, tick);
       if (s)
             bl = toBarLine(s->element(0));
 
-      if ((nVisible > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nVisible <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
+      int n = score()->nstaves();
+      if ((n > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (n == 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
             if (!bl) {
                   bl = new BarLine(this);
                   bl->setTrack(0);
@@ -1386,6 +1390,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   undo(new AddElement(bl));
                   seg->createShapes();
                   }
+            bl->setSpan(n);
             }
       else if (bl)
             score()->undoRemoveElement(bl);
