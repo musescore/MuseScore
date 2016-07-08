@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # do not build mac for PR
-if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then
+if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
   exit 0
 fi
 
@@ -20,7 +20,7 @@ brew install bottles/libsndfile*
 brew install bottles/portaudio*
 
 # additional dependencies
-brew install jack lame
+brew install jack lame ruby
 
 #install Qt
 which -s qmake
