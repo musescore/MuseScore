@@ -454,5 +454,22 @@ QString Volta::accessibleInfo() const
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(text());
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Volta::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LINE_WIDTH:
+                  return StyleIdx::voltaLineWidth;
+            case P_ID::LINE_STYLE:
+                  return StyleIdx::voltaLineStyle;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 }
 

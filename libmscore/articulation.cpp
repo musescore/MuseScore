@@ -607,6 +607,21 @@ PropertyStyle Articulation::propertyStyle(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Articulation::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::ARTICULATION_ANCHOR:
+                  return MStyle::articulationAnchorIdx(int(_articulationType));
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
+//---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 

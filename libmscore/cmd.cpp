@@ -728,9 +728,9 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   // get last segment of tuplet, drilling down to leaf nodes as necessary
                   Tuplet* t = ltuplet;
-                  while (t->elements().last()->type() == Element::Type::TUPLET)
-                        t = toTuplet(t->elements().last());
-                  seg = toChordRest(t->elements().last())->segment();
+                  while (t->elements().back()->isTuplet())
+                        t = toTuplet(t->elements().back());
+                  seg = toChordRest(t->elements().back())->segment();
 
                   // now delete the full tuplet
                   td = ltuplet->duration();

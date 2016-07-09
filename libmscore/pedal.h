@@ -63,10 +63,13 @@ class Pedal : public TextLine {
       virtual void read(XmlReader&) override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
+
       virtual bool setProperty(P_ID propertyId, const QVariant& val) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
       virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
+
       virtual void styleChanged() override;
 
       friend class PedalLine;

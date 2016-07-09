@@ -34,13 +34,15 @@ Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      _numberType   = Tuplet::NumberType::SHOW_NUMBER;
-      _bracketType  = Tuplet::BracketType::AUTO_BRACKET;
+
+      _direction    = score()->style(StyleIdx::tupletDirection).value<Direction>();
+      _numberType   = NumberType(score()->style(StyleIdx::tupletNumberType).toInt());
+      _bracketType  = BracketType(score()->style(StyleIdx::tupletBracketType).toInt());
+
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      _direction    = Direction::AUTO;
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -731,16 +733,16 @@ void Tuplet::add(Element* e)
                   DurationElement* de = static_cast<DurationElement*>(e);
                   int tick = de->tick();
                   if (tick != -1) {
-                        for (int i = 0; i < _elements.size(); ++i) {
+                        for (unsigned int i = 0; i < _elements.size(); ++i) {
                               if (_elements[i]->tick() > tick) {
-                                    _elements.insert(i, de);
+                                    _elements.insert(_elements.begin() + i, de);
                                     found = true;
                                     break;
                                     }
                               }
                         }
                   if (!found)
-                        _elements.append(de);
+                        _elements.push_back(de);
                   de->setTuplet(this);
 
                   // the tick position of a tuplet is the tick position of its
@@ -768,11 +770,15 @@ void Tuplet::remove(Element* e)
                   break;
             case Element::Type::CHORD:
             case Element::Type::REST:
-            case Element::Type::TUPLET:
-                  if (!_elements.removeOne(static_cast<DurationElement*>(e))) {
+            case Element::Type::TUPLET: {
+                  auto i = std::find(_elements.begin(), _elements.end(), static_cast<DurationElement*>(e));
+                  if (i == _elements.end()) {
                         qDebug("Tuplet::remove: cannot find element <%s>", e->name());
-                        qDebug("  elements %d", _elements.size());
+                        qDebug("  elements %ld", _elements.size());
                         }
+                  else
+                        _elements.erase(i);
+                  }
                   break;
             default:
                   qDebug("Tuplet::remove: unknown element");
@@ -887,11 +893,10 @@ void Tuplet::sortElements()
 Fraction Tuplet::elementsDuration()
       {
       Fraction f;
-      foreach(DurationElement* el, _elements)
+      for (DurationElement* el : _elements)
             f += el->duration();
       return f;
       }
-
 
 //---------------------------------------------------------
 //   getProperty
@@ -1006,6 +1011,25 @@ PropertyStyle Tuplet::propertyStyle(P_ID id) const
             default:
                   return DurationElement::propertyStyle(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Tuplet::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::DIRECTION:
+                  return StyleIdx::tupletDirection;
+            case P_ID::NUMBER_TYPE:
+                  return StyleIdx::tupletNumberType;
+            case P_ID::BRACKET_TYPE:
+                  return StyleIdx::tupletBracketType;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------

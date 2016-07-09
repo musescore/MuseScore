@@ -347,5 +347,22 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
       return QPointF(x, 0);
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Pedal::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LINE_WIDTH:
+                  return StyleIdx::pedalLineWidth;
+            case P_ID::LINE_STYLE:
+                  return StyleIdx::pedalLineStyle;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 }
 

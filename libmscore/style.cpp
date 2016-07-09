@@ -857,6 +857,11 @@ ArticulationAnchor MStyle::articulationAnchor(int id) const
       return ArticulationAnchor(value(sid).toInt());
       }
 
+StyleIdx MStyle::articulationAnchorIdx(int id)
+      {
+      return StyleIdx(int(StyleIdx::fermataAnchor) + id);
+      }
+
 //---------------------------------------------------------
 //   setArticulationAnchor
 //---------------------------------------------------------

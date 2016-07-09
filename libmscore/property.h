@@ -30,7 +30,7 @@ enum class PropertyStyle : char {
 //   Element Properties
 //------------------------------------------------------------------------
 
-enum class P_ID : unsigned char {
+enum class P_ID : int {
       SUBTYPE,
       SELECTED,
       GENERATED,
@@ -275,7 +275,6 @@ extern QVariant getProperty(P_ID type, XmlReader& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
 extern bool propertyLink(P_ID id);
-extern StyleIdx propertyStyle(P_ID id);
 
 }     // namespace Ms
 #endif

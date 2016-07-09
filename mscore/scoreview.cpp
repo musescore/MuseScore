@@ -3616,11 +3616,11 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       else {
             QMenu* popup = new QMenu();
             popup->addAction(getAction("edit-style"));
-            popup->addAction(getAction("edit-text-style"));          
-            popup->addAction(getAction("page-settings"));         
-            popup->addAction(getAction("load-style"));          
-            _score->setLayoutAll();     
-            _score->update();  
+            popup->addAction(getAction("edit-text-style"));
+            popup->addAction(getAction("page-settings"));
+            popup->addAction(getAction("load-style"));
+            _score->setLayoutAll();
+            _score->update();
             popup->popup(gp);
             }
       }
@@ -4865,7 +4865,7 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
       {
       _score->cmdCreateTuplet(cr, tuplet);
 
-      const QList<DurationElement*>& cl = tuplet->elements();
+      const std::vector<DurationElement*>& cl = tuplet->elements();
       int ne = cl.size();
       DurationElement* el = 0;
       if (ne && cl[0]->type() == Element::Type::REST)

@@ -372,7 +372,7 @@ class MStyle {
       void setPageFormat(const PageFormat& pf);
 
       ArticulationAnchor articulationAnchor(int id) const;
-//      void setArticulationAnchor(int id, ArticulationAnchor val);
+      static StyleIdx articulationAnchorIdx(int id);
 
       static const char* valueType(const StyleIdx);
       static const char* valueName(const StyleIdx);

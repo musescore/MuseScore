@@ -94,7 +94,7 @@ class Articulation : public Element {
       void setArticulationType(ArticulationType);
       ArticulationType articulationType() const { return _articulationType; }
 
-      virtual int subtype() const override { return int(_articulationType); }
+      virtual int subtype() const override      { return int(_articulationType); }
       void setSubtype(const QString& s);
       QString subtypeName() const;
 
@@ -112,6 +112,7 @@ class Articulation : public Element {
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
+      StyleIdx getPropertyStyle(P_ID id) const override;
 
       QString subtypeUserName() const;
 

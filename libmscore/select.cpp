@@ -1028,7 +1028,7 @@ static bool checkEnd(Element* e, int endTick)
                   }
             // also check that the selection extends to the end of the top-level tuplet
             tuplet = static_cast<Tuplet*>(e);
-            if (tuplet->elements().first()->tick() + tuplet->actualTicks() > endTick)
+            if (tuplet->elements().front()->tick() + tuplet->actualTicks() > endTick)
                   return true;
             }
       else if (cr->type() == Element::Type::CHORD) {

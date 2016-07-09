@@ -571,5 +571,25 @@ QString Ottava::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(ottavaDefault[static_cast<int>(ottavaType())].name);
       }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Ottava::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::NUMBERS_ONLY:
+                  return StyleIdx::ottavaNumbersOnly;
+            case P_ID::LINE_WIDTH:
+                  return StyleIdx::ottavaLineWidth;
+            case P_ID::LINE_STYLE:
+                  return StyleIdx::ottavaLineStyle;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 }
 

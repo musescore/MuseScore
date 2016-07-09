@@ -184,5 +184,23 @@ MasterScore* ScoreElement::masterScore() const
       {
       return _score->masterScore();
       }
+
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyStyle ScoreElement::propertyStyle(P_ID) const
+      {
+      return PropertyStyle::NOSTYLE;
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx ScoreElement::getPropertyStyle(P_ID) const
+      {
+      return StyleIdx::NOSTYLE;
+      }
 }
 

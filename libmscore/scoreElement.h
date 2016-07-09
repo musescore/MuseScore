@@ -13,14 +13,16 @@
 #ifndef __SCORE_ELEMENT_H__
 #define __SCORE_ELEMENT_H__
 
-#include "property.h"
-
 namespace Ms {
 
 class Score;
 class MasterScore;
 class Xml;
 class ScoreElement;
+
+enum class P_ID : int;
+enum class PropertyStyle : char;
+enum class StyleIdx : int;
 
 //---------------------------------------------------------
 //   LinkedElements
@@ -55,14 +57,14 @@ class ScoreElement {
       Score* score() const                 { return _score;      }
       MasterScore* masterScore() const;
       virtual void setScore(Score* s)      { _score = s;         }
+      virtual const char* name() const = 0;
 
       virtual QVariant getProperty(P_ID) const = 0;
       virtual bool setProperty(P_ID, const QVariant&) = 0;
-      virtual const char* name() const = 0;
-
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);
-      virtual PropertyStyle propertyStyle(P_ID) const { return PropertyStyle::NOSTYLE; }
+      virtual PropertyStyle propertyStyle(P_ID) const;
+      virtual StyleIdx getPropertyStyle(P_ID) const;
 
       void undoChangeProperty(P_ID, const QVariant&);
       void undoPushProperty(P_ID);
