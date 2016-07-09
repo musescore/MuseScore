@@ -18,6 +18,7 @@
 #include "fraction.h"
 #include "scoreElement.h"
 #include "shape.h"
+#include "property.h"
 
 class QPainter;
 
@@ -590,8 +591,9 @@ class Element : public QObject, public ScoreElement {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+      virtual void resetProperty(P_ID);
+
       void undoChangeProperty(P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
-      void resetProperty(P_ID);
       void undoResetProperty(P_ID);
       bool custom(P_ID) const;
       void readProperty(XmlReader&, P_ID);

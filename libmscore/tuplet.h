@@ -43,7 +43,7 @@ class Tuplet : public DurationElement {
       enum class BracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
 
    private:
-      QList<DurationElement*> _elements;
+      std::vector<DurationElement*> _elements;
 
       Direction _direction;
       NumberType _numberType;
@@ -83,9 +83,9 @@ class Tuplet : public DurationElement {
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 2; }
 
-      virtual void setSelected(bool f);
+      virtual void setSelected(bool f) override;
 
-      virtual Measure* measure() const { return (Measure*)parent(); }
+      virtual Measure* measure() const override { return (Measure*)parent(); }
 
       NumberType numberType() const        { return _numberType;       }
       BracketType bracketType() const      { return _bracketType;      }
@@ -93,14 +93,14 @@ class Tuplet : public DurationElement {
       void setBracketType(BracketType val) { _bracketType = val;       }
       bool hasBracket() const              { return _hasBracket;       }
 
-      Fraction ratio() const           { return _ratio;         }
-      void setRatio(const Fraction& r) { _ratio = r;            }
+      Fraction ratio() const               { return _ratio;         }
+      void setRatio(const Fraction& r)     { _ratio = r;            }
 
-      const QList<DurationElement*>& elements() const { return _elements; }
-      void clear()                                    { _elements.clear(); }
+      const std::vector<DurationElement*>& elements() const { return _elements; }
+      void clear()                         { _elements.clear(); }
 
       virtual void layout() override;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       Text* number() const { return _number; }
 
       virtual void read(XmlReader&) override;
@@ -115,15 +115,15 @@ class Tuplet : public DurationElement {
       TDuration baseLen() const            { return _baseLen;     }
       void setBaseLen(const TDuration& d)  { _baseLen = d;        }
 
-      virtual void dump() const;
+      virtual void dump() const override;
 
       void setDirection(Direction d)       { _direction = d; }
       Direction direction() const          { return _direction; }
       bool isUp() const                    { return _isUp; }
       virtual int tick() const override    { return _tick; }
       void setTick(int val)                { _tick = val; }
-      void sortElements();
       Fraction elementsDuration();
+      void sortElements();
 
       virtual void setVisible(bool f) override;
       virtual QVariant getProperty(P_ID propertyId) const override;
@@ -132,6 +132,7 @@ class Tuplet : public DurationElement {
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
       };
 
 

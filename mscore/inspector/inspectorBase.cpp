@@ -440,7 +440,7 @@ void InspectorBase::setStyleClicked(int i)
       Element* e   = inspector->element();
       const InspectorItem& ii = iList[i];
 
-      StyleIdx sidx = propertyStyle(ii.t);
+      StyleIdx sidx = e->getPropertyStyle(ii.t);
       if (sidx == StyleIdx::NOSTYLE)
             return;
       e->score()->startCmd();
@@ -468,7 +468,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il)
                   connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));
 
                   resetMapper->setMapping(resetButton, i);
-                  StyleIdx sidx = propertyStyle(ii.t);
+                  StyleIdx sidx = inspector->element()->getPropertyStyle(ii.t);
                   if (sidx != StyleIdx::NOSTYLE) {
                         QMenu* menu = new QMenu(this);
                         resetButton->setMenu(menu);

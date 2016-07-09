@@ -2265,10 +2265,10 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
       for (int i = 0; i < t->elements().size(); ++i)
             qDebug("determineTupletNormalTicks t %p i %d ticks %d", t, i, t->elements().at(i)->duration().ticks());
             */
-      for (int i = 1; i < t->elements().size(); ++i)
+      for (unsigned int i = 1; i < t->elements().size(); ++i)
             if (t->elements().at(0)->duration().ticks() != t->elements().at(i)->duration().ticks())
                   return t->baseLen().ticks();
-      if (t->elements().size() != t->ratio().numerator())
+      if (t->elements().size() != (unsigned)(t->ratio().numerator()))
             return t->baseLen().ticks();
       return 0;
       }

@@ -661,5 +661,24 @@ void Hairpin::endEdit()
       TextLine::endEdit();
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Hairpin::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LINE_WIDTH:
+                  return StyleIdx::hairpinLineWidth;
+            case P_ID::HAIRPIN_HEIGHT:
+                  return StyleIdx::hairpinHeight;
+            case P_ID::HAIRPIN_CONT_HEIGHT:
+                  return StyleIdx::hairpinContHeight;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 }
 

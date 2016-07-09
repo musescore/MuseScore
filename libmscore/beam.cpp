@@ -1811,9 +1811,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               ;
                         else if (c1 == n - 1)
                               len = -len;
-                        else if (tuplet && cr1 == tuplet->elements().first())
+                        else if (tuplet && cr1 == tuplet->elements().front())
                               ;
-                        else if (tuplet && cr1 == tuplet->elements().last())
+                        else if (tuplet && cr1 == tuplet->elements().back())
                               len = -len;
                         else if (b32 || b64)          // end of a sub-beam group
                               len = -len;
@@ -2480,5 +2480,21 @@ Shape Beam::shape() const
       shape.add(bbox());
       return shape;
       }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Beam::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::BEAM_NO_SLOPE:
+                  return StyleIdx::beamNoSlope;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 }
 
