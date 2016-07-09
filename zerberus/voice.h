@@ -187,7 +187,7 @@ class Voice {
       int key() const             { return _key;     }
       int velocity() const        { return _velocity; }
 
-      bool isPlaying() const      { return _state == VoiceState::PLAYING;   }
+      bool isPlaying() const      { return _state == VoiceState::PLAYING || _state == VoiceState::ATTACK;   }
       bool isSustained() const    { return _state == VoiceState::SUSTAINED; }
       bool isOff() const          { return _state == VoiceState::OFF; }
       bool isStopped() const      { return _state == VoiceState::STOP; }
