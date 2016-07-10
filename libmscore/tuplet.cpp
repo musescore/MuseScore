@@ -774,7 +774,7 @@ void Tuplet::remove(Element* e)
                   auto i = std::find(_elements.begin(), _elements.end(), static_cast<DurationElement*>(e));
                   if (i == _elements.end()) {
                         qDebug("Tuplet::remove: cannot find element <%s>", e->name());
-                        qDebug("  elements %ld", _elements.size());
+                        qDebug("  elements %zu", _elements.size());
                         }
                   else
                         _elements.erase(i);
