@@ -262,7 +262,7 @@ void Stem::editDrag(const EditData& ed)
       qreal yDelta = ed.delta.y();
       _userLen += up() ? -yDelta : yDelta;
       layout();
-      Chord* c = static_cast<Chord*>(parent());
+      Chord* c = chord();
       if (c->hook())
             c->hook()->move(QPointF(0.0, ed.delta.y()));
       }

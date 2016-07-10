@@ -3345,15 +3345,28 @@ System* Score::collectSystem(LayoutContext& lc)
 
       if (etick > stick) {    // ignore vbox
             auto spanners = score()->spannerMap().findOverlapping(stick, etick);
+            std::vector<SpannerSegment*> voltaSegments;
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
-                  if (sp->tick() >= etick || sp->tick2() < stick)
-                       continue;
-                  if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
-                        sp->setTick2(lastMeasure()->endTick());
-                        sp->staff()->updateOttava();
+                  if (sp->tick() < etick && sp->tick2() > stick) {
+                        if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
+                              sp->setTick2(lastMeasure()->endTick());
+                              sp->staff()->updateOttava();
+                              }
+                        SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
+                        if (ss->isVoltaSegment())
+                              voltaSegments.push_back(ss);
                         }
-                  sp->layoutSystem(system);     // create/layout spanner segment for this system
+                  }
+            //
+            // vertical align volta segments
+            //
+            if (voltaSegments.size() > 1) {
+                  qreal y = 0;
+                  for (SpannerSegment* ss : voltaSegments)
+                        y = qMin(y, ss->userOff().y());
+                  for (SpannerSegment* ss : voltaSegments)
+                        ss->setUserYoffset(y);
                   }
 
             for (Spanner* sp : _unmanagedSpanner) {
@@ -3372,10 +3385,11 @@ System* Score::collectSystem(LayoutContext& lc)
                   continue;
             Measure* m = toMeasure(mb);
             for (SpannerSegment* ss : system->spannerSegments()) {
-                  // DEBUG: only ottava for now
+                  // DEBUG: only some spanners for now
                   Spanner* sp = ss->spanner();
-                  if (ss->isOttavaSegment()) {
-                        if (sp->tick() < m->endTick() && sp->tick2() >= m->tick()) {
+                  if (ss->isOttavaSegment() || ss->isVoltaSegment()) {
+//                        if (sp->tick() < m->endTick() && sp->tick2() >= m->tick()) {
+                        if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
                               // spanner shape must be translated from system coordinate space to measure coordinate space
                               m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
                               }

@@ -414,6 +414,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::POINT:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
+            case P_TYPE::DIRECTION:
                   tag(name, data);
                   break;
             case P_TYPE::ORNAMENT_STYLE:
@@ -441,9 +442,6 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                              //tag(name, QVariant("Chromatic"));
                              break;
                              }
-                  break;
-            case P_TYPE::DIRECTION:
-                  tag(name, data.value<Direction>().toString());
                   break;
             case P_TYPE::DIRECTION_H:
                   switch (MScore::DirectionH(data.toInt())) {
@@ -578,6 +576,8 @@ void Xml::tag(const QString& name, QVariant data)
                         const Fraction& f = data.value<Fraction>();
                         *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
                         }
+                  else if (strcmp(type, "Ms::Direction") == 0)
+                        *this << QString("<%1>%2</%1>\n").arg(name).arg(data.value<Direction>().toString());
                   else {
                         qFatal("Xml::tag: unsupported type %d %s", data.type(), type);
                         }

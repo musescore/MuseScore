@@ -914,9 +914,10 @@ void Spanner::triggerLayout() const
 //   layoutSystem
 //---------------------------------------------------------
 
-void Spanner::layoutSystem(System*)
+SpannerSegment* Spanner::layoutSystem(System*)
       {
       qDebug(" %s", name());
+      return 0;
       }
 
 }
