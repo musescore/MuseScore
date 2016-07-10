@@ -15,6 +15,7 @@
 #include "xml.h"
 #include "score.h"
 #include "text.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -24,11 +25,21 @@ namespace Ms {
 
 void VoltaSegment::layout()
       {
-      rypos() = 0.0;
+      if (autoplace())
+            setUserOff(QPointF());
       TextLineSegment::layout();
-      if (parent())     // for palette
-            rypos() += score()->styleP(StyleIdx::voltaY) * mag();
-      adjustReadPos();
+      if (!parent())
+            return;
+      rypos() = score()->styleP(StyleIdx::voltaY) * mag();
+      if (autoplace()) {
+            qreal minDistance = spatium() * .7;
+            Shape s1 = shape().translated(pos());
+            qreal d  = system()->topDistance(staffIdx(), s1);
+            if (d > -minDistance)
+                  rUserYoffset() = -d - minDistance;
+            }
+      else
+            adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -220,7 +231,7 @@ void Volta::read(XmlReader& e)
                   QString s = e.readElementText();
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
                   _endings.clear();
-                  foreach(const QString& l, sl) {
+                  for (const QString& l : sl) {
                         int i = l.simplified().toInt();
                         _endings.append(i);
                         }
@@ -248,7 +259,7 @@ void Volta::write(Xml& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       TextLine::writeProperties(xml);
       QString s;
-      foreach(int i, _endings) {
+      for (int i : _endings) {
             if (!s.isEmpty())
                   s += ", ";
             s += QString("%1").arg(i);
@@ -272,7 +283,7 @@ LineSegment* Volta::createLineSegment()
 
 bool Volta::hasEnding(int repeat) const
       {
-      foreach (int ending, endings()) {
+      for (int ending : endings()) {
             if (ending == repeat)
                   return true;
             }

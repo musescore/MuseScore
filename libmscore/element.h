@@ -96,6 +96,8 @@ class Accidental;
 class TextLine;
 class Pedal;
 class LedgerLine;
+class Icon;
+class VoltaSegment;
 
 enum class SymId;
 
@@ -710,6 +712,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Pedal,         PEDAL)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
       CONVERT(LedgerLine,    LEDGER_LINE)
+      CONVERT(Icon,          ICON)
+      CONVERT(VoltaSegment,  VOLTA_SEGMENT)
 #undef CONVERT
       };
 
@@ -796,6 +800,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Pedal,         PEDAL)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
       CONVERT(LedgerLine,    LEDGER_LINE)
+      CONVERT(Icon,          ICON)
+      CONVERT(VoltaSegment,  VOLTA_SEGMENT)
 #undef CONVERT
 
 //---------------------------------------------------------

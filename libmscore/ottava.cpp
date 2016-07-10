@@ -60,7 +60,7 @@ void OttavaSegment::layout()
 
       TextLineSegment::layout();
       if (parent()) {
-            qreal yo = score()->styleP(StyleIdx::ottavaY);
+            qreal yo = score()->styleP(StyleIdx::ottavaY) * mag();
             if (ottava()->placement() == Element::Placement::BELOW)
                   yo = -yo + staff()->height();
             rypos() += yo;

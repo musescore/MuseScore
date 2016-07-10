@@ -134,7 +134,7 @@ Direction::Direction(const QString& s)
       else if (s == "auto")
             val = AUTO;
       else
-            abort();
+            val = s.toInt();
       }
 
 //---------------------------------------------------------

@@ -202,7 +202,7 @@ class Slur : public SlurTie {
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
-      virtual void layoutSystem(System*) override;
+      virtual SpannerSegment* layoutSystem(System*) override;
       virtual void setTrack(int val) override;
       virtual void slurPos(SlurPos*) override;
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF()) override;

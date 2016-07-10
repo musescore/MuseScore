@@ -1417,7 +1417,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 //   layoutSystem
 //---------------------------------------------------------
 
-void Slur::layoutSystem(System* system)
+SpannerSegment* Slur::layoutSystem(System* system)
       {
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
@@ -1447,7 +1447,7 @@ void Slur::layoutSystem(System* system)
             if (startCR() == 0 || startCR()->measure() == 0) {
                   qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
                      track(), track2(), startCR(), endCR(), tick(), tick2());
-                  return;
+                  return slurSegment;
                   }
             if (endCR() == 0) {     // sanity check
                   setEndElement(startCR());
@@ -1537,6 +1537,7 @@ void Slur::layoutSystem(System* system)
                   }
             }
       segments.swap(sl);
+      return slurSegment;
       }
 
 //---------------------------------------------------------

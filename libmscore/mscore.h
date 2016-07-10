@@ -147,12 +147,17 @@ class Direction  {
       constexpr operator int() const  { return val; }
 
       bool operator==(const Direction d) const { return val == d.val; }
+      bool operator!=(const Direction d) const { return val != d.val; }
       bool operator==(const E d) const         { return val == d; }
       bool operator!=(const E d) const         { return val != d; }
 
       const char* toString() const;
       static void fillComboBox(QComboBox*);
       };
+
+constexpr Direction Direction_AUTO(0);
+constexpr Direction Direction_UP(1);
+constexpr Direction Direction_DOWN(2);
 
 //---------------------------------------------------------
 //   ArticulationType

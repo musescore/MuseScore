@@ -22,7 +22,7 @@ namespace Ms {
 
 void StemSlash::draw(QPainter* painter) const
       {
-      qreal lw = point(score()->styleS(StyleIdx::stemWidth));
+      qreal lw = score()->styleP(StyleIdx::stemWidth);
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       painter->drawLine(line);
       }
@@ -34,7 +34,7 @@ void StemSlash::draw(QPainter* painter) const
 void StemSlash::setLine(const QLineF& l)
       {
       line = l;
-      qreal w = point(score()->styleS(StyleIdx::stemWidth)) * .5;
+      qreal w = score()->styleP(StyleIdx::stemWidth) * .5;
       setbbox(QRectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0*w, 2.0*w));
       }
 

@@ -766,10 +766,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 //    layout spannersegment for system
 //---------------------------------------------------------
 
-void SLine::layoutSystem(System* system)
+SpannerSegment* SLine::layoutSystem(System* system)
       {
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
+
+      printf("SLine::layoutSystem %s %d %d   system %d %d\n", name(), tick(), tick2(), stick, etick);
 
       LineSegment* lineSegm = 0;
       for (SpannerSegment* ss : segments) {
@@ -867,6 +869,7 @@ void SLine::layoutSystem(System* system)
                   }
             }
       segments.swap(sl);
+      return lineSegm;
       }
 
 //---------------------------------------------------------

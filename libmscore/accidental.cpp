@@ -394,7 +394,7 @@ void Accidental::draw(QPainter* painter) const
 bool Accidental::acceptDrop(const DropData& data) const
       {
       Element* e = data.element;
-      return e->type() == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS;
+      return e->isIcon() && toIcon(e)->iconType() == IconType::BRACKETS;
       }
 
 //---------------------------------------------------------
@@ -406,7 +406,7 @@ Element* Accidental::drop(const DropData& data)
       Element* e = data.element;
       switch(e->type()) {
             case Element::Type::ICON :
-                  if (static_cast<Icon*>(e)->iconType() == IconType::BRACKETS && !_hasBracket)
+                  if (toIcon(e)->iconType() == IconType::BRACKETS && !_hasBracket)
                         undoSetHasBracket(true);
                   break;
 
