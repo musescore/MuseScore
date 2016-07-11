@@ -1,0 +1,8 @@
+<global>
+sample=../sample.wav
+<group>
+lokey=40
+hikey=50
+pitch_keycenter=40
+<region>
+<region> lokey=60 hikey=70

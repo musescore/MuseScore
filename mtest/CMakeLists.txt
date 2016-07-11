@@ -156,7 +156,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves)
+subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves zerberus)
 
 install(FILES
       ../share/styles/chords_std.xml
