@@ -2910,8 +2910,11 @@ void Score::getNextMeasure(LayoutContext& lc)
       // update time signature map
       // create event if measure len and time signature are different
       // even if they are equivalent 4/4 vs 2/2
+      // also check if nominal time signature has changed
 
-      if (isMaster() && !measure->len().identical(lc.sig)) {
+      if (isMaster() && (!measure->len().identical(lc.sig)
+                        || (lc.prevMeasure && lc.prevMeasure->isMeasure()
+                            && !measure->timesig().identical(toMeasure(lc.prevMeasure)->timesig())))) {
             lc.sig = measure->len();
             sigmap()->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
             }
