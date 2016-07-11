@@ -2688,7 +2688,7 @@ void Measure::sortStaves(QList<int>& dst)
 //   exchangeVoice
 //---------------------------------------------------------
 
-void Measure::exchangeVoice(int v1, int v2, int staffIdx, Measure* measure)
+void Measure::exchangeVoice(int v1, int v2, int staffIdx)
       {
     int strack = staffIdx * VOICES + v1;
     int dtrack = staffIdx * VOICES + v2;
@@ -2697,9 +2697,9 @@ void Measure::exchangeVoice(int v1, int v2, int staffIdx, Measure* measure)
             s->swapElements(strack, dtrack);
             }
 
-      auto spanners = measure->score()->spannerMap().findOverlapping(measure->tick(), measure->endTick()-1);
-      int start = measure->tick();
-      int end = start + measure->ticks();
+      auto spanners = score()->spannerMap().findOverlapping(tick(), endTick()-1);
+      int start = tick();
+      int end = start + ticks();
       for (auto i = spanners.begin(); i < spanners.end(); i++) {
             Spanner* sp = i->value;
             int spStart = sp->tick();
