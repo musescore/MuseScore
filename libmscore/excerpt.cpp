@@ -238,7 +238,7 @@ void deleteExcerpt(Excerpt* excerpt)
             Staff* staff = nullptr;
             // find staff in the main score
             for (Staff* s2 : s->linkedStaves()->staves()) {
-                  if (s2->primaryStaff()) {
+                  if ((s2->score() == oscore) && s2->primaryStaff()) {
                         staff = s2;
                         break;
                         }
