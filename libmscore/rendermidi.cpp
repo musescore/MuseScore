@@ -402,7 +402,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               for (MidiCoreEvent event : nel->events) {
                                     event.setChannel(channel);
                                     NPlayEvent e(event);
-                                    events->insert(std::pair<int, NPlayEvent>(tick, e));
+                                    if (e.dataA() == CTRL_PROGRAM)
+                                          events->insert(std::pair<int, NPlayEvent>(tick-1, e));
+                                    else
+                                          events->insert(std::pair<int, NPlayEvent>(tick, e));
                                     }
                               }
                         }
