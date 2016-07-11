@@ -44,9 +44,6 @@ RangeAnnotation::RangeAnnotation(Score* s)
       _endSegment    = 0;
       _staffStart    = 0;
       _staffEnd      = 0;
-  /*    QRectF r1(100, 300, 11, 16);
-      QPainter painter(this);
-      painter.drawRoundedRect(r1, 20.0, 15.0);*/
       }
 int RangeAnnotation::tickStart() const
       {
