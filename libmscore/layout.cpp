@@ -3662,6 +3662,14 @@ void Score::doLayoutRange(int stick, int etick)
       if (m->prevMeasureMM()) {
             m = m->prevMeasureMM();
             }
+
+      // if the first measure of the score is part of a multi measure rest
+      // m->system() will return a nullptr. We need to find the multi measure
+      // rest which replaces the measure range
+      if (!m->system() && m->hasMMRest())
+            m = m->mmRest();
+      Q_ASSERT(m->system());
+
       Page* p    = m->system()->page();
       System* s  = p->systems().front();
 
