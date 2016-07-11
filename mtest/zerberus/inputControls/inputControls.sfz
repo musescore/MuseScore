@@ -1,0 +1,19 @@
+<global>
+sample=../sample.wav
+<region> key=19
+<region> lokey=20 hikey=30
+<region> key=40 lovel=30 hivel=40
+<region> key=41 locc23=10 hicc23=15
+<region> key=42 lorand=0.5 hirand=0.75
+<region> key=43 seq_length=2 seq_position=1
+<region> key=43 seq_length=2 seq_position=2
+<region> key=44 trigger=attack
+<region> key=44 trigger=release
+<region> key=44 trigger=first
+<region> key=44 trigger=legato
+<region> key=45 off_by=3
+<region> key=45 off_by=3
+<region> key=46 group=3
+<region> on_locc23=60 on_hicc23=65
+<region> key=50 volume=0 loop_start=50 loop_end=100
+<region> key=50 trigger=release rt_decay=6 volume=0

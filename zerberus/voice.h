@@ -200,6 +200,7 @@ class Voice {
       const char* state() const;
       LoopMode loopMode() const   { return _loopMode; }
       int getSamplesSinceStart()  { return _samplesSinceStart;    }
+      float getGain()             { return gain; }
 
       OffMode offMode() const     { return _offMode;  }
       int offBy() const           { return _offBy;    }
