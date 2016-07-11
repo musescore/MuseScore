@@ -565,10 +565,10 @@ void Score::fixTicks()
             // update time signature map
             // create event if measure len and time signature are different
             // even if they are equivalent 4/4 vs 2/2
-            if (!parentScore() && ((m->len().numerator() != sig.numerator())
-               || (m->len().denominator() != sig.denominator()))) {
+            if (!parentScore() && (!sig.identical(m->len()) || !nsig.identical(m->timesig()))) {
                   sig = m->len();
-                  smap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
+                  nsig = m->timesig();
+                  smap->add(tick, SigEvent(sig, nsig,  m->no()));
                   }
 
             tick += measureTicks;
