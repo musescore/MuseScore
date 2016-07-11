@@ -459,7 +459,6 @@ class Score : public QObject, public ScoreElement {
 
       void cmdInsertClef(ClefType);
       void cmdAddGrace(NoteType, int);
-      void cmdExchangeVoice(int, int);
       void removeChordRest(ChordRest* cr, bool clearSegment);
       void cmdMoveRest(Rest*, Direction);
       void cmdMoveLyrics(Lyrics*, Direction);
@@ -1062,6 +1061,7 @@ class Score : public QObject, public ScoreElement {
       void cmdSlashFill();
       void cmdSlashRhythm();
       void cmdResequenceRehearsalMarks();
+      void cmdExchangeVoice(int, int);
 
       void setAccessibleInfo(QString s)   { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo() const      { return accInfo;          }
