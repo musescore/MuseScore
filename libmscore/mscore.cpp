@@ -165,6 +165,7 @@ void Direction::fillComboBox(QComboBox* cb)
 
 static Spatium doubleToSpatium(double d)       { return Spatium(d); }
 static Direction intToDirection(int i)         { return Direction(i); }
+static TextStyleType intToTextStyleType(int i) { return TextStyleType(i); }
 
 //---------------------------------------------------------
 //   init
@@ -178,6 +179,8 @@ void MScore::init()
             qFatal("registerConverter douobleToSpatium failed");
       if (!QMetaType::registerConverter<int, Direction>(&intToDirection))
             qFatal("registerConverter intToDirection failed");
+      if (!QMetaType::registerConverter<int, TextStyleType>(&intToTextStyleType))
+            qFatal("registerConverter intToTextStyleType failed");
 
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Element::Type>     ("ElementType");
