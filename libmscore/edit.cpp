@@ -1640,7 +1640,8 @@ void Score::cmdFlip()
                         undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
                         }
                   }
-            else if (e->isBeam()) {
+
+            if (e->isBeam()) {
                   Beam* beam = toBeam(e);
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(beam, P_ID::STEM_DIRECTION, dir);
