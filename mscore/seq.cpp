@@ -206,7 +206,7 @@ void Seq::setScoreView(ScoreView* v)
       cv = v;
       if (cs)
             disconnect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
-      cs = cv ? cv->score()->masterScore() : 0;
+      cs = cv ? cv->score() : 0;
 
       if (!heartBeatTimer->isActive())
             heartBeatTimer->start(20);    // msec
@@ -911,7 +911,7 @@ void Seq::initInstruments(bool realTime)
                   _driver->updateOutPortCount(maxMidiOutPort + 1);
             }
 
-      foreach(const MidiMapping& mm, *cs->midiMapping()) {
+      foreach(const MidiMapping& mm, *cs->masterScore()->midiMapping()) {
             Channel* channel = mm.articulation;
             foreach(const MidiCoreEvent& e, channel->init) {
                   if (e.type() == ME_INVALID)
@@ -1136,17 +1136,17 @@ void Seq::stopNotes(int channel, bool realTime)
       };
       // Stop notes in all channels
       if (channel == -1) {
-            for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
+            for(int ch = 0; ch < cs->masterScore()->midiMapping()->size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
-                  if (cs->midiChannel(ch) != 9)
+                  if (cs->masterScore()->midiChannel(ch) != 9)
                         send(NPlayEvent(ME_PITCHBEND,  ch, 0, 64));
                   }
             }
       else {
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0));
-            if (cs->midiChannel(channel) != 9)
+            if (cs->masterScore()->midiChannel(channel) != 9)
                   send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
             }
       if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
@@ -1355,11 +1355,11 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
       if (!cs)
             return;
       int channel = event.channel();
-      if (channel >= cs->midiMapping()->size()) {
-            qDebug("bad channel value %d >= %d", channel, cs->midiMapping()->size());
+      if (channel >= cs->masterScore()->midiMapping()->size()) {
+            qDebug("bad channel value %d >= %d", channel, cs->masterScore()->midiMapping()->size());
             return;
             }
-      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
+      int syntiIdx= _synti->index(cs->masterScore()->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
       if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio))
             _driver->putEvent(event, framePos);

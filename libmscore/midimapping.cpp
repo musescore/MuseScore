@@ -14,6 +14,8 @@
 #include "score.h"
 #include "instrument.h"
 #include "part.h"
+#include "excerpt.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -135,9 +137,11 @@ void MasterScore::reorderMidiMapping()
       {
       int sequenceNumber = 0;
       for (Part* part : parts()) {
+            LinkedStaves* oLinkedStaves = part->staves()->at(0)->linkedStaves();
             const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
+                  int channelNo = 0;      // counter for excerpt's instruments
                   for (Channel* channel : instr->channel()) {
                         if (!(_midiMapping[sequenceNumber].part == part
                               && _midiMapping[sequenceNumber].articulation == channel)) {
@@ -148,6 +152,21 @@ void MasterScore::reorderMidiMapping()
                               _midiMapping[shouldBe].articulation->channel = shouldBe;
                               }
                         sequenceNumber++;
+
+                        // Search excerpts that also contain this instrument
+                        // and set their instrument's channel
+                        if (oLinkedStaves) {
+                              for (Excerpt* expt: excerpts()) {
+                                    for (Part* ep: expt->partScore()->parts()) {
+                                          if (oLinkedStaves->staves().contains(ep->staves()->at(0))) {
+                                                const Instrument* ei = ep->instruments()->at(i->first);
+                                                // set channel for instrument in excerpt
+                                                ei->channel().at(channelNo)->channel = channel->channel;
+                                                }
+                                          }
+                                    }
+                              }
+                        channelNo++;
                         }
                   }
             }
