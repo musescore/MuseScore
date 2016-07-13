@@ -1176,7 +1176,7 @@ void SlurTie::undoSetLineType(int t)
 
 void SlurTie::undoSetSlurDirection(Direction d)
       {
-      undoChangeProperty(P_ID::SLUR_DIRECTION, int(d));
+      undoChangeProperty(P_ID::SLUR_DIRECTION, d);
       }
 
 //---------------------------------------------------------

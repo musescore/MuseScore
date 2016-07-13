@@ -1637,7 +1637,7 @@ void Score::cmdFlip()
                               continue;
                   else {
                         Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
+                        undoChangeProperty(chord, P_ID::STEM_DIRECTION, dir);
                         }
                   }
 
@@ -1680,13 +1680,13 @@ void Score::cmdFlip()
                         }
                   else {
                         Direction d = a->up() ? Direction::DOWN : Direction::UP;
-                        undoChangeProperty(a, P_ID::DIRECTION, int(d));
+                        undoChangeProperty(a, P_ID::DIRECTION, d);
                         }
                   }
             else if (e->isTuplet()) {
                   Tuplet* tuplet = toTuplet(e);
                   Direction d = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(tuplet, P_ID::DIRECTION, int(d));
+                  undoChangeProperty(tuplet, P_ID::DIRECTION, d);
                   }
             else if (e->isNoteDot()) {
                   Note* note = toNote(e->parent());
