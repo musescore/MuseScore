@@ -1966,14 +1966,17 @@ void loadTranslation(QString filename, QString localeName)
                   QFile::remove(userlp + ".qm");
       }
 
-      if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
+      if (MScore::debugMode)
+            qDebug("load translator <%s>", qPrintable(lp));
       bool success = translator->load(lp);
-      if (!success && MScore::debugMode) {
-            qDebug("load translator <%s> failed", qPrintable(lp));
-      }
-      if(success) {
+      if (success) {
             qApp->installTranslator(translator);
             translatorList.append(translator);
+            }
+      else {
+            if (MScore::debugMode)
+                  qDebug("load translator <%s> failed", qPrintable(lp));
+            delete translator;
             }
       }
 

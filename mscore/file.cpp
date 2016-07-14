@@ -2641,8 +2641,10 @@ static QPixmap createThumbnail(const QString& name)
       {
       Score* score = new Score;
       Score::FileError error = readScore(score, name, true);
-      if (error != Score::FileError::FILE_NO_ERROR)
+      if (error != Score::FileError::FILE_NO_ERROR) {
+            delete score;
             return QPixmap();
+            }
       score->doLayout();
       QImage pm = score->createThumbnail();
       delete score;

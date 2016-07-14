@@ -74,6 +74,8 @@ Zerberus::~Zerberus()
                         globalInstruments.erase(it);
                   }
             }
+      for (Channel* c : _channel)
+            delete c;
       }
 
 //---------------------------------------------------------

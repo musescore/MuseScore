@@ -8829,9 +8829,9 @@ QIcon MgStyle::getCachedIcon(QString key) const
       if (pixmap)
             return QIcon(*pixmap);
       else {
-            QIcon* icon = new QIcon(new MIconEngine);
-            icon->addFile(key);
-            QPixmapCache::insert(key, icon->pixmap(48));
-            return *icon;
+            QIcon icon = QIcon(new MIconEngine);
+            icon.addFile(key);
+            QPixmapCache::insert(key, icon.pixmap(48));
+            return icon;
             }
       }
