@@ -20,8 +20,8 @@
 
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/event.h"
+#include "voice.h"
 
-class Voice;
 class Channel;
 class ZInstrument;
 enum class Trigger : char;
@@ -43,6 +43,10 @@ class VoiceFifo {
    public:
       VoiceFifo() {
             n = 0;
+            }
+      ~VoiceFifo() {
+            for (Voice* v : buffer)
+                  delete v;
             }
       void push(Voice* v) {
             buffer[writeIdx++] = v;

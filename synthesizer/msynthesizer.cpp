@@ -86,8 +86,11 @@ MasterSynthesizer::~MasterSynthesizer()
       {
       for (Synthesizer* s : _synthesizer)
             delete s;
-      for (int i = 0; i < MAX_EFFECTS; ++i)
-            delete _effect[i];
+      for (int i = 0; i < MAX_EFFECTS; ++i) {
+            for (Effect* e : _effectList[i])
+                  delete e;
+            // delete _effect[i];   // _effect takes from _effectList
+            }
       }
 
 //---------------------------------------------------------
