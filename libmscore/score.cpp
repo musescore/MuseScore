@@ -2740,10 +2740,12 @@ void Score::collectMatch(void* data, Element* e)
 
       if (p->subtypeValid) {
             // HACK: grace note is different from normal note
-            // TODO: this disables the ability to distinguish noteheads in subtype
-
             if (p->type == int(Element::Type::NOTE)) {
-                  if (p->subtype != toNote(e)->chord()->isGrace())
+                  if (p->subtype < 0) {
+                        if (!(toNote(e)->chord()->isGrace()))
+                              return;
+                        }
+                  else if ((toNote(e)->chord()->isGrace()) || (p->subtype != e->subtype()))
                         return;
                   }
             else {
@@ -2784,7 +2786,10 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       ElementPattern pattern;
       pattern.type = int(type);
       if (type == Element::Type::NOTE) {
-            pattern.subtype = toNote(e)->chord()->isGrace();
+            if (toNote(e)->chord()->isGrace())
+                  pattern.subtype = -1;
+            else
+                  pattern.subtype = e->subtype();
             pattern.subtypeValid = true;
             }
       else if (type == Element::Type::SLUR_SEGMENT) {
