@@ -490,8 +490,8 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
             Measure* m1 = startCR()->segment()->measure();
             Measure* m2 = endCR()->segment()->measure();
-            qDebug("zero slur at tick %d(%d) track %d in measure %d-%d",
-               m1->tick(), tick(), track(), m1->no(), m2->no());
+            qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",
+               m1->tick(), tick(), track(), m1->no(), m2->no(), tick(), ticks());
             return;
             }
 
@@ -1152,7 +1152,7 @@ bool SlurTie::readProperties(XmlReader& e)
             segment->read(e);
             add(segment);
             }
-      else if (tag == "up") //obsolete
+      else if (tag == "slurDirection")
             _slurDirection = Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();

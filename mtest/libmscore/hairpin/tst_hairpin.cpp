@@ -50,14 +50,14 @@ void TestHairpin::hairpin()
       Hairpin* hp = new Hairpin(score);
 
    // subtype
-      hp->setHairpinType(Hairpin::Type::DECRESCENDO);
+      hp->setHairpinType(Hairpin::Type::DECRESC_HAIRPIN);
       Hairpin* hp2 = static_cast<Hairpin*>(writeReadElement(hp));
-      QCOMPARE(hp2->hairpinType(), Hairpin::Type::DECRESCENDO);
+      QCOMPARE(hp2->hairpinType(), Hairpin::Type::DECRESC_HAIRPIN);
       delete hp2;
 
-      hp->setHairpinType(Hairpin::Type::CRESCENDO);
+      hp->setHairpinType(Hairpin::Type::CRESC_HAIRPIN);
       hp2 = static_cast<Hairpin*>(writeReadElement(hp));
-      QCOMPARE(hp2->hairpinType(), Hairpin::Type::CRESCENDO);
+      QCOMPARE(hp2->hairpinType(), Hairpin::Type::CRESC_HAIRPIN);
       delete hp2;
       }
 

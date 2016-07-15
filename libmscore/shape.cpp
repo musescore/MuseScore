@@ -167,7 +167,7 @@ void Shape::remove(const QRectF& r)
                   return;
                   }
             }
-      qWarning("Shape::remove: QRectF not found in Shape");
+//      qWarning("Shape::remove: QRectF not found in Shape");
       }
 
 void Shape::remove(const Shape& s)

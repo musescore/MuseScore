@@ -3356,6 +3356,13 @@ System* Score::collectSystem(LayoutContext& lc)
                               sp->setTick2(lastMeasure()->endTick());
                               sp->staff()->updateOttava();
                               }
+                        if (sp->isSlur()) {
+                              Element* e1 = sp->startElement();
+                              Element* e2 = sp->endElement();
+                              if (e1 == 0 || e2 == 0 || e1 == e2) {
+                                    qDebug("bad slur at %d\n", sp->tick());
+                                    }
+                              }
                         SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
                         if (ss->isVoltaSegment() && ss->autoplace())
                               voltaSegments.push_back(ss);
