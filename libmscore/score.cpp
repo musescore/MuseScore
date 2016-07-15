@@ -2823,12 +2823,25 @@ void Score::selectSimilarInRange(Element* e)
 
       Score* score = e->score();
       pattern.type    = int(type);
-      pattern.subtype = 0;
       pattern.staffStart = selection().staffStart();
       pattern.staffEnd = selection().staffEnd();
       pattern.voice   = -1;
       pattern.system  = 0;
-      pattern.subtypeValid = false;
+      if (type == Element::Type::NOTE) {
+            if (toNote(e)->chord()->isGrace())
+                  pattern.subtype = -1;
+            else
+                  pattern.subtype = e->subtype();
+            pattern.subtypeValid = true;
+            }
+      else if (type == Element::Type::SLUR_SEGMENT) {
+            pattern.subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
+            pattern.subtypeValid = true;
+            }
+      else {
+            pattern.subtype = 0;
+            pattern.subtypeValid = false;
+            }
 
       score->scanElementsInRange(&pattern, collectMatch);
 

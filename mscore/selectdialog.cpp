@@ -28,6 +28,8 @@
 #include "libmscore/element.h"
 #include "libmscore/system.h"
 #include "libmscore/score.h"
+#include "libmscore/chord.h"
+#include "libmscore/slur.h"
 
 namespace Ms {
 
@@ -57,6 +59,12 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
             case Element::Type::ARTICULATION: // comes translated, but from a different method
                   subtype->setText(static_cast<const Articulation*>(e)->subtypeUserName());
                   break;
+            case Element::Type::NOTE: // differentiate grace notes from normal notes
+                  if (toNote(e)->chord()->isGrace())
+                        subtype->setText(qApp->translate("selectionfilter", "Grace Notes"));
+                  else
+                        subtype->setText(e->subtypeName());
+                  break;
             // other come translated or don't need any or are too difficult to implement
             default: subtype->setText(e->subtypeName());
             }
@@ -72,7 +80,16 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = int(e->type());
-      p->subtype = int(e->subtype());
+      if (e->isNote()) {
+            if (toNote(e)->chord()->isGrace())
+                  p->subtype = -1;
+            else
+                  p->subtype = int(e->subtype());
+            }
+      else if (e->type() == Element::Type::SLUR_SEGMENT)
+            p->subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
+      else
+            p->subtype = int(e->subtype());
 
       if (sameStaff->isChecked()) {
             p->staffStart = e->staffIdx();
