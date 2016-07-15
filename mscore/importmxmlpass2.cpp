@@ -2927,7 +2927,7 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
       if (type == "crescendo" || type == "diminuendo") {
             Hairpin* h = new Hairpin(_score);
             h->setHairpinType(type == "crescendo"
-                              ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
+                              ? Hairpin::Type::CRESC_HAIRPIN : Hairpin::Type::DECRESC_HAIRPIN);
             if (niente == "yes")
                   h->setHairpinCircledTip(true);
             starts.append(MusicXmlSpannerDesc(h, Element::Type::HAIRPIN, number));

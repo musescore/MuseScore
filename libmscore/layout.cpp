@@ -3357,7 +3357,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               sp->staff()->updateOttava();
                               }
                         SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
-                        if (ss->isVoltaSegment())
+                        if (ss->isVoltaSegment() && ss->autoplace())
                               voltaSegments.push_back(ss);
                         }
                   }
@@ -3388,14 +3388,10 @@ System* Score::collectSystem(LayoutContext& lc)
                   continue;
             Measure* m = toMeasure(mb);
             for (SpannerSegment* ss : system->spannerSegments()) {
-                  // DEBUG: only some spanners for now
                   Spanner* sp = ss->spanner();
-                  if (ss->isOttavaSegment() || ss->isVoltaSegment()) {
-//                        if (sp->tick() < m->endTick() && sp->tick2() >= m->tick()) {
-                        if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
-                              // spanner shape must be translated from system coordinate space to measure coordinate space
-                              m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
-                              }
+                  if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
+                        // spanner shape must be translated from system coordinate space to measure coordinate space
+                        m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
                         }
                   }
             }
