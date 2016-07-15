@@ -115,12 +115,12 @@ matrix:
 notifications:
   email:
     recipients:
-      - "build@musescore.org"
+      secure: "rXxCEnDk34qZ4+sa7vK7SSudTzzaP9MqOovf60J01NvqO36sNO+SADt52nidDH8F4ZSCSnGJIaTxb5Xo0xVEVujWoXeib1yg/BbmHsw6ZyuwGI1t2CBPtenlPRL4e3WUrlOdXh4jnHUzam7/Fw3RQN7kjn115qM+qMlFLTq7Rqw="
     on_success: change
     on_failure: always
   irc:
     channels:
-      - "chat.freenode.net#musescore"
+      secure: "m/euey6Ov37mM7VY6EFfpy2iIE4QyjQoPTVNffCx7xOk99jr5uWMAKr5UlLItLDmviHgnmNHZEOPXwpoRPZA9kDnpKRuE4lPhMYrHqf5uX/7Zw8D84PbNGJgBAuciVLB0Bn+pm1zYtMNb38yu2VEunDED1Q92CegAjygknb/gFw="
     on_success: change
     on_failure: change
     skip_join: true # reduces spam. Channel must not have mode +n set.
