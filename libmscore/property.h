@@ -130,7 +130,6 @@ enum class P_ID : int {
       NUMBERS_ONLY,
       TRILL_TYPE,
 
-      HAIRPIN_TEXTLINE,
       HAIRPIN_CIRCLEDTIP,
       HAIRPIN_TYPE,
       HAIRPIN_HEIGHT,

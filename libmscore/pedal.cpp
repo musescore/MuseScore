@@ -28,10 +28,21 @@ namespace Ms {
 
 void PedalSegment::layout()
       {
+      if (autoplace())
+            setUserOff(QPointF());
       TextLineSegment::layout();
       if (parent())     // for palette
-            rypos() += score()->styleS(StyleIdx::pedalY).val() * spatium();
-      adjustReadPos();
+            rypos() += score()->styleP(StyleIdx::pedalY);
+      if (autoplace() && parent()) {
+            qreal minDistance = spatium() * .7;
+            Shape s1 = shape().translated(pos());
+            qreal d  = system()->bottomDistance(staffIdx(), s1);
+            if (d > -minDistance) {
+                  rUserYoffset() = d + minDistance;
+                  }
+            }
+      else
+            adjustReadPos();
       }
 
 //---------------------------------------------------------

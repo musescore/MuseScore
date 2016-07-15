@@ -33,7 +33,6 @@ class Hairpin;
 class HairpinSegment : public TextLineSegment {
       Q_OBJECT
 
-      QLineF l1, l2;
       bool drawCircledTip;
       QPointF circledTip;
       qreal circledTipRadius;
@@ -69,14 +68,13 @@ class Hairpin : public TextLine {
       Q_ENUMS(Ms::Dynamic::Range)
 
    public:
-      enum class Type : char { CRESCENDO, DECRESCENDO };
+      enum class Type : char { CRESC_HAIRPIN, DECRESC_HAIRPIN, CRESC_LINE, DECRESC_LINE };
 
    private:
       Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
       Q_PROPERTY(Ms::Hairpin::Type  hairpinType READ  hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
 
-      bool _useTextLine;
       bool  _hairpinCircledTip;
       Type _hairpinType;
       int _veloChange;
@@ -98,15 +96,13 @@ class Hairpin : public TextLine {
       virtual Element::Type type() const override { return Element::Type::HAIRPIN;  }
 
       Type hairpinType() const      { return _hairpinType; }
-      void setHairpinType(Type val) { _hairpinType = val;  }
+      void setHairpinType(Type val);
       void undoSetHairpinType(Type);
 
       Segment* segment() const      { return (Segment*)parent(); }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
-      bool useTextLine() const                 { return _useTextLine; }
-      void setUseTextLine(bool val)            { _useTextLine = val; }
       bool hairpinCircledTip() const           { return _hairpinCircledTip; }
       void setHairpinCircledTip(bool val)      { _hairpinCircledTip = val; }
 

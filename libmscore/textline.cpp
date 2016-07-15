@@ -70,8 +70,6 @@ void TextLineSegment::draw(QPainter* painter) const
       TextLine* tl   = textLine();
       qreal _spatium = spatium();
 
-      //QPointF pp2(pos2());
-
       // color for line (text color comes from the text properties)
       QColor color;
       if (selected() && !(score() && score()->printing()))
@@ -105,8 +103,14 @@ void TextLineSegment::draw(QPainter* painter) const
             }
       painter->setPen(pen);
 
-      for (int i = 0; i < npoints; ++i)
-            painter->drawLines(&points[i], 1);
+      if (twoLines) {   // hairpins
+            painter->drawLines(&points[0], 1);
+            painter->drawLines(&points[2], 1);
+            }
+      else {
+            for (int i = 0; i < npoints; ++i)
+                  painter->drawLines(&points[i], 1);
+            }
       }
 
 //---------------------------------------------------------
@@ -142,6 +146,8 @@ void TextLineSegment::setText(Text* t)
                   _text->setTextStyle(t->textStyle());
                   _text->setXmlText(t->xmlText());
                   }
+            _text->setTrack(track());
+            _text->layout();
             }
       else {
             delete _text;
@@ -173,10 +179,6 @@ void TextLineSegment::layout()
                   setText(tl->_continueText);
                   break;
             }
-      if (_text) {
-            _text->setTrack(track());
-            _text->layout();
-            }
       if ((isSingleType() || isEndType()) && tl->_endText) {
             if (_endText == 0) {
                   _endText = new Text(*tl->_endText);
@@ -195,7 +197,6 @@ void TextLineSegment::layout()
             delete _endText;
             _endText = 0;
             }
-
 
       QPointF pp1;
       QPointF pp2(pos2());
@@ -302,6 +303,17 @@ void TextLineSegment::layout()
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void TextLineSegment::spatiumChanged(qreal ov, qreal nv)
+      {
+      textLine()->spatiumChanged(ov, nv);
+      if (_text)
+            _text->spatiumChanged(ov, nv);
       }
 
 //---------------------------------------------------------
@@ -630,17 +642,6 @@ LineSegment* TextLine::createLineSegment()
       if (anchor() == Spanner::Anchor::NOTE)
             seg->setFlag(ElementFlag::ON_STAFF, false);
       return seg;
-      }
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void TextLineSegment::spatiumChanged(qreal ov, qreal nv)
-      {
-      textLine()->spatiumChanged(ov, nv);
-      if (_text)
-            _text->spatiumChanged(ov, nv);
       }
 
 //---------------------------------------------------------

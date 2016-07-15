@@ -33,8 +33,11 @@ class TextLineSegment : public LineSegment {
       // set in layout():
       Text* _text        { 0 };
       Text* _endText     { 0 };
+
+   protected:
       QPointF points[4];
       int npoints;
+      bool twoLines { false };
 
       void setText(Text*);
 
@@ -57,6 +60,8 @@ class TextLineSegment : public LineSegment {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual Shape shape() const override;
+
+      friend class HairpinSegment;
       };
 
 enum class HookType : char { HOOK_90, HOOK_45 };
@@ -70,6 +75,7 @@ class TextLine : public SLine {
 
       PlaceText _beginTextPlace, _continueTextPlace, _endTextPlace;
 
+      enum class LineType : char { CRESCENDO, DECRESCENDO };
       bool _lineVisible;
       bool _beginHook, _endHook;
       HookType _beginHookType, _endHookType;
