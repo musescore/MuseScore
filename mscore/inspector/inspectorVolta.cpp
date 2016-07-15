@@ -39,7 +39,9 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { P_ID::DASH_LINE_LEN, 0, 0, l.dashLineLength, l.resetDashLineLength },
             { P_ID::DASH_GAP_LEN,  0, 0, l.dashGapLength,  l.resetDashGapLength  },
             // tl
-            { P_ID::VOLTA_TYPE,  0, 0, v.voltaType,  v.resetVoltaType  }
+            { P_ID::VOLTA_TYPE,    0, 0, v.voltaType,       v.resetVoltaType  },
+            { P_ID::BEGIN_TEXT,    0, 0, v.voltaText,       0  },
+            { P_ID::VOLTA_ENDING,  0, 0, v.voltaRepeatList, 0  }
             };
 
       mapSignals(il);

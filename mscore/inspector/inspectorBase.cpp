@@ -94,6 +94,16 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             case P_TYPE::DIRECTION:
                   v = QVariant::fromValue(Direction(v.toInt()));
                   break;
+            case P_TYPE::INT_LIST: {
+                  QStringList sl = v.toString().split(",", QString::SkipEmptyParts);
+                  QList<int> il;
+                  for (const QString& l : sl) {
+                        int i = l.simplified().toInt();
+                        il.append(i);
+                        }
+                  v = QVariant::fromValue(il);
+                  }
+                  break;
             default:
                   break;
             }
@@ -127,6 +137,18 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             case P_TYPE::DIRECTION:
                   val = int(val.value<Direction>());
                   break;
+            case P_TYPE::INT_LIST: {
+                  QString s;
+                  QList<int> il = val.value<QList<int>>();
+                  for (int i : il) {
+                        if (!s.isEmpty())
+                              s += ", ";
+                        s += QString("%1").arg(i);
+                        }
+                  val = s;
+                  }
+                  break;
+
             default:
                   break;
             }

@@ -22,7 +22,6 @@
 
 #include "articulationprop.h"
 #include "bendproperties.h"
-#include "voltaproperties.h"
 #include "lineproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
@@ -174,7 +173,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::Type::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Line Properties..."))->setData("l-props");
-            popup->addAction(tr("Volta Properties..."))->setData("v-props");
             }
       else if (e->type() == Element::Type::TIMESIG) {
             genPropertyMenu1(e, popup);
@@ -410,21 +408,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             score()->undoAddElement(s);
             score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
-            }
-      else if (cmd == "v-props") {
-            VoltaSegment* vs = static_cast<VoltaSegment*>(e);
-            VoltaProperties vp;
-            vp.setText(Text::unEscape(vs->volta()->text()));
-            vp.setEndings(vs->volta()->endings());
-            int rv = vp.exec();
-            if (rv) {
-                  QString txt  = vp.getText();
-                  QList<int> l = vp.getEndings();
-                  if (txt != vs->volta()->text())
-                        vs->volta()->undoChangeProperty(P_ID::BEGIN_TEXT, Text::tagEscape(txt));
-                  if (l != vs->volta()->endings())
-                        vs->volta()->undoChangeProperty(P_ID::VOLTA_ENDING, QVariant::fromValue(l));
-                  }
             }
       else if (cmd == "l-props") {
             TextLineSegment* vs = static_cast<TextLineSegment*>(e);
