@@ -29,7 +29,6 @@
 #include "textproperties.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
-#include "glissandoproperties.h"
 #include "fretproperties.h"
 #include "selinstrument.h"
 #include "pianoroll.h"
@@ -314,10 +313,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::Type::FRET_DIAGRAM) {
             popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
             }
-      else if (e->type() == Element::Type::GLISSANDO) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Glissando Properties..."))->setData("gliss-props");
-            }
       else if (e->type() == Element::Type::INSTRUMENT_NAME) {
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
@@ -545,10 +540,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
            }
       else if (cmd == "fret-props")
             editFretDiagram(static_cast<FretDiagram*>(e));
-      else if (cmd == "gliss-props") {
-            GlissandoProperties vp(static_cast<Glissando*>(e));
-            vp.exec();
-            }
       else if (cmd == "staff-props") {
             int tick = -1;
             if (e->isChordRest())
