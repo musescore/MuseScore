@@ -5,8 +5,6 @@ if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then
   exit 0
 fi
 
-rvm use ruby-2.2.1
-
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/bottles-MuseScore-3.0.zip
 unzip bottles.zip
@@ -22,7 +20,7 @@ brew install bottles/libsndfile*
 brew install bottles/portaudio*
 
 # additional dependencies
-brew install jack lame
+brew install jack lame ruby
 
 #install Qt
 which -s qmake
