@@ -3,10 +3,10 @@
 BUILD=../../../build.debug
 #BUILD=../../../../MuseScore-build
 
-for a in undoAddLineBreaks undoLockLineBreaks undoRemoveLineBreaks \
+for a in undoAddLineBreaks \
    undoExplode undoImplode undoImplodeVoice undoSlashFill \
    undoSlashRhythm undoResequenceAlpha undoResequenceNumeric \
-   undoChangeVoice undoResequencePart \
+   undoChangeVoice undoResequencePart undoSlashFill undoSlashRhythm \
    undoResequenceMeasure; do
       echo ${a}
       cp $BUILD/mtest/libmscore/tools/${a}01-test.mscx ${a}01-ref.mscx

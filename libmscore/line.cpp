@@ -771,8 +771,6 @@ SpannerSegment* SLine::layoutSystem(System* system)
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
 
-printf("SLine::layoutSystem %s %d %d   system %d %d\n", name(), tick(), tick2(), stick, etick);
-
       LineSegment* lineSegm = 0;
       for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
