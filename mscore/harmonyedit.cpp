@@ -42,6 +42,7 @@ extern bool useFactorySettings;
 ChordStyleEditor::ChordStyleEditor(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("ChordStyleEditor");
       setupUi(this);
       setWindowTitle(tr("MuseScore: Chord Symbols Style Editor"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -197,7 +198,7 @@ void ChordStyleEditor::harmonyChanged(QTreeWidgetItem* current, QTreeWidgetItem*
 void ChordStyleEditor::save()
       {
       QSettings settings;
-      settings.beginGroup("ChordStyleEditor");
+      settings.beginGroup(objectName());
       settings.setValue("splitter1", splitter1->saveState());
       settings.setValue("splitter2", splitter2->saveState());
 //      settings.setValue("list", harmonyList->saveState());
@@ -212,7 +213,7 @@ void ChordStyleEditor::restore()
       {
       if (!useFactorySettings) {
             QSettings settings;
-            settings.beginGroup("ChordStyleEditor");
+            settings.beginGroup(objectName());
             splitter1->restoreState(settings.value("splitter1").toByteArray());
             splitter2->restoreState(settings.value("splitter2").toByteArray());
             harmonyList->setColumnWidth(0, settings.value("col1", 30).toInt());

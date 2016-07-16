@@ -47,7 +47,6 @@ namespace Ms {
 
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
-extern bool useFactorySettings;
 extern bool externalStyle;
 
 static int exportAudioSampleRates[2] = { 44100, 48000 };
@@ -344,10 +343,6 @@ void Preferences::write()
                      QString("%1%2").arg(t).arg(midiRemote[i].data));
                   }
             }
-
-//      s.beginGroup("PlayPanel");
-//      s.setValue("pos", playPanelPos);
-//      s.endGroup();
 
       writePluginList();
       if (Shortcut::dirty)

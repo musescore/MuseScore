@@ -44,7 +44,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       Instrument  instrument;
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
 
-      virtual void closeEvent(QCloseEvent*);
+      virtual void hideEvent(QHideEvent*);
       void apply();
       void setStaff(Staff*);
       void updateInterval(const Interval&);

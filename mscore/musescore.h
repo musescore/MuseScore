@@ -698,6 +698,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showMixer(bool);
 
       qreal physicalDotsPerInch() const { return _physicalDotsPerInch; }
+
+      static void saveGeometry(QWidget const*const qw);
+      static void restoreGeometry(QWidget*const qw);
       };
 
 extern MuseScore* mscore;
