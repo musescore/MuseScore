@@ -38,6 +38,7 @@ static const int DEFAULT_POS_Y  = 100;
 PlayPanel::PlayPanel(QWidget* parent)
    : QWidget(parent, Qt::Dialog)
       {
+      setObjectName("PlayPanel");
       cachedTickPosition = -1;
       cachedTimePosition = -1;
       cs                 = 0;
@@ -46,9 +47,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      QSettings settings;
-      restoreGeometry(settings.value("playPanel/geometry").toByteArray());
-      move(settings.value("playPanel/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
+      MuseScore::restoreGeometry(this);
 
       setScore(0);
 
@@ -76,13 +75,11 @@ PlayPanel::PlayPanel(QWidget* parent)
 
 PlayPanel::~PlayPanel()
       {
-      QSettings settings;
       // if widget is visible, store geometry and pos into settings
       // if widget is not visible/closed, pos is not reliable (and anyway
       // has been stored into settings when the widget has been hidden)
       if (isVisible()) {
-            settings.setValue("playPanel/pos", pos());
-            settings.setValue("playPanel/geometry", saveGeometry());
+            MuseScore::saveGeometry(this);
             }
       }
 
@@ -137,9 +134,7 @@ void PlayPanel::closeEvent(QCloseEvent* ev)
 
 void PlayPanel::hideEvent(QHideEvent* ev)
       {
-      QSettings settings;
-      settings.setValue("playPanel/pos", pos());
-      settings.setValue("playPanel/geometry", saveGeometry());
+      MuseScore::saveGeometry(this);
       QWidget::hideEvent(ev);
       }
 

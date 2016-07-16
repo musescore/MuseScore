@@ -43,6 +43,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
       virtual bool eventFilter(QObject*, QEvent*);
       virtual void keyPressEvent(QKeyEvent*) override;
       void updateGui();
+      void readSettings();
 
    private slots:
       void gainChanged(double, int);

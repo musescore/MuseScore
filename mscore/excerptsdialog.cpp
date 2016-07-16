@@ -28,8 +28,6 @@
 
 namespace Ms {
 
-extern bool useFactorySettings;
-
 //---------------------------------------------------------
 //   ExcerptItem
 //---------------------------------------------------------
@@ -61,6 +59,7 @@ PartItem::PartItem(Part* p, QListWidget* parent)
 ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("PartEditor");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
@@ -107,19 +106,9 @@ void MuseScore::startExcerptsDialog()
       if (cs == 0)
             return;
       ExcerptsDialog ed(cs->masterScore(), 0);
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("PartEditor");
-            ed.resize(settings.value("size", QSize(484, 184)).toSize());
-            ed.move(settings.value("pos", QPoint(10, 10)).toPoint());
-            settings.endGroup();
-            }
+      MuseScore::restoreGeometry(&ed);
       ed.exec();
-      QSettings settings;
-      settings.beginGroup("PartEditor");
-      settings.setValue("size", ed.size());
-      settings.setValue("pos", ed.pos());
-      settings.endGroup();
+      MuseScore::saveGeometry(&ed);
       cs->setLayoutAll();
       cs->update();
       }

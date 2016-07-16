@@ -105,8 +105,8 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter
       Startcenter();
       ~Startcenter();
       void updateRecentScores();
-      void writeSettings(QSettings&);
-      void readSettings(QSettings&);
+      void writeSettings();
+      void readSettings();
       };
 }
 #endif

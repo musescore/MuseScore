@@ -59,6 +59,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
 
       void updateVelocity(Note* note);
       void updateSelection();
+      void readSettings();
 
    private slots:
       void selectionChanged();
