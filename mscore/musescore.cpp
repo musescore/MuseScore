@@ -3153,8 +3153,7 @@ void MuseScore::saveDialogState(const char* name, QFileDialog* d)
       {
       if (d) {
             settings.beginGroup(name);
-            settings.setValue("size",  d->size());
-            settings.setValue("pos",   d->pos());
+            settings.setValue("geometry", d->saveGeometry());
             settings.setValue("state", d->saveState());
             settings.endGroup();
             }
@@ -3167,9 +3166,8 @@ void MuseScore::saveDialogState(const char* name, QFileDialog* d)
 void MuseScore::restoreDialogState(const char* name, QFileDialog* d)
       {
       settings.beginGroup(name);
-      d->resize(settings.value("size", QSize(860,489)).toSize());
+      d->restoreGeometry(settings.value("geometry").toByteArray());
       d->restoreState(settings.value("state").toByteArray());
-      d->move(settings.value("pos", QPoint(200,200)).toPoint());
       settings.endGroup();
       }
 
@@ -3199,8 +3197,7 @@ void MuseScore::writeSettings()
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
 
       settings.beginGroup("MainWindow");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
+      settings.setValue("geometry", QWidget::saveGeometry());
       settings.setValue("maximized", isMaximized());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
@@ -3257,7 +3254,7 @@ void MuseScore::writeSettings()
       if (drumrollEditor)
             drumrollEditor->writeSettings();
       if (startcenter)
-            startcenter->writeSettings(settings);
+            startcenter->writeSettings();
       }
 
 //---------------------------------------------------------
@@ -3266,8 +3263,8 @@ void MuseScore::writeSettings()
 
 void MuseScore::readSettings()
       {
+      resize(QSize(1024, 768)); //ensure default size if no geometry in settings
       if (useFactorySettings) {
-            resize(QSize(1024, 768));
             QList<int> sizes;
             sizes << 500 << 100;
             mainWindow->setSizes(sizes);
@@ -3277,12 +3274,11 @@ void MuseScore::readSettings()
             }
 
       settings.beginGroup("MainWindow");
-      resize(settings.value("size", QSize(1024, 768)).toSize());
+      mainWindow->restoreGeometry(settings.value("geometry").toByteArray());
       mainWindow->restoreState(settings.value("debuggerSplitter").toByteArray());
       mainWindow->setOpaqueResize(false);
       scorePageLayoutChanged();
 
-      move(settings.value("pos", QPoint(10, 10)).toPoint());
       //for some reason when MuseScore starts maximized the screen-reader
       //doesn't respond to QAccessibleEvents
       if (settings.value("maximized", false).toBool() && !QAccessible::isActive())
@@ -5118,6 +5114,29 @@ void MuseScore::loadPlugins() {}
 bool MuseScore::loadPlugin(const QString&) { return false;}
 void MuseScore::unloadPlugins() {}
 #endif
+
+
+void MuseScore::saveGeometry(QWidget const*const qw)
+      {
+      QSettings settings;
+      QString objectName = qw->objectName();
+      Q_ASSERT(!objectName.isEmpty());
+      settings.beginGroup("Geometries");
+      settings.setValue(objectName, qw->saveGeometry());
+      settings.endGroup();
+      }
+
+void MuseScore::restoreGeometry(QWidget *const qw)
+      {
+      if (!useFactorySettings) {
+            QSettings settings;
+            QString objectName = qw->objectName();
+            Q_ASSERT(!objectName.isEmpty());
+            settings.beginGroup("Geometries");
+            qw->restoreGeometry(settings.value(objectName).toByteArray());
+            settings.endGroup();
+            }
+      }
 
 //---------------------------------------------------------
 //   recentScores

@@ -745,8 +745,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static const std::list<const char*>& advancedNoteInputMenuEntries() { return _advancedNoteInputMenuEntries; }
       std::list<const char*>* noteInputMenuEntries()                 { return &_noteInputMenuEntries; }
 
-      void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; };
+      void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; }
       void populateNoteInputMenu();
+
+      static void saveGeometry(QWidget const*const qw);
+      static void restoreGeometry(QWidget*const qw);
       };
 
 extern MuseScore* mscore;

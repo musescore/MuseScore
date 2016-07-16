@@ -26,6 +26,8 @@ class Score;
 class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
       Q_OBJECT
 
+      void readSettings();
+
    private slots:
       virtual void accept();
       void on_saveButton_clicked();

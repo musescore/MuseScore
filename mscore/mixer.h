@@ -78,6 +78,7 @@ class Mixer : public QScrollArea
       virtual void showEvent(QShowEvent*) override;
       virtual bool eventFilter(QObject*, QEvent*) override;
       virtual void keyPressEvent(QKeyEvent*) override;
+      void readSettings();
 
    private slots:
       void updateSolo(bool);

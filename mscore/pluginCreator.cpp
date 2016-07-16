@@ -42,6 +42,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       manualDock  = 0;
       helpBrowser = 0;
 
+      setObjectName("PluginCreator");
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
       setupUi(this);
@@ -197,11 +198,12 @@ void PluginCreator::setTitle(const QString& s)
 void PluginCreator::writeSettings()
       {
       QSettings settings;
-      settings.beginGroup("PluginCreator");
-      settings.setValue("geometry", saveGeometry());
+      settings.beginGroup(objectName());
       settings.setValue("windowState", saveState());
       settings.setValue("splitter", splitter->saveState());
       settings.endGroup();
+
+      MuseScore::saveGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -212,12 +214,13 @@ void PluginCreator::readSettings()
       {
       if (!useFactorySettings) {
             QSettings settings;
-            settings.beginGroup("PluginCreator");
+            settings.beginGroup(objectName());
             splitter->restoreState(settings.value("splitter").toByteArray());
-            restoreGeometry(settings.value("geometry").toByteArray());
             restoreState(settings.value("windowState").toByteArray());
             settings.endGroup();
             }
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
