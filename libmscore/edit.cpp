@@ -3012,7 +3012,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
                         rest->setDuration(toMeasure(omb)->len() * timeStretch);
                         rest->setTrack(track);
-                        undoAddCR(rest, toMeasure(rootMeasure), tick);
+                        _root->undoAddCR(rest, toMeasure(rootMeasure), tick);
                         }
                   }
             }
