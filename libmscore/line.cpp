@@ -878,7 +878,6 @@ SpannerSegment* SLine::layoutSystem(System* system)
 
 void SLine::layout()
       {
-      qDebug("=====SLine::layout %s", name());
       if (score() == gscore || tick() == -1 || tick2() == 1) {
             //
             // when used in a palette or while dragging from palette,

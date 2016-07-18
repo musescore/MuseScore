@@ -215,6 +215,9 @@ class Spanner : public Element {
       virtual bool isSpanner() const override { return true; }
 
       friend class SpannerSegment;
+#ifndef NDEBUG
+      bool broken { false };
+#endif
       };
 
 }     // namespace Ms

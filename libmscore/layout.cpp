@@ -3161,10 +3161,10 @@ System* Score::collectSystem(LayoutContext& lc)
                                     ts->setGenerated(true);
                                     ts->setParent(s);
                                     undoAddElement(ts);
-                                    ts->layout();
-                                    s->createShape(track / VOICES);
                                     }
                               ts->setFrom(nts);
+                              ts->layout();
+                              s->createShape(track / VOICES);
                               }
                         }
                   else {
@@ -3355,13 +3355,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
                               sp->setTick2(lastMeasure()->endTick());
                               sp->staff()->updateOttava();
-                              }
-                        if (sp->isSlur()) {
-                              Element* e1 = sp->startElement();
-                              Element* e2 = sp->endElement();
-                              if (e1 == 0 || e2 == 0 || e1 == e2) {
-                                    qDebug("bad slur at %d\n", sp->tick());
-                                    }
                               }
                         SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
                         if (ss->isVoltaSegment() && ss->autoplace())
