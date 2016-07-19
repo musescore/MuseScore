@@ -56,6 +56,7 @@
 #include "systemdivider.h"
 #include "hook.h"
 #include "ambitus.h"
+#include "hairpin.h"
 
 namespace Ms {
 
@@ -2977,30 +2978,6 @@ static bool notTopBeam(ChordRest* cr)
                   return true;
             }
       return false;
-      }
-
-//---------------------------------------------------------
-//   lookupDynamic
-//    return Dynamic at chord e position
-//---------------------------------------------------------
-
-static Dynamic* lookupDynamic(Element* e)
-      {
-      Dynamic* d = 0;
-      Segment* s = 0;
-      if (e && e->isChord())
-            s = toChord(e)->segment();
-      if (s) {
-            for (Element* ee : s->annotations()) {
-                  if (ee->isDynamic() && ee->track() == e->track()) {
-                        d = toDynamic(ee);
-                        break;
-                        }
-                  }
-            }
-      if (d)
-            d->layout();
-      return d;
       }
 
 //---------------------------------------------------------

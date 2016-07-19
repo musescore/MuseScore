@@ -136,6 +136,8 @@ class Hairpin : public TextLine {
       virtual QString accessibleInfo() const override;
       };
 
+extern Dynamic* lookupDynamic(Element* e);
+
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Hairpin::Type);

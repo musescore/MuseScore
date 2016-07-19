@@ -32,7 +32,7 @@ Spatium Hairpin::editHairpinHeight;
 //    return Dynamic at chord e position
 //---------------------------------------------------------
 
-static Dynamic* lookupDynamic(Element* e)
+Dynamic* lookupDynamic(Element* e)
       {
       Dynamic* d = 0;
       Segment* s = 0;
@@ -46,8 +46,12 @@ static Dynamic* lookupDynamic(Element* e)
                         }
                   }
             }
-      if (d)
-            d->layout();
+      if (d) {
+            if (!d->autoplace())
+                  d = 0;
+            else
+                  d->layout();
+            }
       return d;
       }
 
@@ -118,13 +122,15 @@ void HairpinSegment::layout()
                         switch (spannerSegmentType()) {
                               case SpannerSegmentType::SINGLE: {
                                     qreal x = 0.0;
-                                    sd = lookupDynamic(hairpin()->startElement());
-                                    if (sd)
-                                          x = sd->bbox().width();
-                                    ed = lookupDynamic(hairpin()->endElement());
-                                    if (ed) {
-                                          len -= ed->bbox().width();
-                                          ed->rUserXoffset() = _spatium * 4;
+                                    if (autoplace()) {
+                                          sd = lookupDynamic(hairpin()->startElement());
+                                          if (sd)
+                                                x = sd->bbox().width();
+                                          ed = lookupDynamic(hairpin()->endElement());
+                                          if (ed) {
+                                                len -= ed->bbox().width();
+                                                ed->rUserXoffset() = _spatium * 4;
+                                                }
                                           }
                                     l1.setLine(x + circledTipRadius * 2.0, 0.0, len, h1);
                                     l2.setLine(x + circledTipRadius * 2.0, 0.0, len, -h1);
@@ -135,9 +141,11 @@ void HairpinSegment::layout()
 
                               case SpannerSegmentType::BEGIN: {
                                     qreal x = 0.0;
-                                    sd = lookupDynamic(hairpin()->startElement());
-                                    if (sd)
-                                          x = sd->bbox().width();
+                                    if (autoplace()) {
+                                          sd = lookupDynamic(hairpin()->startElement());
+                                          if (sd)
+                                                x = sd->bbox().width();
+                                          }
                                     l1.setLine(x + circledTipRadius * 2.0, 0.0, len, h1);
                                     l2.setLine(x + circledTipRadius * 2.0, 0.0, len, -h1);
                                     circledTip.setX(x + circledTipRadius );
@@ -152,9 +160,11 @@ void HairpinSegment::layout()
                                     break;
 
                               case SpannerSegmentType::END: {
-                                    ed = lookupDynamic(hairpin()->endElement());
-                                    if (ed)
-                                          len -= ed->bbox().width();
+                                    if (autoplace()) {
+                                          ed = lookupDynamic(hairpin()->endElement());
+                                          if (ed)
+                                                len -= ed->bbox().width();
+                                          }
                                     drawCircledTip = false;
                                     l1.setLine(.0,  h2, len, h1);
                                     l2.setLine(.0, -h2, len, -h1);
