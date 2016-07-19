@@ -2998,7 +2998,8 @@ static Dynamic* lookupDynamic(Element* e)
                         }
                   }
             }
-      d->layout();
+      if (d)
+            d->layout();
       return d;
       }
 
