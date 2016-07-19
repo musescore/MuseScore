@@ -2980,6 +2980,29 @@ static bool notTopBeam(ChordRest* cr)
       }
 
 //---------------------------------------------------------
+//   lookupDynamic
+//    return Dynamic at chord e position
+//---------------------------------------------------------
+
+static Dynamic* lookupDynamic(Element* e)
+      {
+      Dynamic* d = 0;
+      Segment* s = 0;
+      if (e && e->isChord())
+            s = toChord(e)->segment();
+      if (s) {
+            for (Element* ee : s->annotations()) {
+                  if (ee->isDynamic() && ee->track() == e->track()) {
+                        d = toDynamic(ee);
+                        break;
+                        }
+                  }
+            }
+      d->layout();
+      return d;
+      }
+
+//---------------------------------------------------------
 //   collectSystem
 //---------------------------------------------------------
 
@@ -3319,9 +3342,32 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (e->visible())
                                     s->staffShape(tt->staffIdx()).add(tt->shape());
                               }
-                        else if (e->visible() && (e->isRehearsalMark() || e->isDynamic() || e->isStaffText())) {
+                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
                               e->layout();
                               s->staffShape(e->staffIdx()).add(e->shape());
+                              }
+                        else if (e->visible() && e->isDynamic()) {
+                              Dynamic* d = toDynamic(e);
+                              d->layout();
+
+                              // If dynamic is at start or end of a hairpin
+                              // don't autoplace. This is done later on layout of hairpin
+                              // and allows horizontal alignment of dynamic and hairpin.
+
+                              int tick = d->tick();
+                              auto si = score()->spannerMap().findOverlapping(tick, tick);
+                              for (auto is : si) {
+                                    Spanner* sp = is.value;
+                                    sp->computeStartElement();
+                                    sp->computeEndElement();
+
+                                    if (!sp->isHairpin()
+                                       || !(lookupDynamic(sp->startElement()) == d
+                                       || lookupDynamic(sp->endElement()) == d)) {
+                                          d->doAutoplace();
+                                          d->segment()->staffShape(d->staffIdx()).add(d->shape());
+                                          }
+                                    }
                               }
                         }
                   }
@@ -3371,7 +3417,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (SpannerSegment* ss : voltaSegments)
                         ss->setUserYoffset(y);
                   }
-
             for (Spanner* sp : _unmanagedSpanner) {
                   if (sp->tick() >= etick || sp->tick2() < stick)
                         continue;
