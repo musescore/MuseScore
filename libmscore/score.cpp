@@ -580,6 +580,106 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       }
 
 //---------------------------------------------------------
+//   dragPosition
+//    on input:
+//          p   - canvas relative drag position
+//          rst - current staff index
+//          seg - current segment
+//    on output:
+//          rst - new staff index for drag position
+//          seg - new segment for drag position
+//---------------------------------------------------------
+
+void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
+      {
+      Measure* m = searchMeasure(p);
+      if (m == 0)
+            return;
+
+      System* s = m->system();
+      qreal y   = p.y() - s->canvasPos().y();
+
+      int i;
+      for (i = 0; i < nstaves();) {
+            SysStaff* stff = s->staff(i);
+            if (!stff->show() || !staff(i)->show()) {
+                  ++i;
+                  continue;
+                  }
+            int ni = i;
+            for (;;) {
+                  ++ni;
+                  if (ni == nstaves() || (s->staff(ni)->show() && staff(ni)->show()))
+                        break;
+                  }
+
+            qreal sy2;
+            if (ni != nstaves()) {
+                  SysStaff* nstaff = s->staff(ni);
+                  qreal s1y2       = stff->bbox().y() + stff->bbox().height();
+                  if (i == *rst)
+                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2);
+                  else if (ni == *rst)
+                        sy2 = s1y2;
+                  else
+                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                  }
+            else
+                  sy2 = s->page()->height() - s->pos().y();
+            if (y > sy2) {
+                  i   = ni;
+                  continue;
+                  }
+            break;
+            }
+
+      // search for segment + offset
+      QPointF pppp = p - m->canvasPos();
+      int strack   = i * VOICES;
+      if (!staff(i))
+            return;
+      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
+
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
+            if (!validSegment(segment, strack, etrack))
+                  continue;
+            Segment* ns = segment->next(st);
+            for (; ns; ns = ns->next(st)) {
+                  if (validSegment(ns, strack, etrack))
+                        break;
+                  }
+            if (!ns) {
+                  *rst = i;
+                  *seg = segment;
+                  return;
+                  }
+            if (*seg == segment) {
+                  if (pppp.x() < (segment->x() + (ns->x() - segment->x()))) {
+                        *rst = i;
+                        *seg = segment;
+                        return;
+                        }
+                  }
+            else if (*seg == ns) {
+                  if (pppp.x() <= segment->x()) {
+                        *rst = i;
+                        *seg = segment;
+                        return;
+                        }
+                  }
+            else {
+                  if (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0)) {
+                        *rst = i;
+                        *seg = segment;
+                        return;
+                        }
+                  }
+            }
+      return;
+      }
+
+//---------------------------------------------------------
 //   staffIdx
 //
 ///  Return index for the first staff of \a part.

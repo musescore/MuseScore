@@ -575,6 +575,7 @@ class Score : public QObject, public ScoreElement {
 
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
+      void dragPosition(const QPointF&, int* staffIdx, Segment**) const;
 
       void undoAddElement(Element* element);
       void undoAddCR(ChordRest* element, Measure*, int tick);

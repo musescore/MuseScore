@@ -288,11 +288,10 @@ QRectF Dynamic::drag(EditData* ed)
       //
       Qt::KeyboardModifiers km = qApp->keyboardModifiers();
       if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
-            int si;
-            Segment* seg = 0;
-            if (score()->pos2measure(ed->pos, &si, 0, &seg, 0) == nullptr)
-                  return f;
-            if (seg && (seg != segment() || staffIdx() != si)) {
+            int si       = staffIdx();
+            Segment* seg = segment();
+            score()->dragPosition(ed->pos, &si, &seg);
+            if (seg != segment() || staffIdx() != si) {
                   QPointF pos1(canvasPos());
                   score()->undo(new ChangeParent(this, seg, si));
                   setUserOff(QPointF());

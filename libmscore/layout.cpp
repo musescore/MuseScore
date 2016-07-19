@@ -3351,20 +3351,25 @@ System* Score::collectSystem(LayoutContext& lc)
                               Dynamic* d = toDynamic(e);
                               d->layout();
 
-                              // If dynamic is at start or end of a hairpin
-                              // don't autoplace. This is done later on layout of hairpin
-                              // and allows horizontal alignment of dynamic and hairpin.
+                              if (d->autoplace()) {
+                                    // If dynamic is at start or end of a hairpin
+                                    // don't autoplace. This is done later on layout of hairpin
+                                    // and allows horizontal alignment of dynamic and hairpin.
 
-                              int tick = d->tick();
-                              auto si = score()->spannerMap().findOverlapping(tick, tick);
-                              for (auto is : si) {
-                                    Spanner* sp = is.value;
-                                    sp->computeStartElement();
-                                    sp->computeEndElement();
+                                    int tick = d->tick();
+                                    auto si = score()->spannerMap().findOverlapping(tick, tick);
+                                    bool doAutoplace = true;
+                                    for (auto is : si) {
+                                          Spanner* sp = is.value;
+                                          sp->computeStartElement();
+                                          sp->computeEndElement();
 
-                                    if (!sp->isHairpin()
-                                       || !(lookupDynamic(sp->startElement()) == d
-                                       || lookupDynamic(sp->endElement()) == d)) {
+                                          if (sp->isHairpin()
+                                             && (lookupDynamic(sp->startElement()) == d
+                                             || lookupDynamic(sp->endElement()) == d))
+                                                doAutoplace = false;
+                                          }
+                                    if (doAutoplace) {
                                           d->doAutoplace();
                                           d->segment()->staffShape(d->staffIdx()).add(d->shape());
                                           }
