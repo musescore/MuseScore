@@ -107,14 +107,11 @@ void Fluid::init(float sampleRate)
 Fluid::~Fluid()
       {
       _state = FLUID_SYNTH_STOPPED;
-      foreach(Voice* v, activeVoices)
-            delete v;
-      foreach(Voice* v, freeVoices)
-            delete v;
-      foreach(SFont* sf, sfonts)
-            delete sf;
-      foreach(Channel* c, channel)
-            delete c;
+      qDeleteAll(activeVoices);
+      qDeleteAll(freeVoices);
+      qDeleteAll(sfonts);
+      qDeleteAll(channel);
+      qDeleteAll(patches);
       }
 
 //---------------------------------------------------------
