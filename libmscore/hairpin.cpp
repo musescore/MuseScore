@@ -46,15 +46,7 @@ static Dynamic* lookupDynamic(Element* e)
                         }
                   }
             }
-      if (d) {
-            int staffIdx = d->staffIdx();
-            Shape& ss    = d->segment()->staffShape(staffIdx);
-            Shape& ms    = d->measure()->staffShape(staffIdx);
-            QPointF spos = d->segment()->pos();
-
-            ss.remove(d->shape());
-            ms.remove(d->shape().translated(spos));
-            }
+      d->layout();
       return d;
       }
 
@@ -64,14 +56,16 @@ static Dynamic* lookupDynamic(Element* e)
 
 static void moveDynamic(Dynamic* d, qreal dy)
       {
-      int staffIdx = d->staffIdx();
-      Shape& ss    = d->segment()->staffShape(staffIdx);
-      Shape& ms    = d->measure()->staffShape(staffIdx);
-      QPointF spos = d->segment()->pos();
+      if (d && d->autoplace()) {
+            int staffIdx = d->staffIdx();
+            Shape& ss    = d->segment()->staffShape(staffIdx);
+            Shape& ms    = d->measure()->staffShape(staffIdx);
+            QPointF spos = d->segment()->pos();
 
-      d->rUserYoffset() = dy;
-      ss.add(d->shape());
-      ms.add(d->shape().translated(spos));
+            d->rUserYoffset() = dy;
+            ss.add(d->shape());
+            ms.add(d->shape().translated(spos));
+            }
       }
 
 //---------------------------------------------------------
@@ -203,7 +197,7 @@ void HairpinSegment::layout()
                   circledTip = t.map(circledTip);
 
             QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
-            qreal w  = point(score()->styleS(StyleIdx::hairpinLineWidth));
+            qreal w  = score()->styleP(StyleIdx::hairpinLineWidth);
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             if (parent())
                   rypos() += score()->styleP(StyleIdx::hairpinY);
@@ -212,14 +206,24 @@ void HairpinSegment::layout()
             qreal minDistance = spatium() * .7;
             Shape s1 = shape().translated(pos());
             qreal d  = system()->bottomDistance(staffIdx(), s1);
-            if (d > -minDistance) {
-                  qreal dy           = d + minDistance;
-                  rUserYoffset()     = dy;
-                  if (sd && sd->autoplace())
-                        moveDynamic(sd, dy);
-                  if (ed && ed->autoplace())
-                        moveDynamic(ed, dy);
+
+            qreal ymax = 0.0;
+            if (d > -minDistance)
+                  ymax = d + minDistance;
+
+            if (sd) {
+                  sd->doAutoplace();
+                  if (sd && sd->autoplace() && sd->rUserYoffset() > ymax)
+                        ymax = sd->rUserYoffset();
                   }
+            if (ed) {
+                  ed->doAutoplace();
+                  if (ed && ed->autoplace() && ed->rUserYoffset() > ymax)
+                        ymax = ed->rUserYoffset();
+                  }
+            rUserYoffset() = ymax;
+            moveDynamic(sd, ymax);
+            moveDynamic(ed, ymax);
             }
       else
             adjustReadPos();

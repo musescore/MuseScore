@@ -186,22 +186,35 @@ void Dynamic::layout()
                         rxpos() += e->width() * .5;
                   break;
                   }
-            if (autoplace()) {
-                  qreal minDistance = spatium();
-                  Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
-                  Shape s2 = shape().translated(s->pos());
+            }
+      }
 
-                  if (placement() == Element::Placement::ABOVE) {
-                        qreal d = s2.minVerticalDistance(s1);
-                        if (d > -minDistance)
-                              setUserOff(QPointF(0.0, -d - minDistance));
-                        }
-                  else {
-                        qreal d = s1.minVerticalDistance(s2);
-                        if (d > -minDistance)
-                              setUserOff(QPointF(0.0, d + minDistance));
-                        }
-                  }
+//-------------------------------------------------------------------
+//   doAutoplace
+//
+//    Move Dynamic up or down to avoid collisions with other elements.
+//    Minimum vertical distance is one spatium.
+//-------------------------------------------------------------------
+
+void Dynamic::doAutoplace()
+      {
+      Segment* s = segment();
+      if (!(s && autoplace()))
+            return;
+
+      qreal minDistance = spatium();
+      Shape s1          = s->staffShape(staffIdx()).translated(s->pos());
+      Shape s2          = shape().translated(s->pos());
+
+      if (placement() == Element::Placement::ABOVE) {
+            qreal d = s2.minVerticalDistance(s1);
+            if (d > -minDistance)
+                  rUserYoffset() = -d - minDistance;
+            }
+      else {
+            qreal d = s1.minVerticalDistance(s2);
+            if (d > -minDistance)
+                  rUserYoffset() = d + minDistance;
             }
       }
 
