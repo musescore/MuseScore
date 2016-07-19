@@ -27,6 +27,7 @@
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
+#include "rangeannotation.h"
 
 class QPainter;
 
@@ -542,7 +543,10 @@ class Score : public QObject, public ScoreElement {
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
       bool read(XmlReader&);
-
+      QList<RangeAnnotation*> rangeAnnotations;
+      void addRangeAnnotation(RangeAnnotation* rangeAnn)     { rangeAnnotations.append(rangeAnn); }
+      Segment* rss() const          { return _selection.startSegment(); }
+      int rst() const               { return _selection.tickStart();    }
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);

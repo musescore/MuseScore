@@ -815,6 +815,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::Type::JUMP)
          || (et == Element::Type::MARKER)
          || (et == Element::Type::TEMPO_TEXT)
+         || (et == Element::Type::ANNOTATION)
          || (et == Element::Type::VOLTA)
          ) {
             foreach(Score* s, scoreList())
@@ -969,6 +970,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::Type::BREATH
          && et != Element::Type::DYNAMIC
          && et != Element::Type::STAFF_TEXT
+         && et != Element::Type::ANNOTATION
          && et != Element::Type::TREMOLO
          && et != Element::Type::ARPEGGIO
          && et != Element::Type::SYMBOL
@@ -992,6 +994,7 @@ void Score::undoAddElement(Element* element)
                               // exclude certain element types except on corresponding staff in part
                               // this should be same list excluded in cloneStaff()
                               case Element::Type::STAFF_TEXT:
+                              case Element::Type::ANNOTATION:
                               case Element::Type::FRET_DIAGRAM:
                               case Element::Type::HARMONY:
                               case Element::Type::FIGURED_BASS:
@@ -1076,6 +1079,7 @@ void Score::undoAddElement(Element* element)
                || element->type() == Element::Type::TREMOLOBAR
                || element->type() == Element::Type::DYNAMIC
                || element->type() == Element::Type::STAFF_TEXT
+               || element->type() == Element::Type::ANNOTATION
                || element->type() == Element::Type::FRET_DIAGRAM
                || element->type() == Element::Type::HARMONY) {
                   Segment* segment = static_cast<Segment*>(element->parent());
