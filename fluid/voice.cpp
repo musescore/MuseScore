@@ -50,6 +50,32 @@ namespace FluidS {
 /* min vol envelope release (to stop clicks) in SoundFont timecents */
 #define FLUID_MIN_VOLENVRELEASE -7200.0f /* ~16ms */
 
+
+//---------------------------------------------------------
+//   triangle - calc value of triangle function for lfos
+//---------------------------------------------------------
+
+float triangle(int dur,int pos) {
+      pos += dur/4;
+      pos %= dur;
+      if (pos>dur/2)
+            return 2*(0.5-((pos/(0.5*dur))-1));
+      else
+            return 2*((pos/(0.5*dur))-0.5);
+      }
+
+//---------------------------------------------------------
+//  samplesToNextTurningPoint
+//  calculate how many samples it is to the next change
+//  from rising to falling in a triangle function
+//---------------------------------------------------------
+
+int samplesToNextTurningPoint(int dur, int pos) {
+      pos += dur/4;
+      return ((dur/2)-(pos%(dur/2))) % (dur/2);
+      }
+
+
 //---------------------------------------------------------
 //   Voice
 //---------------------------------------------------------
@@ -139,6 +165,7 @@ void Voice::init(Sample* _sample, Channel* _channel, int _key, int _vel,
       modlfo_val = 0.0;       // Fixme: Retrieve from any other existing
                               // voice on this channel to keep LFOs in
                               // unison?
+      modlfo_pos = 0;
 
       /* vib lfo */
       viblfo_val = 0.0f;      // Fixme: See mod lfo
@@ -193,6 +220,18 @@ float Voice::gen_get(int g)
       return gen[g].val;
       }
 
+void Voice::calcVolEnv(int n, fluid_env_data_t *env_data)
+      {
+      float x;
+      /* calculate the envelope value and check for valid range */
+      x = env_data->coeff * volenv_val + env_data->incr * n;
+      if (x < env_data->min)
+            x = env_data->min;
+      else if (x > env_data->max)
+            x = env_data->max;
+      volenv_val = x;
+      }
+
 //-----------------------------------------------------------------------------
 // write
 //
@@ -216,7 +255,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             return;
             }
 
-      float target_amp;    /* target amplitude */
+      qreal target_amp;    /* target amplitude */
       fluid_env_data_t* env_data;
       float x;
       float _fres;
@@ -228,37 +267,34 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       /******************* vol env **********************/
 
       env_data = &volenv_data[volenv_section];
+      Sample2AmpInc.clear();
+      std::map<int, int> sample2VolEnvSection;
+      std::set<int> volumeChanges;
 
-      /* skip to the next section of the envelope if necessary */
-      while (volenv_count >= env_data->count) {
-            // If we're switching envelope stages from decay to sustain, force the value to be the end value of the previous stage
-            if (env_data && volenv_section == FLUID_VOICE_ENVDECAY)
-                  volenv_val = env_data->min * env_data->coeff;
-
-            env_data = &volenv_data[++volenv_section];
-            volenv_count = 0;
-            }
-
-      /* calculate the envelope value and check for valid range */
-      x = env_data->coeff * volenv_val + env_data->incr * n;
-      if (x < env_data->min) {
-            x = env_data->min;
-            volenv_section++;
-            volenv_count = 0;
-            }
-      else if (x > env_data->max) {
-            x = env_data->max;
-            volenv_section++;
-            volenv_count = 0;
-            }
-
-      volenv_val = x;
-      volenv_count += n;
+      int restN = n;
 
       if (volenv_section == FLUID_VOICE_ENVFINISHED) {
             off();
             return;
             }
+
+      unsigned int curVolEnvCount = volenv_count;
+
+      // determine points where volume envelope changes
+      while (curVolEnvCount+restN >= env_data->count) {
+            restN -= env_data->count - curVolEnvCount;
+
+            sample2VolEnvSection.insert(std::pair<int, int>(n-restN, volenv_section));
+            volumeChanges.insert(n-restN);
+
+            curVolEnvCount = 0;
+            volenv_section++;
+
+            env_data = &volenv_data[volenv_section];
+            }
+
+      sample2VolEnvSection.insert(std::pair<int, int>(n, volenv_section));
+      volumeChanges.insert(n-1);
 
       fluid_check_fpe ("voice_write vol env");
 
@@ -291,17 +327,26 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       fluid_check_fpe ("voice_write mod env");
 
       /******************* mod lfo **********************/
+      // calculate all points where we need to consider
+      // the mod lfo (where it changes its slope)
 
-      if (ticks >= modlfo_delay) {
-            modlfo_val += modlfo_incr * n;
+      int modLfoStart = -1;
 
-            if (modlfo_val > 1.0) {
-                  modlfo_incr = -modlfo_incr;
-                  modlfo_val = (float) 2.0 - modlfo_val;
-                  }
-            else if (modlfo_val < -1.0) {
-                  modlfo_incr = -modlfo_incr;
-                  modlfo_val = (float) -2.0 - modlfo_val;
+      if (ticks >= modlfo_delay)
+            modLfoStart = 0;
+      else if (n >= modlfo_delay)
+            modLfoStart = modlfo_delay;
+
+      if (modLfoStart >= 0) {
+            if (modLfoStart > 0)
+                  volumeChanges.insert(modLfoStart);
+
+            unsigned int modLfoNextTurn = samplesToNextTurningPoint(modlfo_dur, modlfo_pos);
+
+            while (modLfoNextTurn+modLfoStart < n) {
+                  volumeChanges.insert(modLfoNextTurn+modLfoStart);
+                  modLfoNextTurn++;
+                  modLfoNextTurn += samplesToNextTurningPoint(modlfo_dur, modLfoNextTurn);
                   }
             }
 
@@ -326,78 +371,118 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
 
       /******************* amplitude **********************/
 
-      /* calculate final amplitude
-       * - initial gain
-       * - amplitude envelope
-       */
-
       if (volenv_section == FLUID_VOICE_ENVDELAY) {
             ticks += n;
             return;     /* The volume amplitude is in hold phase. No sound is produced. */
             }
 
-      if (volenv_section == FLUID_VOICE_ENVATTACK) {
-            /* the envelope is in the attack section: ramp linearly to max value.
-             * A positive modlfo_to_vol should increase volume (negative attenuation).
-             */
-            target_amp = fluid_atten2amp (attenuation)
-               * fluid_cb2amp (modlfo_val * -modlfo_to_vol)
-               * volenv_val;
-            }
-      else {
-            float amplitude_that_reaches_noise_floor;
-            float amp_max;
+      qreal oldTargetAmp = amp;
+      int lastPos = 0;
+      auto oldVolEnvSection = sample2VolEnvSection.begin();
+      auto curVolEnvSection = oldVolEnvSection;
 
-            target_amp = fluid_atten2amp (attenuation)
-               * fluid_cb2amp (960.0f * (1.0f - volenv_val)
-               + modlfo_val * -modlfo_to_vol);
-
-            /* We turn off a voice, if the volume has dropped low enough. */
-
-            /* A voice can be turned off, when an estimate for the volume
-             * (upper bound) falls below that volume, that will drop the
-             * sample below the noise floor.
-             */
-
-            /* If the loop amplitude is known, we can use it if the voice loop is within
-             * the sample loop
-             */
-
-            /* Is the playing pointer already in the loop? */
-            if (has_looped)
-                  amplitude_that_reaches_noise_floor = amplitude_that_reaches_noise_floor_loop;
+      for (auto curPos : volumeChanges)
+            {
+            if (modLfoStart >= 0 && curPos >= modLfoStart)
+                  modlfo_val = triangle(modlfo_dur, modlfo_pos+curPos-modLfoStart);
             else
-                  amplitude_that_reaches_noise_floor = amplitude_that_reaches_noise_floor_nonloop;
+                  modlfo_val = 0;
 
-            /* voice->attenuation_min is a lower boundary for the attenuation
-             * now and in the future (possibly 0 in the worst case).  Now the
-             * amplitude of sample and volenv cannot exceed amp_max (since
-             * volenv_val can only drop):
-             */
+            if (curPos >= curVolEnvSection->first)
+                  curVolEnvSection++;
 
-            amp_max = fluid_atten2amp (min_attenuation_cB) * volenv_val;
+            volenv_count += curPos-lastPos;
+            calcVolEnv(curPos-lastPos, &volenv_data[oldVolEnvSection->second]);
 
-            /* And if amp_max is already smaller than the known amplitude,
-             * which will attenuate the sample below the noise floor, then we
-             * can safely turn off the voice. Duh. */
-            if (amp_max < amplitude_that_reaches_noise_floor) {
-                  off();
-                  ticks += n;
-                  return;
+            volenv_section = oldVolEnvSection->second;
+
+            if (volenv_section <= FLUID_VOICE_ENVATTACK) {
+                  /* the envelope is in the attack section: ramp linearly to max value.
+                   * A positive modlfo_to_vol should increase volume (negative attenuation).
+                   */
+                  target_amp = fluid_atten2amp (attenuation)
+                     * fluid_cb2amp (modlfo_val * -modlfo_to_vol)
+                     * volenv_val;
                   }
+            else {
+                  //float amplitude_that_reaches_noise_floor;
+                  //float amp_max;
+
+                  target_amp = fluid_atten2amp (attenuation)
+                     * fluid_cb2amp (960.0f * (1.0f - volenv_val)
+                     + modlfo_val * -modlfo_to_vol);
+
+                  // REMOVED DUE TO CHANGE IN ENVELOPE CALCULATION
+                  // is an optimization
+                  // TODO: Make it work again with sample based volume
+
+                  /* We turn off a voice, if the volume has dropped low enough. */
+
+                  /* A voice can be turned off, when an estimate for the volume
+                   * (upper bound) falls below that volume, that will drop the
+                   * sample below the noise floor.
+                   */
+
+                  /* If the loop amplitude is known, we can use it if the voice loop is within
+                   * the sample loop
+                   */
+
+                  /* Is the playing pointer already in the loop? */
+                  /*if (has_looped)
+                        amplitude_that_reaches_noise_floor = amplitude_that_reaches_noise_floor_loop;
+                  else
+                        amplitude_that_reaches_noise_floor = amplitude_that_reaches_noise_floor_nonloop;*/
+
+                  /* voice->attenuation_min is a lower boundary for the attenuation
+                   * now and in the future (possibly 0 in the worst case).  Now the
+                   * amplitude of sample and volenv cannot exceed amp_max (since
+                   * volenv_val can only drop):
+                   */
+
+                  //amp_max = fluid_atten2amp (min_attenuation_cB) * volenv_val;
+
+                  /* And if amp_max is already smaller than the known amplitude,
+                   * which will attenuate the sample below the noise floor, then we
+                   * can safely turn off the voice. Duh. */
+                  /*if (amp_max < amplitude_that_reaches_noise_floor) {
+                        off();
+                        ticks += n;
+                        return;
+                        }*/
+                  }
+
+            if (curVolEnvSection->second != oldVolEnvSection->second) {
+                  if (oldVolEnvSection->second == FLUID_VOICE_ENVDECAY) {
+                        env_data = &volenv_data[oldVolEnvSection->second];
+                        volenv_val = env_data->min * env_data->coeff;
+                        }
+                  volenv_count = 0;
+                  oldVolEnvSection = curVolEnvSection;
+                  }
+            /* Volume increment to go from voice->amp to target_amp in FLUID_BUFSIZE steps */
+            amp_incr = (target_amp - oldTargetAmp) / (curPos - lastPos);
+            lastPos = curPos;
+            Sample2AmpInc.insert(std::pair<int, struct VolEnvValSection>(curPos, {amp_incr, volenv_section}));
+            oldTargetAmp = target_amp;
             }
 
-      /* Volume increment to go from voice->amp to target_amp in FLUID_BUFSIZE steps */
-      amp_incr = (target_amp - amp) / n;
+      if (modLfoStart >= 0) {
+            modlfo_pos += n-modLfoStart;
+            modlfo_val = triangle(modlfo_dur, modlfo_pos-modLfoStart);
+            }
 
       fluid_check_fpe ("voice_write amplitude calculation");
 
+     // REMOVED DUE TO CHANGE IN ENVELOPE CALCULATION
+     // is an optimization
+     // TODO: Make it work again with sample based volume
+
       /* no volume and not changing? - No need to process */
 
-      if ((amp == 0.0f) && (amp_incr == 0.0f)) {
-            ticks += n;
-            return;
-            }
+      //if ((amp == 0.0f) && (amp_incr == 0.0f)) {
+      //      ticks += n;
+      //      return;
+      //      }
 
       /* Calculate the number of samples, that the DSP loop advances
        * through the original waveform with each step in the output
@@ -683,6 +768,12 @@ void Voice::voice_start()
       /* Make an estimate on how loud this voice can get at any time (attenuation). */
       min_attenuation_cB = get_lower_boundary_for_attenuation();
 
+      qDebug("DELAY (%d) %d", FLUID_VOICE_ENVDELAY,volenv_data[FLUID_VOICE_ENVDELAY].count);
+      qDebug("ATTACK (%d) %d", FLUID_VOICE_ENVATTACK,volenv_data[FLUID_VOICE_ENVATTACK].count);
+      qDebug("HOLD (%d) %d", FLUID_VOICE_ENVHOLD, volenv_data[FLUID_VOICE_ENVHOLD].count);
+      qDebug("DECAY (%d) %d", FLUID_VOICE_ENVDECAY, volenv_data[FLUID_VOICE_ENVDECAY].count);
+      qDebug("SUSTAIN (%d) %d", FLUID_VOICE_ENVSUSTAIN, volenv_data[FLUID_VOICE_ENVSUSTAIN].count);
+      qDebug("RELEASE (%d) %d", FLUID_VOICE_ENVRELEASE, volenv_data[FLUID_VOICE_ENVRELEASE].count);
 
       /* Force setting of the phase at the first DSP loop run
        * This cannot be done earlier, because it depends on modulators.
@@ -912,13 +1003,18 @@ void Voice::update_param(int _gen)
                   break;
 
             case GEN_MODLFOFREQ:
+                  {
                   /* - the frequency is converted into a delta value, per frame
                    * - the delay into a sample delay
                    */
+                  unsigned int old_modlfo_dur = modlfo_dur;
                   x = GEN(GEN_MODLFOFREQ);
                   fluid_clip(x, -16000.0f, 4500.0f);
-                  modlfo_incr = (4.0f * fluid_act2hz(x) / _fluid->sample_rate);
+                  modlfo_dur = _fluid->sample_rate / fluid_act2hz(x);
+                  if (old_modlfo_dur > 0)
+                        modlfo_pos = (modlfo_pos/old_modlfo_dur) * modlfo_dur;
                   break;
+                  }
 
             case GEN_VIBLFOFREQ:
                   /* vib lfo
