@@ -28,6 +28,7 @@ class Segment;
 class Shape : std::vector<QRectF> {
    public:
       Shape() {}
+      Shape(const QRectF& r) { add(r); }
       void draw(QPainter*) const;
 
       void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
