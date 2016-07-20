@@ -37,7 +37,6 @@ class HairpinSegment : public TextLineSegment {
       QPointF circledTip;
       qreal circledTipRadius;
 
-   protected:
    public:
       HairpinSegment(Score* s) : TextLineSegment(s) {}
       Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
@@ -48,11 +47,13 @@ class HairpinSegment : public TextLineSegment {
       virtual int grips() const override { return 4; }
       virtual void editDrag(const EditData&) override;
       virtual void layout() override;
-      virtual QVariant getProperty(P_ID id) const override;
-      virtual bool setProperty(P_ID id, const QVariant& v) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual QVariant getProperty(P_ID) const override;
+      virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
+      virtual Shape shape() const override;
       };
 
 //---------------------------------------------------------

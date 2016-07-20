@@ -419,7 +419,9 @@ void LineSegment::editDrag(const EditData& ed)
                         }
                   }
             }
-      line()->layout();
+//      line()->layout();
+//      layout();
+      triggerLayout();
       }
 
 //---------------------------------------------------------

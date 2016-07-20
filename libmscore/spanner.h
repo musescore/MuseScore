@@ -70,6 +70,9 @@ class SpannerSegment : public Element {
       const QPointF& userOff2() const       { return _userOff2;       }
       void setUserOff2(const QPointF& o)    { _userOff2 = o;          }
       void setUserXoffset2(qreal x)         { _userOff2.setX(x);      }
+      qreal& rUserXoffset2()                { return _userOff2.rx();  }
+      qreal& rUserYoffset2()                { return _userOff2.ry();  }
+
       void setPos2(const QPointF& p)        { _p2 = p;                }
       QPointF pos2() const                  { return _p2 + _userOff2; }
       const QPointF& ipos2() const          { return _p2;             }
