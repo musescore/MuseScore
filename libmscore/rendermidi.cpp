@@ -393,10 +393,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   int tick = s->tick() + tickOffset;
 
                   Instrument* instr = e->part()->instrument(tick);
-                  foreach (const ChannelActions& ca, *st->channelActions()) {
-                        int channel = ca.channel;
-                        foreach(const QString& ma, ca.midiActionNames) {
-                              NamedEventList* nel = instr->midiAction(ma, channel);
+                  for (const ChannelActions& ca : *st->channelActions()) {
+                        int channel = instr->channel().at(ca.channel)->channel;
+                        for(const QString& ma : ca.midiActionNames) {
+                              NamedEventList* nel = instr->midiAction(ma, ca.channel);
                               if (!nel)
                                     continue;
                               for (MidiCoreEvent event : nel->events) {
