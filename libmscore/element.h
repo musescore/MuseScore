@@ -216,6 +216,7 @@ class Element : public QObject, public ScoreElement {
       Element* _parent { 0 };
 
       bool _generated;            ///< automatically generated Element
+      bool _autoplace;
 
   protected:
       bool _selected;             ///< set if element is selected
@@ -335,7 +336,6 @@ class Element : public QObject, public ScoreElement {
       Placement _placement;
 
       mutable ElementFlags _flags;
-      bool _autoplace;
 
       int _track;                 ///< staffIdx * VOICES + voice
       qreal _mag;                 ///< standard magnification (derived value)
@@ -377,6 +377,8 @@ class Element : public QObject, public ScoreElement {
       Placement placement() const             { return _placement;  }
       void setPlacement(Placement val)        { _placement = val;   }
       void undoSetPlacement(Placement val);
+      bool placeBelow() const                 { return _placement == Placement::BELOW; }
+      bool placeAbove() const                 { return _placement == Placement::ABOVE; }
 
       bool generated() const                  { return _generated;  }
       void setGenerated(bool val)             { _generated = val;   }
