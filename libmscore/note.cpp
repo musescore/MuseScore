@@ -2205,7 +2205,6 @@ QVariant Note::getProperty(P_ID propertyId) const
 
 bool Note::setProperty(P_ID propertyId, const QVariant& v)
       {
-      Measure* m = chord() ? chord()->measure() : nullptr;
       switch(propertyId) {
             case P_ID::PITCH:
                   setPitch(v.toInt());
@@ -2257,15 +2256,10 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setVeloType(ValueType(v.toInt()));
                   score()->setPlaylistDirty();
                   break;
-            case P_ID::VISIBLE: {                     // P_ID::VISIBLE requires reflecting property on dots
+            case P_ID::VISIBLE: {
                   setVisible(v.toBool());
-                  int dots = chord()->dots();
-                  for (int i = 0; i < dots; ++i) {
-                        if (_dots[i])
-                              _dots[i]->setVisible(visible());
-                        }
-                  if (m)
-                        m->checkMultiVoices(chord()->staffIdx());
+                  if (chord())
+                        chord()->measure()->checkMultiVoices(chord()->staffIdx());
                   break;
                   }
             case P_ID::PLAY:

@@ -3230,12 +3230,21 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "toggle-visible") {
             _score->startCmd();
             QSet<Element*> spanners;
-            for (Element* e : _score->selection().elements()) {
-                  bool spannerSegment = e->isSpannerSegment();
-                  if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
-                        _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
-                  if (spannerSegment)
+            const QList<Element*> elements = score()->selection().elements();
+            for (Element* e : elements) {
+                  if (e->isSpannerSegment()) {
+                        if (spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
+                              continue;
                         spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
+                        }
+                  bool visible = !e->getProperty(P_ID::VISIBLE).toBool();
+                  if (e->isNote()) {      // reflect property to note's dots
+                        for (NoteDot* dot: toNote(e)->dots()) {
+                              if (!elements.contains(dot) && dot->visible() != visible)  // If dot is also selected, don't change again
+                                    _score->undo(new ChangeProperty(dot, P_ID::VISIBLE, visible));
+                              }
+                        }
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, visible));
                   }
             _score->endCmd();
             }
