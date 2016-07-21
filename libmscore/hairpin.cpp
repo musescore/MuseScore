@@ -40,7 +40,7 @@ Dynamic* lookupDynamic(Element* e)
             s = toChord(e)->segment();
       if (s) {
             for (Element* ee : s->annotations()) {
-                  if (ee->isDynamic() && ee->track() == e->track()) {
+                  if (ee->isDynamic() && ee->track() == e->track() && ee->placeBelow()) {
                         d = toDynamic(ee);
                         break;
                         }
@@ -83,22 +83,28 @@ void HairpinSegment::layout()
       Dynamic* ed = 0;
       qreal _spatium = spatium();
 
-      if (autoplace()) {
-            setUserOff(QPointF());
-            setUserOff2(QPointF());
-            if (isSingleType() || isBeginType()) {
-                  sd = lookupDynamic(hairpin()->startElement());
-                  if (sd) {
+      setUserOff(QPointF());
+      setUserOff2(QPointF());
+      if (isSingleType() || isBeginType()) {
+            sd = lookupDynamic(hairpin()->startElement());
+            if (sd) {
+                  if (autoplace()) {
                         rUserXoffset()  = sd->bbox().width();
                         rUserXoffset2() = -sd->bbox().width();
                         }
+                  else
+                        sd->doAutoplace();
                   }
-            if (isSingleType() || isEndType()) {
-                  ed = lookupDynamic(hairpin()->endElement());
-                  if (ed) {
-                        rUserXoffset2()    -= sd->bbox().width();
+            }
+      if (isSingleType() || isEndType()) {
+            ed = lookupDynamic(hairpin()->endElement());
+            if (ed) {
+                  if (autoplace()) {
+                        rUserXoffset2()    -= ed->bbox().width();
                         ed->rUserXoffset() = _spatium * 4;
                         }
+                  else
+                        ed->doAutoplace();
                   }
             }
 
