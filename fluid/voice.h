@@ -96,7 +96,7 @@ class Voice
 					           have to be checked. */
 	unsigned int ticks;
 
-	float amp;                       /* the linear amplitude */
+	qreal amp;                       /* the linear amplitude */
 	Phase phase;                     // the phase of the sample wave
 
 	// Temporary variables used in write()
