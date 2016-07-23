@@ -48,7 +48,7 @@ namespace FluidS {
 
 void updateAmpInc(unsigned int &nextNewAmpInc,std::map<int, struct VolEnvValSection>::iterator &curSample2AmpInc, qreal &dsp_amp_incr, unsigned int dsp_i)
       {
-      if (dsp_i >= nextNewAmpInc) {
+      if (dsp_i > nextNewAmpInc) {
             curSample2AmpInc++;
             nextNewAmpInc = curSample2AmpInc->first;
             dsp_amp_incr = curSample2AmpInc->second.val;
