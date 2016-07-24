@@ -111,7 +111,7 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
                   break;
                   }
             }
-      if (!rangeSegment) {
+    /*  if (!rangeSegment) {
             rangeSegment = new RangeAnnotationSegment(score());
             add(rangeSegment);
             }
@@ -132,7 +132,7 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       switch (sst) {
             // call layoutSegment for the rangeannotation depending upon the segment type (begin, middle or end)
             }
-
+      */
       QList<SpannerSegment*> sl;
       for (SpannerSegment* ss : segments) {
             if (ss->system())
