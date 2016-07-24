@@ -108,6 +108,7 @@ static const ElementName elementNames[] = {
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
       ElementName("Annotation",           QT_TRANSLATE_NOOP("elementName", "Annotation")),
+      ElementName("AnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "AnnotationSegment")),
       ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
       ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),

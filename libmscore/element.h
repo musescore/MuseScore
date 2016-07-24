@@ -245,6 +245,7 @@ class Element : public QObject, public ScoreElement {
             ARPEGGIO,
             ACCIDENTAL,
             ANNOTATION,
+            ANNOTATION_SEGMENT,
 
             STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
             NOTE,             // and this requires stems to be drawn before notes
