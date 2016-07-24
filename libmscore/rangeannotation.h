@@ -116,9 +116,9 @@ class RangeAnnotation : public Spanner {
       void setStaffStart(int v)         { _staffStart = v;  }
       void setStaffEnd(int v)           { _staffEnd = v;    }
       //virtual void rangePos(RangePos*) = 0;
-      virtual void write(Xml& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
+ //     virtual void write(Xml& xml) const override;
+ //     virtual void read(XmlReader&) override;
+ //     virtual void layout() override;
       friend class RangeAnnotationSegment;
       };
 
