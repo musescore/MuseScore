@@ -446,11 +446,12 @@ class ExchangeVoice : public UndoCommand {
 
 class CloneVoice : public UndoCommand {
       Segment* sf;
-      int lTick;            //Source first and last
+      int lTick;
       Segment* d;             //Destination
       int strack, dtrack;
       int otrack;
       bool linked;
+      bool first = true;      //first redo
 
    public:
       CloneVoice(Segment* sf, int lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);

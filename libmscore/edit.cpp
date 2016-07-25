@@ -3264,46 +3264,50 @@ qDebug("time delete");
 //   cloneVoice
 //---------------------------------------------------------
 
-void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* df, bool link)
+void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link, bool spanner)
       {
+      int start = sf->tick();
       TieMap  tieMap;
       TupletMap tupletMap;    // tuplets cannot cross measure boundaries
-      Score* score = df->score();
+      Score* score = sf->score();
       Tremolo* tremolo = 0;
 
       for (Segment* oseg = sf; oseg && oseg->tick() < lTick; oseg = oseg->next1()) {
             Segment* ns = nullptr; //create segment later, on demand
-            Measure* dm = score->tick2measure(oseg->tick());
+            Measure* dm = tick2measure(oseg->tick());
 
             Element* oe = oseg->element(strack);
 
             if (oe && !oe->generated() && oe->isChordRest()) {
                   Element* ne;
+                  //does a linked clone to create just this element
+                  //otherwise element will be add in every linked stave
                   if (link)
                         ne = oe->linkedClone();
                   else
                         ne = oe->clone();
                   ne->setTrack(dtrack);
 
+                  //Don't clone gaps to a first voice
                   if (!(ne->track() % VOICES) && ne->isRest())
                         toRest(ne)->setGap(false);
 
-                  ne->setScore(score);
+                  ne->setScore(this);
                   ChordRest* ocr = toChordRest(oe);
                   ChordRest* ncr = toChordRest(ne);
 
+                  //Handle beams
                   if (ocr->beam() && !ocr->beam()->empty() && ocr->beam()->elements().front() == ocr) {
                         Beam* nb = ocr->beam()->clone();
                         nb->clear();
                         nb->setTrack(dtrack);
-                        nb->setScore(score);
+                        nb->setScore(this);
                         nb->add(ncr);
                         ncr->setBeam(nb);
                         }
 
-                  Tuplet* ot = ocr->tuplet();
-
                   // clone Tuplets
+                  Tuplet* ot = ocr->tuplet();
                   if (ot) {
                         ot->setTrack(strack);
                         Tuplet* nt = tupletMap.findNew(ot);
@@ -3338,7 +3342,16 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* 
                         ncr->setTuplet(nt);
                         }
 
+                  // clone additional settings
                   if (oe->isChordRest()) {
+                        if (oe->isRest()) {
+                              Rest* ore = toRest(ocr);
+                              // If we would clone a full measure rest just don't clone this rest
+                              if (ore->isFullMeasureRest() && (dtrack % VOICES)) {
+                                    continue;
+                                    }
+                              }
+
                         if (oe->isChord()) {
                               Chord* och = toChord(ocr);
                               Chord* nch = toChord(ncr);
@@ -3347,7 +3360,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* 
                               for (int i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
-                                    Interval v = score->staff(dtrack) ? score->staff(dtrack)->part()->instrument(dtrack)->transpose() : Interval();
+                                    Interval v = staff(dtrack) ? staff(dtrack)->part()->instrument(dtrack)->transpose() : Interval();
                                     nn->setTpc1(on->tpc1());
                                     if (v.isZero())
                                           nn->setTpc2(on->tpc1());
@@ -3362,7 +3375,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* 
                                                 tie = toTie(on->tieFor()->linkedClone());
                                           else
                                                 tie = toTie(on->tieFor()->clone());
-                                          tie->setScore(score);
+                                          tie->setScore(this);
                                           nn->setTieFor(tie);
                                           tie->setStartNote(nn);
                                           tie->setTrack(nn->track());
@@ -3391,7 +3404,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* 
                                                 else
                                                       newSp = static_cast<Spanner*>(oldSp->clone());
                                                 newSp->setNoteSpan(newStart, nn);
-                                                score->addElement(newSp);
+                                                addElement(newSp);
                                                 }
                                           else {
                                                 qDebug("cloneVoices: cannot find spanner start note");
@@ -3425,27 +3438,91 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* 
                                           qDebug("inconsistent two note tremolo");
                                     }
                               }
+
+                        // Add element (link -> just in this measure)
                         if (link) {
                               if (!ns)
                                     ns = dm->getSegment(oseg->segmentType(), oseg->tick());
                               ns->add(ne);
                               }
                         else {
-                              score->undoAddCR(toChordRest(ne), dm, oseg->tick());
+                              undoAddCR(toChordRest(ne), dm, oseg->tick());
                               }
                         }
-
-                  Segment* tst = dm->segments().firstCRSegment();
-                  if (strack % VOICES && !(dtrack % VOICES) && (!tst || (!tst->element(dtrack)))) {
-                        Rest* rest = new Rest(score);
-                        rest->setDuration(dm->len());
-                        rest->setDurationType(dm->len().ticks());
-                        rest->setTrack(dtrack);
+                  }
+            Segment* tst = dm->segments().firstCRSegment();
+            if (strack % VOICES && !(dtrack % VOICES) && (!tst || (!tst->element(dtrack)))) {
+                  Rest* rest = new Rest(this);
+                  rest->setDuration(dm->len());
+                  rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                  rest->setTrack(dtrack);
+                  if (link) {
                         Segment* segment = dm->getSegment(rest, dm->tick());
                         segment->add(rest);
                         }
+                  else
+                        undoAddCR(toChordRest(rest), dm, dm->tick());
                   }
             }
-      score->doLayoutRange(sf->tick(), lTick);
+
+      if (spanner) {
+            // Find and add corresponding slurs
+            auto spanners = score->spannerMap().findOverlapping(start, lTick);
+            for (auto i = spanners.begin(); i < spanners.end(); i++) {
+                  Spanner* sp = i->value;
+                  int spStart = sp->tick();
+                  int track   = sp->track();
+                  int track2  = sp->track2();
+                  int spEnd = spStart + sp->ticks();
+                  qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart, spEnd, spEnd-spStart, start, lTick);
+                  if (sp->isSlur() && (spStart >= start && spEnd < lTick)) {
+                        if (track == strack && track2 == strack){
+                              Spanner* ns;
+                              if (link)
+                                    ns =  static_cast<Spanner*>(sp->linkedClone());
+                              else
+                                    ns = static_cast<Spanner*>(sp->clone());
+
+                              ns->setScore(this);
+                              ns->setParent(0);
+                              ns->setTrack(dtrack);
+                              ns->setTrack2(dtrack);
+
+                              // set start/end element for slur
+                              ChordRest* cr1 = sp->startCR();
+                              ChordRest* cr2 = sp->endCR();
+
+                              ns->setStartElement(0);
+                              ns->setEndElement(0);
+                              if (cr1 && cr1->links()) {
+                                    for (ScoreElement* e : *cr1->links()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(e);
+                                          if (cr == cr1)
+                                                continue;
+                                          if ((cr->score() == this) && (cr->tick() == ns->tick()) && cr->track() == dtrack) {
+                                                ns->setStartElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              if (cr2 && cr2->links()) {
+                                    for (ScoreElement* e : *cr2->links()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(e);
+                                          if (cr == cr2)
+                                                continue;
+                                          if ((cr->score() == this) && (cr->tick() == ns->tick2()) && cr->track() == dtrack) {
+                                                ns->setEndElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              undo(new AddElement(ns));
+                              }
+                        }
+                  }
+            }
+
+      //Layout
+      doLayoutRange(start, lTick);
       }
 }
