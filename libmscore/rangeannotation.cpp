@@ -13,6 +13,7 @@
 
 #include "rangeannotation.h"
 #include "textannotation.h"
+#include "measure.h"
 #include "sym.h"
 #include "chord.h"
 #include "note.h"
@@ -49,13 +50,11 @@ RangeAnnotation::RangeAnnotation(Score* s)
 //   RangeAnnotationSegment
 //---------------------------------------------------------
 
-RangeAnnotationSegment::RangeAnnotationSegment(const RangeAnnotationSegment& s)
-   : SpannerSegment(s)
+RangeAnnotationSegment::RangeAnnotationSegment(Score* score)
+   : SpannerSegment(score)
       {
-      _p2       = s._p2;
-      _userOff2 = s._userOff2;
+      setFlag(ElementFlag::ON_STAFF, true);
       }
-
 
 int RangeAnnotationSegment::tickStart() const
       {
@@ -101,17 +100,17 @@ void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
 
 RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       {
-     // int stick = system->firstMeasure()->tick();
-     // int etick = system->lastMeasure()->endTick();
+      int stick = system->firstMeasure()->tick();
+      int etick = system->lastMeasure()->endTick();
 
       RangeAnnotationSegment* rangeSegment = 0;
-      for (SpannerSegment* ss : segments) {
+     /* for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
-                  //rangeSegment = toRangeSegment(ss);
+                  rangeSegment = toRangeSegment(ss);
                   break;
                   }
-            }
-    /*  if (!rangeSegment) {
+            }*/
+      if (!rangeSegment) {
             rangeSegment = new RangeAnnotationSegment(score());
             add(rangeSegment);
             }
@@ -119,10 +118,27 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       rangeSegment->setSpanner(this);
 
       SpannerSegmentType sst;
-      // if else conditions go here, to
-      // determine the type of the range annotation segment
-      // to be BEGIN, MIDDLE, OR END depending upon the
-      // relative positions of tick(), stick, etick and so on
+      if (tick() >= stick) {
+            //
+            // this is the first call to layoutSystem,
+            // processing the first line segment
+            //
+            if (track2() == -1)
+                  setTrack2(track());
+            if (startCR() == 0 || startCR()->measure() == 0) {
+                  qDebug("null start anchor");
+                  return rangeSegment;
+                  }
+            if (endCR() == 0) {     // sanity check
+                  setEndElement(startCR());
+                  setTick2(tick());
+                  }
+            sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+            }
+      else if (tick() < stick && tick2() > etick)
+            sst = SpannerSegmentType::MIDDLE;
+      else
+            sst = SpannerSegmentType::END;
 
       rangeSegment->setSpannerSegmentType(sst);
 
@@ -132,7 +148,7 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       switch (sst) {
             // call layoutSegment for the rangeannotation depending upon the segment type (begin, middle or end)
             }
-      */
+
       QList<SpannerSegment*> sl;
       for (SpannerSegment* ss : segments) {
             if (ss->system())
