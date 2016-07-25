@@ -648,8 +648,6 @@ class Score : public QObject, public ScoreElement {
       void addElement(Element*);
       void removeElement(Element*);
 
-      void cloneVoice(int strack, int dtrack, Measure* sm, Measure* dm, bool link = true);
-
       Note* addPitch(NoteVal&, bool addFlag);
       void addPitch(int pitch, bool addFlag, bool insert);
       Note* addNote(Chord*, NoteVal& noteVal);
@@ -665,7 +663,7 @@ class Score : public QObject, public ScoreElement {
       void putNote(const Position&, bool replace, bool insert);
       void putNoteInsert(const Position&);
 
-      void cloneVoice(int strack, int dtrack, Segment* sf, int lTick, Segment* df, bool link = true);void putNote(const QPointF& pos, bool replace);
+      void cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link = true, bool spanner = true);
 
       void repitchNote(const Position& pos, bool replace);
       void cmdAddPitch(int pitch, bool addFlag, bool insert);

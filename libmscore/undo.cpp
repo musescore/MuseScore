@@ -819,74 +819,96 @@ CloneVoice::CloneVoice(Segment* _sf, int _lTick, Segment* _d, int _strack, int _
       d       = _d;           // first destination segment
       strack  = _strack;
       dtrack  = _dtrack;
-      otrack  = _otrack;      // old source track if -1 only use dtrack and strack
-      linked  = _linked;
+      otrack  = _otrack;      // old source track if -1 delete voice in strack after copy
+      linked  = _linked;      // if true  add elements in destination segment only
+                              // if false add elements in every linked staff
       }
 
 void CloneVoice::undo()
       {
       Score* s = d->score();
       int ticks = d->tick() + lTick - sf->tick();
-      int sTrack = otrack == -1 ? dtrack : otrack;
+      int sTrack = otrack == -1 ? dtrack : otrack; // use the correct source / destination if deleting the source
       int dTrack = otrack == -1 ? strack : dtrack;
 
-      for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
-            Element* el = seg->element(dTrack);
-            if (el && el->isChordRest()) {
-                  el->unlink();
-                  seg->setElement(dTrack, 0);
-                  }
-            }
-
-      s->cloneVoice(sTrack, dTrack, sf, lTick, d, linked);
-
-      if (otrack == -1) {
+      // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
+      if (otrack != -1 && linked)
             for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
-                  Element* el = seg->element(sTrack);
+                  Element* el = seg->element(dTrack);
                   if (el && el->isChordRest()) {
-                        if (linked) {
-                              el->unlink();
-                              seg->setElement(sTrack, 0);
-                              }
-                        else {
+                        el->unlink();
+                        seg->setElement(dTrack, 0);
+                        }
+                  }
+
+      if (otrack == -1 && !linked) {
+            // On the first run get going the undo redo action for adding/deleting elements and slurs
+            if (first) {
+                  s->cloneVoice(sTrack, dTrack, sf, ticks, linked);
+                  auto spanners = s->spannerMap().findOverlapping(sf->tick(), lTick);
+                  for (auto i = spanners.begin(); i < spanners.end(); i++) {
+                        Spanner* sp = i->value;
+                        if (sp->isSlur() && (sp->track() == sTrack || sp->track2() == sTrack))
+                              s->undoRemoveElement(sp);
+                        }
+                  for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
+                        Element* el = seg->element(sTrack);
+                        if (el && el->isChordRest()) {
                               s->undoRemoveElement(el);
                               }
                         }
                   }
-                  if (!(sTrack % VOICES))
-                        s->setRest(d->tick(), sTrack, Fraction::fromTicks(ticks), false, 0);
+            // Set rests if first voice in a staff
+            if (!(sTrack % VOICES))
+                  s->setRest(d->tick(), sTrack, Fraction::fromTicks(ticks), false, 0);
             }
+      else {
+            s->cloneVoice(sTrack, dTrack, sf, ticks, linked);
+            if (!linked && !(dTrack % VOICES))
+                  s->setRest(d->tick(), dTrack, Fraction::fromTicks(ticks), false, 0);
+            }
+
+      first = false;
       }
 
 void CloneVoice::redo()
       {
       Score* s = d->score();
       int ticks = d->tick() + lTick - sf->tick();
-      for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
-            Element* el = seg->element(dtrack);
-            if (el && el->isChordRest()) {
-                  el->unlink();
-                  seg->setElement(dtrack, 0);
-                  }
-            }
-      s->cloneVoice(strack, dtrack, sf, ticks, d, linked);
 
-      if (otrack == -1) {
+      // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
+      if (otrack != -1 && linked)
             for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
-                  Element* el = seg->element(strack);
+                  Element* el = seg->element(dtrack);
                   if (el && el->isChordRest()) {
-                        if (linked) {
-                              el->unlink();
-                              seg->setElement(strack, 0);
-                              }
-                        else {
+                        el->unlink();
+                        seg->setElement(dtrack, 0);
+                        }
+                  }
+
+      if (otrack == -1 && !linked) {
+            // On the first run get going the undo redo action for adding/deleting elements and slurs
+            if (first) {
+                  s->cloneVoice(strack, dtrack, sf, ticks, linked);
+                  auto spanners = s->spannerMap().findOverlapping(sf->tick(), lTick);
+                  for (auto i = spanners.begin(); i < spanners.end(); i++) {
+                        Spanner* sp = i->value;
+                        if (sp->isSlur() && (sp->track() == strack || sp->track2() == strack))
+                              s->undoRemoveElement(sp);
+                        }
+                  for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
+                        Element* el = seg->element(strack);
+                        if (el && el->isChordRest()) {
                               s->undoRemoveElement(el);
                               }
                         }
                   }
+            // Set rests if first voice in a staff
             if (!(strack % VOICES))
                   s->setRest(d->tick(), strack, Fraction::fromTicks(ticks), false, 0);
             }
+      else
+            s->cloneVoice(strack, dtrack, sf, ticks, linked, first);
       }
 
 //---------------------------------------------------------
