@@ -49,8 +49,6 @@ Dynamic* lookupDynamic(Element* e)
       if (d) {
             if (!d->autoplace())
                   d = 0;
-            else
-                  d->layout();
             }
       return d;
       }
@@ -83,14 +81,20 @@ void HairpinSegment::layout()
       Dynamic* ed = 0;
       qreal _spatium = spatium();
 
-      setUserOff(QPointF());
-      setUserOff2(QPointF());
+      if (autoplace()) {
+            setUserOff(QPointF());
+            setUserOff2(QPointF());
+            }
       if (isSingleType() || isBeginType()) {
             sd = lookupDynamic(hairpin()->startElement());
             if (sd) {
                   if (autoplace()) {
-                        rUserXoffset()  = sd->bbox().width();
-                        rUserXoffset2() = -sd->bbox().width();
+                        qreal dx        = sd->bbox().right() + sd->pos().x()
+                                             + sd->segment()->pos().x() + sd->measure()->pos().x();
+                        // hardcoded distance between Dynamic and Hairpin: 0.5sp
+                        qreal dist      = dx - pos().x() + score()->styleP(StyleIdx::autoplaceHairpinDynamicsDistance);
+                        rUserXoffset()  = dist;
+                        rUserXoffset2() = -dist;
                         }
                   else
                         sd->doAutoplace();
@@ -100,8 +104,11 @@ void HairpinSegment::layout()
             ed = lookupDynamic(hairpin()->endElement());
             if (ed) {
                   if (autoplace()) {
-                        rUserXoffset2()    -= ed->bbox().width();
-                        ed->rUserXoffset() = _spatium * 4;
+                        rUserXoffset2() -= ed->bbox().width();
+                        qreal dx         = ed->bbox().left() + ed->pos().x()
+                                           + ed->segment()->pos().x() + ed->measure()->pos().x();
+                        // hardcoded distance between Hairpin and Dynamic: 0.5sp
+                        ed->rUserXoffset() = pos2().x() + pos().x() - dx + score()->styleP(StyleIdx::autoplaceHairpinDynamicsDistance);
                         }
                   else
                         ed->doAutoplace();
@@ -204,23 +211,25 @@ void HairpinSegment::layout()
             Shape s1 = shape().translated(pos());
             qreal d  = system()->bottomDistance(staffIdx(), s1);
 
-            qreal ymax = 0.0;
+            qreal ymax = pos().y();
             if (d > -minDistance)
-                  ymax = d + minDistance;
+                  ymax = ymax + d + minDistance;
 
             if (sd) {
                   sd->doAutoplace();
-                  if (sd && sd->autoplace() && sd->rUserYoffset() > ymax)
-                        ymax = sd->rUserYoffset();
+                  if (sd->pos().y() > ymax)
+                        ymax = sd->pos().y();
                   }
             if (ed) {
                   ed->doAutoplace();
-                  if (ed && ed->autoplace() && ed->rUserYoffset() > ymax)
-                        ymax = ed->rUserYoffset();
+                  if (ed->pos().y() > ymax)
+                        ymax = ed->pos().y();
                   }
-            rUserYoffset() = ymax;
-            moveDynamic(sd, ymax);
-            moveDynamic(ed, ymax);
+            rUserYoffset() = ymax - pos().y();
+            if (sd)
+                  moveDynamic(sd, ymax - sd->pos().y());
+            if (ed)
+                  moveDynamic(ed, ymax - ed->pos().y());
             }
       else
             adjustReadPos();
@@ -564,6 +573,13 @@ void Hairpin::read(XmlReader& e)
                   _veloChange = e.readInt();
             else if (tag == "dynType")
                   _dynRange = Dynamic::Range(e.readInt());
+            else if (tag == "useTextLine") {      // obsolete
+                  e.readInt();
+                  if (hairpinType() == Type::CRESC_HAIRPIN)
+                        setHairpinType(Type::CRESC_LINE);
+                  else if (hairpinType() == Type::DECRESC_HAIRPIN)
+                        setHairpinType(Type::DECRESC_LINE);
+                  }
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }

@@ -309,15 +309,15 @@ void TextBlock::layout(Text* t)
                         f.pos.setY(0.0);
                   qreal w = fm.width(f.text);
                   QRectF r;
-                  if (f.format.type() == CharFormatType::SYMBOL)
+//                  if (f.format.type() == CharFormatType::SYMBOL)
                         r = fm.tightBoundingRect(f.text);
-                  else
-                        r = fm.boundingRect(f.text);
+//                  else
+//                        r = fm.boundingRect(f.text);
 
                   // for whatever reason the boundingRect() is different
                   // on second doLayout() (paint() ?)
-                  r.setX(0);        //HACK
-                  r.setWidth(w);
+//                  r.setX(0);        //HACK
+//                  r.setWidth(w);
 
                   _bbox |= r.translated(f.pos);
                   x += w;

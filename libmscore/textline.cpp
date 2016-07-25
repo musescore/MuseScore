@@ -124,8 +124,19 @@ Shape TextLineSegment::shape() const
             shape.add(_text->bbox().translated(_text->pos()));
       if (_endText)
             shape.add(_endText->bbox().translated(_endText->pos()));
-      for (int i = 0; i < npoints; ++i)
-            shape.add(QRectF(points[i].x(), points[i].y(), points[i+1].x() - points[i].x(), points[i+1].y() - points[i].y()));
+      qreal lw = textLine()->lineWidth().val() * spatium();
+      if (twoLines) {   // hairpins
+            shape.add(QRectF(points[0].x(), points[0].y() - lw * .5,
+               points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
+            shape.add(QRectF(points[2].x(), points[2].y() - lw * .5,
+               points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
+            }
+      else {
+            for (int i = 0; i < npoints; ++i) {
+                  shape.add(QRectF(points[i].x() - lw * .5, points[i].y() - lw * .5,
+                     points[i+1].x() - points[i].x() + lw, points[i+1].y() - points[i].y() + lw));
+                  }
+            }
       return shape;
       }
 
@@ -163,8 +174,8 @@ void TextLineSegment::layout()
       {
       TextLine* tl = textLine();
       qreal _spatium = spatium();
-      if (parent() && tl && tl->isOttava() && tl->isPedal() && tl->isHairpin() && tl->isVolta())
-            rypos() += -5.0 * _spatium;
+//??      if (parent() && tl && tl->isOttava() && tl->isPedal() && tl->isHairpin() && tl->isVolta())
+//            rypos() += -5.0 * _spatium;
 
       if (!tl->diagonal())
             _userOff2.setY(0);
@@ -248,12 +259,13 @@ void TextLineSegment::layout()
                   y1 = h;
             }
       bbox().setRect(x1, y1, x2 - x1, y2 - y1);
+      if (_text)
+            bbox() |= _text->bbox().translated(_text->pos());  // DEBUG
       // set end text position and extend bbox
       if (_endText) {
             _endText->setPos(bbox().right(), 0);
             bbox() |= _endText->bbox().translated(_endText->pos());
             }
-
 
       npoints = 0;
       if (!(tl->lineVisible() || score()->showInvisible()))
@@ -285,7 +297,6 @@ void TextLineSegment::layout()
             if (tl->beginHook() && (isSingleType() || isBeginType())) {
                   qreal hh = tl->beginHookHeight().val() * _spatium;
                   points[npoints] = QPointF(pp1.x() - beginHookWidth, pp1.y() + hh);
-//                  painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - beginHookWidth, pp1.y() + hh));
                   ++npoints;
                   points[npoints] = pp1;
                   }
