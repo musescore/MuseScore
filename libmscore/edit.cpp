@@ -2850,6 +2850,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
       {
       int tick;
       int ticks = 0;
+      bool endMeasure = false;
       if (measure) {
             if (measure->isMeasure() && toMeasure(measure)->isMMRest()) {
                   measure = toMeasure(measure)->prev();
@@ -2858,8 +2859,12 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   }
             tick = measure->tick();
             }
+      else if (last()) {
+            tick = last()->endTick();
+            endMeasure = true;
+            }
       else
-            tick = last() ? last()->endTick() : 0;
+            tick = 0;
 
       // use nominal time signature of current measure
       Fraction f = sigmap()->timesig(tick).nominal();
@@ -2975,8 +2980,20 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
-//                  if (createEndBar)
-//                        m->setEndBarLineType(BarLineType::END, false);
+                  if (endMeasure && pm) {
+                        Segment* segment = pm->findSegment(Segment::Type::EndBarLine, pm->endTick());
+
+                        if (segment) {
+                              for (Element* e : segment->elist()) {
+                                    if (e) {
+                                          BarLine* bl = toBarLine(e);
+                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(BarLineType::END_REPEAT));
+                                          bl->setGenerated(true);
+                                          }
+                                    }
+                              }
+                        }
+
                   }
             else {
                   // a frame, not a measure
