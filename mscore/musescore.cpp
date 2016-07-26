@@ -1218,13 +1218,13 @@ MuseScore::MuseScore()
       menuHelp->addSeparator();
       revertToFactoryAction = menuHelp->addAction("", this, SLOT(resetAndRestart()));
 
-      if (!MScore::noGui)
+      if (!MScore::noGui) {
             retranslate(true);
-
-      //accessibility for menus
-      foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
-            menu->setAccessibleName(menu->objectName());
-            menu->setAccessibleDescription(Shortcut::getMenuShortcutString(menu));
+            //accessibility for menus
+            for (QMenu* menu : mb->findChildren<QMenu*>()) {
+                  menu->setAccessibleName(menu->objectName());
+                  menu->setAccessibleDescription(Shortcut::getMenuShortcutString(menu));
+                  }
             }
 
       setCentralWidget(envelope);
