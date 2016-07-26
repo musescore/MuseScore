@@ -41,10 +41,6 @@ RangeAnnotation::RangeAnnotation(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::HAS_TAG);
       _score         = s;
-      _startSegment  = 0;
-      _endSegment    = 0;
-      _staffStart    = 0;
-      _staffEnd      = 0;
       }
 //---------------------------------------------------------
 //   RangeAnnotationSegment
@@ -56,32 +52,43 @@ RangeAnnotationSegment::RangeAnnotationSegment(Score* score)
       setFlag(ElementFlag::ON_STAFF, true);
       }
 
-int RangeAnnotationSegment::tickStart() const
+//---------------------------------------------------------
+//   firstNoteRestSegmentX
+//    in System() coordinates
+//    returns the position just after the last non-chordrest segment
+//---------------------------------------------------------
+
+qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
       {
-      return _startSegment->tick();
+      for (const MeasureBase* mb : system->measures()) {
+            if (mb->isMeasure()) {
+                  const Measure* measure = static_cast<const Measure*>(mb);
+                  for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
+                        if (seg->isChordRestType()) {
+                              // first CR found; back up to previous segment
+                              seg = seg->prev();
+                              if (seg) {
+                                    // find maximum width
+                                    qreal width = 0.0;
+                                    int n = score()->nstaves();
+                                    for (int i = 0; i < n; ++i) {
+                                          if (!system->staff(i)->show())
+                                                continue;
+                                          Element* e = seg->element(i * VOICES);
+                                          if (e)
+                                                width = qMax(width, e->width());
+                                          }
+                                    return seg->measure()->pos().x() + seg->pos().x() + width;
+                                    }
+                              else
+                                    return 0.0;
+                              }
+                        }
+                  }
+            }
+      qDebug("firstNoteRestSegmentX: did not find segment");
+      return 0.0;
       }
-
-//---------------------------------------------------------
-//   tickEnd
-//---------------------------------------------------------
-
-int RangeAnnotationSegment::tickEnd() const
-      {
-      return _endSegment->tick();
-      }
-
-//---------------------------------------------------------
-//   setRange
-//---------------------------------------------------------
-
-void RangeAnnotationSegment::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
-      {
-      _startSegment  = startSegment;
-      _endSegment    = endSegment;
-      _staffStart    = staffStart;
-      _staffEnd      = staffEnd;
-      }
-
 //---------------------------------------------------------
 //   layout
 //    p1, p2  are in System coordinates
@@ -104,12 +111,12 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       int etick = system->lastMeasure()->endTick();
 
       RangeAnnotationSegment* rangeSegment = 0;
-     /* for (SpannerSegment* ss : segments) {
+      for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
-                  rangeSegment = toRangeSegment(ss);
+                  rangeSegment = static_cast<RangeAnnotationSegment*>(ss);
                   break;
                   }
-            }*/
+            }
       if (!rangeSegment) {
             rangeSegment = new RangeAnnotationSegment(score());
             add(rangeSegment);
@@ -142,11 +149,25 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
 
       rangeSegment->setSpannerSegmentType(sst);
 
-    //  RangePos rPos;
-    //  rangePos(&rPos);
-
+      RangePos rPos;
+      rangePos(&rPos);
       switch (sst) {
-            // call layoutSegment for the rangeannotation depending upon the segment type (begin, middle or end)
+            case SpannerSegmentType::SINGLE:
+                  rangeSegment->layoutSegment(rPos.p1, rPos.p2);
+                  break;
+            case SpannerSegmentType::BEGIN:
+                  rangeSegment->layoutSegment(rPos.p1, QPointF(system->bbox().width(), rPos.p1.y()));
+                  break;
+            case SpannerSegmentType::MIDDLE: {
+                  qreal x1 = firstNoteRestSegmentX(system);
+                  qreal x2 = system->bbox().width();
+                  qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
+                  rangeSegment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
+                  }
+                  break;
+            case SpannerSegmentType::END:
+                  rangeSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), rPos.p2.y()), rPos.p2);
+                  break;
             }
 
       QList<SpannerSegment*> sl;
@@ -180,36 +201,25 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       painter->setBackgroundMode(Qt::OpaqueMode);
       //painter.fillRect(rangeRect, Qt::yellow );
       }
-//void RangeAnnotation::rangePos(RangePos* sp)
-//      {
-      // calculate the start and end point of the range annotation
-      // relative to the system position
-//      }
 
-int RangeAnnotation::tickStart() const
+//---------------------------------------------------------
+//   rangePos
+//    Anchor::NOTE: return anchor note position in system coordinates
+//    Other:        return (x position (relative to what?), 0)
+//---------------------------------------------------------
+
+void RangeAnnotation::rangePos(RangePos* rp)
       {
-      return _startSegment->tick();
+      qreal x = 0.0;
+      ChordRest* scr = startCR();
+      ChordRest* ecr = endCR();
+      rp->system1 = scr->measure()->system();
+      rp->system2 = ecr->measure()->system();
+      if (rp->system1 == 0 || rp->system2 == 0)
+            return;
+      rp->p1 = scr->pagePos() - rp->system1->pagePos();
+      rp->p2 = ecr->pagePos() - rp->system2->pagePos();
       }
 
-//---------------------------------------------------------
-//   tickEnd
-//---------------------------------------------------------
-
-int RangeAnnotation::tickEnd() const
-      {
-      return _endSegment->tick();
-      }
-
-//---------------------------------------------------------
-//   setRange
-//---------------------------------------------------------
-
-void RangeAnnotation::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
-      {
-      _startSegment  = startSegment;
-      _endSegment    = endSegment;
-      _staffStart    = staffStart;
-      _staffEnd      = staffEnd;
-      }
 }
 

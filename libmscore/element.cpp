@@ -108,7 +108,7 @@ static const ElementName elementNames[] = {
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
       ElementName("Annotation",           QT_TRANSLATE_NOOP("elementName", "Annotation")),
-      ElementName("AnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "AnnotationSegment")),
+      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
       ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
       ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),
@@ -1340,6 +1340,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::GLISSANDO_SEGMENT:
 
             case Element::Type::SLUR_SEGMENT:
+            case Element::Type::ANNOTATION_SEGMENT:
             case Element::Type::STEM_SLASH:
             case Element::Type::LINE:
             case Element::Type::TIE:
