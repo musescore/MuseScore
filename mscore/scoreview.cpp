@@ -5694,7 +5694,7 @@ void ScoreView::cmdAddRangeAnnotation()
       if (noteEntryMode())          // force out of entry mode
             sm->postEvent(new CommandEvent("note-input"));
 
-      _score->startCmd();
+     /* _score->startCmd();
       Selection selection = _score->selection();
       if (selection.isSingle()) {
             ChordRest* cr = _score->getSelectedChordRest();
@@ -5715,7 +5715,7 @@ void ScoreView::cmdAddRangeAnnotation()
             range->setRange(startSegment, endSegment, staffStart, staffEnd);
             _score->addRangeAnnotation(range);
             _score->endCmd();
-            }
+            }*/
       }
 
 //---------------------------------------------------------
