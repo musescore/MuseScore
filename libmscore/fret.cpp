@@ -286,8 +286,10 @@ void FretDiagram::draw(QPainter* painter) const
             qreal y = fretDist * i;
             painter->drawLine(QLineF(0.0, y, x2, y));
             }
-      painter->setFont(font);
-      QFontMetricsF fm(font);
+      QFont scaledFont(font);
+      scaledFont.setPixelSize(font.pixelSize() * _userMag);
+      painter->setFont(scaledFont);
+      QFontMetricsF fm(scaledFont);
       qreal dotd = stringDist * .6;
 
       for (int i = 0; i < _strings; ++i) {
@@ -358,7 +360,9 @@ void FretDiagram::layout()
       qreal x = -((dotd+lw1) * .5);
       w += dotd + lw1;
       if (_marker) {
-            QFontMetricsF fm(font);
+            QFont scaledFont(font);
+            scaledFont.setPixelSize(font.pixelSize() * _userMag);
+            QFontMetricsF fm(scaledFont);
             y = -(fretDist * .1 + fm.height());
             h -= y;
             }
