@@ -57,11 +57,6 @@ enum fluid_voice_envelope_index_t {
 	FLUID_VOICE_ENVLAST
       };
 
-struct VolEnvValSection {
-      qreal val;
-      int volenv_section;
-      };
-
 //---------------------------------------------------------
 //   Voice
 //---------------------------------------------------------
@@ -121,7 +116,7 @@ class Voice
 	fluid_env_data_t volenv_data[FLUID_VOICE_ENVLAST];
 	unsigned int volenv_count;
 	int volenv_section;
-   std::map<int, struct VolEnvValSection> Sample2AmpInc;
+   std::map<int, qreal> Sample2AmpInc;
 	float volenv_val;
 	float amplitude_that_reaches_noise_floor_nonloop;
 	float amplitude_that_reaches_noise_floor_loop;

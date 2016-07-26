@@ -46,12 +46,12 @@ namespace FluidS {
  * - dsp_buf: Output buffer of floating point values (FLUID_BUFSIZE in length)
  */
 
-void updateAmpInc(unsigned int &nextNewAmpInc,std::map<int, struct VolEnvValSection>::iterator &curSample2AmpInc, qreal &dsp_amp_incr, unsigned int dsp_i)
+inline void updateAmpInc(unsigned int &nextNewAmpInc,std::map<int, qreal>::iterator &curSample2AmpInc, qreal &dsp_amp_incr, unsigned int dsp_i)
       {
       if (dsp_i >= nextNewAmpInc) {
             curSample2AmpInc++;
             nextNewAmpInc = curSample2AmpInc->first;
-            dsp_amp_incr = curSample2AmpInc->second.val;
+            dsp_amp_incr = curSample2AmpInc->second;
             }
       }
 
@@ -133,7 +133,7 @@ int Voice::dsp_float_interpolate_none(unsigned n)
       float *dsp_buf = voice->dsp_buf;
       float dsp_amp = voice->amp;
       auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second.val;
+      qreal dsp_amp_incr = curSample2AmpInc->second;
       unsigned int nextNewAmpInc = curSample2AmpInc->first;
       unsigned int dsp_i = 0;
       unsigned int dsp_phase_index;
@@ -200,7 +200,7 @@ int Voice::dsp_float_interpolate_linear(unsigned n)
       float *dsp_buf = voice->dsp_buf;
       float dsp_amp = voice->amp;
       auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second.val;
+      qreal dsp_amp_incr = curSample2AmpInc->second;
       unsigned int nextNewAmpInc = curSample2AmpInc->first;
       unsigned int dsp_i = 0;
       unsigned int dsp_phase_index;
@@ -293,7 +293,7 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
       Phase dsp_phase_incr; // end_phase;
       short int* dsp_data = sample->data;
       auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second.val;
+      qreal dsp_amp_incr = curSample2AmpInc->second;
       unsigned int nextNewAmpInc = curSample2AmpInc->first;
       unsigned int dsp_i  = 0;
       unsigned int dsp_phase_index;
@@ -439,7 +439,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
       float *dsp_buf = voice->dsp_buf;
       float dsp_amp = voice->amp;
       auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second.val;
+      qreal dsp_amp_incr = curSample2AmpInc->second;
       unsigned int nextNewAmpInc = curSample2AmpInc->first;
       unsigned int dsp_i = 0;
       unsigned int dsp_phase_index;

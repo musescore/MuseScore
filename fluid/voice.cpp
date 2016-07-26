@@ -220,7 +220,7 @@ float Voice::gen_get(int g)
       return gen[g].val;
       }
 
-void Voice::calcVolEnv(int n, fluid_env_data_t *env_data)
+inline void Voice::calcVolEnv(int n, fluid_env_data_t *env_data)
       {
       float x;
       /* calculate the envelope value and check for valid range */
@@ -273,7 +273,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
 
       int restN = n;
 
-      if (volenv_section == FLUID_VOICE_ENVFINISHED) {
+      if (volenv_section >= FLUID_VOICE_ENVFINISHED) {
             off();
             return;
             }
@@ -294,7 +294,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             }
 
       sample2VolEnvSection.insert(std::pair<int, int>(n, volenv_section));
-      volumeChanges.insert(n-1);
+      volumeChanges.insert(n);
 
       fluid_check_fpe ("voice_write vol env");
 
@@ -388,7 +388,20 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             else
                   modlfo_val = 0;
 
-            if (curPos >= curVolEnvSection->first)
+            // never calculate anything for the very first sample
+            // everything should have been calculated in the last
+            // cycle - it would also cause a divion by zero later
+            if (curPos == 0) {
+                  curPos = 1;
+
+                  // if we should calulate for position 1 already make sure we don't do it twice
+                  // could lead to curPos==lastPos which causes devision by zero
+                  if (volumeChanges.find(1) != volumeChanges.end())
+                        volumeChanges.erase(volumeChanges.find(1));
+                  }
+
+            // just go to the next volume section if we're below last volume point
+            if (curPos >= curVolEnvSection->first && (unsigned int) curVolEnvSection->first < n)
                   curVolEnvSection++;
 
             volenv_count += curPos-lastPos;
@@ -462,7 +475,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             /* Volume increment to go from voice->amp to target_amp in FLUID_BUFSIZE steps */
             amp_incr = (target_amp - oldTargetAmp) / (curPos - lastPos);
             lastPos = curPos;
-            Sample2AmpInc.insert(std::pair<int, struct VolEnvValSection>(curPos, {amp_incr, volenv_section}));
+            Sample2AmpInc.insert(std::pair<int, qreal>(curPos, amp_incr));
             oldTargetAmp = target_amp;
             }
 
