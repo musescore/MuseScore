@@ -452,7 +452,7 @@ void Segment::add(Element* el)
             case Element::Type::FRET_DIAGRAM:
             case Element::Type::TEMPO_TEXT:
             case Element::Type::STAFF_TEXT:
-            case Element::Type::ANNOTATION:
+            case Element::Type::RANGEANNOTATION:
             case Element::Type::REHEARSAL_MARK:
             case Element::Type::MARKER:
             case Element::Type::IMAGE:
@@ -594,7 +594,7 @@ void Segment::remove(Element* el)
             case Element::Type::MARKER:
             case Element::Type::REHEARSAL_MARK:
             case Element::Type::STAFF_TEXT:
-            case Element::Type::ANNOTATION:
+            case Element::Type::RANGEANNOTATION:
             case Element::Type::SYMBOL:
             case Element::Type::TAB_DURATION_SYMBOL:
             case Element::Type::TEMPO_TEXT:

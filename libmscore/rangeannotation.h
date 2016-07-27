@@ -35,7 +35,7 @@ class RangeAnnotationSegment : public SpannerSegment {
    public:
       RangeAnnotationSegment(Score*);
       virtual RangeAnnotationSegment* clone() const { return new RangeAnnotationSegment(*this); }
-      virtual Element::Type type() const { return Element::Type::ANNOTATION_SEGMENT; }
+      virtual Element::Type type() const { return Element::Type::RANGEANNOTATION_SEGMENT; }
       virtual int subtype() const         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const { return name(spanner()->type()); }
 
@@ -51,10 +51,10 @@ class RangeAnnotationSegment : public SpannerSegment {
 
 class RangeAnnotation : public Spanner {
       Q_OBJECT
-      Q_PROPERTY(Ms::Segment*             startSegment        READ startSegment)
+   /*   Q_PROPERTY(Ms::Segment*             startSegment        READ startSegment)
       Q_PROPERTY(Ms::Segment*             endSegment          READ endSegment)
       Q_PROPERTY(int                      staffStart          READ staffStart)
-      Q_PROPERTY(int                      staffEnd            READ staffEnd)
+      Q_PROPERTY(int                      staffEnd            READ staffEnd)*/
 
       Score* _score;
       int _staffStart;
@@ -66,7 +66,7 @@ class RangeAnnotation : public Spanner {
 
       RangeAnnotation(Score*  = 0);
       virtual RangeAnnotation* clone() const override         { return new RangeAnnotation(*this); }
-      virtual Element::Type type() const                 { return Element::Type::ANNOTATION; }
+      virtual Element::Type type() const                 { return Element::Type::RANGEANNOTATION; }
 
       Score* score() const             { return _score; }
       qreal firstNoteRestSegmentX(System* system);
