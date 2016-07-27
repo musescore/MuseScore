@@ -2855,88 +2855,115 @@ void Score::cmdImplode()
       if (!selection().isRange())
             return;
 
-      int dstStaff = selection().staffStart();
-      int endStaff = selection().staffEnd();
+      int dstStaff   = selection().staffStart();
+      int endStaff   = selection().staffEnd();
+      int dstTrack   = dstStaff * VOICES;
       int startTrack = dstStaff * VOICES;
-      int endTrack;
-      int trackInc;
-      // if single staff selected, combine voices
-      // otherwise combine staves
-      if (dstStaff == endStaff - 1) {
-            endTrack = startTrack + VOICES;
-            trackInc = 1;
-            }
-      else {
-            endTrack = endStaff * VOICES;
-            trackInc = VOICES;
-            }
-
+      int endTrack   = endStaff * VOICES;
       Segment* startSegment = selection().startSegment();
       Segment* endSegment = selection().endSegment();
       Measure* startMeasure = startSegment->measure();
       Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasure();
 
-      // loop through segments adding notes to chord on top staff
-      int dstTrack = dstStaff * VOICES;
-      for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
-            if (s->segmentType() != Segment::Type::ChordRest)
-                  continue;
-            Element* dst = s->element(dstTrack);
-            if (dst && dst->type() == Element::Type::CHORD) {
-                  Chord* dstChord = toChord(dst);
-                  // see if we are tying in to this chord
-                  Chord* tied = 0;
-                  foreach (Note* n, dstChord->notes()) {
-                        if (n->tieBack()) {
-                              tied = n->tieBack()->startNote()->chord();
-                              break;
+      // if single staff selected, combine voices
+      // otherwise combine staves
+      if (dstStaff == endStaff - 1) {
+
+            // loop through segments adding notes to chord on top staff
+            for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                  if (!s->isChordRestType())
+                        continue;
+                  Element* dst = s->element(dstTrack);
+                  if (dst && dst->isChord()) {
+                        Chord* dstChord = toChord(dst);
+                        // see if we are tying in to this chord
+                        Chord* tied = 0;
+                        for (Note* n : dstChord->notes()) {
+                              if (n->tieBack()) {
+                                    tied = n->tieBack()->startNote()->chord();
+                                    break;
+                                    }
                               }
-                        }
-                  // loop through each subsequent staff (or track within staff)
-                  // looking for notes to add
-                  for (int srcTrack = startTrack + trackInc; srcTrack < endTrack; srcTrack += trackInc) {
-                        Element* src = s->element(srcTrack);
-                        if (src && src->type() == Element::Type::CHORD) {
-                              Chord* srcChord = toChord(src);
-                              // when combining voices, skip if not same duration
-                              if ((trackInc == 1) && (srcChord->duration() != dstChord->duration()))
-                                    continue;
-                              // add notes
-                              foreach (Note* n, srcChord->notes()) {
-                                    NoteVal nv(n->pitch());
-                                    nv.tpc1 = n->tpc1();
-                                    // skip duplicates
-                                    if (dstChord->findNote(nv.pitch))
+                        // loop through each subsequent staff (or track within staff)
+                        // looking for notes to add
+                        for (int srcTrack = startTrack + 1; srcTrack < endTrack; srcTrack++) {
+                              Element* src = s->element(srcTrack);
+                              if (src && src->isChord()) {
+                                    Chord* srcChord = toChord(src);
+                                    // when combining voices, skip if not same duration
+                                    if (srcChord->duration() != dstChord->duration())
                                           continue;
-                                    Note* nn = addNote(dstChord, nv);
-                                    // add tie to this note if original chord was tied
-                                    if (tied) {
-                                          // find note to tie to
-                                          foreach (Note *tn, tied->notes()) {
-                                                if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
-                                                      // found note to tie
-                                                      Tie* tie = new Tie(this);
-                                                      tie->setStartNote(tn);
-                                                      tie->setEndNote(nn);
-                                                      tie->setTrack(tn->track());
-                                                      undoAddElement(tie);
+                                    // add notes
+                                    for (Note* n : srcChord->notes()) {
+                                          NoteVal nv(n->pitch());
+                                          nv.tpc1 = n->tpc1();
+                                          // skip duplicates
+                                          if (dstChord->findNote(nv.pitch))
+                                                continue;
+                                          Note* nn = addNote(dstChord, nv);
+                                          // add tie to this note if original chord was tied
+                                          if (tied) {
+                                                // find note to tie to
+                                                for (Note *tn : tied->notes()) {
+                                                      if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
+                                                            // found note to tie
+                                                            Tie* tie = new Tie(this);
+                                                            tie->setStartNote(tn);
+                                                            tie->setEndNote(nn);
+                                                            tie->setTrack(tn->track());
+                                                            undoAddElement(tie);
+                                                            }
                                                       }
                                                 }
                                           }
                                     }
+                              // delete chordrest from source track if possible
+                              if (src && src->voice())
+                                    undoRemoveElement(src);
                               }
-                        // delete chordrest from source track if possible
-                        if (src && src->voice())
-                              undoRemoveElement(src);
+                        }
+                  else if (dst) {
+                        // destination track has something, but it isn't a chord
+                        // remove everything from other voices if in "voice mode"
+                        for (int i = 1; i < VOICES; ++i) {
+                              Element* e = s->element(dstTrack + i);
+                              if (e)
+                                    undoRemoveElement(e);
+                              }
                         }
                   }
-            else if (dst && trackInc == 1) {
-                  // destination track has something, but it isn't a chord
-                  // remove everything from other voices if in "voice mode"
-                  for (int i = 1; i < VOICES; ++i) {
-                        Element* e = s->element(dstTrack + i);
-                        if (e)
-                              undoRemoveElement(e);
+            }
+      else {
+            int tracks[VOICES];
+            for (int i = 0; i < VOICES; i++)
+                  tracks[i] = -1;
+            int full = 0;
+            int lTick;
+            if (endSegment)
+                  lTick = endSegment->tick();
+            else
+                  lTick = lastMeasure()->endTick();
+            for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
+                  for (int i = startTrack; i < endTrack && full != VOICES; i++) {
+                        bool t = true;
+                        for (int j = 0; j < VOICES; j++) {
+                              if (i == tracks[j]) {
+                                    t = false;
+                                    break;
+                                    }
+                              }
+
+                        if (!seg->measure()->hasVoice(i) || seg->measure()->isOnlyRests(i) || !t)
+                              continue;
+                        tracks[full] = i;
+                        full++;
+                        }
+                  }
+
+            for (int i = dstTrack; i < dstTrack + VOICES; i++) {
+                  int strack = tracks[i % VOICES];
+                  if (strack != -1 && strack != i) {
+                        undo( new CloneVoice(startSegment, lTick, startSegment, strack, i, i, false));
                         }
                   }
             }
