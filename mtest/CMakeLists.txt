@@ -174,6 +174,7 @@ subdirs (
         libmscore/element
         libmscore/exchangevoices
         libmscore/hairpin
+        libmscore/implode_explode
         libmscore/instrumentchange
         libmscore/join
         libmscore/keysig

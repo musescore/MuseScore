@@ -13,118 +13,64 @@
 
 #include <QtTest/QtTest>
 
-#include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
+#include "libmscore/measure.h"
 #include "libmscore/chord.h"
 
-#define DIR QString("libmscore/exchangevoices/")
+#define DIR QString("libmscore/implode_explode/")
 
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestExchangevoices
+//   TestImplodeExplode
 //---------------------------------------------------------
 
-class TestExchangevoices : public QObject, public MTest
+class TestImplodeExplode : public QObject, public MTest
       {
       Q_OBJECT
 
    private slots:
       void initTestCase();
-
-      void slurs();
-      void glissandi();
-      void undoChangeVoice();
+      void undoExplode();
+      void undoExplodeVoices();
+      void undoExplode1();
       };
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
-void TestExchangevoices::initTestCase()
+void TestImplodeExplode::initTestCase()
       {
       initMTest();
       }
 
 //---------------------------------------------------------
-//   slurs
+//   undoExplode
 //---------------------------------------------------------
 
-void TestExchangevoices::slurs()
+void TestImplodeExplode::undoExplode()
       {
-      QString p1 = DIR + "exchangevoices-slurs.mscx";
-      QVERIFY(score);
-      Score* score = readScore(p1);
-      score->doLayout();
-
-      // select all
-      score->startCmd();
-      score->cmdSelectAll();
-      score->endCmd();
-
-      // do
-      score->startCmd();
-      score->cmdExchangeVoice(0,1);
-      score->endCmd();
-
-      // compare
-      QVERIFY(saveCompareScore(score, "exchangevoices-slurs.mscx", DIR + "exchangevoices-slurs-ref.mscx"));
-      }
-
-//---------------------------------------------------------
-//   glissandi
-//---------------------------------------------------------
-
-void TestExchangevoices::glissandi()
-      {
-      QString p1 = DIR + "exchangevoices-gliss.mscx";
-      QVERIFY(score);
-      Score* score = readScore(p1);
-      score->doLayout();
-
-      // select all
-      score->startCmd();
-      score->cmdSelectAll();
-      score->endCmd();
-
-      // do
-      score->startCmd();
-      score->cmdExchangeVoice(0,1);
-      score->endCmd();
-
-      // compare
-      QVERIFY(saveCompareScore(score, "exchangevoices-gliss.mscx", DIR + "exchangevoices-gliss-ref.mscx"));
-      }
-
-//---------------------------------------------------------
-//   undoChangeVoice
-//---------------------------------------------------------
-
-void TestExchangevoices::undoChangeVoice()
-      {
-      QString readFile(DIR + "undoChangeVoice.mscx");
-      QString writeFile1("undoChangeVoice01-test.mscx");
-      QString reference1(DIR  + "undoChangeVoice01-ref.mscx");
-      QString writeFile2("undoChangeVoice02-test.mscx");
-      QString reference2(DIR  + "undoChangeVoice02-ref.mscx");
+      QString readFile(DIR + "undoExplode.mscx");
+      QString writeFile1("undoExplode01-test.mscx");
+      QString reference1(DIR  + "undoExplode01-ref.mscx");
+      QString writeFile2("undoExplode02-test.mscx");
+      QString reference2(DIR  + "undoExplode02-ref.mscx");
 
       MasterScore* score = readScore(readFile);
       score->doLayout();
 
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
       // do
-      score->deselectAll();
-      // select bottom note of all voice 1 chords
-      for (Segment* s = score->firstSegment(Segment::Type::ChordRest); s; s = s->next1()) {
-            ChordRest* cr = static_cast<ChordRest*>(s->element(0));
-            if (cr && cr->type() == Element::Type::CHORD) {
-                  Ms::Chord* c = static_cast<Ms::Chord*>(cr);
-                  score->select(c->downNote(), SelectType::ADD);
-                  }
-            }
-      // change voice
-      score->changeVoice(1);
+      score->startCmd();
+      score->cmdExplode();
+      score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
@@ -134,5 +80,75 @@ void TestExchangevoices::undoChangeVoice()
       delete score;
       }
 
-QTEST_MAIN(TestExchangevoices)
-#include "tst_exchangevoices.moc"
+
+//---------------------------------------------------------
+//   undoExplodeVoices
+//---------------------------------------------------------
+
+void TestImplodeExplode::undoExplodeVoices()
+      {
+      QString readFile(DIR + "undoExplode.mscx");
+      QString writeFile1("undoExplode01-test.mscx");
+      QString reference1(DIR  + "undoExplode01-ref.mscx");
+      QString writeFile2("undoExplode02-test.mscx");
+      QString reference2(DIR  + "undoExplode02-ref.mscx");
+
+      MasterScore* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->cmdExplode();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undoStack()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoExplode1
+//---------------------------------------------------------
+
+void TestImplodeExplode::undoExplode1()
+      {
+      QString readFile(DIR + "explode1.mscx");
+      QString writeFile1("explode1-test.mscx");
+      QString reference1(DIR  + "explode1-ref.mscx");
+      QString writeFile2("explode1-test2.mscx");
+      QString reference2(DIR  + "explode1-ref2.mscx");
+
+
+      MasterScore* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->cmdExplode();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undoStack()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+QTEST_MAIN(TestImplodeExplode)
+
+#include "tst_implodeExplode.moc"
+
