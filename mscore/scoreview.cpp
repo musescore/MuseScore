@@ -2028,8 +2028,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             }
       // Begin drawing range based annotations
       for (const RangeAnnotation* rangeAnn : _score->rangeAnnotations ) {
-            Segment* rss = rangeAnn->startSegment();
-            Segment* res = rangeAnn->endSegment();
+            Segment* rss = _score->selection().startSegment();
+            Segment* res = _score->selection().endSegment();
             if (!rss)
                   return;
 
@@ -2053,8 +2053,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.setPen(pen);
             double _spatium = score()->spatium();
             double x2      = rss->pagePos().x() - _spatium;
-            int staffStart = rangeAnn->staffStart();
-            int staffEnd   = rangeAnn->staffEnd();
+            int staffStart = _score->selection().staffStart();
+            int staffEnd   = _score->selection().staffEnd();
 
             System* system2 = rss->measure()->system();
             QPointF pt      = rss->pagePos();
@@ -5689,35 +5689,48 @@ void ScoreView::cmdAddAnnotation()
 
 void ScoreView::cmdAddRangeAnnotation()
       {
-      if (!_score->checkHasMeasures())
-            return;
-      if (noteEntryMode())          // force out of entry mode
-            sm->postEvent(new CommandEvent("note-input"));
-
-     /* _score->startCmd();
-      Selection selection = _score->selection();
-      if (selection.isSingle()) {
-            ChordRest* cr = _score->getSelectedChordRest();
-            if (!cr)
-                  return;
-            RangeAnnotation* range = new RangeAnnotation(_score);
-            int endTick = cr->segment()->tick() + cr->durationTypeTicks();
-            range->setRange(cr->segment(), _score->tick2segment(endTick), selection.staffStart(), selection.staffEnd());
-            _score->addRangeAnnotation(range);
-            _score->endCmd();
+      Note* firstNote = 0;
+      Note* lastNote  = 0;
+      if (_score->selection().isRange()) {
+            int startTrack = _score->selection().staffStart() * VOICES;
+            int endTrack   = _score->selection().staffEnd() * VOICES;
+            for (int track = startTrack; track < endTrack; ++track) {
+                  for (Note* n : _score->selection().noteList(track)) {
+                        if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
+                              firstNote = n;
+                        if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
+                              lastNote = n;
+                        }
+                  }
             }
-      else if (selection.isRange()) {
-            RangeAnnotation* range = new RangeAnnotation(_score);
-            Segment* startSegment = selection.startSegment();
-            Segment* endSegment = selection.endSegment();
-            int staffStart = selection.staffStart();
-            int staffEnd = selection.staffEnd();
-            range->setRange(startSegment, endSegment, staffStart, staffEnd);
-            _score->addRangeAnnotation(range);
-            _score->endCmd();
-            }*/
+      else {
+            for (Note* n : _score->selection().noteList()) {
+                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
+                        firstNote = n;
+                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
+                        lastNote = n;
+                  }
+            }
+      if (!firstNote || !lastNote) {
+            qDebug("no note %p %p", firstNote, lastNote);
+            return;
+            }
+      if (firstNote == lastNote) {
+           qDebug("no support for note to same note range annotation %p", firstNote);
+           return;
+           }
+      RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
+      ChordRest* cr1 = firstNote->chord();
+      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
+      rangeAnn->setTick(cr1->tick());
+      rangeAnn->setTick2(cr2->tick());
+      rangeAnn->setTrack(cr1->track());
+      rangeAnn->setTrack2(cr2->track());
+      rangeAnn->setParent(firstNote);
+      _score->startCmd();
+      _score->undoAddElement(rangeAnn);
+      _score->endCmd();
       }
-
 //---------------------------------------------------------
 //   cmdAddText
 //---------------------------------------------------------

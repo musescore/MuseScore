@@ -107,7 +107,7 @@ static const ElementName elementNames[] = {
 
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
-      ElementName("Annotation",           QT_TRANSLATE_NOOP("elementName", "Annotation")),
+      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
       ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
       ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
@@ -1287,7 +1287,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::BAR_LINE:          return new BarLine(score);
             case Element::Type::SYSTEM_DIVIDER:    return new SystemDivider(score);
             case Element::Type::ARPEGGIO:          return new Arpeggio(score);
-            case Element::Type::ANNOTATION:        return new TextAnnotation(score);
+            case Element::Type::RANGEANNOTATION:   return new RangeAnnotation(score);
             case Element::Type::BREATH:            return new Breath(score);
             case Element::Type::GLISSANDO:         return new Glissando(score);
             case Element::Type::BRACKET:           return new Bracket(score);
@@ -1340,7 +1340,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::GLISSANDO_SEGMENT:
 
             case Element::Type::SLUR_SEGMENT:
-            case Element::Type::ANNOTATION_SEGMENT:
+            case Element::Type::RANGEANNOTATION_SEGMENT:
             case Element::Type::STEM_SLASH:
             case Element::Type::LINE:
             case Element::Type::TIE:
@@ -1639,7 +1639,6 @@ bool Element::isText() const
          || type() == Element::Type::LYRICS
          || type() == Element::Type::DYNAMIC
          || type() == Element::Type::FINGERING
-         || type() == Element::Type::ANNOTATION
          || type() == Element::Type::HARMONY
          || type() == Element::Type::MARKER
          || type() == Element::Type::JUMP
