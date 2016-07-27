@@ -2021,8 +2021,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             }
       // Begin drawing range based annotations
       for (const RangeAnnotation* rangeAnn : _score->rangeAnnotations ) {
-            Segment* rss = _score->selection().startSegment();
-            Segment* res = _score->selection().endSegment();
+            Segment* rss = rangeAnn->startSegment();
+            Segment* res = rangeAnn->endSegment();
             if (!rss)
                   return;
 
@@ -5609,11 +5609,13 @@ void ScoreView::cmdAddRangeAnnotation()
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
       ChordRest* cr1 = firstNote->chord();
       ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
+      rangeAnn->setParent(firstNote);
+      rangeAnn->setStartElement(firstNote);
+      rangeAnn->setEndElement(lastNote);
       rangeAnn->setTick(cr1->tick());
       rangeAnn->setTick2(cr2->tick());
       rangeAnn->setTrack(cr1->track());
       rangeAnn->setTrack2(cr2->track());
-      rangeAnn->setParent(firstNote);
       _score->startCmd();
       _score->undoAddElement(rangeAnn);
       _score->endCmd();
