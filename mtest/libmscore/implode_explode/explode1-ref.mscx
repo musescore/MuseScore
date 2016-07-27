@@ -1,0 +1,1622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <clefLeftMargin>0.64</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
+      <pedalY>0</pedalY>
+      <trillY>0</trillY>
+      <minMMRestWidth>0</minMMRestWidth>
+      <page-layout>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">tst_ex</metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Trombone</trackName>
+      <Instrument>
+        <longName>Trombone</longName>
+        <shortName>Tbn.</shortName>
+        <trackName>Trombone</trackName>
+        <minPitchP>35</minPitchP>
+        <maxPitchP>74</maxPitchP>
+        <minPitchA>35</minPitchA>
+        <maxPitchA>70</maxPitchA>
+        <instrumentId>brass.trombone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="57"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Trombone</trackName>
+      <Instrument>
+        <longName>Trombone</longName>
+        <shortName>Tbn.</shortName>
+        <trackName>Trombone</trackName>
+        <minPitchP>35</minPitchP>
+        <maxPitchP>74</maxPitchP>
+        <minPitchA>35</minPitchA>
+        <maxPitchA>70</maxPitchA>
+        <instrumentId>brass.trombone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="57"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Trombone</trackName>
+      <Instrument>
+        <longName>Trombone</longName>
+        <shortName>Tbn.</shortName>
+        <trackName>Trombone</trackName>
+        <minPitchP>35</minPitchP>
+        <maxPitchP>74</maxPitchP>
+        <minPitchA>35</minPitchA>
+        <maxPitchA>70</maxPitchA>
+        <instrumentId>brass.trombone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="57"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="4">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Trombone</trackName>
+      <Instrument>
+        <longName>Trombone</longName>
+        <shortName>Tbn.</shortName>
+        <trackName>Trombone</trackName>
+        <minPitchP>35</minPitchP>
+        <maxPitchP>74</maxPitchP>
+        <minPitchA>35</minPitchA>
+        <maxPitchA>70</maxPitchA>
+        <instrumentId>brass.trombone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="57"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>1</lid>
+        <Text>
+          <lid>2</lid>
+          <style>Title</style>
+          <text>tst_ex</text>
+          </Text>
+        </VBox>
+      <Measure number="1">
+        <TimeSig>
+          <lid>3</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <HairPin id="2">
+          <subtype>0</subtype>
+          <lid>72</lid>
+          </HairPin>
+        <Chord>
+          <lid>4</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>5</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>6</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>7</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>8</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>9</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>10</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>11</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <endSpanner id="2"/>
+        <Chord>
+          <lid>13</lid>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>sforzato</subtype>
+            <lid>12</lid>
+            </Articulation>
+          <Note>
+            <lid>14</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>15</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>16</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>17</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>18</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>19</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>20</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>30</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <lid>40</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>41</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>42</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>43</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>44</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>45</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>46</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>47</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <TimeSig>
+          <lid>73</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>74</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Chord>
+          <lid>75</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>76</lid>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <lid>77</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>78</lid>
+          <durationType>half</durationType>
+          </Rest>
+        <move>0/1</move>
+        <Chord>
+          <lid>91</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>92</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>93</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>94</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>95</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>96</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>98</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>fermata</subtype>
+            <lid>97</lid>
+            <track>5</track>
+            </Articulation>
+          <Note>
+            <lid>99</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>79</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <lid>80</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        <move>0/1</move>
+        <Chord>
+          <lid>100</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>101</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>102</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>103</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>104</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>105</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>106</lid>
+          <track>5</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>107</lid>
+            <track>5</track>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure number="1">
+        <TimeSig>
+          <lid>81</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>87</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <lid>88</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Chord>
+          <lid>109</lid>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>marcato</subtype>
+            <lid>108</lid>
+            </Articulation>
+          <Note>
+            <lid>110</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>111</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>112</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>113</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>114</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>115</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>116</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <lid>117</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>118</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>119</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>120</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>121</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>122</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>123</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>124</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure number="1">
+        <TimeSig>
+          <lid>82</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>83</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <lid>84</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>85</lid>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <lid>125</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>126</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>127</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>128</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>129</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>130</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>131</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>132</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Trombone</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <defaultClef>F</defaultClef>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Trombone</trackName>
+        <Instrument>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          <trackName>Trombone</trackName>
+          <minPitchP>35</minPitchP>
+          <maxPitchP>74</maxPitchP>
+          <minPitchA>35</minPitchA>
+          <maxPitchA>70</maxPitchA>
+          <instrumentId>brass.trombone</instrumentId>
+          <clef>F</clef>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="57"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Title</style>
+            <text>tst_ex</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Trombone</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>3</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <HairPin id="3">
+            <subtype>0</subtype>
+            <lid>72</lid>
+            </HairPin>
+          <Chord>
+            <lid>4</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>5</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>6</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>7</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>9</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>10</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>11</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <endSpanner id="3"/>
+          <Chord>
+            <lid>13</lid>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>sforzato</subtype>
+              <lid>12</lid>
+              </Articulation>
+            <Note>
+              <lid>14</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>16</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>17</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>18</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>19</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>20</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>30</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Chord>
+            <lid>40</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>41</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>42</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>43</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>44</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>45</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>46</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>47</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <name>Trombone</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Trombone-1</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>2</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <defaultClef>F</defaultClef>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Trombone</trackName>
+        <Instrument>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          <trackName>Trombone</trackName>
+          <minPitchP>35</minPitchP>
+          <maxPitchP>74</maxPitchP>
+          <minPitchA>35</minPitchA>
+          <maxPitchA>70</maxPitchA>
+          <instrumentId>brass.trombone</instrumentId>
+          <clef>F</clef>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="57"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Title</style>
+            <text>tst_ex</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Trombone-1</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>73</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <lid>74</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="2">
+          <Chord>
+            <lid>75</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>76</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>77</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>78</lid>
+            <durationType>half</durationType>
+            </Rest>
+          <move>0/1</move>
+          <Chord>
+            <lid>91</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>92</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>93</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>94</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>95</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>96</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>98</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>fermata</subtype>
+              <lid>97</lid>
+              <track>1</track>
+              </Articulation>
+            <Note>
+              <lid>99</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>79</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>80</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <move>0/1</move>
+          <Chord>
+            <lid>100</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>101</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>102</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>103</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>104</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>105</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>106</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>107</lid>
+              <track>1</track>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <name>Trombone-1</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Trombone-2</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>3</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <defaultClef>F</defaultClef>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Trombone</trackName>
+        <Instrument>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          <trackName>Trombone</trackName>
+          <minPitchP>35</minPitchP>
+          <maxPitchP>74</maxPitchP>
+          <minPitchA>35</minPitchA>
+          <maxPitchA>70</maxPitchA>
+          <instrumentId>brass.trombone</instrumentId>
+          <clef>F</clef>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="57"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Title</style>
+            <text>tst_ex</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Trombone-2</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>81</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <lid>87</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="1" len="8/4">
+          <multiMeasureRest>2</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>16/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>88</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <Chord>
+            <lid>109</lid>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>marcato</subtype>
+              <lid>108</lid>
+              </Articulation>
+            <Note>
+              <lid>110</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>111</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>112</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>113</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>114</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>115</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>116</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="4">
+          <Chord>
+            <lid>117</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>118</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>119</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>120</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>121</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>122</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>123</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>124</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <name>Trombone-2</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Trombone-3</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>4</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <defaultClef>F</defaultClef>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Trombone</trackName>
+        <Instrument>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          <trackName>Trombone</trackName>
+          <minPitchP>35</minPitchP>
+          <maxPitchP>74</maxPitchP>
+          <minPitchA>35</minPitchA>
+          <maxPitchA>70</maxPitchA>
+          <instrumentId>brass.trombone</instrumentId>
+          <clef>F</clef>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="57"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Title</style>
+            <text>tst_ex</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Trombone-3</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>82</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <lid>83</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="1" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>16/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>84</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>85</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Chord>
+            <lid>125</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>126</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>127</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>128</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>129</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>130</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>131</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>132</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <name>Trombone-3</name>
+      </Score>
+    </Score>
+  </museScore>
