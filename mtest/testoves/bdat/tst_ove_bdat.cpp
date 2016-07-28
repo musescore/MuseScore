@@ -53,7 +53,7 @@ private slots:
       //void oveGraphicsTest()           { oveReadTest("graphics"); }
       //void oveGuitarBarreTest()        { oveReadTest("guitar-barre"); }
       //void oveGuitarBendTest()         { oveReadTest("guitar-bend"); }
-      //void oveHarmony2Test()           { oveReadTest("harmony 2"); }
+      void oveHarmony2Test()           { oveReadTest("harmony 2"); }
       //void oveGuitarFretTest()         { oveReadTest("harmony-guitar-frame"); }
       //void oveHarmonyTypeTest()        { oveReadTest("harmony-type"); }
       //void oveHarmonyTest()            { oveReadTest("harmony"); }
