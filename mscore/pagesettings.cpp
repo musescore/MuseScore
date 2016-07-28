@@ -37,6 +37,7 @@ namespace Ms {
 PageSettings::PageSettings(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("PageSettings");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
@@ -53,6 +54,9 @@ PageSettings::PageSettings(QWidget* parent)
             mmButton->setChecked(true);
       else
             inchButton->setChecked(true);
+
+      MuseScore::restoreGeometry(this);
+
       connect(mmButton,             SIGNAL(clicked()),            SLOT(mmClicked()));
       connect(inchButton,           SIGNAL(clicked()),            SLOT(inchClicked()));
       connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
@@ -82,6 +86,16 @@ PageSettings::PageSettings(QWidget* parent)
 
 PageSettings::~PageSettings()
       {
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void PageSettings::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------

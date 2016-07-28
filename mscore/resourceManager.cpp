@@ -23,6 +23,7 @@ extern QString mscoreGlobalShare;
 ResourceManager::ResourceManager(QWidget *parent) :
       QDialog(parent)
       {
+      setObjectName("ResourceManager");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
@@ -34,6 +35,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       languagesTable->verticalHeader()->hide();
       tabs->removeTab(tabs->indexOf(plugins));
       tabs->setCurrentIndex(tabs->indexOf(languages));
+      MuseScore::restoreGeometry(this);
       }
 
 void ResourceManager::displayPlugins()
@@ -204,4 +206,15 @@ bool ResourceManager::verifyFile(QString path, QString hash)
             }
       return false;
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void ResourceManager::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }

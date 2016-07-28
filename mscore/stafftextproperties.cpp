@@ -24,6 +24,7 @@
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 #include "globals.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -51,6 +52,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
 StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("StaffTextProperties");
       setupUi(this);
       if (st->systemFlag()) {
             setWindowTitle(tr("MuseScore: System Text Properties"));
@@ -276,6 +278,8 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
 
       curTabIndex = tabWidget->currentIndex();
       connect(tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -483,5 +487,16 @@ void StaffTextProperties::saveValues()
                   }
             }
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void StaffTextProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

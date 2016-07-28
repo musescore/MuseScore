@@ -203,6 +203,7 @@ void ChordStyleEditor::save()
       settings.setValue("splitter2", splitter2->saveState());
 //      settings.setValue("list", harmonyList->saveState());
       settings.setValue("col1", harmonyList->columnWidth(0));
+      MuseScore::saveGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -211,6 +212,7 @@ void ChordStyleEditor::save()
 
 void ChordStyleEditor::restore()
       {
+      MuseScore::restoreGeometry(this);
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup(objectName());

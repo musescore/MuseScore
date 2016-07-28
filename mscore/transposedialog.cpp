@@ -45,10 +45,14 @@ namespace Ms {
 TransposeDialog::TransposeDialog(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("TransposeDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       connect(transposeByKey, SIGNAL(clicked(bool)), SLOT(transposeByKeyToggled(bool)));
       connect(transposeByInterval, SIGNAL(clicked(bool)), SLOT(transposeByIntervalToggled(bool)));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -132,5 +136,15 @@ void TransposeDialog::on_diatonicBox_toggled(bool val)
 {
     chromaticBox->setChecked(!val);
 }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void TransposeDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
 }
 

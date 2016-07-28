@@ -188,6 +188,7 @@ void MuseScore::cmdInsertMeasures()
 InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("InsertMeasuresDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       insmeasures->selectAll();
@@ -203,6 +204,16 @@ void InsertMeasuresDialog::accept()
       if (mscore->currentScore())
             mscore->currentScoreView()->cmdInsertMeasures(n, Element::Type::MEASURE);
       done(1);
+      }
+
+//---------------------------------------------------------
+// InsertMeasuresDialog hideEvent
+//---------------------------------------------------------
+
+void InsertMeasuresDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
       }
 
 //---------------------------------------------------------
@@ -380,6 +391,7 @@ MuseScore::MuseScore()
                   guiScaling = 1.0;
             }
 
+      setObjectName("MuseScore");
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
@@ -2875,9 +2887,9 @@ void MuseScore::writeSettings()
       settings.setValue("lastSaveCopyFormat", lastSaveCopyFormat);
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
 
+      MuseScore::saveGeometry(this);
+
       settings.beginGroup("MainWindow");
-      settings.setValue("geometry", QWidget::saveGeometry());
-      settings.setValue("maximized", isMaximized());
       settings.setValue("fullScreen", isFullScreen());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
@@ -2953,17 +2965,17 @@ void MuseScore::readSettings()
             return;
             }
 
+      MuseScore::restoreGeometry(this);
+
       settings.beginGroup("MainWindow");
-      mainWindow->restoreGeometry(settings.value("geometry").toByteArray());
       mainWindow->restoreState(settings.value("debuggerSplitter").toByteArray());
       mainWindow->setOpaqueResize(false);
       scorePageLayoutChanged();
 
       //for some reason when MuseScore starts maximized the screen-reader
-      //doesn't respond to QAccessibleEvents
-      if ((settings.value("maximized", false).toBool() || settings.value("fullScreen", false).toBool())
-            && !QAccessible::isActive()) {
-            showMaximized();
+      //doesn't respond to QAccessibleEvents --> so force normal mode
+      if (isMaximized() && QAccessible::isActive()) {
+            showNormal();
             }
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "1").toBool());
@@ -2971,6 +2983,11 @@ void MuseScore::readSettings()
       mscore->showSelectionWindow(settings.value("showSelectionWindow", "0").toBool());
 
       restoreState(settings.value("state").toByteArray());
+      //if we were in full screen mode, go to maximized mode
+      if (isFullScreen()) {
+            showMaximized();
+            }
+
       _horizontalSplit = settings.value("split", true).toBool();
       bool splitScreen = settings.value("splitScreen", false).toBool();
       if (splitScreen) {

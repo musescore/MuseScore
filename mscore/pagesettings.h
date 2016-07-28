@@ -38,6 +38,8 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       Navigator* preview;
       bool mmUnit;
       Score* cs;
+
+      virtual void hideEvent(QHideEvent*);
       void updateValues();
       void updatePreview(int);
       void blockSignals(bool);

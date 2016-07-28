@@ -32,6 +32,8 @@ namespace Ms {
 class EditPitch : public QDialog, private Ui::EditPitchBase {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
+
    protected:
       void changeEvent(QEvent *e);
 

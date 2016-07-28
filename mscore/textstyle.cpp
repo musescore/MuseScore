@@ -37,6 +37,7 @@ namespace Ms {
 TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
    : QDialog(parent)
       {
+      setObjectName("TextStyleDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -62,6 +63,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
 
       current = -1;
       textNames->setCurrentItem(textNames->item(0));
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -233,6 +235,16 @@ void TextStyleDialog::newClicked()
       textNames->item(count)->setData(Qt::UserRole, listIdx);
       textNames->setCurrentRow(count);
       mscore->endCmd();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void TextStyleDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
       }
 }
 

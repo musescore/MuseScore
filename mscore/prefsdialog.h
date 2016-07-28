@@ -40,6 +40,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       QButtonGroup* recordButtons;
       Preferences prefs;
 
+      virtual void hideEvent(QHideEvent*);
       void apply();
       void updateSCListView();
       void setUseMidiOutput(bool);

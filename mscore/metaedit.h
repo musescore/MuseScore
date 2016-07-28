@@ -38,6 +38,8 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
 
       bool dirty;
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void newClicked();
       void setDirty() { dirty = true; }

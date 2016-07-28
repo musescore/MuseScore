@@ -136,6 +136,7 @@ void MasterPalette::addPalette(Palette* sp)
 MasterPalette::MasterPalette(QWidget* parent)
    : QWidget(parent, Qt::Dialog)
       {
+      setObjectName("MasterPalette");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -169,6 +170,8 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newFramePalette());
 
       stack->addWidget(new SymbolDialog);
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -177,6 +180,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 void MasterPalette::closeEvent(QCloseEvent* ev)
       {
+      MuseScore::saveGeometry(this);
       if (timeDialog->dirty())
             timeDialog->save();
       if (keyEditor->dirty())

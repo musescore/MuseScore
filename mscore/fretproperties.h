@@ -35,6 +35,8 @@ class FretDiagramProperties : public QDialog, public Ui::FretDiagramProperties {
       Q_OBJECT
       FretDiagram* fd;
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void stringsChanged(int);
       void fretsChanged(int);

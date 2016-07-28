@@ -1502,9 +1502,12 @@ void Palette::actionToggled(bool /*val*/)
 PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
    : QDialog(parent)
       {
-      palette = p;
+      setObjectName("PaletteProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+      palette = p;
+
       name->setText(palette->name());
       cellWidth->setValue(palette->gridWidth() / guiScaling);
       cellHeight->setValue(palette->gridHeight() / guiScaling);
@@ -1512,6 +1515,8 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
       mag->setValue(palette->mag() / guiScaling);
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -1531,20 +1536,35 @@ void PaletteProperties::accept()
       }
 
 //---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void PaletteProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
+//---------------------------------------------------------
 //   PaletteCellProperties
 //---------------------------------------------------------
 
 PaletteCellProperties::PaletteCellProperties(PaletteCell* p, QWidget* parent)
    : QDialog(parent)
       {
-      cell = p;
+      setObjectName("PaletteCellProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+      cell = p;
+
       xoffset->setValue(cell->xoffset);
       yoffset->setValue(cell->yoffset);
       scale->setValue(cell->mag);
       drawStaff->setChecked(cell->drawStaff);
       name->setText(p->name);
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -1559,6 +1579,16 @@ void PaletteCellProperties::accept()
       cell->name    = name->text();
       cell->drawStaff = drawStaff->isChecked();
       QDialog::accept();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void PaletteCellProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
       }
 
 //---------------------------------------------------------

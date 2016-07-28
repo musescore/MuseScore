@@ -29,6 +29,7 @@
 #include "libmscore/system.h"
 #include "libmscore/score.h"
 #include "libmscore/slur.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -39,6 +40,7 @@ namespace Ms {
 SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("SelectDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       e = _e;
@@ -64,6 +66,8 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       sameSubtype->setEnabled(e->subtype() != -1);
       subtype->setEnabled(e->subtype() != -1);
       inSelection->setEnabled(e->score()->selection().isRange());    
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -103,5 +107,16 @@ void SelectDialog::setPattern(ElementPattern* p)
                   } while (e);
             }
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void SelectDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

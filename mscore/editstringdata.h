@@ -37,6 +37,8 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase {
       QList<instrString>* _strings;         // pointer to original string list
       QList<instrString>  _stringsLoc;      // local working copy of string list
 
+      virtual void hideEvent(QHideEvent*);
+
    public:
       EditStringData(QWidget *parent, QList<instrString> * strings, int * frets);
       ~EditStringData();

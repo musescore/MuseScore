@@ -36,6 +36,7 @@ const char* g_groupNames[STAFF_GROUP_MAX] = {
 EditStaffType::EditStaffType(QWidget* parent, Staff* st)
    : QDialog(parent)
       {
+      setObjectName("EditStaffType");
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setupUi(this);
 
@@ -120,6 +121,18 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(templateReset,        SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
       connect(addToTemplates,       SIGNAL(clicked()),                  SLOT(addToTemplatesClicked()));
 //      connect(groupCombo,           SIGNAL(currentIndexChanged(int)),   SLOT(staffGroupChanged(int)));
+
+      MuseScore::restoreGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void EditStaffType::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------

@@ -46,6 +46,7 @@ class TextPalette : public QWidget, public Ui::TextPaletteBase {
 
       QListWidget* lwu;
 
+      virtual void hideEvent(QHideEvent*);
       void closeEvent(QCloseEvent* ev);
       void populateCommon();
 

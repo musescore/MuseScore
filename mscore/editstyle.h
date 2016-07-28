@@ -53,6 +53,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       QVector<StyleWidget> styleWidgets;
 
+      virtual void hideEvent(QHideEvent*);
+
       void getValues();
       void setValues();
       void setHeaderText(StyleIdx idx, QTextEdit* te);

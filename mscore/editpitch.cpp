@@ -19,6 +19,7 @@
 //=============================================================================
 
 #include "editpitch.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -30,23 +31,37 @@ namespace Ms {
 EditPitch::EditPitch(QWidget *parent)
    : QDialog(parent)
       {
+      setObjectName("EditPitchNew");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tableWidget->setCurrentCell(4, 0);                    // select centre C by default
+      MuseScore::restoreGeometry(this);
       }
 
 EditPitch::EditPitch(QWidget *parent, int midiCode)
    : QDialog(parent)
       {
+      setObjectName("EditPitchEdit");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tableWidget->setCurrentCell(9-(midiCode/12), midiCode%12);
+      MuseScore::restoreGeometry(this);
       }
 
 EditPitch::~EditPitch()
 {
 
 }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void EditPitch::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
+      }
 
 void EditPitch::changeEvent(QEvent *e)
       {
