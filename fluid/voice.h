@@ -120,6 +120,7 @@ class Voice
 	float volenv_val;
 	float amplitude_that_reaches_noise_floor_nonloop;
 	float amplitude_that_reaches_noise_floor_loop;
+   int positionToTurnOff; // this is the sample accurate position where the sample reaches the noise floor
 
 	/* mod env */
 	fluid_env_data_t modenv_data[FLUID_VOICE_ENVLAST];
@@ -234,6 +235,7 @@ class Voice
       void add_mod(const Mod* mod, int mode);
 
       static void dsp_float_config();
+      bool updateAmpInc(unsigned int &nextNewAmpInc, std::map<int, qreal>::iterator &curSample2AmpInc, qreal &dsp_amp_incr, unsigned int &dsp_i);
       int dsp_float_interpolate_none(unsigned);
       int dsp_float_interpolate_linear(unsigned);
       int dsp_float_interpolate_4th_order(unsigned);
