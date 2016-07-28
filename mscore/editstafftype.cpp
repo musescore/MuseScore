@@ -72,8 +72,11 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // load a sample tabulature score in preview
       MasterScore* sc = new MasterScore(MScore::defaultStyle());
-      Q_ASSERT(readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR);
-      preview->setScore(sc);
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR)
+            preview->setScore(sc);
+      else {
+            Q_ASSERT_X(false, "EditStaffType::EditStaffType", "Error in opening sample file for preview");
+            }
 
       setValues();
 
