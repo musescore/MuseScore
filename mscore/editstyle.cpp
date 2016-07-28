@@ -37,6 +37,7 @@ namespace Ms {
 EditStyle::EditStyle(Score* s, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("EditStyle");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = s;
@@ -434,8 +435,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(mapper,  SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
       connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
 
-      resize(904, 577); // override designer values
+      MuseScore::restoreGeometry(this);
       cs->startCmd();
+      }
+
+//---------------------------------------------------------
+//   closeEvent
+//---------------------------------------------------------
+
+void EditStyle::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------

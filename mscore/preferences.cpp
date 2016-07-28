@@ -539,6 +539,7 @@ void MuseScore::startPreferenceDialog()
 PreferenceDialog::PreferenceDialog(QWidget* parent)
    : AbstractDialog(parent)
       {
+      setObjectName("PreferenceDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
@@ -637,6 +638,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       updateRemote();
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -656,6 +659,16 @@ void PreferenceDialog::setPreferences(const Preferences& p)
 PreferenceDialog::~PreferenceDialog()
       {
       qDeleteAll(localShortcuts);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void PreferenceDialog::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------
