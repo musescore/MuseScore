@@ -2135,18 +2135,20 @@ NoteType Tuplet::getNoteType() const {
 Harmony::Harmony() {
       musicDataType_ = MusicDataType::Harmony;
 
-      harmonyType_ = HarmonyType::H_maj;
+      harmonyType_ = "";
       root_ = 0;
       bass_ = -1; //0xff
+      alterRoot_ = 0;
+      alterBass_ = 0;
       bassOnBottom_ = false;
       angle_ = 0;
       }
 
-void Harmony::setHarmonyType(HarmonyType type) {
+void Harmony::setHarmonyType(QString type) {
       harmonyType_ = type;
       }
 
-HarmonyType Harmony::getHarmonyType() const {
+QString Harmony::getHarmonyType() const {
       return harmonyType_;
       }
 
@@ -2158,12 +2160,28 @@ int Harmony::getRoot() const {
       return root_;
       }
 
+void Harmony::setAlterRoot(int val) {
+      alterRoot_ = val;
+      }
+
+int Harmony::getAlterRoot() const {
+      return alterRoot_;
+      }
+
 void Harmony::setBass(int bass) {
       bass_ = bass;
       }
 
 int Harmony::getBass() const {
       return bass_;
+      }
+
+void Harmony::setAlterBass(int val) {
+      alterBass_ = val;
+      }
+
+int Harmony::getAlterBass() const {
+      return alterBass_;
       }
 
 void Harmony::setBassOnBottom(bool on) {
@@ -5686,138 +5704,159 @@ bool BarsParse::parseTuplet(MeasureData* measureData, int /*length*/) {
       return true;
       }
 
-HarmonyType binaryToHarmonyType(int bin) {
-      HarmonyType type = HarmonyType::H_maj;
-      if( bin == 0x0091 ) {
-            type = HarmonyType::H_maj;
-            } else if( bin == 0x0089 ) {
-            type = HarmonyType::H_min;
-            } else if( bin == 0x0489 ) {
-            type = HarmonyType::H_min7;
-            } else if( bin == 0x0491 ) {
-            type = HarmonyType::H_7;
-            } else if( bin == 0x0495 ) {
-            type = HarmonyType::H_9;
-            } else if( bin == 0x0449 ) {
-            type = HarmonyType::H_min7b5;
-            } else if( bin == 0x04A1 ) {
-            type = HarmonyType::H_7sus4;
-            } else if( bin == 0x00A1 ) {
-            type = HarmonyType::H_sus4;
-            } else if( bin == 0x0049 ) {
-            type = HarmonyType::H_dim;
-            } else if( bin == 0x0249 ) {
-            type = HarmonyType::H_dim7;
-            } else if( bin == 0x0111 ) {
-            type = HarmonyType::H_aug;
-            } else if( bin == 0x0511 ) {
-            type = HarmonyType::H_aug7;
-            } else if( bin == 0x044D ) {
-            type = HarmonyType::H_min9_b5;
-            } else if( bin == 0x0499 ) {
-            type = HarmonyType::H_7s9;
-            } else if( bin == 0x0615 ) {
-            type = HarmonyType::H_13;
-            } else if( bin == 0x0289 ) {
-            type = HarmonyType::H_min6;
-            } else if( bin == 0x0291 ) {
-            type = HarmonyType::H_6;
-            } else if( bin == 0x0295 ) {
-            type = HarmonyType::H_6;         //6add9
-            } else if( bin == 0x0095 ) {
-            type = HarmonyType::H_min;       //minor add9
-            } else if( bin == 0x008D ) {
-            type = HarmonyType::H_maj7;
-            } else if( bin == 0x0891 ) {
-            type = HarmonyType::H_maj7;
-            } else if( bin == 0x0881 ) {
-            type = HarmonyType::H_maj7_s5;   //maj7#5
-            } else if( bin == 0x0911 ) {
-            type = HarmonyType::H_maj7_s5;   //maj7#5
-            } else if( bin == 0x0991 ) {
-            type = HarmonyType::H_maj7_s11;  //maj7#11
-            } else if( bin == 0x0851 ) {
-            type = HarmonyType::H_maj7_s11;  //maj7#11
-            } else if( bin == 0x08D1 ) {
-            type = HarmonyType::H_maj9;
-            } else if( bin == 0x0895 ) {
-            type = HarmonyType::H_maj9_s5;   //maj9#5
-            } else if( bin == 0x0995 ) {
-            type = HarmonyType::H_maj13_s11; //maj9#11
-            } else if( bin == 0x0855 ) {
-            type = HarmonyType::H_maj9_s11;  //maj9#11
-            } else if( bin == 0x08D5 ) {
-            type = HarmonyType::H_maj13;
-            } else if( bin == 0x0A95 ) {
-            type = HarmonyType::H_maj13_s11; //maj13#11
-            } else if( bin == 0x0A55 ) {
-            type = HarmonyType::H_maj13;     //maj13(no3)
-            } else if( bin == 0x0A85 ) {
-            type = HarmonyType::H_maj9_s5;   //maj13#5#11(no4)
-            } else if( bin == 0x0B45 ) {
-            type = HarmonyType::H_7b9;
-            } else if( bin == 0x0493 ) {
-            type = HarmonyType::H_7b5;
-            } else if( bin == 0x0451 ) {
-            type = HarmonyType::H_9b5;
-            } else if( bin == 0x0455 ) {
-            type = HarmonyType::H_7s9;       //7#5#9
-            } else if( bin == 0x0519 ) {
-            type = HarmonyType::H_7b9;       //7#5b9
-            } else if( bin == 0x0513 ) {
-            type = HarmonyType::H_aug7;      //aug9
-            } else if( bin == 0x0515 ) {
-            type = HarmonyType::H_sus4;      //sus9
-            } else if( bin == 0x04A5 ) {
-            type = HarmonyType::H_13b9;
-            } else if( bin == 0x0613 ) {
-            type = HarmonyType::H_13b9;      //13b9#11
-            } else if( bin == 0x0611 ) {
-            type = HarmonyType::H_13;
-            } else if( bin == 0x0653 ) {
-            type = HarmonyType::H_min;       //m(natural7)
-            } else if( bin == 0x0889 ) {
-            type = HarmonyType::H_min9;      //m9(natural7)
-            } else if( bin == 0x088D ) {
-            type = HarmonyType::H_min11;
-            } else if( bin == 0x04AD ) {
-            type = HarmonyType::H_9s11;
-            } else if( bin == 0x04D5 ) {
-            type = HarmonyType::H_7sus4;     //sus7
-            } else if( bin == 0x0421 ) {
-            type = HarmonyType::H_min11;
-            } else if( bin == 0x04A9 ) {
-            type = HarmonyType::H_min9;
-            } else if( bin == 0x048D ) {
-            type = HarmonyType::H_7b5b9;
-            } else if( bin == 0x0453 ) {
-            type = HarmonyType::H_maj;       //(no5)
-            } else if( bin == 0x0011 ) {
-            type = HarmonyType::H_maj7;      //(no3)
-            } else if( bin == 0x0081 ) {
-            type = HarmonyType::H_7;         //7(no3)
-            } else if( bin == 0x0481 ) {
-            type = HarmonyType::H_7;         //7(no5)
-            } else if( bin == 0x0411 ) {
-            type = HarmonyType::H_6;
-            } else if( bin == 0x0291 ) {
-            type = HarmonyType::H_sus4;      //sus(add9)
-            } else if( bin == 0x00A5 ) {
-            type = HarmonyType::H_13s9;      //13#9b5
-            } else if( bin == 0x0659 ) {
-            type = HarmonyType::H_sus4;      //sus(no5)
-            } else if( bin == 0x0021 ) {
-            type = HarmonyType::H_7b5b9;     //7b5b9#9
-            } else if( bin == 0x045B ) {
-            type = HarmonyType::H_13b5;      //13b5b9#9
-            } else if( bin == 0x065B ) {
-            type = HarmonyType::H_13b9;      //13b9#9
-            } else if( bin == 0x061B ) {
-            type = HarmonyType::H_7b9s9;     //7b9#9
-            } else if( bin == 0x04B5 ) {
-            type = HarmonyType::H_7;
+QString binaryToHarmonyType(int bin) {
+      QString type = "";
+      switch (bin) {
+            case 0x0005: { type = "add9(no3)";        break; }
+            case 0x0009: { type = "min(no5)";         break; }
+            case 0x0011: { type = "(no5)";            break; }
+            case 0x0021: { type = "sus(no5)";         break; }
+            case 0x0025: { type = "24";               break; }
+            case 0x0029: { type = "min4(no5)";        break; }
+            case 0x0049: { type = "dim";              break; }
+            case 0x0051: { type = "(b5)";             break; }
+            case 0x0055: { type = "2#4(no5)";         break; }
+            case 0x0081: { type = "(no3)";            break; }
+            case 0x0085: { type = "2";                break; }
+            case 0x0089: { type = "min";              break; }
+            case 0x008D: { type = "min(add9)";        break; }
+            case 0x0091: { type = "";                 break; }
+            case 0x0093: { type = "addb9";            break; }
+            case 0x0095: { type = "add9";             break; }
+            case 0x00A1: { type = "sus4";             break; }
+            case 0x00A5: { type = "sus(add9)";        break; }
+            case 0x00A9: { type = "min4";             break; }
+            case 0x00D5: { type = "2#4";              break; }
+            case 0x0111: { type = "aug";              break; }
+            case 0x0115: { type = "aug(add9)";        break; }
+            case 0x0151: { type = "(b5b6)";           break; }
+            case 0x0155: { type = "+add9#11";         break; }
+            case 0x0189: { type = "minb6";            break; }
+            case 0x018D: { type = "min2b6";           break; }
+            case 0x0191: { type = "(b6)";             break; }
+            case 0x0199: { type = "(add9)b6";         break; }
+            case 0x0205: { type = "26";               break; }
+            case 0x020D: { type = "min69";            break; }
+            case 0x0211: { type = "6";                break; }
+            case 0x0215: { type = "69";               break; }
+            case 0x022D: { type = "min69 11";         break; }
+            case 0x0249: { type = "dim7";             break; }
+            case 0x0251: { type = "6#11";             break; }
+            case 0x0255: { type = "13#11";            break; }
+            case 0x0281: { type = "6(no3)";           break; }
+            case 0x0285: { type = "69(no3)";          break; }
+            case 0x0289: { type = "min6";             break; }
+            case 0x028D: { type = "min69";            break; }
+            case 0x0291: { type = "6";                break; }
+            case 0x0293: { type = "6b9";              break; }
+            case 0x0295: { type = "69";               break; }
+            case 0x02AD: { type = "min69 11";         break; }
+            case 0x02C5: { type = "69#11(no3)";       break; }
+            case 0x02D5: { type = "69#11";            break; }
+            case 0x040D: { type = "min9(no5)";        break; }
+            case 0x0411: { type = "7(no5)";           break; }
+            case 0x0413: { type = "7b9";              break; }
+            case 0x0415: { type = "9";                break; }
+            case 0x0419: { type = "7#9";              break; }
+            case 0x041B: { type = "7b9#9";            break; }
+            case 0x0421: { type = "sus7";             break; }
+            case 0x0429: { type = "min11";            break; }
+            case 0x042D: { type = "min11";            break; }
+            case 0x0445: { type = "9b5(no3)";         break; }
+            case 0x0449: { type = "min7b5";           break; }
+            case 0x044D: { type = "min9b5";           break; }
+            case 0x0451: { type = "7b5";              break; }
+            case 0x0453: { type = "7b9b5";            break; }
+            case 0x0455: { type = "9b5";              break; }
+            case 0x045B: { type = "7b5b9#9";          break; }
+            case 0x0461: { type = "sus7b5";           break; }
+            case 0x0465: { type = "sus9b5";           break; }
+            case 0x0469: { type = "min11b5";          break; }
+            case 0x046D: { type = "min11b5";          break; }
+            case 0x0481: { type = "7(no3)";           break; }
+            case 0x0489: { type = "min7";             break; }
+            case 0x048D: { type = "min9";             break; }
+            case 0x0491: { type = "7";                break; }
+            case 0x0493: { type = "7b9";              break; }
+            case 0x0495: { type = "9";                break; }
+            case 0x0499: { type = "7#9";              break; }
+            case 0x049B: { type = "7b9#9";            break; }
+            case 0x04A1: { type = "sus7";             break; }
+            case 0x04A5: { type = "sus9";             break; }
+            case 0x04A9: { type = "min11";            break; }
+            case 0x04AD: { type = "min11";            break; }
+            case 0x04B5: { type = "11";               break; }
+            case 0x04D5: { type = "9#11";             break; }
+            case 0x0509: { type = "min7#5";           break; }
+            case 0x0511: { type = "aug7";             break; }
+            case 0x0513: { type = "7#5b9";            break; }
+            case 0x0515: { type = "aug9";             break; }
+            case 0x0519: { type = "7#5#9";            break; }
+            case 0x0529: { type = "min11b13";         break; }
+            case 0x0533: { type = "11b9#5";           break; }
+            case 0x0551: { type = "aug7#11";          break; }
+            case 0x0553: { type = "7b5b9b13";         break; }
+            case 0x0555: { type = "aug9#11";          break; }
+            case 0x0559: { type = "aug7#9#11";        break; }
+            case 0x0609: { type = "min13";            break; }
+            case 0x0611: { type = "13";               break; }
+            case 0x0613: { type = "13b9";             break; }
+            case 0x0615: { type = "13";               break; }
+            case 0x0619: { type = "13#9";             break; }
+            case 0x061B: { type = "13b9#9";           break; }
+            case 0x0621: { type = "sus13";            break; }
+            case 0x062D: { type = "min13(11)";        break; }
+            case 0x0633: { type = "13b9add4";         break; }
+            case 0x0635: { type = "13";               break; }
+            case 0x0645: { type = "13#11(no3)";       break; }
+            case 0x0651: { type = "13b5";             break; }
+            case 0x0653: { type = "13b9#11";          break; }
+            case 0x0655: { type = "13#11";            break; }
+            case 0x0659: { type = "13#9b5";           break; }
+            case 0x065B: { type = "13b5b9#9";         break; }
+            case 0x0685: { type = "13(no3)";          break; }
+            case 0x068D: { type = "min13";            break; }
+            case 0x0691: { type = "13";               break; }
+            case 0x0693: { type = "13b9";             break; }
+            case 0x0695: { type = "13";               break; }
+            case 0x0699: { type = "13#9";             break; }
+            case 0x06A5: { type = "sus13";            break; }
+            case 0x06AD: { type = "min13(11)";        break; }
+            case 0x06B5: { type = "13";               break; }
+            case 0x06D5: { type = "13#11";            break; }
+            case 0x0813: { type = "maj7b9";           break; }
+            case 0x0851: { type = "maj7#11";          break; }
+            case 0x0855: { type = "maj9#11";          break; }
+            case 0x0881: { type = "maj7(no3)";        break; }
+            case 0x0889: { type = "min(\u266e7)";     break; }   // "min(<sym>accidentalNatural</sym>7)"
+            case 0x088D: { type = "min9(\u266e7)";    break; }   // "min9(<sym>accidentalNatural</sym>7)"
+            case 0x0891: { type = "maj7";             break; }
+            case 0x0895: { type = "maj9";             break; }
+            case 0x08C9: { type = "dim7(add maj 7)";  break; }
+            case 0x08D1: { type = "maj7#11";          break; }
+            case 0x08D5: { type = "maj9#11";          break; }
+            case 0x0911: { type = "maj7#5";           break; }
+            case 0x0991: { type = "maj7#5";           break; }
+            case 0x0995: { type = "maj9#5";            break; }
+            case 0x0A0D: { type = "min69(\u266e7)";   break; }   // "min69(<sym>accidentalNatural</sym>7)"
+            case 0x0A11: { type = "maj13";            break; }
+            case 0x0A15: { type = "maj13";            break; }
+            case 0x0A51: { type = "maj13#11";         break; }
+            case 0x0A55: { type = "maj13#11";         break; }
+            case 0x0A85: { type = "maj13(no3)";       break; }
+            case 0x0A89: { type = "min13(\u266e7)";   break; }   // "min13(<sym>accidentalNatural</sym>7)"
+            case 0x0A8D: { type = "min69(\u266e7)";   break; }   // "min69(<sym>accidentalNatural</sym>7)"
+            case 0x0A91: { type = "maj13";            break; }
+            case 0x0A95: { type = "maj13";            break; }
+            case 0x0AAD: { type = "min13(\u266e7)";   break; }   // "min13(<sym>accidentalNatural</sym>7)"
+            case 0x0AD5: { type = "maj13#11";         break; }
+            case 0x0B45: { type = "maj13#5#11(no4)";  break; }
+            default: {
+                  qDebug("Unrecognized harmony type: %04X",bin);
+                  type = "";
+                  break;
+                  }
             }
-
       return type;
       }
 
@@ -5834,7 +5873,50 @@ bool BarsParse::parseHarmony(MeasureData* measureData, int /*length*/) {
 
       // bass on bottom
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      harmony->setBassOnBottom((getHighNibble(placeHolder.toUnsignedInt())==0x4));
+      harmony->setBassOnBottom((getHighNibble(placeHolder.toUnsignedInt()) & 0x4));
+
+      // root alteration
+      switch (placeHolder.toUnsignedInt() & 0x18) {
+            case 0: {
+                  harmony->setAlterRoot(0); // natural
+                  break;
+                  }
+            case 16: {
+                  harmony->setAlterRoot(-1); // flat
+                  break;
+                  }
+            case 8: {
+                  harmony->setAlterRoot(1); // sharp
+                  break;
+                  }
+            default: {
+                  harmony->setAlterRoot(0);
+                  break;
+                  }
+            }
+
+      // bass alteration
+      switch (placeHolder.toUnsignedInt() & 0x3) {
+            case 0: {
+                  harmony->setAlterBass(0); // natural
+                  break;
+                  }
+            case 2: {
+                  harmony->setAlterBass(-1); // flat
+                  break;
+                  }
+            case 1: {
+                  harmony->setAlterBass(1); // sharp
+                  break;
+                  }
+            default: {
+                  harmony->setAlterBass(0);
+                  break;
+                  }
+            }
+
+      // show bass
+      bool useBass = placeHolder.toUnsignedInt() & 0x80;
 
       if( !jump(1) ) { return false; }
 
@@ -5852,7 +5934,8 @@ bool BarsParse::parseHarmony(MeasureData* measureData, int /*length*/) {
 
       // bass
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      harmony->setBass(placeHolder.toInt());
+      if (useBass)
+            harmony->setBass(placeHolder.toInt());
 
       // angle
       if( !readBuffer(placeHolder, 2) ) { return false; }
@@ -6639,7 +6722,7 @@ bool BarsParse::parseHarmonyGuitarFrame(MeasureData* measureData, int length) {
 
       // type
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      harmony->setHarmonyType((HarmonyType)placeHolder.toUnsignedInt());
+      //harmony->setHarmonyType((HarmonyType)placeHolder.toUnsignedInt()); // TODO
 
       // bass
       if( !readBuffer(placeHolder, 1) ) { return false; }

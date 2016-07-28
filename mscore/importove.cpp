@@ -1985,83 +1985,6 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
             }
       }
 
-QString OveHarmony_To_String(OVE::HarmonyType type){
-      static std::map<unsigned int, QString> harmony_map;
-
-      harmony_map[int(OVE::HarmonyType::H_maj)] = "major";
-      harmony_map[int(OVE::HarmonyType::H_min)] = "minor";
-      harmony_map[int(OVE::HarmonyType::H_aug)] = "augmented";
-      harmony_map[int(OVE::HarmonyType::H_dim)] = "diminished";
-      harmony_map[int(OVE::HarmonyType::H_dim7)] = "diminished-seventh";
-      harmony_map[int(OVE::HarmonyType::H_sus2)] = "suspended-second";
-      harmony_map[int(OVE::HarmonyType::H_sus4)] = "suspended-fourth";
-      harmony_map[int(OVE::HarmonyType::H_sus24)] = "suspended-second";
-      harmony_map[int(OVE::HarmonyType::H_add2)] = "major";
-      harmony_map[int(OVE::HarmonyType::H_add9)] = "dominant-ninth";
-      //harmony_map[int(OVE::HarmonyType::H_omit3)] = "";
-      //harmony_map[int(OVE::HarmonyType::H_omit5)] = "";
-      harmony_map[int(OVE::HarmonyType::H_2)] = "2";
-      harmony_map[int(OVE::HarmonyType::H_5)] = "power";
-      harmony_map[int(OVE::HarmonyType::H_6)] = "major-sixth";
-      harmony_map[int(OVE::HarmonyType::H_69)] = "major-sixth";
-      harmony_map[int(OVE::HarmonyType::H_7)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7b5)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7b9)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7s9)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7s11)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7b5s9)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7b5b9)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7b9s9)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7b9s11)] = "dominant";
-      harmony_map[int(OVE::HarmonyType::H_7sus4)] = "suspended-fourth";
-      harmony_map[int(OVE::HarmonyType::H_9)] = "dominant-ninth";
-      harmony_map[int(OVE::HarmonyType::H_9b5)] = "dominant-ninth";
-      harmony_map[int(OVE::HarmonyType::H_9s11)] = "dominant-ninth";
-      harmony_map[int(OVE::HarmonyType::H_9sus4)] = "dominant-ninth";
-      harmony_map[int(OVE::HarmonyType::H_11)] = "dominant-11th";
-      harmony_map[int(OVE::HarmonyType::H_13)] = "dominant-13th";
-      harmony_map[int(OVE::HarmonyType::H_13b5)] = "dominant-13th";
-      harmony_map[int(OVE::HarmonyType::H_13b9)] = "dominant-13th";
-      harmony_map[int(OVE::HarmonyType::H_13s9)] = "dominant-13th";
-      harmony_map[int(OVE::HarmonyType::H_13s11)] = "dominant-13th";
-      harmony_map[int(OVE::HarmonyType::H_13sus4)] = "dominant-13th";
-      harmony_map[int(OVE::HarmonyType::H_min_add2)] = "minor";
-      harmony_map[int(OVE::HarmonyType::H_min_add9)] = "minor";
-      harmony_map[int(OVE::HarmonyType::H_min_maj7)] = "minor-major";
-      harmony_map[int(OVE::HarmonyType::H_min6)] = "minor-sixth";
-      harmony_map[int(OVE::HarmonyType::H_min6_add9)] = "minor-sixth";
-      harmony_map[int(OVE::HarmonyType::H_min7)] = "minor-seventh";
-      harmony_map[int(OVE::HarmonyType::H_min7b5)] = "half-diminished";
-      harmony_map[int(OVE::HarmonyType::H_min7_add4)] = "minor-seventh";
-      harmony_map[int(OVE::HarmonyType::H_min7_add11)] = "minor-seventh";
-      harmony_map[int(OVE::HarmonyType::H_min9)] = "minor-ninth";
-      harmony_map[int(OVE::HarmonyType::H_min9_b5)] = "minor-ninth";
-      harmony_map[int(OVE::HarmonyType::H_min9_maj7)] = "major-minor";
-      harmony_map[int(OVE::HarmonyType::H_min11)] = "minor-11th";
-      harmony_map[int(OVE::HarmonyType::H_min13)] = "minor-13th";
-      harmony_map[int(OVE::HarmonyType::H_maj7)] = "major-seventh";
-      harmony_map[int(OVE::HarmonyType::H_maj7_b5)] = "major-seventh";
-      harmony_map[int(OVE::HarmonyType::H_maj7_s5)] = "major-seventh";
-      harmony_map[int(OVE::HarmonyType::H_maj7_69)] = "major-seventh";
-      harmony_map[int(OVE::HarmonyType::H_maj7_add9)] = "major-seventh";
-      harmony_map[int(OVE::HarmonyType::H_maj7_s11)] = "major-seventh";
-      harmony_map[int(OVE::HarmonyType::H_maj9)] = "major-ninth";
-      harmony_map[int(OVE::HarmonyType::H_maj9_sus4)] = "major-ninth";
-      harmony_map[int(OVE::HarmonyType::H_maj9_b5)] = "major-ninth";
-      harmony_map[int(OVE::HarmonyType::H_maj9_s5)] = "major-ninth";
-      harmony_map[int(OVE::HarmonyType::H_maj9_s11)] = "major-ninth";
-      harmony_map[int(OVE::HarmonyType::H_maj13)] = "major-13th";
-      harmony_map[int(OVE::HarmonyType::H_maj13_b5)] = "major-13th";
-      harmony_map[int(OVE::HarmonyType::H_maj13_b9)] = "major-13th";
-      harmony_map[int(OVE::HarmonyType::H_maj13_b9b5)] = "major-13th";
-      harmony_map[int(OVE::HarmonyType::H_maj13_s11)] = "major-13th";
-      harmony_map[int(OVE::HarmonyType::H_aug7)] = "augmented-seventh";
-      harmony_map[int(OVE::HarmonyType::H_aug7_b9)] = "augmented-seventh";
-      harmony_map[int(OVE::HarmonyType::H_aug7_s9)] = "augmented-seventh";
-
-      return harmony_map[int(type)];
-      }
-
 void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int track){
       OVE::MeasureData* measureData = ove_->getMeasureData(part, staff, measure->no());
       if(measureData == 0)
@@ -2077,15 +2000,20 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 
             // TODO - does this need to be key-aware?
             harmony->setTrack(track);
-            harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), Key::C, Prefer::NEAREST));
-            if(harmonyPtr->getBass() != OVE::INVALID_NOTE && harmonyPtr->getBass() != harmonyPtr->getRoot()){
-                  harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), Key::C, Prefer::NEAREST));
+            harmony->setRootTpc(step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot())));
+            if(harmonyPtr->getBass() != OVE::INVALID_NOTE && (harmonyPtr->getBass() != harmonyPtr->getRoot() || (harmonyPtr->getBass() == harmonyPtr->getRoot() && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))){
+                  harmony->setBaseTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
                   }
-            const ChordDescription* d = harmony->fromXml(OveHarmony_To_String(harmonyPtr->getHarmonyType()));
+            const ChordDescription* d = harmony->fromXml(harmonyPtr->getHarmonyType());
             if(d != 0){
                   harmony->setId(d->id);
-                  harmony->render();
+                  harmony->setTextName(d->names.front());
                   }
+            else {
+                  harmony->setId(-1);
+                  harmony->setTextName(harmonyPtr->getHarmonyType());
+                  }
+            harmony->render();
 
             Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
             s->add(harmony);
