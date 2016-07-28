@@ -40,6 +40,8 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       Navigator* preview;
       bool mmUnit;
       MasterScore* cs;
+
+      virtual void hideEvent(QHideEvent*);
       void updateValues();
       void updatePreview(int);
       void blockSignals(bool);
