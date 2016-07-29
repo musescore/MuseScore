@@ -1296,6 +1296,7 @@ void Score::addElement(Element* element)
             case Element::Type::TRILL:
             case Element::Type::PEDAL:
             case Element::Type::TEXTLINE:
+            case Element::Type::RANGEANNOTATION:
             case Element::Type::HAIRPIN:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
