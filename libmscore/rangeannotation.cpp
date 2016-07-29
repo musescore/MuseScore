@@ -96,8 +96,15 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 
 void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
-      // calculate the co-ordinates of the particular segment which is being layouted
-      // and store them as necessary
+      QRectF rr = QRectF(p1.x(), p1.y(), p2.x()-p1.x(), p2.y()-p1.y());
+      setbbox(rr);
+      if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
+            QPointF staffOffset;
+            if (system() && track() >= 0)
+                  staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
+            setReadPos(readPos() + staffOffset);
+            }
+      adjustReadPos();
       }
 
 

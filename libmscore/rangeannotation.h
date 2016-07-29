@@ -31,6 +31,7 @@ struct RangePos {
 
 class RangeAnnotationSegment : public SpannerSegment {
       Q_OBJECT
+      QPainterPath path;
 
    public:
       RangeAnnotationSegment(Score*);
