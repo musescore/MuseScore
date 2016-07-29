@@ -911,7 +911,10 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       Chord *chordR = noteR->chord();
       int pitchL = noteL->pitch();
       int tickL = chordL->tick();
-      Staff * staffL = chordL->staff();
+      // we canot use staffL = chord->staff() because that won't correspond to the noteL->line()
+      //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
+      //   Therefore we have to take staffMove() into account using vStaffIdx().
+      Staff * staffL = noteL->score()->staff(chordL->vStaffIdx());
       ClefType clefL = staffL->clef(tickL);
       // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
       //  ... 8 is the bottom line.
@@ -925,7 +928,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       // is there another note in this segment on the same line?
       // if so, use its pitch exactly.
       int halfsteps = 0;
-      int staffIdx = staffL->idx();
+      int staffIdx = noteL->chord()->staff()->idx(); // cannot use staffL->idx() because of staffMove()
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       bool done = false;
@@ -952,7 +955,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                         bool error = false;
                         AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
                         int acci2 = int(acciv2);
-                        // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
+                        // we have to add ( noteL->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
                         halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
                         }
                   else {
@@ -982,6 +985,8 @@ int totalTiedNoteTicks(Note* note)
 
 //---------------------------------------------------------
 //   renderNoteArticulation
+// prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
+// body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
 // tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
 // repeatp, true means repeat the body as many times as possible to fill the time slice.
 // sustainp, true means the last note of the body is sustained to fill remaining time slice
