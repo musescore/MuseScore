@@ -202,11 +202,9 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       pen.setWidthF(2.0 / painter->matrix().m11());
       pen.setStyle(Qt::SolidLine);
       painter->setPen(pen);
-    //  QRectF rangeRect = QRectF(x1, y1, x2-x1, y2-y1);
-      // create a rectangle from the four co-ordinates calculated in layout
       painter->setOpacity(0.4);
       painter->setBackgroundMode(Qt::OpaqueMode);
-      //painter.fillRect(rangeRect, Qt::yellow );
+      painter->fillRect(bbox(), Qt::yellow );
       }
 
 //---------------------------------------------------------
