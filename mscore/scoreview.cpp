@@ -5722,7 +5722,7 @@ void ScoreView::cmdAddRangeAnnotation()
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
       ChordRest* cr1 = firstNote->chord();
       ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
-      rangeAnn->setParent(firstNote);
+      rangeAnn->setParent(cr1);
       rangeAnn->setStartElement(cr1);
       rangeAnn->setEndElement(cr2);
       rangeAnn->setTick(cr1->tick());
