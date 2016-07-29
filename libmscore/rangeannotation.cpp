@@ -116,7 +116,8 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       {
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
-
+      Element* crp = parent();
+      qDebug() << crp->tick();
       RangeAnnotationSegment* rangeSegment = 0;
       for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
