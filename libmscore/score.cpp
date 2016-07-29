@@ -2734,11 +2734,17 @@ void Score::padToggle(Pad n)
             TDuration d = r->durationType();
             if (d.type() == TDuration::DurationType::V_MEASURE) {
                   _is.setDots(0);
-                  // return;
                   }
             }
 
+      // on measure rest, select the first actual rest
       ChordRest* cr = selection().cr();
+      if (cr && cr->isRest() && cr->measure()->isMMRest()) {
+            Measure* m = cr->measure()->mmRestFirst();
+            if (m)
+                  cr = m->findChordRest(0, 0);
+            }
+
       if (!cr)
             return;
 
