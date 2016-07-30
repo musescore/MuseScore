@@ -536,6 +536,7 @@ MuseScore::MuseScore()
                   guiScaling = 1.0;
             }
 
+      setObjectName("MuseScore");
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
@@ -3196,9 +3197,9 @@ void MuseScore::writeSettings()
       settings.setValue("lastSaveCopyFormat", lastSaveCopyFormat);
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
 
+      MuseScore::saveGeometry(this);
+
       settings.beginGroup("MainWindow");
-      settings.setValue("geometry", QWidget::saveGeometry());
-      settings.setValue("maximized", isMaximized());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
       settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
@@ -3273,22 +3274,29 @@ void MuseScore::readSettings()
             return;
             }
 
+      MuseScore::restoreGeometry(this);
+
       settings.beginGroup("MainWindow");
-      mainWindow->restoreGeometry(settings.value("geometry").toByteArray());
       mainWindow->restoreState(settings.value("debuggerSplitter").toByteArray());
       mainWindow->setOpaqueResize(false);
       scorePageLayoutChanged();
 
       //for some reason when MuseScore starts maximized the screen-reader
-      //doesn't respond to QAccessibleEvents
-      if (settings.value("maximized", false).toBool() && !QAccessible::isActive())
-            showMaximized();
+      //doesn't respond to QAccessibleEvents --> so force normal mode
+      if (isMaximized() && QAccessible::isActive()) {
+            showNormal();
+            }
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "1").toBool());
       mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
       mscore->showSelectionWindow(settings.value("showSelectionWindow", "0").toBool());
 
       restoreState(settings.value("state").toByteArray());
+      //if we were in full screen mode, go to maximized mode
+      if (isFullScreen()) {
+            showMaximized();
+            }
+
       _horizontalSplit = settings.value("split", true).toBool();
       bool splitScreen = settings.value("splitScreen", false).toBool();
       if (splitScreen) {
