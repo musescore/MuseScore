@@ -1108,6 +1108,7 @@ void Score::undoAddElement(Element* element)
                   }
             else if (element->type() == Element::Type::SLUR
                || element->type() == Element::Type::HAIRPIN
+               || element->type() == Element::Type::RANGEANNOTATION
                || element->type() == Element::Type::OTTAVA
                || element->type() == Element::Type::TRILL
                || element->type() == Element::Type::TEXTLINE
