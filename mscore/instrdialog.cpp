@@ -478,13 +478,27 @@ void MuseScore::editInstrList()
       if (masterScore->measures()->size() == 0)
             masterScore->insertMeasure(Element::Type::MEASURE, 0, false);
 
-      QList<Score*> toDelete;
       for (Excerpt* excpt : masterScore->excerpts()) {
-            if (excpt->partScore()->staves().size() == 0)
-                  toDelete.append(excpt->partScore());
+            QList<Staff*> sl = excpt->partScore()->staves();
+            QMultiMap<int, int> tr = excpt->tracks();
+            if (sl.size() == 0)
+                  masterScore->undo(new RemoveExcerpt(excpt->partScore(), excpt->tracks()));
+            else {
+                  for (Staff* s : sl) {
+                        LinkedStaves* sll = s->linkedStaves();
+                        for (Staff* ss : sll->staves())
+                              if (ss->primaryStaff()) {
+                                    for (int i = s->idx() * VOICES; i < (s->idx() + 1) * VOICES; i++) {
+                                          int strack = tr.key(i, -1);
+                                          if (strack != -1 && ((strack & ~3) == ss->idx()))
+                                                break;
+                                          else if (strack != -1)
+                                                tr.insert(ss->idx() + strack % VOICES, tr.value(strack, -1));
+                                          }
+                                    }
+                        }
+                  }
             }
-      for(Score* s: toDelete)
-            masterScore->undo(new RemoveExcerpt(s));
 
       masterScore->setLayoutAll();
       masterScore->endCmd();

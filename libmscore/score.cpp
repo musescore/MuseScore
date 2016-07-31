@@ -1775,11 +1775,12 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Score* score)
+void MasterScore::addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt* ex)
       {
-      Excerpt* ex = new Excerpt(this);
-      ex->setPartScore(score);
+      if (!ex)
+            ex = new Excerpt(this);
       excerpts().append(ex);
+      ex->setPartScore(score);
       ex->setTitle(score->fileInfo()->completeBaseName());
       for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
@@ -1792,6 +1793,24 @@ void MasterScore::addExcerpt(Score* score)
                         }
                   }
             }
+      if (tracks.isEmpty()) {
+            for (Staff* s : score->staves()) {
+                  LinkedStaves* ls = s->linkedStaves();
+                  if (ls == 0)
+                        continue;
+                  for (Staff* ps : ls->staves()) {
+                        if (ps->primaryStaff()) {
+                              for (int i = 0; i < VOICES; i++)
+                                    tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
+                              break;
+                              }
+                        }
+                  }
+            ex->setTracks(tracks);
+            }
+      else
+            ex->setTracks(tracks);
+
       setExcerptsChanged(true);
       }
 
@@ -3931,6 +3950,9 @@ void Score::changeVoice(int voice)
                         int dstTrack     = chord->staffIdx() * VOICES + voice;
                         ChordRest* dstCR = toChordRest(s->element(dstTrack));
                         Chord* dstChord  = nullptr;
+
+                        if (excerpt() && excerpt()->tracks().key(dstTrack, -1) == -1)
+                              break;
 
                         // set up destination chord
 

@@ -2160,7 +2160,15 @@ void Measure::read(XmlReader& e, int staffIdx)
 
 void Measure::checkMeasue(int staffIdx)
       {
-      for (int track = staffIdx * VOICES + 1; track % VOICES && hasVoice(track); track++) {
+      score()->staff(staffIdx)->setExcerpt(score()->excerpt());
+      int n = VOICES;
+      if (score()->staff(staffIdx)->excerpt())
+            n = 1;
+
+      if (isMMRest())
+            return;
+
+      for (int track = staffIdx * VOICES; (n || track % n) && hasVoice(track); track++) {
             Segment* seg = first();
             if (!seg->element(track))
                   seg = seg->nextCR(track, false);
@@ -2172,19 +2180,19 @@ void Measure::checkMeasue(int staffIdx)
             int ticks = seg->tick() - stick;
 
             while (seg) {
-                  if (ticks) {
+                  if (ticks > 1) {
                         Fraction f = Fraction::fromTicks(ticks);
 
                         Rest* rest = new Rest(score());
                         rest->setDuration(f);
                         rest->setTrack(track);
-                        Segment* segment = getSegment(rest, stick);
-                        segment->add(rest);
                         rest->setGap(true);
-                        seg = segment;
+                        score()->undoAddCR(rest, this, stick);
                         }
 
                   pseg = seg;
+                  if (!seg->element(track)->isChordRest())
+                        break;
                   stick = seg->tick() + toChordRest(seg->element(track))->actualTicks();
                   for (Segment* s = seg->nextCR(track, true); s; s = s->nextCR(track, true)) {
                         if (!s->element(track))
@@ -2688,12 +2696,10 @@ void Measure::sortStaves(QList<int>& dst)
 //   exchangeVoice
 //---------------------------------------------------------
 
-void Measure::exchangeVoice(int v1, int v2, int staffIdx)
+void Measure::exchangeVoice(int strack, int dtrack, int staffIdx)
       {
-    int strack = staffIdx * VOICES + v1;
-    int dtrack = staffIdx * VOICES + v2;
 
-    for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+      for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             s->swapElements(strack, dtrack);
             }
 
@@ -2770,6 +2776,8 @@ void Measure::checkMultiVoices(int staffIdx)
 
 bool Measure::hasVoice(int track) const
       {
+      if (track >= int(mstaves().size() * VOICES))
+            return false;
       for (Segment* s = first(); s; s = s->next()) {
             if (s->segmentType() != Segment::Type::ChordRest)
                   continue;

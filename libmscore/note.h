@@ -23,6 +23,7 @@
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "shape.h"
+#include "tremolo.h"
 
 class QPainter;
 

@@ -1496,9 +1496,8 @@ void MuseScore::updateInspector()
                   _inspector->setElement(cv->getEditObject());
             else if (state() == STATE_FOTO)
                   _inspector->setElement(cv->fotoLasso());
-            else {
+            else
                   _inspector->setElements(cs->selection().elements());
-                  }
             }
       else
             _inspector->setElement(0);
@@ -2493,10 +2492,11 @@ static bool doConvert(Score* cs, QString fn)
                         for (Excerpt* e : excerpts) {
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
+                              nscore->setExcerpt(e);
                               nscore->masterScore()->setName(e->title()); // needed before AddExcerpt
                               nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
                               cs->startCmd();
-                              cs->undo(new AddExcerpt(nscore));
+                              cs->undo(new AddExcerpt(nscore, e->tracks()));
                               createExcerpt(e);
                               cs->endCmd();
                               }
@@ -2518,10 +2518,11 @@ static bool doConvert(Score* cs, QString fn)
                         for (Excerpt* e: excerpts) {
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
+                              nscore->setExcerpt(e);
                               nscore->setName(e->title()); // needed before AddExcerpt
                               nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
                               cs->startCmd();
-                              cs->undo(new AddExcerpt(nscore));
+                              cs->undo(new AddExcerpt(nscore, e->tracks()));
                               createExcerpt(e);
                               cs->endCmd();
                               }

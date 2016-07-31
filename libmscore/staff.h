@@ -26,6 +26,7 @@
 #include "stafftype.h"
 #include "groups.h"
 #include "scoreElement.h"
+#include "excerpt.h"
 
 namespace Ms {
 
@@ -100,6 +101,7 @@ public:
 
 private:
       Part* _part       { 0 };
+      Excerpt* _excerpt { 0 };
 
       ClefList clefs;
       ClefTypeList _defaultClefType;
@@ -149,6 +151,9 @@ private:
       void write(Xml& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
+
+      Excerpt* excerpt() const       { return _excerpt;     }
+      void setExcerpt(Excerpt* e)    { _excerpt = e;        }
 
       BracketType bracket(int idx) const;
       int bracketSpan(int idx) const;

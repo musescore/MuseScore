@@ -434,10 +434,29 @@ class ExchangeVoice : public UndoCommand {
       int staff;
 
    public:
-      ExchangeVoice(Measure*, int val1, int val2, int staff);
+      ExchangeVoice(Measure* ,int val1, int val2, int staff);
       virtual void undo();
       virtual void redo();
       UNDO_NAME("ExchangeVoice")
+      };
+
+//---------------------------------------------------------
+//   CloneVoice
+//---------------------------------------------------------
+
+class CloneVoice : public UndoCommand {
+      Segment* sf;
+      int lTick;            //Source first and last
+      Segment* d;             //Destination
+      int strack, dtrack;
+      int otrack;
+      bool linked;
+
+   public:
+      CloneVoice(Segment* sf, int lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);
+      virtual void undo();
+      virtual void redo();
+      UNDO_NAME("CloneVoice")
       };
 
 //---------------------------------------------------------
@@ -824,9 +843,10 @@ class ChangeImage : public UndoCommand {
 
 class AddExcerpt : public UndoCommand {
       Score* score;
+      QMultiMap<int, int> tracks;
 
    public:
-      AddExcerpt(Score* s) : score(s) {}
+      AddExcerpt(Score* s, QMultiMap<int, int>& t) : score(s), tracks(t) {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("AddExcerpt")
@@ -838,9 +858,10 @@ class AddExcerpt : public UndoCommand {
 
 class RemoveExcerpt : public UndoCommand {
       Score* score;
+      QMultiMap<int, int> tracks;
 
    public:
-      RemoveExcerpt(Score* s) : score(s) {}
+      RemoveExcerpt(Score* s, QMultiMap<int, int>& t) : score(s), tracks(t) {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("RemoveExcerpt")
