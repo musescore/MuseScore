@@ -96,7 +96,8 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 
 void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
-      QRectF rr = QRectF(p1.x(), p1.y(), p2.x()-p1.x(), p2.y()-p1.y());
+      setPos(p1);
+      QRectF rr = QRectF(-5, -10, p2.x()-p1.x() + 10, 40);
       setbbox(rr);
       if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
             QPointF staffOffset;
@@ -159,6 +160,8 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
 
       RangePos rPos;
       rangePos(&rPos);
+  //    rangeSegment->setPos(rPos.p1);
+
       switch (sst) {
             case SpannerSegmentType::SINGLE:
                   rangeSegment->layoutSegment(rPos.p1, rPos.p2);
@@ -206,6 +209,7 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       painter->setOpacity(0.4);
       painter->setBackgroundMode(Qt::OpaqueMode);
       painter->fillRect(bbox(), Qt::yellow );
+      painter->setOpacity(1.0);
       }
 
 //---------------------------------------------------------
