@@ -79,8 +79,9 @@ getCrossPlatformDependencies() {
   copyLib libQt5Sql.so.5
   copyLib libQt5Svg.so.5
   #copyLib libQt5WebChannel.so.5  # Not present on Debian, and apparently not needed
-  copyLib libQt5WebKit.so.5
-  copyLib libQt5WebKitWidgets.so.5
+  copyLib libQt5WebEngine.so.5
+  copyLib libQt5WebEngineCore.so.5
+  copyLib libQt5WebEngineWidgets.so.5
   copyLib libQt5Widgets.so.5
   copyLib libQt5XmlPatterns.so.5
   copyLib libQt5Xml.so.5
@@ -103,7 +104,7 @@ getCrossPlatformDependencies() {
   # except some as listed in "mscore/CMakeLists.txt".
   export -f copy copyQt # make functions available to xargs
   find "$qt_prefix/qml" \! -type d \
-    | grep -vE "QtGraphicalEffects|QtMultimedia|QtSensors|QtTest|QtWebKit" \
+    | grep -vE "QtGraphicalEffects|QtMultimedia|QtSensors|QtTest|QtWebEngine" \
     | sed "s|$qt_prefix/||" | xargs -n1 -I '%%%' \
         bash -c "qt_prefix='$qt_prefix' qt_dest='$qt_dest' copyQt %%%"
 }
@@ -159,9 +160,9 @@ building_on_Debian_Jessie() {
   copyLib libxml2.so.2
   copyLib libxslt.so.1
 
-  copyLib libicudata.so.52 # moved from cross-platform
-  copyLib libicui18n.so.52 # moved from cross-platform
-  copyLib libicuuc.so.52 # moved from cross-platform
+  copyLib libicudata.so.56 # moved from cross-platform
+  copyLib libicui18n.so.56 # moved from cross-platform
+  copyLib libicuuc.so.56 # moved from cross-platform
 
   #2nd round of dependencies
   copyLib libavahi-client.so.3
@@ -274,6 +275,10 @@ building_on_CentOS_6() {
   #copyLib libpulse.so.0
   #copyLib libpulsecommon-8.0.so
   #copyLib libasound_module_pcm_pulse.so  # found in /usr/lib64/alsa-lib/
+
+  # after upgrade to Qt 5.6, check-depends in CentOS 6 said following were provided by neither
+  copyLib libEGL.so.1
+  copyLib libcups.so.2
 }
 
 locateLib() {
