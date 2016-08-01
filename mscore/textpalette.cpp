@@ -540,6 +540,7 @@ const QStringList unicodeRangeNames = {
 TextPalette::TextPalette(QWidget* parent)
    : QWidget(parent)
       {
+      setObjectName("TextPalette");
       setWindowFlags(Qt::Tool);
       setupUi(this);
 
@@ -604,6 +605,7 @@ TextPalette::TextPalette(QWidget* parent)
       populateSmufl();
 
       setFocusPolicy(Qt::NoFocus);
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -835,6 +837,16 @@ void TextPalette::populateUnicode()
 void TextPalette::setText(Text* te)
       {
       _textElement = te;
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void TextPalette::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------

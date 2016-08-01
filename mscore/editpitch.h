@@ -32,6 +32,8 @@ namespace Ms {
 class EditPitch : public QDialog, private Ui::EditPitchBase {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void on_tableWidget_cellDoubleClicked(int row, int column);
       void accept();
