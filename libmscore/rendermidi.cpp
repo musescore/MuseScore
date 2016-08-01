@@ -227,7 +227,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       NoteEventList nel = note->playEvents();
       int nels = nel.size();
       for (int i = 0; i < nels; ++i) {
-            const NoteEvent e = nel[i];
+            const NoteEvent& e = nel[i]; // we make an explict const ref, not a const copy.  no need to copy as we won't change the original object.
+          
             // skip if note has a tie into it and only one NoteEvent
             // its length was already added to previous note
             // if we wish to suppress first note of ornament
