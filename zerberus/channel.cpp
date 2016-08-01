@@ -15,6 +15,7 @@
 #include "channel.h"
 #include "voice.h"
 #include "instrument.h"
+#include "zone.h"
 
 // static const float PI_2 =  1.57079632679489661923;    /* pi/2 */
 
@@ -89,6 +90,9 @@ void Channel::controller(int c, int val)
                   resetCC();
                   }
             }
+
+      for (Zone *z : instrument()->zones())
+            z->updateCCGain(this);
 //      else
 //            qDebug("Zerberus: ctrl 0x%02x 0x%02x", ctrl, val);
       }

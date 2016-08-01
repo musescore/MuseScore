@@ -172,6 +172,8 @@ class Voice {
 
       Trigger trigger;
 
+      const Zone* z;
+
    public:
       Voice(Zerberus*);
       Voice* next() const         { return _next; }
