@@ -86,6 +86,9 @@ struct Zone {
       double loRand = 0.0;
       double hiRand = 1.0;
 
+      std::map<int, double> gainOnCC;
+      double ccGain = 1.0;
+
       int onLocc[128];
       int onHicc[128];
       int locc[128];
@@ -95,6 +98,7 @@ struct Zone {
       Zone();
       ~Zone();
       bool match(Channel*, int key, int velo, Trigger, double rand, int cc, int ccVal);
+      void updateCCGain(Channel* c);
       };
 
 #endif

@@ -80,3 +80,16 @@ bool Zone::match(Channel* c, int k, int v, Trigger et, double rand, int cc, int 
             }
       return false;
       }
+
+//---------------------------------------------------------
+//   updateCCGain
+//---------------------------------------------------------
+
+void Zone::updateCCGain(Channel* c)
+      {
+      ccGain = 1.0;
+      for (auto oncc : gainOnCC) {
+            ccGain *= pow(10, (((float) c->getCtrl(oncc.first) / (float) 127.0) * oncc.second)/20);
+            }
+      }
+
