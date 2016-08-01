@@ -5600,10 +5600,22 @@ void ScoreView::cmdAddRangeAnnotation()
             }
       if (!firstNote || !lastNote) {
             qDebug("no note %p %p", firstNote, lastNote);
+
             return;
             }
       if (firstNote == lastNote) {
-           qDebug("no support for note to same note range annotation %p", firstNote);
+           RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
+           ChordRest* cr = firstNote->chord();
+           rangeAnn->setParent(cr);
+           rangeAnn->setStartElement(cr);
+           rangeAnn->setEndElement(cr);
+           rangeAnn->setTick(cr->tick());
+           rangeAnn->setTick2(cr->tick() + 480);
+           rangeAnn->setTrack(cr->track());
+           rangeAnn->setTrack2(cr->track());
+           _score->startCmd();
+           _score->undoAddElement(rangeAnn);
+           _score->endCmd();
            return;
            }
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
