@@ -124,6 +124,7 @@ class ChordRest : public DurationElement {
 
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
+      int vStaffIdx() const     { return staffIdx() + _staffMove;  }
 
       void layoutArticulations();
 
