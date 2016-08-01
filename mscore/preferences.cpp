@@ -47,7 +47,6 @@ namespace Ms {
 
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
-extern bool useFactorySettings;
 extern bool externalStyle;
 
 static int exportAudioSampleRates[2] = { 44100, 48000 };
@@ -342,10 +341,6 @@ void Preferences::write()
                   }
             }
 
-//      s.beginGroup("PlayPanel");
-//      s.setValue("pos", playPanelPos);
-//      s.endGroup();
-
       writePluginList();
       if (Shortcut::dirty)
             Shortcut::save();
@@ -544,6 +539,7 @@ void MuseScore::startPreferenceDialog()
 PreferenceDialog::PreferenceDialog(QWidget* parent)
    : AbstractDialog(parent)
       {
+      setObjectName("PreferenceDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
@@ -642,6 +638,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       updateRemote();
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -661,6 +659,16 @@ void PreferenceDialog::setPreferences(const Preferences& p)
 PreferenceDialog::~PreferenceDialog()
       {
       qDeleteAll(localShortcuts);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void PreferenceDialog::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------
