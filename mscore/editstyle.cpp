@@ -65,9 +65,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       styleWidgets = {
       //   idx --- showPercent --- widget --- resetButton
-      { StyleIdx::voltaLineStyle,         false, voltaLineStyle,           resetVoltaLineStyle },
-      { StyleIdx::ottavaLineStyle,        false, ottavaLineStyle,          resetOttavaLineStyle },
-      { StyleIdx::pedalLineStyle,         false, pedalLineStyle,           resetPedalLineStyle },
+      { StyleIdx::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle },
+      { StyleIdx::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
+      { StyleIdx::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle },
 
       { StyleIdx::staffUpperBorder,        false, staffUpperBorder,        0 },
       { StyleIdx::staffLowerBorder,        false, staffLowerBorder,        0 },
@@ -185,6 +185,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::tupletDirection,         false, tupletDirection,         resetTupletDirection          },
       { StyleIdx::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType         },
       { StyleIdx::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType        },
+      { StyleIdx::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope           },
+      { StyleIdx::tupletOufOfStaff,        false, tupletOutOfStaff,        0 },
 
       { StyleIdx::lyricsLineHeight,        true,  lyricsLineHeight,             0 },
       { StyleIdx::repeatBarTips,           false, showRepeatBarTips,            0 },
@@ -240,8 +242,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::capoPosition,            false, capoPosition,                 0 },
       { StyleIdx::fretNumMag,              true,  fretNumMag,                   0 },
       { StyleIdx::fretY,                   false, fretY,                        0 },
-      { StyleIdx::tupletMaxSlope,          false, tupletMaxSlope,               0 },
-      { StyleIdx::tupletOufOfStaff,        false, tupletOutOfStaff,             0 },
       { StyleIdx::barreLineWidth,          false, barreLineWidth,               0 },
       { StyleIdx::fretMag,                 false, fretMag,                      0 },
       { StyleIdx::scaleBarlines,           false, scaleBarlines,                0 },
