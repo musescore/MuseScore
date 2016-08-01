@@ -513,7 +513,7 @@ class Score : public QObject, public ScoreElement {
       SynthesizerState _synthesizerState;
 
       void createPlayEvents(Chord*);
-      void createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* chord, int& ontime);
+      void createGraceNotesPlayEvents(int tick, Chord* chord, int& ontime, int& trailtime);
 
    signals:
       void posChanged(POS, unsigned);
