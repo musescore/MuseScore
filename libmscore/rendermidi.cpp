@@ -137,6 +137,11 @@ void Score::updateChannel()
                               continue;
                         Chord* c = static_cast<Chord*>(e);
                         int channel = st->channel(c->tick(), c->voice());
+                        Instrument* instr = c->part()->instrument(c->tick());
+                        if (channel >= instr->channel().size()) {
+                              qDebug() << "Channel " << channel << " too high. Max " << instr->channel().size();
+                              channel = 0;
+                              }
                         foreach (Note* note, c->notes()) {
                               if (note->hidden())
                                     continue;
