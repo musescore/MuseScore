@@ -199,7 +199,7 @@
             <lid>17</lid>
             </ChordLine>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>18</lid>
           <track>1</track>
@@ -225,7 +225,7 @@
         <Rest>
           <lid>23</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
@@ -449,7 +449,7 @@
               <lid>17</lid>
               </ChordLine>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>18</lid>
             <track>1</track>
@@ -475,7 +475,7 @@
           <Rest>
             <lid>23</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         </Staff>
@@ -549,7 +549,7 @@
               <lid>17</lid>
               </ChordLine>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>18</lid>
             <track>5</track>
@@ -575,7 +575,7 @@
           <Rest>
             <lid>23</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         </Staff>

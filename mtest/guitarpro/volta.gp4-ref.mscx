@@ -655,7 +655,6 @@
             <string>0</string>
             </Note>
           </Chord>
-        <endSpanner id="8"/>
         </Measure>
       </Staff>
     <Score>
@@ -1334,7 +1333,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <endSpanner id="15"/>
           </Measure>
         </Staff>
       <Staff id="2">
