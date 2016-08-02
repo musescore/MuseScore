@@ -234,6 +234,7 @@ enum class P_ID : int {
       AUTOPLACE,
       DASH_LINE_LEN,
       DASH_GAP_LEN,
+      TICK,
 
       END
       };

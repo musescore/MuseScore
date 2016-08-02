@@ -102,7 +102,7 @@ class Dynamic : public Text {
       virtual void endEdit() override;
       virtual void reset() override;
 
-      void setVelocity(int v);
+      void setVelocity(int v)   { _velocity = v;    }
       int velocity() const;
       Range dynRange() const    { return _dynRange; }
       void setDynRange(Range t) { _dynRange = t;    }

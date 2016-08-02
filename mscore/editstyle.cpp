@@ -168,9 +168,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::ottavaY,                 false, ottavaY,                 resetOttavaY },
       { StyleIdx::ottavaHook,              false, ottavaHook,              resetOttavaHook },
       { StyleIdx::ottavaLineWidth,         false, ottavaLineWidth,         resetOttavaLineWidth },
-      { StyleIdx::pedalY,                  false, pedalY,                  0 },
-      { StyleIdx::pedalLineWidth,          false, pedalLineWidth,          0 },
-      { StyleIdx::trillY,                  false, trillY,                  0 },
+      { StyleIdx::pedalY,                  false, pedalY,                  resetPedalY },
+      { StyleIdx::pedalLineWidth,          false, pedalLineWidth,          resetPedalLineWidth },
+      { StyleIdx::trillY,                  false, trillY,                  resetTrillY },
       { StyleIdx::harmonyY,                false, harmonyY,                0 },
       { StyleIdx::harmonyFretDist,         false, harmonyFretDist,         0 },
       { StyleIdx::minHarmonyDistance,      false, minHarmonyDistance,      0 },
@@ -251,6 +251,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::MusicalSymbolFont,       false, musicalSymbolFont,            0 },
       { StyleIdx::MusicalTextFont,         false, musicalTextFont,              0 },
       { StyleIdx::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
+      { StyleIdx::dynamicsMinDistance,      false, dynamicsMinDistance,          resetDynamicsMinDistance },
       };
 
       tupletNumberType->clear();

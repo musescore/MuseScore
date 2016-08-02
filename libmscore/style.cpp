@@ -320,7 +320,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::lutefingering1stAnchor,          "lutefingering1stAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::lutefingering2ndAnchor,          "lutefingering2ndAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::lutefingering3rdAnchor,          "lutefingering3rdAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
-      { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) }
+      { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
+      { StyleIdx::dynamicsMinDistance,             "dynamicsMinDistance",               Spatium(0.5) }
       };
 
 //---------------------------------------------------------

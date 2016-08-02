@@ -393,7 +393,7 @@
     <seq>Del</seq>
     </SC>
   <SC>
-    <key>delete-measures</key>
+    <key>time-delete</key>
     <seq>Ctrl+Del</seq>
     <seq>Ctrl+Backspace</seq>
     </SC>

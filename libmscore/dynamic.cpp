@@ -98,15 +98,6 @@ Dynamic::Dynamic(const Dynamic& d)
       }
 
 //---------------------------------------------------------
-//   setVelocity
-//---------------------------------------------------------
-
-void Dynamic::setVelocity(int v)
-      {
-      _velocity = v;
-      }
-
-//---------------------------------------------------------
 //   velocity
 //---------------------------------------------------------
 
@@ -193,7 +184,6 @@ void Dynamic::layout()
 //   doAutoplace
 //
 //    Move Dynamic up or down to avoid collisions with other elements.
-//    Minimum vertical distance is one spatium.
 //-------------------------------------------------------------------
 
 void Dynamic::doAutoplace()
@@ -202,7 +192,7 @@ void Dynamic::doAutoplace()
       if (!(s && autoplace()))
             return;
 
-      qreal minDistance = spatium();
+      qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
       Shape s1          = s->staffShape(staffIdx()).translated(s->pos());
       Shape s2          = shape().translated(s->pos());
 
@@ -310,7 +300,7 @@ QRectF Dynamic::drag(EditData* ed)
 
 void Dynamic::undoSetDynRange(Range v)
       {
-      score()->undoChangeProperty(this, P_ID::DYNAMIC_RANGE, int(v));
+      undoChangeProperty(P_ID::DYNAMIC_RANGE, int(v));
       }
 
 //---------------------------------------------------------
@@ -319,7 +309,7 @@ void Dynamic::undoSetDynRange(Range v)
 
 QVariant Dynamic::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DYNAMIC_RANGE:     return int(_dynRange);
             case P_ID::VELOCITY:          return velocity();
             case P_ID::SUBTYPE:           return int(_dynamicType);

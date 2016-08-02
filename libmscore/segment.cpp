@@ -856,7 +856,9 @@ void Segment::read(XmlReader& e)
 
 QVariant Segment::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
+            case P_ID::TICK:
+                  return _tick;
             case P_ID::LEADING_SPACE:
                   return extraLeadingSpace();
             default:
@@ -884,13 +886,16 @@ QVariant Segment::propertyDefault(P_ID propertyId) const
 bool Segment::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case P_ID::TICK:
+                  _tick = v.toInt();
+                  break;
             case P_ID::LEADING_SPACE:
                   setExtraLeadingSpace(v.value<Spatium>());
-                  score()->setLayout(tick());
                   break;
             default:
                   return Element::setProperty(propertyId, v);
             }
+      score()->setLayout(tick());
       return true;
       }
 

@@ -332,11 +332,8 @@ void Score::expandVoice(Segment* s, int track)
             qDebug("expand voice: no segment");
             return;
             }
-      if (s->element(track)) {
-            ChordRest* cr = (ChordRest*)(s->element(track));
-            qDebug("expand voice: found %s %s", cr->name(), qPrintable(cr->duration().print()));
+      if (s->element(track))
             return;
-            }
 
       // find previous segment with cr in this track
       Segment* ps;
@@ -352,7 +349,7 @@ void Score::expandVoice(Segment* s, int track)
                   qDebug("expandVoice: cannot insert element here");
                   return;
                   }
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->isChord()) {
                   // previous cr ends on or before current segment
                   // for chords, move ps to just after cr ends
                   // so we can fill any gap that might exist
@@ -2246,9 +2243,10 @@ void Score::cmd(const QAction* a)
       else if (cmd == "delete-measures")
             cmdDeleteSelectedMeasures();
       else if (cmd == "time-delete") {
-            // TODO:
-            // remove measures if stave-range is 0-nstaves()
-            cmdDeleteSelectedMeasures();
+            if (selection().state() == SelState::RANGE)
+                  cmdDeleteSelectedMeasures();
+            else
+                  cmdTimeDelete();
             }
       else if (cmd == "pitch-up-octave") {
             if (el && (el->isArticulation() || el->isText()))

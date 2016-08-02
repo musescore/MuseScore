@@ -2606,7 +2606,6 @@ void Score::undoInsertTime(int tick, int len)
                         if (t2 > s->tick())
                               append = true;
                         }
-//                  else if (s->tick() >= tick && s->tick2() < tick2)
                   else if (s->tick() >= tick && s->tick2() <= tick2)
                         append = true;
                   else if (s->tick() > tick && s->tick2() > tick2)
