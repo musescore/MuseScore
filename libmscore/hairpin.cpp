@@ -57,7 +57,7 @@ Dynamic* lookupDynamic(Element* e)
 //   moveDynamic
 //---------------------------------------------------------
 
-static void moveDynamic(Dynamic* d, qreal dy)
+static void moveDynamic(Dynamic* d, qreal y)
       {
       if (d && d->autoplace()) {
             int staffIdx = d->staffIdx();
@@ -65,7 +65,7 @@ static void moveDynamic(Dynamic* d, qreal dy)
             Shape& ms    = d->measure()->staffShape(staffIdx);
             QPointF spos = d->segment()->pos();
 
-            d->rUserYoffset() = dy;
+            d->rUserYoffset() = y;
             ss.add(d->shape());
             ms.add(d->shape().translated(spos));
             }
@@ -119,6 +119,7 @@ void HairpinSegment::layout()
       if (type == Hairpin::Type::DECRESC_LINE || type == Hairpin::Type::CRESC_LINE) {
             twoLines = false;
             TextLineSegment::layout();
+            drawCircledTip = false;
             if (parent())
                   rypos() += score()->styleP(StyleIdx::hairpinY);
             }
@@ -213,23 +214,27 @@ void HairpinSegment::layout()
 
             qreal ymax = pos().y();
             if (d > -minDistance)
-                  ymax = ymax + d + minDistance;
+                  ymax += d + minDistance;
 
+            qreal sdy;
             if (sd) {
+                  sdy = -sd->bbox().top() * .4;
                   sd->doAutoplace();
-                  if (sd->pos().y() > ymax)
-                        ymax = sd->pos().y();
+                  if (sd->pos().y() - sdy > ymax)
+                        ymax = sd->pos().y() - sdy;
                   }
+            qreal edy;
             if (ed) {
+                  edy = -ed->bbox().top() * .4;
                   ed->doAutoplace();
-                  if (ed->pos().y() > ymax)
-                        ymax = ed->pos().y();
+                  if (ed->pos().y() - edy > ymax)
+                        ymax = ed->pos().y() - edy;
                   }
             rUserYoffset() = ymax - pos().y();
             if (sd)
-                  moveDynamic(sd, ymax - sd->pos().y());
+                  moveDynamic(sd, ymax - sd->ipos().y() + sdy);
             if (ed)
-                  moveDynamic(ed, ymax - ed->pos().y());
+                  moveDynamic(ed, ymax - ed->ipos().y() + edy);
             }
       else
             adjustReadPos();

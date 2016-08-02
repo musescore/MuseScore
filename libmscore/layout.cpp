@@ -3293,7 +3293,15 @@ System* Score::collectSystem(LayoutContext& lc)
       if (lineMode)
             system->setWidth(pos.x());
 
-      // layout beams and update the segment shape
+      //
+      // layout
+      //    - beams
+      //    - TempoText
+      //    - RehearsalMark, StaffText
+      //    - Dynamic
+      //    - update the segment shape
+      //
+      //
       int stick = -1;
       int etick = -1;
       for (MeasureBase* mb : system->measures()) {
@@ -3358,7 +3366,7 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       // compute shape of measures
       //
-      // for (auto i = visibleStaves.begin(); i != visibleStaves.end(); ++i) {
+
       for (int si = 0; si < score()->nstaves(); ++si) {
             for (MeasureBase* mb : system->measures()) {
                   if (!mb->isMeasure())
@@ -3405,21 +3413,21 @@ System* Score::collectSystem(LayoutContext& lc)
                         continue;
                   sp->layout();
                   }
-            }
 
-      //
-      // add SpannerSegment shapes to staff shapes
-      //
+            //
+            // add SpannerSegment shapes to staff shapes
+            //
 
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            for (SpannerSegment* ss : system->spannerSegments()) {
-                  Spanner* sp = ss->spanner();
-                  if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
-                        // spanner shape must be translated from system coordinate space to measure coordinate space
-                        m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  for (SpannerSegment* ss : system->spannerSegments()) {
+                        Spanner* sp = ss->spanner();
+                        if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
+                              // spanner shape must be translated from system coordinate space to measure coordinate space
+                              m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
+                              }
                         }
                   }
             }
@@ -3576,7 +3584,7 @@ bool Score::collectPage(LayoutContext& lc)
 
 void Score::doLayout()
       {
-      qDebug();
+//      qDebug();
 
       if (_staves.empty() || first() == 0) {
             // score is empty
@@ -3652,7 +3660,7 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-      qDebug("%d-%d", stick, etick);
+//      qDebug("%d-%d", stick, etick);
       if (stick == -1 || etick == -1) {
             doLayout();
             return;

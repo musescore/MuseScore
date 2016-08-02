@@ -319,6 +319,7 @@ enum class StyleIdx : int {
       lutefingering3rdAnchor,
 
       autoplaceHairpinDynamicsDistance,
+      dynamicsMinDistance,
 
       STYLES
       };

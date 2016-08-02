@@ -377,14 +377,14 @@ void TestNote::tpc()
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
       int octave = 5 * 7;
-      score->cmdAddPitch(octave + 1, false);
-      score->cmdAddPitch(octave + 2, false);
-      score->cmdAddPitch(octave + 3, false);
-      score->cmdAddPitch(octave + 4, false);
-      score->cmdAddPitch(octave + 5, false);
-      score->cmdAddPitch(octave + 6, false);
-      score->cmdAddPitch(octave + 7, false);
-      score->cmdAddPitch(octave + 8, false);
+      score->cmdAddPitch(octave + 1, false, false);
+      score->cmdAddPitch(octave + 2, false, false);
+      score->cmdAddPitch(octave + 3, false, false);
+      score->cmdAddPitch(octave + 4, false, false);
+      score->cmdAddPitch(octave + 5, false, false);
+      score->cmdAddPitch(octave + 6, false, false);
+      score->cmdAddPitch(octave + 7, false, false);
+      score->cmdAddPitch(octave + 8, false, false);
 
       score->cmdConcertPitchChanged(true, true);
 
@@ -437,7 +437,7 @@ void TestNote::tpcTranspose2()
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
       int octave = 5 * 7;
-      score->cmdAddPitch(octave + 3, false);
+      score->cmdAddPitch(octave + 3, false, false);
 
       score->cmdConcertPitchChanged(true, true);
 
@@ -460,24 +460,24 @@ void TestNote::noteLimits()
       score->inputState().setNoteEntryMode(true);
 
       // over 127 shouldn't crash
-      score->cmdAddPitch(140, false);
+      score->cmdAddPitch(140, false, false);
       // below 0 shouldn't crash
-      score->cmdAddPitch(-40, false);
+      score->cmdAddPitch(-40, false, false);
 
       // stack chords
-      score->cmdAddPitch(42, false);
+      score->cmdAddPitch(42, false, false);
       for (int i = 1; i < 20; i++)
-            score->cmdAddPitch(42 + i * 7, true);
+            score->cmdAddPitch(42 + i * 7, true, false);
 
       // interval below
-      score->cmdAddPitch(42, false);
+      score->cmdAddPitch(42, false, false);
       for (int i = 0; i < 20; i++) {
             std::vector<Note*> nl = score->selection().noteList();
             score->cmdAddInterval(-8, nl);
             }
 
       // interval above
-      score->cmdAddPitch(42, false);
+      score->cmdAddPitch(42, false, false);
       for (int i = 0; i < 20; i++) {
             std::vector<Note*> nl = score->selection().noteList();
             score->cmdAddInterval(8, nl);

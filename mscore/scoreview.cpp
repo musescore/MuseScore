@@ -240,10 +240,10 @@ class SeekTransition : public QMouseEventTransition
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
             Element* e = canvas->elementNear(p);
-            if (e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST)) {
-                  if (e->type() == Element::Type::NOTE)
+            if (e && (e->isNote() || e->isRest())) {
+                  if (e->isNote())
                         e = e->parent();
-                  cr = static_cast<ChordRest*>(e);
+                  cr = toChordRest(e);
                   return true;
                   }
             return false;
@@ -2810,53 +2810,52 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "add-noteline")
             cmdAddNoteLine();
       else if (cmd == "note-c")
-            cmdAddPitch(0, false);
+            cmdAddPitch(0, false, false);
       else if (cmd == "note-d")
-            cmdAddPitch(1, false);
+            cmdAddPitch(1, false, false);
       else if (cmd == "note-e")
-            cmdAddPitch(2, false);
+            cmdAddPitch(2, false, false);
       else if (cmd == "note-f")
-            cmdAddPitch(3, false);
+            cmdAddPitch(3, false, false);
       else if (cmd == "note-g")
-            cmdAddPitch(4, false);
+            cmdAddPitch(4, false, false);
       else if (cmd == "note-a")
-            cmdAddPitch(5, false);
+            cmdAddPitch(5, false, false);
       else if (cmd == "note-b")
-            cmdAddPitch(6, false);
+            cmdAddPitch(6, false, false);
       else if (cmd == "chord-c")
-            cmdAddPitch(0, true);
+            cmdAddPitch(0, true, false);
       else if (cmd == "chord-d")
-            cmdAddPitch(1, true);
+            cmdAddPitch(1, true, false);
       else if (cmd == "chord-e")
-            cmdAddPitch(2, true);
+            cmdAddPitch(2, true, false);
       else if (cmd == "chord-f")
-            cmdAddPitch(3, true);
+            cmdAddPitch(3, true, false);
       else if (cmd == "chord-g")
-            cmdAddPitch(4, true);
+            cmdAddPitch(4, true, false);
       else if (cmd == "chord-a")
-            cmdAddPitch(5, true);
+            cmdAddPitch(5, true, false);
       else if (cmd == "chord-b")
-            cmdAddPitch(6, true);
+            cmdAddPitch(6, true, false);
       else if (cmd == "insert-c")
-            cmdInsertNote(0);
+            cmdAddPitch(0, false, true);
       else if (cmd == "insert-d")
-            cmdInsertNote(1);
+            cmdAddPitch(1, false, true);
       else if (cmd == "insert-e")
-            cmdInsertNote(2);
+            cmdAddPitch(2, false, true);
       else if (cmd == "insert-f")
-            cmdInsertNote(3);
+            cmdAddPitch(3, false, true);
       else if (cmd == "insert-g")
-            cmdInsertNote(4);
+            cmdAddPitch(4, false, true);
       else if (cmd == "insert-a")
-            cmdInsertNote(5);
+            cmdAddPitch(5, false, true);
       else if (cmd == "insert-b")
-            cmdInsertNote(6);
+            cmdAddPitch(6, false, true);
       else if (cmd == "chord-text") {
             if (noteEntryMode())          // force out of entry mode
                   sm->postEvent(new CommandEvent("note-input"));
             cmdAddChordName();
             }
-
       else if (cmd == "title-text")
             cmdAddText(TEXT::TITLE);
       else if (cmd == "subtitle-text")
@@ -3680,7 +3679,7 @@ void ScoreView::noteEntryButton(QMouseEvent* ev)
       {
       QPointF p = toLogical(ev->pos());
       _score->startCmd();
-      _score->putNote(p, ev->modifiers() & Qt::ShiftModifier);
+      _score->putNote(p, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
       _score->endCmd();
       ChordRest* cr = _score->inputState().cr();
       if (cr)
@@ -5258,21 +5257,12 @@ qDebug("midiNoteReceived %d chord %d", pitch, chord);
       }
 
 //---------------------------------------------------------
-//   cmdInsertNote
-//---------------------------------------------------------
-
-void ScoreView::cmdInsertNote(int note)
-      {
-      qDebug("not implemented: cmdInsertNote %d", note);
-      }
-
-//---------------------------------------------------------
 //   cmdAddPitch
 ///   insert note or add note to chord
 //    c d e f g a b entered:
 //---------------------------------------------------------
 
-void ScoreView::cmdAddPitch(int note, bool addFlag)
+void ScoreView::cmdAddPitch(int note, bool addFlag, bool insert)
       {
       InputState& is = _score->inputState();
       if (is.track() == -1)          // invalid state
@@ -5372,11 +5362,12 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   }
             }
 
+//      if (!(insert || noteEntryMode())) {
       if (!noteEntryMode()) {
             sm->postEvent(new CommandEvent("note-input"));
             qApp->processEvents();
             }
-      _score->cmdAddPitch(octave * 7 + note, addFlag);
+      _score->cmdAddPitch(octave * 7 + note, addFlag, insert);
       adjustCanvasPosition(is.cr(), false);
       }
 
@@ -5414,7 +5405,7 @@ void ScoreView::cmdAddFret(int fret)
       pos.line      = is.string();
       pos.fret      = fret;
 
-      score()->putNote(pos, false);
+      score()->putNote(pos, false, false);
       _score->endCmd();
       }
 

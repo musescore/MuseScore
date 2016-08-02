@@ -640,7 +640,7 @@ class Score : public QObject, public ScoreElement {
       void removeElement(Element*);
 
       Note* addPitch(NoteVal&, bool addFlag);
-      void addPitch(int pitch, bool addFlag);
+      void addPitch(int pitch, bool addFlag, bool insert);
       Note* addNote(Chord*, NoteVal& noteVal);
 
       NoteVal noteValForPosition(Position pos, bool &error);
@@ -650,10 +650,13 @@ class Score : public QObject, public ScoreElement {
       void cmdDeleteSelection();
       void cmdFullMeasureRest();
 
-      void putNote(const QPointF& pos, bool replace);
-      void putNote(const Position& pos, bool replace);
+      void putNote(const QPointF&, bool replace, bool insert);
+      void putNote(const Position&, bool replace, bool insert);
+      void putNoteInsert(const Position&);
+
       void repitchNote(const Position& pos, bool replace);
-      void cmdAddPitch(int pitch, bool addFlag);
+      void cmdAddPitch(int pitch, bool addFlag, bool insert);
+      void cmdTimeDelete();
 
       void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command
