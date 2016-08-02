@@ -162,7 +162,7 @@
           <lid>11</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>12</lid>
           <track>1</track>
@@ -368,7 +368,7 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>12</lid>
             <track>1</track>
@@ -424,7 +424,7 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>12</lid>
             <track>5</track>

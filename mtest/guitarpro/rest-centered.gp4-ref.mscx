@@ -105,7 +105,7 @@
         <Rest>
           <lid>6</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -130,7 +130,7 @@
         <Rest>
           <lid>12</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
@@ -260,7 +260,7 @@
           <Rest>
             <lid>6</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -285,7 +285,7 @@
           <Rest>
             <lid>12</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         </Staff>
@@ -298,7 +298,7 @@
           <Rest>
             <lid>6</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -318,7 +318,7 @@
           <Rest>
             <lid>12</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         </Staff>
