@@ -2873,9 +2873,14 @@ void MuseScore::writeSettings()
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
 
       settings.beginGroup("MainWindow");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
+      //if we're maximised or fullscreen we will be restored to maximised and these values
+      //won't help us, rather keep them at the previously stored dimensions
+      if (!(isMaximized() || isFullScreen())) {
+            settings.setValue("size", size());
+            settings.setValue("pos", pos());
+            }
       settings.setValue("maximized", isMaximized());
+      settings.setValue("fullScreen", isFullScreen());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
       settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
@@ -2959,8 +2964,10 @@ void MuseScore::readSettings()
       move(settings.value("pos", QPoint(10, 10)).toPoint());
       //for some reason when MuseScore starts maximized the screen-reader
       //doesn't respond to QAccessibleEvents
-      if (settings.value("maximized", false).toBool() && !QAccessible::isActive())
+      if ((settings.value("maximized", false).toBool() || settings.value("fullScreen", false).toBool())
+            && !QAccessible::isActive()) {
             showMaximized();
+            }
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "1").toBool());
       mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
