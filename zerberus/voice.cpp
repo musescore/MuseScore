@@ -96,8 +96,9 @@ void Voice::init()
 //   start
 //---------------------------------------------------------
 
-void Voice::start(Channel* c, int key, int v, const Zone* z, double durSinceNoteOn)
+void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceNoteOn)
       {
+      z = zone;
       _state    = VoiceState::ATTACK;
       //_state    = VoiceState::PLAYING;
       _channel  = c;
@@ -127,6 +128,12 @@ void Voice::start(Channel* c, int key, int v, const Zone* z, double durSinceNote
       double rt_decay_value = 1.0;
       if (trigger == Trigger::RELEASE)
             rt_decay_value = pow(10, (-z->rtDecay * durSinceNoteOn)/20);
+      // the .005 in this calculation is made up like this:
+      //    -> (offset + z->ampVeltrack*curve) being a percent value so
+      //       this should be divided by 100 or multiplied by 0.01
+      //    -> afterwards 0.5 (-6dB) is applied to compensate possible coherent
+      //       signals in a stereo output see http://www.sengpielaudio.com/calculator-coherentsources.htm
+      //    -> 0.005 = 0.01 * 0.5
       gain        = z->volume * (offset + z->ampVeltrack * curve)
                     * .005 * c->gain() * rt_decay_value;
 
@@ -352,7 +359,7 @@ void Voice::process(int frames, float* p)
                   updateEnvelopes();
                   if (_state == VoiceState::OFF)
                         break;
-                  v *= envelopes[currentEnvelope].val;
+                  v *= envelopes[currentEnvelope].val * z->ccGain;
 
                   *p++  += v * _channel->panLeftGain();
                   *p++  += v * _channel->panRightGain();
@@ -382,13 +389,13 @@ void Voice::process(int frames, float* p)
                       + coeffs[1] * getData(idx)
                       + coeffs[2] * getData(idx+2)
                       + coeffs[3] * getData(idx+4))
-                      * gain * _channel->panLeftGain();
+                      * gain * _channel->panLeftGain() * z->ccGain;
 
                   f2 = (coeffs[0] * getData(idx-1)
                       + coeffs[1] * getData(idx+1)
                       + coeffs[2] * getData(idx+3)
                       + coeffs[3] * getData(idx+5))
-                      * gain * _channel->panRightGain();
+                      * gain * _channel->panRightGain() * z->ccGain;
 
                   updateEnvelopes();
                   if (_state == VoiceState::OFF)
