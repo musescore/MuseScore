@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>904</width>
-    <height>580</height>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2424,7 +2424,7 @@
                <string>Reset to default</string>
               </property>
               <property name="accessibleName">
-               <string>Reset 'Staffline thickness' value</string>
+               <string>Reset 'Staff line thickness' value</string>
               </property>
               <property name="text">
                <string notr="true"/>
@@ -4244,7 +4244,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Continue height' value</string>
+             <string>Reset 'Autoplace: Distance to dynamics' value</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4473,7 +4473,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Line style' setting</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4692,7 +4692,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Line style' setting</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4733,6 +4733,9 @@
             </property>
             <property name="toolTip">
              <string>Reset to default</string>
+            </property>
+            <property name="accessibleName">
+             <string>Reset 'Numbers only' setting</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4873,7 +4876,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Line style' setting</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4890,7 +4893,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Default vertical position' value</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4907,7 +4910,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Line thickness' value</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -4985,7 +4988,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Default vertical position' value</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -5063,7 +5066,7 @@
              <string>Reset to default</string>
             </property>
             <property name="accessibleName">
-             <string>Reset 'Line style' value</string>
+             <string>Reset 'Autoplace min. distance' value</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -6297,7 +6300,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Vertical distance from note head' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6320,7 +6323,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Vertical distance from stem' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6343,7 +6346,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Maximum slope' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6531,7 +6534,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Distance after the head of the last note' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6554,7 +6557,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Distance after the stem of the last note' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6577,7 +6580,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Distance before the head of the first note' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6600,7 +6603,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Distance before the stem of the first note' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6680,7 +6683,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Tuplet bracket thickness' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6830,7 +6833,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Direction' setting</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6853,7 +6856,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Number Type' setting</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -6876,7 +6879,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Line style' value</string>
+                <string>Reset 'Bracket Type' setting</string>
                </property>
                <property name="text">
                 <string notr="true"/>
