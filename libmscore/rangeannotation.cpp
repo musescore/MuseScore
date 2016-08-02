@@ -202,13 +202,19 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       {
       painter->setBrush(Qt::NoBrush);
       QPen pen;
-      pen.setColor(MScore::selectColor[2]);
+      if (selected())
+            pen.setColor(Qt::gray);
+      else
+            pen.setColor(MScore::selectColor[2]);
       pen.setWidthF(2.0 / painter->matrix().m11());
       pen.setStyle(Qt::SolidLine);
       painter->setPen(pen);
       painter->setOpacity(0.4);
       painter->setBackgroundMode(Qt::OpaqueMode);
-      painter->fillRect(bbox(), Qt::yellow );
+      if (selected())
+            painter->fillRect(bbox(), Qt::lightGray);
+      else
+            painter->fillRect(bbox(), Qt::yellow );
       painter->setOpacity(1.0);
       painter->drawRect(bbox());
       }
