@@ -184,7 +184,7 @@
         <RepeatMeasure>
           <lid>15</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </RepeatMeasure>
         </Measure>
       </Staff>
@@ -393,7 +393,7 @@
           <RepeatMeasure>
             <lid>15</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </RepeatMeasure>
           </Measure>
         </Staff>
@@ -452,7 +452,7 @@
           <RepeatMeasure>
             <lid>15</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </RepeatMeasure>
           </Measure>
         </Staff>
