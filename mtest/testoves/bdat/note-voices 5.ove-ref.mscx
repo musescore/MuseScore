@@ -151,7 +151,7 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <offset x="0" y="0.5"/>
           <track>1</track>

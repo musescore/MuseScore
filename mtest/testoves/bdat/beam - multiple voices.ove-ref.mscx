@@ -210,7 +210,7 @@
           <offset x="0" y="-4.5"/>
           <durationType>half</durationType>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Beam id="3">
           <track>1</track>
           <l1>7</l1>

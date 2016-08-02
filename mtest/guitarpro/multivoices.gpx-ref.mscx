@@ -226,7 +226,7 @@
             <string>1</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
@@ -259,7 +259,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
@@ -292,7 +292,7 @@
             <string>3</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
@@ -338,7 +338,7 @@
             <string>1</string>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <lid>38</lid>
           <track>1</track>
@@ -352,7 +352,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <lid>40</lid>
           <track>2</track>
@@ -366,7 +366,7 @@
             <string>3</string>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <lid>42</lid>
           <track>3</track>
@@ -385,7 +385,7 @@
         <Rest>
           <lid>45</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
@@ -636,7 +636,7 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
@@ -669,7 +669,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
@@ -702,7 +702,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
@@ -748,7 +748,7 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>38</lid>
             <track>1</track>
@@ -762,7 +762,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>40</lid>
             <track>2</track>
@@ -776,7 +776,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>42</lid>
             <track>3</track>
@@ -795,7 +795,7 @@
           <Rest>
             <lid>45</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         </Staff>
@@ -896,7 +896,7 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Chord>
             <lid>21</lid>
             <track>5</track>
@@ -923,7 +923,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Chord>
             <lid>26</lid>
             <track>6</track>
@@ -950,7 +950,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Chord>
             <lid>31</lid>
             <track>7</track>
@@ -990,7 +990,7 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>38</lid>
             <track>5</track>
@@ -1004,7 +1004,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>40</lid>
             <track>6</track>
@@ -1018,7 +1018,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>42</lid>
             <track>7</track>
@@ -1037,7 +1037,7 @@
           <Rest>
             <lid>45</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         </Staff>

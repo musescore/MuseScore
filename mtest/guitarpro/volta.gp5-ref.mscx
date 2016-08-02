@@ -273,7 +273,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <lid>29</lid>
           <track>1</track>
@@ -455,7 +455,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>1440</tick>
+        <move>0/1</move>
         <Chord>
           <lid>53</lid>
           <track>1</track>
@@ -631,7 +631,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>2880</tick>
+        <move>0/1</move>
         <Chord>
           <lid>77</lid>
           <track>1</track>
@@ -807,7 +807,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>4320</tick>
+        <move>0/1</move>
         <Chord>
           <lid>101</lid>
           <track>1</track>
@@ -986,7 +986,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <lid>125</lid>
           <track>1</track>
@@ -1168,7 +1168,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>7200</tick>
+        <move>0/1</move>
         <Chord>
           <lid>149</lid>
           <track>1</track>
@@ -1229,7 +1229,7 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>8640</tick>
+        <move>0/1</move>
         <Chord>
           <lid>158</lid>
           <track>1</track>
@@ -1257,10 +1257,9 @@
         <Rest>
           <lid>161</lid>
           <durationType>measure</durationType>
-          <duration z="3" n="4"/>
+          <duration>3/4</duration>
           </Rest>
-        <endSpanner id="3"/>
-        <tick>10080</tick>
+        <move>0/1</move>
         <Chord>
           <lid>162</lid>
           <track>1</track>
@@ -1595,7 +1594,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Chord>
             <lid>29</lid>
             <track>1</track>
@@ -1777,7 +1776,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>1440</tick>
+          <move>0/1</move>
           <Chord>
             <lid>53</lid>
             <track>1</track>
@@ -1953,7 +1952,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>2880</tick>
+          <move>0/1</move>
           <Chord>
             <lid>77</lid>
             <track>1</track>
@@ -2129,7 +2128,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>4320</tick>
+          <move>0/1</move>
           <Chord>
             <lid>101</lid>
             <track>1</track>
@@ -2308,7 +2307,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>5760</tick>
+          <move>0/1</move>
           <Chord>
             <lid>125</lid>
             <track>1</track>
@@ -2490,7 +2489,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>7200</tick>
+          <move>0/1</move>
           <Chord>
             <lid>149</lid>
             <track>1</track>
@@ -2551,7 +2550,7 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>8640</tick>
+          <move>0/1</move>
           <Chord>
             <lid>158</lid>
             <track>1</track>
@@ -2579,10 +2578,9 @@
           <Rest>
             <lid>161</lid>
             <durationType>measure</durationType>
-            <duration z="3" n="4"/>
+            <duration>3/4</duration>
             </Rest>
-          <endSpanner id="5"/>
-          <tick>10080</tick>
+          <move>0/1</move>
           <Chord>
             <lid>162</lid>
             <track>1</track>
@@ -2788,7 +2786,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Chord>
             <lid>29</lid>
             <track>5</track>
@@ -2964,7 +2962,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>1440</tick>
+          <move>0/1</move>
           <Chord>
             <lid>53</lid>
             <track>5</track>
@@ -3140,7 +3138,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>2880</tick>
+          <move>0/1</move>
           <Chord>
             <lid>77</lid>
             <track>5</track>
@@ -3316,7 +3314,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>4320</tick>
+          <move>0/1</move>
           <Chord>
             <lid>101</lid>
             <track>5</track>
@@ -3492,7 +3490,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>5760</tick>
+          <move>0/1</move>
           <Chord>
             <lid>125</lid>
             <track>5</track>
@@ -3668,7 +3666,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>7200</tick>
+          <move>0/1</move>
           <Chord>
             <lid>149</lid>
             <track>5</track>
@@ -3721,7 +3719,7 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>8640</tick>
+          <move>0/1</move>
           <Chord>
             <lid>158</lid>
             <track>5</track>
@@ -3741,9 +3739,9 @@
           <Rest>
             <lid>161</lid>
             <durationType>measure</durationType>
-            <duration z="3" n="4"/>
+            <duration>3/4</duration>
             </Rest>
-          <tick>10080</tick>
+          <move>0/1</move>
           <Chord>
             <lid>162</lid>
             <track>5</track>

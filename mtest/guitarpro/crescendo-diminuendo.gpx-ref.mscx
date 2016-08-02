@@ -409,7 +409,7 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>1440</tick>
+          <move>3/4</move>
           <endSpanner id="5"/>
           </Measure>
         <Measure number="2">
@@ -451,7 +451,7 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>3360</tick>
+          <move>3/4</move>
           <endSpanner id="7"/>
           </Measure>
         </Staff>

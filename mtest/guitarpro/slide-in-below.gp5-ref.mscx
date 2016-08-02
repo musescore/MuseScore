@@ -161,7 +161,7 @@
             <lid>16</lid>
             </ChordLine>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Rest>
           <lid>17</lid>
           <track>1</track>
@@ -366,7 +366,7 @@
               <lid>16</lid>
               </ChordLine>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>17</lid>
             <track>1</track>
@@ -459,7 +459,7 @@
               <lid>16</lid>
               </ChordLine>
             </Chord>
-          <tick>0</tick>
+          <move>0/1</move>
           <Rest>
             <lid>17</lid>
             <track>5</track>
