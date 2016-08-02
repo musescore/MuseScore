@@ -87,6 +87,7 @@ struct SfzRegion {
       Trigger trigger;
       LoopMode loop_mode;
       OffMode off_mode;
+      std::map<int, double> gain_oncc;
 
       void init(const QString&);
       bool isEmpty() const { return sample.isEmpty(); }
@@ -147,6 +148,7 @@ void SfzRegion::init(const QString& _path)
             }
       use_cc         = false;
       off_mode = OffMode::FAST;
+      gain_oncc.clear();
       }
 
 //---------------------------------------------------------
@@ -200,6 +202,7 @@ void SfzRegion::setZone(Zone* z) const
       z->group        = group;
       z->loopEnd      = loopEnd;
       z->loopStart    = loopStart;
+      z->gainOnCC     = gain_oncc;
       }
 
 //---------------------------------------------------------
@@ -421,6 +424,22 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
                   off_mode = OffMode::FAST;
             else if (opcode_data == "normal")
                   off_mode = OffMode::NORMAL;
+            }
+      else if (opcode.startsWith("gain_cc")) {
+            int idx = b.mid(7).toInt();
+            double v;
+            if (idx >= 0 && idx < 128) {
+                  readDouble(opcode_data, &v);
+                  gain_oncc.insert(std::pair<int, double>(idx, v));
+                  }
+            }
+      else if (opcode.startsWith("gain_oncc")) {
+            int idx = b.mid(9).toInt();
+            double v;
+            if (idx >= 0 && idx < 128) {
+                  readDouble(opcode_data, &v);
+                  gain_oncc.insert(std::pair<int, double>(idx, v));
+                  }
             }
       else if (opcode == "tune")
             tune = i;
