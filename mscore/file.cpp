@@ -1480,7 +1480,11 @@ void MuseScore::printFile()
       {
       QPrinter printerDev(QPrinter::HighResolution);
       const PageFormat* pf = cs->pageFormat();
-      printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+      QPageSize ps(QPageSize::id(pf->size(), QPageSize::Inch));
+      printerDev.setPageSize(ps);
+      printerDev.setPageOrientation(
+            pf->size().width() > pf->size().height() ? QPageLayout::Landscape : QPageLayout::Portrait
+         );
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
