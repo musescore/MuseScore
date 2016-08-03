@@ -668,9 +668,10 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   if (seg->tick() < nextTick)
                         continue;
                   Segment* seg1 = seg->next(Segment::Type::ChordRest);
-                  int tick2 = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
+                  int tick2     = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
+printf("====ticks %d\n", tick2 - seg->tick());
+                  segment       = seg;
                   Fraction td(Fraction::fromTicks(tick2 - seg->tick()));
-                  segment = seg;
                   if (td > sd)
                         td = sd;
                   akkumulated += td;
@@ -679,6 +680,16 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         return akkumulated;
                   nextTick = tick2;
                   continue;
+                  }
+            if (seg->tick() > nextTick) {
+                  // there was a gap
+                  Fraction td(Fraction::fromTicks(seg->tick() - nextTick));
+                  if (td > sd)
+                        td = sd;
+                  akkumulated += td;
+                  sd -= td;
+                  if (sd.isZero())
+                        return akkumulated;
                   }
             //
             // limit to tuplet level
@@ -699,7 +710,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             Fraction td(cr->duration());
 
             // remove tremolo between 2 notes, if present
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->isChord()) {
                   Chord* c = toChord(cr);
                   if (c->tremolo()) {
                         Tremolo* tremolo = c->tremolo();
@@ -753,7 +764,6 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
                         foreach(TDuration d, dList) {
-                              qDebug("reinstate at %d, %d", tick, d.ticks());
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
                                     Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
@@ -977,13 +987,17 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 
 void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       {
-      Fraction srcF(cr->duration());
       Fraction dstF;
       if (d.type() == TDuration::DurationType::V_MEASURE)
             dstF = cr->measure()->stretchedLen(cr->staff());
       else
             dstF = d.fraction();
+      changeCRlen(cr, dstF);
+      }
 
+void Score::changeCRlen(ChordRest* cr, const Fraction& dstF)
+      {
+      Fraction srcF(cr->duration());
       if (srcF == dstF)
             return;
 
@@ -998,7 +1012,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
             // make shorter and fill with rest
             //
             deselectAll();
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->isChord()) {
                   //
                   // remove ties and tremolo between 2 notes
                   //
@@ -1041,7 +1055,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
             f  -= f2;
             makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
-            if (cr->type() == Element::Type::REST) {
+            if (cr->isRest()) {
                   Fraction timeStretch = cr1->staff()->timeStretch(cr1->tick());
                   Rest* r = toRest(cr);
                   if (first) {
@@ -1055,7 +1069,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                               }
                         }
                   else {
-                        r = setRest(tick, track, f2 * timeStretch, (d.dots() > 0), tuplet);
+                        r = setRest(tick, track, f2 * timeStretch, false, tuplet);
                         }
                   if (first) {
                         select(r, SelectType::SINGLE, 0);
@@ -1065,10 +1079,11 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                   }
             else {
                   std::vector<TDuration> dList = toDurationList(f2, true);
-                  Measure* measure = tick2measure(tick);
-                  int etick = measure->tick();
+                  Measure* measure             = tick2measure(tick);
+                  int etick                    = measure->tick();
+
                   if (((tick - etick) % dList[0].ticks()) == 0) {
-                        foreach(TDuration du, dList) {
+                        for (TDuration du : dList) {
                               bool genTie;
                               Chord* cc;
                               if (oc) {
