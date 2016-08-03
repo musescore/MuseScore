@@ -5695,17 +5695,18 @@ void ScoreView::cmdAddRangeAnnotation()
 
       Segment* ss = score()->selection().startSegment();
       Segment* es = score()->selection().endSegment();
-      int st = score()->selection().tickStart();
-      int et = score()->selection().tickEnd();
-
+      int stick = score()->selection().tickStart();
+      int etick = score()->selection().tickEnd();
+      int strack = score()->selection().staffStart();
+      int etrack = score()->selection().staffEnd();
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
       rangeAnn->setParent(0);
     //  rangeAnn->setStartElement(ss);
     //  rangeAnn->setEndElement(es);
-      rangeAnn->setTick(st);
-      rangeAnn->setTick2(et);
-    //  rangeAnn->setTrack(ss->track());
-    //  rangeAnn->setTrack2(es->track());
+      rangeAnn->setTick(stick);
+      rangeAnn->setTick2(etick);
+      rangeAnn->setTrack(strack);
+      rangeAnn->setTrack2(etrack);
 
       _score->startCmd();
       _score->undoAddElement(rangeAnn);
