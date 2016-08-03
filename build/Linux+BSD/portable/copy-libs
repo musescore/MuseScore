@@ -260,9 +260,9 @@ building_on_CentOS_6() {
   copyLib libjpeg.so.62
   copyLib libssl.so.10
   copyLib libtiff.so.3
-  copyLib libicudata.so.42 # moved from cross-platform
-  copyLib libicui18n.so.42 # moved from cross-platform
-  copyLib libicuuc.so.42 # moved from cross-platform
+  copyLib libicudata.so.56 # moved from cross-platform
+  copyLib libicui18n.so.56 # moved from cross-platform
+  copyLib libicuuc.so.56 # moved from cross-platform
 
   # Needed by Fedora 22:
   copyLib libmng.so.1
