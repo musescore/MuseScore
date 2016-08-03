@@ -117,8 +117,7 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       {
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
-      Element* crp = parent();
-      qDebug() << crp->tick();
+
       RangeAnnotationSegment* rangeSegment = 0;
       for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
@@ -132,12 +131,14 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
             }
       rangeSegment->setSystem(system);
       rangeSegment->setSpanner(this);
+      computeStartElement();
+      computeEndElement();
 
       SpannerSegmentType sst;
       if (tick() >= stick) {
             //
             // this is the first call to layoutSystem,
-            // processing the first line segment
+            // processing the first annotation segment
             //
             if (track2() == -1)
                   setTrack2(track());
@@ -227,15 +228,24 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
 
 void RangeAnnotation::rangePos(RangePos* rp)
       {
-      qreal x = 0.0;
-      ChordRest* scr = startCR();
+      Segment* ss = score()->selection().startSegment();
+      Segment* es = score()->selection().endSegment();
+      if (!ss || !es)
+            return;
+      rp->system1 = ss->system();
+      rp->system2 = es->system();
+      if (rp->system1 == 0 || rp->system2 == 0)
+            return;
+      rp->p1 = ss->pagePos() - rp->system1->pagePos();
+      rp->p2 = es->pagePos() - rp->system2->pagePos();
+ /*   ChordRest* scr = startCR();
       ChordRest* ecr = endCR();
       rp->system1 = scr->measure()->system();
       rp->system2 = ecr->measure()->system();
       if (rp->system1 == 0 || rp->system2 == 0)
             return;
       rp->p1 = scr->pagePos() - rp->system1->pagePos();
-      rp->p2 = ecr->pagePos() - rp->system2->pagePos();
+      rp->p2 = ecr->pagePos() - rp->system2->pagePos();     */
       }
 
 }
