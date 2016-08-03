@@ -84,7 +84,6 @@ class Rest : public ChordRest {
       static int getDotline(TDuration::DurationType durationType);
       SymId sym() const        { return _sym;    }
       int computeLineOffset();
-      bool isFullMeasureRest() const { return durationType() == TDuration::DurationType::V_MEASURE; }
       bool accent();
       void setAccent(bool flag);
 

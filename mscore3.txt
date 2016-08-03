@@ -50,6 +50,25 @@
 
 
 ====================================================================
+      New Features
+====================================================================
+
+Timewise insert/delete notes/rests
+-----------------------------------
+
+      - Ctrl+Shift+[cdefg]
+        Insert note with current duration.
+        This increases the duration of the actual measure independent of the
+        current time signature making it an irregular measure.
+
+      - Ctrl + left mouse button in note entry mode
+        Inserts note/rest with current duration
+
+      - Ctrl+Del
+        Removes the selected Chord/Rest decreasing the duration of the measure.
+
+
+====================================================================
       Programming Style Changes in MuseScore 3
 ====================================================================
 
@@ -87,7 +106,7 @@
 
         Caution when replacing Qt container with stl container as the semantic
         may be different. Especially in a "for (xxx : yyy)" loop the Qt container
-        is copied (copy on write) and the stl container not. That meauns that you can modify a
+        is copied (copy on write) and the stl container not. That means that you can modify a
         Qt container (inserting/deleting elements) in this for loop. This will usually not
         work for a stl container.
 
@@ -168,6 +187,5 @@
 
       * tablature not tested, has likely regressions
       * some scripting interface functions are commented out
-      * horizontal layout mode not working
-      * disabled relayout for beamed notes
+      * horizontal layout mode not working right
 

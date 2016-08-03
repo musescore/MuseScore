@@ -1324,59 +1324,6 @@ void Score::putNote(const Position& p, bool replace, bool insert)
       }
 
 //---------------------------------------------------------
-//   putNoteInsert
-//---------------------------------------------------------
-
-void Score::putNoteInsert(const Position& pos)
-      {
-      // insert
-      // TODO:
-      //    - check voices
-      //    - split chord/rest
-
-      Element* el = selection().element();
-      if (!el)
-            return;
-      if (!(el->isNote() || el->isRest()))
-            return;
-      ChordRest* cr      = el->isNote() ? toChordRest(toNote(el)->chord()) : toChordRest(el);
-      TDuration duration = cr->actualDurationType();
-      Fraction fraction  = cr->duration();
-      int len            = fraction.ticks();
-      Segment* seg       = pos.segment;
-      int tick           = seg->tick();
-      Measure* m         = seg->measure();
-
-      for (int track = 0; track < _staves.size() * VOICES; ++track) {
-            Element* e = seg->element(track);
-            if (e && e->isChordRest()) {
-                  ChordRest* cr = toChordRest(e);
-                  if (cr->tuplet() && cr->tuplet()->elements().front() != cr) {
-                        qDebug("cannot insert in tuplet");
-                        return;
-                        }
-                  }
-            }
-
-      undoInsertTime(tick, len);
-      undo(new InsertTime(this, tick, len));
-      for (Segment* s = pos.segment; s; s = s-> next())
-            s->undoChangeProperty(P_ID::TICK, s->rtick() + len);
-      undo(new ChangeMeasureLen(m, m->len() + fraction));
-
-      Segment* s = m->undoGetSegment(Segment::Type::ChordRest, tick);
-      Position p(pos);
-      p.segment = s;
-
-      for (int si = 0; si < _staves.size(); ++si) {
-            if (si == p.staffIdx)
-                  putNote(p, true, false);
-            else
-                  addRest(s, si * VOICES, duration, nullptr);
-            }
-      }
-
-//---------------------------------------------------------
 //   repitchNote
 //---------------------------------------------------------
 
@@ -3161,6 +3108,87 @@ void Score::checkSpanner(int startTick, int endTick)
       for (auto s : sl2) {    // shorten spanners that extended past end of score
             undo(new ChangeProperty(s, P_ID::SPANNER_TICKS, lastTick - s->tick()));
             s->computeEndElement();
+            }
+      }
+
+//---------------------------------------------------------
+//   putNoteInsert
+//---------------------------------------------------------
+
+void Score::putNoteInsert(const Position& pos)
+      {
+      // insert
+      // TODO:
+      //    - check voices
+      //    - split chord/rest
+
+      Element* el = selection().element();
+      if (!el)
+            return;
+      if (!(el->isNote() || el->isRest()))
+            return;
+      TDuration duration = _is.duration();
+      Fraction fraction  = duration.fraction();
+      int len            = fraction.ticks();
+      Segment* seg       = pos.segment;
+      int tick           = seg->tick();
+      Measure* m         = seg->measure();
+
+      for (int track = 0; track < _staves.size() * VOICES; ++track) {
+            Element* e = seg->element(track);
+            if (e && e->isChordRest()) {
+                  ChordRest* cr = toChordRest(e);
+                  if (cr->tuplet() && cr->tuplet()->elements().front() != cr) {
+                        qDebug("cannot insert in tuplet");
+                        return;
+                        }
+                  }
+            }
+
+      undoInsertTime(tick, len);
+      undo(new InsertTime(this, tick, len));
+      for (Segment* s = pos.segment; s; s = s-> next())
+            s->undoChangeProperty(P_ID::TICK, s->rtick() + len);
+      undo(new ChangeMeasureLen(m, m->len() + fraction));
+
+      Segment* s = m->undoGetSegment(Segment::Type::ChordRest, tick);
+      Position p(pos);
+      p.segment = s;
+
+      int trackI = p.staffIdx * VOICES + _is.voice();
+      for (int track = 0; track < _staves.size() * VOICES; ++track) {
+            if (track == trackI)
+                  putNote(p, true, false);
+            else {
+                  Segment* fs = m->first(Segment::Type::ChordRest);
+                  if (fs->tick() == tick && m->hasVoice(track)) {
+                        setRest(fs->tick(),  track, fraction, false, nullptr, false);
+                        continue;
+                        }
+                  Segment* seg1 = 0;
+                  for (Segment* s = fs; s; s = s->next(Segment::Type::ChordRest)) {
+                        if (s->element(track)) {
+                              ChordRest* cr = toChordRest(s->element(track));
+                              if (s->tick() > tick)
+                                    break;
+                              if (s->tick() + cr->duration().ticks() < tick)
+                                    continue;
+                              seg1 = s;
+                              break;
+                              }
+                        }
+                  if (seg1) {
+                        ChordRest* cr = toChordRest(seg1->element(track));
+                        if (seg1->tick() + cr->duration().ticks() == tick) {
+                              addRest(s, track, duration, nullptr);
+                              }
+                        else if (cr->isFullMeasureRest()) {
+                              // do nothing
+                              }
+                        else
+                              changeCRlen(cr, fraction + cr->duration());
+                        }
+                  }
             }
       }
 

@@ -464,6 +464,7 @@ void MuseScore::populateNoteInputMenu()
                   entryTools->addSeparator();
             else {
                   QAction* a = getAction(s);
+                  QWidget* w;
                   if (strcmp(s, "note-input") == 0) {
                         //-----------------------------------------------------------------
                         // Note Entry Modes menu
@@ -477,16 +478,13 @@ void MuseScore::populateNoteInputMenu()
                         noteEntryMethods->addAction(getAction("note-input-realtime-auto"));
                         noteEntryMethods->addAction(getAction("note-input-realtime-manual"));
 
-                        ToolButtonMenu* noteInputModes = new ToolButtonMenu(tr("Note Entry Methods"),
-                                                                            ToolButtonMenu::TYPES::ICON_CHANGED,
-                                                                            getAction("note-input"),
-                                                                            noteEntryMethods,
-                                                                            this);
-
-                        entryTools->addWidget(noteInputModes);
+                        w = new ToolButtonMenu(tr("Note Entry Methods"),
+                           ToolButtonMenu::TYPES::ICON_CHANGED,
+                           getAction("note-input"),
+                           noteEntryMethods,
+                           this);
                         }
                   else if (strncmp(s, "voice-", 6) == 0) {
-//                        QButton* tb = new QToolButton(this);
                         AccessibleToolButton* tb = new AccessibleToolButton(this, a);
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -498,10 +496,11 @@ void MuseScore::populateNoteInputMenu()
                         tb->setPalette(p);
                         a->setCheckable(true);
                         // tb->setDefaultAction(a);
-                        entryTools->addWidget(tb);
+                        w = tb;
                         }
                   else
-                        entryTools->addWidget(new AccessibleToolButton(entryTools, a));
+                        w = new AccessibleToolButton(entryTools, a);
+                  entryTools->addWidget(w);
                   }
             }
       }

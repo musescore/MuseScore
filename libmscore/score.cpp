@@ -2554,12 +2554,10 @@ void Score::padToggle(Pad n)
 
       //do not allow to add a dot on a full measure rest
       Element* e = selection().element();
-      if (e && e->type() == Element::Type::REST) {
+      if (e && e->isRest()) {
             Rest* r = toRest(e);
-            TDuration d = r->durationType();
-            if (d.type() == TDuration::DurationType::V_MEASURE) {
+            if (r->isFullMeasureRest())
                   _is.setDots(0);
-                  }
             }
 
       // on measure rest, select the first actual rest
@@ -2573,7 +2571,7 @@ void Score::padToggle(Pad n)
       if (!cr)
             return;
 
-      if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
+      if (cr->isChord() && (toChord(cr)->isGrace())) {
             //
             // handle appoggiatura and acciaccatura
             //
