@@ -5689,58 +5689,24 @@ void ScoreView::cmdAddAnnotation()
 
 void ScoreView::cmdAddRangeAnnotation()
       {
-      Note* firstNote = 0;
-      Note* lastNote  = 0;
-      if (_score->selection().isRange()) {
-            int startTrack = _score->selection().staffStart() * VOICES;
-            int endTrack   = _score->selection().staffEnd() * VOICES;
-            for (int track = startTrack; track < endTrack; ++track) {
-                  for (Note* n : _score->selection().noteList(track)) {
-                        if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
-                              firstNote = n;
-                        if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
-                              lastNote = n;
-                        }
-                  }
-            }
-      else {
-            for (Note* n : _score->selection().noteList()) {
-                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
-                        firstNote = n;
-                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
-                        lastNote = n;
-                  }
-            }
-      if (!firstNote || !lastNote) {
-            qDebug("no note %p %p", firstNote, lastNote);
 
+      if (!_score->selection().isRange())
             return;
-            }
-      if (firstNote == lastNote) {
-           RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
-           ChordRest* cr = firstNote->chord();
-           rangeAnn->setParent(cr);
-           rangeAnn->setStartElement(cr);
-           rangeAnn->setEndElement(cr);
-           rangeAnn->setTick(cr->tick());
-           rangeAnn->setTick2(cr->tick() + 480);
-           rangeAnn->setTrack(cr->track());
-           rangeAnn->setTrack2(cr->track());
-           _score->startCmd();
-           _score->undoAddElement(rangeAnn);
-           _score->endCmd();
-           return;
-           }
+
+      Segment* ss = score()->selection().startSegment();
+      Segment* es = score()->selection().endSegment();
+      int st = score()->selection().tickStart();
+      int et = score()->selection().tickEnd();
+
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
-      ChordRest* cr1 = firstNote->chord();
-      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
-      rangeAnn->setParent(cr1);
-      rangeAnn->setStartElement(cr1);
-      rangeAnn->setEndElement(cr2);
-      rangeAnn->setTick(cr1->tick());
-      rangeAnn->setTick2(cr2->tick());
-      rangeAnn->setTrack(cr1->track());
-      rangeAnn->setTrack2(cr2->track());
+      rangeAnn->setParent(0);
+    //  rangeAnn->setStartElement(ss);
+    //  rangeAnn->setEndElement(es);
+      rangeAnn->setTick(st);
+      rangeAnn->setTick2(et);
+    //  rangeAnn->setTrack(ss->track());
+    //  rangeAnn->setTrack2(es->track());
+
       _score->startCmd();
       _score->undoAddElement(rangeAnn);
       _score->endCmd();
