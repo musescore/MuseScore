@@ -78,7 +78,7 @@ getCrossPlatformDependencies() {
   copyLib libQt5Sensors.so.5
   copyLib libQt5Sql.so.5
   copyLib libQt5Svg.so.5
-  #copyLib libQt5WebChannel.so.5  # Not present on Debian, and apparently not needed
+  copyLib libQt5WebChannel.so.5
   copyLib libQt5WebEngine.so.5
   copyLib libQt5WebEngineCore.so.5
   copyLib libQt5WebEngineWidgets.so.5
