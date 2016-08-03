@@ -172,6 +172,7 @@ void TextLineSegment::setText(Text* t)
 
 void TextLineSegment::layout()
       {
+      npoints      = 0;
       TextLine* tl = textLine();
       qreal _spatium = spatium();
 //??      if (parent() && tl && tl->isOttava() && tl->isPedal() && tl->isHairpin() && tl->isVolta())
@@ -214,6 +215,9 @@ void TextLineSegment::layout()
 
       // diagonal line with no text - just use the basic rectangle for line (ignore hooks)
       if (!_text && !_endText && pp2.y() != 0) {
+            npoints = 2;
+            points[0] = pp1;
+            points[1] = pp2;
             setbbox(QRectF(pp1, pp2).normalized());
             return;
             }
@@ -267,7 +271,6 @@ void TextLineSegment::layout()
             bbox() |= _endText->bbox().translated(_endText->pos());
             }
 
-      npoints = 0;
       if (!(tl->lineVisible() || score()->showInvisible()))
             return;
 
