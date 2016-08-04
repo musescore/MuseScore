@@ -2206,6 +2206,14 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                               ee->setParent(ds);
                               undoAddElement(ee);
                               }
+                        else {
+                              BarLine* bd = toBarLine(ds->element(staffIdx * VOICES));
+                              BarLine*  bs = toBarLine(e);
+                              if (bd->barLineType() != bs->barLineType()) {
+                                    undoChangeProperty(bd, P_ID::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
+                                    undoChangeProperty(bd, P_ID::GENERATED, true);
+                                    }
+                              }
                         }
                   }
             }
@@ -2526,7 +2534,7 @@ static bool breakMultiMeasureRest(Measure* m)
                         BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                         if (bl) {
                               BarLineType t = bl->barLineType();
-                              if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED)
+                              if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED && !bl->generated())
                                     return true;
                               else
                                     break;
