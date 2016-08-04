@@ -616,7 +616,8 @@ class Score : public QObject, public ScoreElement {
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
-      void changeCRlen(ChordRest* cr, const Fraction&);
+      void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
+      void createCRSequence(Fraction f, ChordRest* cr, int tick);
 
       Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
       bool makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[VOICES]);

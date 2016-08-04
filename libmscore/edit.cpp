@@ -898,36 +898,6 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                   }
             }
       }
-//---------------------------------------------------------
-//   cmdTimeDelete
-//---------------------------------------------------------
-
-void Score::cmdTimeDelete()
-      {
-      qDebug("time delete");
-      Element* el = selection().element();
-      if (!(el || el->isNote()))
-            return;
-      Note* note   = toNote(el);
-      Chord* chord = note->chord();
-      Segment* seg = chord->segment();
-      int tick     = seg->tick();
-      Fraction f   = chord->duration();
-      int len      = f.ticks();
-      while (seg) {
-            if (seg->tick() >= tick + len)
-                  break;
-            Segment* nseg = seg->next();
-            undoRemoveElement(seg);
-            seg = nseg;
-            }
-      undoInsertTime(tick, -len);
-      undo(new InsertTime(this, tick, -len));
-      for (Segment* s = seg; s; s = s-> next())
-            s->undoChangeProperty(P_ID::TICK, s->rtick() - len);
-      Measure* m = chord->measure();
-      undo(new ChangeMeasureLen(m, m->len() - f));
-      }
 
 //---------------------------------------------------------
 //   cmdAddPitch
@@ -3192,4 +3162,74 @@ void Score::putNoteInsert(const Position& pos)
             }
       }
 
+//---------------------------------------------------------
+//   cmdTimeDelete
+//---------------------------------------------------------
+
+void Score::cmdTimeDelete()
+      {
+qDebug("time delete");
+      Element* el = selection().element();
+      if (!el)
+            return;
+      ChordRest* cr;
+      if (el->isNote())
+            cr = toNote(el)->chord();
+      else if (el->isChordRest())
+            cr = toChordRest(el);
+      else
+            return;
+      Segment* seg = cr->segment();
+      int tick     = seg->tick();
+      Fraction f   = cr->duration();
+      int len      = f.ticks();
+      if (seg->measure()->ticks() <= len) {
+            // maybe we should remove the measure
+            qDebug("empty measure not allowed");
+            return;
+            }
+
+      Measure* m = cr->measure();
+      for (int track = 0; track < _staves.size() * VOICES; ++track) {
+            if (m->hasVoice(track)) {
+                  Segment* fs = m->first(Segment::Type::ChordRest);
+                  Segment* seg1 = 0;
+                  for (Segment* s = fs; s; s = s->next(Segment::Type::ChordRest)) {
+                        if (s->element(track)) {
+                              ChordRest* cr = toChordRest(s->element(track));
+                              if (s->tick() > tick)
+                                    break;
+                              if (s->tick() + cr->duration().ticks() <= tick)
+                                    continue;
+                              seg1 = s;
+                              break;
+                              }
+                        }
+                  if (seg1) {
+                        ChordRest* cr = toChordRest(seg1->element(track));
+                        if (cr->isFullMeasureRest()) {
+                              // do nothing
+                              }
+                        else if (seg1->tick() == tick) {
+                              if (cr->duration() <= f)
+                                    undoRemoveElement(cr);
+                              else {
+                                    Fraction ff = cr->duration() - f + Fraction::fromTicks(tick - seg1->tick());
+                                    undoRemoveElement(cr);
+                                    createCRSequence(ff, cr, tick + len);
+                                    }
+                              }
+                        else {
+                              Fraction f1 = Fraction::fromTicks(tick - seg1->tick());
+                              changeCRlen(cr, f1, false);
+                              }
+                        }
+                  }
+            }
+      undoInsertTime(tick, -len);
+      undo(new InsertTime(this, tick, -len));
+      for (Segment* s = seg->next(); s; s = s->next())
+            s->undoChangeProperty(P_ID::TICK, s->rtick() - len);
+      undo(new ChangeMeasureLen(m, m->len() - f));
+      }
 }
