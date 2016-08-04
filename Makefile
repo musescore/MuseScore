@@ -37,8 +37,10 @@ BUILD_SYSTEM:="ninja"# Optionally override with "make" to use it instead. (Ninja
 
 ifeq ($(BUILD_SYSTEM), "ninja")
   CMAKE_GENERATOR:=Ninja
+  BUILD_FLAGS:=-l $(shell echo $$((${CPUS}*2)))
 else
   CMAKE_GENERATOR:=Unix Makefiles
+  BUILD_FLAGS:=-j ${CPUS}
 endif
 
 
@@ -60,7 +62,7 @@ release:
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       ${BUILD_SYSTEM} lrelease;                             \
-      ${BUILD_SYSTEM} -l ${CPUS};                           \
+      ${BUILD_SYSTEM} ${BUILD_FLAGS};                           \
 
 
 #freetype:
@@ -82,7 +84,7 @@ debug:
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       ${BUILD_SYSTEM} lrelease;                           \
-      ${BUILD_SYSTEM} -l ${CPUS};                         \
+      ${BUILD_SYSTEM} ${BUILD_FLAGS};                         \
 
 #
 #  win32
