@@ -33,6 +33,15 @@ BUILD_LAME:="ON"# Non-free, required for MP3 support. Override with "OFF" to dis
 UPDATE_CACHE:="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
 NO_RPATH:="FALSE"# Package maintainers may want to override this (e.g. Debian)
 
+BUILD_SYSTEM:="ninja"# Optionally override with "make" to use it instead. (Ninja is faster)
+
+ifeq ($(BUILD_SYSTEM), "ninja")
+  CMAKE_GENERATOR:=Ninja
+else
+  CMAKE_GENERATOR:=Unix Makefiles
+endif
+
+
 #
 # change path to include your Qt5 installation
 #
@@ -43,14 +52,15 @@ release:
       cd build.release;                          \
       export PATH=${BINPATH};                    \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
+  	  -G"${CMAKE_GENERATOR}"                   \
   	  -DCMAKE_TOOLCHAIN_FILE="${CMAKE_TOOLCHAIN_FILE}"       \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
-      make lrelease;                             \
-      make -j ${CPUS};                           \
+      ${BUILD_SYSTEM} lrelease;                             \
+      ${BUILD_SYSTEM} -j ${CPUS};                           \
 
 
 #freetype:
@@ -65,13 +75,14 @@ debug:
       cd build.debug;                                       \
       export PATH=${BINPATH};                               \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                    \
+  	  -G"${CMAKE_GENERATOR}"                              \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
   	  -DMUSESCORE_LABEL="${LABEL}"                        \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
-      make lrelease;                                        \
-      make -j ${CPUS};                                      \
+      ${BUILD_SYSTEM} lrelease;                           \
+      ${BUILD_SYSTEM} -j ${CPUS};                         \
 
 #
 #  win32
@@ -88,11 +99,11 @@ win32:
                   mkdir win32install;                  \
             fi;                                        \
             cd win32build;                             \
-            cmake -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG  ..; \
-            make lrelease;                             \
-            make -j ${CPUS};                           \
-            make install;                              \
-            make package;                              \
+            cmake -G"${CMAKE_GENERATOR}" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG  ..; \
+            ${BUILD_SYSTEM} lrelease;                  \
+            ${BUILD_SYSTEM} -j ${CPUS};                \
+            ${BUILD_SYSTEM} install;                   \
+            ${BUILD_SYSTEM} package;                   \
          else                                          \
             echo "build directory win32build does alread exist, please remove first"; \
          fi
@@ -113,7 +124,7 @@ version:
 
 install: release
 	cd build.release \
-	&& make install/strip \
+	&& ${BUILD_SYSTEM} install/strip \
 	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
 	     update-mime-database "${PREFIX}/share/mime"; \
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
@@ -126,7 +137,7 @@ install: release
 # "bin" folder to PATH and "lib" folder to LD_LIBRARY_PATH. i.e.:
 #   $  export $PATH="/path/to/Qt/bin:${PATH}"
 #   $  export $LD_LIBRARY_PATH="/path/to/Qt/lib:${LD_LIBRARY_PATH}"
-#   $  make portable
+#   $  ${BUILD_SYSTEM} portable
 # PREFIX sets install location *and* the name of the resulting AppDir.
 # Version is appended to PREFIX in CMakeLists.txt if MSCORE_UNSTABLE=FALSE.
 portable: PREFIX:=MuseScore
@@ -147,7 +158,7 @@ portable: install
 
 installdebug: debug
 	cd build.debug \
-	&& make install \
+	&& ${BUILD_SYSTEM} install \
 	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
 	     update-mime-database "${PREFIX}/share/mime"; \
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
@@ -182,9 +193,9 @@ unix:
          then                                      \
             mkdir linux;                           \
             cd linux; \
-            cmake -DCMAKE_BUILD_TYPE=RELEASE  ../mscore; \
-            make -j${CPUS} -f Makefile;            \
-            make package;                          \
+            cmake -G"${CMAKE_GENERATOR}" -DCMAKE_BUILD_TYPE=RELEASE  ../mscore; \
+            ${BUILD_SYSTEM} -j${CPUS} -f Makefile; \
+            ${BUILD_SYSTEM} package;               \
          else                                      \
             echo "build directory linux does alread exist, please remove first";  \
          fi

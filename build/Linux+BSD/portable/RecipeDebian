@@ -71,6 +71,7 @@ fetch-build-dependencies() {
     crossbuild-essential-armhf \
     qemu-user-static \
     cmake \
+    ninja-build \
     git
 
   # forcibly install because will break aptitude dependency rules 

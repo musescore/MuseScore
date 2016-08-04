@@ -55,7 +55,7 @@ cd "$(dirname "$(readlink -f "${0}")")/../../../.."
 yum -y install epel-release
 
 # basic dependencies (needed by Docker image)
-yum -y install git wget which automake unzip
+yum -y install git wget which automake unzip ninja-build
 
 if [ "${OS}" == "CentOS 6" ]; then
   # Get newer compiler than available by default
