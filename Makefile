@@ -21,22 +21,22 @@
 REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
-PREFIX    = "/usr/local"
-VERSION   = "3.0b-${REVISION}"
-#VERSION = 3.0.0
+PREFIX    := "/usr/local"
+VERSION   := "3.0b-${REVISION}"
+#VERSION := 3.0.0
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
-SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
-LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
+SUFFIX:=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
+LABEL:=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
 
-BUILD_LAME="ON"# Non-free, required for MP3 support. Override with "OFF" to disable.
-UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
-NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
+BUILD_LAME:="ON"# Non-free, required for MP3 support. Override with "OFF" to disable.
+UPDATE_CACHE:="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
+NO_RPATH:="FALSE"# Package maintainers may want to override this (e.g. Debian)
 
 #
 # change path to include your Qt5 installation
 #
-BINPATH      = ${PATH}
+BINPATH := ${PATH}
 
 release:
 	if test ! -d build.release; then mkdir build.release; fi; \
@@ -129,11 +129,11 @@ install: release
 #   $  make portable
 # PREFIX sets install location *and* the name of the resulting AppDir.
 # Version is appended to PREFIX in CMakeLists.txt if MSCORE_UNSTABLE=FALSE.
-portable: PREFIX=MuseScore
-portable: SUFFIX=-portable
-portable: LABEL=Portable AppImage
-portable: NO_RPATH=TRUE
-portable: UPDATE_CACHE=FALSE
+portable: PREFIX:=MuseScore
+portable: SUFFIX:=-portable
+portable: LABEL:=Portable AppImage
+portable: NO_RPATH:=TRUE
+portable: UPDATE_CACHE:=FALSE
 portable: install
 	build_dir="$$(pwd)/build.release" && cd "$$(cat $${build_dir}/PREFIX.txt)" \
 	&& [ -L usr ] || ln -s . usr && mscore="mscore${SUFFIX}" \
