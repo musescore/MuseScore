@@ -37,11 +37,13 @@ BUILD_SYSTEM:="ninja"# Optionally override with "make" to use it instead. (Ninja
 
 ifeq ($(BUILD_SYSTEM), "ninja")
   CMAKE_GENERATOR:=Ninja
-  BUILD_FLAGS:=-l $(shell echo $$((${CPUS}*2)))
+#  BUILD_FLAGS:=-l $(shell echo $$((${CPUS}*2)))
 else
   CMAKE_GENERATOR:=Unix Makefiles
-  BUILD_FLAGS:=-j ${CPUS}
+#  BUILD_FLAGS:=-j ${CPUS}
 endif
+
+BUILD_FLAGS:=-j $(shell echo $$(((${CPUS}*3+1)/2)))
 
 
 #
