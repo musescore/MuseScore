@@ -544,20 +544,22 @@ void MStyle::setChordList(ChordList* cl, bool custom)
 
 MStyle::MStyle(const MStyle& s)
       {
-      _values          = s._values;
-      _chordList       = s._chordList;
-      _textStyles      = s._textStyles;
+      _values            = s._values;
+      _precomputedValues = s._precomputedValues;
+      _chordList         = s._chordList;
+      _textStyles        = s._textStyles;
       _pageFormat.copy(s._pageFormat);
-      _customChordList = s._customChordList;
+      _customChordList   = s._customChordList;
       }
 
 MStyle& MStyle::operator=(const MStyle& s)
       {
-      _values          = s._values;
-      _chordList       = s._chordList;
-      _textStyles      = s._textStyles;
+      _values            = s._values;
+      _precomputedValues = s._precomputedValues;
+      _chordList         = s._chordList;
+      _textStyles        = s._textStyles;
       _pageFormat.copy(s._pageFormat);
-      _customChordList = s._customChordList;
+      _customChordList   = s._customChordList;
       return *this;
       }
 
