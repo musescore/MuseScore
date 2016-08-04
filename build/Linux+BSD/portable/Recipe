@@ -55,7 +55,7 @@ cd "$(dirname "$(readlink -f "${0}")")/../../../.."
 yum -y install epel-release
 
 # basic dependencies (needed by Docker image)
-yum -y install git wget which automake unzip ninja-build
+yum -y install git wget which automake unzip
 
 if [ "${OS}" == "CentOS 6" ]; then
   # Get newer compiler than available by default
@@ -111,6 +111,11 @@ fi
 
 mkdir cmake && wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
 export PATH=${PWD}/cmake/bin:${PATH}
+
+#install ninja (64-bit only)
+NINJA_URL=https://github.com/ninja-build/ninja/releases/download/v1.7.1/ninja-linux.zip
+mkdir ninja && wget  --no-check-certificate --quiet -P ninja ${NINJA_URL} && unzip ninja/*.zip -d ninja
+export PATH=${PWD}/ninja:${PATH}
 
 ##########################################################################
 # BUILD MUSESCORE
