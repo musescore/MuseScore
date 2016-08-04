@@ -5701,13 +5701,13 @@ void ScoreView::cmdAddRangeAnnotation()
       int etrack = score()->selection().staffEnd();
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
       rangeAnn->setParent(0);
-    //  rangeAnn->setStartElement(ss);
-    //  rangeAnn->setEndElement(es);
+ //     rangeAnn->setStartElement(ss);
+ //     rangeAnn->setEndElement(es);
       rangeAnn->setTick(stick);
       rangeAnn->setTick2(etick);
       rangeAnn->setTrack(strack);
       rangeAnn->setTrack2(etrack);
-
+      rangeAnn->setColor(Qt::yellow);
       _score->startCmd();
       _score->undoAddElement(rangeAnn);
       _score->endCmd();

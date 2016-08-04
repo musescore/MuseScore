@@ -96,6 +96,8 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 
 void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
+      if (curColor() == Qt::black)
+            setColor(Qt::yellow);
       setPos(p1);
       QRectF rr = QRectF(-5, -10, p2.x() - p1.x() - 10, 40);
       setbbox(rr);
@@ -131,8 +133,6 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
             }
       rangeSegment->setSystem(system);
       rangeSegment->setSpanner(this);
-      if (tick2() % 1920 == 0)
-            setTick2(tick2() - 480);
 
       computeStartElement();
       computeEndElement();
@@ -206,9 +206,9 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       painter->setBrush(Qt::NoBrush);
       QPen pen;
       if (selected())
-            pen.setColor(MScore::selectColor[2]);
+            pen.setColor(Qt::lightGray);
       else
-            pen.setColor(curColor());
+            pen.setColor(MScore::selectColor[2]);
       pen.setWidthF(2.0 / painter->matrix().m11());
       pen.setStyle(Qt::SolidLine);
       painter->setPen(pen);
@@ -217,7 +217,7 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       if (selected())
             painter->fillRect(bbox(), Qt::lightGray);
       else
-            painter->fillRect(bbox(), Qt::yellow );
+            painter->fillRect(bbox(), curColor() );
       painter->setOpacity(1.0);
       painter->drawRect(bbox());
       }
@@ -230,8 +230,8 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
 
 void RangeAnnotation::rangePos(RangePos* rp)
       {
-      Segment* ss = score()->selection().startSegment();
-      Segment* es = score()->selection().endSegment();
+      Segment* ss = startSegment();
+      Segment* es = endSegment();
       if (!ss || !es)
             return;
       rp->system1 = ss->system();
