@@ -253,10 +253,12 @@ void deleteExcerpt(Excerpt* excerpt)
       for (Staff* s : partScore->staves()) {
             Staff* staff = nullptr;
             // find staff in the main score
-            for (Staff* s2 : s->linkedStaves()->staves()) {
-                  if ((s2->score() == oscore) && s2->primaryStaff()) {
-                        staff = s2;
-                        break;
+            if (s->linkedStaves()) {
+                  for (Staff* s2 : s->linkedStaves()->staves()) {
+                        if ((s2->score() == oscore) && s2->primaryStaff()) {
+                              staff = s2;
+                              break;
+                              }
                         }
                   }
             if (staff) {
