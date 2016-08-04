@@ -60,7 +60,7 @@ release:
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       ${BUILD_SYSTEM} lrelease;                             \
-      ${BUILD_SYSTEM} -j ${CPUS};                           \
+      ${BUILD_SYSTEM} -l ${CPUS};                           \
 
 
 #freetype:
@@ -82,7 +82,7 @@ debug:
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       ${BUILD_SYSTEM} lrelease;                           \
-      ${BUILD_SYSTEM} -j ${CPUS};                         \
+      ${BUILD_SYSTEM} -l ${CPUS};                         \
 
 #
 #  win32
