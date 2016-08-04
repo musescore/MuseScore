@@ -77,5 +77,5 @@ set_target_properties (
 
 xcode_pch(libmscore all)
 
-ADD_DEPENDENCIES(libmscore mops1)
-ADD_DEPENDENCIES(libmscore mops2)
+#ADD_DEPENDENCIES(libmscore mops1)
+#ADD_DEPENDENCIES(libmscore mops2)
