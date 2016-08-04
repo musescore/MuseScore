@@ -605,42 +605,7 @@ Element* BarLine::drop(const DropData& data)
 
             if (segment()->isEndBarLineType()) {
                   Measure* m  = segment()->measure();
-                  Measure* nm = m->nextMeasure();
-                  switch (st) {
-                        case BarLineType::END_REPEAT:
-                              m->undoChangeProperty(P_ID::REPEAT_END, true);
-                              if (nm && nm->system() == m->system())
-                                    nm->undoChangeProperty(P_ID::REPEAT_START, false);
-                              break;
-                        case BarLineType::START_REPEAT:
-                              m->undoChangeProperty(P_ID::REPEAT_END, false);
-                              if (nm)
-                                    nm->undoChangeProperty(P_ID::REPEAT_START, true);
-                              break;
-                        case BarLineType::END_START_REPEAT:
-                              m->undoChangeProperty(P_ID::REPEAT_END, true);
-                              if (nm)
-                                    nm->undoChangeProperty(P_ID::REPEAT_START, true);
-                              break;
-                        case BarLineType::DOUBLE:
-                        case BarLineType::BROKEN:
-                        case BarLineType::END:
-                        case BarLineType::DOTTED:
-                              for (Element* e : segment()->elist()) {
-                                    if (e)
-                                          e->undoChangeProperty(P_ID::GENERATED, false);
-                                    }
-
-                        case BarLineType::NORMAL:
-                              if (nm && nm->system() == m->system())
-                                    nm->undoChangeProperty(P_ID::REPEAT_START, false);
-                              m->undoChangeProperty(P_ID::REPEAT_END, false);
-                              for (Element* e : segment()->elist()) {
-                                    if (e)
-                                          e->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
-                                    }
-                              break;
-                        }
+                  score()->undoChangeBarLine(m, st);
                   }
             else if (segment()->isBeginBarLineType()) {
                   undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
