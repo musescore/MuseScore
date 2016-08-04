@@ -3320,6 +3320,11 @@ void Measure::stretchMeasure(qreal targetWidth)
       //---------------------------------------------------
 
       int minTick = ticks();
+      if (minTick <= 0) {
+            qDebug("=====minTick %d measure %p", minTick, this);
+            }
+      Q_ASSERT(minTick > 0);
+
       Segment* ns = first();
       while (ns) {
             Segment* s = ns;
@@ -3336,10 +3341,7 @@ void Measure::stretchMeasure(qreal targetWidth)
       //    compute stretch
       //---------------------------------------------------
 
-//      typedef std::multimap<qreal, Segment*, std::less<qreal>> SpringMap;
       std::multimap<qreal, Segment*> springs;
-
-      Q_ASSERT(minTick > 0);
 
       qreal minimumWidth = first()->pos().x();
       for (Segment& s : _segments) {

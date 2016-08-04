@@ -501,6 +501,47 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       }
 
 //---------------------------------------------------------
+//   createCRSequence
+//    Create a rest or chord of len f.
+//    If f is not a basic len, create several rests or
+//    tied chords.
+//
+//    f     total len of ChordRest
+//    cr    prototype CR
+//    tick  start position in measure
+//---------------------------------------------------------
+
+void Score::createCRSequence(Fraction f, ChordRest* cr, int tick)
+      {
+      Measure* measure = cr->measure();
+      ChordRest* ocr = 0;
+      for (TDuration d : toDurationList(f, true)) {
+            ChordRest* ncr = toChordRest(cr->clone());
+            ncr->setDurationType(d);
+            ncr->setDuration(d.fraction());
+
+            if (cr->isChord() && ocr) {
+                  Chord* nc = toChord(ncr);
+                  Chord* oc = toChord(ocr);
+                  for (unsigned int i = 0; i < oc->notes().size(); ++i) {
+                        Note* on = oc->notes()[i];
+                        Note* nn = nc->notes()[i];
+                        Tie* tie = new Tie(this);
+                        tie->setStartNote(on);
+                        tie->setEndNote(nn);
+                        tie->setTrack(cr->track());
+                        on->setTieFor(tie);
+                        nn->setTieBack(tie);
+                        undoAddElement(tie);
+                        }
+                  }
+            undoAddCR(ncr, measure, tick);
+            tick += ncr->actualTicks();
+            ocr = ncr;
+            }
+      }
+
+//---------------------------------------------------------
 //   setNoteRest
 //    pitch == -1  -> set rest
 //    return segment of last created note/rest
@@ -995,7 +1036,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       changeCRlen(cr, dstF);
       }
 
-void Score::changeCRlen(ChordRest* cr, const Fraction& dstF)
+void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
       {
       Fraction srcF(cr->duration());
       if (srcF == dstF)
@@ -1027,8 +1068,16 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF)
                               undoRemoveElement(n->tieFor());
                         }
                   }
-            undoChangeChordRestLen(cr, TDuration(dstF));
-            setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
+            std::vector<TDuration> dList = toDurationList(dstF, true);
+            undoChangeChordRestLen(cr, dList[0]);
+            int tick2 = cr->tick();
+            for (unsigned i = 1; i < dList.size(); ++i) {
+                  tick2 += dList[i-1].ticks();
+                  TDuration d = dList[i];
+                  setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
+                  }
+            if (fillWithRest)
+                  setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
 
             if (selElement)
                   select(selElement, SelectType::SINGLE, 0);

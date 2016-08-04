@@ -3673,6 +3673,8 @@ void Score::doLayoutRange(int stick, int etick)
             doLayout();
             return;
             }
+      if (stick < 0)
+            stick = 0;
       LayoutContext lc;
 
 #if 0
