@@ -52,16 +52,14 @@ class RangeAnnotationSegment : public SpannerSegment {
 
 class RangeAnnotation : public Spanner {
       Q_OBJECT
-   /*   Q_PROPERTY(Ms::Segment*             startSegment        READ startSegment)
-      Q_PROPERTY(Ms::Segment*             endSegment          READ endSegment)
-      Q_PROPERTY(int                      staffStart          READ staffStart)
-      Q_PROPERTY(int                      staffEnd            READ staffEnd)*/
+     // Q_PROPERTY(int                      borderWidth          READ borderWidth)
+     // Q_PROPERTY(QColor                   color            READ color)
+     // Q_PROPERTY(int                      opacity          READ opacity)
 
       Score* _score;
-      int _staffStart;
-      int _staffEnd;
-      Segment* _startSegment;
-      Segment* _endSegment;
+    //  int _borderWidth;
+    //  int _opacity;
+    //  QColor _color;
 
    public:
 
@@ -72,21 +70,11 @@ class RangeAnnotation : public Spanner {
       Score* score() const             { return _score; }
       qreal firstNoteRestSegmentX(System* system);
       virtual RangeAnnotationSegment* layoutSystem(System* system);
-    /*  Segment* startSegment() const     { return _startSegment; }
-      Segment* endSegment() const       { return _endSegment;   }
-      void setStartSegment(Segment* s)  { _startSegment = s; }
-      void setEndSegment(Segment* s)    { _endSegment = s; }
-      void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
-      int tickStart() const;
-      int tickEnd() const;
-      int staffStart() const            { return _staffStart;  }
-      int staffEnd() const              { return _staffEnd;    }
-      void setStaffStart(int v)         { _staffStart = v;  }
-      void setStaffEnd(int v)           { _staffEnd = v;    }*/
       void rangePos(RangePos*);
+    //  QColor color() const     { return _color; }
+
  //     virtual void write(Xml& xml) const override;
  //     virtual void read(XmlReader&) override;
- //     virtual void layout() override;
       friend class RangeAnnotationSegment;
       };
 
