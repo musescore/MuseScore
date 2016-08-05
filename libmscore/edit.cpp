@@ -3183,45 +3183,52 @@ qDebug("time delete");
       int tick     = seg->tick();
       Fraction f   = cr->duration();
       int len      = f.ticks();
+      int etick    = tick + len;
       if (seg->measure()->ticks() <= len) {
             // maybe we should remove the measure
             qDebug("empty measure not allowed");
             return;
             }
 
-      Measure* m = cr->measure();
+      Measure* m  = cr->measure();
+      Segment* fs = m->first(Segment::Type::ChordRest);
+
       for (int track = 0; track < _staves.size() * VOICES; ++track) {
             if (m->hasVoice(track)) {
-                  Segment* fs = m->first(Segment::Type::ChordRest);
-                  Segment* seg1 = 0;
                   for (Segment* s = fs; s; s = s->next(Segment::Type::ChordRest)) {
                         if (s->element(track)) {
                               ChordRest* cr = toChordRest(s->element(track));
-                              if (s->tick() > tick)
-                                    break;
-                              if (s->tick() + cr->duration().ticks() <= tick)
+                              int cetick    = s->tick() + cr->duration().ticks();
+
+                              if (cetick <= tick)
                                     continue;
-                              seg1 = s;
-                              break;
-                              }
-                        }
-                  if (seg1) {
-                        ChordRest* cr = toChordRest(seg1->element(track));
-                        if (cr->isFullMeasureRest()) {
-                              // do nothing
-                              }
-                        else if (seg1->tick() == tick) {
-                              if (cr->duration() <= f)
+                              if (s->tick() >= etick)
+                                    break;
+
+                              if (cr->isFullMeasureRest()) {
+                                    // do nothing
+                                    }
+                              // inside deleted area
+                              else if (s->tick() >= tick && cetick <= etick) {
+                                    // inside
                                     undoRemoveElement(cr);
-                              else {
-                                    Fraction ff = cr->duration() - f + Fraction::fromTicks(tick - seg1->tick());
+                                    }
+                              else if (s->tick() >= tick) {
+                                    // running out
+                                    Fraction ff = cr->duration() - Fraction::fromTicks(cetick - etick);
                                     undoRemoveElement(cr);
                                     createCRSequence(ff, cr, tick + len);
                                     }
-                              }
-                        else {
-                              Fraction f1 = Fraction::fromTicks(tick - seg1->tick());
-                              changeCRlen(cr, f1, false);
+                              else if (s->tick() < tick && cetick <= etick) {
+                                    // running in
+                                    Fraction f1 = Fraction::fromTicks(tick - s->tick());
+                                    changeCRlen(cr, f1, false);
+                                    }
+                              else {
+                                    // running in/out
+                                    Fraction f1 = cr->duration() - f;
+                                    changeCRlen(cr, f1, false);
+                                    }
                               }
                         }
                   }
