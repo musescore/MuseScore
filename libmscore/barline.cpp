@@ -619,7 +619,12 @@ Element* BarLine::drop(const DropData& data)
 
             if (segment()->isEndBarLineType()) {
                   Measure* m  = segment()->measure();
-                  score()->undoChangeBarLine(m, st);
+                  if (st == BarLineType::START_REPEAT) {
+                        if (m->nextMeasureMM())
+                              score()->undoChangeBarLine(m->nextMeasureMM(), st);
+                        }
+                  else
+                        score()->undoChangeBarLine(m, st);
                   }
             else if (segment()->isBeginBarLineType()) {
                   undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
