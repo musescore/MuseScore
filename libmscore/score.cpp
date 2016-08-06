@@ -742,6 +742,17 @@ void Score::setShowPageborders(bool v)
       }
 
 //---------------------------------------------------------
+//   setMarkIrregularMeasures
+//---------------------------------------------------------
+
+void Score::setMarkIrregularMeasures(bool v)
+      {
+      _markIrregularMeasures = v;
+      setUpdateAll();
+      update();
+      }
+
+//---------------------------------------------------------
 //   dirty
 //---------------------------------------------------------
 

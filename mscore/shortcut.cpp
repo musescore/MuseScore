@@ -2300,6 +2300,17 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "mark-irregular",
+         QT_TRANSLATE_NOOP("action","Mark irregular measures"),
+         QT_TRANSLATE_NOOP("action","Mark irregular measures"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_TEXT_EDIT | STATE_LYRICS_EDIT | STATE_HARMONY_FIGBASS_EDIT,
          "show-keys",
          QT_TRANSLATE_NOOP("action","Insert Special Characters..."),

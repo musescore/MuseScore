@@ -106,7 +106,6 @@ void LayoutBreak::draw(QPainter* painter) const
 
       painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
 
-
       painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
          lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
       painter->setBrush(Qt::NoBrush);
