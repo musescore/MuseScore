@@ -514,7 +514,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     continue;
                               Element* ne;
                               if (oe->generated())
-                                    ne = oe->clone();
+                                    continue;
                               else
                                     ne = oe->linkedClone();
                               ne->setTrack(track);
