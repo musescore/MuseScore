@@ -99,7 +99,12 @@ void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       if (curColor() == Qt::black)
             setColor(Qt::yellow);
       setPos(p1);
-      QRectF rr = QRectF(-5, -10, p2.x() - p1.x() - 10, 40);
+      int width = 0;
+      if (p2.x() >= p1.x())
+            width = p2.x() - p1.x();
+      else
+            width = 500 - p1.x();
+      QRectF rr = QRectF(-5, -10, width - 5, 40);
       setbbox(rr);
       if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
             QPointF staffOffset;
@@ -134,9 +139,10 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       rangeSegment->setSystem(system);
       rangeSegment->setSpanner(this);
 
+
+      SpannerSegmentType sst;
       computeStartElement();
       computeEndElement();
-      SpannerSegmentType sst;
       if (tick() >= stick) {
             //
             // this is the first call to layoutSystem,
@@ -163,7 +169,6 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
 
       RangePos rPos;
       rangePos(&rPos);
-  //    rangeSegment->setPos(rPos.p1);
 
       switch (sst) {
             case SpannerSegmentType::SINGLE:
@@ -224,30 +229,75 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
 
 //---------------------------------------------------------
 //   rangePos
-//    Anchor::NOTE: return anchor note position in system coordinates
-//    Other:        return (x position (relative to what?), 0)
 //---------------------------------------------------------
 
 void RangeAnnotation::rangePos(RangePos* rp)
       {
       Segment* ss = startSegment();
       Segment* es = endSegment();
+
+      if (tick2() % 7680 ==0)
+            es = ss->system()->lastMeasure()->last();
+
       if (!ss || !es)
             return;
       rp->system1 = ss->system();
       rp->system2 = es->system();
       if (rp->system1 == 0 || rp->system2 == 0)
             return;
+
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
- /*   ChordRest* scr = startCR();
-      ChordRest* ecr = endCR();
-      rp->system1 = scr->measure()->system();
-      rp->system2 = ecr->measure()->system();
-      if (rp->system1 == 0 || rp->system2 == 0)
+      }
+
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void RangeAnnotation::write(Xml& xml) const
+      {
+      if (!xml.canWrite(this))
             return;
-      rp->p1 = scr->pagePos() - rp->system1->pagePos();
-      rp->p2 = ecr->pagePos() - rp->system2->pagePos();     */
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+      xml.tag("startTick", int(this->tick()));
+      xml.tag("endTick", int(this->tick2()));
+      xml.tag("startTrack", int(this->track()));
+      xml.tag("endTrack", int(this->track2()));
+      xml.tag("color", curColor());
+      RangeAnnotation::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void RangeAnnotation::read(XmlReader& e)
+      {
+      foreach(SpannerSegment* seg, spannerSegments())
+            delete seg;
+      spannerSegments().clear();
+
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
+      setParent(0);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "startTick")
+                  setTick(e.readInt());
+            else if (tag == "endTick")
+                  setTick2(e.readInt());
+            else if (tag == "startTrack")
+                  setTrack(e.readInt());
+            else if (tag == "endTrack")
+                  setTrack2(e.readInt());
+            else if (tag == "color")
+                  setColor(e.readColor());
+            else if (!RangeAnnotation::readProperties(e))
+                  e.unknown();
+            }
       }
 
 }

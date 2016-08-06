@@ -1805,6 +1805,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "HairPin"
                || tag == "Pedal"
                || tag == "Ottava"
+               || tag == "RangeAnnotation"
                || tag == "Trill"
                || tag == "TextLine"
                || tag == "Volta") {
