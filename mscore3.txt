@@ -67,6 +67,26 @@ Timewise insert/delete notes/rests
       - Ctrl+Del
         Removes the selected Chord/Rest decreasing the duration of the measure.
 
+      - drop barline
+        Splits the current measure at the new barline. In 2.0 this inserted a barline
+        in the current measure.
+
+      - ctrl + drop barline
+        This inserts a barline into the current measure (2.0 behaviour of dropping a barline)
+
+      - delete barline
+        This joins the current measure with the next measure.
+
+      - show irregular measures
+        This displays a "+" or "-" in the upper right corner of a measure if the measure
+        length is different from the current time signature.
+
+      Functions which may be removed:
+            - split measure: replaced by dropping a barline
+            - join measure:  replaced by deleting a barline
+            - adjusting the actual measure lenght in measure properties; this
+              can be achieved by inserting/deleting notes/rests in the measure.
+
 
 ====================================================================
       Programming Style Changes in MuseScore 3

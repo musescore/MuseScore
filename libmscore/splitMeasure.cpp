@@ -24,13 +24,23 @@ namespace Ms {
 
 void Score::cmdSplitMeasure(ChordRest* cr)
       {
+      startCmd();
+      splitMeasure(cr);
+      endCmd();
+      }
+
+//---------------------------------------------------------
+//   splitMeasure
+//---------------------------------------------------------
+
+void Score::splitMeasure(ChordRest* cr)
+      {
       Segment* segment = cr->segment();
       Measure* measure = segment->measure();
 
       ScoreRange range;
       range.read(measure->first(), measure->last());
 
-      startCmd();
       undoRemoveMeasures(measure, measure);
       undoInsertTime(measure->tick(), -(measure->endTick() - measure->tick()));
 
@@ -48,8 +58,6 @@ void Score::cmdSplitMeasure(ChordRest* cr)
       m1->adjustToLen(Fraction::fromTicks(ticks1));
       m2->adjustToLen(Fraction::fromTicks(ticks2));
       range.write(this, m1->tick());
-
-      endCmd();
       }
 
 }
