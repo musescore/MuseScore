@@ -959,6 +959,7 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("show-unprintable"));
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
+      menuView->addAction(getAction("mark-irregular"));
       menuView->addSeparator();
 
       a = getAction("fullscreen");
@@ -1740,6 +1741,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("show-unprintable")->setChecked(cs->showUnprintable());
       getAction("show-frames")->setChecked(cs->showFrames());
       getAction("show-pageborders")->setChecked(cs->showPageborders());
+      getAction("mark-irregular")->setChecked(cs->markIrregularMeasures());
       getAction("fotomode")->setChecked(cv->fotoMode());
       getAction("join-measures")->setEnabled(cs->masterScore()->excerpts().size() == 0);
       getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
@@ -4760,9 +4762,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "show-unprintable")
             cs->setShowUnprintable(a->isChecked());
       else if (cmd == "show-frames")
-            cs->setShowFrames(getAction(cmd.toLatin1().data())->isChecked());
+            cs->setShowFrames(a->isChecked());
       else if (cmd == "show-pageborders")
-            cs->setShowPageborders(getAction(cmd.toLatin1().data())->isChecked());
+            cs->setShowPageborders(a->isChecked());
+      else if (cmd == "mark-irregular")
+            cs->setMarkIrregularMeasures(a->isChecked());
       else if (cmd == "tempo")
             addTempo();
       else if (cmd == "loop") {

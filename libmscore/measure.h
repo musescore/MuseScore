@@ -115,8 +115,6 @@ class Measure : public MeasureBase {
                               // 0 if this is the start of a mm rest (_mmRest != 0)
                               // < 0 if this measure is covered by a mm rest
 
-
-
       int _playbackCount;     // temp. value used in RepeatList
                               // counts how many times this measure was already played
 
@@ -171,6 +169,7 @@ class Measure : public MeasureBase {
       void setLen(const Fraction& f)       { _len = f;            }
       // actual length of measure in ticks
       virtual int ticks() const override;
+      bool isIrregular() const             { return _timesig != _len; }
 
       int size() const                          { return _segments.size();        }
       Ms::Segment* first() const                { return _segments.first();       }

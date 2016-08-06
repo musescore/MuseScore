@@ -357,7 +357,7 @@ void BarLine::draw(QPainter* painter) const
       QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
 
-      switch(barLineType()) {
+      switch (barLineType()) {
             case BarLineType::BROKEN:
                   pen.setStyle(Qt::DashLine);
                   painter->setPen(pen);
@@ -479,6 +479,20 @@ void BarLine::draw(QPainter* painter) const
                         }
                   }
                   break;
+            }
+      Segment* s = segment();
+      if (s) {
+            Measure* m = s->measure();
+            if (s && s->isEndBarLineType() && m->isIrregular() && score()->markIrregularMeasures()) {
+                  painter->setPen(MScore::layoutBreakColor);
+                  QFont f("FreeSerif");
+                  f.setPointSizeF(12 * spatium() / SPATIUM20);
+                  f.setBold(true);
+                  QString str = m->len() > m->timesig() ? "+" : "-";
+                  QRectF r = QFontMetricsF(f).boundingRect(str);
+                  painter->setFont(f);
+                  painter->drawText(-r.width(), 0.0, str);
+                  }
             }
       }
 

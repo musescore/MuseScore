@@ -401,16 +401,17 @@ class Score : public QObject, public ScoreElement {
       QString _importedFilePath;          // file from which the score was imported, or empty
 
 
-      bool _showInvisible       { true  };
-      bool _showUnprintable     { true  };
-      bool _showFrames          { true  };
-      bool _showPageborders     { false };
-      bool _showInstrumentNames { true  };
-      bool _showVBox            { true  };
-      bool _printing            { false };      ///< True if we are drawing to a printer
-      bool _playlistDirty       { true  };
-      bool _autosaveDirty       { true  };
-      bool _saved               { false };      ///< True if project was already saved; only on first
+      bool _showInvisible         { true  };
+      bool _showUnprintable       { true  };
+      bool _showFrames            { true  };
+      bool _showPageborders       { false };
+      bool _markIrregularMeasures { true  };
+      bool _showInstrumentNames   { true  };
+      bool _showVBox              { true  };
+      bool _printing              { false };      ///< True if we are drawing to a printer
+      bool _playlistDirty         { true  };
+      bool _autosaveDirty         { true  };
+      bool _saved                 { false };      ///< True if project was already saved; only on first
                                                 ///< save a backup file will be created, subsequent
                                                 ///< saves will not overwrite the backup file.
       bool _defaultsRead        { false };      ///< defaults were read at MusicXML import, allow export of defaults in convertermode
@@ -699,12 +700,14 @@ class Score : public QObject, public ScoreElement {
       bool showUnprintable() const     { return _showUnprintable; }
       bool showFrames() const          { return _showFrames; }
       bool showPageborders() const     { return _showPageborders; }
+      bool markIrregularMeasures() const { return _markIrregularMeasures; }
       bool showInstrumentNames() const { return _showInstrumentNames; }
       bool showVBox() const            { return _showVBox; }
       void setShowInvisible(bool v);
       void setShowUnprintable(bool v);
       void setShowFrames(bool v);
       void setShowPageborders(bool v);
+      void setMarkIrregularMeasures(bool v);
       void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
       void setShowVBox(bool v)            { _showVBox = v;            }
 

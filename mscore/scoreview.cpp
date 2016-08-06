@@ -1977,6 +1977,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                               pen.setWidthF(1);
                               pen.setStyle(Qt::SolidLine);
                               p.setPen(pen);
+                              p.setBrush(Qt::NoBrush);
                               for (const System* system : page->systems()) {
                                     for (const MeasureBase* mb : system->measures()) {
                                           if (mb->type() == Element::Type::MEASURE) {
