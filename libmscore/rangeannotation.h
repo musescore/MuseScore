@@ -73,8 +73,8 @@ class RangeAnnotation : public Spanner {
       void rangePos(RangePos*);
     //  QColor color() const     { return _color; }
 
- //     virtual void write(Xml& xml) const override;
- //     virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
       friend class RangeAnnotationSegment;
       };
 
