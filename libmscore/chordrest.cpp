@@ -824,30 +824,32 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
 
             case Element::Type::BAR_LINE:
-                  {
-                  BarLine* bl = static_cast<BarLine*>(e);
-                  bl->setTrack(staffIdx() * VOICES);
-                  bl->setGenerated(false);
+                  if (data.control()) {
+                        BarLine* bl = toBarLine(e);
+                        bl->setTrack(staffIdx() * VOICES);
+                        bl->setGenerated(false);
 
-                  if (tick() == m->tick())
-                        return m->drop(data);
+                        if (tick() == m->tick())
+                              return m->drop(data);
 
-                  BarLine* obl = 0;
-                  for (Staff* st  : staff()->staffList()) {
-                        Score* score = st->score();
-                        Measure* measure = score->tick2measure(m->tick());
-                        Segment* seg = measure->undoGetSegment(Segment::Type::BarLine, tick());
-                        BarLine* l;
-                        if (obl == 0)
-                              obl = l = bl->clone();
-                        else
-                              l = static_cast<BarLine*>(obl->linkedClone());
-                        l->setTrack(st->idx() * VOICES);
-                        l->setScore(score);
-                        l->setParent(seg);
-                        score->undoAddElement(l);
+                        BarLine* obl = 0;
+                        for (Staff* st  : staff()->staffList()) {
+                              Score* score = st->score();
+                              Measure* measure = score->tick2measure(m->tick());
+                              Segment* seg = measure->undoGetSegment(Segment::Type::BarLine, tick());
+                              BarLine* l;
+                              if (obl == 0)
+                                    obl = l = bl->clone();
+                              else
+                                    l = static_cast<BarLine*>(obl->linkedClone());
+                              l->setTrack(st->idx() * VOICES);
+                              l->setScore(score);
+                              l->setParent(seg);
+                              score->undoAddElement(l);
+                              }
                         }
-                  }
+                  else
+                        score()->splitMeasure(this);
                   delete e;
                   return 0;
 

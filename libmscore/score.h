@@ -953,6 +953,7 @@ class Score : public QObject, public ScoreElement {
 
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);
+      void splitMeasure(ChordRest*);
       void cmdJoinMeasure(Measure*, Measure*);
       int pageNumberOffset() const          { return _pageNumberOffset; }
       void setPageNumberOffset(int v)       { _pageNumberOffset = v; }
