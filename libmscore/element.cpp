@@ -282,6 +282,7 @@ Element::Element(Score* s) :
       _tag           = 1;
       itemDiscovered = false;
       _autoplace     = true;
+      _z             = -1;
       }
 
 Element::Element(const Element& e)
@@ -291,6 +292,7 @@ Element::Element(const Element& e)
       _selected   = e._selected;
       _generated  = e._generated;
       _visible    = e._visible;
+      _z          = e._z;
       _placement  = e._placement;
       _flags      = e._flags;
       _track      = e._track;
@@ -367,6 +369,17 @@ Staff* Element::staff() const
             return 0;
 
       return score()->staff(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   z
+//---------------------------------------------------------
+
+int Element::z() const
+      {
+      if (_z == -1)
+            _z = int(type()) * 100;
+      return _z;
       }
 
 //---------------------------------------------------------
@@ -672,6 +685,7 @@ void Element::writeProperties(Xml& xml) const
             }
       writeProperty(xml, P_ID::COLOR);
       writeProperty(xml, P_ID::VISIBLE);
+      writeProperty(xml, P_ID::Z);
       writeProperty(xml, P_ID::PLACEMENT);
       }
 
@@ -745,6 +759,8 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "placement")
             _placement = Placement(Ms::getProperty(P_ID::PLACEMENT, e).toInt());
+      else if (tag == "z")
+            setZ(e.readInt());
       else
             return false;
       return true;
@@ -949,7 +965,6 @@ Line::Line(Score* s, bool v)
    : Element(s)
       {
       vertical = v;
-      _z = int(Element::Type::LINE) * 100;
       }
 
 //---------------------------------------------------------
@@ -1452,6 +1467,7 @@ QVariant Element::getProperty(P_ID propertyId) const
             case P_ID::USER_OFF:  return _userOff;
             case P_ID::PLACEMENT: return int(_placement);
             case P_ID::AUTOPLACE: return autoplace();
+            case P_ID::Z:         return z();
             default:
                   return QVariant();
             }
@@ -1489,6 +1505,9 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::AUTOPLACE:
                   setAutoplace(v.toBool());
                   break;
+            case P_ID::Z:
+                  setZ(v.toInt());
+                  break;
             default:
                   qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
                      propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
@@ -1520,6 +1539,8 @@ QVariant Element::propertyDefault(P_ID id) const
                   return QPointF();
             case P_ID::AUTOPLACE:
                   return true;
+            case P_ID::Z:
+                  return int(type()) * 100;
             default:    // not all properties have a default
                   break;
             }

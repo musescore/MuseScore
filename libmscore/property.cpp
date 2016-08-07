@@ -42,6 +42,7 @@ static const PropertyData propertyList[] = {
       { P_ID::GENERATED,           false,  "generated",    P_TYPE::BOOL   },
       { P_ID::COLOR,               false, "color",         P_TYPE::COLOR  },
       { P_ID::VISIBLE,             false, "visible",       P_TYPE::BOOL   },
+      { P_ID::Z,                   false, "z",             P_TYPE::INT   },
       { P_ID::SMALL,               false, "small",         P_TYPE::BOOL   },
       { P_ID::SHOW_COURTESY,       false, "showCourtesy",  P_TYPE::INT    },
       { P_ID::LINE_TYPE,           false, "lineType",      P_TYPE::INT    },

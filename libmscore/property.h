@@ -36,6 +36,7 @@ enum class P_ID : int {
       GENERATED,
       COLOR,
       VISIBLE,
+      Z,
       SMALL,
       SHOW_COURTESY,
       LINE_TYPE,
