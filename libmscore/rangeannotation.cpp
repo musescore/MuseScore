@@ -100,7 +100,7 @@ void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             setColor(Qt::yellow);
       setPos(p1);
       int width = p2.x() - p1.x();
-      QRectF rr = QRectF(-5, -10, width - 10, 40);
+      QRectF rr = QRectF(-5, -10, width - 5, 40);
       setbbox(rr);
       if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
             QPointF staffOffset;
@@ -246,6 +246,7 @@ void RangeAnnotation::rangePos(RangePos* rp)
 
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
+
       if (flag)
             rp->p2.setX(rp->p2.x() + 5);
       }
