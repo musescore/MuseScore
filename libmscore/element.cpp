@@ -107,8 +107,6 @@ static const ElementName elementNames[] = {
 
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
-      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
-      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
       ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
       ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),
@@ -152,6 +150,8 @@ static const ElementName elementNames[] = {
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
       ElementName("LedgerLine",           QT_TRANSLATE_NOOP("elementName", "Ledger Line")),
+      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
+      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
       ElementName("NoteHead",             QT_TRANSLATE_NOOP("elementName", "Notehead")),
       ElementName("NoteDot",              QT_TRANSLATE_NOOP("elementName", "Note Dot")),
       ElementName("Tremolo",              QT_TRANSLATE_NOOP("elementName", "Tremolo")),

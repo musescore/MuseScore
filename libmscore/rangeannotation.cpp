@@ -247,7 +247,7 @@ void RangeAnnotation::rangePos(RangePos* rp)
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
       if (flag)
-            rp->p2.setX(rp->p2.x() + 10);
+            rp->p2.setX(rp->p2.x() + 5);
       }
 
 //---------------------------------------------------------
