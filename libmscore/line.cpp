@@ -488,7 +488,17 @@ bool LineSegment::setProperty(P_ID id, const QVariant& val)
 
 QVariant LineSegment::propertyDefault(P_ID id) const
       {
-      return line()->propertyDefault(id);
+      switch (id) {
+            case P_ID::DIAGONAL:
+            case P_ID::LINE_COLOR:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
+            case P_ID::DASH_LINE_LEN:
+            case P_ID::DASH_GAP_LEN:
+                  return line()->propertyDefault(id);
+            default:
+                  return SpannerSegment::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------

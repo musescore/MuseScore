@@ -479,7 +479,7 @@ QVariant Spanner::getProperty(P_ID propertyId) const
 
 bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SPANNER_TICK:
                   setTick(v.toInt());
                   break;
@@ -512,7 +512,7 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Spanner::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::ANCHOR:
                   return int(Anchor::SEGMENT);
             default:
