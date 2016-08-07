@@ -245,8 +245,6 @@ class Element : public QObject, public ScoreElement {
             LINE,
             ARPEGGIO,
             ACCIDENTAL,
-            RANGEANNOTATION,
-            RANGEANNOTATION_SEGMENT,
 
             STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
             NOTE,             // and this requires stems to be drawn before notes
@@ -295,6 +293,8 @@ class Element : public QObject, public ScoreElement {
             SPACER,
             STAFF_STATE,
             LEDGER_LINE,
+            RANGEANNOTATION,
+            RANGEANNOTATION_SEGMENT,
             NOTEHEAD,
             NOTEDOT,
             TREMOLO,
