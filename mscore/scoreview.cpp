@@ -5577,8 +5577,23 @@ void ScoreView::cmdAddAnnotation()
 void ScoreView::cmdAddRangeAnnotation()
       {
 
-      if (!_score->selection().isRange())
+      if (!_score->selection().isRange()) {
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (!cr)
+                  return;
+            int stick = cr->tick();
+            int etick = stick + cr->actualTicks();
+            RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
+            rangeAnn->setParent(0);
+            rangeAnn->setTick(stick);
+            rangeAnn->setTick2(etick);
+            rangeAnn->setTrack(cr->track());
+            rangeAnn->setColor(Qt::yellow);
+            _score->startCmd();
+            _score->undoAddElement(rangeAnn);
+            _score->endCmd();
             return;
+            }
 
       Segment* ss = score()->selection().startSegment();
       Segment* es = score()->selection().endSegment();
