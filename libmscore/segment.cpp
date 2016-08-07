@@ -201,9 +201,6 @@ void Segment::init()
       {
       int staves = score()->nstaves();
       int tracks = staves * VOICES;
-//      _elist.reserve(tracks);
-//      _dotPosX.reserve(staves);
-//      _shapes.reserve(staves);
       _elist.assign(tracks, 0);
       _dotPosX.assign(staves, 0.0);
       _shapes.assign(staves, Shape());
@@ -872,8 +869,9 @@ QVariant Segment::getProperty(P_ID propertyId) const
 
 QVariant Segment::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
-            case P_ID::LEADING_SPACE:   return Spatium(0.0);
+      switch (propertyId) {
+            case P_ID::LEADING_SPACE:
+                  return Spatium(0.0);
             default:
                   return Element::getProperty(propertyId);
             }

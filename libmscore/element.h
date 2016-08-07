@@ -274,6 +274,7 @@ class Element : public QObject, public ScoreElement {
             INSTRUMENT_CHANGE,
             HARMONY,
             FRET_DIAGRAM,
+
             BEND,
             TREMOLOBAR,
             VOLTA,
@@ -285,6 +286,7 @@ class Element : public QObject, public ScoreElement {
             PEDAL_SEGMENT,
             LYRICSLINE_SEGMENT,
             GLISSANDO_SEGMENT,
+
             LAYOUT_BREAK,
             SPACER,
             STAFF_STATE,
