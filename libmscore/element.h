@@ -221,6 +221,7 @@ class Element : public QObject, public ScoreElement {
   protected:
       bool _selected;             ///< set if element is selected
       bool _visible;              ///< visibility attribute
+      mutable int _z;
       QColor _color;              ///< element color attribute
 
   public:
@@ -470,7 +471,8 @@ class Element : public QObject, public ScoreElement {
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }
 
-      virtual int z() const                   { return int(type()) * 100; }  // stacking order
+      int z() const;
+      void setZ(int val)                      { _z = val;  }
 
       int staffIdx() const                    { return _track >> 2;        }
       virtual int vStaffIdx() const           { return staffIdx();         }
@@ -858,9 +860,6 @@ class Line : public Element {
 
       Spatium _width;
       Spatium _len;
-      int _z;                     ///< stacking order when drawing or selecting;
-                                  ///< elements are drawn from high number to low number;
-                                  ///< default is type() * 100;
 
    protected:
       bool vertical;
@@ -883,8 +882,6 @@ public:
       Spatium lineWidth()  const { return _width; }
       void setLen(Spatium);
       void setLineWidth(Spatium);
-      virtual int z() const               { return _z; }
-      void setZ(int val)                  { _z = val;  }
       };
 
 //---------------------------------------------------------

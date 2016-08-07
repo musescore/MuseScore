@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>303</width>
-    <height>148</height>
+    <height>211</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -84,7 +84,7 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="label_3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -97,7 +97,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="offsetX">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
@@ -125,7 +125,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -144,7 +144,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
+     <item row="4" column="3">
       <widget class="QToolButton" name="resetX">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -167,7 +167,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QDoubleSpinBox" name="offsetY">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -192,7 +192,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="3">
+     <item row="5" column="3">
       <widget class="QToolButton" name="resetY">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -215,7 +215,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -234,7 +234,24 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
+     <item row="5" column="2">
+      <widget class="QToolButton" name="vRaster">
+       <property name="accessibleName">
+        <string/>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
       <widget class="QToolButton" name="resetColor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -257,7 +274,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item row="4" column="2">
       <widget class="QToolButton" name="hRaster">
        <property name="text">
         <string notr="true"/>
@@ -271,24 +288,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="2">
-      <widget class="QToolButton" name="vRaster">
-       <property name="accessibleName">
-        <string/>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1" colspan="2">
+     <item row="3" column="1" colspan="2">
       <widget class="Awl::ColorLabel" name="color">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
@@ -358,14 +358,14 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
+     <item row="6" column="0" colspan="2">
       <widget class="QCheckBox" name="autoplace">
        <property name="text">
         <string>Automatic placement</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="3">
+     <item row="6" column="3">
       <widget class="QToolButton" name="resetAutoplace">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -378,6 +378,46 @@
        </property>
        <property name="accessibleName">
         <string>Reset 'Automatic placement' value</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Z</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="QSpinBox" name="z">
+       <property name="maximum">
+        <number>1000000000</number>
+       </property>
+       <property name="singleStep">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QToolButton" name="resetZ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Visible' value</string>
        </property>
        <property name="text">
         <string notr="true"/>

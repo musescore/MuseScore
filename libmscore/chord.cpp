@@ -599,47 +599,23 @@ qreal Chord::maxHeadWidth() const
       }
 
 //---------------------------------------------------------
-//   createLedgerLines
-///   Creates the ledger lines for a chord
-///   \arg track      track the ledger line belongs to
-///   \arg lines      a vector of LedgerLineData describing the lines to add
-///   \arg visible    whether the line is visible or not
-//---------------------------------------------------------
-
-void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool visible)
-      {
-      qreal _spatium = spatium();
-      qreal stepDistance = 0.5;     // staff() ? staff()->lineDistance() * 0.5 : 0.5;
-      for (auto lld : vecLines) {
-            LedgerLine* h = new LedgerLine(score());
-            h->setParent(this);
-            h->setTrack(track);
-            h->setVisible(lld.visible && visible);
-            h->setLen(Spatium( (lld.maxX - lld.minX) / _spatium) );
-            h->setPos(lld.minX, lld.line * _spatium * stepDistance);
-            h->setNext(_ledgerLines);
-            _ledgerLines = h;
-            }
-      }
-
-//---------------------------------------------------------
 //   addLedgerLines
 //---------------------------------------------------------
 
 void Chord::addLedgerLines()
       {
       // initialize for palette
-      int track = 0;                            // the track lines belong to
+      int track          = 0;                   // the track lines belong to
       // the line pos corresponding to the bottom line of the staff
-      int lineBelow = 8;                        // assuming 5-lined "staff"
+      int lineBelow      = 8;                   // assuming 5-lined "staff"
       qreal lineDistance = 1;
-      qreal _mag = 1;
-      bool staffVisible = true;
+      qreal _mag         = 1;
+      bool staffVisible  = true;
 
       if (segment()) { //not palette
-            int idx   = staffIdx() + staffMove();
-            track     = staff2track(idx);
-            Staff* st = score()->staff(idx);
+            int idx      = staffIdx() + staffMove();
+            track        = staff2track(idx);
+            Staff* st    = score()->staff(idx);
             lineBelow    = (st->lines() - 1) * 2;
             lineDistance = st->lineDistance();
             _mag         = staff()->mag();
@@ -752,9 +728,23 @@ void Chord::addLedgerLines()
                         maxLine = l;
                         }
                   }
-            if (minLine < 0 || maxLine > lineBelow)
-                  createLedgerLines(track, vecLines, staffVisible);
+            if (minLine < 0 || maxLine > lineBelow) {
+                  qreal _spatium = spatium();
+                  qreal stepDistance = 0.5;     // staff() ? staff()->lineDistance() * 0.5 : 0.5;
+                  for (auto lld : vecLines) {
+                        LedgerLine* h = new LedgerLine(score());
+                        h->setParent(this);
+                        h->setTrack(track);
+                        h->setVisible(lld.visible && staffVisible);
+                        h->setLen(Spatium( (lld.maxX - lld.minX) / _spatium) );
+                        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
+                        h->setNext(_ledgerLines);
+                        _ledgerLines = h;
+                        }
+                  }
             }
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            ll->layout();
       }
 
 //-----------------------------------------------------------------------------
@@ -1760,8 +1750,6 @@ void Chord::layoutPitched()
             computeUp();
             layoutStem();
             addLedgerLines();
-            for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-                  ll->layout();
             return;
             }
 
@@ -1774,10 +1762,10 @@ void Chord::layoutPitched()
 
             qreal x1 = note->pos().x() + chordX;
             qreal x2 = x1 + note->headWidth();
-            lll = qMax(lll, -x1);
-            rrr = qMax(rrr, x2);
+            lll      = qMax(lll, -x1);
+            rrr      = qMax(rrr, x2);
             // track amount of space due to notehead only
-            lhead = qMax(lhead, -x1);
+            lhead    = qMax(lhead, -x1);
 
             Accidental* accidental = note->accidental();
             if (accidental && !note->fixed()) {
@@ -1845,8 +1833,6 @@ void Chord::layoutPitched()
       //-----------------------------------------
 
       addLedgerLines();
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-            ll->layout();
 
       if (_arpeggio) {
             qreal arpeggioDistance = score()->styleP(StyleIdx::ArpeggioNoteDistance) * _mag;
@@ -1891,7 +1877,6 @@ void Chord::layoutPitched()
             }
 
       if (_ledgerLines) {
-
             // we may need to increase distance to previous chord
             Chord* pc = 0;
 

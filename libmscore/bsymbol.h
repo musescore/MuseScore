@@ -27,9 +27,6 @@ class BSymbol : public Element, public ElementLayout {
       Q_OBJECT
 
       QList<Element*> _leafs;
-      int _z;                     ///< stacking order when drawing or selecting;
-                                  ///< elements are drawn from high number to low number;
-                                  ///< default is type() * 100;
       bool _systemFlag;
 
    public:
@@ -55,8 +52,6 @@ class BSymbol : public Element, public ElementLayout {
       virtual QPointF canvasPos() const override;
       virtual QLineF dragAnchor() const override;
       Segment* segment() const            { return (Segment*)parent(); }
-      virtual int z() const override      { return _z; }
-      void setZ(int val)                  { _z = val;  }
       bool systemFlag() const             { return _systemFlag; }
       void setSystemFlag(bool val)        { _systemFlag = val;  }
       };
