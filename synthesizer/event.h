@@ -20,6 +20,8 @@ namespace Ms {
 class Note;
 class Xml;
 
+enum class BeatType : char;
+
 //---------------------------------------------------------
 //   Event types
 //---------------------------------------------------------
@@ -239,6 +241,7 @@ class NPlayEvent : public PlayEvent {
       NPlayEvent(uchar t, uchar c, uchar a, uchar b)
          : PlayEvent(t, c, a, b) {}
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
+      NPlayEvent(BeatType beatType);
       const Note* note() const       { return _note; }
       void setNote(const Note* v)    { _note = v; }
       };
