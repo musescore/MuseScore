@@ -23,7 +23,11 @@
   #include <mmsystem.h>
 #endif
 
-#include "portmidi/porttime/porttime.h"
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+  #include "portmidi/porttime/porttime.h"
+#else
+  #include <porttime.h>
+#endif
 
 #include "preferences.h"
 #include "pm.h"
@@ -31,66 +35,6 @@
 #include "seq.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   Port
-//---------------------------------------------------------
-
-Port::Port()
-      {
-      type = ZERO_TYPE;
-      }
-
-Port::Port(unsigned char client, unsigned char port)
-      {
-      _alsaPort = port;
-      _alsaClient = client;
-      type = ALSA_TYPE;
-      }
-
-//---------------------------------------------------------
-//   setZero
-//---------------------------------------------------------
-
-void Port::setZero()
-      {
-      type = ZERO_TYPE;
-      }
-
-//---------------------------------------------------------
-//   isZero
-//---------------------------------------------------------
-
-bool Port::isZero()  const
-      {
-      return type == ZERO_TYPE;
-      }
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool Port::operator==(const Port& p) const
-      {
-      if (type == ALSA_TYPE)
-            return _alsaPort == p._alsaPort && _alsaClient == p._alsaClient;
-      else
-            return true;
-      }
-
-//---------------------------------------------------------
-//   operator<
-//---------------------------------------------------------
-
-bool Port::operator<(const Port& p) const
-      {
-      if (type == ALSA_TYPE) {
-            if (_alsaPort != p._alsaPort)
-                  return _alsaPort < p._alsaPort;
-            return _alsaClient < p._alsaClient;
-            }
-      return false;
-      }
 
 //---------------------------------------------------------
 //   PortMidiDriver
@@ -135,7 +79,7 @@ bool PortMidiDriver::init()
       PmError error = Pm_OpenInput(&inputStream,
          inputId,
          (void*)DRIVER_INFO, INPUT_BUFFER_SIZE,
-         ((long (*)(void*)) Pt_Time),
+         ((PmTimeProcPtr) Pt_Time),
          (void*)TIME_INFO);
       if (error != pmNoError) {
             const char* p = Pm_GetErrorText(error);

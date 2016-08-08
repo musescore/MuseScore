@@ -82,6 +82,7 @@ endif (APPLE)
 # Disable components not supported on Linux/BSD
 if (NOT APPLE AND NOT MINGW)
       set(NIX_NOT_AVAIL "Not available on Linux/BSD")
+      option(BUILD_PORTMIDI "PortMidi disabled on Linux. (It uses ALSA but it's better to use ALSA directly)" OFF)
 endif (NOT APPLE AND NOT MINGW)
 
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
@@ -101,6 +102,7 @@ option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JAC
 option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
+option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
 option(BUILD_PCH "Build using precompiled headers." OFF)
 
 if (APPLE)
@@ -312,25 +314,31 @@ ENDIF(BUILD_JACK)
 if (BUILD_PORTAUDIO)
     if (MINGW)
         set ( USE_PORTAUDIO 1 )
-        set ( USE_PORTMIDI  1 )
     else (MINGW)
         PKGCONFIG1 (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
         if (PORTAUDIO_INCDIR)
-              message(STATUS "PortAudio found. PortAudio support enabled. INCDIR ${PORTAUDIO_INCDIR}, LIBDIR ${PORTAUDIO_LIBDIR}, LIB ${PORTAUDIO_LIB}")
+              message("PortAudio found. PortAudio support enabled. INCDIR ${PORTAUDIO_INCDIR}, LIBDIR ${PORTAUDIO_LIBDIR}, LIB ${PORTAUDIO_LIB}")
               set ( USE_PORTAUDIO 1 )
         else (PORTAUDIO_INCDIR)
               message(SEND_ERROR "Error: PortAudio support requested (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}), but portaudio-2.0 version 19 was not found (package portaudio19-dev)")
         endif (PORTAUDIO_INCDIR)
-        if (APPLE)
-          set (USE_PORTMIDI   1)
-        else (APPLE)
-          set (USE_PORTMIDI   0)
-        endif (APPLE)
     endif (MINGW)
 else (BUILD_PORTAUDIO)
      message(STATUS "PortAudio support disabled")
 endif (BUILD_PORTAUDIO)
 
+##
+## PortMidi
+##
+
+if (BUILD_PORTMIDI)
+    if (NOT BUILD_PORTAUDIO)
+        message(SEND_ERROR "Error: PortMidi support requested (BUILD_PORTMIDI=${BUILD_PORTMIDI}), but PortAudio support is disabled (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}). PortMidi requires PortAudio.")
+    endif (NOT BUILD_PORTAUDIO)
+    set (USE_PORTMIDI 1)
+else (BUILD_PORTMIDI)
+    message(STATUS "PortMidi support disabled")
+endif (BUILD_PORTMIDI)
 
 if (APPLE)
    if(SOUNDFONT3)
@@ -543,9 +551,9 @@ add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
 add_subdirectory(demos)
 
-if (USE_PORTMIDI)
+if (USE_PORTMIDI AND (MINGW OR APPLE))
       subdirs (thirdparty/portmidi)
-endif (USE_PORTMIDI)
+endif (USE_PORTMIDI AND (MINGW OR APPLE))
 
 if (AEOLUS)
       subdirs (aeolus)

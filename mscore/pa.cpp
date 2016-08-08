@@ -31,7 +31,10 @@
 
 #include <portaudio.h>
 #include "mididriver.h"
+
+#ifdef USE_PORTMIDI
 #include "pm.h"
+#endif
 
 namespace Ms {
 
