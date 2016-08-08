@@ -3259,6 +3259,14 @@ void ScoreView::cmd(const QAction* a)
             cmdCopyLyricsToClipboard();
             }
 
+      // STATE_NOTE_ENTRY_REALTIME actions (auto or manual)
+
+      else if (cmd == "realtime-advance") {
+            // The user will want to press notes "on the beat" and not before the beat, so wait a
+            // little in case midi input event is received just after realtime-advance was called.
+            QTimer::singleShot(100, this, SLOT(cmdRealtimeAdvance()));
+            }
+
       // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa") {
@@ -4322,7 +4330,10 @@ void ScoreView::cmdEnterRest(const TDuration& d)
 qDebug("cmdEnterRest %s", qPrintable(d.name()));
       if (!noteEntryMode())
             sm->postEvent(new CommandEvent("note-input"));
-      _score->cmdEnterRest(d);
+      if (_score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM))
+            _score->cmd(getAction("pad-rest"));
+      else
+            _score->cmdEnterRest(d);
 #if 0
       expandVoice();
       if (_is.cr() == 0) {
@@ -5252,6 +5263,33 @@ qDebug("midiNoteReceived %d chord %d", pitch, chord);
       score()->masterScore()->enqueueMidiEvent(ev);
       if (!score()->undoStack()->active())
             cmd(0);
+      }
+
+//---------------------------------------------------------
+//   cmdRealtimeAdvance
+//    move input forwards and extend current chord/rest.
+//---------------------------------------------------------
+
+void ScoreView::cmdRealtimeAdvance()
+      {
+      InputState& is = _score->inputState();
+      if (!is.noteEntryMode())
+            return;
+      _score->startCmd();
+      if (is.cr()->duration() != is.duration().fraction())
+            _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
+      Chord* prevChord = static_cast<Chord*>(is.cr());
+      is.moveToNextInputPos();
+      if (_score->activeMidiPitches()->empty())
+            _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
+      else {
+            bool partOfChord = false;
+            for (const MidiInputEvent &ev : *_score->activeMidiPitches()) {
+                  _score->addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
+                  partOfChord = true;
+                  }
+            }
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -6233,4 +6271,3 @@ void ScoreView::updateShadowNotes()
       }
 
 }
-

@@ -360,8 +360,11 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       setPlayNote(true);
       setPlayChord(true);
       select(note, SelectType::SINGLE, 0);
-      if (!chord->staff()->isTabStaff())
-            _is.moveToNextInputPos();
+      if (!chord->staff()->isTabStaff()) {
+            NoteEntryMethod entryMethod = _is.noteEntryMethod();
+            if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
+                  _is.moveToNextInputPos();
+            }
       return note;
       }
 
@@ -1031,6 +1034,47 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       }
 
 //---------------------------------------------------------
+//  addTiedMidiPitch
+//---------------------------------------------------------
+
+Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
+      {
+      if (prevChord->isChord()) {
+            Note* n = addMidiPitch(pitch, addFlag);
+            Note* nn = prevChord->findNote(n->pitch());
+            if (nn) {
+                  Tie* tie = new Tie(this);
+                  tie->setStartNote(nn);
+                  tie->setEndNote(n);
+                  tie->setTrack(n->track());
+                  undoAddElement(tie);
+                  return n;
+                  }
+            undoRemoveElement(n);
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//  addMidiPitch
+//---------------------------------------------------------
+
+Note* Score::addMidiPitch(int pitch, bool addFlag)
+      {
+      NoteVal nval(pitch);
+      Staff* st = staff(inputState().track() / VOICES);
+
+      // if transposing, interpret MIDI pitch as representing desired written pitch
+      // set pitch based on corresponding sounding pitch
+      if (!styleB(StyleIdx::concertPitch))
+            nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
+      // let addPitch calculate tpc values from pitch
+      //Key key   = st->key(inputState().tick());
+      //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+      return addPitch(nval, addFlag);
+      }
+
+//---------------------------------------------------------
 //   addPitch
 //---------------------------------------------------------
 
@@ -1044,8 +1088,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   return 0;
                   }
             Note* note = addNote(c, nval);
-            if (_is.lastSegment() == _is.segment())
-                  _is.moveToNextInputPos();
+            if (_is.lastSegment() == _is.segment()) {
+                  NoteEntryMethod entryMethod = _is.noteEntryMethod();
+                  if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
+                        _is.moveToNextInputPos();
+                  }
             return note;
             }
       expandVoice();
@@ -1172,8 +1219,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             if (next)
                   _is.moveInputPos(next->segment());
             }
-      else
-            _is.moveToNextInputPos();
+      else {
+            NoteEntryMethod entryMethod = _is.noteEntryMethod();
+            if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
+                  _is.moveToNextInputPos();
+            }
       return note;
       }
 
@@ -2725,7 +2775,8 @@ void Score::cmdEnterRest(const TDuration& d)
       NoteVal nval;
       setNoteRest(_is.segment(), track, nval, d.fraction(), Direction::AUTO);
       _is.moveToNextInputPos();
-      _is.setRest(false);  // continue with normal note entry
+      if (!noteEntryMode() || usingNoteEntryMethod(NoteEntryMethod::STEPTIME))
+            _is.setRest(false);  // continue with normal note entry
       endCmd();
       }
 
