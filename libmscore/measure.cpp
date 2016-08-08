@@ -2270,6 +2270,16 @@ bool Measure::isFinalMeasureOfSection() const
       }
 
 //---------------------------------------------------------
+//   isAnacrusis
+//---------------------------------------------------------
+
+bool Measure::isAnacrusis() const
+      {
+      TimeSigFrac timeSig = score()->sigmap()->timesig(tick()).nominal();
+      return irregular() && ticks() < timeSig.ticksPerMeasure();
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

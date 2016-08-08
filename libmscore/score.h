@@ -93,6 +93,7 @@ struct TEvent;
 struct LayoutContext;
 
 enum class ClefType : signed char;
+enum class BeatType : char;
 enum class SymId;
 enum class Key;
 
@@ -644,6 +645,8 @@ class Score : public QObject, public ScoreElement {
 
       Note* addPitch(NoteVal&, bool addFlag);
       void addPitch(int pitch, bool addFlag, bool insert);
+      Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
+      Note* addMidiPitch(int pitch, bool addFlag);
       Note* addNote(Chord*, NoteVal& noteVal);
 
       NoteVal noteValForPosition(Position pos, bool &error);
@@ -805,6 +808,9 @@ class Score : public QObject, public ScoreElement {
 
       bool noteEntryMode() const               { return inputState().noteEntryMode(); }
       void setNoteEntryMode(bool val)          { inputState().setNoteEntryMode(val); }
+      NoteEntryMethod noteEntryMethod() const         { return inputState().noteEntryMethod();        }
+      void setNoteEntryMethod(NoteEntryMethod m)      { inputState().setNoteEntryMethod(m);           }
+      bool usingNoteEntryMethod(NoteEntryMethod m)    { return inputState().usingNoteEntryMethod(m);  }
       int inputPos() const;
       int inputTrack() const                   { return inputState().track(); }
       const InputState& inputState() const     { return _is;                  }
@@ -820,7 +826,9 @@ class Score : public QObject, public ScoreElement {
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
-      int renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn);
+      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+
+      BeatType tick2beatType(int tick);
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
@@ -1096,6 +1104,7 @@ class Score : public QObject, public ScoreElement {
       virtual QVariant propertyDefault(P_ID) const override;
 
       virtual inline QQueue<MidiInputEvent>* midiInputQueue();
+      virtual inline std::list<MidiInputEvent>* activeMidiPitches();
 
       friend class ChangeSynthesizerState;
       friend class Chord;
@@ -1121,7 +1130,8 @@ class MasterScore : public Score {
 
 //      bool _undoRedo;               ///< true if in processing a undo/redo
       int _midiPortCount { 0 };     // A count of JACK/ALSA midi out ports
-      QQueue<MidiInputEvent> _midiInputQueue;
+      QQueue<MidiInputEvent> _midiInputQueue;         // MIDI events that have yet to be processed
+      std::list<MidiInputEvent> _activeMidiPitches;   // MIDI keys currently being held down
       QList<MidiMapping> _midiMapping;
       bool isSimpleMidiMaping; // midi mapping is simple if all ports and channels
                                // don't decrease and don't have gaps
@@ -1149,7 +1159,8 @@ class MasterScore : public Score {
       virtual RepeatList* repeatList()  const override          { return _repeatList; }
       virtual QList<Excerpt*>& excerpts() override              { return _excerpts;   }
       virtual const QList<Excerpt*>& excerpts() const override  { return _excerpts;   }
-      virtual QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
+      virtual QQueue<MidiInputEvent>* midiInputQueue() override         { return &_midiInputQueue;    }
+      virtual std::list<MidiInputEvent>* activeMidiPitches() override   { return &_activeMidiPitches; }
 
       virtual void setUpdateAll() override                  { _cmdState.setUpdateMode(UpdateMode::UpdateAll);  }
       virtual void setLayoutAll() override                  { _cmdState.setUpdateMode(UpdateMode::LayoutAll);  }
@@ -1207,7 +1218,8 @@ inline TempoMap* Score::tempomap() const               { return _masterScore->te
 inline TimeSigMap* Score::sigmap() const               { return _masterScore->sigmap();         }
 inline QList<Excerpt*>& Score::excerpts()              { return _masterScore->excerpts();       }
 inline const QList<Excerpt*>& Score::excerpts() const  { return _masterScore->excerpts();       }
-inline QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
+inline QQueue<MidiInputEvent>* Score::midiInputQueue()          { return _masterScore->midiInputQueue();    }
+inline std::list<MidiInputEvent>* Score::activeMidiPitches()    { return _masterScore->activeMidiPitches(); }
 inline void Score::setUpdateAll()                      { _masterScore->setUpdateAll();          }
 inline void Score::setLayoutAll()                      { _masterScore->setLayoutAll();          }
 inline void Score::setLayout(int tick)                 { _masterScore->setLayout(tick);         }

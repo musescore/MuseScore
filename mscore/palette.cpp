@@ -340,10 +340,10 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             else if (sel.elements().size() == 2 && cr1 && cr2 && cr1 != cr2) {
                   // two chordrests selected
                   // must be on same staff in order to add line, except for slur
-                  if (element->type() == Element::Type::SLUR || cr1->staffIdx() == cr2->staffIdx())
+                  if (element->isSlur() || cr1->staffIdx() == cr2->staffIdx())
                         addSingle = true;
                   }
-            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM && element->type() == Element::Type::CHORD) {
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM && element->isChord()) {
                   // use input position rather than selection if possible
                   Element* e = score->inputState().cr();
                   if (!e)
@@ -547,7 +547,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
          && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
-            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM)
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM)
                   viewer->moveCursor();
             }
       mscore->endCmd();

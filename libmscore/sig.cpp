@@ -38,6 +38,37 @@ static int ticks_measure(const Fraction& f)
       }
 
 //---------------------------------------------------------
+//   rtick2beatType
+//---------------------------------------------------------
+
+BeatType TimeSigFrac::rtick2beatType(int rtick)
+      {
+      if (rtick == 0)
+            return BeatType::DOWNBEAT;
+
+      if (rtick % dUnitTicks() != 0)
+            return BeatType::SUBBEAT;
+
+      if (isCompound()) {
+            if (rtick % beatTicks() != 0)
+                  return BeatType::COMPOUND_SUBBEAT;
+            }
+
+      const int beatNum = rtick / beatTicks();
+
+      int stressBeat = 0;
+      if (isTriple())
+            stressBeat = 3;
+      else if (isDuple())
+            stressBeat = 2;
+
+      if (stressBeat && beatNum % stressBeat == 0)
+            return isCompound() ? BeatType::SIMPLE_STRESSED : BeatType::COMPOUND_STRESSED;
+
+      return isCompound() ? BeatType::SIMPLE_UNSTRESSED : BeatType::COMPOUND_UNSTRESSED;
+      }
+
+//---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
@@ -84,12 +115,12 @@ void TimeSigMap::normalize()
       int z    = 4;
       int n    = 4;
       int tick = 0;
-      Fraction bar;
-      int tm   = ticks_measure(Fraction(z, n));
+      TimeSigFrac bar;
+      int tm   = ticks_measure(TimeSigFrac(z, n));
 
       for (auto i = begin(); i != end(); ++i) {
             SigEvent& e  = i->second;
-            bar += Fraction(i->first - tick, tm).reduced();
+            bar += TimeSigFrac(i->first - tick, tm).reduced();
             e.setBar(bar.numerator() / bar.denominator());
             tick = i->first;
             tm   = ticks_measure(e.timesig());
@@ -102,7 +133,7 @@ void TimeSigMap::normalize()
 
 const SigEvent& TimeSigMap::timesig(int tick) const
       {
-      static const SigEvent ev(Fraction(4, 4));
+      static const SigEvent ev(TimeSigFrac(4, 4));
       if (empty())
             return ev;
       auto i = upper_bound(tick);
@@ -276,8 +307,8 @@ int SigEvent::read(XmlReader& e, int fileDivision)
             numerator2   = numerator;
             denominator2 = denominator;
             }
-      _timesig = Fraction(numerator, denominator);
-      _nominal = Fraction(numerator2, denominator2);
+      _timesig = TimeSigFrac(numerator, denominator);
+      _nominal = TimeSigFrac(numerator2, denominator2);
       return tick;
       }
 
