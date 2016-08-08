@@ -860,6 +860,13 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(new NoteEntryDragTransition(this));                    // mouse drag
       s->addTransition(new NoteEntryButtonTransition(this));                  // mouse button
       s->addTransition(new CommandTransition("play", states[ENTRY_PLAY]));    // ->entryPlay
+      realtimeTimer = new QTimer(this);
+      realtimeTimer->setTimerType(Qt::PreciseTimer);
+      connect(realtimeTimer, SIGNAL(timeout()), this, SLOT(triggerCmdRealtimeAdvance()));
+      extendNoteTimer = new QTimer(this);
+      extendNoteTimer->setTimerType(Qt::PreciseTimer);
+      extendNoteTimer->setSingleShot(true);
+      connect(extendNoteTimer, SIGNAL(timeout()), this, SLOT(extendCurrentNote()));
 
       // setup normal drag canvas state
       s = states[DRAG];
@@ -3259,6 +3266,12 @@ void ScoreView::cmd(const QAction* a)
             cmdCopyLyricsToClipboard();
             }
 
+      // STATE_NOTE_ENTRY_REALTIME actions (auto or manual)
+
+      else if (cmd == "realtime-advance") {
+            realtimeAdvance(true);
+            }
+
       // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa") {
@@ -4257,10 +4270,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
                   showRect.setHeight(r.height());
                   }
             }
-      if (mscore->state() == ScoreState::STATE_NOTE_ENTRY
-                || mscore->state() == ScoreState::STATE_NOTE_ENTRY_DRUM
-                || mscore->state() == ScoreState::STATE_NOTE_ENTRY_PITCHED
-                || mscore->state() == ScoreState::STATE_NOTE_ENTRY_TAB) {
+      if (mscore->state() & ScoreState::STATE_NOTE_ENTRY) {
             setShadowNote(p);
             }
 
@@ -4325,7 +4335,10 @@ void ScoreView::cmdEnterRest(const TDuration& d)
 qDebug("cmdEnterRest %s", qPrintable(d.name()));
       if (!noteEntryMode())
             sm->postEvent(new CommandEvent("note-input"));
-      _score->cmdEnterRest(d);
+      if (_score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM))
+            _score->cmd(getAction("pad-rest"));
+      else
+            _score->cmdEnterRest(d);
 #if 0
       expandVoice();
       if (_is.cr() == 0) {
@@ -4353,11 +4366,11 @@ ScoreState ScoreView::mscoreState() const
             Staff* staff = _score->staff(is.track() / VOICES);
             switch( staff->staffType()->group()) {
                   case StaffGroup::STANDARD:
-                        return STATE_NOTE_ENTRY_PITCHED;
+                        return STATE_NOTE_ENTRY_STAFF_PITCHED;
                   case StaffGroup::TAB:
-                        return STATE_NOTE_ENTRY_TAB;
+                        return STATE_NOTE_ENTRY_STAFF_TAB;
                   case StaffGroup::PERCUSSION:
-                        return STATE_NOTE_ENTRY_DRUM;
+                        return STATE_NOTE_ENTRY_STAFF_DRUM;
                   }
             }
       if (sm->configuration().contains(states[EDIT]) || sm->configuration().contains(states[DRAG_EDIT])) {
@@ -5246,15 +5259,115 @@ void ScoreView::cmdTuplet(int n)
 
 void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
       {
+      qDebug("midiNoteReceived %d chord %d", pitch, chord);
+
       MidiInputEvent ev;
       ev.pitch = pitch;
       ev.chord = chord;
       ev.velocity = velocity;
 
-qDebug("midiNoteReceived %d chord %d", pitch, chord);
       score()->masterScore()->enqueueMidiEvent(ev);
+
       if (!score()->undoStack()->active())
             cmd(0);
+
+      if (!chord && velocity && !realtimeTimer->isActive() && score()->usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO)) {
+            // First note pressed in automatic real-time mode.
+            extendNoteTimer->start(preferences.realtimeDelay); // set timer to trigger repeatedly
+            triggerCmdRealtimeAdvance(); // also trigger once immediately
+            }
+
+      }
+
+//---------------------------------------------------------
+//   extendCurrentNote
+//    Called after user has held down a midi key for a while.
+//    TODO: adapt to allow calling from StepTime mode.
+//---------------------------------------------------------
+
+void ScoreView::extendCurrentNote()
+      {
+      if (!noteEntryMode() || realtimeTimer->isActive())
+            return;
+
+      allowRealtimeRests = false;
+      realtimeTimer->start(preferences.realtimeDelay); // set timer to trigger repeatedly
+      triggerCmdRealtimeAdvance(); // also trigger once immediately
+      }
+
+//---------------------------------------------------------
+//   realtimeAdvance
+//---------------------------------------------------------
+
+void ScoreView::realtimeAdvance(bool allowRests)
+      {
+      if (!noteEntryMode())
+            return;
+      InputState& is = score()->inputState();
+      switch (is.noteEntryMethod()) {
+            case NoteEntryMethod::REALTIME_MANUAL:
+                  allowRealtimeRests = allowRests;
+                  triggerCmdRealtimeAdvance();
+                  break;
+            case NoteEntryMethod::REALTIME_AUTO:
+                  if (realtimeTimer->isActive())
+                        realtimeTimer->stop();
+                  else {
+                        allowRealtimeRests = allowRests;
+                        realtimeTimer->start(preferences.realtimeDelay);
+                        }
+                  break;
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   triggerCmdRealtimeAdvance
+//---------------------------------------------------------
+
+void ScoreView::triggerCmdRealtimeAdvance()
+      {
+      InputState& is = score()->inputState();
+      bool realtime = is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO) || is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
+      if (!realtime || !noteEntryMode() || (!allowRealtimeRests && score()->activeMidiPitches()->empty())) {
+            if (realtimeTimer->isActive())
+                  realtimeTimer->stop();
+            allowRealtimeRests = true;
+            return;
+            }
+      // give audible feedback immediately to indicate a beat, but dont advance just yet.
+      seq->playMetronomeBeat(_score->tick2beatType(is.tick()));
+      // The user will want to press notes "on the beat" and not before the beat, so wait a
+      // little in case midi input event is received just after realtime-advance was called.
+      QTimer::singleShot(100, Qt::PreciseTimer, this, SLOT(cmdRealtimeAdvance()));
+      }
+
+//---------------------------------------------------------
+//   cmdRealtimeAdvance
+//    move input forwards and extend current chord/rest.
+//---------------------------------------------------------
+
+void ScoreView::cmdRealtimeAdvance()
+      {
+      InputState& is = _score->inputState();
+      if (!is.noteEntryMode())
+            return;
+      _score->startCmd();
+      if (is.cr()->duration() != is.duration().fraction())
+            _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
+      Chord* prevChord = static_cast<Chord*>(is.cr());
+      is.moveToNextInputPos();
+      if (_score->activeMidiPitches()->empty())
+            _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
+      else {
+            bool partOfChord = false;
+            for (const MidiInputEvent &ev : *_score->activeMidiPitches()) {
+                  _score->addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
+                  partOfChord = true;
+                  }
+            }
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -5379,7 +5492,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag, bool insert)
 
 void ScoreView::cmdAddFret(int fret)
       {
-      if (mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
+      if (mscoreState() != STATE_NOTE_ENTRY_STAFF_TAB) // only acceptable in TAB note entry
             return;
       InputState& is = _score->inputState();
       if (is.track() == -1)                     // invalid state
@@ -6236,4 +6349,3 @@ void ScoreView::updateShadowNotes()
       }
 
 }
-

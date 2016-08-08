@@ -520,6 +520,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setCurrentScoreView(int);
       void setNormalState()    { changeState(STATE_NORMAL); }
       void setPlayState()      { changeState(STATE_PLAY); }
+      void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
       void checkForUpdate();
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl, int velo);
@@ -607,7 +608,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setBasicPalette();
       void excerptsChanged(MasterScore*);
       void scorePageLayoutChanged();
-      bool processMidiRemote(MidiRemoteType type, int data);
+      bool processMidiRemote(MidiRemoteType type, int data, int value);
       ScoreTab* getTab1() const { return tab1; }
       ScoreTab* getTab2() const { return tab2; }
       QList<LanguageItem>& languages() { return _languages; }
