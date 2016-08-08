@@ -35,7 +35,6 @@
 #include "durationtype.h"
 #include "measure.h"
 #include "tempo.h"
-#include "sig.h"
 #include "repeatlist.h"
 #include "velo.h"
 #include "dynamic.h"
@@ -1527,74 +1526,28 @@ void Score::createPlayEvents()
 //   renderMetronome
 //---------------------------------------------------------
 
-int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn)
+void Score::renderMetronome(EventMap* events, Measure* m, int tickOffset)
       {
       int msrTick = m->tick();
-      qreal tempo       = tempomap()->tempo(msrTick);
-      const SigEvent sig = sigmap()->timesig(msrTick);
-      Fraction timeSig     = sigmap()->timesig(msrTick).nominal();
-      int msrTicks = sig.timesig().ticks();
-      int numerator   = timeSig.numerator();
-      int denominator = timeSig.denominator();
-      int clickTicks  = MScore::division * 4 / denominator;
-      bool triplets = false;
-      // COMPOUND METER: if time sig is 3*n/d, convert to 3d units
-      // note: 3/8, 3/16, ... are NOT considered compound
-      if (numerator > 3 && numerator % 3 == 0) {
-            // if denominator longer than 1/8 OR tempo for compound unit slower than 60MM
-            // (i.e. each denom. unit slower than 180MM = tempo 3.0)
-            // then do not count as compound, but beat click-clack-clack triplets
-            if (denominator < 8 || tempo * denominator / 4 < 3.0)
-                  triplets = true;
-            // otherwise, count as compound meter (one beat every 3 denominator units)
-            else {
-                  numerator   /= 3;
-                  clickTicks  *= 3;
-                  }
-            }
+      qreal tempo = tempomap()->tempo(msrTick);
+      TimeSigFrac timeSig = sigmap()->timesig(msrTick).nominal();
 
-      // NUMBER OF TICKS
-      int numOfClicks = numerator;                          // default to a full measure of 'clicks'
-      int lastPause   = clickTicks;                         // the number of ticks to wait after the last 'click'
-      int pickupClickOffset = 0;
 
-      if (countIn) {
-            // if not at the beginning of a measure, add clicks for the initial measure part
-            if (msrTick < playPos) {
-                  int delta    = playPos - msrTick;
-                  int addClick = (delta + clickTicks - 1) / clickTicks;     // round num. of clicks up
-                  numOfClicks += addClick;
-                  lastPause    = delta - (addClick - 1) * clickTicks;       // anything after last click time is final pause
-                  }
-            // or if measure not complete (anacrusis), add clicks for the missing measure part
-            else if (m->ticks() < clickTicks * numerator) {
-                  int delta    = clickTicks * numerator - m->ticks();
-                  int addClick = (delta + clickTicks - 1) / clickTicks;
-                  numOfClicks += addClick;
-                  lastPause    = delta - (addClick - 1) * clickTicks;
-                  }
-            }
-      else {
-            // compute pickup offset to avoid wrong tick sound
-            if (sig.nominal() != sig.timesig()) {
-                  numOfClicks = msrTicks / clickTicks;
-                  pickupClickOffset = numerator - numOfClicks;
-                  }
-            }
+      int clickTicks = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+      int endTick = m->endTick();
 
-      // click-clack-clack triplets
-      if (triplets)
-            numerator = 3;
-      int tick = 0;
-      NPlayEvent event;
-      for (int i = 0; i < numOfClicks; i++) {
-            tick = (countIn ? 0 : m->tick()) + i * clickTicks + tickOffset;
-            // do not add a tick if the clickticks is greater than the measure duration
-            // except in countIn
-            event.setType(((i + pickupClickOffset) % numerator) == 0 ? ME_TICK1 : ME_TICK2);
-            events->insert(std::pair<int,NPlayEvent>(tick, event));
+      int rtick;
+
+      if (m->isAnacrusis()) {
+            int rem = m->ticks() % clickTicks;
+            msrTick += rem;
+            rtick = rem + timeSig.ticksPerMeasure() - m->ticks();
             }
-      return tick + lastPause;
+      else
+            rtick = 0;
+
+      for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick+=clickTicks)
+            events->insert(std::pair<int,NPlayEvent>(tick + tickOffset, NPlayEvent(timeSig.rtick2beatType(rtick))));
       }
 
 //---------------------------------------------------------
@@ -1629,7 +1582,7 @@ void Score::renderMidi(EventMap* events)
             //    add metronome tick events
             //
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  renderMetronome(events, m, m->tick(), tickOffset, false);
+                  renderMetronome(events, m, tickOffset);
                   if (m->tick() + m->ticks() >= endTick)
                         break;
                   }
