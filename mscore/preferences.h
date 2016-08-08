@@ -93,6 +93,7 @@ struct Preferences {
       QColor dropColor;
       QColor pianoHlColor;
       bool enableMidiInput;
+      int realtimeDelay;
       bool playNotes;         // play notes on click
       bool playChordOnAddNote;
       bool showNavigator;
@@ -124,6 +125,7 @@ struct Preferences {
 
       bool useMidiRemote;
       MidiRemote midiRemote[MIDI_REMOTES];
+      bool advanceOnRelease;
 
       bool midiExpandRepeats;
       bool midiExportRPNs;
