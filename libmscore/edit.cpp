@@ -1167,7 +1167,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       if (_is.repitchMode()) {
             // move cursor to next note, but skip tied notes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
-            while (next && next->isChord())
+            while (next && !next->isChord())
                   next = nextChordRest(next);
             if (next)
                   _is.moveInputPos(next->segment());
@@ -1332,7 +1332,7 @@ void Score::repitchNote(const Position& p, bool replace)
             }
       if (cr->isRest()) { //skip rests
             ChordRest* next = nextChordRest(cr);
-            while(next && next->isChord())
+            while(next && !next->isChord())
                   next = nextChordRest(next);
             if (next)
                   _is.moveInputPos(next->segment());
@@ -1400,7 +1400,7 @@ void Score::repitchNote(const Position& p, bool replace)
       select(lastTiedNote);
       // move to next Chord
       ChordRest* next = nextChordRest(lastTiedNote->chord());
-      while (next && next->isChord())
+      while (next && !next->isChord())
             next = nextChordRest(next);
       if (next)
             _is.moveInputPos(next->segment());
@@ -1513,7 +1513,7 @@ void Score::cmdAddTie()
                         bool noteFound = false;
                         for (int track = strack; track < etrack; ++track) {
                               ChordRest* cr = toChordRest(seg->element(track));
-                              if (cr == 0 || cr->isChord())
+                              if (cr == 0 || !cr->isChord())
                                     continue;
                               int staffIdx = cr->staffIdx() + cr->staffMove();
                               if (staffIdx != chord->staffIdx() + chord->staffMove())
