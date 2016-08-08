@@ -250,6 +250,27 @@ void RangeAnnotation::rangePos(RangePos* rp)
       }
 
 //---------------------------------------------------------
+//   setBorderWidth
+//---------------------------------------------------------
+void RangeAnnotation::setBorderWidth(int v)
+      {
+      _borderWidth = v;
+      if (score())
+            score()->spannerMap().setDirty();
+      }
+
+//---------------------------------------------------------
+//   setOpacity
+//---------------------------------------------------------
+
+void RangeAnnotation::setOpacity(int v)
+      {
+      _opacity = v;
+      if (score())
+            score()->spannerMap().setDirty();
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

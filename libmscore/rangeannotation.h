@@ -52,14 +52,12 @@ class RangeAnnotationSegment : public SpannerSegment {
 
 class RangeAnnotation : public Spanner {
       Q_OBJECT
-     // Q_PROPERTY(int                      borderWidth          READ borderWidth)
-     // Q_PROPERTY(QColor                   color            READ color)
-     // Q_PROPERTY(int                      opacity          READ opacity)
+      Q_PROPERTY(int                      borderWidth      READ borderWidth  WRITE setBorderWidth)
+      Q_PROPERTY(int                      opacity          READ opacity      WRITE setOpacity)
 
       Score* _score;
-    //  int _borderWidth;
-    //  int _opacity;
-    //  QColor _color;
+      int _borderWidth;
+      int _opacity;
 
    public:
 
@@ -71,7 +69,10 @@ class RangeAnnotation : public Spanner {
       qreal firstNoteRestSegmentX(System* system);
       virtual RangeAnnotationSegment* layoutSystem(System* system);
       void rangePos(RangePos*);
-    //  QColor color() const     { return _color; }
+      int borderWidth()                { return _borderWidth; }
+      int opacity()                    { return _opacity;     }
+      void setBorderWidth(int v);
+      void setOpacity(int v);
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
