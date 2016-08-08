@@ -52,6 +52,7 @@ enum {
       RMIDI_TIE,
       RMIDI_UNDO,
       RMIDI_NOTE_EDIT_MODE,
+      RMIDI_REALTIME_ADVANCE,
       MIDI_REMOTES
       };
 
