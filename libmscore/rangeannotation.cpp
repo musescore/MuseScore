@@ -96,8 +96,6 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 
 void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
-      if (curColor() == Qt::black)
-            setColor(Qt::yellow);
       setPos(p1);
       int width = p2.x() - p1.x();
       QRectF rr = QRectF(-5, -10, width - 5, 40);
@@ -134,7 +132,7 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
             }
       rangeSegment->setSystem(system);
       rangeSegment->setSpanner(this);
-
+      rangeSegment->setColor(color());
 
       SpannerSegmentType sst;
       computeStartElement();
@@ -218,7 +216,7 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       if (selected())
             painter->fillRect(bbox(), Qt::lightGray);
       else
-            painter->fillRect(bbox(), curColor() );
+            painter->fillRect(bbox(), color() );
       painter->setOpacity(1.0);
       painter->drawRect(bbox());
       }
