@@ -391,7 +391,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Z</string>
+        <string>Stacking order</string>
        </property>
       </widget>
      </item>
@@ -417,7 +417,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Visible' value</string>
+        <string>Reset 'Stacking order' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
