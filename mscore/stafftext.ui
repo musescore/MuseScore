@@ -1967,101 +1967,6 @@ altera</string>
             <property name="frameShadow">
              <enum>QFrame::Sunken</enum>
             </property>
-            <widget class="QWidget" name="layoutWidget_2">
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>30</y>
-               <width>804</width>
-               <height>51</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <widget class="QLabel" name="label_6">
-                <property name="font">
-                 <font>
-                  <family>DejaVu Serif</family>
-                  <pointsize>12</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>III</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_20">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>DejaVu Serif</family>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Principal
-8</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-                <property name="flat">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_21">
-                <property name="text">
-                 <string>Gemshorn
-8</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_22">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_23">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_24">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_25">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_26">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
            </widget>
           </item>
           <item>
@@ -4275,13 +4180,6 @@ VI</string>
   <tabstop>stop_1_5</tabstop>
   <tabstop>stop_1_6</tabstop>
   <tabstop>stop_1_7</tabstop>
-  <tabstop>pushButton_20</tabstop>
-  <tabstop>pushButton_21</tabstop>
-  <tabstop>pushButton_22</tabstop>
-  <tabstop>pushButton_23</tabstop>
-  <tabstop>pushButton_24</tabstop>
-  <tabstop>pushButton_25</tabstop>
-  <tabstop>pushButton_26</tabstop>
   <tabstop>stop_1_8</tabstop>
   <tabstop>stop_1_9</tabstop>
   <tabstop>stop_1_10</tabstop>

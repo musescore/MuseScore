@@ -3271,7 +3271,7 @@
             </Instrument>
             <Instrument id="tenor-trumpet">
                   <longName>Tenor Trumpet</longName>
-                  <shortName>Tnr. Tpt.</shortName>
+                  <shortName>T. Tpt.</shortName>
                   <description>Tenor Trumpet (included for MusicXML 3 compatibility no
                         range information available)</description>
                   <musicXMLid>brass.trumpet.tenor</musicXMLid>
@@ -9736,7 +9736,7 @@
             </Instrument>
             <Instrument id="treble-viol">
                   <longName>Treble Viol</longName>
-                  <shortName>Tr. vl.</shortName>
+                  <shortName>Tr. Vl.</shortName>
                   <description>Treble Viol</description>
                   <musicXMLid>strings.viol.treble</musicXMLid>
                   <StringData>

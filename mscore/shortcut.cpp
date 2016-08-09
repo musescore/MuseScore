@@ -32,9 +32,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "local-help",
-         QT_TRANSLATE_NOOP("action","Local Handbook..."),  // Appears in menu
-         QT_TRANSLATE_NOOP("action","Local handbook"),     // Appears in Edit > Preferences > Shortcuts
-         QT_TRANSLATE_NOOP("action","Show local handbook"), // Appears if you use Help > What's This?
+         QT_TRANSLATE_NOOP("action","Online Handbook..."),  // Appears in menu
+         QT_TRANSLATE_NOOP("action","Online handbook"),     // Appears in Edit > Preferences > Shortcuts
+         QT_TRANSLATE_NOOP("action","Show online handbook"), // Appears if you use Help > What's This?
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut,
          ShortcutFlags::NONE | ShortcutFlags::A_CHECKABLE
@@ -2646,7 +2646,7 @@ Shortcut Shortcut::_sc[] = {
          "loop",
          QT_TRANSLATE_NOOP("action","Loop"),
          QT_TRANSLATE_NOOP("action","Toggle loop playback"),
-         QT_TRANSLATE_NOOP("action","Loop playback"),
+         QT_TRANSLATE_NOOP("action","Toggle loop playback"),
          Icons::loop_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
