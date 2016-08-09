@@ -2084,6 +2084,7 @@ void Score::deleteItem(Element* el)
             case Element::Type::TEXTLINE_SEGMENT:
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
+            case Element::Type::RANGEANNOTATION_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
 //            case Element::Type::LYRICSLINE_SEGMENT:
             case Element::Type::GLISSANDO_SEGMENT:
