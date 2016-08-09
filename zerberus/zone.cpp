@@ -35,7 +35,7 @@ Zone::Zone()
 
 Zone::~Zone()
       {
-      delete sample;
+      //delete sample;
       }
 
 //---------------------------------------------------------

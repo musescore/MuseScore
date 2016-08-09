@@ -104,13 +104,13 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       _channel  = c;
       _key      = key;
       _velocity = v;
-      Sample* s = z->sample;
+      Sample* s = z->sampleloop.sample;
       audioChan = s->channel();
       data      = s->data() + z->offset * audioChan;
       eidx      = s->frames() * audioChan;
-      _loopMode = z->loopMode;
-      _loopStart = z->loopStart;
-      _loopEnd   = z->loopEnd;
+      _loopMode = z->sampleloop.loopmode;
+      _loopStart = z->sampleloop.loopStart;
+      _loopEnd   = z->sampleloop.loopEnd;
       _samplesSinceStart = 0;
 
       _offMode  = z->offMode;
@@ -186,7 +186,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
       if (trigger == Trigger::RELEASE || trigger == Trigger::CC) {
             // Sample is played on noteoff. We need to stop the voice when it's done. Set the sustain duration accordingly.
-            double sampleDur = ((z->sample->frames()/z->sample->channel()) / z->sample->sampleRate()) * 1000; // in ms
+            double sampleDur = ((s->frames()/s->channel()) / s->sampleRate()) * 1000; // in ms
             double scaledSampleDur = sampleDur / (phaseIncr.data / 256.0);
             double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease);
             envelopes[V1Envelopes::SUSTAIN].setTime(sustainDur, _zerberus->sampleRate());

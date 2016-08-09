@@ -53,12 +53,10 @@ class ZInstrument {
       QString path() const                  { return instrumentPath; }
       const std::list<Zone*>& zones() const { return _zones;  }
       std::list<Zone*>& zones()             { return _zones;  }
-      Sample* readSample(const QString& s, MQZipReader* uz);
       void addZone(Zone* z)                 { _zones.push_back(z); }
       void addRegion(SfzRegion&);
       int getSetCC(int v)                   { return _setcc[v]; }
 
-      static QByteArray buf;  // used during read of Sample
       static int idx;
       };
 

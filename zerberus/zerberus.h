@@ -21,6 +21,7 @@
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/event.h"
 #include "voice.h"
+#include "samplepool.h"
 
 class Channel;
 class ZInstrument;
@@ -91,6 +92,7 @@ class Zerberus : public Ms::Synthesizer {
    public:
       Zerberus();
       ~Zerberus();
+      SamplePool samplepool;
 
       virtual void process(unsigned frames, float*, float*, float*);
       virtual void play(const Ms::PlayEvent& event);

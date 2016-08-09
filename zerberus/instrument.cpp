@@ -24,7 +24,6 @@
 #include "zone.h"
 #include "sample.h"
 
-QByteArray ZInstrument::buf;
 int ZInstrument::idx;
 
 //---------------------------------------------------------
@@ -34,59 +33,6 @@ int ZInstrument::idx;
 Sample::~Sample()
       {
       delete[] _data;
-      }
-
-//---------------------------------------------------------
-//   readSample
-//---------------------------------------------------------
-
-Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
-      {
-      if (uz) {
-            QList<MQZipReader::FileInfo> fi = uz->fileInfoList();
-
-            buf = uz->fileData(s);
-            if (buf.isEmpty()) {
-                  printf("Sample::read: cannot read sample data <%s>\n", qPrintable(s));
-                  return 0;
-                  }
-            }
-      else {
-            QFile f(s);
-            if (!f.open(QIODevice::ReadOnly)) {
-                  printf("Sample::read: open <%s> failed\n", qPrintable(s));
-                  return 0;
-                  }
-            buf = f.readAll();
-            }
-
-      AudioFile a;
-      if (!a.open(buf)) {
-            printf("open <%s> failed: %s\n", qPrintable(s), a.error());
-            return 0;
-            }
-
-      int channel = a.channels();
-      int frames  = a.frames();
-      int sr      = a.samplerate();
-
-      short* data = new short[(frames + 3) * channel];
-      Sample* sa  = new Sample(channel, data, frames, sr);
-      sa->setLoopStart(a.loopStart());
-      sa->setLoopEnd(a.loopEnd());
-      sa->setLoopMode(a.loopMode());
-
-      if (frames != a.read(data + channel, frames)) {
-            qDebug("Sample read failed: %s\n", a.error());
-            delete sa;
-            sa = 0;
-            }
-      for (int i = 0; i < channel; ++i) {
-            data[i]                        = data[channel + i];
-            data[(frames-1) * channel + i] = data[(frames-3) * channel + i];
-            data[(frames-2) * channel + i] = data[(frames-3) * channel + i];
-            }
-      return sa;
       }
 
 //---------------------------------------------------------

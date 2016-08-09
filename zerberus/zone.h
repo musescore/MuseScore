@@ -13,6 +13,8 @@
 #ifndef __ZONE_H__
 #define __ZONE_H__
 
+#include "samplepool.h"
+
 class Sample;
 class Channel;
 
@@ -45,7 +47,7 @@ enum class OffMode : char {
 //---------------------------------------------------------
 
 struct Zone {
-      Sample* sample = 0;
+      SampleLoop sampleloop;
       int  offset  = 0;
       int  seq     = 0;
       int seqLen   = 0;
@@ -78,11 +80,9 @@ struct Zone {
       float rtDecay = 0.0;
 
       Trigger trigger = Trigger::ATTACK;
-      LoopMode loopMode = LoopMode::NO_LOOP;
       OffMode offMode = OffMode::FAST;
       int group = 0;
       int offBy = 0;
-      int loopStart, loopEnd;
       double loRand = 0.0;
       double hiRand = 1.0;
 

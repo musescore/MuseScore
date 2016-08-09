@@ -185,7 +185,7 @@ void SfzRegion::setZone(Zone* z) const
       z->seqLen       = seq_length - 1;
       z->seq          = 0;
       z->trigger      = trigger;
-      z->loopMode     = loop_mode;
+      z->sampleloop.loopmode = loop_mode;
       z->tune         = tune + transpose * 100;
       z->pitchKeytrack = pitch_keytrack / (double) 100.0;
       z->rtDecay      = rt_decay;
@@ -201,8 +201,8 @@ void SfzRegion::setZone(Zone* z) const
       z->loRand       = lorand;
       z->hiRand       = hirand;
       z->group        = group;
-      z->loopEnd      = loopEnd;
-      z->loopStart    = loopStart;
+      z->sampleloop.loopEnd      = loopEnd;
+      z->sampleloop.loopStart    = loopStart;
       z->gainOnCC     = gain_oncc;
       }
 
@@ -264,17 +264,16 @@ void ZInstrument::addRegion(SfzRegion& r)
                   }
             }
       Zone* z = new Zone;
-      z->sample = readSample(r.sample, 0);
-      if (z->sample) {
-            qDebug("Sample Loop - start %d, end %d, mode %d", z->sample->loopStart(), z->sample->loopEnd(), z->sample->loopMode());
+      z->sampleloop.sample = zerberus->samplepool.getSamplePointer(r.sample);
+      if (z->sampleloop.sample) {
             // if there is no opcode defining loop ranges, use sample definitions as fallback (according to spec)
             if (r.loopStart == -1)
-                  r.loopStart = z->sample->loopStart();
+                  r.loopStart = z->sampleloop.sample->loopStart();
             if (r.loopEnd == -1)
-                  r.loopEnd = z->sample->loopEnd();
+                  r.loopEnd = z->sampleloop.sample->loopEnd();
             }
       r.setZone(z);
-      if (z->sample)
+      if (z->sampleloop.sample)
             addZone(z);
       }
 
