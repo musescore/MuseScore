@@ -24,7 +24,11 @@
 #include "config.h"
 #include "mididriver.h"
 
-#include "portmidi/pm_common/portmidi.h"
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+  #include "portmidi/pm_common/portmidi.h"
+#else
+  #include <portmidi.h>
+#endif
 
 namespace Ms {
 
