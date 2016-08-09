@@ -218,7 +218,7 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       else
             painter->fillRect(bbox(), color() );
       painter->setOpacity(1.0);
-      painter->drawRect(bbox());
+     // painter->drawRect(bbox());
       }
 
 //---------------------------------------------------------
@@ -248,7 +248,7 @@ void RangeAnnotation::rangePos(RangePos* rp)
       if (flag)
             rp->p2.setX(rp->p2.x() + 5);
       }
-
+/*
 //---------------------------------------------------------
 //   setBorderWidth
 //---------------------------------------------------------
@@ -269,7 +269,7 @@ void RangeAnnotation::setOpacity(int v)
       if (score())
             score()->spannerMap().setDirty();
       }
-
+*/
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -320,5 +320,89 @@ void RangeAnnotation::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void RangeAnnotation::writeProperties(Xml& xml) const
+      {
+      writeProperty(xml, P_ID::LINE_WIDTH);
+      writeProperty(xml, P_ID::LEFT_MARGIN);
+      writeProperty(xml, P_ID::RIGHT_MARGIN);
+      writeProperty(xml, P_ID::TOP_MARGIN);
+      writeProperty(xml, P_ID::BOTTOM_MARGIN);
+
+      Element::writeProperties(xml);
+      }
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant RangeAnnotation::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_ID::LINE_WIDTH:
+                  return _borderWidth;
+            case P_ID::LEFT_MARGIN:
+                  return _leftMargin;
+            case P_ID::RIGHT_MARGIN:
+                  return _rightMargin;
+            case P_ID::TOP_MARGIN:
+                  return _topMargin;
+            case P_ID::BOTTOM_MARGIN:
+                  return _bottomMargin;
+            default:
+                  return Spanner::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool RangeAnnotation::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      score()->addRefresh(canvasBoundingRect());
+      switch(propertyId) {
+            case P_ID::LINE_WIDTH:
+                  _borderWidth = v.value<Spatium>();
+                  break;
+            case P_ID::LEFT_MARGIN:
+                  _leftMargin = v.toDouble();
+                  break;
+            case P_ID::RIGHT_MARGIN:
+                  _rightMargin = v.toDouble();
+                  break;
+            case P_ID::TOP_MARGIN:
+                  _topMargin = v.toDouble();
+                  break;
+            case P_ID::BOTTOM_MARGIN:
+                  _bottomMargin = v.toDouble();
+                  break;
+            default:
+                  return Spanner::setProperty(propertyId, v);
+            }
+      score()->setLayoutAll();
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant RangeAnnotation::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_ID::LINE_WIDTH:
+                  return Spatium(0.0);
+            case P_ID::LEFT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
+            case P_ID::TOP_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
+                  return 0.0;
+            default:
+                  return Spanner::propertyDefault(id);
+            }
+      }
 }
 
