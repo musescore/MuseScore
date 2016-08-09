@@ -824,7 +824,9 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
 
             case Element::Type::BAR_LINE:
-                  if (data.control()) {
+                  if (data.control())
+                        score()->splitMeasure(this);
+                  else {
                         BarLine* bl = toBarLine(e);
                         bl->setTrack(staffIdx() * VOICES);
                         bl->setGenerated(false);
@@ -848,8 +850,6 @@ Element* ChordRest::drop(const DropData& data)
                               score->undoAddElement(l);
                               }
                         }
-                  else
-                        score()->splitMeasure(this);
                   delete e;
                   return 0;
 

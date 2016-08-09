@@ -139,15 +139,18 @@ void ScoreView::doDragElement(QMouseEvent* ev)
 
 void ScoreView::endDrag()
       {
-      if (dragElement->type() == Element::Type::MEASURE) {
+      if (dragElement->isMeasure()) {
             qreal userDist = dragStaff->userDist();
             dragStaff->setUserDist(staffUserDist);
             score()->undo(new ChangeStaffUserDist(dragStaff, userDist));
             }
       else {
-            foreach(Element* e, _score->selection().elements()) {
+            foreach (Element* e, _score->selection().elements()) {
                   e->endDrag();
-                  e->score()->undoPropertyChanged(e, P_ID::USER_OFF, e->startDragPosition());
+                  if (e->userOff() != e->startDragPosition()) {
+                        e->undoChangeProperty(P_ID::AUTOPLACE, false);
+                        e->score()->undoPropertyChanged(e, P_ID::USER_OFF, e->startDragPosition());
+                        }
                   }
             }
       _score->setLayoutAll();
