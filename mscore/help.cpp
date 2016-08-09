@@ -153,7 +153,7 @@ void MuseScore::showHelp(const QUrl& url)
       if (!_helpEngine)
             return;
 
-      QAction* a = getAction("local-help");
+      QAction* a = getAction("help");
       a->blockSignals(true);
       a->setChecked(true);
       a->blockSignals(false);

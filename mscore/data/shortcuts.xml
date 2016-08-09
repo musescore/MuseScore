@@ -5,7 +5,7 @@
     <seq>Ctrl+Shift+P</seq>
     </SC>
   <SC>
-    <key>local-help</key>
+    <key>help</key>
     <seq>F1</seq>
     </SC>
   <SC>

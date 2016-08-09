@@ -1185,7 +1185,7 @@ MuseScore::MuseScore()
             connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
             }
 #endif
-      //menuHelp->addAction(getAction("local-help"));
+      //menuHelp->addAction(getAction("help"));
       onlineHandbookAction = menuHelp->addAction("", this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
@@ -4709,7 +4709,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 //            transportTools->setVisible(!transportTools->isVisible());
 //      else if (cmd == "toggle-noteinput")
 //            entryTools->setVisible(!entryTools->isVisible());
-      else if (cmd == "local-help")
+      else if (cmd == "help")
             showContextHelp();
       else if (cmd == "follow")
             preferences.followSong = a->isChecked();
