@@ -287,7 +287,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::staccatissimoAnchor,             "staccatissimoAnchor",             int(ArticulationAnchor::CHORD) },
       { StyleIdx::tenutoAnchor,                    "tenutoAnchor",                    int(ArticulationAnchor::CHORD) },
       { StyleIdx::portatoAnchor,                   "portatoAnchor",                   int(ArticulationAnchor::CHORD) },
-      { StyleIdx::marcatoAnchor,                   "marcatoAnchor",                   int(ArticulationAnchor::CHORD) },
+      { StyleIdx::marcatoAnchor,                   "marcatoAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::fadeinAnchor,                    "fadeinAnchor",                    int(ArticulationAnchor::CHORD) },
       { StyleIdx::fadeoutAnchor,                   "fadeoutAnchor",                   int(ArticulationAnchor::CHORD) },
       { StyleIdx::volumeswellAnchor,               "volumeswellAnchor",               int(ArticulationAnchor::CHORD) },
