@@ -115,7 +115,7 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
       connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
       connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
-      addAction(getAction("local-help"));  // why is this needed?
+      addAction(getAction("help"));  // why is this needed?
       }
 
 //---------------------------------------------------------
