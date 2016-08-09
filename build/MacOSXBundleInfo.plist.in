@@ -312,7 +312,7 @@
 			<string>Viewer</string>
 		</dict>
 	</array>
-    
+
     <key>ATSApplicationFontsPath</key>
     <string>fonts</string>
 
@@ -340,6 +340,8 @@
 	<true/>
 	<key>LSRequiresCarbon</key>
 	<true/>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.7.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>ATSApplicationFontsPath</key>
