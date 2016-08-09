@@ -2332,8 +2332,15 @@ void Score::cmd(const QAction* a)
       else if (cmd == "time-delete") {
             if (selection().state() == SelState::RANGE)
                   cmdDeleteSelectedMeasures();
-            else
-                  cmdTimeDelete();
+            else {
+                  Element* e = selection().element();
+                  if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
+                        Measure* m = toBarLine(e)->segment()->measure();
+                        cmdJoinMeasure(m, m->nextMeasure());
+                        }
+                  else
+                        cmdTimeDelete();
+                  }
             }
       else if (cmd == "pitch-up-octave") {
             if (el && (el->isArticulation() || el->isText()))

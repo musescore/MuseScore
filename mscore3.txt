@@ -69,13 +69,12 @@ Timewise insert/delete notes/rests
         Extend this to selection ranges.
 
       - drop barline
-        Splits the current measure at the new barline. In 2.0 this inserted a barline
-        in the current measure.
+        This inserts a barline into the current measure or changes the current barline.
 
       - ctrl + drop barline
-        This inserts a barline into the current measure (2.0 behaviour of dropping a barline)
+        Splits the current measure at the new barline.
 
-      - delete barline
+      - ctrl + delete barline
         This joins the current measure with the next measure.
 
       - show irregular measures

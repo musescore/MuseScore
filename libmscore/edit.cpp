@@ -1969,9 +1969,6 @@ void Score::deleteItem(Element* el)
                   if (segType & (Segment::Type::BeginBarLine | Segment::Type::BarLine))
                         undoRemoveElement(el);
                   else if (segType == Segment::Type::EndBarLine) {
-                        endCmd();
-                        cmdJoinMeasure(m, m->nextMeasure());
-#if 0
                         m->undoResetProperty(P_ID::REPEAT_END);
                         Measure* nm = m->nextMeasure();
                         if (nm && m->system() == nm->system())
@@ -1986,7 +1983,6 @@ void Score::deleteItem(Element* el)
                               b->undoResetProperty(P_ID::BARLINE_SPAN_FROM);
                               b->undoResetProperty(P_ID::BARLINE_SPAN_TO);
                               }
-#endif
                         }
                   else if (segType == Segment::Type::StartRepeatBarLine)
                         m->undoChangeProperty(P_ID::REPEAT_START, false);
@@ -2415,7 +2411,6 @@ void Score::cmdDeleteSelection()
             // keep track of linked elements that are deleted implicitly
             // so we don't try to delete them twice if they are also in selection
             QList<ScoreElement*> deletedElements;
-
 
             for (Element* e : el) {
                   // these are the linked elements we are about to delete
