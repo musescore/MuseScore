@@ -245,14 +245,14 @@ void RangeAnnotation::rangePos(RangePos* rp)
 
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
-      qreal h1 = rp->system1->staff(track())->y();
-      qreal h2 = rp->system2->staff(track2())->y();
-      int h3 = 50 * track();
-      int h4 = 50 * track2();
-      int h5 = rp->system1->staffYpage(track());
-      int h6 = rp->system2->staffYpage(track2());
-      rp->p1.setY(rp->p1.y() + h3);
-      rp->p2.setY(rp->p2.y() + h4);
+      qreal h1 = rp->system1->staff(staffStart())->y();
+      qreal h2 = rp->system2->staff(staffEnd())->y();
+      qreal h3 = 50.0 * track();
+      qreal h4 = 50.0 * track2();
+      qreal h5 = rp->system1->staffYpage(staffStart());
+      qreal h6 = rp->system2->staffYpage(staffEnd());
+      rp->p1.setY(rp->p1.y() + h1);
+      rp->p2.setY(rp->p2.y() + h2);
 
       if (flag)
             rp->p2.setX(rp->p2.x() + 5);

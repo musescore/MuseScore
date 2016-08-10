@@ -54,6 +54,8 @@ class RangeAnnotation : public Spanner {
       Q_PROPERTY(int                      opacity          READ opacity)
       Score* _score;
       int _opacity;
+      int _staffStart;
+      int _staffEnd;
       Spatium _borderWidth  { Spatium(0) };
       qreal _leftMargin { 0.0 }, _rightMargin { 0.0 };
       qreal _topMargin  { 0.0 }, _bottomMargin { 0.0 };
@@ -64,7 +66,11 @@ class RangeAnnotation : public Spanner {
       virtual RangeAnnotation* clone() const override         { return new RangeAnnotation(*this); }
       virtual Element::Type type() const                 { return Element::Type::RANGEANNOTATION; }
 
-      Score* score() const             { return _score; }
+      Score* score() const                { return _score; }
+      void setStaffStart(int v)           { _staffStart = v; }
+      void setStaffEnd(int v)             { _staffEnd = v; }
+      int staffStart()                    { return _staffStart; }
+      int staffEnd()                      { return _staffEnd;   }
       qreal firstNoteRestSegmentX(System* system);
       virtual RangeAnnotationSegment* layoutSystem(System* system);
       void rangePos(RangePos*);
