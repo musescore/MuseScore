@@ -47,9 +47,8 @@ void TextAnnotation::write(Xml& xml) const
       {
      if (!xml.canWrite(this))
             return;
-      xml.stag("Annotation");
+      xml.stag("TextAnnotation");
       xml.tag("textAnchorType", int(_anchorType));
-      qDebug() << "Inside write, xml text is" << plainText();
       xml.tag("textVal",xmlText());
       Text::writeProperties(xml);
       xml.etag();

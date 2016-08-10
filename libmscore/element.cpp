@@ -135,9 +135,14 @@ static const ElementName elementNames[] = {
       ElementName("InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change")),
       ElementName("Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol")),
       ElementName("FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram")),
+      ElementName("TextAnnotation",                 QT_TRANSLATE_NOOP("elementName", "TextAnnotation")),
+
       ElementName("Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend")),
       ElementName("TremoloBar",           QT_TRANSLATE_NOOP("elementName", "Tremolo Bar")),
       ElementName("Volta",                QT_TRANSLATE_NOOP("elementName", "Volta")),
+      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
+      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
+
       ElementName("HairpinSegment",       QT_TRANSLATE_NOOP("elementName", "Hairpin Segment")),
       ElementName("OttavaSegment",        QT_TRANSLATE_NOOP("elementName", "Ottava Segment")),
       ElementName("TrillSegment",         QT_TRANSLATE_NOOP("elementName", "Trill Segment")),
@@ -150,8 +155,6 @@ static const ElementName elementNames[] = {
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
       ElementName("LedgerLine",           QT_TRANSLATE_NOOP("elementName", "Ledger Line")),
-      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
-      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
       ElementName("NoteHead",             QT_TRANSLATE_NOOP("elementName", "Notehead")),
       ElementName("NoteDot",              QT_TRANSLATE_NOOP("elementName", "Note Dot")),
       ElementName("Tremolo",              QT_TRANSLATE_NOOP("elementName", "Tremolo")),
@@ -180,6 +183,7 @@ static const ElementName elementNames[] = {
       ElementName("ElementList",          QT_TRANSLATE_NOOP("elementName", "Element List")),
       ElementName("StaffList",            QT_TRANSLATE_NOOP("elementName", "Staff List")),
       ElementName("MeasureList",          QT_TRANSLATE_NOOP("elementName", "Measure List")),
+
       ElementName("HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal Frame")),
       ElementName("VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame")),
       ElementName("TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame")),
@@ -1287,6 +1291,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::BAR_LINE:          return new BarLine(score);
             case Element::Type::SYSTEM_DIVIDER:    return new SystemDivider(score);
             case Element::Type::ARPEGGIO:          return new Arpeggio(score);
+            case Element::Type::TEXT_ANNOTATION:   return new TextAnnotation(score);
             case Element::Type::RANGEANNOTATION:   return new RangeAnnotation(score);
             case Element::Type::BREATH:            return new Breath(score);
             case Element::Type::GLISSANDO:         return new Glissando(score);

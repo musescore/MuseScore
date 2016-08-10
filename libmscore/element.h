@@ -40,7 +40,6 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
-class Annotation;
 class BarLine;
 class Articulation;
 class Marker;
@@ -85,6 +84,7 @@ class Ambitus;
 class Bracket;
 class InstrumentChange;
 class Text;
+class TextAnnotation;
 class Hairpin;
 class HairpinSegment;
 class Bend;
@@ -276,10 +276,13 @@ class Element : public QObject, public ScoreElement {
             INSTRUMENT_CHANGE,
             HARMONY,
             FRET_DIAGRAM,
+            TEXT_ANNOTATION,
 
             BEND,
             TREMOLOBAR,
             VOLTA,
+            RANGEANNOTATION,
+            RANGEANNOTATION_SEGMENT,
             HAIRPIN_SEGMENT,
             OTTAVA_SEGMENT,
             TRILL_SEGMENT,
@@ -293,8 +296,6 @@ class Element : public QObject, public ScoreElement {
             SPACER,
             STAFF_STATE,
             LEDGER_LINE,
-            RANGEANNOTATION,
-            RANGEANNOTATION_SEGMENT,
             NOTEHEAD,
             NOTEDOT,
             TREMOLO,
@@ -324,6 +325,8 @@ class Element : public QObject, public ScoreElement {
             ELEMENT_LIST,
             STAFF_LIST,
             MEASURE_LIST,
+
+
             HBOX,
             VBOX,
             TBOX,
