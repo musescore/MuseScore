@@ -24,6 +24,7 @@ add_library (zerberus STATIC
       zone.cpp
       zerberusgui.cpp
       samplepool.cpp
+      sample.cpp
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${INCS}

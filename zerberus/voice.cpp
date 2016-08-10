@@ -104,14 +104,15 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       _channel  = c;
       _key      = key;
       _velocity = v;
-      Sample* s = z->sampleloop.sample;
-      audioChan = s->channel();
-      data      = s->data() + z->offset * audioChan;
-      eidx      = s->frames() * audioChan;
+      _sample = z->sampleloop.sample;
+      audioChan = _sample->channel();
+      //data      = s->data() + z->offset * audioChan;
+      eidx      = _sample->frames() * audioChan;
       _loopMode = z->sampleloop.loopmode;
       _loopStart = z->sampleloop.loopStart;
       _loopEnd   = z->sampleloop.loopEnd;
       _samplesSinceStart = 0;
+      sampleStream = _zerberus->samplepool.getSampleStream(this);
 
       _offMode  = z->offMode;
       _offBy    = z->offBy;
@@ -138,7 +139,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
                     * .005 * c->gain() * rt_decay_value;
 
       phase.set(0);
-      float sr = float(s->sampleRate()) / _zerberus->sampleRate();
+      float sr = float(_sample->sampleRate()) / _zerberus->sampleRate();
       double targetcents = ((((key - z->keyBase) * z->pitchKeytrack) + z->keyBase) * 100.0) + z->tune;
       if (trigger == Trigger::CC)
             targetcents = z->keyBase * 100;
@@ -186,7 +187,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
       if (trigger == Trigger::RELEASE || trigger == Trigger::CC) {
             // Sample is played on noteoff. We need to stop the voice when it's done. Set the sustain duration accordingly.
-            double sampleDur = ((s->frames()/s->channel()) / s->sampleRate()) * 1000; // in ms
+            double sampleDur = ((_sample->frames()/_sample->channel()) / _sample->sampleRate()) * 1000; // in ms
             double scaledSampleDur = sampleDur / (phaseIncr.data / 256.0);
             double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease);
             envelopes[V1Envelopes::SUSTAIN].setTime(sustainDur, _zerberus->sampleRate());
@@ -328,7 +329,7 @@ void Voice::process(int frames, float* p)
       if (audioChan == 1) {
             while (frames--) {
 
-                  updateLoop();
+                  sampleStream->updateLoop();
 
                   int idx = phase.index();
 
@@ -338,10 +339,10 @@ void Voice::process(int frames, float* p)
                         }
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f;
-                  f =  (coeffs[0] * getData(idx-1)
-                      + coeffs[1] * getData(idx+0)
-                      + coeffs[2] * getData(idx+1)
-                      + coeffs[3] * getData(idx+2)) * gain
+                  f =  (coeffs[0] * sampleStream->getData(idx-1)
+                      + coeffs[1] * sampleStream->getData(idx+0)
+                      + coeffs[2] * sampleStream->getData(idx+1)
+                      + coeffs[3] * sampleStream->getData(idx+2)) * gain
                       - a1 * hist1l
                       - a2 * hist2l;
                   float v = b02 * (f + hist2l) + b1 * hist1l;
@@ -373,7 +374,7 @@ void Voice::process(int frames, float* p)
             //
             while (frames--) {
 
-                  updateLoop();
+                  sampleStream->updateLoop();
 
                   int idx = phase.index() * 2;
                   if (idx >= eidx) {
@@ -385,16 +386,16 @@ void Voice::process(int frames, float* p)
                   const float* coeffs = interpCoeff[phase.fract()];
                   float f1, f2;
 
-                  f1 = (coeffs[0] * getData(idx-2)
-                      + coeffs[1] * getData(idx)
-                      + coeffs[2] * getData(idx+2)
-                      + coeffs[3] * getData(idx+4))
+                  f1 = (coeffs[0] * sampleStream->getData(idx-2)
+                      + coeffs[1] * sampleStream->getData(idx)
+                      + coeffs[2] * sampleStream->getData(idx+2)
+                      + coeffs[3] * sampleStream->getData(idx+4))
                       * gain * _channel->panLeftGain() * z->ccGain;
 
-                  f2 = (coeffs[0] * getData(idx-1)
-                      + coeffs[1] * getData(idx+1)
-                      + coeffs[2] * getData(idx+3)
-                      + coeffs[3] * getData(idx+5))
+                  f2 = (coeffs[0] * sampleStream->getData(idx-1)
+                      + coeffs[1] * sampleStream->getData(idx+1)
+                      + coeffs[2] * sampleStream->getData(idx+3)
+                      + coeffs[3] * sampleStream->getData(idx+5))
                       * gain * _channel->panRightGain() * z->ccGain;
 
                   updateEnvelopes();
@@ -428,46 +429,6 @@ void Voice::process(int frames, float* p)
                   _samplesSinceStart++;
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   updateLoop
-//---------------------------------------------------------
-
-void Voice::updateLoop()
-      {
-      int idx = phase.index();
-      int loopOffset = (audioChan * 3) - 1; // offset due to interpolation
-      bool validLoop = _loopEnd > 0 && _loopStart >= 0 && (_loopEnd <= (eidx/audioChan));
-      bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state < VoiceState::STOP));
-
-      if (!(validLoop && shallLoop)) {
-            _looping = false;
-            return;
-            }
-
-      if (idx + loopOffset > _loopEnd)
-            _looping = true;
-      if (idx > _loopEnd)
-            phase.setIndex(_loopStart+(idx-_loopEnd-1));
-      }
-
-short Voice::getData(int pos) {
-      if (pos < 0 && !_looping)
-            return 0;
-
-      if (!_looping)
-            return data[pos];
-
-      int loopEnd = _loopEnd * audioChan;
-      int loopStart = _loopStart * audioChan;
-
-      if (pos < loopStart)
-            return data[loopEnd + (pos - loopStart) + audioChan];
-      else if (pos > (loopEnd + audioChan - 1))
-            return data[loopStart + (pos - loopEnd) - audioChan];
-      else
-            return data[pos];
       }
 
 //---------------------------------------------------------

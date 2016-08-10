@@ -68,6 +68,19 @@ bool AudioFile::open(const QByteArray& b)
       }
 
 //---------------------------------------------------------
+//   open
+//---------------------------------------------------------
+
+bool AudioFile::open(const QString filename)
+      {
+      idx = 0;
+      sf  = sf_open(filename.toLocal8Bit() , SFM_READ, &info);
+      hasInstrument = sf_command(sf, SFC_GET_INSTRUMENT, &inst, sizeof(inst)) == SF_TRUE;
+
+      return sf != 0;
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 

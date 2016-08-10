@@ -32,6 +32,7 @@ class AudioFile {
       ~AudioFile();
 
       bool open(const QByteArray&);
+      bool open(const QString filename);
       const char* error() const     { return sf_strerror(sf); }
       int read(short*, int);
 

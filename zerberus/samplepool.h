@@ -18,6 +18,8 @@
 #define STREAM_BUFFER_SIZE 1024
 
 enum class LoopMode : char;
+class Voice;
+class SamplePool;
 
 struct SampleLoop
       {
@@ -27,28 +29,37 @@ struct SampleLoop
       LoopMode loopmode;
       };
 
-struct SampleStream
+class SampleStream
       {
-      SampleLoop* sampleLoop;
-      float buffer[STREAM_BUFFER_SIZE];
+      SamplePool* samplePool;
+      short *buffer;
+      bool streaming;
       unsigned int readPos = 0;
       unsigned int writePos = 0;
-      unsigned int fileReadPos = 0;
-      bool looping = false;
+      sf_count_t fileReadPos;
+      Voice* voice;
+      SF_INFO info;
+      SNDFILE *sf;
+
+public:
+      SampleStream(Voice *v, SamplePool* sp);
+      ~SampleStream();
+      void updateLoop();
+      short getData(int pos);
       };
 
 class SamplePool
       {
       std::map<QString, Sample*> filename2sample;
       std::vector<SampleStream *> streams;
-      bool streaming;
+      bool _streaming = false;
 
-      static QByteArray buf;  // used during read of Sample
 public:
       SamplePool();
       void fillSteamBuffers();
+      bool streaming() { return _streaming; }
       Sample* getSamplePointer(QString filename);
-      SampleStream* getSampleStream(QString filename);
+      SampleStream* getSampleStream(Voice* v);
       };
 
 #endif // SAMPLEPOOL_H

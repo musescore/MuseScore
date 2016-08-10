@@ -20,6 +20,7 @@ class Channel;
 struct Zone;
 class Sample;
 class Zerberus;
+class SampleStream;
 
 enum class LoopMode : char;
 enum class OffMode : char;
@@ -111,6 +112,7 @@ enum V1Envelopes : int {
 //---------------------------------------------------------
 
 class Voice {
+      friend class SampleStream;
       Voice* _next;
       Zerberus* _zerberus;
 
@@ -120,7 +122,6 @@ class Voice {
       int _velocity;
       int audioChan;
 
-      short* data;
       int eidx;
       LoopMode _loopMode;
       OffMode _offMode;
@@ -129,6 +130,9 @@ class Voice {
       int _loopEnd;
       bool _looping;
       int _samplesSinceStart;
+
+      SampleStream* sampleStream;
+      Sample* _sample;
 
       float gain;
 

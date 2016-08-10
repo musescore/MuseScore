@@ -13,35 +13,35 @@
 #ifndef __SAMPLE_H__
 #define __SAMPLE_H__
 
+#include <sndfile.h>
+
 //---------------------------------------------------------
 //   Sample
 //---------------------------------------------------------
 
 class Sample {
-      int _channel;
       short* _data;
-      int _frames;
-      int _sampleRate;
-      int _loopStart;
-      int _loopEnd;
-      int _loopMode;
+
+      SF_INFO info;
+      SNDFILE* sf;
+      SF_INSTRUMENT inst;
+      bool hasInstrument;
+      QString _filename;
 
    public:
-      Sample(int ch, short* val, int f, int sr)
-         : _channel(ch), _data(val), _frames(f), _sampleRate(sr) {}
+      Sample(QString f, bool diskStreaming=false);
       ~Sample();
       bool read(const QString&);
-      int frames() const     { return _frames;          }
-      short* data() const    { return _data + _channel; }
-      int channel() const    { return _channel;         }
-      int sampleRate() const { return _sampleRate;      }
+      int frames() const     { return info.frames;          }
+      short* data() const    { return _data; }
+      int channel() const    { return info.channels;         }
+      int sampleRate() const { return info.samplerate;      }
 
-      void setLoopStart (int v) { _loopStart = v; }
-      void setLoopEnd (int v)   { _loopEnd = v; }
-      void setLoopMode (int v)  { _loopMode = v; }
-      int loopStart()           { return _loopStart; }
-      int loopEnd()             { return _loopEnd; }
-      int loopMode()            { return _loopMode; }
+      const QString filename() const    { return _filename; }
+
+      unsigned int loopStart(int v = 0) { return hasInstrument ? inst.loops[v].start : -1; }
+      unsigned int loopEnd(int v = 0)   { return hasInstrument ? inst.loops[v].end : -1; }
+      int loopMode(int v = 0)   { return hasInstrument ? inst.loops[v].mode : -1; }
       };
 
 #endif
