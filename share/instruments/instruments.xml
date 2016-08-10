@@ -50,10 +50,13 @@
                   <shortName>Picc.</shortName>
                   <description>Piccolo</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
-                  <clef>G8va</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8va</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>74-105</aPitchRange>
                   <pPitchRange>74-108</pPitchRange>
+                  <transposeDiatonic>7</transposeDiatonic>
+                  <transposeChromatic>12</transposeChromatic>
                   <Channel>
                         <program value="72"/>
                   </Channel>
@@ -9299,10 +9302,13 @@
                         <string>38</string>
                         <string>43</string>
                   </StringData>
-                  <clef>F8vb</clef>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
-                  <pPitchRange>23-67</pPitchRange>
+                  <pPitchRange>28-67</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="32"/>
                   </Channel>
@@ -9669,10 +9675,13 @@
                   <shortName>Cb.</shortName>
                   <description>Contrabass</description>
                   <musicXMLid>strings.contrabass</musicXMLid>
-                  <clef>F8vb</clef>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
                   <pPitchRange>28-67</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="43"/>
                   </Channel>
@@ -9691,10 +9700,13 @@
                   <shortName>Cbs.</shortName>
                   <description>Contrabasses</description>
                   <musicXMLid>strings.group</musicXMLid>
-                  <clef>F8vb</clef>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
                   <pPitchRange>28-67</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="48"/>
                   </Channel>
