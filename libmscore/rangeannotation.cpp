@@ -98,7 +98,8 @@ void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
       setPos(p1);
       int width = p2.x() - p1.x();
-      QRectF rr = QRectF(-5, -10, width - 5, 40);
+      int height = p2.y() - p1.y();
+      QRectF rr = QRectF(-5, -10, width - 5, height);
       setbbox(rr);
       if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
             QPointF staffOffset;
@@ -133,7 +134,6 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
       rangeSegment->setSystem(system);
       rangeSegment->setSpanner(this);
       rangeSegment->setColor(color());
-
       SpannerSegmentType sst;
       computeStartElement();
       computeEndElement();
@@ -229,6 +229,7 @@ void RangeAnnotation::rangePos(RangePos* rp)
       {
       Segment* ss = startSegment();
       Segment* es = endSegment();
+
       int flag = 0;
       if (es->rtick() == 0) {
             es = es->measure()->prevMeasure()->last();
@@ -244,6 +245,14 @@ void RangeAnnotation::rangePos(RangePos* rp)
 
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
+      qreal h1 = rp->system1->staff(track())->y();
+      qreal h2 = rp->system2->staff(track2())->y();
+      int h3 = 50 * track();
+      int h4 = 50 * track2();
+      int h5 = rp->system1->staffYpage(track());
+      int h6 = rp->system2->staffYpage(track2());
+      rp->p1.setY(rp->p1.y() + h3);
+      rp->p2.setY(rp->p2.y() + h4);
 
       if (flag)
             rp->p2.setX(rp->p2.x() + 5);

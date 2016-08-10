@@ -31,7 +31,6 @@ struct RangePos {
 
 class RangeAnnotationSegment : public SpannerSegment {
       Q_OBJECT
-      QPainterPath path;
 
    public:
       RangeAnnotationSegment(Score*);
@@ -39,7 +38,6 @@ class RangeAnnotationSegment : public SpannerSegment {
       virtual Element::Type type() const { return Element::Type::RANGEANNOTATION_SEGMENT; }
       virtual int subtype() const         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const { return name(spanner()->type()); }
-
       void layoutSegment(const QPointF& p1, const QPointF& p2);
       RangeAnnotationSegment* layoutSystem(System* system);
       virtual void draw(QPainter*) const;
