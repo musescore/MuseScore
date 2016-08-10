@@ -245,14 +245,19 @@ void RangeAnnotation::rangePos(RangePos* rp)
 
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
-      qreal h1 = rp->system1->staff(staffStart())->y();
-      qreal h2 = rp->system2->staff(staffEnd())->y();
+      SysStaff* s1 = rp->system1->staff(staffStart());
+      SysStaff* s2 = rp->system2->staff(staffEnd() - 1);
+      if (!s1 || !s2) {
+            qDebug() << "Trying to reference null staff";
+            return;
+            }
       qreal h3 = 50.0 * track();
       qreal h4 = 50.0 * track2();
       qreal h5 = rp->system1->staffYpage(staffStart());
-      qreal h6 = rp->system2->staffYpage(staffEnd());
-      rp->p1.setY(rp->p1.y() + h1);
-      rp->p2.setY(rp->p2.y() + h2);
+      qreal h6 = rp->system2->staffYpage(staffEnd() - 1);
+
+      rp->p1.setY(rp->p1.y() + s1->y());
+      rp->p2.setY(rp->p2.y() + s2->y() + s2->bbox().height());
 
       if (flag)
             rp->p2.setX(rp->p2.x() + 5);

@@ -5712,16 +5712,14 @@ void ScoreView::cmdAddRangeAnnotation()
       Segment* es = score()->selection().endSegment();
       int stick = score()->selection().tickStart();
       int etick = score()->selection().tickEnd();
-      int strack = ss->track();
-      int etrack = es->track();
       int sstaff = score()->selection().staffStart();
       int estaff = score()->selection().staffEnd();
+      int strack = sstaff * VOICES;
       RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
       rangeAnn->setParent(0);
       rangeAnn->setTick(stick);
       rangeAnn->setTick2(etick);
       rangeAnn->setTrack(strack);
-      rangeAnn->setTrack2(etrack);
       rangeAnn->setStaffStart(sstaff);
       rangeAnn->setStaffEnd(estaff);
       rangeAnn->setColor(Qt::yellow);
