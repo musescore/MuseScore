@@ -55,14 +55,14 @@ public:
       void fillBuffer();
       };
 
-class bufferThread : public QThread
+class BufferThread : public QThread
 {
       Q_OBJECT
 
       SamplePool* samplePool;
       void run() Q_DECL_OVERRIDE;
 public:
-      bufferThread(SamplePool* sp) : QThread(), samplePool(sp) {}
+      BufferThread(SamplePool* sp) : QThread(), samplePool(sp) {}
 };
 
 class SamplePool
@@ -70,7 +70,7 @@ class SamplePool
       std::map<QString, Sample*> filename2sample;
       std::vector<SampleStream *> streams;
       bool _streaming = true;
-      bufferThread* fillBuffersThread;
+      BufferThread* fillBuffersThread;
       QMutex streamMutex;
 
 public:

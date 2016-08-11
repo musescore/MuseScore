@@ -17,7 +17,7 @@
 SamplePool::SamplePool()
       {
       if (streaming()) {
-            fillBuffersThread = new bufferThread(this);
+            fillBuffersThread = new BufferThread(this);
             fillBuffersThread->start();
             }
       }
@@ -223,7 +223,7 @@ void SampleStream::fillBuffer() {
       }
 
 
-void bufferThread::run()
+void BufferThread::run()
       {
       while (true) {
             samplePool->fillSteamBuffers();
