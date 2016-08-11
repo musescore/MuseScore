@@ -669,12 +669,10 @@ void Seq::process(unsigned n, float* buffer)
                               _driver->startTransport();
                               }
                         }
-                  if (preferences.useJackMidi) { // TODO same for ALSA Midi
-                        // Initializing instruments every time we start playback.
-                        // External synth can have wrong values, for example
-                        // if we switch between scores
-                        initInstruments(true);
-                        }
+                  // Initializing instruments every time we start playback.
+                  // External synth can have wrong values, for example
+                  // if we switch between scores
+                  initInstruments(true);
                   // Need to change state after calling collectEvents()
                   state = Transport::PLAY;
                   if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
@@ -688,6 +686,7 @@ void Seq::process(unsigned n, float* buffer)
                   state = Transport::STOP;
                   // Muting all notes
                   stopNotes(-1, true);
+                  initInstruments(true);
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
