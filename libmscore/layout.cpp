@@ -2208,7 +2208,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                               }
                         else {
                               BarLine* bd = toBarLine(ds->element(staffIdx * VOICES));
-                              BarLine*  bs = toBarLine(e);
+                              BarLine* bs = toBarLine(e);
                               if (bd->barLineType() != bs->barLineType()) {
                                     undoChangeProperty(bd, P_ID::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
                                     undoChangeProperty(bd, P_ID::GENERATED, true);
@@ -2436,6 +2436,9 @@ static bool validMMRestMeasure(Measure* m)
                               }
                         if (s->element(track))  {
                               if (s->element(track)->type() != Element::Type::REST)
+                                    return false;
+                              Rest* rest = toRest(s->element(track));
+                              if (rest->articulations().size() > 0) // break on fermata
                                     return false;
                               restFound = true;
                               }
