@@ -8521,6 +8521,32 @@
                   </Channel>
                   <genre>common</genre>
             </Instrument>
+            <Instrument id="guitar-nylon-treble-clef">
+                  <trackName>Guitar (Treble Clef)</trackName>
+                  <longName>Guitar</longName>
+                  <shortName>Guit.</shortName>
+                  <description>Acoustic Nylon-strung Guitar (Treble Clef)</description>
+                  <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                        <string>71</string>
+                        <string>76</string>
+                  </StringData>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-83</aPitchRange>
+                  <pPitchRange>40-83</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="24"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="guitar-nylon-tablature">
                   <trackName>Classical Guitar [Tablature]</trackName>
                   <init>guitar-nylon</init>
