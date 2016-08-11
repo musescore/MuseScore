@@ -140,8 +140,6 @@ static const ElementName elementNames[] = {
       ElementName("Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend")),
       ElementName("TremoloBar",           QT_TRANSLATE_NOOP("elementName", "Tremolo Bar")),
       ElementName("Volta",                QT_TRANSLATE_NOOP("elementName", "Volta")),
-      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
-      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
 
       ElementName("HairpinSegment",       QT_TRANSLATE_NOOP("elementName", "Hairpin Segment")),
       ElementName("OttavaSegment",        QT_TRANSLATE_NOOP("elementName", "Ottava Segment")),
@@ -156,10 +154,14 @@ static const ElementName elementNames[] = {
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
       ElementName("LedgerLine",           QT_TRANSLATE_NOOP("elementName", "Ledger Line")),
       ElementName("NoteHead",             QT_TRANSLATE_NOOP("elementName", "Notehead")),
+      ElementName("RangeAnnotation",           QT_TRANSLATE_NOOP("elementName", "Range Annotation")),
+      ElementName("RangeAnnotationSegment",    QT_TRANSLATE_NOOP("elementName", "Range Annotation Segment")),
+
       ElementName("NoteDot",              QT_TRANSLATE_NOOP("elementName", "Note Dot")),
       ElementName("Tremolo",              QT_TRANSLATE_NOOP("elementName", "Tremolo")),
       ElementName("Measure",              QT_TRANSLATE_NOOP("elementName", "Measure")),
       ElementName("Selection",            QT_TRANSLATE_NOOP("elementName", "Selection")),
+
       ElementName("Lasso",                QT_TRANSLATE_NOOP("elementName", "Lasso")),
       ElementName("ShadowNote",           QT_TRANSLATE_NOOP("elementName", "Shadow Note")),
       ElementName("TabDurationSymbol",    QT_TRANSLATE_NOOP("elementName", "Tab Duration Symbol")),

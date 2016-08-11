@@ -30,6 +30,7 @@
 #include "text.h"
 #include <QRectF>
 #include <QPainter>
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -89,6 +90,7 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
       qDebug("firstNoteRestSegmentX: did not find segment");
       return 0.0;
       }
+
 //---------------------------------------------------------
 //   layout
 //    p1, p2  are in System coordinates
@@ -99,16 +101,9 @@ void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       setPos(p1);
       int width = p2.x() - p1.x();
       int height = p2.y() - p1.y();
-      QRectF rr = QRectF(-5, -10, width - 5, height);
+      QRectF rr = QRectF(-5, -5, width, height);
       setbbox(rr);
-      if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
-            QPointF staffOffset;
-            if (system() && track() >= 0)
-                  staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
-            setReadPos(readPos() + staffOffset);
-            }
-      adjustReadPos();
-      }
+     }
 
 
 //---------------------------------------------------------
@@ -216,9 +211,10 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       if (selected())
             painter->fillRect(bbox(), Qt::lightGray);
       else
-            painter->fillRect(bbox(), color() );
-      painter->setOpacity(1.0);
-     // painter->drawRect(bbox());
+            painter->fillRect(bbox(), color());
+      painter->setOpacity(1.0);     // set opacity back to normal
+  //  Uncomment the following for adding border to the annotation
+  //  painter->drawRect(bbox());
       }
 
 //---------------------------------------------------------
@@ -229,61 +225,46 @@ void RangeAnnotation::rangePos(RangePos* rp)
       {
       Segment* ss = startSegment();
       Segment* es = endSegment();
+      System* system1 = ss->measure()->system();
+      System* system2 = es->measure()->system();
+      int staffStart = _staffStart;
+      int staffEnd = _staffEnd;
 
-      int flag = 0;
-      if (es->rtick() == 0) {
+      // Reset tick to end tick of previous measure if end tick of a segment is same as start tick of the next measure
+      if (es->rtick() == 0)
             es = es->measure()->prevMeasure()->last();
-            flag = 1;
-            }
 
       if (!ss || !es)
             return;
-      rp->system1 = ss->system();
-      rp->system2 = es->system();
+
+      rp->system1 = system1;
+      rp->system2 = system2;
+
       if (rp->system1 == 0 || rp->system2 == 0)
             return;
 
       rp->p1 = ss->pagePos() - rp->system1->pagePos();
       rp->p2 = es->pagePos() - rp->system2->pagePos();
-      SysStaff* s1 = rp->system1->staff(staffStart());
-      SysStaff* s2 = rp->system2->staff(staffEnd() - 1);
-      if (!s1 || !s2) {
-            qDebug() << "Trying to reference null staff";
+      SysStaff* ss1   = system1->staff(staffStart);
+
+      // Calculate the last visible staff of the selection
+      int lastStaff = 0;
+      for (int i = staffEnd; i >= 0; --i) {
+            if (score()->staff(i)->show()) {
+                  lastStaff = i;
+                  break;
+                  }
+            }
+
+      SysStaff* ss2 = system2->staff(lastStaff);
+      if (!ss1 || !ss2) {
             return;
             }
-      qreal h3 = 50.0 * track();
-      qreal h4 = 50.0 * track2();
-      qreal h5 = rp->system1->staffYpage(staffStart());
-      qreal h6 = rp->system2->staffYpage(staffEnd() - 1);
 
-      rp->p1.setY(rp->p1.y() + s1->y());
-      rp->p2.setY(rp->p2.y() + s2->y() + s2->bbox().height());
-
-      if (flag)
-            rp->p2.setX(rp->p2.x() + 5);
-      }
-/*
-//---------------------------------------------------------
-//   setBorderWidth
-//---------------------------------------------------------
-void RangeAnnotation::setBorderWidth(int v)
-      {
-      _borderWidth = v;
-      if (score())
-            score()->spannerMap().setDirty();
+      rp->p1.setY(rp->p1.y() + ss1->bbox().y());
+      rp->p2.setY(rp->p2.y() + ss2->bbox().y() + ss2->bbox().height() + boxHeight());
       }
 
-//---------------------------------------------------------
-//   setOpacity
-//---------------------------------------------------------
-
-void RangeAnnotation::setOpacity(int v)
-      {
-      _opacity = v;
-      if (score())
-            score()->spannerMap().setDirty();
-      }
-*/
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------

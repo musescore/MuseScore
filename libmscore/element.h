@@ -281,8 +281,6 @@ class Element : public QObject, public ScoreElement {
             BEND,
             TREMOLOBAR,
             VOLTA,
-            RANGEANNOTATION,
-            RANGEANNOTATION_SEGMENT,
             HAIRPIN_SEGMENT,
             OTTAVA_SEGMENT,
             TRILL_SEGMENT,
@@ -297,10 +295,14 @@ class Element : public QObject, public ScoreElement {
             STAFF_STATE,
             LEDGER_LINE,
             NOTEHEAD,
+
+            RANGEANNOTATION,
+            RANGEANNOTATION_SEGMENT,
             NOTEDOT,
             TREMOLO,
             MEASURE,
             SELECTION,
+
             LASSO,
             SHADOW_NOTE,
             TAB_DURATION_SYMBOL,
