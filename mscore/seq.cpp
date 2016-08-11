@@ -695,6 +695,8 @@ void Seq::process(unsigned n, float* buffer)
                         // if we switch between scores
                         initInstruments(true);
                         }
+                  else
+                        initInstruments(false);
                   // Need to change state after calling collectEvents()
                   state = Transport::PLAY;
                   if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
@@ -708,6 +710,10 @@ void Seq::process(unsigned n, float* buffer)
                   state = Transport::STOP;
                   // Muting all notes
                   stopNotes(-1, true);
+                  if (preferences.useJackMidi)
+                        initInstruments(true);
+                  else
+                        initInstruments(false);
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
