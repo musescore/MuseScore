@@ -26,6 +26,7 @@ class Sample {
       SNDFILE* sf;
       SF_INSTRUMENT inst;
       bool hasInstrument;
+      bool _needsStreaming;
       QString _filename;
 
    public:
@@ -34,8 +35,9 @@ class Sample {
       bool read(const QString&);
       int frames() const     { return info.frames;          }
       short* data() const    { return _data; }
-      int channel() const    { return info.channels;         }
+      int channel() const    { return info.channels;        }
       int sampleRate() const { return info.samplerate;      }
+      bool needsStreaming()  { return _needsStreaming;      }
 
       const QString filename() const    { return _filename; }
 

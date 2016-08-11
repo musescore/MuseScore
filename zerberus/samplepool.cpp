@@ -76,7 +76,7 @@ SampleStream::SampleStream(Voice *v, SamplePool *sp)
       voice = v;
       samplePool = sp;
       Sample* s = v->_sample;
-      if (!sp->streaming()) {
+      if (!sp->streaming() || !s->needsStreaming()) {
             streaming = false;
             buffer = s->data();
             }
@@ -166,6 +166,9 @@ short SampleStream::getData(int pos) {
       }
 
 void SampleStream::fillBuffer() {
+      if (!streaming)
+            return;
+
       readPosMutex.lock();
       unsigned int writePosInBuffer = writePos % (STREAM_BUFFER_SIZE * voice->_sample->channel());
       if (readPos < backwardSampleCount) {
