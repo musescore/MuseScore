@@ -65,12 +65,10 @@ void SamplePool::deleteSampleStream(SampleStream *sampleStream)
 
 void SamplePool::fillSteamBuffers()
       {
-      while(true) {
-            streamMutex.lock();
-            for (SampleStream* sampleStream : streams)
-                  sampleStream->fillBuffer();
-            streamMutex.unlock();
-            }
+      streamMutex.lock();
+      for (SampleStream* sampleStream : streams)
+            sampleStream->fillBuffer();
+      streamMutex.unlock();
       }
 
 SampleStream::SampleStream(Voice *v, SamplePool *sp)
@@ -224,6 +222,10 @@ void SampleStream::fillBuffer() {
 
 void bufferThread::run()
       {
-      samplePool->fillSteamBuffers();
+      while (true) {
+            samplePool->fillSteamBuffers();
+            // TODO use a time based on voices and buffer size!
+            usleep(100);
+            }
       }
 
