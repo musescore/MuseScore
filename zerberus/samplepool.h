@@ -15,7 +15,7 @@
 #include "sample.h"
 #include <map>
 
-#define STREAM_BUFFER_SIZE 1024
+#define STREAM_BUFFER_SIZE 2048
 
 enum class LoopMode : char;
 class Voice;
@@ -34,25 +34,44 @@ class SampleStream
       SamplePool* samplePool;
       short *buffer;
       bool streaming;
+
+      unsigned int loopDuration;
       unsigned int readPos = 0;
       unsigned int writePos = 0;
+
+      unsigned int backwardSampleCount;
+
       sf_count_t fileReadPos;
       Voice* voice;
       SF_INFO info;
       SNDFILE *sf;
+      QMutex readPosMutex;
 
 public:
       SampleStream(Voice *v, SamplePool* sp);
       ~SampleStream();
       void updateLoop();
       short getData(int pos);
+      void fillBuffer();
       };
+
+class bufferThread : public QThread
+{
+      Q_OBJECT
+
+      SamplePool* samplePool;
+      void run() Q_DECL_OVERRIDE;
+public:
+      bufferThread(SamplePool* sp) : QThread(), samplePool(sp) {}
+};
 
 class SamplePool
       {
       std::map<QString, Sample*> filename2sample;
       std::vector<SampleStream *> streams;
-      bool _streaming = false;
+      bool _streaming = true;
+      bufferThread* fillBuffersThread;
+      QMutex streamMutex;
 
 public:
       SamplePool();
