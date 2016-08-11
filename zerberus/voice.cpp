@@ -440,3 +440,18 @@ const char* Voice::state() const
       return voiceStateNames[int(_state)];
       }
 
+void Voice::stop()
+      {
+      envelopes[currentEnvelope].step();
+      envelopes[V1Envelopes::RELEASE].max = envelopes[currentEnvelope].val;
+      currentEnvelope = V1Envelopes::RELEASE;
+      _state = VoiceState::STOP;
+      }
+
+void Voice::off()
+      {
+      _zerberus->samplepool.deleteSampleStream(sampleStream);
+      sampleStream = nullptr;
+      _state = VoiceState::OFF;
+      }
+

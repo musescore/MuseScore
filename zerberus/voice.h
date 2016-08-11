@@ -197,10 +197,10 @@ class Voice {
       bool isSustained() const    { return _state == VoiceState::SUSTAINED; }
       bool isOff() const          { return _state == VoiceState::OFF; }
       bool isStopped() const      { return _state == VoiceState::STOP; }
-      void stop()                 { envelopes[currentEnvelope].step(); envelopes[V1Envelopes::RELEASE].max = envelopes[currentEnvelope].val; currentEnvelope = V1Envelopes::RELEASE; _state = VoiceState::STOP;      }
+      void stop();
       void stop(float time);
       void sustained()            { _state = VoiceState::SUSTAINED; }
-      void off()                  { _state = VoiceState::OFF;       }
+      void off();
       const char* state() const;
       LoopMode loopMode() const   { return _loopMode; }
       int getSamplesSinceStart()  { return _samplesSinceStart;    }

@@ -39,6 +39,23 @@ SampleStream* SamplePool::getSampleStream(Voice* v)
       return sampleStream;
       }
 
+void SamplePool::deleteSampleStream(SampleStream *sampleStream)
+      {
+      std::vector<SampleStream*>::iterator toDelete = streams.end();
+      for (std::vector<SampleStream*>::iterator i = streams.begin(); i != streams.end(); ++i) {
+            if (*i == sampleStream) {
+                  toDelete = i;
+                  break;
+                  }
+            }
+      if (toDelete != streams.end()) {
+            streams.erase(toDelete);
+            delete sampleStream;
+            }
+      else
+            qDebug("Could not find samplestream!");
+      }
+
 SampleStream::SampleStream(Voice *v, SamplePool *sp)
       {
       voice = v;

@@ -60,6 +60,7 @@ public:
       bool streaming() { return _streaming; }
       Sample* getSamplePointer(QString filename);
       SampleStream* getSampleStream(Voice* v);
+      void deleteSampleStream(SampleStream *sampleStream);
       };
 
 #endif // SAMPLEPOOL_H
