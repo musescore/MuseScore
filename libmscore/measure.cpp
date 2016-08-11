@@ -2994,6 +2994,9 @@ bool Measure::isEmpty() const
                   if (s->element(track))  {
                         if (s->element(track)->type() != Element::Type::REST)
                               return false;
+                        Rest* rest = static_cast<Rest*>(s->element(track));
+                        if (rest->articulations().size() > 0) // break on fermata
+                              return false;
                         restFound = true;
                         }
                   }
