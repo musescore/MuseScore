@@ -86,7 +86,12 @@ SampleStream::SampleStream(Voice *v, SamplePool *sp)
 
             // init buffer from sample precache
             memcpy(buffer, s->data(), sizeof(short) * (STREAM_BUFFER_SIZE * s->channel()));
+            memset(&info, 0, sizeof(info));
             sf = sf_open(s->filename().toLocal8Bit().constData(), SFM_READ, &info);
+            if (!sf) {
+                  qDebug("Error opening file %s with error %s", s->filename().toLocal8Bit().constData(), sf_strerror(sf));
+                  Q_ASSERT(sf != 0);
+                  }
             writePos = STREAM_BUFFER_SIZE * s->channel();
             readPos = 0;
             fileReadPos = STREAM_BUFFER_SIZE;
