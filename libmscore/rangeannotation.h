@@ -56,7 +56,6 @@ class RangeAnnotation : public Spanner {
       int _opacity;
       int _staffStart;
       int _staffEnd;
-      qreal _boxHeight;
       Segment* _startSegment;
       Segment* _endSegment;
       Spatium _borderWidth  { Spatium(0) };
@@ -74,8 +73,6 @@ class RangeAnnotation : public Spanner {
       void setStaffEnd(int v)             { _staffEnd = v; }
       int staffStart()                    { return _staffStart; }
       int staffEnd()                      { return _staffEnd;   }
-      qreal boxHeight()                   { return _boxHeight;  }
-      void setBoxHeight(qreal v)                 { _boxHeight = v;     }
       void setStartSegment(Segment* s)           { _startSegment = s; }
       void setEndSegment(Segment* s)             { _endSegment = s; }
       Segment* startSegment()                    { return _startSegment; }

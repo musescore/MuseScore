@@ -5611,7 +5611,7 @@ void ScoreView::cmdAddRangeAnnotation()
       Segment* ss = score()->selection().startSegment();
       Segment* es = score()->selection().endSegment();
       ss->setParent(ss->measure());
-      ss->measure()->setParent(ss->measure()->system());
+      ss->parent()->setParent(ss->measure()->system());
       int stick = score()->selection().tickStart();
       int etick = score()->selection().tickEnd();
       int sstaff = score()->selection().staffStart();
@@ -5627,7 +5627,6 @@ void ScoreView::cmdAddRangeAnnotation()
       rangeAnn->setStartSegment(ss);
       rangeAnn->setEndSegment(es);
       rangeAnn->setColor(Qt::yellow);
-      rangeAnn->setBoxHeight(es->measure()->system()->staff(estaff - 1)->y() - ss->measure()->system()->staff(sstaff)->y());
       _score->startCmd();
       _score->undoAddElement(rangeAnn);
       _score->endCmd();

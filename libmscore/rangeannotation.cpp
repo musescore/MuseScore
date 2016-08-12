@@ -261,8 +261,8 @@ void RangeAnnotation::rangePos(RangePos* rp)
             return;
             }
 
-      rp->p1.setY(rp->p1.y() + ss1->bbox().y());
-      rp->p2.setY(rp->p2.y() + ss2->bbox().y() + ss2->bbox().height() + boxHeight());
+      rp->p1.setY(rp->p1.y());
+      rp->p2.setY(rp->p2.y() + ss2->bbox().y() - ss1->bbox().y() + ss2->bbox().height());
       }
 
 //---------------------------------------------------------
