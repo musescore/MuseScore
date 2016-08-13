@@ -34,7 +34,7 @@ Sample* SamplePool::getSamplePointer(QString filename)
        Sample* sa;
 
       try {
-            sa  = new Sample(filename, _streaming);
+            sa  = new Sample(filename, _streaming, _streamBufferSize);
             }
       catch (...) {
             delete sa;
@@ -125,19 +125,19 @@ SampleStream::SampleStream(Voice *v, SamplePool *sp)
             }
       else {
             streaming = true;
-            buffer = new short[STREAM_BUFFER_SIZE * s->channel()];
+            buffer = new short[sp->streamBufferSize() * s->channel()];
 
             // init buffer from sample precache
-            memcpy(buffer, s->data(), sizeof(short) * (STREAM_BUFFER_SIZE * s->channel()));
+            memcpy(buffer, s->data(), sizeof(short) * (sp->streamBufferSize() * s->channel()));
             memset(&info, 0, sizeof(info));
             sf = sf_open(s->filename().toLocal8Bit().constData(), SFM_READ, &info);
             if (!sf) {
                   qDebug("Error opening file %s with error %s", s->filename().toLocal8Bit().constData(), sf_strerror(sf));
                   throw ERROR_OPENING_FILE;
                   }
-            writePos = STREAM_BUFFER_SIZE * s->channel();
+            writePos = sp->streamBufferSize() * s->channel();
             readPos = 0;
-            fileReadPos = STREAM_BUFFER_SIZE;
+            fileReadPos = sp->streamBufferSize();
 
             loopDuration = v->_loopEnd - v->_loopStart;
             backwardSampleCount = s->channel() * 4; // 4times interpol per channel
@@ -210,9 +210,9 @@ short SampleStream::getData(int pos) {
                   return 0;
                   }
             readPosMutex.unlock();
-            if ((writePos - readPos) <= (samplePool->fillPercentage() * STREAM_BUFFER_SIZE * voice->_sample->channel()))
+            if ((writePos - readPos) <= (samplePool->fillPercentage() * samplePool->streamBufferSize() * voice->_sample->channel()))
                   samplePool->triggerBufferRefill();
-            return buffer[pos % (STREAM_BUFFER_SIZE * voice->_sample->channel())];
+            return buffer[pos % (samplePool->streamBufferSize() * voice->_sample->channel())];
             }
       }
 
@@ -221,15 +221,15 @@ void SampleStream::fillBuffer() {
             return;
 
       readPosMutex.lock();
-      unsigned int writePosInBuffer = writePos % (STREAM_BUFFER_SIZE * voice->_sample->channel());
+      unsigned int writePosInBuffer = writePos % (samplePool->streamBufferSize() * voice->_sample->channel());
       if (readPos < backwardSampleCount) {
             readPosMutex.unlock();
             return;
             }
-      unsigned int readBackInBuffer = (readPos - backwardSampleCount) % (STREAM_BUFFER_SIZE * voice->_sample->channel());
+      unsigned int readBackInBuffer = (readPos - backwardSampleCount) % (samplePool->streamBufferSize() * voice->_sample->channel());
 
       // buffer is full
-      if ((writePos - readPos) >= STREAM_BUFFER_SIZE) {
+      if ((writePos - readPos) >= samplePool->streamBufferSize()) {
             readPosMutex.unlock();
             return;
             }
@@ -239,7 +239,7 @@ void SampleStream::fillBuffer() {
       sf_count_t toFill;
 
       if (readBackInBuffer < writePosInBuffer)
-            toFill = (STREAM_BUFFER_SIZE * voice->_sample->channel()) - writePosInBuffer;
+            toFill = (samplePool->streamBufferSize() * voice->_sample->channel()) - writePosInBuffer;
       else
             toFill = readBackInBuffer - writePosInBuffer;
 
@@ -249,7 +249,7 @@ void SampleStream::fillBuffer() {
             toFill -= ((fileReadPos+toFill) - info.frames);
       while (toFill > 0) {
             // Just to make sure no nasty things happen -> remove when every seems to work good
-            Q_ASSERT(toFill + (writePosInBuffer / (STREAM_BUFFER_SIZE * voice->_sample->channel())) < STREAM_BUFFER_SIZE);
+            Q_ASSERT(toFill + (writePosInBuffer / (samplePool->streamBufferSize() * voice->_sample->channel())) < samplePool->streamBufferSize());
             unsigned int framesThatShouldBeRead = toFill;
 
             sf_seek(sf, fileReadPos, SEEK_SET);
@@ -265,7 +265,7 @@ void SampleStream::fillBuffer() {
                   }
 
             writePos += frames_read * voice->_sample->channel();
-            writePosInBuffer = writePos % (STREAM_BUFFER_SIZE * voice->_sample->channel());
+            writePosInBuffer = writePos % (samplePool->streamBufferSize() * voice->_sample->channel());
             fileReadPos += frames_read;
             toFill -= frames_read;
 

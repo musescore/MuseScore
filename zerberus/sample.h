@@ -34,7 +34,7 @@ class Sample {
       QString _filename;
 
    public:
-      Sample(QString f, bool diskStreaming=false);
+      Sample(QString f, bool diskStreaming, unsigned int streamBufferSize);
       ~Sample();
       bool read(const QString&);
       int frames() const     { return info.frames;          }

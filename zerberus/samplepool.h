@@ -15,8 +15,6 @@
 #include "sample.h"
 #include <map>
 
-#define STREAM_BUFFER_SIZE 2048
-
 enum class LoopMode : char;
 class Voice;
 class SamplePool;
@@ -74,6 +72,7 @@ class SamplePool : public QObject
       std::vector<SampleStream *> streams;
       bool _streaming = true;
       float _fillPercentage = 0.5;
+      unsigned int _streamBufferSize = 2048;
       QThread* fillBuffersThread;
       BufferWorker* bufferWorker;
       QMutex streamMutex;
@@ -92,6 +91,7 @@ public:
       void triggerBufferRefill();
       void deleteSampleStream(SampleStream *sampleStream);
       float fillPercentage() { return _fillPercentage; }
+      unsigned int streamBufferSize() { return _streamBufferSize; }
       };
 
 #endif // SAMPLEPOOL_H

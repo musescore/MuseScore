@@ -12,7 +12,7 @@
 #include "samplepool.h"
 #include <QString>
 
-Sample::Sample(QString f, bool diskStreaming)
+Sample::Sample(QString f, bool diskStreaming, unsigned int streamBufferSize)
       {
       _filename = f;
 
@@ -28,9 +28,9 @@ Sample::Sample(QString f, bool diskStreaming)
             throw ERROR_OPENING_FILE;
             }
 
-      if (diskStreaming && info.frames > STREAM_BUFFER_SIZE) {
-            _data = new short[STREAM_BUFFER_SIZE * info.channels];
-            if (sf_readf_short(sf, _data, STREAM_BUFFER_SIZE) != STREAM_BUFFER_SIZE) {
+      if (diskStreaming && info.frames > streamBufferSize) {
+            _data = new short[streamBufferSize * info.channels];
+            if (sf_readf_short(sf, _data, streamBufferSize) != streamBufferSize) {
                   qDebug("Sample read failed: %s\n", sf_strerror(sf));
                   throw ERROR_READING_FILE;
                   }
