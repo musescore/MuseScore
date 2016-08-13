@@ -28,7 +28,15 @@ Sample* SamplePool::getSamplePointer(QString filename)
        if (sampleIterator != filename2sample.end())
              return sampleIterator->second;
 
-      Sample* sa  = new Sample(filename, _streaming);
+       Sample* sa;
+
+      try {
+            sa  = new Sample(filename, _streaming);
+            }
+      catch (...) {
+            delete sa;
+            return nullptr;
+            }
 
       filename2sample.insert(std::pair<QString, Sample*>(filename, sa));
 
@@ -37,7 +45,15 @@ Sample* SamplePool::getSamplePointer(QString filename)
 
 SampleStream* SamplePool::getSampleStream(Voice* v)
       {
-      SampleStream* sampleStream = new SampleStream(v, this);
+      SampleStream* sampleStream;
+      try {
+            sampleStream = new SampleStream(v, this);
+            }
+      catch (...) {
+            delete sampleStream;
+            return nullptr;
+            }
+
       streamMutex.lock();
       streams.push_back(sampleStream);
       streamMutex.unlock();
@@ -66,8 +82,14 @@ void SamplePool::deleteSampleStream(SampleStream *sampleStream)
 void SamplePool::fillSteamBuffers()
       {
       streamMutex.lock();
-      for (SampleStream* sampleStream : streams)
-            sampleStream->fillBuffer();
+      for (SampleStream* sampleStream : streams) {
+            try {
+                  sampleStream->fillBuffer();
+                  }
+            catch (...) {
+                  qDebug("ERROR filling buffer");
+                  }
+            }
       streamMutex.unlock();
       }
 
@@ -90,7 +112,7 @@ SampleStream::SampleStream(Voice *v, SamplePool *sp)
             sf = sf_open(s->filename().toLocal8Bit().constData(), SFM_READ, &info);
             if (!sf) {
                   qDebug("Error opening file %s with error %s", s->filename().toLocal8Bit().constData(), sf_strerror(sf));
-                  Q_ASSERT(sf != 0);
+                  throw ERROR_OPENING_FILE;
                   }
             writePos = STREAM_BUFFER_SIZE * s->channel();
             readPos = 0;
@@ -228,9 +250,8 @@ void SampleStream::fillBuffer() {
                   fileReadPos -= loopDuration;
 
             if (framesThatShouldBeRead != frames_read) {
-                  qDebug("ERROR: reading file with error %s", sf_strerror(sf));
-                  qDebug() << "FilePos " << fileReadPos << " loop start " << voice->_loopStart << " loop end " << voice->_loopEnd << " loop duration " << loopDuration << " looping " << voice->_looping;
-                  return;
+                  qDebug("ERROR: reading file %s with error %s",voice->_sample->filename().toLocal8Bit().constData() ,sf_strerror(sf));
+                  throw ERROR_READING_FILE;
                   }
             }
       }

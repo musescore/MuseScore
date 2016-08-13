@@ -19,6 +19,10 @@
 //   Sample
 //---------------------------------------------------------
 
+enum SF_ERROR {
+      ERROR_OPENING_FILE, ERROR_READING_FILE
+      };
+
 class Sample {
       short* _data;
 

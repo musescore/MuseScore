@@ -25,22 +25,23 @@ Sample::Sample(QString f, bool diskStreaming)
 
       if (sf == 0) {
             printf("open <%s> failed: %s\n", qPrintable(_filename), sf_strerror(sf));
-            // TODO throw exception
-            return;
+            throw ERROR_OPENING_FILE;
             }
 
       if (diskStreaming && info.frames > STREAM_BUFFER_SIZE) {
             _data = new short[STREAM_BUFFER_SIZE * info.channels];
-            if (sf_readf_short(sf, _data, STREAM_BUFFER_SIZE) != STREAM_BUFFER_SIZE)
+            if (sf_readf_short(sf, _data, STREAM_BUFFER_SIZE) != STREAM_BUFFER_SIZE) {
                   qDebug("Sample read failed: %s\n", sf_strerror(sf));
-            // TODO throw exception
+                  throw ERROR_READING_FILE;
+                  }
             _needsStreaming = true;
             }
       else {
             _data = new short[info.frames * info.channels];
-            if (sf_readf_short(sf, _data, info.frames) != info.frames)
+            if (sf_readf_short(sf, _data, info.frames) != info.frames) {
                   qDebug("Sample read failed: %s\n", sf_strerror(sf));
-            // TODO throw exception
+                  throw ERROR_READING_FILE;
+                  }
             _needsStreaming = false;
             }
 
