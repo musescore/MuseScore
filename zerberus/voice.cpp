@@ -329,7 +329,7 @@ void Voice::process(int frames, float* p)
       if (audioChan == 1) {
             while (frames--) {
 
-                  sampleStream->updateLoop();
+                  sampleStream->updateLoop(phase.index());
 
                   int idx = phase.index();
 
@@ -374,9 +374,9 @@ void Voice::process(int frames, float* p)
             //
             while (frames--) {
 
-                  sampleStream->updateLoop();
+                  sampleStream->updateLoop(phase.index());
 
-                  int idx = phase.index() * 2;
+                  unsigned long idx = phase.index() * 2;
                   if (idx >= eidx) {
                         off();
                         // printf("end of sample\n");

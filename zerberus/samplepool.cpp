@@ -112,9 +112,8 @@ SampleStream::~SampleStream() {
 //   updateLoop
 //---------------------------------------------------------
 
-void SampleStream::updateLoop()
+void SampleStream::updateLoop(int idx)
       {
-      int idx = voice->phase.index();
       bool validLoop = voice->_loopEnd > 0 &&
                   voice->_loopStart >= 0 &&
                   (voice->_loopEnd <= (voice->eidx/voice->audioChan));
@@ -122,8 +121,10 @@ void SampleStream::updateLoop()
                   (voice->loopMode() == LoopMode::SUSTAIN &&
                   (voice->_state == VoiceState::PLAYING || voice->_state == VoiceState::SUSTAINED));
 
-      if (voice->_looping && voice->loopMode() == LoopMode::SUSTAIN && (voice->_state != VoiceState::PLAYING || voice->_state != VoiceState::SUSTAINED))
+      if (voice->_looping && voice->loopMode() == LoopMode::SUSTAIN && (voice->_state != VoiceState::PLAYING || voice->_state != VoiceState::SUSTAINED)) {
             voice->_looping = false;
+            qDebug() << "Switch looping to false: Loopmode " << int(voice->loopMode()) << " voice state " << int(voice->_state);
+            }
 
       if (!(validLoop && shallLoop))
             return;
@@ -131,7 +132,7 @@ void SampleStream::updateLoop()
       if (idx > voice->_loopEnd) {
             voice->_looping = true;
             if (streaming)
-                  voice->eidx += loopDuration;
+                  voice->eidx += loopDuration * voice->_sample->channel();
             else
                   voice->phase.setIndex(voice->_loopStart + (idx - voice->_loopEnd - 1));
             }
@@ -157,9 +158,9 @@ short SampleStream::getData(int pos) {
             }
       else {
             readPosMutex.lock();
-            if (pos > readPos && pos < writePos)
+            if ((unsigned int) pos > readPos && (unsigned int) pos < writePos)
                   readPos = pos;
-            if (pos >= writePos) {
+            if ((unsigned int) pos >= writePos) {
                   //qDebug("ERROR: streaming buffer empty! pos %d, writePos %d", pos, writePos);
                   // TODO Skip reading if already behind
                   readPosMutex.unlock();
@@ -197,6 +198,7 @@ void SampleStream::fillBuffer() {
       else
             toFill = readBackInBuffer - writePosInBuffer;
 
+      updateLoop((toFill + fileReadPos) * voice->_sample->channel());
       toFill /= voice->_sample->channel(); // to fill in frames
       while (toFill > 0) {
             // Just to make sure no nasty things happen -> remove when every seems to work good
@@ -211,19 +213,23 @@ void SampleStream::fillBuffer() {
                   frames_read = sf_readf_short(sf, &buffer[writePosInBuffer], untilLoop);
                   framesThatShouldBeRead = untilLoop;
                   }
-            else
+            else {
                   frames_read = sf_readf_short(sf, &buffer[writePosInBuffer], toFill);
+                  }
 
             writePos += frames_read * voice->_sample->channel();
             writePosInBuffer = writePos % (STREAM_BUFFER_SIZE * voice->_sample->channel());
             fileReadPos += frames_read;
             toFill -= frames_read;
 
-            if (voice->_looping && fileReadPos > voice->_loopEnd)
+            if (voice->_looping && fileReadPos >= voice->_loopEnd)
                   fileReadPos -= loopDuration;
 
-            if (framesThatShouldBeRead != frames_read)
+            if (framesThatShouldBeRead != frames_read) {
                   qDebug("ERROR: reading file with error %s", sf_strerror(sf));
+                  qDebug() << "FilePos " << fileReadPos << " loop start " << voice->_loopStart << " loop end " << voice->_loopEnd << " loop duration " << loopDuration << " looping " << voice->_looping;
+                  return;
+                  }
             }
       }
 

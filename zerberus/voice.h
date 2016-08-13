@@ -82,7 +82,7 @@ struct Phase {
       void set(int b)                 { data = b * 256;   }
       void set(double b)              { data = b * 256.0; }
       void setIndex(int b)            { data = b * 256 + _fract; }
-      int index() const               { return data >> 8; }
+      long index() const               { return data >> 8; }
       unsigned fract() const          { return _fract;    }
 
       Phase() {}
@@ -122,7 +122,7 @@ class Voice {
       int _velocity;
       int audioChan;
 
-      int eidx;
+      unsigned long eidx;
       LoopMode _loopMode;
       OffMode _offMode;
       int _offBy;

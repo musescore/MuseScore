@@ -50,7 +50,7 @@ class SampleStream
 public:
       SampleStream(Voice *v, SamplePool* sp);
       ~SampleStream();
-      void updateLoop();
+      void updateLoop(int idx);
       short getData(int pos);
       void fillBuffer();
       };
