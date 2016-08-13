@@ -225,8 +225,14 @@ void RangeAnnotation::rangePos(RangePos* rp)
       Segment* ss =  score()->tick2segment(tick());
       Segment* es =  score()->tick2segment(tick2());
 
-      if (!ss || !es)
+      if (!ss || !es) {
+            qDebug() << "Error : Null segment";
             return;
+            }
+
+      // Reset end segment of spanner segment to end segment of previous measure if end tick of a segment is same as start tick of the next measure
+      if (es->rtick() == 0)
+            es = es->measure()->prevMeasure()->last();
 
       if (!ss->measure()->system()) {
             // segment is in a measure that has not been laid out yet
@@ -245,11 +251,6 @@ void RangeAnnotation::rangePos(RangePos* rp)
       System* system2 = es->measure()->system();
       int staffStart = _staffStart;
       int staffEnd = _staffEnd;
-
-      // Reset end segment of spanner segment to end segment of previous measure if end tick of a segment is same as start tick of the next measure
-      if (es->rtick() == 0)
-            es = es->measure()->prevMeasure()->last();
-
       rp->system1 = system1;
       rp->system2 = system2;
 
