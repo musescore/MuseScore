@@ -100,7 +100,7 @@ void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
       setPos(p1);
       int width = p2.x() - p1.x();
-      int height = p2.y() - p1.y();
+      int height = p2.y() - p1.y() + 10 ;
       QRectF rr = QRectF(-5, -5, width, height);
       setbbox(rr);
      }
@@ -164,17 +164,16 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
                   rangeSegment->layoutSegment(rPos.p1, rPos.p2);
                   break;
             case SpannerSegmentType::BEGIN:
-                  rangeSegment->layoutSegment(rPos.p1, QPointF(system->bbox().width(), rPos.p1.y()));
+                  rangeSegment->layoutSegment(rPos.p1, QPointF(system->bbox().width(), rPos.p2.y()));
                   break;
             case SpannerSegmentType::MIDDLE: {
                   qreal x1 = firstNoteRestSegmentX(system);
                   qreal x2 = system->bbox().width();
-                  qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
-                  rangeSegment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
+                  rangeSegment->layoutSegment(QPointF(x1, 0), QPointF(x2, rPos.p2.y()));
                   }
                   break;
             case SpannerSegmentType::END:
-                  rangeSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), rPos.p2.y()), rPos.p2);
+                  rangeSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), 0), rPos.p2);
                   break;
             }
 
@@ -223,19 +222,33 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
 
 void RangeAnnotation::rangePos(RangePos* rp)
       {
-      Segment* ss = startSegment();
-      Segment* es = endSegment();
+      Segment* ss =  score()->tick2segment(tick());
+      Segment* es =  score()->tick2segment(tick2());
+
+      if (!ss || !es)
+            return;
+
+      if (!ss->measure()->system()) {
+            // segment is in a measure that has not been laid out yet
+            // this can happen in mmrests
+            // first chordrest segment of mmrest instead
+            const Measure* mmr = ss->measure()->mmRest1();
+            if (mmr && mmr->system())
+                  ss = mmr->first(Segment::Type::ChordRest);
+            else
+                  return;                 // still no system?
+            if (!ss)
+                  return;                 // no chordrest segment?
+            }
+
       System* system1 = ss->measure()->system();
       System* system2 = es->measure()->system();
       int staffStart = _staffStart;
       int staffEnd = _staffEnd;
 
-      // Reset tick to end tick of previous measure if end tick of a segment is same as start tick of the next measure
+      // Reset end segment of spanner segment to end segment of previous measure if end tick of a segment is same as start tick of the next measure
       if (es->rtick() == 0)
             es = es->measure()->prevMeasure()->last();
-
-      if (!ss || !es)
-            return;
 
       rp->system1 = system1;
       rp->system2 = system2;
@@ -249,7 +262,7 @@ void RangeAnnotation::rangePos(RangePos* rp)
 
       // Calculate the last visible staff of the selection
       int lastStaff = 0;
-      for (int i = staffEnd; i >= 0; --i) {
+      for (int i = staffEnd - 1; i >= 0; --i) {
             if (score()->staff(i)->show()) {
                   lastStaff = i;
                   break;
@@ -275,10 +288,12 @@ void RangeAnnotation::write(Xml& xml) const
             return;
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
-      xml.tag("startTick", int(this->tick()));
-      xml.tag("endTick", int(this->tick2()));
-      xml.tag("startTrack", int(this->track()));
-      xml.tag("endTrack", int(this->track2()));
+      xml.tag("startTick", int(tick()));
+      xml.tag("endTick", int(tick2()));
+      xml.tag("staffStart", int(staffStart()));
+      xml.tag("staffEnd", int(staffEnd()));
+      xml.tag("startTrack", int(track()));
+      xml.tag("endTrack", int(track2()));
       xml.tag("color", curColor());
       RangeAnnotation::writeProperties(xml);
       xml.etag();
@@ -297,17 +312,28 @@ void RangeAnnotation::read(XmlReader& e)
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       setParent(0);
-
-      while (e.readNextStartElement()) {
+        while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "startTick")
-                  setTick(e.readInt());
-            else if (tag == "endTick")
-                  setTick2(e.readInt());
+            if (tag == "startTick") {
+                  int stick = e.readInt();
+                  Segment* ss = score()->tick2segment(e.readInt());
+                  setTick(stick);
+                  setStartSegment(ss);
+                  }
+            else if (tag == "endTick") {
+                  int etick = e.readInt();
+                  Segment* es = score()->tick2segment(e.readInt());
+                  setTick2(etick);
+                  setEndSegment(es);
+                  }
             else if (tag == "startTrack")
                   setTrack(e.readInt());
             else if (tag == "endTrack")
                   setTrack2(e.readInt());
+            else if (tag == "staffStart")
+                  setStaffStart(e.readInt());
+            else if (tag == "staffEnd")
+                  setStaffEnd(e.readInt());
             else if (tag == "color")
                   setColor(e.readColor());
             else if (!RangeAnnotation::readProperties(e))

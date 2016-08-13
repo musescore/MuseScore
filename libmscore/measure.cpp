@@ -1809,6 +1809,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Trill"
                || tag == "TextLine"
                || tag == "Volta") {
+                  if (tag == "RangeAnnotation") {
+                        segment = getSegment(Segment::Type::ChordRest, e.tick());
+                        segment->setTick(e.tick());
+                        segment->setParent(this);
+                        }
+
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());

@@ -65,26 +65,23 @@ class RangeAnnotation : public Spanner {
    public:
 
       RangeAnnotation(Score*  = 0);
-      virtual RangeAnnotation* clone() const override         { return new RangeAnnotation(*this); }
-      virtual Element::Type type() const                 { return Element::Type::RANGEANNOTATION; }
+      virtual RangeAnnotation* clone() const override  { return new RangeAnnotation(*this); }
+      virtual Element::Type type() const               { return Element::Type::RANGEANNOTATION; }
 
-      Score* score() const                { return _score; }
-      void setStaffStart(int v)           { _staffStart = v; }
-      void setStaffEnd(int v)             { _staffEnd = v; }
-      int staffStart()                    { return _staffStart; }
-      int staffEnd()                      { return _staffEnd;   }
-      void setStartSegment(Segment* s)           { _startSegment = s; }
-      void setEndSegment(Segment* s)             { _endSegment = s; }
-      Segment* startSegment()                    { return _startSegment; }
-      Segment* endSegment()                      { return _endSegment;   }
+      Score* score() const                             { return _score; }
+      void setStaffStart(int v)                        { _staffStart = v; }
+      void setStaffEnd(int v)                          { _staffEnd = v; }
+      int staffStart() const                           { return _staffStart; }
+      int staffEnd()  const                            { return _staffEnd;   }
+      void setStartSegment(Segment* s)                 { _startSegment = s; }
+      void setEndSegment(Segment* s)                   { _endSegment = s; }
+      Segment* startSegment()                          { return _startSegment; }
+      Segment* endSegment()                            { return _endSegment;   }
       qreal firstNoteRestSegmentX(System* system);
       virtual RangeAnnotationSegment* layoutSystem(System* system);
       void rangePos(RangePos*);
       Spatium borderWidth()                { return _borderWidth; }
       int opacity()                    { return _opacity;     }
-   //   void setBorderWidth(int v);
-   //   void setOpacity(int v);
-
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void writeProperties(Xml&) const override;

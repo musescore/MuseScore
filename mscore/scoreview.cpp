@@ -5623,7 +5623,7 @@ void ScoreView::cmdAddRangeAnnotation()
       rangeAnn->setTick2(etick);
       rangeAnn->setTrack(strack);
       rangeAnn->setStaffStart(sstaff);
-      rangeAnn->setStaffEnd(estaff -1);
+      rangeAnn->setStaffEnd(estaff);
       rangeAnn->setStartSegment(ss);
       rangeAnn->setEndSegment(es);
       rangeAnn->setColor(Qt::yellow);

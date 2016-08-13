@@ -743,6 +743,7 @@ void System::remove(Element* el)
             case Element::Type::TEXTLINE_SEGMENT:
             case Element::Type::HAIRPIN_SEGMENT:
             case Element::Type::OTTAVA_SEGMENT:
+            case Element::Type::RANGEANNOTATION_SEGMENT:
             case Element::Type::TRILL_SEGMENT:
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
