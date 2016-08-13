@@ -200,6 +200,8 @@ void SampleStream::fillBuffer() {
 
       updateLoop((toFill + fileReadPos) * voice->_sample->channel());
       toFill /= voice->_sample->channel(); // to fill in frames
+      if (fileReadPos+toFill > info.frames)
+            toFill -= ((fileReadPos+toFill) - info.frames);
       while (toFill > 0) {
             // Just to make sure no nasty things happen -> remove when every seems to work good
             Q_ASSERT(toFill + (writePosInBuffer / (STREAM_BUFFER_SIZE * voice->_sample->channel())) < STREAM_BUFFER_SIZE);
