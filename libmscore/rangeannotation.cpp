@@ -357,6 +357,28 @@ void RangeAnnotation::writeProperties(Xml& xml) const
       Element::writeProperties(xml);
       }
 //---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool RangeAnnotation::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "leftMargin")
+            _leftMargin = e.readDouble();
+      else if (tag == "rightMargin")
+            _rightMargin = e.readDouble();
+      else if (tag == "topMargin")
+            _topMargin = e.readDouble();
+      else if (tag == "bottomMargin")
+            _bottomMargin = e.readDouble();
+      else if (Spanner::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
+      }
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -418,10 +440,12 @@ QVariant RangeAnnotation::propertyDefault(P_ID id) const
             case P_ID::LINE_WIDTH:
                   return Spatium(0.0);
             case P_ID::LEFT_MARGIN:
+                  return 3.0;
             case P_ID::RIGHT_MARGIN:
+                  return -3.0;
             case P_ID::TOP_MARGIN:
             case P_ID::BOTTOM_MARGIN:
-                  return 0.0;
+                  return 3.0;
             default:
                   return Spanner::propertyDefault(id);
             }

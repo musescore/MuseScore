@@ -59,8 +59,8 @@ class RangeAnnotation : public Spanner {
       Segment* _startSegment;
       Segment* _endSegment;
       Spatium _borderWidth  { Spatium(0) };
-      qreal _leftMargin { 0.0 }, _rightMargin { 0.0 };
-      qreal _topMargin  { 0.0 }, _bottomMargin { 0.0 };
+      qreal _leftMargin { 5.0 }, _rightMargin  { 5.0 };
+      qreal _topMargin  { 5.0 }, _bottomMargin { 5.0 };
 
    public:
 
@@ -85,6 +85,7 @@ class RangeAnnotation : public Spanner {
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void writeProperties(Xml&) const override;
+      virtual bool readProperties(XmlReader&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
