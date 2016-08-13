@@ -55,31 +55,43 @@ public:
       void fillBuffer();
       };
 
-class BufferThread : public QThread
-{
+class BufferWorker : public QObject
+      {
       Q_OBJECT
 
       SamplePool* samplePool;
-      void run() Q_DECL_OVERRIDE;
+public slots:
+      void fillBuffers();
 public:
-      BufferThread(SamplePool* sp) : QThread(), samplePool(sp) {}
-};
+      BufferWorker(SamplePool* sp) : QObject(), samplePool(sp) {}
+      };
 
-class SamplePool
+class SamplePool : public QObject
       {
+      Q_OBJECT
+
       std::map<QString, Sample*> filename2sample;
       std::vector<SampleStream *> streams;
       bool _streaming = true;
-      BufferThread* fillBuffersThread;
+      float _fillPercentage = 0.5;
+      QThread* fillBuffersThread;
+      BufferWorker* bufferWorker;
       QMutex streamMutex;
+      bool fillDone = true;
+
+signals:
+      void fillBuffers();
 
 public:
       SamplePool();
+      ~SamplePool();
       void fillSteamBuffers();
       bool streaming() { return _streaming; }
       Sample* getSamplePointer(QString filename);
       SampleStream* getSampleStream(Voice* v);
+      void triggerBufferRefill();
       void deleteSampleStream(SampleStream *sampleStream);
+      float fillPercentage() { return _fillPercentage; }
       };
 
 #endif // SAMPLEPOOL_H

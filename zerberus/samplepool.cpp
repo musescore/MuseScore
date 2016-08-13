@@ -17,7 +17,10 @@
 SamplePool::SamplePool()
       {
       if (streaming()) {
-            fillBuffersThread = new BufferThread(this);
+            fillBuffersThread = new QThread();
+            bufferWorker = new BufferWorker(this);
+            bufferWorker->moveToThread(fillBuffersThread);
+            connect(this, SIGNAL(fillBuffers()), bufferWorker, SLOT(fillBuffers()));
             fillBuffersThread->start();
             }
       }
@@ -91,6 +94,24 @@ void SamplePool::fillSteamBuffers()
                   }
             }
       streamMutex.unlock();
+      }
+
+void SamplePool::triggerBufferRefill()
+      {
+      emit fillBuffers();
+      }
+
+SamplePool:: ~SamplePool()
+      {
+      fillBuffersThread->quit();
+      fillBuffersThread->wait();
+      delete fillBuffersThread;
+      delete bufferWorker;
+      qDeleteAll(streams);
+
+      // delete samples
+      for (auto f2s : filename2sample)
+            delete f2s.second;
       }
 
 SampleStream::SampleStream(Voice *v, SamplePool *sp)
@@ -189,6 +210,8 @@ short SampleStream::getData(int pos) {
                   return 0;
                   }
             readPosMutex.unlock();
+            if ((writePos - readPos) <= (samplePool->fillPercentage() * STREAM_BUFFER_SIZE * voice->_sample->channel()))
+                  samplePool->triggerBufferRefill();
             return buffer[pos % (STREAM_BUFFER_SIZE * voice->_sample->channel())];
             }
       }
@@ -256,13 +279,8 @@ void SampleStream::fillBuffer() {
             }
       }
 
-
-void BufferThread::run()
+void BufferWorker::fillBuffers()
       {
-      while (true) {
-            samplePool->fillSteamBuffers();
-            // TODO use a time based on voices and buffer size!
-            usleep(100);
-            }
+      samplePool->fillSteamBuffers();
       }
 
