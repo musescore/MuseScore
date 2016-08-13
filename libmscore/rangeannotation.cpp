@@ -96,12 +96,14 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
-void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
+void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2, RangeAnnotation* range)
       {
       setPos(p1);
-      int width = p2.x() - p1.x();
-      int height = p2.y() - p1.y() + 10 ;
-      QRectF rr = QRectF(-5, -5, width, height);
+      qreal left = 0.0 - range->getProperty(P_ID::LEFT_MARGIN).toDouble();
+      qreal top = 0.0 - range->getProperty(P_ID::TOP_MARGIN).toDouble();
+      qreal width =  p2.x() - p1.x() + range->getProperty(P_ID::LEFT_MARGIN).toDouble() + range->getProperty(P_ID::RIGHT_MARGIN).toDouble();
+      qreal height = p2.y() - p1.y() + range->getProperty(P_ID::TOP_MARGIN).toDouble() + range->getProperty(P_ID::BOTTOM_MARGIN).toDouble();
+      QRectF rr = QRectF(left, top , width, height);
       setbbox(rr);
      }
 
@@ -161,19 +163,19 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
 
       switch (sst) {
             case SpannerSegmentType::SINGLE:
-                  rangeSegment->layoutSegment(rPos.p1, rPos.p2);
+                  rangeSegment->layoutSegment(rPos.p1, rPos.p2, this);
                   break;
             case SpannerSegmentType::BEGIN:
-                  rangeSegment->layoutSegment(rPos.p1, QPointF(system->bbox().width(), rPos.p2.y()));
+                  rangeSegment->layoutSegment(rPos.p1, QPointF(system->bbox().width(), rPos.p2.y()), this);
                   break;
             case SpannerSegmentType::MIDDLE: {
                   qreal x1 = firstNoteRestSegmentX(system);
                   qreal x2 = system->bbox().width();
-                  rangeSegment->layoutSegment(QPointF(x1, 0), QPointF(x2, rPos.p2.y()));
+                  rangeSegment->layoutSegment(QPointF(x1, 0), QPointF(x2, rPos.p2.y()), this);
                   }
                   break;
             case SpannerSegmentType::END:
-                  rangeSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), 0), rPos.p2);
+                  rangeSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), 0), rPos.p2, this);
                   break;
             }
 
@@ -274,8 +276,6 @@ void RangeAnnotation::rangePos(RangePos* rp)
       if (!ss1 || !ss2) {
             return;
             }
-
-      rp->p1.setY(rp->p1.y());
       rp->p2.setY(rp->p2.y() + ss2->bbox().y() - ss1->bbox().y() + ss2->bbox().height());
       }
 
@@ -445,7 +445,7 @@ QVariant RangeAnnotation::propertyDefault(P_ID id) const
                   return -3.0;
             case P_ID::TOP_MARGIN:
             case P_ID::BOTTOM_MARGIN:
-                  return 3.0;
+                  return 1.0;
             default:
                   return Spanner::propertyDefault(id);
             }

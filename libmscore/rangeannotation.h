@@ -11,6 +11,7 @@
 namespace Ms {
 
 class Score;
+class RangeAnnotation;
 struct RangePos;
 
 //---------------------------------------------------------
@@ -38,7 +39,7 @@ class RangeAnnotationSegment : public SpannerSegment {
       virtual Element::Type type() const { return Element::Type::RANGEANNOTATION_SEGMENT; }
       virtual int subtype() const         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const { return name(spanner()->type()); }
-      void layoutSegment(const QPointF& p1, const QPointF& p2);
+      void layoutSegment(const QPointF& p1, const QPointF& p2, RangeAnnotation* range);
       RangeAnnotationSegment* layoutSystem(System* system);
       virtual void draw(QPainter*) const;
       friend class RangeAnnotation;
@@ -59,8 +60,8 @@ class RangeAnnotation : public Spanner {
       Segment* _startSegment;
       Segment* _endSegment;
       Spatium _borderWidth  { Spatium(0) };
-      qreal _leftMargin { 5.0 }, _rightMargin  { 5.0 };
-      qreal _topMargin  { 5.0 }, _bottomMargin { 5.0 };
+      qreal _leftMargin { 3.0 }, _rightMargin  { -3.0 };
+      qreal _topMargin  { 1.0 }, _bottomMargin { 1.0 };
 
    public:
 
