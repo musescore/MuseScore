@@ -5589,18 +5589,21 @@ void ScoreView::cmdAddAnnotation()
 
 void ScoreView::cmdAddRangeAnnotation()
       {
-
       if (!_score->selection().isRange()) {
             ChordRest* cr = _score->getSelectedChordRest();
             if (!cr)
                   return;
             int stick = cr->tick();
             int etick = stick + cr->actualTicks();
+            int sstaff = cr->staffIdx();
+            int strack = sstaff * VOICES;
             RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
             rangeAnn->setParent(0);
             rangeAnn->setTick(stick);
             rangeAnn->setTick2(etick);
-            rangeAnn->setTrack(cr->track());
+            rangeAnn->setTrack(strack);
+            rangeAnn->setStaffStart(sstaff);
+            rangeAnn->setStaffEnd(sstaff);
             rangeAnn->setColor(Qt::yellow);
             _score->startCmd();
             _score->undoAddElement(rangeAnn);
@@ -5610,8 +5613,6 @@ void ScoreView::cmdAddRangeAnnotation()
 
       Segment* ss = score()->selection().startSegment();
       Segment* es = score()->selection().endSegment();
-      ss->setParent(ss->measure());
-      ss->parent()->setParent(ss->measure()->system());
       int stick = score()->selection().tickStart();
       int etick = score()->selection().tickEnd();
       int sstaff = score()->selection().staffStart();
