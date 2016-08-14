@@ -5352,7 +5352,7 @@
                         <head>1</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Open Hi-hat</name>
+                        <name>Open Hi-Hat</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6359,9 +6359,178 @@
                   <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="percussion">
+                  <longName>Percussion</longName>
+                  <shortName>Perc.</shortName>
+                  <description>Orchestral Percussion</description>
+                  <musicXMLid>drum.group.set</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="27">
+                        <head>1</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Closed Hi-Hat</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                  </Drum>
+                  <Drum pitch="28">
+                        <head>1</head>
+                        <line>9</line>
+                        <voice>1</voice>
+                        <name>Pedal Hi-Hat</name>
+                        <stem>2</stem>
+                        <shortcut>F</shortcut>
+                  </Drum>
+                  <Drum pitch="29">
+                        <head>1</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Open Hi-Hat</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                  </Drum>
+                  <Drum pitch="30">
+                        <head>1</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ride</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="36">
+                        <head>0</head>
+                        <line>7</line>
+                        <voice>1</voice>
+                        <name>Concert Bass Drum</name>
+                        <stem>2</stem>
+                        <shortcut>B</shortcut>
+                  </Drum>
+                  <Drum pitch="37">
+                        <head>1</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Snare Side Stick</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="38">
+                        <head>0</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Concert Snare Drum</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Drum pitch="39">
+                        <head>0</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Castanets</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="54">
+                        <head>2</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Tambourine</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="55">
+                        <head>1</head>
+                        <line>-3</line>
+                        <voice>0</voice>
+                        <name>Splash Cymbal</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="56">
+                        <head>3</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Cowbell</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="58">
+                        <head>2</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Vibraslap</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="59">
+                        <head>1</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Concert Cymbal</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                  </Drum>
+                  <Drum pitch="62">
+                        <head>1</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Mute High Conga </name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="63">
+                        <head>1</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Open High Conga</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="64">
+                        <head>1</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Low Conga</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="70">
+                        <head>0</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Maracas</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="75">
+                        <head>0</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Claves</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="81">
+                        <head>2</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Triangle</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                  </Drum>
+                  <Drum pitch="82">
+                        <head>0</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Shaker</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="84">
+                        <head>1</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Mark Tree</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="48"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="marching-percussion">
-            <name>Marching Percussion</name>
+            <name>Battery Percussion</name>
             <Instrument id="marching-snare">
                   <longName>Snare Drum</longName>
                   <shortName>S.D.</shortName>
@@ -6435,13 +6604,13 @@
                         <head>6</head>
                         <line>1</line>
                         <voice>2</voice>
-                        <name>Open High Hat</name>
+                        <name>Open Hi-Hat</name>
                   </Drum>
                   <Drum pitch="76">
                         <head>1</head>
                         <line>1</line>
                         <voice>2</voice>
-                        <name>Closed High Hat</name>
+                        <name>Closed Hi-Hat</name>
                   </Drum>
                   <Articulation>
                         <gateTime>100%</gateTime>
@@ -6817,6 +6986,7 @@
                         <program>58</program>
                   </channel>
                   <genre>common</genre>
+                  <genre>orchestra</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="vocals">
