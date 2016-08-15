@@ -272,7 +272,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::barGraceDistance,        "barGraceDistance",        Spatium(.6) },
       { StyleIdx::lyricsDashMinLength,     "lyricsDashMinLength",     Spatium(0.4) },
       { StyleIdx::lyricsDashMaxLength,     "lyricsDashMaxLegth",      Spatium(0.8) },
-
+      { StyleIdx::lyricsDashMaxDistance,   "lyricsDashMaxDistance",   Spatium(16.0) },
       { StyleIdx::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { StyleIdx::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
       { StyleIdx::ornamentStyle,           "ornamentStyle",           int(MScore::OrnamentStyle::DEFAULT) },
