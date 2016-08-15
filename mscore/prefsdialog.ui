@@ -96,7 +96,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -2993,6 +2993,69 @@
             </property>
             <property name="text">
              <string>Use JACK MIDI</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="zerberusSettings">
+         <property name="title">
+          <string>Zerberus Settings</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_14">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="enableStreaming">
+            <property name="text">
+             <string>Enable Streaming</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Buffer Size</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="BufferSize">
+            <property name="text">
+             <string>2048</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Refill at</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QSlider" name="refillPercent">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>50</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="refillLabel">
+            <property name="text">
+             <string>50%</string>
             </property>
            </widget>
           </item>

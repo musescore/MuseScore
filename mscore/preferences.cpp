@@ -205,6 +205,10 @@ void Preferences::init()
 
       workspace               = "Basic";
       exportPdfDpi            = 300;
+
+      zerberusUseStreaming    = true;
+      zerberusStreamingBufferSize = 2048;
+      zerberusRefillPercent = 50;
       };
 
 //---------------------------------------------------------
@@ -341,6 +345,10 @@ void Preferences::write()
       s.setValue("workspace", workspace);
       s.setValue("exportPdfDpi", exportPdfDpi);
       s.setValue("verticalPageOrientation", MScore::verticalOrientation());
+
+      s.setValue("zerberusUseStreaming", zerberusUseStreaming);
+      s.setValue("zerberusStreamingBufferSize", zerberusStreamingBufferSize);
+      s.setValue("zerberusRefillPercent", zerberusRefillPercent);
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
@@ -514,6 +522,10 @@ void Preferences::read()
       exportPdfDpi       = s.value("exportPdfDpi", exportPdfDpi).toInt();
       MScore::setVerticalOrientation(s.value("verticalPageOrientation", MScore::verticalOrientation()).toBool());
 
+      zerberusUseStreaming = s.value("zerberusUseStreaming", zerberusUseStreaming).toBool();
+      zerberusStreamingBufferSize = s.value("zerberusStreamingBufferSize", zerberusStreamingBufferSize).toInt();
+      zerberusRefillPercent = s.value("zerberusRefillPercent", zerberusRefillPercent).toFloat();
+
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
 
       QString ss(s.value("sessionStart", "score").toString());
@@ -677,6 +689,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
+      connect(refillPercent, SIGNAL(valueChanged(int)), SLOT(updateRefillLabel(int)));
+      connect(enableStreaming, SIGNAL(stateChanged(int)), SLOT(enableStreamingChanged(int)));
       updateRemote();
 
       MuseScore::restoreGeometry(this);
@@ -1006,6 +1020,10 @@ void PreferenceDialog::updateValues()
       exportAudioSampleRate->setCurrentIndex(idx);
       exportPdfDpi->setValue(prefs.exportPdfDpi);
       pageVertical->setChecked(MScore::verticalOrientation());
+
+      enableStreaming->setChecked(prefs.zerberusUseStreaming);
+      BufferSize->setText(QString::number(prefs.zerberusStreamingBufferSize));
+      refillPercent->setValue(prefs.zerberusRefillPercent);
       }
 
 //---------------------------------------------------------
@@ -1505,6 +1523,12 @@ void PreferenceDialog::apply()
 
       mscore->setIconSize(QSize(prefs.iconWidth * guiScaling, prefs.iconHeight * guiScaling));
 
+      prefs.zerberusUseStreaming = enableStreaming->isChecked();
+      prefs.zerberusRefillPercent = refillPercent->value();
+      prefs.zerberusStreamingBufferSize = BufferSize->text().toInt();
+      if (prefs.zerberusStreamingBufferSize <= 0)
+            prefs.zerberusStreamingBufferSize = 2048;
+
       preferences = prefs;
       emit preferencesChanged();
       preferences.write();
@@ -1733,6 +1757,24 @@ void PreferenceDialog::updateTranslationClicked()
       {
       ResourceManager r(0);
       r.exec();
+      }
+
+
+void PreferenceDialog::updateRefillLabel(int value)
+      {
+      refillLabel->setText(QString::number(value) + "%");
+      }
+
+void PreferenceDialog::enableStreamingChanged(int state)
+      {
+      if (state == Qt::Checked){
+            BufferSize->setEnabled(true);
+            refillPercent->setEnabled(true);
+      }
+      else {
+            BufferSize->setEnabled(false);
+            refillPercent->setEnabled(false);
+            }
       }
 
 //---------------------------------------------------------

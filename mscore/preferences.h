@@ -181,6 +181,10 @@ struct Preferences {
       QString workspace;
       int exportPdfDpi;
 
+      bool zerberusUseStreaming;
+      unsigned int zerberusStreamingBufferSize;
+      int zerberusRefillPercent;
+
       bool dirty;
 
       QList<PluginDescription> pluginList;

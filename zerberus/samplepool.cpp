@@ -10,12 +10,17 @@
 //=============================================================================
 
 #include "samplepool.h"
-#include "audiofile/audiofile.h"
+#include "mscore/preferences.h"
 #include "voice.h"
 #include "zone.h"
 
 SamplePool::SamplePool()
       {
+      _streaming = Ms::preferences.zerberusUseStreaming;
+      _fillPercentage = (float) Ms::preferences.zerberusRefillPercent / 100.0f;
+      _streamBufferSize = Ms::preferences.zerberusStreamingBufferSize;
+      qDebug() << "Streaming: " << _streaming << " BufferSize: " << _streamBufferSize << " fill Percentage " << _fillPercentage;
+
       if (streaming()) {
             fillBuffersThread = new QThread();
             bufferWorker = new BufferWorker(this);

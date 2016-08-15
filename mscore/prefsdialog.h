@@ -79,6 +79,9 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void changeSoundfontPaths();
       void updateTranslationClicked();
 
+      void updateRefillLabel(int value);
+      void enableStreamingChanged(int state);
+
    signals:
       void preferencesChanged();
       void mixerPreferencesChanged(bool showMidiControls);
