@@ -209,10 +209,9 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       painter->setPen(pen);
       painter->setBackgroundMode(Qt::OpaqueMode);
       if (selected())
-            painter->fillRect(bbox(), Qt::lightGray);
+            painter->fillRect(bbox(), QColor(0,0,0,127));
       else
             painter->fillRect(bbox(), color());
-      painter->setOpacity(1.0);     // set opacity back to normal
   //  Uncomment the following for adding border to the annotation
   //  painter->drawRect(bbox());
       }
