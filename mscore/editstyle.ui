@@ -4049,6 +4049,13 @@
             </widget>
            </item>
            <item row="2" column="0">
+            <widget class="QLabel" name="label_119">
+             <property name="text">
+              <string>Max. dash distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
             <widget class="QCheckBox" name="lyricsDashForce">
              <property name="text">
               <string>Always force dash</string>
@@ -4067,6 +4074,25 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="decimals">
+              <number>0</number>
+             </property>
+             <property name="minimum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>16.000000000000000</double>
+             </property>
+            </widget>
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
