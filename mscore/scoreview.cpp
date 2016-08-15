@@ -5604,7 +5604,9 @@ void ScoreView::cmdAddRangeAnnotation()
             rangeAnn->setTrack(strack);
             rangeAnn->setStaffStart(sstaff);
             rangeAnn->setStaffEnd(sstaff);
-            rangeAnn->setColor(Qt::yellow);
+            QColor yellow;
+            yellow.setAlpha(127);
+            rangeAnn->setColor(yellow);
             _score->startCmd();
             _score->undoAddElement(rangeAnn);
             _score->endCmd();
@@ -5627,7 +5629,9 @@ void ScoreView::cmdAddRangeAnnotation()
       rangeAnn->setStaffEnd(estaff);
       rangeAnn->setStartSegment(ss);
       rangeAnn->setEndSegment(es);
-      rangeAnn->setColor(Qt::yellow);
+      QColor yellow;
+      yellow.setAlpha(127);
+      rangeAnn->setColor(yellow);
       _score->startCmd();
       _score->undoAddElement(rangeAnn);
       _score->endCmd();

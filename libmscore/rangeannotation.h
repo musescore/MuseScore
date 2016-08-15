@@ -51,10 +51,7 @@ class RangeAnnotationSegment : public SpannerSegment {
 
 class RangeAnnotation : public Spanner {
       Q_OBJECT
-      Q_PROPERTY(Spatium                  borderWidth      READ borderWidth)
-      Q_PROPERTY(int                      opacity          READ opacity)
       Score* _score;
-      int _opacity;
       int _staffStart;
       int _staffEnd;
       Segment* _startSegment;
@@ -81,8 +78,6 @@ class RangeAnnotation : public Spanner {
       qreal firstNoteRestSegmentX(System* system);
       virtual RangeAnnotationSegment* layoutSystem(System* system);
       void rangePos(RangePos*);
-      Spatium borderWidth()                { return _borderWidth; }
-      int opacity()                    { return _opacity;     }
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void writeProperties(Xml&) const override;

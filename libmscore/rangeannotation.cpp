@@ -207,7 +207,6 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       pen.setWidthF(2.0 / painter->matrix().m11());
       pen.setStyle(Qt::SolidLine);
       painter->setPen(pen);
-      painter->setOpacity(0.4);
       painter->setBackgroundMode(Qt::OpaqueMode);
       if (selected())
             painter->fillRect(bbox(), Qt::lightGray);
