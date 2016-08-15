@@ -64,6 +64,8 @@ class StaffNameList : public QList<StaffName> {
 struct NamedEventList {
       QString name;
       QString descr;
+      int offsetInTicks = 0;
+      unsigned int noteDur = 1; // in ticks
       std::vector<MidiCoreEvent> events;
 
       void write(Xml&, const QString& name) const;

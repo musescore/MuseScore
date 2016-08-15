@@ -36,6 +36,10 @@ void NamedEventList::write(Xml& xml, const QString& n) const
       xml.stag(QString("%1 name=\"%2\"").arg(n).arg(name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
+      if (noteDur != 1)
+            xml.tagE(QString("noteDuration value=\"%1\"").arg(noteDur));
+      if (offsetInTicks != 0)
+            xml.tag("offset", offsetInTicks);
       foreach(const MidiCoreEvent& e, events)
             e.write(xml);
       xml.etag();
@@ -62,6 +66,18 @@ void NamedEventList::read(XmlReader& e)
                   ev.setDataB(e.intAttribute("value", 0));
                   events.push_back(ev);
                   e.skipCurrentElement();
+                  }
+            else if (tag == "note-on") {
+                  MidiCoreEvent ev(ME_NOTEON, e.intAttribute("channel", 0), e.intAttribute("pitch", 0), e.intAttribute("velo", 1));
+                  events.push_back(ev);
+                  e.skipCurrentElement();
+                  }
+            else if (tag == "noteDuration") {
+                  noteDur= e.intAttribute("value", 1);
+                  e.skipCurrentElement();
+                  }
+            else if (tag == "offset") {
+                  offsetInTicks = e.readInt();
                   }
             else if (tag == "descr")
                   descr = e.readElementText();

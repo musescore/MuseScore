@@ -434,10 +434,12 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               for (MidiCoreEvent event : nel->events) {
                                     event.setChannel(channel);
                                     NPlayEvent e(event);
-                                    if (e.dataA() == CTRL_PROGRAM)
-                                          events->insert(std::pair<int, NPlayEvent>(tick-1, e));
-                                    else
-                                          events->insert(std::pair<int, NPlayEvent>(tick, e));
+                                    events->insert(std::pair<int, NPlayEvent>(tick + nel->offsetInTicks, e));
+                                    if (event.type() == ME_NOTEON) {
+                                          NPlayEvent noteoff(event);
+                                          noteoff.setDataB(0);
+                                          events->insert(std::pair<int, NPlayEvent>(tick + nel->offsetInTicks + nel->noteDur, noteoff));
+                                          }
                                     }
                               }
                         }
