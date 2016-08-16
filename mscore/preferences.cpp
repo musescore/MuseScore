@@ -207,8 +207,8 @@ void Preferences::init()
       exportPdfDpi            = 300;
 
       zerberusUseStreaming    = true;
-      zerberusStreamingBufferSize = 2048;
-      zerberusRefillPercent = 50;
+      zerberusStreamingBufferSize = 4096;
+      zerberusRefillPercent = 30;
       };
 
 //---------------------------------------------------------

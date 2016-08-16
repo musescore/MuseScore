@@ -43,7 +43,6 @@ class SampleStream
       Voice* voice;
       SF_INFO info;
       SNDFILE *sf;
-      QMutex readPosMutex;
 
 public:
       SampleStream(Voice *v, SamplePool* sp);
@@ -77,6 +76,7 @@ class SamplePool : public QObject
       BufferWorker* bufferWorker;
       QMutex streamMutex;
       bool fillDone = true;
+      bool refillRuns = false;
 
 signals:
       void fillBuffers();

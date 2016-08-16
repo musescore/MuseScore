@@ -89,6 +89,7 @@ void SamplePool::deleteSampleStream(SampleStream *sampleStream)
 
 void SamplePool::fillSteamBuffers()
       {
+      refillRuns = true;
       streamMutex.lock();
       for (SampleStream* sampleStream : streams) {
             try {
@@ -99,10 +100,13 @@ void SamplePool::fillSteamBuffers()
                   }
             }
       streamMutex.unlock();
+      refillRuns = false;
       }
 
 void SamplePool::triggerBufferRefill()
       {
+      if (refillRuns)
+            return;
       emit fillBuffers();
       }
 
@@ -205,18 +209,18 @@ short SampleStream::getData(int pos) {
                   return buffer[pos];
             }
       else {
-            readPosMutex.lock();
+            //readPosMutex.lock();
             if ((unsigned int) pos > readPos && (unsigned int) pos < writePos)
                   readPos = pos;
-            if ((unsigned int) pos >= writePos) {
-                  //qDebug("ERROR: streaming buffer empty! pos %d, writePos %d", pos, writePos);
-                  // TODO Skip reading if already behind
-                  readPosMutex.unlock();
-                  return 0;
-                  }
-            readPosMutex.unlock();
             if ((writePos - readPos) <= (samplePool->fillPercentage() * samplePool->streamBufferSize() * voice->_sample->channel()))
                   samplePool->triggerBufferRefill();
+            if ((unsigned int) pos >= writePos) {
+                  qDebug("ERROR: streaming buffer empty! pos %d, writePos %d", pos, writePos);
+                  // TODO Skip reading if already behind
+                  //readPosMutex.unlock();
+                  return 0;
+                  }
+            //readPosMutex.unlock();
             return buffer[pos % (samplePool->streamBufferSize() * voice->_sample->channel())];
             }
       }
@@ -225,21 +229,16 @@ void SampleStream::fillBuffer() {
       if (!streaming)
             return;
 
-      readPosMutex.lock();
       unsigned int writePosInBuffer = writePos % (samplePool->streamBufferSize() * voice->_sample->channel());
       if (readPos < backwardSampleCount) {
-            readPosMutex.unlock();
             return;
             }
       unsigned int readBackInBuffer = (readPos - backwardSampleCount) % (samplePool->streamBufferSize() * voice->_sample->channel());
 
       // buffer is full
       if ((writePos - readPos) >= samplePool->streamBufferSize()) {
-            readPosMutex.unlock();
             return;
             }
-
-      readPosMutex.unlock();
 
       sf_count_t toFill;
 
