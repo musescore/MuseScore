@@ -216,6 +216,9 @@
                <property name="text">
                 <string>Musical text font:</string>
                </property>
+               <property name="buddy">
+                <cstring>musicalTextFont</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -270,6 +273,9 @@
                   <property name="text">
                    <string>Minimum number of empty measures:</string>
                   </property>
+                  <property name="buddy">
+                   <cstring>minEmptyMeasures</cstring>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
@@ -292,6 +298,9 @@
                  <widget class="QLabel" name="label_16">
                   <property name="text">
                    <string>Minimum width of measure:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>minMeasureWidth</cstring>
                   </property>
                  </widget>
                 </item>
@@ -432,6 +441,9 @@
                  <widget class="QLabel" name="label_3">
                   <property name="text">
                    <string>Select swing ratio:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>swingBox</cstring>
                   </property>
                  </widget>
                 </item>
@@ -1739,6 +1751,9 @@
                      <property name="text">
                       <string>Symbol:</string>
                      </property>
+                     <property name="buddy">
+                      <cstring>dividerLeftSym</cstring>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1766,6 +1781,9 @@
                      <property name="text">
                       <string>Horizontal offset:</string>
                      </property>
+                     <property name="buddy">
+                      <cstring>dividerLeftX</cstring>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1782,6 +1800,9 @@
                     <widget class="QLabel" name="label_65">
                      <property name="text">
                       <string>Vertical offset:</string>
+                     </property>
+                     <property name="buddy">
+                      <cstring>dividerLeftY</cstring>
                      </property>
                     </widget>
                    </item>
@@ -1832,6 +1853,9 @@
                      <property name="text">
                       <string>Symbol:</string>
                      </property>
+                     <property name="buddy">
+                      <cstring>dividerRightSym</cstring>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1859,6 +1883,9 @@
                      <property name="text">
                       <string>Horizontal offset:</string>
                      </property>
+                     <property name="buddy">
+                      <cstring>dividerRightX</cstring>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1875,6 +1902,9 @@
                     <widget class="QLabel" name="label_68">
                      <property name="text">
                       <string>Vertical offset:</string>
+                     </property>
+                     <property name="buddy">
+                      <cstring>dividerRightY</cstring>
                      </property>
                     </widget>
                    </item>
@@ -1950,6 +1980,9 @@
               <widget class="QLabel" name="label_108">
                <property name="text">
                 <string>Clef to time signature distance:</string>
+               </property>
+               <property name="buddy">
+                <cstring>clefTimesigDistance</cstring>
                </property>
               </widget>
              </item>
@@ -2262,6 +2295,9 @@
                <property name="text">
                 <string>Barline to accidental distance:</string>
                </property>
+               <property name="buddy">
+                <cstring>barAccidentalDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="19" column="1">
@@ -2294,6 +2330,9 @@
               <widget class="QLabel" name="label_103">
                <property name="text">
                 <string>Multimeasure rest margin:</string>
+               </property>
+               <property name="buddy">
+                <cstring>multiMeasureRestMargin</cstring>
                </property>
               </widget>
              </item>
@@ -2341,7 +2380,7 @@
                 <string>Barline to grace note distance:</string>
                </property>
                <property name="buddy">
-                <cstring>barNoteDistance</cstring>
+                <cstring>barGraceDistance</cstring>
                </property>
               </widget>
              </item>
@@ -2571,12 +2610,18 @@
                <property name="text">
                 <string>Clef to key distance:</string>
                </property>
+               <property name="buddy">
+                <cstring>clefKeyDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="14" column="0">
               <widget class="QLabel" name="label_109">
                <property name="text">
                 <string>Key to time signature distance:</string>
+               </property>
+               <property name="buddy">
+                <cstring>keyTimesigDistance</cstring>
                </property>
               </widget>
              </item>
@@ -2693,12 +2738,18 @@
                <property name="text">
                 <string>Key to barline distance:</string>
                </property>
+               <property name="buddy">
+                <cstring>keyBarlineDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="16" column="0">
               <widget class="QLabel" name="label_111">
                <property name="text">
                 <string>System header distance:</string>
+               </property>
+               <property name="buddy">
+                <cstring>systemHeaderDistance</cstring>
                </property>
               </widget>
              </item>
@@ -2799,6 +2850,9 @@
                <property name="text">
                 <string>System header to time signature distance:</string>
                </property>
+               <property name="buddy">
+                <cstring>systemHeaderTimeSigDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="16" column="5">
@@ -2840,7 +2894,7 @@
                 <string>Time signature to barline distance:</string>
                </property>
                <property name="buddy">
-                <cstring>timesigLeftMargin</cstring>
+                <cstring>timesigBarlineDistance</cstring>
                </property>
               </widget>
              </item>
@@ -4046,12 +4100,18 @@
              <property name="text">
               <string>Max. dash length:</string>
              </property>
+             <property name="buddy">
+              <cstring>lyricsDashMaxLength</cstring>
+             </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_119">
              <property name="text">
               <string>Max. dash distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDashMaxDistance</cstring>
              </property>
             </widget>
            </item>
@@ -4133,6 +4193,9 @@
             <widget class="QLabel" name="label_93">
              <property name="text">
               <string>Min. dash length:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDashMinLength</cstring>
              </property>
             </widget>
            </item>
@@ -4366,6 +4429,9 @@
             <widget class="QLabel" name="label_117">
              <property name="text">
               <string>Autoplace: Distance to dynamics:</string>
+             </property>
+             <property name="buddy">
+              <cstring>autoplaceHairpinDynamicsDistance</cstring>
              </property>
             </widget>
            </item>
@@ -5170,6 +5236,9 @@
              <property name="text">
               <string>Autoplace min. distance:</string>
              </property>
+             <property name="buddy">
+              <cstring>dynamicsMinDistance</cstring>
+             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -5758,6 +5827,9 @@
              <property name="text">
               <string>Barré line thickness:</string>
              </property>
+             <property name="buddy">
+              <cstring>barreLineWidth</cstring>
+             </property>
             </widget>
            </item>
            <item row="2" column="1">
@@ -5780,6 +5852,9 @@
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Scale:</string>
+             </property>
+             <property name="buddy">
+              <cstring>fretMag</cstring>
              </property>
             </widget>
            </item>
@@ -6794,6 +6869,9 @@
                 <property name="indent">
                  <number>10</number>
                 </property>
+                <property name="buddy">
+                 <cstring>tupletBracketWidth</cstring>
+                </property>
                </widget>
               </item>
               <item row="0" column="1">
@@ -6874,6 +6952,9 @@
                 <property name="indent">
                  <number>10</number>
                 </property>
+                <property name="buddy">
+                 <cstring>tupletDirection</cstring>
+                </property>
                </widget>
               </item>
               <item row="0" column="3">
@@ -6902,6 +6983,9 @@
                 </property>
                 <property name="indent">
                  <number>10</number>
+                </property>
+                <property name="buddy">
+                 <cstring>tupletNumberType</cstring>
                 </property>
                </widget>
               </item>
@@ -6937,6 +7021,9 @@
                 </property>
                 <property name="indent">
                  <number>10</number>
+                </property>
+                <property name="buddy">
+                 <cstring>tupletBracketType</cstring>
                 </property>
                </widget>
               </item>
@@ -7134,6 +7221,10 @@
   <tabstop>frameSystemDistance</tabstop>
   <tabstop>lastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
+  <tabstop>genCourtesyTimesig</tabstop>
+  <tabstop>genKeysig</tabstop>
+  <tabstop>genCourtesyKeysig</tabstop>
+  <tabstop>genCourtesyClef</tabstop>
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
   <tabstop>headerOddEven</tabstop>
@@ -7171,20 +7262,51 @@
   <tabstop>dividerRightX</tabstop>
   <tabstop>dividerRightY</tabstop>
   <tabstop>minMeasureWidth_2</tabstop>
+  <tabstop>resetMinMeasureWidth</tabstop>
+  <tabstop>measureSpacing</tabstop>
+  <tabstop>resetMeasureSpacing</tabstop>
   <tabstop>barNoteDistance</tabstop>
+  <tabstop>resetBarNoteDistance</tabstop>
+  <tabstop>barGraceDistance</tabstop>
+  <tabstop>resetBarGraceDistance</tabstop>
   <tabstop>barAccidentalDistance</tabstop>
+  <tabstop>resetBarAccidentalDistance</tabstop>
   <tabstop>noteBarDistance</tabstop>
+  <tabstop>resetNoteBarDistance</tabstop>
   <tabstop>minNoteDistance</tabstop>
+  <tabstop>resetMinNoteDistance</tabstop>
   <tabstop>clefLeftMargin</tabstop>
+  <tabstop>resetClefLeftMargin</tabstop>
   <tabstop>keysigLeftMargin</tabstop>
+  <tabstop>resetKeysigLeftMargin</tabstop>
   <tabstop>timesigLeftMargin</tabstop>
+  <tabstop>resetTimesigLeftMargin</tabstop>
+  <tabstop>timesigBarlineDistance</tabstop>
+  <tabstop>resetTimesigBarlineDistance</tabstop>
   <tabstop>clefKeyRightMargin</tabstop>
+  <tabstop>resetClefKeyRightMargin</tabstop>
   <tabstop>clefBarlineDistance</tabstop>
+  <tabstop>resetClefBarlineDistance</tabstop>
+  <tabstop>clefKeyDistance</tabstop>
+  <tabstop>resetClefKeyDistance</tabstop>
+  <tabstop>clefTimesigDistance</tabstop>
+  <tabstop>resetClefTimesigDistance</tabstop>
+  <tabstop>keyTimesigDistance</tabstop>
+  <tabstop>resetKeyTimesigDistance</tabstop>
+  <tabstop>keyBarlineDistance</tabstop>
+  <tabstop>resetKeyBarlineDistance</tabstop>
+  <tabstop>systemHeaderDistance</tabstop>
+  <tabstop>resetSystemHeaderDistance</tabstop>
+  <tabstop>systemHeaderTimeSigDistance</tabstop>
+  <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
   <tabstop>multiMeasureRestMargin</tabstop>
+  <tabstop>resetMultiMeasureRestMargin</tabstop>
   <tabstop>staffLineWidth</tabstop>
+  <tabstop>resetStaffLineWidth</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
   <tabstop>showStartBarlineMultiple</tabstop>
+  <tabstop>scaleBarlines</tabstop>
   <tabstop>barWidth</tabstop>
   <tabstop>endBarWidth</tabstop>
   <tabstop>endBarDistance</tabstop>
@@ -7218,6 +7340,10 @@
   <tabstop>smallNoteSize</tabstop>
   <tabstop>graceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
+  <tabstop>lyricsDashMinLength</tabstop>
+  <tabstop>lyricsDashMaxLength</tabstop>
+  <tabstop>lyricsDashMaxDistance</tabstop>
+  <tabstop>lyricsDashForce</tabstop>
   <tabstop>hairpinY</tabstop>
   <tabstop>resetHairpinY</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
@@ -7226,6 +7352,8 @@
   <tabstop>resetHairpinHeight</tabstop>
   <tabstop>hairpinContinueHeight</tabstop>
   <tabstop>resetHairpinContinueHeight</tabstop>
+  <tabstop>autoplaceHairpinDynamicsDistance</tabstop>
+  <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
   <tabstop>voltaY</tabstop>
   <tabstop>resetVoltaY</tabstop>
   <tabstop>voltaHook</tabstop>
@@ -7245,9 +7373,15 @@
   <tabstop>ottavaLineStyle</tabstop>
   <tabstop>resetOttavaLineStyle</tabstop>
   <tabstop>pedalY</tabstop>
+  <tabstop>resetPedalY</tabstop>
   <tabstop>pedalLineWidth</tabstop>
+  <tabstop>resetPedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
+  <tabstop>resetPedalLineStyle</tabstop>
   <tabstop>trillY</tabstop>
+  <tabstop>resetTrillY</tabstop>
+  <tabstop>dynamicsMinDistance</tabstop>
+  <tabstop>resetDynamicsMinDistance</tabstop>
   <tabstop>chordsStandard</tabstop>
   <tabstop>chordsJazz</tabstop>
   <tabstop>chordsCustom</tabstop>
@@ -7292,14 +7426,28 @@
   <tabstop>radioKeySigNatBefore</tabstop>
   <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>tupletMaxSlope</tabstop>
+  <tabstop>resetTupletMaxSlope</tabstop>
   <tabstop>tupletVStemDistance</tabstop>
+  <tabstop>resetTupletVStemDistance</tabstop>
   <tabstop>tupletVHeadDistance</tabstop>
+  <tabstop>resetTupletVHeadDistance</tabstop>
   <tabstop>tupletOutOfStaff</tabstop>
   <tabstop>tupletStemLeftDistance</tabstop>
+  <tabstop>resetTupletStemLeftDistance</tabstop>
   <tabstop>tupletNoteLeftDistance</tabstop>
+  <tabstop>resetTupletNoteLeftDistance</tabstop>
   <tabstop>tupletStemRightDistance</tabstop>
+  <tabstop>resetTupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
+  <tabstop>resetTupletNoteRightDistance</tabstop>
   <tabstop>tupletBracketWidth</tabstop>
+  <tabstop>resetTupletBracketWidth</tabstop>
+  <tabstop>tupletDirection</tabstop>
+  <tabstop>resetTupletDirection</tabstop>
+  <tabstop>tupletNumberType</tabstop>
+  <tabstop>resetTupletNumberType</tabstop>
+  <tabstop>tupletBracketType</tabstop>
+  <tabstop>resetTupletBracketType</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
