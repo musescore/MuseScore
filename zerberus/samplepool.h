@@ -70,12 +70,11 @@ class SamplePool : public QObject
       std::map<QString, Sample*> filename2sample;
       std::vector<SampleStream *> streams;
       bool _streaming = true;
-      float _fillPercentage = 0.5;
-      unsigned int _streamBufferSize = 2048;
-      QThread* fillBuffersThread;
-      BufferWorker* bufferWorker;
-      QMutex streamMutex;
-      bool fillDone = true;
+      float _fillPercentage = 0.3; // if the buffer is filled lower than this percentage it triggers a refill
+      unsigned int _streamBufferSize = 4096; // size of the ringbuffer (in frames) that gets filled and read during streaming
+      QThread* fillBuffersThread; // this thread will run the worker below
+      BufferWorker* bufferWorker; // this worker will run the buffer refill in a seperate thread (once triggered)
+      QMutex streamMutex; // mutex for stream access (by audio thread and buffer refill thread)
       bool refillRuns = false;
 
 signals:
