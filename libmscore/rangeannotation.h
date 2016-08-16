@@ -41,6 +41,13 @@ class RangeAnnotationSegment : public SpannerSegment {
       virtual QString subtypeName() const { return name(spanner()->type()); }
       void layoutSegment(const QPointF& p1, const QPointF& p2, RangeAnnotation* range);
       RangeAnnotationSegment* layoutSystem(System* system);
+      virtual void writeProperties(Xml&) const override;
+      virtual bool readProperties(XmlReader&) override;
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+
       virtual void draw(QPainter*) const;
       friend class RangeAnnotation;
       };

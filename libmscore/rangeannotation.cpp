@@ -209,7 +209,7 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       painter->setPen(pen);
       painter->setBackgroundMode(Qt::OpaqueMode);
       if (selected())
-            painter->fillRect(bbox(), QColor(0,0,0,127));
+            painter->fillRect(bbox(), QColor(0,255,255,100));
       else
             painter->fillRect(bbox(), color());
   //  Uncomment the following for adding border to the annotation
@@ -352,7 +352,7 @@ void RangeAnnotation::writeProperties(Xml& xml) const
       writeProperty(xml, P_ID::TOP_MARGIN);
       writeProperty(xml, P_ID::BOTTOM_MARGIN);
 
-      Element::writeProperties(xml);
+      Spanner::writeProperties(xml);
       }
 //---------------------------------------------------------
 //   readProperties
@@ -447,6 +447,51 @@ QVariant RangeAnnotation::propertyDefault(P_ID id) const
             default:
                   return Spanner::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void RangeAnnotationSegment::writeProperties(Xml& xml) const
+      {
+      spanner()->writeProperties(xml);
+      SpannerSegment::writeProperties(xml);
+      }
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool RangeAnnotationSegment::readProperties(XmlReader& e)
+      {
+      spanner()->readProperties(e);
+      SpannerSegment::readProperties(e);
+      }
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant RangeAnnotationSegment::getProperty(P_ID propertyId) const
+      {
+      return spanner()->getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool RangeAnnotationSegment::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      return spanner()->setProperty(propertyId, v);
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant RangeAnnotationSegment::propertyDefault(P_ID id) const
+      {
+      return spanner()->propertyDefault(id);
       }
 }
 

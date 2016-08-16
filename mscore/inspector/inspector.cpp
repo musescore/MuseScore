@@ -246,6 +246,10 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::GLISSANDO_SEGMENT:
                               ie = new InspectorGlissando(this);
                               break;
+                        case Element::Type::RANGEANNOTATION:
+                        case Element::Type::RANGEANNOTATION_SEGMENT:
+                              ie = new InspectorRangeAnnotation(this);
+                              break;
                         case Element::Type::TEMPO_TEXT:
                               ie = new InspectorTempoText(this);
                               break;
@@ -511,6 +515,26 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             };
       mapSignals();
       }
+//---------------------------------------------------------
+//   InspectorRangeAnnotation
+//---------------------------------------------------------
+
+InspectorRangeAnnotation::InspectorRangeAnnotation(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      ra.setupUi(addWidget());
+
+      iList = {
+            { P_ID::LINE_WIDTH, 0, 0, ra.borderWidth, ra.resetBorderWIdth},
+            { P_ID::LEFT_MARGIN,   0, 0, ra.leftMargin,   ra.resetLeftMargin},
+            { P_ID::RIGHT_MARGIN,  0, 0, ra.rightMargin,  ra.resetRightMargin},
+            { P_ID::TOP_MARGIN,    0, 0, ra.topMargin,    ra.resetTopMargin},
+            { P_ID::BOTTOM_MARGIN, 0, 0, ra.bottomMargin, ra.resetBottomMargin}
+            };
+      mapSignals();
+      }
+
 
 //---------------------------------------------------------
 //   InspectorSpacer
