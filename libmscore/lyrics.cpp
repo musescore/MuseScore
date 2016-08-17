@@ -37,9 +37,9 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
             // search through all tracks of current staff looking for a lyric in specified verse
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && !cr->lyricsList().empty()) {
+                  if (cr && !cr->lyrics().empty()) {
                         // cr with lyrics found, but does it have a syllable in specified verse?
-                        l = cr->lyricsList().value(verse);
+                        l = cr->lyrics().value(verse);
                         if (l)
                               break;
                         }
@@ -214,18 +214,6 @@ void Lyrics::remove(Element* el)
       }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-/* As the lyrics line is now drawn by the system it belongs to, standard Text drawing is enough.
-
-void Lyrics::draw(QPainter* painter) const
-      {
-      Text::draw(painter);
-      }
-*/
-
-//---------------------------------------------------------
 //   isMelisma
 //---------------------------------------------------------
 
@@ -291,7 +279,7 @@ void Lyrics::layout1()
           return;
 
       ChordRest* cr = chordRest();
-      const QVector<Lyrics*>* ll = &(cr->lyricsList());
+      const QVector<Lyrics*>* ll = &(cr->lyrics());
 
       qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
       int line = ll->indexOf(this);

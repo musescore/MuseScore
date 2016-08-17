@@ -22,7 +22,6 @@
 #include "measure.h"
 #include "barline.h"
 #include "part.h"
-#include "lyrics.h"
 #include "repeat.h"
 #include "staff.h"
 #include "line.h"
@@ -777,25 +776,6 @@ int Segment::tick() const
 void Segment::setTick(int t)
       {
       _tick = t - measure()->tick();
-      }
-
-//---------------------------------------------------------
-//   segLyricsList
-//---------------------------------------------------------
-
-const QVector<Lyrics*>* Segment::lyricsList(int track) const
-      {
-      if (!(segmentType() & (Type::ChordRest))) {
-            if (MScore::debugMode)
-                  qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
-            return 0;
-            }
-
-      ChordRest* cr = static_cast<ChordRest*>(element(track));
-      if (cr)
-            return &cr->lyricsList();
-
-      return 0;
       }
 
 //---------------------------------------------------------

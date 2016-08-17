@@ -47,7 +47,7 @@ class System;
 
 /**
  All Elements in a segment start at the same tick. The Segment can store one Element for
- each voice in each staff in the score. It also stores the lyrics for each staff.
+ each voice in each staff in the score.
  Some elements (Clef, KeySig, TimeSig etc.) are assumed to always have voice zero
  and can be found in _elist[staffIdx * VOICES];
 
@@ -153,7 +153,6 @@ class Segment : public Element {
 
       void removeElement(int track);
       void setElement(int track, Element* el);
-      const QVector<Lyrics*>* lyricsList(int track) const;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       Measure* measure() const            { return (Measure*)parent(); }

@@ -2603,7 +2603,7 @@ Lyrics* Score::addLyrics()
       else
             return 0;
 
-      int no = cr->lyricsList().size();
+      int no = cr->lyrics().size();
       Lyrics* lyrics = new Lyrics(this);
       lyrics->setTrack(cr->track());
       lyrics->setParent(cr);

@@ -4825,7 +4825,7 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             case Element::Type::CHORD:
                   {
                   Chord* c = static_cast<Chord*>(el);
-                  const auto ll = &c->lyricsList();
+                  const auto ll = &c->lyrics();
                   // ise grace after
                   if (c) {
                         for (Chord* g : c->graceNotesBefore()) {
@@ -5276,7 +5276,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                     case Element::Type::CHORD:
                                           {
                                           Chord* c                 = static_cast<Chord*>(el);
-                                          const QVector<Lyrics*>* ll = &c->lyricsList();
+                                          const QVector<Lyrics*>* ll = &c->lyrics();
                                           // ise grace after
                                           if (c) {
                                                 for (Chord* g : c->graceNotesBefore()) {

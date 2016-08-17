@@ -101,9 +101,9 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _small        = cr._small;
       _crossMeasure = cr._crossMeasure;
 
-      for (Lyrics* l : cr._lyricsList) {        // make deep copy
+      for (Lyrics* l : cr._lyrics) {        // make deep copy
             if (l == 0) {
-                  _lyricsList.append(0);
+                  _lyrics.append(0);
                   continue;
                   }
             Lyrics* nl = new Lyrics(*l);
@@ -111,7 +111,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
                   nl->linkTo(l);
             nl->setParent(this);
             nl->setTrack(track());
-            _lyricsList.append(nl);
+            _lyrics.append(nl);
             }
       }
 
@@ -124,7 +124,7 @@ void ChordRest::undoUnlink()
       DurationElement::undoUnlink();
       for (Articulation* a : _articulations)
             a->undoUnlink();
-      for (Lyrics* l : _lyricsList) {
+      for (Lyrics* l : _lyrics) {
             if (l)
                   l->undoUnlink();
             }
@@ -136,12 +136,9 @@ void ChordRest::undoUnlink()
 
 ChordRest::~ChordRest()
       {
-      foreach (Articulation* a,  _articulations)
-            delete a;
-      foreach (Lyrics* l, _lyricsList)
-            delete l;
-      if (_tabDur)
-            delete _tabDur;
+      qDeleteAll(_articulations);
+      qDeleteAll(_lyrics);
+      delete _tabDur;
       }
 
 //---------------------------------------------------------
@@ -153,9 +150,9 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
       if (_beam && (_beam->elements().front() == this)
        && !measure()->slashStyle(staffIdx()))
             _beam->scanElements(data, func, all);
-      foreach(Articulation* a, _articulations)
+      for (Articulation* a : _articulations)
             func(data, a);
-      foreach(Lyrics* l, _lyricsList) {
+      for (Lyrics* l : _lyrics) {
             if (l)
                   l->scanElements(data, func, all);
             }
@@ -220,7 +217,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if (_beam && !_beam->generated())
             xml.tag("Beam", _beam->id());
 #endif
-      for (Lyrics* lyrics : _lyricsList) {
+      for (Lyrics* lyrics : _lyrics) {
             if (lyrics)
                   lyrics->write(xml);
             }
@@ -1137,7 +1134,7 @@ void ChordRest::add(Element* e)
       switch(e->type()) {
             case Element::Type::ARTICULATION:
                   {
-                  Articulation* a = static_cast<Articulation*>(e);
+                  Articulation* a = toArticulation(e);
                   _articulations.push_back(a);
                   if (a->timeStretch() != 1.0)
                         score()->fixTicks();          // update tempo map
@@ -1145,13 +1142,11 @@ void ChordRest::add(Element* e)
                   break;
             case Element::Type::LYRICS:
                   {
-                  Lyrics* l = static_cast<Lyrics*>(e);
-                  int size = _lyricsList.size();
-                  if (l->no() >= size) {
-                        for (int i = size-1; i < l->no(); ++i)
-                              _lyricsList.append(0);
-                        }
-                  _lyricsList[l->no()] = l;
+                  Lyrics* l = toLyrics(e);
+                  int size = _lyrics.size();
+                  for (int i = size-1; i < l->no(); ++i)
+                        _lyrics.push_back(0);
+                  _lyrics[l->no()] = l;
                   }
                   break;
             default:
@@ -1169,7 +1164,7 @@ void ChordRest::remove(Element* e)
       switch (e->type()) {
             case Element::Type::ARTICULATION:
                   {
-                  Articulation* a = static_cast<Articulation*>(e);
+                  Articulation* a = toArticulation(e);
                   if (!_articulations.removeOne(a))
                         qDebug("ChordRest::remove(): articulation not found");
                   if (a->timeStretch() != 1.0)
@@ -1178,13 +1173,13 @@ void ChordRest::remove(Element* e)
                   break;
             case Element::Type::LYRICS:
                   {
-                  for (int i = 0; i < _lyricsList.size(); ++i) {
-                        if (_lyricsList[i] != e)
+                  for (int i = 0; i < _lyrics.size(); ++i) {
+                        if (_lyrics[i] != e)
                               continue;
-                        _lyricsList[i]->removeFromScore();
-                        _lyricsList[i] = 0;
-                        while (!_lyricsList.empty() && _lyricsList.back() == 0)
-                              _lyricsList.takeLast();
+                        _lyrics[i]->removeFromScore();
+                        _lyrics[i] = 0;
+                        while (!_lyrics.empty() && _lyrics.back() == 0)
+                              _lyrics.takeLast();
                         return;
                         }
                   }
@@ -1380,7 +1375,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
             func(a);
       if (_tabDur)
             func(_tabDur);
-      for (Lyrics* l : _lyricsList)
+      for (Lyrics* l : _lyrics)
             if (l)
                   func(l);
       if (tuplet())
@@ -1408,21 +1403,24 @@ Element* ChordRest::prevElement()
 QString ChordRest::accessibleExtraInfo() const
       {
       QString rez = "";
-      foreach (Articulation* a, articulations()) {
-            if (!score()->selectionFilter().canSelect(a)) continue;
+      for (Articulation* a : articulations()) {
+            if (!score()->selectionFilter().canSelect(a))
+                  continue;
             rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
             }
 
-      foreach (Element* l, lyricsList()) {
+      for (Element* l : lyrics()) {
             if (!l)
                   continue;
-            if (!score()->selectionFilter().canSelect(l)) continue;
+            if (!score()->selectionFilter().canSelect(l))
+                  continue;
             rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
             }
 
       if (segment()) {
-            foreach (Element* e, segment()->annotations()) {
-                  if (!score()->selectionFilter().canSelect(e)) continue;
+            for (Element* e : segment()->annotations()) {
+                  if (!score()->selectionFilter().canSelect(e))
+                        continue;
                   if (e->staffIdx() == staffIdx() )
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -1431,7 +1429,8 @@ QString ChordRest::accessibleExtraInfo() const
             auto spanners = smap.findOverlapping(tick(), tick());
             for (auto interval : spanners) {
                   Spanner* s = interval.value;
-                  if (!score()->selectionFilter().canSelect(s)) continue;
+                  if (!score()->selectionFilter().canSelect(s))
+                        continue;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
                       s->type() == Element::Type::TIE    ) //ties are added in notes
                         continue;
@@ -1466,12 +1465,14 @@ Shape ChordRest::shape() const
       Shape shape;
       for (Articulation* a : _articulations)
             shape.add(a->bbox().translated(a->pos()));
+#if 0
       qreal margin = spatium() * .5;
-      for (Lyrics* l : _lyricsList) {
+      for (Lyrics* l : _lyrics) {
             if (!l)
                   continue;
             shape.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
             }
+#endif
       return shape;
       }
 }

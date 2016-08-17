@@ -1465,7 +1465,7 @@ void Score::removeElement(Element* element)
                   ChordRest* cr = toChordRest(element);
                   if (cr->beam())
                         cr->beam()->remove(cr);
-                  for (Lyrics* lyr : cr->lyricsList())
+                  for (Lyrics* lyr : cr->lyrics())
                         if (lyr)                // lyrics list may be sparse
                               lyr->removeFromScore();
                   // TODO: check for tuplet?
@@ -3658,7 +3658,8 @@ bool Score::hasLyrics()
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = 0; i < ntracks(); ++i) {
-                  if (seg->lyricsList(i) && seg->lyricsList(i)->size() > 0)
+                  ChordRest* cr = toChordRest(seg->element(i));
+                  if (cr && !cr->lyrics().isEmpty())
                         return true;
                   }
             }
@@ -3691,8 +3692,9 @@ int Score::lyricCount()
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = 0; i < ntracks(); ++i) {
-                  if (seg->lyricsList(i))
-                        count += seg->lyricsList(i)->size();
+                  ChordRest* cr = toChordRest(seg->element(i));
+                  if (cr)
+                        count += cr->lyrics().size();
                   }
             }
       return count;
@@ -3715,6 +3717,10 @@ int Score::harmonyCount()
       return count;
       }
 
+//---------------------------------------------------------
+//   extractLyrics
+//---------------------------------------------------------
+
 QString Score::extractLyrics()
       {
       QString result;
@@ -3735,13 +3741,14 @@ QString Score::extractLyrics()
                         int playCount = m->playbackCount();
                         for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                               // consider voice 1 only
-                              if (seg->lyricsList(track) == nullptr || seg->lyricsList(track)->size() == 0)
+                              ChordRest* cr = toChordRest(seg->element(track));
+                              if (!cr || cr->lyrics().empty())
                                     continue;
-                              if (seg->lyricsList(track)->size() > maxLyrics)
-                                    maxLyrics = seg->lyricsList(track)->size();
-                              if (playCount >= seg->lyricsList(track)->size())
+                              if (cr->lyrics().size() > maxLyrics)
+                                    maxLyrics = cr->lyrics().size();
+                              if (playCount >= cr->lyrics().size())
                                     continue;
-                              Lyrics* l = seg->lyricsList(track)->at(playCount);
+                              Lyrics* l = cr->lyrics().at(playCount);
                               if (!l)
                                     continue;
                               found = true;
@@ -3763,13 +3770,14 @@ QString Score::extractLyrics()
                         if (lyricsNumber >= playCount) {
                               for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                                     // consider voice 1 only
-                                    if (seg->lyricsList(track) == nullptr || seg->lyricsList(track)->size() == 0)
+                                    ChordRest* cr = toChordRest(seg->element(track));
+                                    if (!cr || cr->lyrics().empty())
                                           continue;
-                                    if (seg->lyricsList(track)->size() > maxLyrics)
-                                          maxLyrics = seg->lyricsList(track)->size();
-                                    if (lyricsNumber >= seg->lyricsList(track)->size())
+                                    if (cr->lyrics().size() > maxLyrics)
+                                          maxLyrics = cr->lyrics().size();
+                                    if (lyricsNumber >= cr->lyrics().size())
                                           continue;
-                                    Lyrics* l = seg->lyricsList(track)->at(lyricsNumber);
+                                    Lyrics* l = cr->lyrics(lyricsNumber);
                                     if (!l)
                                           continue;
                                     found = true;

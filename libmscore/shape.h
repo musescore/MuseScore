@@ -61,7 +61,7 @@ inline static bool intersects(qreal a, qreal b, qreal c, qreal d)
       {
       // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
       // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
-      // if we can assume a <= b and c <= d (reduces layout from 116
+      // if we can assume a <= b and c <= d
       return (b > c) && (a < d);
       }
 

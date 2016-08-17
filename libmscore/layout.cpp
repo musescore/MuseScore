@@ -2616,8 +2616,7 @@ void Score::createBeams(Measure* measure)
                   ChordRest* cr = segment->cr(track);
                   if (cr == 0)
                         continue;
-                  // cr->layoutArticulations();
-                  for (Lyrics* l : cr->lyricsList()) {
+                  for (Lyrics* l : cr->lyrics()) {
                         if (l)
                               l->layout();
                         }
@@ -2900,7 +2899,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   // Also see fixTicks
                   qreal stretch = 0.0;
                   for (Element* e : segment.elist()) {
-                        if (!e || !e->isChordRest())
+                        if (!e)
                               continue;
                         ChordRest* cr = toChordRest(e);
                         for (Articulation* a : cr->articulations())
@@ -2942,10 +2941,31 @@ void Score::getNextMeasure(LayoutContext& lc)
                                     chord->tremolo()->layout();
                               }
                         }
+                  s.createShapes();
+                  //
+                  // move lyrics down if there are notes overlapping
+                  //
+                  for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        int track = staffIdx * VOICES;
+                        ChordRest* cr = s.cr(track);
+                        if (cr) {
+                              Shape sh;
+                              qreal margin = spatium() * .5;
+                              for (Lyrics* l : cr->lyrics()) {
+                                    if (l) {
+                                          l->rUserYoffset() = 0.0;
+                                          sh.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
+                                          }
+                                    }
+                              if (!sh.empty())
+                                    s.staffShape(staffIdx).add(sh);
+                              }
+                        }
                   }
             else if (s.isEndBarLineType())
                   continue;
-            s.createShapes();
+            else
+                  s.createShapes();
             }
 
       lc.tick += measure->ticks();
@@ -3374,6 +3394,65 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   }
             }
+      //
+      //    vertical align lyrics
+      //
+
+      qreal margin = spatium() * .5;
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  int track = staffIdx * VOICES;
+                  qreal yMax = 0.0;
+
+                  // pass I : compute yMax
+
+                  for (Segment& s : m->segments()) {
+                        if (!s.isChordRestType())
+                              continue;
+                        ChordRest* cr = s.cr(track);
+                        if (cr) {
+                              Shape sh;
+                              for (Lyrics* l : cr->lyrics()) {
+                                    if (l) {
+                                          l->rUserYoffset() = 0.0;
+                                          sh.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
+                                          }
+                                    }
+                              s.staffShape(staffIdx).remove(sh);
+                              for (Lyrics* l : cr->lyrics()) {
+                                    if (l) {
+                                          qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
+                                          if (y > 0.0)
+                                                yMax = qMax(yMax, y);
+                                          }
+                                    }
+                              }
+                        }
+
+                  // pass II : apply yMax
+
+                  for (Segment& s : m->segments()) {
+                        if (!s.isChordRestType())
+                              continue;
+                        ChordRest* cr = s.cr(track);
+                        if (cr) {
+                              Shape sh;
+                              for (Lyrics* l : cr->lyrics()) {
+                                    if (l) {
+                                          l->rUserYoffset() = yMax;
+                                          sh.add(l->bbox().translated(l->pos()));
+                                          }
+                                    }
+                              s.staffShape(staffIdx).add(sh);
+                              }
+                        }
+                  }
+            }
+
       //
       // compute shape of measures
       //

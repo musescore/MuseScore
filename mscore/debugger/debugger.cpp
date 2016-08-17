@@ -353,7 +353,7 @@ static void addChord(ElementItem* sei, Chord* chord)
 
       if (chord->beam() && chord->beam()->elements().front() == chord)
             new ElementItem(sei, chord->beam());
-      for (Lyrics* lyrics : chord->lyricsList()) {
+      for (Lyrics* lyrics : chord->lyrics()) {
             if (lyrics)
                   new ElementItem(sei, lyrics);
             }
@@ -393,7 +393,7 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr->beam() && cr->beam()->elements().front() == cr)
                               new ElementItem(sei, cr->beam());
-                        foreach(Lyrics* lyrics, cr->lyricsList()) {
+                        for (Lyrics* lyrics : cr->lyrics()) {
                               if (lyrics)
                                     new ElementItem(sei, lyrics);
                               }
@@ -819,8 +819,8 @@ SegmentView::SegmentView()
       {
       sb.setupUi(addWidget());
       sb.segmentType->clear();
-      connect(sb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)),      SLOT(gotoElement(QListWidgetItem*)));
-      connect(sb.spannerFor, SIGNAL(itemClicked(QListWidgetItem*)),  SLOT(gotoElement(QListWidgetItem*)));
+      connect(sb.lyrics,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(sb.spannerFor,  SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerBack, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.annotations, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       }
@@ -851,7 +851,7 @@ void SegmentView::setElement(Element* e)
 //      Score* cs = e->score();
 #if 0 // TODO
       for (int i = 0; i < cs->nstaves(); ++i) {
-            const LyricsList* ll = s->lyricsList(i);
+            const LyricsList* ll = s->lyrics(i);
             if (ll) {
                   foreach(Lyrics* l, *ll) {
                         QString s;
@@ -959,7 +959,7 @@ void ChordDebug::setElement(Element* e)
             crb.attributes->addItem(item);
             }
       crb.lyrics->clear();
-      foreach(Lyrics* lyrics, chord->lyricsList()) {
+      for (Lyrics* lyrics : chord->lyrics()) {
             QString s;
             s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1255,7 +1255,7 @@ void RestView::setElement(Element* e)
             crb.attributes->addItem(item);
             }
       crb.lyrics->clear();
-      for (Lyrics* lyrics : rest->lyricsList()) {
+      for (Lyrics* lyrics : rest->lyrics()) {
             QString s;
             s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
