@@ -3001,8 +3001,7 @@ System* Score::collectSystem(LayoutContext& lc)
             return 0;
             }
       bool raggedRight = MScore::noHorizontalStretch;
-
-      System* system = getNextSystem(lc);
+      System* system   = getNextSystem(lc);
       system->setInstrumentNames(lc.startWithLongNames);
 
       qreal xo;
@@ -3503,9 +3502,11 @@ System* Score::collectSystem(LayoutContext& lc)
             }
       system->layout2();   // compute staff distances
 
-      Measure* lm           = system->lastMeasure();
-      lc.firstSystem        = lm && lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-      lc.startWithLongNames = lc.firstSystem && lm->sectionBreak()->startWithLongNames();
+      Measure* lm  = system->lastMeasure();
+      if (lm) {
+            lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.startWithLongNames = lc.firstSystem && lm->sectionBreak()->startWithLongNames();
+            }
       lc.systemChanged      = lc.systemOldMeasure != (system->measures().empty() ? 0 : system->measures().back());
       return system;
       }
