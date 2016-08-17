@@ -59,6 +59,8 @@ class BufferWorker : public QObject
       SamplePool* samplePool;
 public slots:
       void fillBuffers();
+      void addStream(SampleStream* sampleStream);
+      void deleteStream(SampleStream* sampleStream);
 public:
       BufferWorker(SamplePool* sp) : QObject(), samplePool(sp) {}
       };
@@ -67,6 +69,7 @@ class SamplePool : public QObject
       {
       Q_OBJECT
 
+friend class BufferWorker;
       std::map<QString, Sample*> filename2sample;
       std::vector<SampleStream *> streams;
       bool _streaming = true;
@@ -74,16 +77,16 @@ class SamplePool : public QObject
       unsigned int _streamBufferSize = 4096; // size of the ringbuffer (in frames) that gets filled and read during streaming
       QThread* fillBuffersThread; // this thread will run the worker below
       BufferWorker* bufferWorker; // this worker will run the buffer refill in a seperate thread (once triggered)
-      QMutex streamMutex; // mutex for stream access (by audio thread and buffer refill thread)
       bool refillRuns = false;
 
 signals:
       void fillBuffers();
+      void addStream(SampleStream* sampleStream);
+      void deleteStream(SampleStream* sampleStream);
 
 public:
       SamplePool();
       ~SamplePool();
-      void fillSteamBuffers();
       bool streaming() { return _streaming; }
       Sample* getSamplePointer(QString filename);
       SampleStream* getSampleStream(Voice* v);

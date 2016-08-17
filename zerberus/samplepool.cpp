@@ -26,6 +26,8 @@ SamplePool::SamplePool()
             bufferWorker = new BufferWorker(this);
             bufferWorker->moveToThread(fillBuffersThread);
             connect(this, SIGNAL(fillBuffers()), bufferWorker, SLOT(fillBuffers()));
+            connect(this, SIGNAL(addStream(SampleStream*)), bufferWorker, SLOT(addStream(SampleStream*)));
+            connect(this, SIGNAL(deleteStream(SampleStream*)), bufferWorker, SLOT(deleteStream(SampleStream*)));
             fillBuffersThread->start();
             }
       }
@@ -62,45 +64,14 @@ SampleStream* SamplePool::getSampleStream(Voice* v)
             return nullptr;
             }
 
-      streamMutex.lock();
-      streams.push_back(sampleStream);
-      streamMutex.unlock();
+      //streams.push_back(sampleStream);
+      emit addStream(sampleStream);
       return sampleStream;
       }
 
 void SamplePool::deleteSampleStream(SampleStream *sampleStream)
       {
-      streamMutex.lock();
-      std::vector<SampleStream*>::iterator toDelete = streams.end();
-      for (std::vector<SampleStream*>::iterator i = streams.begin(); i != streams.end(); ++i) {
-            if (*i == sampleStream) {
-                  toDelete = i;
-                  break;
-                  }
-            }
-      if (toDelete != streams.end()) {
-            streams.erase(toDelete);
-            delete sampleStream;
-            }
-      else
-            qDebug("Could not find samplestream!");
-      streamMutex.unlock();
-      }
-
-void SamplePool::fillSteamBuffers()
-      {
-      refillRuns = true;
-      streamMutex.lock();
-      for (SampleStream* sampleStream : streams) {
-            try {
-                  sampleStream->fillBuffer();
-                  }
-            catch (...) {
-                  qDebug("ERROR filling buffer");
-                  }
-            }
-      streamMutex.unlock();
-      refillRuns = false;
+      emit deleteStream(sampleStream);
       }
 
 void SamplePool::triggerBufferRefill()
@@ -209,7 +180,6 @@ short SampleStream::getData(int pos) {
                   return buffer[pos];
             }
       else {
-            //readPosMutex.lock();
             if ((unsigned int) pos > readPos && (unsigned int) pos < writePos)
                   readPos = pos;
             if ((writePos - readPos) <= (samplePool->fillPercentage() * samplePool->streamBufferSize() * voice->_sample->channel()))
@@ -217,10 +187,8 @@ short SampleStream::getData(int pos) {
             if ((unsigned int) pos >= writePos) {
                   qDebug("ERROR: streaming buffer empty! pos %d, writePos %d", pos, writePos);
                   // TODO Skip reading if already behind
-                  //readPosMutex.unlock();
                   return 0;
                   }
-            //readPosMutex.unlock();
             return buffer[pos % (samplePool->streamBufferSize() * voice->_sample->channel())];
             }
       }
@@ -285,6 +253,37 @@ void SampleStream::fillBuffer() {
 
 void BufferWorker::fillBuffers()
       {
-      samplePool->fillSteamBuffers();
+      samplePool->refillRuns = true;
+      for (SampleStream* sampleStream : samplePool->streams) {
+            try {
+                  sampleStream->fillBuffer();
+                  }
+            catch (...) {
+                  qDebug("ERROR filling buffer");
+                  }
+            }
+      samplePool->refillRuns = false;
+      }
+
+void BufferWorker::addStream(SampleStream *sampleStream)
+      {
+      samplePool->streams.push_back(sampleStream);
+      }
+
+void BufferWorker::deleteStream(SampleStream *sampleStream)
+      {
+      std::vector<SampleStream*>::iterator toDelete = samplePool->streams.end();
+      for (std::vector<SampleStream*>::iterator i = samplePool->streams.begin(); i != samplePool->streams.end(); ++i) {
+            if (*i == sampleStream) {
+                  toDelete = i;
+                  break;
+                  }
+            }
+      if (toDelete != samplePool->streams.end()) {
+            samplePool->streams.erase(toDelete);
+            delete sampleStream;
+            }
+      else
+            qDebug("Could not find samplestream!");
       }
 
