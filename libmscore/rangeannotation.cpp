@@ -96,13 +96,13 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
-void RangeAnnotationSegment::layoutSegment(const QPointF& p1, const QPointF& p2, RangeAnnotation* range)
+void RangeAnnotationSegment::layoutSegment(RangePos* rp, RangeAnnotation* range)
       {
-      setPos(p1);
+      setPos(rp->p1);
       qreal left = 0.0 - range->getProperty(P_ID::LEFT_MARGIN).toDouble();
       qreal top = 0.0 - range->getProperty(P_ID::TOP_MARGIN).toDouble();
-      qreal width =  p2.x() - p1.x() + range->getProperty(P_ID::LEFT_MARGIN).toDouble() + range->getProperty(P_ID::RIGHT_MARGIN).toDouble();
-      qreal height = p2.y() - p1.y() + range->getProperty(P_ID::TOP_MARGIN).toDouble() + range->getProperty(P_ID::BOTTOM_MARGIN).toDouble();
+      qreal width =  rp->p2.x() - rp->p1.x() + range->getProperty(P_ID::LEFT_MARGIN).toDouble() + range->getProperty(P_ID::RIGHT_MARGIN).toDouble();
+      qreal height = rp->height + range->getProperty(P_ID::TOP_MARGIN).toDouble() + range->getProperty(P_ID::BOTTOM_MARGIN).toDouble();
       QRectF rr = QRectF(left, top , width, height);
       setbbox(rr);
      }
@@ -158,26 +158,9 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
 
       rangeSegment->setSpannerSegmentType(sst);
 
-      RangePos rPos;
-      rangePos(&rPos);
-
-      switch (sst) {
-            case SpannerSegmentType::SINGLE:
-                  rangeSegment->layoutSegment(rPos.p1, rPos.p2, this);
-                  break;
-            case SpannerSegmentType::BEGIN:
-                  rangeSegment->layoutSegment(rPos.p1, QPointF(system->bbox().width(), rPos.p2.y()), this);
-                  break;
-            case SpannerSegmentType::MIDDLE: {
-                  qreal x1 = firstNoteRestSegmentX(system);
-                  qreal x2 = system->bbox().width();
-                  rangeSegment->layoutSegment(QPointF(x1, 0), QPointF(x2, rPos.p2.y()), this);
-                  }
-                  break;
-            case SpannerSegmentType::END:
-                  rangeSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), 0), rPos.p2, this);
-                  break;
-            }
+      RangePos* rp;
+      rangePos(rp, sst, system);
+      rangeSegment->layoutSegment(rp, this);
 
       QList<SpannerSegment*> sl;
       for (SpannerSegment* ss : segments) {
@@ -204,7 +187,6 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
             pen.setColor(Qt::lightGray);
       else
             pen.setColor(MScore::selectColor[2]);
-      pen.setWidthF(2.0 / painter->matrix().m11());
       pen.setStyle(Qt::SolidLine);
       painter->setPen(pen);
       painter->setBackgroundMode(Qt::OpaqueMode);
@@ -212,15 +194,19 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
             painter->fillRect(bbox(), QColor(0,255,255,100));
       else
             painter->fillRect(bbox(), color());
-  //  Uncomment the following for adding border to the annotation
-  //  painter->drawRect(bbox());
+      qreal borderWidth = spanner()->getProperty(P_ID::LINE_WIDTH).toDouble();
+      if (borderWidth > 0.0) {
+            pen.setWidthF(borderWidth);
+            painter->setPen(pen);
+            painter->drawRect(bbox());
+            }
       }
 
 //---------------------------------------------------------
 //   rangePos
 //---------------------------------------------------------
 
-void RangeAnnotation::rangePos(RangePos* rp)
+void RangeAnnotation::rangePos(RangePos* rp, SpannerSegmentType sst, System* system)
       {
       Segment* ss =  score()->tick2segment(tick());
       Segment* es =  score()->tick2segment(tick2());
@@ -247,20 +233,10 @@ void RangeAnnotation::rangePos(RangePos* rp)
                   return;                 // no chordrest segment?
             }
 
-      System* system1 = ss->measure()->system();
-      System* system2 = es->measure()->system();
       int staffStart = _staffStart;
       int staffEnd = _staffEnd;
-      rp->system1 = system1;
-      rp->system2 = system2;
 
-      if (rp->system1 == 0 || rp->system2 == 0)
-            return;
-
-      rp->p1 = ss->pagePos() - rp->system1->pagePos();
-      rp->p2 = es->pagePos() - rp->system2->pagePos();
-      SysStaff* ss1   = system1->staff(staffStart);
-
+      SysStaff* ss1   = system->staff(staffStart);
       // Calculate the last visible staff of the selection
       int lastStaff = 0;
       for (int i = staffEnd - 1; i >= 0; --i) {
@@ -270,11 +246,33 @@ void RangeAnnotation::rangePos(RangePos* rp)
                   }
             }
 
-      SysStaff* ss2 = system2->staff(lastStaff);
+      SysStaff* ss2 = system->staff(lastStaff);
       if (!ss1 || !ss2) {
             return;
             }
-      rp->p2.setY(rp->p2.y() + ss2->bbox().y() - ss1->bbox().y() + ss2->bbox().height());
+
+      switch (sst) {
+            case SpannerSegmentType::SINGLE:
+                  rp->p1 = ss->pagePos() - system->pagePos();
+                  rp->p2 = es->pagePos() - system->pagePos();
+                  rp->height = ss2->y() - ss1->y() + ss2->bbox().height();
+                  break;
+            case SpannerSegmentType::BEGIN:
+                  rp->p1 = ss->pagePos() - system->pagePos();
+                  rp->p2 = system->lastMeasure()->last()->pagePos() - system->pagePos();
+                  rp->height = ss2->y() - ss1->y() + ss2->bbox().height();
+                  break;
+            case SpannerSegmentType::MIDDLE:
+                  rp->p1 = system->firstMeasure()->first()->pagePos() - system->pagePos();
+                  rp->p2 = system->lastMeasure()->last()->pagePos() - system->pagePos();
+                  rp->height = ss2->y() - ss1->y() + ss2->bbox().height();
+                  break;
+            case SpannerSegmentType::END:
+                  rp->p1 = system->firstMeasure()->first()->pagePos() - system->pagePos();
+                  rp->p2 = es->pagePos() - system->pagePos();
+                  rp->height = ss2->y() - ss1->y() + ss2->bbox().height();
+                  break;
+            }
       }
 
 //---------------------------------------------------------

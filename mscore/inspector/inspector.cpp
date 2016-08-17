@@ -526,7 +526,7 @@ InspectorRangeAnnotation::InspectorRangeAnnotation(QWidget* parent)
       ra.setupUi(addWidget());
 
       iList = {
-            { P_ID::LINE_WIDTH, 0, 0, ra.borderWidth, ra.resetBorderWIdth},
+            { P_ID::LINE_WIDTH, 0, 0, ra.borderWidth, ra.resetBorderWidth},
             { P_ID::LEFT_MARGIN,   0, 0, ra.leftMargin,   ra.resetLeftMargin},
             { P_ID::RIGHT_MARGIN,  0, 0, ra.rightMargin,  ra.resetRightMargin},
             { P_ID::TOP_MARGIN,    0, 0, ra.topMargin,    ra.resetTopMargin},

@@ -23,6 +23,7 @@ struct RangePos {
       System* system1;        // start system of the range annotation
       QPointF p2;             // end point of the range annotation
       System* system2;        // end system of the range annotation
+      qreal height;
       };
 
 //---------------------------------------------------------
@@ -39,7 +40,7 @@ class RangeAnnotationSegment : public SpannerSegment {
       virtual Element::Type type() const { return Element::Type::RANGEANNOTATION_SEGMENT; }
       virtual int subtype() const         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const { return name(spanner()->type()); }
-      void layoutSegment(const QPointF& p1, const QPointF& p2, RangeAnnotation* range);
+      void layoutSegment(RangePos* rp, RangeAnnotation* range);
       RangeAnnotationSegment* layoutSystem(System* system);
       virtual void writeProperties(Xml&) const override;
       virtual bool readProperties(XmlReader&) override;
@@ -84,7 +85,7 @@ class RangeAnnotation : public Spanner {
       Segment* endSegment()                            { return _endSegment;   }
       qreal firstNoteRestSegmentX(System* system);
       virtual RangeAnnotationSegment* layoutSystem(System* system);
-      void rangePos(RangePos*);
+      void rangePos(RangePos* rp, SpannerSegmentType sst, System* system);
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void writeProperties(Xml&) const override;

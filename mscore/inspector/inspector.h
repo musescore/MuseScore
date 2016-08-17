@@ -160,7 +160,7 @@ class InspectorArticulation : public InspectorBase {
 class InspectorRangeAnnotation : public InspectorBase {
       Q_OBJECT
       UiInspectorElement e;
-      Ui::inspectorRangeAnnotation ra;
+      Ui::InspectorRangeAnnotation ra;
 
    public:
       InspectorRangeAnnotation(QWidget* parent);
