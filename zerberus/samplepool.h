@@ -38,6 +38,8 @@ class SampleStream
       unsigned int writePos = 0;
 
       unsigned int backwardSampleCount;
+      unsigned int bufferSize;
+      unsigned int fillSize;
 
       sf_count_t fileReadPos;
       Voice* voice;

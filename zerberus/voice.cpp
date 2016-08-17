@@ -328,7 +328,6 @@ void Voice::process(int frames, float* p)
 
       if (audioChan == 1) {
             while (frames--) {
-
                   sampleStream->updateLoop(phase.index());
 
                   int idx = phase.index();
