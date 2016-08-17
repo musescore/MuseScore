@@ -2941,31 +2941,10 @@ void Score::getNextMeasure(LayoutContext& lc)
                                     chord->tremolo()->layout();
                               }
                         }
-                  s.createShapes();
-                  //
-                  // move lyrics down if there are notes overlapping
-                  //
-                  for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                        int track = staffIdx * VOICES;
-                        ChordRest* cr = s.cr(track);
-                        if (cr) {
-                              Shape sh;
-                              qreal margin = spatium() * .5;
-                              for (Lyrics* l : cr->lyrics()) {
-                                    if (l) {
-                                          l->rUserYoffset() = 0.0;
-                                          sh.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
-                                          }
-                                    }
-                              if (!sh.empty())
-                                    s.staffShape(staffIdx).add(sh);
-                              }
-                        }
                   }
             else if (s.isEndBarLineType())
                   continue;
-            else
-                  s.createShapes();
+            s.createShapes();
             }
 
       lc.tick += measure->ticks();
@@ -3422,9 +3401,10 @@ System* Score::collectSystem(LayoutContext& lc)
                                           sh.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
                                           }
                                     }
+                              // lyrics shapes must be moved, so first remove them from segment
                               s.staffShape(staffIdx).remove(sh);
                               for (Lyrics* l : cr->lyrics()) {
-                                    if (l) {
+                                    if (l && l->autoplace()) {
                                           qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
                                           if (y > 0.0)
                                                 yMax = qMax(yMax, y);
@@ -3442,7 +3422,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (cr) {
                               Shape sh;
                               for (Lyrics* l : cr->lyrics()) {
-                                    if (l) {
+                                    if (l && l->autoplace()) {
                                           l->rUserYoffset() = yMax;
                                           sh.add(l->bbox().translated(l->pos()));
                                           }

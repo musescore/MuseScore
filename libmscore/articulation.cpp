@@ -494,10 +494,7 @@ void Articulation::reset()
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(a));
-      //MScore::OrnamentStyle o = score()->style()->ornamentStyle(int(ornamentStyle()));
       Element::reset();
-//      if (chordRest())                              // done in setProperty()
-//            chordRest()->layoutArticulations();
       }
 
 //---------------------------------------------------------
