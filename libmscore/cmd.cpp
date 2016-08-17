@@ -2254,7 +2254,7 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
 void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       {
       ChordRest* cr        = lyrics->chordRest();
-      QVector<Lyrics*>& ll = cr->lyricsList();
+      QVector<Lyrics*>& ll = cr->lyrics();
       int no               = lyrics->no();
       if (dir == Direction::UP) {
             if (no) {

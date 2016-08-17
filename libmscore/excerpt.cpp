@@ -776,12 +776,12 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
                               // remove lyrics from chord
                               // since only one set of lyrics is used with linked staves
-                              foreach (Lyrics* l, ncr->lyricsList()) {
+                              foreach (Lyrics* l, ncr->lyrics()) {
                                     if (l)
                                           l->unlink();
                                     }
-                              qDeleteAll(ncr->lyricsList());
-                              ncr->lyricsList().clear();
+                              qDeleteAll(ncr->lyrics());
+                              ncr->lyrics().clear();
 
                               foreach (Element* e, seg->annotations()) {
                                     if (e->generated() || e->systemFlag())

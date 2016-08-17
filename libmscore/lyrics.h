@@ -31,8 +31,6 @@
 //   #define USE_FONT_DASH_TICKNESS
 #endif
 
-//class QPainter;
-
 namespace Ms {
 
 //---------------------------------------------------------
@@ -114,7 +112,6 @@ class Lyrics : public Text {
       Syllabic syllabic() const                       { return _syllabic; }
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-//      virtual void draw(QPainter*) const override;
       virtual void endEdit() override;
 
       int ticks() const                               { return _ticks;    }

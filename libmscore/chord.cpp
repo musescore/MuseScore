@@ -3008,7 +3008,7 @@ void Chord::removeMarkings(bool keepTremolo)
             remove(e);
       for (Element* e : articulations())
             remove(e);
-      for (Element* e : lyricsList())
+      for (Element* e : lyrics())
             remove(e);
       for (Element* e : graceNotes())
             remove(e);

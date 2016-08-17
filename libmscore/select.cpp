@@ -474,7 +474,7 @@ void Selection::updateSelectedElements()
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
-                        for (Element* e : cr->lyricsList()) {
+                        for (Element* e : cr->lyrics()) {
                               if (e)
                                     appendFiltered(e);
                               }

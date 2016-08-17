@@ -29,7 +29,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       int track        = lyrics->track();
       ChordRest* cr    = lyrics->chordRest();
       int verse        = lyrics->no();
-      const QVector<Lyrics*>* ll = &lyrics->chordRest()->lyricsList();
+      const QVector<Lyrics*>* ll = &lyrics->chordRest()->lyrics();
 
       if (up) {
             if (verse == 0)
@@ -107,9 +107,10 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Lyrics* fromLyrics = 0;
       if (!back) {
             while (segment) {
-                  const QVector<Lyrics*>* nll = segment->lyricsList(track);
-                  if (nll) {
-                        fromLyrics = nll->value(verse);
+                  ChordRest* cr = toChordRest(segment->element(track));
+                  if (cr) {
+                        const QVector<Lyrics*>& nll = cr->lyrics();
+                        fromLyrics = nll.value(verse);
                         if (fromLyrics)
                               break;
                         }
@@ -117,12 +118,13 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   }
             }
 
-      const QVector<Lyrics*>* ll = nextSegment->lyricsList(track);
-      if (ll == 0) {
+      ChordRest* cr = toChordRest(nextSegment->element(track));
+      if (!cr) {
             qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
             return;
             }
-      Lyrics* toLyrics = ll->value(verse);
+      const QVector<Lyrics*>& ll = cr->lyrics();
+      Lyrics* toLyrics = ll.value(verse);
 
       bool newLyrics = false;
       if (!toLyrics) {
@@ -215,12 +217,13 @@ void ScoreView::lyricsMinus()
       // we are extending with several dashes
       Lyrics* fromLyrics = 0;
       while (segment) {
-            const QVector<Lyrics*>* nll = segment->lyricsList(track);
-            if (!nll) {
+            ChordRest* cr = toChordRest(segment->element(track));
+            if (!cr) {
                   segment = segment->prev1(Segment::Type::ChordRest);
                   continue;
                   }
-            fromLyrics = nll->value(verse);
+            const QVector<Lyrics*>& nll = cr->lyrics();
+            fromLyrics = nll.value(verse);
             if (fromLyrics)
                   break;
             segment = segment->prev1(Segment::Type::ChordRest);
@@ -228,8 +231,9 @@ void ScoreView::lyricsMinus()
 
       _score->startCmd();
 
-      const QVector<Lyrics*>*   ll        = nextSegment->lyricsList(track);
-      Lyrics*                 toLyrics    = ll->value(verse);
+      ChordRest* cr = toChordRest(nextSegment->element(track));
+      const QVector<Lyrics*>* ll = &cr->lyrics();
+      Lyrics* toLyrics           = ll->value(verse);
       bool newLyrics = (toLyrics == 0);
       if (!toLyrics) {
             toLyrics = new Lyrics(_score);
@@ -304,9 +308,10 @@ void ScoreView::lyricsUnderscore()
       // we are extending with several underscores
       Lyrics* fromLyrics = 0;
       while (segment) {
-            const QVector<Lyrics*>* nll = segment->lyricsList(track);
-            if (nll) {
-                  fromLyrics = nll->value(verse);
+            ChordRest* cr = toChordRest(segment->element(track));
+            if (cr) {
+                  const QVector<Lyrics*>& nll = cr->lyrics();
+                  fromLyrics = nll.value(verse);
                   if (fromLyrics)
                         break;
                   }
@@ -350,7 +355,8 @@ void ScoreView::lyricsUnderscore()
 
       // if a place for a new lyrics has been found, create a lyrics there
 
-      const QVector<Lyrics*>*   ll        = nextSegment->lyricsList(track);
+      ChordRest* cr = toChordRest(nextSegment->element(track));
+      const QVector<Lyrics*>*   ll        = &cr->lyrics();
       Lyrics*                 toLyrics    = ll->value(verse);
       bool newLyrics = (toLyrics == 0);
       if (!toLyrics) {
@@ -447,8 +453,9 @@ void ScoreView::lyricsEndEdit()
             Segment*    prevSegment = lyrics->segment()->prev1(Segment::Type::ChordRest);
             Segment*    segment     = prevSegment;
             while (segment) {
-                  const QVector<Lyrics*>* nll = segment->lyricsList(track);
-                  if (nll) {
+                  ChordRest* cr = toChordRest(segment->element(track));
+                  if (cr) {
+                        const QVector<Lyrics*>* nll = &cr->lyrics();
                         prevLyrics = nll->value(verse);
                         if (prevLyrics)
                               break;
