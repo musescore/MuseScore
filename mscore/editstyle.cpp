@@ -208,6 +208,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::smallClefMag,            true,  smallClefSize,                0 },
       { StyleIdx::lyricsDashMinLength,     false, lyricsDashMinLength,          0 },
       { StyleIdx::lyricsDashMaxLength,     false, lyricsDashMaxLength,          0 },
+      { StyleIdx::lyricsDashMaxDistance,   false, lyricsDashMaxDistance,        0 },
       { StyleIdx::lyricsDashForce,         false, lyricsDashForce,              0 },
       { StyleIdx::lastSystemFillLimit,     true,  lastSystemFillThreshold,      0 },
       { StyleIdx::genClef,                 false, genClef,                      0 },

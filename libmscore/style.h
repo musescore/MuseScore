@@ -29,6 +29,8 @@ class Element;
 
 //---------------------------------------------------------
 //   StyleIdx
+//
+//    Keep in sync with styleTypes[] in style.cpp
 //---------------------------------------------------------
 
 enum class StyleIdx : int {
@@ -269,6 +271,7 @@ enum class StyleIdx : int {
       barGraceDistance,
       lyricsDashMinLength,
       lyricsDashMaxLength,
+      lyricsDashMaxDistance,
       lyricsDashForce,
 
       minVerticalDistance,
