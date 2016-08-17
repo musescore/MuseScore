@@ -1465,14 +1465,14 @@ Shape ChordRest::shape() const
       Shape shape;
       for (Articulation* a : _articulations)
             shape.add(a->bbox().translated(a->pos()));
-#if 0
       qreal margin = spatium() * .5;
       for (Lyrics* l : _lyrics) {
             if (!l)
                   continue;
+            if (l->autoplace())
+                  l->rUserYoffset() = 0.0;
             shape.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
             }
-#endif
       return shape;
       }
 }
