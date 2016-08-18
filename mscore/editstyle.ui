@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>600</height>
+    <width>1123</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -139,6 +139,11 @@
         <string>Tuplets</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Lyrics</string>
+       </property>
+      </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="sizePolicy">
@@ -148,7 +153,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>19</number>
       </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -516,16 +521,6 @@
            <property name="verticalSpacing">
             <number>2</number>
            </property>
-           <item row="3" column="0" colspan="4">
-            <widget class="QFrame" name="frame_2">
-             <property name="frameShape">
-              <enum>QFrame::HLine</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_76">
              <property name="sizePolicy">
@@ -564,7 +559,7 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="0" colspan="2">
+           <item row="7" column="0" colspan="2">
             <widget class="QCheckBox" name="genClef">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -736,82 +731,6 @@
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QLabel" name="label_72">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Lyrics top margin:</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDistance">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QLabel" name="label_71">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Lyrics bottom margin:</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsMinBottomDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="3">
-            <widget class="QDoubleSpinBox" name="lyricsMinBottomDistance">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0">
             <widget class="QLabel" name="label_74">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -830,7 +749,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="1">
+           <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="systemFrameDistance">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -849,7 +768,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="2">
+           <item row="4" column="2">
             <widget class="QLabel" name="label_75">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -868,7 +787,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="3">
+           <item row="4" column="3">
             <widget class="QDoubleSpinBox" name="frameSystemDistance">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -887,7 +806,7 @@
              </property>
             </widget>
            </item>
-           <item row="13" column="0">
+           <item row="10" column="0">
             <spacer>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -900,7 +819,7 @@
              </property>
             </spacer>
            </item>
-           <item row="9" column="0">
+           <item row="6" column="0">
             <spacer name="verticalSpacer_9">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -916,23 +835,13 @@
              </property>
             </spacer>
            </item>
-           <item row="6" column="0" colspan="4">
+           <item row="3" column="0" colspan="4">
             <widget class="QFrame" name="frame_3">
              <property name="frameShape">
               <enum>QFrame::HLine</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_36">
-             <property name="text">
-              <string>Lyrics line height:</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsLineHeight</cstring>
              </property>
             </widget>
            </item>
@@ -974,7 +883,7 @@
              </property>
             </widget>
            </item>
-           <item row="8" column="0">
+           <item row="5" column="0">
             <widget class="QLabel" name="label_77">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -990,7 +899,7 @@
              </property>
             </widget>
            </item>
-           <item row="11" column="0">
+           <item row="8" column="0">
             <widget class="QCheckBox" name="genKeysig">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1003,14 +912,14 @@
              </property>
             </widget>
            </item>
-           <item row="12" column="0">
+           <item row="9" column="0">
             <widget class="QCheckBox" name="genCourtesyClef">
              <property name="text">
               <string>Create courtesy clefs</string>
              </property>
             </widget>
            </item>
-           <item row="10" column="2">
+           <item row="7" column="2">
             <widget class="QCheckBox" name="genCourtesyTimesig">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1023,7 +932,7 @@
              </property>
             </widget>
            </item>
-           <item row="11" column="2">
+           <item row="8" column="2">
             <widget class="QCheckBox" name="genCourtesyKeysig">
              <property name="text">
               <string>Create courtesy key signatures</string>
@@ -1031,25 +940,6 @@
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="QSpinBox" name="lyricsLineHeight">
-             <property name="suffix">
-              <string notr="true">%</string>
-             </property>
-             <property name="minimum">
-              <number>10</number>
-             </property>
-             <property name="maximum">
-              <number>300</number>
-             </property>
-             <property name="singleStep">
-              <number>10</number>
-             </property>
-             <property name="value">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="1">
             <widget class="QSpinBox" name="lastSystemFillThreshold">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -7155,6 +7045,232 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page">
+       <layout class="QVBoxLayout" name="verticalLayout_44">
+        <item>
+         <widget class="QGroupBox" name="groupBox_32">
+          <property name="title">
+           <string>Lyrics</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_23">
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDistance">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="minimum">
+              <double>-100.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_133">
+             <property name="text">
+              <string>Line height:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_131">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Min. top margin:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_132">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Top distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="lyricsLineHeight">
+             <property name="suffix">
+              <string notr="true">%</string>
+             </property>
+             <property name="minimum">
+              <number>10</number>
+             </property>
+             <property name="maximum">
+              <number>300</number>
+             </property>
+             <property name="singleStep">
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <spacer name="verticalSpacer_24">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_31">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsMinTopDistance">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="minimum">
+              <double>-100.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_137">
+             <property name="text">
+              <string>Min. bottom margin</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsMinBottomDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="minimum">
+              <double>-100.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetLyricsDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Minimum measure width' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetLyricsLineHeight">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Minimum measure width' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetLyricsMinTopDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Minimum measure width' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetLyricsMinBottomDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Minimum measure width' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </item>
@@ -7214,9 +7330,6 @@
   <tabstop>akkoladeDistance</tabstop>
   <tabstop>minSystemDistance</tabstop>
   <tabstop>maxSystemDistance</tabstop>
-  <tabstop>lyricsDistance</tabstop>
-  <tabstop>lyricsMinBottomDistance</tabstop>
-  <tabstop>lyricsLineHeight</tabstop>
   <tabstop>systemFrameDistance</tabstop>
   <tabstop>frameSystemDistance</tabstop>
   <tabstop>lastSystemFillThreshold</tabstop>

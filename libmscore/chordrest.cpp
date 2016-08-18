@@ -1479,7 +1479,7 @@ Shape ChordRest::shape() const
             x2 = qMax(x2, x1 + l->bbox().width() + margin);
             }
       if (x2 > x1)
-            shape.add(QRectF(x1, 0.0, x2-x1, 2.0));
+            shape.add(QRectF(x1, 0.0, x2-x1, 0.0));
       return shape;
       }
 }

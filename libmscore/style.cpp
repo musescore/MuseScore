@@ -55,7 +55,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::minSystemDistance,       "minSystemDistance",       Spatium(8.5)  },
       { StyleIdx::maxSystemDistance,       "maxSystemDistance",       Spatium(15.0) },
       { StyleIdx::lyricsDistance,          "lyricsDistance",          Spatium(2.0)  },
-      { StyleIdx::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(4.0)  },
+      { StyleIdx::lyricsMinTopDistance,    "lyricsMinTopDistance",    Spatium(1.0)  },
+      { StyleIdx::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(3.0)  },
       { StyleIdx::lyricsLineHeight,        "lyricsLineHeight",        1.0 },
       { StyleIdx::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 
