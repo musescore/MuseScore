@@ -7252,7 +7252,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
+           <item row="3" column="3">
             <spacer name="horizontalSpacer_32">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -7264,6 +7264,74 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetLyricsDashMinLength">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Min. dash length' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetLyricsDashMaxLength">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Max. dash length' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetLyricsDashMaxDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Max. dash distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetLyricsDashForce">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Always force dash' setting</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -7578,9 +7646,13 @@
   <tabstop>lyricsMinBottomDistance</tabstop>
   <tabstop>resetLyricsMinBottomDistance</tabstop>
   <tabstop>lyricsDashMinLength</tabstop>
+  <tabstop>resetLyricsDashMinLength</tabstop>
   <tabstop>lyricsDashMaxLength</tabstop>
+  <tabstop>resetLyricsDashMaxLength</tabstop>
   <tabstop>lyricsDashMaxDistance</tabstop>
+  <tabstop>resetLyricsDashMaxDistance</tabstop>
   <tabstop>lyricsDashForce</tabstop>
+  <tabstop>resetLyricsDashForce</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
