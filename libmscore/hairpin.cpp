@@ -508,7 +508,6 @@ void Hairpin::setHairpinType(Type val)
 
 void Hairpin::layout()
       {
-      printf("Hairpin::layout\n");
       setPos(0.0, 0.0);
       TextLine::layout();
       }

@@ -44,6 +44,7 @@ enum class StyleIdx : int {
       maxSystemDistance,
 
       lyricsDistance,
+      lyricsMinTopDistance,
       lyricsMinBottomDistance,
       lyricsLineHeight,
 

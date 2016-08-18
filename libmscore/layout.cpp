@@ -3376,7 +3376,9 @@ System* Score::collectSystem(LayoutContext& lc)
       //    vertical align lyrics
       //
 
-      qreal margin = spatium() * .5;
+      qreal lyricsMinTopDistance    = styleP(StyleIdx::lyricsMinTopDistance);
+      qreal lyricsMinBottomDistance = styleP(StyleIdx::lyricsMinBottomDistance);
+
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
@@ -3397,7 +3399,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               for (Lyrics* l : cr->lyrics()) {
                                     if (l) {
                                           l->rUserYoffset() = 0.0;
-                                          sh.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
+                                          sh.add(l->bbox().translated(l->pos()));
                                           }
                                     }
                               // lyrics shapes must be moved, so first remove them from segment
@@ -3406,8 +3408,8 @@ System* Score::collectSystem(LayoutContext& lc)
                               for (Lyrics* l : cr->lyrics()) {
                                     if (l && l->autoplace()) {
                                           qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
-                                          if (y > 0.0)
-                                                yMax = qMax(yMax, y);
+                                          if (y > -lyricsMinTopDistance)
+                                                yMax = qMax(yMax, y + lyricsMinTopDistance);
                                           }
                                     }
                               }
@@ -3424,7 +3426,8 @@ System* Score::collectSystem(LayoutContext& lc)
                               for (Lyrics* l : cr->lyrics()) {
                                     if (l && l->autoplace()) {
                                           l->rUserYoffset() = yMax;
-                                          sh.add(l->bbox().translated(l->pos()));
+                                          sh.add(l->bbox().translated(l->pos())
+                                             .adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                                           }
                                     }
                               s.staffShape(staffIdx).add(sh);
