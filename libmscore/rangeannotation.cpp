@@ -99,10 +99,10 @@ qreal RangeAnnotation::firstNoteRestSegmentX(System* system)
 void RangeAnnotationSegment::layoutSegment(RangePos* rp, RangeAnnotation* range)
       {
       setPos(rp->p1);
-      qreal left = 0.0 - range->getProperty(P_ID::LEFT_MARGIN).toDouble();
-      qreal top = 0.0 - range->getProperty(P_ID::TOP_MARGIN).toDouble();
-      qreal width =  rp->p2.x() - rp->p1.x() + range->getProperty(P_ID::LEFT_MARGIN).toDouble() + range->getProperty(P_ID::RIGHT_MARGIN).toDouble();
-      qreal height = rp->height + range->getProperty(P_ID::TOP_MARGIN).toDouble() + range->getProperty(P_ID::BOTTOM_MARGIN).toDouble();
+      qreal left = 0.0 - range->getProperty(P_ID::LEFTMARGIN_SP).toDouble() * spatium();
+      qreal top = 0.0 - range->getProperty(P_ID::TOPMARGIN_SP).toDouble() * spatium();
+      qreal width =  rp->p2.x() - rp->p1.x() + range->getProperty(P_ID::LEFTMARGIN_SP).toDouble() * spatium() + range->getProperty(P_ID::RIGHTMARGIN_SP).toDouble() * spatium();
+      qreal height = rp->height +  range->getProperty(P_ID::TOPMARGIN_SP).toDouble() * spatium() + range->getProperty(P_ID::BOTTOMMARGIN_SP).toDouble() * spatium();
       QRectF rr = QRectF(left, top , width, height);
       setbbox(rr);
      }
@@ -345,10 +345,10 @@ void RangeAnnotation::read(XmlReader& e)
 void RangeAnnotation::writeProperties(Xml& xml) const
       {
       writeProperty(xml, P_ID::LINE_WIDTH);
-      writeProperty(xml, P_ID::LEFT_MARGIN);
-      writeProperty(xml, P_ID::RIGHT_MARGIN);
-      writeProperty(xml, P_ID::TOP_MARGIN);
-      writeProperty(xml, P_ID::BOTTOM_MARGIN);
+      writeProperty(xml, P_ID::LEFTMARGIN_SP);
+      writeProperty(xml, P_ID::RIGHTMARGIN_SP);
+      writeProperty(xml, P_ID::TOPMARGIN_SP);
+      writeProperty(xml, P_ID::BOTTOMMARGIN_SP);
 
       Spanner::writeProperties(xml);
       }
@@ -360,14 +360,14 @@ bool RangeAnnotation::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "leftMargin")
-            _leftMargin = e.readDouble();
-      else if (tag == "rightMargin")
-            _rightMargin = e.readDouble();
-      else if (tag == "topMargin")
-            _topMargin = e.readDouble();
-      else if (tag == "bottomMargin")
-            _bottomMargin = e.readDouble();
+      if (tag == "leftMarginSp")
+            _leftMargin = Spatium(e.readDouble());
+      else if (tag == "rightMarginSp")
+            _rightMargin = Spatium(e.readDouble());
+      else if (tag == "topMarginSp")
+            _topMargin = Spatium(e.readDouble());
+      else if (tag == "bottomMarginSp")
+            _bottomMargin = Spatium(e.readDouble());
       else if (Spanner::readProperties(e))
             ;
       else
@@ -383,13 +383,13 @@ QVariant RangeAnnotation::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::LINE_WIDTH:
                   return _borderWidth;
-            case P_ID::LEFT_MARGIN:
+            case P_ID::LEFTMARGIN_SP:
                   return _leftMargin;
-            case P_ID::RIGHT_MARGIN:
+            case P_ID::RIGHTMARGIN_SP:
                   return _rightMargin;
-            case P_ID::TOP_MARGIN:
+            case P_ID::TOPMARGIN_SP:
                   return _topMargin;
-            case P_ID::BOTTOM_MARGIN:
+            case P_ID::BOTTOMMARGIN_SP:
                   return _bottomMargin;
             default:
                   return Spanner::getProperty(propertyId);
@@ -407,17 +407,17 @@ bool RangeAnnotation::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::LINE_WIDTH:
                   _borderWidth = v.value<Spatium>();
                   break;
-            case P_ID::LEFT_MARGIN:
-                  _leftMargin = v.toDouble();
+            case P_ID::LEFTMARGIN_SP:
+                  _leftMargin = Spatium(v.toDouble());
                   break;
-            case P_ID::RIGHT_MARGIN:
-                  _rightMargin = v.toDouble();
+            case P_ID::RIGHTMARGIN_SP:
+                  _rightMargin = Spatium(v.toDouble());
                   break;
-            case P_ID::TOP_MARGIN:
-                  _topMargin = v.toDouble();
+            case P_ID::TOPMARGIN_SP:
+                  _topMargin = Spatium(v.toDouble());
                   break;
-            case P_ID::BOTTOM_MARGIN:
-                  _bottomMargin = v.toDouble();
+            case P_ID::BOTTOMMARGIN_SP:
+                  _bottomMargin = Spatium(v.toDouble());
                   break;
             default:
                   return Spanner::setProperty(propertyId, v);
@@ -435,13 +435,13 @@ QVariant RangeAnnotation::propertyDefault(P_ID id) const
       switch(id) {
             case P_ID::LINE_WIDTH:
                   return Spatium(0.0);
-            case P_ID::LEFT_MARGIN:
-                  return 3.0;
-            case P_ID::RIGHT_MARGIN:
-                  return -3.0;
-            case P_ID::TOP_MARGIN:
-            case P_ID::BOTTOM_MARGIN:
-                  return 1.0;
+            case P_ID::LEFTMARGIN_SP:
+                  return Spatium(1.0);
+            case P_ID::RIGHTMARGIN_SP:
+                  return Spatium(-1.0);
+            case P_ID::TOPMARGIN_SP:
+            case P_ID::BOTTOMMARGIN_SP:
+                  return Spatium(1.0);
             default:
                   return Spanner::propertyDefault(id);
             }

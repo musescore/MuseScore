@@ -515,6 +515,7 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             };
       mapSignals();
       }
+
 //---------------------------------------------------------
 //   InspectorRangeAnnotation
 //---------------------------------------------------------
@@ -527,10 +528,10 @@ InspectorRangeAnnotation::InspectorRangeAnnotation(QWidget* parent)
 
       iList = {
             { P_ID::LINE_WIDTH, 0, 0, ra.borderWidth, ra.resetBorderWidth},
-            { P_ID::LEFT_MARGIN,   0, 0, ra.leftMargin,   ra.resetLeftMargin},
-            { P_ID::RIGHT_MARGIN,  0, 0, ra.rightMargin,  ra.resetRightMargin},
-            { P_ID::TOP_MARGIN,    0, 0, ra.topMargin,    ra.resetTopMargin},
-            { P_ID::BOTTOM_MARGIN, 0, 0, ra.bottomMargin, ra.resetBottomMargin}
+            { P_ID::LEFTMARGIN_SP,   0, 0, ra.leftMargin,   ra.resetLeftMargin},
+            { P_ID::RIGHTMARGIN_SP,  0, 0, ra.rightMargin,  ra.resetRightMargin},
+            { P_ID::TOPMARGIN_SP,    0, 0, ra.topMargin,    ra.resetTopMargin},
+            { P_ID::BOTTOMMARGIN_SP, 0, 0, ra.bottomMargin, ra.resetBottomMargin}
             };
       mapSignals();
       }

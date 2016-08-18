@@ -65,8 +65,8 @@ class RangeAnnotation : public Spanner {
       Segment* _startSegment;
       Segment* _endSegment;
       Spatium _borderWidth  { Spatium(0) };
-      qreal _leftMargin { 3.0 }, _rightMargin  { -3.0 };
-      qreal _topMargin  { 1.0 }, _bottomMargin { 1.0 };
+      Spatium _leftMargin { Spatium(1.0) }, _rightMargin  { Spatium(-1.0) };
+      Spatium _topMargin  { Spatium(1.0) }, _bottomMargin { Spatium(1.0) };
 
    public:
 
