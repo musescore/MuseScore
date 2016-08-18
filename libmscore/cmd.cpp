@@ -710,7 +710,6 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         continue;
                   Segment* seg1 = seg->next(Segment::Type::ChordRest);
                   int tick2     = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
-printf("====ticks %d\n", tick2 - seg->tick());
                   segment       = seg;
                   Fraction td(Fraction::fromTicks(tick2 - seg->tick()));
                   if (td > sd)
