@@ -883,12 +883,12 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
 
             qreal xx = x + hw + chord->pos().x();
 
+            Direction dotPosition = note->userDotPosition();
             if (chord->dots()) {
                   if (chord->up())
                         upDotPosX = qMax(upDotPosX, xx);
                   else
                         downDotPosX = qMax(downDotPosX, xx);
-                  Direction dotPosition = note->userDotPosition();
 
                   if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
                         // resolve dot conflicts
@@ -930,8 +930,8 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
                                     }
                               }
                         }
-                  note->setDotY(dotPosition);
                   }
+            note->setDotY(dotPosition);  // also removes invalid dots
             }
 
       if (segment) {
