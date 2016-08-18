@@ -312,6 +312,8 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
+      if (autoplace())
+            setUserOff(QPointF());
       setPos(textStyle().offset(spatium()));
       Text::layout1();
 
@@ -330,8 +332,21 @@ void TempoText::layout()
 
       if (placement() == Element::Placement::BELOW)
             rypos() = -rypos() + 4 * spatium();
-      adjustReadPos();
+
+      if (s && autoplace()) {
+            Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
+            Shape s2 = shape().translated(s->pos());
+            qreal d  = s2.minVerticalDistance(s1);
+            if (d > 0)
+                  setUserOff(QPointF(0.0, -d));
+            }
+      if (!autoplace())
+            adjustReadPos();
       }
+
+//---------------------------------------------------------
+//   duration2userName
+//---------------------------------------------------------
 
 QString TempoText::duration2userName(const TDuration t)
       {

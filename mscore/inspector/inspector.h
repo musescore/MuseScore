@@ -304,10 +304,9 @@ class InspectorTremoloBar : public InspectorBase {
 //   InspectorTempoText
 //---------------------------------------------------------
 
-class InspectorTempoText : public InspectorBase {
+class InspectorTempoText : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorText t;
       Ui::InspectorTempoText tt;
 

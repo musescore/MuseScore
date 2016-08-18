@@ -1466,13 +1466,20 @@ Shape ChordRest::shape() const
       for (Articulation* a : _articulations)
             shape.add(a->bbox().translated(a->pos()));
       qreal margin = spatium() * .5;
+      qreal x1 = 1000000.0;
+      qreal x2 = -1000000.0;
       for (Lyrics* l : _lyrics) {
             if (!l)
                   continue;
             if (l->autoplace())
                   l->rUserYoffset() = 0.0;
-            shape.add(l->bbox().adjusted(-margin, 0.0, margin, 0.0).translated(l->pos()));
+
+            // for horizontal spacing we only need the lyrics width:
+            x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
+            x2 = qMax(x2, x1 + l->bbox().width() + margin);
             }
+      if (x2 > x1)
+            shape.add(QRectF(x1, 0.0, x2-x1, 2.0));
       return shape;
       }
 }

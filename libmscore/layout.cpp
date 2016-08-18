@@ -3402,6 +3402,7 @@ System* Score::collectSystem(LayoutContext& lc)
                                     }
                               // lyrics shapes must be moved, so first remove them from segment
                               s.staffShape(staffIdx).remove(sh);
+
                               for (Lyrics* l : cr->lyrics()) {
                                     if (l && l->autoplace()) {
                                           qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
