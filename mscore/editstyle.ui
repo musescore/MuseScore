@@ -153,7 +153,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>19</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -3980,119 +3980,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="lyricsDashGroup">
-          <property name="title">
-           <string>Lyrics Dash</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_18">
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_80">
-             <property name="text">
-              <string>Max. dash length:</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsDashMaxLength</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_119">
-             <property name="text">
-              <string>Max. dash distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsDashMaxDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QCheckBox" name="lyricsDashForce">
-             <property name="text">
-              <string>Always force dash</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <spacer name="horizontalSpacer_23">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>0</number>
-             </property>
-             <property name="minimum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>16.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>0.050000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>9.990000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.050000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.800000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="maximum">
-              <double>9.990000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.050000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.400000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_93">
-             <property name="text">
-              <string>Min. dash length:</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsDashMinLength</cstring>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer_21">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -7045,12 +6932,12 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="Page20">
        <layout class="QVBoxLayout" name="verticalLayout_44">
         <item>
-         <widget class="QGroupBox" name="groupBox_32">
+         <widget class="QGroupBox" name="lyricsTextBox">
           <property name="title">
-           <string>Lyrics</string>
+           <string>Lyrics Text</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_23">
            <item row="0" column="1">
@@ -7080,6 +6967,9 @@
              <property name="text">
               <string>Line height:</string>
              </property>
+             <property name="buddy">
+              <cstring>lyricsLineHeight</cstring>
+             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -7093,6 +6983,9 @@
              <property name="text">
               <string>Min. top margin:</string>
              </property>
+             <property name="buddy">
+              <cstring>lyricsMinTopDistance</cstring>
+             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -7105,6 +6998,9 @@
              </property>
              <property name="text">
               <string>Top distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDistance</cstring>
              </property>
             </widget>
            </item>
@@ -7126,19 +7022,6 @@
               <number>100</number>
              </property>
             </widget>
-           </item>
-           <item row="4" column="1">
-            <spacer name="verticalSpacer_24">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
            <item row="1" column="3">
             <spacer name="horizontalSpacer_31">
@@ -7178,7 +7061,10 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_137">
              <property name="text">
-              <string>Min. bottom margin</string>
+              <string>Min. bottom margin:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsMinBottomDistance</cstring>
              </property>
             </widget>
            </item>
@@ -7204,7 +7090,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Top distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7221,7 +7107,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Line height' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7238,7 +7124,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Min. top margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7255,7 +7141,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Min. bottom margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7268,6 +7154,200 @@
            </item>
           </layout>
          </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="lyricsDashBox">
+          <property name="title">
+           <string>Lyrics Dash</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_24">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_122">
+             <property name="text">
+              <string>Min. dash length:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDashMinLength</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.990000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.050000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.400000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_120">
+             <property name="text">
+              <string>Max. dash length:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDashMaxLength</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>0.050000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>9.990000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.050000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.800000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_121">
+             <property name="text">
+              <string>Max. dash distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDashMaxDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="decimals">
+              <number>0</number>
+             </property>
+             <property name="minimum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>16.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="lyricsDashForce">
+             <property name="text">
+              <string>Always force dash</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <spacer name="horizontalSpacer_32">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>630</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetLyricsDashMinLength">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Min. dash length' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetLyricsDashMaxLength">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Max. dash length' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetLyricsDashMaxDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Max. dash distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetLyricsDashForce">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Always force dash' setting</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_23">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -7453,10 +7533,6 @@
   <tabstop>smallNoteSize</tabstop>
   <tabstop>graceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
-  <tabstop>lyricsDashMinLength</tabstop>
-  <tabstop>lyricsDashMaxLength</tabstop>
-  <tabstop>lyricsDashMaxDistance</tabstop>
-  <tabstop>lyricsDashForce</tabstop>
   <tabstop>hairpinY</tabstop>
   <tabstop>resetHairpinY</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
@@ -7561,6 +7637,22 @@
   <tabstop>resetTupletNumberType</tabstop>
   <tabstop>tupletBracketType</tabstop>
   <tabstop>resetTupletBracketType</tabstop>
+  <tabstop>lyricsDistance</tabstop>
+  <tabstop>resetLyricsDistance</tabstop>
+  <tabstop>lyricsLineHeight</tabstop>
+  <tabstop>resetLyricsLineHeight</tabstop>
+  <tabstop>lyricsMinTopDistance</tabstop>
+  <tabstop>resetLyricsMinTopDistance</tabstop>
+  <tabstop>lyricsMinBottomDistance</tabstop>
+  <tabstop>resetLyricsMinBottomDistance</tabstop>
+  <tabstop>lyricsDashMinLength</tabstop>
+  <tabstop>resetLyricsDashMinLength</tabstop>
+  <tabstop>lyricsDashMaxLength</tabstop>
+  <tabstop>resetLyricsDashMaxLength</tabstop>
+  <tabstop>lyricsDashMaxDistance</tabstop>
+  <tabstop>resetLyricsDashMaxDistance</tabstop>
+  <tabstop>lyricsDashForce</tabstop>
+  <tabstop>resetLyricsDashForce</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
