@@ -158,9 +158,9 @@ RangeAnnotationSegment* RangeAnnotation::layoutSystem(System* system)
 
       rangeSegment->setSpannerSegmentType(sst);
 
-      RangePos* rp;
-      rangePos(rp, sst, system);
-      rangeSegment->layoutSegment(rp, this);
+      RangePos rp;
+      rangePos(&rp, sst, system);
+      rangeSegment->layoutSegment(&rp, this);
 
       QList<SpannerSegment*> sl;
       for (SpannerSegment* ss : segments) {
