@@ -531,7 +531,8 @@ InspectorRangeAnnotation::InspectorRangeAnnotation(QWidget* parent)
             { P_ID::LEFTMARGIN_SP,   0, 0, ra.leftMargin,   ra.resetLeftMargin},
             { P_ID::RIGHTMARGIN_SP,  0, 0, ra.rightMargin,  ra.resetRightMargin},
             { P_ID::TOPMARGIN_SP,    0, 0, ra.topMargin,    ra.resetTopMargin},
-            { P_ID::BOTTOMMARGIN_SP, 0, 0, ra.bottomMargin, ra.resetBottomMargin}
+            { P_ID::BOTTOMMARGIN_SP, 0, 0, ra.bottomMargin, ra.resetBottomMargin},
+            { P_ID::COLOR, 0, 0, e.color, e.resetColor}
             };
       mapSignals();
       }

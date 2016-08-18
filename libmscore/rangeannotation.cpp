@@ -184,7 +184,7 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       painter->setBrush(Qt::NoBrush);
       QPen pen;
       if (selected())
-            pen.setColor(Qt::lightGray);
+            pen.setColor(Qt::blue);
       else
             pen.setColor(MScore::selectColor[2]);
       pen.setStyle(Qt::SolidLine);
@@ -193,10 +193,10 @@ void RangeAnnotationSegment::draw(QPainter* painter) const
       if (selected())
             painter->fillRect(bbox(), QColor(0,255,255,100));
       else
-            painter->fillRect(bbox(), color());
+            painter->fillRect(bbox(), spanner()->color());
       qreal borderWidth = spanner()->getProperty(P_ID::LINE_WIDTH).toDouble();
       if (borderWidth > 0.0) {
-            pen.setWidthF(borderWidth);
+            pen.setWidthF(borderWidth * spatium());
             painter->setPen(pen);
             painter->drawRect(bbox());
             }
@@ -291,7 +291,8 @@ void RangeAnnotation::write(Xml& xml) const
       xml.tag("staffEnd", int(staffEnd()));
       xml.tag("startTrack", int(track()));
       xml.tag("endTrack", int(track2()));
-      xml.tag("color", curColor());
+      xml.tag("borderWidth", _borderWidth);
+      xml.tag("color", color());
       RangeAnnotation::writeProperties(xml);
       xml.etag();
       }
@@ -333,6 +334,8 @@ void RangeAnnotation::read(XmlReader& e)
                   setStaffEnd(e.readInt());
             else if (tag == "color")
                   setColor(e.readColor());
+            else if (tag == "borderWidth")
+                  setProperty(P_ID::LINE_WIDTH, e.readDouble());
             else if (!RangeAnnotation::readProperties(e))
                   e.unknown();
             }
@@ -368,6 +371,8 @@ bool RangeAnnotation::readProperties(XmlReader& e)
             _topMargin = Spatium(e.readDouble());
       else if (tag == "bottomMarginSp")
             _bottomMargin = Spatium(e.readDouble());
+      else if (tag == "borderWidth")
+            _borderWidth = Spatium(e.readDouble());
       else if (Spanner::readProperties(e))
             ;
       else
@@ -405,7 +410,7 @@ bool RangeAnnotation::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_ID::LINE_WIDTH:
-                  _borderWidth = v.value<Spatium>();
+                  _borderWidth = Spatium(v.toDouble());
                   break;
             case P_ID::LEFTMARGIN_SP:
                   _leftMargin = Spatium(v.toDouble());
