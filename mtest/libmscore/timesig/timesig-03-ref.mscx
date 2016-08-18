@@ -186,6 +186,7 @@
             </Note>
           </Chord>
         <StaffText>
+          <style>Staff Technique Text</style>
           <text>simile</text>
           </StaffText>
         <HairPin id="2">

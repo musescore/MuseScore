@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2011-2014 Werner Schweer
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -2268,13 +2268,13 @@ bool Text::readProperties(XmlReader& e)
                         case 11: st = TextStyleType::INSTRUMENT_EXCERPT; break;
 
                         case 12: st = TextStyleType::DYNAMICS;  break;
-                        case 13: st = TextStyleType::TECHNIQUE;   break;
+                        case 13: st = TextStyleType::EXPRESSION;     break;
                         case 14: st = TextStyleType::TEMPO;     break;
-                        case 15: st = TextStyleType::METRONOME; break;
+                        case 15: st = TextStyleType::TEMPO;     break;
                         case 16: st = TextStyleType::FOOTER;    break;  // TextStyleType::COPYRIGHT
                         case 17: st = TextStyleType::MEASURE_NUMBER; break;
-                        case 18: st = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
-                        case 19: st = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                        case 18: st = TextStyleType::HEADER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                        case 19: st = TextStyleType::HEADER; break;    // TextStyleType::PAGE_NUMBER_EVEN
                         case 20: st = TextStyleType::TRANSLATOR; break;
                         case 21: st = TextStyleType::TUPLET;     break;
 
@@ -2282,7 +2282,7 @@ bool Text::readProperties(XmlReader& e)
                         case 23: st = TextStyleType::STAFF;          break;
                         case 24: st = TextStyleType::HARMONY;        break;
                         case 25: st = TextStyleType::REHEARSAL_MARK; break;
-                        case 26: st = TextStyleType::REPEAT;         break;
+                        case 26: st = TextStyleType::REPEAT_RIGHT;   break;
                         case 27: st = TextStyleType::VOLTA;          break;
                         case 28: st = TextStyleType::FRAME;          break;
                         case 29: st = TextStyleType::TEXTLINE;       break;
@@ -2290,7 +2290,7 @@ bool Text::readProperties(XmlReader& e)
                         case 31: st = TextStyleType::STRING_NUMBER;  break;
 
                         case 32: st = TextStyleType::OTTAVA;  break;
-                        case 33: st = TextStyleType::BENCH;   break;
+                        case 33: st = TextStyleType::BEND;    break;
                         case 34: st = TextStyleType::HEADER;  break;
                         case 35: st = TextStyleType::FOOTER;  break;
                         case 0:

@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2014 Werner Schweer
+//  Copyright (C) 2014-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -179,7 +179,7 @@ class TextBlock {
 ///    Graphic representation of a text.
 //
 //   @P text           string  the raw text
-//   @P textStyleType  enum   (TextStyleType.DEFAULT, .TITLE, .SUBTITLE, .COMPOSER, .POET, .LYRIC1, .LYRIC2, .FINGERING, .LH_GUITAR_FINGERING, .RH_GUITAR_FINGERING, .STRING_NUMBER, .INSTRUMENT_LONG, .INSTRUMENT_SHORT, .INSTRUMENT_EXCERPT, .DYNAMICS, .TECHNIQUE, .TEMPO, .METRONOME, .MEASURE_NUMBER, .TRANSLATOR, .TUPLET, .SYSTEM, .STAFF, .HARMONY, .REHEARSAL_MARK, .REPEAT_LEFT, .REPEAT_RIGHT, .REPEAT, .VOLTA, .FRAME, .TEXTLINE, .GLISSANDO, .OTTAVA, .PEDAL, .HAIRPIN, .BENCH, .HEADER, .FOOTER, .INSTRUMENT_CHANGE, .FIGURED_BASS)
+//   @P textStyleType  enum   (TextStyleType.DEFAULT, .TITLE, .SUBTITLE, .COMPOSER, .POET, .LYRIC1, .LYRIC2, .FINGERING, .LH_GUITAR_FINGERING, .RH_GUITAR_FINGERING, .STRING_NUMBER, .INSTRUMENT_LONG, .INSTRUMENT_SHORT, .INSTRUMENT_EXCERPT, .DYNAMICS, .TECHNIQUE, .TEMPO, .METRONOME, .MEASURE_NUMBER, .TRANSLATOR, .TUPLET, .EXPRESSION, .SYSTEM, .STAFF, .HARMONY, .REHEARSAL_MARK, .REPEAT_LEFT, .REPEAT_RIGHT, .REPEAT, .VOLTA, .FRAME, .TEXTLINE, .GLISSANDO, .OTTAVA, .PEDAL, .HAIRPIN, .BEND, .HEADER, .FOOTER, .INSTRUMENT_CHANGE, .FIGURED_BASS)
 //---------------------------------------------------------
 
 class Text : public Element {

@@ -80,8 +80,8 @@
       <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
       <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
       <ArpeggioHookLen>0.9</ArpeggioHookLen>
-      <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
+      <evenFooterL>$P</evenFooterL>
       <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>

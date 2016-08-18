@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2011-2013 Werner Schweer and others
+//  Copyright (C) 2011-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -348,7 +348,7 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //---------------------------------------------------------
 //   Text Style Type
 //    Enumerate the list of build in text styles.
-//    Must be in sync with list in setDefaultStyle().
+//    Must be in sync with list in setDefaultStyle() in style.cpp.
 //---------------------------------------------------------
 
 MS_QML_ENUM(TextStyleType, signed char,\
@@ -357,44 +357,46 @@ MS_QML_ENUM(TextStyleType, signed char,\
       SUBTITLE,\
       COMPOSER,\
       POET,\
+      INSTRUMENT_EXCERPT,\
+      \
+      SYSTEM,\
+      STAFF,\
+      EXPRESSION,\
+      DYNAMICS,\
+      TEMPO,\
+      INSTRUMENT_CHANGE,\
+      REHEARSAL_MARK,\
+      MEASURE_NUMBER,\
+      \
       LYRIC1,\
       LYRIC2,\
+      HARMONY,\
       FINGERING,\
       LH_GUITAR_FINGERING,\
       RH_GUITAR_FINGERING,\
-      \
+      BEND,\
       STRING_NUMBER,\
       INSTRUMENT_LONG,\
       INSTRUMENT_SHORT,\
-      INSTRUMENT_EXCERPT,\
-      DYNAMICS,\
-      TECHNIQUE,\
-      TEMPO,\
-      METRONOME,\
-      MEASURE_NUMBER,\
-      TRANSLATOR,\
       \
+      REPEAT_LEFT,      /* align to start of measure */\
+      REPEAT_RIGHT,     /* align to end of measure */\
       TUPLET,\
-      SYSTEM,\
-      STAFF,\
-      HARMONY,\
-      REHEARSAL_MARK,\
-      REPEAT_LEFT,       /* align to start of measure */\
-      REPEAT_RIGHT,      /* align to end of measure */\
-      REPEAT,            /* obsolete */\
-      VOLTA,\
-      FRAME,\
-      \
-      TEXTLINE,\
       GLISSANDO,\
+      VOLTA,\
       OTTAVA,\
       PEDAL,\
       HAIRPIN,\
-      BENCH,\
+      TEXTLINE,\
+      \
       HEADER,\
       FOOTER,\
-      INSTRUMENT_CHANGE,\
+      FRAME,\
       FIGURED_BASS,\
+      TRANSLATOR,       /* obsolete */\
+      METRONOME,        /* obsolete */\
+      REPEAT,           /* obsolete */\
+      TECHNIQUE,        /* obsolete */\
       \
       TEXT_STYLES\
       )

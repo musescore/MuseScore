@@ -139,7 +139,7 @@
         <halign>left</halign>
         <valign>bottom</valign>
         <offsetType>absolute</offsetType>
-        <name>Instrument Name (Part)</name>
+        <name>Part Name</name>
         <family>MuseJazz</family>
         <size>18</size>
         </TextStyle>

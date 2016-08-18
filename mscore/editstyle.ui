@@ -5760,7 +5760,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_601">
              <property name="text">
-              <string>Fret offset number font size:</string>
+              <string>Fret number font size:</string>
              </property>
              <property name="buddy">
               <cstring>fretNumMag</cstring>

@@ -393,6 +393,8 @@
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <TextStyle>
           <halign>center</halign>
           <valign>top</valign>
@@ -626,6 +628,8 @@
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <TextStyle>
           <halign>center</halign>
           <valign>top</valign>

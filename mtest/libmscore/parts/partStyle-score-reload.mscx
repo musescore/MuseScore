@@ -475,7 +475,7 @@
             <text>Style Score</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text></text>
             </Text>
           </VBox>
@@ -713,7 +713,7 @@
             <text>Style Score</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text></text>
             </Text>
           </VBox>

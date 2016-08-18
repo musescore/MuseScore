@@ -313,6 +313,8 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.36</page-height>
           <page-width>1190.88</page-width>
@@ -405,7 +407,7 @@
             <text>gaps</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Piano</text>
             </Text>
           </VBox>
