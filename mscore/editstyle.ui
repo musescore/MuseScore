@@ -153,7 +153,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>19</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -7045,7 +7045,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="Page20">
        <layout class="QVBoxLayout" name="verticalLayout_44">
         <item>
          <widget class="QGroupBox" name="groupBox_32">
@@ -7080,6 +7080,9 @@
              <property name="text">
               <string>Line height:</string>
              </property>
+             <property name="buddy">
+              <cstring>lyricsLineHeight</cstring>
+             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -7093,6 +7096,9 @@
              <property name="text">
               <string>Min. top margin:</string>
              </property>
+             <property name="buddy">
+              <cstring>lyricsMinTopDistance</cstring>
+             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -7105,6 +7111,9 @@
              </property>
              <property name="text">
               <string>Top distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsDistance</cstring>
              </property>
             </widget>
            </item>
@@ -7178,7 +7187,10 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_137">
              <property name="text">
-              <string>Min. bottom margin</string>
+              <string>Min. bottom margin:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsMinBottomDistance</cstring>
              </property>
             </widget>
            </item>
@@ -7204,7 +7216,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Top distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7221,7 +7233,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Line height' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7238,7 +7250,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Min. top margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7255,7 +7267,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Minimum measure width' value</string>
+              <string>Reset 'Min. bottom margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7561,6 +7573,14 @@
   <tabstop>resetTupletNumberType</tabstop>
   <tabstop>tupletBracketType</tabstop>
   <tabstop>resetTupletBracketType</tabstop>
+  <tabstop>lyricsDistance</tabstop>
+  <tabstop>resetLyricsDistance</tabstop>
+  <tabstop>lyricsLineHeight</tabstop>
+  <tabstop>resetLyricsLineHeight</tabstop>
+  <tabstop>lyricsMinTopDistance</tabstop>
+  <tabstop>resetLyricsMinTopDistance</tabstop>
+  <tabstop>lyricsMinBottomDistance</tabstop>
+  <tabstop>resetLyricsMinBottomDistance</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
