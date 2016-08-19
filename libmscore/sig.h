@@ -27,10 +27,10 @@ class XmlReader;
 
 enum class BeatType : char {
       DOWNBEAT,               // 1st beat of measure (rtick == 0)
-      SIMPLE_STRESSED,        // e.g. beat 3 in 4/4
-      SIMPLE_UNSTRESSED,      // "offbeat" e.g. beat 2 and 4 in 4/4 (i.e. the denominator unit)
       COMPOUND_STRESSED,      // e.g. eighth-note number 7 in 12/8
+      SIMPLE_STRESSED,        // e.g. beat 3 in 4/4
       COMPOUND_UNSTRESSED,    // e.g. eighth-note numbers 4 or 10 in 12/8
+      SIMPLE_UNSTRESSED,      // "offbeat" e.g. beat 2 and 4 in 4/4 (i.e. the denominator unit)
       COMPOUND_SUBBEAT,       // e.g. any other eighth-note in 12/8 (i.e. the denominator unit)
       SUBBEAT                 // does not fall on a beat
       };
@@ -48,27 +48,33 @@ class TimeSigFrac : public Fraction {
       TimeSigFrac(const TimeSigFrac& f) : TimeSigFrac(f.numerator(), f.denominator()) {}
 
       // isCompound? Note: 3/8, 3/16, ... are NOT considered compound.
-      bool isCompound() { return numerator() > 3 /*&& denominator() >= 8*/ && numerator() % 3 == 0; }
+      bool isCompound() const { return numerator() > 3 /*&& denominator() >= 8*/ && numerator() % 3 == 0; }
 
       // isBeatedCompound? Note: Conductors will beat the simple unit at slow tempos (<60 compound units per minute)
       // However, the meter is still considered to be compound (at least for our purposes).
-      bool isBeatedCompound(qreal tempo) { return tempo2beatsPerMinute(tempo) >= 60.0; }
+      bool isBeatedCompound(qreal tempo) const { return tempo2beatsPerMinute(tempo) >= 60.0; }
 
-      int dUnitTicks()        { return (4 * MScore::division) / denominator(); }
-      int ticksPerMeasure()   { return numerator() * dUnitTicks(); }
+      int dUnitTicks()        const   { return (4 * MScore::division) / denominator(); }
+      int ticksPerMeasure()   const   { return numerator() * dUnitTicks(); }
 
-      int dUnitsPerBeat()     { return isCompound() ? 3 : 1; }
-      int beatTicks()         { return dUnitTicks() * dUnitsPerBeat(); }
-      int beatsPerMeasure()   { return numerator() / dUnitsPerBeat(); }
+      int dUnitsPerBeat()     const   { return isCompound() ? 3 : 1; }
+      int beatTicks()         const   { return dUnitTicks() * dUnitsPerBeat(); }
+      int beatsPerMeasure()   const   { return numerator() / dUnitsPerBeat(); }
 
-      bool isTriple()   { return beatsPerMeasure() % 3 == 0; }
-      bool isDuple()    { Q_ASSERT(!isTriple()); return beatsPerMeasure() % 2 == 0; } // note: always test isTriple() first
+      bool isTriple()         const   { return beatsPerMeasure() % 3 == 0; }
+      bool isDuple() const { Q_ASSERT(!isTriple()); return beatsPerMeasure() % 2 == 0; } // note: always test isTriple() first
 
       // MuseScore stores tempos in quarter-notes-per-second, so conversions to conventional beats-per-minute format are provided here:
-      qreal tempo2beatsPerMinute(qreal tempo)   { return tempo * denominator() * 15.0 / dUnitsPerBeat(); }
-      qreal beatsPerMinute2tempo(qreal bpm)     { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
+      qreal tempo2beatsPerMinute(qreal tempo)   const { return tempo * denominator() * 15.0 / dUnitsPerBeat(); }
+      qreal beatsPerMinute2tempo(qreal bpm)     const { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
 
-      BeatType rtick2beatType(int rtick);
+      BeatType rtick2beatType(int rtick)  const;
+
+      int ticksPastDUnit(int rtick)       const { return rtick % dUnitTicks(); }                 // returns 0 if rtick is exactly on a dUnit
+      int ticksToNextDUnit(int rtick)     const { return dUnitTicks() - ticksPastDUnit(rtick); } // returns dUnitTicks() if rtick is on a dUnit
+
+      int ticksPastBeat(int rtick)        const { return rtick % beatTicks(); }                  // returns 0 if rtick is exactly on a beat
+      int ticksToNextBeat(int rtick)      const { return beatTicks() - ticksPastBeat(rtick); }   // returns beatTicks() if rtick is on a beat
 
       };
 
