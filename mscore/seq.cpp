@@ -1042,6 +1042,16 @@ void Seq::setPos(int utick)
       if (utick != ucur)
             updateSynthesizerState(ucur, utick);
 
+      // consider events with position < 0 as init events (from MidiActions)
+      // TODO maybe mark MidiActions in a way and find last MidiAction to set synth
+      // to correct state
+      if (utick == 0) {
+            while (playPos->first < 0) {
+                  putEvent(playPos->second);
+                  playPos++;
+                  }
+            }
+
       playTime  = cs->utick2utime(utick) * MScore::sampleRate;
       mutex.lock();
       playPos   = events.lower_bound(utick);
