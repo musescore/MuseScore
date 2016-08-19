@@ -1057,6 +1057,12 @@ MuseScore::MuseScore()
       menuAddText->addAction(getAction("tempo"));
       menuAdd->addMenu(menuAddText);
 
+      menuAddAnnotation = new QMenu();
+      menuAddAnnotation->addAction(getAction("text-annotation"));
+      menuAddAnnotation->addAction(getAction("range-annotation"));
+      menuAdd->addMenu(menuAddAnnotation);
+
+
       menuAddLines = new QMenu();
       menuAddLines->addAction(getAction("add-slur"));
       menuAddLines->addAction(getAction("add-hairpin"));
@@ -1280,6 +1286,7 @@ void MuseScore::retranslate(bool firstStart)
       menuAddMeasures->setTitle(tr("&Measures"));
       menuAddFrames->setTitle(tr("&Frames"));
       menuAddText->setTitle(tr("&Text"));
+      menuAddAnnotation->setTitle(tr("&Annotation"));
       menuAddLines->setTitle(tr("&Lines"));
       menuAddPitch->setTitle(tr("N&otes"));
       menuAddInterval->setTitle(tr("&Intervals"));

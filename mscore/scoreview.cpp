@@ -68,6 +68,8 @@
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/textannotation.h"
+#include "libmscore/rangeannotation.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
@@ -2024,6 +2026,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.setBrush(QBrush(Qt::NoBrush));
             p.drawRect(r);
             }
+
       const Selection& sel = _score->selection();
       if (sel.isRange()) {
             Segment* ss = sel.startSegment();
@@ -2058,7 +2061,6 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             double x2      = ss->pagePos().x() - _spatium;
             int staffStart = sel.staffStart();
             int staffEnd   = sel.staffEnd();
-
             System* system2 = ss->measure()->system();
             QPointF pt      = ss->pagePos();
             double y        = pt.y();
@@ -2882,6 +2884,10 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::REHEARSAL_MARK);
       else if (cmd == "instrument-change-text")
             cmdAddText(TEXT::INSTRUMENT_CHANGE);
+      else if (cmd == "text-annotation")
+            cmdAddAnnotation();
+      else if (cmd == "range-annotation")
+            cmdAddRangeAnnotation();
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5540,13 +5546,94 @@ void ScoreView::cmdAddChordName()
       harmony->setTrack(cr->track());
       harmony->setParent(cr->segment());
       _score->undoAddElement(harmony);
-
       _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony);
       _score->setLayoutAll();
       _score->update();
       }
 
+//---------------------------------------------------------
+//   cmdAddAnnotation
+//---------------------------------------------------------
+
+void ScoreView::cmdAddAnnotation()
+      {
+      if (!_score->checkHasMeasures())
+            return;
+      if (noteEntryMode())          // force out of entry mode
+            sm->postEvent(new CommandEvent("note-input"));
+
+      _score->startCmd();
+        ChordRest* cr = _score->getSelectedChordRest();
+      if (!cr)
+            return;
+
+      TextAnnotation* t = new TextAnnotation(_score);
+      t->setTrack(cr->track());
+      t->setTextStyleType(TextStyleType::ANNOTATION);
+      t->setParent(cr->segment());
+      if (t) {
+            _score->undoAddElement(t);
+            _score->select(t, SelectType::SINGLE, 0);
+            _score->endCmd();
+            startEdit(t);
+            }
+      else
+            _score->endCmd();
+
+      }
+
+//---------------------------------------------------------
+//   cmdAddRangeAnnotation
+//---------------------------------------------------------
+
+void ScoreView::cmdAddRangeAnnotation()
+      {
+      if (!_score->selection().isRange()) {
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (!cr)
+                  return;
+            int stick = cr->tick();
+            int etick = stick + cr->actualTicks();
+            int sstaff = cr->staffIdx();
+            int strack = sstaff * VOICES;
+            RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
+            rangeAnn->setParent(0);
+            rangeAnn->setTick(stick);
+            rangeAnn->setTick2(etick);
+            rangeAnn->setTrack(strack);
+            rangeAnn->setStaffStart(sstaff);
+            rangeAnn->setStaffEnd(sstaff);
+            QColor yellow(255, 255, 0, 127);
+            rangeAnn->setColor(yellow);
+            _score->startCmd();
+            _score->undoAddElement(rangeAnn);
+            _score->endCmd();
+            return;
+            }
+
+      Segment* ss = score()->selection().startSegment();
+      Segment* es = score()->selection().endSegment();
+      int stick = score()->selection().tickStart();
+      int etick = score()->selection().tickEnd();
+      int sstaff = score()->selection().staffStart();
+      int estaff = score()->selection().staffEnd();
+      int strack = sstaff * VOICES;
+      RangeAnnotation* rangeAnn = new RangeAnnotation(_score);
+      rangeAnn->setParent(0);
+      rangeAnn->setTick(stick);
+      rangeAnn->setTick2(etick);
+      rangeAnn->setTrack(strack);
+      rangeAnn->setStaffStart(sstaff);
+      rangeAnn->setStaffEnd(estaff);
+      rangeAnn->setStartSegment(ss);
+      rangeAnn->setEndSegment(es);
+      QColor yellow(255, 255, 0, 127);
+      rangeAnn->setColor(yellow);
+      _score->startCmd();
+      _score->undoAddElement(rangeAnn);
+      _score->endCmd();
+      }
 //---------------------------------------------------------
 //   cmdAddText
 //---------------------------------------------------------

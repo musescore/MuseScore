@@ -13,6 +13,7 @@
 #include "mscore.h"
 #include "segment.h"
 #include "element.h"
+#include "textannotation.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"
@@ -429,7 +430,7 @@ void Segment::checkElement(Element* el, int track)
 
 void Segment::add(Element* el)
       {
-//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
+    //  qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
 
       el->setParent(this);
 
@@ -444,13 +445,13 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   _empty = false;
                   break;
-
             case Element::Type::DYNAMIC:
             case Element::Type::HARMONY:
             case Element::Type::SYMBOL:
             case Element::Type::FRET_DIAGRAM:
             case Element::Type::TEMPO_TEXT:
             case Element::Type::STAFF_TEXT:
+            case Element::Type::RANGEANNOTATION:
             case Element::Type::REHEARSAL_MARK:
             case Element::Type::MARKER:
             case Element::Type::IMAGE:
@@ -460,7 +461,6 @@ void Segment::add(Element* el)
             case Element::Type::FIGURED_BASS:
                   _annotations.push_back(el);
                   break;
-
             case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
@@ -545,7 +545,6 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   _empty = false;
                   break;
-
             default:
                   qFatal("Segment::add() unknown %s", el->name());
             }
@@ -594,6 +593,7 @@ void Segment::remove(Element* el)
             case Element::Type::MARKER:
             case Element::Type::REHEARSAL_MARK:
             case Element::Type::STAFF_TEXT:
+            case Element::Type::RANGEANNOTATION:
             case Element::Type::SYMBOL:
             case Element::Type::TAB_DURATION_SYMBOL:
             case Element::Type::TEMPO_TEXT:
@@ -1029,9 +1029,11 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   e->scanElements(data, func, all);
                   }
       for (Element* e : annotations()) {
-            if (all || e->systemFlag() || measure()->visible(e->staffIdx()))
-                  e->scanElements(data,  func, all);
-            }
+             if (score()->tagIsValid(e->tag())) {
+                   if (all || e->systemFlag()  || measure()->visible(e->staffIdx()))
+                         e->scanElements(data,  func, all);
+                   }
+             }
       }
 
 //---------------------------------------------------------
