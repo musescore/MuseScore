@@ -552,6 +552,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
       {
       Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
 
+      bool isRest   = nval.pitch == -1;
       int tick      = segment->tick();
       Element* nr   = 0;
       Tie* tie      = 0;
@@ -572,18 +573,18 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   }
 
             measure = segment->measure();
-            std::vector<TDuration> dl = toDurationList(dd, true);
+            std::vector<TDuration> dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
             int n = dl.size();
             for (int i = 0; i < n; ++i) {
                   const TDuration& d = dl[i];
                   ChordRest* ncr;
                   Note* note = 0;
                   Tie* addTie = 0;
-                  if (nval.pitch == -1) {
+                  if (isRest) {
                         nr = ncr = new Rest(this);
                         nr->setTrack(track);
                         ncr->setDurationType(d);
-                        ncr->setDuration(d.fraction());
+                        ncr->setDuration(d == TDuration::DurationType::V_MEASURE ? measure->len() : d.fraction());
                         }
                   else {
                         nr = note = new Note(this);
@@ -641,7 +642,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             //
             //  Note does not fit on current measure, create Tie to
             //  next part of note
-            if (nval.pitch != -1) {
+            if (!isRest) {
                   tie = new Tie(this);
                   tie->setStartNote((Note*)nr);
                   tie->setTrack(nr->track());
