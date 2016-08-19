@@ -245,6 +245,7 @@ void SynthControl::deleteSoundBankClicked()
             removeSoundBank(item->text());
             }
       updateSoundbanks();
+      soundbankMatchInstrumentTemplates();
       emit soundbanksChanged();
       }
 
