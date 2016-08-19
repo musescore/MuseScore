@@ -550,6 +550,7 @@ class Score : public QObject, public ScoreElement {
       void cmdAddHairpin(bool);
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
+      void cmdResetNoteAndRestGroupings();
 
       void addRemoveBreaks(int interval, bool lock);
 
@@ -661,6 +662,7 @@ class Score : public QObject, public ScoreElement {
       void putNoteInsert(const Position&);
 
       void repitchNote(const Position& pos, bool replace);
+      void regroupNotesAndRests(int startTick, int endTick, int track);
       void cmdAddPitch(int pitch, bool addFlag, bool insert);
       void cmdTimeDelete();
 

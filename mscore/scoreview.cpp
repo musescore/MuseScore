@@ -5354,18 +5354,23 @@ void ScoreView::cmdRealtimeAdvance()
       if (!is.noteEntryMode())
             return;
       _score->startCmd();
-      if (is.cr()->duration() != is.duration().fraction())
+      if (!is.cr() || is.cr()->duration() != is.duration().fraction())
             _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
-      Chord* prevChord = static_cast<Chord*>(is.cr());
+      ChordRest* prevCR = toChordRest(is.cr());
       is.moveToNextInputPos();
       if (_score->activeMidiPitches()->empty())
             _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
       else {
+            Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
             bool partOfChord = false;
             for (const MidiInputEvent &ev : *_score->activeMidiPitches()) {
                   _score->addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
                   partOfChord = true;
                   }
+            }
+      if (prevCR->measure() != is.segment()->measure()) {
+            // just advanced across barline. Now simplify tied notes.
+            score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
             }
       _score->endCmd();
       }
