@@ -61,6 +61,9 @@ class TimeSigFrac : public Fraction {
       int beatTicks()         const   { return dUnitTicks() * dUnitsPerBeat(); }
       int beatsPerMeasure()   const   { return numerator() / dUnitsPerBeat(); }
 
+      int subbeatTicks(int level)   const;
+      int maxSubbeatLevel()         const;
+
       bool isTriple()         const   { return beatsPerMeasure() % 3 == 0; }
       bool isDuple() const { Q_ASSERT(!isTriple()); return beatsPerMeasure() % 2 == 0; } // note: always test isTriple() first
 
@@ -69,6 +72,10 @@ class TimeSigFrac : public Fraction {
       qreal beatsPerMinute2tempo(qreal bpm)     const { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
 
       BeatType rtick2beatType(int rtick)  const;
+      int rtick2subbeatLevel(int rtick)   const; // returns negative value if not on a well-defined subbeat
+
+      BeatType strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed = 0, int* subbeatTick = 0, bool saveLast = false) const; // range is exclusive
+      int strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbeatTick = 0) const; // range is exclusive
 
       int ticksPastDUnit(int rtick)       const { return rtick % dUnitTicks(); }                 // returns 0 if rtick is exactly on a dUnit
       int ticksToNextDUnit(int rtick)     const { return dUnitTicks() - ticksPastDUnit(rtick); } // returns dUnitTicks() if rtick is on a dUnit
@@ -76,6 +83,8 @@ class TimeSigFrac : public Fraction {
       int ticksPastBeat(int rtick)        const { return rtick % beatTicks(); }                  // returns 0 if rtick is exactly on a beat
       int ticksToNextBeat(int rtick)      const { return beatTicks() - ticksPastBeat(rtick); }   // returns beatTicks() if rtick is on a beat
 
+      int ticksPastSubbeat(int rtick, int level)      const { return rtick % subbeatTicks(level); }
+      int ticksToNextSubbeat(int rtick, int level)    const { return subbeatTicks(level) - ticksPastSubbeat(rtick, level); }
       };
 
 //-------------------------------------------------------------------
