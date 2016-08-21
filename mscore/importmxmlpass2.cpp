@@ -5544,7 +5544,6 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else if (_e.name() == "tremolo") {
                               tremoloType = _e.attributes().value("type").toString();
                               tremolo = _e.readElementText().toInt();
-                              _e.readNext();
                               }
                         else if (_e.name() == "accidental-mark")
                               skipLogCurrElem();
