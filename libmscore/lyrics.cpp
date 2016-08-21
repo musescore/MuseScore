@@ -906,7 +906,7 @@ void LyricsLineSegment::draw(QPainter* painter) const
             return;
       qreal _spatium = spatium();
 
-      QPen pen(lyricsLine()->curColor());
+      QPen pen(lyricsLine()->lyrics()->curColor());
       pen.setWidthF(lyricsLine()->lineWidth().val() * _spatium);
       pen.setCapStyle(Qt::FlatCap);
       painter->setPen(pen);
