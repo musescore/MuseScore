@@ -183,6 +183,7 @@ subdirs (
         libmscore/midimapping
         libmscore/note
         libmscore/repeat
+        libmscore/rhythmicGrouping
         libmscore/selectionfilter
         libmscore/selectionrangedelete
         libmscore/spanners

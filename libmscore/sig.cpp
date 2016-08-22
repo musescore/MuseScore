@@ -39,12 +39,14 @@ static int ticks_measure(const Fraction& f)
 
 //---------------------------------------------------------
 //   rtick2beatType
+//    caller must adjust rtick as appropriate if the measure's
+//    actual timeSig is different from the nominal timeSig.
 //---------------------------------------------------------
 
-BeatType TimeSigFrac::rtick2beatType(int rtick)
+BeatType TimeSigFrac::rtick2beatType(int rtick) const
       {
       if (rtick == 0)
-            return BeatType::DOWNBEAT;
+            return BeatType::DOWNBEAT; // note: only return DOWNBEAT for rtick = 0, not for rtick = measureTicks,
 
       if (rtick % dUnitTicks() != 0)
             return BeatType::SUBBEAT;
@@ -57,15 +59,137 @@ BeatType TimeSigFrac::rtick2beatType(int rtick)
       const int beatNum = rtick / beatTicks();
 
       int stressBeat = 0;
+
       if (isTriple())
             stressBeat = 3;
       else if (isDuple())
             stressBeat = 2;
+      else
+            stressBeat = (numerator() + 1) / 2; // Assumes 5/4 timeSig = (3+2)/4. (The same assumption is used for beaming)
 
       if (stressBeat && beatNum % stressBeat == 0)
-            return isCompound() ? BeatType::SIMPLE_STRESSED : BeatType::COMPOUND_STRESSED;
+            return isCompound() ? BeatType::COMPOUND_STRESSED : BeatType::SIMPLE_STRESSED;
 
-      return isCompound() ? BeatType::SIMPLE_UNSTRESSED : BeatType::COMPOUND_UNSTRESSED;
+      return isCompound() ? BeatType::COMPOUND_UNSTRESSED : BeatType::SIMPLE_UNSTRESSED;
+      }
+
+//---------------------------------------------------------
+//   strongestBeatInRange
+//    dUnitsCrossed - pointer to store number crossed
+//    subbeatTick - pointer to store tick of strongest beat
+//    saveLast - which tick to store if strongest type is
+//                crossed more than once
+//
+//    caller must adjust rticks as appropriate if the measure's
+//    actual timeSig is different from the nominal timeSig.
+//---------------------------------------------------------
+
+BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed, int* subbeatTick, bool saveLast) const
+      {
+      Q_ASSERT(rtick2 > rtick1);
+
+      BeatType strongest = BeatType::SUBBEAT;
+
+      for (int rtick = rtick1 + ticksToNextDUnit(rtick1); rtick < rtick2; rtick += dUnitTicks()) {
+            if (dUnitsCrossed)
+                  (*dUnitsCrossed)++;
+            BeatType type = rtick2beatType(rtick);
+            if (static_cast<int>(type) < static_cast<int>(strongest) + saveLast) { // "<" behaves like "<=" if saveLast is true
+                  strongest = type;
+                  if (subbeatTick)
+                        (*subbeatTick) = rtick;
+                  }
+            }
+
+      return strongest;
+      }
+
+//---------------------------------------------------------
+//   subbeatTicks
+//    divides dUnitTicks() by 2 once for each level.
+//---------------------------------------------------------
+
+int TimeSigFrac::subbeatTicks(int level) const
+      {
+      Q_ASSERT(level <= maxSubbeatLevel());
+      int subbeatTicks = dUnitTicks();
+      while (level > 0) {
+            subbeatTicks /= 2;
+            level--;
+            }
+      return subbeatTicks;
+      }
+
+//---------------------------------------------------------
+//   maxSubbeatLevel
+//    subdivision beyond this level would result in rounding errors
+//---------------------------------------------------------
+
+int TimeSigFrac::maxSubbeatLevel() const
+      {
+      int level = 0;
+      int subbeatTicks = dUnitTicks();
+      while (subbeatTicks % 2 == 0) {
+            subbeatTicks /= 2;
+            level++;
+            }
+      return level;
+      }
+
+//---------------------------------------------------------
+//   rtick2subbeatLevel
+//    returns 0 if rtick is on a beat or denominator unit.
+//    returns 1 if rtick lies halfway between dUnits
+//    returns 2 if rtick lies on a multiple of  1/4  of dUnit
+//            3                                 1/8
+//            4                                 1/16
+//            n                                 1/(2**n)
+//    returns -(n+1) if max n is reached and rtick still not found.
+//
+//    Caller must adjust rtick as appropriate if the measure's
+//    actual timeSig is different from the nominal timeSig.
+//---------------------------------------------------------
+
+int TimeSigFrac::rtick2subbeatLevel(int rtick) const
+      {
+      int level = 0;
+      int subbeatTicks = dUnitTicks();
+      int remainder = rtick % subbeatTicks;
+      while (remainder != 0) {
+            level++;
+            if (subbeatTicks % 2 != 0)
+                  return -level; // further sub-division would split measure into chunks of unequal length.
+            subbeatTicks /= 2;
+            remainder %= subbeatTicks;
+            }
+      return level;
+      }
+
+//---------------------------------------------------------
+//   strongestSubbeatLevelInRange
+//    Return value is negative if none are found.
+//
+//    Caller must adjust rtick as appropriate if the measure's
+//    actual timeSig is different from the nominal timeSig.
+//---------------------------------------------------------
+
+int TimeSigFrac::strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbeatTick) const
+      {
+      Q_ASSERT(rtick2 > rtick1);
+
+      for (int level = 0, subbeatTicks = dUnitTicks();;) {
+            int n = rtick1 / subbeatTicks;
+            int m = (rtick2 - 1) / subbeatTicks; // -1 to make the range exclusive
+            if (m > n) {
+                  if (subbeatTick)
+                        (*subbeatTick) = m * subbeatTicks;
+                  return level;
+                  }
+            level++;
+            if (subbeatTicks % 2 != 0)
+                  return -level; // further sub-division would split measure into chunks of unequal length.
+            subbeatTicks /= 2;
+            }
       }
 
 //---------------------------------------------------------

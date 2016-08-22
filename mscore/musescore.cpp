@@ -478,6 +478,8 @@ void MuseScore::populateNoteInputMenu()
                         noteEntryMethods->addAction(getAction("note-input-realtime-auto"));
                         noteEntryMethods->addAction(getAction("note-input-realtime-manual"));
 
+                        connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(setNoteEntryState()));
+
                         w = new ToolButtonMenu(tr("Note Entry Methods"),
                            ToolButtonMenu::TYPES::ICON_CHANGED,
                            getAction("note-input"),
@@ -1082,6 +1084,7 @@ MuseScore::MuseScore()
       menuFormat->addSeparator();
 
       menuFormat->addAction(getAction("reset-beammode"));
+      menuFormat->addAction(getAction("reset-groupings"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();
 
