@@ -2991,6 +2991,76 @@ static bool notTopBeam(ChordRest* cr)
       }
 
 //---------------------------------------------------------
+//   getLyricsMaxY
+//---------------------------------------------------------
+
+static qreal findLyricsMaxY(Segment& s, int staffIdx)
+      {
+      qreal yMax = 0.0;
+      if (!s.isChordRestType())
+            return yMax;
+      ChordRest* cr = s.cr(staffIdx * VOICES);
+      if (cr) {
+            Shape sh;
+            for (Lyrics* l : cr->lyrics()) {
+                  if (l) {
+                        l->rUserYoffset() = 0.0;
+                        sh.add(l->bbox().translated(l->pos()));
+                        }
+                  }
+            // lyrics shapes must be moved, so first remove them from segment
+            s.staffShape(staffIdx).remove(sh);
+
+            qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
+            for (Lyrics* l : cr->lyrics()) {
+                  if (l && l->autoplace()) {
+                        qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
+                        if (y > -lyricsMinTopDistance)
+                              yMax = qMax(yMax, y + lyricsMinTopDistance);
+                        }
+                  }
+            }
+      return yMax;
+      }
+
+static qreal findLyricsMaxY(Measure* m, int staffIdx)
+      {
+      qreal yMax = 0.0;
+      for (Segment& s : m->segments())
+            yMax = qMax(yMax, findLyricsMaxY(s, staffIdx));
+      return yMax;
+      }
+
+//---------------------------------------------------------
+//   applyLyricsMax
+//---------------------------------------------------------
+
+static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
+      {
+      if (!s.isChordRestType())
+            return;
+      ChordRest* cr = s.cr(staffIdx * VOICES);
+      if (cr) {
+            Shape sh;
+            qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
+            for (Lyrics* l : cr->lyrics()) {
+                  if (l && l->autoplace()) {
+                        l->rUserYoffset() = yMax;
+                        sh.add(l->bbox().translated(l->pos())
+                           .adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                        }
+                  }
+            s.staffShape(staffIdx).add(sh);
+            }
+      }
+
+static void applyLyricsMax(Measure* m, int staffIdx, qreal yMax)
+      {
+      for (Segment& s : m->segments())
+            applyLyricsMax(s, staffIdx, yMax);
+      }
+
+//---------------------------------------------------------
 //   collectSystem
 //---------------------------------------------------------
 
@@ -3376,64 +3446,48 @@ System* Score::collectSystem(LayoutContext& lc)
       //    vertical align lyrics
       //
 
-      qreal lyricsMinTopDistance    = styleP(StyleIdx::lyricsMinTopDistance);
-      qreal lyricsMinBottomDistance = styleP(StyleIdx::lyricsMinBottomDistance);
+      VerticalAlignRange ar = VerticalAlignRange(styleI(StyleIdx::autoplaceVerticalAlignRange));
 
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                  int track = staffIdx * VOICES;
-                  qreal yMax = 0.0;
-
-                  // pass I : compute yMax
-
-                  for (Segment& s : m->segments()) {
-                        if (!s.isChordRestType())
+      switch (ar) {
+            case VerticalAlignRange::MEASURE:
+                  for (MeasureBase* mb : system->measures()) {
+                        if (!mb->isMeasure())
                               continue;
-                        ChordRest* cr = s.cr(track);
-                        if (cr) {
-                              Shape sh;
-                              for (Lyrics* l : cr->lyrics()) {
-                                    if (l) {
-                                          l->rUserYoffset() = 0.0;
-                                          sh.add(l->bbox().translated(l->pos()));
-                                          }
-                                    }
-                              // lyrics shapes must be moved, so first remove them from segment
-                              s.staffShape(staffIdx).remove(sh);
-
-                              for (Lyrics* l : cr->lyrics()) {
-                                    if (l && l->autoplace()) {
-                                          qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
-                                          if (y > -lyricsMinTopDistance)
-                                                yMax = qMax(yMax, y + lyricsMinTopDistance);
-                                          }
+                        Measure* m = toMeasure(mb);
+                        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                              qreal yMax = findLyricsMaxY(m, staffIdx);
+                              applyLyricsMax(m, staffIdx, yMax);
+                              }
+                        }
+                  break;
+            case VerticalAlignRange::SYSTEM:
+                  for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        qreal yMax = 0.0;
+                        for (MeasureBase* mb : system->measures()) {
+                              if (!mb->isMeasure())
+                                    continue;
+                              yMax = qMax(yMax, findLyricsMaxY(toMeasure(mb), staffIdx));
+                              }
+                        for (MeasureBase* mb : system->measures()) {
+                              if (!mb->isMeasure())
+                                    continue;
+                              applyLyricsMax(toMeasure(mb), staffIdx, yMax);
+                              }
+                        }
+                  break;
+            case VerticalAlignRange::SEGMENT:
+                  for (MeasureBase* mb : system->measures()) {
+                        if (!mb->isMeasure())
+                              continue;
+                        Measure* m = toMeasure(mb);
+                        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                              for (Segment& s : m->segments()) {
+                                    qreal yMax = findLyricsMaxY(s, staffIdx);
+                                    applyLyricsMax(s, staffIdx, yMax);
                                     }
                               }
                         }
-
-                  // pass II : apply yMax
-
-                  for (Segment& s : m->segments()) {
-                        if (!s.isChordRestType())
-                              continue;
-                        ChordRest* cr = s.cr(track);
-                        if (cr) {
-                              Shape sh;
-                              for (Lyrics* l : cr->lyrics()) {
-                                    if (l && l->autoplace()) {
-                                          l->rUserYoffset() = yMax;
-                                          sh.add(l->bbox().translated(l->pos())
-                                             .adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
-                                          }
-                                    }
-                              s.staffShape(staffIdx).add(sh);
-                              }
-                        }
-                  }
+                  break;
             }
 
       //

@@ -208,7 +208,6 @@ enum class StyleIdx : int {
       MusicalTextFont,
 
       showHeader,
-//      headerStyled,
       headerFirstPage,
       headerOddEven,
       evenHeaderL,
@@ -219,7 +218,6 @@ enum class StyleIdx : int {
       oddHeaderR,
 
       showFooter,
-//      footerStyled,
       footerFirstPage,
       footerOddEven,
       evenFooterL,
@@ -324,6 +322,7 @@ enum class StyleIdx : int {
 
       autoplaceHairpinDynamicsDistance,
       dynamicsMinDistance,
+      autoplaceVerticalAlignRange,
 
       STYLES
       };
