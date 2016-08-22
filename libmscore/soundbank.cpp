@@ -265,12 +265,18 @@ void addToSoundBanks(QString filename)
             }
       XmlReader e(&file);
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "SoundBank") {
-                  QString sbName = e.attribute("name");
-                  SoundBank* newSb = new SoundBank(sbName);
-                  newSb->read(e);
-                  soundbanks.push_back(newSb);
+            if (e.name() == "SoundBanks") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "SoundBank") {
+                              QString sbName = e.attribute("name");
+                              SoundBank* newSb = new SoundBank(sbName);
+                              newSb->read(e);
+                              soundbanks.push_back(newSb);
+                              }
+                        else
+                              e.unknown();
+                        }
                   }
             else
                   e.unknown();
