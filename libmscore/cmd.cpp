@@ -2326,20 +2326,14 @@ void Score::cmd(const QAction* a)
             cmdAddOttava(Ottava::Type::OTTAVA_8VA);
       else if (cmd == "add-8vb")
             cmdAddOttava(Ottava::Type::OTTAVA_8VB);
-      else if (cmd == "delete-measures")
-            cmdDeleteSelectedMeasures();
       else if (cmd == "time-delete") {
-            if (selection().state() == SelState::RANGE)
-                  cmdDeleteSelectedMeasures();
-            else {
-                  Element* e = selection().element();
-                  if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
-                        Measure* m = toBarLine(e)->segment()->measure();
-                        cmdJoinMeasure(m, m->nextMeasure());
-                        }
-                  else
-                        cmdTimeDelete();
+            Element* e = selection().element();
+            if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
+                  Measure* m = toBarLine(e)->segment()->measure();
+                  cmdJoinMeasure(m, m->nextMeasure());
                   }
+            else
+                  cmdTimeDelete();
             }
       else if (cmd == "pitch-up-octave") {
             if (el && (el->isArticulation() || el->isText()))

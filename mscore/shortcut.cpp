@@ -1116,17 +1116,6 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL,
-         "delete-measures",
-         QT_TRANSLATE_NOOP("action","Delete Selected Measures"),
-         QT_TRANSLATE_NOOP("action","Delete selected measures"),
-         0,
-         Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
-         },
-      {
-         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "append-measure",
          QT_TRANSLATE_NOOP("action","Append One Measure"),

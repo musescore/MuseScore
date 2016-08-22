@@ -854,11 +854,6 @@ MuseScore::MuseScore()
 
       menuEdit->addAction(getAction("instruments"));
 
-      menuEditMeasure = new QMenu("");
-      for (auto i : { "delete-measures", "split-measure", "join-measures" })
-            menuEditMeasure->addAction(getAction(i));
-      menuEdit->addMenu(menuEditMeasure);
-
 #ifdef NDEBUG
       if (enableExperimental) {
 #endif
@@ -1272,7 +1267,6 @@ void MuseScore::retranslate(bool firstStart)
       menuFile->setTitle(tr("&File"));
       openRecent->setTitle(tr("Open &Recent"));
       menuEdit->setTitle(tr("&Edit"));
-      menuEditMeasure->setTitle(tr("&Measure"));
       menuView->setTitle(tr("&View"));
       menuWorkspaces->setTitle(tr("W&orkspaces"));
       pref->setText(tr("&Preferences..."));
