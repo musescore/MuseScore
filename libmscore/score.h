@@ -652,7 +652,7 @@ class Score : public QObject, public ScoreElement {
       NoteVal noteValForPosition(Position pos, bool &error);
 
       void deleteItem(Element*);
-      void cmdDeleteSelectedMeasures();
+      void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure);
       void cmdDeleteSelection();
       void cmdFullMeasureRest();
 
@@ -663,6 +663,7 @@ class Score : public QObject, public ScoreElement {
       void repitchNote(const Position& pos, bool replace);
       void cmdAddPitch(int pitch, bool addFlag, bool insert);
       void cmdTimeDelete();
+      void timeDelete(Measure*, Segment*, const Fraction&);
 
       void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command

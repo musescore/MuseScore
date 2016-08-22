@@ -215,7 +215,7 @@ class Measure : public MeasureBase {
       Segment* undoGetSegment(Segment::Type st, int tick);
       Segment* getSegment(Element* el, int tick);
       Segment* getSegment(Segment::Type st, int tick);
-      Segment* findSegment(Segment::Type st, int t);
+      Segment* findSegment(Segment::Type st, int tick);
 
       qreal createEndBarLines(bool);
       void setEndBarLineType(BarLineType val, int track, bool visible = true, QColor color = QColor());

@@ -138,8 +138,9 @@ bool Selection::isEndActive() const {
 
 Element* Selection::element() const
       {
-      return _el.size() == 1 ? _el[0] : 0;
+      return ((state() != SelState::RANGE) && (_el.size() == 1)) ? _el[0] : 0;
       }
+
 //---------------------------------------------------------
 //   cr
 //---------------------------------------------------------

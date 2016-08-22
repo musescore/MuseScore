@@ -451,7 +451,7 @@ void TestSpanners::spanners09()
       QVERIFY(msr);
       score->startCmd();
       score->select(msr);
-      score->cmdDeleteSelectedMeasures();
+      score->cmdTimeDelete();
       score->endCmd();
       QVERIFY(saveCompareScore(score, "lyricsline02.mscx", DIR + "lyricsline02-ref.mscx"));
 
@@ -483,7 +483,7 @@ void TestSpanners::spanners10()
       QVERIFY(msr);
       score->startCmd();
       score->select(msr);
-      score->cmdDeleteSelectedMeasures();
+      score->cmdTimeDelete();
       score->endCmd();
       QVERIFY(saveCompareScore(score, "lyricsline03.mscx", DIR + "lyricsline03-ref.mscx"));
 
@@ -515,7 +515,7 @@ void TestSpanners::spanners11()
       QVERIFY(msr);
       score->startCmd();
       score->select(msr);
-      score->cmdDeleteSelectedMeasures();
+      score->cmdTimeDelete();
       score->endCmd();
       QVERIFY(saveCompareScore(score, "lyricsline04.mscx", DIR + "lyricsline04-ref.mscx"));
 
@@ -547,7 +547,7 @@ void TestSpanners::spanners12()
       QVERIFY(msr);
       score->startCmd();
       score->select(msr);
-      score->cmdDeleteSelectedMeasures();
+      score->cmdTimeDelete();
       score->endCmd();
       QVERIFY(saveCompareScore(score, "lyricsline05.mscx", DIR + "lyricsline05-ref.mscx"));
 

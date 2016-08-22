@@ -280,7 +280,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuFile;
       QMenu* openRecent;
       QMenu* menuEdit;
-      QMenu* menuEditMeasure;
       QMenu* menuView;
       QMenu* menuWorkspaces;
 

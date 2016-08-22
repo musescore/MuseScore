@@ -2108,11 +2108,12 @@ void Score::deleteItem(Element* el)
       }
 
 //---------------------------------------------------------
-//   cmdDeleteSelectedMeasures
+//   deleteMeasures
 //---------------------------------------------------------
 
-void Score::cmdDeleteSelectedMeasures()
+void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
       {
+#if 0
       if (!selection().isRange())
             return;
 
@@ -2128,6 +2129,7 @@ void Score::cmdDeleteSelectedMeasures()
             ie = seg->prev() ? seg->measure() : seg->measure()->prev();
       else
             ie = lastMeasure();
+#endif
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
@@ -3208,70 +3210,130 @@ void Score::putNoteInsert(const Position& pos)
             }
       }
 
+static constexpr Segment::Type CR_TYPE = Segment::Type::ChordRest;
+
 //---------------------------------------------------------
 //   cmdTimeDelete
 //---------------------------------------------------------
 
 void Score::cmdTimeDelete()
       {
-qDebug("time delete");
-      Element* el = selection().element();
-      if (!el)
-            return;
-      ChordRest* cr;
-      if (el->isNote())
-            cr = toNote(el)->chord();
-      else if (el->isChordRest())
-            cr = toChordRest(el);
-      else
-            return;
-      Segment* seg = cr->segment();
-      int tick     = seg->tick();
-      Fraction f   = cr->duration();
-      int len      = f.ticks();
-      int etick    = tick + len;
-      if (seg->measure()->ticks() <= len) {
-            // maybe we should remove the measure
-            qDebug("empty measure not allowed");
-            return;
+      Segment* startSegment;
+      Segment* endSegment;
+
+      if (selection().state() != SelState::RANGE) {
+            Element* el = selection().element();
+            if (!el)
+                  return;
+            ChordRest* cr;
+            if (el->isNote())
+                  cr = toNote(el)->chord();
+            else if (el->isChordRest())
+                  cr = toChordRest(el);
+            startSegment = cr->segment();
+            int endTick  = startSegment->tick() + cr->duration().ticks();
+            endSegment   = cr->measure()->findSegment(CR_TYPE, endTick);
+            if (endSegment == 0) {
+                  qDebug("no segment at %d", endTick);
+                  return;
+                  }
+            }
+      else {
+            startSegment = selection().startSegment();
+            endSegment   = selection().endSegment();
             }
 
-      Measure* m  = cr->measure();
-      Segment* fs = m->first(Segment::Type::ChordRest);
+      MeasureBase* is = startSegment->measure();
+      if (is->isMeasure() && toMeasure(is)->isMMRest())
+            is = toMeasure(is)->mmRestFirst();
+      MeasureBase* ie;
+
+      if (endSegment)
+            ie = endSegment->prev() ? endSegment->measure() : endSegment->measure()->prev();
+      else
+            ie = lastMeasure();
+
+      for (;;) {
+            if (is->tick() != startSegment->tick()) {
+                  int tick = startSegment->tick();
+                  int len;
+                  if (ie == is)
+                        len = endSegment->tick() - tick;
+                  else
+                        len = is->endTick() - tick;
+                  timeDelete(toMeasure(is), startSegment, Fraction::fromTicks(len));
+                  if (is == ie)
+                        break;
+                  is = is->next();
+                  }
+            if (ie->endTick() != endSegment->tick()) {
+                  int len  = endSegment->tick() - ie->tick();
+                  timeDelete(toMeasure(ie), toMeasure(ie)->first(), Fraction::fromTicks(len));
+                  if (is == ie)
+                        break;
+                  ie = ie->prev();
+                  }
+            deleteMeasures(is, ie);
+            break;
+            };
+
+      deselectAll();
+      }
+
+//---------------------------------------------------------
+//   timeDelete
+//---------------------------------------------------------
+
+void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
+      {
+      int tick  = startSegment->rtick();
+      int len   = f.ticks();
+      int etick = tick + len;
+//      printf("cmdTimeDelete at tick %d ticks %d\n", tick, len);
+
+      Segment* fs = m->first(CR_TYPE);
 
       for (int track = 0; track < _staves.size() * VOICES; ++track) {
             if (m->hasVoice(track)) {
-                  for (Segment* s = fs; s; s = s->next(Segment::Type::ChordRest)) {
+                  for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                         if (s->element(track)) {
                               ChordRest* cr = toChordRest(s->element(track));
-                              int cetick    = s->tick() + cr->duration().ticks();
+                              int cetick    = s->rtick() + cr->duration().ticks();
 
-                              if (cetick <= tick)
+                              if (cetick <= tick) {
+//                                    printf("   %d continue %d\n", track, s->rtick());
                                     continue;
-                              if (s->tick() >= etick)
+                                    }
+                              if (s->rtick() >= etick) {
+//                                    printf("   %d break %d\n", track, s->rtick());
                                     break;
+                                    }
 
                               if (cr->isFullMeasureRest()) {
                                     // do nothing
                                     }
                               // inside deleted area
-                              else if (s->tick() >= tick && cetick <= etick) {
+                              else if (s->rtick() >= tick && cetick <= etick) {
                                     // inside
+//                                    printf("   %d inside\n", track);
                                     undoRemoveElement(cr);
                                     }
-                              else if (s->tick() >= tick) {
+                              else if (s->rtick() >= tick) {
                                     // running out
+//                                    printf("   %d running out\n", track);
                                     Fraction ff = cr->duration() - Fraction::fromTicks(cetick - etick);
                                     undoRemoveElement(cr);
                                     createCRSequence(ff, cr, tick + len);
                                     }
-                              else if (s->tick() < tick && cetick <= etick) {
+                              else if (s->rtick() < tick && cetick <= etick) {
                                     // running in
+//                                    printf("   %d running in\n", track);
                                     Fraction f1 = Fraction::fromTicks(tick - s->tick());
                                     changeCRlen(cr, f1, false);
                                     }
                               else {
                                     // running in/out
+//                                    printf("   %d running in/out\n", track);
                                     Fraction f1 = cr->duration() - f;
                                     changeCRlen(cr, f1, false);
                                     }
@@ -3281,7 +3343,7 @@ qDebug("time delete");
             }
       undoInsertTime(tick, -len);
       undo(new InsertTime(this, tick, -len));
-      for (Segment* s = seg->next(); s; s = s->next())
+      for (Segment* s = startSegment->next(); s; s = s->next())
             s->undoChangeProperty(P_ID::TICK, s->rtick() - len);
       undo(new ChangeMeasureLen(m, m->len() - f));
       }
