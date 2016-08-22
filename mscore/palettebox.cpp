@@ -114,7 +114,7 @@ void PaletteBox::updateWorkspaces()
       const QList<Workspace*> pl = Workspace::workspaces();
       int idx = 0;
       int curIdx = -1;
-      foreach (Workspace* p, pl) {
+      for (Workspace* p : pl) {
             workspaceList->addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
             if (p->name() == preferences.workspace)
                   curIdx = idx;
@@ -193,8 +193,8 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   {
                   QMessageBox::StandardButton reply;
                   reply = QMessageBox::question(0,
-                             QWidget::tr("Warning"),
                              QWidget::tr("Are you sure?"),
+                             QWidget::tr("Do you really want to delete the '%1' palette?").arg(palette->name()),
                              QMessageBox::Yes | QMessageBox::No,
                              QMessageBox::Yes
                              );
