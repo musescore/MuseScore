@@ -236,6 +236,8 @@ class Chord : public ChordRest {
 
       void sortNotes();
 
+      Chord* nextTiedChord(bool backwards = false, bool sameSize = true);
+
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
       virtual QString accessibleExtraInfo() const override;

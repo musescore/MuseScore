@@ -3101,6 +3101,37 @@ void Chord::sortNotes()
      }
 
 //---------------------------------------------------------
+//   nextTiedChord
+//    Return next chord if all notes in this chord are tied to it.
+//    Set backwards=true to return the previous chord instead.
+//
+//    Note: the next chord might have extra notes that are not tied
+//    back to this one. Set sameSize=true to return 0 in this case.
+//---------------------------------------------------------
+
+Chord* Chord::nextTiedChord(bool backwards, bool sameSize)
+      {
+      Segment* nextSeg = backwards ? segment()->prev1(Segment::Type::ChordRest) : segment()->next1(Segment::Type::ChordRest);
+      if (!nextSeg)
+            return 0;
+      ChordRest* nextCR = nextSeg->cr(track());
+      if (!nextCR || !nextCR->isChord())
+            return 0;
+      Chord* next = toChord(nextCR);
+      if (sameSize && notes().size() != next->notes().size())
+            return 0; // sizes don't match so some notes can't be tied
+      for (Note* n : _notes) {
+            Tie* tie = backwards ? n->tieBack() : n->tieFor();
+            if (!tie)
+                  return 0; // not tied
+            Note* nn = backwards ? tie->startNote() : tie->endNote();
+            if (!nn || nn->chord() != next)
+                  return 0; // tied to note in wrong voice, or tied over rest
+            }
+      return next; // all notes in this chord are tied to notes in next chord
+      }
+
+//---------------------------------------------------------
 //   toGraceAfter
 //---------------------------------------------------------
 

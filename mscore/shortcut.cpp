@@ -683,6 +683,17 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "reset-groupings",
+         QT_TRANSLATE_NOOP("action","Reset Note and Rest Groupings"),
+         QT_TRANSLATE_NOOP("action","Reset note and rest groupings"),
+         QT_TRANSLATE_NOOP("action","Combine rests and tied notes from selection and resplit at rhythmical locations"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "flip",
          QT_TRANSLATE_NOOP("action","Flip Direction"),
          QT_TRANSLATE_NOOP("action","Flip direction"),
