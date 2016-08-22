@@ -663,6 +663,7 @@ class Score : public QObject, public ScoreElement {
 
       void repitchNote(const Position& pos, bool replace);
       void regroupNotesAndRests(int startTick, int endTick, int track);
+      void recalculateVoices(int startTick, int endTick, int staffIdx);
       void cmdAddPitch(int pitch, bool addFlag, bool insert);
       void cmdTimeDelete();
       void timeDelete(Measure*, Segment*, const Fraction&);

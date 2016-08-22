@@ -83,6 +83,7 @@ void Preferences::init()
       iconWidth          = 28;
 
       enableMidiInput    = true;
+      enableRealtimeVoices = true;
       realtimeDelay      = 750; // ms
       playNotes          = true;
       playChordOnAddNote = true;
@@ -230,6 +231,7 @@ void Preferences::write()
       s.setValue("defaultColor",       MScore::defaultColor);
       s.setValue("pianoHlColor",       pianoHlColor);
       s.setValue("enableMidiInput",    enableMidiInput);
+      s.setValue("enableRealtimeVoices", enableRealtimeVoices);
       s.setValue("realtimeDelay",      realtimeDelay);
       s.setValue("playNotes",          playNotes);
       s.setValue("playChordOnAddNote", playChordOnAddNote);
@@ -382,6 +384,7 @@ void Preferences::read()
       pianoHlColor            = s.value("pianoHlColor", pianoHlColor).value<QColor>();
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
+      enableRealtimeVoices    = s.value("enableRealtimeVoices", enableRealtimeVoices).toBool();
       realtimeDelay           = s.value("realtimeDelay", realtimeDelay).toInt();
       playNotes               = s.value("playNotes", playNotes).toBool();
       playChordOnAddNote      = s.value("playChordOnAddNote", playChordOnAddNote).toBool();
@@ -777,6 +780,7 @@ void PreferenceDialog::updateValues()
       iconHeight->setValue(prefs.iconHeight);
 
       enableMidiInput->setChecked(prefs.enableMidiInput);
+      enableRealtimeVoices->setChecked(prefs.enableRealtimeVoices);
       realtimeDelay->setValue(prefs.realtimeDelay);
       playNotes->setChecked(prefs.playNotes);
       playChordOnAddNote->setChecked(prefs.playChordOnAddNote);
@@ -1271,6 +1275,7 @@ void PreferenceDialog::apply()
       prefs.bgUseColor     = bgColorButton->isChecked();
       prefs.fgUseColor     = fgColorButton->isChecked();
       prefs.enableMidiInput = enableMidiInput->isChecked();
+      prefs.enableRealtimeVoices = enableRealtimeVoices->isChecked();
       prefs.realtimeDelay   = realtimeDelay->value();
       prefs.playNotes      = playNotes->isChecked();
       prefs.playChordOnAddNote = playChordOnAddNote->isChecked();

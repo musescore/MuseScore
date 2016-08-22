@@ -56,6 +56,7 @@
 #include "ottava.h"
 #include "textframe.h"
 #include "accidental.h"
+#include "virtualmeasure.h"
 
 namespace Ms {
 
@@ -1471,7 +1472,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
             int maxTick = endTick > msr->endTick() ? msr->endTick() : endTick;
             if (!seg || seg->measure() != msr)
                   seg = msr->first(Segment::Type::ChordRest);
-            for (; seg && seg->tick() + seg->ticks() < maxTick; seg = seg->next(Segment::Type::ChordRest)) {
+            for (; seg && seg->tick() + seg->ticks() <= maxTick; seg = seg->next(Segment::Type::ChordRest)) {
                   ChordRest* curr = seg->cr(track);
                   if (!curr)
                         continue; // voice is empty here
@@ -1532,6 +1533,119 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
       // now put the input state back where it was before
       _is.setSegment(inputSegment);
       }
+
+//---------------------------------------------------------
+//   recalculateVoices
+//---------------------------------------------------------
+
+void Score::recalculateVoices(int startTick, int endTick, int staffIdx)
+      {
+      // store InputState location so we can get back to it later.
+      Segment* inputSegment = _is.segment();
+      int inputTrack = _is.track();
+      Segment* startSeg = tick2segment(startTick, true, Segment::Type::ChordRest);
+      for (Measure* msr = startSeg->measure(); msr && msr->tick() < endTick; msr = msr->nextMeasure()) {
+            Segment* firstSeg = startSeg->measure() == msr ? startSeg : msr->first(Segment::Type::ChordRest);
+            int maxTick = endTick < msr->endTick() ? endTick : msr->endTick();
+            VirtualMeasure vm; // temporary place to put notes while the new voicing is calculated
+            for (Segment* seg = firstSeg; seg && seg->tick() + seg->ticks() <= maxTick; seg = seg->next(Segment::Type::ChordRest)) {
+                  int sTrack = staffIdx * VOICES;
+                  int eTrack = sTrack + VOICES;
+                  for (int track = sTrack; track < eTrack; track++) {
+                        ChordRest* cr = seg->cr(track);
+                        if (!cr || !cr->isChord())
+                              continue; // voice is empty here
+                        // get length of tied note
+                        Chord* chord = toChord(cr);
+                        for (Note* n : chord->notes()) {
+                              Tie* t = n->tieBack();
+                              Note* tnb = t ? t->startNote() : 0;
+                              if (tnb && tnb->chord()->measure() == chord->measure())
+                                    continue; // already accounted for this note
+                              int ticks = chord->duration().ticks();
+                              Note* tnf = 0;
+                              Note* nn = n;
+                              for (t = n->tieFor(); t; t = nn->tieFor()) {
+                                    nn = t->endNote();
+                                    if (nn->tick() + nn->chord()->duration().ticks() <= maxTick) {
+                                          ticks += nn->chord()->duration().ticks();
+                                          }
+                                    else {
+                                          tnf = nn;
+                                          break;
+                                          }
+                                    }
+                              TimeSigFrac nominal = sigmap()->timesig(seg->tick()).nominal();
+                              std::vector<TDuration> dList = toRhythmicDurationList(
+                                    Fraction::fromTicks(ticks), false, n->rtick(), nominal, seg->measure(), 1);
+                              vm.addTiedNotes(n->pitch(), n->tick(), dList, tnf, tnb); // add notes to temporary container
+                              }
+                        }
+                  }
+            // calculate the new voicing
+            vm.arrange();
+            // overwrite the real measure with the newly calculated one
+            for (int voice = 0, track = staffIdx * VOICES; voice < VOICES; voice++, track++) {
+                  doLayoutRange(startSeg->tick(), maxTick);
+                  Segment* seg = firstSeg;
+                  if (voice >= vm.numVoices()) {
+                        // no more vvoices so overwrite remaining voices with rests
+                        seg = setNoteRest(seg, track, NoteVal(), Fraction::fromTicks(maxTick - seg->tick()), Direction::AUTO);
+                        continue;
+                        }
+                  VirtualVoice* vvoice = vm.voices()[voice];
+                  for (RawChord* rchord : vvoice->chords()) {
+                        if (seg->tick() < rchord->tick()) {
+                              seg = setNoteRest(seg, track, NoteVal(), Fraction::fromTicks(rchord->tick() - seg->tick()), Direction::AUTO); // This *appears* to work in all voices, but see FIXME below.
+                              while (seg->tick() < rchord->tick()) // might encounter segments from other voices before the one we want
+                                    seg = seg->next(Segment::Type::ChordRest); // FIXME: in higher voices this sometimes does not find the ChordRest we just added 2 lines above with setNoteRest()
+                              }
+                        seg = setNoteRest(seg, track, NoteVal(0), Fraction::fromTicks(rchord->ticks()), Direction::AUTO);
+                        Chord* newChord = toChord(seg->cr(track));
+                        Note* n = newChord->notes().front();
+                        undoRemoveElement(n);
+                        for (RawNote* rnote : rchord->notes()) {
+                              NoteVal nval = NoteVal(rnote->pitch());
+                              n = addNote(newChord, nval);
+                              Note* nn = rnote->tiedNoteFor();
+                              if (nn) {
+                                    Tie* t = new Tie(this);
+                                    n->setTieFor(t);
+                                    t->setStartNote(n);
+                                    t->setEndNote(nn);
+                                    nn->setTieBack(t);
+                                    t->setTrack(track);
+                                    undoAddElement(t);
+                                    }
+                              else if (rnote->next()) {
+                                    rnote->next()->setTiedNoteBack(n);
+                                    }
+                              nn = rnote->tiedNoteBack();
+                              if (nn) {
+                                    Tie* t = new Tie(this);
+                                    n->setTieBack(t);
+                                    t->setEndNote(n);
+                                    t->setStartNote(nn);
+                                    nn->setTieFor(t);
+                                    t->setTrack(nn->track());
+                                    undoAddElement(t);
+                                    }
+                              else if (rnote->prev()) {
+                                    rnote->prev()->setTiedNoteFor(n);
+                                    }
+                              }
+                        while (seg && seg->tick() < rchord->endTick()) // might encounter segments from other voices before the one we want
+                              seg = seg->next(Segment::Type::ChordRest);
+                        }
+                  if (seg && seg->tick() < maxTick) // measure is incomplete so fill with rests
+                        seg = setNoteRest(seg, track, NoteVal(), Fraction::fromTicks(maxTick - seg->tick()), Direction::AUTO);
+                  }
+            }
+      // now put the input state back where it was before
+      _is.setTrack(inputTrack);
+      _is.setSegment(inputSegment);
+      }
+
 
 //---------------------------------------------------------
 //   cmdAddTie

@@ -5369,7 +5369,10 @@ void ScoreView::cmdRealtimeAdvance()
             }
       if (prevCR->measure() != is.segment()->measure()) {
             // just advanced across barline. Now simplify tied notes.
-            score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
+            if (preferences.enableRealtimeVoices)
+                  score()->recalculateVoices(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track() / VOICES);
+            else
+                  score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
             }
       _score->endCmd();
       }

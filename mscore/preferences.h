@@ -93,6 +93,7 @@ struct Preferences {
       QColor dropColor;
       QColor pianoHlColor;
       bool enableMidiInput;
+      bool enableRealtimeVoices;
       int realtimeDelay;
       bool playNotes;         // play notes on click
       bool playChordOnAddNote;
