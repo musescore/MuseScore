@@ -27,6 +27,7 @@
 #include "libmscore/clef.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/layout.h"
 
 namespace Ms {
 
@@ -253,8 +254,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::MusicalSymbolFont,       false, musicalSymbolFont,            0 },
       { StyleIdx::MusicalTextFont,         false, musicalTextFont,              0 },
       { StyleIdx::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
-      { StyleIdx::dynamicsMinDistance,      false, dynamicsMinDistance,          resetDynamicsMinDistance },
+      { StyleIdx::dynamicsMinDistance,              false, dynamicsMinDistance,          resetDynamicsMinDistance },
+      { StyleIdx::autoplaceVerticalAlignRange,      false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
       };
+
+      autoplaceVerticalAlignRange->clear();
+      autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
+      autoplaceVerticalAlignRange->addItem(tr("Measure"), int(VerticalAlignRange::MEASURE));
+      autoplaceVerticalAlignRange->addItem(tr("System"),  int(VerticalAlignRange::SYSTEM));
 
       tupletNumberType->clear();
       tupletNumberType->addItem(tr("Number"), int(Tuplet::NumberType::SHOW_NUMBER));

@@ -47,6 +47,14 @@ struct LayoutContext {
       int adjustMeasureNo(MeasureBase*);
       };
 
+//---------------------------------------------------------
+//   VerticalAlignRange
+//---------------------------------------------------------
+
+enum class VerticalAlignRange {
+      SEGMENT, MEASURE, SYSTEM
+      };
+
 
 }     // namespace Ms
 #endif

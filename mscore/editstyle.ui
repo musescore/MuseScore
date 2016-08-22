@@ -490,6 +490,55 @@
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="groupBox_33">
+             <property name="title">
+              <string>Autoplace</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_11">
+              <item row="0" column="1">
+               <widget class="QComboBox" name="autoplaceVerticalAlignRange"/>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_36">
+                <property name="text">
+                 <string>Vertical Align Range</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <spacer name="horizontalSpacer_23">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetAutoplaceVerticalAlignRange">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Minimum measure width' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>

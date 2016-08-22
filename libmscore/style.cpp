@@ -22,6 +22,7 @@
 #include "mscore.h"
 #include "clef.h"
 #include "tuplet.h"
+#include "layout.h"
 
 namespace Ms {
 
@@ -322,7 +323,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::lutefingering2ndAnchor,          "lutefingering2ndAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::lutefingering3rdAnchor,          "lutefingering3rdAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
-      { StyleIdx::dynamicsMinDistance,             "dynamicsMinDistance",               Spatium(0.5) }
+      { StyleIdx::dynamicsMinDistance,             "dynamicsMinDistance",               Spatium(0.5) },
+      { StyleIdx::autoplaceVerticalAlignRange,     "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) }
       };
 
 //---------------------------------------------------------
@@ -866,14 +868,5 @@ StyleIdx MStyle::articulationAnchorIdx(int id)
       {
       return StyleIdx(int(StyleIdx::fermataAnchor) + id);
       }
-
-//---------------------------------------------------------
-//   setArticulationAnchor
-//---------------------------------------------------------
-
-// void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
-//      {
-//      _articulationAnchor[id] = val;
-//      }
 
 }
