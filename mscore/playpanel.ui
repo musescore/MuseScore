@@ -889,7 +889,7 @@
         <font/>
        </property>
        <property name="toolTip">
-        <string>Actual tempo</string>
+        <string>Actual tempo in quarter notes per minute</string>
        </property>
        <property name="autoFillBackground">
         <bool>false</bool>
