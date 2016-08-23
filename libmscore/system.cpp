@@ -386,6 +386,7 @@ void System::layout2()
                         dist += staffDistance;
                         break;
                   }
+            dist += score()->staff(si2)->userDist();
 
             for (MeasureBase* mb : ml) {
                   if (!mb->isMeasure())
