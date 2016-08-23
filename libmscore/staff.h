@@ -95,10 +95,10 @@ struct SwingParameters {
 class Staff : public QObject, public ScoreElement {
       Q_OBJECT
 
-public:
+   public:
       enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
 
-private:
+   private:
       Part* _part       { 0 };
 
       ClefList clefs;

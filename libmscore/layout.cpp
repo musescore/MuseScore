@@ -1205,8 +1205,9 @@ void Score::layoutSpanner()
                         for (int i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }
-                  Chord* c = toChord(segment->element(track));
-                  if (c && c->isChord()) {
+                  Element* e = segment->element(track);
+                  if (e && e->isChord()) {
+                        Chord* c = toChord(segment->element(track));
                         c->layoutStem();
                         for (Note* n : c->notes()) {
                               Tie* tie = n->tieFor();
@@ -3602,6 +3603,8 @@ bool Score::collectPage(LayoutContext& lc)
                   distance = vbox ? vbox->topGap() : sub;
                   distance = qMax(distance, -s2->minTop());
                   }
+            distance += _staves.front()->userDist();
+
             y += distance;
             s2->setPos(page->lm(), y);
             page->appendSystem(s2);
