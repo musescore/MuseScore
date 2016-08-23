@@ -53,6 +53,7 @@ class TestMeasure : public QObject, public MTest
       void spanner_B();
       void spanner_C();
       void spanner_D();
+      void deleteLast();
       void minWidth();
       };
 
@@ -183,10 +184,10 @@ void TestMeasure::minWidth()
       {
       MasterScore* score = readScore(DIR + "measure-2.mscx");
 
-//      int n = score->systems().size();
-//      int measuresSystem[n];
-//      for (int i = 0; i < n; ++i)
-//            measuresSystem[i] = score->systems().at(i)->measures().size();
+      int n = score->systems().size();
+      int measuresSystem[n];
+      for (int i = 0; i < n; ++i)
+            measuresSystem[i] = score->systems().at(i)->measures().size();
 
       score->doLayout();
 
@@ -200,12 +201,10 @@ void TestMeasure::minWidth()
       QCOMPARE(mw1, m1->minWidth1());
       QCOMPARE(mw2, m2->minWidth1());
 
-//TODO      // after second layout nothing should be changed:
-//      for (int i = 0; i < n; ++i) {
-//            printf("==%d %d == %d\n", i,
-//               measuresSystem[i], score->systems()->at(i)->measures().size());
-//            QCOMPARE(measuresSystem[i], score->systems()->at(i)->measures().size());
-//            }
+      // after second layout nothing should be changed:
+      for (int i = 0; i < n; ++i) {
+            QCOMPARE(measuresSystem[i], int(score->systems().at(i)->measures().size()));
+            }
       }
 
 //---------------------------------------------------------
@@ -331,6 +330,24 @@ void TestMeasure::spanner_D()
       score->endCmd();
 
       QVERIFY(saveCompareScore(score, "measure-9.mscx", DIR + "measure-9-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//    deleteLast
+//---------------------------------------------------------
+
+void TestMeasure::deleteLast()
+      {
+      MasterScore* score = readScore(DIR + "measure-10.mscx");
+
+      score->startCmd();
+      Measure* m = score->lastMeasure();
+      score->select(m);
+      score->cmdTimeDelete();
+      score->endCmd();
+
+      QVERIFY(saveCompareScore(score, "measure-10.mscx", DIR + "measure-10-ref.mscx"));
       delete score;
       }
 

@@ -3343,7 +3343,8 @@ void Score::cmdTimeDelete()
                         break;
                   is = is->next();
                   }
-            if (ie->endTick() != endSegment->tick()) {
+            int endTick = endSegment ? endSegment->tick() : ie->endTick();
+            if (ie->endTick() != endTick) {
                   int len  = endSegment->tick() - ie->tick();
                   timeDelete(toMeasure(ie), toMeasure(ie)->first(), Fraction::fromTicks(len));
                   if (is == ie)
