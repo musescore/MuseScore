@@ -99,12 +99,12 @@
           <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <Lyrics>
-            <text>abcd</text>
-            </Lyrics>
-          <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
             <text>sss</text>
+            </Lyrics>
+          <Lyrics>
+            <text>abcd</text>
             </Lyrics>
           <StemDirection>up</StemDirection>
           <Note>
@@ -121,12 +121,12 @@
           <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <Lyrics>
-            <text>efgh</text>
-            </Lyrics>
-          <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
             <text>词</text>
+            </Lyrics>
+          <Lyrics>
+            <text>efgh</text>
             </Lyrics>
           <StemDirection>down</StemDirection>
           <Note>

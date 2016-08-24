@@ -17,6 +17,7 @@
 #include "sym.h"
 #include "system.h"
 #include "xml.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -28,7 +29,7 @@ static const qreal      TWICE                               = 2.0;
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
+static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Element::Placement p)
       {
       Lyrics* l = 0;
       while ((s = s->next1(Segment::Type::ChordRest))) {
@@ -36,10 +37,10 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
             int etrack = strack + VOICES;
             // search through all tracks of current staff looking for a lyric in specified verse
             for (int track = strack; track < etrack; ++track) {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && !cr->lyrics().empty()) {
+                  ChordRest* cr = toChordRest(s->element(track));
+                  if (cr) {
                         // cr with lyrics found, but does it have a syllable in specified verse?
-                        l = cr->lyrics().value(verse);
+                        l = cr->lyrics(verse, p);
                         if (l)
                               break;
                         }
@@ -50,9 +51,9 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       return l;
       }
 
-//=========================================================
+//---------------------------------------------------------
 //   Lyrics
-//=========================================================
+//---------------------------------------------------------
 
 Lyrics::Lyrics(Score* s)
    : Text(s)
@@ -61,7 +62,7 @@ Lyrics::Lyrics(Score* s)
       _no         = 0;
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
-      _separator  = nullptr;
+      _separator  = 0;
       }
 
 Lyrics::Lyrics(const Lyrics& l)
@@ -70,21 +71,12 @@ Lyrics::Lyrics(const Lyrics& l)
       _no         = l._no;
       _ticks      = l._ticks;
       _syllabic   = l._syllabic;
-#if 0
-      // if we copy lines at all, they need to be parented to new lyric
-      // but they will be regenerated upon layout anyhow
-      for (const Line* line : l._separator) {
-            Line* nline = new Line(*line);
-            nline->setParent(this);
-            _separator.append(nline);
-            }
-#endif
-      _separator = nullptr;
+      _separator = 0;
       }
 
 Lyrics::~Lyrics()
       {
-      if (_separator != nullptr)
+      if (_separator)
             remove(_separator);
       }
 
@@ -110,8 +102,7 @@ void Lyrics::write(Xml& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag("Lyrics");
-      if (_no)
-            xml.tag("no", _no);
+      writeProperty(xml, P_ID::VERSE);
       if (_syllabic != Syllabic::SINGLE) {
             static const char* sl[] = {
                   "single", "begin", "end", "middle"
@@ -230,7 +221,7 @@ bool Lyrics::isMelisma() const
             ChordRest* cr = chordRest();
             Segment* s = cr->segment()->next1();
             ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
-            if (ncr && !ncr->lyrics(_no))
+            if (ncr && !ncr->lyrics(_no, placement()))
                   return true;
             }
 
@@ -244,17 +235,8 @@ bool Lyrics::isMelisma() const
 
 void Lyrics::layout()
       {
-      // setPos(_textStyle.offset(spatium()));
       layout1();
-      QPointF rp(readPos());
-      if (!rp.isNull()) {
-            if (score()->mscVersion() <= 114) {
-                  rp.ry() += lineSpacing() + 2;
-                  rp.rx() += bbox().width() * .5;
-                  }
-            setUserOff(rp - ipos());
-            setReadPos(QPointF());
-            }
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -278,22 +260,29 @@ void Lyrics::layout1()
       if (!parent()) // palette & clone trick
           return;
 
-      ChordRest* cr = chordRest();
-      const QVector<Lyrics*>* ll = &(cr->lyrics());
+      qreal lh   = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
+      qreal y;
+      qreal dist = score()->styleP(StyleIdx::lyricsDistance);
 
-      qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
-      int line = ll->indexOf(this);
-      qreal y  = lh * line + point(score()->styleS(StyleIdx::lyricsDistance));
+      if (placement() == Element::Placement::BELOW)
+            y  = lh * _no + dist;
+      else {
+            int verses = chordRest()->lastVerse(Element::Placement::ABOVE);
+            y = -lh * (verses + 1 - _no) - dist - staff()->height();
+            printf("y %f verses %d verse %d\n", y, verses, _no);
+            }
+
       qreal x  = 0.0;
 
       //
       // parse leading verse number and/or punctuation, so we can factor it into layout separately
       // TODO: provide a way to disable this
       //
-      bool hasNumber = false; // _verseNumber;
+      bool hasNumber     = false; // _verseNumber;
       qreal centerAdjust = 0.0;
-      qreal leftAdjust = 0.0;
-      QString s = plainText(true);
+      qreal leftAdjust   = 0.0;
+      QString s          = plainText(true);
+
       // find:
       // 1) string of numbers and non-word characters at start of syllable
       // 2) at least one other character (indicating start of actual lyric)
@@ -319,6 +308,7 @@ void Lyrics::layout1()
                   hasNumber = true;
             }
 
+      ChordRest* cr = chordRest();
       Align ta = textStyle().align();
       if (ta & AlignmentFlags::HCENTER) {
             //
@@ -326,24 +316,11 @@ void Lyrics::layout1()
             // however, lyrics that are melismas or have verse numbers will be forced to left alignment
             // TODO: provide a way to disable the automatic left alignment
             //
-#if 0
-            // using this value below forces left-aligned lyrics to align with left edge of whole notes
-            // but that means they won't align with left-aligned lyrics on quarter notes
-            qreal maxWidth;
-            if (cr->type() == Element::Type::CHORD)
-                  maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
-            else
-                  maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
-#endif
             qreal nominalWidth = symWidth(SymId::noteheadBlack);
             if (!isMelisma() && !hasNumber)     // center under notehead
                   x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
             else                                // force left alignment
-#if 1
                   x += width() * .5 - cr->x() - leftAdjust;
-#else
-                  x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - leftAdjust;
-#endif
             }
       else if (!(ta & AlignmentFlags::RIGHT)) {
             // even for left aligned syllables, ignore leading verse numbers and/or punctuation
@@ -387,7 +364,7 @@ void Lyrics::layout1()
 #endif
             }
       else
-            if (_separator != nullptr) {
+            if (_separator) {
                   _separator->removeUnmanaged();
                   delete _separator;
                   _separator = nullptr;
@@ -554,6 +531,8 @@ QVariant Lyrics::getProperty(P_ID propertyId) const
                   return int(_syllabic);
             case P_ID::LYRIC_TICKS:
                   return _ticks;
+            case P_ID::VERSE:
+                  return _no;
             default:
                   return Text::getProperty(propertyId);
             }
@@ -572,12 +551,15 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::LYRIC_TICKS:
                   _ticks = v.toInt();
                   break;
+            case P_ID::VERSE:
+                  _no = v.toInt();
+                  break;
             default:
                   if (!Text::setProperty(propertyId, v))
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      score()->setLayout(segment()->tick());
       return true;
       }
 
@@ -591,6 +573,7 @@ QVariant Lyrics::propertyDefault(P_ID id) const
             case P_ID::SYLLABIC:
                   return int(Syllabic::SINGLE);
             case P_ID::LYRIC_TICKS:
+            case P_ID::VERSE:
                   return 0;
             default: return Text::propertyDefault(id);
             }
@@ -625,7 +608,7 @@ LyricsLine::LyricsLine(const LyricsLine& g)
 void LyricsLine::layout()
       {
       bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
-      if (lyrics()->ticks() > 0) {              // melisma
+      if (lyrics()->ticks()) {              // melisma
             setLineWidth(Spatium(Lyrics::MELISMA_DEFAULT_LINE_THICKNESS));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
@@ -693,9 +676,9 @@ void LyricsLine::layout()
 #if defined(USE_FONT_DASH_TICKNESS)
             setLineWidth(Spatium(lyrics()->dashThickness() / spatium()));
 #endif
-            _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no());
-            setTick2(_nextLyrics != nullptr ? _nextLyrics->segment()->tick() : tick());
-      }
+            _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no(), lyrics()->placement());
+            setTick2(_nextLyrics ? _nextLyrics->segment()->tick() : tick());
+            }
       if (ticks()) {                // only do layout if some time span
             // do layout with non-0 duration
             if (tempMelismaTicks)
@@ -831,7 +814,7 @@ void LyricsLineSegment::layout()
             rypos() = lyr->y();
       else {
             // use Y position of *next* syllable if there is one on same system
-            Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no());
+            Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
             if (nextLyr && nextLyr->segment()->system() == system())
                   rypos() = nextLyr->y();
             else

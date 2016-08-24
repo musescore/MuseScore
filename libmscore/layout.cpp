@@ -2973,6 +2973,10 @@ static bool isTopBeam(ChordRest* cr)
       return false;
       }
 
+//---------------------------------------------------------
+//   notTopBeam
+//---------------------------------------------------------
+
 static bool notTopBeam(ChordRest* cr)
       {
       if (cr->beam() && cr->beam()->elements().front() == cr) {
@@ -2993,7 +2997,7 @@ static bool notTopBeam(ChordRest* cr)
       }
 
 //---------------------------------------------------------
-//   getLyricsMaxY
+//   findLyricsMaxY
 //---------------------------------------------------------
 
 static qreal findLyricsMaxY(Segment& s, int staffIdx)
@@ -3005,7 +3009,7 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
       if (cr) {
             Shape sh;
             for (Lyrics* l : cr->lyrics()) {
-                  if (l) {
+                  if (l->autoplace() && l->placement() == Element::Placement::BELOW) {
                         l->rUserYoffset() = 0.0;
                         sh.add(l->bbox().translated(l->pos()));
                         }
@@ -3015,7 +3019,7 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
 
             qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
             for (Lyrics* l : cr->lyrics()) {
-                  if (l && l->autoplace()) {
+                  if (l->autoplace() && l->placement() == Element::Placement::BELOW) {
                         qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
                         if (y > -lyricsMinTopDistance)
                               yMax = qMax(yMax, y + lyricsMinTopDistance);
@@ -3034,6 +3038,47 @@ static qreal findLyricsMaxY(Measure* m, int staffIdx)
       }
 
 //---------------------------------------------------------
+//   findLyricsMinY
+//---------------------------------------------------------
+
+static qreal findLyricsMinY(Segment& s, int staffIdx)
+      {
+      qreal yMin = 0.0;
+      if (!s.isChordRestType())
+            return yMin;
+      ChordRest* cr = s.cr(staffIdx * VOICES);
+      if (cr) {
+            Shape sh;
+            for (Lyrics* l : cr->lyrics()) {
+                  if (l->autoplace() && l->placement() == Element::Placement::ABOVE) {
+                        l->rUserYoffset() = 0.0;
+                        sh.add(l->bbox().translated(l->pos()));
+                        }
+                  }
+            // lyrics shapes must be moved, so first remove them from segment
+            s.staffShape(staffIdx).remove(sh);
+
+            qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
+            for (Lyrics* l : cr->lyrics()) {
+                  if (l->autoplace() && l->placement() == Element::Placement::ABOVE) {
+                        qreal y = sh.minVerticalDistance(s.staffShape(staffIdx));
+                        if (y > -lyricsMinTopDistance)
+                              yMin = qMin(yMin, -y -lyricsMinTopDistance);
+                        }
+                  }
+            }
+      return yMin;
+      }
+
+static qreal findLyricsMinY(Measure* m, int staffIdx)
+      {
+      qreal yMin = 0.0;
+      for (Segment& s : m->segments())
+            yMin = qMin(yMin, findLyricsMinY(s, staffIdx));
+      return yMin;
+      }
+
+//---------------------------------------------------------
 //   applyLyricsMax
 //---------------------------------------------------------
 
@@ -3046,7 +3091,7 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
             Shape sh;
             qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
             for (Lyrics* l : cr->lyrics()) {
-                  if (l && l->autoplace()) {
+                  if (l->autoplace() && l->placement() == Element::Placement::BELOW) {
                         l->rUserYoffset() = yMax;
                         sh.add(l->bbox().translated(l->pos())
                            .adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
@@ -3060,6 +3105,35 @@ static void applyLyricsMax(Measure* m, int staffIdx, qreal yMax)
       {
       for (Segment& s : m->segments())
             applyLyricsMax(s, staffIdx, yMax);
+      }
+
+//---------------------------------------------------------
+//   applyLyricsMin
+//---------------------------------------------------------
+
+static void applyLyricsMin(Segment& s, int staffIdx, qreal yMin)
+      {
+      if (!s.isChordRestType())
+            return;
+      ChordRest* cr = s.cr(staffIdx * VOICES);
+      if (cr) {
+            Shape sh;
+            qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
+            for (Lyrics* l : cr->lyrics()) {
+                  if (l->autoplace() && l->placement() == Element::Placement::ABOVE) {
+                        l->rUserYoffset() = yMin;
+                        sh.add(l->bbox().translated(l->pos())
+                           .adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
+                        }
+                  }
+            s.staffShape(staffIdx).add(sh);
+            }
+      }
+
+static void applyLyricsMin(Measure* m, int staffIdx, qreal yMax)
+      {
+      for (Segment& s : m->segments())
+            applyLyricsMin(s, staffIdx, yMax);
       }
 
 //---------------------------------------------------------
@@ -3465,15 +3539,18 @@ System* Score::collectSystem(LayoutContext& lc)
             case VerticalAlignRange::SYSTEM:
                   for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                         qreal yMax = 0.0;
+                        qreal yMin = 0.0;
                         for (MeasureBase* mb : system->measures()) {
                               if (!mb->isMeasure())
                                     continue;
                               yMax = qMax(yMax, findLyricsMaxY(toMeasure(mb), staffIdx));
+                              yMin = qMin(yMin, findLyricsMinY(toMeasure(mb), staffIdx));
                               }
                         for (MeasureBase* mb : system->measures()) {
                               if (!mb->isMeasure())
                                     continue;
                               applyLyricsMax(toMeasure(mb), staffIdx, yMax);
+                              applyLyricsMin(toMeasure(mb), staffIdx, yMin);
                               }
                         }
                   break;

@@ -40,7 +40,6 @@
 #include "keysig.h"
 #include "layoutbreak.h"
 #include "layout.h"
-#include "lyrics.h"
 #include "note.h"
 #include "ottava.h"
 #include "page.h"

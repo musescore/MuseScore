@@ -273,6 +273,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::BREATH:
                               ie = new InspectorCaesura(this);
                               break;
+                        case Element::Type::LYRICS:
+                              ie = new InspectorLyric(this);
+                              break;
                         default:
                               if (_element->isText()) {
                                     if (_element->type() == Element::Type::INSTRUMENT_NAME) // these are generated
@@ -934,6 +937,48 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
 //---------------------------------------------------------
 
 void InspectorDynamic::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
+            }
+      t.style->blockSignals(false);
+      InspectorElementBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   InspectorLyric
+//---------------------------------------------------------
+
+InspectorLyric::InspectorLyric(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      t.setupUi(addWidget());
+      l.setupUi(addWidget());
+
+      std::vector<InspectorItem> il = {
+            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
+            { P_ID::PLACEMENT,          0, 0, l.placement, l.resetPlacement }
+            };
+      l.placement->clear();
+      l.placement->addItem(tr("Above"), 0);
+      l.placement->addItem(tr("Below"), 1);
+      mapSignals(il);
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorLyric::setElement()
       {
       Element* e = inspector->element();
       Score* score = e->score();

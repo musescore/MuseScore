@@ -1763,7 +1763,7 @@ void Score::cmdFlip()
                         }
                   }
 
-            if (e->isBeam()) {
+            else if (e->isBeam()) {
                   Beam* beam = toBeam(e);
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(beam, P_ID::STEM_DIRECTION, dir);
@@ -1823,10 +1823,13 @@ void Score::cmdFlip()
                   }
             else if (e->isTempoText() || e->isDynamic() || e->isHairpin() || e->isOttavaSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner
-                  Element::Placement p = Element::Placement(e->getProperty(P_ID::PLACEMENT).toInt());
+                  Element::Placement p = e->placement();
                   p = p == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;
                   e->undoChangeProperty(P_ID::AUTOPLACE, true);
                   e->undoChangeProperty(P_ID::PLACEMENT, int(p));
+                  }
+            else if (e->isLyrics()) {
+                  toLyrics(e)->chordRest()->flipLyrics(toLyrics(e));
                   }
             }
       }

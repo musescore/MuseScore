@@ -61,7 +61,7 @@ class ChordRest : public DurationElement {
 
    protected:
       QVector<Articulation*> _articulations;
-      QVector<Lyrics*> _lyrics;
+      std::vector<Lyrics*> _lyrics;
       TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
 
       Beam* _beam;
@@ -146,9 +146,11 @@ class ChordRest : public DurationElement {
 
       virtual void setTrack(int val) override;
 
-      const QVector<Lyrics*>& lyrics() const { return _lyrics; }
-      QVector<Lyrics*>& lyrics()             { return _lyrics; }
-      Lyrics* lyrics(int no)                     { return _lyrics.value(no); }
+      const std::vector<Lyrics*>& lyrics() const { return _lyrics; }
+      std::vector<Lyrics*>& lyrics()             { return _lyrics; }
+      Lyrics* lyrics(int verse, Placement) const;
+      int lastVerse(Placement) const;
+      void flipLyrics(Lyrics*);
 
       virtual void add(Element*);
       virtual void remove(Element*);

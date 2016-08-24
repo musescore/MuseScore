@@ -162,7 +162,7 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       if (!selectionOnly) {
             xml.stag("PageList");
-            foreach(Page* page, _pages)
+            for (Page* page : _pages)
                   page->write(xml);
             xml.etag();
             }

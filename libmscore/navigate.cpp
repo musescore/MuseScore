@@ -9,6 +9,7 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
+
 #include "navigate.h"
 #include "element.h"
 #include "clef.h"
@@ -18,7 +19,6 @@
 #include "chord.h"
 #include "system.h"
 #include "segment.h"
-#include "lyrics.h"
 #include "harmony.h"
 #include "utils.h"
 #include "input.h"

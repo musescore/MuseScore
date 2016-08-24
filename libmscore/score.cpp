@@ -1466,8 +1466,7 @@ void Score::removeElement(Element* element)
                   if (cr->beam())
                         cr->beam()->remove(cr);
                   for (Lyrics* lyr : cr->lyrics())
-                        if (lyr)                // lyrics list may be sparse
-                              lyr->removeFromScore();
+                        lyr->removeFromScore();
                   // TODO: check for tuplet?
                   }
                   break;
@@ -3659,7 +3658,7 @@ bool Score::hasLyrics()
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = 0; i < ntracks(); ++i) {
                   ChordRest* cr = toChordRest(seg->element(i));
-                  if (cr && !cr->lyrics().isEmpty())
+                  if (cr && !cr->lyrics().empty())
                         return true;
                   }
             }
@@ -3729,7 +3728,7 @@ QString Score::extractLyrics()
       Segment::Type st = Segment::Type::ChordRest;
       for (int track = 0; track < ntracks(); track += VOICES) {
             bool found = false;
-            int maxLyrics = 1;
+            unsigned maxLyrics = 1;
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   m->setPlaybackCount(0);
                   }
@@ -3748,7 +3747,7 @@ QString Score::extractLyrics()
                                     maxLyrics = cr->lyrics().size();
                               if (playCount >= cr->lyrics().size())
                                     continue;
-                              Lyrics* l = cr->lyrics().at(playCount);
+                              Lyrics* l = cr->lyrics(playCount, Element::Placement::BELOW);  // TODO: ABOVE
                               if (!l)
                                     continue;
                               found = true;
@@ -3777,7 +3776,7 @@ QString Score::extractLyrics()
                                           maxLyrics = cr->lyrics().size();
                                     if (lyricsNumber >= cr->lyrics().size())
                                           continue;
-                                    Lyrics* l = cr->lyrics(lyricsNumber);
+                                    Lyrics* l = cr->lyrics(lyricsNumber, Element::Placement::BELOW);  // TODO
                                     if (!l)
                                           continue;
                                     found = true;
