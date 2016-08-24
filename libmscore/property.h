@@ -205,6 +205,7 @@ enum class P_ID : int {
       SLUR_UOFF3,
       SLUR_UOFF4,
       STAFF_MOVE,
+      VERSE,
       SYLLABIC,
       LYRIC_TICKS,
       VOLTA_ENDING,

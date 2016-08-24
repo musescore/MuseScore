@@ -33,7 +33,6 @@
 #include "bracket.h"
 #include "mscore.h"
 #include "barline.h"
-#include "lyrics.h"
 #include "system.h"
 #include "box.h"
 #include "chordrest.h"

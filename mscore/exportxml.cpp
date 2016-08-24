@@ -286,14 +286,14 @@ class ExportMusicXml {
       int findBracket(const TextLine* tl) const;
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
-      void chord(Chord* chord, int staff, const QVector<Lyrics*>* ll, bool useDrumset);
+      void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, const Clef* clef);
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
-      void lyrics(const QVector<Lyrics*>* ll, const int trk);
+      void lyrics(const std::vector<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(int t);
       void calcDivisions();
@@ -2338,7 +2338,7 @@ static QString instrId(int partNr, int instrNr)
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const QVector<Lyrics*>* ll, bool useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset)
       {
       Part* part = chord->score()->staff(chord->track() / VOICES)->part();
       int partNr = _score->parts().indexOf(part);
@@ -3579,7 +3579,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 //   lyrics
 //---------------------------------------------------------
 
-void ExportMusicXml::lyrics(const QVector<Lyrics*>* ll, const int trk)
+void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
       {
       for (const Lyrics* l : *ll) {
             if (l && !l->xmlText().isEmpty()) {
@@ -5275,8 +5275,8 @@ void ExportMusicXml::write(QIODevice* dev)
 
                                     case Element::Type::CHORD:
                                           {
-                                          Chord* c                 = static_cast<Chord*>(el);
-                                          const QVector<Lyrics*>* ll = &c->lyrics();
+                                          Chord* c      = toChord(el);
+                                          const auto ll = &c->lyrics();
                                           // ise grace after
                                           if (c) {
                                                 for (Chord* g : c->graceNotesBefore()) {

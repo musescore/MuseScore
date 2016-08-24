@@ -117,6 +117,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_accidental.ui
       inspector/inspector_tempotext.ui
       inspector/inspector_dynamic.ui
+      inspector/inspector_lyric.ui
       inspector/inspector_line.ui
       inspector/inspector_textline.ui
       inspector/inspector_slur.ui

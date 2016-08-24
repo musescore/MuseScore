@@ -25,7 +25,6 @@
 #include "undo.h"
 #include "staff.h"
 #include "harmony.h"
-#include "lyrics.h"
 #include "segment.h"
 #include "stafftype.h"
 #include "icon.h"

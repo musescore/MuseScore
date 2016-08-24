@@ -13,7 +13,6 @@
 #include "measurebase.h"
 #include "measure.h"
 #include "staff.h"
-#include "lyrics.h"
 #include "score.h"
 #include "chord.h"
 #include "note.h"

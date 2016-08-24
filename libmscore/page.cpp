@@ -23,7 +23,6 @@
 #include "barline.h"
 #include "slur.h"
 #include "hook.h"
-#include "lyrics.h"
 #include "bracket.h"
 #include "line.h"
 #include "staff.h"

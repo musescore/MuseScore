@@ -102,16 +102,12 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _crossMeasure = cr._crossMeasure;
 
       for (Lyrics* l : cr._lyrics) {        // make deep copy
-            if (l == 0) {
-                  _lyrics.append(0);
-                  continue;
-                  }
             Lyrics* nl = new Lyrics(*l);
             if (link)
                   nl->linkTo(l);
             nl->setParent(this);
             nl->setTrack(track());
-            _lyrics.append(nl);
+            _lyrics.push_back(nl);
             }
       }
 
@@ -124,10 +120,8 @@ void ChordRest::undoUnlink()
       DurationElement::undoUnlink();
       for (Articulation* a : _articulations)
             a->undoUnlink();
-      for (Lyrics* l : _lyrics) {
-            if (l)
-                  l->undoUnlink();
-            }
+      for (Lyrics* l : _lyrics)
+            l->undoUnlink();
       }
 
 //---------------------------------------------------------
@@ -152,10 +146,8 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
             _beam->scanElements(data, func, all);
       for (Articulation* a : _articulations)
             func(data, a);
-      for (Lyrics* l : _lyrics) {
-            if (l)
-                  l->scanElements(data, func, all);
-            }
+      for (Lyrics* l : _lyrics)
+            l->scanElements(data, func, all);
       DurationElement* de = this;
       while (de->tuplet() && de->tuplet()->elements().front() == de) {
             de->tuplet()->scanElements(data, func, all);
@@ -217,10 +209,8 @@ void ChordRest::writeProperties(Xml& xml) const
       if (_beam && !_beam->generated())
             xml.tag("Beam", _beam->id());
 #endif
-      for (Lyrics* lyrics : _lyrics) {
-            if (lyrics)
-                  lyrics->write(xml);
-            }
+      for (Lyrics* lyrics : _lyrics)
+            lyrics->write(xml);
       if (!isGrace()) {
             Fraction t(globalDuration());
             if (staff())
@@ -1141,13 +1131,7 @@ void ChordRest::add(Element* e)
                   }
                   break;
             case Element::Type::LYRICS:
-                  {
-                  Lyrics* l = toLyrics(e);
-                  int size = _lyrics.size();
-                  for (int i = size-1; i < l->no(); ++i)
-                        _lyrics.push_back(0);
-                  _lyrics[l->no()] = l;
-                  }
+                  _lyrics.push_back(toLyrics(e));
                   break;
             default:
                   qFatal("ChordRest::add: unknown element %s", e->name());
@@ -1171,19 +1155,14 @@ void ChordRest::remove(Element* e)
                         score()->fixTicks();           // update tempo map
                   }
                   break;
-            case Element::Type::LYRICS:
-                  {
-                  for (int i = 0; i < _lyrics.size(); ++i) {
-                        if (_lyrics[i] != e)
-                              continue;
-                        _lyrics[i]->removeFromScore();
-                        _lyrics[i] = 0;
-                        while (!_lyrics.empty() && _lyrics.back() == 0)
-                              _lyrics.takeLast();
-                        return;
-                        }
+            case Element::Type::LYRICS: {
+                  toLyrics(e)->removeFromScore();
+                  auto i = std::find(_lyrics.begin(), _lyrics.end(), toLyrics(e));
+                  if (i != _lyrics.end())
+                        _lyrics.erase(i);
+                  else
+                        qDebug("ChordRest::remove: %s %p not found", e->name(), e);
                   }
-                  qDebug("ChordRest::remove: %s %p not found", e->name(), e);
                   break;
             default:
                   qFatal("ChordRest::remove: unknown element <%s>", e->name());
@@ -1376,8 +1355,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
       if (_tabDur)
             func(_tabDur);
       for (Lyrics* l : _lyrics)
-            if (l)
-                  func(l);
+            func(l);
       if (tuplet())
             func(tuplet());
       }
@@ -1410,8 +1388,6 @@ QString ChordRest::accessibleExtraInfo() const
             }
 
       for (Element* l : lyrics()) {
-            if (!l)
-                  continue;
             if (!score()->selectionFilter().canSelect(l))
                   continue;
             rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
@@ -1469,11 +1445,8 @@ Shape ChordRest::shape() const
       qreal x1 = 1000000.0;
       qreal x2 = -1000000.0;
       for (Lyrics* l : _lyrics) {
-            if (!l)
-                  continue;
             if (l->autoplace())
                   l->rUserYoffset() = 0.0;
-
             // for horizontal spacing we only need the lyrics width:
             x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
             x2 = qMax(x2, x1 + l->bbox().width() + margin);
@@ -1482,5 +1455,54 @@ Shape ChordRest::shape() const
             shape.add(QRectF(x1, 0.0, x2-x1, 0.0));
       return shape;
       }
+
+//---------------------------------------------------------
+//   lyrics
+//---------------------------------------------------------
+
+Lyrics* ChordRest::lyrics(int no, Placement p) const
+      {
+      for (Lyrics* l : _lyrics) {
+            if (l->placement() == p && l->no() == no)
+                  return l;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   lastVerse
+//    return last verse number (starting from 0)
+//    return -1 if there are no lyrics;
+//---------------------------------------------------------
+
+int ChordRest::lastVerse(Placement p) const
+      {
+      int lastVerse = -1;
+
+      for (Lyrics* l : _lyrics) {
+            if (l->placement() == p && l->no() > lastVerse)
+                  lastVerse = l->no();
+            }
+
+      return lastVerse;
+      }
+
+//---------------------------------------------------------
+//   flipLyrics
+//---------------------------------------------------------
+
+void ChordRest::flipLyrics(Lyrics* l)
+      {
+      Element::Placement p = l->placement();
+      if (p == Element::Placement::ABOVE)
+            p = Element::Placement::BELOW;
+      else
+            p = Element::Placement::ABOVE;
+      int verses = lastVerse(p);
+      l->undoChangeProperty(P_ID::VERSE, verses + 1);
+      l->undoChangeProperty(P_ID::AUTOPLACE, true);
+      l->undoChangeProperty(P_ID::PLACEMENT, int(p));
+      }
+
 }
 
