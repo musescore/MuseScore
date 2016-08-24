@@ -41,6 +41,7 @@ void SfzControl::init()
       {
       defaultPath.clear();
       octave_offset = 0;
+      note_offset = 0;
       }
 
 //---------------------------------------------------------
@@ -514,6 +515,7 @@ bool ZInstrument::loadSfz(const QString& s)
 
       SfzControl c;
       c.init();
+      c.defines.clear();
       for (int i = 0;i < 128; i++)
             c.set_cc[i] = -1;
 
@@ -571,7 +573,6 @@ bool ZInstrument::loadSfz(const QString& s)
       r.init(path);
       g.init(path);
       glob.init(path);
-
 
       bool groupMode = false;
       bool globMode = false;
