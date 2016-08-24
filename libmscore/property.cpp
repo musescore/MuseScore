@@ -213,7 +213,7 @@ static const PropertyData propertyList[] = {
       { P_ID::SLUR_UOFF3,          false,  "o3",                   P_TYPE::POINT   },
       { P_ID::SLUR_UOFF4,          false,  "o4",                   P_TYPE::POINT   },
       { P_ID::STAFF_MOVE,          true,  "move",                  P_TYPE::INT  },
-      { P_ID::VERSE,               true,  "no",                    P_TYPE::INT  },
+      { P_ID::VERSE,               true,  "no",                    P_TYPE::ZERO_INT  },
       { P_ID::SYLLABIC,            true,  "syllabic",              P_TYPE::INT  },
       { P_ID::LYRIC_TICKS,         true,  "ticks",                 P_TYPE::INT  },
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST  },

@@ -344,6 +344,9 @@ class InspectorLyric : public InspectorElementBase {
       Ui::InspectorText t;
       Ui::InspectorLyric l;
 
+   private slots:
+      virtual void valueChanged(int idx) override;
+
    public:
       InspectorLyric(QWidget* parent);
       virtual void setElement() override;

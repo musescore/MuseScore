@@ -271,6 +271,7 @@ enum class P_TYPE : char {
       INT_LIST,
       GLISSANDO_STYLE,
       BARLINE_TYPE,
+      ZERO_INT,         // displayed with offset +1
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
