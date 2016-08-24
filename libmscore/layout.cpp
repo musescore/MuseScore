@@ -2753,7 +2753,8 @@ void Score::getNextMeasure(LayoutContext& lc)
       if (lineMode) {
             while (lc.curMeasure && lc.curMeasure->isVBox()) {
                   lc.curMeasure  = lc.nextMeasure;
-                  lc.nextMeasure = lc.curMeasure->next();
+                  if (lc.curMeasure)
+                        lc.nextMeasure = lc.curMeasure->next();
                   }
             if (!lc.curMeasure)
                   return;

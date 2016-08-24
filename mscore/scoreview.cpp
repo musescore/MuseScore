@@ -1914,10 +1914,12 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
       QRegion r1(r);
       if ((_score->layoutMode() == LayoutMode::LINE) || (_score->layoutMode() == LayoutMode::SYSTEM)) {
-            Page* page = _score->pages().front();
-            QList<Element*> ell = page->items(fr);
-            qStableSort(ell.begin(), ell.end(), elementLessThan);
-            drawElements(p, ell);
+            if (_score->pages().size() > 0) {
+                  Page* page = _score->pages().front();
+                  QList<Element*> ell = page->items(fr);
+                  qStableSort(ell.begin(), ell.end(), elementLessThan);
+                  drawElements(p, ell);
+                  }
             }
       else {
             foreach (Page* page, _score->pages()) {
@@ -2292,6 +2294,8 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 void ScoreView::constraintCanvas (int* dxx, int* dyy)
       {
       if (score()->layoutMode() == LayoutMode::SYSTEM)
+            return;
+      if (score()->pages().isEmpty())
             return;
       int dx = *dxx;
       int dy = *dyy;
