@@ -1164,7 +1164,7 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
             case P_ID::BARLINE_TYPE:
                   if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
                         return QVariant::fromValue(BarLineType::END);
-                  return int(BarLineType::NORMAL);
+                  return QVariant::fromValue(BarLineType::NORMAL);
 
             case P_ID::BARLINE_SPAN:
                   if (staff())
