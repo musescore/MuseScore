@@ -3302,11 +3302,13 @@ void Score::cmdTimeDelete()
             Element* el = selection().element();
             if (!el)
                   return;
-            ChordRest* cr;
+            ChordRest* cr = nullptr;
             if (el->isNote())
                   cr = toNote(el)->chord();
             else if (el->isChordRest())
                   cr = toChordRest(el);
+            else
+                  return;
             startSegment = cr->segment();
             int endTick  = startSegment->tick() + cr->duration().ticks();
             endSegment   = cr->measure()->findSegment(CR_TYPE, endTick);
