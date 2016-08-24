@@ -520,13 +520,50 @@ bool ZInstrument::loadSfz(const QString& s)
             c.set_cc[i] = -1;
 
       int idx = 0;
+      bool inBlockComment = false;
       // preprocessor
       while(idx < fileContents.size()) {
             QRegularExpression findWithSpaces("\"(.+)\"");
             QRegularExpression comment("//.*$");
+            QRegularExpression trailingSpacesOrTab("^[\\s\\t]*");
             QRegularExpressionMatch foundWithSpaces;
             QString curLine = fileContents[idx];
+            QString curLineCopy = curLine;
+            bool nextIsImportant = false;
+            int idxBlockComment = 0;
+            int from = 0;
+
+            for (QChar chr : curLineCopy) {
+                  bool terminated = false;
+
+                  if (nextIsImportant) {
+                        nextIsImportant = false;
+                        if (inBlockComment && chr == '/') { // found block end
+                              inBlockComment = false;
+                              terminated = true;
+                              curLine.remove(from, idxBlockComment - from + 1);
+                              idxBlockComment = from - 1;
+                              }
+                        else if (!inBlockComment && chr == '*') { // found block start
+                              inBlockComment = true;
+                              terminated = true;
+                              from = idxBlockComment - 1;
+                              }
+                        }
+
+                  if (!terminated && inBlockComment && chr == '*')
+                        nextIsImportant = true;
+                  else if (!terminated && !inBlockComment && chr == '/')
+                        nextIsImportant = true;
+
+                  idxBlockComment++;
+                  }
+
+            if (inBlockComment)
+                  curLine.remove(from, curLine.size() - from);
+
             curLine = curLine.remove(comment);
+            curLine.remove(trailingSpacesOrTab);
             fileContents[idx] = curLine;
 
             if (curLine.startsWith("#define")) {
