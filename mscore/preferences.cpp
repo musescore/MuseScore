@@ -150,7 +150,11 @@ void Preferences::init()
 
       mag                     = 1.0;
 
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       checkUpdateStartup      = true;
+#else
+      checkUpdateStartup      = false;
+#endif
 
       followSong              = true;
       importCharsetOve        = "GBK";
@@ -463,7 +467,7 @@ void Preferences::read()
       pl.removeAll(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath());
       mySoundfontsPath = pl.join(";");
       mySoundfontsPath = s.value("mySoundfontsPath", mySoundfontsPath).toString();
-      
+
       //Create directories if they are missing
       QDir dir;
       dir.mkpath(myScoresPath);
@@ -661,6 +665,10 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       updateRemote();
+
+#if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
+      General->removeTab(General->indexOf(tabUpdate)); // updateTab not needed on Linux
+#endif
       }
 
 //---------------------------------------------------------
@@ -847,7 +855,7 @@ void PreferenceDialog::updateValues()
                   }
             }
       language->blockSignals(false);
-      
+
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -858,8 +866,8 @@ void PreferenceDialog::updateValues()
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
-      
-      //Generate the filtered Shortcut List 
+
+      //Generate the filtered Shortcut List
       filterShortcutsTextChanged(filterShortcuts->text());
 
       //
