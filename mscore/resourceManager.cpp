@@ -32,8 +32,8 @@ ResourceManager::ResourceManager(QWidget *parent) :
       displayLanguages();
       languagesTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
-      tabs->removeTab(1);
-      tabs->setCurrentIndex(0);
+      tabs->removeTab(tabs->indexOf(plugins));
+      tabs->setCurrentIndex(tabs->indexOf(languages));
       }
 
 void ResourceManager::displayPlugins()

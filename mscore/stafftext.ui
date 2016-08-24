@@ -22,7 +22,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_1">
+     <widget class="QWidget" name="tabChangeChannel">
       <attribute name="title">
        <string>Change Channel</string>
       </attribute>
@@ -262,7 +262,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tabMIDIAction">
       <attribute name="title">
        <string>MIDI Action</string>
       </attribute>
@@ -346,7 +346,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tabAeolusStops">
       <attribute name="title">
        <string>Aeolus Stops</string>
       </attribute>
@@ -3998,7 +3998,7 @@ VI</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="tabSwingSettings">
       <attribute name="title">
        <string>Swing Settings</string>
       </attribute>
