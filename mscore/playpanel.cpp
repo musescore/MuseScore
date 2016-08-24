@@ -28,9 +28,6 @@
 
 namespace Ms {
 
-static const int DEFAULT_POS_X  = 300;
-static const int DEFAULT_POS_Y  = 100;
-
 //---------------------------------------------------------
 //   PlayPanel
 //---------------------------------------------------------
