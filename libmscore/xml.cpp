@@ -407,6 +407,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::BOOL:
             case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
+            case P_TYPE::ZERO_INT:
             case P_TYPE::SPATIUM:
             case P_TYPE::SP_REAL:
             case P_TYPE::REAL:
