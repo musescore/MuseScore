@@ -84,6 +84,9 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             case P_TYPE::TEMPO:
                   v = v.toDouble() / 60.0;
                   break;
+            case P_TYPE::ZERO_INT:
+                  v = v.toInt() - 1;
+                  break;
             case P_TYPE::POINT_MM:
             case P_TYPE::SIZE_MM:
                   v = v.toDouble() * DPMM;
@@ -128,6 +131,9 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
                   break;
             case P_TYPE::TEMPO:
                   val = val.toDouble() * 60.0;
+                  break;
+            case P_TYPE::ZERO_INT:
+                  val = val.toInt() + 1;
                   break;
             case P_TYPE::POINT_MM:
                   val = val.toDouble() / DPMM;

@@ -56,6 +56,7 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/slur.h"
 #include "libmscore/breath.h"
+#include "libmscore/lyrics.h"
 
 namespace Ms {
 
@@ -964,14 +965,34 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       l.setupUi(addWidget());
 
       std::vector<InspectorItem> il = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
-            { P_ID::PLACEMENT,          0, 0, l.placement, l.resetPlacement }
+            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
+            { P_ID::PLACEMENT,          0, 0, l.placement, l.resetPlacement },
+            { P_ID::VERSE,              0, 0, l.verse,     0 }
             };
       l.placement->clear();
       l.placement->addItem(tr("Above"), 0);
       l.placement->addItem(tr("Below"), 1);
       mapSignals(il);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
+      }
+
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorLyric::valueChanged(int idx)
+      {
+      if (iList[idx].t == P_ID::VERSE) {
+            int val    = getValue(iList[idx]).toInt();
+            Lyrics* l  = toLyrics(inspector->element());
+            printf("value changed %d  old %d\n", val, l->no());
+            Lyrics* nl = l->chordRest()->lyrics(val, l->placement());
+            if (nl) {
+                  printf("   move away %d -> %d\n", nl->no(), l->no());
+                  nl->undoChangeProperty(P_ID::VERSE, l->no());
+                  }
+            }
+      InspectorBase::valueChanged(idx);
       }
 
 //---------------------------------------------------------

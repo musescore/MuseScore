@@ -2284,30 +2284,23 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
 
 void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       {
-      ChordRest* cr            = lyrics->chordRest();
-      std::vector<Lyrics*>& ll = cr->lyrics();
-      int no                   = lyrics->no();
+      ChordRest* cr                = lyrics->chordRest();
+      int verse                    = lyrics->no();
+      Element::Placement placement = lyrics->placement();
+      int newVerse;
       if (dir == Direction::UP) {
-            if (no) {
-                  if (ll[no-1] == 0) {
-                        ll[no-1] = ll[no];
-                        ll[no] = 0;
-                        lyrics->setNo(no-1);
-                        }
-                  }
+            if (verse)
+                  newVerse = verse - 1;
+            else
+                  return;
             }
-      else {
-            if (no == int(ll.size()-1)) {
-                  ll.push_back(ll[no]);
-                  ll[no] = 0;
-                  lyrics->setNo(no+1);
-                  }
-            else if (ll[no + 1] == 0) {
-                  ll[no+1] = ll[no];
-                  ll[no] = 0;
-                  lyrics->setNo(no+1);
-                  }
-            }
+      else
+            newVerse = verse + 1;
+      Lyrics* nl = cr->lyrics(newVerse, placement);
+      if (nl)
+            nl->undoChangeProperty(P_ID::VERSE, verse);
+      lyrics->undoChangeProperty(P_ID::VERSE, newVerse);
+      score()->setLayout(cr->tick());
       }
 
 //---------------------------------------------------------
@@ -2325,22 +2318,22 @@ void Score::cmd(const QAction* a)
       //
       Element* el = selection().element();
       if (cmd == "pitch-up") {
-            if (el && (el->isArticulation() || el->isText()))
+            if (el && el->isLyrics())
+                  cmdMoveLyrics(toLyrics(el), Direction::UP);
+            else if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->isRest())
                   cmdMoveRest(toRest(el), Direction::UP);
-            else if (el && el->isLyrics())
-                  cmdMoveLyrics(toLyrics(el), Direction::UP);
             else
                   upDown(true, UpDownMode::CHROMATIC);
             }
       else if (cmd == "pitch-down") {
-            if (el && (el->isArticulation() || el->isText()))
+            if (el && el->isLyrics())
+                  cmdMoveLyrics(toLyrics(el), Direction::DOWN);
+            else if (el && (el->isArticulation() || el->isText()))
                   el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->isRest())
                   cmdMoveRest(toRest(el), Direction::DOWN);
-            else if (el && el->isLyrics())
-                  cmdMoveLyrics(toLyrics(el), Direction::DOWN);
             else
                   upDown(false, UpDownMode::CHROMATIC);
             }

@@ -269,7 +269,6 @@ void Lyrics::layout1()
       else {
             int verses = chordRest()->lastVerse(Element::Placement::ABOVE);
             y = -lh * (verses + 1 - _no) - dist - staff()->height();
-            printf("y %f verses %d verse %d\n", y, verses, _no);
             }
 
       qreal x  = 0.0;
@@ -722,7 +721,7 @@ void LyricsLine::removeUnmanaged()
 
 bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SPANNER_TICKS:
                   {
                   // if parent lyrics has a melisma, change its length too
