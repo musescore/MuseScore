@@ -3745,7 +3745,7 @@ QString Score::extractLyrics()
                                     continue;
                               if (cr->lyrics().size() > maxLyrics)
                                     maxLyrics = cr->lyrics().size();
-                              if (playCount >= cr->lyrics().size())
+                              if (playCount >= int(cr->lyrics().size()))
                                     continue;
                               Lyrics* l = cr->lyrics(playCount, Element::Placement::BELOW);  // TODO: ABOVE
                               if (!l)
@@ -3763,9 +3763,9 @@ QString Score::extractLyrics()
                         }
                   }
             // consider remaning lyrics
-            for (int lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
+            for (unsigned lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
                   for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-                        int playCount = m->playbackCount();
+                        unsigned playCount = m->playbackCount();
                         if (lyricsNumber >= playCount) {
                               for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                                     // consider voice 1 only

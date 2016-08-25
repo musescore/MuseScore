@@ -42,9 +42,9 @@ void StaffText::write(Xml& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag("StaffText");
-      foreach(ChannelActions s, _channelActions) {
+      for (ChannelActions s : _channelActions) {
             int channel = s.channel;
-            foreach(QString name, s.midiActionNames)
+            for (QString name : s.midiActionNames)
                   xml.tagE(QString("MidiAction channel=\"%1\" name=\"%2\"").arg(channel).arg(name));
             }
       for (int voice = 0; voice < VOICES; ++voice) {
@@ -172,5 +172,29 @@ bool StaffText::getAeolusStop(int group, int idx) const
       return aeolusStops[group] & (1 << idx);
       }
 
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void StaffText::layout()
+      {
+      if (autoplace())
+            setUserOff(QPointF());
+      setPos(textStyle().offset(spatium()));
+      Text::layout1();
+      if (!parent()) // palette & clone trick
+          return;
+
+      if (autoplace()) {
+            qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
+            Shape s1          = segment()->staffShape(staffIdx()).translated(segment()->pos());
+            Shape s2          = shape().translated(segment()->pos());
+
+            qreal d = s2.minVerticalDistance(s1);
+            if (d > -minDistance)
+                  rUserYoffset() = -d - minDistance;
+            }
+      adjustReadPos();
+      }
 }
 
