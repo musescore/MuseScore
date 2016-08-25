@@ -27,6 +27,7 @@ StaffText::StaffText(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setTextStyleType(TextStyleType::STAFF);
+      setPlacement(Placement::ABOVE);     // default
       _setAeolusStops = false;
       _swing = false;
       clearAeolusStops();
@@ -180,19 +181,29 @@ void StaffText::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
-      setPos(textStyle().offset(spatium()));
+      QPointF p(textStyle().offset(spatium()));
+      if (placement() == Element::Placement::BELOW)
+            p.ry() =  - p.ry() + lineHeight();
+      setPos(p);
       Text::layout1();
       if (!parent()) // palette & clone trick
           return;
 
       if (autoplace() && segment()) {
-            qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
+            qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);  // TODO
             Shape s1          = segment()->staffShape(staffIdx()).translated(segment()->pos());
             Shape s2          = shape().translated(segment()->pos());
 
-            qreal d = s2.minVerticalDistance(s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
+            if (placement() == Element::Placement::ABOVE) {
+                  qreal d = s2.minVerticalDistance(s1);
+                  if (d > -minDistance)
+                        rUserYoffset() = -d - minDistance;
+                  }
+            else {
+                  qreal d = s1.minVerticalDistance(s2);
+                  if (d > -minDistance)
+                        rUserYoffset() = d + minDistance;
+                  }
             }
       adjustReadPos();
       }
@@ -209,6 +220,20 @@ Segment* StaffText::segment() const
             }
       Segment* s = toSegment(parent());
       return s;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant StaffText::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_ID::PLACEMENT:
+                  return int(Placement::ABOVE);
+            default:
+                  return Text::propertyDefault(id);
+            }
       }
 
 }

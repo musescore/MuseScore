@@ -37,6 +37,7 @@
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_dynamic.h"
 #include "ui_inspector_lyric.h"
+#include "ui_inspector_stafftext.h"
 #include "ui_inspector_slur.h"
 #include "ui_inspector_empty.h"
 #include "ui_inspector_text.h"
@@ -349,6 +350,22 @@ class InspectorLyric : public InspectorElementBase {
 
    public:
       InspectorLyric(QWidget* parent);
+      virtual void setElement() override;
+      };
+
+//---------------------------------------------------------
+//   InspectorLyric
+//---------------------------------------------------------
+
+class InspectorStafftext : public InspectorElementBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorText t;
+      Ui::InspectorStafftext s;
+
+   public:
+      InspectorStafftext(QWidget* parent);
       virtual void setElement() override;
       };
 
