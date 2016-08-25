@@ -122,6 +122,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_textline.ui
       inspector/inspector_slur.ui
       inspector/inspector_text.ui
+      inspector/inspector_stafftext.ui
       inspector/inspector_ambitus.ui
       inspector/inspector_empty.ui
       inspector/inspector_fret.ui

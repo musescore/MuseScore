@@ -51,6 +51,8 @@ class StaffText : public Text  {
       virtual int subtype() const                         { return (int) textStyleType(); }
       virtual void layout() override;
       virtual QString subtypeName() const                 { return textStyle().name(); }
+      virtual QVariant propertyDefault(P_ID id) const override;
+
       Segment* segment() const;
       QString channelName(int voice) const                { return _channelNames[voice]; }
       void setChannelName(int v, const QString& s)        { _channelNames[v] = s;        }

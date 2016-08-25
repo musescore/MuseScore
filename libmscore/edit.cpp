@@ -1821,7 +1821,8 @@ void Score::cmdFlip()
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(note, P_ID::DOT_POSITION, d);
                   }
-            else if (e->isTempoText() || e->isDynamic() || e->isHairpin() || e->isOttavaSegment()) {
+            else if (e->isTempoText() || e->isStaffText() || e->isDynamic() || e->isHairpin()
+               || e->isOttavaSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner
                   Element::Placement p = e->placement();
                   p = p == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;

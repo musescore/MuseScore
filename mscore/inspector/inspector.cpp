@@ -277,6 +277,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::LYRICS:
                               ie = new InspectorLyric(this);
                               break;
+                        case Element::Type::STAFF_TEXT:
+                              ie = new InspectorStafftext(this);
+                              break;
                         default:
                               if (_element->isText()) {
                                     if (_element->type() == Element::Type::INSTRUMENT_NAME) // these are generated
@@ -1000,6 +1003,48 @@ void InspectorLyric::valueChanged(int idx)
 //---------------------------------------------------------
 
 void InspectorLyric::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
+            }
+      t.style->blockSignals(false);
+      InspectorElementBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   InspectorStafftext
+//---------------------------------------------------------
+
+InspectorStafftext::InspectorStafftext(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      t.setupUi(addWidget());
+      s.setupUi(addWidget());
+
+      std::vector<InspectorItem> il = {
+            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
+            { P_ID::PLACEMENT,          0, 0, s.placement, s.resetPlacement },
+            };
+      s.placement->clear();
+      s.placement->addItem(tr("Above"), 0);
+      s.placement->addItem(tr("Below"), 1);
+      mapSignals(il);
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorStafftext::setElement()
       {
       Element* e = inspector->element();
       Score* score = e->score();
