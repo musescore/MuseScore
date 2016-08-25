@@ -1029,6 +1029,27 @@ InspectorStafftext::InspectorStafftext(QWidget* parent)
       t.setupUi(addWidget());
       s.setupUi(addWidget());
 
+      Element* e = inspector->element();
+      Text* te = static_cast<Text*>(e);
+      bool sameType = true;
+
+      for (const auto& ee : inspector->el()) {
+            Text* tt = static_cast<Text*>(ee);
+
+            if (tt->systemFlag() != te->systemFlag()) {
+                  sameType = false;
+                  break;
+                  }
+            }
+      if (sameType) {
+            if (te->systemFlag())
+                  s.elementName->setText(tr("System Text"));
+            else
+                  s.elementName->setText(tr("Staff Text"));
+            }
+      else
+            s.elementName->setText(tr("System/Staff Text"));
+
       std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::PLACEMENT,          0, 0, s.placement, s.resetPlacement },
