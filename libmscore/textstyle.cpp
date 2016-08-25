@@ -39,12 +39,14 @@ TextStyle::TextStyle(QString _name, QString _family, qreal _size,
    Align _align,
    const QPointF& _off, OffsetType _ot,
    bool sd,
-   bool hasFrame, Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
+   bool hasFrame,
+   bool square,
+   Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg, TextStyleHidden hidden)
       {
       d = new TextStyleData(_name, _family, _size,
          _bold, _italic, _underline, _align, _off, _ot,
-         sd, hasFrame, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
+         sd, hasFrame, square, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
       _hidden = hidden;
       }
 
@@ -79,6 +81,7 @@ TextStyleData::TextStyleData()
       italic                 = false;
       underline              = false;
       hasFrame               = false;
+      _square                = false;
       sizeIsSpatiumDependent = false;
       frameWidth             = Spatium(0);
       paddingWidth           = Spatium(0);
@@ -98,13 +101,15 @@ TextStyleData::TextStyleData(
    Align _align,
    const QPointF& _off, OffsetType _ot,
    bool sd,
-   bool _hasFrame, Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
+   bool _hasFrame,
+   bool square,
+   Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg)
    :
    ElementLayout(_align, _off, _ot),
    name(_name), size(_size), bold(_bold),
    italic(_italic), underline(_underline),
-   sizeIsSpatiumDependent(sd), hasFrame(_hasFrame), frameWidth(fw), paddingWidth(pw),
+   sizeIsSpatiumDependent(sd), hasFrame(_hasFrame), _square(square), frameWidth(fw), paddingWidth(pw),
    frameRound(fr), frameColor(co), circle(_circle), systemFlag(_systemFlag),
    foregroundColor(fg), backgroundColor(bg)
       {
@@ -127,6 +132,7 @@ bool TextStyleData::operator!=(const TextStyleData& s) const
           || s.italic                 != italic
           || s.underline              != underline
           || s.hasFrame               != hasFrame
+          || s._square                != _square
           || s.sizeIsSpatiumDependent != sizeIsSpatiumDependent
           || s.frameWidth             != frameWidth
           || s.paddingWidth           != paddingWidth
@@ -225,6 +231,8 @@ void TextStyleData::writeProperties(Xml& xml) const
             xml.tag("frameColor",   frameColor);
             if (circle)
                   xml.tag("circle", circle);
+            if (_square)
+                  xml.tag("square", _square);
             }
       if (systemFlag)
             xml.tag("systemFlag", systemFlag);
@@ -269,6 +277,8 @@ void TextStyleData::writeProperties(Xml& xml, const TextStyleData& r) const
                   xml.tag("frameColor",   frameColor);
             if (circle != r.circle)
                   xml.tag("circle", circle);
+            if (_square != r._square)
+                  xml.tag("square", _square);
             }
       if (systemFlag != r.systemFlag)
             xml.tag("systemFlag", systemFlag);
@@ -301,6 +311,8 @@ void TextStyleData::restyle(const TextStyleData& os, const TextStyleData& ns)
             backgroundColor = ns.backgroundColor;
       if (hasFrame == os.hasFrame)
             hasFrame = ns.hasFrame;
+      if (_square == os._square)
+            _square = ns._square;
       if (frameWidth.val() == os.frameWidth.val())
             frameWidth = ns.frameWidth;
       if (paddingWidth.val() == os.paddingWidth.val())
@@ -368,6 +380,8 @@ bool TextStyleData::readProperties(XmlReader& e)
             }
       else if (tag == "frame")
             hasFrame = e.readInt();
+      else if (tag == "square")
+            _square = e.readInt();
       else if (tag == "paddingWidth")          // obsolete
             paddingWidthMM = e.readDouble();
       else if (tag == "paddingWidthS")
@@ -400,6 +414,7 @@ bool TextStyle::bold() const                             {  return d->bold;    }
 bool TextStyle::italic() const                           { return d->italic; }
 bool TextStyle::underline() const                        { return d->underline; }
 bool TextStyle::hasFrame() const                         { return d->hasFrame; }
+bool TextStyle::square() const                           { return d->_square; }
 Align TextStyle::align() const                           { return d->align(); }
 const QPointF& TextStyle::offset() const                 { return d->offset(); }
 QPointF TextStyle::offset(qreal spatium) const           { return d->offset(spatium); }
@@ -412,6 +427,7 @@ qreal TextStyle::frameWidthMM()  const                   { return d->frameWidthM
 qreal TextStyle::paddingWidthMM() const                  { return d->paddingWidthMM; }
 void TextStyle::setFrameWidth(Spatium v)                 { d->frameWidth = v; }
 void TextStyle::setPaddingWidth(Spatium v)               { d->paddingWidth = v; }
+void TextStyle::setSquare(bool val)                      { d->_square = val; }
 
 int TextStyle::frameRound() const                        { return d->frameRound; }
 QColor TextStyle::frameColor() const                     { return d->frameColor; }

@@ -55,11 +55,20 @@ class TextStyle {
          qreal _size,
          bool _bold, bool _italic, bool _underline,
          Align _align,
-         const QPointF& _off = QPointF(), OffsetType _ot = OffsetType::SPATIUM,
+         const QPointF& _off = QPointF(),
+         OffsetType _ot = OffsetType::SPATIUM,
          bool sd = false,
-         bool hasFrame = false, Spatium fw = Spatium(0.2), Spatium pw = Spatium(0.5), int fr = 25,
-         QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
-         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), TextStyleHidden hidden = TextStyleHidden::NEVER);
+         bool hasFrame = false,
+         bool square = false,
+         Spatium fw = Spatium(0.2),
+         Spatium pw = Spatium(0.5),
+         int fr = 25,
+         QColor co = QColor(Qt::black),
+         bool circle = false,
+         bool systemFlag = false,
+         QColor fg = QColor(Qt::black),
+         QColor bg = QColor(255, 255, 255, 0),
+         TextStyleHidden hidden = TextStyleHidden::NEVER);
 
       TextStyle(const TextStyle&);
       ~TextStyle();
@@ -74,6 +83,8 @@ class TextStyle {
       bool italic() const;
       bool underline() const;
       bool hasFrame() const;
+      bool square() const;
+      void setSquare(bool val);
       Align align() const;
       OffsetType offsetType() const;
       const QPointF& offset() const;
