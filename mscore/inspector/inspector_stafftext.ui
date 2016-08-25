@@ -14,7 +14,7 @@
    <string/>
   </property>
   <property name="accessibleName">
-   <string>Articulation Inspector</string>
+   <string>Staff Text Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Stafftext</string>
+      <string>Staff Text</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -86,6 +86,9 @@
        <property name="text">
         <string>Placement</string>
        </property>
+       <property name="buddy">
+        <cstring>placement</cstring>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -97,7 +100,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Direction</string>
+        <string>Placement</string>
        </property>
        <item>
         <property name="text">
@@ -117,7 +120,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Direction' value</string>
+        <string>Reset 'Placement' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
