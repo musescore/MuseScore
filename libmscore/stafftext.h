@@ -44,12 +44,14 @@ class StaffText : public Text  {
 
    public:
       StaffText(Score* = 0);
-      virtual StaffText* clone() const   { return new StaffText(*this); }
-      virtual Element::Type type() const { return Element::Type::STAFF_TEXT; }
+      virtual StaffText* clone() const                    { return new StaffText(*this); }
+      virtual Element::Type type() const                  { return Element::Type::STAFF_TEXT; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
-      virtual int subtype() const         { return (int) textStyleType(); }
-      virtual QString subtypeName() const { return textStyle().name(); }
+      virtual int subtype() const                         { return (int) textStyleType(); }
+      virtual void layout() override;
+      virtual QString subtypeName() const                 { return textStyle().name(); }
+      Segment* segment() const                            { return (Segment*)parent(); }
       QString channelName(int voice) const                { return _channelNames[voice]; }
       void setChannelName(int v, const QString& s)        { _channelNames[v] = s;        }
       void setSwingParameters(int unit, int ratio)        {  _swingParameters.swingUnit = unit; _swingParameters.swingRatio = ratio; }
@@ -59,10 +61,10 @@ class StaffText : public Text  {
       void clearAeolusStops();
       void setAeolusStop(int group, int idx, bool val);
       bool getAeolusStop(int group, int idx) const;
-      void setSetAeolusStops(bool val) { _setAeolusStops = val; }
-      void setSwing(bool checked)      { _swing = checked; }
-      bool setAeolusStops() const      { return _setAeolusStops; }
-      bool swing() const               { return _swing; }
+      void setSetAeolusStops(bool val)                    { _setAeolusStops = val; }
+      void setSwing(bool checked)                         { _swing = checked; }
+      bool setAeolusStops() const                         { return _setAeolusStops; }
+      bool swing() const                                  { return _swing; }
       };
 
 }     // namespace Ms
