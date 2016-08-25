@@ -359,7 +359,7 @@ void initStyle(MStyle* s)
       // this is an empty style, no offsets are allowed
       // never show this style
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", ""), ff, 10, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, false, false,
          false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
          QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));
 
@@ -383,7 +383,7 @@ void initStyle(MStyle* s)
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "RH Guitar Fingering"),       ff,  8, false, false, false,
          AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"),             ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::CENTER, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
          true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Long)"),    ff, 12, false, false, false,
@@ -401,7 +401,7 @@ void initStyle(MStyle* s)
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM,
-         true, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
+         true, false, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Metronome"),      ff, 12, true, false, false,
          AlignmentFlags::LEFT));
@@ -413,7 +413,7 @@ void initStyle(MStyle* s)
          AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "System"), ff,  10, false, false, false,
-         AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true, false,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Staff"),        ff,  10, false, false, false,
@@ -421,21 +421,27 @@ void initStyle(MStyle* s)
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Chord Symbol"), ff,  12, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Rehearsal Mark"), ff,  14, true, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -3.0), OffsetType::SPATIUM, true,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Rehearsal Mark"), ff,  14,
+         true,
+         false,
+         false,
+         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE,
+         QPointF(0, -3.0), OffsetType::SPATIUM,
+         true,    // hasFrame
+         true,    // square
          true, Spatium(.2), Spatium(.5), 20, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Left"), ff,  20, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Right"), ff,  12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
       // for backward compatibility
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text"), ff,  12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
       // y offset may depend on voltaHook style element
@@ -467,7 +473,7 @@ void initStyle(MStyle* s)
          AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 */
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Figured Bass"), "MScoreBC", 8, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OffsetType::SPATIUM, true,
+         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OffsetType::SPATIUM, true, false,
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
          TextStyleHidden::IN_EDITOR));                                         // don't show in Style Editor

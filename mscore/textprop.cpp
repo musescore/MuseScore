@@ -171,6 +171,7 @@ void TextProp::setTextStyle(const TextStyle& s)
       paddingWidth->setValue(s.paddingWidth().val());
       frameRound->setValue(s.frameRound());
       circleButton->setChecked(s.circle());
+      square->setChecked(s.square());
       boxButton->setChecked(!s.circle());
       }
 
@@ -202,6 +203,7 @@ TextStyle TextProp::textStyle() const
       ts.setHasFrame(frame->isChecked());
       ts.setSystemFlag(systemFlag->isChecked());
       ts.setSizeIsSpatiumDependent(sizeIsSpatiumDependent->isChecked());
+      ts.setSquare(square->isChecked());
 
       Align a = 0;
       if (alignHCenter->isChecked())
