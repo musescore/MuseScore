@@ -185,7 +185,7 @@ void StaffText::layout()
       if (!parent()) // palette & clone trick
           return;
 
-      if (autoplace()) {
+      if (autoplace() && segment()) {
             qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
             Shape s1          = segment()->staffShape(staffIdx()).translated(segment()->pos());
             Shape s2          = shape().translated(segment()->pos());
@@ -196,5 +196,20 @@ void StaffText::layout()
             }
       adjustReadPos();
       }
+
+//---------------------------------------------------------
+//   segment
+//---------------------------------------------------------
+
+Segment* StaffText::segment() const
+      {
+      if (!parent()->isSegment()) {
+            qDebug("StaffText parent %s\n", parent()->name());
+            return 0;
+            }
+      Segment* s = toSegment(parent());
+      return s;
+      }
+
 }
 
