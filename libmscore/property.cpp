@@ -289,6 +289,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::BOOL:
                   return QVariant(bool(e.readInt()));
             case P_TYPE::SUBTYPE:
+            case P_TYPE::ZERO_INT:
             case P_TYPE::INT:
                   return QVariant(e.readInt());
             case P_TYPE::REAL:
