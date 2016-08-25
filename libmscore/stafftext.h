@@ -51,7 +51,7 @@ class StaffText : public Text  {
       virtual int subtype() const                         { return (int) textStyleType(); }
       virtual void layout() override;
       virtual QString subtypeName() const                 { return textStyle().name(); }
-      Segment* segment() const                            { return (Segment*)parent(); }
+      Segment* segment() const;
       QString channelName(int voice) const                { return _channelNames[voice]; }
       void setChannelName(int v, const QString& s)        { _channelNames[v] = s;        }
       void setSwingParameters(int unit, int ratio)        {  _swingParameters.swingUnit = unit; _swingParameters.swingRatio = ratio; }
