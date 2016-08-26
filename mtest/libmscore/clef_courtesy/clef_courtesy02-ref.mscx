@@ -6,8 +6,6 @@
     <Division>480</Division>
     <Style>
       <maxSystemDistance>20</maxSystemDistance>
-      <lyricsDistance>0</lyricsDistance>
-      <lyricsMinBottomDistance>0</lyricsMinBottomDistance>
       <frameSystemDistance>0</frameSystemDistance>
       <barWidth>0.2</barWidth>
       <endBarWidth>0.4</endBarWidth>
