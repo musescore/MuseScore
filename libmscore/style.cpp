@@ -66,6 +66,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsDashMaxLength,     "lyricsDashMaxLegth",      Spatium(0.8) },
       { StyleIdx::lyricsDashMaxDistance,   "lyricsDashMaxDistance",   Spatium(16.0) },
       { StyleIdx::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
+      { StyleIdx::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
 
       { StyleIdx::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 

@@ -282,7 +282,6 @@ void Lyrics::layout1()
 
       //
       // parse leading verse number and/or punctuation, so we can factor it into layout separately
-      // TODO: provide a way to disable this
       //
       bool hasNumber     = false; // _verseNumber;
       qreal centerAdjust = 0.0;
@@ -294,24 +293,27 @@ void Lyrics::layout1()
       // 2) at least one other character (indicating start of actual lyric)
       // 3) string of non-word characters at end of syllable
       //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
-      QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
-      QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
-      if (punctuationMatch.hasMatch()) {
-            // leading and trailing punctuation
-            QString lp = punctuationMatch.captured(1);
-            QString tp = punctuationMatch.captured(3);
-            // actual lyric
-            //QString actualLyric = punctuationMatch.captured(2);
-            Text leading(*this);
-            leading.setPlainText(lp);
-            leading.layout1();
-            Text trailing(*this);
-            trailing.setPlainText(tp);
-            trailing.layout1();
-            leftAdjust = leading.width();
-            centerAdjust = leading.width() - trailing.width();
-            if (!lp.isEmpty() && lp[0].isDigit())
-                  hasNumber = true;
+
+      if (score()->styleB(StyleIdx::lyricsAlignVerseNumber)) {
+            QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
+            QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
+            if (punctuationMatch.hasMatch()) {
+                  // leading and trailing punctuation
+                  QString lp = punctuationMatch.captured(1);
+                  QString tp = punctuationMatch.captured(3);
+                  // actual lyric
+                  //QString actualLyric = punctuationMatch.captured(2);
+                  Text leading(*this);
+                  leading.setPlainText(lp);
+                  leading.layout1();
+                  Text trailing(*this);
+                  trailing.setPlainText(tp);
+                  trailing.layout1();
+                  leftAdjust = leading.width();
+                  centerAdjust = leading.width() - trailing.width();
+                  if (!lp.isEmpty() && lp[0].isDigit())
+                        hasNumber = true;
+                  }
             }
 
       ChordRest* cr = chordRest();

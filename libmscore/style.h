@@ -53,6 +53,7 @@ enum class StyleIdx : int {
       lyricsDashMaxLength,
       lyricsDashMaxDistance,
       lyricsDashForce,
+      lyricsAlignVerseNumber,
 
       figuredBassFontFamily,
       figuredBassFontSize,

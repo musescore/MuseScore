@@ -153,7 +153,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>19</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -6992,6 +6992,22 @@
            <string>Lyrics Text</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_23">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_132">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Position Above</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsPosAbove</cstring>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="1">
             <widget class="QSpinBox" name="lyricsLineHeight">
              <property name="suffix">
@@ -7056,22 +7072,6 @@
              </property>
              <property name="buddy">
               <cstring>lyricsMinTopDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_132">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Position Above</string>
-             </property>
-             <property name="buddy">
-              <cstring>lyricsPosAbove</cstring>
              </property>
             </widget>
            </item>
@@ -7187,23 +7187,6 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="2">
-            <widget class="QToolButton" name="resetLyricsMinBottomDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Min. bottom margin' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="lyricsPosBelow">
              <property name="sizePolicy">
@@ -7242,6 +7225,9 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="lyricsPlacement"/>
+           </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetLyricsPosBelow">
              <property name="toolTip">
@@ -7266,9 +7252,6 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="lyricsPlacement"/>
-           </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetLyricsPlacement">
              <property name="toolTip">
@@ -7276,6 +7259,47 @@
              </property>
              <property name="accessibleName">
               <string>Reset 'Top distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QCheckBox" name="lyricsAlignVerseNumber">
+             <property name="text">
+              <string>Align Verse Number</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetLyricsMinBottomDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Min. bottom margin' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetLyricsAlignVerseNumber">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Min. bottom margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7780,7 +7804,6 @@
   <tabstop>lyricsMinTopDistance</tabstop>
   <tabstop>resetLyricsMinTopDistance</tabstop>
   <tabstop>lyricsMinBottomDistance</tabstop>
-  <tabstop>resetLyricsMinBottomDistance</tabstop>
   <tabstop>lyricsDashMinLength</tabstop>
   <tabstop>resetLyricsDashMinLength</tabstop>
   <tabstop>lyricsDashMaxLength</tabstop>

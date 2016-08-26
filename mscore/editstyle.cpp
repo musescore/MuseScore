@@ -83,6 +83,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::lyricsPosBelow,          false, lyricsPosBelow,          resetLyricsPosBelow },
       { StyleIdx::lyricsMinTopDistance,    false, lyricsMinTopDistance,    resetLyricsMinTopDistance },
       { StyleIdx::lyricsMinBottomDistance, false, lyricsMinBottomDistance, resetLyricsMinBottomDistance },
+      { StyleIdx::lyricsLineHeight,        true,  lyricsLineHeight,        resetLyricsLineHeight },
+      { StyleIdx::lyricsDashMinLength,     false, lyricsDashMinLength,     resetLyricsDashMinLength },
+      { StyleIdx::lyricsDashMaxLength,     false, lyricsDashMaxLength,     resetLyricsDashMaxLength },
+      { StyleIdx::lyricsDashMaxDistance,   false, lyricsDashMaxDistance,   resetLyricsDashMaxDistance },
+      { StyleIdx::lyricsDashForce,         false, lyricsDashForce,         resetLyricsDashForce },
+      { StyleIdx::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber },
+
       { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     0 },
       { StyleIdx::frameSystemDistance,     false, frameSystemDistance,     0 },
       { StyleIdx::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
@@ -194,7 +201,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope           },
       { StyleIdx::tupletOufOfStaff,        false, tupletOutOfStaff,        0 },
 
-      { StyleIdx::lyricsLineHeight,        true,  lyricsLineHeight,             resetLyricsLineHeight },
       { StyleIdx::repeatBarTips,           false, showRepeatBarTips,            0 },
       { StyleIdx::startBarlineSingle,      false, showStartBarlineSingle,       0 },
       { StyleIdx::startBarlineMultiple,    false, showStartBarlineMultiple,     0 },
@@ -211,10 +217,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::smallStaffMag,           true,  smallStaffSize,               0 },
       { StyleIdx::smallNoteMag,            true,  smallNoteSize,                0 },
       { StyleIdx::smallClefMag,            true,  smallClefSize,                0 },
-      { StyleIdx::lyricsDashMinLength,     false, lyricsDashMinLength,          resetLyricsDashMinLength },
-      { StyleIdx::lyricsDashMaxLength,     false, lyricsDashMaxLength,          resetLyricsDashMaxLength },
-      { StyleIdx::lyricsDashMaxDistance,   false, lyricsDashMaxDistance,        resetLyricsDashMaxDistance },
-      { StyleIdx::lyricsDashForce,         false, lyricsDashForce,              resetLyricsDashForce },
       { StyleIdx::lastSystemFillLimit,     true,  lastSystemFillThreshold,      0 },
       { StyleIdx::genClef,                 false, genClef,                      0 },
       { StyleIdx::genKeysig,               false, genKeysig,                    0 },
@@ -260,6 +262,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::dynamicsMinDistance,              false, dynamicsMinDistance,          resetDynamicsMinDistance },
       { StyleIdx::autoplaceVerticalAlignRange,      false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
       };
+
+      lyricsPlacement->clear();
+      lyricsPlacement->addItem(tr("Above"), int(Element::Placement::ABOVE));
+      lyricsPlacement->addItem(tr("Above"), int(Element::Placement::BELOW));
 
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
