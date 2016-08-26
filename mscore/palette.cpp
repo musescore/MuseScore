@@ -100,7 +100,7 @@ Palette::Palette(QWidget* parent)
 
 Palette::~Palette()
       {
-      foreach(PaletteCell* cell, cells)
+      for (PaletteCell* cell : cells)
             delete cell;
       }
 
@@ -111,6 +111,35 @@ Palette::~Palette()
 void Palette::resizeEvent(QResizeEvent* e)
       {
       setFixedHeight(heightForWidth(e->size().width()));
+      }
+
+//---------------------------------------------------------
+//   filter
+///  return true if all filtered
+//---------------------------------------------------------
+
+bool Palette::filter(const QString& text)
+      {
+      QString t = text.toLower();
+      bool res = true;
+      for (PaletteCell* cell : cells) {
+            QStringList h = cell->name.toLower().split(" ");
+            bool c = false;
+            QStringList n = t.split(" ");
+            for (QString hs : h) {
+                  for (QString ns : n)
+                        c = hs.startsWith(ns);
+                        if (c)
+                            break;
+                  }
+            bool contains = t.isEmpty() || c;
+            cell->visible = contains;
+            if (contains && res)
+                  res = false;
+            }
+      setFixedHeight(heightForWidth(width()));
+      updateGeometry();
+      return res;
       }
 
 //---------------------------------------------------------
@@ -188,20 +217,20 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       QAction* moreAction    = menu.addAction(tr("More Elements..."));
       moreAction->setEnabled(_moreElements);
 
-      if (cells[i] && cells[i]->readOnly)
+      if (cellAt(i) && cellAt(i)->readOnly)
             clearAction->setEnabled(false);
 
       QAction* action = menu.exec(mapToGlobal(event->pos()));
 
       if (action == clearAction) {
-            PaletteCell* cell = cells[i];
+            PaletteCell* cell = cellAt(i);
             if (cell)
                   delete cell;
             cells[i] = 0;
             emit changed();
             }
       else if (action == contextAction) {
-            PaletteCell* c = cells[i];
+            PaletteCell* c = cellAt(i);
             if (c == 0)
                   return;
             PaletteCellProperties props(c);
@@ -245,8 +274,8 @@ void Palette::setGrid(int hh, int vv)
 
 Element* Palette::element(int idx)
       {
-      if (idx < size() &&  cells[idx])
-            return cells[idx]->element;
+      if (idx < size() &&  cellAt(idx))
+            return cellAt(idx)->element;
       else
             return 0;
       }
@@ -268,7 +297,7 @@ void Palette::mousePressEvent(QMouseEvent* ev)
                   }
             emit boxClicked(dragIdx);
             }
-      PaletteCell* cell = cells[dragIdx];
+      PaletteCell* cell = cellAt(dragIdx);
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
       }
@@ -317,8 +346,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             return;
 
       Element* element = 0;
-      if (i < size() && cells[i])
-            element = cells[i]->element;
+      if (i < size() && cellAt(i))
+            element = cellAt(i)->element;
       if (element == 0)
             return;
 
@@ -575,7 +604,7 @@ int Palette::idx(const QPoint& p) const
             return -1;
 
       int idx = row * nc + col;
-      if (idx < 0 || idx >= cells.size())
+      if (idx < 0 || idx >= size())
             return -1;
       return idx;
       }
@@ -607,14 +636,14 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
       {
       if ((currentIdx != -1) && (dragIdx == currentIdx) && (ev->buttons() & Qt::LeftButton)
          && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance()) {
-            PaletteCell* cell = cells[currentIdx];
+            PaletteCell* cell = cellAt(currentIdx);
             if (cell && cell->element) {
                   QDrag* drag = new QDrag(this);
                   QMimeData* mimeData = new QMimeData;
                   Element* el  = cell->element;
                   qreal mag    = PALETTE_SPATIUM * extraMag / gscore->spatium();
                   QPointF spos = QPointF(dragStartPosition) / mag;
-                  spos        -= QPointF(cells[currentIdx]->x, cells[currentIdx]->y);
+                  spos        -= QPointF(cell->x, cell->y);
 
                   // DEBUG:
                   spos.setX(0.0);
@@ -638,7 +667,7 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
                   r = idxRect(currentIdx);
             currentIdx = idx(ev->pos());
             if (currentIdx != -1) {
-                  if (cells[currentIdx] == 0)
+                  if (cellAt(currentIdx) == 0)
                         currentIdx = -1;
                   else
                         r |= idxRect(currentIdx);
@@ -753,7 +782,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
       QColor bgColor(0xf6, 0xf0, 0xda);
       if (preferences.fgUseColor)
-         bgColor = preferences.fgColor;
+            bgColor = preferences.fgColor;
 #if 1
       p.setBrush(bgColor);
       p.drawRoundedRect(0, 0, width(), height(), 2, 2);
@@ -791,21 +820,25 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
       QPen pen(Qt::black);
       pen.setWidthF(MScore::defaultStyle()->value(StyleIdx::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
 
+      int actualIndex = 0;
       for (int idx = 0; idx < cells.size(); ++idx) {
             int yoffset = gscore->spatium() * _yOffset;
-            QRect r = idxRect(idx);
+            QRect r = idxRect(actualIndex);
             QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             QColor c(MScore::selectColor[0]);
-            if (idx == selectedIdx) {
+            if (actualIndex == selectedIdx) {
                   c.setAlpha(100);
                   p.fillRect(r, c);
                   }
-            else if (idx == currentIdx) {
+            else if (actualIndex == currentIdx) {
                   c.setAlpha(50);
                   p.fillRect(r, c);
                   }
+
             if (cells.isEmpty() || cells[idx] == 0)
+                  continue;
+            if (!cells[idx]->visible)
                   continue;
 
             QString tag = cells[idx]->tag;
@@ -837,8 +870,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   p.drawPixmap(x + (hhgrid - size) / 2, y + (vgrid - size) / 2, pm);
                   }
             else {
-                  int row    = idx / columns();
-                  int column = idx % columns();
+                  int row    = actualIndex / columns();
+                  int column = actualIndex % columns();
 
                   el->layout();
                   el->setPos(0.0, 0.0);
@@ -896,6 +929,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   el->scanElements(&p, paintPaletteElement);
                   p.restore();
                   }
+            if (cells[idx]->visible)
+                  actualIndex++;
             }
       }
 
@@ -922,10 +957,10 @@ bool Palette::event(QEvent* ev)
             int idx = row * columns() + col;
             if (idx >= cells.size())
                   return false;
-            if (cells[idx] == 0)
+            if (cellAt(idx) == 0)
                   return false;
             QToolTip::showText(he->globalPos(),
-               qApp->translate("Palette", cells[idx]->name.toUtf8()), this);
+               qApp->translate("Palette", cellAt(idx)->name.toUtf8()), this);
             return false;
             }
       return QWidget::event(ev);
@@ -1441,7 +1476,38 @@ int Palette::rows() const
       int c = columns();
       if (c == 0)
             return 0;
-      return (cells.size() + c - 1) / c;
+      return (size() + c - 1) / c;
+      }
+
+//---------------------------------------------------------
+//   size
+//---------------------------------------------------------
+
+int Palette::size() const
+      {
+      int s = 0;
+      for (PaletteCell* cell : cells) {
+            if (cell->visible)
+                  s++;
+            }
+      return s;
+      }
+
+//---------------------------------------------------------
+//   cellAt
+//---------------------------------------------------------
+
+PaletteCell* Palette::cellAt(int index)
+      {
+      int s = 0;
+      for (PaletteCell* cell : cells) {
+            if (cell->visible) {
+                  if (s == index)
+                        return cell;
+                  s++;
+                  }
+            }
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -1453,10 +1519,10 @@ int Palette::heightForWidth(int w) const
       int c = w / hgrid;
       if (c <= 0)
             c = 1;
-      int size = cells.size();
+      int s = size();
       if (_moreElements)
-            size += 1;
-      int rows = (size + c - 1) / c;
+            s += 1;
+      int rows = (s + c - 1) / c;
       if (rows <= 0)
             rows = 1;
       qreal mag = PALETTE_SPATIUM * extraMag;
@@ -1481,9 +1547,9 @@ QSize Palette::sizeHint() const
 void Palette::actionToggled(bool /*val*/)
       {
       selectedIdx = -1;
-      int nn = cells.size();
+      int nn = size();
       for (int n = 0; n < nn; ++n) {
-            Element* e = cells[n]->element;
+            Element* e = cellAt(n)->element;
             if (e && e->type() == Element::Type::ICON) {
                   QAction* a = getAction(static_cast<Icon*>(e)->action());
                   if (a->isChecked()) {
