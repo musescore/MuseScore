@@ -153,7 +153,7 @@ void Dynamic::layout()
             setUserOff(QPointF());
 
       QPointF p(textStyle().offset(spatium()));
-      if (placement() == Element::Placement::ABOVE)
+      if (placeAbove())
             p.ry() = staff()->height() - p.ry() + lineHeight();
       setPos(p);
       Text::layout1();
@@ -196,7 +196,7 @@ void Dynamic::doAutoplace()
       Shape s1          = s->staffShape(staffIdx()).translated(s->pos());
       Shape s2          = shape().translated(s->pos());
 
-      if (placement() == Element::Placement::ABOVE) {
+      if (placeAbove()) {
             qreal d = s2.minVerticalDistance(s1);
             if (d > -minDistance)
                   rUserYoffset() = -d - minDistance;

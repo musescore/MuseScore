@@ -43,10 +43,16 @@ enum class StyleIdx : int {
       minSystemDistance,
       maxSystemDistance,
 
-      lyricsDistance,
+      lyricsPlacement,
+      lyricsPosAbove,
+      lyricsPosBelow,
       lyricsMinTopDistance,
       lyricsMinBottomDistance,
       lyricsLineHeight,
+      lyricsDashMinLength,
+      lyricsDashMaxLength,
+      lyricsDashMaxDistance,
+      lyricsDashForce,
 
       figuredBassFontFamily,
       figuredBassFontSize,
@@ -268,10 +274,6 @@ enum class StyleIdx : int {
       fretMag,
       scaleBarlines,
       barGraceDistance,
-      lyricsDashMinLength,
-      lyricsDashMaxLength,
-      lyricsDashMaxDistance,
-      lyricsDashForce,
 
       minVerticalDistance,
       ornamentStyle,
