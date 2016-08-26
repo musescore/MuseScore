@@ -77,7 +77,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::akkoladeDistance,        false, akkoladeDistance,        0 },
       { StyleIdx::minSystemDistance,       false, minSystemDistance,       0 },
       { StyleIdx::maxSystemDistance,       false, maxSystemDistance,       0 },
-      { StyleIdx::lyricsDistance,          false, lyricsDistance,          resetLyricsDistance },
+
+      { StyleIdx::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement },
+      { StyleIdx::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove },
+      { StyleIdx::lyricsPosBelow,          false, lyricsPosBelow,          resetLyricsPosBelow },
       { StyleIdx::lyricsMinTopDistance,    false, lyricsMinTopDistance,    resetLyricsMinTopDistance },
       { StyleIdx::lyricsMinBottomDistance, false, lyricsMinBottomDistance, resetLyricsMinBottomDistance },
       { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     0 },
