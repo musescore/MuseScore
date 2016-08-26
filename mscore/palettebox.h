@@ -32,6 +32,7 @@ class PaletteBox : public QDockWidget {
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
       QComboBox* workspaceList;
+      QLineEdit* searchBox;
       const int paletteStretch = 1000;
       QAction* singlePaletteAction;
       QToolButton* addWorkspaceButton;
@@ -43,6 +44,7 @@ class PaletteBox : public QDockWidget {
       void workspaceSelected(int idx);
       void newWorkspaceClicked();
       void setSinglePalette(bool);
+      void filterPalettes(const QString& text);
 
    signals:
       void changed();

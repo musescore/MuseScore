@@ -42,7 +42,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       QVBoxLayout* vl = new QVBoxLayout(w);
       vl->setMargin(0);
       QHBoxLayout* hl = new QHBoxLayout;
-      hl->setContentsMargins(5,5,5,0);
+      hl->setContentsMargins(5,0,5,0);
 
       workspaceList = new QComboBox;
       hl->addWidget(workspaceList);
@@ -53,6 +53,14 @@ PaletteBox::PaletteBox(QWidget* parent)
 
       setWidget(w);
 
+      searchBox = new QLineEdit(this);
+      searchBox->setPlaceholderText(tr("Filter"));
+      searchBox->setClearButtonEnabled(true);
+      connect(searchBox, SIGNAL(textChanged(const QString&)), this, SLOT(filterPalettes(const QString&)));
+      QHBoxLayout* hlSearch = new QHBoxLayout;
+      hlSearch->setContentsMargins(5,0,5,0);
+      hlSearch->addWidget(searchBox);
+
       PaletteBoxScrollArea* sa = new PaletteBoxScrollArea;
       sa->setFocusPolicy(Qt::NoFocus);
       sa->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -62,6 +70,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setWidgetResizable(true);
       sa->setFrameShape(QFrame::NoFrame);
       vl->addWidget(sa);
+      vl->addLayout(hlSearch);
       vl->addLayout(hl);
 
       QWidget* paletteList = new QWidget;
@@ -90,6 +99,32 @@ void PaletteBox::retranslate()
       addWorkspaceButton->setText(tr("+"));
       addWorkspaceButton->setToolTip(tr("Add new workspace"));
       updateWorkspaces();
+      }
+
+//---------------------------------------------------------
+//   retransfilterPaletteslate
+//---------------------------------------------------------
+
+void PaletteBox::filterPalettes(const QString& text)
+      {
+      for (int i = 0; i < vbox->count(); i++) {
+            QWidgetItem* wi = static_cast<QWidgetItem*>(vbox->itemAt(i));
+            PaletteBoxButton* b = static_cast<PaletteBoxButton*>(wi->widget());
+            i++;
+            wi = static_cast<QWidgetItem*>(vbox->itemAt(i));
+            if (!wi) return;
+            Palette* p = static_cast<Palette*>(wi->widget());
+            bool f = p->filter(text);
+            b->setVisible(!f);
+            if (b->isVisible()) {
+                 if (text.isEmpty())
+                      b->showPalette(false);
+                 else
+                      b->showPalette(true);
+                 }
+            else
+                 b->showPalette(false);
+            }
       }
 
 //---------------------------------------------------------
