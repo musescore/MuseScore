@@ -54,17 +54,17 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
       setupUi(this);
       if (st->systemFlag()) {
             setWindowTitle(tr("MuseScore: System Text Properties"));
-            tabWidget->removeTab(2); // Aeolus settings  for staff text only
-            //if (!enableExperimental) tabWidget->removeTab(1); // MIDI action
-            tabWidget->removeTab(0); // Channel switching  for staff text only
+            tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops)); // Aeolus settings  for staff text only
+            //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
+            tabWidget->removeTab(tabWidget->indexOf(tabChangeChannel)); // Channel switching  for staff text only
             }
       else {
             setWindowTitle(tr("MuseScore: Staff Text Properties"));
-            //tabWidget->removeTab(3); // Swing settings for system text only, could be disabled here, if desired
+            //tabWidget->removeTab(tabWidget->indexOf(tabSwingSettings)); // Swing settings for system text only, could be disabled here, if desired
 #ifndef AEOLUS
-            tabWidget->removeTab(2);
+            tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops));
 #endif
-            //if (!enableExperimental) tabWidget->removeTab(1); // MIDI action
+            //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
             }
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _staffText = static_cast<StaffText*>(st->clone());

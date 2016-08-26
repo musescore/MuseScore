@@ -156,7 +156,11 @@ void Preferences::init()
       mag                     = 1.0;
       showMidiControls        = false;
 
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       checkUpdateStartup      = true;
+#else
+      checkUpdateStartup      = false;
+#endif
 
       followSong              = true;
       importCharsetOve        = "GBK";
@@ -651,6 +655,9 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       updateRemote();
 
       MuseScore::restoreGeometry(this);
+#if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
+      General->removeTab(General->indexOf(tabUpdate)); // updateTab not needed on Linux
+#endif
       }
 
 //---------------------------------------------------------
