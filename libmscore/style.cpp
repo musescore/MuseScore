@@ -703,6 +703,9 @@ void MStyle::load(XmlReader& e)
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
 
+            if (tag == "lyricsDistance")        // was renamed
+                  tag = "lyricsPosBelow";
+
             if (tag == "TextStyle") {
                   TextStyle s;
                   s.read(e);
