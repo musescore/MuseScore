@@ -127,10 +127,12 @@ bool Palette::filter(const QString& text)
             bool c = false;
             QStringList n = t.split(" ");
             for (QString hs : h) {
-                  for (QString ns : n)
-                        c = hs.startsWith(ns);
-                        if (c)
-                            break;
+                  for (QString ns : n) {
+                        if (!ns.trimmed().isEmpty())
+                              c = hs.trimmed().startsWith(ns.trimmed());
+                        }
+                  if (c)
+                        break;
                   }
             bool contains = t.isEmpty() || c;
             cell->visible = contains;
