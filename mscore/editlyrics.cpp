@@ -31,6 +31,8 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       int verse        = lyrics->no();
       Element::Placement placement = lyrics->placement();
 
+      if (placement == Element::Placement::ABOVE)
+            up = !up;
       if (up) {
             if (verse == 0)
                   return;
@@ -38,9 +40,10 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             }
       else {
             ++verse;
-            if (verse >= cr->lastVerse(placement))
+            if (verse > cr->lastVerse(placement))
                   return;
             }
+
       endEdit();
       _score->startCmd();
       lyrics = cr->lyrics(verse, placement);
@@ -418,11 +421,31 @@ void ScoreView::lyricsReturn()
 
       Lyrics* oldLyrics = lyrics;
 
+      int newVerse;
+      if (lyrics->placeAbove()) {
+            newVerse = oldLyrics->no() - 1;
+            if (newVerse == -1) {
+                  // raise all lyrics above
+                  newVerse = 0;
+                  for (Segment* s = _score->firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+                        ChordRest* cr = s->cr(lyrics->track());
+                        if (cr) {
+                              for (Lyrics* l : cr->lyrics()) {
+                                    if (l->placement() == oldLyrics->placement())
+                                          l->undoChangeProperty(P_ID::VERSE, l->no() + 1);
+                                    }
+                              }
+                        }
+                  }
+            }
+      else
+            newVerse = oldLyrics->no() + 1;
       lyrics = static_cast<Lyrics*>(Element::create(lyrics->type(), _score));
       lyrics->setTrack(oldLyrics->track());
       lyrics->setParent(segment->element(oldLyrics->track()));
-      lyrics->setNo(oldLyrics->no() + 1);
       lyrics->setPlacement(oldLyrics->placement());
+
+      lyrics->setNo(newVerse);
 
       _score->undoAddElement(lyrics);
       _score->select(lyrics, SelectType::SINGLE, 0);

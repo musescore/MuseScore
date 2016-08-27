@@ -274,8 +274,8 @@ void Lyrics::layout1()
       if (placeBelow())
             y  = lh * (_no+1) + score()->styleP(StyleIdx::lyricsPosBelow) + staff()->height();
       else {
-            int verses = chordRest()->lastVerse(Element::Placement::ABOVE);
-            y = -lh * (verses - _no) + score()->styleP(StyleIdx::lyricsPosAbove);
+            // we are counting _no from bottom to top for verses above
+            y = -lh * _no + score()->styleP(StyleIdx::lyricsPosAbove);
             }
 
       qreal x  = 0.0;

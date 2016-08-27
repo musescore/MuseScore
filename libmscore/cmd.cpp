@@ -2288,6 +2288,9 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       int verse                    = lyrics->no();
       Element::Placement placement = lyrics->placement();
       int newVerse;
+      if (lyrics->placeAbove())
+            dir = (dir == Direction::UP) ? Direction::DOWN : Direction::UP;
+
       if (dir == Direction::UP) {
             if (verse)
                   newVerse = verse - 1;
