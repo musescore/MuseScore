@@ -716,7 +716,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType *mt)
                               if (rpnh == -1 || rpnl == -1) {
                                     qDebug("parameter number not defined, data 0x%x 0x%x, tick %d, channel %d",
                                        datah, datal, i->first, ev.channel());
-                                    break;
+                                    continue;
                                     }
                               // assume that the sequence is always
                               //    CTRL_HDATA - CTRL_LDATA
