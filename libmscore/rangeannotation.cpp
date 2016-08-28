@@ -444,7 +444,7 @@ QVariant RangeAnnotation::propertyDefault(P_ID id) const
                   return Spatium(-1.0);
             case P_ID::TOPMARGIN_SP:
             case P_ID::BOTTOMMARGIN_SP:
-                  return Spatium(1.0);
+                  return Spatium(2.0);
             default:
                   return Spanner::propertyDefault(id);
             }
