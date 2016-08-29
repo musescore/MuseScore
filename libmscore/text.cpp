@@ -1295,11 +1295,19 @@ void Text::layoutFrame()
       {
       frame = bbox();
       if (textStyle().square()) {
+#if 0
+            // "real" square
             if (frame.width() > frame.height()) {
                   qreal w = frame.width() - frame.height();
                   frame.adjust(0.0, -w * .5, 0.0, w * .5);
                   }
             else {
+                  qreal w = frame.height() - frame.width();
+                  frame.adjust(-w * .5, 0.0, w * .5, 0.0);
+                  }
+#endif
+            // make sure width >= height
+            if (frame.height() > frame.width()) {
                   qreal w = frame.height() - frame.width();
                   frame.adjust(-w * .5, 0.0, w * .5, 0.0);
                   }
