@@ -1996,12 +1996,12 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                   // this is time consuming (ca. +5%) and probably requires more optimization
 
                   int n = 1;
-                  for (Segment* ps = ss;;) {
+                  for (Segment* ps = ss; ps != s;) {
                         qreal ww;
+                        ps = ps->prev();
                         if (ps == s)
                               ww = ns->minLeft(ls) - ss->x();
                         else {
-                              ps = ps->prev();
                               if (ps->isChordRestType())
                                     ++n;
                               ww = ps->minHorizontalDistance(ns, false) - (ss->x() - ps->x());
@@ -2029,8 +2029,6 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
                               x = xx;
                               break;
                               }
-                        if (ps == s)
-                              break;
                         }
 #endif
                   }

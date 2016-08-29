@@ -1366,7 +1366,6 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       Segment::Type st  = segmentType();
       Segment::Type nst = ns ? ns->segmentType() : Segment::Type::Invalid;
 
-//      printf("minHDist %s - %s\n", subTypeName(), ns->subTypeName());
 
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
@@ -1374,9 +1373,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             w = qMax(w, d);
             }
 
-      if (st == Segment::Type::ChordRest) {
+      if (isChordRestType()) {
             if (nst == Segment::Type::EndBarLine)
-                  // w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::noteBarDistance);
                   w += score()->styleP(StyleIdx::noteBarDistance);
             else if (nst == Segment::Type::Clef)
                   w = qMax(w, score()->styleP(StyleIdx::clefLeftMargin));
@@ -1397,7 +1395,7 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
                   }
             }
-      else if (st != Segment::Type::ChordRest && nst == Segment::Type::ChordRest) {
+      else if (nst == Segment::Type::ChordRest) {
             qreal d;
             if (systemHeaderGap) {
                   if (st == Segment::Type::TimeSig)
@@ -1451,7 +1449,6 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             w = 0.0;
       if (ns)
             w += ns->extraLeadingSpace().val() * spatium();
-//      printf("  == %f %s %s\n", w, subTypeName(), ns ? ns->subTypeName() : "-0-");
       return w;
       }
 

@@ -66,8 +66,10 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
             for (const QRectF& r1 : *this) {
                   qreal ay1 = r1.top();
                   qreal ay2 = r1.bottom();
-                  // if ((ay1 >= by1 && ay1 < by2) || (ay2 >= by1 && ay2 < by2) || (ay1 < by1 && ay2 >= by2))
-                  if (intersects(ay1, ay2, by1, by2))
+                  if (intersects(ay1, ay2, by1, by2)
+                     || ((r1.height() == 0.0) && (r2.height() == 0.0) && (ay1 == by1))
+                     || ((r1.width() == 0.0) || (r2.width() == 0.0)))
+//                  if (intersects(ay1, ay2, by1, by2))
                         dist = qMax(dist, r1.right() - r2.left());
                   }
             }
@@ -89,7 +91,6 @@ qreal Shape::minVerticalDistance(const Shape& a) const
             for (const QRectF& r1 : *this) {
                   qreal ax1 = r1.left();
                   qreal ax2 = r1.right();
-                  // if ((ax1 >= bx1 && ax1 < bx2) || (ax2 >= bx1 && ax2 < bx2) || (ax1 < bx1 && ax2 >= bx2))
                   if (intersects(ax1, ax2, bx1, bx2))
                         dist = qMax(dist, r1.bottom() - r2.top());
                   }
@@ -106,7 +107,7 @@ qreal Shape::left() const
       {
       qreal dist = 0.0;
       for (const QRectF& r : *this) {
-            if (r.left() < dist)
+            if (r.height() != 0.0 && r.left() < dist)
                   dist = r.left();
             }
       return -dist;
