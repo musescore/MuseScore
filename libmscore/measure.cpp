@@ -267,6 +267,8 @@ void Measure::remove(Segment* el)
             }
       else {
             Q_ASSERT(el == _segments.first());
+            if (el != _segments.first())
+                  return;
             }
 
       if (el->next()) {
