@@ -623,7 +623,8 @@ void Segment::remove(Element* el)
 
             case Element::Type::KEYSIG:
                   Q_ASSERT(_elist[track] == el);
-
+                  if (_elist[track] != el)
+                        return;
                   _elist[track] = 0;
                   if (!el->generated())
                         el->staff()->removeKey(tick());
