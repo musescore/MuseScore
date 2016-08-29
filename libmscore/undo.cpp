@@ -969,6 +969,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::Type::BREATH
          && et != Element::Type::DYNAMIC
          && et != Element::Type::STAFF_TEXT
+         && et != Element::Type::RANGEANNOTATION
          && et != Element::Type::TREMOLO
          && et != Element::Type::ARPEGGIO
          && et != Element::Type::SYMBOL
@@ -1104,6 +1105,7 @@ void Score::undoAddElement(Element* element)
                   }
             else if (element->type() == Element::Type::SLUR
                || element->type() == Element::Type::HAIRPIN
+               || element->type() == Element::Type::RANGEANNOTATION
                || element->type() == Element::Type::OTTAVA
                || element->type() == Element::Type::TRILL
                || element->type() == Element::Type::TEXTLINE

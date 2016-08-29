@@ -2960,6 +2960,7 @@ QString Text::accessibleInfo() const
             case TextStyleType::TITLE:
             case TextStyleType::SUBTITLE:
             case TextStyleType::COMPOSER:
+            case TextStyleType::ANNOTATION:
             case TextStyleType::POET:
             case TextStyleType::TRANSLATOR:
             case TextStyleType::MEASURE_NUMBER:

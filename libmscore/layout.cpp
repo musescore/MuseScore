@@ -3586,16 +3586,23 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       //    layout SpannerSegments for current system
       //
+      std::vector<Spanner*> rangeAnnotations;
 
       if (etick > stick) {    // ignore vbox
             auto spanners = score()->spannerMap().findOverlapping(stick, etick);
             std::vector<SpannerSegment*> voltaSegments;
+
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
                   if (sp->tick() < etick && sp->tick2() > stick) {
                         if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
                               sp->setTick2(lastMeasure()->endTick());
                               sp->staff()->updateOttava();
+                              }
+                        // Layout later if spanner is a range annotation
+                        if (sp->type() == Element::Type::RANGEANNOTATION) {
+                              rangeAnnotations.push_back(sp);
+                              continue;
                               }
                         SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
                         if (ss->isVoltaSegment() && ss->autoplace())
@@ -3641,6 +3648,9 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
       system->layout2();   // compute staff distances
+      // Layout range annotation spanners now, since staff distances have been calculated
+      for (Spanner* s : rangeAnnotations)
+            s->layoutSystem(system);
 
       Measure* lm  = system->lastMeasure();
       if (lm) {
