@@ -59,7 +59,7 @@ class Beam : public Element {
       int minMove;              // set in layout1()
       int maxMove;
       TDuration maxDuration;
-      qreal slope;
+      qreal slope { 0.0 };
 
       int editFragment;       // valid in edit mode
 
