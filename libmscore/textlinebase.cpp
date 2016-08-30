@@ -643,21 +643,6 @@ void TextLineBase::read(XmlReader& e)
             }
       }
 
-#if 0
-//---------------------------------------------------------
-//   createLineSegment
-//---------------------------------------------------------
-
-LineSegment* TextLineBase::createLineSegment()
-      {
-      TextLineBaseSegment* seg = new TextLineBaseSegment(score());
-      // note-anchored line segments are relative to system not to staff
-      if (anchor() == Spanner::Anchor::NOTE)
-            seg->setFlag(ElementFlag::ON_STAFF, false);
-      return seg;
-      }
-#endif
-
 //---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------

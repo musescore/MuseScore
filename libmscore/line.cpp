@@ -790,6 +790,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   break;
                   }
             }
+printf("===%p line segment %s segments %p %d\n", this, name(), lineSegm, segments.size());
       if (!lineSegm) {
             lineSegm = createLineSegment();
             add(lineSegm);
@@ -865,10 +866,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
-                  }
-                  break;
-            }
-      lineSegm->layout();
+#if 1
       QList<SpannerSegment*> sl;
       for (SpannerSegment* ss : segments) {
             if (ss->system())
@@ -879,6 +877,23 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   }
             }
       segments.swap(sl);
+#endif
+                  }
+                  break;
+            }
+      lineSegm->layout();
+#if 0
+      QList<SpannerSegment*> sl;
+      for (SpannerSegment* ss : segments) {
+            if (ss->system())
+                  sl.push_back(ss);
+            else {
+                  qDebug("delete spanner segment %s", ss->name());
+                  delete ss;
+                  }
+            }
+      segments.swap(sl);
+#endif
       return lineSegm;
       }
 
