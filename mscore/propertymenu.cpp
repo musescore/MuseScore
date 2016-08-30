@@ -406,8 +406,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "l-props") {
             TextLineBaseSegment* vs = static_cast<TextLineBaseSegment*>(e);
-//TODO            LineProperties lp(vs->textLine());
-//            lp.exec();
+             LineProperties lp(vs->textLineBase());
+            lp.exec();
             }
       else if (cmd == "tr-props")
             editTremoloBarProperties(static_cast<TremoloBar*>(e));

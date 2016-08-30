@@ -37,8 +37,7 @@ class Text;
 class LineProperties : public QDialog, public Ui::LinePropertiesDialog {
       Q_OBJECT
 
-      TextLineBase* otl;    // original text line
-      TextLineBase* tl;     // cloned original text line to record changes in Text elements
+      TextLineBase* tl;
 
    private slots:
       virtual void accept();
