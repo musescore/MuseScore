@@ -1311,6 +1311,8 @@ void Segment::createShape(int staffIdx)
                && !e->isRehearsalMark()
                && !e->isTempoText()
                && !e->isDynamic()
+               && !e->isSymbol()
+               && !e->isFSymbol()
                && !e->isStaffText())
                   s.add(e->shape());
             }
