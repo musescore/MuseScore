@@ -103,6 +103,8 @@ class VoltaSegment;
 class NoteLine;
 class Trill;
 class TrillSegment;
+class Symbol;
+class FSymbol;
 
 enum class SymId;
 
@@ -732,6 +734,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(NoteLine,      NOTELINE)
       CONVERT(Trill,         TRILL)
       CONVERT(TrillSegment,  TRILL_SEGMENT)
+      CONVERT(Symbol,        SYMBOL)
+      CONVERT(FSymbol,       FSYMBOL)
 #undef CONVERT
       };
 
@@ -826,6 +830,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(NoteLine,      NOTELINE)
       CONVERT(Trill,         TRILL)
       CONVERT(TrillSegment,  TRILL_SEGMENT)
+      CONVERT(Symbol,        SYMBOL)
+      CONVERT(FSymbol,       FSYMBOL)
 #undef CONVERT
 
 //---------------------------------------------------------
