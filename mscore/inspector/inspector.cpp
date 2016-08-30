@@ -225,7 +225,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorHairpin(this);
                               break;
                         case Element::Type::TEXTLINE_SEGMENT:
-                        case Element::Type::PEDAL_SEGMENT:
+//                        case Element::Type::PEDAL_SEGMENT:
                               ie = new InspectorTextLine(this);
                               break;
                         case Element::Type::SLUR_SEGMENT:

@@ -562,7 +562,12 @@ void Spanner::computeEndElement()
       {
       switch (_anchor) {
             case Anchor::SEGMENT: {
+                  if (track2() == -1)
+                        setTrack2(track());
+                  if (ticks() == 0 && isTextLine())
+                        setTicks(score()->lastSegment()->tick() - _tick);
                   // find last cr on this staff that ends before tick2
+
                   _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
                   if (!_endElement) {
                         qDebug("%s no end element for tick %d", name(), tick2());

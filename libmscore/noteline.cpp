@@ -11,17 +11,28 @@
 //=============================================================================
 
 #include "noteline.h"
+#include "textline.h"
 
 namespace Ms {
 
 NoteLine::NoteLine(Score* s)
-   : TextLine(s)
+   : TextLineBase(s)
       {
       }
 
 NoteLine::NoteLine(const NoteLine& nl)
-   : TextLine(nl)
+   : TextLineBase(nl)
       {
+      }
+
+//---------------------------------------------------------
+//   createLineSegment
+//---------------------------------------------------------
+
+LineSegment* NoteLine::createLineSegment()
+      {
+      TextLineSegment* seg = new TextLineSegment(score());
+      return seg;
       }
 
 

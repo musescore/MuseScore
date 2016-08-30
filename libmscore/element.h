@@ -29,7 +29,6 @@ namespace Ms {
  Definition of classes Element, ElementList, StaffLines.
 */
 
-
 class Xml;
 class Measure;
 class Staff;
@@ -57,6 +56,7 @@ class ChordRest;
 class Slur;
 class Tie;
 class Glissando;
+class GlissandoSegment;
 class SystemDivider;
 class RehearsalMark;
 class Harmony;
@@ -94,11 +94,15 @@ class InstrumentName;
 class DurationElement;
 class Accidental;
 class TextLine;
+class TextLineSegment;
 class Pedal;
+class PedalSegment;
 class LedgerLine;
 class Icon;
 class VoltaSegment;
 class NoteLine;
+class Trill;
+class TrillSegment;
 
 enum class SymId;
 
@@ -306,6 +310,7 @@ class Element : public QObject, public ScoreElement {
             PEDAL,
             TRILL,
             TEXTLINE,
+            TEXTLINE_BASE,
             NOTELINE,
             LYRICSLINE,
             GLISSANDO,
@@ -684,6 +689,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Tie,           TIE)
       CONVERT(Slur,          SLUR)
       CONVERT(Glissando,     GLISSANDO)
+      CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
       CONVERT(SystemDivider, SYSTEM_DIVIDER)
       CONVERT(RehearsalMark, REHEARSAL_MARK)
       CONVERT(Harmony,       HARMONY)
@@ -716,12 +722,16 @@ class Element : public QObject, public ScoreElement {
       CONVERT(InstrumentName, INSTRUMENT_NAME)
       CONVERT(Accidental,    ACCIDENTAL)
       CONVERT(TextLine,      TEXTLINE)
+      CONVERT(TextLineSegment,      TEXTLINE_SEGMENT)
       CONVERT(Pedal,         PEDAL)
+      CONVERT(PedalSegment,  PEDAL_SEGMENT)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
       CONVERT(LedgerLine,    LEDGER_LINE)
       CONVERT(Icon,          ICON)
       CONVERT(VoltaSegment,  VOLTA_SEGMENT)
       CONVERT(NoteLine,      NOTELINE)
+      CONVERT(Trill,         TRILL)
+      CONVERT(TrillSegment,  TRILL_SEGMENT)
 #undef CONVERT
       };
 
@@ -772,6 +782,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Tie,           TIE)
       CONVERT(Slur,          SLUR)
       CONVERT(Glissando,     GLISSANDO)
+      CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
       CONVERT(SystemDivider, SYSTEM_DIVIDER)
       CONVERT(RehearsalMark, REHEARSAL_MARK)
       CONVERT(Harmony,       HARMONY)
@@ -805,12 +816,16 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(InstrumentName, INSTRUMENT_NAME)
       CONVERT(Accidental,    ACCIDENTAL)
       CONVERT(TextLine,      TEXTLINE)
+      CONVERT(TextLineSegment,      TEXTLINE_SEGMENT)
       CONVERT(Pedal,         PEDAL)
+      CONVERT(PedalSegment,  PEDAL_SEGMENT)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
       CONVERT(LedgerLine,    LEDGER_LINE)
       CONVERT(Icon,          ICON)
       CONVERT(VoltaSegment,  VOLTA_SEGMENT)
       CONVERT(NoteLine,      NOTELINE)
+      CONVERT(Trill,         TRILL)
+      CONVERT(TrillSegment,  TRILL_SEGMENT)
 #undef CONVERT
 
 //---------------------------------------------------------

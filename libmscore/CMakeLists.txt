@@ -52,7 +52,7 @@ add_library (
       spacer.cpp spanner.cpp staff.cpp staffstate.cpp
       stafftext.cpp stafftype.cpp stem.cpp style.cpp textstyle.cpp symbol.cpp
       sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp
-      textframe.cpp textline.cpp timesig.cpp
+      textframe.cpp textline.cpp textlinebase.cpp timesig.cpp
       tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
       utils.cpp velo.cpp volta.cpp xml.cpp mscore.cpp
       undo.cpp cmd.cpp scorefile.cpp revisions.cpp

@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include "pedal.h"
-#include "textline.h"
 #include "sym.h"
 #include "xml.h"
 #include "system.h"
@@ -30,7 +29,7 @@ void PedalSegment::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
-      TextLineSegment::layout();
+      TextLineBaseSegment::layout();
       if (parent())     // for palette
             rypos() += score()->styleP(StyleIdx::pedalY);
       if (autoplace() && parent()) {
@@ -56,7 +55,7 @@ bool PedalSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::LINE_STYLE:
                   return pedal()->setProperty(id, v);
             default:
-                  return TextLineSegment::setProperty(id, v);
+                  return TextLineBaseSegment::setProperty(id, v);
             }
       }
 
@@ -72,7 +71,7 @@ QVariant PedalSegment::propertyDefault(P_ID id) const
             case P_ID::TEXT_STYLE_TYPE:
                   return pedal()->propertyDefault(id);
             default:
-                  return TextLineSegment::propertyDefault(id);
+                  return TextLineBaseSegment::propertyDefault(id);
             }
       }
 
@@ -88,7 +87,7 @@ PropertyStyle PedalSegment::propertyStyle(P_ID id) const
                   return pedal()->propertyStyle(id);
 
             default:
-                  return TextLineSegment::propertyStyle(id);
+                  return TextLineBaseSegment::propertyStyle(id);
             }
       }
 
@@ -104,7 +103,7 @@ void PedalSegment::resetProperty(P_ID id)
                   return pedal()->resetProperty(id);
 
             default:
-                  return TextLineSegment::resetProperty(id);
+                  return TextLineBaseSegment::resetProperty(id);
             }
       }
 
@@ -122,7 +121,7 @@ void PedalSegment::styleChanged()
 //---------------------------------------------------------
 
 Pedal::Pedal(Score* s)
-   : TextLine(s)
+   : TextLineBase(s)
       {
       setBeginHookHeight(Spatium(-1.2));
       setEndHookHeight(Spatium(-1.2));
@@ -157,7 +156,7 @@ void Pedal::read(XmlReader& e)
                   setLineStyle(Qt::PenStyle(e.readInt()));
                   lineStyleStyle = PropertyStyle::UNSTYLED;
                   }
-            else if (!TextLine::readProperties(e))
+            else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
       }
@@ -189,16 +188,16 @@ bool Pedal::setProperty(P_ID propertyId, const QVariant& val)
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
-                  TextLine::setProperty(propertyId, val);
+                  TextLineBase::setProperty(propertyId, val);
                   break;
 
             case P_ID::LINE_STYLE:
                   lineStyleStyle = PropertyStyle::UNSTYLED;
-                  TextLine::setProperty(propertyId, val);
+                  TextLineBase::setProperty(propertyId, val);
                   break;
 
             default:
-                  if (!TextLine::setProperty(propertyId, val))
+                  if (!TextLineBase::setProperty(propertyId, val))
                         return false;
                   break;
             }
@@ -223,7 +222,7 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
                   return int(TextStyleType::PEDAL);
 
             default:
-                  return TextLine::propertyDefault(propertyId);
+                  return TextLineBase::propertyDefault(propertyId);
             }
       }
 
@@ -241,7 +240,7 @@ PropertyStyle Pedal::propertyStyle(P_ID id) const
                   return lineStyleStyle;
 
             default:
-                  return TextLine::propertyStyle(id);
+                  return TextLineBase::propertyStyle(id);
             }
       }
 
@@ -263,7 +262,7 @@ void Pedal::resetProperty(P_ID id)
                   break;
 
             default:
-                  return TextLine::resetProperty(id);
+                  return TextLineBase::resetProperty(id);
             }
       }
 

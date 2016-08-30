@@ -327,6 +327,10 @@ enum class StyleIdx : int {
       dynamicsMinDistance,
       autoplaceVerticalAlignRange,
 
+      textLinePlacement,
+      textLinePosAbove,
+      textLinePosBelow,
+
       STYLES
       };
 

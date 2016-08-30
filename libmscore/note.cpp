@@ -55,6 +55,7 @@
 #include "glissando.h"
 #include "bagpembell.h"
 #include "hairpin.h"
+#include "textline.h"
 
 namespace Ms {
 
