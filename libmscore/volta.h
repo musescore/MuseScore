@@ -13,7 +13,7 @@
 #ifndef __VOLTA_H__
 #define __VOLTA_H__
 
-#include "textline.h"
+#include "textlinebase.h"
 
 namespace Ms {
 
@@ -29,11 +29,11 @@ extern LineSegment* voltaDebug;
 //   @@ VoltaSegment
 //---------------------------------------------------------
 
-class VoltaSegment : public TextLineSegment {
+class VoltaSegment : public TextLineBaseSegment {
       Q_OBJECT
 
    public:
-      VoltaSegment(Score* s) : TextLineSegment(s) {}
+      VoltaSegment(Score* s) : TextLineBaseSegment(s) {}
       virtual Element::Type type() const override   { return Element::Type::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
       Volta* volta() const                          { return (Volta*)spanner(); }
@@ -51,7 +51,7 @@ class VoltaSegment : public TextLineSegment {
 //   @P voltaType  enum (Volta.CLOSE, Volta.OPEN)
 //---------------------------------------------------------
 
-class Volta : public TextLine {
+class Volta : public TextLineBase {
       Q_OBJECT
 
       Q_PROPERTY(Ms::Volta::Type voltaType READ voltaType WRITE undoSetVoltaType)

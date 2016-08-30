@@ -329,7 +329,11 @@ static const StyleType styleTypes[] {
       { StyleIdx::lutefingering3rdAnchor,          "lutefingering3rdAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
       { StyleIdx::dynamicsMinDistance,             "dynamicsMinDistance",               Spatium(0.5) },
-      { StyleIdx::autoplaceVerticalAlignRange,     "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) }
+      { StyleIdx::autoplaceVerticalAlignRange,     "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
+
+      { StyleIdx::textLinePlacement,         "textLinePlacement",         int(Element::Placement::ABOVE)  },
+      { StyleIdx::textLinePosAbove,          "textLinePosAbove",          Spatium(-3.5) },
+      { StyleIdx::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
       };
 
 //---------------------------------------------------------

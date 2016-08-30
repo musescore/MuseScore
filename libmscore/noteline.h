@@ -13,17 +13,42 @@
 #ifndef __NOTELINE_H__
 #define __NOTELINE_H__
 
-#include "textline.h"
+#include "textlinebase.h"
 
 namespace Ms {
 
 class Note;
 
+#if 0
+//---------------------------------------------------------
+//   @@ TextLineSegment
+//---------------------------------------------------------
+
+class TextLineSegment : public TextLineBaseSegment {
+      Q_OBJECT
+
+   protected:
+
+   public:
+      TextLineSegment(Score* s) : TextLineBaseSegment(s)  { }
+      virtual Element::Type type() const override     { return Element::Type::TEXTLINE_SEGMENT; }
+      virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
+      TextLine* textLine() const                      { return (TextLine*)spanner(); }
+      virtual void layout() override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
+      };
+#endif
+
 //---------------------------------------------------------
 //   @@ NoteLine
 //---------------------------------------------------------
 
-class NoteLine : public TextLine {
+class NoteLine : public TextLineBase {
       Q_OBJECT
 
       Note* _startNote;
@@ -41,6 +66,7 @@ class NoteLine : public TextLine {
       Note* startNote() const     { return _startNote; }
       void setEndNote(Note* n)    { _endNote = n; }
       Note* endNote() const       { return _endNote; }
+      virtual LineSegment* createLineSegment() override;
       };
 
 

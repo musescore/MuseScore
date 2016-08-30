@@ -261,11 +261,16 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
       { StyleIdx::dynamicsMinDistance,              false, dynamicsMinDistance,          resetDynamicsMinDistance },
       { StyleIdx::autoplaceVerticalAlignRange,      false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
+      { StyleIdx::textLinePlacement,       false, textLinePlacement, resetTextLinePlacement },
+      { StyleIdx::textLinePosAbove,        false, textLinePosAbove,             resetTextLinePosAbove },
+      { StyleIdx::textLinePosBelow,        false, textLinePosBelow,             resetTextLinePosBelow },
       };
 
-      lyricsPlacement->clear();
-      lyricsPlacement->addItem(tr("Above"), int(Element::Placement::ABOVE));
-      lyricsPlacement->addItem(tr("Above"), int(Element::Placement::BELOW));
+      for (QComboBox* cb : std::vector<QComboBox*> { lyricsPlacement, textLinePlacement }) {
+            cb->clear();
+            cb->addItem(tr("Above"), int(Element::Placement::ABOVE));
+            cb->addItem(tr("Above"), int(Element::Placement::BELOW));
+            }
 
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));

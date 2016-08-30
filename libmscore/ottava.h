@@ -13,7 +13,7 @@
 #ifndef __OTTAVA_H__
 #define __OTTAVA_H__
 
-#include "textline.h"
+#include "textlinebase.h"
 
 namespace Ms {
 
@@ -33,13 +33,13 @@ class Ottava;
 //   @@ OttavaSegment
 //---------------------------------------------------------
 
-class OttavaSegment : public TextLineSegment {
+class OttavaSegment : public TextLineBaseSegment {
       Q_OBJECT
 
    protected:
 
    public:
-      OttavaSegment(Score* s) : TextLineSegment(s)  { }
+      OttavaSegment(Score* s) : TextLineBaseSegment(s)  { }
       virtual Element::Type type() const override   { return Element::Type::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }
@@ -57,7 +57,7 @@ class OttavaSegment : public TextLineSegment {
 //   @P ottavaType  enum (Ottava.OTTAVA_8VA, .OTTAVA_8VB, .OTTAVA_15MA, .OTTAVA_15MB, .OTTAVA_22MA, .OTTAVA_22MB)
 //---------------------------------------------------------
 
-class Ottava : public TextLine {
+class Ottava : public TextLineBase {
       Q_OBJECT
       Q_PROPERTY(Ms::Ottava::Type ottavaType READ ottavaType WRITE undoSetOttavaType)
       Q_ENUMS(Type)

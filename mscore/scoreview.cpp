@@ -86,9 +86,8 @@
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 #include "libmscore/xml.h"
-#ifdef SHAPES
+#include "libmscore/textline.h"
 #include "libmscore/shape.h"
-#endif
 
 namespace Ms {
 

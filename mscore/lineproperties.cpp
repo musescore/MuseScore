@@ -46,13 +46,14 @@ static void setTextPlace(PlaceText place, QComboBox* cb)
 //   LineProperties
 //---------------------------------------------------------
 
-LineProperties::LineProperties(TextLine* l, QWidget* parent)
+LineProperties::LineProperties(TextLineBase* l, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+#if 0
       otl = l;
-      tl  = l->clone();
+      tl  = new TextLineBase(*l);
 
       beginText->setText(Text::unEscape(otl->beginText()));
       continueText->setText(Text::unEscape(otl->continueText()));
@@ -74,6 +75,7 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       connect(beginTextTb, SIGNAL(clicked()),    SLOT(beginTextProperties()));
       connect(continueTextTb, SIGNAL(clicked()), SLOT(continueTextProperties()));
       connect(endTextTb, SIGNAL(clicked()),      SLOT(endTextProperties()));
+#endif
       }
 
 //---------------------------------------------------------

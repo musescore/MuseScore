@@ -43,7 +43,6 @@
 #include "tie.h"
 #include "system.h"
 #include "text.h"
-#include "textline.h"
 #include "tremolo.h"
 #include "tuplet.h"
 #include "utils.h"
@@ -615,12 +614,8 @@ QByteArray Selection::mimeData() const
       QByteArray a;
       switch (_state) {
             case SelState::LIST:
-                  if (isSingle()) {
-                        Element* e = element();
-                        if (e->type() == Element::Type::TEXTLINE_SEGMENT)
-                              e = static_cast<TextLineSegment*>(e)->textLine();
-                        a = e->mimeData(QPointF());
-                        }
+                  if (isSingle())
+                        a = element()->mimeData(QPointF());
                   else
                         a = symbolListMimeData();
                   break;

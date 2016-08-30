@@ -118,7 +118,7 @@ void HairpinSegment::layout()
       Hairpin::Type type = hairpin()->hairpinType();
       if (type == Hairpin::Type::DECRESC_LINE || type == Hairpin::Type::CRESC_LINE) {
             twoLines = false;
-            TextLineSegment::layout();
+            TextLineBaseSegment::layout();
             drawCircledTip = false;
             if (parent())
                   rypos() += score()->styleP(StyleIdx::hairpinY);
@@ -253,7 +253,7 @@ Shape HairpinSegment::shape() const
             case Hairpin::Type::DECRESC_LINE:
             case Hairpin::Type::CRESC_LINE:
             default:
-                  return TextLineSegment::shape();
+                  return TextLineBaseSegment::shape();
             }
       }
 
@@ -322,7 +322,7 @@ void HairpinSegment::editDrag(const EditData& ed)
 
 void HairpinSegment::draw(QPainter* painter) const
       {
-      TextLineSegment::draw(painter);
+      TextLineBaseSegment::draw(painter);
 
       QColor color;
       if (selected() && !(score() && score()->printing()))
@@ -356,7 +356,7 @@ QVariant HairpinSegment::getProperty(P_ID id) const
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return hairpin()->getProperty(id);
             default:
-                  return TextLineSegment::getProperty(id);
+                  return TextLineBaseSegment::getProperty(id);
             }
       }
 
@@ -377,7 +377,7 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return hairpin()->setProperty(id, v);
             default:
-                  return TextLineSegment::setProperty(id, v);
+                  return TextLineBaseSegment::setProperty(id, v);
             }
       }
 
@@ -398,7 +398,7 @@ QVariant HairpinSegment::propertyDefault(P_ID id) const
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return hairpin()->propertyDefault(id);
             default:
-                  return TextLineSegment::propertyDefault(id);
+                  return TextLineBaseSegment::propertyDefault(id);
             }
       }
 
@@ -415,7 +415,7 @@ PropertyStyle HairpinSegment::propertyStyle(P_ID id) const
                   return hairpin()->propertyStyle(id);
 
             default:
-                  return TextLineSegment::propertyStyle(id);
+                  return TextLineBaseSegment::propertyStyle(id);
             }
       }
 
@@ -433,7 +433,7 @@ StyleIdx HairpinSegment::getPropertyStyle(P_ID id) const
             default:
                   break;
             }
-      return TextLineSegment::getPropertyStyle(id);
+      return TextLineBaseSegment::getPropertyStyle(id);
       }
 
 //---------------------------------------------------------
@@ -449,7 +449,7 @@ void HairpinSegment::resetProperty(P_ID id)
                   return hairpin()->resetProperty(id);
 
             default:
-                  return TextLineSegment::resetProperty(id);
+                  return TextLineBaseSegment::resetProperty(id);
             }
       }
 
@@ -458,7 +458,7 @@ void HairpinSegment::resetProperty(P_ID id)
 //---------------------------------------------------------
 
 Hairpin::Hairpin(Score* s)
-   : TextLine(s)
+   : TextLineBase(s)
       {
       _hairpinType       = Type::CRESC_HAIRPIN;
       _hairpinCircledTip = false;
@@ -509,7 +509,7 @@ void Hairpin::setHairpinType(Type val)
 void Hairpin::layout()
       {
       setPos(0.0, 0.0);
-      TextLine::layout();
+      TextLineBase::layout();
       }
 
 //---------------------------------------------------------
@@ -538,7 +538,7 @@ void Hairpin::write(Xml& xml) const
       writeProperty(xml, P_ID::PLACEMENT);
       writeProperty(xml, P_ID::HAIRPIN_HEIGHT);
       writeProperty(xml, P_ID::HAIRPIN_CONT_HEIGHT);
-      TextLine::writeProperties(xml);
+      TextLineBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -584,7 +584,7 @@ void Hairpin::read(XmlReader& e)
                   else if (hairpinType() == Type::DECRESC_HAIRPIN)
                         setHairpinType(Type::DECRESC_LINE);
                   }
-            else if (!TextLine::readProperties(e))
+            else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
       }
@@ -636,7 +636,7 @@ QVariant Hairpin::getProperty(P_ID id) const
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return _hairpinContHeight;
             default:
-                  return TextLine::getProperty(id);
+                  return TextLineBase::getProperty(id);
             }
       }
 
@@ -662,7 +662,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
                   break;
             case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
-                  TextLine::setProperty(id, v);
+                  TextLineBase::setProperty(id, v);
                   break;
             case P_ID::HAIRPIN_HEIGHT:
                   hairpinHeightStyle = PropertyStyle::UNSTYLED;
@@ -673,7 +673,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
                   _hairpinContHeight = v.value<Spatium>();
                   break;
             default:
-                  return TextLine::setProperty(id, v);
+                  return TextLineBase::setProperty(id, v);
             }
       triggerLayout();
       return true;
@@ -700,7 +700,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
                   return int(Qt::CustomDashLine);
 
             default:
-                  return TextLine::propertyDefault(id);
+                  return TextLineBase::propertyDefault(id);
             }
       }
 
@@ -715,7 +715,7 @@ PropertyStyle Hairpin::propertyStyle(P_ID id) const
             case P_ID::HAIRPIN_HEIGHT:        return hairpinHeightStyle;
             case P_ID::HAIRPIN_CONT_HEIGHT:   return hairpinContHeightStyle;
             default:
-                  return TextLine::propertyStyle(id);
+                  return TextLineBase::propertyStyle(id);
             }
       }
 
@@ -742,7 +742,7 @@ void Hairpin::resetProperty(P_ID id)
                   break;
 
             default:
-                  return TextLine::resetProperty(id);
+                  return TextLineBase::resetProperty(id);
             }
       triggerLayout();
       }
@@ -802,7 +802,7 @@ void Hairpin::reset()
             undoChangeProperty(P_ID::HAIRPIN_HEIGHT, propertyDefault(P_ID::HAIRPIN_HEIGHT), PropertyStyle::STYLED);
       if (hairpinContHeightStyle == PropertyStyle::UNSTYLED)
             undoChangeProperty(P_ID::HAIRPIN_CONT_HEIGHT, propertyDefault(P_ID::HAIRPIN_CONT_HEIGHT), PropertyStyle::STYLED);
-      TextLine::reset();
+      TextLineBase::reset();
       }
 
 //---------------------------------------------------------
@@ -811,7 +811,7 @@ void Hairpin::reset()
 
 QString Hairpin::accessibleInfo() const
       {
-      QString rez = TextLine::accessibleInfo();
+      QString rez = TextLineBase::accessibleInfo();
       switch (hairpinType()) {
             case Type::CRESC_HAIRPIN:
                   rez += ": " + tr("Crescendo");
@@ -832,7 +832,7 @@ QString Hairpin::accessibleInfo() const
 void Hairpin::startEdit(MuseScoreView* view, const QPointF& p)
       {
       editHairpinHeight = _hairpinHeight;
-      TextLine::startEdit(view, p);
+      TextLineBase::startEdit(view, p);
       }
 
 //---------------------------------------------------------
@@ -843,7 +843,7 @@ void Hairpin::endEdit()
       {
       if (editHairpinHeight != _hairpinHeight)
             score()->undoPropertyChanged(this, P_ID::HAIRPIN_HEIGHT, editHairpinHeight);
-      TextLine::endEdit();
+      TextLineBase::endEdit();
       }
 
 }

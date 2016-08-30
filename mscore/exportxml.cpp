@@ -97,6 +97,7 @@
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
 #include "libmscore/undo.h"
+#include "libmscore/textline.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {

@@ -16,7 +16,7 @@
 #include "element.h"
 #include "dynamic.h"
 #include "line.h"
-#include "textline.h"
+#include "textlinebase.h"
 #include "mscore.h"
 
 class QPainter;
@@ -30,7 +30,7 @@ class Hairpin;
 //   @@ HairpinSegment
 //---------------------------------------------------------
 
-class HairpinSegment : public TextLineSegment {
+class HairpinSegment : public TextLineBaseSegment {
       Q_OBJECT
 
       bool drawCircledTip;
@@ -38,7 +38,7 @@ class HairpinSegment : public TextLineSegment {
       qreal circledTipRadius;
 
    public:
-      HairpinSegment(Score* s) : TextLineSegment(s) {}
+      HairpinSegment(Score* s) : TextLineBaseSegment(s) {}
       Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
       virtual Element::Type type() const override    { return Element::Type::HAIRPIN_SEGMENT; }
@@ -63,7 +63,7 @@ class HairpinSegment : public TextLineSegment {
 //   @P veloChange   int
 //---------------------------------------------------------
 
-class Hairpin : public TextLine {
+class Hairpin : public TextLineBase {
       Q_OBJECT
       Q_ENUMS(Type)
       Q_ENUMS(Ms::Dynamic::Range)

@@ -164,6 +164,7 @@ static const ElementName elementNames[] = {
       ElementName("Pedal",                QT_TRANSLATE_NOOP("elementName", "Pedal")),
       ElementName("Trill",                QT_TRANSLATE_NOOP("elementName", "Trill")),
       ElementName("TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line")),
+      ElementName("TextLineBase",         QT_TRANSLATE_NOOP("elementName", "Text Line Base")),  // remove
       ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
       ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line")),
       ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
@@ -1332,9 +1333,9 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
             case Element::Type::AMBITUS:           return new Ambitus(score);
 
-            case Element::Type::TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
+            case Element::Type::TEXTLINE_BASE:
+            case Element::Type::TEXTLINE_SEGMENT:
             case Element::Type::GLISSANDO_SEGMENT:
-
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::STEM_SLASH:
             case Element::Type::LINE:
@@ -1610,8 +1611,8 @@ void Element::readProperty(XmlReader& e, P_ID id)
 
 bool Element::isSLine() const
       {
-      return type() == Element::Type::HAIRPIN || type() == Element::Type::OTTAVA || type() == Element::Type::PEDAL
-         || type() == Element::Type::TRILL || type() == Element::Type::VOLTA || type() == Element::Type::TEXTLINE || type() == Element::Type::NOTELINE || type() == Element::Type::GLISSANDO;
+      return isHairpin() || isOttava() || isPedal()
+         || isTrill() || isVolta() || isTextLine() || isNoteLine() || isGlissando();
       }
 
 //---------------------------------------------------------
@@ -1620,7 +1621,9 @@ bool Element::isSLine() const
 
 bool Element::isSLineSegment() const
       {
-      return type() == Element::Type::HAIRPIN_SEGMENT || type() == Element::Type::OTTAVA_SEGMENT || type() == Element::Type::PEDAL_SEGMENT || type() == Element::Type::TRILL_SEGMENT || type() == Element::Type::VOLTA_SEGMENT || type() == Element::Type::TEXTLINE_SEGMENT || type() == Element::Type::GLISSANDO_SEGMENT;
+      return isHairpinSegment() || isOttavaSegment() || isPedalSegment()
+         || isTrillSegment() || isVoltaSegment() || isTextLineSegment()
+         || isGlissandoSegment();
       }
 
 //---------------------------------------------------------

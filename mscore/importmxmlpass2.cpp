@@ -55,6 +55,7 @@
 #include "libmscore/trill.h"
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
+#include "libmscore/textline.h"
 
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
