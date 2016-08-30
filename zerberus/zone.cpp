@@ -68,6 +68,8 @@ bool Zone::match(Channel* c, int k, int v, Trigger et, double rand, int cc, int 
             if (trigger == Trigger::CC) {
                   if (onLocc[cc] <= ccVal && onHicc[cc] >= ccVal) {
                         seq++;
+                        if (seq > seqLen)
+                              seq = 0;
                         return oldSeq == seqPos;
                         }
                   else
