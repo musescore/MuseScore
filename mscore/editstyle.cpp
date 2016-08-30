@@ -269,7 +269,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (QComboBox* cb : std::vector<QComboBox*> { lyricsPlacement, textLinePlacement }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Element::Placement::ABOVE));
-            cb->addItem(tr("Above"), int(Element::Placement::BELOW));
+            cb->addItem(tr("Below"), int(Element::Placement::BELOW));
             }
 
       autoplaceVerticalAlignRange->clear();
