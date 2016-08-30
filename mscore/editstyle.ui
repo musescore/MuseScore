@@ -20,21 +20,6 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QListWidget" name="pageList">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
@@ -151,15 +136,6 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <property name="spacing">
@@ -5142,7 +5118,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="Page15">
        <layout class="QVBoxLayout" name="verticalLayout_45">
         <item>
          <widget class="QGroupBox" name="groupBox_32">
@@ -5159,10 +5135,10 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Below</string>
+              <string>Position Below:</string>
              </property>
              <property name="buddy">
-              <cstring>lyricsPosAbove</cstring>
+              <cstring>textLinePosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -5188,7 +5164,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Top distance' value</string>
+              <string>Reset 'Placement' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5227,7 +5203,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Top distance' value</string>
+              <string>Reset 'Position Below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5247,10 +5223,10 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Above</string>
+              <string>Position Above:</string>
              </property>
              <property name="buddy">
-              <cstring>lyricsPosAbove</cstring>
+              <cstring>textLinePosAbove</cstring>
              </property>
             </widget>
            </item>
@@ -5260,7 +5236,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Top distance' value</string>
+              <string>Reset 'Position Above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5296,7 +5272,10 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_72">
              <property name="text">
-              <string>Placement</string>
+              <string>Placement:</string>
+             </property>
+             <property name="buddy">
+              <cstring>textLinePlacement</cstring>
              </property>
             </widget>
            </item>
@@ -5318,7 +5297,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Page15">
+      <widget class="QWidget" name="Page16">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <property name="spacing">
          <number>0</number>
@@ -5915,7 +5894,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Page16">
+      <widget class="QWidget" name="Page17">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QGroupBox" name="groupBox_20">
@@ -6148,7 +6127,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Page17">
+      <widget class="QWidget" name="Page18">
        <layout class="QVBoxLayout" name="verticalLayout_24">
         <property name="spacing">
          <number>0</number>
@@ -6310,7 +6289,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Page18">
+      <widget class="QWidget" name="Page19">
        <layout class="QVBoxLayout" name="verticalLayout_30">
         <property name="spacing">
          <number>0</number>
@@ -6391,7 +6370,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Page19">
+      <widget class="QWidget" name="Page20">
        <layout class="QVBoxLayout" name="verticalLayout_301">
         <property name="spacing">
          <number>0</number>
@@ -7165,7 +7144,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Page20">
+      <widget class="QWidget" name="Page21">
        <layout class="QVBoxLayout" name="verticalLayout_44">
         <item>
          <widget class="QGroupBox" name="lyricsTextBox">
@@ -7182,7 +7161,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Above</string>
+              <string>Position Above:</string>
              </property>
              <property name="buddy">
               <cstring>lyricsPosAbove</cstring>
@@ -7323,7 +7302,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Top distance' value</string>
+              <string>Reset 'Position Above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7399,10 +7378,10 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Below</string>
+              <string>Position Below:</string>
              </property>
              <property name="buddy">
-              <cstring>lyricsPosAbove</cstring>
+              <cstring>lyricsPosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -7415,7 +7394,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Top distance' value</string>
+              <string>Reset 'Position Below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7429,7 +7408,10 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_71">
              <property name="text">
-              <string>Placement</string>
+              <string>Placement:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsPlacement</cstring>
              </property>
             </widget>
            </item>
@@ -7439,7 +7421,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Top distance' value</string>
+              <string>Reset 'Placement' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7712,12 +7694,6 @@
      </property>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
@@ -7912,6 +7888,12 @@
   <tabstop>resetTrillY</tabstop>
   <tabstop>dynamicsMinDistance</tabstop>
   <tabstop>resetDynamicsMinDistance</tabstop>
+  <tabstop>textLinePlacement</tabstop>
+  <tabstop>resetTextLinePlacement</tabstop>
+  <tabstop>textLinePosAbove</tabstop>
+  <tabstop>resetTextLinePosAbove</tabstop>
+  <tabstop>textLinePosBelow</tabstop>
+  <tabstop>resetTextLinePosBelow</tabstop>
   <tabstop>chordsStandard</tabstop>
   <tabstop>chordsJazz</tabstop>
   <tabstop>chordsCustom</tabstop>
@@ -7978,13 +7960,20 @@
   <tabstop>resetTupletNumberType</tabstop>
   <tabstop>tupletBracketType</tabstop>
   <tabstop>resetTupletBracketType</tabstop>
+  <tabstop>lyricsPlacement</tabstop>
+  <tabstop>resetLyricsPlacement</tabstop>
   <tabstop>lyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
+  <tabstop>lyricsPosBelow</tabstop>
+  <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
   <tabstop>lyricsMinTopDistance</tabstop>
   <tabstop>resetLyricsMinTopDistance</tabstop>
   <tabstop>lyricsMinBottomDistance</tabstop>
+  <tabstop>resetLyricsMinBottomDistance</tabstop>
+  <tabstop>lyricsAlignVerseNumber</tabstop>
+  <tabstop>resetLyricsAlignVerseNumber</tabstop>
   <tabstop>lyricsDashMinLength</tabstop>
   <tabstop>resetLyricsDashMinLength</tabstop>
   <tabstop>lyricsDashMaxLength</tabstop>
