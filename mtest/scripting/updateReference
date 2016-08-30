@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ../../build.debug/mtest/scripting/p1.log  p1.log.ref
+cp ../../build.debug/mtest/scripting/p2.log  p2.log.ref
+
+
