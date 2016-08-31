@@ -2170,6 +2170,13 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
                   --active;
             cv->midiNoteReceived(pitch, false, velo);
             }
+
+      if (_pianoTools && _pianoTools->isVisible()) {
+            if (velo)
+                  _pianoTools->pressPitch(pitch);
+            else
+                  _pianoTools->releasePitch(pitch);
+            }
       }
 
 //---------------------------------------------------------
