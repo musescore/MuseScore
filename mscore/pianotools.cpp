@@ -50,7 +50,6 @@ HPiano::HPiano(QWidget* parent)
 
       _firstKey   = 21;
       _lastKey    = 108;   // 88 key piano
-      _currentKey = -1;
       qreal x = 0.0;
       for (int i = _firstKey; i <= _lastKey; ++i) {
             PianoKeyItem* k = new PianoKeyItem(this, i);
@@ -133,13 +132,40 @@ QSize HPiano::sizeHint() const
 //   pressKeys
 //---------------------------------------------------------
 
-void HPiano::pressKeys(QSet<int> pitches)
+void HPiano::setPressedPitches(QSet<int> pitches)
       {
-	for (PianoKeyItem* key : keys) {
-            if (pitches.contains(key->pitch()))
-                  key->setPressed(true);
-            else
-                  key->setPressed(false);
+      _pressedPitches = pitches;
+      updateAllKeys();
+      }
+
+//---------------------------------------------------------
+//   pressPitch
+//---------------------------------------------------------
+
+void HPiano::pressPitch(int pitch)
+      {
+      _pressedPitches.insert(pitch);
+      updateAllKeys();
+      }
+
+//---------------------------------------------------------
+//   releasePitch
+//---------------------------------------------------------
+
+void HPiano::releasePitch(int pitch)
+      {
+      _pressedPitches.remove(pitch);
+      updateAllKeys();
+      }
+
+//---------------------------------------------------------
+//   updateAllKeys
+//---------------------------------------------------------
+
+void HPiano::updateAllKeys()
+      {
+      for (PianoKeyItem* key : keys) {
+            key->setPressed(_pressedPitches.contains(key->pitch()));
             key->update();
             }
       }
@@ -333,7 +359,7 @@ void PianoTools::heartBeat(QList<const Ms::Note *> notes)
       for (const Note* note : notes) {
           pitches.insert(note->ppitch());
           }
-      _piano->pressKeys(pitches);
+      _piano->setPressedPitches(pitches);
       }
 
 //---------------------------------------------------------
