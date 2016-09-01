@@ -239,7 +239,7 @@ private void doascii(char c)
     } else if (c == 's') {
         if (clksencnt) {
             if (inited)
-                printf("Clock Count %ld\nActive Sense Count %ld\n", 
+                printf("Clock Count %ld\nActive Sense Count %ld\n",
                         clockcount, actsensecount);
         } else if (inited) {
             printf("Clock Counting not on\n");
@@ -306,11 +306,11 @@ private void output(PmMessage data)
         int i;
         long data_copy = data;
         in_sysex = true;
-        /* look for MIDI_EOX in first 3 bytes 
+        /* look for MIDI_EOX in first 3 bytes
          * if realtime messages are embedded in sysex message, they will
          * be printed as if they are part of the sysex message
          */
-        for (i = 0; (i < 4) && ((data_copy & 0xFF) != MIDI_EOX); i++) 
+        for (i = 0; (i < 4) && ((data_copy & 0xFF) != MIDI_EOX); i++)
             data_copy >>= 8;
         if (i < 4) {
             in_sysex = false;

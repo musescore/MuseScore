@@ -57,8 +57,8 @@ static void *Pt_CallbackProc(void *p)
     if (error != KERN_SUCCESS) {
         mach_error("Couldn't set thread precedence policy", error);
     }
-    
-    
+
+
     /* to kill a process, just increment the pt_callback_proc_id */
     /* printf("pt_callback_proc_id %d, id %d\n", pt_callback_proc_id, parameters->id); */
     while (pt_callback_proc_id == parameters->id) {
@@ -82,7 +82,7 @@ PtError Pt_Start(int resolution, PtCallback *callback, void *userData)
 {
     if (time_started_flag) return ptAlreadyStarted;
     start_time = AudioGetCurrentHostTime();
-    
+
     if (callback) {
         int res;
         pt_callback_parameters *parms;
@@ -96,7 +96,7 @@ PtError Pt_Start(int resolution, PtCallback *callback, void *userData)
         res = pthread_create(&pt_thread_pid, NULL, Pt_CallbackProc, parms);
         if (res != 0) return ptHostError;
     }
-    
+
     time_started_flag = TRUE;
     return ptNoError;
 }

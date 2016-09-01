@@ -64,11 +64,11 @@ void main_test_input(unsigned int somethingStupid) {
     TIME_START;
 
     /* open input device */
-    Pm_OpenInput(&midi, 
+    Pm_OpenInput(&midi,
                  i,
-                 DRIVER_INFO, 
-                 INPUT_BUFFER_SIZE, 
-                 TIME_PROC, 
+                 DRIVER_INFO,
+                 INPUT_BUFFER_SIZE,
+                 TIME_PROC,
                  TIME_INFO);
 
     printf("Midi Input opened. Reading %d Midi messages...\n", num);
@@ -118,7 +118,7 @@ void main_test_output() {
 	char line[80];
     long off_time;
     int chord[] = { 60, 67, 76, 83, 90 };
-    #define chord_size 5 
+    #define chord_size 5
     PmEvent buffer[chord_size];
     PmTimestamp timestamp;
 
@@ -132,12 +132,12 @@ void main_test_output() {
        when latency is zero, we will pass in a NULL timer pointer
        for that case. If PortMidi tries to access the time_proc,
        we will crash, so this test will tell us something. */
-    Pm_OpenOutput(&midi, 
-                  i, 
+    Pm_OpenOutput(&midi,
+                  i,
                   DRIVER_INFO,
-                  OUTPUT_BUFFER_SIZE, 
+                  OUTPUT_BUFFER_SIZE,
                   (latency == 0 ? NULL : TIME_PROC),
-                  (latency == 0 ? NULL : TIME_INFO), 
+                  (latency == 0 ? NULL : TIME_INFO),
                   latency);
     printf("Midi Output opened with %ld ms latency.\n", latency);
 
@@ -177,7 +177,7 @@ void main_test_output() {
     Pm_WriteShort(midi, TIME_PROC(TIME_INFO),
                   Pm_Message(0x90, 60, 0));
 
-    /* output several note on/offs to test timing. 
+    /* output several note on/offs to test timing.
        Should be 1s between notes */
     printf("chord will arpeggiate if latency > 0\n");
     printf("ready to chord-on/chord-off... (type RETURN):");
@@ -189,19 +189,19 @@ void main_test_output() {
     }
     Pm_Write(midi, buffer, chord_size);
 
-    off_time = timestamp + 1000 + chord_size * 1000; 
-    while (TIME_PROC(TIME_INFO) < off_time) 
+    off_time = timestamp + 1000 + chord_size * 1000;
+    while (TIME_PROC(TIME_INFO) < off_time)
 		/* busy wait */;
     for (i = 0; i < chord_size; i++) {
         buffer[i].timestamp = timestamp + 1000 * i;
         buffer[i].message = Pm_Message(0x90, chord[i], 0);
     }
-    Pm_Write(midi, buffer, chord_size);    
+    Pm_Write(midi, buffer, chord_size);
 
     /* close device (this not explicitly needed in most implementations) */
     printf("ready to close and terminate... (type RETURN):");
     fgets(line, STRING_MAX, stdin);
-	
+
     Pm_Close(midi);
     Pm_Terminate();
     printf("done closing and terminating...\n");
@@ -216,27 +216,27 @@ void main_test_both()
     PmEvent buffer[1];
     PmError status, length;
     int num = 10;
-    
+
     in = get_number("Type input number: ");
     out = get_number("Type output number: ");
 
     /* In is recommended to start timer before PortMidi */
     TIME_START;
 
-    Pm_OpenOutput(&midiOut, 
-                  out, 
+    Pm_OpenOutput(&midiOut,
+                  out,
                   DRIVER_INFO,
-                  OUTPUT_BUFFER_SIZE, 
+                  OUTPUT_BUFFER_SIZE,
                   TIME_PROC,
-                  TIME_INFO, 
+                  TIME_INFO,
                   latency);
     printf("Midi Output opened with %ld ms latency.\n", latency);
     /* open input device */
-    Pm_OpenInput(&midi, 
+    Pm_OpenInput(&midi,
                  in,
-                 DRIVER_INFO, 
-                 INPUT_BUFFER_SIZE, 
-                 TIME_PROC, 
+                 DRIVER_INFO,
+                 INPUT_BUFFER_SIZE,
+                 TIME_PROC,
                  TIME_INFO);
     printf("Midi Input opened. Reading %d Midi messages...\n",num);
     Pm_SetFilter(midi, PM_FILT_ACTIVE | PM_FILT_CLOCK);
@@ -268,13 +268,13 @@ void main_test_both()
     /* close midi devices */
     Pm_Close(midi);
     Pm_Close(midiOut);
-    Pm_Terminate(); 
+    Pm_Terminate();
 }
 
 
 /* main_test_stream exercises windows winmm API's stream mode */
 /*    The winmm stream mode is used for latency>0, and sends
-   timestamped messages. The timestamps are relative (delta) 
+   timestamped messages. The timestamps are relative (delta)
    times, whereas PortMidi times are absolute. Since peculiar
    things happen when messages are not always sent in advance,
    this function allows us to exercise the system and test it.
@@ -294,12 +294,12 @@ void main_test_stream() {
     TIME_START;
 
 	/* open output device */
-    Pm_OpenOutput(&midi, 
-                  i, 
+    Pm_OpenOutput(&midi,
+                  i,
                   DRIVER_INFO,
-                  OUTPUT_BUFFER_SIZE, 
+                  OUTPUT_BUFFER_SIZE,
                   TIME_PROC,
-                  TIME_INFO, 
+                  TIME_INFO,
                   latency);
     printf("Midi Output opened with %ld ms latency.\n", latency);
 
@@ -347,7 +347,7 @@ void main_test_stream() {
 	}
     Pm_Write(midi, buffer, 8);
 
-    while (Pt_Time() < now + 2500) 
+    while (Pt_Time() < now + 2500)
 		/* busy wait */;
 	/* now we are 500 ms behind schedule, but since the latency
 	   is 500, the delay should not be audible */
@@ -363,7 +363,7 @@ void main_test_stream() {
     /* close device (this not explicitly needed in most implementations) */
     printf("ready to close and terminate... (type RETURN):");
     fgets(line, STRING_MAX, stdin);
-	
+
     Pm_Close(midi);
     Pm_Terminate();
     printf("done closing and terminating...\n");
@@ -385,7 +385,7 @@ int main(int argc, char *argv[])
     int test_input = 0, test_output = 0, test_both = 0, somethingStupid = 0;
     int stream_test = 0;
     int latency_valid = FALSE;
-    
+
     for (i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0) {
             show_usage();
@@ -418,18 +418,18 @@ int main(int argc, char *argv[])
         n = scanf("%d", &i);
         fgets(line, STRING_MAX, stdin);
         switch(i) {
-        case 1: 
+        case 1:
             test_input = 1;
             break;
-        case 2: 
+        case 2:
             test_input = 1;
             somethingStupid = 1;
             break;
-        case 3: 
+        case 3:
             test_input = 1;
             somethingStupid = 2;
             break;
-        case 4: 
+        case 4:
             test_output = 1;
             break;
         case 5:
@@ -443,7 +443,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    
+
     /* list device information */
     default_in = Pm_GetDefaultInputDeviceID();
     default_out = Pm_GetDefaultOutputDeviceID();
@@ -464,7 +464,7 @@ int main(int argc, char *argv[])
             printf("\n");
         }
     }
-    
+
     /* run test */
     if (stream_test) {
         main_test_stream();
@@ -475,7 +475,7 @@ int main(int argc, char *argv[])
     } else if (test_both) {
         main_test_both();
     }
-    
+
     printf("finished portMidi test...type ENTER to quit...");
     fgets(line, STRING_MAX, stdin);
     return 0;

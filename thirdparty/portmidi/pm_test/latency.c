@@ -18,14 +18,14 @@
    Latency can affect PortMidi applications: if a process fails
    to wake up promptly, MIDI input may sit in the input buffer
    waiting to be handled, and MIDI output may not be generated
-   with accurate timing. Using the latency parameter when 
+   with accurate timing. Using the latency parameter when
    opening a MIDI output port allows the caller to defer timing
    to PortMidi, which in most implementations will pass the
    data on to the OS. By passing timestamps and data to the
    OS kernel, device driver, or even hardware, there are fewer
    sources of latency that can affect the ultimate timing of
    the data. On the other hand, the application must generate
-   and deliver the data ahead of the timestamp. The amount by 
+   and deliver the data ahead of the timestamp. The amount by
    which data is computed early must be at least as large as
    the worst-case latency to avoid timing problems.
 
@@ -63,7 +63,7 @@
    some uncertainty due to rounding. A microsecond latency that
    spans the time when the clock is incremented will be reported
    as a latency of 1. On the other hand, a latency of almost
-   1ms that falls between two clock ticks will be reported as 
+   1ms that falls between two clock ticks will be reported as
    zero. In general, if the highest nonzero bin is numbered N,
    then the maximum latency is N+1.
 
@@ -195,25 +195,25 @@ int main()
         /* open stream(s) */
         if (test_in) {
             int i = get_number("MIDI input device number: ");
-            Pm_OpenInput(&in, 
+            Pm_OpenInput(&in,
                   i,
-                  NULL, 
-                  INPUT_BUFFER_SIZE, 
-                  (long (*)(void *)) Pt_Time, 
+                  NULL,
+                  INPUT_BUFFER_SIZE,
+                  (long (*)(void *)) Pt_Time,
                   NULL);
-            /* turn on filtering; otherwise, input might overflow in the 
+            /* turn on filtering; otherwise, input might overflow in the
                5-second period before timer callback starts reading midi */
             Pm_SetFilter(in, PM_FILT_ACTIVE | PM_FILT_CLOCK);
         }
         if (test_out) {
             int i = get_number("MIDI output device number: ");
             PmEvent buffer[1];
-            Pm_OpenOutput(&out, 
+            Pm_OpenOutput(&out,
                   i,
                   NULL,
                   OUTPUT_BUFFER_SIZE,
                   (long (*)(void *)) Pt_Time,
-                  NULL, 
+                  NULL,
                   0); /* no latency scheduling */
 
             /* send a program change to force a status byte -- this fixes
@@ -254,7 +254,7 @@ int main()
     for (i = 0; i < len; i++) {
         printf("%2d      %10ld\n", i, histogram[i]);
     }
-    printf("Number of points greater than %dms: %ld\n", 
+    printf("Number of points greater than %dms: %ld\n",
            HIST_LEN - 1, out_of_range);
     printf("Maximum latency: %ld milliseconds\n", max_latency);
     printf("\nNote that due to rounding, actual latency can be 1ms higher\n");

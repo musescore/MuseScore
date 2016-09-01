@@ -1,6 +1,6 @@
 File: PortMidi Win32 Readme
 Author: Belinda Thom, June 16 2002
-Revised by: Roger Dannenberg, June 2002, May 2004, June 2007, 
+Revised by: Roger Dannenberg, June 2002, May 2004, June 2007,
             Umpei Kurokawa, June 2007
 
 =============================================================================
@@ -8,7 +8,7 @@ USING PORTMIDI:
 =============================================================================
 
 Using Microsoft Visual C++ project files (provided with PortMidi), there
-are two configurations of the PortMidi library. The Debug version is 
+are two configurations of the PortMidi library. The Debug version is
 intended for debugging, especially in a console application. The Debug
 version enables some extra error checking and outputs some text as well
 as a prompt to type ENTER so that you don't lose any debugging text when
@@ -20,7 +20,7 @@ every call to PortMidi. You can disable this checking (especially if you
 want to handle error codes in your own way) by removing PM_CHECK_ERRORS
 from the predefined symbols list in the Settings dialog box.
 
-PortMidi is designed to run without a console and should work perfectly 
+PortMidi is designed to run without a console and should work perfectly
 well within a graphical user interface application. The Release version
 is both optimized and lacking the debugging printout code of the Debug
 version.
@@ -42,7 +42,7 @@ TO COMPILE PORTMIDI:
 3)  cd to or open the portmidi directory
 
 4)  start or click on the portmidi.sln workspace
-	
+
 
 5)  the following projects exist within this workspace:
     - portmidi (the PortMidi library)
@@ -60,25 +60,25 @@ TO COMPILE PORTMIDI:
 
 6)  verify that all project settings are for Win32 Debug release:
     - type Alt-F7
-    - highlight all three projects in left part of Project Settings window; 
+    - highlight all three projects in left part of Project Settings window;
     - "Settings For" should say "Win32 Debug"
-	
-    -In Visual C++ 2005 Express Edition, there is a drop down menu in 
+
+    -In Visual C++ 2005 Express Edition, there is a drop down menu in
      the top toolbar to select the Win32 and Debug option.
 
 7)  use Build->Batch Build ... to build everything in the project
-	
+
     -In Visual C++ 2005 Express Edition, use Build->Build Solution
-	
+
 8)  The settings for these projects were distributed in the zip file, so
     compile should just work.
 
 9) run test project; use the menu that shows up from the command prompt to
-    test that portMidi works on your system. tests include: 
+    test that portMidi works on your system. tests include:
 		- verify midi output works
 		- verify midi input works
 
-10) run other projects if you wish: sysex, latency, midithread, mm, 
+10) run other projects if you wish: sysex, latency, midithread, mm,
     qtest, midithru
 
 ============================================================================
@@ -90,7 +90,7 @@ be to copy the test project file (test.dsp) and modify it. -RBD
 
 The easiest way is to start a new project w/in the portMidi workspace:
 
-1) To open new project: 
+1) To open new project:
 	- File->New->Projects
 	- Location: <...>\portmidi\<yourProjectName>
 	- check Add to current workspace
@@ -99,15 +99,15 @@ The easiest way is to start a new project w/in the portMidi workspace:
       in the next step)
 	- Click OK
 	- Select "An Empty Project" and click Finish
-	
-	In Visual C++ 2005 Express Edition, 
+
+	In Visual C++ 2005 Express Edition,
 	- File->New->Projects
 	- Location: <...>\portmidi\<yourProjectName>
 	- select Add to solution
 	- select CLR Empty project in CLR
 	- select Win32 Console Application in Win32
 	- select Empty project in General
-	
+
 2) Now this project will be the active project. Make it explicitly depend
    on PortMidi dll:
 	- Project->Dependencies

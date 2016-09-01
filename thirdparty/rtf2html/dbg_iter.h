@@ -9,13 +9,13 @@ class dbg_iter_mixin : public virtual T
    {
       return T::operator=(t);
    }
-   dbg_iter_mixin& operator++ () 
-   {  
-      ++offset; 
+   dbg_iter_mixin& operator++ ()
+   {
+      ++offset;
       T::operator++();
       return *this;
    }
-   dbg_iter_mixin operator++ (int i) 
+   dbg_iter_mixin operator++ (int i)
    {
       ++offset;
       return T::operator++(i);
@@ -37,7 +37,7 @@ class dbg_iter : public dbg_iter_mixin<T>
 };
 
 template<class T>
-class dbg_iter<std::istreambuf_iterator<T> > : 
+class dbg_iter<std::istreambuf_iterator<T> > :
    public virtual std::istreambuf_iterator<T>,
    public dbg_iter_mixin<std::istreambuf_iterator<T> >
 {

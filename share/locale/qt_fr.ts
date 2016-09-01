@@ -92,9 +92,9 @@ Le support audio et vidéo est désactivé.</translation>
 <context>
     <name>Phonon::Gstreamer::MediaObject</name>
     <message>
-        <source>Cannot start playback. 
+        <source>Cannot start playback.
 
-Check your Gstreamer installation and make sure you 
+Check your Gstreamer installation and make sure you
 have libgstreamer-plugins-base installed.</source>
         <translation>Impossible de démarrer la lecture. Verifiez votre installation de Gstreamer et assuez-vousd&apos;avoir installé libgstreamer-plugins-base.</translation>
     </message>

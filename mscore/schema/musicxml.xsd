@@ -11,7 +11,7 @@ http://www.recordare.com/
 This MusicXML™ work is being provided by the copyright holder under the MusicXML Public License Version 3.0, available from:
 
 	http://www.recordare.com/dtds/license.html
-	
+
 This is the W3C XML Schema (XSD) version of the MusicXML 3.0 language. Validation is tightened by moving MusicXML definitions from comments into schema data types and definitions. Character entities and other entity usages that are not supported in W3C XML Schema have been removed. The features of W3C XML Schema make it easier to define variations of the MusicXML format, either via extension or restriction.
 
 This file defines the MusicXML 3.0 XSD, including the score-partwise and score-timewise document elements.</xs:documentation>
@@ -34,7 +34,7 @@ This file defines the MusicXML 3.0 XSD, including the score-partwise and score-t
 			<xs:enumeration value="below"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="beam-level">
 		<xs:annotation>
 			<xs:documentation>The MusicXML format supports six levels of beaming, up to 1024th notes. Unlike the number-level type, the beam-level type identifies concurrent beams in a beam group. It does not distinguish overlapping beams such as grace notes within regular notes, or beams used in different voices.</xs:documentation>
@@ -44,10 +44,10 @@ This file defines the MusicXML 3.0 XSD, including the score-partwise and score-t
 			<xs:maxInclusive value="8"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="color">
 		<xs:annotation>
-			<xs:documentation>The color type indicates the color of an element. Color may be represented as hexadecimal RGB triples, as in HTML, or as hexadecimal ARGB tuples, with the A indicating alpha of transparency. An alpha value of 00 is totally transparent; FF is totally opaque. If RGB is used, the A value is assumed to be FF. 
+			<xs:documentation>The color type indicates the color of an element. Color may be represented as hexadecimal RGB triples, as in HTML, or as hexadecimal ARGB tuples, with the A indicating alpha of transparency. An alpha value of 00 is totally transparent; FF is totally opaque. If RGB is used, the A value is assumed to be FF.
 
 For instance, the RGB value "#800080" represents purple. An ARGB value of "#40800080" would be a transparent purple.
 
@@ -57,7 +57,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:pattern value="#[\dA-F]{6}([\dA-F][\dA-F])?"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="comma-separated-text">
 		<xs:annotation>
 			<xs:documentation>The comma-separated-text type is used to specify a comma-separated list of text elements, as is used by the font-family attribute.</xs:documentation>
@@ -66,7 +66,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:pattern value="[^,]+(, ?[^,]+)*"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="css-font-size">
 		<xs:annotation>
 			<xs:documentation>The css-font-size type includes the CSS font sizes used as an alternative to a numeric point size.</xs:documentation>
@@ -88,7 +88,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 		</xs:annotation>
 		<xs:restriction base="xs:decimal"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="enclosure-shape">
 		<xs:annotation>
 			<xs:documentation>The enclosure-shape type describes the shape and presence / absence of an enclosure around text or symbols. A bracket enclosure is similar to a rectangle with the bottom line missing, as is common in jazz notation.</xs:documentation>
@@ -104,7 +104,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="fermata-shape">
 		<xs:annotation>
 			<xs:documentation>The fermata-shape type represents the shape of the fermata sign. The empty value is equivalent to the normal value.</xs:documentation>
@@ -116,14 +116,14 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value=""/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="font-size">
 		<xs:annotation>
 			<xs:documentation>The font-size can be one of the CSS font sizes or a numeric point size.</xs:documentation>
 		</xs:annotation>
 		<xs:union memberTypes="xs:decimal css-font-size"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="font-style">
 		<xs:annotation>
 			<xs:documentation>The font-style type represents a simplified version of the CSS font-style property.</xs:documentation>
@@ -133,7 +133,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="italic"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="font-weight">
 		<xs:annotation>
 			<xs:documentation>The font-weight type represents a simplified version of the CSS font-weight property.</xs:documentation>
@@ -143,7 +143,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="bold"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="left-center-right">
 		<xs:annotation>
 			<xs:documentation>The left-center-right type is used to define horizontal alignment and text justification.</xs:documentation>
@@ -154,7 +154,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="left-right">
 		<xs:annotation>
 			<xs:documentation>The left-right type is used to indicate whether one element appears to the left or the right of another element.</xs:documentation>
@@ -164,7 +164,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="line-shape">
 		<xs:annotation>
 			<xs:documentation>The line-shape type distinguishes between straight and curved lines.</xs:documentation>
@@ -174,7 +174,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="curved"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="line-type">
 		<xs:annotation>
 			<xs:documentation>The line-type type distinguishes between solid, dashed, dotted, and wavy lines.</xs:documentation>
@@ -186,7 +186,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="wavy"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="midi-16">
 		<xs:annotation>
 			<xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16.</xs:documentation>
@@ -196,7 +196,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="16"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="midi-128">
 		<xs:annotation>
 			<xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 128.</xs:documentation>
@@ -206,7 +206,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="128"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="midi-16384">
 		<xs:annotation>
 			<xs:documentation>The midi-16 type is used to express MIDI 1.0 values that range from 1 to 16,384.</xs:documentation>
@@ -216,7 +216,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="16384"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="mute">
 		<xs:annotation>
 			<xs:documentation>The mute type represents muting for different instruments, including brass, winds, and strings. The on and off values are used for undifferentiated mutes. The remaining values represent specific mutes.</xs:documentation>
@@ -239,7 +239,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="palm"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="non-negative-decimal">
 		<xs:annotation>
 			<xs:documentation>The non-negative-decimal type specifies a non-negative decimal value.</xs:documentation>
@@ -248,7 +248,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:minInclusive value="0"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="number-level">
 		<xs:annotation>
 			<xs:documentation>Slurs, tuplets, and many other features can be concurrent and overlapping within a single musical part. The number-level type distinguishes up to six concurrent objects of the same type. A reading program should be prepared to handle cases where the number-levels stop in an arbitrary order. Different numbers are needed when the features overlap in MusicXML document order. When a number-level value is implied, the value is 1 by default.</xs:documentation>
@@ -258,7 +258,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="6"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="number-of-lines">
 		<xs:annotation>
 			<xs:documentation>The number-of-lines type is used to specify the number of lines in text decoration attributes.</xs:documentation>
@@ -268,7 +268,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="3"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="number-or-normal">
 		<xs:annotation>
 			<xs:documentation>The number-or-normal values can be either a decimal number or the string "normal". This is used by the line-height and letter-spacing attributes.</xs:documentation>
@@ -281,7 +281,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="over-under">
 		<xs:annotation>
 			<xs:documentation>The over-under type is used to indicate whether the tips of curved lines such as slurs and ties are overhand (tips down) or underhand (tips up).</xs:documentation>
@@ -291,7 +291,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="under"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="percent">
 		<xs:annotation>
 			<xs:documentation>The percent type specifies a percentage from 0 to 100.</xs:documentation>
@@ -301,7 +301,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="100"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="positive-decimal">
 		<xs:annotation>
 			<xs:documentation>The positive-decimal type specifies a positive decimal value.</xs:documentation>
@@ -310,7 +310,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:minExclusive value="0"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="positive-divisions">
 		<xs:annotation>
 			<xs:documentation>The positive-divisions type restricts divisions values to positive numbers.</xs:documentation>
@@ -319,7 +319,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:minExclusive value="0"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="positive-integer-or-empty">
 		<xs:annotation>
 			<xs:documentation>The positive-integer-or-empty values can be either a positive integer or an empty string.</xs:documentation>
@@ -332,7 +332,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="rotation-degrees">
 		<xs:annotation>
 			<xs:documentation>The rotation-degrees type specifies rotation, pan, and elevation values in degrees. Values range from -180 to 180.</xs:documentation>
@@ -342,7 +342,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:maxInclusive value="180"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="semi-pitched">
 		<xs:annotation>
 			<xs:documentation>The semi-pitched type represents categories of indefinite pitch for percussion instruments.</xs:documentation>
@@ -356,7 +356,7 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="very-low"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="start-note">
 		<xs:annotation>
 			<xs:documentation>The start-note type describes the starting note of trills and mordents for playback, relative to the current note.</xs:documentation>
@@ -367,11 +367,11 @@ As in SVG 1.1, colors are defined in terms of the sRGB color space (IEC 61966).<
 			<xs:enumeration value="below"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="start-stop">
 		<xs:annotation>
 			<xs:documentation>The start-stop type is used for an attribute of musical elements that can either start or stop, such as tuplets.
-									
+
 The values of start and stop refer to how an element appears in musical score order, not in MusicXML document order. An element with a stop attribute may precede the corresponding element with a start attribute within a MusicXML document. This is particularly common in multi-staff music. For example, the stopping point for a tuplet may appear in staff 1 before the starting point for the tuplet appears in staff 2 later in the document.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
@@ -383,7 +383,7 @@ The values of start and stop refer to how an element appears in musical score or
 	<xs:simpleType name="start-stop-continue">
 		<xs:annotation>
 			<xs:documentation>The start-stop-continue type is used for an attribute of musical elements that can either start or stop, but also need to refer to an intermediate point in the symbol, as for complex slurs or for formatting of symbols across system breaks.
-						
+
 The values of start, stop, and continue refer to how an element appears in musical score order, not in MusicXML document order. An element with a stop attribute may precede the corresponding element with a start attribute within a MusicXML document. This is particularly common in multi-staff music. For example, the stopping point for a slur may appear in staff 1 before the starting point for the slur appears in staff 2 later in the document.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
@@ -403,7 +403,7 @@ The values of start, stop, and continue refer to how an element appears in music
 			<xs:enumeration value="single"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="string-number">
 		<xs:annotation>
 			<xs:documentation>The string-number type indicates a string number. Strings are numbered from high to low, with 1 being the highest pitched string.</xs:documentation>
@@ -461,7 +461,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="bottom"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="trill-beats">
 		<xs:annotation>
 			<xs:documentation>The trill-beats type specifies the beats used in a trill-sound or bend-sound attribute group. It is a decimal value with a minimum value of 2.</xs:documentation>
@@ -470,7 +470,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:minInclusive value="2"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="trill-step">
 		<xs:annotation>
 			<xs:documentation>The trill-step type describes the alternating note of trills and mordents for playback, relative to the current note.</xs:documentation>
@@ -481,7 +481,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="unison"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="two-note-turn">
 		<xs:annotation>
 			<xs:documentation>The two-note-turn type describes the ending notes of trills and mordents for playback, relative to the current note.</xs:documentation>
@@ -492,7 +492,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="up-down">
 		<xs:annotation>
 			<xs:documentation>The up-down type is used for the direction of arrows and other pointed symbols like vertical accents, indicating which way the tip is pointing.</xs:documentation>
@@ -512,7 +512,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="inverted"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="valign">
 		<xs:annotation>
 			<xs:documentation>The valign type is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text. Defaults are implementation-dependent.</xs:documentation>
@@ -524,7 +524,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="baseline"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="valign-image">
 		<xs:annotation>
 			<xs:documentation>The valign-image type is used to indicate vertical alignment for images and graphics, so it does not include a baseline value. Defaults are implementation-dependent.</xs:documentation>
@@ -535,7 +535,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="bottom"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="yes-no">
 		<xs:annotation>
 			<xs:documentation>The yes-no type is used for boolean-like attributes. We cannot use W3C XML Schema booleans due to their restrictions on expression of boolean values.</xs:documentation>
@@ -561,9 +561,9 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:pattern value="[^:Z]*"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<!-- Simple types derived from attributes.mod entities and elements -->
-	
+
 	<xs:simpleType name="cancel-location">
 		<xs:annotation>
 			<xs:documentation>The cancel-location type is used to indicate where a key signature cancellation appears relative to a new key signature: to the left, to the right, or before the barline and to the left. It is left by default. For mid-measure key elements, a cancel-location of before-barline should be treated like a cancel-location of left.</xs:documentation>
@@ -574,7 +574,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="before-barline"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="clef-sign">
 		<xs:annotation>
 			<xs:documentation>The clef-sign element represents the different clef symbols. The jianpu sign indicates that the music that follows should be in jianpu numbered notation, just as the TAB sign indicates that the music that follows should be in tablature notation. Unlike TAB, a jianpu sign does not correspond to a visual clef notation.</xs:documentation>
@@ -589,21 +589,21 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="fifths">
 		<xs:annotation>
 			<xs:documentation>The fifths type represents the number of flats or sharps in a traditional key signature. Negative numbers are used for flats and positive numbers for sharps, reflecting the key's placement within the circle of fifths (hence the type name).</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:integer"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="mode">
 		<xs:annotation>
 			<xs:documentation>The mode type is used to specify major/minor and other mode distinctions. Valid mode values include major, minor, dorian, phrygian, lydian, mixolydian, aeolian, ionian, locrian, and none.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="show-frets">
 		<xs:annotation>
 			<xs:documentation>The show-frets type indicates whether to show tablature frets as numbers (0, 1, 2) or letters (a, b, c). The default choice is numbers.</xs:documentation>
@@ -613,21 +613,21 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="letters"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="staff-line">
 		<xs:annotation>
 			<xs:documentation>The staff-line type indicates the line on a given staff. Staff lines are numbered from bottom to top, with 1 being the bottom line on a staff. Staff line values can be used to specify positions outside the staff, such as a C clef positioned in the middle of a grand staff.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:integer"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="staff-number">
 		<xs:annotation>
 			<xs:documentation>The staff-number type indicates staff numbers within a multi-staff part. Staves are numbered from top to bottom, with 1 being the top staff on a part.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:positiveInteger"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="staff-type">
 		<xs:annotation>
 			<xs:documentation>The staff-type value can be ossia, cue, editorial, regular, or alternate. An alternate staff indicates one that shares the same musical data as the prior staff, but displayed differently (e.g., treble and bass clef, standard notation and tab).</xs:documentation>
@@ -640,7 +640,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="alternate"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="time-relation">
 		<xs:annotation>
 			<xs:documentation>The time-relation type indicates the symbol used to represent the interchangeable aspect of dual time signatures.</xs:documentation>
@@ -654,7 +654,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="hyphen"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="time-separator">
 		<xs:annotation>
 			<xs:documentation>The time-separator type indicates how to display the arrangement between the beats and beat-type values in a time signature. The default value is none. The horizontal, diagonal, and vertical values represent horizontal, diagonal lower-left to upper-right, and vertical lines respectively. For these values, the beats and beat-type values are arranged on either side of the separator line. The none value represents no separator with the beats and beat-type arranged vertically. The adjacent value represents no separator with the beats and beat-type arranged horizontally.</xs:documentation>
@@ -667,7 +667,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="adjacent"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="time-symbol">
 		<xs:annotation>
 			<xs:documentation>The time-symbol type indicates how to display a time signature. The normal value is the usual fractional display, and is the implied symbol type if none is specified. Other options are the common and cut time symbols, as well as a single number with an implied denominator. The note symbol indicates that the beat-type should be represented with the corresponding downstem note rather than a number. The dotted-note symbol indicates that the beat-type should be represented with a dotted downstem note that corresponds to three times the beat-type value, and a numerator that is one third the beats value.</xs:documentation>
@@ -681,9 +681,9 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="normal"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<!-- Simple types derived from barline.mod elements -->
-	
+
 	<xs:simpleType name="backward-forward">
 		<xs:annotation>
 			<xs:documentation>The backward-forward type is used to specify repeat directions. The start of the repeat has a forward direction while the end of the repeat has a backward direction.</xs:documentation>
@@ -693,7 +693,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="forward"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="bar-style">
 		<xs:annotation>
 			<xs:documentation>The bar-style type represents barline style information. Choices are regular, dotted, dashed, heavy, light-light, light-heavy, heavy-light, heavy-heavy, tick (a short stroke through the top line), short (a partial barline between the 2nd and 4th lines), and none.</xs:documentation>
@@ -712,7 +712,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="ending-number">
 		<xs:annotation>
 			<xs:documentation>The ending-number type is used to specify either a comma-separated list of positive integers without leading zeros, or a string of zero or more spaces. It is used for the number attribute of the ending element. The zero or more spaces version is used when software knows that an ending is present, but cannot determine the type of the ending.</xs:documentation>
@@ -721,7 +721,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:pattern value="([ ]*)|([1-9][0-9]*(, ?[1-9][0-9]*)*)"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="right-left-middle">
 		<xs:annotation>
 			<xs:documentation>The right-left-middle type is used to specify barline location.</xs:documentation>
@@ -732,7 +732,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="middle"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="start-stop-discontinue">
 		<xs:annotation>
 			<xs:documentation>The start-stop-discontinue type is used to specify ending types. Typically, the start type is associated with the left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not conclude a piece.</xs:documentation>
@@ -743,7 +743,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="discontinue"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="winged">
 		<xs:annotation>
 			<xs:documentation>The winged attribute indicates whether the repeat has winged extensions that appear above and below the barline. The straight and curved values represent single wings, while the double-straight and double-curved values represent double wings. The none value indicates no wings and is the default.</xs:documentation>
@@ -758,7 +758,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 	</xs:simpleType>
 
 <!-- Simple types derived from direction.mod elements -->
-	
+
 	<xs:simpleType name="accordion-middle">
 		<xs:annotation>
 			<xs:documentation>The accordion-middle type may have values of 1, 2, or 3, corresponding to having 1 to 3 dots in the middle section of the accordion registration symbol.</xs:documentation>
@@ -768,7 +768,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:maxInclusive value="3"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="beater-value">
 		<xs:annotation>
 			<xs:documentation>The beater-value type represents pictograms for beaters, mallets, and sticks that do not have different materials represented in the pictogram. The finger and hammer values are in addition to Stone's list.</xs:documentation>
@@ -793,7 +793,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="wire brush"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="degree-symbol-value">
 		<xs:annotation>
 			<xs:documentation>The degree-symbol-value type indicates indicates that a symbol should be used in specifying the degree.</xs:documentation>
@@ -806,7 +806,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="half-diminished"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="degree-type-value">
 		<xs:annotation>
 			<xs:documentation>The degree-type-value type indicates whether the current degree element is an addition, alteration, or subtraction to the kind of the current chord in the harmony element.</xs:documentation>
@@ -817,7 +817,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="subtract"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="effect">
 		<xs:annotation>
 			<xs:documentation>The effect type represents pictograms for sound effect percussion instruments. The cannon value is in addition to Stone's list.</xs:documentation>
@@ -839,7 +839,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="wind whistle"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="glass">
 		<xs:annotation>
 			<xs:documentation>The glass type represents pictograms for glass percussion instruments.</xs:documentation>
@@ -848,7 +848,7 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="wind chimes"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="harmony-type">
 		<xs:annotation>
 			<xs:documentation>The harmony-type type differentiates different types of harmonies when alternate harmonies are possible. Explicit harmonies have all note present in the music; implied have some notes missing but implied; alternate represents alternate analyses.</xs:documentation>
@@ -859,11 +859,11 @@ Distances in a MusicXML file are measured in tenths of staff space. Tenths are t
 			<xs:enumeration value="alternate"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="kind-value">
 		<xs:annotation>
 			<xs:documentation>A kind-value indicates the type of chord. Degree elements can then add, subtract, or alter from these starting points. Values include:
-	
+
 Triads:
 	major (major third, perfect fifth)
 	minor (minor third, perfect fifth)
@@ -904,7 +904,7 @@ Other:
 	pedal (pedal-point bass)
 	power (perfect fifth)
 	Tristan
-	
+
 The "other" kind is used when the harmony is entirely composed of add elements. The "none" kind is used to explicitly encode absence of chords or functional harmony.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
@@ -943,7 +943,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="line-end">
 		<xs:annotation>
 			<xs:documentation>The line-end type specifies if there is a jog up or down (or both), an arrow, or nothing at the start or end of a bracket.</xs:documentation>
@@ -956,7 +956,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="measure-numbering-value">
 		<xs:annotation>
 			<xs:documentation>The measure-numbering-value type describes how measure numbers are displayed on this part: no numbers, numbers every measure, or numbers every system.</xs:documentation>
@@ -967,7 +967,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="system"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="membrane">
 		<xs:annotation>
 			<xs:documentation>The membrane type represents pictograms for membrane percussion instruments. The goblet drum value is in addition to Stone's list.</xs:documentation>
@@ -987,7 +987,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="tomtom"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="metal">
 		<xs:annotation>
 			<xs:documentation>The metal type represents pictograms for metal percussion instruments. The hi-hat value refers to a pictogram like Stone's high-hat cymbals but without the long vertical line at the bottom.</xs:documentation>
@@ -1018,7 +1018,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="Vietnamese hat"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="on-off">
 		<xs:annotation>
 			<xs:documentation>The on-off type is used for notation elements such as string mutes.</xs:documentation>
@@ -1028,7 +1028,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="off"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="pitched">
 		<xs:annotation>
 			<xs:documentation>The pitched type represents pictograms for pitched percussion instruments. The chimes and tubular chimes values distinguish the single-line and double-line versions of the pictogram. The mallet value is in addition to Stone's list.</xs:documentation>
@@ -1043,7 +1043,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="xylophone"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="principal-voice-symbol">
 		<xs:annotation>
 			<xs:documentation>The principal-voice-symbol type represents the type of symbol used to indicate the start of a principal or secondary voice. The "plain" value represents a plain square bracket. The value of "none" is used for analysis markup when the principal-voice element does not have a corresponding appearance in the score.</xs:documentation>
@@ -1055,7 +1055,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="start-stop-change-continue">
 		<xs:annotation>
 			<xs:documentation>The start-stop-change-continue type is used to distinguish types of pedal directions.</xs:documentation>
@@ -1067,7 +1067,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="continue"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="tip-direction">
 		<xs:annotation>
 			<xs:documentation>The tip-direction type represents the direction in which the tip of a stick or beater points, using Unicode arrow terminology.</xs:documentation>
@@ -1083,7 +1083,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="southwest"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="stick-location">
 		<xs:annotation>
 			<xs:documentation>The stick-location type represents pictograms for the location of sticks, beaters, or mallets on cymbals, gongs, drums, and other instruments.</xs:documentation>
@@ -1095,7 +1095,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="cymbal edge"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="stick-material">
 		<xs:annotation>
 			<xs:documentation>The stick-material type represents the material being displayed in a stick pictogram.</xs:documentation>
@@ -1108,7 +1108,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="x"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="stick-type">
 		<xs:annotation>
 			<xs:documentation>The stick-type type represents the shape of pictograms where the material
@@ -1122,7 +1122,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="yarn"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="up-down-stop-continue">
 		<xs:annotation>
 			<xs:documentation>The up-down-stop-continue type is used for octave-shift elements, indicating the direction of the shift from their true pitched values because of printing difficulty.</xs:documentation>
@@ -1134,7 +1134,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="continue"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="wedge-type">
 		<xs:annotation>
 			<xs:documentation>The wedge type is crescendo for the start of a wedge that is closed at the left side, diminuendo for the start of a wedge that is closed on the right side, and stop for the end of a wedge. The continue type is used for formatting wedges over a system break, or for other situations where a single wedge is divided into multiple segments.</xs:documentation>
@@ -1146,7 +1146,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="continue"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="wood">
 		<xs:annotation>
 			<xs:documentation>The wood type represents pictograms for wood percussion instruments. The maraca and maracas values distinguish the one- and two-maraca versions of the pictogram. The vibraslap and castanets values are in addition to Stone's list.</xs:documentation>
@@ -1168,9 +1168,9 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="wood block"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<!-- Simple types derived from layout.mod elements -->
-	
+
 	<xs:simpleType name="distance-type">
 		<xs:annotation>
 		<xs:documentation>The distance-type defines what type of distance is being defined in a distance element. Values include beam and hyphen. This is left as a string so that other application-specific types can be defined, but it is made a separate type so that it can be redefined more strictly.</xs:documentation>
@@ -1202,7 +1202,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 		</xs:annotation>
 		<xs:restriction base="xs:decimal"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="note-size-type">
 		<xs:annotation>
 			<xs:documentation>The note-size-type type indicates the type of note being defined by a note-size element. The grace type is used for notes of cue size that that include a grace element. The cue type is used for all other notes with cue size, whether defined explicitly or implicitly via a cue element. The large type is used for notes of large size.</xs:documentation>
@@ -1215,7 +1215,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 	</xs:simpleType>
 
 	<!-- Simple types derived from note.mod elements -->
-	
+
 	<xs:simpleType name="accidental-value">
 		<xs:annotation>
 			<xs:documentation>The accidental-value type represents notated accidentals supported by MusicXML. In the MusicXML 2.0 DTD this was a string with values that could be included. The XSD strengthens the data typing to an enumerated list. The quarter- and three-quarters- accidentals are Tartini-style quarter-tone accidentals. The -down and -up accidentals are quarter-tone accidentals that include arrows pointing down or up. The slash- accidentals are used in Turkish classical music. The numbered sharp and flat accidentals are superscripted versions of the accidental signs, used in Turkish folk music. The sori and koron accidentals are microtonal sharp and flat accidentals used in Iranian and Persian music.</xs:documentation>
@@ -1257,7 +1257,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="koron"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="arrow-direction">
 		<xs:annotation>
 			<xs:documentation>The arrow-direction type represents the direction in which an arrow points, using Unicode arrow terminology.</xs:documentation>
@@ -1278,7 +1278,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="other"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="arrow-style">
 		<xs:annotation>
 			<xs:documentation>The arrow-style type represents the style of an arrow, using Unicode arrow terminology. Filled and hollow arrows indicate polygonal single arrows. Paired arrows are duplicate single arrows in the same direction. Combined arrows apply to double direction arrows like left right, indicating that an arrow in one direction should be combined with an arrow in the other direction.</xs:documentation>
@@ -1293,7 +1293,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="other"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="beam-value">
 		<xs:annotation>
 			<xs:documentation>The beam-value type represents the type of beam associated with each of 8 beam levels (up to 1024th notes) available for each note.</xs:documentation>
@@ -1306,7 +1306,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="backward hook"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="breath-mark-value">
 		<xs:annotation>
 			<xs:documentation>The breath-mark-value type represents the symbol used for a breath mark.</xs:documentation>
@@ -1317,7 +1317,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="tick"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="circular-arrow">
 		<xs:annotation>
 			<xs:documentation>The circular-arrow type represents the direction in which a circular arrow points, using Unicode arrow terminology.</xs:documentation>
@@ -1327,7 +1327,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="anticlockwise"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="fan">
 		<xs:annotation>
 			<xs:documentation>The fan type represents the type of beam fanning present on a note, used to represent accelerandos and ritardandos.</xs:documentation>
@@ -1338,7 +1338,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="handbell-value">
 		<xs:annotation>
 			<xs:documentation>The handbell-value type represents the type of handbell technique being notated.</xs:documentation>
@@ -1357,7 +1357,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="swing"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="hole-closed-location">
 		<xs:annotation>
 			<xs:documentation>The hole-closed-location type indicates which portion of the hole is filled in when the corresponding hole-closed-value is half.</xs:documentation>
@@ -1369,7 +1369,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="top"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="hole-closed-value">
 		<xs:annotation>
 			<xs:documentation>The hole-closed-value type represents whether the hole is closed, open, or half-open.</xs:documentation>
@@ -1380,7 +1380,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="half"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="note-type-value">
 		<xs:annotation>
 			<xs:documentation>The note-type type is used for the MusicXML type element and represents the graphic note type, from 1024th (shortest) to maxima (longest).</xs:documentation>
@@ -1402,7 +1402,7 @@ The "other" kind is used when the harmony is entirely composed of add elements. 
 			<xs:enumeration value="maxima"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="notehead-value">
 		<xs:annotation>
 			<xs:documentation>
@@ -1439,7 +1439,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="ti"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="octave">
 		<xs:annotation>
 			<xs:documentation>Octaves are represented by the numbers 0 to 9, where 4 indicates the octave started by middle C.</xs:documentation>
@@ -1449,14 +1449,14 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:maxInclusive value="9"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="semitones">
 		<xs:annotation>
 			<xs:documentation>The semitones type is a number representing semitones, used for chromatic alteration. A value of -1 corresponds to a flat and a value of 1 to a sharp. Decimal values like 0.5 (quarter tone sharp) are used for microtones.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:decimal"/>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="show-tuplet">
 		<xs:annotation>
 			<xs:documentation>The show-tuplet type indicates whether to show a part of a tuplet relating to the tuplet-actual element, both the tuplet-actual and tuplet-normal elements, or neither.</xs:documentation>
@@ -1467,7 +1467,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="stem-value">
 		<xs:annotation>
 			<xs:documentation>The stem type represents the notated stem direction.</xs:documentation>
@@ -1479,7 +1479,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="step">
 		<xs:annotation>
 			<xs:documentation>The step type represents a step of the diatonic scale, represented using the English letters A through G.</xs:documentation>
@@ -1494,7 +1494,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="G"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="syllabic">
 		<xs:annotation>
 			<xs:documentation>Lyric hyphenation is indicated by the syllabic type. The single, begin, end, and middle values represent single-syllable words, word-beginning syllables, word-ending syllables, and mid-word syllables, respectively.</xs:documentation>
@@ -1506,7 +1506,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="middle"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="tremolo-marks">
 		<xs:annotation>
 			<xs:documentation>The number of tremolo marks is represented by a number from 0 to 8: the same as beam-level with 0 added.</xs:documentation>
@@ -1516,9 +1516,9 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:maxInclusive value="8"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<!-- Simple types derived from score.mod elements -->
-	
+
 	<xs:simpleType name="group-barline-value">
 		<xs:annotation>
 			<xs:documentation>The group-barline-value type indicates if the group should have common barlines.</xs:documentation>
@@ -1529,7 +1529,7 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="Mensurstrich"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="group-symbol-value">
 		<xs:annotation>
 			<xs:documentation>The group-symbol-value type indicates how the symbol for a group is indicated in the score. The default value is none.</xs:documentation>
@@ -1542,13 +1542,13 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 			<xs:enumeration value="square"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<!-- Attribute groups derived from common.mod elements -->
-	
+
 	<xs:attributeGroup name="bend-sound">
 		<xs:annotation>
 			<xs:documentation>The bend-sound type is used for bend and slide elements, and is similar to the trill-sound attribute group. Here the beats element refers to the number of discrete elements (like MIDI pitch bends) used to represent a continuous bend or slide. The first-beat indicates the percentage of the direction for starting a bend; the last-beat the percentage for ending it. The default choices are:
-	
+
 	accelerate = "no"
 	beats = "4"
 	first-beat = "25"
@@ -1559,15 +1559,15 @@ The arrow shapes differ from triangle and inverted triangle by being centered on
 		<xs:attribute name="first-beat" type="percent"/>
 		<xs:attribute name="last-beat" type="percent"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="bezier">
 		<xs:annotation>
 			<xs:documentation>The bezier attribute group is used to indicate the curvature of slurs and ties, representing the control points for a cubic bezier curve. For ties, the bezier attribute group is used with the tied element.
 
 Normal slurs, S-shaped slurs, and ties need only two bezier points: one associated with the start of the slur or tie, the other with the stop. Complex slurs and slurs divided over system breaks can specify additional bezier data at slur elements with a continue type.
-	
+
 The bezier-offset, bezier-x, and bezier-y attributes describe the outgoing bezier point for slurs and ties with a start type, and the incoming bezier point for slurs and ties with types of stop or continue. The attributes bezier-offset2, bezier-x2, and bezier-y2 are only valid with slurs of type continue, and describe the outgoing bezier point.
-	
+
 The bezier-offset and bezier-offset2 attributes are measured in terms of musical divisions, like the offset element. These are the recommended attributes for specifying horizontal position. The other attributes are specified in tenths, relative to any position settings associated with the slur or tied element.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="bezier-offset" type="divisions"/>
@@ -1577,7 +1577,7 @@ The bezier-offset and bezier-offset2 attributes are measured in terms of musical
 		<xs:attribute name="bezier-x2" type="tenths"/>
 		<xs:attribute name="bezier-y2" type="tenths"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="color">
 		<xs:annotation>
 			<xs:documentation>The color attribute group indicates the color of an element.</xs:documentation>
@@ -1588,7 +1588,7 @@ The bezier-offset and bezier-offset2 attributes are measured in terms of musical
 	<xs:attributeGroup name="dashed-formatting">
 		<xs:annotation>
 			<xs:documentation>The dashed-formatting entity represents the length of dashes and spaces in a dashed line. Both the dash-length and space-length attributes are represented in tenths. These attributes are ignored if the corresponding line-type attribute is not dashed.</xs:documentation>
-		</xs:annotation>	
+		</xs:annotation>
 		<xs:attribute name="dash-length" type="tenths"/>
 		<xs:attribute name="space-length" type="tenths"/>
 	</xs:attributeGroup>
@@ -1599,7 +1599,7 @@ The bezier-offset and bezier-offset2 attributes are measured in terms of musical
 		</xs:annotation>
 		<xs:attribute name="directive" type="yes-no"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="document-attributes">
 		<xs:annotation>
 			<xs:documentation>The document-attributes attribute group is used to specify the attributes for an entire MusicXML document. Currently this is used for the version attribute.
@@ -1608,14 +1608,14 @@ The version attribute was added in Version 1.1 for the score-partwise and score-
 		</xs:annotation>
 		<xs:attribute name="version" type="xs:token" default="1.0"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="enclosure">
 		<xs:annotation>
 			<xs:documentation>The enclosure attribute group is used to specify the formatting of an enclosure around text or symbols.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="enclosure" type="enclosure-shape"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="font">
 		<xs:annotation>
 			<xs:documentation>The font attribute group gathers together attributes for determining the font within a credit or direction. They are based on the text styles for Cascading Style Sheets. The font-family is a comma-separated list of font names. These can be specific font styles such as Maestro or Opus, or one of several generic font styles: music, engraved, handwritten, text, serif, sans-serif, handwritten, cursive, fantasy, and monospace. The music, engraved, and handwritten values refer to music fonts; the rest refer to text fonts. The fantasy style refers to decorative text such as found in older German-style printing. The font-style can be normal or italic. The font-size can be one of the CSS sizes (xx-small, x-small, small, medium, large, x-large, xx-large) or a numeric point size. The font-weight can be normal or bold. The default is application-dependent, but is a text font vs. a music font.</xs:documentation>
@@ -1625,7 +1625,7 @@ The version attribute was added in Version 1.1 for the score-partwise and score-
 		<xs:attribute name="font-size" type="font-size"/>
 		<xs:attribute name="font-weight" type="font-weight"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="halign">
 		<xs:annotation>
 			<xs:documentation>In cases where text extends over more than one line, horizontal alignment and justify values can be different. The most typical case is for credits, such as:
@@ -1639,21 +1639,21 @@ The halign attribute is used in these situations. If it is not present, its valu
 		</xs:annotation>
 		<xs:attribute name="halign" type="left-center-right"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="justify">
 		<xs:annotation>
 			<xs:documentation>The justify attribute is used to indicate left, center, or right justification. The default value varies for different elements. For elements where the justify attribute is present but the halign attribute is not, the justify attribute indicates horizontal alignment as well as justification.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="justify" type="left-center-right"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="letter-spacing">
 		<xs:annotation>
 			<xs:documentation>The letter-spacing attribute specifies text tracking. Values are either "normal" or a number representing the number of ems to add between each letter. The number may be negative in order to subtract space. The default is normal, which allows flexibility of letter-spacing for purposes of text justification.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="letter-spacing" type="number-or-normal"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="level-display">
 		<xs:annotation>
 			<xs:documentation>The level-display attribute group specifies three common ways to indicate editorial indications: putting parentheses or square brackets around a symbol, or making the symbol a different size. If not specified, they are left to application defaults. It is used by the level and accidental elements.</xs:documentation>
@@ -1662,45 +1662,45 @@ The halign attribute is used in these situations. If it is not present, its valu
 		<xs:attribute name="bracket" type="yes-no"/>
 		<xs:attribute name="size" type="symbol-size"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="line-height">
 		<xs:annotation>
 			<xs:documentation>The line-height attribute specifies text leading. Values are either "normal" or a number representing the percentage of the current font height to use for leading. The default is "normal". The exact normal value is implementation-dependent, but values between 100 and 120 are recommended.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="line-height" type="number-or-normal"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="line-shape">
 		<xs:annotation>
 			<xs:documentation>The line-shape attribute distinguishes between straight and curved lines.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="line-shape" type="line-shape"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="line-type">
 		<xs:annotation>
 			<xs:documentation>The line-type attribute distinguishes between solid, dashed, dotted, and wavy lines.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="line-type" type="line-type"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="orientation">
 		<xs:annotation>
 			<xs:documentation>The orientation attribute indicates whether slurs and ties are overhand (tips down) or underhand (tips up). This is distinct from the placement attribute used by any notation type.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="orientation" type="over-under"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="placement">
 		<xs:annotation>
 			<xs:documentation>The placement attribute indicates whether something is above or below another element, such as a note or a notation.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="placement" type="above-below"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="position">
 		<xs:annotation>
-			<xs:documentation>The position attributes are based on MuseData print suggestions. For most elements, any program will compute a default x and y position. The position attributes let this be changed two ways. 
+			<xs:documentation>The position attributes are based on MuseData print suggestions. For most elements, any program will compute a default x and y position. The position attributes let this be changed two ways.
 
 The default-x and default-y attributes change the computation of the default position. For most elements, the origin is changed relative to the left-hand side of the note or the musical position within the bar (x) and the top line of the staff (y).
 
@@ -1724,7 +1724,7 @@ For the note, figured-bass, and harmony elements, the default-x value is conside
 Since the credit-words and credit-image elements are not related to a measure, in these cases the default-x and default-y attributes adjust the origin relative to the bottom left-hand corner of the specified page.
 
 The relative-x and relative-y attributes change the position relative to the default position, either as computed by the individual program, or as overridden by the default-x and default-y attributes.
-	
+
 Positive x is right, negative x is left; positive y is up, negative y is down. All units are in tenths of interline space. For stems, positive relative-y lengthens a stem while negative relative-y shortens it.
 
 The default-x and default-y position attributes provide higher-resolution positioning data than related features such as the placement attribute and the offset element. Applications reading a MusicXML file that can understand both features should generally rely on the default-x and default-y attributes for their greater accuracy. For the relative-x and relative-y attributes, the offset element, placement attribute, and directive attribute provide context for the relative position information, so the two features should be interpreted together.
@@ -1736,21 +1736,21 @@ As elsewhere in the MusicXML format, tenths are the global tenths defined by the
 		<xs:attribute name="relative-x" type="tenths"/>
 		<xs:attribute name="relative-y" type="tenths"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="print-object">
 		<xs:annotation>
 			<xs:documentation>The print-object attribute specifies whether or not to print an object (e.g. a note or a rest). It is yes by default.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="print-object" type="yes-no"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="print-spacing">
 		<xs:annotation>
 			<xs:documentation>The print-spacing attribute controls whether or not spacing is left for an invisible note or object. It is used only if no note, dot, or lyric is being printed. The value is yes (leave spacing) by default.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="print-spacing" type="yes-no"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="print-style">
 		<xs:annotation>
 			<xs:documentation>The print-style attribute group collects the most popular combination of printing attributes: position, font, and color.</xs:documentation>
@@ -1759,7 +1759,7 @@ As elsewhere in the MusicXML format, tenths are the global tenths defined by the
 		<xs:attributeGroup ref="font"/>
 		<xs:attributeGroup ref="color"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="print-style-align">
 		<xs:annotation>
 			<xs:documentation>The print-style-align attribute group adds the halign and valign attributes to the position, font, and color attributes.</xs:documentation>
@@ -1768,7 +1768,7 @@ As elsewhere in the MusicXML format, tenths are the global tenths defined by the
 		<xs:attributeGroup ref="halign"/>
 		<xs:attributeGroup ref="valign"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="printout">
 		<xs:annotation>
 			<xs:documentation>The printout attribute group collects the different controls over printing an object (e.g. a note or rest) and its parts, including augmentation dots and lyrics. This is especially useful for notes that overlap in different voices, or for chord sheets that contain lyrics and chords but no melody.
@@ -1780,7 +1780,7 @@ By default, all these attributes are set to yes. If print-object is set to no, t
 		<xs:attributeGroup ref="print-spacing"/>
 		<xs:attribute name="print-lyric" type="yes-no"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="text-decoration">
 		<xs:annotation>
 			<xs:documentation>The text-decoration attribute group is based on the similar feature in XHTML and CSS. It allows for text to be underlined, overlined, or struck-through. It extends the CSS version by allow double or triple lines instead of just being on or off.</xs:documentation>
@@ -1789,14 +1789,14 @@ By default, all these attributes are set to yes. If print-object is set to no, t
 		<xs:attribute name="overline" type="number-of-lines"/>
 		<xs:attribute name="line-through" type="number-of-lines"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="text-direction">
 		<xs:annotation>
 			<xs:documentation>The text-direction attribute is used to adjust and override the Unicode bidirectional text algorithm, similar to the W3C Internationalization Tag Set recommendation.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="dir" type="text-direction"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="text-formatting">
 		<xs:annotation>
 			<xs:documentation>The text-formatting attribute group collects the common formatting attributes for text elements. Default values may differ across the elements that use this group.</xs:documentation>
@@ -1812,28 +1812,28 @@ By default, all these attributes are set to yes. If print-object is set to no, t
 		<xs:attributeGroup ref="text-direction"/>
 		<xs:attributeGroup ref="enclosure"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="text-rotation">
 		<xs:annotation>
 			<xs:documentation>The rotation attribute is used to rotate text around the alignment point specified by the halign and valign attributes. Positive values are clockwise rotations, while negative values are counter-clockwise rotations.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="rotation" type="rotation-degrees"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="trill-sound">
 		<xs:annotation>
 			<xs:documentation>The trill-sound attribute group includes attributes used to guide the sound of trills, mordents, turns, shakes, and wavy lines, based on MuseData sound suggestions. The default choices are:
-	
+
 	start-note = "upper"
 	trill-step = "whole"
 	two-note-turn = "none"
 	accelerate = "no"
 	beats = "4".
-	
+
 Second-beat and last-beat are percentages for landing on the indicated beat, with defaults of 25 and 75 respectively.
-	
+
 For mordent and inverted-mordent elements, the defaults are different:
-	
+
 	The default start-note is "main", not "upper".
 	The default for beats is "3", not "4".
 	The default for second-beat is "12", not "25".
@@ -1847,21 +1847,21 @@ For mordent and inverted-mordent elements, the defaults are different:
 		<xs:attribute name="second-beat" type="percent"/>
 		<xs:attribute name="last-beat" type="percent"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="valign">
 		<xs:annotation>
 			<xs:documentation>The valign attribute is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text. Defaults are implementation-dependent.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="valign" type="valign"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="valign-image">
 		<xs:annotation>
 			<xs:documentation>The valign-image attribute is used to indicate vertical alignment for images and graphics, so it removes the baseline value. Defaults are implementation-dependent.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="valign" type="valign-image"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="x-position">
 		<xs:annotation>
 			<xs:documentation>The x-position attribute group is used for elements like notes where specifying x position is common, but specifying y position is rare.</xs:documentation>
@@ -1871,7 +1871,7 @@ For mordent and inverted-mordent elements, the defaults are different:
 		<xs:attribute name="relative-x" type="tenths"/>
 		<xs:attribute name="relative-y" type="tenths"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="y-position">
 		<xs:annotation>
 			<xs:documentation>The y-position attribute group is used for elements like stems where specifying y position is common, but specifying x position is rare.</xs:documentation>
@@ -1881,9 +1881,9 @@ For mordent and inverted-mordent elements, the defaults are different:
 		<xs:attribute name="relative-x" type="tenths"/>
 		<xs:attribute name="relative-y" type="tenths"/>
 	</xs:attributeGroup>
-	
+
 	<!-- Attribute groups derived from direction.mod elements -->
-	
+
 	<xs:attributeGroup name="image-attributes">
 		<xs:annotation>
 			<xs:documentation>The image-attributes group is used to include graphical images in a score. The required source attribute is the URL for the image file. The required type attribute is the MIME type for the image file format. Typical choices include application/postscript, image/gif, image/jpeg, image/png, and image/tiff.</xs:documentation>
@@ -1894,7 +1894,7 @@ For mordent and inverted-mordent elements, the defaults are different:
 		<xs:attributeGroup ref="halign"/>
 		<xs:attributeGroup ref="valign-image"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="print-attributes">
 		<xs:annotation>
 			<xs:documentation>The print-attributes group is used by the print element. The new-system and new-page attributes indicate whether to force a system or page break, or to force the current music onto the same system or page as the preceding music. Normally this is the first music data within a measure. If used in multi-part music, they should be placed in the same positions within each part, or the results are undefined. The page-number attribute sets the number of a new page; it is ignored if new-page is not "yes". Version 2.0 adds a blank-page attribute. This is a positive integer value that specifies the number of blank pages to insert before the current measure. It is ignored if new-page is not "yes". These blank pages have no music, but may have text or images specified by the credit element. This is used to allow a combination of pages that are all text, or all text and images, together with pages of music.
@@ -1907,9 +1907,9 @@ The staff-spacing attribute specifies spacing between multiple staves in tenths 
 		<xs:attribute name="blank-page" type="xs:positiveInteger"/>
 		<xs:attribute name="page-number" type="xs:token"/>
 	</xs:attributeGroup>
-	
+
 	<!-- Attribute groups derived from link.mod entities and elements -->
-	
+
 	<xs:attributeGroup name="element-position">
 		<xs:annotation>
 			<xs:documentation>The element and position attributes are new as of Version 2.0. They allow for bookmarks and links to be positioned at higher resolution than the level of music-data elements. When no element and position attributes are present, the bookmark or link element refers to the next sibling element in the MusicXML file. The element attribute specifies an element type for a descendant of the next sibling element that is not a link or bookmark. The position attribute specifies the position of this descendant element, where the first position is 1. The position attribute is ignored if the element attribute is not present. For instance, an element value of "beam" and a position value of "2" defines the link or bookmark to refer to the second beam descendant of the next sibling element that is not a link or bookmark. This is equivalent to an XPath test of [.//beam[2]] done in the context of the sibling element.</xs:documentation>
@@ -1930,9 +1930,9 @@ The staff-spacing attribute specifies spacing between multiple staves in tenths 
 		<xs:attribute ref="xlink:show" default="replace"/>
 		<xs:attribute ref="xlink:actuate" default="onRequest"/>
 	</xs:attributeGroup>
-	
+
 	<!-- Attribute groups derived from score.mod elements -->
-	
+
 	<xs:attributeGroup name="group-name-text">
 		<xs:annotation>
 			<xs:documentation>The group-name-text attribute group is used by the group-name and group-abbreviation elements. The print-style and justify attribute groups are deprecated in MusicXML 2.0 in favor of the new group-name-display and group-abbreviation-display elements.</xs:documentation>
@@ -1944,10 +1944,10 @@ The staff-spacing attribute specifies spacing between multiple staves in tenths 
 	<xs:attributeGroup name="measure-attributes">
 		<xs:annotation>
 			<xs:documentation>The measure-attributes group is used by the measure element. Measures have a required number attribute (going from partwise to timewise, measures are grouped via the number).
-	
+
 The implicit attribute is set to "yes" for measures where the measure number should never appear, such as pickup measures and the last half of mid-measure repeats. The value is "no" if not specified.
-	
-The non-controlling attribute is intended for use in multimetric music like the Don Giovanni minuet. If set to "yes", the left barline in this measure does not coincide with the left barline of measures in other parts. The value is "no" if not specified. 
+
+The non-controlling attribute is intended for use in multimetric music like the Don Giovanni minuet. If set to "yes", the left barline in this measure does not coincide with the left barline of measures in other parts. The value is "no" if not specified.
 
 In partwise files, the number attribute should be the same for measures in different parts that share the same left barline. While the number attribute is often numeric, it does not have to be. Non-numeric values are typically used together with the implicit or non-controlling attributes being set to "yes". For a pickup measure, the number attribute is typically set to "0" and the implicit attribute is typically set to "yes". Further details about measure numbering can be defined using the measure-numbering element.
 
@@ -1958,14 +1958,14 @@ Measure width is specified in tenths. These are the global tenths specified in t
 		<xs:attribute name="non-controlling" type="yes-no"/>
 		<xs:attribute name="width" type="tenths"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="part-attributes">
 		<xs:annotation>
 			<xs:documentation>In either partwise or timewise format, the part element has an id attribute that is an IDREF back to a score-part in the part-list.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:IDREF" use="required"/>
 	</xs:attributeGroup>
-	
+
 	<xs:attributeGroup name="part-name-text">
 		<xs:annotation>
 			<xs:documentation>The part-name-text attribute group is used by the part-name and part-abbreviation elements. The print-style and justify attribute groups are deprecated in MusicXML 2.0 in favor of the new part-name-display and part-abbreviation-display elements.</xs:documentation>
@@ -1974,7 +1974,7 @@ Measure width is specified in tenths. These are the global tenths specified in t
 		<xs:attributeGroup ref="print-object"/>
 		<xs:attributeGroup ref="justify"/>
 	</xs:attributeGroup>
-	
+
 	<!-- Complex types derived from common.mod entities and elements -->
 
 	<xs:complexType name="accidental-text">
@@ -1991,7 +1991,7 @@ Measure width is specified in tenths. These are the global tenths specified in t
 	<xs:complexType name="dynamics">
 		<xs:annotation>
 			<xs:documentation>Dynamics can be associated either with a note or a general musical direction. To avoid inconsistencies between and amongst the letter abbreviations for dynamics (what is sf vs. sfz, standing alone or with a trailing dynamic that is not always piano), we use the actual letters as the names of these dynamic elements. The other-dynamics element allows other dynamic marks that are not covered here, but many of those should perhaps be included in a more general musical direction element. Dynamics elements may also be combined to create marks not covered by a single element, such as sfmp.
-	
+
 These letter dynamic symbols are separated from crescendo, decrescendo, and wedge indications. Dynamic representation is inconsistent in scores. Many things are assumed by the composer and left out, such as returns to original dynamics. Systematic representations are quite complex: for example, Humdrum has at least 3 representation formats related to dynamics. The MusicXML format captures what is in the score, but does not try to be optimal for analysis or synthesis of dynamics.</xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -2025,13 +2025,13 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		<xs:attributeGroup ref="text-decoration"/>
 		<xs:attributeGroup ref="enclosure"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="empty">
 		<xs:annotation>
 			<xs:documentation>The empty type represents an empty element with no attributes.</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
-	
+
 	<xs:complexType name="empty-placement">
 		<xs:annotation>
 			<xs:documentation>The empty-placement type represents an empty element with print-style and placement attributes.</xs:documentation>
@@ -2039,21 +2039,21 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		<xs:attributeGroup ref="print-style"/>
 		<xs:attributeGroup ref="placement"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="empty-print-style">
 		<xs:annotation>
 			<xs:documentation>The empty-print-style type represents an empty element with print-style attribute group.</xs:documentation>
 		</xs:annotation>
 		<xs:attributeGroup ref="print-style"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="empty-print-style-align">
 		<xs:annotation>
 			<xs:documentation>The empty-print-style-align type represents an empty element with print-style-align attribute group.</xs:documentation>
 		</xs:annotation>
 		<xs:attributeGroup ref="print-style-align"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="empty-print-object-style-align">
 		<xs:annotation>
 			<xs:documentation>The empty-print-style-align-object type represents an empty element with print-object and print-style-align attribute groups.</xs:documentation>
@@ -2061,7 +2061,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		<xs:attributeGroup ref="print-object"/>
 		<xs:attributeGroup ref="print-style-align"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="empty-trill-sound">
 		<xs:annotation>
 			<xs:documentation>The empty-trill-sound type represents an empty element with print-style, placement, and trill-sound attributes.</xs:documentation>
@@ -2070,7 +2070,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		<xs:attributeGroup ref="placement"/>
 		<xs:attributeGroup ref="trill-sound"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="horizontal-turn">
 		<xs:annotation>
 			<xs:documentation>The horizontal-turn type represents turn elements that are horizontal rather than vertical. These are empty elements with print-style, placement, trill-sound, and slash attributes. If the slash attribute is yes, then a vertical line is used to slash the turn; it is no by default.</xs:documentation>
@@ -2080,7 +2080,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		<xs:attributeGroup ref="trill-sound"/>
 		<xs:attribute name="slash" type="yes-no"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="fermata">
 		<xs:annotation>
 			<xs:documentation>The fermata text content represents the shape of the fermata sign. An empty fermata element represents a normal fermata. The fermata type is upright if not specified.</xs:documentation>
@@ -2117,7 +2117,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="fret">
 		<xs:annotation>
 			<xs:documentation>The fret element is used with tablature notation and chord diagrams. Fret numbers start with 0 for an open string and 1 for the first fret.</xs:documentation>
@@ -2141,7 +2141,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="midi-device">
 		<xs:annotation>
 			<xs:documentation>The midi-device type corresponds to the DeviceName meta event in Standard MIDI Files. The optional port attribute is a number from 1 to 16 that can be used with the unofficial MIDI port (or cable) meta event. Unlike the DeviceName meta event, there can be multiple midi-device elements per MusicXML part starting in MusicXML 3.0. The optional id attribute refers to the score-instrument assigned to this device. If missing, the device assignment affects all score-instrument elements in the score-part.</xs:documentation>
@@ -2215,7 +2215,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		</xs:sequence>
 		<xs:attributeGroup ref="print-object"/>
 	</xs:complexType>
-		
+
 	<xs:complexType name="other-play">
 		<xs:annotation>
 			<xs:documentation>The other-play element represents other types of playback. The required type attribute indicates the type of playback to which the element content applies.</xs:documentation>
@@ -2226,7 +2226,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="play">
 		<xs:annotation>
 			<xs:documentation>The play type, new in Version 3.0, specifies playback techniques to be used in conjunction with the instrument-sound element. When used as part of a sound element, it applies to all notes going forward in score order. In multi-instrument parts, the affected instrument should be specified using the id attribute. When used as part of a note element, it applies to the current note only.</xs:documentation>
@@ -2245,7 +2245,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:IDREF"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="string">
 		<xs:annotation>
 			<xs:documentation>The string type is used with tablature notation, regular notation (where it is often circled), and chord diagrams. String numbers start with 1 for the highest string.</xs:documentation>
@@ -2257,7 +2257,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="typed-text">
 		<xs:annotation>
 			<xs:documentation>The typed-text type represents a text element with a type attributes.</xs:documentation>
@@ -2268,7 +2268,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-		
+
 	<xs:complexType name="wavy-line">
 		<xs:annotation>
 			<xs:documentation>Wavy lines are one way to indicate trills. When used with a measure element, they should always have type="continue" set.</xs:documentation>
@@ -2282,7 +2282,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 	</xs:complexType>
 
 	<!-- Complex types derived from attributes.mod elements -->
-	
+
 	<xs:complexType name="attributes">
 		<xs:annotation>
 			<xs:documentation>The attributes element contains musical information that typically changes on measure boundaries. This includes key and time signatures, clefs, transpositions, and staving. When attributes are changed mid-measure, it affects the music in score order, not in MusicXML document order.</xs:documentation>
@@ -2301,7 +2301,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 					<xs:documentation>The key element represents a key signature. Both traditional and non-traditional key signatures are supported. The optional number attribute refers to staff numbers. If absent, the key signature applies to all staves in the part.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			
+
 			<xs:element name="time" type="time" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Time signatures are represented by the beats element for the numerator and the beat-type element for the denominator.</xs:documentation>
@@ -2370,7 +2370,7 @@ These letter dynamic symbols are separated from crescendo, decrescendo, and wedg
 	<xs:complexType name="beat-repeat">
 		<xs:annotation>
 			<xs:documentation>The beat-repeat type is used to indicate that a single beat (but possibly many notes) is repeated. Both the start and stop of the beat being repeated should be specified. The slashes attribute specifies the number of slashes to use in the symbol. The use-dots attribute indicates whether or not to use dots as well (for instance, with mixed rhythm patterns). By default, the value for slashes is 1 and the value for use-dots is no.
-	
+
 The beat-repeat element specifies a notation style for repetitions. The actual music being repeated needs to be repeated within the MusicXML file. This element specifies the notation that indicates the repeat.</xs:documentation>
 		</xs:annotation>
 		<xs:group ref="slash" minOccurs="0"/>
@@ -2456,7 +2456,7 @@ Clefs appear at the start of each system unless the print-object attribute has b
 		<xs:attributeGroup ref="print-style"/>
 		<xs:attributeGroup ref="print-object"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="key-octave">
 		<xs:annotation>
 			<xs:documentation>The key-octave element specifies in which octave an element of a key signature appears. The content specifies the octave value using the same values as the display-octave element. The number attribute is a positive integer that refers to the key signature element in left-to-right order. If the cancel attribute is set to yes, then this number refers to an element specified by the cancel element. It is no by default.</xs:documentation>
@@ -2472,7 +2472,7 @@ Clefs appear at the start of each system unless the print-object attribute has b
 	<xs:complexType name="measure-repeat">
 		<xs:annotation>
 			<xs:documentation>The measure-repeat type is used for both single and multiple measure repeats. The text of the element indicates the number of measures to be repeated in a single pattern. The slashes attribute specifies the number of slashes to use in the repeat sign. It is 1 if not specified. Both the start and the stop of the measure-repeat must be specified. The text of the element is ignored when the type is stop.
-	
+
 The measure-repeat element specifies a notation style for repetitions. The actual music being repeated needs to be repeated within the MusicXML file. This element specifies the notation that indicates the repeat.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
@@ -2624,7 +2624,7 @@ The print-object attribute allows a time signature to be specified but not print
 		</xs:sequence>
 		<xs:attribute name="number" type="staff-number"/>
 	</xs:complexType>
-	
+
 	<!-- Complex types derived from barline.mod elements -->
 
 	<xs:complexType name="bar-style-color">
@@ -2641,7 +2641,7 @@ The print-object attribute allows a time signature to be specified but not print
 	<xs:complexType name="barline">
 		<xs:annotation>
 			<xs:documentation>If a barline is other than a normal single barline, it should be represented by a barline type that describes it. This includes information about repeats and multiple endings, as well as line style. Barline data is on the same level as the other musical data in a score - a child of a measure in a partwise score, or a part in a timewise score. This allows for barlines within measures, as in dotted barlines that subdivide measures in complex meters. The two fermata elements allow for fermatas on both sides of the barline (the lower one inverted).
-	
+
 Barlines have a location attribute to make it easier to process barlines independently of the other musical data in a score. It is often easier to set up measures separately from entering notes. The location attribute must match where the barline element occurs within the rest of the musical data in the score. If location is left, it should be the first element in the measure, aside from the print, bookmark, and link elements. If location is right, it should be the last element, again with the possible exception of the print, bookmark, and link elements. If no location is specified, the right barline is the default. The segno, coda, and divisions attributes work the same way as in the sound element. They are used for playback when barline elements contain segno or coda child elements.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -2659,11 +2659,11 @@ Barlines have a location attribute to make it easier to process barlines indepen
 		<xs:attribute name="coda" type="xs:token"/>
 		<xs:attribute name="divisions" type="divisions"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="ending">
 		<xs:annotation>
 			<xs:documentation>The ending type represents multiple (e.g. first and second) endings. Typically, the start type is associated with the left barline of the first measure in an ending. The stop and discontinue types are associated with the right barline of the last measure in an ending. Stop is used when the ending mark concludes with a downward jog, as is typical for first endings. Discontinue is used when there is no downward jog, as is typical for second endings that do not conclude a piece. The length of the jog can be specified using the end-length attribute. The text-x and text-y attributes are offsets that specify where the baseline of the start of the ending text appears, relative to the start of the ending line.
-	
+
 The number attribute reflects the numeric values of what is under the ending line. Single endings such as "1" or comma-separated multiple endings such as "1,2" may be used. The ending element text is used when the text displayed in the ending is different than what appears in the number attribute. The print-object element is used to indicate when an ending is present but not printed, as is often the case for many parts in a full score.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
@@ -2689,7 +2689,7 @@ The number attribute reflects the numeric values of what is under the ending lin
 	</xs:complexType>
 
 	<!-- Complex types derived from direction.mod elements -->
-	
+
 	<xs:complexType name="accord">
 		<xs:annotation>
 			<xs:documentation>The accord type represents the tuning of a single string in the scordatura element. It uses the same group of elements as the staff-tuning element. Strings are numbered from high to low.</xs:documentation>
@@ -2729,7 +2729,7 @@ The number attribute reflects the numeric values of what is under the ending lin
 		<xs:attribute name="type" type="start-stop" use="required"/>
 		<xs:attributeGroup ref="color"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="bass">
 		<xs:annotation>
 			<xs:documentation>The bass type is used to indicate a bass note in popular music chord symbols, e.g. G/C. It is generally not used in functional harmony, as inversion is generally not used in pop chord symbols. As with root, it is divided into step and alter elements, similar to pitches.</xs:documentation>
@@ -2804,7 +2804,7 @@ The number attribute reflects the numeric values of what is under the ending lin
 	<xs:complexType name="degree">
 		<xs:annotation>
 			<xs:documentation>The degree type is used to add, alter, or subtract individual notes in the chord. The print-object attribute can be used to keep the degree from printing separately when it has already taken into account in the text attribute of the kind element. The degree-value and degree-type text attributes specify how the value and type of the degree should be displayed.
-	
+
 A harmony of kind "other" can be spelled explicitly by using a series of degree elements together with a root.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -2855,7 +2855,7 @@ A harmony of kind "other" can be spelled explicitly by using a series of degree 
 	<xs:complexType name="direction">
 		<xs:annotation>
 			<xs:documentation>A direction is a musical indication that is not attached to a specific note. Two or more may be combined to indicate starts and stops of wedges, dashes, etc.
-	
+
 By default, a series of direction-type elements and a series of child elements of a direction-type within a single direction element follow one another in sequence visually. For a series of direction-type children, non-positional formatting attributes are carried over from the previous element by default.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -2868,7 +2868,7 @@ By default, a series of direction-type elements and a series of child elements o
 		<xs:attributeGroup ref="placement"/>
 		<xs:attributeGroup ref="directive"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="direction-type">
 		<xs:annotation>
 			<xs:documentation>Textual direction types may have more than 1 component due to multiple fonts. The dynamics element may also be used in the notations element. Attribute groups related to print suggestions apply to the individual direction-type, not to the overall direction.</xs:documentation>
@@ -2992,7 +2992,7 @@ By default, a series of direction-type elements and a series of child elements o
 	<xs:complexType name="grouping">
 		<xs:annotation>
 			<xs:documentation>The grouping type is used for musical analysis. When the type attribute is "start" or "single", it usually contains one or more feature elements. The number attribute is used for distinguishing between overlapping and hierarchical groupings. The member-of attribute allows for easy distinguishing of what grouping elements are in what hierarchy. Feature elements contained within a "stop" type of grouping may be ignored.
-	
+
 This element is flexible to allow for different types of analyses. Future versions of the MusicXML format may add elements that can represent more standardized categories of analysis data, allowing for easier data sharing.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -3006,9 +3006,9 @@ This element is flexible to allow for different types of analyses. Future versio
 	<xs:complexType name="harmony">
 		<xs:annotation>
 			<xs:documentation>The harmony type is based on Humdrum's **harm encoding, extended to support chord symbols in popular music as well as functional harmony analysis in classical music.
-	
-If there are alternate harmonies possible, this can be specified using multiple harmony elements differentiated by type. Explicit harmonies have all note present in the music; implied have some notes missing but implied; alternate represents alternate analyses. 
-	
+
+If there are alternate harmonies possible, this can be specified using multiple harmony elements differentiated by type. Explicit harmonies have all note present in the music; implied have some notes missing but implied; alternate represents alternate analyses.
+
 The harmony object may be used for analysis or for chord symbols. The print-object attribute controls whether or not anything is printed due to the harmony element. The print-frame attribute controls printing of a frame or fretboard diagram. The print-style attribute group sets the default for the harmony, but individual elements can override this with their own print-style values.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -3056,17 +3056,17 @@ The harmony object may be used for analysis or for chord symbols. The print-obje
 	<xs:complexType name="kind">
 		<xs:annotation>
 			<xs:documentation>Kind indicates the type of chord. Degree elements can then add, subtract, or alter from these starting points
-	
+
 The attributes are used to indicate the formatting of the symbol. Since the kind element is the constant in all the harmony-chord groups that can make up a polychord, many formatting attributes are here.
-	
+
 The use-symbols attribute is yes if the kind should be represented when possible with harmony symbols rather than letters and numbers. These symbols include:
-	
+
 	major: a triangle, like Unicode 25B3
 	minor: -, like Unicode 002D
 	augmented: +, like Unicode 002B
 	diminished: °, like Unicode 00B0
 	half-diminished: ø, like Unicode 00F8
-	
+
 For the major-minor kind, only the minor symbol is used when use-symbols is yes. The major symbol is set using the symbol attribute in the degree-value element. The corresponding degree-alter value will usually be 0 in this case.
 
 The text attribute describes how the kind should be spelled in a score. If use-symbols is yes, the value of the text attribute follows the symbol. The stack-degrees attribute is yes if the degree elements should be stacked above each other. The parentheses-degrees attribute is yes if all the degrees should be in parentheses. The bracket-degrees attribute is yes if all the degrees should be in a bracket. If not specified, these values are implementation-specific. The alignment attributes are for the entire harmony-chord group of which this kind element is a part.</xs:documentation>
@@ -3279,7 +3279,7 @@ The text attribute describes how the kind should be spelled in a score. If use-s
 	<xs:complexType name="print">
 		<xs:annotation>
 			<xs:documentation>The print type contains general printing parameters, including the layout elements defined in the layout.mod file. The part-name-display and part-abbreviation-display elements used in the score.mod file may also be used here to change how a part name or abbreviation is displayed over the course of a piece. They take effect when the current measure or a succeeding measure starts a new system.
-	
+
 Layout elements in a print statement only apply to the current page, system, staff, or measure. Music that follows continues to take the default values from the layout included in the defaults element.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -3339,29 +3339,29 @@ Layout elements in a print statement only apply to the current page, system, sta
 	<xs:complexType name="sound">
 		<xs:annotation>
 			<xs:documentation>The sound element contains general playback parameters. They can stand alone within a part/measure, or be a component element within a direction.
-	
+
 Tempo is expressed in quarter notes per minute. If 0, the sound-generating program should prompt the user at the time of compiling a sound (MIDI) file.
-	
+
 Dynamics (or MIDI velocity) are expressed as a percentage of the default forte value (90 for MIDI 1.0).
-	
+
 Dacapo indicates to go back to the beginning of the movement. When used it always has the value "yes".
-	
+
 Segno and dalsegno are used for backwards jumps to a segno sign; coda and tocoda are used for forward jumps to a coda sign. If there are multiple jumps, the value of these parameters can be used to name and distinguish them. If segno or coda is used, the divisions attribute can also be used to indicate the number of divisions per quarter note. Otherwise sound and MIDI generating programs may have to recompute this.
-	
+
 By default, a dalsegno or dacapo attribute indicates that the jump should occur the first time through, while a tocoda attribute indicates the jump should occur the second time through. The time that jumps occur can be changed by using the time-only attribute.
-	
+
 Forward-repeat is used when a forward repeat sign is implied, and usually follows a bar line. When used it always has the value of "yes".
-	
+
 The fine attribute follows the final note or rest in a movement with a da capo or dal segno direction. If numeric, the value represents the actual duration of the final note or rest, which can be ambiguous in written notation and different among parts and voices. The value may also be "yes" to indicate no change to the final duration.
-	
+
 If the sound element applies only particular times through a repeat, the time-only attribute indicates which times to apply the sound element.
-	
+
 Pizzicato in a sound element effects all following notes. Yes indicates pizzicato, no indicates arco.
 
 The pan and elevation attributes are deprecated in Version 2.0. The pan and elevation elements in the midi-instrument element should be used instead. The meaning of the pan and elevation attributes is the same as for the pan and elevation elements. If both are present, the mid-instrument elements take priority.
-	
+
 The damper-pedal, soft-pedal, and sostenuto-pedal attributes effect playback of the three common piano pedals and their MIDI controller equivalents. The yes value indicates the pedal is depressed; no indicates the pedal is released. A numeric value from 0 to 100 may also be used for half pedaling. This value is the percentage that the pedal is depressed. A value of 0 is equivalent to no, and a value of 100 is equivalent to yes.
-	
+
 MIDI devices, MIDI instruments, and playback techniques are changed using the midi-device, midi-instrument, and play elements. When there are multiple instances of these elements, they should be grouped together by instrument using the id attribute values.
 
 The offset element is used to indicate that the sound takes place offset from the current score position. If the sound element is a child of a direction element, the sound offset element overrides the direction offset element if both elements are present. Note that the offset reflects the intended musical position for the change in sound. It should not be used to compensate for latency issues in particular hardware configurations.</xs:documentation>
@@ -3392,7 +3392,7 @@ The offset element is used to indicate that the sound takes place offset from th
 		<xs:attribute name="soft-pedal" type="yes-no-number"/>
 		<xs:attribute name="sostenuto-pedal" type="yes-no-number"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="stick">
 		<xs:annotation>
 			<xs:documentation>The stick type represents pictograms where the material of the stick, mallet, or beater is included.</xs:documentation>
@@ -3411,7 +3411,7 @@ The offset element is used to indicate that the sound takes place offset from th
 		<xs:attribute name="type" type="on-off" use="required"/>
 		<xs:attributeGroup ref="print-style-align"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="wedge">
 		<xs:annotation>
 			<xs:documentation>The wedge type represents crescendo and diminuendo wedge symbols. The type attribute is crescendo for the start of a wedge that is closed at the left side, and diminuendo for the start of a wedge that is closed on the right side. Spread values are measured in tenths; those at the start of a crescendo wedge or end of a diminuendo wedge are ignored. The niente attribute is yes if a circle appears at the point of the wedge, indicating a crescendo from nothing or diminuendo to nothing. It is no by default, and used only when the type is crescendo, or the type is stop for a wedge that began with a diminuendo type. The line-type is solid by default.</xs:documentation>
@@ -3592,7 +3592,7 @@ The offset element is used to indicate that the sound takes place offset from th
 		<xs:group ref="all-margins"/>
 		<xs:attribute name="type" type="margin-type"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="scaling">
 		<xs:annotation>
 			<xs:documentation>Margins, page sizes, and distances are all measured in tenths to keep MusicXML data in a consistent coordinate system as much as possible. The translation to absolute units is done with the scaling type, which specifies how many millimeters are equal to how many tenths. For a staff height of 7 mm, millimeters would be set to 7 while tenths is set to 40. The ability to set a formula rather than a single scaling factor helps avoid roundoff errors.</xs:documentation>
@@ -3628,7 +3628,7 @@ When used in the print element, the system-dividers element affects the dividers
 	<xs:complexType name="system-layout">
 		<xs:annotation>
 			<xs:documentation>A system is a group of staves that are read and played simultaneously. System layout includes left and right margins and the vertical distance from the previous system. The system distance is measured from the bottom line of the previous system to the top line of the current system. It is ignored for the first system on a page. The top system distance is measured from the page's top margin to the top line of the first system. It is ignored for all but the first system on a page.
-	
+
 Sometimes the sum of measure widths in a system may not equal the system width specified by the layout elements due to roundoff or other errors. The behavior when reading MusicXML files in these cases is application-dependent. For instance, applications may find that the system layout data is more reliable than the sum of the measure widths, and adjust the measure widths accordingly.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -3668,7 +3668,7 @@ Sometimes the sum of measure widths in a system may not equal the system width s
 	</xs:complexType>
 
 	<!-- Complex types derived from note.mod elements -->
-	
+
 	<xs:complexType name="accidental">
 		<xs:annotation>
 			<xs:documentation>The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses, brackets, and size are controlled by the level-display attribute group.</xs:documentation>
@@ -3822,7 +3822,7 @@ Sometimes the sum of measure widths in a system may not equal the system width s
 Note that the beam number does not distinguish sets of beams that overlap, as it does for slur and other elements. Beaming groups are distinguished by being in different voices and/or the presence or absence of grace and cue elements.
 
 Beams that have a begin value can also have a fan attribute to indicate accelerandos and ritardandos using fanned beams. The fan attribute may also be used with a continue value if the fanning direction changes on that note. The value is "none" if not specified.
-	
+
 The repeater attribute has been deprecated in MusicXML 3.0. Formerly used for tremolos, it needs to be specified with a "yes" value for each beam using it.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
@@ -3889,7 +3889,7 @@ The repeater attribute has been deprecated in MusicXML 3.0. Formerly used for tr
 		<xs:attributeGroup ref="print-style"/>
 		<xs:attributeGroup ref="placement"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="extend">
 		<xs:annotation>
 			<xs:documentation>The extend type represents lyric word extension / melisma lines as well as figured bass extensions. The optional type and position attributes are added in Version 3.0 to provide better formatting control.</xs:documentation>
@@ -3925,7 +3925,7 @@ The repeater attribute has been deprecated in MusicXML 3.0. Formerly used for tr
 	<xs:complexType name="figured-bass">
 		<xs:annotation>
 			<xs:documentation>The figured-bass element represents figured bass notation. Figured bass elements take their position from the first regular note (not a grace note or chord note) that follows in score order. The optional duration element is used to indicate changes of figures under a note.
-	
+
 Figures are ordered from top to bottom. The value of parentheses is "no" if not present.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -4071,7 +4071,7 @@ Figures are ordered from top to bottom. The value of parentheses is "no" if not 
 		<xs:attributeGroup ref="print-style"/>
 		<xs:attributeGroup ref="placement"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="hole-closed">
 		<xs:annotation>
 			<xs:documentation>The hole-closed type represents whether the hole is closed, open, or half-open. The optional location attribute indicates which portion of the hole is filled in when the element value is half.</xs:documentation>
@@ -4082,7 +4082,7 @@ Figures are ordered from top to bottom. The value of parentheses is "no" if not 
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="instrument">
 		<xs:annotation>
 			<xs:documentation>The instrument type distinguishes between score-instrument elements in a score-part. The id attribute is an IDREF back to the score-instrument ID. If multiple score-instruments are specified on a score-part, there should be an instrument element for each note in the part.</xs:documentation>
@@ -4193,8 +4193,8 @@ Figures are ordered from top to bottom. The value of parentheses is "no" if not 
 
 	<xs:complexType name="note">
 		<xs:annotation>
-			<xs:documentation>Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between elements used for sound information and elements used for notation information (e.g., tie is used for sound, tied for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do forward elements, but no tie elements. Having these two types of information available can make interchange considerably easier, as some programs handle one type of information much more readily than the other. 
-	
+			<xs:documentation>Notes are the most common type of MusicXML data. The MusicXML format keeps the MuseData distinction between elements used for sound information and elements used for notation information (e.g., tie is used for sound, tied for notation). Thus grace notes do not have a duration element. Cue notes have a duration element, as do forward elements, but no tie elements. Having these two types of information available can make interchange considerably easier, as some programs handle one type of information much more readily than the other.
+
 The dynamics and end-dynamics attributes correspond to MIDI 1.0's Note On and Note Off velocities, respectively. They are expressed in terms of percentages of the default forte value (90 for MIDI 1.0). The attack and release attributes are used to alter the starting and stopping time of the note from when it would otherwise occur based on the flow of durations - information that is specific to a performance. They are expressed in terms of divisions, either positive or negative. A note that starts a tie should not have a release attribute, and a note that stops a tie should not have an attack attribute. If a note is played only particular times through a repeat, the time-only attribute shows which times to play the note. The pizzicato attribute is used when just this note is sounded pizzicato, vs. the pizzicato element which changes overall playback between pizzicato and arco.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -4264,9 +4264,9 @@ The dynamics and end-dynamics attributes correspond to MIDI 1.0's Note On and No
 	<xs:complexType name="notehead">
 		<xs:annotation>
 			<xs:documentation>The notehead element indicates shapes other than the open and closed ovals associated with note durations.
-	
+
 For the enclosed shapes, the default is to be hollow for half notes and longer, and filled otherwise. The filled attribute can be set to change this if needed.
-	
+
 If the parentheses attribute is set to yes, the notehead is parenthesized. It is no by default.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
@@ -4290,7 +4290,7 @@ If the parentheses attribute is set to yes, the notehead is parenthesized. It is
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
-	
+
 	<xs:complexType name="ornaments">
 		<xs:annotation>
 			<xs:documentation>Ornaments can be any of several types, followed optionally by accidentals. The accidental-mark element's content is represented the same as an accidental element, but with a different name to reflect the different musical meaning.</xs:documentation>
@@ -4396,7 +4396,7 @@ If the parentheses attribute is set to yes, the notehead is parenthesized. It is
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="rest">
 		<xs:annotation>
 			<xs:documentation>The rest element indicates notated rests or silences. Rest elements are usually empty, but placement on the staff can be specified using display-step and display-octave elements. If the measure attribute is set to yes, this indicates this is a complete measure rest.</xs:documentation>
@@ -4406,7 +4406,7 @@ If the parentheses attribute is set to yes, the notehead is parenthesized. It is
 		</xs:sequence>
 		<xs:attribute name="measure" type="yes-no"/>
 	</xs:complexType>
-	
+
 	<xs:complexType name="slide">
 		<xs:annotation>
 			<xs:documentation>Glissando and slide types both indicate rapidly moving from one pitch to the other so that individual notes are not discerned. The distinction is similar to that between NIFF's glissando and portamento elements. A slide is continuous between two notes and defaults to a solid line. The optional text for a is printed alongside the line.</xs:documentation>
@@ -4471,7 +4471,7 @@ If the parentheses attribute is set to yes, the notehead is parenthesized. It is
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="technical">
 		<xs:annotation>
 			<xs:documentation>Technical indications give performance information for individual instruments.</xs:documentation>
@@ -4661,9 +4661,9 @@ Using repeater beams for indicating tremolos is deprecated as of MusicXML 3.0.</
 	<xs:complexType name="tuplet">
 		<xs:annotation>
 			<xs:documentation>A tuplet element is present when a tuplet is to be displayed graphically, in addition to the sound data provided by the time-modification elements. The number attribute is used to distinguish nested tuplets. The bracket attribute is used to indicate the presence of a bracket. If unspecified, the results are implementation-dependent. The line-shape attribute is used to specify whether the bracket is straight or in the older curved or slurred style. It is straight by default.
-	
-Whereas a time-modification element shows how the cumulative, sounding effect of tuplets and double-note tremolos compare to the written note type, the tuplet element describes how this is displayed. The tuplet element also provides more detailed representation information than the time-modification element, and is needed to represent nested tuplets and other complex tuplets accurately. 
-	
+
+Whereas a time-modification element shows how the cumulative, sounding effect of tuplets and double-note tremolos compare to the written note type, the tuplet element describes how this is displayed. The tuplet element also provides more detailed representation information than the time-modification element, and is needed to represent nested tuplets and other complex tuplets accurately.
+
 The show-number attribute is used to display either the number of actual notes, the number of both actual and normal notes, or neither. It is actual by default. The show-type attribute is used to display either the actual type, both the actual and normal types, or neither. It is none by default.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -4718,7 +4718,7 @@ The show-number attribute is used to display either the number of actual notes, 
 			<xs:element name="tuplet-dot" type="tuplet-dot" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	
+
 	<xs:complexType name="tuplet-type">
 		<xs:annotation>
 			<xs:documentation>The tuplet-type type indicates the graphical note type of the notes for this portion of the tuplet.</xs:documentation>
@@ -4739,15 +4739,15 @@ The show-number attribute is used to display either the number of actual notes, 
 			<xs:group ref="display-step-octave" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-	
+
 	<!-- Complex types derived from score.mod elements -->
 
 	<xs:complexType name="credit">
 		<xs:annotation>
 			<xs:documentation>The credit type represents the appearance of the title, composer, arranger, lyricist, copyright, dedication, and other text and graphics that commonly appears on the first page of a score. The credit-words and credit-image elements are similar to the words and image elements for directions. However, since the credit is not part of a measure, the default-x and default-y attributes adjust the origin relative to the bottom left-hand corner of the first page. The enclosure for credit-words is none by default.
-	
+
 By default, a series of credit-words elements within a single credit element follow one another in sequence visually. Non-positional formatting attributes are carried over from the previous element by default.
-	
+
 The page attribute for the credit element, new in Version 2.0, specifies the page number where the credit should appear. This is an integer value that starts with 1 for the first page. Its value is 1 by default. Since credits occur before the music, these page numbers do not refer to the page numbering specified by the print element's page-number attribute.
 
 The credit-type element, new in Version 3.0, indicates the purpose behind a credit. Multiple types of data may be combined in a single credit, so multiple elements may be used. Standard values include page number, title, subtitle, composer, arranger, lyricist, and rights.
@@ -4856,9 +4856,9 @@ The credit-type element, new in Version 3.0, indicates the purpose behind a cred
 	<xs:complexType name="part-group">
 		<xs:annotation>
 			<xs:documentation>The part-group element indicates groupings of parts in the score, usually indicated by braces and brackets. Braces that are used for multi-staff parts should be defined in the attributes element for that part. The part-group start element appears before the first score-part in the group. The part-group stop element appears after the last score-part in the group.
-	
-The number attribute is used to distinguish overlapping and nested part-groups, not the sequence of groups. As with parts, groups can have a name and abbreviation. Values for the child elements are ignored at the stop of a group. 
-	
+
+The number attribute is used to distinguish overlapping and nested part-groups, not the sequence of groups. As with parts, groups can have a name and abbreviation. Values for the child elements are ignored at the stop of a group.
+
 A part-group element is not needed for a single multi-staff part. By default, multi-staff parts include a brace symbol and (if appropriate given the bar-style) common barlines. The symbol formatting for a multi-staff part can be more fully specified using the part-symbol element.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -4900,7 +4900,7 @@ A part-group element is not needed for a single multi-staff part. By default, mu
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
-	
+
 	<xs:complexType name="part-name">
 		<xs:annotation>
 			<xs:documentation>The part-name type describes the name or abbreviation of a score-part element. Formatting attributes for the part-name element are deprecated in Version 2.0 in favor of the new part-name-display and part-abbreviation-display elements.</xs:documentation>
@@ -4915,7 +4915,7 @@ A part-group element is not needed for a single multi-staff part. By default, mu
 	<xs:complexType name="score-instrument">
 		<xs:annotation>
 			<xs:documentation>The score-instrument type represents a single instrument within a score-part. As with the score-part type, each score-instrument has a required ID attribute, a name, and an optional abbreviation.
-	
+
 A score-instrument type is also required if the score specifies MIDI 1.0 channels, banks, or programs. An initial midi-instrument assignment can also be made here. MusicXML software should be able to automatically assign reasonable channels and instruments without these elements in simple cases, such as where part names match General MIDI instrument names.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -5013,7 +5013,7 @@ A score-instrument type is also required if the score specifies MIDI 1.0 channel
 	</xs:complexType>
 
 	<!-- Element groups derived from common.mod entities and elements -->
-	
+
 	<xs:group name="editorial">
 		<xs:annotation>
 			<xs:documentation>The editorial group specifies editorial information for a musical element.</xs:documentation>
@@ -5204,7 +5204,7 @@ A score-instrument type is also required if the score specifies MIDI 1.0 channel
 	<xs:group name="harmony-chord">
 		<xs:annotation>
 			<xs:documentation>A harmony element can contain many stacked chords (e.g. V of II). A sequence of harmony-chord groups is used for this type of secondary function, where V of II would be represented by a harmony-chord with a V function followed by a harmony-chord with a II function.
-	
+
 A root is a pitch name like C, D, E, where a function is an indication like I, II, III. It is an either/or choice to avoid data inconsistency.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -5313,7 +5313,7 @@ A root is a pitch name like C, D, E, where a function is an indication like I, I
 				<xs:element name="forward" type="forward"/>
 				<xs:element name="direction" type="direction"/>
 				<xs:element name="attributes" type="attributes"/>
-				<xs:element name="harmony" type="harmony"/>				
+				<xs:element name="harmony" type="harmony"/>
 				<xs:element name="figured-bass" type="figured-bass"/>
 				<xs:element name="print" type="print"/>
 				<xs:element name="sound" type="sound"/>

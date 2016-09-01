@@ -92,9 +92,9 @@ Die Audio- und Video-Unterstützung wurde abgeschaltet</translation>
 <context>
     <name>Phonon::Gstreamer::MediaObject</name>
     <message>
-        <source>Cannot start playback. 
+        <source>Cannot start playback.
 
-Check your Gstreamer installation and make sure you 
+Check your Gstreamer installation and make sure you
 have libgstreamer-plugins-base installed.</source>
         <translation>Das Abspielen konnte nicht gestartet werden.
 Bitte prüfen Sie die Gstreamer-Installation und stellen Sie sicher, dass das Paket libgstreamer-plugins-base installiert ist.</translation>

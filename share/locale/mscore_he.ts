@@ -7509,7 +7509,7 @@ You only need to do this once.
 
 Would you like to locate %2 now?</source>
         <translation>‏MuseScore לא מייצא MP3 באופן ישיר, אלא משתמש בספריית LAME.
-עליך להשיג  את הקובץ %1 בנפרד (לפרטים עיין במדריך), ואז למקם את הקובץ בשביל מוזסקור. 
+עליך להשיג  את הקובץ %1 בנפרד (לפרטים עיין במדריך), ואז למקם את הקובץ בשביל מוזסקור.
 אתה צריך לעשות את זה פעם אחת בלבד.
 
 רוצה לחפש את הקובץ %2 עכשיו?</translation>
@@ -10498,8 +10498,8 @@ Save before closing?</source>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="355"/>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
         <translation type="unfinished"/>

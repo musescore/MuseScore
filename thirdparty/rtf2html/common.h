@@ -10,7 +10,7 @@
 
 #include <cmath>
    inline int rint(double f)
-   { 
+   {
       return(f-std::floor(f)<0.5?std::floor(f):std::ceil(f));
    }
 

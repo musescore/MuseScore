@@ -2,23 +2,23 @@
 
     This is RTF to HTML converter version 0.1.0.
     Copyright (C) 2003 Valentin Lavrinenko, vlavrinenko@users.sourceforge.net
-    
-    Its primary purpose is using by developers to add rtf to html 
-    converting functionality to their projects, although, end users 
+
+    Its primary purpose is using by developers to add rtf to html
+    converting functionality to their projects, although, end users
     can also find it useful.
 
     The main effort was made on processing the tables correctly, and it
     seems successful - all other programs I've seen do tables processing
     much worse. Moreover, at the moment, I haven't seen any file that
     displays correctly in MS Word, but crashes this program.
-    
+
     For further information, go to
     http://www.sourceforge.net/projects/rtf2html
 
 
 2.  Copying
 
-    Distributed under LGPL license - see COPYING.LESSER, it must be 
+    Distributed under LGPL license - see COPYING.LESSER, it must be
     in the archive.
 
 
@@ -54,10 +54,10 @@
 	rtf2html -h|--help
 
 	prints the help.
-    
+
         rtf2html [<rtf file> [<html file>]].
-    
-        Converts the file. If either of files is not specified, 
+
+        Converts the file. If either of files is not specified,
 	the corresponding std descriptor (stdin or stdout) is used.
 
     5.2 Supported features
@@ -66,16 +66,16 @@
         - Character formatting: bold, italic, underline, sub- and superscripts.
          NOTE: underlining is displayed only as solid.
         - Paragraph formatting: horizontal alignment, indentation, margins.
-        - Table formatting: arbitrary cell spans, cell sizings, borders, 
+        - Table formatting: arbitrary cell spans, cell sizings, borders,
           vertical alignment in cells.
-         NOTE: borders are displayed correctly only under IE 5+ and only 
+         NOTE: borders are displayed correctly only under IE 5+ and only
                as solid.
         - Page formatting: page width, left margin.
-        - Hexadecimal character codes (Cyrillic letters would come out in 
+        - Hexadecimal character codes (Cyrillic letters would come out in
           win1251)
         - Font faces and sizes.
         - Foreground and background colors, highlighting.
-    
+
     5.3 Unsupported features
 
         This version DOES NOT support the following:
@@ -87,7 +87,7 @@
 
 6.  Compiling notes.
 
-    The source was compiled with 
+    The source was compiled with
     - gcc 3.3 under ALT Linux Master 2.4 on i386
     - gcc 3.4.2 (MinGW) under Win2k
-    
+

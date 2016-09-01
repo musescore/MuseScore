@@ -99,13 +99,13 @@ Al audio- og videosupport er deaktiveret</translation>
 <context>
     <name>Phonon::Gstreamer::MediaObject</name>
     <message>
-        <source>Cannot start playback. 
+        <source>Cannot start playback.
 
-Check your Gstreamer installation and make sure you 
+Check your Gstreamer installation and make sure you
 have libgstreamer-plugins-base installed.</source>
         <translation>Kan ikke starte playback.
 
-Tjek Gstreamer-installationen og kontrollér, at 
+Tjek Gstreamer-installationen og kontrollér, at
 libgstreamer-plugins-base er installeret.</translation>
     </message>
     <message numerus="yes">

@@ -10507,8 +10507,8 @@ Simpan sebelum ditutup?</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="355"/>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
         <translation type="unfinished"/>

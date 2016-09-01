@@ -10499,12 +10499,12 @@ Save before closing?</source>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="355"/>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
-        <translation>Следният файл е заключен: 
-%1 
+        <translation>Следният файл е заключен:
+%1
 
 Try saving to a different location.</translation>
     </message>

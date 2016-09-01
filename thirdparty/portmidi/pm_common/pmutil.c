@@ -75,11 +75,11 @@ PmQueue *Pm_QueueCreate(long num_msgs, long bytes_per_msg)
 PmError Pm_QueueDestroy(PmQueue *q)
 {
     PmQueueRep *queue = (PmQueueRep *) q;
-        
+
     /* arg checking */
-    if (!queue || !queue->buffer || !queue->peek) 
+    if (!queue || !queue->buffer || !queue->peek)
                 return pmBadPtr;
-    
+
     pm_free(queue->peek);
     pm_free(queue->buffer);
     pm_free(queue);
@@ -113,7 +113,7 @@ PmError Pm_Dequeue(PmQueue *q, void *msg)
 
     head = queue->head;
     /* if writer overflows, it writes queue->overflow = tail+1 so that
-     * when the reader gets to that position in the buffer, it can 
+     * when the reader gets to that position in the buffer, it can
      * return the overflow condition to the reader. The problem is that
      * at overflow, things have wrapped around, so tail == head, and the
      * reader will detect overflow immediately instead of waiting until
@@ -121,11 +121,11 @@ PmError Pm_Dequeue(PmQueue *q, void *msg)
      * point where tail == head. So the condition also checks that
      * queue->buffer[head] is zero -- if so, then the buffer is now
      * empty, and we're at the point in the msg stream where overflow
-     * occurred. It's time to signal overflow to the reader. If 
+     * occurred. It's time to signal overflow to the reader. If
      * queue->buffer[head] is non-zero, there's a message there and we
      * should read all the way around the buffer before signalling overflow.
      * There is a write-order dependency here, but to fail, the overflow
-     * field would have to be written while an entire buffer full of 
+     * field would have to be written while an entire buffer full of
      * writes are still pending. I'm assuming out-of-order writes are
      * possible, but not that many.
      */
@@ -136,14 +136,14 @@ PmError Pm_Dequeue(PmQueue *q, void *msg)
 
     /* test to see if there is data in the queue -- test from back
      * to front so if writer is simultaneously writing, we don't
-     * waste time discovering the write is not finished 
+     * waste time discovering the write is not finished
      */
     for (i = queue->msg_size - 1; i >= 0; i--) {
         if (!queue->buffer[head + i]) {
             return pmNoData;
         }
     }
-    memcpy(msg, (char *) &queue->buffer[head + 1], 
+    memcpy(msg, (char *) &queue->buffer[head + 1],
            sizeof(int32) * (queue->msg_size - 1));
     /* fix up zeros */
     i = queue->buffer[head];
@@ -190,7 +190,7 @@ PmError Pm_Enqueue(PmQueue *q, void *msg)
     int32 *ptr;
     int32 *dest;
     int rslt;
-    if (!queue) 
+    if (!queue)
         return pmBadPtr;
     /* no more enqueue until receiver acknowledges overflow */
     if (queue->overflow) return pmBufferOverflow;
@@ -234,7 +234,7 @@ int Pm_QueueEmpty(PmQueue *q)
 int Pm_QueueFull(PmQueue *q)
 {
     int tail;
-    int i; 
+    int i;
     PmQueueRep *queue = (PmQueueRep *) q;
     /* arg checking */
     if (!queue)
@@ -262,7 +262,7 @@ void *Pm_QueuePeek(PmQueue *q)
     if (queue->peek_flag) {
         return queue->peek;
     }
-    /* this is ugly: if peek_overflow is set, then Pm_Dequeue() 
+    /* this is ugly: if peek_overflow is set, then Pm_Dequeue()
      * returns immediately with pmBufferOverflow, but here, we
      * want Pm_Dequeue() to really check for data. If data is
      * there, we can return it
@@ -276,7 +276,7 @@ void *Pm_QueuePeek(PmQueue *q)
         queue->peek_flag = TRUE;
         return queue->peek;
     } else if (rslt == pmBufferOverflow) {
-        /* when overflow is indicated, the queue is empty and the 
+        /* when overflow is indicated, the queue is empty and the
          * first message that was dropped by Enqueue (signalling
          * pmBufferOverflow to its caller) would have been the next
          * message in the queue. Pm_QueuePeek will return NULL, but

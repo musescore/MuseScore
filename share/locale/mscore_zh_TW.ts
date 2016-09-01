@@ -10496,12 +10496,12 @@ Save before closing?</source>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="355"/>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
-        <translation>下列檔案是鎖定了 不能更改: 
-%1 
+        <translation>下列檔案是鎖定了 不能更改:
+%1
 
 請另存別處.</translation>
     </message>
