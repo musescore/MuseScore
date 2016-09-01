@@ -1529,6 +1529,69 @@ QString Text::plainText(bool noSym) const
       return s;
       }
 
+QString Text::manageSpacing(QString t)
+      {
+      QString m;
+      QRegExp rx("<(?=b>)|<(?=/b>)|<(?=i>)|<(?=/i>)|<(?=sub>)|<(?=/sub>)|<(?=sup>)|<(?=/sup>)|<(?=u>)|<(?=/u>)|<(?=sym>)|<(?=/sym>)|<(?=font)");
+      QStringList query = t.split(rx);
+
+      if (query.length() < 2)
+            return t;
+
+      QListIterator<QString> itr(query);
+
+      while (itr.hasNext()) {
+            QString current = itr.next();
+            if (current.length() > 0 && current.contains(">"))
+                  current.push_front("<");
+            QRegExp r2("</b>|</i>|</sub>|</sup>|</sym>");
+            QStringList currentList = current.split(r2);
+
+            if (currentList.length() > 1) {
+                  QString el1 = currentList[1];
+                  if (el1.count(" ") == el1.length() && el1.length() > 0) {
+                        QStringList strip = current.split(el1);
+                        current = strip[0];
+                        current.push_front(el1);
+                        }
+                  }
+            else {
+                  QRegExp r3("</u>");
+                  QStringList handleList = current.split(r3);
+                  if (handleList.length() > 1) {
+                        QString el2 = handleList[1];
+                        if (el2.count(" ") == el2.length() && el2.length() > 0) {
+                              el2.push_front("</u><sup>.");
+                              el2.push_back("</sup>");
+                              current = el2;
+                              }
+                        }
+                  else {
+                        QRegExp r4("<(?=font)");
+                        QRegExp r5("<font.+>");
+                        QStringList fList = current.split(r4);
+                        if (fList.length() > 1) {
+                              QString el3 = fList[1];
+                              if (el3.contains(">"))
+                                    el3.push_front("<");
+                              QStringList gList = el3.split(r5);
+                              if (gList.length() > 1) {
+                                    QString el4 = gList[1];
+                                    if (el4.count(" ") == el4.length() && el4.length() > 0) {
+                                          current = el3.split(el4)[0];
+                                          el4.push_front("<sup>.");
+                                          el4.push_back("</sup>");
+                                          current.append(el4);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            m.append(current);
+            }
+      return m;
+      }
+
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
@@ -1593,8 +1656,8 @@ void Text::endEdit()
 
                   // because we are pushing each individual linked element's old text to the undo stack,
                   // we don't actually need to call the undo version of change property here
-
-                  e->setProperty(P_ID::TEXT, _text);
+                  QString formattedText = manageSpacing(_text);
+                  e->setProperty(P_ID::TEXT, formattedText );
 
                   // the change mentioned previously eliminated the following line, which is where the linked elements actually got their text set
                   // one would think this line alone would be enough to make undo work
