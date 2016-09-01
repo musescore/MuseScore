@@ -275,11 +275,12 @@ class Text : public Element {
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
 
       void startEdit(MuseScoreView*, const QPointF&);
+      QString manageSpacing(QString t);
+
       void endEdit();
       bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&);
 
       void setFormat(FormatId, QVariant);
-
       bool deletePreviousChar();
       bool deleteChar();
       void deleteSelectedText();
