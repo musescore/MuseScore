@@ -92,13 +92,13 @@
 <context>
     <name>Phonon::Gstreamer::MediaObject</name>
     <message>
-        <source>Cannot start playback. 
+        <source>Cannot start playback.
 
-Check your Gstreamer installation and make sure you 
+Check your Gstreamer installation and make sure you
 have libgstreamer-plugins-base installed.</source>
-        <translation>無法開始播放。 
+        <translation>無法開始播放。
 
-檢查您的 Gstreamer 安裝並確認您 
+檢查您的 Gstreamer 安裝並確認您
 有安裝 libgstreamer-plugins-base 。</translation>
     </message>
     <message numerus="yes">

@@ -65,13 +65,13 @@ void loopback_test()
     int shift;
 
     Pt_Start(1, 0, 0);
-    
+
     printf("Connect a midi cable from an output port to an input port.\n");
     printf("This test will send random data via sysex message from output\n");
     printf("to input and check that the correct data was received.\n");
     outp = get_number("Type output device number: ");
     /* Open output with 1ms latency -- when latency is non-zero, the Win32
-       implementation supports sending sysex messages incrementally in a 
+       implementation supports sending sysex messages incrementally in a
        series of buffers. This is nicer than allocating a big buffer for the
        message, and it also seems to work better. Either way works.
      */
@@ -89,7 +89,7 @@ void loopback_test()
     while (1) {
         PmError count;
         long start_time;
-        long error_position = -1; /* 0; -1; -1 for continuous */ 
+        long error_position = -1; /* 0; -1; -1 for continuous */
         long expected = 0;
         long actual = 0;
         /* this modification will run until an error is detected */
@@ -140,10 +140,10 @@ void loopback_test()
                 Sleep(1); /* be nice: give some CPU time to the system */
                 continue; /* continue polling for input */
             }
-            
+
             /* printf("read %lx ", event.message);
                fflush(stdout); */
-            
+
             /* compare 4 bytes of data until you reach an eox */
             for (shift = 0; shift < 32 && (data != MIDI_EOX); shift += 8) {
                 data = (event.message >> shift) & 0xFF;
@@ -156,7 +156,7 @@ void loopback_test()
             }
         }
         if (error_position >= 0) {
-            printf("Error at byte %ld: sent %lx recd %lx\n", error_position, 
+            printf("Error at byte %ld: sent %lx recd %lx\n", error_position,
                    expected, actual);
         } else if (i != len + 2) {
             printf("Error: byte %d not received\n", i);
@@ -186,7 +186,7 @@ void send_multiple_test()
     PtTimestamp stop_time;
 
     Pt_Start(1, 0, 0);
-    
+
     printf("This is for performance testing. You should be sending to this\n");
     printf("program running the receive multiple test. Do NOT send to\n");
     printf("a synthesizer or you risk reprogramming it\n");
@@ -245,7 +245,7 @@ void receive_poll(PtTimestamp timestamp, void *userData)
     int shift;
     int data = 0;
     int i;
-    
+
     if (!receive_poll_running) return; /* wait until midi device is opened */
     shift = 0;
     while (data != MIDI_EOX) {
@@ -254,7 +254,7 @@ void receive_poll(PtTimestamp timestamp, void *userData)
 
         /* compare 4 bytes of data until you reach an eox */
         for (shift = 0; shift < 32 && (data != MIDI_EOX); shift += 8) {
-            receive_msg[receive_msg_index++] = data = 
+            receive_msg[receive_msg_index++] = data =
                 (event.message >> shift) & 0xFF;
             if (receive_msg_index >= MAX_MSG_LEN) {
                 printf("error: incoming sysex too long\n");
@@ -309,7 +309,7 @@ void receive_multiple_test()
 {
     PmError err;
     int inp;
-    
+
     printf("This test expects to receive data sent by the send_multiple test\n");
     printf("The test will check that correct data is received.\n");
 
@@ -337,7 +337,7 @@ void receive_multiple_test()
     if (receive_msg_error) {
         printf("Receive_multiple test encountered an error\n");
     } else {
-        printf("Receive_multiple test successfully received %d sysex messages\n", 
+        printf("Receive_multiple test successfully received %d sysex messages\n",
                receive_msg_messages);
     }
 cleanup:
@@ -385,7 +385,7 @@ void receive_sysex()
     while (data != MIDI_EOX) {
         PmError count;
         count = Pm_Read(midi, &msg, 1);
-        /* CAUTION: this causes busy waiting. It would be better to 
+        /* CAUTION: this causes busy waiting. It would be better to
            be in a polling loop to avoid being compute bound. PortMidi
            does not support a blocking read since this is so seldom
            useful.
@@ -479,7 +479,7 @@ int main()
 {
     int i;
     char line[80];
-    
+
     /* list device information */
     for (i = 0; i < Pm_CountDevices(); i++) {
         const PmDeviceInfo *info = Pm_GetDeviceInfo(i);

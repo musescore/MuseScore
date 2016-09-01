@@ -53,7 +53,7 @@ PtError Pt_Stop();
 */
 int Pt_Started();
 
-/* 
+/*
     Pt_Time() returns the current time in ms.
 */
 PtTimestamp Pt_Time();
@@ -61,7 +61,7 @@ PtTimestamp Pt_Time();
 /*
     Pt_Sleep() pauses, allowing other threads to run.
 
-    duration is the length of the pause in ms. The true duration 
+    duration is the length of the pause in ms. The true duration
     of the pause may be rounded to the nearest or next clock tick
     as determined by resolution in Pt_Start().
 */

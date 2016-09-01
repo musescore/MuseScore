@@ -30,11 +30,11 @@ void pm_free(void *ptr);
 /* if an error occurs while opening or closing a midi stream, set these: */
 extern int pm_hosterror;
 extern char pm_hosterror_text[PM_HOST_ERROR_MSG_LEN];
- 
+
 struct pm_internal_struct;
 
 /* these do not use PmInternal because it is not defined yet... */
-typedef PmError (*pm_write_short_fn)(struct pm_internal_struct *midi, 
+typedef PmError (*pm_write_short_fn)(struct pm_internal_struct *midi,
                                      PmEvent *buffer);
 typedef PmError (*pm_begin_sysex_fn)(struct pm_internal_struct *midi,
                                      PmTimestamp timestamp);
@@ -72,7 +72,7 @@ typedef struct {
     pm_abort_fn abort; /* abort */
     pm_close_fn close; /* close device */
     pm_poll_fn poll;   /* read pending midi events into portmidi buffer */
-    pm_has_host_error_fn has_host_error; /* true when device has had host 
+    pm_has_host_error_fn has_host_error; /* true when device has had host
                                             error message */
     pm_host_error_fn host_error; /* provide text readable host error message
                                     for device (clears and resets) */
@@ -86,7 +86,7 @@ typedef struct {
     PmDeviceInfo pub; /* some portmidi state also saved in here (for autmatic
                          device closing (see PmDeviceInfo struct) */
     void *descriptor; /* ID number passed to win32 multimedia API open */
-    void *internalDescriptor; /* points to PmInternal device, allows automatic 
+    void *internalDescriptor; /* points to PmInternal device, allows automatic
                                  device closing */
     pm_fns_type dictionary;
 } descriptor_node, *descriptor_type;
@@ -100,7 +100,7 @@ typedef unsigned long (*time_get_proc_type)(void *time_info);
 typedef struct pm_internal_struct {
     int device_id; /* which device is open (index to descriptors) */
     short write_flag; /* MIDI_IN, or MIDI_OUT */
-    
+
     PmTimeProcPtr time_proc; /* where to get the time */
     void *time_info; /* pass this to get_time() */
     long buffer_len; /* how big is the buffer or queue? */
@@ -110,12 +110,12 @@ typedef struct pm_internal_struct {
                   /* set to zero to get immediate, simple blocking output */
                   /* if latency is zero, timestamps will be ignored; */
                   /* if midi input device, this field ignored */
-    
+
     int sysex_in_progress; /* when sysex status is seen, this flag becomes
         * true until EOX is seen. When true, new data is appended to the
-        * stream of outgoing bytes. When overflow occurs, sysex data is 
+        * stream of outgoing bytes. When overflow occurs, sysex data is
         * dropped (until an EOX or non-real-timei status byte is seen) so
-        * that, if the overflow condition is cleared, we don't start 
+        * that, if the overflow condition is cleared, we don't start
         * sending data from the middle of a sysex message. If a sysex
         * message is filtered, sysex_in_progress is false, causing the
         * message to be dropped. */
@@ -143,12 +143,12 @@ typedef struct pm_internal_struct {
 
 
 /* defined by system specific implementation, e.g. pmwinmm, used by PortMidi */
-void pm_init(void); 
-void pm_term(void); 
+void pm_init(void);
+void pm_term(void);
 
 /* defined by portMidi, used by pmwinmm */
 PmError none_write_short(PmInternal *midi, PmEvent *buffer);
-PmError none_write_byte(PmInternal *midi, unsigned char byte, 
+PmError none_write_byte(PmInternal *midi, unsigned char byte,
                         PmTimestamp timestamp);
 PmTimestamp none_synchronize(PmInternal *midi);
 

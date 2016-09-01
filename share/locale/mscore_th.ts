@@ -10491,8 +10491,8 @@ Save before closing?</source>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="355"/>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
         <translation type="unfinished"/>
@@ -14131,7 +14131,7 @@ failed: </source>
 Please select a single note or lyrics and retry operation
 </source>
         <translation>ไม่ได้เลือกโน้ตหรือเนื่้อร้อง:
-กรุณาเลือกโน้ตหรือเนื่้อร้องตัวเดียวแล้วลองปฏิบัติการใหม่ 
+กรุณาเลือกโน้ตหรือเนื่้อร้องตัวเดียวแล้วลองปฏิบัติการใหม่
 </translation>
     </message>
     <message>
@@ -14480,7 +14480,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <location filename="../../mscore/importxml.cpp" line="260"/>
         <source>Could not open MusicXML file
 %1</source>
-        <translation>ไม่สามารถเปิดไฟล์ MusicXML 
+        <translation>ไม่สามารถเปิดไฟล์ MusicXML
 %1</translation>
     </message>
     <message>

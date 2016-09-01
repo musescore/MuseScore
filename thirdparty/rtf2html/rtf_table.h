@@ -37,7 +37,7 @@ struct table_cell_def
    bool left_equals(int x) { return x==Left; }
 };
 
-template <class T> 
+template <class T>
 class killing_ptr_vector : public std::vector<T*>
 {
  public:

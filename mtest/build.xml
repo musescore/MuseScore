@@ -3,7 +3,7 @@
   <property name="root.dir"     value="."/>
   <property name="report.dir"     value="${root.dir}/report"/>
   <property name="reporthtml.dir"     value="${root.dir}/report/html"/>
- 
+
   <!-- Create xml report -->
   <target name="report">
     <mkdir dir="${report.dir}"/>
@@ -13,7 +13,7 @@
       </fileset>
     </junitreport>
   </target>
-  
+
   <!-- Create HTML report -->
   <target name="reporthtml">
     <mkdir dir="${report.dir}"/>
@@ -24,7 +24,7 @@
     <report format="frames" todir="${reporthtml.dir}"/>
     </junitreport>
   </target>
-  
+
   <!-- Clean reports -->
   <target name="clean">
     <delete dir="${report.dir}"/>

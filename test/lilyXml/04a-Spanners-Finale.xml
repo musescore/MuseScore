@@ -27,8 +27,8 @@
   <!--=========================================================-->
   <part id="P1">
       <!-- Tested spanners: tuplet, slur(solid, dashed), wedge (cresc, dim),
-           wavy-line, octave-shift (8va,8vb,15ma,15mb), bracket (solid, 
-           dashed up/down, dashes, glissando (wavy), slide (solid), 
+           wavy-line, octave-shift (8va,8vb,15ma,15mb), bracket (solid,
+           dashed up/down, dashes, glissando (wavy), slide (solid),
            pedal (down,up,change; line/Ped*)  -->
     <measure number="1">
       <attributes>

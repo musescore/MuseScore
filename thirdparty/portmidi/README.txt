@@ -28,7 +28,7 @@ ERROR HANDLING
 
 Error handling turned out to be much more complicated than expected.
 PortMidi functions return error codes that the caller can check.
-In addition, errors may occur asynchronously due to MIDI input. 
+In addition, errors may occur asynchronously due to MIDI input.
 However, for Windows, there are virtually no errors that can
 occur if the code is correct and not passing bogus values. One
 exception is an error that the system is out of memory, but my
@@ -40,8 +40,8 @@ Ordinarily, the caller checks for an error code. If the error is
 system-dependent, pmHostError is returned and the caller can
 call Pm_GetHostErrorText to get a text description of the error.
 
-Host error codes are system-specific and are recorded in the 
-system-specific data allocated for each open MIDI port. 
+Host error codes are system-specific and are recorded in the
+system-specific data allocated for each open MIDI port.
 However, if an error occurs on open or close,
 we cannot store the error with the device because there will be
 no device data (assuming PortMidi cleans up after devices that
@@ -57,7 +57,7 @@ overhead even if the user does not want to look at the error data.
 
 The system-specific Read, Write, Poll, etc. implementations should
 check for asynchronous errors and return immediately if one is
-found so that these get reported. This happens in the Mac OS X 
+found so that these get reported. This happens in the Mac OS X
 code, where lots of things are happening in callbacks, but again,
 in Windows, there are no error codes recorded in callbacks.
 
@@ -65,7 +65,7 @@ DEBUGGING
 
 If you are building a console application for research, we suggest
 compiling with the option PM_CHECK_ERRORS. This will insert a
-check for error return values at the end of each PortMidi 
+check for error return values at the end of each PortMidi
 function. If an error is encountered, a text message is printed
 using printf(), the user is asked to type ENTER, and then exit(-1)
 is called to clean up and terminate the program.

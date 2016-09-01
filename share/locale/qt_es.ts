@@ -97,9 +97,9 @@
 <context>
     <name>Phonon::Gstreamer::MediaObject</name>
     <message>
-        <source>Cannot start playback. 
+        <source>Cannot start playback.
 
-Check your Gstreamer installation and make sure you 
+Check your Gstreamer installation and make sure you
 have libgstreamer-plugins-base installed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1189,7 +1189,7 @@ Verique que el nombre del directorio es correcto.</translation>
     <message>
         <source>&apos;%1&apos; is write protected.
 Do you want to delete it anyway?</source>
-        <translation>«%1» está protegido contra escritura. 
+        <translation>«%1» está protegido contra escritura.
 ¿Desea borrarlo de todas formas?</translation>
     </message>
     <message>
@@ -2740,19 +2740,19 @@ Do you want to delete it anyway?</source>
     <message>
         <source>File %1 is not writable.
 Please choose a different file name.</source>
-        <translation>No se puede escribir en el fichero %1. 
+        <translation>No se puede escribir en el fichero %1.
 Elija un nombre de fichero diferente.</translation>
     </message>
     <message>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
-        <translation>%1 ya existe. 
+        <translation>%1 ya existe.
 ¿Desea sobrescribirlo?</translation>
     </message>
     <message>
         <source>%1 is a directory.
 Please choose a different file name.</source>
-        <translation>%1 es un directorio. 
+        <translation>%1 es un directorio.
 Elija un nombre de fichero diferente.</translation>
     </message>
     <message>

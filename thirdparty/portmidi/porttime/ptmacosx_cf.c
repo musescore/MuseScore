@@ -78,7 +78,7 @@ static void* Pt_Thread(void *p)
 
     /* run until we're told to stop by Pt_Stop() */
     CFRunLoopRunInMode(CFSTR("PtTimeMode"), LONG_TIME, false);
-    
+
     CFRunLoopRemoveTimer(CFRunLoopGetCurrent(), timer, CFSTR("PtTimeMode"));
     CFRelease(timer);
     free(params);
@@ -98,11 +98,11 @@ PtError Pt_Start(int resolution, PtCallback *callback, void *userData)
     startTime = CFAbsoluteTimeGetCurrent();
 
     if (callback) {
-    
+
         params->resolution = resolution;
         params->callback = callback;
         params->userData = userData;
-    
+
         pthread_create(&pthread_id, NULL, Pt_Thread, params);
     }
 

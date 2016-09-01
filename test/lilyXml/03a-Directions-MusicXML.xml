@@ -14,8 +14,8 @@
   <part id="P1">
     <!-- Direction type can contain the following child types:
          rehearsal+ | segno+ | words+ |
-         coda+ | wedge | dynamics+ | dashes | bracket | pedal | 
-         metronome | octave-shift | harp-pedals | damp | 
+         coda+ | wedge | dynamics+ | dashes | bracket | pedal |
+         metronome | octave-shift | harp-pedals | damp |
          damp-all | eyeglasses | scordatura | image |
          accordion-registration | other-direction -->
     <!-- Rehearsal marks -->
@@ -138,7 +138,7 @@
     </measure>
     <!-- Dynamics: p | pp | ppp | pppp | ppppp | pppppp |
         f | ff | fff | ffff | fffff | ffffff | mp | mf | sf |
-        sfp | sfpp | fp | rf | rfz | sfz | sffz | fz | 
+        sfp | sfpp | fp | rf | rfz | sfz | sffz | fz |
         other-dynamics -->
     <measure number="3">
       <direction>

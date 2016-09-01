@@ -6,9 +6,9 @@ VFLAGS = -g
 # For debugging, define PM_CHECK_ERRORS
 PMFLAGS = -DPM_CHECK_ERRORS
 # Otherwise do not define PM_CHECK_ERRORS
-# PMFLAGS = 
+# PMFLAGS =
 # Dynamic Lib is built without PM_CHECK_ERRORS
-PMDLFLAGS = 
+PMDLFLAGS =
 # Path for installation of dynamic libraries
 PF = /usr/local
 # Architecture for static libs
@@ -29,7 +29,7 @@ PTSRC = porttime/porttime.c porttime/ptmacosx_mach.c
 pmobjects = pm_common/pmutil.o pm_mac/pmmac.o  \
 	pm_common/portmidi.o pm_mac/pmmacosxcm.o \
 	pm_mac/finddefault.o pm_mac/readbinaryplist.o \
-	porttime/porttime.o porttime/ptmacosx_mach.o 
+	porttime/porttime.o porttime/ptmacosx_mach.o
 
 current: all
 
@@ -86,11 +86,11 @@ pm_test/midithread: pm_mac/Makefile.osx pm_test/midithread.o $(pmlib)
 	$(CC) pm_test/midithread.o -o pm_test/midithread \
         $(pmlib) $(MACLIB)
 
-pm_test/latency: pm_mac/Makefile.osx $(pmlib) pm_test/latency.o 
+pm_test/latency: pm_mac/Makefile.osx $(pmlib) pm_test/latency.o
 	$(CC) pm_test/latency.o -o pm_test/latency $(pmlib) \
         $(MACLIB) -lpthread -lm
 
-pm_test/midithru: pm_mac/Makefile.osx $(pmlib) pm_test/midithru.o 
+pm_test/midithru: pm_mac/Makefile.osx $(pmlib) pm_test/midithru.o
 	$(CC) pm_test/midithru.o -o pm_test/midithru $(pmlib) \
         $(MACLIB) -lpthread -lm
 
@@ -104,7 +104,7 @@ pm_test/qtest: pm_mac/Makefile.osx pm_test/qtest.o $(pmlib)
 	$(CC) pm_test/qtest.o -o pm_test/qtest $(pmlib) $(MACLIB)
 
 clean:
-	rm -f *.o *~ core* */*.o */*~ */core* pm_test/*/pm_dll.dll 
+	rm -f *.o *~ core* */*.o */*~ */core* pm_test/*/pm_dll.dll
 	rm -f *.opt *.ncb *.plg pm_win/Debug/pm_dll.lib pm_win/Release/pm_dll.lib
 	rm -f pm_test/*.opt pm_test/*.ncb
 	rm -f pm_java/pmjni/*.o pm_java/pmjni/*~ pm_java/*.h
