@@ -241,7 +241,7 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
             b = false;
             }
       partList->setEnabled(b);
-      title->setEnabled(b);
+      title->setEnabled(true);
 
       bool flag = excerptList->currentItem() != 0;
       int n = excerptList->count();
