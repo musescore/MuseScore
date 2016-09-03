@@ -23,6 +23,7 @@
 #include "sym.h"
 #include "xml.h"
 #include "undo.h"
+#include "mscore.h"
 
 namespace Ms {
 
@@ -197,7 +198,9 @@ bool TextFragment::operator ==(const TextFragment& f) const
 
 void TextFragment::draw(QPainter* p, const Text* t) const
       {
-      p->setFont(font(t));
+      QFont f(font(t));
+      f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+      p->setFont(f);
       p->drawText(pos, text);
       }
 
@@ -210,8 +213,11 @@ QFont TextFragment::font(const Text* t) const
       QFont font;
 
       qreal m = format.fontSize();
+
       if (t->textStyle().sizeIsSpatiumDependent())
             m *= t->spatium() / SPATIUM20;
+      if (format.valign() != VerticalAlignment::AlignNormal)
+            m *= subScriptSize;
 
       font.setUnderline(format.underline() || format.preedit());
       if (format.type() == CharFormatType::TEXT) {
@@ -230,10 +236,8 @@ QFont TextFragment::font(const Text* t) const
             //font.setStyleStrategy(QFont::NoFontMerging);
             font.setHintingPreference(QFont::PreferVerticalHinting);
             }
-      if (format.valign() != VerticalAlignment::AlignNormal)
-            m *= subScriptSize;
 
-      font.setPixelSize(lrint(m));
+      font.setPointSizeF(m);
       return font;
       }
 
@@ -289,14 +293,14 @@ void TextBlock::layout(Text* t)
                   }
             }
       if (_text.empty()) {
-            QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+            QFontMetricsF fm(t->textStyle().fontPx(t->spatium()), MScore::paintDevice());
             _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
             _lineSpacing = fm.lineSpacing();
             }
       else {
             for (TextFragment& f : _text) {
                   f.pos.setX(x);
-                  QFontMetricsF fm(f.font(t));
+                  QFontMetricsF fm(f.font(t), MScore::paintDevice());
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
                         qreal voffset = fm.xHeight() / subScriptSize;   // use original height
                         if (f.format.valign() == VerticalAlignment::AlignSubScript)
@@ -307,19 +311,8 @@ void TextBlock::layout(Text* t)
                         }
                   else
                         f.pos.setY(0.0);
-                  qreal w = fm.width(f.text);
-                  QRectF r;
-//                  if (f.format.type() == CharFormatType::SYMBOL)
-                        r = fm.tightBoundingRect(f.text);
-//                  else
-//                        r = fm.boundingRect(f.text);
-
-                  // for whatever reason the boundingRect() is different
-                  // on second doLayout() (paint() ?)
-//                  r.setX(0);        //HACK
-//                  r.setWidth(w);
-
-                  _bbox |= r.translated(f.pos);
+                  qreal w  = fm.width(f.text);
+                  _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
                   x += w;
                   // _lineSpacing = (_lineSpacing == 0 || fm.lineSpacing() == 0) ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
                   _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());

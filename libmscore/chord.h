@@ -63,13 +63,6 @@ enum class PlayEventType : char    {
 class Chord : public ChordRest {
       Q_OBJECT
 
-      struct LedgerLineData {
-            int   line;
-            qreal minX, maxX;
-            bool  visible;
-            bool  accidental;
-            };
-
       Q_PROPERTY(Ms::Beam* beam              READ beam)
       Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
       Q_PROPERTY(Ms::Hook* hook              READ hook)

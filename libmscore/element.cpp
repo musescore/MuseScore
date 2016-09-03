@@ -969,30 +969,14 @@ Line::Line(Score* s, bool v)
       }
 
 //---------------------------------------------------------
-//   dump
+//   spatiumChanged
 //---------------------------------------------------------
 
-void Line::dump() const
+void Line::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      qDebug("  width:%g height:%g vert:%d", point(_width), point(_len), vertical);
-      }
-
-//---------------------------------------------------------
-//   setLen
-//---------------------------------------------------------
-
-void Line::setLen(Spatium l)
-      {
-      _len = l;
-      }
-
-//---------------------------------------------------------
-//   setLineWidth
-//---------------------------------------------------------
-
-void Line::setLineWidth(Spatium w)
-      {
-      _width = w;
+      _width = (_width / oldValue) * newValue;
+      _len   = (_len / oldValue) * newValue;
+      layout();
       }
 
 //---------------------------------------------------------
@@ -1001,14 +985,11 @@ void Line::setLineWidth(Spatium w)
 
 void Line::layout()
       {
-      qreal sp = spatium();
-      qreal w  = _width.val() * sp;
-      qreal l  = _len.val() * sp;
-      qreal w2 = w * .5;
+      qreal w2 = _width * .5;
       if (vertical)
-            bbox().setRect(-w2, -w2, w, l + w);
+            bbox().setRect(-w2, -w2, _width, _len + _width);
       else
-            bbox().setRect(-w2, -w2, l + w, w);
+            bbox().setRect(-w2, -w2, _len + _width, _width);
       }
 
 //---------------------------------------------------------
@@ -1017,14 +998,11 @@ void Line::layout()
 
 void Line::draw(QPainter* painter) const
       {
-      qreal sp = spatium();
-      painter->setPen(QPen(curColor(), _width.val() * sp));
-
-      qreal l = _len.val() * sp;
+      painter->setPen(QPen(curColor(), _width));
       if (vertical)
-            painter->drawLine(QLineF(0.0, 0.0, 0.0, l));
+            painter->drawLine(QLineF(0.0, 0.0, 0.0, _len));
       else
-            painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
+            painter->drawLine(QLineF(0.0, 0.0, _len, 0.0));
       }
 
 //---------------------------------------------------------
@@ -1033,8 +1011,8 @@ void Line::draw(QPainter* painter) const
 
 void Line::writeProperties(Xml& xml) const
       {
-      xml.tag("lineWidth", _width.val());
-      xml.tag("lineLen", _len.val());
+      xml.tag("lineWidth", _width / spatium());
+      xml.tag("lineLen", _len / spatium());
       if (!vertical)
             xml.tag("vertical", vertical);
       }
@@ -1048,9 +1026,9 @@ bool Line::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
 
       if (tag == "lineWidth")
-            _width = Spatium(e.readDouble());
+            _width = e.readDouble() * spatium();
       else if (tag == "lineLen")
-            _len = Spatium(e.readDouble());
+            _len = e.readDouble() * spatium();
       else if (tag == "vertical")
             vertical = e.readInt();
       else

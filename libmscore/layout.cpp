@@ -1956,25 +1956,19 @@ qreal Score::computeMinWidth(Segment* s, bool isFirstMeasureInSystem)
       qreal x;
 
       Shape ls;
-      if (s->isChordRestType()) {
-            // x = qMax(s->minLeft() + styleP(StyleIdx::minNoteDistance), styleP(StyleIdx::barNoteDistance));
-            x = s->minLeft() + styleP(StyleIdx::barNoteDistance);
-            }
-      else {
-            if (isFirstMeasureInSystem)
-                  ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // left margin
-            else
-                  ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));      // simulated bar line
-            x = s->minLeft(ls);
-
-            if (s->isClefType())
-                  // x = qMax(x, clefLeftMargin);
-                  x += styleP(StyleIdx::clefLeftMargin);
-            else if (s->isKeySigType())
-                  x = qMax(x, styleP(StyleIdx::keysigLeftMargin));
-            else if (s->isTimeSigType())
-                  x = qMax(x, styleP(StyleIdx::timesigLeftMargin));
-            }
+      if (isFirstMeasureInSystem)
+            ls.add(QRectF(0.0, -1000000.0, 0.0, 2000000.0));   // hard left margin
+      else
+            ls.add(QRectF(0.0, 0.0, 0.0, spatium() * 4));      // simulated bar line
+      x = s->minLeft(ls);
+      if (s->isChordRestType())
+            x += styleP(StyleIdx::barNoteDistance);
+      else if (s->isClefType())
+            x += styleP(StyleIdx::clefLeftMargin);
+      else if (s->isKeySigType())
+            x = qMax(x, styleP(StyleIdx::keysigLeftMargin));
+      else if (s->isTimeSigType())
+            x = qMax(x, styleP(StyleIdx::timesigLeftMargin));
 
       x += s->extraLeadingSpace().val() * spatium();
       bool isSystemHeader = isFirstMeasureInSystem;

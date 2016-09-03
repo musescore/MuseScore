@@ -108,6 +108,7 @@ qreal Shape::left() const
       qreal dist = 0.0;
       for (const QRectF& r : *this) {
             if (r.height() != 0.0 && r.left() < dist)
+            // if (r.left() < dist)
                   dist = r.left();
             }
       return -dist;

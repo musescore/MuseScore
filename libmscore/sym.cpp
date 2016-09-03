@@ -5617,8 +5617,9 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                   font->setFamily(_family);
                   font->setStyleStrategy(QFont::NoFontMerging);
                   font->setHintingPreference(QFont::PreferVerticalHinting);
-                  qreal size = 20.0;
-                  font->setPixelSize(lrint(size));
+                  qreal size = 20.0 * MScore::pixelRatio;
+                  //font->setPixelSize(lrint(size));
+                  font->setPointSize(size);
                   }
             qreal imag = 1.0 / mag;
             painter->scale(mag, mag);
@@ -5635,7 +5636,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
       worldScale      *= pixelRatio;
 //      if (worldScale < 1.0)
 //            worldScale = 1.0;
-      int scale16      = lrint(worldScale * 6553.6 * mag);
+      int scale16      = lrint(worldScale * 6553.6 * mag * DPI_F);
 
       GlyphKey gk(face, id, mag, worldScale, color);
       GlyphPixmap* pm = cache->object(gk);
@@ -5773,8 +5774,9 @@ void ScoreFont::computeMetrics(Sym* sym, int code)
             if (FT_Load_Glyph(face, index, FT_LOAD_DEFAULT) == 0) {
                   FT_BBox bb;
                   if (FT_Outline_Get_BBox(&face->glyph->outline, &bb) == 0) {
+                        constexpr double m = 640.0 / DPI_F;
                         QRectF bbox;
-                        bbox.setCoords(bb.xMin/640.0, -bb.yMax/640.0, bb.xMax/640.0, -bb.yMin/640.0);
+                        bbox.setCoords(bb.xMin/m, -bb.yMax/m, bb.xMax/m, -bb.yMin/m);
                         sym->setIndex(index);
                         sym->setCode(code);
                         sym->setBbox(bbox);

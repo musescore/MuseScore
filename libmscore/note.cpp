@@ -1228,7 +1228,7 @@ void Note::endDrag()
       if (_lineOffset == 0)
             return;
 
-      int staffIdx = chord()->staffIdx() + chord()->staffMove();
+      int staffIdx = chord()->vStaffIdx();
       Staff* staff = score()->staff(staffIdx);
       int tick     = chord()->tick();
 
@@ -1272,12 +1272,10 @@ void Note::endDrag()
             int tpc2 = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
             // undefined for non-tablature staves
             for (Note* nn : tiedNotes()) {
-                  if (nn->pitch() != nPitch)
-                        nn->undoChangeProperty(P_ID::PITCH, nPitch);
-                  if (nn->_tpc[0] != tpc1)
-                        nn->undoChangeProperty(P_ID::TPC1, tpc1);
-                  if (nn->_tpc[1] != tpc2)
-                        nn->undoChangeProperty(P_ID::TPC2, tpc2);
+                  // score()->undoChangePitch(nn, nPitch, tpc1, tpc2);
+                  nn->undoChangeProperty(P_ID::PITCH, nPitch);
+                  nn->undoChangeProperty(P_ID::TPC1, tpc1);
+                  nn->undoChangeProperty(P_ID::TPC2, tpc2);
                   }
             }
       _lineOffset = 0;
