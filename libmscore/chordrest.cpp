@@ -815,6 +815,7 @@ Element* ChordRest::drop(const DropData& data)
                         score()->splitMeasure(this);
                   else {
                         BarLine* bl = toBarLine(e);
+                        bl->setPos(QPointF());
                         bl->setTrack(staffIdx() * VOICES);
                         bl->setGenerated(false);
 
@@ -830,7 +831,7 @@ Element* ChordRest::drop(const DropData& data)
                               if (obl == 0)
                                     obl = l = bl->clone();
                               else
-                                    l = static_cast<BarLine*>(obl->linkedClone());
+                                    l = toBarLine(obl->linkedClone());
                               l->setTrack(st->idx() * VOICES);
                               l->setScore(score);
                               l->setParent(seg);
@@ -841,7 +842,7 @@ Element* ChordRest::drop(const DropData& data)
                   return 0;
 
             case Element::Type::CLEF:
-                  score()->cmdInsertClef(static_cast<Clef*>(e), this);
+                  score()->cmdInsertClef(toClef(e), this);
                   break;
 
             case Element::Type::TIMESIG:
