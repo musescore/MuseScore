@@ -71,8 +71,9 @@ static const int MAX_TAGS = 32;
 
 static constexpr qreal INCH      = 25.4;
 static constexpr qreal PPI       = 72.0;           // printer points per inch
-static constexpr qreal SPATIUM20 = 5.0;
-static constexpr qreal DPI       = 72.0;
+static constexpr qreal DPI_F     = 5;
+static constexpr qreal DPI       = 72.0 * DPI_F;
+static constexpr qreal SPATIUM20 = 5.0 * (DPI / 72.0);
 static constexpr qreal DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES  = 4;
@@ -430,6 +431,21 @@ enum class IconType : signed char {
       };
 
 //---------------------------------------------------------
+//   MPaintDevice
+//---------------------------------------------------------
+
+class MPaintDevice : public QPaintDevice {
+
+   protected:
+      virtual int metric(PaintDeviceMetric m) const;
+
+   public:
+      MPaintDevice() : QPaintDevice() {}
+      virtual QPaintEngine* paintEngine() const;
+      virtual ~MPaintDevice() {}
+      };
+
+//---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
@@ -448,6 +464,8 @@ class MScore : public QObject {
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* _qml;
 #endif
+
+      static MPaintDevice* _paintDevice;
 
    public:
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
@@ -514,6 +532,7 @@ class MScore : public QObject {
       static bool noImages;
 
       static bool pdfPrinting;
+      static double pixelRatio;
 
       static qreal verticalPageGap;
       static qreal horizontalPageGapEven;
@@ -522,6 +541,7 @@ class MScore : public QObject {
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* qml();
 #endif
+      static MPaintDevice* paintDevice();
       virtual void endCmd() { };
       };
 

@@ -163,7 +163,7 @@ QFont TextStyleData::font(qreal _spatium) const
       if (sizeIsSpatiumDependent)
             m *= _spatium / SPATIUM20;
 
-      f.setPointSizeF(m);
+      f.setPointSizeF(m * MScore::pixelRatio);
       return f;
       }
 
@@ -185,7 +185,7 @@ QFont TextStyleData::fontPx(qreal _spatium) const
       if (sizeIsSpatiumDependent)
             m *= _spatium / SPATIUM20;
 
-      f.setPixelSize(lrint(m));
+      f.setPointSize(m * MScore::pixelRatio);
       return f;
       }
 

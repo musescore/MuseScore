@@ -1884,6 +1884,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       {
       cs->setPrinting(true);
       MScore::pdfPrinting = true;
+
       QPdfWriter printerDev(saveName);
       printerDev.setResolution(preferences.exportPdfDpi);
       const PageFormat* pf = cs->pageFormat();
@@ -1899,11 +1900,20 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
             return false;
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
-      double mag = printerDev.logicalDpiX() / DPI;
-      p.scale(mag, mag);
+
+      p.setViewport(QRect(0.0, 0.0, pf->size().width() * printerDev.logicalDpiX(),
+         pf->size().height()*printerDev.logicalDpiY()));
+      p.setWindow(QRect(0.0, 0.0, pf->size().width() * DPI, pf->size().height() * DPI));
+
+      double pr = MScore::pixelRatio;
+      MScore::pixelRatio = DPI / printerDev.logicalDpiX();
+      MScore::pdfPrinting = true;
+
+      // double mag = printerDev.logicalDpiX() / DPI;
+      // p.scale(mag, mag);
 
       const QList<Page*> pl = cs->pages();
-      int pages    = pl.size();
+      int pages = pl.size();
       bool firstPage = true;
       for (int n = 0; n < pages; ++n) {
             if (!firstPage)
@@ -1913,6 +1923,8 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
             }
       p.end();
       cs->setPrinting(false);
+
+      MScore::pixelRatio = pr;
       MScore::pdfPrinting = false;
       return true;
       }
@@ -1943,18 +1955,27 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
-      double mag = printerDev.logicalDpiX() / DPI;
-      p.scale(mag, mag);
+
+      p.setViewport(QRect(0.0, 0.0, pf->size().width() * printerDev.logicalDpiX(),
+         pf->size().height()*printerDev.logicalDpiY()));
+      p.setWindow(QRect(0.0, 0.0, pf->size().width() * DPI, pf->size().height() * DPI));
+
+      double pr = MScore::pixelRatio;
+      MScore::pixelRatio = DPI / printerDev.logicalDpiX();
+      MScore::pdfPrinting = true;
+
+//      double mag = printerDev.logicalDpiX() / DPI;
+//      p.scale(mag, mag);
 
       bool firstPage = true;
       for (Score* s : cs) {
             LayoutMode layoutMode = s->layoutMode();
             if (layoutMode != LayoutMode::PAGE) {
                   s->setLayoutMode(LayoutMode::PAGE);
-                  s->doLayout();
+            //      s->doLayout();
                   }
+            s->doLayout();
             s->setPrinting(true);
-            MScore::pdfPrinting = true;
 
             const PageFormat* pf = s->pageFormat();
             printerDev.setPaperSize(pf->size(), QPrinter::Inch);
@@ -1969,7 +1990,6 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   }
             //reset score
             s->setPrinting(false);
-            MScore::pdfPrinting = false;
 
             if (layoutMode != s->layoutMode()) {
                   s->setLayoutMode(layoutMode);
@@ -1977,6 +1997,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   }
             }
       p.end();
+      MScore::pdfPrinting = false;
+      MScore::pixelRatio = pr;
       return true;
       }
 

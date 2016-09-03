@@ -881,8 +881,8 @@ class StaffLines : public Element {
 class Line : public Element {
       Q_OBJECT
 
-      Spatium _width;
-      Spatium _len;
+      qreal _width;
+      qreal _len;
 
    protected:
       bool vertical;
@@ -892,19 +892,20 @@ public:
       Line(Score*, bool vertical);
       Line &operator=(const Line&);
 
-      virtual Line* clone() const        { return new Line(*this); }
-      virtual Element::Type type() const { return Element::Type::LINE; }
-      virtual void layout();
+      virtual Line* clone() const override        { return new Line(*this); }
+      virtual Element::Type type() const override { return Element::Type::LINE; }
+      virtual void layout() override;
 
-      virtual void draw(QPainter*) const;
+      virtual void draw(QPainter*) const override;
       void writeProperties(Xml& xml) const;
       bool readProperties(XmlReader&);
-      void dump() const;
 
-      Spatium len()    const { return _len; }
-      Spatium lineWidth()  const { return _width; }
-      void setLen(Spatium);
-      void setLineWidth(Spatium);
+      qreal len() const          { return _len;   }
+      qreal lineWidth() const    { return _width; }
+      void setLen(qreal v)       { _len = v;      }
+      void setLineWidth(qreal v) { _width = v;    }
+
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
       };
 
 //---------------------------------------------------------

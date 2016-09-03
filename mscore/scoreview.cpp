@@ -147,8 +147,8 @@ class MagTransition1 : public QEventTransition
       virtual void onTransition(QEvent* e) {
             QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
             QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            bool b1 = me->button() == Qt::LeftButton;
-            ScoreView* c = static_cast<ScoreView*>(eventSource());
+            bool b1         = me->button() == Qt::LeftButton;
+            ScoreView* c    = static_cast<ScoreView*>(eventSource());
             c->zoomStep(b1 ? 2 : -1, me->pos());
             }
    public:
@@ -2171,16 +2171,16 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
             _mag = 0.05;
 
       mscore->setMag(_mag);
-      setMag(_mag * (mscore->physicalDotsPerInch() / DPI));
-      _magIdx = MagIdx::MAG_FREE;
 
+      double m = _mag * mscore->physicalDotsPerInch() / DPI;
+
+      setMag(m);
+
+      _magIdx    = MagIdx::MAG_FREE;
       QPointF p2 = imatrix.map(pos);
       QPointF p3 = p2 - p1;
-
-      double m = _mag;
-
-      int dx    = lrint(p3.x() * m);
-      int dy    = lrint(p3.y() * m);
+      int dx     = lrint(p3.x() * m);
+      int dy     = lrint(p3.y() * m);
 
       constraintCanvas(&dx, &dy);
 
@@ -2230,7 +2230,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 #define PIXELSSTEPSFACTOR 5
 
       QPoint pixelsScrolled = event->pixelDelta();
-      QPoint stepsScrolled = event->angleDelta();
+      QPoint stepsScrolled  = event->angleDelta();
 
       int dx = 0, dy = 0, n = 0;
       qreal nReal = 0.0;

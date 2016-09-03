@@ -537,6 +537,8 @@ MuseScore::MuseScore()
                   guiScaling = 1.0;
             }
 
+      MScore::pixelRatio = DPI / screen->logicalDotsPerInch();
+
       setObjectName("MuseScore");
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
@@ -2490,7 +2492,7 @@ static bool doConvert(Score* cs, QString fn)
             return mscore->saveMidi(cs, fn);
       else if (fn.endsWith(".pdf")) {
             if (!exportScoreParts) {
-                  rv = mscore->savePdf(fn);
+                  rv = mscore->savePdf(cs, fn);
                   }
             else {
                   if (cs->excerpts().size() == 0) {

@@ -55,6 +55,17 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   LedgerLineData
+//---------------------------------------------------------
+
+struct LedgerLineData {
+      int   line;
+      qreal minX, maxX;
+      bool  visible;
+      bool  accidental;
+      };
+
+//---------------------------------------------------------
 //   upNote / downNote
 //---------------------------------------------------------
 
@@ -655,7 +666,7 @@ void Chord::addLedgerLines()
                   delta = -1;
                   }
             for (int i = from; i < n && i >=0 ; i += delta) {
-                  const Note* note = _notes.at(i);
+                  Note* note = _notes.at(i);
                   int l = note->physicalLine();
 
                   // if 1st pass and note not below staff or 2nd pass and note not above staff
@@ -681,19 +692,19 @@ void Chord::addLedgerLines()
 
                   // check if note horiz. pos. is outside current range
                   // if more length on the right, increase range
+//                  note->layout();
                   x = note->pos().x();
-                  if (x-extraLen < minX) {
+                  if (x - extraLen < minX) {
                         minX  = x - extraLen;
-//                        minXr = minX - extraLen;
                         // increase width of all lines between this one and the staff
-                        for (auto& d : vecLines)
+                        for (auto& d : vecLines) {
                               if (!d.accidental && ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) )
                                     d.minX = minX ;
+                              }
                         }
                   // same for left side
-                  if (x+hw+extraLen > maxX) {
+                  if (x + hw + extraLen > maxX) {
                         maxX = x + hw + extraLen;
-//                        maxXr = maxX + extraLen;
                         for (auto& d : vecLines)
                               if ( (l < 0 && d.line >= l) || (l > 0 && d.line <= l) )
                                     d.maxX = maxX;
@@ -736,7 +747,7 @@ void Chord::addLedgerLines()
                         h->setParent(this);
                         h->setTrack(track);
                         h->setVisible(lld.visible && staffVisible);
-                        h->setLen(Spatium( (lld.maxX - lld.minX) / _spatium) );
+                        h->setLen(lld.maxX - lld.minX);
                         h->setPos(lld.minX, lld.line * _spatium * stepDistance);
                         h->setNext(_ledgerLines);
                         _ledgerLines = h;
@@ -1502,7 +1513,7 @@ void Chord::layout2()
             int etrack = strack + VOICES;
 
             for (LedgerLine* h = _ledgerLines; h; h = h->next()) {
-                  Spatium len(h->len());
+                  qreal len = h->len();
                   qreal y   = h->y();
                   qreal x   = h->x();
                   bool found = false;
@@ -1516,15 +1527,15 @@ void Chord::layout2()
                               if (ll->y() != y)
                                     continue;
 
-                              qreal d = cx - ll->measureXPos() - (ll->len().val() * _spatium);
+                              qreal d = cx - ll->measureXPos() - ll->len();
                               if (d < minDist) {
                                     //
                                     // the ledger lines overlap
                                     //
                                     qreal shorten = (minDist - d) * .5;
                                     x   += shorten;
-                                    len -= Spatium(shorten / _spatium);
-                                    ll->setLen(ll->len() - Spatium(shorten / _spatium));
+                                    len -= shorten;
+                                    ll->setLen(ll->len() - shorten);
                                     h->setLen(len);
                                     h->setPos(x, y);
                                     }
@@ -2154,7 +2165,7 @@ void Chord::layoutTablature()
                   ldgLin->setParent(this);
                   ldgLin->setTrack(track());
                   ldgLin->setVisible(_visible);
-                  ldgLin->setLen(Spatium( (headWidth + extraLen) / _spatium) );
+                  ldgLin->setLen(headWidth + extraLen);
                   ldgLin->setPos(llX, llY);
                   ldgLin->setNext(_ledgerLines);
                   _ledgerLines = ldgLin;

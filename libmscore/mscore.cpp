@@ -109,6 +109,9 @@ int     MScore::mtcType;
 bool    MScore::noExcerpts = false;
 bool    MScore::noImages = false;
 bool    MScore::pdfPrinting = false;
+double  MScore::pixelRatio  = 0.8;        // DPI / logicalDPI
+
+MPaintDevice* MScore::_paintDevice;
 
 #ifdef SCRIPT_INTERFACE
 QQmlEngine* MScore::_qml = 0;
@@ -439,6 +442,36 @@ QQmlEngine* MScore::qml()
             }
       return _qml;
       }
+
+//---------------------------------------------------------
+//   paintDevice
+//---------------------------------------------------------
+
+MPaintDevice* MScore::paintDevice()
+      {
+      if (!_paintDevice)
+            _paintDevice = new MPaintDevice();
+      return _paintDevice;
+      }
+
+int MPaintDevice::metric(PaintDeviceMetric m) const
+      {
+      switch (m) {
+            case QPaintDevice::PdmDpiY:
+                  return int(DPI);
+            default:
+                  printf("debug: metric %d\n", int(m));
+                  return 1;
+            }
+      return 0;
+      }
+
+QPaintEngine* MPaintDevice::paintEngine() const
+      {
+      printf("paint engine\n");
+      return 0;
+      }
+
 #endif
 }
 
