@@ -481,12 +481,12 @@ void BarLine::draw(QPainter* painter) const
                   break;
             }
       Segment* s = segment();
-      if (s) {
+      if (s && !score()->printing()) {
             Measure* m = s->measure();
             if (s && s->isEndBarLineType() && m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
                   painter->setPen(MScore::layoutBreakColor);
                   QFont f("FreeSerif");
-                  f.setPointSizeF(12 * spatium() / SPATIUM20);
+                  f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
                   f.setBold(true);
                   QString str = m->len() > m->timesig() ? "+" : "-";
                   QRectF r = QFontMetricsF(f).boundingRect(str);
