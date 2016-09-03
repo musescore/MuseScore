@@ -791,6 +791,7 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::BREATH:
                   {
                   Breath* b = toBreath(e);
+                  b->setPos(QPointF());
                   int track = staffIdx() * VOICES;
                   b->setTrack(track);
 
