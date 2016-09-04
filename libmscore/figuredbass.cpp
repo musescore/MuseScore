@@ -453,29 +453,23 @@ void FiguredBassItem::layout()
 
       // font size in pixels, scaled according to spatium()
       // (use the same font selection as used in draw() below)
-      qreal m = score()->styleD(StyleIdx::figuredBassFontSize);
-      m *= spatium() / SPATIUM20;     // make spatium dependent
-      f.setPixelSize(lrint(m));
-/* USING POINTS RATHER PIXELS MAKES FOR COARSER STEPS IN Qt ROUNDING TO INTEGER FONT SIZES
-      // font size in points, scaled according to spatium()
       qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * spatium() / SPATIUM20;
       f.setPointSizeF(m);
-*/
-      QFontMetrics      fm(f);
+      QFontMetricsF fm(f, MScore::paintDevice());
 
-      QString           str = QString();
-      x = symWidth(SymId::noteheadBlack) * .5;
+      QString str;
+      x  = symWidth(SymId::noteheadBlack) * .5;
       x1 = x2 = 0.0;
 
       // create display text
       int font = 0;
       int style = score()->styleI(StyleIdx::figuredBassStyle);
 
-      if(parenth[0] != Parenthesis::NONE)
+      if (parenth[0] != Parenthesis::NONE)
             str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[0])]);
 
       // prefix
-      if(_prefix != Modifier::NONE) {
+      if (_prefix != Modifier::NONE) {
             // if no digit, the string created so far 'hangs' to the left of the note
             if(_digit == FBIDigitNone)
                   x1 = fm.width(str);

@@ -101,7 +101,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       if (glissando()->showText()) {
             const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
             QFont f = st.fontPx(_spatium);
-            QRectF r = QFontMetricsF(f).boundingRect(glissando()->text());
+            QRectF r = QFontMetricsF(f, MScore::paintDevice()).boundingRect(glissando()->text());
             // if text longer than available space, skip it
             if (r.width() < l) {
                   qreal yOffset = r.height() + r.y();       // find text descender height

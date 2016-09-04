@@ -475,17 +475,15 @@ qreal Note::tabHeadWidth(StaffType* tab) const
       {
       qreal val;
       if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
-            qreal mags = magS();
-            QFont f = tab->fretFont();
-            int size = lrint(tab->fretFontSize());
-            f.setPixelSize(size);
-            QFontMetricsF fm(f);
+            QFont f    = tab->fretFont();
+            f.setPointSizeF(tab->fretFontSize());
+            QFontMetricsF fm(f, MScore::paintDevice());
             QString s;
             if (fixed())
                 s = "/";
             else
                 s = tab->fretString(_fret, _string, _ghost);
-            val  = fm.width(s) * mags;
+            val  = fm.width(s) * magS();
             }
       else
             val = headWidth();
@@ -722,13 +720,15 @@ void Note::draw(QPainter* painter) const
                         painter->restore();
                         }
                   }
-            qreal mag = magS();
-            qreal imag = 1.0 / mag;
-            painter->scale(mag, mag);
-            painter->setFont(tab->fretFont());
+//            qreal mag = magS();
+//            qreal imag = 1.0 / mag;
+//            painter->scale(mag, mag);
+            QFont f(tab->fretFont());
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(f);
             painter->setPen(c);
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
-            painter->scale(imag, imag);
+//            painter->scale(imag, imag);
             }
 
       // NOT tablature
