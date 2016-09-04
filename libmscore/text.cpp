@@ -341,7 +341,7 @@ qreal TextBlock::xpos(int column, const Text* t) const
       for (const TextFragment& f : _text) {
             if (column == col)
                   return f.pos.x();
-            QFontMetricsF fm(f.font(t));
+            QFontMetricsF fm(f.font(t), MScore::paintDevice());
             int idx = 0;
             for (const QChar& c : f.text) {
                   ++idx;
@@ -436,7 +436,7 @@ int TextBlock::column(qreal x, Text* t) const
                   ++idx;
                   if (c.isHighSurrogate())
                         continue;
-                  QFontMetricsF fm(f.font(t));
+                  QFontMetricsF fm(f.font(t), MScore::paintDevice());
                   qreal xo = fm.width(f.text.left(idx));
                   if (x <= f.pos.x() + px + (xo-px)*.5)
                         return col;
@@ -993,7 +993,7 @@ QRectF Text::cursorRect() const
       else
             font = _textStyle.fontPx(spatium());
 
-      qreal ascent = QFontMetricsF(font).ascent() * .7;
+      qreal ascent = QFontMetricsF(font, MScore::paintDevice()).ascent() * .7;
       qreal h = ascent;       // lineSpacing();
       qreal x = tline.xpos(_cursor->column(), this);
       qreal y = tline.y();
@@ -1328,7 +1328,7 @@ void Text::layoutFrame()
 
 qreal Text::lineSpacing() const
       {
-      return QFontMetricsF(textStyle().fontPx(spatium())).lineSpacing();
+      return QFontMetricsF(textStyle().fontPx(spatium()), MScore::paintDevice()).lineSpacing();
       }
 
 //---------------------------------------------------------
@@ -1337,7 +1337,7 @@ qreal Text::lineSpacing() const
 
 qreal Text::lineHeight() const
       {
-      return QFontMetricsF(textStyle().fontPx(spatium())).height();
+      return QFontMetricsF(textStyle().fontPx(spatium()), MScore::paintDevice()).height();
       }
 
 //---------------------------------------------------------
@@ -1346,7 +1346,7 @@ qreal Text::lineHeight() const
 
 qreal Text::baseLine() const
       {
-      return QFontMetricsF(textStyle().fontPx(spatium())).ascent();
+      return QFontMetricsF(textStyle().fontPx(spatium()), MScore::paintDevice()).ascent();
       }
 
 //---------------------------------------------------------

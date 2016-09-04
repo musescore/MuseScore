@@ -489,7 +489,7 @@ void BarLine::draw(QPainter* painter) const
                   f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
                   f.setBold(true);
                   QString str = m->len() > m->timesig() ? "+" : "-";
-                  QRectF r = QFontMetricsF(f).boundingRect(str);
+                  QRectF r = QFontMetricsF(f, MScore::paintDevice()).boundingRect(str);
                   painter->setFont(f);
                   painter->drawText(-r.width(), 0.0, str);
                   }
