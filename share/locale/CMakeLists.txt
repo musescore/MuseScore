@@ -97,6 +97,7 @@ install(FILES
       qt_lt.qm
       qt_nb.qm
       qt_nl.qm
+      qt_nl_BE.qm
       qt_pl.qm
       qt_pt.qm
       qt_pt_BR.qm
