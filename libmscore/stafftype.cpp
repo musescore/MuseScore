@@ -414,9 +414,8 @@ void StaffType::setDurationMetrics()
 // use a scaled up font and then scale computed values down
 //      QFontMetricsF fm(durationFont());
       QFont font(durationFont());
-      qreal pixelSize = _durationFontSize;
-      font.setPixelSize(lrint(pixelSize) * 100.0);
-      QFontMetricsF fm(font);
+      font.setPointSizeF(_durationFontSize);
+      QFontMetricsF fm(font, MScore::paintDevice());
       QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
       QRectF bb( fm.tightBoundingRect(txt) );
       // raise symbols by a default margin and, if marks are above lines, by half the line distance
@@ -440,7 +439,7 @@ void StaffType::setFretMetrics()
       if (_fretMetricsValid && _refDPI == DPI)
             return;
 
-      QFontMetricsF fm(fretFont());
+      QFontMetricsF fm(fretFont(), MScore::paintDevice());
       QRectF bb;
       // compute vertical displacement
       if (_useNumbers) {
@@ -537,14 +536,14 @@ qreal StaffType::durationBoxY()
 void StaffType::setDurationFontSize(qreal val)
       {
       _durationFontSize = val;
-      _durationFont.setPixelSize( lrint(val) );
+      _durationFont.setPointSizeF(val);
       _durationMetricsValid = false;
       }
 
 void StaffType::setFretFontSize(qreal val)
       {
       _fretFontSize = val;
-      _fretFont.setPixelSize( lrint(val) );
+      _fretFont.setPointSizeF(val);
       _fretMetricsValid = false;
       }
 
@@ -896,7 +895,7 @@ void TabDurationSymbol::layout()
       if (!chord || chord->type() != Element::Type::CHORD ||
             (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
                   chord->beamMode() != Beam::Mode::END) ) {
-            QFontMetricsF fm(_tab->durationFont());
+            QFontMetricsF fm(_tab->durationFont(), MScore::paintDevice());
             hbb   = _tab->durationBoxH();
             wbb   = fm.width(_text);
             xbb   = 0.0;
