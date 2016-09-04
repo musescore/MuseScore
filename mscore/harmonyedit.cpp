@@ -280,7 +280,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
             const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
-            QFont ff(st->fontPx(_spatium));
+            QFont ff(st->font(_spatium * MScore::pixelRatio));
             ff.setFamily(sb->font().family());
 
             QString s;
@@ -314,15 +314,15 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
 
       foreach(ChordFont cf, chordList->fonts) {
             if (cf.family.isEmpty() || cf.family == "default")
-                  fontList.append(st->fontPx(_spatium * cf.mag));
+                  fontList.append(st->font(_spatium * cf.mag * MScore::pixelRatio));
             else {
-                  QFont ff(st->fontPx(_spatium * cf.mag));
+                  QFont ff(st->font(_spatium * cf.mag * MScore::pixelRatio));
                   ff.setFamily(cf.family);
                   fontList.append(ff);
                   }
             }
       if (fontList.isEmpty())
-            fontList.append(st->fontPx(_spatium));
+            fontList.append(st->font(_spatium * MScore::pixelRatio));
 
       foreach(const RenderAction& a, renderList) {
             if (a.type == RenderAction::RenderActionType::SET) {
@@ -471,7 +471,7 @@ void HarmonyCanvas::dropEvent(QDropEvent* event)
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
             const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
-            QFont ff(st->fontPx(_spatium));
+            QFont ff(st->font(_spatium * MScore::pixelRatio));
             ff.setFamily(sb->font().family());
 
 //            qDebug("drop %s", dragElement->name());

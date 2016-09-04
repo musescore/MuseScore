@@ -261,8 +261,6 @@ void Lyrics::layout()
 
 void Lyrics::layout1()
       {
-//      setPos(textStyle().offset(spatium())); text offset ignored, replaced by element style options
-
       setPos(QPointF());
       Text::layout1();
       if (!parent()) // palette & clone trick

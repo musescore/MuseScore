@@ -163,29 +163,7 @@ QFont TextStyleData::font(qreal _spatium) const
       if (sizeIsSpatiumDependent)
             m *= _spatium / SPATIUM20;
 
-      f.setPointSizeF(m * MScore::pixelRatio);
-      return f;
-      }
-
-//---------------------------------------------------------
-//   font
-//---------------------------------------------------------
-
-QFont TextStyleData::fontPx(qreal _spatium) const
-      {
-      qreal m = size;
-
-      QFont f(family);
-      f.setBold(bold);
-      f.setItalic(italic);
-      f.setUnderline(underline);
-#ifdef USE_GLYPHS
-      f.setHintingPreference(QFont::PreferVerticalHinting);
-#endif
-      if (sizeIsSpatiumDependent)
-            m *= _spatium / SPATIUM20;
-
-      f.setPointSize(m * MScore::pixelRatio);
+//      f.setPointSizeF(m * MScore::pixelRatio);
       return f;
       }
 
@@ -456,7 +434,6 @@ void TextStyle::setBackgroundColor(const QColor& v)      { d->backgroundColor = 
 void TextStyle::write(Xml& xml) const                    { d->write(xml); }
 void TextStyle::read(XmlReader& v)               { d->read(v); }
 QFont TextStyle::font(qreal space) const                 { return d->font(space); }
-QFont TextStyle::fontPx(qreal spatium) const             { return d->fontPx(spatium); }
 QRectF TextStyle::bbox(qreal sp, const QString& s) const { return d->bbox(sp, s); }
 QFontMetricsF TextStyle::fontMetrics(qreal space) const  { return d->fontMetrics(space); }
 bool TextStyle::operator!=(const TextStyle& s) const     { return d->operator!=(*s.d); }

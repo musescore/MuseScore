@@ -1172,7 +1172,9 @@ void Harmony::draw(QPainter* painter) const
       QColor color = textColor();
       painter->setPen(color);
       foreach(const TextSegment* ts, textList) {
-            painter->setFont(ts->font);
+            QFont f(ts->font);
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(f);
             painter->drawText(QPointF(ts->x, ts->y), ts->text);
             }
       }
@@ -1193,7 +1195,7 @@ TextSegment::TextSegment(const QString& s, const QFont& f, qreal x, qreal y)
 
 qreal TextSegment::width() const
       {
-      QFontMetricsF fm(font);
+      QFontMetricsF fm(font, MScore::paintDevice());
 #if 1
       return fm.width(text);
 #else
@@ -1214,7 +1216,7 @@ qreal TextSegment::width() const
 
 QRectF TextSegment::boundingRect() const
       {
-      QFontMetricsF fm(font);
+      QFontMetricsF fm(font, MScore::paintDevice());
       return fm.boundingRect(text);
       }
 
@@ -1224,7 +1226,7 @@ QRectF TextSegment::boundingRect() const
 
 QRectF TextSegment::tightBoundingRect() const
       {
-      QFontMetricsF fm(font);
+      QFontMetricsF fm(font, MScore::paintDevice());
       return fm.tightBoundingRect(text);
       }
 
@@ -1358,15 +1360,15 @@ void Harmony::render(const TextStyle* st)
       fontList.clear();
       foreach(ChordFont cf, chordList->fonts) {
             if (cf.family.isEmpty() || cf.family == "default")
-                  fontList.append(st->fontPx(spatium() * cf.mag));
+                  fontList.append(st->font(spatium() * cf.mag));
             else {
-                  QFont ff(st->fontPx(spatium() * cf.mag));
+                  QFont ff(st->font(spatium() * cf.mag));
                   ff.setFamily(cf.family);
                   fontList.append(ff);
                   }
             }
       if (fontList.empty())
-            fontList.append(st->fontPx(spatium()));
+            fontList.append(st->font(spatium()));
 
       foreach(const TextSegment* s, textList)
             delete s;

@@ -70,7 +70,6 @@ class TextStyleData : public QSharedData, public ElementLayout {
       bool readProperties(XmlReader& v);
 
       QFont font(qreal space) const;
-      QFont fontPx(qreal spatium) const;
       QRectF bbox(qreal space, const QString& s) const { return fontMetrics(space).boundingRect(s); }
       QFontMetricsF fontMetrics(qreal space) const     { return QFontMetricsF(font(space), MScore::paintDevice()); }
       bool operator!=(const TextStyleData& s) const;

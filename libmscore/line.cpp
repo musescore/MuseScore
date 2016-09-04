@@ -790,7 +790,6 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   break;
                   }
             }
-printf("===%p line segment %s segments %p %d\n", this, name(), lineSegm, segments.size());
       if (!lineSegm) {
             lineSegm = createLineSegment();
             add(lineSegm);

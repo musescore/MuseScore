@@ -74,8 +74,8 @@ void Bend::layout()
       QRectF bb;
 
       const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
-      QFont f = st->fontPx(_spatium);
-      QFontMetricsF fm(f);
+//      QFont f = st->fontPx(_spatium);
+      QFontMetricsF fm(st->fontMetrics(_spatium));
 
       int n   = _points.size();
       qreal x = noteWidth;
@@ -167,7 +167,7 @@ void Bend::draw(QPainter* painter) const
 
       qreal _spatium = spatium();
       const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
-      QFont f = st->fontPx(_spatium);
+      QFont f = st->font(_spatium);
       painter->setFont(f);
 
       int n    = _points.size();

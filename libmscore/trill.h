@@ -36,8 +36,8 @@ class TrillSegment : public LineSegment {
 
    protected:
    public:
-      TrillSegment(Score* s) : LineSegment(s) {}
-      Trill* trill() const                { return (Trill*)spanner(); }
+      TrillSegment(Score* s) : LineSegment(s)      {}
+      Trill* trill() const                         { return (Trill*)spanner(); }
       virtual Element::Type type() const override  { return Element::Type::TRILL_SEGMENT; }
       virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
       virtual void draw(QPainter*) const override;
