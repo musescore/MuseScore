@@ -154,6 +154,8 @@ void SelectionWindow::updateFilteredElements()
 
 void SelectionWindow::changeCheckbox(QListWidgetItem* item)
       {
+      if (!_score)
+            return;
       int type = item->data(Qt::UserRole).toInt();
       bool set = false;
       item->checkState() == Qt::Checked ? set = true : set = false;
