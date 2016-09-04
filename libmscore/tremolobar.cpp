@@ -88,10 +88,11 @@ void TremoloBar::draw(QPainter* painter) const
 
       qreal _spatium = spatium();
       const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
-      QFont f = st->fontPx(_spatium);
-      painter->setFont(f);
+      QFont f = st->font(_spatium);
+      f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 
-      int n    = _points.size();
+      painter->setFont(f);
+      int n = _points.size();
 
       int previousTime  = _points[0].time;
       int previousPitch = _points[0].pitch;

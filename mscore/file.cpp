@@ -2343,6 +2343,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       {
       bool rv = true;
       score->setPrinting(!screenshot);    // dont print page break symbols etc.
+      double pr = MScore::pixelRatio;
 
       QImage::Format f;
       if (format != QImage::Format_Indexed8)
@@ -2372,6 +2373,8 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             QImage printer(w, h, f);
             printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
             printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
+
+            MScore::pixelRatio = DPI / printer.logicalDpiX();
 
             printer.fill(transparent ? 0 : 0xffffffff);
 
@@ -2435,6 +2438,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                   break;
             }
       score->setPrinting(false);
+      MScore::pixelRatio = pr;
       return rv;
       }
 

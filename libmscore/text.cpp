@@ -293,7 +293,7 @@ void TextBlock::layout(Text* t)
                   }
             }
       if (_text.empty()) {
-            QFontMetricsF fm(t->textStyle().fontPx(t->spatium()), MScore::paintDevice());
+            QFontMetricsF fm = t->textStyle().fontMetrics(t->spatium());
             _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
             _lineSpacing = fm.lineSpacing();
             }
@@ -988,10 +988,10 @@ QRectF Text::cursorRect() const
       if (fragment) {
             font = fragment->font(this);
 //TODOxxxx            if (font.family() == score()->scoreFont()->font().family())
-//                  font = _textStyle.fontPx(spatium());
+//                  font = _textStyle.font(spatium());
             }
       else
-            font = _textStyle.fontPx(spatium());
+            font = _textStyle.font(spatium());
 
       qreal ascent = QFontMetricsF(font, MScore::paintDevice()).ascent() * .7;
       qreal h = ascent;       // lineSpacing();
@@ -1328,7 +1328,7 @@ void Text::layoutFrame()
 
 qreal Text::lineSpacing() const
       {
-      return QFontMetricsF(textStyle().fontPx(spatium()), MScore::paintDevice()).lineSpacing();
+      return textStyle().fontMetrics(spatium()).lineSpacing();
       }
 
 //---------------------------------------------------------
@@ -1337,7 +1337,7 @@ qreal Text::lineSpacing() const
 
 qreal Text::lineHeight() const
       {
-      return QFontMetricsF(textStyle().fontPx(spatium()), MScore::paintDevice()).height();
+      return textStyle().fontMetrics(spatium()).height();
       }
 
 //---------------------------------------------------------
@@ -1346,7 +1346,7 @@ qreal Text::lineHeight() const
 
 qreal Text::baseLine() const
       {
-      return QFontMetricsF(textStyle().fontPx(spatium()), MScore::paintDevice()).ascent();
+      return textStyle().fontMetrics(spatium()).ascent();
       }
 
 //---------------------------------------------------------

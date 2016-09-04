@@ -5780,7 +5780,7 @@ void ScoreFont::computeMetrics(Sym* sym, int code)
                         sym->setIndex(index);
                         sym->setCode(code);
                         sym->setBbox(bbox);
-                        sym->setAdvance(face->glyph->linearHoriAdvance / 655360.0);
+                        sym->setAdvance(face->glyph->linearHoriAdvance * DPI_F/ 655360.0);
                         }
                   }
             }

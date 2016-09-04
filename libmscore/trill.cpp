@@ -126,7 +126,7 @@ void TrillSegment::layout()
             rypos() += score()->styleS(StyleIdx::trillY).val() * spatium();
       if (staff())
             setMag(staff()->mag());
-      if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
+      if (isSingleType() || isBeginType()) {
             Accidental* a = trill()->accidental();
             if (a) {
                   a->layout();
@@ -134,6 +134,7 @@ void TrillSegment::layout()
                   qreal _spatium = spatium();
                   a->setPos(_spatium * 1.3, -2.2 * _spatium);
                   a->adjustReadPos();
+                  a->setParent(this);
                   }
             switch (trill()->trillType()) {
                   case Trill::Type::TRILL_LINE:
