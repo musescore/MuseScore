@@ -106,9 +106,7 @@ void GlissandoSegment::draw(QPainter* painter) const
                   qreal yOffset = r.height() + r.y();       // find text descender height
                   // raise text slightly above line and slightly more with WAVY than with STRAIGHT
                   yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.4 : 0.1);
-                  QFont f = st.font(_spatium);
-                  f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-                  painter->setFont(f);
+                  painter->setFont(st.font(_spatium * MScore::pixelRatio));
                   qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), glissando()->text());
                   }
