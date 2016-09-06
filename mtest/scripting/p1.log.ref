@@ -5,11 +5,11 @@ test script p1
 filter:256
 filter:-1
 Clef
-type is:14
-KeySig
 type is:15
+KeySig
+type is:16
 TimeSig
-type is:17
+type is:18
 Chord
 type is:78
   durationType:480
@@ -21,7 +21,7 @@ type is:78
     denominator:4
     ticks:480
 Rest
-type is:18
+type is:19
   duration:
     numerator:1
     denominator:4
