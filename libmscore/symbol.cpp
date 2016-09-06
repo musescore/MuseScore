@@ -269,7 +269,7 @@ void FSymbol::read(XmlReader& e)
             if (tag == "font")
                   _font.setFamily(e.readElementText());
             else if (tag == "fontsize")
-                  _font.setPixelSize(e.readInt());
+                  _font.setPointSize(e.readInt());
             else if (tag == "code")
                   _code = e.readInt();
             else if (!BSymbol::readProperties(e))
@@ -291,7 +291,7 @@ void FSymbol::layout()
             }
       else
             s = QChar(_code);
-      QFontMetricsF fm(_font);
+      QFontMetricsF fm(_font, MScore::paintDevice());
       setbbox(fm.boundingRect(s));
       adjustReadPos();
       }
