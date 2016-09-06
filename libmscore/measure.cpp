@@ -1802,11 +1802,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   score()->addSpanner(sl);
                   }
             else if (tag == "HairPin"
-               || tag == "Pedal"
-               || tag == "Ottava"
-               || tag == "Trill"
-               || tag == "TextLine"
-               || tag == "Volta") {
+                     || tag == "Pedal"
+                     || tag == "Ottava"
+                     || tag == "RangeAnnotation"
+                     || tag == "Trill"
+                     || tag == "TextLine"
+                     || tag == "Volta") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
@@ -1990,6 +1991,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Symbol"
                || tag == "Tempo"
                || tag == "StaffText"
+               || tag == "TextAnnotation"
                || tag == "RehearsalMark"
                || tag == "InstrumentChange"
                || tag == "StaffState"
