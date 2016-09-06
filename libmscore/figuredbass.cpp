@@ -560,16 +560,10 @@ void FiguredBassItem::draw(QPainter* painter) const
 #ifdef USE_GLYPHS
       f.setHintingPreference(QFont::PreferVerticalHinting);
 #endif
-      // font size in pixels, scaled according to spatium()
       // (use the same font selection as used in layout() above)
-      qreal m = score()->styleD(StyleIdx::figuredBassFontSize);
-      m *= spatium() / SPATIUM20;     // make spatium dependent
-      f.setPixelSize(lrint(m));
-/* USING POINTS RATHER PIXELS MAKES FOR COARSER STEPS IN Qt ROUNDING TO INTEGER FONT SIZES
-      // font size in points, scaled according to spatium()
       qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * spatium() / SPATIUM20;
       f.setPointSizeF(m);
-*/
+
       painter->setFont(f);
       painter->setBrush(Qt::NoBrush);
       QPen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, Qt::SolidLine, Qt::RoundCap);
