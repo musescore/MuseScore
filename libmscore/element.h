@@ -250,6 +250,7 @@ class Element : public QObject, public ScoreElement {
 
             ARPEGGIO,
             ACCIDENTAL,
+            LEDGER_LINE,
             STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
             NOTE,             // and this requires stems to be drawn before notes
             CLEF,             // elements from CLEF to TIMESIG need to be in the order
@@ -260,7 +261,6 @@ class Element : public QObject, public ScoreElement {
             BREATH,
 
             REPEAT_MEASURE,
-            IMAGE,
             TIE,
             ARTICULATION,
             CHORDLINE,
@@ -296,10 +296,10 @@ class Element : public QObject, public ScoreElement {
             LAYOUT_BREAK,
             SPACER,
             STAFF_STATE,
-            LEDGER_LINE,
             NOTEHEAD,
             NOTEDOT,
             TREMOLO,
+            IMAGE,
             MEASURE,
             SELECTION,
             LASSO,

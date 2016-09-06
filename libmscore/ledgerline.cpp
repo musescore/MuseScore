@@ -26,7 +26,6 @@ namespace Ms {
 LedgerLine::LedgerLine(Score* s)
    : Line(s, false)
       {
-      setZ(int(Element::Type::STEM) * 100 - 50);
       setSelectable(false);
       _next = 0;
       }
