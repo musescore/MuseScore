@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="nl">
+<TS version="2.0" language="nl_BE">
 <context>
     <name>MAC_APPLICATION_MENU</name>
     <message>
@@ -980,7 +980,7 @@ niet hernoemen naar
     </message>
     <message>
         <source>Discard</source>
-        <translation>&amp;Niet opslaan</translation>
+        <translation>&amp;Verwerpen</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
