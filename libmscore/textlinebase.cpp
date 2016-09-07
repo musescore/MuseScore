@@ -98,7 +98,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       if (tl->lineStyle() == Qt::CustomDashLine) {
-            QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
+            QVector<qreal> dashes { tl->dashLineLen().val() * _spatium, tl->dashGapLen().val() * _spatium };
             pen.setDashPattern(dashes);
             }
       painter->setPen(pen);

@@ -303,8 +303,11 @@
        <property name="accessibleName">
         <string>Dash line length</string>
        </property>
-       <property name="maximum">
-        <double>20.000000000000000</double>
+       <property name="suffix">
+        <string extracomment="Staff space unit">sp</string>
+       </property>
+       <property name="singleStep">
+        <double>0.250000000000000</double>
        </property>
       </widget>
      </item>
@@ -313,8 +316,11 @@
        <property name="accessibleName">
         <string>Dash gap width</string>
        </property>
-       <property name="maximum">
-        <double>20.000000000000000</double>
+       <property name="suffix">
+        <string extracomment="Staff space unit">sp</string>
+       </property>
+       <property name="singleStep">
+        <double>0.250000000000000</double>
        </property>
       </widget>
      </item>

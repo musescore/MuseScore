@@ -75,8 +75,8 @@ class SLine : public Spanner {
       Spatium _lineWidth      { 0.15 };
       QColor _lineColor       { MScore::defaultColor };
       Qt::PenStyle _lineStyle { Qt::SolidLine };
-      qreal _dashLineLen      { 5.0   };
-      qreal _dashGapLen       { 5.0   };
+      Spatium _dashLineLen    { 1.0   };
+      Spatium _dashGapLen     { 1.0   };
       bool _diagonal          { false };
 
    protected:
@@ -109,10 +109,10 @@ class SLine : public Spanner {
       void setLineColor(const QColor& v)  { _lineColor = v;               }
       void setLineStyle(Qt::PenStyle v)   { _lineStyle = v;               }
 
-      qreal dashLineLen() const           { return _dashLineLen; }
-      void setDashLineLen(qreal val)      { _dashLineLen = val; }
-      qreal dashGapLen() const            { return _dashGapLen; }
-      void setDashGapLen(qreal val)       { _dashGapLen = val; }
+      Spatium dashLineLen() const           { return _dashLineLen; }
+      void setDashLineLen(const Spatium& v) { _dashLineLen = v; }
+      Spatium dashGapLen() const            { return _dashGapLen; }
+      void setDashGapLen(const Spatium& v)  { _dashGapLen = v; }
 
       LineSegment* frontSegment() const   { return (LineSegment*)spannerSegments().front(); }
       LineSegment* backSegment() const    { return (LineSegment*)spannerSegments().back();  }
