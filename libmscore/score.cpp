@@ -2628,6 +2628,7 @@ void Score::deselect(Element* el)
       addRefresh(el->abbox());
       _selection.remove(el);
       setSelectionChanged(true);
+      update();
       }
 
 //---------------------------------------------------------
@@ -2637,9 +2638,9 @@ void Score::deselect(Element* el)
 
 void Score::select(Element* e, SelectType type, int staffIdx)
       {
-      if (e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST)) {
+      if (e && (e->isNote() || e->isRest())) {
             Element* ee = e;
-            if (ee->type() == Element::Type::NOTE)
+            if (ee->isNote())
                   ee = ee->parent();
             int tick = toChordRest(ee)->segment()->tick();
             if (playPos() != tick)
@@ -2650,10 +2651,17 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
 
       switch (type) {
-            case SelectType::SINGLE:     return selectSingle(e, staffIdx);
-            case SelectType::ADD:        return selectAdd(e);
-            case SelectType::RANGE:      return selectRange(e, staffIdx);
+            case SelectType::SINGLE:
+                  selectSingle(e, staffIdx);
+                  break;
+            case SelectType::ADD:
+                  selectAdd(e);
+                  break;
+            case SelectType::RANGE:
+                  selectRange(e, staffIdx);
+                  break;
             }
+      update();
       }
 
 //---------------------------------------------------------
@@ -2705,7 +2713,7 @@ void Score::selectAdd(Element* e)
             return;
             }
 
-      if (e->type() == Element::Type::MEASURE) {
+      if (e->isMeasure()) {
             Measure* m = toMeasure(e);
             int tick  = m->tick();
             if (_selection.isNone()) {
@@ -2727,8 +2735,8 @@ void Score::selectAdd(Element* e)
             if (_selection.elements().contains(e))
                   _selection.remove(e);
             else {
-                  _selection.add(e);
                   selState = SelState::LIST;
+                  _selection.add(e);
                   }
             }
       _selection.setState(selState);
