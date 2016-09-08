@@ -97,6 +97,8 @@ void ScoreView::endEdit()
       for (int i = 0; i < grips; ++i)
             score()->addRefresh(grip[i]);
 
+      if (editObject->userOff() != editObject->startDragPosition())
+            editObject->undoChangeProperty(P_ID::AUTOPLACE, false);
       editObject->endEdit();
 
       _score->addRefresh(editObject->canvasBoundingRect());
