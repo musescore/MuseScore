@@ -64,9 +64,9 @@ class Lyrics : public Text {
       // These values are used when USE_FONT_DASH_METRIC is not defined
 #if !defined(USE_FONT_DASH_METRIC)
       static constexpr qreal  LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
-      static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
+      static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.67;     // the fraction of lyrics font x-height to
                                                                               // raise the dashes above text base line;
-#endif                                                                        // this usually raises at about 2/3 of x-height
+#endif
 
    private:
       int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks
@@ -149,20 +149,20 @@ class LyricsLine : public SLine {
       Q_OBJECT
 
    protected:
-      Lyrics*     _nextLyrics;
+      Lyrics* _nextLyrics;
 
    public:
       LyricsLine(Score* s);
       LyricsLine(const LyricsLine&);
 
-      virtual LyricsLine* clone() const override     { return new LyricsLine(*this); }
+      virtual LyricsLine* clone() const override      { return new LyricsLine(*this); }
       virtual Element::Type type() const override     { return Element::Type::LYRICSLINE; }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
       virtual void removeUnmanaged() override;
 
-      Lyrics*     lyrics() const                      { return (Lyrics*)parent();   }
-      Lyrics*     nextLyrics() const                  { return _nextLyrics;         }
+      Lyrics* lyrics() const                          { return (Lyrics*)parent();   }
+      Lyrics* nextLyrics() const                      { return _nextLyrics;         }
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       };
 
@@ -174,18 +174,17 @@ class LyricsLineSegment : public LineSegment {
       Q_OBJECT
 
    protected:
-      int         _numOfDashes;
-      qreal       _dashLength;
+      int   _numOfDashes;
+      qreal _dashLength;
 
 public:
       LyricsLineSegment(Score* s);
 
       virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
       virtual Element::Type type() const override           { return Element::Type::LYRICSLINE_SEGMENT; }
-      LyricsLine* lyricsLine() const                        { return (LyricsLine*)spanner(); }
       virtual void draw(QPainter*) const override;
-
       virtual void layout() override;
+      LyricsLine* lyricsLine() const                        { return (LyricsLine*)spanner(); }
       };
 
 }     // namespace Ms
