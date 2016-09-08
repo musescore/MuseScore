@@ -3743,7 +3743,6 @@ void ScoreView::select(QMouseEvent* ev)
                               }
                         else if (ev->type() == QEvent::MouseButtonRelease) {
                               score()->deselect(curElement);
-                              _score->setUpdateAll();   //DEBUG
                               mscore->endCmd();
                               }
                         return;
@@ -3751,9 +3750,7 @@ void ScoreView::select(QMouseEvent* ev)
                   addSelect = true;
                   st = SelectType::ADD;
                   }
-            if (curElement && curElement->type() == Element::Type::KEYSIG
-               && (keyState != Qt::ControlModifier)
-               && st == SelectType::SINGLE) {
+            if (curElement && curElement->isKeySig() && (keyState != Qt::ControlModifier) && st == SelectType::SINGLE) {
                   // special case: select for all staves
                   Segment* s = static_cast<Segment*>(curElement->parent());
                   bool first = true;
@@ -3768,8 +3765,8 @@ void ScoreView::select(QMouseEvent* ev)
                   }
             else
                   _score->select(curElement, st, dragStaffIdx);
-            if (curElement && curElement->type() == Element::Type::NOTE && ev->type() == QEvent::MouseButtonPress) {
-                  Note* note = static_cast<Note*>(curElement);
+            if (curElement && curElement->isNote() && ev->type() == QEvent::MouseButtonPress) {
+                  Note* note = toNote(curElement);
                   int pitch = note->ppitch();
                   mscore->play(note, pitch);
                   }
