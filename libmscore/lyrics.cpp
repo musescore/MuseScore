@@ -70,9 +70,9 @@ Lyrics::Lyrics(Score* s)
 Lyrics::Lyrics(const Lyrics& l)
    : Text(l)
       {
-      _no         = l._no;
-      _ticks      = l._ticks;
-      _syllabic   = l._syllabic;
+      _no        = l._no;
+      _ticks     = l._ticks;
+      _syllabic  = l._syllabic;
       _separator = 0;
       }
 
@@ -91,7 +91,7 @@ void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool /*all*
       func(data, this);
 /* DO NOT ADD EITHER THE LYRICSLINE OR THE SEGMENTS: segments are added through the system each belongs to;
       LyricsLine is not needed, as it is internally manged.
-      if (_separator != nullptr)
+      if (_separator)
             _separator->scanElements(data, func, all); */
       }
 
@@ -774,8 +774,10 @@ void LyricsLineSegment::layout()
       {
       bool        endOfSystem       = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
-      Lyrics*     lyr, *nextLyr     = nullptr;
-      qreal       fromX = 0, toX = 0;             // start and end point of intra-lyrics room
+      Lyrics*     lyr               = 0;
+      Lyrics*     nextLyr           = 0;
+      qreal       fromX             = 0;
+      qreal       toX               = 0;             // start and end point of intra-lyrics room
       qreal       sp                = spatium();
       System*     sys;
 
@@ -851,10 +853,7 @@ void LyricsLineSegment::layout()
             _dashLength = lyr->dashLength();
 #else
             // set conventional dash Y pos
-            qreal dashOffset = lyr->textStyle().size() * Lyrics::LYRICS_DASH_Y_POS_RATIO;
-            if (lyr->textStyle().sizeIsSpatiumDependent()) {
-                  dashOffset *= (sp / SPATIUM20);
-                  }
+            qreal dashOffset = lyr->textStyle().fontMetrics(sp).xHeight() * Lyrics::LYRICS_DASH_Y_POS_RATIO;
             rypos() -= dashOffset;
             _dashLength = score()->styleP(StyleIdx::lyricsDashMaxLength) * mag();  // and dash length
 #endif
