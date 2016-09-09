@@ -2,6 +2,9 @@
 <languages>
   <language code="af" name="Afrikaans" />
   <language code="ar" name="العربية" />
+  <language code="ar_DZ" name="(العربية (الجزائر" />
+  <language code="ar_EG" name="(العربية (مصر" />
+  <language code="ar_SD" name="(العربية (السودان" />
   <language code="ast" name="Asturianu" />
   <language code="be" name="Беларуская мова" />
   <language code="bg" name="български" />

@@ -21,6 +21,9 @@
 install(FILES
       mscore_af.qm
       mscore_ar.qm
+      mscore_ar_DZ.qm
+      mscore_ar_EG.qm
+      mscore_ar_SD.qm
       mscore_ast.qm
       mscore_be.qm
       mscore_bg.qm
@@ -112,6 +115,9 @@ install(FILES
       qt_zh_TW.qm
       instruments_af.qm
       instruments_ar.qm
+      instruments_ar_DZ.qm
+      instruments_ar_EG.qm
+      instruments_ar_SD.qm
       instruments_ast.qm
       instruments_be.qm
       instruments_bg.qm
