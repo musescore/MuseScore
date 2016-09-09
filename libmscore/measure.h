@@ -142,7 +142,7 @@ class Measure : public MeasureBase {
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
       virtual bool isEditable() const override { return false; }
-      void checkMeasue(int idx);
+      void checkMeasure(int idx);
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;

@@ -2157,7 +2157,7 @@ void Measure::read(XmlReader& e, int staffIdx)
 //    with invisible rests
 //---------------------------------------------------------
 
-void Measure::checkMeasue(int staffIdx)
+void Measure::checkMeasure(int staffIdx)
       {
       for (int track = staffIdx * VOICES + 1; track % VOICES && hasVoice(track); track++) {
             Segment* seg = first();
