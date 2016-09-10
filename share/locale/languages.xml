@@ -6,7 +6,7 @@
   <language code="ar_EG" name="(العربية (مصر" />
   <language code="ar_SD" name="(العربية (السودان" />
   <language code="ast" name="Asturianu" />
-  <language code="be" name="Беларуская мова" />
+  <language code="be" name="Беларуская" />
   <language code="bg" name="български" />
   <language code="ca" name="Català" />
   <language code="ca@valencia" name="Valencià" />
@@ -22,27 +22,27 @@
   <language code="et" name="Eesti" />
   <language code="eu" name="Euskara" />
   <language code="fa" name="فارسی" />
-  <language code="fi" name="Finnish" />
-  <language code="fo" name="Faeroese" />
+  <language code="fi" name="Suomi" />
+  <language code="fo" name="Føroyskt" />
   <language code="fr" name="Français" />
   <language code="ga" name="Gaeilge" />
   <language code="gl" name="Galego" />
   <language code="he" name="עברית" />
-  <language code="hi_IN" name="Hindi" />
+  <language code="hi_IN" name="हिन्दी" />
   <language code="hr" name="Hrvatski" />
   <language code="hu" name="Magyar" />
   <language code="id" name="Bahasa Indonesia" />
   <language code="it" name="Italiano" />
-  <language code="ja" name="Japanese" />
+  <language code="ja" name="日本語" />
   <language code="ka" name="ქართული" />
   <language code="ko" name="한국어" />
   <language code="lt" name="Lietuvių" />
-  <language code="lv" name="Latviešu " />
-  <language code="mn_MN" name="Монгол хэл" />
+  <language code="lv" name="Latviešu" />
+  <language code="mn_MN" name="Монгол" />
   <language code="nl" name="Nederlands" />
   <language code="nl_BE" name="Vlaams" />
-  <language code="nb" name="Norsk (Bokmål)" />
-  <language code="nn" name="Norsk (Nynorsk)" />
+  <language code="nb" name="Norsk bokmål" />
+  <language code="nn" name="Norsk nynorsk" />
   <language code="pl" name="Polski" />
   <language code="pt" name="Português" />
   <language code="pt_BR" name="Português brasileiro" />
@@ -56,7 +56,7 @@
   <language code="th" name="ภาษาไทย" />
   <language code="tr" name="Türkçe" />
   <language code="uk" name="Українська" />
-  <language code="uz@Latn" name="Ozbek tili" />
+  <language code="uz@Latn" name="Oʻzbekcha" />
   <language code="vi" name="Tiếng Việt" />
   <language code="zh_CN" name="简体中文" />
   <language code="zh_TW" name="繁體中文 (台灣)" />
