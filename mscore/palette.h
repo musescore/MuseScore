@@ -139,6 +139,7 @@ class Palette : public QWidget {
       virtual void contextMenuEvent(QContextMenuEvent*);
 
       int idx(const QPoint&) const;
+      int idx2(const QPoint&) const;
       QRect idxRect(int);
       void layoutCell(PaletteCell*);
 
