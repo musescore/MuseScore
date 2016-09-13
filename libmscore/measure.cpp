@@ -1557,13 +1557,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       qreal _spatium = spatium();
 
       QList<Chord*> graceNotes;
-
-      //sort tuplet elements. needed for nested tuplets #22537
-      if (score()->mscVersion() <= 114) {
-            for (Tuplet* t : e.tuplets()) {
-                  t->sortElements();
-                  }
-            }
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
 
@@ -1840,9 +1833,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  // in some 1.3 scores, clefs can be in score but not in cleflist
-                  // if (score()->mscVersion() > 114)
-                  //      staff->setClef(e.tick(), clef->clefTypeList());
 
                   // there may be more than one clef segment for same tick position
                   if (!segment) {
@@ -1910,15 +1900,13 @@ void Measure::read(XmlReader& e, int staffIdx)
                         timeStretch = ts->stretch().reduced();
                         _timesig    = ts->sig() / timeStretch;
 
-                        if (score()->mscVersion() > 114) {
-                              if (irregular) {
-                                    score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
-                                    score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
-                                    }
-                              else {
-                                    _len = _timesig;
-                                    score()->sigmap()->add(tick(), SigEvent(_timesig));
-                                    }
+                        if (irregular) {
+                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                              score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                              }
+                        else {
+                              _len = _timesig;
+                              score()->sigmap()->add(tick(), SigEvent(_timesig));
                               }
                         }
                   }
@@ -1945,19 +1933,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                               staff->setKey(curTick, ks->keySigEvent());
                         }
                   }
-            else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114
-                  Element* element = Element::name2Element(tag, score());
-                  element->setTrack(e.track());
-                  element->read(e);
-                  segment       = getSegment(Segment::Type::ChordRest, e.tick());
-                  ChordRest* cr = static_cast<ChordRest*>(segment->element(element->track()));
-                  if (!cr)
-                        cr = static_cast<ChordRest*>(segment->element(e.track())); // in case lyric itself has bad track info
-                  if (!cr)
-                        qDebug("Internal error: no chord/rest for lyrics");
-                  else
-                        cr->add(element);
-                  }
             else if (tag == "Text") {
                   Text* t = new StaffText(score());
                   t->setTrack(e.track());
@@ -1979,8 +1954,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Dynamic* dyn = new Dynamic(score());
                   dyn->setTrack(e.track());
                   dyn->read(e);
-                  if (score()->mscVersion() <= 114)
-                        dyn->setDynamicType(dyn->xmlText());
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(dyn);
                   }
@@ -1998,8 +1971,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Element* el = Element::name2Element(tag, score());
                   // hack - needed because tick tags are unreliable in 1.3 scores
                   // for symbols attached to anything but a measure
-                  if (score()->mscVersion() <= 114 && el->type() == Element::Type::SYMBOL)
-                        el->setParent(this);    // this will get reset when adding to segment
                   el->setTrack(e.track());
                   el->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());

@@ -46,7 +46,8 @@ bool CharFormat::operator==(const CharFormat& cf) const
          || cf.underline() != underline()
          || cf.preedit() != preedit()
          || cf.valign() != valign()
-         || cf.fontSize() != fontSize())
+         || cf.fontSize() != fontSize()
+         )
             return false;
       if (type() == CharFormatType::TEXT)
             return cf.fontFamily() == fontFamily();

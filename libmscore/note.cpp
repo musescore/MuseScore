@@ -549,11 +549,12 @@ int Note::playTicks() const
 
 void Note::addSpanner(Spanner* l)
       {
-      Note* e = static_cast<Note*>(l->endElement());
-      if (e && e->type() == Element::Type::NOTE) {
-            e->addSpannerBack(l);
-            if (l->type() == Element::Type::GLISSANDO)
-                 e->chord()->setEndsGlissando(true);
+      Element* e = l->endElement();
+      if (e && e->isNote()) {
+            Note* note = toNote(e);
+            note->addSpannerBack(l);
+            if (l->isGlissando())
+                 note->chord()->setEndsGlissando(true);
             }
       addSpannerFor(l);
       }
@@ -565,12 +566,12 @@ void Note::addSpanner(Spanner* l)
 void Note::removeSpanner(Spanner* l)
       {
       Note* e = static_cast<Note*>(l->endElement());
-      if (e && e->type() == Element::Type::NOTE) {
+      if (e && e->isNote()) {
             if (!e->removeSpannerBack(l)) {
                   qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
                   // abort();
                   }
-            if (l->type() == Element::Type::GLISSANDO)
+            if (l->isGlissando())
                  e->chord()->updateEndsGlissando();
             }
       if (!removeSpannerFor(l)) {
@@ -590,7 +591,7 @@ void Note::add(Element* e)
 
       switch(e->type()) {
             case Element::Type::NOTEDOT:
-                  _dots.append(static_cast<NoteDot*>(e));
+                  _dots.append(toNoteDot(e));
                   break;
             case Element::Type::SYMBOL:
             case Element::Type::IMAGE:
@@ -601,7 +602,7 @@ void Note::add(Element* e)
                   break;
             case Element::Type::TIE:
                   {
-                  Tie* tie = static_cast<Tie*>(e);
+                  Tie* tie = toTie(e);
                   tie->setStartNote(this);
                   tie->setTrack(track());
                   setTieFor(tie);
@@ -616,7 +617,7 @@ void Note::add(Element* e)
                   }
                   break;
             case Element::Type::ACCIDENTAL:
-                  _accidental = static_cast<Accidental*>(e);
+                  _accidental = toAccidental(e);
                   break;
             case Element::Type::TEXTLINE:
             case Element::Type::GLISSANDO:
@@ -650,7 +651,7 @@ void Note::remove(Element* e)
                   break;
             case Element::Type::TIE:
                   {
-                  Tie* tie = static_cast<Tie*>(e);
+                  Tie* tie = toTie(e);
                   setTieFor(0);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(0);
@@ -1034,12 +1035,11 @@ void Note::read(XmlReader& e)
                   Spanner* sp = e.findSpanner(id);
                   if (sp) {
                         sp->setEndElement(this);
-                        if (sp->type() == Element::Type::TIE)
-                              _tieBack = static_cast<Tie*>(sp);
+                        if (sp->isTie())
+                              _tieBack = toTie(sp);
                         else {
-                              if (sp->type() == Element::Type::GLISSANDO
-                                          && parent() && parent()->type() == Element::Type::CHORD)
-                                    static_cast<Chord*>(parent())->setEndsGlissando(true);
+                              if (sp->isGlissando() && parent() && parent()->isChord())
+                                    toChord(parent())->setEndsGlissando(true);
                               addSpannerBack(sp);
                               }
                         e.removeSpanner(sp);
@@ -1314,22 +1314,22 @@ bool Note::acceptDrop(const DropData& data) const
          || type == Element::Type::CHORD
          || type == Element::Type::HARMONY
          || type == Element::Type::DYNAMIC
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::ACCIACCATURA)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::APPOGGIATURA)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::GRACE4)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::GRACE16)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::GRACE32)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::GRACE8_AFTER)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::GRACE16_AFTER)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::GRACE32_AFTER)
          || (noteType() == NoteType::NORMAL && type == Element::Type::BAGPIPE_EMBELLISHMENT)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::SBEAM)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::MBEAM)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::NBEAM)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::BEAM32)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::BEAM64)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
+         || (type == Element::Type::ICON && toIcon(e)->iconType() == IconType::BRACKETS)
          || (type == Element::Type::SYMBOL)
          || (type == Element::Type::CLEF)
          || (type == Element::Type::KEYSIG)
@@ -1371,7 +1371,7 @@ Element* Note::drop(const DropData& data)
                   score()->undoAddElement(e);
                   {
                   // set style
-                  Fingering* f = static_cast<Fingering*>(e);
+                  Fingering* f = toFingering(e);
                   TextStyleType st = f->textStyleType();
                   //f->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
@@ -1387,7 +1387,7 @@ Element* Note::drop(const DropData& data)
             case Element::Type::HAIRPIN:
                   {
                   Hairpin* hairpin = toHairpin(e);
-                  bool decresc = (hairpin->hairpinType() == Hairpin::Type::DECRESC_HAIRPIN);
+                  bool decresc = hairpin->hairpinType() == Hairpin::Type::DECRESC_HAIRPIN;
                   delete e;
                   data.view->cmdAddHairpin(decresc);
                   }
@@ -1404,17 +1404,14 @@ Element* Note::drop(const DropData& data)
                   break;
 
             case Element::Type::BEND:
-                  {
-                  Bend* b = static_cast<Bend*>(e);
-                  b->setParent(this);
-                  b->setTrack(track());
-                  score()->undoAddElement(b);
-                  }
+                  e->setParent(this);
+                  e->setTrack(track());
+                  score()->undoAddElement(e);
                   return e;
 
             case Element::Type::NOTEHEAD:
                   {
-                  NoteHead* s = static_cast<NoteHead*>(e);
+                  NoteHead* s = toNoteHead(e);
                   NoteHead::Group group = s->headGroup();
                   if (group == NoteHead::Group::HEAD_INVALID) {
                         qDebug("unknown notehead");
@@ -1440,7 +1437,7 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::ICON:
                   {
-                  switch (static_cast<Icon*>(e)->iconType()) {
+                  switch (toIcon(e)->iconType()) {
                         case IconType::ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division/2);
                               break;
@@ -1474,9 +1471,7 @@ Element* Note::drop(const DropData& data)
                               return ch->drop(data);
                               break;
                         case IconType::BRACKETS:
-                              {
                               addBracket();
-                              }
                               break;
                         default:
                               break;
@@ -1507,7 +1502,7 @@ Element* Note::drop(const DropData& data)
                         return 0;
                         }
                   // calculate correct transposed tpc
-                  Note* n = static_cast<Note*>(e);
+                  Note* n = toNote(e);
                   Interval v = part()->instrument(ch->tick())->transpose();
                   v.flip();
                   n->setTpc2(Ms::transposeTpc(n->tpc1(), v, true));
@@ -1532,7 +1527,7 @@ Element* Note::drop(const DropData& data)
                   Note* finalNote = Glissando::guessFinalNote(chord());
                   if (finalNote != nullptr) {
                         // init glissando data
-                        Glissando* gliss = static_cast<Glissando*>(e);
+                        Glissando* gliss = toGlissando(e);
                         gliss->setAnchor(Spanner::Anchor::NOTE);
                         gliss->setStartElement(this);
                         gliss->setEndElement(finalNote);
@@ -1558,7 +1553,7 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::CHORD:
                   {
-                  Chord* c      = static_cast<Chord*>(e);
+                  Chord* c      = toChord(e);
                   Note* n       = c->upNote();
                   Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
@@ -1568,7 +1563,7 @@ Element* Note::drop(const DropData& data)
                   nval.headGroup = n->headGroup();
                   Segment* seg = score()->setNoteRest(chord()->segment(), t, nval,
                      score()->inputState().duration().fraction(), dir);
-                  ChordRest* cr = static_cast<ChordRest*>(seg->element(t));
+                  ChordRest* cr = toChordRest(seg->element(t));
                   if (cr)
                         score()->nextInputPos(cr, true);
                   delete e;
@@ -1731,9 +1726,9 @@ void Note::layout2()
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
-            if (e->type() == Element::Type::SYMBOL) {
+            if (e->isSymbol()) {
                   qreal w = headWidth();
-                  Symbol* sym = static_cast<Symbol*>(e);
+                  Symbol* sym = toSymbol(e);
                   QPointF rp = e->readPos();
                   e->layout();
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
@@ -2658,8 +2653,8 @@ Note* Note::lastTiedNote() const
 
 Note* Note::firstTiedNote() const
       {
-      std::vector<Note*> notes;
-      Note* note = const_cast<Note*>(this);
+      std::vector<const Note*> notes;
+      const Note* note = this;
       notes.push_back(note);
       while (note->tieBack()) {
             if (std::find(notes.begin(), notes.end(), note->tieBack()->startNote()) != notes.end())
@@ -2667,7 +2662,7 @@ Note* Note::firstTiedNote() const
             note = note->tieBack()->startNote();
             notes.push_back(note);
             }
-      return note;
+      return const_cast<Note*>(note);
       }
 
 //---------------------------------------------------------

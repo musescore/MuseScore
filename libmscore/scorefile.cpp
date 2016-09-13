@@ -254,20 +254,14 @@ void Score::readStaff(XmlReader& e)
                         Measure* measure = 0;
                         measure = new Measure(this);
                         measure->setTick(e.tick());
-                        if (_mscVersion < 115) {
-                              const SigEvent& ev = sigmap()->timesig(measure->tick());
-                              measure->setLen(ev.timesig());
-                              measure->setTimesig(ev.nominal());
-                              }
-                        else {
-                              //
-                              // inherit timesig from previous measure
-                              //
-                              Measure* m = e.lastMeasure(); // measure->prevMeasure();
-                              Fraction f(m ? m->timesig() : Fraction(4,4));
-                              measure->setLen(f);
-                              measure->setTimesig(f);
-                              }
+                        //
+                        // inherit timesig from previous measure
+                        //
+                        Measure* m = e.lastMeasure(); // measure->prevMeasure();
+                        Fraction f(m ? m->timesig() : Fraction(4,4));
+                        measure->setLen(f);
+                        measure->setTimesig(f);
+
                         measure->read(e, staff);
                         measure->checkMeasue(staff);
                         if (!measure->isMMRest()) {
@@ -292,8 +286,6 @@ void Score::readStaff(XmlReader& e)
                         mb->setTick(e.tick());
                         measures()->add(mb);
                         }
-//                  else if (tag == "move")
-//                        e.initTick(e.readFraction().ticks());
                   else if (tag == "tick")
                         e.initTick(fileDivision(e.readInt()));
                   else
@@ -325,8 +317,6 @@ void Score::readStaff(XmlReader& e)
                                     measure = measure->nextMeasure();
                               }
                         }
-//                  else if (tag == "move")
-//                        e.initTick(e.readFraction().ticks());
                   else if (tag == "tick")
                         e.initTick(fileDivision(e.readInt()));
                   else
@@ -901,44 +891,19 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         QString message;
                         if (mscVersion() > MSCVERSION)
                               return FileError::FILE_TOO_NEW;
-                        if (mscVersion() < 206)
+                        if (mscVersion() < 114)
                               return FileError::FILE_TOO_OLD;
                         }
-
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "programVersion") {
-                              setMscoreVersion(e.readElementText());
-                              parseVersion(mscoreVersion());
-                              }
-                        else if (tag == "programRevision")
-                              setMscoreRevision(e.readInt());
-                        else if (tag == "Score") {
-                              if (!read(e))
-                                    return FileError::FILE_BAD_FORMAT;
-                              }
-                        else if (tag == "Revision") {
-                              Revision* revision = new Revision;
-                              revision->read(e);
-                              revisions()->add(revision);
-                              }
-                        else
-                              e.unknown();
-                        }
+                  if (mscVersion() == 114)
+                        return read114(e);
+                  if (mscVersion() <= 207)
+                        return read207(e);
+                  return read300(e);
                   }
             else
                   e.unknown();
             }
-
-      int id = 1;
-      for (LinkedElements* le : e.linkIds())
-            le->setLid(this, id++);
-
-      for (Staff* s : staves())
-            s->updateOttava();
-
-      setCreated(false);
-      return FileError::FILE_NO_ERROR;
+      return FileError::FILE_CORRUPTED;
       }
 
 //---------------------------------------------------------

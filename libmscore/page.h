@@ -82,6 +82,7 @@ class PageFormat {
       PageFormat();
 
       const QSizeF& size() const    { return _size;          }    // size in inch
+      QSizeF& size()                { return _size;          }    // size in inch
       qreal width() const           { return _size.width();  }
       qreal height() const          { return _size.height(); }
       void setSize(const QSizeF& s) { _size = s;             }

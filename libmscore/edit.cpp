@@ -3373,7 +3373,6 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       int tick  = startSegment->rtick();
       int len   = f.ticks();
       int etick = tick + len;
-//      printf("cmdTimeDelete at tick %d ticks %d\n", tick, len);
 
       Segment* fs = m->first(CR_TYPE);
 
@@ -3385,11 +3384,9 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                               int cetick    = s->rtick() + cr->duration().ticks();
 
                               if (cetick <= tick) {
-//                                    printf("   %d continue %d\n", track, s->rtick());
                                     continue;
                                     }
                               if (s->rtick() >= etick) {
-//                                    printf("   %d break %d\n", track, s->rtick());
                                     break;
                                     }
 
@@ -3399,25 +3396,21 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                               // inside deleted area
                               else if (s->rtick() >= tick && cetick <= etick) {
                                     // inside
-//                                    printf("   %d inside\n", track);
                                     undoRemoveElement(cr);
                                     }
                               else if (s->rtick() >= tick) {
                                     // running out
-//                                    printf("   %d running out\n", track);
                                     Fraction ff = cr->duration() - Fraction::fromTicks(cetick - etick);
                                     undoRemoveElement(cr);
                                     createCRSequence(ff, cr, tick + len);
                                     }
                               else if (s->rtick() < tick && cetick <= etick) {
                                     // running in
-//                                    printf("   %d running in\n", track);
                                     Fraction f1 = Fraction::fromTicks(tick - s->tick());
                                     changeCRlen(cr, f1, false);
                                     }
                               else {
                                     // running in/out
-//                                    printf("   %d running in/out\n", track);
                                     Fraction f1 = cr->duration() - f;
                                     changeCRlen(cr, f1, false);
                                     }

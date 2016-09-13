@@ -125,7 +125,7 @@
           </TimeSig>
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -136,7 +136,7 @@
           </Chord>
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -146,7 +146,7 @@
       <Measure number="2">
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -157,7 +157,7 @@
           </Chord>
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -167,7 +167,7 @@
       <Measure number="3">
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -178,7 +178,7 @@
           </Chord>
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>

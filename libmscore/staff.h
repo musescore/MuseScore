@@ -159,6 +159,7 @@ class Staff : public QObject, public ScoreElement {
       QList <BracketItem> brackets() const { return _brackets; }
       void cleanupBrackets();
 
+      ClefList& clefList()                           { return clefs;  }
       ClefTypeList clefType(int tick) const;
       ClefTypeList defaultClefType() const           { return _defaultClefType; }
       void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
