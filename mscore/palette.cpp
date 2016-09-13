@@ -612,6 +612,34 @@ int Palette::idx(const QPoint& p) const
       }
 
 //---------------------------------------------------------
+//   idx2
+//   returns indexes outside of cells.size()
+//---------------------------------------------------------
+
+int Palette::idx2(const QPoint& p) const
+      {
+      if (columns() == 0)
+            return -1;
+      int rightBorder = width() % hgrid;
+      int hhgrid      = hgrid + (rightBorder / columns());
+
+      int x = p.x();
+      int y = p.y();
+
+      int row = y / vgrid;
+      int col = x / hhgrid;
+
+      int nc = columns();
+      if (col > nc)
+            return -1;
+
+      int idx = row * nc + col;
+      if (idx < 0 || idx > columns()*rows())
+            return -1;
+      return idx;
+      }
+
+//---------------------------------------------------------
 //   idxRect
 //---------------------------------------------------------
 
@@ -1016,20 +1044,11 @@ void Palette::dragMoveEvent(QDragMoveEvent* ev)
       if (i == -1)
             return;
 
-      int n = cells.size();
-      int ii = i;
-      for (; ii < n; ++ii) {
-            if (cells[ii] == 0)
-                  break;
-            }
-      if (ii == n)
-            return;
-
       QRect r;
       if (currentIdx != -1)
             r = idxRect(currentIdx);
-      update(r | idxRect(ii));
-      currentIdx = ii;
+      update(r | idxRect(i));
+      currentIdx = i;
       }
 
 //---------------------------------------------------------
@@ -1109,16 +1128,33 @@ void Palette::dropEvent(QDropEvent* event)
       e->setSelected(false);
       bool ok = false;
       if (event->source() == this) {
-            int i = idx(event->pos());
+            int i = idx2(event->pos());
             if (i == -1) {
+                  //Append if invalid index
+                  cells.append(cells[dragSrcIdx]);
+                  cells[dragSrcIdx] = 0;
+                  ok = true;
+                  }
+            else if (i > cells.size()-1) {
+                  //Append if past size+1
+                  for (int iter = i; i > cells.size(); iter--) {
+                      cells.append(0);
+                      }
+
                   cells.append(cells[dragSrcIdx]);
                   cells[dragSrcIdx] = 0;
                   ok = true;
                   }
             else if (dragSrcIdx != i) {
-                  PaletteCell* c = cells[dragSrcIdx];
-                  cells[dragSrcIdx] = cells[i];
-                  cells[i] = c;
+                  //Insert if within size()
+                  if (cells[i] != 0) {
+                          cells.move(dragSrcIdx,i);
+
+                      }
+                  else {
+                          cells.swap(dragSrcIdx,i);
+                          cells[dragSrcIdx] = 0;
+                      }
                   delete e;
                   ok = true;
                   }
