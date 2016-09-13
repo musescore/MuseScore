@@ -197,7 +197,6 @@ class Note : public Element {
                                           ///< except if only one note is dotted
       bool _fretConflict  { false };      ///< used by TAB staves to mark a fretting conflict:
                                           ///< two or mor enotes on the same string
-
       bool dragMode       { false };
       bool _mirror        { false };      ///< True if note is mirrored at stem.
       bool _small         { false };
@@ -205,8 +204,8 @@ class Note : public Element {
       mutable bool _mark  { false };      // for use in sequencer
       bool _fixed         { false };      // for slash notation
 
-      MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };    ///< user override of mirror
-      Direction _userDotPosition { Direction::AUTO }; ///< user override of dot position
+      MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };      ///< user override of mirror
+      Direction _userDotPosition     { Direction::AUTO };               ///< user override of dot position
 
       NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
       NoteHead::Type  _headType  { NoteHead::Type::HEAD_AUTO    };

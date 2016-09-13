@@ -338,9 +338,8 @@ QString PageFormat::name() const
 //  <page-layout>
 //      <page-height>
 //      <page-width>
-//      <pageFormat>A6</pageFormat>
 //      <landscape>1</landscape>
-//      <page-margins>
+//      <page-margins type="both">
 //         <left-margin>28.3465</left-margin>
 //         <right-margin>28.3465</right-margin>
 //         <top-margin>28.3465</top-margin>
@@ -353,7 +352,7 @@ void PageFormat::read(XmlReader& e, Score* score)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
-      bool landscape = false;
+      bool landscape         = false;
       QString type;
 
       while (e.readNextStartElement()) {
@@ -395,18 +394,13 @@ void PageFormat::read(XmlReader& e, Score* score)
                   _size.rheight() = e.readDouble() * 0.5 / PPI;
             else if (tag == "page-width")
                   _size.rwidth() = e.readDouble() * .5 / PPI;
-            else if (tag == "page-offset") {           // obsolete, moved to Score
-                  QString val(e.readElementText());
-                  if(score)
-                        score->setPageNumberOffset(val.toInt());
-                  }
             else
                   e.unknown();
             }
       if (landscape)
             _size.transpose();
-      qreal w1 = _size.width() - _oddLeftMargin - _oddRightMargin;
-      qreal w2 = _size.width() - _evenLeftMargin - _evenRightMargin;
+      qreal w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
+      qreal w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
       _printableWidth = qMin(w1, w2);     // silently adjust right margins
       }
 

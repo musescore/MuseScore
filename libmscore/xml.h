@@ -129,7 +129,7 @@ class XmlReader : public QXmlStreamReader {
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }
       void setTransposeDiatonic(int v)  { _transpose.diatonic = v; }
 
-      QList<std::pair<int, ClefType>>& clefs(int idx);
+//      QList<std::pair<int, ClefType>>& clefs(int idx);
 
       QMap<int, LinkedElements*>& linkIds() { return _elinks;     }
       };

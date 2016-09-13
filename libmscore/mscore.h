@@ -17,8 +17,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.07"
-static constexpr int MSCVERSION = 207;
+#define MSC_VERSION     "3.00"
+static constexpr int MSCVERSION = 300;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -33,6 +33,7 @@ static constexpr int MSCVERSION = 207;
 //    1.12  use durationType, remove tickLen
 //    1.13  Clefs: userOffset is not (mis)used for vertical layout position
 //    1.14  save user modified beam position as spatium value (Versions 0.9.6 - 1.3)
+
 //    1.15  save timesig inline; Lyrics "endTick" replaced by "ticks"
 //    1.16  spanners (hairpin, trill etc.) are now inline and have no ticks anymore
 //    1.17  new <Score> toplevel structure to support linked parts (excerpts)
@@ -47,6 +48,7 @@ static constexpr int MSCVERSION = 207;
 //    1.24  default image size is spatium dependent
 //      -   symbol numbers in TextLine() replaced by symbol names
 //          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
+
 //    2.00  (Version 2.0)
 //    2.01  save SlurSegment position relative to staff
 //    2.02  save instrumentId, note slashes
@@ -57,6 +59,7 @@ static constexpr int MSCVERSION = 207;
 //
 //    2.07  irregular, breakMMrest, more style options, system divider, bass string for tab (3.0)
 
+//    3.00  (Version 3.0 alpha)
 
 class MStyle;
 class Sequencer;

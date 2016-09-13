@@ -67,6 +67,7 @@ add_library (
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
       shape.cpp systemdivider.cpp midimapping.cpp
+      read114.cpp read207.cpp read300.cpp
       )
 
 set_target_properties (

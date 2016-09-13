@@ -105,6 +105,8 @@ class Trill;
 class TrillSegment;
 class Symbol;
 class FSymbol;
+class Fingering;
+class NoteHead;
 
 enum class SymId;
 
@@ -736,6 +738,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(TrillSegment,  TRILL_SEGMENT)
       CONVERT(Symbol,        SYMBOL)
       CONVERT(FSymbol,       FSYMBOL)
+      CONVERT(Fingering,     FINGERING)
+      CONVERT(NoteHead,      NOTEHEAD)
 #undef CONVERT
       };
 
@@ -832,6 +836,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(TrillSegment,  TRILL_SEGMENT)
       CONVERT(Symbol,        SYMBOL)
       CONVERT(FSymbol,       FSYMBOL)
+      CONVERT(Fingering,     FINGERING)
+      CONVERT(NoteHead,      NOTEHEAD)
 #undef CONVERT
 
 //---------------------------------------------------------
