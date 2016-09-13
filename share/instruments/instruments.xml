@@ -255,10 +255,10 @@
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>69-100</aPitchRange>
+                  <aPitchRange>69-95</aPitchRange>
                   <pPitchRange>69-100</pPitchRange>
                   <Channel>
-                        <program value="67"/>
+                        <program value="72"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
@@ -269,10 +269,10 @@
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-98</aPitchRange>
+                  <aPitchRange>67-93</aPitchRange>
                   <pPitchRange>67-98</pPitchRange>
                   <Channel>
-                        <program value="67"/>
+                        <program value="72"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
@@ -283,10 +283,10 @@
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>76-107</aPitchRange>
+                  <aPitchRange>76-102</aPitchRange>
                   <pPitchRange>76-107</pPitchRange>
                   <Channel>
-                        <program value="67"/>
+                        <program value="72"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
@@ -297,10 +297,10 @@
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>74-105</aPitchRange>
+                  <aPitchRange>74-100</aPitchRange>
                   <pPitchRange>74-105</pPitchRange>
                   <Channel>
-                        <program value="67"/>
+                        <program value="72"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
@@ -311,10 +311,10 @@
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-103</aPitchRange>
+                  <aPitchRange>72-98</aPitchRange>
                   <pPitchRange>72-103</pPitchRange>
                   <Channel>
-                        <program value="67"/>
+                        <program value="72"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
@@ -325,10 +325,10 @@
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>71-102</aPitchRange>
+                  <aPitchRange>71-97</aPitchRange>
                   <pPitchRange>71-102</pPitchRange>
                   <Channel>
-                        <program value="67"/>
+                        <program value="72"/>
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
