@@ -185,7 +185,7 @@
           <item row="4" column="1">
            <widget class="QCheckBox" name="showStartcenter">
             <property name="text">
-             <string>Show start center</string>
+             <string>Show Start Center</string>
             </property>
            </widget>
           </item>
@@ -218,7 +218,7 @@
              <string>Show play panel</string>
             </property>
             <property name="text">
-             <string>Show play panel</string>
+             <string>Show Play Panel</string>
             </property>
            </widget>
           </item>
@@ -228,7 +228,7 @@
              <string>Show navigator</string>
             </property>
             <property name="text">
-             <string>Show navigator</string>
+             <string>Show Navigator</string>
             </property>
            </widget>
           </item>
@@ -658,7 +658,7 @@
        <item row="1" column="1" rowspan="2">
         <widget class="QGroupBox" name="groupBox_12">
          <property name="title">
-          <string>Style</string>
+          <string>Theme</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
