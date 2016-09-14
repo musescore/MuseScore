@@ -118,9 +118,10 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
               SLOT(addButtonClicked()));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
-
-      for (int i = 1; i <= VOICES; i++)
-            partList->resizeColumnToContents(i);
+      for (int i = 1; i <= VOICES; i++) {
+            //partList->model()->setHeaderData(i, Qt::Horizontal, MScore::selectColor[i-1], Qt::BackgroundRole);
+            partList->header()->resizeSection(i, 30);
+            }
 
       int n = score->excerpts().size();
       if (n > 0)

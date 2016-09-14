@@ -323,6 +323,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <attribute name="headerStretchLastSection">
+              <bool>false</bool>
+             </attribute>
              <column>
               <property name="text">
                <string>Instrument</string>
@@ -332,20 +335,32 @@
               <property name="text">
                <string>1</string>
               </property>
+              <property name="textAlignment">
+               <set>AlignCenter</set>
+              </property>
              </column>
              <column>
               <property name="text">
                <string>2</string>
+              </property>
+              <property name="textAlignment">
+               <set>AlignCenter</set>
               </property>
              </column>
              <column>
               <property name="text">
                <string>3</string>
               </property>
+              <property name="textAlignment">
+               <set>AlignCenter</set>
+              </property>
              </column>
              <column>
               <property name="text">
                <string>4</string>
+              </property>
+              <property name="textAlignment">
+               <set>AlignCenter</set>
               </property>
              </column>
             </widget>
