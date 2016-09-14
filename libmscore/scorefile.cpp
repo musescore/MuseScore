@@ -88,7 +88,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
 //   write
 //---------------------------------------------------------
 
-void Score::write(Xml& xml, bool selectionOnly)
+bool Score::write(Xml& xml, bool selectionOnly)
       {
       // if we have multi measure rests and some parts are hidden,
       // then some layout information is missing:
@@ -242,6 +242,7 @@ void Score::write(Xml& xml, bool selectionOnly)
             undo()->undo();
             endUndoRedo();
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -365,19 +366,11 @@ bool Score::saveFile()
             MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName).arg(QString(strerror(errno)));
             return false;
             }
-      try {
-            if (suffix == "mscx")
-                  saveFile(&temp, false);
-            else
-                  saveCompressedFile(&temp, info, false);
-            }
-      catch (QString s) {
-            MScore::lastError = s;
+      if (suffix == "mscx" ? Score::saveFile(&temp, false) : Score::saveCompressedFile(&temp, info, false))
             return false;
-            }
+
       if (temp.error() != QFile::NoError) {
             MScore::lastError = tr("MuseScore: Save File failed: %1").arg(temp.errorString());
-            temp.close();
             return false;
             }
       temp.close();
@@ -453,16 +446,15 @@ bool Score::saveFile()
 //   saveCompressedFile
 //---------------------------------------------------------
 
-void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
+bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       {
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            QString s = tr("Open File\n%1\nfailed: ")
+            MScore::lastError = tr("Open File\n%1\nfailed: ")
                + QString(strerror(errno));
-            throw(s.arg(info.filePath()));
+            return false;
             }
-      saveCompressedFile(&fp, info, onlySelection);
-      fp.close();
+      return saveCompressedFile(&fp, info, onlySelection);
       }
 
 //---------------------------------------------------------
@@ -499,7 +491,7 @@ QImage Score::createThumbnail()
 //    file is already opened
 //---------------------------------------------------------
 
-void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection)
+bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection)
       {
       MQZipWriter uz(f);
 
@@ -556,8 +548,10 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
                   QBuffer cbuf;
                   OmrPage* page = _omr->page(i);
                   const QImage& image = page->image();
-                  if (!image.save(&cbuf, "PNG"))
-                        throw(QString("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height()));
+                  if (!image.save(&cbuf, "PNG")) {
+                        MScore::lastError = QString("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height());
+                        return false;
+                        }
                   uz.addFile(path, cbuf.data());
                   cbuf.close();
                   }
@@ -575,6 +569,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       dbuf.seek(0);
       uz.addFile(fn, dbuf.data());
       uz.close();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -655,9 +650,9 @@ bool Score::saveStyle(const QString& name)
 extern QString revision;
 extern bool enableTestMode;
 
-void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
+bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
-      if(!MScore::testMode)
+      if (!MScore::testMode)
             MScore::testMode = enableTestMode;
       Xml xml(f);
       xml.writeOmr = msczFormat;
@@ -670,7 +665,8 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       else {
             xml.stag("museScore version=\"2.00\"");
             }
-      write(xml, onlySelection);
+      if (!write(xml, onlySelection))
+            return false;
       xml.etag();
       if (!parentScore())
             _revisions->write(xml);
@@ -680,6 +676,7 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             _mscoreRevision = revision.toInt();
             _mscVersion = MSCVERSION;
             }
+      return true;
       }
 
 //---------------------------------------------------------

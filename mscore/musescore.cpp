@@ -2137,22 +2137,14 @@ static bool doConvert(Score* cs, QString fn)
             }
       if (fn.endsWith(".mscx")) {
             QFileInfo fi(fn);
-            try {
-                  cs->saveFile(fi);
-                  }
-            catch(QString) {
+            if (!cs->saveFile(fi))
                   return false;
-                  }
             return true;
             }
       else if (fn.endsWith(".mscz")) {
             QFileInfo fi(fn);
-            try {
-                  cs->saveCompressedFile(fi, false);
-                  }
-            catch(QString) {
+            if (!cs->saveCompressedFile(fi, false))
                   return false;
-                  }
             return true;
             }
       else if (fn.endsWith(".xml")) {

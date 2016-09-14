@@ -1899,14 +1899,15 @@ void ChordObj::read()
 //    return false on error
 //---------------------------------------------------------
 
-void Capella::read(void* p, qint64 len)
+bool Capella::read(void* p, qint64 len)
       {
       if (len == 0)
-            return;
+            return true;
       qint64 rv = f->read((char*)p, len);
       if (rv != len)
-            throw Capella::Error::CAP_EOF;
+            return false;
       curPos += len;
+      return true;
       }
 
 //---------------------------------------------------------
