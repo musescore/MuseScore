@@ -27,6 +27,7 @@
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
+#include "rangeannotation.h"
 
 class QPainter;
 
@@ -544,7 +545,6 @@ class Score : public QObject, public ScoreElement {
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
       bool read(XmlReader&);
-
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);

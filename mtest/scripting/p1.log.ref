@@ -11,7 +11,7 @@ type is:16
 TimeSig
 type is:18
 Chord
-type is:78
+type is:81
   durationType:480
   beamMode:0
   small:false
@@ -29,7 +29,7 @@ type is:19
   beamMode:4
   small:false
 Chord
-type is:78
+type is:81
   durationType:960
   beamMode:0
   small:false
