@@ -263,7 +263,7 @@ void Score::readStaff(XmlReader& e)
                         measure->setTimesig(f);
 
                         measure->read(e, staff);
-                        measure->checkMeasue(staff);
+                        measure->checkMeasure(staff);
                         if (!measure->isMMRest()) {
                               measures()->add(measure);
                               e.setLastMeasure(measure);
@@ -306,7 +306,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         e.initTick(measure->tick());
                         measure->read(e, staff);
-                        measure->checkMeasue(staff);
+                        measure->checkMeasure(staff);
                         if (measure->isMMRest())
                               measure = e.lastMeasure()->nextMeasure();
                         else {
