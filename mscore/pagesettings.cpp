@@ -242,6 +242,9 @@ void PageSettings::updateValues()
             evenPageLeftMargin->setValue(oddPageLeftMargin->value());
             }
 
+      landscapeButton->setChecked(pf->width() > pf->height());
+      portraitButton->setChecked(pf->width() <= pf->height());
+
       twosided->setChecked(pf->twosided());
 
       pageOffsetEntry->setValue(sc->pageNumberOffset() + 1);
@@ -273,7 +276,7 @@ void PageSettings::mmClicked()
 //   portraitClicked
 //---------------------------------------------------------
 
-void Ms::PageSettings::portraitClicked()
+void PageSettings::portraitClicked()
       {
       PageFormat pf;
       double f  = mmUnit ? 1.0/INCH : 1.0;
@@ -287,7 +290,7 @@ void Ms::PageSettings::portraitClicked()
 //   landscapeClicked
 //---------------------------------------------------------
 
-void Ms::PageSettings::landscapeClicked()
+void PageSettings::landscapeClicked()
       {
       PageFormat pf;
       pf.setSize(QSizeF(pf.height(), pf.width()));

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>489</width>
     <height>520</height>
    </rect>
   </property>
@@ -111,12 +111,23 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QCheckBox" name="twosided">
-          <property name="text">
-           <string>Two sided</string>
-          </property>
-         </widget>
+        <item row="4" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QRadioButton" name="portraitButton">
+            <property name="text">
+             <string>Portrait</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="landscapeButton">
+            <property name="text">
+             <string>Landscape</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_3">
@@ -128,6 +139,13 @@
           </property>
           <property name="buddy">
            <cstring>pageHeight</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0" colspan="2">
+         <widget class="QCheckBox" name="twosided">
+          <property name="text">
+           <string>Two sided</string>
           </property>
          </widget>
         </item>
@@ -144,20 +162,6 @@
           </property>
           <property name="buddy">
            <cstring>pageWidth</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QRadioButton" name="portraitButton">
-          <property name="text">
-           <string>Portrait</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QRadioButton" name="landscapeButton">
-          <property name="text">
-           <string>Landscape</string>
           </property>
          </widget>
         </item>
@@ -508,12 +512,12 @@
   <tabstop>pageGroup</tabstop>
   <tabstop>pageWidth</tabstop>
   <tabstop>pageHeight</tabstop>
+  <tabstop>portraitButton</tabstop>
+  <tabstop>landscapeButton</tabstop>
   <tabstop>twosided</tabstop>
   <tabstop>spatiumEntry</tabstop>
   <tabstop>inchButton</tabstop>
   <tabstop>mmButton</tabstop>
-  <tabstop>portraitButton</tabstop>
-  <tabstop>landscapeButton</tabstop>
   <tabstop>oddPageTopMargin</tabstop>
   <tabstop>oddPageLeftMargin</tabstop>
   <tabstop>oddPageRightMargin</tabstop>
