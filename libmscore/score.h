@@ -27,6 +27,7 @@
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
+#include "tremolo.h"
 
 class QPainter;
 
@@ -369,6 +370,8 @@ class Score : public QObject, public ScoreElement {
       int _linkId { 0 };
       MasterScore* _masterScore;
       QList<MuseScoreView*> viewer;
+      Excerpt* _excerpt = 0;
+
 
       QString _mscoreVersion;
       int _mscoreRevision;
@@ -545,6 +548,9 @@ class Score : public QObject, public ScoreElement {
       void readStaff(XmlReader&);
       bool read(XmlReader&);
 
+      Excerpt* excerpt()            { return _excerpt; }
+      void setExcerpt(Excerpt* e)   { _excerpt = e;     }
+
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);
@@ -660,6 +666,8 @@ class Score : public QObject, public ScoreElement {
       void putNote(const QPointF&, bool replace, bool insert);
       void putNote(const Position&, bool replace, bool insert);
       void putNoteInsert(const Position&);
+
+      void cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link = true, bool spanner = true);
 
       void repitchNote(const Position& pos, bool replace);
       void regroupNotesAndRests(int startTick, int endTick, int track);
@@ -1213,7 +1221,7 @@ class MasterScore : public Score {
       void updateChannel();
       void setSoloMute();
 
-      void addExcerpt(Score*);
+      void addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt* ex = 0);
       void removeExcerpt(Score*);
       };
 
