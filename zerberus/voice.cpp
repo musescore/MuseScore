@@ -437,19 +437,19 @@ void Voice::process(int frames, float* p)
 void Voice::updateLoop()
       {
       int idx = phase.index();
+      int loopOffset = (audioChan * 3) - 1; // offset due to interpolation
       bool validLoop = _loopEnd > 0 && _loopStart >= 0 && (_loopEnd <= (eidx/audioChan));
-      bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state == VoiceState::PLAYING || _state == VoiceState::SUSTAINED));
+      bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state < VoiceState::STOP));
 
-      if (_looping && loopMode() == LoopMode::SUSTAIN && (_state != VoiceState::PLAYING || _state != VoiceState::SUSTAINED))
+      if (!(validLoop && shallLoop)) {
             _looping = false;
-
-      if (!(validLoop && shallLoop))
             return;
-
-      if (idx > _loopEnd) {
-            _looping = true;
-            phase.setIndex(_loopStart+(idx-_loopEnd-1));
             }
+
+      if (idx + loopOffset > _loopEnd)
+            _looping = true;
+      if (idx > _loopEnd)
+            phase.setIndex(_loopStart+(idx-_loopEnd-1));
       }
 
 short Voice::getData(int pos) {
