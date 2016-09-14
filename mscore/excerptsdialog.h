@@ -79,6 +79,7 @@ class StaffItem : public QTreeWidgetItem {
 
       Staff* staff() const        { return _staff;    }
       void setStaff(Staff* s)     { _staff = s;       }
+      void setData(int column, int role, const QVariant& value) override;
       };
 
 //---------------------------------------------------------

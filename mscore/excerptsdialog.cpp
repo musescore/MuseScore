@@ -76,6 +76,23 @@ StaffItem::StaffItem(PartItem* li)
             }
       }
 
+void StaffItem::setData(int column, int role, const QVariant& value)
+      {
+      const bool isCheckChange = column > 0
+         && role == Qt::CheckStateRole
+         && data(column, role).isValid() // Don't "change" during initialization
+         && checkState(column) != value;
+      QTreeWidgetItem::setData(column, role, value);
+      if (isCheckChange) {
+            int unchecked = 0;
+            for (int i = 1; i <= VOICES; i++) {
+                  if (checkState(i) == Qt::Unchecked)
+                        unchecked += 1;
+                  }
+            if (unchecked == VOICES)
+                  setCheckState(column, Qt::Checked);
+            }
+      }
 //---------------------------------------------------------
 //   ExcerptsDialog
 //---------------------------------------------------------
@@ -340,8 +357,10 @@ void ExcerptsDialog::partDoubleClicked(QTreeWidgetItem* item, int)
       {
       if (!title->isEnabled())
             return;
-      PartItem* pi = (PartItem*)item;
-      title->setText(pi->part()->partName());
+      if (!item->parent()) { // top level items are PartItem
+            PartItem* pi = (PartItem*)item;
+            title->setText(pi->part()->partName());
+            }
       }
 
 //---------------------------------------------------------
