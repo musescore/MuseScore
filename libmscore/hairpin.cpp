@@ -492,11 +492,13 @@ void Hairpin::setHairpinType(Type val)
                   setBeginText("cresc.");
                   setContinueText("(cresc.)");
                   setLineStyle(Qt::CustomDashLine);
+                  setDashGapLen(Spatium(4.0));
                   break;
             case Type::DECRESC_LINE:
                   setBeginText("dim.");
                   setContinueText("(dim.)");
                   setLineStyle(Qt::CustomDashLine);
+                  setDashGapLen(Spatium(4.0));
                   break;
             };
       }
@@ -698,7 +700,10 @@ QVariant Hairpin::propertyDefault(P_ID id) const
                   if (_hairpinType == Type::CRESC_HAIRPIN || _hairpinType == Type::DECRESC_HAIRPIN)
                         return int(Qt::SolidLine);
                   return int(Qt::CustomDashLine);
-
+            case P_ID::DASH_GAP_LEN:
+                  if (lineStyle() == Qt::CustomDashLine)
+                        return Spatium(4.0);
+                  // fall thru
             default:
                   return TextLineBase::propertyDefault(id);
             }
