@@ -762,7 +762,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         measure->setTimesig(ev.nominal());
 
                         readMeasure(measure, staff, e);
-                        measure->checkMeasue(staff);
+                        measure->checkMeasure(staff);
 
                         if (!measure->isMMRest()) {
                               score->measures()->add(measure);
@@ -790,7 +790,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         e.initTick(measure->tick());
 
                         readMeasure(measure, staff, e);
-                        measure->checkMeasue(staff);
+                        measure->checkMeasure(staff);
 
                         if (measure->isMMRest())
                               measure = e.lastMeasure()->nextMeasure();
