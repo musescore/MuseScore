@@ -438,7 +438,7 @@ PasteState Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             Measure* endM = tick2measureMM(dstTick + tickLen);
             for (int i = dstStaff; i < endStaff; i++) {
                   for (Measure* m = dstM; m && m != endM->nextMeasureMM(); m = m->nextMeasureMM())
-                        m->checkMeasue(i);
+                        m->checkMeasure(i);
                   }
             _selection.setRange(s1, s2, dstStaff, endStaff);
             _selection.updateSelectedElements();
