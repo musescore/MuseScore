@@ -25,6 +25,7 @@
 #include "libmscore/image.h"
 #include "libmscore/element.h"
 #include "libmscore/system.h"
+#include "libmscore/durationtype.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/measure/")
@@ -55,6 +56,9 @@ class TestMeasure : public QObject, public MTest
       void spanner_D();
       void deleteLast();
       void minWidth();
+
+      void gap();
+      void checkMeasure();
       };
 
 //---------------------------------------------------------
@@ -350,6 +354,107 @@ void TestMeasure::deleteLast()
       QVERIFY(saveCompareScore(score, "measure-10.mscx", DIR + "measure-10-ref.mscx"));
       delete score;
       }
+
+
+//---------------------------------------------------------
+///   gaps
+//
+//    delete rests and check reorganization of lengths
+//
+//---------------------------------------------------------
+
+void TestMeasure::gap()
+      {
+      MasterScore* score = readScore(DIR + "gaps.mscx");
+      Element* tst       = 0;
+
+      //Select and delete third quarter rest in first Measure (voice 2)
+      score->startCmd();
+      Measure* m  = score->firstMeasure();
+      Segment* s  = m->undoGetSegment(Segment::Type::ChordRest, 960);
+      Element* el = s->element(1);
+      score->select(el);
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      tst = s->element(1);
+      Q_ASSERT(tst);
+
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/);
+
+      //Select and delete second quarter rest in third Measure (voice 4)
+      score->startCmd();
+      m  = m->nextMeasure()->nextMeasure();
+      s  = m->undoGetSegment(Segment::Type::ChordRest, 4320);
+      el = s->element(3);
+      score->select(el);
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      tst = s->element(3);
+      Q_ASSERT(tst);
+
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/);
+
+      //Select and delete first quarter rest in third Measure (voice 4)
+      score->startCmd();
+      s  = m->undoGetSegment(Segment::Type::ChordRest, 3840);
+      el = s->element(3);
+      score->select(el);
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      tst = s->element(3);
+      Q_ASSERT(tst);
+
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 960/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+
+
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   checkMeasure
+//
+//    import a Score with gaps in excerpt and
+//
+//---------------------------------------------------------
+
+void TestMeasure::checkMeasure()
+      {
+      MasterScore* score = readScore(DIR + "checkMeasure.mscx");
+      Element* tst       = 0;
+      Measure* m         = score->firstMeasure()->nextMeasure();
+
+      Segment* s = m->undoGetSegment(Segment::Type::ChordRest, 2880);
+      tst = s->element(1);
+      Q_ASSERT(tst);
+
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+
+      m = m->nextMeasure();
+//      s = m->undoGetSegment(Segment::Type::ChordRest, 3840);
+//      tst = s->element(2);
+//      Q_ASSERT(tst);
+
+//      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+
+      m = m->nextMeasure();
+      s = m->undoGetSegment(Segment::Type::ChordRest, 6240);
+      tst = s->element(1);
+      Q_ASSERT(tst);
+
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 120/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+
+      s = m->undoGetSegment(Segment::Type::ChordRest, 6480);
+      tst = s->element(1);
+      Q_ASSERT(tst);
+
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 120/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+
+      delete score;
+      }
+
 
 
 QTEST_MAIN(TestMeasure)
