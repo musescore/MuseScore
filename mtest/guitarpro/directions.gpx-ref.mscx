@@ -503,10 +503,6 @@
           <name>segno</name>
           <lid>102</lid>
           </Symbol>
-        <Symbol>
-          <name>segno</name>
-          <lid>112</lid>
-          </Symbol>
         <Rest>
           <lid>103</lid>
           <durationType>measure</durationType>
@@ -532,10 +528,6 @@
         <Symbol>
           <name>coda</name>
           <lid>109</lid>
-          </Symbol>
-        <Symbol>
-          <name>coda</name>
-          <lid>113</lid>
           </Symbol>
         <Rest>
           <lid>110</lid>
@@ -1136,10 +1128,6 @@
             <name>segno</name>
             <lid>102</lid>
             </Symbol>
-          <Symbol>
-            <name>segno</name>
-            <lid>112</lid>
-            </Symbol>
           <Rest>
             <lid>103</lid>
             <durationType>measure</durationType>
@@ -1165,10 +1153,6 @@
           <Symbol>
             <name>coda</name>
             <lid>109</lid>
-            </Symbol>
-          <Symbol>
-            <name>coda</name>
-            <lid>113</lid>
             </Symbol>
           <Rest>
             <lid>110</lid>
@@ -1551,7 +1535,6 @@
         <Measure number="33">
           <Symbol>
             <name>segno</name>
-            <lid>112</lid>
             </Symbol>
           <Rest>
             <lid>103</lid>
@@ -1569,7 +1552,6 @@
         <Measure number="35">
           <Symbol>
             <name>coda</name>
-            <lid>113</lid>
             </Symbol>
           <Rest>
             <lid>110</lid>

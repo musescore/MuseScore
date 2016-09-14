@@ -409,8 +409,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <move>3/4</move>
-          <endSpanner id="5"/>
           </Measure>
         <Measure number="2">
           <Chord>
@@ -424,7 +422,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="6">
+          <HairPin id="5">
             <subtype>1</subtype>
             <lid>21</lid>
             </HairPin>
@@ -439,7 +437,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="6"/>
+          <endSpanner id="5"/>
           <Chord>
             <lid>17</lid>
             <durationType>quarter</durationType>
@@ -451,8 +449,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <move>3/4</move>
-          <endSpanner id="7"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -472,7 +468,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="5">
+          <HairPin id="6">
             <subtype>0</subtype>
             <lid>20</lid>
             </HairPin>
@@ -487,6 +483,7 @@
               <string>3</string>
               </Note>
             </Chord>
+          <endSpanner id="6"/>
           <Chord>
             <lid>10</lid>
             <durationType>quarter</durationType>
@@ -526,6 +523,7 @@
               <string>3</string>
               </Note>
             </Chord>
+          <endSpanner id="7"/>
           <Chord>
             <lid>17</lid>
             <durationType>quarter</durationType>

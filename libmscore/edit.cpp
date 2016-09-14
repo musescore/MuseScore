@@ -56,6 +56,7 @@
 #include "ottava.h"
 #include "textframe.h"
 #include "accidental.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -1258,6 +1259,10 @@ void Score::putNote(const Position& p, bool replace, bool insert)
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
 
+      if (score()->excerpt() && !score()->excerpt()->tracks().isEmpty()
+       && score()->excerpt()->tracks().key(_is.track(), -1) == -1)
+            return;
+
       Direction stemDirection = Direction::AUTO;
       bool error;
       NoteVal nval = noteValForPosition(p, error);
@@ -1952,6 +1957,11 @@ void Score::deleteItem(Element* el)
                         undoRemoveElement(rest->tuplet());
                   if (el->voice() != 0) {
                         rest->undoChangeProperty(P_ID::GAP, true);
+                        for (ScoreElement* r : el->linkList()) {
+                              Rest* rest = static_cast<Rest*>(r);
+                              if (rest->track() % VOICES)
+                                    rest->undoChangeProperty(P_ID::GAP, true);
+                              }
 
                         // delete them really when only gap rests are in the actual measure.
                         Measure* m = toRest(el)->measure();
@@ -2018,12 +2028,18 @@ void Score::deleteItem(Element* el)
 
                                     Fraction f = Fraction::fromTicks(ticks);
 
-                                    Rest* rest = new Rest(score());
-                                    rest->setDuration(f);
-                                    rest->setTrack(track);
-                                    Segment* segment = m->getSegment(rest, stick);
-                                    segment->add(rest);
-                                    rest->setGap(true);
+                                    std::vector<TDuration> dList = toDurationList(f, true);
+                                    if (dList.empty())
+                                          break;
+
+                                    for (const TDuration& d : dList) {
+                                          Rest* rest = new Rest(this);
+                                          rest->setDuration(d.fraction());
+                                          rest->setDurationType(d);
+                                          rest->setTrack(track);
+                                          rest->setGap(true);
+                                          undoAddCR(rest, m, stick);
+                                          }
                                     }
                               }
                         // Set input position
@@ -2821,6 +2837,10 @@ void Score::cmdExchangeVoice(int s, int d)
 
       Measure* m1 = tick2measure(t1);
       Measure* m2 = tick2measure(t2);
+
+      if (selection().score()->excerpt())
+            return;
+
       if (t2 > m2->tick())
             m2 = 0;
 
@@ -3423,5 +3443,271 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       for (Segment* s = startSegment->next(); s; s = s->next())
             s->undoChangeProperty(P_ID::TICK, s->rtick() - len);
       undo(new ChangeMeasureLen(m, m->len() - f));
+      }
+
+//---------------------------------------------------------
+//   cloneVoice
+//---------------------------------------------------------
+
+void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link, bool spanner)
+      {
+      int start = sf->tick();
+      TieMap  tieMap;
+      TupletMap tupletMap;    // tuplets cannot cross measure boundaries
+      Score* score = sf->score();
+      Tremolo* tremolo = 0;
+
+      for (Segment* oseg = sf; oseg && oseg->tick() < lTick; oseg = oseg->next1()) {
+            Segment* ns = nullptr; //create segment later, on demand
+            Measure* dm = tick2measure(oseg->tick());
+
+            Element* oe = oseg->element(strack);
+
+            if (oe && !oe->generated() && oe->isChordRest()) {
+                  Element* ne;
+                  //does a linked clone to create just this element
+                  //otherwise element will be add in every linked stave
+                  if (link)
+                        ne = oe->linkedClone();
+                  else
+                        ne = oe->clone();
+                  ne->setTrack(dtrack);
+
+                  //Don't clone gaps to a first voice
+                  if (!(ne->track() % VOICES) && ne->isRest())
+                        toRest(ne)->setGap(false);
+
+                  ne->setScore(this);
+                  ChordRest* ocr = toChordRest(oe);
+                  ChordRest* ncr = toChordRest(ne);
+
+                  //Handle beams
+                  if (ocr->beam() && !ocr->beam()->empty() && ocr->beam()->elements().front() == ocr) {
+                        Beam* nb = ocr->beam()->clone();
+                        nb->clear();
+                        nb->setTrack(dtrack);
+                        nb->setScore(this);
+                        nb->add(ncr);
+                        ncr->setBeam(nb);
+                        }
+
+                  // clone Tuplets
+                  Tuplet* ot = ocr->tuplet();
+                  if (ot) {
+                        ot->setTrack(strack);
+                        Tuplet* nt = tupletMap.findNew(ot);
+                        if (nt == 0) {
+                              if (link)
+                                    nt = toTuplet(ot->linkedClone());
+                              else
+                                    nt = toTuplet(ot->clone());
+                              nt->setTrack(dtrack);
+                              nt->setParent(dm);
+                              tupletMap.add(ot, nt);
+
+                              Tuplet* nt1 = nt;
+                              while (ot->tuplet()) {
+                                    Tuplet* nt = tupletMap.findNew(ot->tuplet());
+                                    if (nt == 0) {
+                                          if (link)
+                                                nt = toTuplet(ot->tuplet()->linkedClone());
+                                          else
+                                                nt = toTuplet(ot->tuplet()->clone());
+                                          nt->setTrack(dtrack);
+                                          nt->setParent(dm);
+                                          tupletMap.add(ot->tuplet(), nt);
+                                          }
+                                    nt->add(nt1);
+                                    nt1->setTuplet(nt);
+                                    ot = ot->tuplet();
+                                    nt1 = nt;
+                                    }
+                              }
+                        nt->add(ncr);
+                        ncr->setTuplet(nt);
+                        }
+
+                  // clone additional settings
+                  if (oe->isChordRest()) {
+                        if (oe->isRest()) {
+                              Rest* ore = toRest(ocr);
+                              // If we would clone a full measure rest just don't clone this rest
+                              if (ore->isFullMeasureRest() && (dtrack % VOICES)) {
+                                    continue;
+                                    }
+                              }
+
+                        if (oe->isChord()) {
+                              Chord* och = toChord(ocr);
+                              Chord* nch = toChord(ncr);
+
+                              int n = och->notes().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Note* on = och->notes().at(i);
+                                    Note* nn = nch->notes().at(i);
+                                    Interval v = staff(dtrack) ? staff(dtrack)->part()->instrument(dtrack)->transpose() : Interval();
+                                    nn->setTpc1(on->tpc1());
+                                    if (v.isZero())
+                                          nn->setTpc2(on->tpc1());
+                                    else {
+                                          v.flip();
+                                          nn->setTpc2(Ms::transposeTpc(nn->tpc1(), v, true));
+                                          }
+
+                                    if (on->tieFor()) {
+                                          Tie* tie;
+                                          if (link)
+                                                tie = toTie(on->tieFor()->linkedClone());
+                                          else
+                                                tie = toTie(on->tieFor()->clone());
+                                          tie->setScore(this);
+                                          nn->setTieFor(tie);
+                                          tie->setStartNote(nn);
+                                          tie->setTrack(nn->track());
+                                          tie->setEndNote(nn);
+                                          tieMap.add(on->tieFor(), tie);
+                                          }
+                                    if (on->tieBack()) {
+                                          Tie* tie = tieMap.findNew(on->tieBack());
+                                          if (tie) {
+                                                nn->setTieBack(tie);
+                                                tie->setEndNote(nn);
+                                                }
+                                          else {
+                                                qDebug("cloneVoices: cannot find tie");
+                                                }
+                                          }
+                                    // add back spanners (going back from end to start spanner element
+                                    // makes sure the 'other' spanner anchor element is already set up)
+                                    // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                                    for (Spanner* oldSp : on->spannerBack()) {
+                                          Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                          if (newStart != nullptr) {
+                                                Spanner* newSp;
+                                                if (link)
+                                                      newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                else
+                                                      newSp = static_cast<Spanner*>(oldSp->clone());
+                                                newSp->setNoteSpan(newStart, nn);
+                                                addElement(newSp);
+                                                }
+                                          else {
+                                                qDebug("cloneVoices: cannot find spanner start note");
+                                                }
+                                          }
+                                    }
+                              // two note tremolo
+                              if (och->tremolo() && och->tremolo()->twoNotes()) {
+                                   if (och == och->tremolo()->chord1()) {
+                                          if (tremolo)
+                                                qDebug("unconnected two note tremolo");
+                                          if (link)
+                                                tremolo = toTremolo(och->tremolo()->linkedClone());
+                                          else
+                                                tremolo = toTremolo(och->tremolo()->clone());
+                                          tremolo->setScore(nch->score());
+                                          tremolo->setParent(nch);
+                                          tremolo->setTrack(nch->track());
+                                          tremolo->setChords(nch, 0);
+                                          nch->setTremolo(tremolo);
+                                          }
+                                    else if (och == och->tremolo()->chord2()) {
+                                          if (!tremolo)
+                                                qDebug("first note for two note tremolo missing");
+                                          else {
+                                                tremolo->setChords(tremolo->chord1(), nch);
+                                                nch->setTremolo(tremolo);
+                                                }
+                                          }
+                                    else
+                                          qDebug("inconsistent two note tremolo");
+                                    }
+                              }
+
+                        // Add element (link -> just in this measure)
+                        if (link) {
+                              if (!ns)
+                                    ns = dm->getSegment(oseg->segmentType(), oseg->tick());
+                              ns->add(ne);
+                              }
+                        else {
+                              undoAddCR(toChordRest(ne), dm, oseg->tick());
+                              }
+                        }
+                  }
+            Segment* tst = dm->segments().firstCRSegment();
+            if (strack % VOICES && !(dtrack % VOICES) && (!tst || (!tst->element(dtrack)))) {
+                  Rest* rest = new Rest(this);
+                  rest->setDuration(dm->len());
+                  rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                  rest->setTrack(dtrack);
+                  if (link) {
+                        Segment* segment = dm->getSegment(rest, dm->tick());
+                        segment->add(rest);
+                        }
+                  else
+                        undoAddCR(toChordRest(rest), dm, dm->tick());
+                  }
+            }
+
+      if (spanner) {
+            // Find and add corresponding slurs
+            auto spanners = score->spannerMap().findOverlapping(start, lTick);
+            for (auto i = spanners.begin(); i < spanners.end(); i++) {
+                  Spanner* sp = i->value;
+                  int spStart = sp->tick();
+                  int track   = sp->track();
+                  int track2  = sp->track2();
+                  int spEnd = spStart + sp->ticks();
+                  qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart, spEnd, spEnd-spStart, start, lTick);
+                  if (sp->isSlur() && (spStart >= start && spEnd < lTick)) {
+                        if (track == strack && track2 == strack){
+                              Spanner* ns;
+                              if (link)
+                                    ns =  static_cast<Spanner*>(sp->linkedClone());
+                              else
+                                    ns = static_cast<Spanner*>(sp->clone());
+
+                              ns->setScore(this);
+                              ns->setParent(0);
+                              ns->setTrack(dtrack);
+                              ns->setTrack2(dtrack);
+
+                              // set start/end element for slur
+                              ChordRest* cr1 = sp->startCR();
+                              ChordRest* cr2 = sp->endCR();
+
+                              ns->setStartElement(0);
+                              ns->setEndElement(0);
+                              if (cr1 && cr1->links()) {
+                                    for (ScoreElement* e : *cr1->links()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(e);
+                                          if (cr == cr1)
+                                                continue;
+                                          if ((cr->score() == this) && (cr->tick() == ns->tick()) && cr->track() == dtrack) {
+                                                ns->setStartElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              if (cr2 && cr2->links()) {
+                                    for (ScoreElement* e : *cr2->links()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(e);
+                                          if (cr == cr2)
+                                                continue;
+                                          if ((cr->score() == this) && (cr->tick() == ns->tick2()) && cr->track() == dtrack) {
+                                                ns->setEndElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              undo(new AddElement(ns));
+                              }
+                        }
+                  }
+            }
+
+      //Layout
+      doLayoutRange(start, lTick);
       }
 }

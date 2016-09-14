@@ -757,6 +757,7 @@ void MuseScore::newFile()
             xs->setName(x->title());
             xs->style()->set(StyleIdx::createMultiMeasureRests, true);
             x->setPartScore(xs);
+            xs->setExcerpt(x);
             score->excerpts().append(x);
             createExcerpt(x);
             score->setExcerptsChanged(true);

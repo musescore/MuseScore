@@ -2374,6 +2374,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       // create parts (excerpts)
       //
       foreach(Part* part, score->parts()) {
+            QMultiMap<int, int> tracks;
             Score* pscore = new Score(static_cast<MasterScore*>(score));
             pscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
@@ -2394,7 +2395,20 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             p->staves()->append(s);
             pscore->staves().append(s);
             stavesMap.append(score->staffIdx(staff));
-            cloneStaves(score, pscore, stavesMap);
+
+            for (int i = score->staffIdx(staff) * VOICES, j = 0; i < score->staffIdx(staff) * VOICES + VOICES; i++, j++)
+                  tracks.insert(i, j);
+
+            pscore->setName(part->partName());
+            Excerpt* excerpt = new Excerpt(score);
+            excerpt->setTracks(tracks);
+            excerpt->setPartScore(pscore);
+            pscore->setExcerpt(excerpt);
+            excerpt->setTitle(part->partName());
+            excerpt->parts().append(part);
+            score->excerpts().append(excerpt);
+
+            cloneStaves(score, pscore, stavesMap, tracks);
 
             if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
@@ -2411,13 +2425,6 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
             pscore->appendPart(p);
-
-            pscore->setName(part->partName());
-            Excerpt* excerpt = new Excerpt(score);
-            excerpt->setPartScore(pscore);
-            excerpt->setTitle(part->partName());
-            excerpt->parts().append(part);
-            score->excerpts().append(excerpt);
 
             //
             // create excerpt title
