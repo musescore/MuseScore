@@ -1792,7 +1792,8 @@ void MasterScore::addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt*
                         }
                   }
             }
-      if (tracks.isEmpty()) {
+      if (tracks.isEmpty()) { // SHOULDN'T HAPPEN, protected in the UI
+            qDebug() << "Empty tracklist when adding excerpt. Something is wrong.";
             for (Staff* s : score->staves()) {
                   LinkedStaves* ls = s->linkedStaves();
                   if (ls == 0)
