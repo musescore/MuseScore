@@ -702,7 +702,7 @@ class Capella {
       QString readQString();
       void readExtra();
       QList<BasicDrawObj*> readDrawObjectArray();
-      void read(void* p, qint64 len);
+      bool read(void* p, qint64 len);
       QFont readFont();
       QPointF readPoint();
 

@@ -569,7 +569,7 @@ class Score : public QObject, public ScoreElement {
 
       int pageIdx(Page* page) const { return _pages.indexOf(page); }
 
-      void write(Xml&, bool onlySelection);
+      bool write(Xml&, bool onlySelection);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -726,9 +726,9 @@ class Score : public QObject, public ScoreElement {
       void setShowVBox(bool v)            { _showVBox = v;            }
 
       bool saveFile(QFileInfo& info);
-      void saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
-      void saveCompressedFile(QFileInfo&, bool onlySelection);
-      void saveCompressedFile(QIODevice*, QFileInfo&, bool onlySelection);
+      bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
+      bool saveCompressedFile(QFileInfo&, bool onlySelection);
+      bool saveCompressedFile(QIODevice*, QFileInfo&, bool onlySelection);
       bool exportFile();
 
       void print(QPainter* printer, int page);
