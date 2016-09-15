@@ -5118,6 +5118,7 @@ int main(int argc, char* av[])
                   const char* name;
                   const char* color;
                   };
+            MgStyleConfigData::animationsEnabled = preferences.animations;
             MgStyle* st = new MgStyle;
             QApplication::setStyle(st);
             QPalette p(QApplication::palette());
@@ -5193,7 +5194,6 @@ int main(int argc, char* av[])
                   "QTabBar::close-button:hover {\n"
               "   image: url(:/data/icons/png/window-close-hover.png);\n"
               "   }");
-            MgStyleConfigData::animationsEnabled = preferences.animations;
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
             }
       else
