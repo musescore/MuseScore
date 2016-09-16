@@ -270,7 +270,7 @@
                 <string>Add instrument</string>
                </property>
                <property name="text">
-                <string>+</string>
+                <string notr="true">+</string>
                </property>
               </widget>
              </item>
@@ -280,7 +280,7 @@
                 <string>Remove instrument</string>
                </property>
                <property name="text">
-                <string>-</string>
+                <string notr="true">-</string>
                </property>
               </widget>
              </item>
