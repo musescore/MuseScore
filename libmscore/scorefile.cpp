@@ -366,8 +366,10 @@ bool Score::saveFile()
             MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName).arg(QString(strerror(errno)));
             return false;
             }
-      if (suffix == "mscx" ? Score::saveFile(&temp, false) : Score::saveCompressedFile(&temp, info, false))
+      bool rv = suffix == "mscx" ? Score::saveFile(&temp, false) : Score::saveCompressedFile(&temp, info, false);
+      if (!rv) {
             return false;
+            }
 
       if (temp.error() != QFile::NoError) {
             MScore::lastError = tr("MuseScore: Save File failed: %1").arg(temp.errorString());
