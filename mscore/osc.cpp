@@ -323,7 +323,7 @@ void MuseScore::oscMuteChannel(double val)
             Channel* channel = mm.articulation;
             channel->mute = (val==0.0f ? false : true);
             if (mixer)
-                  mixer->partEdit(i)->mute->setCheckState(val==0.0f ? Qt::Unchecked:Qt::Checked);
+                  mixer->partEdit(i)->mute->setChecked(val==0.0f ? Qt::Unchecked : Qt::Checked);
             }
       }
 #endif // #ifndef OSC

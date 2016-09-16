@@ -62,13 +62,7 @@ PartEdit::PartEdit(QWidget* parent)
       connect(channelSpinBox, SIGNAL(valueChanged(int)),        SLOT(midiChannelChanged(int)));
       connect(expand,         SIGNAL(toggled(bool)),            SLOT(expandToggled(bool)));
 
-      channelLabel->setVisible(preferences.showMidiControls);
-      portLabel->setVisible(preferences.showMidiControls);
-      channelSpinBox->setVisible(preferences.showMidiControls);
-      portSpinBox->setVisible(preferences.showMidiControls);
-      details->setVisible(false);
-
-      hboxLayout->setSpacing(preferences.showMidiControls ? 5 : 20);
+      expandToggled(false);
       }
 
 //---------------------------------------------------------
@@ -122,8 +116,7 @@ void PartEdit::setPart(Part* p, Channel* a)
       _setValue(portSpinBox,    part->masterScore()->midiMapping(a->channel)->port + 1);
       _setValue(channelSpinBox, part->masterScore()->midiMapping(a->channel)->channel + 1);
 
-      QHBoxLayout* hb = new QHBoxLayout;
-      ((QVBoxLayout*)(details->layout()))->addLayout(hb);
+      QHBoxLayout* hb = voiceButtonBox;
       int idx = 0;
       for (Staff* staff : *part->staves()) {
             for (int voice = 0; voice < VOICES; ++voice) {
@@ -145,7 +138,7 @@ void PartEdit::setPart(Part* p, Channel* a)
                         }
                   ++idx;
                   }
-            hb->addStretch(1);
+            hb->addStretch(5);
             }
       while (voiceButtons.value(idx)) {
             QToolButton* tb = voiceButtons.value(idx);
@@ -291,12 +284,18 @@ void Mixer::updateAll(MasterScore* score)
       {
       cs = score;
       int n = -vb->count();
+      if (n < 0) {
+            QLayoutItem* wi = vb->itemAt(vb->count()-1);
+            vb->removeItem(wi);
+            delete wi;
+            n += 1;
+            }
       if (cs) {
             QList<MidiMapping>* mm = cs->midiMapping();
-            n = mm->size() - vb->count();
+            n += mm->size();
             }
       while (n < 0) {
-            QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(0));
+            QLayoutItem* wi = vb->itemAt(0);
             vb->removeItem(wi);
             delete wi->widget();
             delete wi;
@@ -308,6 +307,7 @@ void Mixer::updateAll(MasterScore* score)
             vb->addWidget(pe);
             --n;
             }
+      vb->addStretch(5);
       patchListChanged();
       }
 
@@ -336,12 +336,14 @@ void Mixer::patchListChanged()
       int idx = 0;
       QList<MidiMapping>* mm = cs->midiMapping();
       const QList<MidiPatch*> pl = synti->getPatchInfo();
-      foreach (const MidiMapping& m, *mm) {
-            QWidgetItem* wi  = (QWidgetItem*)(vb->itemAt(idx));
+      for (const MidiMapping& m : *mm) {
+            QLayoutItem* wi  = (QWidgetItem*)(vb->itemAt(idx));
+            if (!wi->widget())
+                  continue;
             PartEdit* pe     = (PartEdit*)(wi->widget());
             bool drum        = m.part->instrument()->useDrumset();
             pe->patch->clear();
-            foreach(const MidiPatch* p, pl) {
+            for (const MidiPatch* p : pl) {
                   if (p->drum == drum)
                         pe->patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
                   }
@@ -350,8 +352,10 @@ void Mixer::patchListChanged()
             }
       // Update solo & mute only after creating all controls (we need to sync all controls)
       idx = 0;
-      foreach (const MidiMapping& m, *mm) {
-            QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(idx));
+      for (const MidiMapping& m : *mm) {
+            QLayoutItem* wi = (QWidgetItem*)(vb->itemAt(idx));
+            if (!wi->widget())
+                  continue;
             PartEdit* pe    = (PartEdit*)(wi->widget());
             pe->mute->setChecked(m.articulation->mute);
             pe->solo->setChecked(m.articulation->solo);
