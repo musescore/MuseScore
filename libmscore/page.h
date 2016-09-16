@@ -89,7 +89,7 @@ class PageFormat {
       void copy(const PageFormat&);
 
       QString name() const;
-      void read(XmlReader&, Score* s = 0);
+      void read(XmlReader&);
       void write(Xml&) const;
       qreal evenLeftMargin() const        { return _evenLeftMargin;   }
       qreal oddLeftMargin() const         { return _oddLeftMargin;    }
