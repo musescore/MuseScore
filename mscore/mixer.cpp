@@ -28,6 +28,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "preferences.h"
 #include <qmessagebox.h>
+#include <accessibletoolbutton.h>
 
 namespace Ms {
 
@@ -49,26 +50,34 @@ PartEdit::PartEdit(QWidget* parent)
    : QWidget(parent, Qt::Dialog)
       {
       setupUi(this);
-      connect(patch,    SIGNAL(activated(int)),           SLOT(patchChanged(int)));
-      connect(volume,   SIGNAL(valueChanged(double,int)), SLOT(volChanged(double)));
-      connect(pan,      SIGNAL(valueChanged(double,int)), SLOT(panChanged(double)));
-      connect(chorus,   SIGNAL(valueChanged(double,int)), SLOT(chorusChanged(double)));
-      connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
-      connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
-      connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
-      connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
-      connect(portSpinBox,    SIGNAL(valueChanged(int)),  SLOT(midiChannelChanged(int)));
-      connect(channelSpinBox, SIGNAL(valueChanged(int)),  SLOT(midiChannelChanged(int)));
+      connect(patch,          SIGNAL(activated(int)),           SLOT(patchChanged(int)));
+      connect(volume,         SIGNAL(valueChanged(double,int)), SLOT(volChanged(double)));
+      connect(pan,            SIGNAL(valueChanged(double,int)), SLOT(panChanged(double)));
+      connect(chorus,         SIGNAL(valueChanged(double,int)), SLOT(chorusChanged(double)));
+      connect(reverb,         SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
+      connect(mute,           SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
+      connect(solo,           SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
+      connect(drumset,        SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
+      connect(portSpinBox,    SIGNAL(valueChanged(int)),        SLOT(midiChannelChanged(int)));
+      connect(channelSpinBox, SIGNAL(valueChanged(int)),        SLOT(midiChannelChanged(int)));
+      connect(expand,         SIGNAL(toggled(bool)),            SLOT(expandToggled(bool)));
 
-      channelLabel  ->setVisible(preferences.showMidiControls);
-      portLabel     ->setVisible(preferences.showMidiControls);
+      channelLabel->setVisible(preferences.showMidiControls);
+      portLabel->setVisible(preferences.showMidiControls);
       channelSpinBox->setVisible(preferences.showMidiControls);
-      portSpinBox   ->setVisible(preferences.showMidiControls);
+      portSpinBox->setVisible(preferences.showMidiControls);
+      details->setVisible(false);
 
-      if (!preferences.showMidiControls)
-            hboxLayout->setSpacing(20);
-      else
-            hboxLayout->setSpacing(5);
+      hboxLayout->setSpacing(preferences.showMidiControls ? 5 : 20);
+      }
+
+//---------------------------------------------------------
+//   expandToggled
+//---------------------------------------------------------
+
+void PartEdit::expandToggled(bool val)
+      {
+      details->setVisible(val);
       }
 
 //---------------------------------------------------------
@@ -112,6 +121,75 @@ void PartEdit::setPart(Part* p, Channel* a)
       _setChecked(drumset, p->instrument()->useDrumset());
       _setValue(portSpinBox,    part->masterScore()->midiMapping(a->channel)->port + 1);
       _setValue(channelSpinBox, part->masterScore()->midiMapping(a->channel)->channel + 1);
+
+      QHBoxLayout* hb = new QHBoxLayout;
+      ((QVBoxLayout*)(details->layout()))->addLayout(hb);
+      int idx = 0;
+      for (Staff* staff : *part->staves()) {
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  if (!voiceButtons.value(idx)) {
+                        QToolButton* tb = new QToolButton;
+                        tb->setText(QString("%1").arg(voice+1));
+                        tb->setCheckable(true);
+                        tb->setChecked(staff->playbackVoice(voice));
+                        tb->setFocusPolicy(Qt::ClickFocus);
+                        tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
+                        // if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
+                        //      tb->setStyleSheet(vbsh);
+                        QPalette p(tb->palette());
+                        p.setColor(QPalette::Base, MScore::selectColor[voice]);
+                        tb->setPalette(p);
+                        hb->addWidget(tb);
+                        voiceButtons.append(tb);
+                        connect(tb, SIGNAL(clicked()), SLOT(playbackVoiceChanged()));
+                        }
+                  ++idx;
+                  }
+            hb->addStretch(1);
+            }
+      while (voiceButtons.value(idx)) {
+            QToolButton* tb = voiceButtons.value(idx);
+            if (!tb)
+                  break;
+            voiceButtons.takeAt(idx);
+            delete tb;
+            }
+      }
+
+//---------------------------------------------------------
+//   playbackVoiceChanged
+//---------------------------------------------------------
+
+void PartEdit::playbackVoiceChanged()
+      {
+      int idx = 0;
+      Score* score = part->score();
+      score->startCmd();
+      for (Staff* staff : *part->staves()) {
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  QToolButton* tb = voiceButtons[idx];
+                  bool val = tb->isChecked();
+                  if (val != staff->playbackVoice(voice)) {
+                        switch (voice) {
+                              case 0:
+                              printf("undo\n");
+                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE1, val);
+                                    break;
+                              case 1:
+                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE2, val);
+                                    break;
+                              case 2:
+                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE3, val);
+                                    break;
+                              case 3:
+                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE4, val);
+                                    break;
+                              }
+                        }
+                  ++idx;
+                  }
+            }
+      score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -418,7 +496,7 @@ void PartEdit::muteChanged(bool val, bool syncControls)
 
 void PartEdit::soloToggled(bool val, bool syncControls)
       {
-      channel->solo = val;
+      channel->solo     = val;
       channel->soloMute = !val;
       if (val) {
             mute->setChecked(false);
@@ -585,6 +663,7 @@ void PartEdit::sync(bool syncControls)
                   }
             }
       }
+
 //---------------------------------------------------------
 //   midiChannelChanged
 //   handles MIDI port & channel change
@@ -619,7 +698,7 @@ void PartEdit::midiChannelChanged(int)
 
       // If there is an instrument with the same MIDI port and channel, sync this instrument to a found one
       bool needSync = true;
-      int elementsInMixer = this->parentWidget()->layout()->count();
+      int elementsInMixer = parentWidget()->layout()->count();
       for (int i = 0; i < elementsInMixer; i++) {
             QWidgetItem* wi = (QWidgetItem*)(this->parentWidget()->layout()->itemAt(i));
             PartEdit* pe    = (PartEdit*)(wi->widget());

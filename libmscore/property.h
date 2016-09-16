@@ -237,6 +237,10 @@ enum class P_ID : int {
       DASH_LINE_LEN,
       DASH_GAP_LEN,
       TICK,
+      PLAYBACK_VOICE1,
+      PLAYBACK_VOICE2,
+      PLAYBACK_VOICE3,
+      PLAYBACK_VOICE4,
 
       END
       };

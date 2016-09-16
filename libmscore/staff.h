@@ -128,6 +128,7 @@ class Staff : public QObject, public ScoreElement {
       LinkedStaves* _linkedStaves { nullptr };
       QMap<int,int> _channelList[VOICES];
       QMap<int,SwingParameters> _swingList;
+      bool _playbackVoice[VOICES] { true, true, true, true };
 
       VeloList _velocities;         ///< cached value
       PitchList _pitchOffsets;      ///< cached value
@@ -271,6 +272,9 @@ class Staff : public QObject, public ScoreElement {
       virtual QVariant propertyDefault(P_ID) const override;
 
       BracketType innerBracket() const;
+
+      bool playbackVoice(int voice) const        { return _playbackVoice[voice]; }
+      void setPlaybackVoice(int voice, bool val) { _playbackVoice[voice] = val; }
 
 #ifndef NDEBUG
       void dumpClefs(const char* title) const;

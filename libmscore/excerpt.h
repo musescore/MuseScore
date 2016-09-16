@@ -37,6 +37,7 @@ class Excerpt : public QObject {
       Q_PROPERTY(QString     title      READ title)
 
       MasterScore* _oscore;
+
       Score* _partScore           { 0 };
       QString _title;
       QList<Part*> _parts;

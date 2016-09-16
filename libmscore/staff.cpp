@@ -548,6 +548,10 @@ void Staff::write(Xml& xml) const
 
       writeProperty(xml, P_ID::MAG);
       writeProperty(xml, P_ID::COLOR);
+      writeProperty(xml, P_ID::PLAYBACK_VOICE1);
+      writeProperty(xml, P_ID::PLAYBACK_VOICE2);
+      writeProperty(xml, P_ID::PLAYBACK_VOICE3);
+      writeProperty(xml, P_ID::PLAYBACK_VOICE4);
       xml.etag();
       }
 
@@ -664,6 +668,14 @@ void Staff::read(XmlReader& e)
                   e.setTransposeDiatonic(e.readInt());
             else if (tag == "transposeChromatic")
                   e.setTransposeChromatic(e.readInt());
+            else if (tag == "playbackVoice1")
+                  setPlaybackVoice(0, e.readInt());
+            else if (tag == "playbackVoice2")
+                  setPlaybackVoice(1, e.readInt());
+            else if (tag == "playbackVoice3")
+                  setPlaybackVoice(2, e.readInt());
+            else if (tag == "playbackVoice4")
+                  setPlaybackVoice(3, e.readInt());
             else
                   e.unknown();
             }
@@ -1217,6 +1229,14 @@ QVariant Staff::getProperty(P_ID id) const
                   return color();
             case P_ID::SMALL:
                   return small();
+            case P_ID::PLAYBACK_VOICE1:
+                  return playbackVoice(0);
+            case P_ID::PLAYBACK_VOICE2:
+                  return playbackVoice(1);
+            case P_ID::PLAYBACK_VOICE3:
+                  return playbackVoice(2);
+            case P_ID::PLAYBACK_VOICE4:
+                  return playbackVoice(3);
             default:
                   qDebug("Staff::getProperty: unhandled id");
                   return QVariant();
@@ -1245,6 +1265,18 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
                   scaleChanged(oldVal, mag());
                   }
                   break;
+            case P_ID::PLAYBACK_VOICE1:
+                  setPlaybackVoice(0, v.toBool());
+                  break;
+            case P_ID::PLAYBACK_VOICE2:
+                  setPlaybackVoice(1, v.toBool());
+                  break;
+            case P_ID::PLAYBACK_VOICE3:
+                  setPlaybackVoice(2, v.toBool());
+                  break;
+            case P_ID::PLAYBACK_VOICE4:
+                  setPlaybackVoice(3, v.toBool());
+                  break;
             default:
                   qDebug("Staff::setProperty: unhandled id");
                   break;
@@ -1266,6 +1298,11 @@ QVariant Staff::propertyDefault(P_ID id) const
                   return QColor(Qt::black);
             case P_ID::SMALL:
                   return false;
+            case P_ID::PLAYBACK_VOICE1:
+            case P_ID::PLAYBACK_VOICE2:
+            case P_ID::PLAYBACK_VOICE3:
+            case P_ID::PLAYBACK_VOICE4:
+                  return true;
             default:
                   return QVariant();
             }
