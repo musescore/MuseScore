@@ -244,7 +244,11 @@ static const PropertyData propertyList[] = {
       { P_ID::AUTOPLACE,           false, 0,                       P_TYPE::BOOL  },
       { P_ID::DASH_LINE_LEN,       false, "dashLineLength",        P_TYPE::REAL  },
       { P_ID::DASH_GAP_LEN,        false, "dashGapLength",         P_TYPE::REAL  },
-      { P_ID::TICK,                false, 0,                       P_TYPE::INT  },
+      { P_ID::TICK,                false, 0,                       P_TYPE::INT   },
+      { P_ID::PLAYBACK_VOICE1,     false, "playbackVoice1",        P_TYPE::BOOL  },
+      { P_ID::PLAYBACK_VOICE2,     false, "playbackVoice2",        P_TYPE::BOOL  },
+      { P_ID::PLAYBACK_VOICE3,     false, "playbackVoice3",        P_TYPE::BOOL  },
+      { P_ID::PLAYBACK_VOICE4,     false, "playbackVoice4",        P_TYPE::BOOL  },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT   }
       };

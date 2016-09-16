@@ -497,17 +497,15 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
-            bool mute;
+            bool mute = false;
             const Note* note = event.note();
 
             if (note) {
-                  Instrument* instr = note->staff()->part()->instrument(note->chord()->tick());
+                  Staff* staff      = note->staff();
+                  Instrument* instr = staff->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
-                  mute = a->mute || a->soloMute;
+                  mute = a->mute || a->soloMute || !staff->playbackVoice(note->voice());
                   }
-            else
-                  mute = false;
-
             if (!mute)
                   putEvent(event, framePos);
             }

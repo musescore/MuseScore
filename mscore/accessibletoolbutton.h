@@ -10,7 +10,7 @@ namespace Ms {
 class AccessibleToolButton : public QToolButton{
       Q_OBJECT
 public:
-      AccessibleToolButton(QWidget* parent, QAction* defaultQAction );
+      AccessibleToolButton(QWidget* parent, QAction* defaultQAction = 0);
       void focusInEvent(QFocusEvent* e);
       void focusOutEvent(QFocusEvent* e);
       void keyPressEvent(QKeyEvent *e);

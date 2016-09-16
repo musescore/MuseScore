@@ -40,6 +40,9 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       Channel* channel;
       Part* part;
 
+      QList<QToolButton*> voiceButtons;
+
+
    private slots:
       void patchChanged(int, bool syncControls = true);
       void volChanged(double, bool syncControls = true);
@@ -51,6 +54,8 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       void drumsetToggled(bool, bool syncControls = true);
       void midiChannelChanged(int);
       void sync(bool syncControls);
+      void expandToggled(bool);
+      void playbackVoiceChanged();
 
    public slots:
 
