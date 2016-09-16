@@ -669,7 +669,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       else {
             xml.stag("museScore version=\"2.06\"");
             }
-      if (write(xml, onlySelection))
+      if (!write(xml, onlySelection))
             return false;
       xml.etag();
       if (isMaster())
