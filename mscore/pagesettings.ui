@@ -85,6 +85,27 @@
         <string>Page Size</string>
        </property>
        <layout class="QGridLayout">
+        <item row="4" column="0">
+         <widget class="QRadioButton" name="portraitButton">
+          <property name="text">
+           <string>Portrait</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0" colspan="2">
+         <widget class="QCheckBox" name="twosided">
+          <property name="text">
+           <string>Two sided</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QRadioButton" name="landscapeButton">
+          <property name="text">
+           <string>Landscape</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
          <widget class="QDoubleSpinBox" name="pageWidth">
           <property name="sizePolicy">
@@ -111,24 +132,6 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QRadioButton" name="portraitButton">
-            <property name="text">
-             <string>Portrait</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="landscapeButton">
-            <property name="text">
-             <string>Landscape</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -139,13 +142,6 @@
           </property>
           <property name="buddy">
            <cstring>pageHeight</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0" colspan="2">
-         <widget class="QCheckBox" name="twosided">
-          <property name="text">
-           <string>Two sided</string>
           </property>
          </widget>
         </item>
