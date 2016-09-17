@@ -972,7 +972,7 @@ void TabDurationSymbol::layout2()
 
 void TabDurationSymbol::draw(QPainter* painter) const
       {
-      if(!_tab)
+      if (!_tab)
             return;
       qreal mag = magS();
       qreal imag = 1.0 / mag;
@@ -982,7 +982,9 @@ void TabDurationSymbol::draw(QPainter* painter) const
       painter->scale(mag, mag);
       if (_beamGrid == TabBeamGrid::NONE) {
             // if no beam grid, draw symbol
-            painter->setFont(_tab->durationFont());
+            QFont f(_tab->durationFont());
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(f);
             painter->drawText(QPointF(0.0, 0.0), _text);
             }
       else {
