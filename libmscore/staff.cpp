@@ -538,7 +538,7 @@ void Staff::write(Xml& xml) const
             defaultLineTo = (targetStaffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (targetStaffLines-1) * 2);
             }
       if (_barLineSpan != 1 || _barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo) {
-            if(_barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo)
+            if (_barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo)
                   xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
             else
                   xml.tag("barLineSpan", _barLineSpan);
@@ -1237,6 +1237,12 @@ QVariant Staff::getProperty(P_ID id) const
                   return playbackVoice(2);
             case P_ID::PLAYBACK_VOICE4:
                   return playbackVoice(3);
+            case P_ID::BARLINE_SPAN:
+                  return barLineSpan();
+            case P_ID::BARLINE_SPAN_FROM:
+                  return barLineFrom();
+            case P_ID::BARLINE_SPAN_TO:
+                  return barLineTo();
             default:
                   qDebug("Staff::getProperty: unhandled id");
                   return QVariant();
@@ -1276,6 +1282,15 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
                   break;
             case P_ID::PLAYBACK_VOICE4:
                   setPlaybackVoice(3, v.toBool());
+                  break;
+            case P_ID::BARLINE_SPAN:
+                  setBarLineSpan(v.toInt());
+                  break;
+            case P_ID::BARLINE_SPAN_FROM:
+                  setBarLineFrom(v.toInt());
+                  break;
+            case P_ID::BARLINE_SPAN_TO:
+                  setBarLineTo(v.toInt());
                   break;
             default:
                   qDebug("Staff::setProperty: unhandled id");
