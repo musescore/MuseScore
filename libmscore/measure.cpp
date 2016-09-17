@@ -1380,7 +1380,7 @@ void Measure::adjustToLen(Fraction nf)
                   }
             }
       Score* s      = score()->masterScore();
-      Measure* m    = this;
+      Measure* m    = s->tick2measure(tick());
       QList<int> sl = s->uniqueStaves();
 
       for (int staffIdx : sl) {
@@ -1393,11 +1393,11 @@ void Measure::adjustToLen(Fraction nf)
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = segment->element(track);
                         if (e) {
-                              if (e->type() == Element::Type::REST) {
+                              if (e->isRest()) {
                                     ++rests;
-                                    rest = static_cast<Rest*>(e);
+                                    rest = toRest(e);
                                     }
-                              else if (e->type() == Element::Type::CHORD)
+                              else if (e->isChord())
                                     ++chords;
                               }
                         }
