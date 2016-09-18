@@ -18,7 +18,7 @@
 
 namespace Ms {
 
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //   cycles

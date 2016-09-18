@@ -42,6 +42,7 @@ class TestScripting : public QObject, public MTest
       void plugins01();
       void plugins02();
       void testTextStyle();
+      void testKeySig();
       void test1() { read1("s1", "p1"); }       // scan note rest
       void test2() { read1("s2", "p2"); }       // scan segment attributes
       };
@@ -160,6 +161,26 @@ void TestScripting::testTextStyle()
       QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test.mscx", DIR + "testTextStyle-ref.mscx"));
       score->undoStack()->undo();
       QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test2.mscx", DIR + "testTextStyle.mscx"));
+
+      delete item;
+      }
+
+//---------------------------------------------------------
+///   testKeySig
+///   Reading and writing of a key signature through the plugin framework
+//---------------------------------------------------------
+
+void TestScripting::testKeySig()
+      {
+      QmlPlugin* item = loadPlugin(root + "/" + DIR + "testKeySig.qml");
+      QVERIFY(item != nullptr);
+
+      Score* score = readScore(DIR + "testKeySig.mscx");
+      MuseScoreCore::mscoreCore->setCurrentScore(score);
+      runPlugin(item, score);
+      QVERIFY(saveCompareScore(item->curScore(), "testKeySig-test.mscx", DIR + "testKeySig-ref.mscx"));
+      score->undoStack()->undo();
+      QVERIFY(saveCompareScore(item->curScore(), "testKeySig-test2.mscx", DIR + "testKeySig.mscx"));
 
       delete item;
       }

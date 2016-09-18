@@ -28,11 +28,15 @@ class Segment;
 ///    The KeySig class represents a Key Signature on a staff
 //
 //   @P showCourtesy  bool  show courtesy key signature for this sig if appropriate
+//   @P key           enum  Key.C_B, .G_B, .D_B, .A_B, .E_B, .B_B, .F, .C, .G, .D, .A, .E, .B, .F_S, .C_S
 //---------------------------------------------------------------------------------------
 
 class KeySig : public Element {
       Q_OBJECT
       Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
+      Q_PROPERTY(Ms::MSQE_Key::E key   READ qmlKey   WRITE qmlSetKey)
+
+      Q_ENUMS(Ms::MSQE_Key::E)
 
       bool _showCourtesy;
       bool _hideNaturals;     // used in layout to override score style (needed for the Continuous panel)
@@ -50,15 +54,13 @@ class KeySig : public Element {
       virtual void layout() override;
       virtual qreal mag() const override;
 
-      //@ sets the key of the key signature
-      Q_INVOKABLE void setKey(Key);
+      void setKey(Key);
 
       Segment* segment() const            { return (Segment*)parent(); }
       Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
-      //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
-      Q_INVOKABLE Key key() const         { return _sig.key(); }
+      Key key() const                     { return _sig.key(); }
       bool isCustom() const               { return _sig.custom(); }
       bool isAtonal() const               { return _sig.isAtonal(); }
       KeySigEvent keySigEvent() const     { return _sig; }
@@ -70,6 +72,9 @@ class KeySig : public Element {
       bool showCourtesy() const           { return _showCourtesy; }
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }
       void undoSetShowCourtesy(bool v);
+
+      Ms::MSQE_Key::E qmlKey() const { return static_cast<Ms::MSQE_Key::E>(_sig.key()); }
+      void qmlSetKey(Ms::MSQE_Key::E key) { setKey(static_cast<Key>(key)); }
 
       void setHideNaturals(bool hide)     { _hideNaturals = hide; }
 
@@ -87,5 +92,7 @@ class KeySig : public Element {
 extern const char* keyNames[];
 
 }     // namespace Ms
-#endif
 
+Q_DECLARE_METATYPE(Ms::MSQE_Key::E);
+
+#endif

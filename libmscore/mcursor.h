@@ -24,7 +24,7 @@ class TDuration;
 class Fraction;
 class TimeSig;
 class Chord;
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //   MCursor

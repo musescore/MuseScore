@@ -96,7 +96,7 @@ struct LayoutContext;
 enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
-enum class Key;
+enum class Key : signed char;
 
 extern bool showRubberBand;
 

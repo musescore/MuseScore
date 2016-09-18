@@ -43,7 +43,7 @@ class Clef;
 class TimeSig;
 class Ottava;
 
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //   LinkedStaves

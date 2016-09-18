@@ -212,6 +212,7 @@ void MScore::init()
       //classed enumerations
       qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
       qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
+      qRegisterMetaType<MSQE_Key::E>("Key");
 #endif
       qRegisterMetaType<Fraction>("Fraction");
 
@@ -434,6 +435,7 @@ QQmlEngine* MScore::qml()
             //classed enumerations
             qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
             qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
+            qmlRegisterUncreatableType<MSQE_Key>("MuseScore", 1, 0, "Key", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();
