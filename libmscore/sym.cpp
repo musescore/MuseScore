@@ -39,6 +39,8 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" )
       };
 
+QJsonObject ScoreFont::_glyphnamesJson;
+
 //---------------------------------------------------------
 //   table of symbol names
 //    symNames must be in sync with enum class SymId
@@ -2646,6 +2648,7 @@ QVector<const char*> Sym::symNames = {
 //    SMuFL stylistic alternates which we need to access directly
 
       "noteheadDoubleWholeAlt",           // double whole with double side bars
+      "4stringTabClefSerif",              // TAB clef in script style
       "6stringTabClefSerif",              // TAB clef in script style
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
@@ -5269,6 +5272,7 @@ QVector<QString> Sym::symUserNames = {
 //    SMuFL stylistic alternates which we need to access directly
 
       "noteheadDoubleWholeAlt",           // double whole with double side bars
+      "4StringTabClefSerif",              // TAB clef in script style
       "6StringTabClefSerif",              // TAB clef in script style
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
@@ -5724,6 +5728,7 @@ const char* Sym::id2name(SymId id)
 
 void initScoreFonts()
       {
+      ScoreFont::initGlyphNamesJson();
       int error = FT_Init_FreeType(&ftlib);
       if (!ftlib || error)
             qFatal("init freetype library failed");
@@ -5809,18 +5814,9 @@ void ScoreFont::load()
       qreal pixelSize = 200.0;
       FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
 
-      QFile fi(_fontPath + "glyphnames.json");
-      if (!fi.open(QIODevice::ReadOnly))
-            qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
-      QJsonParseError error;
-      QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
-      if (error.error != QJsonParseError::NoError)
-            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
-               error.offset, qPrintable(error.errorString()));
-
-      for (auto i : o.keys()) {
+      for (auto i : ScoreFont::glyphNamesJson().keys()) {
             bool ok;
-            int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
+            int code = ScoreFont::glyphNamesJson().value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
             if (!ok)
                   qDebug("codepoint not recognized for glyph %s", qPrintable(i));
             if (Sym::lnhash.contains(i)) {
@@ -5831,16 +5827,17 @@ void ScoreFont::load()
             //else
             //      qDebug("unknown glyph: %s", qPrintable(i));
             }
-      fi.close();
-      fi.setFileName(_fontPath + "metadata.json");
+
+      QJsonParseError error;
+      QFile fi(_fontPath + "metadata.json");
       if (!fi.open(QIODevice::ReadOnly))
             qDebug("ScoreFont: open glyph metadata file <%s> failed", qPrintable(fi.fileName()));
-      o = QJsonDocument::fromJson(fi.readAll(), &error).object();
+      QJsonObject metadataJson = QJsonDocument::fromJson(fi.readAll(), &error).object();
       if (error.error != QJsonParseError::NoError)
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
 
-      QJsonObject oo = o.value("glyphsWithAnchors").toObject();
+      QJsonObject oo = metadataJson.value("glyphsWithAnchors").toObject();
       for (auto i : oo.keys()) {
             constexpr qreal scale = SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
@@ -5972,6 +5969,10 @@ void ScoreFont::load()
             SymId       id;
             }
       alternate[] = {
+                  {     QString("4stringTabClef"),
+                        QString("4stringTabClefSerif"),
+                        SymId::fourStringTabClefSerif
+                  },
                   {     QString("6stringTabClef"),
                         QString("6stringTabClefSerif"),
                         SymId::sixStringTabClefSerif
@@ -6003,7 +6004,7 @@ void ScoreFont::load()
             };
 
       // find each relevant alternate in "glyphsWithAlternates" value
-      QJsonObject oa = o.value("glyphsWithAlternates").toObject();
+      QJsonObject oa = metadataJson.value("glyphsWithAlternates").toObject();
       bool ok;
       for (const StylisticAlternate& c : alternate) {
             QJsonObject::const_iterator i = oa.find(c.key);
@@ -6079,6 +6080,28 @@ ScoreFont* ScoreFont::fallbackFont()
 const char* ScoreFont::fallbackTextFont()
       {
       return "Bravura Text";
+      }
+
+//---------------------------------------------------------
+//   initGlyphNamesJson
+//---------------------------------------------------------
+
+bool ScoreFont::initGlyphNamesJson()
+      {
+      QFile fi(":fonts/smufl/glyphnames.json");
+      if (!fi.open(QIODevice::ReadOnly)) {
+            qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
+            return false;
+            }
+      QJsonParseError error;
+      _glyphnamesJson = QJsonDocument::fromJson(fi.readAll(), &error).object();
+      if (error.error != QJsonParseError::NoError) {
+            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
+               error.offset, qPrintable(error.errorString()));
+            return false;
+            }
+      fi.close();
+      return true;
       }
 
 //---------------------------------------------------------

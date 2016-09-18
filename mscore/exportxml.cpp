@@ -2742,7 +2742,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       // Determine y position, but leave at zero in case of tablature staff
       // as no display-step or display-octave should be written for a tablature staff,
 
-      if (clef != ClefType::TAB && clef != ClefType::TAB2) {
+      if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF) {
             double yOffsSp = rest->userOff().y() / rest->spatium();              // y offset in spatium (negative = up)
             yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5); // same rounded to int (positive = up)
 

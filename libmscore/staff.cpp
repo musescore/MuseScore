@@ -223,7 +223,10 @@ ClefTypeList Staff::clefType(int tick) const
       if (ct._concertClef == ClefType::INVALID) {
             switch(_staffType.group()) {
                   case StaffGroup::TAB:
-                        ct = ClefTypeList(ClefType(score()->styleI(StyleIdx::tabClef)));
+                        {
+                        ClefType sct = ClefType(score()->styleI(StyleIdx::tabClef));
+                        ct = _staffType.lines() <= 4 ?  ClefTypeList(sct == ClefType::TAB ? ClefType::TAB4 : ClefType::TAB4_SERIF) : ClefTypeList(sct == ClefType::TAB ? ClefType::TAB : ClefType::TAB_SERIF);
+                        }
                         break;
                   case StaffGroup::STANDARD:
                         ct = defaultClefType();

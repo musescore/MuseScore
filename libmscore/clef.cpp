@@ -47,13 +47,15 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "C3",   "C",         3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, QT_TRANSLATE_NOOP("clefTable", "Alto clef"),              StaffGroup::STANDARD  }, // C3
 { "C4",   "C",         4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, QT_TRANSLATE_NOOP("clefTable", "Tenor clef"),             StaffGroup::STANDARD  }, // C4
 { "TAB",  "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature"),              StaffGroup::TAB       },
+{ "TAB4", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature 4 lines"),              StaffGroup::TAB       },
 { "PERC", "percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Percussion"),             StaffGroup::PERCUSSION},
 { "C5",   "C",         5,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, QT_TRANSLATE_NOOP("clefTable", "Baritone clef (C clef)"), StaffGroup::STANDARD  }, // C5
 { "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "French violin clef"),     StaffGroup::STANDARD  }, // G4
 { "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "Bass clef 8va"),          StaffGroup::STANDARD  }, // F_8VA
 { "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "Bass clef 15ma"),         StaffGroup::STANDARD  }, // F_15MA
 { "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Percussion2"),            StaffGroup::PERCUSSION}, // PERC2
-{ "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature2"),             StaffGroup::TAB       },
+{ "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature Serif"),             StaffGroup::TAB       },
+{ "TAB4_SERIF", "TAB", 5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature Serif 4 lines"),              StaffGroup::TAB       },
 { "G8vbp","G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Treble clef optional 8vb"),StaffGroup::STANDARD }, // G5
 { "G8vbo","G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Treble clef 8vb Old"),    StaffGroup::STANDARD  },
       };
@@ -269,8 +271,18 @@ void Clef::layout()
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
                   break;
-            case ClefType::TAB2:                           // TAB clef alternate style
+            case ClefType::TAB4:                            // TAB clef 4 strings
+                  symbol->setSym(SymId::fourStringTabClef);
+                  // on tablature, position clef at half the number of spaces * line distance
+                  yoff = lineDist * (lines - 1) * .5;
+                  break;
+            case ClefType::TAB_SERIF:                           // TAB clef alternate style
                   symbol->setSym(SymId::sixStringTabClefSerif);
+                  // on tablature, position clef at half the number of spaces * line distance
+                  yoff = lineDist * (lines - 1) * .5;
+                  break;
+            case ClefType::TAB4_SERIF:                           // TAB clef alternate style
+                  symbol->setSym(SymId::fourStringTabClefSerif);
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
                   break;
@@ -500,7 +512,7 @@ ClefType Clef::clefType(const QString& s)
                   case 17: ct = ClefType::F_8VA; break;
                   case 18: ct = ClefType::F_15MA; break;
                   case 19: ct = ClefType::PERC; break;      // PERC2 no longer supported
-                  case 20: ct = ClefType::TAB2; break;
+                  case 20: ct = ClefType::TAB_SERIF; break;
                   }
             }
       else
