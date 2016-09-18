@@ -732,7 +732,7 @@ Palette* MuseScore::newClefsPalette(bool basic)
             ClefType::G5,    ClefType::G4,  ClefType::C1,  ClefType::C2,    ClefType::C3,
             ClefType::C4,    ClefType::C5,  ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
             ClefType::F8,    ClefType::F15, ClefType::F_B, ClefType::F_C,   ClefType::PERC,
-            ClefType::PERC2, ClefType::TAB, ClefType::TAB2
+            ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
             };
       for (ClefType j : basic ? clefs1 : clefs2) {
             Clef* k = new Ms::Clef(gscore);

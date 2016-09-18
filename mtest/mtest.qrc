@@ -1,14 +1,12 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
    <qresource prefix="/">
-      <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
-      <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>           
-      <file alias="fonts/gootville/glyphnames.json">../fonts/gootville/glyphnames.json</file>
-      <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>       
-      <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
-      <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>         
+      <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
+      <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
+      <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
+      <file alias="fonts/smufl/glyphnames.json">../fonts/smufl/glyphnames.json</file>
       <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
-      <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>     
+      <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
 
       <file alias="instruments.xml">../share/instruments/instruments.xml</file>
 

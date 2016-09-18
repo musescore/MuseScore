@@ -2634,6 +2634,7 @@ enum class SymId {
 //    SMuFL stylistic alternates which we need to access directly
 
       noteheadDoubleWholeAlt,             // double whole with double side bars
+      fourStringTabClefSerif,             // TAB clef in script style
       sixStringTabClefSerif,              // TAB clef in script style
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
@@ -2770,6 +2771,7 @@ class ScoreFont {
       mutable QFont* font { 0 };
 
       static QVector<ScoreFont> _scoreFonts;
+      static QJsonObject _glyphnamesJson;
       const Sym& sym(SymId id) const { return _symbols[int(id)]; }
       void load();
       void computeMetrics(Sym* sym, int code);
@@ -2792,6 +2794,8 @@ class ScoreFont {
       static ScoreFont* fallbackFont();
       static const char* fallbackTextFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
+      static bool initGlyphNamesJson();
+      static const QJsonObject& glyphNamesJson() { return _glyphnamesJson; }
 
       QString toString(SymId) const;
       QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }      // TODOxxxx
