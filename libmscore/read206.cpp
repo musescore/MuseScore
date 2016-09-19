@@ -19,9 +19,9 @@ namespace Ms {
 //   read207
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read207(XmlReader& e)
+Score::FileError MasterScore::read206(XmlReader& e)
       {
-      qDebug("read207");
+      qDebug("read206");
       return MasterScore::read300(e);
       }
 

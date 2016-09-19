@@ -1186,7 +1186,7 @@ class MasterScore : public Score {
       FileError loadMsc(QString name, bool ignoreVersionError);
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
       FileError read114(XmlReader&);
-      FileError read207(XmlReader&);
+      FileError read206(XmlReader&);
       FileError read300(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();

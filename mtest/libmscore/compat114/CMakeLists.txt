@@ -11,7 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-set(TARGET tst_compat)
+set(TARGET tst_compat114)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
