@@ -925,9 +925,9 @@
         </Measure>
       </Staff>
     <Score>
-      <Tracklist sTrack="1" dstTrack="0"></Tracklist>
-      <Tracklist sTrack="2" dstTrack="1"></Tracklist>
-      <Tracklist sTrack="4" dstTrack="4"></Tracklist>
+      <Tracklist sTrack="1" dstTrack="0"/>
+      <Tracklist sTrack="2" dstTrack="1"/>
+      <Tracklist sTrack="4" dstTrack="4"/>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
@@ -1446,7 +1446,7 @@
       <name>Piano</name>
       </Score>
     <Score>
-      <Tracklist sTrack="11" dstTrack="0"></Tracklist>
+      <Tracklist sTrack="11" dstTrack="0"/>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
