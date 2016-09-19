@@ -818,7 +818,7 @@ MuseScore::MuseScore()
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   menuFile->addSeparator();
-            else
+            else if (enableExperimental || strcmp(i,"file-save-online") != 0)
                   menuFile->addAction(getAction(i));
             }
       if (enableExperimental)
