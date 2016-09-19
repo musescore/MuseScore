@@ -161,7 +161,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>quarter</durationType>
@@ -171,7 +171,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         </Measure>
       <Measure number="2">
@@ -183,7 +183,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>half</durationType>
@@ -193,7 +193,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <BarLine>
           <subtype>end</subtype>
@@ -216,7 +216,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>half</durationType>
@@ -226,7 +226,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         </Measure>
       <Measure number="2">
@@ -239,7 +239,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>quarter</durationType>
@@ -249,7 +249,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <BarLine>
           <subtype>end</subtype>

@@ -634,18 +634,11 @@ Palette* MuseScore::newBreathPalette()
       sp->setDrawGrid(true);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < 4; ++i) {
-            if (i == 1) // do not add two similar breaths. //TODO add support for other break mark
-                  continue;
+      for (BreathType bt : Breath::breathList) {
             Breath* a = new Breath(gscore);
-            a->setBreathType(i);
-            if (i < 2) {
-                  sp->append(a, tr("Breath"));
-                  }
-            else {
-                  sp->append(a, tr("Caesura"));
-                  a->setPause(2.0);
-                  }
+            a->setSymId(bt.id);
+            a->setPause(bt.pause);
+            sp->append(a, Sym::id2userName(bt.id));
             }
       return sp;
       }

@@ -1950,11 +1950,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       if (Breath* b = hasBreathMark(chord)) {
             notations.tag(xml);
             articulations.tag(xml);
-            int st = b->breathType();
-            if (st == 0 || st == 1)
-                  xml.tagE("breath-mark");
-            else
-                  xml.tagE("caesura");
+            xml.tagE(b->isCaesura() ? "caesura" : "breath-mark");
             }
 
       for (Element* e : chord->el()) {

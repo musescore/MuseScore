@@ -52,6 +52,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/breath.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/sym.h"
 
 extern QString rtf2html(const QString &);
 
@@ -220,7 +221,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                 {
                                                 Breath* b = new Breath(score);
                                                 b->setTrack(track);
-                                                b->setBreathType(3);
+                                                b->setSymId(SymId::caesura);
                                                 Segment* seg = s->measure()->getSegment(Segment::Type::Breath, s->tick() + (cr ? cr->actualTicks() : 0));
                                                 seg->add(b);
                                                 }

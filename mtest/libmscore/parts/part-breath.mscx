@@ -161,7 +161,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>quarter</durationType>
@@ -391,7 +391,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>quarter</durationType>
