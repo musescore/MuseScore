@@ -156,6 +156,57 @@ static const StyleVal2 style114[] = {
       { StyleIdx::hideInstrumentNameIfOneInstrument, QVariant(false) },
       };
 
+#define MM(x) ((x)/INCH)
+
+const PaperSize paperSizes114[] = {
+      PaperSize("Custom",    MM(1),    MM(1)),
+      PaperSize("A4",        MM(210),  MM(297)),
+      PaperSize("B5",        MM(176),  MM(250)),
+      PaperSize("Letter",    8.5,      11),
+      PaperSize("Legal",     8.5,      14),
+      PaperSize("Executive", 7.5,      10),
+      PaperSize("A0",        MM(841),  MM(1189)),
+      PaperSize("A1",        MM(594),  MM(841)),
+      PaperSize("A2",        MM(420),  MM(594)),
+      PaperSize("A3",        MM(297),  MM(420)),
+      PaperSize("A5",        MM(148),  MM(210)),
+      PaperSize("A6",        MM(105),  MM(148)),
+      PaperSize("A7",        MM(74),   MM(105)),
+      PaperSize("A8",        MM(52),   MM(74)),
+      PaperSize("A9",        MM(37),   MM(52)),
+      PaperSize("A10",       MM(26),   MM(37)),
+      PaperSize("B0",        MM(1000), MM(1414)),
+      PaperSize("B1",        MM(707),  MM(1000)),
+      PaperSize("B2",        MM(500),  MM(707)),
+      PaperSize("B3",        MM(353),  MM(500)),
+      PaperSize("B4",        MM(250),  MM(353)),
+      PaperSize("B6",        MM(125),  MM(176)),
+      PaperSize("B7",        MM(88),   MM(125)),
+      PaperSize("B8",        MM(62),   MM(88)),
+      PaperSize("B9",        MM(44),   MM(62)),
+      PaperSize("B10",       MM(31),   MM(44)),
+      PaperSize("Comm10E",   MM(105),  MM(241)),
+      PaperSize("DLE",       MM(110),  MM(220)),
+      PaperSize("Folio",     MM(210),  MM(330)),
+      PaperSize("Ledger",    MM(432),  MM(279)),
+      PaperSize("Tabloid",   MM(279),  MM(432)),
+      PaperSize(0,           MM(1),    MM(1))   // mark end of list
+      };
+
+//---------------------------------------------------------
+//   getPaperSize
+//---------------------------------------------------------
+
+static const PaperSize* getPaperSize114(const QString& name)
+      {
+      for (int i = 0; paperSizes114[i].name; ++i) {
+            if (name == paperSizes114[i].name)
+                  return &paperSizes114[i];
+            }
+      qDebug("unknown paper size");
+      return &paperSizes[0];
+      }
+
 //---------------------------------------------------------
 //   readMeasure
 //---------------------------------------------------------
@@ -1046,7 +1097,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
             else if (tag == "page-width")
                   pf->size().rwidth() = e.readDouble() * .5 / PPI;
             else if (tag == "pageFormat") {
-                  e.readElementText();
+                  pf->setSize(getPaperSize114(e.readElementText()));
                   }
             else if (tag == "page-offset") {
                   e.readInt();
@@ -1438,6 +1489,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             }
       if (style(StyleIdx::minEmptyMeasures).toInt() == 0)
             style()->set(StyleIdx::minEmptyMeasures, 1);
+      style()->set(StyleIdx::frameSystemDistance, style(StyleIdx::frameSystemDistance).toDouble() + 6.0);
       // hack: net overall effect of layout changes has been for things to take slightly more room
       qreal adjustedSpacing = qMax(styleD(StyleIdx::measureSpacing) * 0.95, 1.0);
       style()->set(StyleIdx::measureSpacing, adjustedSpacing);

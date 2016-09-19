@@ -5,13 +5,14 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <minSystemDistance>9.2</minSystemDistance>
       <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
-      <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
-      <bracketDistance>0.25</bracketDistance>
+      <bracketDistance>0.2</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <minNoteDistance>0.4</minNoteDistance>
       <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
@@ -22,8 +23,9 @@
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
+      <createMultiMeasureRests>1</createMultiMeasureRests>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <voltaY>-2</voltaY>
+      <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <TextStyle>
@@ -80,22 +82,14 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
         </Staff>
-      <Staff id="2">
-        <StaffType group="pitched">
-          </StaffType>
-        </Staff>
-      <trackName>Piano</trackName>
+      <trackName>Flute</trackName>
       <Instrument>
-        <longName><font face="Times New Roman"/>Piano</longName>
-        <shortName><font face="Times New Roman"/>Pno.</shortName>
-        <trackName>Piano</trackName>
-        <minPitchP>21</minPitchP>
-        <maxPitchP>108</maxPitchP>
-        <minPitchA>21</minPitchA>
-        <maxPitchA>108</maxPitchA>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -113,75 +107,80 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="0"/>
-          <controller ctrl="93" value="1"/>
+          <program value="73"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
+      <HBox>
+        <width>5</width>
+        </HBox>
       <Measure number="1">
-        <Clef>
-          <concertClefType>G8va</concertClefType>
-          <transposingClefType>G8va</transposingClefType>
-          </Clef>
-        <TimeSig>
-          <sigN>3</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <dots>1</dots>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>84</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="1" len="16/4">
+        <multiMeasureRest>4</multiMeasureRest>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>16/4</duration>
+          </Rest>
         </Measure>
       <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="5">
         <Chord>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
             </Note>
           </Chord>
         <Chord>
-          <dots>1</dots>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
-          <Note>
-            <pitch>83</pitch>
-            <tpc>19</tpc>
-            </Note>
           </Chord>
+        </Measure>
+      <Measure number="6">
         <Chord>
-          <durationType>eighth</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
+          <durationType>whole</durationType>
           <Note>
             <pitch>79</pitch>
             <tpc>15</tpc>
@@ -189,67 +188,8 @@
           </Chord>
         <BarLine>
           <subtype>end</subtype>
-          <span>2</span>
+          <span>1</span>
           </BarLine>
-        </Measure>
-      </Staff>
-    <Staff id="2">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>3</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <durationType>eighth</durationType>
-          <Note>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <dots>1</dots>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
-        </Measure>
-      <Measure number="2">
-        <Chord>
-          <durationType>eighth</durationType>
-          <Note>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <dots>1</dots>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
         </Measure>
       </Staff>
     </Score>

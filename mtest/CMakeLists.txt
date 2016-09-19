@@ -157,7 +157,8 @@ add_custom_target(reporthtml
       )
 
 subdirs (
-#        libmscore/compat              # Expected not to work
+        libmscore/compat114
+        libmscore/compat206
         libmscore/album
         libmscore/barline
         libmscore/beam
