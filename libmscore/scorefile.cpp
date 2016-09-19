@@ -111,7 +111,7 @@ bool Score::write(Xml& xml, bool selectionOnly)
             if (!(trackList.size() == e->parts().size() * VOICES) && !trackList.isEmpty()) {
                   while (i.hasNext()) {
                       i.next();
-                      xml.tag(QString("Tracklist sTrack=\"%1\" dstTrack=\"%2\"").arg(i.key()).arg(i.value()), "");
+                      xml.tagE(QString("Tracklist sTrack=\"%1\" dstTrack=\"%2\"").arg(i.key()).arg(i.value()));
                       }
                   }
             }
@@ -1064,25 +1064,18 @@ bool Score::read(XmlReader& e)
                   beam->setParent(0);
                   // _beams.append(beam);
                   }
+
+            else if (e.name() == "Tracklist") {
+                  int strack = e.intAttribute("sTrack",   -1);
+                  int dtrack = e.intAttribute("dstTrack", -1);
+                  if (strack != -1 && dtrack != -1)
+                        e.tracks().insert(strack, dtrack);
+                  }
             else if (tag == "Score") {          // recursion
                   if (MScore::noExcerpts)
                         e.skipCurrentElement();
                   else {
-                        QMultiMap<int, int> tracks;
-                        while (e.readNextStartElement()) {
-                              if (e.name() == "Tracklist") {
-                                    int strack = e.intAttribute("sTrack", -1);
-                                    int dtrack = e.intAttribute("dstTrack", -1);
-                                    if (strack == -1 || dtrack == -1)
-                                          continue;
-                                    tracks.insert(strack, dtrack);
-                                    e.readNext();
-                                    }
-                              else {
-                                    e.unknown();
-                                    break;
-                                    }
-                              }
+                        e.tracks().clear();
                         MasterScore* m = masterScore();
                         Score* s = new Score(m, MScore::baseStyle());
                         Excerpt* ex = new Excerpt(m);
@@ -1090,7 +1083,7 @@ bool Score::read(XmlReader& e)
                         s->setExcerpt(ex);
                         ex->setPartScore(s);
                         s->read(e);
-                        m->addExcerpt(s, tracks, ex);
+                        m->addExcerpt(s, e.tracks(), ex);
                         }
                   }
             else if (tag == "PageList") {
