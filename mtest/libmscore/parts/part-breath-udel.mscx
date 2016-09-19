@@ -166,7 +166,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           <lid>87</lid>
           </Breath>
         <Chord>
@@ -803,7 +803,7 @@
               </Note>
             </Chord>
           <Breath>
-            <subtype>0</subtype>
+            <symbol>breathMarkComma</symbol>
             <lid>87</lid>
             </Breath>
           <Chord>

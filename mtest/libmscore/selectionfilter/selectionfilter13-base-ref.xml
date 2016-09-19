@@ -22,7 +22,7 @@
         </Note>
       </Chord>
     <Breath>
-      <subtype>0</subtype>
+      <symbol>breathMarkComma</symbol>
       <track>0</track>
       </Breath>
     <Chord>
@@ -44,7 +44,7 @@
         </Note>
       </Chord>
     <Breath>
-      <subtype>0</subtype>
+      <symbol>breathMarkComma</symbol>
       <track>0</track>
       </Breath>
     </Staff>

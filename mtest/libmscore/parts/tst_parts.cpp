@@ -28,6 +28,7 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/sym.h"
 #include "libmscore/chordline.h"
+#include "libmscore/sym.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/parts/")
@@ -408,7 +409,7 @@ MasterScore* TestParts::doAddBreath()
       DropData dd;
       dd.view = 0;
       Breath* b = new Breath(score);
-      b->setBreathType(0);
+      b->setSymId(SymId::breathMarkComma);
       dd.element = b;
 
       score->startCmd();

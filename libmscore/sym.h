@@ -2717,7 +2717,7 @@ class Sym {
       static SymId oldName2id(const QString s)   { return lonhash.value(s, SymId::noSym);}
       static const char* id2name(SymId id);
 
-      static QString id2userName(SymId id)   { return symUserNames[int(id)]; }
+      static QString id2userName(SymId id)       { return symUserNames[int(id)]; }
       static SymId userName2id(const QString& s);
 
       static QVector<const char*> symNames;
@@ -2743,7 +2743,6 @@ struct GlyphKey {
          : face(_f), id(_id), mag(m), worldScale(s), color(c) {}
       bool operator==(const GlyphKey&) const;
       };
-
 
 struct GlyphPixmap {
       QPixmap pm;

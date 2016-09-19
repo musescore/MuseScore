@@ -17,6 +17,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/breath.h"
+#include "libmscore/sym.h"
 
 #define DIR QString("libmscore/breath/")
 
@@ -63,14 +64,14 @@ void TestBreath::breath()
       score->startCmd();
       score->cmdSelectAll();
       for (Element* e : score->selection().elements()) {
-          DropData dd;
-          dd.view = 0;
-          Breath* b = new Breath(score);
-          b->setBreathType(0);
-          dd.element = b;
+            DropData dd;
+            dd.view = 0;
+            Breath* b = new Breath(score);
+            b->setSymId(SymId::breathMarkComma);
+            dd.element = b;
             if (e->acceptDrop(dd))
                   e->drop(dd);
-      }
+          }
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 

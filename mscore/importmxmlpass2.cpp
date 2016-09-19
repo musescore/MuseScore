@@ -5373,7 +5373,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
       int wavyLineNo = 0;
       QString arpeggioType;
       //      QString glissandoType;
-      int breath = -1;
+      SymId breath = SymId::noSym;
       int tremolo = 0;
       QString tremoloType;
       QString placement;
@@ -5531,12 +5531,12 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               continue;
                               }
                         else if (_e.name() == "breath-mark") {
-                              breath = 0;
+                              breath = SymId::breathMarkComma;
                               _e.readElementText();
                               // TODO: handle value read (note: encoding unknown, only "comma" found)
                               }
                         else if (_e.name() == "caesura") {
-                              breath = 3;
+                              breath = SymId::caesura;
                               _e.readNext();
                               }
                         else if (_e.name() == "doit"
@@ -5773,11 +5773,11 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   logError(QString("unknown wavy-line type %1").arg(wavyLineType));
             }
 
-      if (breath >= 0) {
+      if (breath != SymId::noSym) {
             Breath* b = new Breath(_score);
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
-            b->setBreathType(breath);
+            b->setSymId(breath);
             Segment* seg = measure->getSegment(Segment::Type::Breath, tick + ticks);
             seg->add(b);
             }
