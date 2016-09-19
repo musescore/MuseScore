@@ -2826,5 +2826,6 @@ extern void initScoreFonts();
 
 }     // namespace Ms
 
+Q_DECLARE_METATYPE(Ms::SymId);
 #endif
 

@@ -62,6 +62,7 @@ class XmlReader : public QXmlStreamReader {
       void htmlToString(int level, QString*);
       Interval _transpose;
       QMap<int, LinkedElements*> _elinks;
+      QMultiMap<int, int> _tracks;
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
@@ -132,6 +133,7 @@ class XmlReader : public QXmlStreamReader {
 //      QList<std::pair<int, ClefType>>& clefs(int idx);
 
       QMap<int, LinkedElements*>& linkIds() { return _elinks;     }
+      QMultiMap<int, int>& tracks()         { return _tracks;     }
       };
 
 //---------------------------------------------------------
