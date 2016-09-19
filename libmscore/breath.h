@@ -31,8 +31,7 @@ class Breath : public Element {
 
       int _breathType;
       qreal _pause;
-      static const int breathSymbols = 4;
-      static SymId symList[breathSymbols];
+      static SymId symList[];
 
    public:
       Breath(Score* s);
@@ -44,7 +43,7 @@ class Breath : public Element {
       qreal pause() const              { return _pause; }
       void setPause(qreal v)           { _pause = v; }
 
-      Segment* segment() const         { return (Segment*)parent(); }
+      Segment* segment() const         { return toSegment(parent()); }
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

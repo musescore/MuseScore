@@ -20,11 +20,16 @@
 
 namespace Ms {
 
-SymId Breath::symList[Breath::breathSymbols] = {
+SymId Breath::symList[] = {
       SymId::breathMarkComma,
       SymId::breathMarkComma,      // TODO-smufl SymId(lcommaSym),
+      SymId::breathMarkSalzedo,
+      SymId::breathMarkTick,
+      SymId::breathMarkUpbow,
       SymId::caesuraCurved,
-      SymId::caesura
+      SymId::caesura,
+      SymId::caesuraShort,
+      SymId::caesuraThick
       };
 
 //---------------------------------------------------------
@@ -75,8 +80,12 @@ void Breath::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "subtype")
+            if (tag == "subtype") {
                   _breathType = e.readInt();
+                  if (score()->mscVersion() < 300 && _breathType > 1) // caesura in older score
+                        _breathType += 3; // skip over the 3 added breaths marks
+
+                  }
             else if (tag == "pause")
                   _pause = e.readDouble();
             else if (!Element::readProperties(e))
@@ -181,13 +190,10 @@ Element* Breath::prevElement()
 
 QString Breath::accessibleInfo() const
       {
-      switch (breathType()) {
-            case 2:
-            case 3:
-                  return tr("Caesura");
-            default:
-                  return tr("Breath");
-            }
+      if (breathType() < 5 )
+            return tr("Breath");
+      else
+            return tr("Caesura");
       }
 }
 
