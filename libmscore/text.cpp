@@ -2318,7 +2318,7 @@ bool Text::readProperties(XmlReader& e)
             _text.replace("<sym>unicode", "<sym>met");
             }
       else if (tag == "html-data")
-            setXmlText(convertFromHtml(e.readXml()));
+            setXmlText(convertFromHtml(e.readXml().trimmed()));
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
       else if (tag == "frameWidth") {           // obsolete

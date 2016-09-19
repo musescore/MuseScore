@@ -6,12 +6,12 @@
     <Division>480</Division>
     <Style>
       <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
-      <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <minNoteDistance>0.4</minNoteDistance>
       <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
@@ -23,7 +23,7 @@
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <voltaY>-2</voltaY>
+      <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <TextStyle>
@@ -80,7 +80,6 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="-1" span="1"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -124,66 +123,143 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
+          <durationType>quarter</durationType>
           <Note>
+            <pos x="-1" y="1.5"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
-          <Tremolo>
-            <subtype>c8</subtype>
-            </Tremolo>
           </Chord>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
         </Measure>
       <Measure number="2">
         <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
+          <durationType>quarter</durationType>
           <Note>
+            <pos x="1" y="1.5"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
-          <Tremolo>
-            <subtype>c16</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Note>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
           </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
         </Measure>
       <Measure number="3">
         <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
+          <durationType>quarter</durationType>
           <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          <Note>
+            <pos x="1" y="1.5"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
-          <Tremolo>
-            <subtype>c32</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          <Note>
+            <pos x="1" y="-0.5"/>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          <Note>
+            <pos x="0" y="-2.5"/>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Stem>
+            <pos x="0.617965" y="-3.31219"/>
+            <userLen>0.2</userLen>
+            </Stem>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          <Note>
+            <pos x="1" y="-3.5"/>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
