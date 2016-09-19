@@ -5599,7 +5599,10 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
             return;
             }
       if (!isValid(id)) {
-            qDebug("ScoreFont::draw: invalid sym %d\n", int(id));
+            if (this != ScoreFont::fallbackFont())
+                  fallbackFont()->draw(id, painter, mag, pos, worldScale);
+            else
+                  qDebug("ScoreFont::draw: invalid sym %d", int(id));
             return;
             }
       int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
@@ -5741,6 +5744,7 @@ void initScoreFonts()
       QFont::insertSubstitution("Gootville Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont",      "Bravura Text");
       QFont::insertSubstitution("MuseJazz",       "Bravura Text");
+      ScoreFont::fallbackFont();   // load fallback font
       }
 
 //---------------------------------------------------------
@@ -5798,6 +5802,7 @@ void ScoreFont::computeMetrics(Sym* sym, int code)
 void ScoreFont::load()
       {
       QString facePath = _fontPath + _filename;
+      printf("font load <%s>\n", qPrintable(facePath));
       QFile f(facePath);
       if (!f.open(QIODevice::ReadOnly)) {
             qDebug("ScoreFont::load(): open failed <%s>", qPrintable(facePath));
@@ -6027,12 +6032,20 @@ void ScoreFont::load()
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
       computeMetrics(sym, 32);
-
-      /*for (int i = 1; i < int(SymId::lastSym); ++i) {
-            Sym sym = _symbols[i];
-            if (!sym.isValid())
-                  qDebug("invalid symbol %s", Sym::id2name(SymId(i)));
-            }*/
+#if 0
+      //
+      // check for missing symbols
+      //
+      ScoreFont* fb = ScoreFont::fallbackFont();
+      if (fb && fb != this) {
+            for (int i = 1; i < int(SymId::lastSym); ++i) {
+                  const Sym& sym = _symbols[i];
+                  if (!sym.isValid()) {
+                        qDebug("invalid symbol %s", Sym::id2name(SymId(i)));
+                        }
+                  }
+            }
+#endif
       }
 
 //---------------------------------------------------------
@@ -6110,6 +6123,8 @@ bool ScoreFont::initGlyphNamesJson()
 
 const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       {
+      if (!sym(id).isValid() && this != ScoreFont::fallbackFont())
+            return fallbackFont()->bbox(id, mag);
       QRectF r = sym(id).bbox();
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }

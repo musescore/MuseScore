@@ -237,28 +237,6 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
             e->setParent(nb);
       }
 
-#if 0
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void Score::init()
-      {
-      Layer l;
-      l.name          = "default";
-      l.tags          = 1;
-      _layer.append(l);
-      _layerTags[0]   = "default";
-
-      _scoreFont = ScoreFont::fontFactory("emmentaler");
-
-      _pos[int(POS::CURRENT)] = 0;
-      _pos[int(POS::LEFT)]    = 0;
-      _pos[int(POS::RIGHT)]   = 0;
-      _fileDivision           = MScore::division;
-      }
-#endif
-
 //---------------------------------------------------------
 //   Score
 //---------------------------------------------------------
@@ -267,7 +245,6 @@ Score::Score()
    : QObject(0), ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _masterScore = 0;
-//      init();
       Layer l;
       l.name          = "default";
       l.tags          = 1;
