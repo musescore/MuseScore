@@ -15,15 +15,15 @@
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
 
-#define DIR QString("libmscore/compat/")
+#define DIR QString("libmscore/compat206/")
 
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestCompat
+//   TestCompat206
 //---------------------------------------------------------
 
-class TestCompat : public QObject, public MTest
+class TestCompat206 : public QObject, public MTest
       {
       Q_OBJECT
 
@@ -37,7 +37,7 @@ class TestCompat : public QObject, public MTest
 //   initTestCase
 //---------------------------------------------------------
 
-void TestCompat::initTestCase()
+void TestCompat206::initTestCase()
       {
       initMTest();
       }
@@ -45,42 +45,24 @@ void TestCompat::initTestCase()
 //---------------------------------------------------------
 //   compat_data
 //    every "xxx" test requires two *.mscx files:
-//          xxx.mscx     is the mscore 1.2 file
+//          xxx.mscx     is the mscore 2.x file
 //          xxx-ref.mscx is the corresponding (correct)
-//                       mscore 2.0 file
+//                       mscore 3.0 file
 //---------------------------------------------------------
 
-void TestCompat::compat_data()
+void TestCompat206::compat_data()
       {
       QTest::addColumn<QString>("file");
 
-      QTest::newRow("notes") <<  "notes";       // notes.mscx notes-ref.mscx
-// does not work:
-//      QTest::newRow("noteheads") << "noteheads";
-      QTest::newRow("keysig") << "keysig";
-      QTest::newRow("hairpin") << "hairpin";
+      QTest::newRow("breath") <<  "breath";
 
-// does not work:
-//      QTest::newRow("articulations") << "articulations";
-// does not work:
-//      QTest::newRow("textstyles") << "textstyles";
-      QTest::newRow("title") << "title";
-      QTest::newRow("notes_useroffset") << "notes_useroffset";
-      QTest::newRow("tremolo2notes") << "tremolo2notes";
-      QTest::newRow("accidentals") << "accidentals";
-      QTest::newRow("slurs") << "slurs";
-      QTest::newRow("clef_missing_first") << "clef_missing_first";
-      QTest::newRow("hor_frame_and_mmrest") << "hor_frame_and_mmrest";
-      QTest::newRow("chord_symbol") << "chord_symbol";
-      QTest::newRow("style") << "style";
-      QTest::newRow("text_scaling") << "text_scaling";
       }
 
 //---------------------------------------------------------
 //   compat
 //---------------------------------------------------------
 
-void TestCompat::compat()
+void TestCompat206::compat()
       {
       QFETCH(QString, file);
 
@@ -94,6 +76,6 @@ void TestCompat::compat()
       QVERIFY(saveCompareScore(score, writeFile, reference));
       }
 
-QTEST_MAIN(TestCompat)
-#include "tst_compat.moc"
+QTEST_MAIN(TestCompat206)
+#include "tst_compat206.moc"
 
