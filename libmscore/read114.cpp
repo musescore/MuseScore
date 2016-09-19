@@ -45,6 +45,7 @@
 #include "repeat.h"
 #include "breath.h"
 #include "tremolo.h"
+#include "articulation.h"
 
 namespace Ms {
 
@@ -1112,6 +1113,130 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
       }
 
+static void readStyle(MStyle* style, XmlReader& e)
+      {
+      QString oldChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
+      bool chordListTag = false;
+      while (e.readNextStartElement()) {
+            QString tag = e.name().toString();
+
+            if (tag == "lyricsDistance")        // was renamed
+                  tag = "lyricsPosBelow";
+
+            if (tag == "TextStyle") {
+                  TextStyle s;
+                  s.read(e);
+                  style->setTextStyle(s);
+                  }
+            else if (tag == "Spatium")
+                  style->set(StyleIdx::spatium, e.readDouble() * DPMM);
+            else if (tag == "page-layout") {
+                  PageFormat pf;
+                  pf.copy(*style->pageFormat());
+                  readPageFormat(&pf, e);
+                  style->setPageFormat(pf);
+                  }
+            else if (tag == "displayInConcertPitch")
+                  style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
+            else if (tag == "ChordList") {
+                  style->chordList()->clear();
+                  style->chordList()->read(e);
+                  style->setCustomChordList(true);
+                  chordListTag = true;
+                  }
+            else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth")   // obsolete
+                  e.skipCurrentElement();
+            else if (tag == "systemDistance")  // obsolete
+                  style->set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));
+            else {
+                  if (tag == "stemDir") {
+                        int voice = e.attribute("voice", "1").toInt() - 1;
+                        switch(voice) {
+                              case 0: tag = "StemDir1"; break;
+                              case 1: tag = "StemDir2"; break;
+                              case 2: tag = "StemDir3"; break;
+                              case 3: tag = "StemDir4"; break;
+                              }
+                        }
+                  // for compatibility:
+                  if (tag == "oddHeader" || tag == "evenHeader"
+                     || tag == "oddFooter" || tag == "evenFooter")
+                        tag += "C";
+
+                  int idx2;
+                  for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
+                        ArticulationInfo& ai =  Articulation::articulationList[idx2];
+                        // deal with obsolete tags from 1.14 format
+                        if (tag == "SforzatoaccentAnchor")
+                              tag = "SforzatoAnchor";
+                        if (tag == "SnappizzicatorAnchor")
+                              tag = "SnappizzicatoAnchor";
+                        else if (tag == "EspressivoAnchor")
+                              continue;
+                        if (QString::compare(tag, QString(ai.name).append("Anchor"),  Qt::CaseInsensitive) == 0
+                              || QString::compare(tag, QString("U").append(ai.name).append("Anchor"), Qt::CaseInsensitive) == 0
+                              || QString::compare(tag, QString("D").append(ai.name).append("Anchor"), Qt::CaseInsensitive) == 0
+                              ) {
+                              StyleIdx si = MStyle::styleIdx(QString(ai.name).append("Anchor"));
+                              if (si != StyleIdx::NOSTYLE) {
+                                    QString val(e.readElementText());
+                                    style->set(si, val.toInt());
+                                    break;
+                                    }
+                              }
+                        }
+                  if (idx2 < int(ArticulationType::ARTICULATIONS))
+                        continue;
+                  QString val(e.readElementText());
+                  style->convertToUnit(tag, val);
+                  
+                  }
+            }
+
+      // if we just specified a new chord description file
+      // and didn't encounter a ChordList tag
+      // then load the chord description file
+
+      QString newChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
+      if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
+            if (!newChordDescriptionFile.startsWith("chords_") && style->value(StyleIdx::chordStyle).toString() == "std") {
+                  // should not normally happen,
+                  // but treat as "old" (114) score just in case
+                  style->set(StyleIdx::chordStyle, QVariant(QString("custom")));
+                  style->set(StyleIdx::chordsXmlFile, QVariant(true));
+                  qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
+                  }
+            if (style->value(StyleIdx::chordStyle).toString() == "custom")
+                  style->setCustomChordList(true);
+            else
+                  style->setCustomChordList(false);
+            style->chordList()->unload();
+            }
+
+      // make sure we have a chordlist
+      if (!style->chordList()->loaded() && !chordListTag) {
+            if (style->value(StyleIdx::chordsXmlFile).toBool())
+                  style->chordList()->read("chords.xml");
+            style->chordList()->read(newChordDescriptionFile);
+            }
+
+      //
+      //  Compatibility with old scores/styles:
+      //  translate old frameWidthMM and paddingWidthMM
+      //  into spatium units
+      //
+      int n = style->textStyles().size();
+      qreal _spatium = style->value(StyleIdx::spatium).toDouble();
+      qreal spMM = _spatium / DPMM;
+      for (int i = 0; i < n; ++i) {
+            TextStyle* s = &style->textStyle(TextStyleType(i));
+            if (s->frameWidthMM() != 0.0)
+                  s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
+            if (s->paddingWidthMM() != 0.0)
+                  s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
+            }
+      }
+
 //---------------------------------------------------------
 //   read114
 //    import old version <= 1.3 files
@@ -1189,7 +1314,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   setShowPageborders(e.readInt());
             else if (tag == "Style") {
                   qreal sp = spatium();
-                  style()->load(e);
+                  readStyle(style(), e);
+                  //style()->load(e);
                   // adjust this now so chords render properly on read
                   // other style adjustments can wait until reading is finished
                   if (style(StyleIdx::useGermanNoteNames).toBool())
