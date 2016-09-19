@@ -188,7 +188,7 @@ void XmlReader::unknown()
       {
       if (QXmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));
-      qDebug("%s: xml read error at line %lld col %lld: %s",
+      qDebug("%s: xml unknown tag at line %lld col %lld: %s",
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
       skipCurrentElement();

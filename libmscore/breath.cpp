@@ -78,7 +78,7 @@ void Breath::write(Xml& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag("Breath");
-      xml.tag("symbol", Sym::id2name(_symId));
+      writeProperty(xml, P_ID::SYMBOL);
       writeProperty(xml, P_ID::PAUSE);
       Element::writeProperties(xml);
       xml.etag();
@@ -148,7 +148,7 @@ QVariant Breath::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::SYMBOL:
-                  return int(_symId);
+                  return QVariant::fromValue(_symId);
             case P_ID::PAUSE:
                   return _pause;
             default:
@@ -164,7 +164,8 @@ bool Breath::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_ID::SYMBOL:
-                  setSymId(SymId(v.toInt()));
+                  setSymId(v.value<SymId>());
+                  break;
 
             case P_ID::PAUSE:
                   setPause(v.toDouble());

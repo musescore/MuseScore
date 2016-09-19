@@ -18,6 +18,7 @@
 #include "note.h"
 #include "barline.h"
 #include "style.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -249,7 +250,7 @@ static const PropertyData propertyList[] = {
       { P_ID::PLAYBACK_VOICE2,     false, "playbackVoice2",        P_TYPE::BOOL  },
       { P_ID::PLAYBACK_VOICE3,     false, "playbackVoice3",        P_TYPE::BOOL  },
       { P_ID::PLAYBACK_VOICE4,     false, "playbackVoice4",        P_TYPE::BOOL  },
-      { P_ID::SYMBOL,              true,  "symbol",                P_TYPE::INT   },
+      { P_ID::SYMBOL,              true,  "symbol",                P_TYPE::SYMID },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT   }
       };
@@ -394,10 +395,12 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   g.read(e);
                   return QVariant::fromValue(g);
                   }
+            case P_TYPE::SYMID:
+                  return QVariant::fromValue(Sym::name2id(e.readElementText()));
+                  break;
             case P_TYPE::POINT_MM:              // not supported
             case P_TYPE::TDURATION:
             case P_TYPE::SIZE_MM:
-            case P_TYPE::SYMID:
             case P_TYPE::TEXT_STYLE:
             case P_TYPE::INT_LIST:
                   return QVariant();
