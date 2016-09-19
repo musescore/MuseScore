@@ -45,6 +45,7 @@ cp ../../../build.debug/mtest/libmscore/parts/part-chordline-urdel.mscx part-cho
 
 cp ../../../build.debug/mtest/libmscore/parts/part-54346-1.mscx   part-54346.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part-54346-parts.mscx   part-54346-parts.mscx
+cp ../../../build.debug/mtest/libmscore/parts/voices.mscx   voices-ref.mscx
 
 
 
