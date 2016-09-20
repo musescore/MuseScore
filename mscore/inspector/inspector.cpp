@@ -500,23 +500,18 @@ InspectorHBox::InspectorHBox(QWidget* parent)
 //---------------------------------------------------------
 
 InspectorArticulation::InspectorArticulation(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       ar.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,               0, 0, e.color,        e.resetColor      },
-            { P_ID::VISIBLE,             0, 0, e.visible,      e.resetVisible    },
-            { P_ID::USER_OFF,            0, 0, e.offsetX,      e.resetX          },
-            { P_ID::USER_OFF,            1, 0, e.offsetY,      e.resetY          },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::ARTICULATION_ANCHOR, 0, 0, ar.anchor,      ar.resetAnchor    },
             { P_ID::DIRECTION,           0, 0, ar.direction,   ar.resetDirection },
             { P_ID::TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch },
             { P_ID::ORNAMENT_STYLE,      0, 0, ar.ornamentStyle, ar.resetOrnamentStyle },
             { P_ID::PLAY,                0, 0, ar.playArticulation, ar.resetPlayArticulation}
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //---------------------------------------------------------
@@ -539,21 +534,16 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
 //---------------------------------------------------------
 
 InspectorRest::InspectorRest(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       s.setupUi(addWidget());
       r.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
-            { P_ID::SMALL,          0, 0, r.small,         r.resetSmall         },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::SMALL,          0, 0, r.small,         r.resetSmall         },
             };
-      mapSignals();
+      mapSignals(iiList);
 
       //
       // Select
@@ -590,7 +580,7 @@ void InspectorRest::setElement()
       {
       Rest* rest = toRest(inspector->element());
       tuplet->setEnabled(rest->tuplet());
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       }
 
 //---------------------------------------------------------
@@ -615,17 +605,12 @@ void InspectorRest::tupletClicked()
 //---------------------------------------------------------
 
 InspectorTimeSig::InspectorTimeSig(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       s.setupUi(addWidget());
       t.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,          0, 0, e.color,          e.resetColor         },
-            { P_ID::VISIBLE,        0, 0, e.visible,        e.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, e.offsetX,        e.resetX             },
-            { P_ID::USER_OFF,       1, 0, e.offsetY,        e.resetY             },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,   s.resetLeadingSpace  },
             { P_ID::SHOW_COURTESY,  0, 0, t.showCourtesy,   t.resetShowCourtesy  },
 //            { P_ID::TIMESIG,        0, 0, t.timesigZ,       t.resetTimesig       },
@@ -633,14 +618,14 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
 //            { P_ID::TIMESIG_GLOBAL, 0, 0, t.globalTimesigZ, t.resetGlobalTimesig },
 //            { P_ID::TIMESIG_GLOBAL, 1, 0, t.globalTimesigN, t.resetGlobalTimesig }
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //   InspectorTimeSig::setElement
 
 void InspectorTimeSig::setElement()
       {
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       TimeSig* ts = toTimeSig(inspector->element());
       if (ts->generated())
             t.showCourtesy->setEnabled(false);
@@ -651,29 +636,24 @@ void InspectorTimeSig::setElement()
 //---------------------------------------------------------
 
 InspectorKeySig::InspectorKeySig(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       s.setupUi(addWidget());
       k.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
 //            { P_ID::SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //   InspectorKeySig::setElement
 
 void InspectorKeySig::setElement()
       {
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       KeySig* ks = toKeySig(inspector->element());
       if (ks->generated())
             k.showCourtesy->setEnabled(false);
@@ -684,22 +664,17 @@ void InspectorKeySig::setElement()
 //---------------------------------------------------------
 
 InspectorTuplet::InspectorTuplet(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       t.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
-            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
-            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
-            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::DIRECTION,    0, 0, t.direction,   t.resetDirection   },
             { P_ID::NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
             { P_ID::BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
             };
 
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //---------------------------------------------------------
@@ -707,20 +682,15 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
 //---------------------------------------------------------
 
 InspectorAccidental::InspectorAccidental(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       a.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,               0, 0, e.color,       e.resetColor       },
-            { P_ID::VISIBLE,             0, 0, e.visible,     e.resetVisible     },
-            { P_ID::USER_OFF,            0, 0, e.offsetX,     e.resetX           },
-            { P_ID::USER_OFF,            1, 0, e.offsetY,     e.resetY           },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::SMALL,               0, 0, a.small,       a.resetSmall       },
             { P_ID::ACCIDENTAL_BRACKET,  0, 0, a.hasBracket,  a.resetHasBracket  }
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //---------------------------------------------------------
@@ -728,20 +698,15 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
 //---------------------------------------------------------
 
 InspectorBend::InspectorBend(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       g.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
-            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
-            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
-            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
             };
 
-      mapSignals();
+      mapSignals(iiList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 
@@ -801,29 +766,26 @@ void InspectorTremoloBar::propertiesClicked()
 //---------------------------------------------------------
 
 InspectorClef::InspectorClef(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       s.setupUi(addWidget());
       c.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::SHOW_COURTESY,  0, 0, c.showCourtesy,  c.resetShowCourtesy  }
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
-//   InspectorClef::setElement
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
 
 void InspectorClef::setElement()
       {
       otherClef = nullptr;                      // no 'other clef' yet
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
 
       // try to locate the 'other clef' of a courtesy / main pair
       Clef* clef = toClef(inspector->element());
@@ -849,8 +811,6 @@ void InspectorClef::setElement()
       if (otherSegm)
             otherClef = toClef(otherSegm->element(clef->track()));
       }
-
-//   InspectorClef::valueChanged
 
 void InspectorClef::valueChanged(int idx)
       {
