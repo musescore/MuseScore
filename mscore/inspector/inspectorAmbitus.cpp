@@ -31,9 +31,8 @@ enum AmbitusControl : char {
 //---------------------------------------------------------
 
 InspectorAmbitus::InspectorAmbitus(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      b.setupUi(addWidget());
       r.setupUi(addWidget());
       s.setupUi(addWidget());
 
@@ -85,12 +84,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       item = model->item(0);
       item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
-      iList = {
-            { P_ID::COLOR,          0, 0, b.color,         b.resetColor         },
-            { P_ID::VISIBLE,        0, 0, b.visible,       b.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, b.offsetX,       b.resetX             },
-            { P_ID::USER_OFF,       1, 0, b.offsetY,       b.resetY             },
-
+      const std::vector<InspectorItem> iiList = {
             { P_ID::HEAD_GROUP,     0, 0, r.noteHeadGroup, r.resetNoteHeadGroup },
             { P_ID::HEAD_TYPE,      0, 0, r.noteHeadType,  r.resetNoteHeadType  },
             { P_ID::MIRROR_HEAD,    0, 0, r.direction,     r.resetDirection     },
@@ -104,9 +98,8 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             };
 
-      mapSignals();
+      mapSignals(iiList);
       connect(r.updateRange, SIGNAL(clicked()), this, SLOT(updateRange()) );
-
       }
 
 //---------------------------------------------------------

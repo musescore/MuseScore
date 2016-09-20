@@ -22,24 +22,19 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorJump::InspectorJump(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      b.setupUi(addWidget());
       t.setupUi(addWidget());
       j.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,              0, false, b.color,      b.resetColor      },
-            { P_ID::VISIBLE,            0, false, b.visible,    b.resetVisible    },
-            { P_ID::USER_OFF,           0, false, b.offsetX,    b.resetX          },
-            { P_ID::USER_OFF,           1, false, b.offsetY,    b.resetY          },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle      },
             { P_ID::JUMP_TO,            0, false, j.jumpTo,     j.resetJumpTo     },
             { P_ID::PLAY_UNTIL,         0, false, j.playUntil,  j.resetPlayUntil  },
             { P_ID::CONTINUE_AT,        0, false, j.continueAt, j.resetContinueAt }
             };
 
-      mapSignals();
+      mapSignals(iiList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
@@ -61,7 +56,7 @@ void InspectorJump::setElement()
                   t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
             }
       t.style->blockSignals(false);
-      InspectorBase::setElement();
+      InspectorElementBase::setElement();
       }
 
 }

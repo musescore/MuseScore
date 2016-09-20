@@ -316,7 +316,7 @@ class InspectorTempoText : public InspectorElementBase {
 class InspectorDynamic : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+//      UiInspectorElement e;
       Ui::InspectorText t;
       Ui::InspectorDynamic d;
 
@@ -332,7 +332,7 @@ class InspectorDynamic : public InspectorElementBase {
 class InspectorLyric : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+//      UiInspectorElement e;
       Ui::InspectorText t;
       Ui::InspectorLyric l;
 
@@ -351,7 +351,7 @@ class InspectorLyric : public InspectorElementBase {
 class InspectorStafftext : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+//      UiInspectorElement e;
       Ui::InspectorText t;
       Ui::InspectorStafftext s;
 
@@ -432,10 +432,10 @@ class InspectorSlur : public InspectorElementBase {
 //   InspectorCaesura
 //---------------------------------------------------------
 
-class InspectorCaesura : public InspectorBase {
+class InspectorCaesura : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+//      UiInspectorElement e;
       Ui::InspectorCaesura c;
 
    public:

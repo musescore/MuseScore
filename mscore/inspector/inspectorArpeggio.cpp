@@ -23,21 +23,15 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorArpeggio::InspectorArpeggio(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       g.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,           0, false, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,         0, false, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,        0, false, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,        1, false, e.offsetY,  e.resetY        },
-
+      const std::vector<InspectorItem> iiList = {
             { P_ID::PLAY,            0, 0,     g.playArpeggio, g.resetPlayArpeggio}
             };
 
-      mapSignals();
+      mapSignals(iiList);
       }
 }
 

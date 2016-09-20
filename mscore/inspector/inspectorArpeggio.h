@@ -24,10 +24,10 @@ namespace Ms {
 //   InspectorArpeggio
 //---------------------------------------------------------
 
-class InspectorArpeggio : public InspectorBase {
+class InspectorArpeggio : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement   e;
+//      UiInspectorElement   e;
       Ui::InspectorArpeggio g;
 
    public:

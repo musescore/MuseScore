@@ -24,10 +24,10 @@ namespace Ms {
 //   InspectorBeam
 //---------------------------------------------------------
 
-class InspectorBeam : public InspectorBase {
+class InspectorBeam : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+//      UiInspectorElement e;
       Ui::InspectorBeam b;
 
    protected slots:

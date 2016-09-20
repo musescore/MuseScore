@@ -1308,9 +1308,8 @@ void InspectorBarLine::blockSpanDataSignals(bool val)
 //   InspectorCaesura
 //---------------------------------------------------------
 
-InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorBase(parent)
+InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       c.setupUi(addWidget());
 
       Breath* b = toBreath(inspector->element());
@@ -1324,14 +1323,10 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorBase(parent)
       if (sameType)
             c.elementName->setText(b->accessibleInfo());
 
-      iList = {
-            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+      std::vector<InspectorItem> il = {
             { P_ID::PAUSE,          0, 0, c.pause,         c.resetPause         }
             };
-      mapSignals();
+      mapSignals(il);
       }
 
 }
