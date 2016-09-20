@@ -55,15 +55,11 @@ void TestCompat114::compat_data()
       QTest::addColumn<QString>("file");
 
       QTest::newRow("notes") <<  "notes";       // notes.mscx notes-ref.mscx
-// does not work:
-//      QTest::newRow("noteheads") << "noteheads";
+      QTest::newRow("noteheads") << "noteheads";
       QTest::newRow("keysig") << "keysig";
       QTest::newRow("hairpin") << "hairpin";
-
-// does not work:
-//      QTest::newRow("articulations") << "articulations";
-// does not work:
-//      QTest::newRow("textstyles") << "textstyles";
+      QTest::newRow("articulations") << "articulations";
+      QTest::newRow("textstyles") << "textstyles";
       QTest::newRow("title") << "title";
       QTest::newRow("notes_useroffset") << "notes_useroffset";
       QTest::newRow("tremolo2notes") << "tremolo2notes";
@@ -72,8 +68,7 @@ void TestCompat114::compat_data()
       QTest::newRow("clef_missing_first") << "clef_missing_first";
       QTest::newRow("hor_frame_and_mmrest") << "hor_frame_and_mmrest";
       QTest::newRow("chord_symbol") << "chord_symbol";
-// does not work:
-      //QTest::newRow("style") << "style";
+      QTest::newRow("style") << "style";
       QTest::newRow("text_scaling") << "text_scaling";
       }
 

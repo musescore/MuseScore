@@ -226,7 +226,7 @@ struct ChordFont {
 //---------------------------------------------------------
 
 class ChordList : public QMap<int, ChordDescription> {
-      QHash<QString, ChordSymbol> symbols;
+      QMap<QString, ChordSymbol> symbols;
 
    public:
       QList<ChordFont> fonts;

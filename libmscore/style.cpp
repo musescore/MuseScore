@@ -31,23 +31,6 @@ namespace Ms {
 // 120 dpi           screen resolution
 //  spatium = 20/4 points
 
-//---------------------------------------------------------
-//   StyleType
-//---------------------------------------------------------
-
-struct StyleType {
-      StyleIdx _idx;
-      const char* _name;       // xml name for read()/write()
-      QVariant _defaultValue;
-
-   public:
-      StyleIdx  styleIdx() const            { return _idx;          }
-      int idx() const                       { return int(_idx);     }
-      const char*  valueType() const        { return _defaultValue.typeName();    }
-      const char*      name() const         { return _name;         }
-      const QVariant&  defaultValue() const { return _defaultValue; }
-      };
-
 static const StyleType styleTypes[] {
       { StyleIdx::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0)  },
       { StyleIdx::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0)  },
@@ -354,6 +337,19 @@ const char* MStyle::valueName(const StyleIdx i)
       return styleTypes[int(i)].name();
       }
 
+//---------------------------------------------------------
+//   styleIdx
+//---------------------------------------------------------
+
+StyleIdx MStyle::styleIdx(const QString &name)
+      {
+      for (StyleType st : styleTypes) {
+            if (st.name() == name)
+                  return st.styleIdx();
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 static const QString ff("FreeSerif");
 
 //---------------------------------------------------------
@@ -591,6 +587,12 @@ const TextStyle& MStyle::textStyle(TextStyleType idx) const
       return _textStyles[int(idx)];
       }
 
+TextStyle& MStyle::textStyle(TextStyleType idx)
+      {
+      Q_ASSERT(int(idx) >= 0 && int(idx) < _textStyles.count());
+      return _textStyles[int(idx)];
+      }
+
 const TextStyle& MStyle::textStyle(const QString& name) const
       {
       for (const TextStyle& s : _textStyles) {
@@ -677,6 +679,34 @@ void MStyle::set(const StyleIdx t, const QVariant& val)
       }
 
 //---------------------------------------------------------
+//   convertToUnit
+//---------------------------------------------------------
+
+void MStyle::convertToUnit(const QString& tag, const QString& val)
+      {
+      for (const StyleType& t : styleTypes) {
+            StyleIdx idx = t.styleIdx();
+            if (t.name() == tag) {
+                  const char* type = t.valueType();
+                  if (!strcmp("Ms::Spatium", type))
+                        set(idx, Spatium(val.toDouble()));
+                  else if (!strcmp("double", type))
+                        set(idx, QVariant(val.toDouble()));
+                  else if (!strcmp("bool", type))
+                        set(idx, QVariant(bool(val.toInt())));
+                  else if (!strcmp("int", type))
+                        set(idx, QVariant(val.toInt()));
+                  else if (!strcmp("Ms::Direction", type))
+                        set(idx, QVariant::fromValue(Direction(val.toInt())));
+                  else if (!strcmp("QString", type))
+                        set(idx, QVariant(val));
+                  else
+                        qFatal("MStyle::load: unhandled type %s", type);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   load
 //---------------------------------------------------------
 
@@ -708,9 +738,6 @@ void MStyle::load(XmlReader& e)
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
 
-            if (tag == "lyricsDistance")        // was renamed
-                  tag = "lyricsPosBelow";
-
             if (tag == "TextStyle") {
                   TextStyle s;
                   s.read(e);
@@ -728,47 +755,9 @@ void MStyle::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth")   // obsolete
-                  e.skipCurrentElement();
-            else if (tag == "systemDistance")  // obsolete
-                  set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));
             else {
-                  if (tag == "stemDir") {
-                        int voice = e.attribute("voice", "1").toInt() - 1;
-                        switch(voice) {
-                              case 0: tag = "StemDir1"; break;
-                              case 1: tag = "StemDir2"; break;
-                              case 2: tag = "StemDir3"; break;
-                              case 3: tag = "StemDir4"; break;
-                              }
-                        }
-                  // for compatibility:
-                  if (tag == "oddHeader" || tag == "evenHeader"
-                     || tag == "oddFooter" || tag == "evenFooter")
-                        tag += "C";
-
                   QString val(e.readElementText());
-
-                  for (const StyleType& t : styleTypes) {
-                        StyleIdx idx = t.styleIdx();
-                        if (t.name() == tag) {
-                              const char* type = t.valueType();
-                              if (!strcmp("Ms::Spatium", type))
-                                    set(idx, Spatium(val.toDouble()));
-                              else if (!strcmp("double", type))
-                                    set(idx, QVariant(val.toDouble()));
-                              else if (!strcmp("bool", type))
-                                    set(idx, QVariant(bool(val.toInt())));
-                              else if (!strcmp("int", type))
-                                    set(idx, QVariant(val.toInt()));
-                              else if (!strcmp("Ms::Direction", type))
-                                    set(idx, QVariant::fromValue(Direction(val.toInt())));
-                              else if (!strcmp("QString", type))
-                                    set(idx, QVariant(val));
-                              else
-                                    qFatal("MStyle::load: unhandled type %s", type);
-                              }
-                        }
+                  convertToUnit(tag, val);
                   }
             }
 
@@ -797,22 +786,6 @@ void MStyle::load(XmlReader& e)
             if (value(StyleIdx::chordsXmlFile).toBool())
                   _chordList.read("chords.xml");
             _chordList.read(newChordDescriptionFile);
-            }
-
-      //
-      //  Compatibility with old scores/styles:
-      //  translate old frameWidthMM and paddingWidthMM
-      //  into spatium units
-      //
-      int n = _textStyles.size();
-      qreal _spatium = value(StyleIdx::spatium).toDouble();
-      qreal spMM = _spatium / DPMM;
-      for (int i = 0; i < n; ++i) {
-            TextStyle* s = &_textStyles[i];
-            if (s->frameWidthMM() != 0.0)
-                  s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
-            if (s->paddingWidthMM() != 0.0)
-                  s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
             }
       }
 
@@ -886,5 +859,4 @@ StyleIdx MStyle::articulationAnchorIdx(int id)
       {
       return StyleIdx(int(StyleIdx::fermataAnchor) + id);
       }
-
 }
