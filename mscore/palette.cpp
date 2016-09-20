@@ -1525,7 +1525,7 @@ int Palette::size() const
       {
       int s = 0;
       for (PaletteCell* cell : cells) {
-            if (cell->visible)
+            if (cell && cell->visible)
                   s++;
             }
       return s;
@@ -1539,7 +1539,7 @@ PaletteCell* Palette::cellAt(int index)
       {
       int s = 0;
       for (PaletteCell* cell : cells) {
-            if (cell->visible) {
+            if (cell && cell->visible) {
                   if (s == index)
                         return cell;
                   s++;
