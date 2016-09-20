@@ -1601,10 +1601,10 @@ void Score::connectTies(bool silent)
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
-                  Chord* c = static_cast<Chord*>(s->element(i));
-                  if (c == 0 || !c->isChord())
+                  Element* e = s->element(i);
+                  if (e == 0 || !e->isChord())
                         continue;
-
+                  Chord* c = toChord(e);
                   for (Note* n : c->notes()) {
                         // connect a tie without end note
                         Tie* tie = n->tieFor();
