@@ -317,6 +317,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::textLinePlacement,         "textLinePlacement",         int(Element::Placement::ABOVE)  },
       { StyleIdx::textLinePosAbove,          "textLinePosAbove",          Spatium(-3.5) },
       { StyleIdx::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
+
+      { StyleIdx::tremoloBarLineWidth,          "tremoloBarLineWidth",          Spatium(0.1) },
       };
 
 //---------------------------------------------------------

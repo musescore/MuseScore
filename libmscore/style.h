@@ -331,6 +331,8 @@ enum class StyleIdx : int {
       textLinePosAbove,
       textLinePosBelow,
 
+      tremoloBarLineWidth,
+
       STYLES
       };
 
@@ -399,7 +401,7 @@ class MStyle {
       bool load(QFile* qf);
       void load(XmlReader& e);
       void save(Xml& xml, bool optimize);
-      
+
       void convertToUnit(const QString& tag, const QString& val);
 
       PageFormat* pageFormat()             { return &_pageFormat; }

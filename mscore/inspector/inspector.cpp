@@ -734,7 +734,8 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-//            { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
+            { P_ID::PLAY,         0, 0, g.play,        g.resetPlay       },
+            { P_ID::LINE_WIDTH,   0, 0, g.lineWidth,   g.resetLineWidth  },
             { P_ID::MAG,          0, 0, g.mag,         g.resetMag        }
             };
 
