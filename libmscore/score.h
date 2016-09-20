@@ -757,6 +757,7 @@ class Score : public QObject, public ScoreElement {
 
       void cmd(const QAction*);
       int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }
+      void setFileDivision(int t) { _fileDivision = t; }
 
       QString importedFilePath() const           { return _importedFilePath; }
       void setImportedFilePath(const QString& filePath);
@@ -892,6 +893,7 @@ class Score : public QObject, public ScoreElement {
       qreal loHeight() const;
 
       const QList<Page*>& pages() const        { return _pages;                }
+      QList<Page*>& pages()                    { return _pages;                }
       const QList<System*>& systems() const    { return _systems;              }
       QList<System*>& systems()                { return _systems;              }
 
