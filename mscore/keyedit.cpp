@@ -91,9 +91,6 @@ void KeyCanvas::clear()
 
 void KeyCanvas::paintEvent(QPaintEvent*)
       {
-      double spatium = 2.0 * PALETTE_SPATIUM / extraMag;
-      gscore->setSpatium(spatium);
-
       QPainter painter(this);
       painter.setRenderHint(QPainter::Antialiasing, true);
       qreal wh = double(height());
@@ -115,11 +112,11 @@ void KeyCanvas::paintEvent(QPaintEvent*)
       painter.fillRect(background, Qt::white);
 
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle()->value(StyleIdx::staffLineWidth).toDouble() * spatium);
+      pen.setWidthF(MScore::defaultStyle()->value(StyleIdx::staffLineWidth).toDouble() * gscore->spatium());
       painter.setPen(pen);
 
       for (int i = 0; i < 5; ++i) {
-            qreal yy = r.y() + i * spatium;
+            qreal yy = r.y() + i * gscore->spatium();
             painter.drawLine(QLineF(r.x(), yy, r.x() + r.width(), yy));
             }
       if (dragElement) {
@@ -240,7 +237,7 @@ void KeyCanvas::dragMoveEvent(QDragMoveEvent* event)
 
 void KeyCanvas::dropEvent(QDropEvent*)
       {
-      foreach(Accidental* a, accidentals)
+      for (Accidental* a : accidentals)
             a->setSelected(false);
       dragElement->setSelected(true);
       accidentals.append(dragElement);
@@ -255,11 +252,11 @@ void KeyCanvas::dropEvent(QDropEvent*)
 
 void KeyCanvas::snap(Accidental* a)
       {
-      double y = a->ipos().y();
-      double spatium2 = PALETTE_SPATIUM / extraMag;
-      int line = int(y / spatium2);
-      y = line * spatium2;
-      a->rypos() = y;
+      double y        = a->ipos().y();
+      double spatium2 = gscore->spatium() * .5;
+      int line        = int((y + spatium2 * .5) / spatium2);
+      y               = line * spatium2;
+      a->rypos()      = y;
       }
 
 //---------------------------------------------------------
@@ -325,9 +322,11 @@ KeyEditor::KeyEditor(QWidget* parent)
 
 void KeyEditor::addClicked()
       {
-      double extraMag = 2.0;
+      // double extraMag = 2.0;
       const QList<Accidental*> al = canvas->getAccidentals();
-      double spatium = 2.0 * PALETTE_SPATIUM / extraMag;
+      // qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
+      // double spatium = 2.0 * PALETTE_SPATIUM / extraMag;
+      double spatium = gscore->spatium();
       double xoff = 10000000.0;
 
       for (Accidental* a : al) {
@@ -340,10 +339,10 @@ void KeyEditor::addClicked()
       e.setCustom(true);
       for (Accidental* a : al) {
             KeySym s;
-            s.sym = a->symbol();
+            s.sym       = a->symbol();
             QPointF pos = a->ipos();
-            pos.rx() -= xoff;
-            s.spos = pos / spatium;
+            pos.rx()   -= xoff;
+            s.spos      = pos / spatium;
             e.keySymbols().append(s);
             }
       KeySig* ks = new KeySig(gscore);
