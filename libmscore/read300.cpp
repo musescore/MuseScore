@@ -163,6 +163,7 @@ bool Score::read(XmlReader& e)
                   int dtrack = e.intAttribute("dstTrack", -1);
                   if (strack != -1 && dtrack != -1)
                         e.tracks().insert(strack, dtrack);
+                  e.skipCurrentElement();
                   }
             else if (tag == "Score") {          // recursion
                   if (MScore::noExcerpts)
