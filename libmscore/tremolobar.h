@@ -36,6 +36,7 @@ class TremoloBar : public Element {
       QPointF notePos;
       qreal noteWidth;
       qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
+      QPolygonF polygon;                  // computed by layout
 
    public:
       TremoloBar(Score* s);

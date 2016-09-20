@@ -729,21 +729,16 @@ void InspectorBend::propertiesClicked()
 //---------------------------------------------------------
 
 InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       g.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
-            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
-            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
-            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+      const std::vector<InspectorItem> iiList = {
 //            { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
             { P_ID::MAG,          0, 0, g.mag,         g.resetMag        }
             };
 
-      mapSignals();
+      mapSignals(iiList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 
@@ -753,10 +748,10 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
 
 void InspectorTremoloBar::propertiesClicked()
       {
-      Bend* b = toBend(inspector->element());
+      TremoloBar* b = toTremoloBar(inspector->element());
       Score* score = b->score();
       score->startCmd();
-      mscore->currentScoreView()->editBendProperties(b);
+      mscore->currentScoreView()->editTremoloBarProperties(b);
       score->setLayoutAll();
       score->endCmd();
       }

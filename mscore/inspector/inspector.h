@@ -281,10 +281,9 @@ class InspectorBend : public InspectorElementBase {
 //   InspectorTremoloBar
 //---------------------------------------------------------
 
-class InspectorTremoloBar : public InspectorBase {
+class InspectorTremoloBar : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorTremoloBar g;
 
    private slots:
