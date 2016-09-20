@@ -8,35 +8,36 @@
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>2</staffLowerBorder>
       <minSystemDistance>9.5</minSystemDistance>
-      <lyricsDistance>2</lyricsDistance>
+      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
       <systemFrameDistance>1</systemFrameDistance>
-      <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <repeatBarTips>1</repeatBarTips>
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.2</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <shortestStem>2</shortestStem>
       <minNoteDistance>0.4</minNoteDistance>
-      <barNoteDistance>0.6</barNoteDistance>
-      <measureSpacing>1.4</measureSpacing>
+      <measureSpacing>1.33</measureSpacing>
+      <ledgerLineWidth>0.12</ledgerLineWidth>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
+      <harmonyY>0</harmonyY>
       <pageNumberOddEven>0</pageNumberOddEven>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <concertPitch>1</concertPitch>
-      <voltaY>-2</voltaY>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
+      <tupletOufOfStaff>0</tupletOufOfStaff>
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <rxoffset>50</rxoffset>
         <offsetType>absolute</offsetType>
         <name>Title</name>
         <family>MuseJazz</family>
@@ -48,7 +49,6 @@
         <valign>top</valign>
         <xoffset>0</xoffset>
         <yoffset>10</yoffset>
-        <rxoffset>50</rxoffset>
         <offsetType>absolute</offsetType>
         <name>Subtitle</name>
         <family>MuseJazz</family>
@@ -57,8 +57,6 @@
       <TextStyle>
         <halign>right</halign>
         <valign>bottom</valign>
-        <rxoffset>100</rxoffset>
-        <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
         <name>Composer</name>
         <family>MuseJazz</family>
@@ -67,7 +65,6 @@
       <TextStyle>
         <halign>left</halign>
         <valign>bottom</valign>
-        <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
         <name>Lyricist</name>
         <family>MuseJazz</family>
@@ -79,7 +76,7 @@
         <xoffset>0</xoffset>
         <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
-        <name>Lyrics odd lines</name>
+        <name>Lyrics Odd Lines</name>
         <family>MuseJazz</family>
         <size>10</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -90,7 +87,7 @@
         <xoffset>0</xoffset>
         <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
-        <name>Lyrics even lines</name>
+        <name>Lyrics Even Lines</name>
         <family>MuseJazz</family>
         <size>10</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -105,10 +102,26 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <TextStyle>
+        <halign>center</halign>
+        <valign>center</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-5</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>String Number</name>
+        <family>MuseJazz</family>
+        <size>8</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <frameWidthS>0.1</frameWidthS>
+        <paddingWidthS>-0.1</paddingWidthS>
+        <frameRound>0</frameRound>
+        <frameColor r="0" g="0" b="0" a="255"/>
+        <circle>1</circle>
+        </TextStyle>
+      <TextStyle>
         <halign>right</halign>
         <valign>center</valign>
         <offsetType>absolute</offsetType>
-        <name>InstrumentsLong</name>
+        <name>Instrument Name (Long)</name>
         <family>MuseJazz</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -117,7 +130,7 @@
         <halign>right</halign>
         <valign>center</valign>
         <offsetType>absolute</offsetType>
-        <name>InstrumentsShort</name>
+        <name>Instrument Name (Short)</name>
         <family>MuseJazz</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -125,9 +138,8 @@
       <TextStyle>
         <halign>left</halign>
         <valign>bottom</valign>
-        <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
-        <name>InstrumentsExcerpt</name>
+        <name>Instrument Name (Part)</name>
         <family>MuseJazz</family>
         <size>18</size>
         </TextStyle>
@@ -149,7 +161,7 @@
         <xoffset>0</xoffset>
         <yoffset>-2</yoffset>
         <offsetType>spatium</offsetType>
-        <name>Technik</name>
+        <name>Technique</name>
         <family>MuseJazz</family>
         <size>12</size>
         <italic>1</italic>
@@ -199,7 +211,7 @@
         <halign>center</halign>
         <valign>center</valign>
         <offsetType>spatium</offsetType>
-        <name>Tuplets</name>
+        <name>Tuplet</name>
         <family>MuseJazz</family>
         <size>8</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -233,7 +245,7 @@
         <xoffset>0</xoffset>
         <yoffset>-2.5</yoffset>
         <offsetType>spatium</offsetType>
-        <name>Chordname</name>
+        <name>Chord Symbol</name>
         <family>MuseJazz</family>
         <size>15</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -248,8 +260,8 @@
         <family>MuseJazz</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0</frameWidthS>
-        <paddingWidthS>0</paddingWidthS>
+        <frameWidthS>0.15</frameWidthS>
+        <paddingWidthS>0.15</paddingWidthS>
         <frameRound>10</frameRound>
         <frameColor r="0" g="0" b="0" a="255"/>
         <systemFlag>1</systemFlag>
@@ -259,7 +271,6 @@
         <valign>baseline</valign>
         <xoffset>0</xoffset>
         <yoffset>-4</yoffset>
-        <rxoffset>100</rxoffset>
         <offsetType>spatium</offsetType>
         <name>Repeat Text</name>
         <family>MuseJazz</family>
@@ -292,7 +303,7 @@
         <halign>left</halign>
         <valign>center</valign>
         <offsetType>spatium</offsetType>
-        <name>TextLine</name>
+        <name>Text Line</name>
         <family>MuseJazz</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -309,28 +320,9 @@
         </TextStyle>
       <TextStyle>
         <halign>center</halign>
-        <valign>center</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-5</yoffset>
-        <rxoffset>100</rxoffset>
-        <offsetType>spatium</offsetType>
-        <name>String Number</name>
-        <family>MuseJazz</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0</frameWidthS>
-        <paddingWidthS>0</paddingWidthS>
-        <frameRound>0</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <circle>1</circle>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
         <valign>top</valign>
         <xoffset>0</xoffset>
         <yoffset>-10</yoffset>
-        <rxoffset>50</rxoffset>
-        <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
         <name>Copyright</name>
         <family>MuseJazz</family>
@@ -341,8 +333,6 @@
         <valign>baseline</valign>
         <xoffset>0</xoffset>
         <yoffset>-10</yoffset>
-        <rxoffset>50</rxoffset>
-        <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
         <name>Page Number Odd</name>
         <family>MuseJazz</family>
@@ -353,8 +343,6 @@
         <valign>baseline</valign>
         <xoffset>0</xoffset>
         <yoffset>-10</yoffset>
-        <rxoffset>50</rxoffset>
-        <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
         <name>Page Number Even</name>
         <family>MuseJazz</family>
@@ -363,50 +351,52 @@
       <ChordList>
         <font id="0" family="MuseJazz">
           <mag>1</mag>
-          <sym name="sus4" code="0xe18d"/>
-          <sym name="s#" code="0xe189"/>
+          <sym name="#" code="0xe10c"/>
+          <sym name="(" code="0x28"/>
+          <sym name=")" code="0x29"/>
+          <sym name="+" code="0xe186"/>
+          <sym name="accidentales" code="0x266d"/>
+          <sym name="accidentalis" code="0x266f"/>
+          <sym name="accidentals" code="0x266d"/>
+          <sym name="b" code="0xe10d"/>
+          <sym name="circle" code="0xe18e"/>
+          <sym name="degree" code="0xe187"/>
+          <sym name="dim" code="0xe184"/>
           <sym name="ma" code="0xe180"/>
-          <sym name="s11" code="0xe182"/>
-          <sym name="s13" code="0xe183"/>
-          <sym name="triangle" code="0xe18a"/>
+          <sym name="mi" code="0xe181"/>
+          <sym name="minus" code="0x2d"/>
+          <sym name="notea" value="a"/>
+          <sym name="noteb" value="b"/>
+          <sym name="notec" value="c"/>
+          <sym name="noted" value="d"/>
+          <sym name="notee" value="e"/>
+          <sym name="notef" value="f"/>
+          <sym name="noteg" value="g"/>
+          <sym name="noteh" value="h"/>
+          <sym name="oslash" code="0xe18f"/>
+          <sym name="s#" code="0xe189"/>
           <sym name="s0" code="0xe190"/>
           <sym name="s1" code="0xe191"/>
+          <sym name="s11" code="0xe182"/>
+          <sym name="s13" code="0xe183"/>
           <sym name="s2" code="0xe192"/>
-          <sym name="mi" code="0xe181"/>
           <sym name="s3" code="0xe193"/>
           <sym name="s4" code="0xe194"/>
           <sym name="s5" code="0xe195"/>
           <sym name="s6" code="0xe196"/>
           <sym name="s7" code="0xe197"/>
-          <sym name="minus" code="0x2d"/>
           <sym name="s8" code="0xe198"/>
           <sym name="s9" code="0xe199"/>
-          <sym name="#" code="0xe10c"/>
-          <sym name="degree" code="0xe187"/>
-          <sym name="(" code="0x28"/>
-          <sym name=")" code="0x29"/>
-          <sym name="+" code="0xe186"/>
           <sym name="sb" code="0xe188"/>
-          <sym name="oslash" code="0xe18f"/>
-          <sym name="notea" value="a"/>
-          <sym name="noteb" value="b"/>
-          <sym name="notec" value="c"/>
-          <sym name="noted" value="d"/>
-          <sym name="circle" code="0xe18e"/>
-          <sym name="notee" value="e"/>
-          <sym name="notef" value="f"/>
-          <sym name="noteg" value="g"/>
-          <sym name="noteh" value="h"/>
           <sym name="sus" code="0xe185"/>
-          <sym name="dim" code="0xe184"/>
-          <sym name="b" code="0xe10d"/>
+          <sym name="sus4" code="0xe18d"/>
+          <sym name="triangle" code="0xe18a"/>
           </font>
         <font id="1" family="MuseJazz">
           <mag>1.25</mag>
-          <sym name="add" code="0xe18b"/>
-          <sym name="11" code="0xe182"/>
           <sym name="0" code="0xe190"/>
           <sym name="1" code="0xe191"/>
+          <sym name="11" code="0xe182"/>
           <sym name="13" code="0xe183"/>
           <sym name="2" code="0xe192"/>
           <sym name="3" code="0xe193"/>
@@ -416,42 +406,41 @@
           <sym name="7" code="0xe197"/>
           <sym name="8" code="0xe198"/>
           <sym name="9" code="0xe199"/>
+          <sym name="add" code="0xe18b"/>
           <sym name="add11" code="0xe18c"/>
           </font>
         <font id="2" family="MuseJazz">
           <mag>0.8</mag>
-          <sym name="h" code="0x68"/>
-          <sym name="i" code="0x69"/>
-          <sym name="j" code="0x6a"/>
-          <sym name="k" code="0x6b"/>
-          <sym name="l" code="0x6c"/>
-          <sym name="m" code="0x6d"/>
-          <sym name="n" code="0x6e"/>
-          <sym name="o" code="0x6f"/>
-          <sym name="p" code="0x70"/>
-          <sym name="q" code="0x71"/>
-          <sym name="r" code="0x72"/>
-          <sym name="s" code="0x73"/>
-          <sym name="t" code="0x74"/>
-          <sym name="u" code="0x75"/>
-          <sym name="v" code="0x76"/>
-          <sym name="w" code="0x77"/>
-          <sym name="s(" code="0x28"/>
-          <sym name="x" code="0x78"/>
-          <sym name="s)" code="0x29"/>
-          <sym name="y" code="0x79"/>
-          <sym name="z" code="0x7a"/>
-          <sym name="is" value="is"/>
-          <sym name="es" value="es"/>
-          <sym name="notemi" value="mi"/>
-          <sym name="striangle" code="0xe18a"/>
-          <sym name="letterb" code="0x62"/>
           <sym name="a" code="0x61"/>
           <sym name="c" code="0x63"/>
           <sym name="d" code="0x64"/>
           <sym name="e" code="0x65"/>
           <sym name="f" code="0x66"/>
           <sym name="g" code="0x67"/>
+          <sym name="h" code="0x68"/>
+          <sym name="i" code="0x69"/>
+          <sym name="j" code="0x6a"/>
+          <sym name="k" code="0x6b"/>
+          <sym name="l" code="0x6c"/>
+          <sym name="letterb" code="0x62"/>
+          <sym name="m" code="0x6d"/>
+          <sym name="n" code="0x6e"/>
+          <sym name="notemi" value="mi"/>
+          <sym name="o" code="0x6f"/>
+          <sym name="p" code="0x70"/>
+          <sym name="q" code="0x71"/>
+          <sym name="r" code="0x72"/>
+          <sym name="s" code="0x73"/>
+          <sym name="s(" code="0x28"/>
+          <sym name="s)" code="0x29"/>
+          <sym name="striangle" code="0xe18a"/>
+          <sym name="t" code="0x74"/>
+          <sym name="u" code="0x75"/>
+          <sym name="v" code="0x76"/>
+          <sym name="w" code="0x77"/>
+          <sym name="x" code="0x78"/>
+          <sym name="y" code="0x79"/>
+          <sym name="z" code="0x7a"/>
           </font>
         <font id="3" family="MuseJazz">
           <mag>0.55</mag>
@@ -459,6 +448,7 @@
         <renderRoot>:n :a</renderRoot>
         <renderBase>/ m:0:1 :n :a m:0:-1</renderBase>
         <chord id="1">
+          <name></name>
           <name></name>
           <xml>major</xml>
           <voicing>C E G</voicing>
@@ -1957,7 +1947,7 @@
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
-    <metaTag name="copyright"></metaTag>
+    <metaTag name="copyright">Copyright</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
@@ -1978,12 +1968,28 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
-        <bracket type="-1" span="1"/>
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
         <trackName>Piano</trackName>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
           <controller ctrl="93" value="30"/>
@@ -1994,10 +2000,10 @@
     <Staff id="1">
       <VBox>
         <height>6.36254</height>
-        <bottomGap>56.6929</bottomGap>
+        <bottomGap>6</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Title</text>
+          <text><b>Title</b></text>
           </Text>
         <Text>
           <style>Subtitle</style>

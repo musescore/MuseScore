@@ -10,10 +10,10 @@
       <staffDistance>6</staffDistance>
       <akkoladeDistance>6.4</akkoladeDistance>
       <minSystemDistance>8.2</minSystemDistance>
-      <lyricsDistance>1.5</lyricsDistance>
+      <lyricsPosBelow>1.5</lyricsPosBelow>
       <lyricsMinBottomDistance>5.5</lyricsMinBottomDistance>
       <systemFrameDistance>6</systemFrameDistance>
-      <frameSystemDistance>0</frameSystemDistance>
+      <frameSystemDistance>6</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <repeatBarTips>1</repeatBarTips>
@@ -82,20 +82,9 @@
       <ArpeggioHookLen>0.9</ArpeggioHookLen>
       <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
-      <voltaY>-2</voltaY>
+      <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
       <fermataAnchor>2</fermataAnchor>
       <shortfermataAnchor>2</shortfermataAnchor>
       <longfermataAnchor>2</longfermataAnchor>
@@ -120,6 +109,17 @@
       <upmordentAnchor>1</upmordentAnchor>
       <downmordentAnchor>1</downmordentAnchor>
       <thumbAnchor>1</thumbAnchor>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-4</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Chord Symbol</name>
+        <family>FreeSerif</family>
+        <size>12</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        </TextStyle>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>
@@ -163,7 +163,6 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="-1" span="1"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -229,7 +228,6 @@
           <span>1</span>
           </BarLine>
         </Measure>
-      <tick>1920</tick>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>

@@ -335,6 +335,24 @@ enum class StyleIdx : int {
       };
 
 //---------------------------------------------------------
+//   StyleType
+//---------------------------------------------------------
+
+struct StyleType {
+      StyleIdx _idx;
+      const char* _name;       // xml name for read()/write()
+      QVariant _defaultValue;
+
+   public:
+      StyleIdx  styleIdx() const            { return _idx;          }
+      int idx() const                       { return int(_idx);     }
+      const char*  valueType() const        { return _defaultValue.typeName();    }
+      const char*      name() const         { return _name;         }
+      const QVariant&  defaultValue() const { return _defaultValue; }
+      };
+
+
+//---------------------------------------------------------
 //   MStyle
 //---------------------------------------------------------
 
@@ -361,8 +379,11 @@ class MStyle {
       ChordList* chordList()  { return &_chordList; }
 
       void setChordList(ChordList*, bool custom = true);    // Style gets ownership of ChordList
+      void setCustomChordList(bool t) { _customChordList = t; }
 
       const TextStyle& textStyle(TextStyleType) const;
+      TextStyle& textStyle(TextStyleType);
+
       const TextStyle& textStyle(const QString& name) const;
       TextStyleType textStyleType(const QString& name) const;
       void setTextStyle(const TextStyle& ts);
@@ -378,6 +399,8 @@ class MStyle {
       bool load(QFile* qf);
       void load(XmlReader& e);
       void save(Xml& xml, bool optimize);
+      
+      void convertToUnit(const QString& tag, const QString& val);
 
       PageFormat* pageFormat()             { return &_pageFormat; }
       const PageFormat* pageFormat() const { return &_pageFormat; }
@@ -389,6 +412,7 @@ class MStyle {
 
       static const char* valueType(const StyleIdx);
       static const char* valueName(const StyleIdx);
+      static StyleIdx styleIdx(const QString& name);
       };
 
 extern void initStyle(MStyle*);
