@@ -86,6 +86,7 @@ class Text;
 class Hairpin;
 class HairpinSegment;
 class Bend;
+class TremoloBar;
 class RepeatMeasure;
 class Tuplet;
 class NoteDot;
@@ -719,6 +720,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
       CONVERT(Bend,          BEND)
+      CONVERT(TremoloBar,    TREMOLOBAR)
       CONVERT(RepeatMeasure, REPEAT_MEASURE)
       CONVERT(Tuplet,        TUPLET)
       CONVERT(NoteDot,       NOTEDOT)
@@ -817,6 +819,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
       CONVERT(Bend,          BEND)
+      CONVERT(TremoloBar,    TREMOLOBAR)
       CONVERT(RepeatMeasure, REPEAT_MEASURE)
       CONVERT(Tuplet,        TUPLET)
       CONVERT(NoteDot,       NOTEDOT)
