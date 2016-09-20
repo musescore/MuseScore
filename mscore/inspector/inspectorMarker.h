@@ -25,10 +25,10 @@ namespace Ms {
 //   InspectorMarker
 //---------------------------------------------------------
 
-class InspectorMarker : public InspectorBase {
+class InspectorMarker : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement b;
+//      UiInspectorElement b;
       Ui::InspectorText t;
       Ui::InspectorMarker  m;
 

@@ -23,10 +23,10 @@ namespace Ms {
 //   InspectorFretDiagram
 //---------------------------------------------------------
 
-class InspectorFretDiagram : public InspectorBase {
+class InspectorFretDiagram : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement  e;
+//      UiInspectorElement  e;
       Ui::InspectorFretDiagram   f;
 
    private slots:

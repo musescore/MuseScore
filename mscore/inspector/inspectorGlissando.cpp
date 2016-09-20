@@ -23,24 +23,19 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorGlissando::InspectorGlissando(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       g.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,           0, false, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,         0, false, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,        0, false, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,        1, false, e.offsetY,  e.resetY        },
-            { P_ID::GLISS_TYPE,      0, false, g.type,     g.resetType     },
-            { P_ID::GLISS_TEXT,      0, false, g.text,     g.resetText     },
-            { P_ID::GLISS_SHOW_TEXT, 0, false, g.showText, g.resetShowText },
-            { P_ID::GLISSANDO_STYLE, 0, false, g.glissandoStyle, g.resetGlissandoStyle},
-            { P_ID::PLAY,            0, 0,     g.playGlissando, g.resetPlayGlissando}
+      const std::vector<InspectorItem> iiList = {
+            { P_ID::GLISS_TYPE,      0, false, g.type,           g.resetType           },
+            { P_ID::GLISS_TEXT,      0, false, g.text,           g.resetText           },
+            { P_ID::GLISS_SHOW_TEXT, 0, false, g.showText,       g.resetShowText       },
+            { P_ID::GLISSANDO_STYLE, 0, false, g.glissandoStyle, g.resetGlissandoStyle },
+            { P_ID::PLAY,            0, 0,     g.playGlissando,  g.resetPlayGlissando  }
             };
 
-      mapSignals();
+      mapSignals(iiList);
       }
 }
 

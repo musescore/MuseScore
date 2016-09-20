@@ -23,16 +23,11 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorBeam::InspectorBeam(QWidget* parent)
-   : InspectorBase(parent)
+   : InspectorElementBase(parent)
       {
-      e.setupUi(addWidget());
       b.setupUi(addWidget());
 
-      iList = {
-            { P_ID::COLOR,          0, false, e.color,        e.resetColor        },
-            { P_ID::VISIBLE,        0, false, e.visible,      e.resetVisible      },
-            { P_ID::USER_OFF,       0, false, e.offsetX,      e.resetX            },
-            { P_ID::USER_OFF,       1, false, e.offsetY,      e.resetY            },
+      const std::vector<InspectorItem> iiList = {
             { P_ID::STEM_DIRECTION, 0, false, b.direction,    b.resetDirection    },
             { P_ID::DISTRIBUTE,     0, false, b.distribute,   b.resetDistribute   },
             { P_ID::GROW_LEFT,      0, false, b.growLeft,     b.resetGrowLeft     },
@@ -42,7 +37,7 @@ InspectorBeam::InspectorBeam(QWidget* parent)
             { P_ID::BEAM_POS,       0, false, b.y1,           0                   },
             { P_ID::BEAM_POS,       1, false, b.y2,           0                   }
             };
-      mapSignals();
+      mapSignals(iiList);
       }
 
 //---------------------------------------------------------
@@ -63,7 +58,7 @@ void InspectorBeam::valueChanged(int idx)
             b.y1->setEnabled(!val);
             b.y2->setEnabled(!val);
             }
-      InspectorBase::valueChanged(idx);
+      InspectorElementBase::valueChanged(idx);
       }
 
 void InspectorBeam::setValue(const InspectorItem& ii, QVariant val)
@@ -80,7 +75,7 @@ void InspectorBeam::setValue(const InspectorItem& ii, QVariant val)
             b.y1->setEnabled(enable);
             b.y2->setEnabled(enable);
             }
-      InspectorBase::setValue(ii, val);
+      InspectorElementBase::setValue(ii, val);
       }
 }
 

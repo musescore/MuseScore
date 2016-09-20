@@ -24,7 +24,7 @@ namespace Ms {
 //   InspectorJump
 //---------------------------------------------------------
 
-class InspectorJump : public InspectorBase {
+class InspectorJump : public InspectorElementBase {
       Q_OBJECT
 
       UiInspectorElement b;
