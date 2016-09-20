@@ -170,7 +170,7 @@ static const PropertyData propertyList[] = {
       { P_ID::GROUPS,              false, 0,                       P_TYPE::GROUPS    },
       { P_ID::LINE_STYLE,          false, "lineStyle",             P_TYPE::INT       },
       { P_ID::LINE_COLOR,          false, 0,                       P_TYPE::COLOR     },
-      { P_ID::LINE_WIDTH,          false, 0,                       P_TYPE::SPATIUM   },
+      { P_ID::LINE_WIDTH,          false, "lineWidth",             P_TYPE::SPATIUM   },
       { P_ID::LASSO_POS,           false, 0,                       P_TYPE::POINT_MM  },
       { P_ID::LASSO_SIZE,          false, 0,                       P_TYPE::SIZE_MM   },
 

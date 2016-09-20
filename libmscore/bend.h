@@ -44,8 +44,8 @@ class Bend : public Element {
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
-      bool playBend() const          { return _playBend; }
-      void setPlayBend(bool v)       { _playBend = v;    }
+      bool playBend() const                      { return _playBend; }
+      void setPlayBend(bool v)                   { _playBend = v;    }
 
       // property methods
       virtual QVariant getProperty(P_ID propertyId) const override;

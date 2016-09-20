@@ -178,7 +178,7 @@ class Clef : public Element {
       void setConcertClef(ClefType val);
       void setTransposingClef(ClefType val);
       void setClefType(const ClefTypeList& ctl) { _clefTypes = ctl; }
-      virtual void spatiumChanged(qreal oldValue, qreal newValue);
+      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
