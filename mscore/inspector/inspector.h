@@ -145,9 +145,8 @@ class InspectorHBox : public InspectorBase {
 //   InspectorArticulation
 //---------------------------------------------------------
 
-class InspectorArticulation : public InspectorBase {
+class InspectorArticulation : public InspectorElementBase {
       Q_OBJECT
-      UiInspectorElement e;
       Ui::InspectorArticulation ar;
 
    public:
@@ -170,10 +169,9 @@ class InspectorSpacer : public InspectorBase {
 //   InspectorRest
 //---------------------------------------------------------
 
-class InspectorRest : public InspectorBase {
+class InspectorRest : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement   e;
       Ui::InspectorSegment s;
       Ui::InspectorRest    r;
 
@@ -192,10 +190,9 @@ class InspectorRest : public InspectorBase {
 //---------------------------------------------------------
 
 
-class InspectorClef : public InspectorBase {
+class InspectorClef : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorClef    c;
       Clef* otherClef;        // the courtesy clef for a main clef or viceversa
@@ -212,10 +209,9 @@ class InspectorClef : public InspectorBase {
 //   InspectorTimeSig
 //---------------------------------------------------------
 
-class InspectorTimeSig : public InspectorBase {
+class InspectorTimeSig : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorTimeSig t;
 
@@ -228,10 +224,9 @@ class InspectorTimeSig : public InspectorBase {
 //   InspectorKeySig
 //---------------------------------------------------------
 
-class InspectorKeySig : public InspectorBase {
+class InspectorKeySig : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorKeySig k;
 
@@ -244,10 +239,9 @@ class InspectorKeySig : public InspectorBase {
 //   InspectorTuplet
 //---------------------------------------------------------
 
-class InspectorTuplet : public InspectorBase {
+class InspectorTuplet : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorTuplet t;
 
    public:
@@ -258,10 +252,9 @@ class InspectorTuplet : public InspectorBase {
 //   InspectorAccidental
 //---------------------------------------------------------
 
-class InspectorAccidental : public InspectorBase {
+class InspectorAccidental : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorAccidental a;
 
    public:
@@ -272,10 +265,9 @@ class InspectorAccidental : public InspectorBase {
 //   InspectorBend
 //---------------------------------------------------------
 
-class InspectorBend : public InspectorBase {
+class InspectorBend : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement e;
       Ui::InspectorBend g;
 
    private slots:
