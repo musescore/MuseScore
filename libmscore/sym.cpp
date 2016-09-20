@@ -5802,7 +5802,6 @@ void ScoreFont::computeMetrics(Sym* sym, int code)
 void ScoreFont::load()
       {
       QString facePath = _fontPath + _filename;
-      printf("font load <%s>\n", qPrintable(facePath));
       QFile f(facePath);
       if (!f.open(QIODevice::ReadOnly)) {
             qDebug("ScoreFont::load(): open failed <%s>", qPrintable(facePath));
