@@ -1736,25 +1736,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   breath->setTrack(e.track());
                   int tick = e.tick();
                   breath->read(e);
-                  if (score()->mscVersion() <= 206) {
-                        // older scores placed the breath segment right after the chord to which it applies
-                        // rather than before the next chordrest segment with an element for the staff
-                        // result would be layout too far left if there are other segments due to notes in other staves
-                        // we need to find tick of chord to which this applies, and add its duration
-                        int prevTick;
-                        if (e.tick() < tick)
-                              prevTick = e.tick();    // use our own tick if we explicitly reset to earlier position
-                        else
-                              prevTick = lastTick;    // otherwise use tick of previous tick/chord/rest tag
-                        // find segment
-                        Segment* prev = findSegment(Segment::Type::ChordRest, prevTick);
-                        if (prev) {
-                              // find chordrest
-                              ChordRest* lastCR = static_cast<ChordRest*>(prev->element(e.track()));
-                              if (lastCR)
-                                    tick = prevTick + lastCR->actualTicks();
-                              }
-                        }
                   segment = getSegment(Segment::Type::Breath, tick);
                   segment->add(breath);
                   }
@@ -1822,9 +1803,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rm->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rm);
-                  if (rm->actualDuration().isZero()) { // might happen with 1.3 scores
-                        rm->setDuration(len());
-                        }
                   lastTick = e.tick();
                   e.incTick(ticks());
                   }
