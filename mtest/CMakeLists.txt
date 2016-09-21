@@ -198,7 +198,7 @@ subdirs (
         importmidi
         capella
         biab
-#        musicxml       above/below for stafftext does not work
+        musicxml
         guitarpro
         scripting
         testoves
