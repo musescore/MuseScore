@@ -67,8 +67,11 @@ static Acc accList[] = {
       Acc("natural arrow both",  QT_TRANSLATE_NOOP("accidental", "Natural arrow both"),  AccidentalVal::NATURAL, 0,    SymId::noSym), //TODO-smufl
 
       Acc("sori",                QT_TRANSLATE_NOOP("accidental", "Sori"),                AccidentalVal::NATURAL, 50,   SymId::accidentalSori),
-      Acc("koron",               QT_TRANSLATE_NOOP("accidental", "Koron"),               AccidentalVal::NATURAL, -50,  SymId::accidentalKoron)
-      };
+      Acc("koron",               QT_TRANSLATE_NOOP("accidental", "Koron"),               AccidentalVal::NATURAL, -50,  SymId::accidentalKoron),
+
+      Acc("natural-sharp",       QT_TRANSLATE_NOOP("accidental", "Natural-sharp"),       AccidentalVal::SHARP,   0,    SymId::accidentalNaturalSharp),
+      Acc("natural-flat",        QT_TRANSLATE_NOOP("accidental", "Natural-flat"),        AccidentalVal::FLAT,    0,    SymId::accidentalNaturalFlat),
+};
 
 //---------------------------------------------------------
 //   Accidental
@@ -105,112 +108,102 @@ void Accidental::read(XmlReader& e)
                         _hasBracket = i & 0x8000;
                         i &= ~0x8000;
                         AccidentalType at;
-                        switch(i) {
-                               case 0:
-                                     at = AccidentalType::NONE;
-                                     break;
-                               case 1:
-                               case 11:
-                                     at = AccidentalType::SHARP;
-                                     break;
-                               case 2:
-                               case 12:
-                                     at = AccidentalType::FLAT;
-                                     break;
-                               case 3:
-                               case 13:
-                                     at = AccidentalType::SHARP2;
-                                     break;
-                               case 4:
-                               case 14:
-                                     at = AccidentalType::FLAT2;
-                                     break;
-                               case 5:
-                               case 15:
-                                     at = AccidentalType::NATURAL;
-                                     break;
-                               case 6:
-                                     at = AccidentalType::SHARP;
-                                     _hasBracket = true;
-                                     break;
-                               case 7:
-                                     at = AccidentalType::FLAT;
-                                     _hasBracket = true;
-                                     break;
-                               case 8:
-                                     at = AccidentalType::SHARP2;
-                                     _hasBracket = true;
-                                     break;
-                               case 9:
-                                     at = AccidentalType::FLAT2;
-                                     _hasBracket = true;
-                                     break;
-                               case 10:
-                                     at = AccidentalType::NATURAL;
-                                     _hasBracket = true;
-                                     break;
-                               case 16:
-                                     at = AccidentalType::FLAT_SLASH;
-                                     break;
-                               case 17:
-                                     at = AccidentalType::FLAT_SLASH2;
-                                     break;
-                               case 18:
-                                     at = AccidentalType::MIRRORED_FLAT2;
-                                     break;
-                               case 19:
-                                     at = AccidentalType::MIRRORED_FLAT;
-                                     break;
-                               case 20:
-                                     at = AccidentalType::MIRRORED_FLAT_SLASH;
-                                     break;
-                               case 21:
-                                     at = AccidentalType::FLAT_FLAT_SLASH;
-                                     break;
-                               case 22:
-                                     at = AccidentalType::SHARP_SLASH;
-                                     break;
-                               case 23:
-                                     at = AccidentalType::SHARP_SLASH2;
-                                     break;
-                               case 24:
-                                     at = AccidentalType::SHARP_SLASH3;
-                                     break;
-                               case 25:
-                                     at = AccidentalType::SHARP_SLASH4;
-                                     break;
-                               case 26:
-                                     at = AccidentalType::SHARP_ARROW_UP;
-                                     break;
-                               case 27:
-                                     at = AccidentalType::SHARP_ARROW_DOWN;
-                                     break;
-                               case 28:
-                                     at = AccidentalType::SHARP_ARROW_BOTH;
-                                     break;
-                               case 29:
-                                     at = AccidentalType::FLAT_ARROW_UP;
-                                     break;
-                               case 30:
-                                     at = AccidentalType::FLAT_ARROW_DOWN;
-                                     break;
-                               case 31:
-                                     at = AccidentalType::FLAT_ARROW_BOTH;
-                                     break;
-                               case 32:
-                                     at = AccidentalType::NATURAL_ARROW_UP;
-                                     break;
-                               case 33:
-                                     at = AccidentalType::NATURAL_ARROW_DOWN;
-                                     break;
-                               case 34:
-                                     at = AccidentalType::NATURAL_ARROW_BOTH;
-                                     break;
-                               default:
-                                     at = AccidentalType::NONE;
-                                     break;
-                               }
-                        setAccidentalType(AccidentalType(at));
+                        switch (i) {
+                              case 0:
+                                    at = AccidentalType::NONE;
+                                    break;
+                              case 6:
+                                    _hasBracket = true;
+                              case 1:
+                              case 11:
+                                    at = AccidentalType::SHARP;
+                                    break;
+                              case 7:
+                                    _hasBracket = true;
+                              case 2:
+                              case 12:
+                                    at = AccidentalType::FLAT;
+                                    break;
+                              case 8:
+                                    _hasBracket = true;
+                              case 3:
+                              case 13:
+                                    at = AccidentalType::SHARP2;
+                                    break;
+                              case 9:
+                                    _hasBracket = true;
+                              case 4:
+                              case 14:
+                                    at = AccidentalType::FLAT2;
+                                    break;
+                              case 10:
+                                    _hasBracket = true;
+                              case 5:
+                              case 15:
+                                    at = AccidentalType::NATURAL;
+                                    break;
+                              case 16:
+                                    at = AccidentalType::FLAT_SLASH;
+                                    break;
+                              case 17:
+                                    at = AccidentalType::FLAT_SLASH2;
+                                    break;
+                              case 18:
+                                    at = AccidentalType::MIRRORED_FLAT2;
+                                    break;
+                              case 19:
+                                    at = AccidentalType::MIRRORED_FLAT;
+                                    break;
+                              case 20:
+                                    at = AccidentalType::MIRRORED_FLAT_SLASH;
+                                    break;
+                              case 21:
+                                    at = AccidentalType::FLAT_FLAT_SLASH;
+                                    break;
+                              case 22:
+                                    at = AccidentalType::SHARP_SLASH;
+                                    break;
+                              case 23:
+                                    at = AccidentalType::SHARP_SLASH2;
+                                    break;
+                              case 24:
+                                    at = AccidentalType::SHARP_SLASH3;
+                                    break;
+                              case 25:
+                                    at = AccidentalType::SHARP_SLASH4;
+                                    break;
+                              case 26:
+                                    at = AccidentalType::SHARP_ARROW_UP;
+                                    break;
+                              case 27:
+                                    at = AccidentalType::SHARP_ARROW_DOWN;
+                                    break;
+                              case 28:
+                                    at = AccidentalType::SHARP_ARROW_BOTH;
+                                    break;
+                              case 29:
+                                    at = AccidentalType::FLAT_ARROW_UP;
+                                    break;
+                              case 30:
+                                    at = AccidentalType::FLAT_ARROW_DOWN;
+                                    break;
+                              case 31:
+                                    at = AccidentalType::FLAT_ARROW_BOTH;
+                                    break;
+                              case 32:
+                                    at = AccidentalType::NATURAL_ARROW_UP;
+                                    break;
+                              case 33:
+                                    at = AccidentalType::NATURAL_ARROW_DOWN;
+                                    break;
+                              case 34:
+                                    at = AccidentalType::NATURAL_ARROW_BOTH;
+                                    break;
+                              default:
+                                    at = AccidentalType::NONE;
+                                    break;
+                              }
+                        setAccidentalType(at);
                         }
                   else
                         setSubtype(text);
@@ -366,7 +359,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
             case AccidentalVal::FLAT:    return AccidentalType::FLAT;
             case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
             default:
-                  qFatal("value2subtype: illegal accidental val %d", static_cast<int>(v));
+                  qFatal("value2subtype: illegal accidental val %d", int(v));
             }
       return AccidentalType::NONE;
       }
@@ -378,12 +371,10 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 void Accidental::draw(QPainter* painter) const
       {
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff())
-          || (note() && note()->fixed())) {
+      if ((staff() && staff()->isTabStaff()) || (note() && note()->fixed()))
             return;
-            }
       painter->setPen(curColor());
-      foreach(const SymElement& e, el)
+      for (const SymElement& e : el)
             score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, 0.0));
       }
 

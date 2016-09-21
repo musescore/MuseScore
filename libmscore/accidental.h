@@ -70,6 +70,8 @@ enum class AccidentalType : char {
       NATURAL_ARROW_BOTH,
       SORI,
       KORON,
+      NATURAL_SHARP,
+      NATURAL_FLAT,
       END
       };
 
