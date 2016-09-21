@@ -124,7 +124,7 @@ class Clef : public Element {
       Q_PROPERTY(bool showCourtesy READ showCourtesy WRITE undoSetShowCourtesy)
       Q_PROPERTY(bool small READ small)
 
-      QList<Element*> elements;
+      SymId symId;
       bool _showCourtesy;
       bool _showPreviousClef;       // show clef type at position tick-1
                                     // used for first clef on staff immediatly followed
@@ -136,10 +136,9 @@ class Clef : public Element {
    public:
       Clef(Score*);
       Clef(const Clef&);
-      ~Clef();
+      ~Clef() {}
       virtual Clef* clone() const        { return new Clef(*this); }
       virtual Element::Type type() const { return Element::Type::CLEF; }
-      virtual void setSelected(bool f);
       virtual qreal mag() const;
 
       Segment* segment() const           { return (Segment*)parent(); }
@@ -153,8 +152,6 @@ class Clef : public Element {
       virtual void write(Xml&) const;
 
       virtual bool isEditable() const                    { return false; }
-
-      virtual void addElement(Element* e, qreal x, qreal y);
 
       bool small() const               { return _small; }
       void setSmall(bool val);
@@ -187,7 +184,6 @@ class Clef : public Element {
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
       QString accessibleInfo() const override;
-
       void clear();
       };
 
