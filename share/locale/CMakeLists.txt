@@ -57,6 +57,7 @@ install(FILES
       mscore_ko.qm
       mscore_lt.qm
       mscore_lv.qm
+      mscore_ml.qm
       mscore_mn_MN.qm
       mscore_nl.qm
       mscore_nb.qm
@@ -151,6 +152,7 @@ install(FILES
       instruments_ko.qm
       instruments_lt.qm
       instruments_lv.qm
+      instruments_ml.qm
       instruments_mn_MN.qm
       instruments_nl.qm
       instruments_nb.qm
