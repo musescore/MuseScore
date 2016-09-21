@@ -56,6 +56,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 #include "libmscore/textline.h"
+#include "libmscore/barline.h"
 
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
@@ -3079,6 +3080,10 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
                   return false;
                   }
             }
+      else if (barStyle == "tick") {
+      }
+      else if (barStyle == "short") {
+      }
       else {
             qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());       // TODO
             return false;
@@ -3143,7 +3148,31 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                   }
             else {
                   int track = _pass1.trackForPart(partId);
-                  if (loc == "right")
+                  if (barStyle == "tick") {
+                        BarLine* b = new BarLine(measure->score());
+                        int track = _pass1.trackForPart(partId);
+                        b->setTrack(track);
+                        b->setBarLineType(BarLineType::NORMAL);
+                        b->setSpan(1);
+                        b->setSpanFrom(BARLINE_SPAN_TICK1_FROM);
+                        b->setSpanTo(BARLINE_SPAN_TICK1_TO);
+                        b->setCustomSpan(true);
+                        Segment* segment = measure->getSegment(Segment::Type::EndBarLine, measure->endTick());
+                        segment->add(b);
+                        }
+                  else if (barStyle == "short") {
+                        BarLine* b = new BarLine(measure->score());
+                        int track = _pass1.trackForPart(partId);
+                        b->setTrack(track);
+                        b->setBarLineType(BarLineType::NORMAL);
+                        b->setSpan(1);
+                        b->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
+                        b->setSpanTo(BARLINE_SPAN_SHORT1_TO);
+                        b->setCustomSpan(true);
+                        Segment* segment = measure->getSegment(Segment::Type::EndBarLine, measure->endTick());
+                        segment->add(b);
+                        }
+                  else if (loc == "right")
                         measure->setEndBarLineType(type, track, visible);
                   else if (measure->prevMeasure())
                         measure->prevMeasure()->setEndBarLineType(type, track, visible);

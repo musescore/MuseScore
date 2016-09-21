@@ -3471,6 +3471,27 @@ void Measure::removeSystemTrailer()
       }
 
 //---------------------------------------------------------
+//   endBarLine
+//      return the first one
+//---------------------------------------------------------
+
+const BarLine* Measure::endBarLine() const
+      {
+      // search barline segment:
+      Segment* s = last();
+      while (s && s->segmentType() != Segment::Type::EndBarLine)
+            s = s->prev();
+      // search first element
+      if (s) {
+            for (const Element* e : s->elist()) {
+                  if (e)
+                        return toBarLine(e);
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   endBarLineType
 //    Assume all barlines have same type if there is more
 //    than one.
@@ -3478,21 +3499,8 @@ void Measure::removeSystemTrailer()
 
 BarLineType Measure::endBarLineType() const
       {
-      // search barline segment:
-
-      Segment* s = last();
-      while (s && s->segmentType() != Segment::Type::EndBarLine)
-            s = s->prev();
-
-      // search first element
-
-      if (s) {
-            for (const Element* e : s->elist()) {
-                  if (e)
-                        return toBarLine(e)->barLineType();
-                  }
-            }
-      return BarLineType::NORMAL;
+      const BarLine* bl = endBarLine();
+      return bl ? bl->barLineType() : BarLineType::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -3503,21 +3511,8 @@ BarLineType Measure::endBarLineType() const
 
 bool Measure::endBarLineVisible() const
       {
-      // search barline segment:
-
-      Segment* s = last();
-      while (s && s->segmentType() != Segment::Type::EndBarLine)
-            s = s->prev();
-
-      // search first element
-
-      if (s) {
-            for (const Element* e : s->elist()) {
-                  if (e)
-                        return toBarLine(e)->visible();
-                  }
-            }
-      return true;
+      const BarLine* bl = endBarLine();
+      return bl ? bl->visible() : true;
       }
 //---------------------------------------------------------
 //   triggerLayout
