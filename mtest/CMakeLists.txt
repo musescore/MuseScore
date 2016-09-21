@@ -202,6 +202,13 @@ subdirs (
         guitarpro
         scripting
         testoves
+        zerberus/comments
+        zerberus/envelopes
+        zerberus/includes
+        zerberus/global
+        zerberus/opcodeparse
+        zerberus/inputControls
+        zerberus/loop
         )
 
 

@@ -1,0 +1,16 @@
+<global>
+sample=../10Zeros50Ones50Zeros.wav
+volume=0
+ampeg_delay=0
+ampeg_start=0 
+ampeg_attack=0
+ampeg_hold=0
+ampeg_decay=0
+ampeg_sustain=100
+ampeg_release=0
+<region> key=20 loop_mode=no_loop
+<region> key=21 loop_mode=one_shot
+<group>
+ampeg_release=0.0011 // ~50 Samples
+<region> key=22 loop_mode=loop_continuous
+<region> key=23 loop_mode=loop_sustain
