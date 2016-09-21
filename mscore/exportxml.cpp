@@ -1456,13 +1456,28 @@ void ExportMusicXml::barlineRight(Measure* m)
 
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
-      if (!needBarStyle && !volta)
+      // detect short and tick barlines
+      QString special = "";
+      if (bst == BarLineType::NORMAL) {
+            const BarLine* bl = m->endBarLine();
+            if (bl) {
+                  if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK1_FROM && bl->spanTo() == BARLINE_SPAN_TICK1_TO)
+                        special = "tick";
+                  if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK2_FROM && bl->spanTo() == BARLINE_SPAN_TICK2_TO)
+                        special = "tick";
+                  if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT1_FROM && bl->spanTo() == BARLINE_SPAN_SHORT1_TO)
+                        special = "short";
+                  if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT2_FROM && bl->spanTo() == BARLINE_SPAN_SHORT2_FROM)
+                        special = "short";
+                  }
+            }
+      if (!needBarStyle && !volta && special.isEmpty())
             return;
       xml.stag(QString("barline location=\"right\""));
       if (needBarStyle) {
             if (!visible) {
                   xml.tag("bar-style", QString("none"));
-                  } else {
+            } else {
                   switch (bst) {
                         case BarLineType::DOUBLE:
                               xml.tag("bar-style", QString("light-light"));
@@ -1485,6 +1500,9 @@ void ExportMusicXml::barlineRight(Measure* m)
                               break;
                         }
                   }
+            }
+      else if (!special.isEmpty()) {
+            xml.tag("bar-style", special);
             }
       if (volta)
             ending(xml, volta, false);

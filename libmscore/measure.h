@@ -272,6 +272,7 @@ class Measure : public MeasureBase {
       void removeSystemHeader();
       void removeSystemTrailer();
 
+      const BarLine* endBarLine() const;
       BarLineType endBarLineType() const;
       bool endBarLineVisible() const;
       Shape& staffShape(int staffIdx) { return mstaff(staffIdx)->shape(); }
