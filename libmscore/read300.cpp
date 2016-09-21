@@ -41,15 +41,6 @@ bool Score::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
-            else if (tag == "KeySig")           // obsolete
-                  e.skipCurrentElement();
-            else if (tag == "StaffType") {      // obsolete
-                  StaffType st;
-                  st.read(e);
-                  e.staffType().append(st);
-                  }
-            else if (tag == "siglist")
-                  sigmap()->read(e, _fileDivision);
             else if (tag == "Omr") {
 #ifdef OMR
                   masterScore()->setOmr(new Omr(this));
