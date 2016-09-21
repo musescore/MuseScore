@@ -904,7 +904,6 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   int column = actualIndex % columns();
 
                   el->layout();
-                  el->setPos(0.0, 0.0);
 
                   qreal cellMag = cells[idx]->mag * mag;
                   if (drawStaff) {

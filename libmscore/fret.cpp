@@ -373,9 +373,11 @@ void FretDiagram::layout()
       if (_harmony)
             _harmony->layout();
 
-      if (parent() == 0 || parent()->type() != Element::Type::SEGMENT)
+      if (!parent() || !parent()->isSegment()) {
+            setPos(QPointF());
             return;
-//      Measure* m     = static_cast<Segment*>(parent())->measure();
+            }
+//      Measure* m     = toSegment(parent())->measure();
 //      int idx        = staffIdx();
 //      MStaff* mstaff = m->mstaff(idx);
 //      qreal dist = -(bbox().top());

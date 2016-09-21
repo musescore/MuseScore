@@ -1259,6 +1259,8 @@ void Text::layout1()
                         h  = parent()->height();
                   }
             }
+      else
+            setPos(QPointF());
 
       if (textStyle().align() & AlignmentFlags::BOTTOM)
             yoff += h - bb.bottom();

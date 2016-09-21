@@ -39,7 +39,10 @@ TremoloBar::TremoloBar(Score* s)
 void TremoloBar::layout()
       {
       qreal _spatium = spatium();
-      setPos(0.0, -_spatium * 3.0);
+      if (parent())
+            setPos(0.0, -_spatium * 3.0);
+      else
+            setPos(QPointF());
 
       /* we place the tremolo bars starting slightly before the
        *  notehead, and end it slightly after, drawing above the
