@@ -814,40 +814,18 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
        qDebug("addElem el %p track %d placement %s tick %d",
        el, track, qPrintable(placement), tick);
        */
-
-      // calc y offset assuming five line staff and default style
-      // note that required y offset is element type dependent
-      const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
-      qreal offsAbove = 0;
-      qreal offsBelow = 0;
-      if (el->type() == Element::Type::TEMPO_TEXT || el->type() == Element::Type::REHEARSAL_MARK) {
-            offsAbove = 0;
-            offsBelow = 8 + (stafflines - 1);
-            }
-      else if (el->type() == Element::Type::TEXT || el->type() == Element::Type::STAFF_TEXT) {
-            offsAbove = 0;
-            offsBelow = 6 + (stafflines - 1);
-            }
-      else if (el->type() == Element::Type::SYMBOL) {
-            offsAbove = -2;
-            offsBelow =  4 + (stafflines - 1);
-            }
-      else if (el->type() == Element::Type::DYNAMIC) {
-            offsAbove = -5.75 - (stafflines - 1);
-            offsBelow = -0.75;
-            }
-      else
-            qDebug("addElem el %p unsupported type %d",
-                   el, int(el->type()));  //TODO
-
+       
       // move to correct position
       // TODO: handle rx, ry
-      qreal y = 0;
-      if (el->isDynamic()) {
-            el->setPlacement(placement == "above"
-               ? Element::Placement::ABOVE : Element::Placement::BELOW);
-            }
-      else {
+      if (el->type() == Element::Type::SYMBOL) {
+            qreal y = 0;
+            // calc y offset assuming five line staff and default style
+            // note that required y offset is element type dependent
+            const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
+            qreal offsAbove = 0;
+            qreal offsBelow = 0;
+            offsAbove = -2;
+            offsBelow =  4 + (stafflines - 1);
             if (placement == "above")
                   y += offsAbove;
             if (placement == "below")
@@ -856,6 +834,11 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             y *= el->score()->spatium();
             el->setUserOff(QPoint(0, y));
             }
+      else {
+            el->setPlacement(placement == "above"
+               ? Element::Placement::ABOVE : Element::Placement::BELOW);
+            }
+      
       el->setTrack(track);
       Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);
@@ -1356,34 +1339,25 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 
       // calc y offset assuming five line staff and default style
       // note that required y offset is element type dependent
-      const qreal stafflines = 5;       // assume five line staff, but works OK-ish for other sizes too
-      qreal offsAbove = 0;
-      qreal offsBelow = 0;
-      if (sli->type() == Element::Type::PEDAL || sli->type() == Element::Type::HAIRPIN) {
-            offsAbove = -6 - (stafflines - 1);
-            offsBelow = -1;
+      if (sli->type() == Element::Type::HAIRPIN) {
+            if (placement == "above") {
+                  const qreal stafflines = 5;       // assume five line staff, but works OK-ish for other sizes too
+                  qreal offsAbove = -6 - (stafflines - 1);
+                  qreal y = 0;
+                  y +=  offsAbove;
+                  // add linesegment containing the user offset
+                  LineSegment* tls= sli->createLineSegment();
+                  //qDebug("   y = %g", y);
+                  tls->setAutoplace(false);
+                  y *= sli->score()->spatium();
+                  tls->setUserOff(QPointF(0, y));
+                  sli->add(tls);
+                  }
             }
-      else if (sli->type() == Element::Type::TEXTLINE) {
-            offsAbove = 0;
-            offsBelow =  5 + 3 + (stafflines - 1);
+      else {
+            sli->setPlacement(placement == "above"
+               ? Element::Placement::ABOVE : Element::Placement::BELOW);
             }
-      else if (sli->type() == Element::Type::OTTAVA) {
-            // ignore
-            }
-      else
-            qDebug("setSLinePlacement sli %p unsupported type %d",
-                   sli, int(sli->type()));
-
-      // move to correct position
-      qreal y = 0;
-      if (placement == "above") y += offsAbove;
-      if (placement == "below") y += offsBelow;
-      // add linesegment containing the user offset
-      LineSegment* tls= sli->createLineSegment();
-      //qDebug("   y = %g", y);
-      y *= sli->score()->spatium();
-      tls->setUserOff(QPointF(0, y));
-      sli->add(tls);
       }
 
 //---------------------------------------------------------
