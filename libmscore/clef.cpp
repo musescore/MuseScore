@@ -267,7 +267,8 @@ void Clef::layout()
             }
       // clefs are right aligned to Segment
       QRectF r(symBbox(symId));
-      setPos(-r.right(), yoff * _spatium);
+//      setPos(-r.right(), yoff * _spatium);
+      setPos(0.0, yoff * _spatium);
 
       setbbox(r);
       }
