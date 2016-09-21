@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/jazzy/JazzyBasic.otf">../fonts/jazzy/JazzyBasic.otf</file>
+        <file alias="fonts/jazzy/JazzyBasicText.otf">../fonts/jazzy/JazzyBasicText.otf</file>
+	    </qresource>
+</RCC>

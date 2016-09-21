@@ -172,6 +172,11 @@
                  <string notr="true">Gonville</string>
                 </property>
                </item>
+               <item>
+                <property name="text">
+                 <string>Jazzy</string>
+                </property>
+               </item>
               </widget>
              </item>
              <item row="0" column="0">
@@ -222,6 +227,11 @@
                <item>
                 <property name="text">
                  <string>Gonville Text</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Jazzy Text</string>
                 </property>
                </item>
                <item>
