@@ -29,6 +29,8 @@
 
 namespace Ms {
 
+enum class TremoloBarType { DIP, DIVE, RELEASE_UP, INVERTED_DIP, RETURN, RELEASE_DOWN };
+
 //---------------------------------------------------------
 //   TremoloBarProperties
 //---------------------------------------------------------
@@ -41,11 +43,12 @@ TremoloBarProperties::TremoloBarProperties(TremoloBar* b, QWidget* parent)
       bend = b;
       bendCanvas->setPoints(bend->points());
       bendTypes = new QButtonGroup(this);
-      bendTypes->addButton(bend1, 0);
-      bendTypes->addButton(bend2, 1);
-      bendTypes->addButton(bend3, 2);
-      bendTypes->addButton(bend4, 3);
-      bendTypes->addButton(bend5, 4);
+      bendTypes->addButton(bend1, int(TremoloBarType::DIP));
+      bendTypes->addButton(bend2, int(TremoloBarType::DIVE));
+      bendTypes->addButton(bend3, int(TremoloBarType::RELEASE_UP));
+      bendTypes->addButton(bend4, int(TremoloBarType::INVERTED_DIP));
+      bendTypes->addButton(bend5, int(TremoloBarType::RETURN));
+      bendTypes->addButton(bend6, int(TremoloBarType::RELEASE_DOWN));
       bendTypes->setExclusive(true);
       connect(bendTypes, SIGNAL(buttonClicked(int)), SLOT(bendTypeChanged(int)));
       }
@@ -68,20 +71,23 @@ void TremoloBarProperties::bendTypeChanged(int n)
       QList<PitchValue>& points = bendCanvas->points();
 
       points.clear();
-      switch(n) {
-            case 0:
+      switch (TremoloBarType(n)) {
+            case TremoloBarType::DIP:
                   points.append(PitchValue(0,0));
-                  points.append(PitchValue(15,100));
-                  points.append(PitchValue(60,100));
+                  points.append(PitchValue(30,-100));
+                  points.append(PitchValue(60,0));
                   break;
-            case 1:
+
+            // TODO: fill in the right points
+
+            case TremoloBarType::DIVE:
                   points.append(PitchValue(0,0));
                   points.append(PitchValue(10,100));
                   points.append(PitchValue(20,100));
                   points.append(PitchValue(30,0));
                   points.append(PitchValue(60,0));
                   break;
-            case 2:
+            case TremoloBarType::RELEASE_UP:
                   points.append(PitchValue(0,0));
                   points.append(PitchValue(10,100));
                   points.append(PitchValue(20,100));
@@ -90,15 +96,21 @@ void TremoloBarProperties::bendTypeChanged(int n)
                   points.append(PitchValue(50,100));
                   points.append(PitchValue(60,100));
                   break;
-            case 3:
+            case TremoloBarType::INVERTED_DIP:
                   points.append(PitchValue(0,100));
                   points.append(PitchValue(60,100));
                   break;
-            case 4:
+            case TremoloBarType::RETURN:
                   points.append(PitchValue(0,100));
                   points.append(PitchValue(15,100));
                   points.append(PitchValue(30,0));
                   points.append(PitchValue(60,0));
+                  break;
+            case TremoloBarType::RELEASE_DOWN:
+                  points.append(PitchValue(0,100));
+                  points.append(PitchValue(15,100));
+                  points.append(PitchValue(30,0));
+                  points.append(PitchValue(60,50));
                   break;
             }
       update();
@@ -162,9 +174,9 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
       pen.setWidth(5);
       pen.setColor(Qt::gray);
       p.setPen(pen);
-      foreach(const PitchValue& v, _points) {
+      for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
-            int y = th - ((th * v.pitch) / 300) + tm;
+            int y = th - ((th * v.pitch) / 300) - ys * (ROWS/2) + tm;
             if (idx)
                   p.drawLine(x1, y1, x, y);
             x1 = x;
@@ -172,9 +184,9 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
             ++idx;
             }
 
-      foreach(const PitchValue& v, _points) {
+      for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
-            int y = th - ((th * v.pitch) / 300) + tm;
+            int y = th - ((th * v.pitch) / 300) - ys * (ROWS/2) + tm;
             p.fillRect(x - GRIP2, y - GRIP2, GRIP, GRIP, Qt::blue);
             }
 
