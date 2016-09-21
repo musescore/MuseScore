@@ -68,7 +68,7 @@ private slots:
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
-      //void directions1() { mxmlIoTest("testDirections1"); }
+      void directions1() { mxmlIoTest("testDirections1"); }
       void divisionsDefinedTooLate1() { mxmlIoTestRef("testDivsDefinedTooLate1"); }
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
@@ -116,6 +116,7 @@ private slots:
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
       //void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); } //problem with cautionary measure 8 and 9
+      void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig3"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
@@ -126,7 +127,7 @@ private slots:
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
-      //void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
+      void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
@@ -162,8 +163,8 @@ private slots:
       void voiceMapper3() { mxmlIoTestRef("testVoiceMapper3"); }
       void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
       void volta1() { mxmlIoTest("testVolta1"); }
-      //void wedge1() { mxmlIoTest("testWedge1"); }
-      //void wedge2() { mxmlIoTest("testWedge2"); }
+      void wedge1() { mxmlIoTest("testWedge1"); }
+      void wedge2() { mxmlIoTest("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
       void words2() { mxmlIoTest("testWords2"); }
       void sound1() { mxmlIoTestRef("testSound1"); }
