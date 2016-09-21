@@ -42,6 +42,7 @@ echo       %1/share/locale/mscore_ka.ts \
 echo       %1/share/locale/mscore_ko.ts \
 echo       %1/share/locale/mscore_lt.ts \
 echo       %1/share/locale/mscore_lv.ts \
+echo       %1/share/locale/mscore_ml.ts \
 echo       %1/share/locale/mscore_mn_MN.ts \
 echo       %1/share/locale/mscore_nb.ts \
 echo       %1/share/locale/mscore_nl.ts \
