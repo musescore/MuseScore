@@ -719,10 +719,10 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
 
 void InspectorTremoloBar::propertiesClicked()
       {
-      Bend* b = static_cast<Bend*>(inspector->element());
+      TremoloBar* b = static_cast<TremoloBar*>(inspector->element());
       Score* score = b->score();
       score->startCmd();
-      mscore->currentScoreView()->editBendProperties(b);
+      mscore->currentScoreView()->editTremoloBarProperties(b);
       score->setLayoutAll(true);
       score->endCmd();
       }
