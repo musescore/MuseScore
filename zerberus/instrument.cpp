@@ -126,6 +126,7 @@ bool ZInstrument::load(const QString& path)
             return loadFromFile(path);
       if (fi.isDir())
             return loadFromDir(path);
+      qDebug("not file nor dir " + path.toLatin1());
       return false;
       }
 
