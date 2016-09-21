@@ -502,7 +502,7 @@
           <height>42</height>
          </size>
         </property>
-        <layout class="QGridLayout" name="gridLayout">
+        <layout class="QGridLayout" name="gridLayout2">
          <item row="0" column="1">
           <widget class="QLabel" name="label_2">
            <property name="text">
