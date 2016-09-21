@@ -290,6 +290,9 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   }
             }
       else {
+            Accidental* s = new Accidental(gscore);
+            s->setAccidentalType(AccidentalType::NONE);
+            sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
             for (int i = int(AccidentalType::SHARP); i < int(AccidentalType::END); ++i) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(AccidentalType(i));
