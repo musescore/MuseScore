@@ -1581,7 +1581,7 @@ void Measure::adjustToLen(Fraction nf)
                   }
             }
       Score* s      = score()->rootScore();
-      Measure* m    = this;
+      Measure* m    = s->tick2measure(tick());
       QList<int> sl = s->uniqueStaves();
 
       for (int staffIdx : sl) {
