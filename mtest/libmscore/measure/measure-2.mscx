@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>06ce77e</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <bracketDistance>0.3</bracketDistance>
       <measureSpacing>1.3</measureSpacing>
       <ledgerLineWidth>0.08</ledgerLineWidth>
-      <beamMinLen>1.32</beamMinLen>
       <voltaY>-2</voltaY>
       <page-layout>
         <page-height>1584</page-height>
@@ -31,13 +25,16 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright">Copyright © 2012 Marc Sabatella
 Licensed under the Creative Commons Attribution 3.0 License</metaTag>
-    <metaTag name="creationDate">2014-04-14</metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">WIN</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -58,12 +55,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="1" span="4"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <distOffset>1.12661</distOffset>
         </Staff>
       <trackName>Piano</trackName>
@@ -73,7 +74,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <program value="0"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -94,7 +94,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <width>7.22807</width>
         </HBox>
       <Measure number="1" len="2/4">
-        <irregular/>
+        <irregular>1</irregular>
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
@@ -114,7 +114,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>2</tempo>
           <pos x="-9.3211" y="-6.38978"/>
-          <style>Tempo</style>
           <family>FreeSerifMscore</family>
           <text><font size="11"></font><font face="Times New Roman"></font><b>Andante con moto (</b><font face="FreeSerifMscore"></font><b>𝅘𝅥</b><font face="Times New Roman"></font><b> = 120)</b></text>
           </Tempo>
@@ -123,13 +122,15 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Rest>
         <Slur id="2">
           <track>0</track>
-          <up>2</up>
           </Slur>
         <Beam id="1">
+          <l1>5</l1>
+          <l2>4</l2>
           </Beam>
         <Chord>
           <durationType>16th</durationType>
           <Beam>1</Beam>
+          <Slur type="start" id="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -140,20 +141,22 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>61</pitch>
             <tpc>9</tpc>
             </Note>
           </Chord>
         <Beam id="2">
+          <l1>4</l1>
+          <l2>8</l2>
           </Beam>
         <Chord>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -167,10 +170,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>9</tpc>
             </Note>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
+          <Slur type="stop" id="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -187,6 +190,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="3"/>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -213,7 +217,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>960</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -225,6 +229,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Chord>
         <Beam id="3">
           <track>1</track>
+          <l1>26</l1>
+          <l2>27</l2>
           </Beam>
         <Chord>
           <track>1</track>
@@ -244,7 +250,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <track>1</track>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               <track>1</track>
               </Accidental>
             <pitch>64</pitch>
@@ -292,15 +298,15 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="3"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="3"/>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <tick>2880</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -334,7 +340,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>61</pitch>
@@ -348,6 +354,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="4"/>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -360,9 +367,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="4"/>
         <Chord>
           <durationType>half</durationType>
+          <Slur type="stop" id="4"/>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -372,14 +379,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>6240</tick>
+        <move>3/4</move>
         <Tempo>
           <tempo>1.9</tempo>
           <pos x="-19.2601" y="-4"/>
-          <style>Tempo</style>
           <text>poco rit.</text>
           </Tempo>
-        <tick>4800</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -391,6 +397,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Chord>
         <Beam id="4">
           <track>1</track>
+          <l1>27</l1>
+          <l2>31</l2>
           </Beam>
         <Chord>
           <track>1</track>
@@ -419,7 +427,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <track>1</track>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               <track>1</track>
               </Accidental>
             <pitch>62</pitch>
@@ -437,7 +445,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>63</pitch>
@@ -446,7 +454,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>68</pitch>
@@ -463,6 +471,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="5"/>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -479,15 +488,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="5"/>
         <Chord>
           <durationType>half</durationType>
+          <Slur type="stop" id="5"/>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <tick>7680</tick>
+        <move>0/1</move>
+        <move>1/2</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -503,7 +513,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>61</pitch>
@@ -515,7 +525,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>2.13333</tempo>
           <pos x="-6.65335" y="-4"/>
-          <style>Tempo</style>
           <text>più mosso</text>
           </Tempo>
         <Slur id="6">
@@ -528,6 +537,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="6"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -560,6 +570,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="5">
+          <l1>26</l1>
+          <l2>27</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -599,6 +611,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="6">
+          <l1>-4</l1>
+          <l2>-3</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -646,7 +660,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <tick>10560</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -691,7 +705,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>12480</tick>
+        <move>0/1</move>
         <Rest>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -707,7 +721,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>1</track>
               </Accidental>
             <pitch>66</pitch>
@@ -720,7 +734,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>1</track>
               </Accidental>
             <pitch>61</pitch>
@@ -729,14 +743,14 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               <track>1</track>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <tick>12960</tick>
+        <move>1/4</move>
         <Chord>
           <offset x="0.5" y="0"/>
           <track>3</track>
@@ -744,7 +758,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>3</track>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               <track>3</track>
               </Accidental>
             <pitch>59</pitch>
@@ -766,15 +780,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>1.8</tempo>
           <pos x="-15.9638" y="-4"/>
-          <style>Tempo</style>
           <text>rit.</text>
           </Tempo>
-        <endSpanner id="6"/>
         <Beam id="7">
+          <l1>-1</l1>
+          <l2>-1</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>7</Beam>
+          <Slur type="stop" id="6"/>
           <Note>
             <endSpanner id="8"/>
             <pitch>69</pitch>
@@ -787,15 +802,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>7</Beam>
+          <Slur type="start" id="9"/>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>68</pitch>
             <tpc>10</tpc>
             </Note>
           </Chord>
-        <tick>13920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -811,14 +827,14 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>
             </Note>
           </Chord>
-        <tick>13920</tick>
+        <move>0/1</move>
         <Chord>
           <track>3</track>
           <dots>1</dots>
@@ -827,7 +843,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <track>3</track>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               <track>3</track>
               </Accidental>
             <pitch>60</pitch>
@@ -841,9 +857,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <endSpanner id="9"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="9"/>
           <Note>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -861,16 +877,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Arpeggio>
           </Chord>
         <StaffText>
-          <style>Staff</style>
           <text></text>
           </StaffText>
         <Tempo>
           <tempo>2.25</tempo>
           <pos x="-10.8564" y="-4"/>
-          <style>Tempo</style>
           <text>più mosso</text>
           </Tempo>
         <Beam id="8">
+          <l1>20</l1>
+          <l2>21</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -940,7 +956,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -973,7 +989,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>1.9</tempo>
           <pos x="-10.3194" y="-4"/>
-          <style>Tempo</style>
           <text>rit.</text>
           </Tempo>
         <Chord>
@@ -1034,17 +1049,15 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
       <Measure number="11">
         <KeySig>
           <accidental>2</accidental>
-          <natural>-1</natural>
           </KeySig>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <pos x="0.19375" y="8"/>
+          <offset x="-0.464531" y="0"/>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
           <pos x="-7.52002" y="-4"/>
-          <style>Tempo</style>
           <text>tempo primo</text>
           </Tempo>
         <Slur id="10">
@@ -1056,6 +1069,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="10"/>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -1083,7 +1097,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>19200</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -1092,7 +1106,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>1</track>
               </Accidental>
             <pitch>61</pitch>
@@ -1132,6 +1146,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="9">
+          <l1>-5</l1>
+          <l2>-4</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -1168,9 +1184,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <endSpanner id="10"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="10"/>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -1184,7 +1200,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <tick>21120</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -1209,7 +1225,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>58</pitch>
@@ -1229,6 +1245,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="11"/>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -1272,7 +1289,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>23040</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -1292,16 +1309,17 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
+          <Slur type="start" id="12"/>
           <Note>
             <track>1</track>
             <pitch>64</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="12"/>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="12"/>
           <Note>
             <track>1</track>
             <pitch>62</pitch>
@@ -1312,7 +1330,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
       <Measure number="14">
         <Dynamic>
           <subtype>other-dynamics</subtype>
-          <pos x="-0.6" y="7.33854"/>
+          <offset x="-1.25828" y="-0.66146"/>
           <text>cresc.</text>
           </Dynamic>
         <Chord>
@@ -1327,6 +1345,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="10">
+          <l1>-13</l1>
+          <l2>-12</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -1375,9 +1395,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="11"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="11"/>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -1386,7 +1406,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>77</pitch>
             <tpc>25</tpc>
@@ -1394,7 +1414,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>24960</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -1418,7 +1438,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>2.06667</tempo>
           <pos x="-3.85729" y="-6.3151"/>
-          <style>Tempo</style>
           <text>accel.</text>
           </Tempo>
         <Slur id="13">
@@ -1430,6 +1449,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="13"/>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -1438,7 +1458,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>24</tpc>
@@ -1464,7 +1484,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>24</tpc>
@@ -1480,7 +1500,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -1490,7 +1510,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>81</pitch>
             <tpc>17</tpc>
@@ -1522,10 +1542,11 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>1.83333</tempo>
           <pos x="-3.10419" y="-6.3151"/>
-          <style>Tempo</style>
           <text>rit.</text>
           </Tempo>
         <Beam id="11">
+          <l1>-23</l1>
+          <l2>-24</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -1547,7 +1568,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>28320</tick>
+        <move>0/1</move>
+        <move>3/4</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -1571,7 +1593,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <pos x="-0.6" y="6.84245"/>
+          <offset x="-1.25828" y="-1.15755"/>
           </Dynamic>
         <Chord>
           <durationType>quarter</durationType>
@@ -1580,12 +1602,12 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <pos x="0.658089" y="-6.11458"/>
             </Articulation>
           <Note>
-            <pitch>86</pitch>
-            <tpc>16</tpc>
-            </Note>
-          <Note>
             <pitch>83</pitch>
             <tpc>19</tpc>
+            </Note>
+          <Note>
+            <pitch>86</pitch>
+            <tpc>16</tpc>
             </Note>
           <Note>
             <pitch>90</pitch>
@@ -1597,61 +1619,63 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Arpeggio>
           </Chord>
         <Beam id="12">
+          <l1>-24</l1>
+          <l2>-23</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>12</Beam>
           <Note>
-            <pitch>88</pitch>
-            <tpc>18</tpc>
-            </Note>
-          <Note>
             <pitch>85</pitch>
             <tpc>21</tpc>
+            </Note>
+          <Note>
+            <pitch>88</pitch>
+            <tpc>18</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>12</Beam>
           <Note>
-            <pitch>86</pitch>
-            <tpc>16</tpc>
-            </Note>
-          <Note>
             <pitch>83</pitch>
             <tpc>19</tpc>
+            </Note>
+          <Note>
+            <pitch>86</pitch>
+            <tpc>16</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <subtype>natural</subtype>
-              </Accidental>
-            <pitch>84</pitch>
-            <tpc>14</tpc>
-            </Note>
           <Note>
             <pitch>81</pitch>
             <tpc>17</tpc>
             </Note>
-          </Chord>
-        <endSpanner id="13"/>
-        <Chord>
-          <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
-            <pitch>82</pitch>
-            <tpc>12</tpc>
+            <pitch>84</pitch>
+            <tpc>14</tpc>
             </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Slur type="stop" id="13"/>
           <Note>
             <pitch>79</pitch>
             <tpc>15</tpc>
             </Note>
+          <Note>
+            <Accidental>
+              <subtype>accidentalFlat</subtype>
+              </Accidental>
+            <pitch>82</pitch>
+            <tpc>12</tpc>
+            </Note>
           </Chord>
-        <tick>28800</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -1680,7 +1704,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Tempo>
           <tempo>1.53333</tempo>
           <pos x="-7.10773" y="-4"/>
-          <style>Tempo</style>
           <text>meno mosso</text>
           </Tempo>
         <HairPin id="14">
@@ -1723,7 +1746,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <pos x="-0.579284" y="7.45156"/>
+          <offset x="-0.908425" y="-0.54844"/>
           </Dynamic>
         <endSpanner id="14"/>
         <Chord>
@@ -1792,18 +1815,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         </Measure>
       <Measure number="20">
         <StaffText>
-          <style>Staff</style>
           <text></text>
           </StaffText>
         <Dynamic>
           <subtype>mp</subtype>
           <velocity>64</velocity>
-          <pos x="-0.6" y="7.50391"/>
+          <offset x="-0.929141" y="-0.49609"/>
           </Dynamic>
         <Tempo>
           <tempo>1.23333</tempo>
           <pos x="-11.19" y="-4"/>
-          <style>Tempo</style>
           <text>rall.</text>
           </Tempo>
         <endSpanner id="15"/>
@@ -1819,14 +1840,14 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>9</tpc>
             </Note>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -1847,7 +1868,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <durationType>half</durationType>
           <Note>
             <Tie id="16">
-              <up>2</up>
               </Tie>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -1855,10 +1875,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <Tie id="17">
-              <up>2</up>
               </Tie>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -1879,7 +1898,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <subtype>0</subtype>
             </Arpeggio>
           </Chord>
-        <tick>37680</tick>
+        <move>5/8</move>
         <StaffText>
           <pos x="49.9305" y="-6.44883"/>
           <style>System</style>
@@ -1941,6 +1960,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="start" id="20"/>
           <Note>
             <pitch>53</pitch>
             <tpc>13</tpc>
@@ -1953,9 +1973,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="20"/>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="stop" id="20"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -1969,9 +1989,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="start" id="21"/>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>51</pitch>
             <tpc>11</tpc>
@@ -1984,9 +2005,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>12</tpc>
             </Note>
           </Chord>
-        <endSpanner id="21"/>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="stop" id="21"/>
           <Note>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -2001,10 +2022,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </SlurSegment>
           </Slur>
         <Beam id="13">
+          <l1>19</l1>
+          <l2>13</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>13</Beam>
+          <Slur type="start" id="22"/>
           <Note>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -2026,10 +2050,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="22"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>13</Beam>
+          <Slur type="stop" id="22"/>
           <Note>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -2043,9 +2067,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="start" id="23"/>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>49</pitch>
             <tpc>9</tpc>
@@ -2058,9 +2083,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>12</tpc>
             </Note>
           </Chord>
-        <endSpanner id="23"/>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="stop" id="23"/>
           <Note>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -2072,10 +2097,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="14">
+          <l1>21</l1>
+          <l2>17</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>14</Beam>
+          <Slur type="start" id="24"/>
           <Note>
             <pitch>48</pitch>
             <tpc>14</tpc>
@@ -2089,9 +2117,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="24"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="24"/>
           <Note>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -2101,10 +2129,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="15">
+          <l1>-1</l1>
+          <l2>-5</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>15</Beam>
+          <Slur type="start" id="25"/>
           <Note>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -2118,20 +2149,20 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="25"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="25"/>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
             </Note>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>54</pitch>
             <tpc>20</tpc>
@@ -2143,10 +2174,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="16">
+          <l1>-11</l1>
+          <l2>-11</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>16</Beam>
+          <Slur type="start" id="26"/>
           <Note>
             <pitch>43</pitch>
             <tpc>15</tpc>
@@ -2181,21 +2215,22 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="26"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="26"/>
           <Note>
             <pitch>52</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>7680</tick>
+        <move>0/1</move>
+        <move>1/2</move>
         <Chord>
           <track>5</track>
           <durationType>half</durationType>
@@ -2216,10 +2251,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="17">
+          <l1>25</l1>
+          <l2>19</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>17</Beam>
+          <Slur type="start" id="27"/>
           <Note>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -2241,10 +2279,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <endSpanner id="27"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>17</Beam>
+          <Slur type="stop" id="27"/>
           <Note>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -2254,10 +2292,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="18">
+          <l1>20</l1>
+          <l2>16</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>18</Beam>
+          <Slur type="start" id="28"/>
           <Note>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -2279,10 +2320,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <endSpanner id="28"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>18</Beam>
+          <Slur type="stop" id="28"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -2294,10 +2335,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="19">
+          <l1>28</l1>
+          <l2>21</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>19</Beam>
+          <Slur type="start" id="29"/>
           <Note>
             <pitch>43</pitch>
             <tpc>15</tpc>
@@ -2319,10 +2363,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <endSpanner id="29"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>19</Beam>
+          <Slur type="stop" id="29"/>
           <Note>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -2332,19 +2376,22 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="20">
+          <l1>21</l1>
+          <l2>17</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>20</Beam>
+          <Slur type="start" id="30"/>
           <Note>
             <pitch>48</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="30"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>20</Beam>
+          <Slur type="stop" id="30"/>
           <Note>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -2358,7 +2405,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>56</pitch>
             <tpc>10</tpc>
@@ -2381,7 +2428,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <tick>12480</tick>
+        <move>0/1</move>
         <Slur id="31">
           <track>5</track>
           </Slur>
@@ -2389,6 +2436,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>5</track>
           <dots>1</dots>
           <durationType>half</durationType>
+          <Slur type="start" id="31"/>
           <Note>
             <track>5</track>
             <pitch>45</pitch>
@@ -2449,18 +2497,18 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Articulation>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>54</pitch>
             <tpc>20</tpc>
             </Note>
           </Chord>
-        <tick>13920</tick>
-        <endSpanner id="31"/>
+        <move>0/1</move>
         <Chord>
           <track>5</track>
           <dots>1</dots>
           <durationType>half</durationType>
+          <Slur type="stop" id="31"/>
           <Note>
             <track>5</track>
             <pitch>50</pitch>
@@ -2497,6 +2545,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <transposingClefType>G</transposingClefType>
           </Clef>
         <Beam id="21">
+          <l1>-1</l1>
+          <l2>0</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -2622,7 +2672,6 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
       <Measure number="11">
         <KeySig>
           <accidental>2</accidental>
-          <natural>-1</natural>
           </KeySig>
         <Slur id="32">
           <track>4</track>
@@ -2633,6 +2682,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="start" id="32"/>
           <Note>
             <pitch>38</pitch>
             <tpc>16</tpc>
@@ -2645,9 +2695,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <endSpanner id="32"/>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="stop" id="32"/>
           <Note>
             <pitch>54</pitch>
             <tpc>20</tpc>
@@ -2660,10 +2710,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </SlurSegment>
           </Slur>
         <Beam id="22">
+          <l1>24</l1>
+          <l2>20</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>22</Beam>
+          <Slur type="start" id="33"/>
           <Note>
             <pitch>47</pitch>
             <tpc>19</tpc>
@@ -2677,9 +2730,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>20</tpc>
             </Note>
           </Chord>
-        <endSpanner id="33"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="33"/>
           <Note>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -2691,10 +2744,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="23">
+          <l1>4</l1>
+          <l2>0</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>23</Beam>
+          <Slur type="start" id="34"/>
           <Note>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -2708,9 +2764,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <endSpanner id="34"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="34"/>
           <Note>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -2720,10 +2776,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="24">
+          <l1>-1</l1>
+          <l2>-5</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>24</Beam>
+          <Slur type="start" id="35"/>
           <Note>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -2737,9 +2796,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="35"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="35"/>
           <Note>
             <pitch>43</pitch>
             <tpc>15</tpc>
@@ -2752,6 +2811,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="start" id="36"/>
           <Note>
             <pitch>42</pitch>
             <tpc>20</tpc>
@@ -2764,9 +2824,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <endSpanner id="36"/>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="stop" id="36"/>
           <Note>
             <pitch>54</pitch>
             <tpc>20</tpc>
@@ -2776,10 +2836,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="25">
+          <l1>24</l1>
+          <l2>20</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>25</Beam>
+          <Slur type="start" id="37"/>
           <Note>
             <pitch>47</pitch>
             <tpc>19</tpc>
@@ -2793,9 +2856,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>20</tpc>
             </Note>
           </Chord>
-        <endSpanner id="37"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="37"/>
           <Note>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -2807,10 +2870,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="26">
+          <l1>4</l1>
+          <l2>0</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>26</Beam>
+          <Slur type="start" id="38"/>
           <Note>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -2826,9 +2892,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="38"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="38"/>
           <Note>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -2840,10 +2906,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="27">
+          <l1>-1</l1>
+          <l2>-5</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>27</Beam>
+          <Slur type="start" id="39"/>
           <Note>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -2861,9 +2930,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="39"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="39"/>
           <Note>
             <pitch>43</pitch>
             <tpc>15</tpc>
@@ -2889,6 +2958,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Slur>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="start" id="40"/>
           <Note>
             <pitch>42</pitch>
             <tpc>20</tpc>
@@ -2905,9 +2975,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="40"/>
         <Chord>
           <durationType>eighth</durationType>
+          <Slur type="stop" id="40"/>
           <Note>
             <pitch>54</pitch>
             <tpc>20</tpc>
@@ -2919,10 +2989,13 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="28">
+          <l1>26</l1>
+          <l2>27</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>28</Beam>
+          <Slur type="start" id="41"/>
           <Note>
             <pitch>47</pitch>
             <tpc>19</tpc>
@@ -2950,10 +3023,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="41"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>28</Beam>
+          <Slur type="stop" id="41"/>
           <Note>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -2967,13 +3040,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="29">
+          <l1>-1</l1>
+          <l2>-5</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>29</Beam>
+          <Slur type="start" id="42"/>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>44</pitch>
             <tpc>22</tpc>
@@ -2987,9 +3063,9 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="42"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="42"/>
           <Note>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -2999,13 +3075,16 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <track>4</track>
           </Slur>
         <Beam id="30">
+          <l1>0</l1>
+          <l2>-4</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>30</Beam>
+          <Slur type="start" id="43"/>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>43</pitch>
             <tpc>15</tpc>
@@ -3019,12 +3098,12 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <endSpanner id="43"/>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="43"/>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -3051,13 +3130,15 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Pedal>
         <Slur id="45">
           <track>4</track>
-          <up>2</up>
           </Slur>
         <Beam id="31">
+          <l1>0</l1>
+          <l2>-4</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>31</Beam>
+          <Slur type="start" id="45"/>
           <Note>
             <pitch>42</pitch>
             <tpc>20</tpc>
@@ -3074,6 +3155,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="32">
+          <l1>12</l1>
+          <l2>11</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3091,7 +3174,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -3100,6 +3183,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="33">
+          <l1>8</l1>
+          <l2>7</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3111,10 +3196,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="45"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>33</Beam>
+          <Slur type="stop" id="45"/>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -3139,16 +3224,18 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Pedal>
         <Slur id="47">
           <track>4</track>
-          <up>2</up>
           </Slur>
         <Beam id="34">
+          <l1>0</l1>
+          <l2>-4</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>34</Beam>
+          <Slur type="start" id="47"/>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>41</pitch>
             <tpc>13</tpc>
@@ -3163,6 +3250,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="35">
+          <l1>12</l1>
+          <l2>11</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3181,6 +3270,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="36">
+          <l1>8</l1>
+          <l2>7</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3190,10 +3281,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <endSpanner id="47"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>36</Beam>
+          <Slur type="stop" id="47"/>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -3216,13 +3307,15 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Pedal>
         <Slur id="49">
           <track>4</track>
-          <up>2</up>
           </Slur>
         <Beam id="37">
+          <l1>4</l1>
+          <l2>0</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>37</Beam>
+          <Slur type="start" id="49"/>
           <Note>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -3239,6 +3332,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="38">
+          <l1>13</l1>
+          <l2>11</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3261,6 +3356,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="39">
+          <l1>8</l1>
+          <l2>7</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3272,10 +3369,10 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <endSpanner id="49"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>39</Beam>
+          <Slur type="stop" id="49"/>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -3300,16 +3397,18 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           </Pedal>
         <Slur id="51">
           <track>4</track>
-          <up>2</up>
           </Slur>
         <Beam id="40">
+          <l1>4</l1>
+          <l2>0</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>40</Beam>
+          <Slur type="start" id="51"/>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>39</pitch>
             <tpc>11</tpc>
@@ -3320,13 +3419,15 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Beam>40</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>46</pitch>
             <tpc>12</tpc>
             </Note>
           </Chord>
         <Beam id="41">
+          <l1>13</l1>
+          <l2>11</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -3341,32 +3442,34 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Beam>41</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>58</pitch>
             <tpc>12</tpc>
             </Note>
           </Chord>
         <Beam id="42">
+          <l1>8</l1>
+          <l2>7</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>42</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>61</pitch>
             <tpc>9</tpc>
             </Note>
           </Chord>
-        <endSpanner id="51"/>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>42</Beam>
+          <Slur type="stop" id="51"/>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -3397,30 +3500,29 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>37320</tick>
+        <move>7/16</move>
         <Ottava id="54">
           <subtype>8va</subtype>
-          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
           <lineStyle>2</lineStyle>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <pos x="81.8996" y="-9.37436"/>
-            <placement>below</placement>
             </Segment>
           </Ottava>
-        <tick>37680</tick>
+        <move>5/8</move>
         <StaffText>
-          <style>Staff</style>
           <text></text>
           </StaffText>
-        <tick>36480</tick>
+        <move>0/1</move>
         <Beam id="43">
           <Fragment>
             <y1>-4.85541</y1>
             <y2>-4.85541</y2>
             </Fragment>
+          <l1>-19</l1>
+          <l2>-19</l2>
           </Beam>
         <Chord>
           <track>6</track>
@@ -3487,7 +3589,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <track>6</track>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               <track>6</track>
               </Accidental>
             <pitch>62</pitch>
@@ -3516,7 +3618,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <track>6</track>
             <Accidental>
               <role>1</role>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>6</track>
               </Accidental>
             <pitch>66</pitch>
@@ -3524,6 +3626,8 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             </Note>
           </Chord>
         <Beam id="44">
+          <l1>-32</l1>
+          <l2>-36</l2>
           </Beam>
         <Chord>
           <track>6</track>
@@ -3574,7 +3678,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
             <track>6</track>
             <Accidental>
               <role>1</role>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>6</track>
               </Accidental>
             <pitch>78</pitch>

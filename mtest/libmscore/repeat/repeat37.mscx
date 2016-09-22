@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -152,7 +152,7 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -165,7 +165,7 @@
           </Jump>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <TBox>
@@ -178,7 +178,7 @@
           <text>SECTION_BREAK on vertical frame w/text</text>
           </Text>
         </TBox>
-      <Measure number="3">
+      <Measure number="1">
         <Marker>
           <pos x="-0.899999" y="-2.3"/>
           <style>Repeat Text Right</style>
@@ -190,10 +190,10 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
-      <Measure number="4">
+      <Measure number="2">
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
@@ -203,7 +203,7 @@
           </Jump>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <HBox>
@@ -212,7 +212,7 @@
           <subtype>section</subtype>
           </LayoutBreak>
         </HBox>
-      <Measure number="5">
+      <Measure number="1">
         <Marker>
           <pos x="-1.65" y="-2.3"/>
           <style>Repeat Text Right</style>
@@ -224,10 +224,10 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
-      <Measure number="6">
+      <Measure number="2">
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
@@ -237,7 +237,7 @@
           </Jump>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <HBox>
@@ -249,7 +249,7 @@
       <HBox>
         <width>5</width>
         </HBox>
-      <Measure number="7">
+      <Measure number="1">
         <Marker>
           <pos x="-1.8" y="-2.45"/>
           <style>Repeat Text Right</style>
@@ -261,10 +261,10 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
-      <Measure number="8">
+      <Measure number="2">
         <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
@@ -278,7 +278,7 @@
           </Jump>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <HBox>
@@ -295,7 +295,7 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -311,7 +311,7 @@
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

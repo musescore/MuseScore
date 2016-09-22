@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -73,8 +73,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -182,7 +182,7 @@ in other voice</text>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>2880</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -213,7 +213,7 @@ in other voice</text>
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -256,7 +256,7 @@ in other staff</text>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -273,7 +273,7 @@ in other staff</text>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -303,13 +303,13 @@ in other staff</text>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         </Measure>
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         </Measure>
       <Measure number="6">
@@ -331,13 +331,13 @@ in other staff</text>
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         </Measure>
       </Staff>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -63,8 +63,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -106,20 +106,20 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>49</lid>
+        <lid>34</lid>
         </VBox>
       <Measure number="1">
         <TimeSig>
-          <lid>0</lid>
+          <lid>1</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>1</lid>
+          <lid>2</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>2</lid>
+            <lid>3</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -138,10 +138,10 @@
         </Measure>
       <Measure number="3">
         <Chord>
-          <lid>7</lid>
+          <lid>6</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>8</lid>
+            <lid>7</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -150,13 +150,12 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Chord>
-          <lid>10</lid>
+          <lid>8</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>11</lid>
+            <lid>9</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -164,20 +163,45 @@
         </Measure>
       <Measure number="5">
         <RehearsalMark>
-          <lid>13</lid>
+          <lid>10</lid>
           <text>C</text>
           </RehearsalMark>
         <Chord>
-          <lid>14</lid>
+          <lid>11</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>15</lid>
+            <lid>12</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
         </Measure>
       <Measure number="6">
+        <Chord>
+          <lid>13</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>14</lid>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="7">
+        <Chord>
+          <lid>15</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>16</lid>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="8">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <Chord>
           <lid>17</lid>
           <durationType>whole</durationType>
@@ -188,78 +212,51 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="7">
-        <Chord>
-          <lid>20</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>21</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="8">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          <pause>3</pause>
-          </LayoutBreak>
-        <Chord>
-          <lid>23</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>24</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        </Measure>
       <Measure number="9">
         <RehearsalMark>
-          <lid>26</lid>
+          <lid>19</lid>
           <text>QQ</text>
           </RehearsalMark>
         <Rest>
-          <lid>27</lid>
+          <lid>20</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="10">
         <Rest>
-          <lid>29</lid>
+          <lid>21</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="11">
         <Rest>
-          <lid>31</lid>
+          <lid>22</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="12">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Rest>
-          <lid>33</lid>
+          <lid>23</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="13">
         <RehearsalMark>
-          <lid>35</lid>
+          <lid>24</lid>
           <text>Foo</text>
           </RehearsalMark>
         <Chord>
-          <lid>36</lid>
+          <lid>25</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>37</lid>
+            <lid>26</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -267,10 +264,10 @@
         </Measure>
       <Measure number="14">
         <Chord>
-          <lid>39</lid>
+          <lid>27</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>40</lid>
+            <lid>28</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -278,10 +275,10 @@
         </Measure>
       <Measure number="15">
         <Chord>
-          <lid>42</lid>
+          <lid>29</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>43</lid>
+            <lid>30</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -289,10 +286,10 @@
         </Measure>
       <Measure number="16">
         <Chord>
-          <lid>45</lid>
+          <lid>31</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>46</lid>
+            <lid>32</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -300,7 +297,7 @@
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>47</lid>
+          <lid>33</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -350,10 +347,10 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Flute</trackName>
         <Instrument>
-          <longName pos="0">Flute</longName>
-          <shortName pos="0">Fl.</shortName>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
@@ -395,7 +392,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>49</lid>
+          <lid>34</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
@@ -403,16 +400,16 @@
           </VBox>
         <Measure number="1">
           <TimeSig>
-            <lid>0</lid>
+            <lid>1</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
-            <lid>1</lid>
+            <lid>2</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>2</lid>
+              <lid>3</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -431,10 +428,10 @@
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>7</lid>
+            <lid>6</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>7</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -442,10 +439,10 @@
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>10</lid>
+            <lid>8</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>9</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -453,20 +450,42 @@
           </Measure>
         <Measure number="5">
           <RehearsalMark>
-            <lid>13</lid>
+            <lid>10</lid>
             <text>C</text>
             </RehearsalMark>
           <Chord>
-            <lid>14</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>15</lid>
+              <lid>12</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           </Measure>
         <Measure number="6">
+          <Chord>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="7">
+          <Chord>
+            <lid>15</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>16</lid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="8">
           <Chord>
             <lid>17</lid>
             <durationType>whole</durationType>
@@ -477,86 +496,64 @@
               </Note>
             </Chord>
           </Measure>
-        <Measure number="7">
-          <Chord>
-            <lid>20</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>21</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </Measure>
-        <Measure number="8">
-          <Chord>
-            <lid>23</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>24</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </Measure>
         <Measure number="9">
           <RehearsalMark>
-            <lid>26</lid>
+            <lid>19</lid>
             <text>QQ</text>
             </RehearsalMark>
           <Rest>
-            <lid>27</lid>
+            <lid>20</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="9" len="16/4">
           <multiMeasureRest>4</multiMeasureRest>
           <RehearsalMark>
-            <lid>26</lid>
+            <lid>19</lid>
             <text>QQ</text>
             </RehearsalMark>
           <Rest>
             <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
-          <tick>23040</tick>
+          <move>4/1</move>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>17280</tick>
         <Measure number="10">
           <Rest>
-            <lid>29</lid>
+            <lid>21</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="11">
           <Rest>
-            <lid>31</lid>
+            <lid>22</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="12">
           <Rest>
-            <lid>33</lid>
+            <lid>23</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="13">
           <RehearsalMark>
-            <lid>35</lid>
+            <lid>24</lid>
             <text>Foo</text>
             </RehearsalMark>
           <Chord>
-            <lid>36</lid>
+            <lid>25</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>37</lid>
+              <lid>26</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -564,10 +561,10 @@
           </Measure>
         <Measure number="14">
           <Chord>
-            <lid>39</lid>
+            <lid>27</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>40</lid>
+              <lid>28</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -575,10 +572,10 @@
           </Measure>
         <Measure number="15">
           <Chord>
-            <lid>42</lid>
+            <lid>29</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>43</lid>
+              <lid>30</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -586,10 +583,10 @@
           </Measure>
         <Measure number="16">
           <Chord>
-            <lid>45</lid>
+            <lid>31</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>46</lid>
+              <lid>32</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -597,7 +594,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>47</lid>
+            <lid>33</lid>
             </BarLine>
           </Measure>
         </Staff>

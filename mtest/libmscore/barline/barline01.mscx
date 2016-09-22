@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -53,13 +53,15 @@
       </PageList>
     <Part>
       <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
         <bracket type="0" span="3"/>
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute 1</longName>
-        <shortName pos="0">Fl. 1</shortName>
+        <longName>Flute 1</longName>
+        <shortName>Fl. 1</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -88,13 +90,15 @@
       </Part>
     <Part>
       <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute 2</longName>
-        <shortName pos="0">Fl. 2</shortName>
+        <longName>Flute 2</longName>
+        <shortName>Fl. 2</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -123,13 +127,15 @@
       </Part>
     <Part>
       <Staff id="3">
+        <StaffType group="pitched">
+          </StaffType>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute 3</longName>
-        <shortName pos="0">Fl. 3</shortName>
+        <longName>Flute 3</longName>
+        <shortName>Fl. 3</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -162,9 +168,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -194,7 +197,7 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="4">
@@ -204,7 +207,7 @@
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="5">
@@ -258,9 +261,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -304,13 +304,13 @@
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="6">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="7">
@@ -338,9 +338,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -402,13 +399,13 @@
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>

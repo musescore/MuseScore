@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -117,9 +117,9 @@
         <Rest>
           <lid>4</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <lid>5</lid>
           <track>1</track>
@@ -163,9 +163,9 @@
         <Rest>
           <lid>12</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <lid>13</lid>
           <track>2</track>
@@ -209,9 +209,9 @@
         <Rest>
           <lid>20</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Rest>
           <lid>21</lid>
           <track>3</track>
@@ -249,9 +249,9 @@
         <Rest>
           <lid>27</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <lid>28</lid>
           <track>1</track>
@@ -419,9 +419,9 @@
           <Rest>
             <lid>4</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <tick>0</tick>
+          <move>0/1</move>
           <Chord>
             <lid>5</lid>
             <track>1</track>
@@ -465,9 +465,9 @@
           <Rest>
             <lid>12</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <tick>1920</tick>
+          <move>0/1</move>
           <Chord>
             <lid>13</lid>
             <track>2</track>
@@ -511,9 +511,9 @@
           <Rest>
             <lid>20</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <tick>3840</tick>
+          <move>0/1</move>
           <Rest>
             <lid>21</lid>
             <track>3</track>
@@ -551,9 +551,9 @@
           <Rest>
             <lid>27</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <tick>5760</tick>
+          <move>0/1</move>
           <Chord>
             <lid>28</lid>
             <track>1</track>

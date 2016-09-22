@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -99,7 +99,7 @@
           <direction>up</direction>
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
-          <baseNote></baseNote>
+          <baseNote>eighth</baseNote>
           <Number>
             <style>Tuplet</style>
             <text>3</text>

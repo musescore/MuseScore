@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -66,8 +66,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -140,14 +140,14 @@
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>8</lid>
+          <lid>7</lid>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration>2/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>9</lid>
+          <lid>8</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -208,8 +208,8 @@
           </Staff>
         <trackName>Flute</trackName>
         <Instrument>
-          <longName pos="0">Flute</longName>
-          <shortName pos="0">Fl.</shortName>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
@@ -286,14 +286,14 @@
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>8</lid>
+            <lid>7</lid>
             <durationType>measure</durationType>
-            <duration z="2" n="4"/>
+            <duration>2/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>9</lid>
+            <lid>8</lid>
             </BarLine>
           </Measure>
         </Staff>

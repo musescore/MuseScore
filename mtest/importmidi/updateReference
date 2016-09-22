@@ -103,7 +103,8 @@ instrument_channels.mscx
 instrument_clef.mscx
 instrument_3staff_organ.mscx
 tuplet_triplets_mixed.mscx
-lyrics_voice_1.mscx"
+lyrics_voice_1.mscx
+lyrics_time_0.mscx"
 
 for i in $FILES; do
       cp   $MSCORE/$i .

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -107,18 +107,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>5</sigN>
@@ -168,10 +164,11 @@
             <string>3</string>
             </Note>
           </Chord>
+        <move>33/32</move>
         <Chord>
           <lid>12</lid>
           <durationType>eighth</durationType>
-          <duration z="1" n="32"/>
+          <duration>1/32</duration>
           <grace4/>
           <Note>
             <lid>13</lid>
@@ -181,7 +178,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <tick>1980</tick>
         <Chord>
           <lid>14</lid>
           <durationType>quarter</durationType>
@@ -193,7 +189,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <tick>2400</tick>
         </Measure>
       </Staff>
     <Score>
@@ -264,7 +259,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName>Acoustic Guitar</longName>
           <shortName>Guit.</shortName>
@@ -320,7 +315,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
@@ -330,12 +325,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>5</sigN>
@@ -385,10 +376,14 @@
               <string>3</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>16</lid>
+            <duration>1/32</duration>
+            </Rest>
           <Chord>
             <lid>12</lid>
             <durationType>eighth</durationType>
-            <duration z="1" n="32"/>
+            <duration>1/32</duration>
             <grace4/>
             <Note>
               <lid>13</lid>
@@ -398,7 +393,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>1980</tick>
           <Chord>
             <lid>14</lid>
             <durationType>quarter</durationType>
@@ -410,15 +404,10 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>2400</tick>
           </Measure>
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
@@ -452,10 +441,14 @@
               <string>3</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>16</lid>
+            <duration>1/32</duration>
+            </Rest>
           <Chord>
             <lid>12</lid>
             <durationType>eighth</durationType>
-            <duration z="1" n="32"/>
+            <duration>1/32</duration>
             <grace4/>
             <Note>
               <lid>13</lid>
@@ -465,7 +458,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>1980</tick>
           <Chord>
             <lid>14</lid>
             <durationType>quarter</durationType>
@@ -477,7 +469,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>2400</tick>
           </Measure>
         </Staff>
       <name>S-Gt</name>
