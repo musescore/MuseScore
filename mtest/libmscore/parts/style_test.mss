@@ -267,7 +267,7 @@
       <halign>left</halign>
       <valign>top</valign>
       <offsetType>absolute</offsetType>
-      <name>Instrument Name (Part)</name>
+      <name>Part Name</name>
       <family>FreeSerif</family>
       <size>18</size>
       </TextStyle>

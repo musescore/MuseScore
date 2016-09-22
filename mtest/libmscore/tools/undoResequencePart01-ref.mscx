@@ -309,6 +309,8 @@
         <lastSystemFillLimit>0.03</lastSystemFillLimit>
         <showMeasureNumber>0</showMeasureNumber>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1584</page-height>
           <page-width>1224</page-width>
@@ -394,7 +396,7 @@
           <height>10</height>
           <lid>34</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Flute</text>
             </Text>
           </VBox>

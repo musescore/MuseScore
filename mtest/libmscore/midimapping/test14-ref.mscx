@@ -767,6 +767,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -856,7 +858,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Track 1</text>
             </Text>
           </VBox>
@@ -913,6 +915,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1002,7 +1006,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Track 2</text>
             </Text>
           </VBox>
@@ -1054,6 +1058,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1143,7 +1149,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Track 3</text>
             </Text>
           </VBox>
@@ -1195,6 +1201,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1284,7 +1292,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Track 4</text>
             </Text>
           </VBox>
@@ -1336,6 +1344,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1830,7 +1840,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Track 5</text>
             </Text>
           </VBox>

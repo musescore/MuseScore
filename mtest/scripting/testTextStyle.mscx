@@ -115,7 +115,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
-          <style>System</style>
+          <style>System Text</style>
           <text>System Text</text>
           </StaffText>
         <Rest>
@@ -125,7 +125,7 @@
         </Measure>
       <Measure number="2">
         <StaffText>
-          <text>Staff Text</text>
+          <text>Staff Technique Text</text>
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
@@ -134,8 +134,8 @@
         </Measure>
       <Measure number="3">
         <StaffText>
-          <style>Technique</style>
-          <text>Styled Technique Text</text>
+          <style>Staff Expression Text</style>
+          <text>Expression Text</text>
           </StaffText>
         <Rest>
           <durationType>measure</durationType>

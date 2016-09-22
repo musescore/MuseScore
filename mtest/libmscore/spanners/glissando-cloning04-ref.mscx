@@ -263,7 +263,7 @@
           <height>10</height>
           <lid>1</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Flute</text>
             </Text>
           </VBox>

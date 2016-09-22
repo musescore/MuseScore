@@ -166,6 +166,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <TextStyle>
           <halign>left</halign>
           <valign>top</valign>
@@ -264,7 +266,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Flute</text>
             </Text>
           </VBox>

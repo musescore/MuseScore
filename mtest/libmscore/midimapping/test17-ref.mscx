@@ -810,6 +810,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -930,7 +932,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1042,6 +1044,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1162,7 +1166,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1274,6 +1278,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1394,7 +1400,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1506,6 +1512,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -1626,7 +1634,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1738,6 +1746,8 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <oddHeaderC>$i</oddHeaderC>
+        <evenHeaderC>$i</evenHeaderC>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -2003,7 +2013,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>Part Name</style>
             <text>Drumset</text>
             </Text>
           </VBox>

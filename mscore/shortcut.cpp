@@ -1863,8 +1863,15 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "staff-text",
-         QT_TRANSLATE_NOOP("action","Staff Text"),
-         QT_TRANSLATE_NOOP("action","Add staff text")
+         QT_TRANSLATE_NOOP("action","Staff Technique Text"),
+         QT_TRANSLATE_NOOP("action","Add technique staff text")
+         },
+       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "expression-text",
+         QT_TRANSLATE_NOOP("action","Staff Expression Text"),
+         QT_TRANSLATE_NOOP("action","Add expression staff text")
          },
       {
          MsWidget::SCORE_TAB,

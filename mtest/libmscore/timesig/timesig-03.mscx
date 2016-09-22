@@ -181,7 +181,7 @@
         </Measure>
       <Measure number="3">
         <StaffText>
-          <style>Staff</style>
+          <style>Staff Technique Text</style>
           <text>simile</text>
           </StaffText>
         <HairPin id="2">

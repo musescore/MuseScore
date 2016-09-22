@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -52,7 +52,6 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
 
       { StyleIdx::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
-
       { StyleIdx::figuredBassFontSize,     "figuredBassFontSize",     QVariant(8.0) },
       { StyleIdx::figuredBassYOffset,      "figuredBassYOffset",      QVariant(6.0) },
       { StyleIdx::figuredBassLineHeight,   "figuredBassLineHeight",   QVariant(1.0) },
@@ -60,21 +59,21 @@ static const StyleType styleTypes[] {
       { StyleIdx::figuredBassStyle,        "figuredBassStyle" ,       QVariant(0) },
       { StyleIdx::systemFrameDistance,     "systemFrameDistance",     Spatium(7.0) },
       { StyleIdx::frameSystemDistance,     "frameSystemDistance",     Spatium(7.0) },
+
       { StyleIdx::minMeasureWidth,         "minMeasureWidth",         Spatium(5.0) },
       { StyleIdx::barWidth,                "barWidth",                Spatium(0.16) },      // 0.1875
       { StyleIdx::doubleBarWidth,          "doubleBarWidth",          Spatium(0.16) },
-
       { StyleIdx::endBarWidth,             "endBarWidth",             Spatium(0.5) },       // 0.5
       { StyleIdx::doubleBarDistance,       "doubleBarDistance",       Spatium(0.30) },
       { StyleIdx::endBarDistance,          "endBarDistance",          Spatium(0.40) },     // 0.3
       { StyleIdx::repeatBarTips,           "repeatBarTips",           QVariant(false) },
       { StyleIdx::startBarlineSingle,      "startBarlineSingle",      QVariant(false) },
       { StyleIdx::startBarlineMultiple,    "startBarlineMultiple",    QVariant(true) },
+
       { StyleIdx::bracketWidth,            "bracketWidth",            Spatium(0.45) },
       { StyleIdx::bracketDistance,         "bracketDistance",         Spatium(0.1) },
       { StyleIdx::akkoladeWidth,           "akkoladeWidth",           Spatium(1.6) },
       { StyleIdx::akkoladeBarDistance,     "akkoladeBarDistance",     Spatium(.4) },
-
       { StyleIdx::dividerLeft,             "dividerLeft",             QVariant(false) },
       { StyleIdx::dividerLeftSym,          "dividerLeftSym",          QVariant(QString("systemDivider")) },
       { StyleIdx::dividerLeftX,            "dividerLeftX",            QVariant(0.0) },
@@ -87,7 +86,6 @@ static const StyleType styleTypes[] {
       { StyleIdx::clefLeftMargin,          "clefLeftMargin",          Spatium(0.8) },     // 0.64 (gould: <= 1)
       { StyleIdx::keysigLeftMargin,        "keysigLeftMargin",        Spatium(0.5) },
       { StyleIdx::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
-
       { StyleIdx::timesigLeftMargin,       "timesigLeftMargin",       Spatium(0.5) },
       { StyleIdx::clefKeyRightMargin,      "clefKeyRightMargin",      Spatium(0.8) },
       { StyleIdx::clefKeyDistance,         "clefKeyDistance",         Spatium(1.0) },   // gould: 1 - 1.25
@@ -96,9 +94,9 @@ static const StyleType styleTypes[] {
       { StyleIdx::keyBarlineDistance,      "keyTimesigDistance",      Spatium(1.0) },
       { StyleIdx::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },     // gould: 2.5
       { StyleIdx::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },  // gould: 2.0
-
       { StyleIdx::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.18) },      // was 0.5
       { StyleIdx::timesigBarlineDistance,  "timesigBarlineDistance",  Spatium(0.5) },
+
       { StyleIdx::stemWidth,               "stemWidth",               Spatium(0.13) },      // 0.09375
       { StyleIdx::shortenStem,             "shortenStem",             QVariant(true) },
       { StyleIdx::shortStemProgression,    "shortStemProgression",    Spatium(0.25) },
@@ -106,10 +104,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
       { StyleIdx::minNoteDistance,         "minNoteDistance",         Spatium(0.25) },      // 0.4
       { StyleIdx::barNoteDistance,         "barNoteDistance",         Spatium(1.2) },
-
       { StyleIdx::barAccidentalDistance,   "barAccidentalDistance",   Spatium(.3) },
       { StyleIdx::multiMeasureRestMargin,  "multiMeasureRestMargin",  Spatium(1.2) },
       { StyleIdx::noteBarDistance,         "noteBarDistance",         Spatium(1.0) },
+
       { StyleIdx::measureSpacing,          "measureSpacing",          QVariant(1.2) },
       { StyleIdx::staffLineWidth,          "staffLineWidth",          Spatium(0.08) },      // 0.09375
       { StyleIdx::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },     // 0.1875
@@ -117,10 +115,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
       { StyleIdx::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
       { StyleIdx::beamWidth,               "beamWidth",               Spatium(0.5) },           // was 0.48
-
       { StyleIdx::beamDistance,            "beamDistance",            QVariant(0.5) },          // 0.25sp units
       { StyleIdx::beamMinLen,              "beamMinLen",              Spatium(1.32) },      // 1.316178 exactly notehead widthen beams
       { StyleIdx::beamNoSlope,             "beamNoSlope",             QVariant(false) },
+
       { StyleIdx::dotMag,                  "dotMag",                  QVariant(1.0) },
       { StyleIdx::dotNoteDistance,         "dotNoteDistance",         Spatium(0.35) },
       { StyleIdx::dotRestDistance,         "dotRestDistance",         Spatium(0.25) },
@@ -128,9 +126,9 @@ static const StyleType styleTypes[] {
       { StyleIdx::propertyDistanceHead,    "propertyDistanceHead",    Spatium(1.0) },
       { StyleIdx::propertyDistanceStem,    "propertyDistanceStem",    Spatium(1.8) },
       { StyleIdx::propertyDistance,        "propertyDistance",        Spatium(1.0) },
-
       { StyleIdx::articulationMag,         "articulationMag",         QVariant(1.0) },
       { StyleIdx::lastSystemFillLimit,     "lastSystemFillLimit",     QVariant(0.3) },
+
       { StyleIdx::hairpinY,                "hairpinY",                Spatium(7.5) },
       { StyleIdx::hairpinHeight,           "hairpinHeight",           Spatium(1.2) },
       { StyleIdx::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
@@ -148,20 +146,20 @@ static const StyleType styleTypes[] {
       { StyleIdx::fretNumMag,              "fretNumMag",              QVariant(2.0) },
       { StyleIdx::fretNumPos,              "fretNumPos",              QVariant(0) },
       { StyleIdx::fretY,                   "fretY",                   Spatium(2.0) },
+
       { StyleIdx::showPageNumber,          "showPageNumber",          QVariant(true) },
       { StyleIdx::showPageNumberOne,       "showPageNumberOne",       QVariant(false) },
-
       { StyleIdx::pageNumberOddEven,       "pageNumberOddEven",       QVariant(true) },
       { StyleIdx::showMeasureNumber,       "showMeasureNumber",       QVariant(true) },
       { StyleIdx::showMeasureNumberOne,    "showMeasureNumberOne",    QVariant(false) },
       { StyleIdx::measureNumberInterval,   "measureNumberInterval",   QVariant(5) },
       { StyleIdx::measureNumberSystem,     "measureNumberSystem",     QVariant(true) },
       { StyleIdx::measureNumberAllStaffs,  "measureNumberAllStaffs",  QVariant(false) },
+
       { StyleIdx::smallNoteMag,            "smallNoteMag",            QVariant(.7) },
       { StyleIdx::graceNoteMag,            "graceNoteMag",            QVariant(0.7) },
       { StyleIdx::smallStaffMag,           "smallStaffMag",           QVariant(0.7) },
       { StyleIdx::smallClefMag,            "smallClefMag",            QVariant(0.8) },
-
       { StyleIdx::genClef,                 "genClef",                 QVariant(true) },
       { StyleIdx::genKeysig,               "genKeysig",               QVariant(true) },
       { StyleIdx::genCourtesyTimesig,      "genCourtesyTimesig",      QVariant(true) },
@@ -169,10 +167,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::genCourtesyClef,         "genCourtesyClef",         QVariant(true) },
       { StyleIdx::swingRatio,              "swingRatio",              QVariant(60)   },
       { StyleIdx::swingUnit,               "swingUnit",               QVariant(QString("")) },
+
       { StyleIdx::useStandardNoteNames,    "useStandardNoteNames",    QVariant(true) },
       { StyleIdx::useGermanNoteNames,      "useGermanNoteNames",      QVariant(false) },
       { StyleIdx::useFullGermanNoteNames,  "useFullGermanNoteNames",  QVariant(false) },
-
       { StyleIdx::useSolfeggioNoteNames,   "useSolfeggioNoteNames",   QVariant(false) },
       { StyleIdx::useFrenchNoteNames,      "useFrenchNoteNames",      QVariant(false) },
       { StyleIdx::automaticCapitalization, "automaticCapitalization", QVariant(true) },
@@ -182,8 +180,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::chordStyle,              "chordStyle",              QVariant(QString("std")) },
       { StyleIdx::chordsXmlFile,           "chordsXmlFile",           QVariant(false) },
       { StyleIdx::chordDescriptionFile,    "chordDescriptionFile",    QVariant(QString("chords_std.xml")) },
-      { StyleIdx::concertPitch,            "concertPitch",            QVariant(false) },
 
+      { StyleIdx::concertPitch,            "concertPitch",            QVariant(false) },
       { StyleIdx::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },
       { StyleIdx::minEmptyMeasures,        "minEmptyMeasures",        QVariant(2) },
       { StyleIdx::minMMRestWidth,          "minMMRestWidth",          Spatium(4) },
@@ -208,28 +206,28 @@ static const StyleType styleTypes[] {
       { StyleIdx::MusicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Emmentaler")) },
       { StyleIdx::MusicalTextFont,         "musicalTextFont",         QVariant(QString("MScore Text")) },
 
-      { StyleIdx::showHeader,              "showHeader",              QVariant(false) },
+      { StyleIdx::showHeader,              "showHeader",              QVariant(true) },
       { StyleIdx::headerFirstPage,         "headerFirstPage",         QVariant(false) },
       { StyleIdx::headerOddEven,           "headerOddEven",           QVariant(true) },
-      { StyleIdx::evenHeaderL,             "evenHeaderL",             QVariant(QString()) },
-      { StyleIdx::evenHeaderC,             "evenHeaderC",             QVariant(QString()) },
-      { StyleIdx::evenHeaderR,             "evenHeaderR",             QVariant(QString()) },
       { StyleIdx::oddHeaderL,              "oddHeaderL",              QVariant(QString()) },
       { StyleIdx::oddHeaderC,              "oddHeaderC",              QVariant(QString()) },
-      { StyleIdx::oddHeaderR,              "oddHeaderR",              QVariant(QString()) },
-      { StyleIdx::showFooter,              "showFooter",              QVariant(true) },
+      { StyleIdx::oddHeaderR,              "oddHeaderR",              QVariant(QString("$p")) },
+      { StyleIdx::evenHeaderL,             "evenHeaderL",             QVariant(QString("$p")) },
+      { StyleIdx::evenHeaderC,             "evenHeaderC",             QVariant(QString()) },
+      { StyleIdx::evenHeaderR,             "evenHeaderR",             QVariant(QString()) },
 
+      { StyleIdx::showFooter,              "showFooter",              QVariant(true) },
       { StyleIdx::footerFirstPage,         "footerFirstPage",         QVariant(true) },
       { StyleIdx::footerOddEven,           "footerOddEven",           QVariant(true) },
-      { StyleIdx::evenFooterL,             "evenFooterL",             QVariant(QString("$p")) },
-      { StyleIdx::evenFooterC,             "evenFooterC",             QVariant(QString("$:copyright:")) },
-      { StyleIdx::evenFooterR,             "evenFooterR",             QVariant(QString()) },
       { StyleIdx::oddFooterL,              "oddFooterL",              QVariant(QString()) },
-      { StyleIdx::oddFooterC,              "oddFooterC",              QVariant(QString("$:copyright:")) },
-      { StyleIdx::oddFooterR,              "oddFooterR",              QVariant(QString("$p")) },
+      { StyleIdx::oddFooterC,              "oddFooterC",              QVariant(QString("$C")) },
+      { StyleIdx::oddFooterR,              "oddFooterR",              QVariant(QString()) },
+      { StyleIdx::evenFooterL,             "evenFooterL",             QVariant(QString()) },
+      { StyleIdx::evenFooterC,             "evenFooterC",             QVariant(QString("$C")) },
+      { StyleIdx::evenFooterR,             "evenFooterR",             QVariant(QString()) },
+
       { StyleIdx::voltaY,                  "voltaY",                  Spatium(-3.0) },
       { StyleIdx::voltaHook,               "voltaHook",               Spatium(1.9) },
-
       { StyleIdx::voltaLineWidth,          "voltaLineWidth",          Spatium(.1) },
       { StyleIdx::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
       { StyleIdx::ottavaY,                 "ottavaY",                 Spatium(-3.0) },
@@ -238,9 +236,9 @@ static const StyleType styleTypes[] {
       { StyleIdx::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { StyleIdx::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
       { StyleIdx::tabClef,                 "tabClef",                 QVariant(int(ClefType::TAB)) },
+
       { StyleIdx::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
       { StyleIdx::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
-
       { StyleIdx::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
       { StyleIdx::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
       { StyleIdx::linearStretch,           "linearStretch",           QVariant(qreal(1.5)) },
@@ -310,10 +308,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::lutefingering1stAnchor,          "lutefingering1stAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::lutefingering2ndAnchor,          "lutefingering2ndAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::lutefingering3rdAnchor,          "lutefingering3rdAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
+
       { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
       { StyleIdx::dynamicsMinDistance,             "dynamicsMinDistance",               Spatium(0.5) },
       { StyleIdx::autoplaceVerticalAlignRange,     "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
-
       { StyleIdx::textLinePlacement,         "textLinePlacement",         int(Element::Placement::ABOVE)  },
       { StyleIdx::textLinePosAbove,          "textLinePosAbove",          Spatium(-3.5) },
       { StyleIdx::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
@@ -356,7 +354,7 @@ static const QString ff("FreeSerif");
 
 //---------------------------------------------------------
 //   setDefaultStyle
-//    synchronize with TextStyleType
+//    synchronize with TextStyleType in mscore.h
 //---------------------------------------------------------
 
 void initStyle(MStyle* s)
@@ -367,123 +365,128 @@ void initStyle(MStyle* s)
       // never show this style
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", ""), ff, 10, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, false, false,
-         false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
+         false, Spatium(.2), Spatium(.5), 0, QColor(Qt::black), false, false, QColor(Qt::black),
          QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Title"),    ff, 24, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Title"),     ff, 24, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Subtitle"), ff, 14, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Subtitle"),  ff, 14, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(0, MM(10)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Composer"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Composer"),  ff, 12, false, false, false,
          AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyricist"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyricist"),  ff, 12, false, false, false,
          AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Part Name"), ff, 14, false, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, MM(2)), OffsetType::ABS));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Odd Lines"),          ff, 11, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "System Text"),           ff, 10, false, false, false,
+         AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true, false,
+         false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Staff Technique Text"),  ff, 10, false, false, false,
+         AlignmentFlags::LEFT, QPointF(0, -3.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Staff Expression Text"), ff, 11, false, true, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, 8.0), OffsetType::SPATIUM, true));
+
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),              ff, 12, false, true, false,
+         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"),                 ff, 12, true, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM, true, false,
+         false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Change"),     ff, 10, true, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, -3.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Rehearsal Mark"),        ff, 14, true, false, false,
+         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -3.0), OffsetType::SPATIUM, true, true,
+         true, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Measure Number"),        ff, 8, false, false, false,
+         AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(.0, -2.0), OffsetType::SPATIUM, true));
+
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Odd Lines"),      ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Even Lines"),         ff, 11, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Even Lines"),     ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Fingering"),                 ff,  8, false, false, false,
+
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Chord Symbol"),          ff, 12, false, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Fingering"),             ff, 8, false, false, false,
          AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "LH Guitar Fingering"),       ff,  8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "LH Guitar Fingering"),   ff, 8, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(-0.5, 0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "RH Guitar Fingering"),       ff,  8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "RH Guitar Fingering"),   ff, 8, false, false, false,
          AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"),             ff,  8, false, false, false,
+
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Bend"),                  ff, 8, false, false, false,
+         AlignmentFlags::CENTER | AlignmentFlags::BOTTOM, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"),         ff, 8, false, false, false,
          AlignmentFlags::CENTER, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
          true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Long)"),    ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Long Instrument Name"),  ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Short)"),   ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Short Instrument Name"), ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Part)"),    ff, 18, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(), OffsetType::ABS));
 
-      // dynamics size is 12pt for bravura-text
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, false,false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, true, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM,
-         true, false, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Metronome"),      ff, 12, true, false, false,
-         AlignmentFlags::LEFT));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Measure Number"), ff, 8, false, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(.0, -2.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Translator"),     ff, 11, false, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::TOP, QPointF(0, 6)));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tuplet"),         ff, 10, false, true, false,
-         AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "System"), ff,  10, false, false, false,
-         AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true, false,
-         false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Staff"),        ff,  10, false, false, false,
-         AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Chord Symbol"), ff,  12, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Rehearsal Mark"), ff,  14,
-         true,
-         false,
-         false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE,
-         QPointF(0, -3.0), OffsetType::SPATIUM,
-         true,    // hasFrame
-         true,    // square
-         true, Spatium(.2), Spatium(.5), 20, Qt::black, false, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Left"), ff,  20, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Left"),      ff, 20, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
-         false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Right"), ff,  12, false, false, false,
+         false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Right"),     ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
-         false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
+         false, Spatium(0.2), Spatium(0.5), 0, Qt::black, false, true));
 
-      // for backward compatibility
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text"), ff,  12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
-         false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tuplet"),    ff, 10, false, true, false,
+         AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Glissando"), ff, 8, false, true, false,
+         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 
       // y offset may depend on voltaHook style element
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Volta"),     ff, 11, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.5, 1.9), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Frame"),     ff, 12, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::TOP));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Ottava"),    ff, 12, false, true, false,
+         AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Pedal"),     ff, 12, false, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, 0.15), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Hairpin"),   ff, 11, false, true, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Text Line"), ff, 12, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Glissando"), ff, 8, false, true, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Ottava"),            ff, 12, false, true, false,
-         AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Pedal"),             ff, 12, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, 0.15), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Hairpin"),           ff, 12, false, true, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Bend"),              ff, 8, false, false, false,
-         AlignmentFlags::CENTER | AlignmentFlags::BOTTOM, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Header"),            ff, 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Header"),    ff, 10, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Footer"),            ff, 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Footer"),    ff, 8, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(0.0, MM(5)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Change"), ff,  12, true, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(0, -3.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Frame"),     ff, 12, false, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::TOP));
 
 /*      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Verse Number"),ff, 11, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 */
+
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Figured Bass"), "MScoreBC", 8, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OffsetType::SPATIUM, true, false,
-         false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
-         false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
-         TextStyleHidden::IN_EDITOR));                                         // don't show in Style Editor
+         false, Spatium(0.0), Spatium(0.0), 0, QColor(Qt::black), false, // default params
+         false, QColor(Qt::black), QColor(255, 255, 255, 0),             // default params
+         TextStyleHidden::IN_EDITOR));                                   // show in Inspector, hide in Edit Text Styles
+
+      // following 3 styles unused, temporarily kept for backward compatibility
+      // not visible in UI, but rescues text properties from MuseScore 2
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Translator"),      ff, 11, false, false, false,
+         AlignmentFlags::HCENTER | AlignmentFlags::TOP, QPointF(0, MM(10)), OffsetType::ABS, true, false,
+         false, Spatium(.2), Spatium(.5), 0, QColor(Qt::black), false, false, QColor(Qt::black),
+         QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));           // make style not accessible in UI
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Metronome"),       ff, 12, true, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, 0), OffsetType::SPATIUM, true, false,
+         false, Spatium(.2), Spatium(.5), 0, QColor(Qt::black), false, false, QColor(Qt::black),
+         QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));           // make style not accessible in UI
+            // TODO: compatibility layer to switch text to Tempo style on import
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text"),     ff, 12, false, false, false,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
+         false, Spatium(.2), Spatium(.5), 0, QColor(Qt::black), false, false, QColor(Qt::black),
+         QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));           // make style not accessible in UI
+            // TODO: compatibility layer to switch text to Repeat Text Right style on import
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"),       ff, 12, false, true, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true, false,
+         false, Spatium(.2), Spatium(.5), 0, QColor(Qt::black), false, false, QColor(Qt::black),
+         QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));           // make style not accessible in UI
+            // TODO: compatibility layer to switch text to Expression style while assigning these properties
 
 #undef MM
 

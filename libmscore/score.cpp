@@ -281,6 +281,8 @@ Score::Score(MasterScore* parent)
             _style.set(StyleIdx::createMultiMeasureRests, true);
             _style.set(StyleIdx::dividerLeft, false);
             _style.set(StyleIdx::dividerRight, false);
+            _style.set(StyleIdx::evenHeaderC, "$i");
+            _style.set(StyleIdx::oddHeaderC, "$i");
             }
       _synthesizerState = parent->_synthesizerState;
       }

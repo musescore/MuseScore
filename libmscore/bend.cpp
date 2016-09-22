@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -73,7 +73,7 @@ void Bend::layout()
             }
       QRectF bb;
 
-      const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
+      const TextStyle* st = &score()->textStyle(TextStyleType::BEND);
       QFontMetricsF fm(st->fontMetrics(_spatium));
 
       int n   = _points.size();
@@ -165,7 +165,7 @@ void Bend::draw(QPainter* painter) const
       painter->setBrush(QBrush(curColor()));
 
       qreal _spatium = spatium();
-      const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
+      const TextStyle* st = &score()->textStyle(TextStyleType::BEND);
       QFont f = st->font(_spatium * MScore::pixelRatio);
       painter->setFont(f);
 

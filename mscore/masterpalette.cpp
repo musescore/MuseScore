@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id: masterpalette.cpp
 //
-//  Copyright (C) 2002-2016 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -145,7 +145,6 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       treeWidget->clear();
 
-      addPalette(MuseScore::newGraceNotePalette(false));
       addPalette(MuseScore::newClefsPalette(false));
       keyEditor = new KeyEditor;
 
@@ -160,26 +159,26 @@ MasterPalette::MasterPalette(QWidget* parent)
       stack->addWidget(timeDialog);
       treeWidget->addTopLevelItem(timeItem);
 
-      addPalette(MuseScore::newBarLinePalette(false));
-      addPalette(MuseScore::newLinesPalette(false));
-      addPalette(MuseScore::newArpeggioPalette());
-      addPalette(MuseScore::newBreathPalette());
       addPalette(MuseScore::newBracketsPalette());
-      addPalette(MuseScore::newArticulationsPalette(false));
-
       addPalette(MuseScore::newAccidentalsPalette(false));
-
+      addPalette(MuseScore::newArticulationsPalette(false));
+      addPalette(MuseScore::newBreathPalette());
+      addPalette(MuseScore::newGraceNotePalette(false));
+      addPalette(MuseScore::newNoteHeadsPalette());
+      addPalette(MuseScore::newLinesPalette(false));
+      addPalette(MuseScore::newBarLinePalette(false));
+      addPalette(MuseScore::newArpeggioPalette());
+      addPalette(MuseScore::newTremoloPalette());
+      addPalette(MuseScore::newTextPalette());
+      addPalette(MuseScore::newTempoPalette(false, true));
       addPalette(MuseScore::newDynamicsPalette(false, true));
       addPalette(MuseScore::newFingeringPalette());
-      addPalette(MuseScore::newNoteHeadsPalette());
-      addPalette(MuseScore::newTremoloPalette());
       addPalette(MuseScore::newRepeatsPalette());
-      addPalette(MuseScore::newTempoPalette(false, true));
-      addPalette(MuseScore::newTextPalette());
-      addPalette(MuseScore::newBreaksPalette());
+      addPalette(MuseScore::newFretboardDiagramPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
-      addPalette(MuseScore::newBeamPalette(false));
+      addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newFramePalette());
+      addPalette(MuseScore::newBeamPalette(false));
 
       symbolItem = new QTreeWidgetItem();
       symbolItem->setData(0, Qt::UserRole, -1);

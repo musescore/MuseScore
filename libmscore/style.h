@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -39,7 +39,6 @@ enum class StyleIdx : int {
       staffLowerBorder,
       staffDistance,
       akkoladeDistance,
-
       minSystemDistance,
       maxSystemDistance,
 
@@ -63,8 +62,8 @@ enum class StyleIdx : int {
       figuredBassStyle,
       systemFrameDistance,
       frameSystemDistance,
-      minMeasureWidth,
 
+      minMeasureWidth,
       barWidth,
       doubleBarWidth,
       endBarWidth,
@@ -91,7 +90,6 @@ enum class StyleIdx : int {
       keysigLeftMargin,
       ambitusMargin,
       timesigLeftMargin,
-
       clefKeyRightMargin,
 /**/      clefKeyDistance,
 /**/      clefTimesigDistance,
@@ -99,7 +97,6 @@ enum class StyleIdx : int {
       keyBarlineDistance,
       systemHeaderDistance,
       systemHeaderTimeSigDistance,
-
       clefBarlineDistance,
       timesigBarlineDistance,
 
@@ -139,12 +136,11 @@ enum class StyleIdx : int {
       hairpinHeight,
       hairpinContHeight,
       hairpinLineWidth,
-
       pedalY,
       pedalLineWidth,
       pedalLineStyle,
-
       trillY,
+
       harmonyY,
       harmonyFretDist,
       minHarmonyDistance,
@@ -161,8 +157,8 @@ enum class StyleIdx : int {
       showMeasureNumberOne,
       measureNumberInterval,
       measureNumberSystem,
-
       measureNumberAllStaffs,
+
       smallNoteMag,
       graceNoteMag,
       smallStaffMag,
@@ -173,7 +169,6 @@ enum class StyleIdx : int {
       genCourtesyTimesig,
       genCourtesyKeysig,
       genCourtesyClef,
-
       swingRatio,
       swingUnit,
 
@@ -189,6 +184,7 @@ enum class StyleIdx : int {
       chordStyle,
       chordsXmlFile,
       chordDescriptionFile,
+
       concertPitch,
       createMultiMeasureRests,
       minEmptyMeasures,
@@ -204,12 +200,10 @@ enum class StyleIdx : int {
       ArpeggioNoteDistance,
       ArpeggioLineWidth,
       ArpeggioHookLen,
-
       SlurEndWidth,
       SlurMidWidth,
       SlurDottedWidth,
       MinTieLength,
-
       SectionPause,
       MusicalSymbolFont,
       MusicalTextFont,
@@ -217,34 +211,32 @@ enum class StyleIdx : int {
       showHeader,
       headerFirstPage,
       headerOddEven,
-      evenHeaderL,
-      evenHeaderC,
-      evenHeaderR,
       oddHeaderL,
       oddHeaderC,
       oddHeaderR,
+      evenHeaderL,
+      evenHeaderC,
+      evenHeaderR,
 
       showFooter,
       footerFirstPage,
       footerOddEven,
-      evenFooterL,
-      evenFooterC,
-      evenFooterR,
       oddFooterL,
       oddFooterC,
       oddFooterR,
+      evenFooterL,
+      evenFooterC,
+      evenFooterR,
 
       voltaY,
       voltaHook,
       voltaLineWidth,
       voltaLineStyle,
-
       ottavaY,
       ottavaHook,
       ottavaLineWidth,
       ottavaLineStyle,
       ottavaNumbersOnly,
-
       tabClef,
 
       tremoloWidth,
@@ -275,7 +267,6 @@ enum class StyleIdx : int {
       fretMag,
       scaleBarlines,
       barGraceDistance,
-
       minVerticalDistance,
       ornamentStyle,
       spatium,
@@ -326,7 +317,6 @@ enum class StyleIdx : int {
       autoplaceHairpinDynamicsDistance,
       dynamicsMinDistance,
       autoplaceVerticalAlignRange,
-
       textLinePlacement,
       textLinePosAbove,
       textLinePosBelow,

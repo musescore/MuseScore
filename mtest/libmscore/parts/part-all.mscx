@@ -242,7 +242,7 @@
             </Note>
           </Chord>
         <StaffText>
-          <style>System</style>
+          <style>System Text</style>
           <text>system-text</text>
           </StaffText>
         <Chord>

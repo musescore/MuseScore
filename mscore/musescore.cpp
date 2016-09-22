@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2016 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -1048,6 +1048,7 @@ MuseScore::MuseScore()
       menuAddText->addSeparator();
       menuAddText->addAction(getAction("system-text"));
       menuAddText->addAction(getAction("staff-text"));
+      menuAddText->addAction(getAction("expression-text"));
       menuAddText->addAction(getAction("chord-text"));
       menuAddText->addAction(getAction("rehearsalmark-text"));
       menuAddText->addAction(getAction("instrument-change-text"));
