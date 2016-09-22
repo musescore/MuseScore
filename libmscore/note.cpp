@@ -819,303 +819,11 @@ void Note::write(Xml& xml) const
 
 void Note::read(XmlReader& e)
       {
-      bool hasAccidental = false;                     // used for userAccidental backward compatibility
-
-      _tpc[0] = Tpc::TPC_INVALID;
-      _tpc[1] = Tpc::TPC_INVALID;
-
-      if (e.hasAttribute("pitch"))                   // obsolete
-            _pitch = e.intAttribute("pitch");
-      if (e.hasAttribute("tpc"))                     // obsolete
-            _tpc[0] = e.intAttribute("tpc");
-
+      setTpc1(Tpc::TPC_INVALID);
+      setTpc2(Tpc::TPC_INVALID);
 
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "pitch")
-                  _pitch = e.readInt();
-            else if (tag == "tpc") {
-                  _tpc[0] = e.readInt();
-                  _tpc[1] = _tpc[0];
-                  }
-            else if (tag == "track")            // for performance
-                  setTrack(e.readInt());
-            else if (tag == "Accidental") {
-                  // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
-                  // if a userAccidental has some other property set (like for instance offset)
-                  Accidental* a;
-                  if (hasAccidental)            // if the other tag has already been read,
-                        a = _accidental;        // re-use the accidental it constructed
-                  else
-                        a = new Accidental(score());
-                  // the accidental needs to know the properties of the
-                  // track it belongs to (??)
-                  a->setTrack(track());
-                  a->read(e);
-                  if (!hasAccidental)           // only the new accidental, if it has been added previously
-                        add(a);
-                  if (score()->mscVersion() <= 114)
-                        hasAccidental = true;   // we now have an accidental
-                  }
-            else if (tag == "Tie") {
-                  Tie* tie = new Tie(score());
-                  tie->setParent(this);
-                  tie->setTrack(track());
-                  tie->read(e);
-                  tie->setStartNote(this);
-                  _tieFor = tie;
-                  }
-            else if (tag == "tpc2")
-                  _tpc[1] = e.readInt();
-            else if (tag == "small")
-                  setSmall(e.readInt());
-            else if (tag == "mirror")
-                  setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e));
-            else if (tag == "dotPosition")
-                  setProperty(P_ID::DOT_POSITION, Ms::getProperty(P_ID::DOT_POSITION, e));
-            else if (tag == "fixed")
-                  setFixed(e.readBool());
-            else if (tag == "fixedLine")
-                  setFixedLine(e.readInt());
-            else if (tag == "onTimeType") { //obsolete
-                  if (e.readElementText() == "offset")
-                        _onTimeType = 2;
-                  else
-                        _onTimeType = 1;
-                  }
-            else if (tag == "offTimeType") { //obsolete
-                  if (e.readElementText() == "offset")
-                        _offTimeType = 2;
-                  else
-                        _offTimeType = 1;
-            }
-            else if (tag == "onTimeOffset") {// obsolete
-                  if (_onTimeType == 1)
-                        setOnTimeOffset(e.readInt() * 1000 / chord()->actualTicks());
-                  else
-                        setOnTimeOffset(e.readInt() * 10);
-                  }
-            else if (tag == "offTimeOffset") {// obsolete
-                  if (_offTimeType == 1)
-                        setOffTimeOffset(1000 + (e.readInt() * 1000 / chord()->actualTicks()));
-                  else
-                        setOffTimeOffset(1000 + (e.readInt() * 10));
-                  }
-            else if (tag == "head")
-                  setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
-            else if (tag == "velocity")
-                  setVeloOffset(e.readInt());
-            else if (tag == "play")
-                  setPlay(e.readInt());
-            else if (tag == "tuning")
-                  setTuning(e.readDouble());
-            else if (tag == "fret")
-                  setFret(e.readInt());
-            else if (tag == "string")
-                  setString(e.readInt());
-            else if (tag == "ghost")
-                  setGhost(e.readInt());
-            else if (tag == "headType")
-                  if (score()->mscVersion() <= 114)
-                        setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt() - 1);
-                  else
-                        setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt());
-            else if (tag == "veloType")
-                  setProperty(P_ID::VELO_TYPE, Ms::getProperty(P_ID::VELO_TYPE, e));
-            else if (tag == "line")
-                  _line = e.readInt();
-            else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
-                  Fingering* f = new Fingering(score());
-                  f->setTextStyleType(TextStyleType::FINGERING);
-                  f->read(e);
-                  add(f);
-                  }
-            else if (tag == "Symbol") {
-                  Symbol* s = new Symbol(score());
-                  s->setTrack(track());
-                  s->read(e);
-                  add(s);
-                  }
-            else if (tag == "Image") {
-                  if (MScore::noImages)
-                        e.skipCurrentElement();
-                  else {
-                        Image* image = new Image(score());
-                        image->setTrack(track());
-                        image->read(e);
-                        add(image);
-                        }
-                  }
-            else if (tag == "userAccidental") {
-                  QString val(e.readElementText());
-                  bool ok;
-                  int k = val.toInt(&ok);
-                  if (ok) {
-                        // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
-                        // if a userAccidental has some other property set (like for instance offset)
-                        // only construct a new accidental, if the other tag has not been read yet
-                        // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
-                        if (!hasAccidental) {
-                              Accidental* a = new Accidental(score());
-                              add(a);
-                              }
-                        // TODO: for backward compatibility
-                        bool bracket = k & 0x8000;
-                        k &= 0xfff;
-                        AccidentalType at = AccidentalType::NONE;
-                        switch(k) {
-                              case 0: at = AccidentalType::NONE; break;
-                              case 1: at = AccidentalType::SHARP; break;
-                              case 2: at = AccidentalType::FLAT; break;
-                              case 3: at = AccidentalType::SHARP2; break;
-                              case 4: at = AccidentalType::FLAT2; break;
-                              case 5: at = AccidentalType::NATURAL; break;
-
-                              case 6: at = AccidentalType::FLAT_SLASH; break;
-                              case 7: at = AccidentalType::FLAT_SLASH2; break;
-                              case 8: at = AccidentalType::MIRRORED_FLAT2; break;
-                              case 9: at = AccidentalType::MIRRORED_FLAT; break;
-                              case 10: at = AccidentalType::MIRRORED_FLAT_SLASH; break;
-                              case 11: at = AccidentalType::FLAT_FLAT_SLASH; break;
-
-                              case 12: at = AccidentalType::SHARP_SLASH; break;
-                              case 13: at = AccidentalType::SHARP_SLASH2; break;
-                              case 14: at = AccidentalType::SHARP_SLASH3; break;
-                              case 15: at = AccidentalType::SHARP_SLASH4; break;
-
-                              case 16: at = AccidentalType::SHARP_ARROW_UP; break;
-                              case 17: at = AccidentalType::SHARP_ARROW_DOWN; break;
-                              case 18: at = AccidentalType::SHARP_ARROW_BOTH; break;
-                              case 19: at = AccidentalType::FLAT_ARROW_UP; break;
-                              case 20: at = AccidentalType::FLAT_ARROW_DOWN; break;
-                              case 21: at = AccidentalType::FLAT_ARROW_BOTH; break;
-                              case 22: at = AccidentalType::NATURAL_ARROW_UP; break;
-                              case 23: at = AccidentalType::NATURAL_ARROW_DOWN; break;
-                              case 24: at = AccidentalType::NATURAL_ARROW_BOTH; break;
-                              case 25: at = AccidentalType::SORI; break;
-                              case 26: at = AccidentalType::KORON; break;
-                              }
-                        _accidental->setAccidentalType(at);
-                        _accidental->setHasBracket(bracket);
-                        _accidental->setRole(AccidentalRole::USER);
-                        hasAccidental = true;   // we now have an accidental
-                        }
-                  }
-            else if (tag == "move")             // obsolete
-                  chord()->setStaffMove(e.readInt());
-            else if (tag == "Bend") {
-                  Bend* b = new Bend(score());
-                  b->setTrack(track());
-                  b->read(e);
-                  add(b);
-                  }
-            else if (tag == "NoteDot") {
-                  NoteDot* dot = new NoteDot(score());
-                  dot->read(e);
-                  add(dot);
-                  }
-            else if (tag == "Events") {
-                  _playEvents.clear();    // remove default event
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "Event") {
-                              NoteEvent ne;
-                              ne.read(e);
-                              _playEvents.append(ne);
-                              }
-                        else
-                              e.unknown();
-                        }
-                  if (chord())
-                        chord()->setPlayEventType(PlayEventType::User);
-                  }
-            else if (tag == "endSpanner") {
-                  int id = e.intAttribute("id");
-                  Spanner* sp = e.findSpanner(id);
-                  if (sp) {
-                        sp->setEndElement(this);
-                        if (sp->isTie())
-                              _tieBack = toTie(sp);
-                        else {
-                              if (sp->isGlissando() && parent() && parent()->isChord())
-                                    toChord(parent())->setEndsGlissando(true);
-                              addSpannerBack(sp);
-                              }
-                        e.removeSpanner(sp);
-                        }
-                  else {
-                        // End of a spanner whose start element will appear later;
-                        // may happen for cross-staff spanner from a lower to a higher staff
-                        // (for instance a glissando from bass to treble staff of piano).
-                        // Create a place-holder spanner with end data
-                        // (a TextLine is used only because both Spanner or SLine are abstract,
-                        // the actual class does not matter, as long as it is derived from Spanner)
-                        int id = e.intAttribute("id", -1);
-                        if (id != -1 &&
-                                    // DISABLE if pasting into a staff with linked staves
-                                    // because the glissando is not properly cloned into the linked staves
-                                    (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->empty())) {
-                              Spanner* placeholder = new TextLine(score());
-                              placeholder->setAnchor(Spanner::Anchor::NOTE);
-                              placeholder->setEndElement(this);
-                              placeholder->setTrack2(track());
-                              placeholder->setTick(0);
-                              placeholder->setTick2(e.tick());
-                              e.addSpanner(id, placeholder);
-                              }
-                        }
-                  e.readNext();
-                  }
-            else if (tag == "TextLine"
-                  || tag == "Glissando") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
-                  // check this is not a lower-to-higher cross-staff spanner we already got
-                  int id = e.intAttribute("id");
-                  Spanner* placeholder = e.findSpanner(id);
-                  if (placeholder) {
-                        // if it is, fill end data from place-holder
-                        sp->setAnchor(Spanner::Anchor::NOTE);           // make sure we can set a Note as end element
-                        sp->setEndElement(placeholder->endElement());
-                        sp->setTrack2(placeholder->track2());
-                        sp->setTick(e.tick());                          // make sure tick2 will be correct
-                        sp->setTick2(placeholder->tick2());
-                        static_cast<Note*>(placeholder->endElement())->addSpannerBack(sp);
-                        // remove no longer needed place-holder before reading the new spanner,
-                        // as reading it also adds it to XML reader list of spanners,
-                        // which would overwrite the place-holder
-                        e.removeSpanner(placeholder);
-                        delete placeholder;
-                        }
-                  sp->setTrack(track());
-                  sp->read(e);
-                  // DISABLE pasting of glissandi into staves with other lionked staves
-                  // because the glissando is not properly cloned into the linked staves
-                  if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->empty()) {
-                        e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
-                        delete sp;
-                        }
-                  else {
-                        sp->setAnchor(Spanner::Anchor::NOTE);
-                        sp->setStartElement(this);
-                        sp->setTick(e.tick());
-                        addSpannerFor(sp);
-                        sp->setParent(this);
-                        }
-                  }
-            else if (tag == "onTimeType")                   // obsolete
-                  e.skipCurrentElement(); // _onTimeType = readValueType(e);
-            else if (tag == "offTimeType")                  // obsolete
-                  e.skipCurrentElement(); // _offTimeType = readValueType(e);
-            else if (tag == "tick")                         // bad input file
-                  e.skipCurrentElement();
-            else if (tag == "offset") {
-                  if (score()->mscVersion() > 114) // || voice() >= 2)
-                        Element::readProperties(e);
-                  else
-                        e.skipCurrentElement(); // ignore manual layout in older scores
-                  }
-            else if (Element::readProperties(e))
+            if (readProperties(e))
                   ;
             else
                   e.unknown();
@@ -1123,16 +831,6 @@ void Note::read(XmlReader& e)
       // ensure sane values:
       _pitch = limit(_pitch, 0, 127);
 
-      if (score()->mscVersion() <= 114) {
-            if (concertPitch()) {
-                  _tpc[1]  = Tpc::TPC_INVALID;
-                  }
-            else {
-                  _pitch += transposition();
-                  _tpc[1] = _tpc[0];
-                  _tpc[0] = Tpc::TPC_INVALID;
-                  }
-            }
       if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
             Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
             int tpc = pitch2tpc(_pitch, key, Prefer::NEAREST);
@@ -1177,16 +875,202 @@ void Note::read(XmlReader& e)
             int transposedPitch = (_pitch - v.chromatic) % 12;
             if (tpc2Pitch != transposedPitch) {
                   qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
-                  // just in case the staff transposition info is not reliable here,
-                  // do not attempt to correct tpc
-                  // except for older scores where we know there are tpc problems
-                  if (score()->mscVersion() <= 206) {
-                        v.flip();
-                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
-                        }
                   }
             }
-      return;
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Note::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "pitch")
+            _pitch = e.readInt();
+      else if (tag == "tpc") {
+            _tpc[0] = e.readInt();
+            _tpc[1] = _tpc[0];
+            }
+      else if (tag == "track")            // for performance
+            setTrack(e.readInt());
+      else if (tag == "Accidental") {
+            Accidental* a = new Accidental(score());
+            a->setTrack(track());
+            a->read(e);
+            add(a);
+            }
+      else if (tag == "Tie") {
+            Tie* tie = new Tie(score());
+            tie->setParent(this);
+            tie->setTrack(track());
+            tie->read(e);
+            tie->setStartNote(this);
+            _tieFor = tie;
+            }
+      else if (tag == "tpc2")
+            _tpc[1] = e.readInt();
+      else if (tag == "small")
+            setSmall(e.readInt());
+      else if (tag == "mirror")
+            setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e));
+      else if (tag == "dotPosition")
+            setProperty(P_ID::DOT_POSITION, Ms::getProperty(P_ID::DOT_POSITION, e));
+      else if (tag == "fixed")
+            setFixed(e.readBool());
+      else if (tag == "fixedLine")
+            setFixedLine(e.readInt());
+      else if (tag == "head")
+            setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
+      else if (tag == "velocity")
+            setVeloOffset(e.readInt());
+      else if (tag == "play")
+            setPlay(e.readInt());
+      else if (tag == "tuning")
+            setTuning(e.readDouble());
+      else if (tag == "fret")
+            setFret(e.readInt());
+      else if (tag == "string")
+            setString(e.readInt());
+      else if (tag == "ghost")
+            setGhost(e.readInt());
+      else if (tag == "headType")
+            if (score()->mscVersion() <= 114)
+                  setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt() - 1);
+            else
+                  setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt());
+      else if (tag == "veloType")
+            setProperty(P_ID::VELO_TYPE, Ms::getProperty(P_ID::VELO_TYPE, e));
+      else if (tag == "line")
+            _line = e.readInt();
+      else if (tag == "Fingering") {
+            Fingering* f = new Fingering(score());
+            f->setTextStyleType(TextStyleType::FINGERING);
+            f->read(e);
+            add(f);
+            }
+      else if (tag == "Symbol") {
+            Symbol* s = new Symbol(score());
+            s->setTrack(track());
+            s->read(e);
+            add(s);
+            }
+      else if (tag == "Image") {
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image* image = new Image(score());
+                  image->setTrack(track());
+                  image->read(e);
+                  add(image);
+                  }
+            }
+      else if (tag == "Bend") {
+            Bend* b = new Bend(score());
+            b->setTrack(track());
+            b->read(e);
+            add(b);
+            }
+      else if (tag == "NoteDot") {
+            NoteDot* dot = new NoteDot(score());
+            dot->read(e);
+            add(dot);
+            }
+      else if (tag == "Events") {
+            _playEvents.clear();    // remove default event
+            while (e.readNextStartElement()) {
+                  const QStringRef& tag(e.name());
+                  if (tag == "Event") {
+                        NoteEvent ne;
+                        ne.read(e);
+                        _playEvents.append(ne);
+                        }
+                  else
+                        e.unknown();
+                  }
+            if (chord())
+                  chord()->setPlayEventType(PlayEventType::User);
+            }
+      else if (tag == "endSpanner") {
+            int id = e.intAttribute("id");
+            Spanner* sp = e.findSpanner(id);
+            if (sp) {
+                  sp->setEndElement(this);
+                  if (sp->isTie())
+                        _tieBack = toTie(sp);
+                  else {
+                        if (sp->isGlissando() && parent() && parent()->isChord())
+                              toChord(parent())->setEndsGlissando(true);
+                        addSpannerBack(sp);
+                        }
+                  e.removeSpanner(sp);
+                  }
+            else {
+                  // End of a spanner whose start element will appear later;
+                  // may happen for cross-staff spanner from a lower to a higher staff
+                  // (for instance a glissando from bass to treble staff of piano).
+                  // Create a place-holder spanner with end data
+                  // (a TextLine is used only because both Spanner or SLine are abstract,
+                  // the actual class does not matter, as long as it is derived from Spanner)
+                  int id = e.intAttribute("id", -1);
+                  if (id != -1 &&
+                              // DISABLE if pasting into a staff with linked staves
+                              // because the glissando is not properly cloned into the linked staves
+                              (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->empty())) {
+                        Spanner* placeholder = new TextLine(score());
+                        placeholder->setAnchor(Spanner::Anchor::NOTE);
+                        placeholder->setEndElement(this);
+                        placeholder->setTrack2(track());
+                        placeholder->setTick(0);
+                        placeholder->setTick2(e.tick());
+                        e.addSpanner(id, placeholder);
+                        }
+                  }
+            e.readNext();
+            }
+      else if (tag == "TextLine"
+            || tag == "Glissando") {
+            Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+            // check this is not a lower-to-higher cross-staff spanner we already got
+            int id = e.intAttribute("id");
+            Spanner* placeholder = e.findSpanner(id);
+            if (placeholder) {
+                  // if it is, fill end data from place-holder
+                  sp->setAnchor(Spanner::Anchor::NOTE);           // make sure we can set a Note as end element
+                  sp->setEndElement(placeholder->endElement());
+                  sp->setTrack2(placeholder->track2());
+                  sp->setTick(e.tick());                          // make sure tick2 will be correct
+                  sp->setTick2(placeholder->tick2());
+                  static_cast<Note*>(placeholder->endElement())->addSpannerBack(sp);
+                  // remove no longer needed place-holder before reading the new spanner,
+                  // as reading it also adds it to XML reader list of spanners,
+                  // which would overwrite the place-holder
+                  e.removeSpanner(placeholder);
+                  delete placeholder;
+                  }
+            sp->setTrack(track());
+            sp->read(e);
+            // DISABLE pasting of glissandi into staves with other lionked staves
+            // because the glissando is not properly cloned into the linked staves
+            if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->empty()) {
+                  e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
+                  delete sp;
+                  }
+            else {
+                  sp->setAnchor(Spanner::Anchor::NOTE);
+                  sp->setStartElement(this);
+                  sp->setTick(e.tick());
+                  addSpannerFor(sp);
+                  sp->setParent(this);
+                  }
+            }
+      else if (tag == "offset")
+            Element::readProperties(e);
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------

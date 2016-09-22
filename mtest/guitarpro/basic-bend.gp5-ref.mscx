@@ -103,7 +103,7 @@
           <Note>
             <lid>6</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <Bend>
               <point time="0" pitch="0" vibrato="0"/>
@@ -255,7 +255,7 @@
             <Note>
               <lid>6</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>

@@ -96,7 +96,7 @@
           <Note>
             <lid>4</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>58</pitch>
             <tpc>12</tpc>
@@ -234,7 +234,7 @@
             <Note>
               <lid>4</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>12</tpc>

@@ -117,7 +117,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -135,7 +135,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -154,7 +154,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -172,7 +172,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -191,7 +191,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -211,7 +211,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -230,7 +230,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -250,7 +250,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -269,7 +269,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -289,7 +289,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>

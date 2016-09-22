@@ -46,6 +46,9 @@
 #include "breath.h"
 #include "tremolo.h"
 #include "articulation.h"
+#include "utils.h"
+#include "accidental.h"
+#include "fingering.h"
 
 namespace Ms {
 
@@ -209,6 +212,359 @@ static const PaperSize* getPaperSize114(const QString& name)
       }
 
 //---------------------------------------------------------
+//   readAccidental
+//---------------------------------------------------------
+
+static void readAccidental(Accidental* a, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "bracket") {
+                  int i = e.readInt();
+                  if (i == 0 || i == 1)
+                        a->setHasBracket(i);
+                  }
+            else if (tag == "subtype") {
+                  QString text(e.readElementText());
+                  bool isInt;
+                  int i = text.toInt(&isInt);
+                  if (isInt) {
+                        a->setHasBracket(i & 0x8000);
+                        i &= ~0x8000;
+                        AccidentalType at;
+                        switch (i) {
+                              case 0:
+                                    at = AccidentalType::NONE;
+                                    break;
+                              case 6:
+                                    a->setHasBracket(true);
+                              case 1:
+                              case 11:
+                                    at = AccidentalType::SHARP;
+                                    break;
+                              case 7:
+                                    a->setHasBracket(true);
+                              case 2:
+                              case 12:
+                                    at = AccidentalType::FLAT;
+                                    break;
+                              case 8:
+                                    a->setHasBracket(true);
+                              case 3:
+                              case 13:
+                                    at = AccidentalType::SHARP2;
+                                    break;
+                              case 9:
+                                    a->setHasBracket(true);
+                              case 4:
+                              case 14:
+                                    at = AccidentalType::FLAT2;
+                                    break;
+                              case 10:
+                                    a->setHasBracket(true);
+                              case 5:
+                              case 15:
+                                    at = AccidentalType::NATURAL;
+                                    break;
+                              case 16:
+                                    at = AccidentalType::FLAT_SLASH;
+                                    break;
+                              case 17:
+                                    at = AccidentalType::FLAT_SLASH2;
+                                    break;
+                              case 18:
+                                    at = AccidentalType::MIRRORED_FLAT2;
+                                    break;
+                              case 19:
+                                    at = AccidentalType::MIRRORED_FLAT;
+                                    break;
+                              case 20:
+                                    at = AccidentalType::MIRRORED_FLAT_SLASH;
+                                    break;
+                              case 21:
+                                    at = AccidentalType::FLAT_FLAT_SLASH;
+                                    break;
+                              case 22:
+                                    at = AccidentalType::SHARP_SLASH;
+                                    break;
+                              case 23:
+                                    at = AccidentalType::SHARP_SLASH2;
+                                    break;
+                              case 24:
+                                    at = AccidentalType::SHARP_SLASH3;
+                                    break;
+                              case 25:
+                                    at = AccidentalType::SHARP_SLASH4;
+                                    break;
+                              case 26:
+                                    at = AccidentalType::SHARP_ARROW_UP;
+                                    break;
+                              case 27:
+                                    at = AccidentalType::SHARP_ARROW_DOWN;
+                                    break;
+                              case 28:
+                                    at = AccidentalType::SHARP_ARROW_BOTH;
+                                    break;
+                              case 29:
+                                    at = AccidentalType::FLAT_ARROW_UP;
+                                    break;
+                              case 30:
+                                    at = AccidentalType::FLAT_ARROW_DOWN;
+                                    break;
+                              case 31:
+                                    at = AccidentalType::FLAT_ARROW_BOTH;
+                                    break;
+                              case 32:
+                                    at = AccidentalType::NATURAL_ARROW_UP;
+                                    break;
+                              case 33:
+                                    at = AccidentalType::NATURAL_ARROW_DOWN;
+                                    break;
+                              case 34:
+                                    at = AccidentalType::NATURAL_ARROW_BOTH;
+                                    break;
+                              default:
+                                    at = AccidentalType::NONE;
+                                    break;
+                              }
+                        a->setAccidentalType(at);
+                        }
+                  else
+                        a->setSubtype(text);
+                  }
+            else if (tag == "role") {
+                  AccidentalRole r = AccidentalRole(e.readInt());
+                  if (r == AccidentalRole::AUTO || r == AccidentalRole::USER)
+                        a->setRole(r);
+                  }
+            else if (tag == "small")
+                  a->setSmall(e.readInt());
+            else if (tag == "offset")
+                  e.skipCurrentElement(); // ignore manual layout in older scores
+            else if (a->Element::readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readNote
+//---------------------------------------------------------
+
+static void readNote(Note* note, XmlReader& e)
+      {
+      e.hasAccidental = false;                     // used for userAccidental backward compatibility
+
+      note->setTpc1(Tpc::TPC_INVALID);
+      note->setTpc2(Tpc::TPC_INVALID);
+
+      if (e.hasAttribute("pitch"))                   // obsolete
+            note->setPitch(e.intAttribute("pitch"));
+      if (e.hasAttribute("tpc"))                     // obsolete
+            note->setTpc1(e.intAttribute("tpc"));
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Accidental") {
+                  // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
+                  // if a userAccidental has some other property set (like for instance offset)
+                  Accidental* a;
+                  if (e.hasAccidental)            // if the other tag has already been read,
+                        a = note->accidental();        // re-use the accidental it constructed
+                  else
+                        a = new Accidental(note->score());
+                  // the accidental needs to know the properties of the
+                  // track it belongs to (??)
+                  a->setTrack(note->track());
+                  readAccidental(a, e);
+                  if (!e.hasAccidental)          // only the new accidental, if it has been added previously
+                        note->add(a);
+                  e.hasAccidental = true;   // we now have an accidental
+                  }
+            else if (tag == "Text") {
+                  Fingering* f = new Fingering(note->score());
+                  f->setTextStyleType(TextStyleType::FINGERING);
+                  f->read(e);
+                  note->add(f);
+                  }
+            else if (tag == "onTimeType") {
+                  if (e.readElementText() == "offset")
+                        note->setOnTimeType(2);
+                  else
+                        note->setOnTimeType(1);
+                  }
+            else if (tag == "offTimeType") {
+                  if (e.readElementText() == "offset")
+                        note->setOffTimeType(2);
+                  else
+                        note->setOffTimeType(1);
+                  }
+            else if (tag == "onTimeOffset") {
+                  if (note->onTimeType() == 1)
+                        note->setOnTimeOffset(e.readInt() * 1000 / note->chord()->actualTicks());
+                  else
+                        note->setOnTimeOffset(e.readInt() * 10);
+                  }
+            else if (tag == "offTimeOffset") {
+                  if (note->offTimeType() == 1)
+                        note->setOffTimeOffset(1000 + (e.readInt() * 1000 / note->chord()->actualTicks()));
+                  else
+                        note->setOffTimeOffset(1000 + (e.readInt() * 10));
+                  }
+            else if (tag == "userAccidental") {
+                  QString val(e.readElementText());
+                  bool ok;
+                  int k = val.toInt(&ok);
+                  if (ok) {
+                        // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
+                        // if a userAccidental has some other property set (like for instance offset)
+                        // only construct a new accidental, if the other tag has not been read yet
+                        // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
+                        if (!e.hasAccidental) {
+                              Accidental* a = new Accidental(note->score());
+                              note->add(a);
+                              }
+                        // TODO: for backward compatibility
+                        bool bracket = k & 0x8000;
+                        k &= 0xfff;
+                        AccidentalType at = AccidentalType::NONE;
+                        switch(k) {
+                              case 0: at = AccidentalType::NONE; break;
+                              case 1: at = AccidentalType::SHARP; break;
+                              case 2: at = AccidentalType::FLAT; break;
+                              case 3: at = AccidentalType::SHARP2; break;
+                              case 4: at = AccidentalType::FLAT2; break;
+                              case 5: at = AccidentalType::NATURAL; break;
+
+                              case 6: at = AccidentalType::FLAT_SLASH; break;
+                              case 7: at = AccidentalType::FLAT_SLASH2; break;
+                              case 8: at = AccidentalType::MIRRORED_FLAT2; break;
+                              case 9: at = AccidentalType::MIRRORED_FLAT; break;
+                              case 10: at = AccidentalType::MIRRORED_FLAT_SLASH; break;
+                              case 11: at = AccidentalType::FLAT_FLAT_SLASH; break;
+
+                              case 12: at = AccidentalType::SHARP_SLASH; break;
+                              case 13: at = AccidentalType::SHARP_SLASH2; break;
+                              case 14: at = AccidentalType::SHARP_SLASH3; break;
+                              case 15: at = AccidentalType::SHARP_SLASH4; break;
+
+                              case 16: at = AccidentalType::SHARP_ARROW_UP; break;
+                              case 17: at = AccidentalType::SHARP_ARROW_DOWN; break;
+                              case 18: at = AccidentalType::SHARP_ARROW_BOTH; break;
+                              case 19: at = AccidentalType::FLAT_ARROW_UP; break;
+                              case 20: at = AccidentalType::FLAT_ARROW_DOWN; break;
+                              case 21: at = AccidentalType::FLAT_ARROW_BOTH; break;
+                              case 22: at = AccidentalType::NATURAL_ARROW_UP; break;
+                              case 23: at = AccidentalType::NATURAL_ARROW_DOWN; break;
+                              case 24: at = AccidentalType::NATURAL_ARROW_BOTH; break;
+                              case 25: at = AccidentalType::SORI; break;
+                              case 26: at = AccidentalType::KORON; break;
+                              }
+                        note->accidental()->setAccidentalType(at);
+                        note->accidental()->setHasBracket(bracket);
+                        note->accidental()->setRole(AccidentalRole::USER);
+                        e.hasAccidental = true;   // we now have an accidental
+                        }
+                  }
+            else if (tag == "onTimeType")
+                  e.skipCurrentElement(); // _onTimeType = readValueType(e);
+            else if (tag == "offTimeType")
+                  e.skipCurrentElement(); // _offTimeType = readValueType(e);
+            else if (tag == "offset")
+                  e.skipCurrentElement(); // ignore manual layout in older scores
+            else if (tag == "move")
+                  note->chord()->setStaffMove(e.readInt());
+            else if (note->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      // ensure sane values:
+      note->setPitch(limit(note->pitch(), 0, 127));
+
+      if (note->concertPitch())
+            note->setTpc2(Tpc::TPC_INVALID);
+      else {
+            note->setPitch(note->pitch() + note->transposition());
+            note->setTpc2(note->tpc1());
+            note->setTpc1(Tpc::TPC_INVALID);
+            }
+      if (!tpcIsValid(note->tpc1()) && !tpcIsValid(note->tpc2())) {
+            Key key = (note->staff() && note->chord()) ? note->staff()->key(note->chord()->tick()) : Key::C;
+            int tpc = pitch2tpc(note->pitch(), key, Prefer::NEAREST);
+            if (note->concertPitch())
+                  note->setTpc1(tpc);
+            else
+                  note->setTpc2(tpc);
+            }
+      if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
+            int tick = note->chord() ? note->chord()->tick() : -1;
+            Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
+            if (tpcIsValid(note->tpc1())) {
+                  v.flip();
+                  if (v.isZero())
+                        note->setTpc2(note->tpc1());
+                  else
+                        note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+                  }
+            else {
+                  if (v.isZero())
+                        note->setTpc1(note->tpc2());
+                  else
+                        note->setTpc1(Ms::transposeTpc(note->tpc2(), v, true));
+                  }
+            }
+
+      // check consistency of pitch, tpc1, tpc2, and transposition
+      // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
+      // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
+      // including perhaps some we don't know about yet,
+      // we will attempt to fix some problems here regardless of version
+
+      if (!e.pasteMode() && !MScore::testMode) {
+            int tpc1Pitch = (tpc2pitch(note->tpc1()) + 12) % 12;
+            int tpc2Pitch = (tpc2pitch(note->tpc2()) + 12) % 12;
+            int concertPitch = note->pitch() % 12;
+            if (tpc1Pitch != concertPitch) {
+                  qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
+                  note->setPitch(note->pitch() + tpc1Pitch - concertPitch);
+                  }
+            Interval v = note->staff()->part()->instrument(e.tick())->transpose();
+            int transposedPitch = (note->pitch() - v.chromatic) % 12;
+            if (tpc2Pitch != transposedPitch) {
+                  qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+                  // just in case the staff transposition info is not reliable here,
+                  v.flip();
+                  note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   readChord
+//---------------------------------------------------------
+
+static void readChord(Chord* chord, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Note") {
+                  Note* note = new Note(chord->score());
+                  // the note needs to know the properties of the track it belongs to
+                  note->setTrack(chord->track());
+                  note->setChord(chord);
+                  readNote(note, e);
+                  chord->add(note);
+                  }
+            else if (chord->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readMeasure
 //---------------------------------------------------------
 
@@ -328,7 +684,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Chord") {
                   Chord* chord = new Chord(m->score());
                   chord->setTrack(e.track());
-                  chord->read(e);
+                  readChord(chord, e);
                   segment = m->getSegment(Segment::Type::ChordRest, e.tick());
                   if (chord->noteType() != NoteType::NORMAL) {
                         graceNotes.push_back(chord);
@@ -1189,7 +1545,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                         continue;
                   QString val(e.readElementText());
                   style->convertToUnit(tag, val);
-                  
+
                   }
             }
 

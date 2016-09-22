@@ -118,10 +118,11 @@ class Chord : public ChordRest {
       virtual Element::Type type() const         { return Element::Type::CHORD; }
       virtual qreal mag() const;
 
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void setSelected(bool f);
-      virtual Element* drop(const DropData&);
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual bool readProperties(XmlReader&) override;
+      virtual void setSelected(bool f) override;
+      virtual Element* drop(const DropData&) override;
 
       void setStemDirection(Direction d) { _stemDirection = d; }
       Direction stemDirection() const    { return _stemDirection; }

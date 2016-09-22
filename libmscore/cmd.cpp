@@ -440,6 +440,7 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
                   }
             if (npitch < 0 || npitch > 127) {
                   delete note;
+                  endCmd();
                   return;
                   }
             note->setPitch(npitch, ntpc1, ntpc2);

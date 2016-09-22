@@ -37,6 +37,7 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">cap</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -94,7 +95,7 @@
           <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>61</pitch>
             <tpc>21</tpc>
@@ -113,7 +114,7 @@
           <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -128,7 +129,7 @@
           <Beam>2</Beam>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -147,7 +148,7 @@
           <Beam>2</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -175,7 +176,7 @@
           <Beam>3</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>68</pitch>
             <tpc>22</tpc>
@@ -194,7 +195,7 @@
           <Beam>3</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -205,7 +206,7 @@
           <Beam>3</Beam>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>71</pitch>
             <tpc>19</tpc>

@@ -354,6 +354,7 @@ class Note : public Element {
       void draw(QPainter*) const;
 
       virtual void read(XmlReader&) override;
+      virtual bool readProperties(XmlReader&) override;
       virtual void write(Xml& xml) const override;
 
       bool acceptDrop(const DropData&) const override;
@@ -456,6 +457,11 @@ class Note : public Element {
 
       virtual Shape shape() const override;
       std::vector<Note*> tiedNotes() const;
+
+      void setOffTimeType(int v) { _offTimeType = v; }
+      void setOnTimeType(int v)  { _onTimeType = v; }
+      int offTimeType() const    { return _offTimeType; }
+      int onTimeType() const     { return _onTimeType; }
       };
 
 // extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];

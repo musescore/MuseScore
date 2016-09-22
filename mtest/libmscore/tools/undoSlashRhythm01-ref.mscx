@@ -336,7 +336,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
@@ -355,7 +355,7 @@
           <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -370,7 +370,7 @@
           <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <Tie id="2">
               </Tie>
@@ -404,7 +404,7 @@
           <Beam>2</Beam>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -418,7 +418,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>

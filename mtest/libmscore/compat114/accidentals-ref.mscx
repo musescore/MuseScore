@@ -132,7 +132,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
@@ -142,7 +142,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>71</pitch>
             <tpc>7</tpc>
@@ -152,7 +152,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>74</pitch>
             <tpc>28</tpc>
@@ -162,7 +162,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>0</tpc>
@@ -175,7 +175,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -186,7 +186,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat-slash</subtype>
+              <subtype>accidentalBakiyeFlat</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -197,7 +197,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat-slash2</subtype>
+              <subtype>accidentalBuyukMucennebFlat</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -208,7 +208,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>mirrored-flat2</subtype>
+              <subtype>accidentalThreeQuarterTonesFlatZimmermann</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -221,7 +221,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>mirrored-flat</subtype>
+              <subtype>accidentalQuarterToneFlatStein</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -232,7 +232,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>mirrored-flat-slash</subtype>
+              <subtype>noSym</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -243,7 +243,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat-flat-slash</subtype>
+              <subtype>noSym</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -254,7 +254,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp-slash</subtype>
+              <subtype>accidentalQuarterToneSharpStein</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -270,7 +270,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp-slash2</subtype>
+              <subtype>accidentalBuyukMucennebSharp</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -281,7 +281,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp-slash3</subtype>
+              <subtype>accidentalKucukMucennebSharp</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -292,7 +292,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp-slash4</subtype>
+              <subtype>accidentalThreeQuarterTonesSharpStein</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -303,7 +303,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp arrow up</subtype>
+              <subtype>accidentalThreeQuarterTonesSharpArrowUp</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -316,7 +316,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp arrow down</subtype>
+              <subtype>accidentalQuarterToneSharpArrowDown</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -327,7 +327,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sharp arrow both</subtype>
+              <subtype>noSym</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -338,7 +338,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat arrow up</subtype>
+              <subtype>accidentalQuarterToneFlatArrowUp</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -349,7 +349,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat arrow down</subtype>
+              <subtype>accidentalThreeQuarterTonesFlatArrowDown</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -362,7 +362,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>flat arrow both</subtype>
+              <subtype>noSym</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -373,7 +373,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural arrow up</subtype>
+              <subtype>accidentalQuarterToneSharpNaturalArrowUp</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -384,7 +384,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural arrow down</subtype>
+              <subtype>accidentalQuarterToneFlatNaturalArrowDown</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -395,7 +395,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>natural arrow both</subtype>
+              <subtype>noSym</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -411,7 +411,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>sori</subtype>
+              <subtype>accidentalSori</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -422,7 +422,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>koron</subtype>
+              <subtype>accidentalKoron</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -438,7 +438,7 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
@@ -449,7 +449,7 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>71</pitch>
             <tpc>7</tpc>
@@ -460,7 +460,7 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>74</pitch>
             <tpc>28</tpc>
@@ -471,7 +471,7 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>0</tpc>
@@ -485,7 +485,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -497,7 +497,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat-slash</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -509,7 +509,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat-slash2</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -521,7 +521,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>mirrored-flat2</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -535,7 +535,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>mirrored-flat</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -547,7 +547,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>mirrored-flat-slash</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -559,7 +559,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat-flat-slash</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -571,7 +571,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp-slash</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -588,7 +588,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp-slash2</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -600,7 +600,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp-slash3</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -612,7 +612,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp-slash4</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -624,7 +624,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp arrow up</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -638,7 +638,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp arrow down</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -650,7 +650,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sharp arrow both</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -662,7 +662,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat arrow up</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -674,7 +674,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat arrow down</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -688,7 +688,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>flat arrow both</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -700,7 +700,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>natural arrow up</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -712,7 +712,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>natural arrow down</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -724,7 +724,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>natural arrow both</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -738,7 +738,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>sori</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -750,7 +750,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>koron</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>

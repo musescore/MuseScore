@@ -37,6 +37,7 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">capx</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -107,7 +108,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>13</tpc>
@@ -166,7 +167,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -226,7 +227,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>77</pitch>
             <tpc>13</tpc>

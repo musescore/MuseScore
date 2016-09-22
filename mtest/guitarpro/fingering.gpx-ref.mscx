@@ -223,7 +223,7 @@
           <Note>
             <lid>23</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <Fingering>
               <lid>24</lid>
@@ -242,7 +242,7 @@
           <Note>
             <lid>26</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <Fingering>
               <lid>27</lid>
@@ -261,7 +261,7 @@
           <Note>
             <lid>29</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <Fingering>
               <lid>30</lid>
@@ -298,7 +298,7 @@
           <Note>
             <lid>36</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <Fingering>
               <lid>37</lid>
@@ -577,7 +577,7 @@
             <Note>
               <lid>23</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <Fingering>
                 <lid>24</lid>
@@ -596,7 +596,7 @@
             <Note>
               <lid>26</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <Fingering>
                 <lid>27</lid>
@@ -615,7 +615,7 @@
             <Note>
               <lid>29</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <Fingering>
                 <lid>30</lid>
@@ -652,7 +652,7 @@
             <Note>
               <lid>36</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <Fingering>
                 <lid>37</lid>
