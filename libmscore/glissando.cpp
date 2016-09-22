@@ -530,11 +530,15 @@ Note* Glissando::guessInitialNote(Chord* chord)
                   else                          // no parent or parent is not a chord?
                         return nullptr;
             case NoteType::NORMAL:
+                  {
                   // if chord has grace notes before, the last one is the previous note
                   QVector<Chord*>graces = chord->graceNotesBefore();
                   if (graces.size() > 0)
                         return graces.last()->upNote();
+                  }
                   break;                        // else process to standard case
+            default:
+                  break;
             }
 
       // standard case (NORMAL or grace before chord)
@@ -619,10 +623,14 @@ Note* Glissando::guessFinalNote(Chord* chord)
                         return nullptr;
                   break;
             case NoteType::NORMAL:
+                  {
                   // if chord has grace notes after, the first one is the next note
                   QVector<Chord*>graces = chord->graceNotesAfter();
                   if (graces.size() > 0)
                         return graces.first()->upNote();
+                  }
+                  break;
+            default:
                   break;
             }
 
