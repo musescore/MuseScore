@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -28,11 +24,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-08-13</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -57,8 +51,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName pos="0">Voice</longName>
-        <shortName pos="0">Vo.</shortName>
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName></trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -68,7 +62,6 @@
           <program value="52"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -92,9 +85,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -168,7 +158,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
           <beginText>
-            <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
@@ -247,7 +236,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
             <off2 x="0" y="0"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>1</endings>
@@ -284,7 +272,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="6">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
@@ -382,7 +369,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
           <beginText>
-            <style>Volta</style>
             <text>3.</text>
             </beginText>
           <endings>3</endings>

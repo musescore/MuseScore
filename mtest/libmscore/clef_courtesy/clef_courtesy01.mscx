@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -45,10 +45,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -102,9 +107,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -138,7 +140,6 @@
       <Measure number="3">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>2</pause>
           </LayoutBreak>
         <Chord>
           <durationType>whole</durationType>
@@ -181,11 +182,9 @@
       <Measure number="6">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>2</pause>
           </LayoutBreak>
         <LayoutBreak>
           <subtype>section</subtype>
-          <pause>2</pause>
           </LayoutBreak>
         <Chord>
           <durationType>whole</durationType>

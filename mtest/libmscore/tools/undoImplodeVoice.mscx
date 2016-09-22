@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -53,8 +53,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -129,7 +129,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
@@ -143,7 +143,7 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -181,7 +181,7 @@
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>1</track>
               </Accidental>
             <pitch>70</pitch>
@@ -198,7 +198,7 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>half</durationType>
@@ -236,7 +236,7 @@
           <Note>
             <track>2</track>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               <track>2</track>
               </Accidental>
             <pitch>66</pitch>
@@ -279,7 +279,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -311,7 +311,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>quarter</durationType>
@@ -327,7 +327,7 @@
           <Note>
             <track>2</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>2</track>
               </Accidental>
             <pitch>68</pitch>
@@ -369,7 +369,7 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -384,7 +384,7 @@
           <track>1</track>
           <durationType>half</durationType>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>half</durationType>
@@ -415,7 +415,7 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
@@ -429,7 +429,7 @@
           <track>1</track>
           <durationType>half</durationType>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>half</durationType>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -66,8 +66,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -163,7 +163,7 @@
           <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>78</pitch>
             <tpc>20</tpc>
@@ -236,7 +236,6 @@
         <endRepeat>2</endRepeat>
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Pedal id="2">
           <beginHookHeight>-1.2</beginHookHeight>
@@ -280,7 +279,7 @@
           <Beam>3</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>78</pitch>
             <tpc>20</tpc>
@@ -384,7 +383,7 @@
           <Beam>5</Beam>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>78</pitch>
             <tpc>20</tpc>
@@ -426,25 +425,25 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>

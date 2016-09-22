@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.07">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -35,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Composer</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -99,7 +93,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -121,8 +114,13 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="1">
+          <l1>-16</l1>
+          <l2>-11</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <appoggiatura/>
           <Note>
             <pitch>81</pitch>
@@ -131,6 +129,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <appoggiatura/>
           <Note>
             <pitch>79</pitch>
@@ -139,6 +138,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <appoggiatura/>
           <Note>
             <pitch>77</pitch>
@@ -147,6 +147,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1775380192</Beam>
           <grace8after/>
           <Note>
             <pitch>72</pitch>
@@ -155,14 +156,20 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1775380192</Beam>
           <grace8after/>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
+        <Beam id="2">
+          <l1>-5</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <grace8after/>
           <Note>
             <pitch>69</pitch>
@@ -171,6 +178,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <appoggiatura/>
           <Note>
             <pitch>76</pitch>
@@ -179,6 +187,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <appoggiatura/>
           <Note>
             <pitch>74</pitch>
@@ -194,8 +203,13 @@
           </Chord>
         </Measure>
       <Measure number="2">
+        <Beam id="3">
+          <l1>-16</l1>
+          <l2>-11</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <acciaccatura/>
           <Note>
             <pitch>81</pitch>
@@ -204,6 +218,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <acciaccatura/>
           <Note>
             <pitch>79</pitch>
@@ -212,6 +227,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <acciaccatura/>
           <Note>
             <pitch>77</pitch>
@@ -220,6 +236,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <acciaccatura/>
           <Note>
             <pitch>76</pitch>
@@ -228,6 +245,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <acciaccatura/>
           <Note>
             <pitch>74</pitch>
@@ -236,6 +254,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>72</pitch>
@@ -244,14 +263,20 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
+        <Beam id="4">
+          <l1>-5</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <grace8after/>
           <Note>
             <pitch>69</pitch>
@@ -267,8 +292,13 @@
           </Chord>
         </Measure>
       <Measure number="3">
+        <Beam id="5">
+          <l1>-16</l1>
+          <l2>-11</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>5</Beam>
           <appoggiatura/>
           <Note>
             <pitch>81</pitch>
@@ -277,6 +307,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>5</Beam>
           <appoggiatura/>
           <Note>
             <pitch>79</pitch>
@@ -285,6 +316,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>5</Beam>
           <appoggiatura/>
           <Note>
             <pitch>77</pitch>
@@ -293,6 +325,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>72</pitch>
@@ -301,14 +334,20 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
+        <Beam id="6">
+          <l1>-5</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>6</Beam>
           <grace8after/>
           <Note>
             <pitch>69</pitch>
@@ -317,6 +356,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>5</Beam>
           <appoggiatura/>
           <Note>
             <pitch>76</pitch>
@@ -325,6 +365,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>5</Beam>
           <appoggiatura/>
           <Note>
             <pitch>74</pitch>
@@ -343,8 +384,13 @@
           </Chord>
         </Measure>
       <Measure number="4">
+        <Beam id="7">
+          <l1>-16</l1>
+          <l2>-11</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>7</Beam>
           <acciaccatura/>
           <Note>
             <pitch>81</pitch>
@@ -353,6 +399,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>7</Beam>
           <acciaccatura/>
           <Note>
             <pitch>79</pitch>
@@ -361,6 +408,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>7</Beam>
           <acciaccatura/>
           <Note>
             <pitch>77</pitch>
@@ -369,6 +417,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>7</Beam>
           <acciaccatura/>
           <Note>
             <pitch>76</pitch>
@@ -377,6 +426,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>7</Beam>
           <acciaccatura/>
           <Note>
             <pitch>74</pitch>
@@ -385,6 +435,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>72</pitch>
@@ -393,14 +444,20 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
+        <Beam id="8">
+          <l1>-5</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>8</Beam>
           <grace8after/>
           <Note>
             <pitch>69</pitch>
@@ -423,8 +480,14 @@
           <subtype>trill</subtype>
           <lineWidth>0.15</lineWidth>
           </Trill>
+        <endSpanner id="2"/>
+        <Beam id="9">
+          <l1>-16</l1>
+          <l2>-11</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>9</Beam>
           <appoggiatura/>
           <Note>
             <pitch>81</pitch>
@@ -433,6 +496,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>9</Beam>
           <appoggiatura/>
           <Note>
             <pitch>79</pitch>
@@ -441,6 +505,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>9</Beam>
           <appoggiatura/>
           <Note>
             <pitch>77</pitch>
@@ -449,6 +514,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>72</pitch>
@@ -457,14 +523,20 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>0</Beam>
           <grace8after/>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
+        <Beam id="10">
+          <l1>-5</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>10</Beam>
           <grace8after/>
           <Note>
             <pitch>69</pitch>
@@ -473,6 +545,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>9</Beam>
           <appoggiatura/>
           <Note>
             <pitch>76</pitch>
@@ -481,6 +554,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>9</Beam>
           <appoggiatura/>
           <Note>
             <pitch>74</pitch>

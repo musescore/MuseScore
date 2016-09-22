@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -186,9 +186,9 @@
           </Dynamic>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -220,7 +220,7 @@
           <track>1</track>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>quarter</durationType>
@@ -271,11 +271,11 @@
           </HairPin>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>2400</tick>
+        <move>1/4</move>
         <endSpanner id="2"/>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -321,11 +321,11 @@
             <tpc>11</tpc>
             </Note>
           </Chord>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Rest>
           <track>2</track>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="3">
@@ -336,9 +336,9 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -375,7 +375,7 @@
             <tpc>11</tpc>
             </Note>
           </Chord>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>2</track>
           <durationType>quarter</durationType>
@@ -416,9 +416,9 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Slur id="3">
           <track>1</track>
           </Slur>
@@ -460,19 +460,19 @@
             <tpc>11</tpc>
             </Note>
           </Chord>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Rest>
           <track>2</track>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>7680</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -508,11 +508,11 @@
           <track>1</track>
           <durationType>quarter</durationType>
           </Rest>
-        <tick>7680</tick>
+        <move>0/1</move>
         <Rest>
           <track>2</track>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
@@ -525,13 +525,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="3">
@@ -563,13 +563,13 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
@@ -582,9 +582,9 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>11</track>
           <durationType>quarter</durationType>
@@ -620,9 +620,9 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>11</track>
           <durationType>quarter</durationType>
@@ -672,9 +672,9 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <track>11</track>
           <durationType>quarter</durationType>
@@ -715,9 +715,9 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Slur id="5">
           <track>11</track>
           </Slur>
@@ -763,9 +763,9 @@
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>7680</tick>
+        <move>0/1</move>
         <Chord>
           <track>11</track>
           <durationType>quarter</durationType>

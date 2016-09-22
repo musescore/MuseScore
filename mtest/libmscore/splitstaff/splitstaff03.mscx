@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -53,8 +53,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -102,8 +102,8 @@
         </Staff>
       <trackName>Harp</trackName>
       <Instrument>
-        <longName pos="0">Harp</longName>
-        <shortName pos="0">Hrp.</shortName>
+        <longName>Harp</longName>
+        <shortName>Hrp.</shortName>
         <trackName>Harp</trackName>
         <minPitchP>23</minPitchP>
         <maxPitchP>104</maxPitchP>
@@ -154,8 +154,8 @@
         </Staff>
       <trackName>Violoncello</trackName>
       <Instrument>
-        <longName pos="0">Violoncello</longName>
-        <shortName pos="0">Vlc.</shortName>
+        <longName>Violoncello</longName>
+        <shortName>Vlc.</shortName>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>
@@ -211,18 +211,15 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -232,9 +229,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -259,18 +253,15 @@
       </Staff>
     <Staff id="3">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

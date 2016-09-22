@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -103,7 +103,7 @@
         <Harmony>
           <root>14</root>
           <name>7</name>
-          <lid>7</lid>
+          <lid>6</lid>
           </Harmony>
         <Chord>
           <lid>2</lid>
@@ -230,7 +230,7 @@
           <Harmony>
             <root>14</root>
             <name>7</name>
-            <lid>7</lid>
+            <lid>6</lid>
             </Harmony>
           <Chord>
             <lid>2</lid>

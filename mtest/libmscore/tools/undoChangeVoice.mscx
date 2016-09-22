@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -55,8 +55,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -173,7 +173,7 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>3840</tick>
+        <move>0/1</move>
         <Chord>
           <lid>16</lid>
           <track>1</track>
@@ -220,7 +220,7 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <lid>25</lid>
           <track>1</track>
@@ -262,7 +262,7 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>7680</tick>
+        <move>0/1</move>
         <Rest>
           <lid>33</lid>
           <track>1</track>
@@ -319,7 +319,7 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>9600</tick>
+        <move>0/1</move>
         <Rest>
           <lid>44</lid>
           <track>1</track>
@@ -491,7 +491,7 @@
           <span>1</span>
           <lid>73</lid>
           </BarLine>
-        <tick>11520</tick>
+        <move>0/1</move>
         <Tuplet id="3">
           <lid>76</lid>
           <track>1</track>
@@ -631,8 +631,8 @@
           </Staff>
         <trackName>Piano</trackName>
         <Instrument>
-          <longName pos="0">Piano</longName>
-          <shortName pos="0">Pno.</shortName>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
           <trackName>Piano</trackName>
           <minPitchP>21</minPitchP>
           <maxPitchP>108</maxPitchP>
@@ -753,7 +753,7 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <tick>3840</tick>
+          <move>0/1</move>
           <Chord>
             <lid>16</lid>
             <track>1</track>
@@ -800,7 +800,7 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <tick>5760</tick>
+          <move>0/1</move>
           <Chord>
             <lid>25</lid>
             <track>1</track>
@@ -842,7 +842,7 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <tick>7680</tick>
+          <move>0/1</move>
           <Rest>
             <lid>33</lid>
             <track>1</track>
@@ -899,7 +899,7 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <tick>9600</tick>
+          <move>0/1</move>
           <Rest>
             <lid>44</lid>
             <track>1</track>
@@ -1071,7 +1071,7 @@
             <span>1</span>
             <lid>73</lid>
             </BarLine>
-          <tick>11520</tick>
+          <move>0/1</move>
           <Tuplet id="7">
             <lid>76</lid>
             <track>1</track>

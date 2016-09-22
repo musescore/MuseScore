@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -208,7 +208,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -216,7 +215,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -226,7 +224,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -234,7 +231,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -244,7 +240,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -252,7 +247,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -262,7 +256,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -270,7 +263,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -280,7 +272,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -288,7 +279,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -298,7 +288,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -306,7 +295,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -316,7 +304,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -324,7 +311,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <BarLine>

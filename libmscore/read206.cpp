@@ -271,7 +271,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                         ++idx;
                         }
                   if (idx == sizeof(n)/sizeof(*n)) {
-                        qDebug("invalid type");
+                        qDebug("invalid type %s", qPrintable(s));
                         }
                   else
                         a->setAccidentalType(AccidentalType(idx));
