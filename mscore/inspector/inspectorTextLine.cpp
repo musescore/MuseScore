@@ -29,12 +29,14 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
       tl.setupUi(addWidget());
 
       std::vector<InspectorItem> il = {
-            { P_ID::DIAGONAL,      0, 0, l.diagonal,    l.resetDiagonal    },
-            { P_ID::LINE_VISIBLE,  0, 0, l.lineVisible, l.resetLineVisible },
-            { P_ID::LINE_COLOR,    0, 0, l.lineColor,   l.resetLineColor   },
-            { P_ID::LINE_WIDTH,    0, 0, l.lineWidth,   l.resetLineWidth   },
-            { P_ID::LINE_STYLE,    0, 0, l.lineStyle,   l.resetLineStyle   },
-            { P_ID::PLACEMENT,     0, 0, tl.placement,  tl.resetPlacement  },
+            { P_ID::DIAGONAL,      0, 0, l.diagonal,       l.resetDiagonal    },
+            { P_ID::LINE_VISIBLE,  0, 0, l.lineVisible,    l.resetLineVisible },
+            { P_ID::LINE_COLOR,    0, 0, l.lineColor,      l.resetLineColor   },
+            { P_ID::LINE_WIDTH,    0, 0, l.lineWidth,      l.resetLineWidth   },
+            { P_ID::LINE_STYLE,    0, 0, l.lineStyle,      l.resetLineStyle   },
+            { P_ID::DASH_LINE_LEN, 0, 0, l.dashLineLength, l.resetDashLineLength    },
+            { P_ID::DASH_GAP_LEN,  0, 0, l.dashGapLength,  l.resetDashGapLength     },
+            { P_ID::PLACEMENT,     0, 0, tl.placement,    tl.resetPlacement  },
             };
       mapSignals(il);
       }

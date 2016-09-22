@@ -36,11 +36,13 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(Hairpin::Type::DECRESC_LINE));
 
       std::vector<InspectorItem> il = {
-            { P_ID::DIAGONAL,            0, 0, l.diagonal,          l.resetDiagonal          },
             { P_ID::LINE_VISIBLE,        0, 0, l.lineVisible,       l.resetLineVisible       },
+            { P_ID::DIAGONAL,            0, 0, l.diagonal,          l.resetDiagonal          },
             { P_ID::LINE_COLOR,          0, 0, l.lineColor,         l.resetLineColor         },
             { P_ID::LINE_WIDTH,          0, 0, l.lineWidth,         l.resetLineWidth         },
             { P_ID::LINE_STYLE,          0, 0, l.lineStyle,         l.resetLineStyle         },
+            { P_ID::DASH_LINE_LEN,       0, 0, l.dashLineLength,    l.resetDashLineLength    },
+            { P_ID::DASH_GAP_LEN,        0, 0, l.dashGapLength,     l.resetDashGapLength     },
             { P_ID::HAIRPIN_CIRCLEDTIP,  0, 0, h.hairpinCircledTip, h.resetHairpinCircledTip },
             { P_ID::HAIRPIN_TYPE,        0, 0, h.hairpinType,       0                        },
             { P_ID::DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
