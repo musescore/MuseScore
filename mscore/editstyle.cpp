@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2016 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -367,6 +367,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + tr("file name")
             + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
             + tr("file path+name")
+            + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
+            + tr("part name, except on first page")
+            + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
+            + tr("part name, on all pages")
             + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
             + tr("current date")
             + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
@@ -382,9 +386,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
             + tr("the $ sign itself")
             + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-            + tr("meta data tag, see below")
+            + tr("metadata tag, see below")
             + QString("</i></td></tr></table><p>")
-            + tr("Available meta data tags and their current values:")
+            + tr("Available metadata tags and their current values")
+            + QString("<br />")
+            + tr("(in File > Score Properties...):")
             + QString("</p><table>");
       // show all tags for current score/part, see also Score::init()
       if (!cs->isMaster()) {
