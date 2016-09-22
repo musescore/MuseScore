@@ -30,12 +30,14 @@ InspectorTrill::InspectorTrill(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::DIAGONAL,       0, 0, l.diagonal,   l.resetDiagonal   },
-            { P_ID::LINE_COLOR,     0, 0, l.lineColor,  l.resetLineColor  },
-            { P_ID::LINE_WIDTH,     0, 0, l.lineWidth,  l.resetLineWidth  },
-            { P_ID::LINE_STYLE,     0, 0, l.lineStyle,  l.resetLineStyle  },
-            { P_ID::TRILL_TYPE,     0, 0, t.trillType,  t.resetTrillType  },
-            { P_ID::ORNAMENT_STYLE, 0, 0, t.ornamentStyle, t.resetOrnamentStyle },
+            { P_ID::DIAGONAL,       0, 0, l.diagonal,         l.resetDiagonal   },
+            { P_ID::LINE_COLOR,     0, 0, l.lineColor,        l.resetLineColor  },
+            { P_ID::LINE_WIDTH,     0, 0, l.lineWidth,        l.resetLineWidth  },
+            { P_ID::LINE_STYLE,     0, 0, l.lineStyle,        l.resetLineStyle  },
+            { P_ID::DASH_LINE_LEN,  0, 0, l.dashLineLength,   l.resetDashLineLength    },
+            { P_ID::DASH_GAP_LEN,   0, 0, l.dashGapLength,    l.resetDashGapLength     },
+            { P_ID::TRILL_TYPE,     0, 0, t.trillType,        t.resetTrillType  },
+            { P_ID::ORNAMENT_STYLE, 0, 0, t.ornamentStyle,    t.resetOrnamentStyle },
             { P_ID::PLAY,           0, 0, t.playArticulation, t.resetPlayArticulation}
             };
 
