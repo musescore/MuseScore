@@ -295,7 +295,8 @@ enum class NoteType : unsigned char {
       GRACE32       = 0x10,
       GRACE8_AFTER  = 0x20,
       GRACE16_AFTER = 0x40,
-      GRACE32_AFTER = 0x80
+      GRACE32_AFTER = 0x80,
+      INVALID       = 0xFF
       };
 
 constexpr NoteType operator| (NoteType t1, NoteType t2) {
