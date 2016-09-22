@@ -352,14 +352,11 @@ void PageFormat::read(XmlReader& e)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
-      bool landscape         = false;
       QString type;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "landscape")        // obsolete
-                  landscape = e.readInt();
-            else if (tag == "page-margins") {
+            if (tag == "page-margins") {
                   type = e.attribute("type","both");
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
                   while (e.readNextStartElement()) {
@@ -397,8 +394,6 @@ void PageFormat::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (landscape)
-            _size.transpose();
       qreal w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
       qreal w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
       _printableWidth = qMin(w1, w2);     // silently adjust right margins
