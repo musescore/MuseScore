@@ -18,34 +18,32 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __SELECTDIALOG_H__
-#define __SELECTDIALOG_H__
+#ifndef __SELECTNOTEDIALOG_H__
+#define __SELECTNOTEDIALOG_H__
 
-#include "ui_selectdialog.h"
+#include "ui_selectnotedialog.h"
 
 namespace Ms {
 
-class Element;
-struct ElementPattern;
+struct NotePattern;
 
 //---------------------------------------------------------
-//   SelectDialog
+//   SelectNoteDialog
 //---------------------------------------------------------
 
-class SelectDialog : public QDialog, Ui::SelectDialog {
+class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog {
       Q_OBJECT
-      const Element* e;
+      const Note* n;
 
    public:
-      SelectDialog(const Element* e, QWidget* parent);
-      void setPattern(ElementPattern* p);
+      SelectNoteDialog(const Note* n, QWidget* parent);
+      void setPattern(NotePattern* p);
       bool doReplace() const       { return replace->isChecked();       }
       bool doAdd() const           { return add->isChecked();           }
       bool doSubtract() const      { return subtract->isChecked();      }
       bool doFromSelection() const { return fromSelection->isChecked(); }
       bool isInSelection() const   { return inSelection->isChecked();   }
       };
-
 
 } // namespace Ms
 #endif
