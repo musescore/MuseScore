@@ -375,7 +375,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool editScoreViewDragTransition(QMouseEvent* e);
       bool editSelectTransition(QMouseEvent* me);
       void cmdAddSlur();
-      void cmdAddHairpin(bool);
+      virtual void cmdAddHairpin(HairpinType) override;
       void cmdAddNoteLine();
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
 

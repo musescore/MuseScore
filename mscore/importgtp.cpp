@@ -2230,9 +2230,9 @@ void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
       {
       hairpins[staffIdx] = new Hairpin(score);
       if (crec)
-            hairpins[staffIdx]->setHairpinType(Hairpin::Type::CRESC_HAIRPIN);
+            hairpins[staffIdx]->setHairpinType(HairpinType::CRESC_HAIRPIN);
       else
-            hairpins[staffIdx]->setHairpinType(Hairpin::Type::DECRESC_HAIRPIN);
+            hairpins[staffIdx]->setHairpinType(HairpinType::DECRESC_HAIRPIN);
       hairpins[staffIdx]->setTick(tick);
       hairpins[staffIdx]->setTick2(tick);
       hairpins[staffIdx]->setTrack(track);

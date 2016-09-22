@@ -808,22 +808,22 @@ Palette* MuseScore::newLinesPalette(bool basic)
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);
-      gabel0->setHairpinType(Hairpin::Type::CRESC_HAIRPIN);
+      gabel0->setHairpinType(HairpinType::CRESC_HAIRPIN);
       gabel0->setLen(w);
       sp->append(gabel0, qApp->translate("lines", "Crescendo hairpin"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
-      gabel1->setHairpinType(Hairpin::Type::DECRESC_HAIRPIN);
+      gabel1->setHairpinType(HairpinType::DECRESC_HAIRPIN);
       gabel1->setLen(w);
       sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo hairpin"));
 
       Hairpin* gabel2 = new Hairpin(gscore);
-      gabel2->setHairpinType(Hairpin::Type::CRESC_LINE);
+      gabel2->setHairpinType(HairpinType::CRESC_LINE);
       gabel2->setLen(w);
       sp->append(gabel2, qApp->translate("lines", "Crescendo line"));
 
       Hairpin* gabel3 = new Hairpin(gscore);
-      gabel3->setHairpinType(Hairpin::Type::DECRESC_LINE);
+      gabel3->setHairpinType(HairpinType::DECRESC_LINE);
       gabel3->setLen(w);
       sp->append(gabel3, QT_TRANSLATE_NOOP("Palette", "Diminuendo line"));
 

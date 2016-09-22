@@ -1271,9 +1271,8 @@ Element* Note::drop(const DropData& data)
             case Element::Type::HAIRPIN:
                   {
                   Hairpin* hairpin = toHairpin(e);
-                  bool decresc = hairpin->hairpinType() == Hairpin::Type::DECRESC_HAIRPIN;
+                  data.view->cmdAddHairpin(hairpin->hairpinType());
                   delete e;
-                  data.view->cmdAddHairpin(decresc);
                   }
                   return 0;
 

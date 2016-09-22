@@ -815,7 +815,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
        qDebug("addElem el %p track %d placement %s tick %d",
        el, track, qPrintable(placement), tick);
        */
-       
+
       // move to correct position
       // TODO: handle rx, ry
       if (el->type() == Element::Type::SYMBOL) {
@@ -839,7 +839,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             el->setPlacement(placement == "above"
                ? Element::Placement::ABOVE : Element::Placement::BELOW);
             }
-      
+
       el->setTrack(track);
       Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);
@@ -2903,7 +2903,7 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
       if (type == "crescendo" || type == "diminuendo") {
             Hairpin* h = new Hairpin(_score);
             h->setHairpinType(type == "crescendo"
-                              ? Hairpin::Type::CRESC_HAIRPIN : Hairpin::Type::DECRESC_HAIRPIN);
+                              ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
             if (niente == "yes")
                   h->setHairpinCircledTip(true);
             starts.append(MusicXmlSpannerDesc(h, Element::Type::HAIRPIN, number));

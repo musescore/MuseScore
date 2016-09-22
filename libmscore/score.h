@@ -97,6 +97,7 @@ enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
 enum class Key;
+enum class HairpinType : char;
 
 extern bool showRubberBand;
 
@@ -549,7 +550,7 @@ class Score : public QObject, public ScoreElement {
 
       void cmdRemovePart(Part*);
       void cmdAddTie();
-      void cmdAddHairpin(bool);
+//      void cmdAddHairpin(bool);
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
       void cmdResetNoteAndRestGroupings();
@@ -1041,7 +1042,7 @@ class Score : public QObject, public ScoreElement {
       void addUnmanagedSpanner(Spanner*);
       void removeUnmanagedSpanner(Spanner*);
 
-      Hairpin* addHairpin(bool crescendo, int tickStart, int tickEnd, int track);
+      Hairpin* addHairpin(HairpinType, int tickStart, int tickEnd, int track);
 
       ChordRest* findCR(int tick, int track) const;
       ChordRest* findCRinStaff(int tick, int staffIdx) const;
