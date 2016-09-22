@@ -1416,7 +1416,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "landscape")        // obsolete
+            if (tag == "landscape")
                   landscape = e.readInt();
             else if (tag == "page-margins") {
                   type = e.attribute("type","both");
