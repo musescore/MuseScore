@@ -2887,10 +2887,12 @@ void Score::collectMatch(void* data, Element* e)
 
       if (p->subtypeValid) {
             // HACK: grace note is different from normal note
-            // TODO: this disables the ability to distinguish noteheads in subtype
-
             if (p->type == int(Element::Type::NOTE)) {
-                  if (p->subtype != toNote(e)->chord()->isGrace())
+                  if (p->subtype < 0) {
+                        if (!(toNote(e)->chord()->isGrace()))
+                              return;
+                        }
+                  else if ((toNote(e)->chord()->isGrace()) || (p->subtype != e->subtype()))
                         return;
                   }
             else {
@@ -2931,7 +2933,10 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       ElementPattern pattern;
       pattern.type = int(type);
       if (type == Element::Type::NOTE) {
-            pattern.subtype = toNote(e)->chord()->isGrace();
+            if (toNote(e)->chord()->isGrace())
+                  pattern.subtype = -1;
+            else
+                  pattern.subtype = e->subtype();
             pattern.subtypeValid = true;
             }
       else if (type == Element::Type::SLUR_SEGMENT) {
@@ -2965,12 +2970,25 @@ void Score::selectSimilarInRange(Element* e)
 
       Score* score = e->score();
       pattern.type    = int(type);
-      pattern.subtype = 0;
       pattern.staffStart = selection().staffStart();
       pattern.staffEnd = selection().staffEnd();
       pattern.voice   = -1;
       pattern.system  = 0;
-      pattern.subtypeValid = false;
+      if (type == Element::Type::NOTE) {
+            if (toNote(e)->chord()->isGrace())
+                  pattern.subtype = -1;
+            else
+                  pattern.subtype = e->subtype();
+            pattern.subtypeValid = true;
+            }
+      else if (type == Element::Type::SLUR_SEGMENT) {
+            pattern.subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
+            pattern.subtypeValid = true;
+            }
+      else {
+            pattern.subtype = 0;
+            pattern.subtypeValid = false;
+            }
 
       score->scanElementsInRange(&pattern, collectMatch);
 
