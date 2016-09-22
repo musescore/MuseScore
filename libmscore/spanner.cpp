@@ -257,8 +257,7 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
       {
-      foreach (SpannerSegment* ss, spannerSegments())
-            delete ss;
+      qDeleteAll(spannerSegments());
       }
 
 //---------------------------------------------------------
@@ -270,7 +269,7 @@ void Spanner::add(Element* e)
       SpannerSegment* ls = static_cast<SpannerSegment*>(e);
       ls->setSpanner(this);
       ls->setSelected(selected());
-      ls->setTrack(ls->spanner()->track());
+      ls->setTrack(track());
       segments.append(ls);
       }
 

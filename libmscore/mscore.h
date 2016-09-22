@@ -64,6 +64,8 @@ static constexpr int MSCVERSION = 300;
 class MStyle;
 class Sequencer;
 
+enum class HairpinType : char;
+
 static constexpr int VOICES = 4;
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
 inline int track2staff(int voice)    { return voice >> 2;    }

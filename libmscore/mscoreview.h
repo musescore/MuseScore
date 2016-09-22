@@ -20,6 +20,7 @@ class Score;
 class Note;
 class Page;
 enum class Grip : signed char;
+enum class HairpinType : char;
 
 //---------------------------------------------------------
 //   MuseScoreView
@@ -56,7 +57,7 @@ class MuseScoreView {
       virtual const QRectF& getGrip(Grip) const = 0;
       virtual void setDropRectangle(const QRectF&) {};
       virtual void cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/) {};
-      virtual void cmdAddHairpin(bool) {};
+      virtual void cmdAddHairpin(HairpinType) {};
       virtual void startEdit() {};
       virtual void startEdit(Element*, Grip /*startGrip*/) {};
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;

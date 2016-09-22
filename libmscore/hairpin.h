@@ -26,6 +26,8 @@ namespace Ms {
 class Score;
 class Hairpin;
 
+enum class HairpinType : char { CRESC_HAIRPIN, DECRESC_HAIRPIN, CRESC_LINE, DECRESC_LINE };
+
 //---------------------------------------------------------
 //   @@ HairpinSegment
 //---------------------------------------------------------
@@ -68,16 +70,13 @@ class Hairpin : public TextLineBase {
       Q_ENUMS(Type)
       Q_ENUMS(Ms::Dynamic::Range)
 
-   public:
-      enum class Type : char { CRESC_HAIRPIN, DECRESC_HAIRPIN, CRESC_LINE, DECRESC_LINE };
-
    private:
       Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
-      Q_PROPERTY(Ms::Hairpin::Type  hairpinType READ  hairpinType WRITE undoSetHairpinType)
+      Q_PROPERTY(Ms::HairpinType    hairpinType READ  hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
 
       bool  _hairpinCircledTip;
-      Type _hairpinType;
+      HairpinType _hairpinType;
       int _veloChange;
       Dynamic::Range _dynRange;
       PropertyStyle lineWidthStyle;
@@ -96,9 +95,9 @@ class Hairpin : public TextLineBase {
       virtual Hairpin* clone() const override     { return new Hairpin(*this); }
       virtual Element::Type type() const override { return Element::Type::HAIRPIN;  }
 
-      Type hairpinType() const      { return _hairpinType; }
-      void setHairpinType(Type val);
-      void undoSetHairpinType(Type);
+      HairpinType hairpinType() const      { return _hairpinType; }
+      void setHairpinType(HairpinType val);
+      void undoSetHairpinType(HairpinType);
 
       Segment* segment() const      { return (Segment*)parent(); }
       virtual void layout() override;
@@ -141,7 +140,7 @@ extern Dynamic* lookupDynamic(Element* e);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Hairpin::Type);
+Q_DECLARE_METATYPE(Ms::HairpinType);
 
 #endif
 

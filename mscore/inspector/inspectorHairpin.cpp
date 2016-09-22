@@ -30,10 +30,10 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.setupUi(addWidget());
 
       h.hairpinType->clear();
-      h.hairpinType->addItem(tr("Crescendo Hairpin"),   int(Hairpin::Type::CRESC_HAIRPIN));
-      h.hairpinType->addItem(tr("Decrescendo Hairpin"), int(Hairpin::Type::DECRESC_HAIRPIN) );
-      h.hairpinType->addItem(tr("Crescendo Line"),      int(Hairpin::Type::CRESC_LINE));
-      h.hairpinType->addItem(tr("Decrescendo Line"),    int(Hairpin::Type::DECRESC_LINE));
+      h.hairpinType->addItem(tr("Crescendo Hairpin"),   int(HairpinType::CRESC_HAIRPIN));
+      h.hairpinType->addItem(tr("Decrescendo Hairpin"), int(HairpinType::DECRESC_HAIRPIN) );
+      h.hairpinType->addItem(tr("Crescendo Line"),      int(HairpinType::CRESC_LINE));
+      h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
 
       std::vector<InspectorItem> il = {
             { P_ID::LINE_VISIBLE,        0, 0, l.lineVisible,       l.resetLineVisible       },
@@ -59,8 +59,8 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
 
 void InspectorHairpin::postInit()
       {
-      bool useTextLine = h.hairpinType->currentIndex() == int(Hairpin::Type::CRESC_LINE)
-         || h.hairpinType->currentIndex() == int(Hairpin::Type::DECRESC_LINE);
+      bool useTextLine = h.hairpinType->currentIndex() == int(HairpinType::CRESC_LINE)
+         || h.hairpinType->currentIndex() == int(HairpinType::DECRESC_LINE);
       l.lineVisible->setEnabled(useTextLine);
       h.hairpinCircledTip->setDisabled(useTextLine);
       h.hairpinHeight->setDisabled(useTextLine);

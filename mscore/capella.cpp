@@ -1024,9 +1024,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else {
                                           Hairpin* hp = new Hairpin(score);
                                           if (wdgo->decresc)
-                                                hp->setHairpinType(Hairpin::Type::DECRESC_HAIRPIN);
+                                                hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
                                           else
-                                                hp->setHairpinType(Hairpin::Type::CRESC_HAIRPIN);
+                                                hp->setHairpinType(HairpinType::CRESC_HAIRPIN);
                                           hp->setTick(cr1->tick());
                                           hp->setTick2(cr2->tick());
                                           hp->setTrack(track);

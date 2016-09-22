@@ -488,7 +488,7 @@ void Score::updateHairpin(Hairpin* h)
       //
 
       int endVelo = velo;
-      if (h->hairpinType() == Hairpin::Type::CRESC_HAIRPIN || h->hairpinType() == Hairpin::Type::CRESC_LINE) {
+      if (h->hairpinType() == HairpinType::CRESC_HAIRPIN || h->hairpinType() == HairpinType::CRESC_LINE) {
             if (incr == 0 && velo < st->velocities().nextVelo(tick2-1))
                   endVelo = st->velocities().nextVelo(tick2-1);
             else

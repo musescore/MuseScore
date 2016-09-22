@@ -3305,7 +3305,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
             }
 
       if (hp->tick() == tick) {
-            if ( hp->hairpinType() == Hairpin::Type::CRESC_HAIRPIN ) {
+            if ( hp->hairpinType() == HairpinType::CRESC_HAIRPIN ) {
                   if ( hp->hairpinCircledTip() ) {
                         xml.tagE(QString("wedge type=\"crescendo\" niente=\"yes\" number=\"%1\"").arg(n + 1));
                         }
@@ -3318,7 +3318,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
                   }
             }
       else {
-            if ( hp->hairpinCircledTip() && hp->hairpinType() == Hairpin::Type::DECRESC_HAIRPIN )
+            if ( hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN )
                   xml.tagE(QString("wedge type=\"stop\" niente=\"yes\" number=\"%1\"").arg(n + 1));
             else
                   xml.tagE(QString("wedge type=\"stop\" number=\"%1\"").arg(n + 1));

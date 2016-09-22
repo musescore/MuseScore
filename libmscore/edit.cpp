@@ -1780,12 +1780,12 @@ void Score::cmdFlip()
                   }
             else if (e->isHairpinSegment()) {
                   Hairpin* h = toHairpinSegment(e)->hairpin();
-                  Hairpin::Type st = h->hairpinType();
+                  HairpinType st = h->hairpinType();
                   switch (st)  {
-                        case Hairpin::Type::CRESC_HAIRPIN:     st = Hairpin::Type::DECRESC_HAIRPIN; break;
-                        case Hairpin::Type::DECRESC_HAIRPIN:   st = Hairpin::Type::CRESC_HAIRPIN; break;
-                        case Hairpin::Type::CRESC_LINE:        st = Hairpin::Type::DECRESC_LINE; break;
-                        case Hairpin::Type::DECRESC_LINE:      st = Hairpin::Type::CRESC_LINE; break;
+                        case HairpinType::CRESC_HAIRPIN:     st = HairpinType::DECRESC_HAIRPIN; break;
+                        case HairpinType::DECRESC_HAIRPIN:   st = HairpinType::CRESC_HAIRPIN; break;
+                        case HairpinType::CRESC_LINE:        st = HairpinType::DECRESC_LINE; break;
+                        case HairpinType::DECRESC_LINE:      st = HairpinType::CRESC_LINE; break;
                         }
                   undoChangeProperty(h, P_ID::HAIRPIN_TYPE, int(st));
                   }
@@ -2716,12 +2716,18 @@ Lyrics* Score::addLyrics()
 //   addHairpin
 //---------------------------------------------------------
 
-Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int tickEnd, int track)
+Hairpin* Score::addHairpin(HairpinType t, int tickStart, int tickEnd, int track)
       {
       Hairpin* pin = new Hairpin(this);
-      pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESC_HAIRPIN : Hairpin::Type::CRESC_HAIRPIN);
-      pin->setBeginText(decrescendo ? "dim." : "cresc.");
-      pin->setContinueText(decrescendo ? "(dim.)" : "(cresc.)");
+      pin->setHairpinType(t);
+      if (t == HairpinType::CRESC_LINE) {
+            pin->setBeginText("cresc.");
+            pin->setContinueText("(cresc.)");
+            }
+      else if (t == HairpinType::DECRESC_LINE) {
+            pin->setBeginText("dim.");
+            pin->setContinueText("(dim.)");
+            }
       pin->setTrack(track);
       pin->setTrack2(track);
       pin->setTick(tickStart);

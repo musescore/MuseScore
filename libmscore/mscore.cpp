@@ -204,7 +204,7 @@ void MScore::init()
       qRegisterMetaType<Jump::Type>("JumpType");
       qRegisterMetaType<Marker::Type>("MarkerType");
       qRegisterMetaType<Beam::Mode>("BeamMode");
-      qRegisterMetaType<Hairpin::Type>("HairpinType");
+      qRegisterMetaType<HairpinType>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");

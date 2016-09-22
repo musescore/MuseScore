@@ -2814,9 +2814,9 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "add-slur")
             cmdAddSlur();
       else if (cmd == "add-hairpin")
-            cmdAddHairpin(false);
+            cmdAddHairpin(HairpinType::CRESC_HAIRPIN);
       else if (cmd == "add-hairpin-reverse")
-            cmdAddHairpin(true);
+            cmdAddHairpin(HairpinType::DECRESC_HAIRPIN);
       else if (cmd == "add-noteline")
             cmdAddNoteLine();
       else if (cmd == "note-c")
@@ -4649,7 +4649,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 //    '<' typed on keyboard
 //---------------------------------------------------------
 
-void ScoreView::cmdAddHairpin(bool decrescendo)
+void ScoreView::cmdAddHairpin(HairpinType type)
       {
       Selection selection = _score->selection();
       // special case for two selected chordrests on same staff
@@ -4670,7 +4670,7 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
                        continue;
                   if (cr2 == 0)
                        cr2 = cr1;
-                  _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+                  _score->addHairpin(type, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
                   }
             _score->endCmd();
             _score->startCmd();
@@ -4688,7 +4688,7 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
 
             _score->startCmd();
             int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
-            Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), tick2, cr1->track());
+            Hairpin* pin = _score->addHairpin(type, cr1->tick(), tick2, cr1->track());
             pin->layout();
             _score->endCmd();
             _score->startCmd();
