@@ -1,6 +1,6 @@
 #!/bin/bash
 
-P=../../../build.debug/mtest/libmscore/compat
+P=../../../build.debug/mtest/libmscore/compat114
 #P=../../../../MuseScore-build/mtest/libmscore/compat
 
 # cp $P/articulations-test.mscx articulations-ref.mscx

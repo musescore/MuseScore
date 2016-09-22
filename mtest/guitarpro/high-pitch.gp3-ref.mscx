@@ -112,7 +112,7 @@
           <Note>
             <lid>7</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>8</pitch>
             <tpc>22</tpc>
@@ -129,7 +129,7 @@
           <Note>
             <lid>9</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>27</pitch>
             <tpc>11</tpc>
@@ -139,7 +139,7 @@
           <Note>
             <lid>10</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>34</pitch>
             <tpc>12</tpc>
@@ -404,7 +404,7 @@
             <Note>
               <lid>7</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>8</pitch>
               <tpc>22</tpc>
@@ -421,7 +421,7 @@
             <Note>
               <lid>9</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>27</pitch>
               <tpc>11</tpc>
@@ -431,7 +431,7 @@
             <Note>
               <lid>10</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>34</pitch>
               <tpc>12</tpc>

@@ -370,7 +370,6 @@ void TestNote::grace()
 void TestNote::tpc()
       {
       MasterScore* score = readScore(DIR + "tpc.mscx");
-      score->doLayout();
 
       score->inputState().setTrack(0);
       score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
@@ -389,7 +388,6 @@ void TestNote::tpc()
       score->cmdConcertPitchChanged(true, true);
 
       QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
-
       }
 
 //---------------------------------------------------------
@@ -400,7 +398,6 @@ void TestNote::tpc()
 void TestNote::tpcTranspose()
       {
       MasterScore* score = readScore(DIR + "tpc-transpose.mscx");
-      score->doLayout();
 
       score->startCmd();
       Measure* m = score->firstMeasure();
@@ -430,7 +427,6 @@ void TestNote::tpcTranspose()
 void TestNote::tpcTranspose2()
       {
       MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
-      score->doLayout();
 
       score->inputState().setTrack(0);
       score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
@@ -442,7 +438,6 @@ void TestNote::tpcTranspose2()
       score->cmdConcertPitchChanged(true, true);
 
       QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
-
       }
 
 //---------------------------------------------------------
@@ -452,7 +447,6 @@ void TestNote::tpcTranspose2()
 void TestNote::noteLimits()
       {
       MasterScore* score = readScore(DIR + "empty.mscx");
-      score->doLayout();
 
       score->inputState().setTrack(0);
       score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));

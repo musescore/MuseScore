@@ -102,7 +102,7 @@
             </Note>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -121,7 +121,7 @@
           <durationType>whole</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -141,7 +141,7 @@
           <durationType>whole</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -161,7 +161,7 @@
           <durationType>whole</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>

@@ -141,10 +141,14 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       QString csl  = fi.suffix().toLower();
 
       Score::FileError rv;
-      if (csl == "cap")
+      if (csl == "cap") {
             rv = importCapella(score, name);
-      else if (csl == "capx")
+            score->setMetaTag("originalFormat", csl);
+            }
+      else if (csl == "capx") {
             rv = importCapXml(score, name);
+            score->setMetaTag("originalFormat", csl);
+            }
       else if (csl == "ove")
             rv = importOve(score, name);
       else if (csl == "sgu")

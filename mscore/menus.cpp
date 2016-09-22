@@ -286,18 +286,18 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(AccidentalType(i));
-                  sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
+                  sp->append(s, s->subtypeUserName());
                   }
             }
       else {
             Accidental* s = new Accidental(gscore);
             s->setAccidentalType(AccidentalType::NONE);
-            sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
+            sp->append(s, s->subtypeUserName());
             for (int i = int(AccidentalType::SHARP); i < int(AccidentalType::END); ++i) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(AccidentalType(i));
                   if (s->symbol() != SymId::noSym)
-                        sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
+                        sp->append(s, s->subtypeUserName());
                   else
                         delete s;
                   }

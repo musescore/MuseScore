@@ -957,112 +957,125 @@ void Chord::write(Xml& xml) const
 void Chord::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "Note") {
-                  Note* note = new Note(score());
-                  // the note needs to know the properties of the track it belongs to
-                  note->setTrack(track());
-                  note->setChord(this);
-                  note->read(e);
-                  add(note);
-                  }
-            else if (ChordRest::readProperties(e))
+            if (readProperties(e))
                   ;
-            else if (tag == "Stem") {
-                  Stem* s = new Stem(score());
-                  s->read(e);
-                  add(s);
-                  }
-            else if (tag == "Hook") {
-                  _hook = new Hook(score());
-                  _hook->read(e);
-                  add(_hook);
-                  }
-            else if (tag == "appoggiatura") {
-                  _noteType = NoteType::APPOGGIATURA;
-                  e.readNext();
-                  }
-            else if (tag == "acciaccatura") {
-                  _noteType = NoteType::ACCIACCATURA;
-                  e.readNext();
-                  }
-            else if (tag == "grace4") {
-                  _noteType = NoteType::GRACE4;
-                  e.readNext();
-                  }
-            else if (tag == "grace16") {
-                  _noteType = NoteType::GRACE16;
-                  e.readNext();
-                  }
-            else if (tag == "grace32") {
-                  _noteType = NoteType::GRACE32;
-                  e.readNext();
-                  }
-            else if (tag == "grace8after") {
-                  _noteType = NoteType::GRACE8_AFTER;
-                  e.readNext();
-                  }
-            else if (tag == "grace16after") {
-                  _noteType = NoteType::GRACE16_AFTER;
-                  e.readNext();
-                  }
-            else if (tag == "grace32after") {
-                  _noteType = NoteType::GRACE32_AFTER;
-                  e.readNext();
-                  }
-            else if (tag == "StemSlash") {
-                  StemSlash* ss = new StemSlash(score());
-                  ss->read(e);
-                  add(ss);
-                  }
-            else if (tag == "StemDirection")
-                  readProperty(e, P_ID::STEM_DIRECTION);
-            else if (tag == "noStem")
-                  _noStem = e.readInt();
-            else if (tag == "Arpeggio") {
-                  _arpeggio = new Arpeggio(score());
-                  _arpeggio->setTrack(track());
-                  _arpeggio->read(e);
-                  _arpeggio->setParent(this);
-                  }
-            // old glissando format, chord-to-chord, attached to its final chord
-            else if (tag == "Glissando") {
-                  // the measure we are reading is not inserted in the score yet
-                  // as well as, possibly, the glissando intended initial chord;
-                  // then we cannot fully link the glissando right now;
-                  // temporarily attach the glissando to its final note as a back spanner;
-                  // after the whole score is read, Score::connectTies() will look for
-                  // the suitable initial note
-                  Note* finalNote = upNote();
-                  Glissando* gliss = new Glissando(score());
-                  gliss->read(e);
-                  gliss->setAnchor(Spanner::Anchor::NOTE);
-                  gliss->setStartElement(nullptr);
-                  gliss->setEndElement(nullptr);
-                  // in TAB, use straight line with no text
-                  if (score()->staff(e.track() >> 2)->isTabStaff()) {
-                        gliss->setGlissandoType(Glissando::Type::STRAIGHT);
-                        gliss->setShowText(false);
-                        }
-                  finalNote->addSpannerBack(gliss);
-                  }
-            else if (tag == "Tremolo") {
-                  _tremolo = new Tremolo(score());
-                  _tremolo->setTrack(track());
-                  _tremolo->read(e);
-                  _tremolo->setParent(this);
-                  }
-            else if (tag == "tickOffset")       // obsolete
-                  ;
-            else if (tag == "ChordLine") {
-                  ChordLine* cl = new ChordLine(score());
-                  cl->read(e);
-                  add(cl);
-                  }
             else
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Chord::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "Note") {
+            Note* note = new Note(score());
+            // the note needs to know the properties of the track it belongs to
+            note->setTrack(track());
+            note->setChord(this);
+            note->read(e);
+            add(note);
+            }
+      else if (ChordRest::readProperties(e))
+            ;
+      else if (tag == "Stem") {
+            Stem* s = new Stem(score());
+            s->read(e);
+            add(s);
+            }
+      else if (tag == "Hook") {
+            _hook = new Hook(score());
+            _hook->read(e);
+            add(_hook);
+            }
+      else if (tag == "appoggiatura") {
+            _noteType = NoteType::APPOGGIATURA;
+            e.readNext();
+            }
+      else if (tag == "acciaccatura") {
+            _noteType = NoteType::ACCIACCATURA;
+            e.readNext();
+            }
+      else if (tag == "grace4") {
+            _noteType = NoteType::GRACE4;
+            e.readNext();
+            }
+      else if (tag == "grace16") {
+            _noteType = NoteType::GRACE16;
+            e.readNext();
+            }
+      else if (tag == "grace32") {
+            _noteType = NoteType::GRACE32;
+            e.readNext();
+            }
+      else if (tag == "grace8after") {
+            _noteType = NoteType::GRACE8_AFTER;
+            e.readNext();
+            }
+      else if (tag == "grace16after") {
+            _noteType = NoteType::GRACE16_AFTER;
+            e.readNext();
+            }
+      else if (tag == "grace32after") {
+            _noteType = NoteType::GRACE32_AFTER;
+            e.readNext();
+            }
+      else if (tag == "StemSlash") {
+            StemSlash* ss = new StemSlash(score());
+            ss->read(e);
+            add(ss);
+            }
+      else if (tag == "StemDirection")
+            readProperty(e, P_ID::STEM_DIRECTION);
+      else if (tag == "noStem")
+            _noStem = e.readInt();
+      else if (tag == "Arpeggio") {
+            _arpeggio = new Arpeggio(score());
+            _arpeggio->setTrack(track());
+            _arpeggio->read(e);
+            _arpeggio->setParent(this);
+            }
+      // old glissando format, chord-to-chord, attached to its final chord
+      else if (tag == "Glissando") {
+            // the measure we are reading is not inserted in the score yet
+            // as well as, possibly, the glissando intended initial chord;
+            // then we cannot fully link the glissando right now;
+            // temporarily attach the glissando to its final note as a back spanner;
+            // after the whole score is read, Score::connectTies() will look for
+            // the suitable initial note
+            Note* finalNote = upNote();
+            Glissando* gliss = new Glissando(score());
+            gliss->read(e);
+            gliss->setAnchor(Spanner::Anchor::NOTE);
+            gliss->setStartElement(nullptr);
+            gliss->setEndElement(nullptr);
+            // in TAB, use straight line with no text
+            if (score()->staff(e.track() >> 2)->isTabStaff()) {
+                  gliss->setGlissandoType(Glissando::Type::STRAIGHT);
+                  gliss->setShowText(false);
+                  }
+            finalNote->addSpannerBack(gliss);
+            }
+      else if (tag == "Tremolo") {
+            _tremolo = new Tremolo(score());
+            _tremolo->setTrack(track());
+            _tremolo->read(e);
+            _tremolo->setParent(this);
+            }
+      else if (tag == "tickOffset")       // obsolete
+            ;
+      else if (tag == "ChordLine") {
+            ChordLine* cl = new ChordLine(score());
+            cl->read(e);
+            add(cl);
+            }
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------

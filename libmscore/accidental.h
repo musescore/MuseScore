@@ -154,7 +154,7 @@ class Accidental : public Element {
       virtual Accidental* clone() const override  { return new Accidental(*this); }
       virtual Element::Type type() const override { return Element::Type::ACCIDENTAL; }
 
-      const char* subtypeUserName() const;
+      QString subtypeUserName() const;
       void setSubtype(const QString& s);
       void setAccidentalType(AccidentalType t)     { _accidentalType = t;    }
 
@@ -172,7 +172,7 @@ class Accidental : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) override { setGenerated(false); }
 
       SymId symbol() const;
-      Note* note() const  { return (parent() && parent()->type() == Element::Type::NOTE) ? (Note*)parent() : 0; }
+      Note* note() const                  { return (parent() && parent()->isNote()) ? toNote(parent()) : 0; }
 
       bool hasBracket() const             { return _hasBracket;     }
       void setHasBracket(bool val)        { _hasBracket = val;      }

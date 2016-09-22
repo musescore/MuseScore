@@ -111,7 +111,7 @@
           <durationType>half</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>62</pitch>
             <tpc>4</tpc>
@@ -123,7 +123,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>62</pitch>
             <tpc>4</tpc>
@@ -136,7 +136,7 @@
           <durationType>half</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>62</pitch>
             <tpc>4</tpc>

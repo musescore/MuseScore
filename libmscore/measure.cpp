@@ -1591,11 +1591,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
 
-      // keep track of tick of previous element
-      // this allows markings that need to apply to previous element to do so
-      // even though we may have already advanced to next tick position
-      int lastTick = e.tick();
-
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -1603,7 +1598,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.initTick(e.readFraction().ticks() + tick());
             else if (tag == "tick") {
                   e.initTick(score()->fileDivision(e.readInt()));
-                  lastTick = e.tick();
                   }
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
@@ -1633,28 +1627,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   chord->setTrack(e.track());
                   chord->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
-                  if (chord->noteType() != NoteType::NORMAL) {
+                  if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-                              Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
-                              }
-                        }
                   else {
                         segment->add(chord);
-                        Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
-
                         for (int i = 0; i < graceNotes.size(); ++i) {
                               Chord* gc = graceNotes[i];
                               gc->setGraceIndex(i);
@@ -1662,57 +1638,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                               }
                         graceNotes.clear();
                         int crticks = chord->actualTicks();
-
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-
-                              Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
-                              if (tremolo->twoNotes()) {
-                                    int track = chord->track();
-                                    Segment* ss = 0;
-                                    for (Segment* ps = first(Segment::Type::ChordRest); ps; ps = ps->next(Segment::Type::ChordRest)) {
-                                          if (ps->tick() >= e.tick())
-                                                break;
-                                          if (ps->element(track))
-                                                ss = ps;
-                                          }
-                                    Chord* pch = 0;       // previous chord
-                                    if (ss) {
-                                          ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
-                                          if (cr && cr->type() == Element::Type::CHORD)
-                                                pch = static_cast<Chord*>(cr);
-                                          }
-                                    if (pch) {
-                                          tremolo->setParent(pch);
-                                          pch->setTremolo(tremolo);
-                                          chord->setTremolo(0);
-                                          // force duration to half
-                                          Fraction pts(timeStretch * pch->globalDuration());
-                                          int pcrticks = pts.ticks();
-                                          pch->setDuration(Fraction::fromTicks(pcrticks / 2));
-                                          chord->setDuration(Fraction::fromTicks(crticks / 2));
-                                          }
-                                    else {
-                                          qDebug("tremolo: first note not found");
-                                          }
-                                    crticks /= 2;
-                                    }
-                              else {
-                                    tremolo->setParent(chord);
-                                    }
-                              }
-                        lastTick = e.tick();
                         e.incTick(crticks);
                         }
                   }
@@ -1728,7 +1653,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (!rest->duration().isValid())     // hack
                         rest->setDuration(timesig()/timeStretch);
 
-                  lastTick = e.tick();
                   e.incTick(rest->actualTicks());
                   }
             else if (tag == "Breath") {
@@ -1803,7 +1727,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rm->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rm);
-                  lastTick = e.tick();
                   e.incTick(ticks());
                   }
             else if (tag == "Clef") {

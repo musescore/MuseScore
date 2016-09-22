@@ -35,6 +35,7 @@
 #include "rest.h"
 #include "breath.h"
 #include "repeat.h"
+#include "utils.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -43,6 +44,157 @@
 
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   readAccidental
+//---------------------------------------------------------
+
+static void readAccidental(Accidental* a, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "bracket") {
+                  int i = e.readInt();
+                  if (i == 0 || i == 1)
+                        a->setHasBracket(i);
+                  }
+            else if (tag == "subtype") {
+                  const char* n[] = {
+                     "none", "sharp", "flat", "double sharp", "double flat", "natural",
+                     "flat-slash", "flat-slash2", "mirrored-flat2", "mirrored-flat",
+                     "mirrored-flat-slash", "flat-flat-slash", "sharp-slash", "sharp-slash2",
+                     "sharp-slash3", "sharp-slash4", "sharp arrow up", "sharp arrow down",
+                     "sharp arrow both", "flat arrow up", "flat arrow down", "flat arrow both",
+                     "natural arrow up", "natural arrow down", "natural arrow both", "sori",
+                     "koron"
+                     };
+                  QString s = e.readElementText();
+                  int idx = 0;
+                  for (const char* p : n) {
+                        if (s == p)
+                              break;
+                        ++idx;
+                        }
+                  if (idx == sizeof(n)/sizeof(*n)) {
+                        qDebug("invalid type");
+                        }
+                  else
+                        a->setAccidentalType(AccidentalType(idx));
+                  }
+            else if (tag == "role") {
+                  AccidentalRole r = AccidentalRole(e.readInt());
+                  if (r == AccidentalRole::AUTO || r == AccidentalRole::USER)
+                        a->setRole(r);
+                  }
+            else if (tag == "small")
+                  a->setSmall(e.readInt());
+            else if (a->Element::readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readNote
+//---------------------------------------------------------
+
+static void readNote(Note* note, XmlReader& e)
+      {
+      note->setTpc1(Tpc::TPC_INVALID);
+      note->setTpc2(Tpc::TPC_INVALID);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Accidental") {
+                  Accidental* a = new Accidental(note->score());
+                  a->setTrack(note->track());
+                  readAccidental(a, e);
+                  note->add(a);
+                  }
+            else if (note->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      // ensure sane values:
+      note->setPitch(limit(note->pitch(), 0, 127));
+
+      if (!tpcIsValid(note->tpc1()) && !tpcIsValid(note->tpc2())) {
+            Key key = (note->staff() && note->chord()) ? note->staff()->key(note->chord()->tick()) : Key::C;
+            int tpc = pitch2tpc(note->pitch(), key, Prefer::NEAREST);
+            if (note->concertPitch())
+                  note->setTpc1(tpc);
+            else
+                  note->setTpc2(tpc);
+            }
+      if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
+            int tick = note->chord() ? note->chord()->tick() : -1;
+            Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
+            if (tpcIsValid(note->tpc1())) {
+                  v.flip();
+                  if (v.isZero())
+                        note->setTpc2(note->tpc1());
+                  else
+                        note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+                  }
+            else {
+                  if (v.isZero())
+                        note->setTpc1(note->tpc2());
+                  else
+                        note->setTpc1(Ms::transposeTpc(note->tpc2(), v, true));
+                  }
+            }
+
+      // check consistency of pitch, tpc1, tpc2, and transposition
+      // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
+      // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
+      // including perhaps some we don't know about yet,
+      // we will attempt to fix some problems here regardless of version
+
+      if (!e.pasteMode() && !MScore::testMode) {
+            int tpc1Pitch = (tpc2pitch(note->tpc1()) + 12) % 12;
+            int tpc2Pitch = (tpc2pitch(note->tpc2()) + 12) % 12;
+            int concertPitch = note->pitch() % 12;
+            if (tpc1Pitch != concertPitch) {
+                  qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
+                  note->setPitch(note->pitch() + tpc1Pitch - concertPitch);
+                  }
+            Interval v = note->staff()->part()->instrument(e.tick())->transpose();
+            int transposedPitch = (note->pitch() - v.chromatic) % 12;
+            if (tpc2Pitch != transposedPitch) {
+                  qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+                  // just in case the staff transposition info is not reliable here,
+                  // do not attempt to correct tpc
+                  // except for older scores where we know there are tpc problems
+                  v.flip();
+                  note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   readChord
+//---------------------------------------------------------
+
+static void readChord(Chord* chord, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Note") {
+                  Note* note = new Note(chord->score());
+                  // the note needs to know the properties of the track it belongs to
+                  note->setTrack(chord->track());
+                  note->setChord(chord);
+                  readNote(note, e);
+                  chord->add(note);
+                  }
+            else if (chord->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
 
 //---------------------------------------------------------
 //   readMeasure
@@ -129,30 +281,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score);
                   chord->setTrack(e.track());
-                  chord->read(e);
+                  readChord(chord, e);
                   segment = m->getSegment(Segment::Type::ChordRest, e.tick());
-                  if (chord->noteType() != NoteType::NORMAL) {
+                  if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-                              Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
-                              }
-                        }
                   else {
                         segment->add(chord);
-                        Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
-
                         for (int i = 0; i < graceNotes.size(); ++i) {
                               Chord* gc = graceNotes[i];
                               gc->setGraceIndex(i);
@@ -160,57 +294,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               }
                         graceNotes.clear();
                         int crticks = chord->actualTicks();
-
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-
-                              Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
-                              if (tremolo->twoNotes()) {
-                                    int track = chord->track();
-                                    Segment* ss = 0;
-                                    for (Segment* ps = m->first(Segment::Type::ChordRest); ps; ps = ps->next(Segment::Type::ChordRest)) {
-                                          if (ps->tick() >= e.tick())
-                                                break;
-                                          if (ps->element(track))
-                                                ss = ps;
-                                          }
-                                    Chord* pch = 0;       // previous chord
-                                    if (ss) {
-                                          ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
-                                          if (cr && cr->type() == Element::Type::CHORD)
-                                                pch = static_cast<Chord*>(cr);
-                                          }
-                                    if (pch) {
-                                          tremolo->setParent(pch);
-                                          pch->setTremolo(tremolo);
-                                          chord->setTremolo(0);
-                                          // force duration to half
-                                          Fraction pts(timeStretch * pch->globalDuration());
-                                          int pcrticks = pts.ticks();
-                                          pch->setDuration(Fraction::fromTicks(pcrticks / 2));
-                                          chord->setDuration(Fraction::fromTicks(crticks / 2));
-                                          }
-                                    else {
-                                          qDebug("tremolo: first note not found");
-                                          }
-                                    crticks /= 2;
-                                    }
-                              else {
-                                    tremolo->setParent(chord);
-                                    }
-                              }
-                        lastTick = e.tick();
+                        lastTick    = e.tick();
                         e.incTick(crticks);
                         }
                   }
@@ -935,7 +1019,7 @@ static bool readScore(Score* score, XmlReader& e)
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
-      qDebug("read206");
+      qDebug(" ");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "programVersion") {

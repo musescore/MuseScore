@@ -278,7 +278,6 @@ bool Score::read(XmlReader& e)
 
 Score::FileError MasterScore::read300(XmlReader& e)
       {
-      qDebug("read300");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "programVersion") {

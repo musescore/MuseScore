@@ -240,7 +240,7 @@
           <Note>
             <lid>31</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -293,7 +293,7 @@
           <Note>
             <lid>41</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>25</tpc>
@@ -307,7 +307,7 @@
           <Note>
             <lid>43</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>18</tpc>
@@ -332,7 +332,7 @@
           <Note>
             <lid>47</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>48</pitch>
             <tpc>14</tpc>
@@ -352,7 +352,7 @@
           <Note>
             <lid>51</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>48</pitch>
             <tpc>26</tpc>
@@ -366,7 +366,7 @@
           <Note>
             <lid>53</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -391,7 +391,7 @@
           <Note>
             <lid>57</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>25</tpc>
@@ -411,7 +411,7 @@
           <Note>
             <lid>61</lid>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>27</tpc>
@@ -425,7 +425,7 @@
           <Note>
             <lid>63</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -450,7 +450,7 @@
           <Note>
             <lid>67</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>26</tpc>
@@ -470,7 +470,7 @@
           <Note>
             <lid>71</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>26</tpc>
@@ -484,7 +484,7 @@
           <Note>
             <lid>73</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -498,7 +498,7 @@
           <Note>
             <lid>75</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -512,7 +512,7 @@
           <Note>
             <lid>77</lid>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>27</tpc>
@@ -543,7 +543,7 @@
           <Note>
             <lid>83</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>18</tpc>
@@ -557,7 +557,7 @@
           <Note>
             <lid>85</lid>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>28</tpc>
@@ -660,7 +660,7 @@
           <Note>
             <lid>105</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -702,7 +702,7 @@
           <Note>
             <lid>113</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -716,7 +716,7 @@
           <Note>
             <lid>115</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -758,7 +758,7 @@
           <Note>
             <lid>123</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>18</tpc>
@@ -772,7 +772,7 @@
           <Note>
             <lid>125</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -814,7 +814,7 @@
           <Note>
             <lid>133</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -828,7 +828,7 @@
           <Note>
             <lid>135</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>6</tpc>
@@ -842,7 +842,7 @@
           <Note>
             <lid>137</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>13</tpc>
@@ -862,7 +862,7 @@
           <Note>
             <lid>141</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -876,7 +876,7 @@
           <Note>
             <lid>143</lid>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>5</tpc>
@@ -901,7 +901,7 @@
           <Note>
             <lid>147</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -921,7 +921,7 @@
           <Note>
             <lid>151</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -935,7 +935,7 @@
           <Note>
             <lid>153</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>7</tpc>
@@ -949,7 +949,7 @@
           <Note>
             <lid>155</lid>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>5</tpc>
@@ -963,7 +963,7 @@
           <Note>
             <lid>157</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -1066,7 +1066,7 @@
           <Note>
             <lid>177</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>13</tpc>
@@ -1119,7 +1119,7 @@
           <Note>
             <lid>187</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -1139,7 +1139,7 @@
           <Note>
             <lid>191</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -1175,7 +1175,7 @@
           <Note>
             <lid>197</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -1195,7 +1195,7 @@
           <Note>
             <lid>201</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>25</tpc>
@@ -1209,7 +1209,7 @@
           <Note>
             <lid>203</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>18</tpc>
@@ -1223,7 +1223,7 @@
           <Note>
             <lid>205</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -1237,7 +1237,7 @@
           <Note>
             <lid>207</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>48</pitch>
             <tpc>26</tpc>
@@ -1257,7 +1257,7 @@
           <Note>
             <lid>211</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>48</pitch>
             <tpc>26</tpc>
@@ -1271,7 +1271,7 @@
           <Note>
             <lid>213</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -1296,7 +1296,7 @@
           <Note>
             <lid>217</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>25</tpc>
@@ -1316,7 +1316,7 @@
           <Note>
             <lid>221</lid>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>27</tpc>
@@ -1330,7 +1330,7 @@
           <Note>
             <lid>223</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -1355,7 +1355,7 @@
           <Note>
             <lid>227</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>26</tpc>
@@ -1386,7 +1386,7 @@
           <Note>
             <lid>233</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -1400,7 +1400,7 @@
           <Note>
             <lid>235</lid>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>29</tpc>
@@ -1414,7 +1414,7 @@
           <Note>
             <lid>237</lid>
             <Accidental>
-              <subtype>double sharp</subtype>
+              <subtype>accidentalDoubleSharp</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>27</tpc>
@@ -1506,7 +1506,7 @@
           <Note>
             <lid>255</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>18</tpc>
@@ -1548,7 +1548,7 @@
           <Note>
             <lid>263</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -1562,7 +1562,7 @@
           <Note>
             <lid>265</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -1604,7 +1604,7 @@
           <Note>
             <lid>273</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>59</pitch>
             <tpc>7</tpc>
@@ -1618,7 +1618,7 @@
           <Note>
             <lid>275</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -1660,7 +1660,7 @@
           <Note>
             <lid>283</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>6</tpc>
@@ -1674,7 +1674,7 @@
           <Note>
             <lid>285</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -1705,7 +1705,7 @@
           <Note>
             <lid>291</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>48</pitch>
             <tpc>14</tpc>
@@ -1719,7 +1719,7 @@
           <Note>
             <lid>293</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>50</pitch>
             <tpc>16</tpc>
@@ -1733,7 +1733,7 @@
           <Note>
             <lid>295</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>52</pitch>
             <tpc>6</tpc>
@@ -1747,7 +1747,7 @@
           <Note>
             <lid>297</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>53</pitch>
             <tpc>13</tpc>
@@ -1767,7 +1767,7 @@
           <Note>
             <lid>301</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -1781,7 +1781,7 @@
           <Note>
             <lid>303</lid>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>57</pitch>
             <tpc>5</tpc>
@@ -1806,7 +1806,7 @@
           <Note>
             <lid>307</lid>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -2175,7 +2175,7 @@
             <Note>
               <lid>31</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -2228,7 +2228,7 @@
             <Note>
               <lid>41</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>25</tpc>
@@ -2242,7 +2242,7 @@
             <Note>
               <lid>43</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -2267,7 +2267,7 @@
             <Note>
               <lid>47</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>48</pitch>
               <tpc>14</tpc>
@@ -2287,7 +2287,7 @@
             <Note>
               <lid>51</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>48</pitch>
               <tpc>26</tpc>
@@ -2301,7 +2301,7 @@
             <Note>
               <lid>53</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -2326,7 +2326,7 @@
             <Note>
               <lid>57</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>25</tpc>
@@ -2346,7 +2346,7 @@
             <Note>
               <lid>61</lid>
               <Accidental>
-                <subtype>double sharp</subtype>
+                <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>27</tpc>
@@ -2360,7 +2360,7 @@
             <Note>
               <lid>63</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -2385,7 +2385,7 @@
             <Note>
               <lid>67</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>26</tpc>
@@ -2405,7 +2405,7 @@
             <Note>
               <lid>71</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>26</tpc>
@@ -2419,7 +2419,7 @@
             <Note>
               <lid>73</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -2433,7 +2433,7 @@
             <Note>
               <lid>75</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -2447,7 +2447,7 @@
             <Note>
               <lid>77</lid>
               <Accidental>
-                <subtype>double sharp</subtype>
+                <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>27</tpc>
@@ -2478,7 +2478,7 @@
             <Note>
               <lid>83</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -2492,7 +2492,7 @@
             <Note>
               <lid>85</lid>
               <Accidental>
-                <subtype>double sharp</subtype>
+                <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>28</tpc>
@@ -2595,7 +2595,7 @@
             <Note>
               <lid>105</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -2637,7 +2637,7 @@
             <Note>
               <lid>113</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -2651,7 +2651,7 @@
             <Note>
               <lid>115</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -2693,7 +2693,7 @@
             <Note>
               <lid>123</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -2707,7 +2707,7 @@
             <Note>
               <lid>125</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -2749,7 +2749,7 @@
             <Note>
               <lid>133</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -2763,7 +2763,7 @@
             <Note>
               <lid>135</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>6</tpc>
@@ -2777,7 +2777,7 @@
             <Note>
               <lid>137</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -2797,7 +2797,7 @@
             <Note>
               <lid>141</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -2811,7 +2811,7 @@
             <Note>
               <lid>143</lid>
               <Accidental>
-                <subtype>double flat</subtype>
+                <subtype>accidentalDoubleFlat</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>5</tpc>
@@ -2836,7 +2836,7 @@
             <Note>
               <lid>147</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -2856,7 +2856,7 @@
             <Note>
               <lid>151</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -2870,7 +2870,7 @@
             <Note>
               <lid>153</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>7</tpc>
@@ -2884,7 +2884,7 @@
             <Note>
               <lid>155</lid>
               <Accidental>
-                <subtype>double flat</subtype>
+                <subtype>accidentalDoubleFlat</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>5</tpc>
@@ -2898,7 +2898,7 @@
             <Note>
               <lid>157</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -3001,7 +3001,7 @@
             <Note>
               <lid>177</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -3054,7 +3054,7 @@
             <Note>
               <lid>187</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -3074,7 +3074,7 @@
             <Note>
               <lid>191</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -3110,7 +3110,7 @@
             <Note>
               <lid>197</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -3130,7 +3130,7 @@
             <Note>
               <lid>201</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>25</tpc>
@@ -3144,7 +3144,7 @@
             <Note>
               <lid>203</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -3158,7 +3158,7 @@
             <Note>
               <lid>205</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -3172,7 +3172,7 @@
             <Note>
               <lid>207</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>48</pitch>
               <tpc>26</tpc>
@@ -3192,7 +3192,7 @@
             <Note>
               <lid>211</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>48</pitch>
               <tpc>26</tpc>
@@ -3206,7 +3206,7 @@
             <Note>
               <lid>213</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -3231,7 +3231,7 @@
             <Note>
               <lid>217</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>25</tpc>
@@ -3251,7 +3251,7 @@
             <Note>
               <lid>221</lid>
               <Accidental>
-                <subtype>double sharp</subtype>
+                <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>27</tpc>
@@ -3265,7 +3265,7 @@
             <Note>
               <lid>223</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -3290,7 +3290,7 @@
             <Note>
               <lid>227</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>26</tpc>
@@ -3321,7 +3321,7 @@
             <Note>
               <lid>233</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -3335,7 +3335,7 @@
             <Note>
               <lid>235</lid>
               <Accidental>
-                <subtype>double sharp</subtype>
+                <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>29</tpc>
@@ -3349,7 +3349,7 @@
             <Note>
               <lid>237</lid>
               <Accidental>
-                <subtype>double sharp</subtype>
+                <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>27</tpc>
@@ -3441,7 +3441,7 @@
             <Note>
               <lid>255</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -3483,7 +3483,7 @@
             <Note>
               <lid>263</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -3497,7 +3497,7 @@
             <Note>
               <lid>265</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -3539,7 +3539,7 @@
             <Note>
               <lid>273</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>7</tpc>
@@ -3553,7 +3553,7 @@
             <Note>
               <lid>275</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -3595,7 +3595,7 @@
             <Note>
               <lid>283</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>6</tpc>
@@ -3609,7 +3609,7 @@
             <Note>
               <lid>285</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -3640,7 +3640,7 @@
             <Note>
               <lid>291</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>48</pitch>
               <tpc>14</tpc>
@@ -3654,7 +3654,7 @@
             <Note>
               <lid>293</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -3668,7 +3668,7 @@
             <Note>
               <lid>295</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>6</tpc>
@@ -3682,7 +3682,7 @@
             <Note>
               <lid>297</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -3702,7 +3702,7 @@
             <Note>
               <lid>301</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -3716,7 +3716,7 @@
             <Note>
               <lid>303</lid>
               <Accidental>
-                <subtype>double flat</subtype>
+                <subtype>accidentalDoubleFlat</subtype>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>5</tpc>
@@ -3741,7 +3741,7 @@
             <Note>
               <lid>307</lid>
               <Accidental>
-                <subtype>natural</subtype>
+                <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>

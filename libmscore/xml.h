@@ -70,6 +70,7 @@ class XmlReader : public QXmlStreamReader {
       XmlReader(QIODevice* d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
       XmlReader(const QString& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
 
+      bool hasAccidental;                     // used for userAccidental backward compatibility
       void unknown();
 
       // attribute helper routines:
