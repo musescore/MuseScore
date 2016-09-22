@@ -954,6 +954,8 @@ void Chord::write(Xml& xml) const
             case NoteType::GRACE32_AFTER:
                   xml.tagE("grace32after");
                   break;
+            default:
+                  break;
             }
 
       if (_noStem)

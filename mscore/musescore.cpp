@@ -64,6 +64,7 @@
 #include "mediadialog.h"
 #include "workspace.h"
 #include "selectdialog.h"
+#include "selectnotedialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
 #include "inspector/inspector.h"
@@ -3944,41 +3945,76 @@ void MuseScore::selectSimilarInRange(Element* e)
 void MuseScore::selectElementDialog(Element* e)
       {
       Score* score = e->score();
-      SelectDialog sd(e, 0);
-      if (sd.exec()) {
-            ElementPattern pattern;
-            sd.setPattern(&pattern);
+      if (e->type() == Element::Type::NOTE) {
+            SelectNoteDialog sd(static_cast<Note*>(e), 0);
+            if (sd.exec()) {
+                  NotePattern pattern;
+                  sd.setPattern(&pattern);
 
-            if (sd.isInSelection())
-                  score->scanElementsInRange(&pattern, Score::collectMatch);
-            else
-                  score->scanElements(&pattern, Score::collectMatch);
+                  if (sd.isInSelection())
+                        score->scanElementsInRange(&pattern, Score::collectNoteMatch);
+                  else
+                        score->scanElements(&pattern, Score::collectNoteMatch);
 
-            if (sd.doReplace()) {
-                  score->select(0, SelectType::SINGLE, 0);
-                  foreach(Element* ee, pattern.el)
-                        score->select(ee, SelectType::ADD, 0);
-                  }
-            else if (sd.doSubtract()) {
-                  QList<Element*> sl(score->selection().elements());
-                  foreach(Element* ee, pattern.el)
-                        sl.removeOne(ee);
-                  score->select(0, SelectType::SINGLE, 0);
-                  foreach(Element* ee, sl)
-                        score->select(ee, SelectType::ADD, 0);
-                  }
-            else if (sd.doAdd()) {
-                  QList<Element*> sl(score->selection().elements());
-                  foreach(Element* ee, pattern.el) {
-                        if(!sl.contains(ee))
+                  if (sd.doReplace()) {
+                        score->select(0, SelectType::SINGLE, 0);
+                        for (Note* ee : pattern.el)
                               score->select(ee, SelectType::ADD, 0);
                         }
+                  else if (sd.doSubtract()) {
+                        QList<Element*> sl(score->selection().elements());
+                        for (Note* ee : pattern.el)
+                              sl.removeOne(ee);
+                        score->select(0, SelectType::SINGLE, 0);
+                        for (Element* ee : sl)
+                              score->select(ee, SelectType::ADD, 0);
+                        }
+                  else if (sd.doAdd()) {
+                        QList<Element*> sl(score->selection().elements());
+                        for (Note* ee : pattern.el) {
+                              if(!sl.contains(ee))
+                                    score->select(ee, SelectType::ADD, 0);
+                              }
+                        }
                   }
-            if (score->selectionChanged()) {
-                  score->setSelectionChanged(false);
-                  SelState ss = score->selection().state();
-                  selectionChanged(ss);
+            }
+      else {
+            SelectDialog sd(e, 0);
+            if (sd.exec()) {
+                  ElementPattern pattern;
+                  sd.setPattern(&pattern);
+
+                  if (sd.isInSelection())
+                        score->scanElementsInRange(&pattern, Score::collectMatch);
+                  else
+                        score->scanElements(&pattern, Score::collectMatch);
+
+                  if (sd.doReplace()) {
+                        score->select(0, SelectType::SINGLE, 0);
+                        for (Element* ee : pattern.el)
+                              score->select(ee, SelectType::ADD, 0);
+                        }
+                  else if (sd.doSubtract()) {
+                        QList<Element*> sl(score->selection().elements());
+                        for (Element* ee : pattern.el)
+                              sl.removeOne(ee);
+                        score->select(0, SelectType::SINGLE, 0);
+                        for (Element* ee : sl)
+                              score->select(ee, SelectType::ADD, 0);
+                        }
+                  else if (sd.doAdd()) {
+                        QList<Element*> sl(score->selection().elements());
+                        for (Element* ee : pattern.el) {
+                              if(!sl.contains(ee))
+                                    score->select(ee, SelectType::ADD, 0);
+                              }
+                        }
                   }
+            }
+      if (score->selectionChanged()) {
+            score->setSelectionChanged(false);
+            SelState ss = score->selection().state();
+            selectionChanged(ss);
             }
       }
 
