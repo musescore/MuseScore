@@ -2885,19 +2885,9 @@ void Score::collectMatch(void* data, Element* e)
       if (p->type != int(e->type()))
             return;
 
-      if (p->subtypeValid) {
-            // HACK: grace note is different from normal note
-            // TODO: this disables the ability to distinguish noteheads in subtype
+      if (p->subtypeValid && p->subtype != e->subtype())
+            return;
 
-            if (p->type == int(Element::Type::NOTE)) {
-                  if (p->subtype != toNote(e)->chord()->isGrace())
-                        return;
-                  }
-            else {
-                  if (p->subtype != e->subtype())
-                        return;
-                  }
-            }
       if ((p->staffStart != -1)
          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
@@ -2918,6 +2908,30 @@ void Score::collectMatch(void* data, Element* e)
             }
       p->el.append(e);
       }
+
+//---------------------------------------------------------
+//   collectNoteMatch
+//---------------------------------------------------------
+
+void Score::collectNoteMatch(void* data, Element* e)
+      {
+      NotePattern* p = static_cast<NotePattern*>(data);
+      if (!e->isNote())
+            return;
+      Note* n = toNote(e);
+      if (p->type != NoteType::INVALID && p->type != n->noteType())
+            return;
+      if (p->pitch != -1 && p->pitch != n->pitch())
+            return;
+      if (p->tpc != Tpc::TPC_INVALID && p->tpc != n->tpc())
+            return;
+      if (p->notehead != NoteHead::Group::HEAD_INVALID && p->notehead != n->headGroup())
+            return;
+      if (p->duration.type() != TDuration::DurationType::V_INVALID && p->duration != n->chord()->actualDurationType())
+            return;
+      p->el.append(n);
+      }
+
 
 //---------------------------------------------------------
 //   selectSimilar
