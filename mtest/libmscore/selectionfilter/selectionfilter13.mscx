@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -129,7 +129,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <Chord>
           <durationType>quarter</durationType>
@@ -146,7 +146,7 @@
             </Note>
           </Chord>
         <Breath>
-          <subtype>0</subtype>
+          <symbol>breathMarkComma</symbol>
           </Breath>
         <BarLine>
           <subtype>normal</subtype>
@@ -156,7 +156,7 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -166,7 +166,7 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -176,7 +176,7 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

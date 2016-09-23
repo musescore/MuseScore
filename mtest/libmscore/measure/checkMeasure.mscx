@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -113,9 +113,9 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>0</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -156,9 +156,9 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>1920</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -177,7 +177,7 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <tick>3360</tick>
+        <move>3/4</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -191,9 +191,9 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>4320</tick>
+        <move>1/4</move>
         <Chord>
           <track>2</track>
           <durationType>quarter</durationType>
@@ -225,9 +225,9 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -237,7 +237,7 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <tick>6360</tick>
+        <move>5/16</move>
         <Chord>
           <track>1</track>
           <durationType>16th</durationType>
@@ -247,7 +247,7 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <tick>6600</tick>
+        <move>7/16</move>
         <Chord>
           <track>1</track>
           <durationType>16th</durationType>

@@ -46,6 +46,201 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   StyleVal206
+//---------------------------------------------------------
+
+struct StyleVal2 {
+            StyleIdx idx;
+            QVariant val;
+            };
+      static const StyleVal2 style206[] = {
+      { StyleIdx::staffUpperBorder,            7.0  },
+      { StyleIdx::staffLowerBorder,            7.0  },
+      { StyleIdx::staffDistance,               6.5  },
+      { StyleIdx::akkoladeDistance,            6.5  },
+      { StyleIdx::minSystemDistance,           8.5  },
+      { StyleIdx::maxSystemDistance,           15.0 },
+//      { StyleIdx::lyricsDistance,              2.0  }, //renamed to lyricsPosBelow
+      { StyleIdx::lyricsMinBottomDistance,     4.0  },
+      { StyleIdx::lyricsLineHeight,            QVariant(1.0) },
+      { StyleIdx::figuredBassFontFamily,       QVariant(QString("MScoreBC")) },
+      { StyleIdx::figuredBassFontSize,         QVariant(8.0) },
+      { StyleIdx::figuredBassYOffset,          QVariant(6.0) },
+      { StyleIdx::figuredBassLineHeight,       QVariant(1.0) },
+      { StyleIdx::figuredBassAlignment,        QVariant(0) },
+      { StyleIdx::figuredBassStyle,            QVariant(0) },
+      { StyleIdx::systemFrameDistance,         QVariant(7.0) },
+      { StyleIdx::frameSystemDistance,         QVariant(7.0) },
+      { StyleIdx::minMeasureWidth,             QVariant(5.0) },
+      { StyleIdx::barWidth,                    QVariant(0.16) },      // 0.1875
+      { StyleIdx::doubleBarWidth,              QVariant(0.16) },
+      { StyleIdx::endBarWidth,                 QVariant(0.5) },       // 0.5
+      { StyleIdx::doubleBarDistance,           QVariant(0.30) },
+      { StyleIdx::endBarDistance,              QVariant(0.40) },     // 0.3
+      { StyleIdx::repeatBarTips,               QVariant(false) },
+      { StyleIdx::startBarlineSingle,          QVariant(false) },
+      { StyleIdx::startBarlineMultiple,        QVariant(true) },
+      { StyleIdx::bracketWidth,                QVariant(0.45) },
+      { StyleIdx::bracketDistance,             QVariant(0.1) },
+      { StyleIdx::akkoladeWidth,               QVariant(1.6) },
+      { StyleIdx::akkoladeBarDistance,         QVariant(.4) },
+      { StyleIdx::clefLeftMargin,              QVariant(0.64) },
+      { StyleIdx::keysigLeftMargin,            QVariant(0.5) },
+      { StyleIdx::timesigLeftMargin,           QVariant(0.5) },
+      { StyleIdx::clefKeyRightMargin,          QVariant(1.75) },
+      { StyleIdx::clefBarlineDistance,         QVariant(0.18) },      // was 0.5
+      { StyleIdx::stemWidth,                   QVariant(0.13) },      // 0.09375
+      { StyleIdx::shortenStem,                 QVariant(true) },
+      { StyleIdx::shortStemProgression,        QVariant(0.25) },
+      { StyleIdx::shortestStem,                QVariant(2.25) },
+      { StyleIdx::beginRepeatLeftMargin,       QVariant(1.0) },
+      { StyleIdx::minNoteDistance,             QVariant(0.25) },      // 0.4
+      { StyleIdx::barNoteDistance,             QVariant(1.2) },
+      { StyleIdx::barAccidentalDistance,       QVariant(.3) },
+      { StyleIdx::multiMeasureRestMargin,      QVariant(1.2) },
+      { StyleIdx::noteBarDistance,             QVariant(1.0) },
+      { StyleIdx::measureSpacing,              QVariant(1.2) },
+      { StyleIdx::staffLineWidth,              QVariant(0.08) },      // 0.09375
+      { StyleIdx::ledgerLineWidth,             QVariant(0.16) },     // 0.1875
+      { StyleIdx::ledgerLineLength,            QVariant(.6) },     // notehead width + this value
+      { StyleIdx::accidentalDistance,          QVariant(0.22) },
+      { StyleIdx::accidentalNoteDistance,      QVariant(0.22) },
+      { StyleIdx::beamWidth,                   QVariant(0.5) },           // was 0.48
+      { StyleIdx::beamDistance,                QVariant(0.5) },          // 0.25sp
+      { StyleIdx::beamMinLen,                  QVariant(1.32) },      // 1.316178 exactly notehead width
+      { StyleIdx::beamNoSlope,                 QVariant(false) },
+      { StyleIdx::dotMag,                      QVariant(1.0) },
+      { StyleIdx::dotNoteDistance,             QVariant(0.35) },
+      { StyleIdx::dotRestDistance,             QVariant(0.25) },
+      { StyleIdx::dotDotDistance,              QVariant(0.5) },
+      { StyleIdx::propertyDistanceHead,        QVariant(1.0) },
+      { StyleIdx::propertyDistanceStem,        QVariant(1.8) },
+      { StyleIdx::propertyDistance,            QVariant(1.0) },
+      { StyleIdx::articulationMag,             QVariant(1.0) },
+      { StyleIdx::lastSystemFillLimit,         QVariant(0.3) },
+      { StyleIdx::hairpinY,                    QVariant(7.5) },
+      { StyleIdx::hairpinHeight,               QVariant(1.2) },
+      { StyleIdx::hairpinContHeight,           QVariant(0.5) },
+      { StyleIdx::hairpinLineWidth,            QVariant(0.13) },
+      { StyleIdx::pedalY,                      QVariant(8) },
+      { StyleIdx::pedalLineWidth,              QVariant(.15) },
+      { StyleIdx::pedalLineStyle,              QVariant(int(Qt::SolidLine)) },
+      { StyleIdx::trillY,                      QVariant(-1) },
+      { StyleIdx::harmonyY,                    QVariant(2.5) },
+      { StyleIdx::harmonyFretDist,             QVariant(0.5) },
+      { StyleIdx::minHarmonyDistance,          QVariant(0.5) },
+      { StyleIdx::maxHarmonyBarDistance,       QVariant(3.0) },
+      { StyleIdx::capoPosition,                QVariant(0) },
+      { StyleIdx::fretNumMag,                  QVariant(2.0) },
+      { StyleIdx::fretNumPos,                  QVariant(0) },
+      { StyleIdx::fretY,                       QVariant(2.0) },
+      { StyleIdx::showPageNumber,              QVariant(true) },
+      { StyleIdx::showPageNumberOne,           QVariant(false) },
+      { StyleIdx::pageNumberOddEven,           QVariant(true) },
+      { StyleIdx::showMeasureNumber,           QVariant(true) },
+      { StyleIdx::showMeasureNumberOne,        QVariant(false) },
+      { StyleIdx::measureNumberInterval,       QVariant(5) },
+      { StyleIdx::measureNumberSystem,         QVariant(true) },
+      { StyleIdx::measureNumberAllStaffs,      QVariant(false) },
+      { StyleIdx::smallNoteMag,                QVariant(.7) },
+      { StyleIdx::graceNoteMag,                QVariant(0.7) },
+      { StyleIdx::smallStaffMag,               QVariant(0.7) },
+      { StyleIdx::smallClefMag,                QVariant(0.8) },
+      { StyleIdx::genClef,                     QVariant(true) },
+      { StyleIdx::genKeysig,                   QVariant(true) },
+//      { StyleIdx::genTimesig,                  QVariant(true) },
+      { StyleIdx::genCourtesyTimesig,          QVariant(true) },
+      { StyleIdx::genCourtesyKeysig,           QVariant(true) },
+      { StyleIdx::genCourtesyClef,             QVariant(true) },
+      { StyleIdx::swingRatio,                  QVariant(60)   },
+      { StyleIdx::swingUnit,                   QVariant(QString("")) },
+      { StyleIdx::useStandardNoteNames,        QVariant(true) },
+      { StyleIdx::useGermanNoteNames,          QVariant(false) },
+      { StyleIdx::useFullGermanNoteNames,      QVariant(false) },
+      { StyleIdx::useSolfeggioNoteNames,       QVariant(false) },
+      { StyleIdx::useFrenchNoteNames,          QVariant(false) },
+      { StyleIdx::automaticCapitalization,     QVariant(true) },
+      { StyleIdx::lowerCaseMinorChords,        QVariant(false) },
+      { StyleIdx::lowerCaseBassNotes,          QVariant(false) },
+      { StyleIdx::allCapsNoteNames,            QVariant(false) },
+      { StyleIdx::chordStyle,                  QVariant(QString("std")) },
+      { StyleIdx::chordsXmlFile,               QVariant(false) },
+      { StyleIdx::chordDescriptionFile,        QVariant(QString("chords_std.xml")) },
+      { StyleIdx::concertPitch,                QVariant(false) },
+      { StyleIdx::createMultiMeasureRests,     QVariant(false) },
+      { StyleIdx::minEmptyMeasures,            QVariant(2) },
+      { StyleIdx::minMMRestWidth,              QVariant(4) },
+      { StyleIdx::hideEmptyStaves,             QVariant(false) },
+      { StyleIdx::dontHideStavesInFirstSystem, QVariant(true) },
+      { StyleIdx::hideInstrumentNameIfOneInstrument, QVariant(true) },
+      { StyleIdx::gateTime,                    QVariant(100) },
+      { StyleIdx::tenutoGateTime,              QVariant(100) },
+      { StyleIdx::staccatoGateTime,            QVariant(50) },
+      { StyleIdx::slurGateTime,                QVariant(100) },
+      { StyleIdx::ArpeggioNoteDistance,        QVariant(.5) },
+      { StyleIdx::ArpeggioLineWidth,           QVariant(.18) },
+      { StyleIdx::ArpeggioHookLen,             QVariant(.8) },
+      { StyleIdx::SlurEndWidth,                QVariant(.07) },
+      { StyleIdx::SlurMidWidth,                QVariant(.15) },
+      { StyleIdx::SlurDottedWidth,             QVariant(.1) },
+      { StyleIdx::MinTieLength,                QVariant(1.0) },
+      { StyleIdx::SectionPause,                QVariant(qreal(3.0)) },
+      { StyleIdx::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
+      { StyleIdx::MusicalTextFont,             QVariant(QString("MScore Text")) },
+      { StyleIdx::showHeader,                  QVariant(false) },
+//      { StyleIdx::headerStyled,                QVariant(true) },
+      { StyleIdx::headerFirstPage,             QVariant(false) },
+      { StyleIdx::headerOddEven,               QVariant(true) },
+      { StyleIdx::evenHeaderL,                 QVariant(QString()) },
+      { StyleIdx::evenHeaderC,                 QVariant(QString()) },
+      { StyleIdx::evenHeaderR,                 QVariant(QString()) },
+      { StyleIdx::oddHeaderL,                  QVariant(QString()) },
+      { StyleIdx::oddHeaderC,                  QVariant(QString()) },
+      { StyleIdx::oddHeaderR,                  QVariant(QString()) },
+      { StyleIdx::showFooter,                  QVariant(true) },
+//      { StyleIdx::footerStyled,                QVariant(true) },
+      { StyleIdx::footerFirstPage,             QVariant(true) },
+      { StyleIdx::footerOddEven,               QVariant(true) },
+      { StyleIdx::evenFooterL,                 QVariant(QString("$p")) },
+      { StyleIdx::evenFooterC,                 QVariant(QString("$:copyright:")) },
+      { StyleIdx::evenFooterR,                 QVariant(QString()) },
+      { StyleIdx::oddFooterL,                  QVariant(QString()) },
+      { StyleIdx::oddFooterC,                  QVariant(QString("$:copyright:")) },
+      { StyleIdx::oddFooterR,                  QVariant(QString("$p")) },
+      { StyleIdx::voltaY,                      QVariant(-3.0) },
+      { StyleIdx::voltaHook,                   QVariant(1.9) },
+      { StyleIdx::voltaLineWidth,              QVariant(.1) },
+      { StyleIdx::voltaLineStyle,              QVariant(int(Qt::SolidLine)) },
+      { StyleIdx::ottavaY,                     QVariant(-3.0) },
+      { StyleIdx::ottavaHook,                  QVariant(1.9) },
+      { StyleIdx::ottavaLineWidth,             QVariant(.1) },
+      { StyleIdx::ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
+      { StyleIdx::ottavaNumbersOnly,           true },
+      { StyleIdx::tabClef,                     QVariant(int(ClefType::TAB)) },
+      { StyleIdx::tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: notehead width
+      { StyleIdx::tremoloBoxHeight,            QVariant(0.65) },
+      { StyleIdx::tremoloStrokeWidth,          QVariant(0.5) },  // was 0.35
+      { StyleIdx::tremoloDistance,             QVariant(0.8) },
+      // TODO { StyleIdx::tremoloBeamLengthMultiplier, QVariant(0.62) },
+      // TODO { StyleIdx::tremoloMaxBeamLength,        QVariant(12.0) },
+      { StyleIdx::linearStretch,               QVariant(qreal(1.5)) },
+      { StyleIdx::crossMeasureValues,          QVariant(false) },
+      { StyleIdx::keySigNaturals,              QVariant(int(KeySigNatural::NONE)) },
+      { StyleIdx::tupletMaxSlope,              QVariant(qreal(0.5)) },
+      { StyleIdx::tupletOufOfStaff,            QVariant(true) },
+      { StyleIdx::tupletVHeadDistance,         QVariant(.5) },
+      { StyleIdx::tupletVStemDistance,         QVariant(.25) },
+      { StyleIdx::tupletStemLeftDistance,      QVariant(.5) },
+      { StyleIdx::tupletStemRightDistance,     QVariant(.5) },
+      { StyleIdx::tupletNoteLeftDistance,      QVariant(0.0) },
+      { StyleIdx::tupletNoteRightDistance,     QVariant(0.0) },
+      { StyleIdx::barreLineWidth,              QVariant(1.0) },
+      { StyleIdx::fretMag,                     QVariant(1.0) },
+      { StyleIdx::scaleBarlines,               QVariant(true) },
+      { StyleIdx::barGraceDistance,            QVariant(.6) },
+      };
+
+//---------------------------------------------------------
 //   readAccidental
 //---------------------------------------------------------
 
@@ -76,7 +271,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                         ++idx;
                         }
                   if (idx == sizeof(n)/sizeof(*n)) {
-                        qDebug("invalid type");
+                        qDebug("invalid type %s", qPrintable(s));
                         }
                   else
                         a->setAccidentalType(AccidentalType(idx));
@@ -774,6 +969,70 @@ static void readStaffContent(Score* score, XmlReader& e)
                   }
             }
       }
+static void readStyle(MStyle* style, XmlReader& e)
+      {
+      QString oldChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
+      bool chordListTag = false;
+      while (e.readNextStartElement()) {
+            QString tag = e.name().toString();
+
+            if (tag == "lyricsDistance")        // was renamed
+                  tag = "lyricsPosBelow";
+
+            if (tag == "TextStyle") {
+                  TextStyle s;
+                  s.read(e);
+                  style->setTextStyle(s);
+                  }
+            else if (tag == "Spatium")
+                  style->set(StyleIdx::spatium, e.readDouble() * DPMM);
+            else if (tag == "page-layout") {
+                  PageFormat pf;
+                  pf.copy(*style->pageFormat());
+                  pf.read(e);
+                  style->setPageFormat(pf);
+                  }
+            else if (tag == "displayInConcertPitch")
+                  style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
+            else if (tag == "ChordList") {
+                  style->chordList()->clear();
+                  style->chordList()->read(e);
+                  style->setCustomChordList(true);
+                  chordListTag = true;
+                  }
+            else {
+                  QString val(e.readElementText());
+                  style->convertToUnit(tag, val);
+                  }
+            }
+
+      // if we just specified a new chord description file
+      // and didn't encounter a ChordList tag
+      // then load the chord description file
+
+      QString newChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
+      if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
+            if (!newChordDescriptionFile.startsWith("chords_") && style->value(StyleIdx::chordStyle).toString() == "std") {
+                  // should not normally happen,
+                  // but treat as "old" (114) score just in case
+                  style->set(StyleIdx::chordStyle, QVariant(QString("custom")));
+                  style->set(StyleIdx::chordsXmlFile, QVariant(true));
+                  qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
+                  }
+            if (style->value(StyleIdx::chordStyle).toString() == "custom")
+                  style->setCustomChordList(true);
+            else
+                  style->setCustomChordList(false);
+            style->chordList()->unload();
+            }
+
+      // make sure we have a chordlist
+      if (!style->chordList()->loaded() && !chordListTag) {
+            if (style->value(StyleIdx::chordsXmlFile).toBool())
+                  style->chordList()->read("chords.xml");
+            style->chordList()->read(newChordDescriptionFile);
+            }
+      }
 
 //---------------------------------------------------------
 //   readScore
@@ -836,7 +1095,7 @@ static bool readScore(Score* score, XmlReader& e)
                   score->setShowPageborders(e.readInt());
             else if (tag == "Style") {
                   qreal sp = score->style()->value(StyleIdx::spatium).toDouble();
-                  score->style()->load(e);
+                  readStyle(score->style(), e);
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (score->layoutMode() == LayoutMode::FLOAT) {
                         // style should not change spatium in
@@ -1015,11 +1274,15 @@ static bool readScore(Score* score, XmlReader& e)
 
 //---------------------------------------------------------
 //   read206
+//    import old version > 1.3  and < 2.x files
 //---------------------------------------------------------
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
-      qDebug(" ");
+      for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
+            style()->set(style206[i].idx, style206[i].val);
+
+      qDebug("read206");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "programVersion") {

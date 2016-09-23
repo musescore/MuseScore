@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>35650ee</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <SyntiSettings>
-      <s name="soundfont" val="/usr/local/share/mscore-2.0/sound/TimGM6mb.sf2"/>
-      <f name="RevRoomsize" val="0.5"/>
-      <f name="RevDamp" val="0.5"/>
-      <f name="RevWidth" val="1"/>
-      <f name="RevGain" val="0.495052"/>
-      <f name="ChoType" val="0"/>
-      <f name="ChoSpeed" val="0.002"/>
-      <f name="ChoDepth" val="0.8"/>
-      <f name="ChoBlocks" val="0.03"/>
-      <f name="ChoGain" val="0.495052"/>
-      </SyntiSettings>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -41,11 +27,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <PageList>
@@ -58,7 +48,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Voice</trackName>
@@ -112,7 +104,7 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -124,20 +116,13 @@
             </Note>
           </Chord>
         <Ottava id="2">
-          <subtype>0</subtype>
-          <endHookHeight>1.9</endHookHeight>
-          <endHookType>0</endHookType>
+          <subtype>8va</subtype>
           <lineWidth>0.1</lineWidth>
           <lineStyle>1</lineStyle>
-          <lineColor r="0" g="0" b="0" a="255"/>
-          <beginTextPlace>left</beginTextPlace>
-          <continueTextPlace>left</continueTextPlace>
           <beginText>
-            <style>Ottava</style>
             <text>8va</text>
             </beginText>
           <continueText>
-            <style>Ottava</style>
             <text>(8va)</text>
             </continueText>
           </Ottava>
@@ -205,7 +190,7 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

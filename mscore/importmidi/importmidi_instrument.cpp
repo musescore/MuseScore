@@ -310,7 +310,7 @@ void sortInstrumentTemplates(
             std::vector<const InstrumentTemplate *> &templates,
             const std::pair<int, int> &minMaxPitch)
       {
-      std::sort(templates.begin(), templates.end(),
+      std::stable_sort(templates.begin(), templates.end(),
                 [minMaxPitch](const InstrumentTemplate *templ1, const InstrumentTemplate *templ2) {
             const int diff1 = findMaxPitchDiff(minMaxPitch, templ1);
             const int diff2 = findMaxPitchDiff(minMaxPitch, templ2);

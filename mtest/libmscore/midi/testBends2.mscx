@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.1.0</programVersion>
-  <programRevision>de3a7c2</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -35,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2015-06-11</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -109,7 +103,6 @@
           </Articulation>
         <Channel>
           <program value="27"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -171,7 +164,6 @@
           </Articulation>
         <Channel>
           <program value="25"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -253,8 +245,13 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
+        <Beam id="1">
+          <l1>12</l1>
+          <l2>8</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -262,6 +259,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -269,6 +267,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Bend>
               <point time="0" pitch="0" vibrato="0"/>

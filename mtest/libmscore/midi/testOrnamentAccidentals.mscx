@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.1.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -35,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2015-05-04</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -106,7 +100,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -140,8 +133,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="1">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -149,6 +147,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -157,6 +156,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -168,7 +168,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -187,8 +187,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="2">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -196,6 +201,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -204,6 +210,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -214,11 +221,16 @@
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
+        <Beam id="3">
+          <l1>-4</l1>
+          <l2>-3</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -226,9 +238,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>68</pitch>
             <tpc>10</tpc>
@@ -247,8 +260,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="4">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -256,6 +274,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>68</pitch>
             <tpc>10</tpc>
@@ -264,6 +283,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -290,8 +310,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="5">
+          <l1>-3</l1>
+          <l2>-3</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>5</Beam>
           <Note>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -299,6 +324,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>5</Beam>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -307,6 +333,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>5</Beam>
           <Note>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -318,7 +345,7 @@
           <durationType>eighth</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -340,8 +367,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="6">
+          <l1>-3</l1>
+          <l2>-3</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>6</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -349,6 +381,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>6</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -357,6 +390,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>6</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -368,7 +402,7 @@
           <durationType>eighth</durationType>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -390,8 +424,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="7">
+          <l1>-3</l1>
+          <l2>-3</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>7</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -399,6 +438,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>7</Beam>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -407,6 +447,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>7</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -417,11 +458,16 @@
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
+        <Beam id="8">
+          <l1>3</l1>
+          <l2>4</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>8</Beam>
           <Note>
             <Accidental>
-              <subtype>natural</subtype>
+              <subtype>accidentalNatural</subtype>
               </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -429,9 +475,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>8</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -450,8 +497,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="9">
+          <l1>-3</l1>
+          <l2>-3</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>9</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -459,6 +511,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>9</Beam>
           <Note>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -467,6 +520,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>9</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -493,8 +547,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="10">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>10</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -502,6 +561,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>10</Beam>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -510,6 +570,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>10</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -521,7 +582,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -535,7 +596,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -544,12 +605,17 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="11">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>11</Beam>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -557,6 +623,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>11</Beam>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -565,10 +632,11 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>11</Beam>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -583,7 +651,7 @@
           <durationType>eighth</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -605,8 +673,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="12">
+          <l1>23</l1>
+          <l2>23</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>12</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -614,10 +687,11 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>12</Beam>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -626,6 +700,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>12</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -652,8 +727,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="13">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>13</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -661,6 +741,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>13</Beam>
           <Note>
             <pitch>68</pitch>
             <tpc>10</tpc>
@@ -669,6 +750,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>13</Beam>
           <Note>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -680,7 +762,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -694,7 +776,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -703,12 +785,17 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="14">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>14</Beam>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -716,6 +803,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>14</Beam>
           <Note>
             <pitch>68</pitch>
             <tpc>10</tpc>
@@ -724,10 +812,11 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>14</Beam>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -739,7 +828,7 @@
           <durationType>eighth</durationType>
           <Note>
             <Accidental>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -761,8 +850,13 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
+        <Beam id="15">
+          <l1>23</l1>
+          <l2>23</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>15</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -770,10 +864,11 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>15</Beam>
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>double flat</subtype>
+              <subtype>accidentalDoubleFlat</subtype>
               </Accidental>
             <pitch>69</pitch>
             <tpc>5</tpc>
@@ -782,6 +877,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>
+          <Beam>15</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>

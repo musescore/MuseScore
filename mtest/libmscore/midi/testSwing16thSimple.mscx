@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
-      <smallNoteMag>0.7</smallNoteMag>
-      <graceNoteMag>0.7</graceNoteMag>
-      <smallStaffMag>0.7</smallStaffMag>
       <swingRatio>70</swingRatio>
       <page-layout>
         <page-height>1683.36</page-height>
@@ -41,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-06-27</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -68,8 +56,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -93,7 +81,6 @@
           </Articulation>
         <Channel>
           <program value="73"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -110,9 +97,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -123,8 +107,13 @@
           <style>System</style>
           <text>system-text</text>
           </StaffText>
+        <Beam id="1">
+          <l1>1</l1>
+          <l2>0</l2>
+          </Beam>
         <Chord>
           <durationType>16th</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -132,6 +121,7 @@
           </Chord>
         <Chord>
           <durationType>16th</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -140,8 +130,13 @@
         <Rest>
           <durationType>eighth</durationType>
           </Rest>
+        <Beam id="2">
+          <l1>1</l1>
+          <l2>-3</l2>
+          </Beam>
         <Chord>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -149,6 +144,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -156,6 +152,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -164,8 +161,13 @@
         <Rest>
           <durationType>eighth</durationType>
           </Rest>
+        <Beam id="3">
+          <l1>-3</l1>
+          <l2>-7</l2>
+          </Beam>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -173,6 +175,7 @@
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -180,6 +183,7 @@
           </Chord>
         <Chord>
           <durationType>16th</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -199,7 +203,7 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>e5de291</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -31,12 +27,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2013-10-23</metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -47,7 +46,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Voice</trackName>
@@ -75,7 +76,6 @@
           </Articulation>
         <Channel>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -85,9 +85,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -157,11 +154,16 @@
           </Chord>
         </Measure>
       <Measure number="3">
+        <Beam id="1">
+          <l1>17</l1>
+          <l2>12</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>prall</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -172,6 +174,7 @@
           <Articulation>
             <subtype>staccatissimo</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -182,6 +185,7 @@
           <Articulation>
             <subtype>staccatissimo</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -192,16 +196,22 @@
           <Articulation>
             <subtype>staccatissimo</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
             </Note>
           </Chord>
+        <Beam id="2">
+          <l1>11</l1>
+          <l2>16</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>reverseturn</subtype>
             </Articulation>
+          <Beam>2</Beam>
           <Note>
             <pitch>79</pitch>
             <tpc>15</tpc>
@@ -212,6 +222,7 @@
           <Articulation>
             <subtype>staccatissimo</subtype>
             </Articulation>
+          <Beam>2</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -222,6 +233,7 @@
           <Articulation>
             <subtype>staccatissimo</subtype>
             </Articulation>
+          <Beam>2</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -232,6 +244,7 @@
           <Articulation>
             <subtype>staccatissimo</subtype>
             </Articulation>
+          <Beam>2</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -281,8 +294,13 @@
           </Chord>
         </Measure>
       <Measure number="6">
+        <Beam id="3">
+          <l1>11</l1>
+          <l2>16</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>79</pitch>
             <tpc>15</tpc>
@@ -290,6 +308,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -297,6 +316,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -304,13 +324,19 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
             </Note>
           </Chord>
+        <Beam id="4">
+          <l1>17</l1>
+          <l2>12</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -318,6 +344,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -325,6 +352,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -332,6 +360,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
