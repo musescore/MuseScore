@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <swingRatio>70</swingRatio>
@@ -34,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-06-27</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -86,7 +81,6 @@
           </Articulation>
         <Channel>
           <program value="73"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -113,8 +107,13 @@
           <style>System</style>
           <text>system-text</text>
           </StaffText>
+        <Beam id="1">
+          <l1>17</l1>
+          <l2>15</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -122,11 +121,16 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <Beam id="2">
+          <l1>12</l1>
+          <l2>16</l2>
+          </Beam>
         <Tuplet id="1">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
@@ -139,6 +143,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -147,6 +152,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -155,11 +161,16 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
             </Note>
           </Chord>
+        <Beam id="3">
+          <l1>-5</l1>
+          <l2>-1</l2>
+          </Beam>
         <Tuplet id="2">
           <normalNotes>2</normalNotes>
           <actualNotes>2</actualNotes>
@@ -172,6 +183,7 @@
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -180,6 +192,7 @@
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>

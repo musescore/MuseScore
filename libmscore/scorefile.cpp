@@ -670,7 +670,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             xml.tag("programRevision", revision);
             }
       else {
-            xml.stag("museScore version=\"2.06\"");
+            xml.stag("museScore version=\"3.00\"");
             }
       if (!write(xml, onlySelection))
             return false;

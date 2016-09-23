@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.1.0</programVersion>
-  <programRevision>d8321d9</programRevision>
+<museScore version="3.00">
   <Score>
-    <layoutMode>line</layoutMode>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -36,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2015-06-11</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -99,7 +92,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -160,7 +152,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -221,7 +212,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -282,7 +272,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -343,7 +332,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -404,7 +392,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -465,7 +452,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -526,7 +512,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -587,7 +572,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -648,7 +632,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -709,7 +692,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -770,7 +752,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -831,7 +812,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -892,7 +872,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -953,7 +932,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -966,13 +944,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -982,9 +960,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -992,13 +967,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1008,9 +983,6 @@
       </Staff>
     <Staff id="3">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1018,21 +990,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="4">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1040,13 +1009,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1056,9 +1025,6 @@
       </Staff>
     <Staff id="5">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1066,21 +1032,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="6">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1088,13 +1051,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1104,9 +1067,6 @@
       </Staff>
     <Staff id="7">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1114,21 +1074,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="8">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1136,13 +1093,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1152,9 +1109,6 @@
       </Staff>
     <Staff id="9">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1162,21 +1116,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="10">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1184,13 +1135,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1200,9 +1151,6 @@
       </Staff>
     <Staff id="11">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1210,21 +1158,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="12">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1232,13 +1177,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1248,9 +1193,6 @@
       </Staff>
     <Staff id="13">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1258,21 +1200,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="14">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1280,13 +1219,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1296,9 +1235,6 @@
       </Staff>
     <Staff id="15">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1306,21 +1242,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="16">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1328,13 +1261,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1344,9 +1277,6 @@
       </Staff>
     <Staff id="17">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1354,21 +1284,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="18">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1376,13 +1303,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1392,9 +1319,6 @@
       </Staff>
     <Staff id="19">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1402,21 +1326,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="20">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1424,13 +1345,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1440,9 +1361,6 @@
       </Staff>
     <Staff id="21">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1450,21 +1368,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="22">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1472,13 +1387,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1488,9 +1403,6 @@
       </Staff>
     <Staff id="23">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1498,21 +1410,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="24">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1520,13 +1429,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1536,9 +1445,6 @@
       </Staff>
     <Staff id="25">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1546,21 +1452,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="26">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1568,13 +1471,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1584,9 +1487,6 @@
       </Staff>
     <Staff id="27">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1594,21 +1494,18 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>
     <Staff id="28">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1616,7 +1513,7 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -1660,14 +1557,13 @@
               </Articulation>
             <Channel>
               <program value="52"/>
-              <synti>Fluid</synti>
               </Channel>
             </Instrument>
           <text>Voice</text>
           </InstrumentChange>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1677,9 +1573,6 @@
       </Staff>
     <Staff id="29">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1687,13 +1580,13 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       </Staff>

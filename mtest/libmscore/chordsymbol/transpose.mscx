@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -55,8 +55,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -98,11 +98,9 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>9</lid>
         </VBox>
       <Measure number="1">
         <TimeSig>
-          <lid>1</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -110,13 +108,10 @@
         <Harmony>
           <root>15</root>
           <name>7</name>
-          <lid>2</lid>
           </Harmony>
         <Chord>
-          <lid>3</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>4</lid>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -125,13 +120,10 @@
       <Measure number="2">
         <Harmony>
           <root>14</root>
-          <lid>5</lid>
           </Harmony>
         <Chord>
-          <lid>6</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>7</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -139,7 +131,6 @@
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>8</lid>
           </BarLine>
         </Measure>
       </Staff>

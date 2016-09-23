@@ -81,8 +81,8 @@ cp   $MSCORE/brush.gp4.mscx brush.gp4-ref.mscx
 #cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
 cp   $MSCORE/repeats.gpx.mscx repeats.gpx-ref.mscx
 cp   $MSCORE/volta.gpx.mscx volta.gpx-ref.mscx
-cp   $MSCORE/grace-before-beat.gpx.mscx grace-before-beat.gpx-ref.mscx
-cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx
+#cp   $MSCORE/grace-before-beat.gpx.mscx grace-before-beat.gpx-ref.mscx
+#cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx
 cp   $MSCORE/palm-mute.gpx.mscx palm-mute.gpx-ref.mscx
 cp   $MSCORE/palm-mute.gp5.mscx palm-mute.gp5-ref.mscx
 cp   $MSCORE/palm-mute.gp4.mscx palm-mute.gp4-ref.mscx
@@ -108,3 +108,4 @@ cp   $MSCORE/free-time.gpx.mscx free-time.gpx-ref.mscx
 cp   $MSCORE/repeated-bars.gpx.mscx repeated-bars.gpx-ref.mscx
 cp   $MSCORE/dotted-gliss.gp3.mscx dotted-gliss.gp3-ref.mscx
 cp   $MSCORE/high-pitch.gp3.mscx high-pitch.gp3-ref.mscx
+cp   $MSCORE/multivoices.gpx.mscx multivoices.gpx-ref.mscx

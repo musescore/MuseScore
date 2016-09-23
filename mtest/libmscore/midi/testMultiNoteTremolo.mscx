@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.1.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -35,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2015-05-09</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -100,7 +94,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -120,7 +113,7 @@
           </TimeSig>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -131,7 +124,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -139,7 +132,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -154,7 +147,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -165,7 +158,7 @@
         <Chord>
           <dots>1</dots>
           <durationType>half</durationType>
-          <duration z="3" n="8"/>
+          <duration>3/8</duration>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -181,10 +174,10 @@
         <Chord>
           <dots>1</dots>
           <durationType>half</durationType>
-          <duration z="3" n="8"/>
+          <duration>3/8</duration>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>75</pitch>
             <tpc>11</tpc>
@@ -196,7 +189,7 @@
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
-          <duration z="1" n="8"/>
+          <duration>1/8</duration>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -207,10 +200,10 @@
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
-          <duration z="1" n="8"/>
+          <duration>1/8</duration>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>12</tpc>
@@ -224,10 +217,10 @@
       <Measure number="3">
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -246,7 +239,7 @@
           </Chord>
         <Chord>
           <durationType>whole</durationType>
-          <duration z="1" n="2"/>
+          <duration>1/2</duration>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -256,7 +249,7 @@
       <Measure number="4">
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -271,10 +264,10 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>82</pitch>
             <tpc>12</tpc>
@@ -282,7 +275,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -297,7 +290,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>84</pitch>
             <tpc>14</tpc>
@@ -307,15 +300,15 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>5760</tick>
+        <move>0/1</move>
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>70</pitch>
@@ -329,7 +322,7 @@
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <track>1</track>
             <pitch>62</pitch>
@@ -344,7 +337,7 @@
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <track>1</track>
             <pitch>65</pitch>
@@ -353,7 +346,7 @@
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>68</pitch>
@@ -367,11 +360,11 @@
         <Chord>
           <track>1</track>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <track>1</track>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               <track>1</track>
               </Accidental>
             <pitch>58</pitch>

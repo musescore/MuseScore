@@ -481,15 +481,18 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                   undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
-                  KeySig* nks = new KeySig(score);
-                  nks->setParent(s);
-                  nks->setTrack(track);
-                  nks->setKeySigEvent(nkey);
-                  undo(new AddElement(nks));
-                  if (lks)
-                        undo(new Link(lks, nks));
-                  else
-                        lks = nks;
+                  // do not create empty keysig unless custom or atonal
+                  if (tick != 0 || nkey.key() != Key::C || nkey.custom() || nkey.isAtonal()) {
+                        KeySig* nks = new KeySig(score);
+                        nks->setParent(s);
+                        nks->setTrack(track);
+                        nks->setKeySigEvent(nkey);
+                        undo(new AddElement(nks));
+                        if (lks)
+                              undo(new Link(lks, nks));
+                        else
+                              lks = nks;
+                        }
                   }
             }
       }

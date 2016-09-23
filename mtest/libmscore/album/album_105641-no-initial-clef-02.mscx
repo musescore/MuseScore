@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsDistance>3</lyricsDistance>
+      <lyricsPosBelow>3</lyricsPosBelow>
       <lyricsMinBottomDistance>4.5</lyricsMinBottomDistance>
       <hideEmptyStaves>1</hideEmptyStaves>
       <showHeader>1</showHeader>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -33,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2015-04-02</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -59,8 +55,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -98,7 +94,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -123,7 +118,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>68</pitch>
             <tpc>22</tpc>

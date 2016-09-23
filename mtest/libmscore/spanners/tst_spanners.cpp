@@ -460,6 +460,7 @@ void TestSpanners::spanners09()
 
       // UNDO AND VERIFY
       score->undoStack()->undo();
+      score->doLayout(); // measure needs to be renumbered
       QVERIFY(saveCompareScore(score, "lyricsline02.mscx", DIR + "lyricsline02.mscx"));
       delete score;
       }
@@ -492,6 +493,7 @@ void TestSpanners::spanners10()
 
       // UNDO AND VERIFY
       score->undoStack()->undo();
+      score->doLayout(); // measure needs to be renumbered
       QVERIFY(saveCompareScore(score, "lyricsline03.mscx", DIR + "lyricsline03.mscx"));
       delete score;
       }
@@ -524,6 +526,7 @@ void TestSpanners::spanners11()
 
       // UNDO AND VERIFY
       score->undoStack()->undo();
+      score->doLayout(); // measure needs to be renumbered
       QVERIFY(saveCompareScore(score, "lyricsline04.mscx", DIR + "lyricsline04.mscx"));
       delete score;
       }
@@ -556,6 +559,7 @@ void TestSpanners::spanners12()
 
       // UNDO AND VERIFY
       score->undoStack()->undo();
+      score->doLayout(); // measure needs to be renumbered
       QVERIFY(saveCompareScore(score, "lyricsline05.mscx", DIR + "lyricsline05.mscx"));
       delete score;
       }

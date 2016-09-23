@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
-      <clefLeftMargin>4</clefLeftMargin>
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <rxoffset>50</rxoffset>
         <offsetType>absolute</offsetType>
         <name>Title</name>
         <family>Arial</family>
@@ -59,7 +57,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
@@ -92,12 +92,14 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Oboe</trackName>
       <Instrument>
-        <shortName pos="0">Ob.</shortName>
+        <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -137,10 +139,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <lid>0</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <lid>1</lid>
           <sigN>4</sigN>
@@ -281,109 +279,105 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <lid>26</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
-          <lid>27</lid>
+          <lid>26</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
-          <lid>28</lid>
+          <lid>27</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>29</lid>
+          <lid>28</lid>
           </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>30</lid>
+          <lid>29</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>31</lid>
+          <lid>30</lid>
           </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
-          <lid>32</lid>
+          <lid>31</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>33</lid>
+          <lid>32</lid>
           </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
-          <lid>34</lid>
+          <lid>33</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>35</lid>
+          <lid>34</lid>
           </BarLine>
         </Measure>
       <Measure number="5">
         <Rest>
-          <lid>36</lid>
+          <lid>35</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>37</lid>
+          <lid>36</lid>
           </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
-          <lid>38</lid>
+          <lid>37</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>39</lid>
+          <lid>38</lid>
           </BarLine>
         </Measure>
       <Measure number="7">
         <Rest>
-          <lid>40</lid>
+          <lid>39</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>41</lid>
+          <lid>40</lid>
           </BarLine>
         </Measure>
       <Measure number="8">
         <Rest>
-          <lid>42</lid>
+          <lid>41</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>43</lid>
+          <lid>42</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -397,7 +391,6 @@
         <TextStyle>
           <halign>center</halign>
           <valign>top</valign>
-          <rxoffset>50</rxoffset>
           <offsetType>absolute</offsetType>
           <name>Title</name>
           <family>Arial</family>
@@ -436,10 +429,12 @@
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
-          <type>-1</type>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Flute</trackName>
         <Instrument>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
@@ -474,20 +469,12 @@
             <style>Title</style>
             <text>Style Score</text>
             </Text>
-          <Text>
-            <style>Instrument Name (Part)</style>
-            <text></text>
-            </Text>
           </VBox>
         <Measure number="1">
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             </Clef>
-          <KeySig>
-            <lid>0</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TimeSig>
             <lid>1</lid>
             <sigN>4</sigN>
@@ -634,7 +621,6 @@
         <TextStyle>
           <halign>center</halign>
           <valign>top</valign>
-          <rxoffset>50</rxoffset>
           <offsetType>absolute</offsetType>
           <name>Title</name>
           <family>Arial</family>
@@ -673,12 +659,14 @@
       <Part>
         <Staff id="1">
           <linkedTo>2</linkedTo>
-          <type>-1</type>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Oboe</trackName>
         <Instrument>
-          <shortName pos="0">Ob.</shortName>
+          <shortName>Ob.</shortName>
           <trackName>Oboe</trackName>
           <minPitchP>58</minPitchP>
           <maxPitchP>93</maxPitchP>
@@ -712,119 +700,127 @@
             <style>Title</style>
             <text>Style Score</text>
             </Text>
-          <Text>
-            <style>Instrument Name (Part)</style>
-            <text></text>
-            </Text>
           </VBox>
         <Measure number="1">
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             </Clef>
-          <KeySig>
-            <lid>26</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TimeSig>
-            <lid>27</lid>
+            <lid>26</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
+            <lid>27</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>28</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>29</lid>
             </BarLine>
           </Measure>
-        <Measure number="2">
+        <Measure number="1" len="32/4">
+          <multiMeasureRest>8</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
           <Rest>
-            <lid>30</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>31</lid>
-            </BarLine>
-          </Measure>
-        <Measure number="3">
-          <Rest>
-            <lid>32</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>33</lid>
-            </BarLine>
-          </Measure>
-        <Measure number="4">
-          <Rest>
-            <lid>34</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>35</lid>
-            </BarLine>
-          </Measure>
-        <Measure number="5">
-          <Rest>
-            <lid>36</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>37</lid>
-            </BarLine>
-          </Measure>
-        <Measure number="6">
-          <Rest>
-            <lid>38</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>39</lid>
-            </BarLine>
-          </Measure>
-        <Measure number="7">
-          <Rest>
-            <lid>40</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>41</lid>
-            </BarLine>
-          </Measure>
-        <Measure number="8">
-          <Rest>
-            <lid>42</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>32/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>43</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>29</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>30</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>31</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>32</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>33</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>34</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="5">
+          <Rest>
+            <lid>35</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>36</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="6">
+          <Rest>
+            <lid>37</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>38</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="7">
+          <Rest>
+            <lid>39</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>40</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="8">
+          <Rest>
+            <lid>41</lid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>42</lid>
             </BarLine>
           </Measure>
         </Staff>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -55,8 +55,8 @@
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
-        <longName pos="0">Violin</longName>
-        <shortName pos="0">Vln.</shortName>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -110,9 +110,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -140,7 +137,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -151,7 +148,7 @@
           </Chord>
         <Chord>
           <durationType>half</durationType>
-          <duration z="1" n="4"/>
+          <duration>1/4</duration>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -165,7 +162,7 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -175,7 +172,7 @@
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -185,7 +182,7 @@
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

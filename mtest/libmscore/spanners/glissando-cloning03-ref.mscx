@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -129,7 +129,7 @@
             <Glissando id="2">
               <text>gliss.</text>
               <subtype>0</subtype>
-              <lid>8</lid>
+              <lid>7</lid>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -177,7 +177,7 @@
             <Glissando id="3">
               <text>gliss.</text>
               <subtype>0</subtype>
-              <lid>8</lid>
+              <lid>7</lid>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <concertPitch>1</concertPitch>
@@ -35,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-08-13</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -60,8 +54,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -71,7 +65,6 @@
           <program value="73"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -197,7 +190,6 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
           <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
           <beginText>
-            <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
@@ -236,7 +228,6 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <Volta id="3">
           <lineWidth>0.1</lineWidth>
           <beginText>
-            <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>2</endings>

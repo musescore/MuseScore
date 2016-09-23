@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>fa034c3</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -31,12 +27,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2013-10-23</metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -47,7 +46,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Voice</trackName>
@@ -75,7 +76,6 @@
           </Articulation>
         <Channel>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -85,9 +85,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -149,6 +146,8 @@
           <root>14</root>
           </Harmony>
         <Beam id="1">
+          <l1>17</l1>
+          <l2>12</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -186,6 +185,8 @@
           <root>15</root>
           </Harmony>
         <Beam id="2">
+          <l1>11</l1>
+          <l2>16</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -264,6 +265,8 @@
         </Measure>
       <Measure number="6">
         <Beam id="3">
+          <l1>11</l1>
+          <l2>16</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -298,6 +301,8 @@
             </Note>
           </Chord>
         <Beam id="4">
+          <l1>17</l1>
+          <l2>12</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>

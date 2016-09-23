@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
@@ -93,11 +89,9 @@ p, li { white-space: pre-wrap; }
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-08-13</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -120,8 +114,8 @@ p, li { white-space: pre-wrap; }
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
-        <longName pos="0">Violin</longName>
-        <shortName pos="0">Vln.</shortName>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
         <trackName></trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -131,19 +125,16 @@ p, li { white-space: pre-wrap; }
           <program value="40"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -165,9 +156,6 @@ p, li { white-space: pre-wrap; }
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -202,7 +190,6 @@ p, li { white-space: pre-wrap; }
             <offset x="-0.491739" y="-2.95043"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
@@ -227,7 +214,6 @@ p, li { white-space: pre-wrap; }
             <offset x="-0.0674338" y="-2.89668"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>1</endings>
@@ -251,11 +237,11 @@ p, li { white-space: pre-wrap; }
             <offset x="0.271718" y="-2.87585"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>3.</text>
             </beginText>
           <endings>2</endings>
           </Volta>
+        <endSpanner id="4"/>
         <Chord>
           <durationType>whole</durationType>
           <Note>

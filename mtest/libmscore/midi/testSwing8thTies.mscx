@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
-      <smallNoteMag>0.7</smallNoteMag>
-      <graceNoteMag>0.7</graceNoteMag>
-      <smallStaffMag>0.7</smallStaffMag>
       <swingRatio>70</swingRatio>
       <page-layout>
         <page-height>1683.36</page-height>
@@ -41,11 +31,9 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-06-27</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -68,8 +56,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -93,7 +81,6 @@
           </Articulation>
         <Channel>
           <program value="73"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -110,9 +97,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -123,11 +107,16 @@
           <style>System</style>
           <text>system-text</text>
           </StaffText>
+        <Beam id="1">
+          <l1>16</l1>
+          <l2>21</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>75</pitch>
             <tpc>11</tpc>
@@ -135,6 +124,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Tie id="2">
               </Tie>
@@ -144,6 +134,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <endSpanner id="2"/>
             <pitch>72</pitch>
@@ -152,6 +143,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -183,8 +175,13 @@
           </BarLine>
         </Measure>
       <Measure number="2">
+        <Beam id="2">
+          <l1>-4</l1>
+          <l2>0</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -192,6 +189,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Tie id="4">
               </Tie>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -163,6 +163,8 @@
             <maxPitchP>85</maxPitchP>
             <minPitchA>52</minPitchA>
             <maxPitchA>80</maxPitchA>
+            <transposeDiatonic>-1</transposeDiatonic>
+            <transposeChromatic>-2</transposeChromatic>
             <instrumentId>brass.trumpet.bflat</instrumentId>
             <Articulation>
               <velocity>100</velocity>
@@ -206,7 +208,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -214,7 +215,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -224,7 +224,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -232,7 +231,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -242,7 +240,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -250,7 +247,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -260,7 +256,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -268,7 +263,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -278,7 +272,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -286,7 +279,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -296,7 +288,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -304,7 +295,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -314,7 +304,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -322,7 +311,6 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <BarLine>
@@ -383,6 +371,8 @@
             <maxPitchP>85</maxPitchP>
             <minPitchA>52</minPitchA>
             <maxPitchA>80</maxPitchA>
+            <transposeDiatonic>-1</transposeDiatonic>
+            <transposeChromatic>-2</transposeChromatic>
             <instrumentId>brass.trumpet.bflat</instrumentId>
             <Articulation>
               <velocity>100</velocity>
@@ -426,6 +416,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -433,6 +424,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -442,6 +434,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -449,6 +442,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -458,6 +452,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -465,6 +460,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -474,6 +470,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -481,6 +478,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -490,6 +488,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -497,6 +496,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -506,6 +506,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -513,6 +514,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <BarLine>
