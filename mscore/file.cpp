@@ -1478,6 +1478,9 @@ QString MuseScore::getDrumsetFilename(bool open)
 
 void MuseScore::printFile()
       {
+      LayoutMode layoutMode = cs->layoutMode();
+      cs->switchToPageMode();
+
       QPrinter printerDev(QPrinter::HighResolution);
       const PageFormat* pf = cs->pageFormat();
       QPageSize ps(QPageSize::id(pf->size(), QPageSize::Inch));
@@ -1506,39 +1509,36 @@ void MuseScore::printFile()
 
       QPrintDialog pd(&printerDev, 0);
 
-      if (!pd.exec())
-            return;
+      if (pd.exec()) {
+            QPainter p(&printerDev);
+            p.setRenderHint(QPainter::Antialiasing, true);
+            p.setRenderHint(QPainter::TextAntialiasing, true);
+            double mag = printerDev.logicalDpiX() / DPI;
 
-      LayoutMode layoutMode = cs->layoutMode();
-      cs->switchToPageMode();
+            p.scale(mag, mag);
 
-      QPainter p(&printerDev);
-      p.setRenderHint(QPainter::Antialiasing, true);
-      p.setRenderHint(QPainter::TextAntialiasing, true);
-      double mag = printerDev.logicalDpiX() / DPI;
+            int fromPage = printerDev.fromPage() - 1;
+            int toPage   = printerDev.toPage() - 1;
+            if (fromPage < 0)
+                  fromPage = 0;
+            if ((toPage < 0) || (toPage >= pages))
+                  toPage = pages - 1;
 
-      p.scale(mag, mag);
+            for (int copy = 0; copy < printerDev.numCopies(); ++copy) {
+                  bool firstPage = true;
+                  for (int n = fromPage; n <= toPage; ++n) {
+                        if (!firstPage)
+                              printerDev.newPage();
+                        firstPage = false;
 
-      int fromPage = printerDev.fromPage() - 1;
-      int toPage   = printerDev.toPage() - 1;
-      if (fromPage < 0)
-            fromPage = 0;
-      if ((toPage < 0) || (toPage >= pages))
-            toPage = pages - 1;
-
-      for (int copy = 0; copy < printerDev.numCopies(); ++copy) {
-            bool firstPage = true;
-            for (int n = fromPage; n <= toPage; ++n) {
-                  if (!firstPage)
-                        printerDev.newPage();
-                  firstPage = false;
-
-                  cs->print(&p, n);
-                  if ((copy + 1) < printerDev.numCopies())
-                        printerDev.newPage();
+                        cs->print(&p, n);
+                        if ((copy + 1) < printerDev.numCopies())
+                              printerDev.newPage();
+                        }
                   }
+            p.end();
             }
-      p.end();
+
       if (layoutMode != cs->layoutMode())
             cs->endCmd(true);       // rollback
       }
