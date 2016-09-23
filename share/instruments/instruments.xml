@@ -9514,6 +9514,12 @@
                   <Channel name="tremolo">
                         <program value="44"/>
                   </Channel>
+                  <Channel name="slap">
+                        <program value="36"/>
+                  </Channel>
+                  <Channel name="pop">
+                        <program value="37"/>
+                  </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
             </Instrument>
@@ -9535,6 +9541,12 @@
                   <pPitchRange>28-65</pPitchRange>
                   <Channel>
                         <program value="33"/>
+                  </Channel>
+                  <Channel name="slap">
+                        <program value="36"/>
+                  </Channel>
+                  <Channel name="pop">
+                        <program value="37"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -9567,6 +9579,12 @@
                   <Channel>
                         <program value="35"/>
                   </Channel>
+                  <Channel name="slap">
+                        <program value="36"/>
+                  </Channel>
+                  <Channel name="pop">
+                        <program value="37"/>
+                  </Channel>
             </Instrument>
             <Instrument id="5-string-electric-bass">
                   <longName>5-str. Electric Bass</longName>
@@ -9587,6 +9605,12 @@
                   <pPitchRange>23-65</pPitchRange>
                   <Channel>
                         <program value="33"/>
+                  </Channel>
+                  <Channel name="slap">
+                        <program value="36"/>
+                  </Channel>
+                  <Channel name="pop">
+                        <program value="37"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
