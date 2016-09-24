@@ -28,6 +28,7 @@
 #include "libmscore/element.h"
 #include "libmscore/system.h"
 #include "libmscore/score.h"
+#include "libmscore/slur.h"
 
 namespace Ms {
 
@@ -73,6 +74,8 @@ void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = int(e->type());
       p->subtype = int(e->subtype());
+      if (e->type() == Element::Type::SLUR_SEGMENT)
+            p->subtype = int(((SlurSegment*)e)->spanner()->type());
 
       if (sameStaff->isChecked()) {
             p->staffStart = e->staffIdx();
