@@ -2884,14 +2884,22 @@ void Score::collectMatch(void* data, Element* e)
       ElementPattern* p = static_cast<ElementPattern*>(data);
       if (p->type != int(e->type()))
             return;
-
-      if (p->subtypeValid && p->subtype != e->subtype())
+      
+      if (p->type == int(Element::Type::NOTE)) {
+            if (p->subtype < 0) {
+                  if (!(toNote(e)->chord()->isGrace()))
+                        return;
+                  }
+            else if ((toNote(e)->chord()->isGrace()) || (p->subtype != e->subtype()))
+                  return;
+            }
+      else if (p->subtypeValid && p->subtype != e->subtype())
             return;
 
       if ((p->staffStart != -1)
          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
-      if (e->isChord() || e->isRest() || e->isNote() || e->isLyrics() || e->isBeam() || e->isStem() || e->isSlurSegment()) {
+      if (e->isChord() || e->isRest() || e->isArticulation() || e->isLyrics() || e->isBeam() || e->isStem() || e->isSlurSegment()) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
@@ -2929,6 +2937,13 @@ void Score::collectNoteMatch(void* data, Element* e)
             return;
       if (p->duration.type() != TDuration::DurationType::V_INVALID && p->duration != n->chord()->actualDurationType())
             return;
+      if ((p->staffStart != -1)
+         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
+            return;
+      if (p->voice != -1 && p->voice != e->voice())
+            return;
+      if (p->system && (p->system != n->chord()->segment()->system()))
+            return;
       p->el.append(n);
       }
 
@@ -2944,20 +2959,20 @@ void Score::selectSimilar(Element* e, bool sameStaff)
 
       ElementPattern pattern;
       pattern.type = int(type);
+      pattern.subtype = 0;
+      pattern.subtypeValid = false;
       if (type == Element::Type::NOTE) {
-            pattern.subtype = toNote(e)->chord()->isGrace();
-            pattern.subtypeValid = true;
+            if (toNote(e)->chord()->isGrace())
+                  pattern.subtype = -1; // hack
+            else
+                  pattern.subtype = e->subtype();
             }
       else if (type == Element::Type::SLUR_SEGMENT) {
             pattern.subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
             pattern.subtypeValid = true;
             }
-      else {
-            pattern.subtype = 0;
-            pattern.subtypeValid = false;
-            }
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
-      pattern.staffEnd = sameStaff ? e->staffIdx()+1 : -1;
+      pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
       pattern.voice   = -1;
       pattern.system  = 0;
 
@@ -2975,23 +2990,33 @@ void Score::selectSimilar(Element* e, bool sameStaff)
 void Score::selectSimilarInRange(Element* e)
       {
       Element::Type type = e->type();
-      ElementPattern pattern;
-
       Score* score = e->score();
+
+      ElementPattern pattern;
       pattern.type    = int(type);
       pattern.subtype = 0;
+      pattern.subtypeValid = false;
+      if (type == Element::Type::NOTE) {
+            if (toNote(e)->chord()->isGrace())
+                  pattern.subtype = -1; //hack
+            else
+                  pattern.subtype = e->subtype();
+            pattern.subtypeValid = true;
+            }
+      else if (type == Element::Type::SLUR_SEGMENT) {
+            pattern.subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
+            pattern.subtypeValid = true;
+            }
       pattern.staffStart = selection().staffStart();
       pattern.staffEnd = selection().staffEnd();
       pattern.voice   = -1;
       pattern.system  = 0;
-      pattern.subtypeValid = false;
 
       score->scanElementsInRange(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      for (Element* e : pattern.el) {
+      for (Element* e : pattern.el)
             score->select(e, SelectType::ADD, 0);
-            }
       }
 
 //---------------------------------------------------------
