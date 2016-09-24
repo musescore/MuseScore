@@ -490,6 +490,8 @@ void Page::doRebuildBspTree()
 //    $P          - page number, on all pages
 //    $N          - page number, if there is more than one
 //    $n          - number of pages
+//    $i          - part name, except on first page
+//    $I          - part name, on all pages
 //    $f          - file name
 //    $F          - file path+name
 //    $d          - current date
@@ -499,7 +501,7 @@ void Page::doRebuildBspTree()
 //    $C          - copyright, on first page only
 //    $c          - copyright, on all pages
 //    $$          - the $ sign itself
-//    $:tag:      - meta data tag
+//    $:tag:      - any metadata tag
 //
 //       tags already defined:
 //       (see Score::init()))
@@ -534,6 +536,11 @@ QString Page::replaceTextMacros(const QString& s) const
                               break;
                         case 'n':
                               d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
+                              break;
+                        case 'i': // not on first page
+                              if (_no) // FALLTHROUGH
+                        case 'I':
+                              d += score()->metaTag("partName").toHtmlEscaped();
                               break;
                         case 'f':
                               d += masterScore()->fileInfo()->completeBaseName().toHtmlEscaped();
