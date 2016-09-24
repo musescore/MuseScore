@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1123</width>
-    <height>865</height>
+    <width>920</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -5760,7 +5760,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_601">
              <property name="text">
-              <string>Fret offset number font size:</string>
+              <string>Fret number font size:</string>
              </property>
              <property name="buddy">
               <cstring>fretNumMag</cstring>

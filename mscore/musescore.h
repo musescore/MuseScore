@@ -708,6 +708,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newAccidentalsPalette(bool basic = false);
       static Palette* newBarLinePalette(bool basic);
       static Palette* newLinesPalette(bool basic);
+      static Palette* newFretboardDiagramPalette();
 
       Inspector* inspector()           { return _inspector; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }
