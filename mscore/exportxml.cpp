@@ -3272,17 +3272,22 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 
 void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       {
-      directionTag(xml, attr, hp);
-      xml.stag("direction-type");
-
       int n = findHairpin(hp);
       if (n >= 0)
             hairpins[n] = 0;
       else {
             n = findHairpin(0);
-            hairpins[n] = hp;
+            if (n >= 0)
+                  hairpins[n] = hp;
+            else {
+                  qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick);
+                  return;
+                  }
             }
 
+      directionTag(xml, attr, hp);
+      xml.stag("direction-type");
+            
       if (hp->tick() == tick) {
             if ( hp->hairpinType() == Hairpin::Type::CRESCENDO ) {
                   if ( hp->hairpinCircledTip() ) {
