@@ -1518,7 +1518,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             else if (staff->excerpt())
                   tracks.append(staff->idx() * VOICES + cr->voice());
             else
-                  tracks.append(strack);
+                  tracks.append(score()->staffIdx(staff) * VOICES + cr->voice());
 
             for (int ntrack : tracks) {
                   if (ntrack < staff->part()->startTrack() || ntrack >= staff->part()->endTrack())
