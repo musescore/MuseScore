@@ -5857,12 +5857,12 @@ void ScoreFont::load()
                   if (i == "stemDownNW") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setStemDownNW(QPointF(4.0 * x, 4.0 * -y));
+                        sym->setStemDownNW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
                         }
                   else if (i == "stemUpSE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setStemUpSE(QPointF(4.0 * x, 4.0 * -y));
+                        sym->setStemUpSE(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
                         }
                   else if (i == "cutOutNE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
