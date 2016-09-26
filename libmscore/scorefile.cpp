@@ -477,15 +477,24 @@ QImage Score::createThumbnail()
       int h      = int(fr.height() * mag);
 
       QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
-      pm.setDotsPerMeterX(lrint((mag * 1000) / INCH));
-      pm.setDotsPerMeterY(lrint((mag * 1000) / INCH));
+
+      int dpm = lrint(DPMM * 1000.0);
+      pm.setDotsPerMeterX(dpm);
+      pm.setDotsPerMeterY(dpm);
       pm.fill(0xffffffff);
+
+      double pr = MScore::pixelRatio;
+      MScore::pixelRatio = 1.0;
+
       QPainter p(&pm);
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       p.scale(mag, mag);
       print(&p, 0);
       p.end();
+
+      MScore::pixelRatio = pr;
+
       if (layoutMode() != mode) {
             setLayoutMode(mode);
             doLayout();
@@ -931,7 +940,7 @@ void Score::print(QPainter* painter, int pageNo)
 
       QList<Element*> ell = page->items(fr);
       qStableSort(ell.begin(), ell.end(), elementLessThan);
-      foreach(const Element* e, ell) {
+      for (const Element* e : ell) {
             if (!e->visible())
                   continue;
             painter->save();
