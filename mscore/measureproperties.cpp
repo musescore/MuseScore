@@ -25,6 +25,7 @@
 #include "libmscore/repeat.h"
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -35,19 +36,25 @@ namespace Ms {
 MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("MeasureProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       setMeasure(_m);
       staves->verticalHeader()->hide();
+
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
       connect(nextButton, SIGNAL(clicked()), SLOT(gotoNextMeasure()));
       connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
+
       nextButton->setEnabled(_m->nextMeasure() != 0);
       previousButton->setEnabled(_m->prevMeasure() != 0);
       if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft) {
             horizontalLayout_2->removeWidget(nextButton);
             horizontalLayout_2->insertWidget(0, nextButton);
             }
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -266,5 +273,16 @@ void MeasureProperties::apply()
       score->select(m, SelectType::SINGLE, 0);
       score->update();
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void MeasureProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

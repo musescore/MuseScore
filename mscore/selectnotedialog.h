@@ -35,6 +35,7 @@ class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog {
       Q_OBJECT
       const Note* n;
 
+      virtual void hideEvent(QHideEvent*);
    public:
       SelectNoteDialog(const Note* n, QWidget* parent);
       void setPattern(NotePattern* p);

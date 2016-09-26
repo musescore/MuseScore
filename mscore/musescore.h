@@ -170,6 +170,8 @@ class AboutMusicXMLBoxDialog : public QDialog, Ui::AboutMusicXMLBox {
 class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       virtual void accept();
 

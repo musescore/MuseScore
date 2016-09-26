@@ -35,6 +35,7 @@ enum class Key;
 class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void transposeByKeyToggled(bool);
       void transposeByIntervalToggled(bool);

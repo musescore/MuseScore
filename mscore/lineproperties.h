@@ -39,6 +39,8 @@ class LineProperties : public QDialog, public Ui::LinePropertiesDialog {
 
       TextLineBase* tl;
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       virtual void accept();
       void beginTextProperties();

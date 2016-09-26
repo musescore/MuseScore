@@ -22,6 +22,7 @@ class ResourceManager : public QDialog, public Ui::Resource
    {
     Q_OBJECT
 
+    virtual void hideEvent(QHideEvent*);
 public:
     explicit ResourceManager(QWidget *parent = 0);
     QByteArray txt;

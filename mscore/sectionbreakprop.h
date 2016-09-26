@@ -34,6 +34,7 @@ class LayoutBreak;
 class SectionBreakProperties : public QDialog, public Ui::SectionBreakProperties {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
    public:
       SectionBreakProperties(LayoutBreak*, QWidget* parent = 0);
       double pause() const;
