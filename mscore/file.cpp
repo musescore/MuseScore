@@ -1510,6 +1510,9 @@ void MuseScore::printFile()
             p.setRenderHint(QPainter::TextAntialiasing, true);
             double mag = printerDev.logicalDpiX() / DPI;
 
+            double pr = MScore::pixelRatio;
+            MScore::pixelRatio = DPI / printerDev.logicalDpiX();
+
             p.scale(mag, mag);
 
             int fromPage = printerDev.fromPage() - 1;
@@ -1532,13 +1535,13 @@ void MuseScore::printFile()
                         }
                   }
             p.end();
+            MScore::pixelRatio = pr;
             }
 
       if (layoutMode != cs->layoutMode()) {
             cs->setLayoutMode(layoutMode);
             cs->doLayout();
             }
-      MScore::pixelRatio = pr;
       }
 
 //---------------------------------------------------------
