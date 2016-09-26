@@ -173,7 +173,7 @@ AccidentalType Accidental::name2subtype(const QString& tag)
       {
       SymId symId = Sym::name2id(tag);
       if (symId == SymId::noSym)
-            qDebug("no symbol found");
+            ; // qDebug("no symbol found");
       else {
             int i = 0;
             for (const Acc& acc : accList) {

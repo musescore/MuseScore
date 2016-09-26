@@ -1511,8 +1511,7 @@ void MuseScore::printFile()
             double mag = printerDev.logicalDpiX() / DPI;
 
             double pr = MScore::pixelRatio;
-            MScore::pixelRatio = DPI / printerDev.logicalDpiX();
-
+            MScore::pixelRatio = 1.0 / mag;
             p.scale(mag, mag);
 
             int fromPage = printerDev.fromPage() - 1;
@@ -1913,9 +1912,6 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = DPI / printerDev.logicalDpiX();
 
-      // double mag = printerDev.logicalDpiX() / DPI;
-      // p.scale(mag, mag);
-
       const QList<Page*> pl = cs->pages();
       int pages = pl.size();
       bool firstPage = true;
@@ -1967,9 +1963,6 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = DPI / printerDev.logicalDpiX();
       MScore::pdfPrinting = true;
-
-//      double mag = printerDev.logicalDpiX() / DPI;
-//      p.scale(mag, mag);
 
       bool firstPage = true;
       for (Score* s : cs) {
@@ -2378,11 +2371,11 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
             printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
 
-            MScore::pixelRatio = DPI / printer.logicalDpiX();
-
             printer.fill(transparent ? 0 : 0xffffffff);
 
             double mag = convDpi / DPI;
+            MScore::pixelRatio = 1.0 / mag;
+
             QPainter p(&printer);
             p.setRenderHint(QPainter::Antialiasing, true);
             p.setRenderHint(QPainter::TextAntialiasing, true);
@@ -2554,8 +2547,8 @@ QString MuseScore::getWallpaper(const QString& caption)
 // [of edit that must be coordinated with the MuseScore master code base.
 //
 bool MuseScore::saveSvg(Score* score, const QString& saveName)
-{
-    SvgGenerator printer;
+      {
+      SvgGenerator printer;
 
       QString title(score->title());
       printer.setTitle(title);
@@ -2659,16 +2652,16 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 
                   // Paint it
                   paintElement(p, e);
-            }
+                  }
             p.translate(QPointF(pf->width() * DPI, 0.0));
-      }
+            }
 
       // Clean up and return
       score->setPrinting(false);
       MScore::pdfPrinting = false;
       p.end(); // Writes MuseScore SVG file to disk, finally
       return true;
-}
+      }
 
 //---------------------------------------------------------
 //   createThumbnail
