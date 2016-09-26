@@ -135,6 +135,8 @@ class XmlReader : public QXmlStreamReader {
 
       QMap<int, LinkedElements*>& linkIds() { return _elinks;     }
       QMultiMap<int, int>& tracks()         { return _tracks;     }
+
+      void checkTuplets();
       };
 
 //---------------------------------------------------------

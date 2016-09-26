@@ -244,6 +244,22 @@ bool XmlReader::readBool()
       }
 
 //---------------------------------------------------------
+//   checkTuplets
+//---------------------------------------------------------
+
+void XmlReader::checkTuplets()
+      {
+      for (Tuplet* tuplet : tuplets()) {
+            if (tuplet->elements().empty()) {
+                  // this should not happen and is a sign of input file corruption
+                  qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
+                     tuplet->id(), tuplet);
+                  delete tuplet;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   compareProperty
 //---------------------------------------------------------
 
