@@ -1135,16 +1135,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else
                   e.unknown();
             }
-      for (Tuplet* tuplet : e.tuplets()) {
-            if (tuplet->elements().empty()) {
-                  // this should not happen and is a sign of input file corruption
-                  qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
-                     tuplet->id(), tuplet);
-                  delete tuplet;
-                  }
-            else
-                  tuplet->setParent(m);
-            }
+      e.checkTuplets();
       }
 
 //---------------------------------------------------------

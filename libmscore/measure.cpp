@@ -1999,27 +1999,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else
                   e.unknown();
             }
-#if 0
-      if (staffIdx == 0) {
-            Segment* s = last();
-            if (s && s->segmentType() == Segment::Type::BarLine) {
-                  BarLine* b = static_cast<BarLine*>(s->element(0));
-                  setEndBarLineType(b->barLineType(), false, b->visible(), b->color());
-                  // s->remove(b);
-                  // delete b;
-                  }
-            }
-#endif
-      for (Tuplet* tuplet : e.tuplets()) {
-            if (tuplet->elements().empty()) {
-                  // this should not happen and is a sign of input file corruption
-                  qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
-                     tuplet->id(), tuplet);
-                  delete tuplet;
-                  }
-            else
-                  tuplet->setParent(this);
-            }
+      e.checkTuplets();
       }
 
 //---------------------------------------------------------

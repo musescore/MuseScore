@@ -96,6 +96,7 @@ void InstrumentChange::read(XmlReader& e)
             // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
             // here we set the instrument change to inherit the staff transposition to emulate previous versions
             // in Note::read(), we attempt to fix the tpc corruption
+
             Interval v = staff() ? staff()->part()->instrument()->transpose() : 0;
             _instrument->setTranspose(v);
             }

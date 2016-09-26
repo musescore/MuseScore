@@ -1538,6 +1538,7 @@ void MuseScore::printFile()
             cs->setLayoutMode(layoutMode);
             cs->doLayout();
             }
+      MScore::pixelRatio = pr;
       }
 
 //---------------------------------------------------------
@@ -1908,7 +1909,6 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = DPI / printerDev.logicalDpiX();
-      MScore::pdfPrinting = true;
 
       // double mag = printerDev.logicalDpiX() / DPI;
       // p.scale(mag, mag);
