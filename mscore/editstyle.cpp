@@ -440,7 +440,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   closeEvent
+//   hideEvent
 //---------------------------------------------------------
 
 void EditStyle::hideEvent(QHideEvent* ev)

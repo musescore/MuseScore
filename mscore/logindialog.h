@@ -28,6 +28,8 @@ class LoginDialog : public QDialog, public Ui::LoginDialog
       
       LoginManager* _loginManager;
 
+      virtual void hideEvent(QHideEvent*);
+
    signals:
       void loginSuccessful();
       

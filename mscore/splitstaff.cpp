@@ -19,6 +19,7 @@
 //=============================================================================
 
 #include "splitstaff.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -29,9 +30,22 @@ namespace Ms {
 SplitStaff::SplitStaff(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("SplitStaff");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       splitPoint->setValue(60);
+      MuseScore::restoreGeometry(this);
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void SplitStaff::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

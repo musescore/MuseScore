@@ -29,6 +29,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -39,6 +40,7 @@ namespace Ms {
 FretDiagramProperties::FretDiagramProperties(FretDiagram* _fd, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("FretDiagramProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       fd = _fd;
@@ -52,6 +54,8 @@ FretDiagramProperties::FretDiagramProperties(FretDiagram* _fd, QWidget* parent)
       connect(strings, SIGNAL(valueChanged(int)), SLOT(stringsChanged(int)));
       connect(frets,   SIGNAL(valueChanged(int)), SLOT(fretsChanged(int)));
       connect(diagramScrollBar, SIGNAL(valueChanged(int)), SLOT(fretOffsetChanged(int)));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -72,6 +76,16 @@ void FretDiagramProperties::stringsChanged(int val)
       {
       fd->setStrings(val);
       diagram->update();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void FretDiagramProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
       }
 
 //---------------------------------------------------------

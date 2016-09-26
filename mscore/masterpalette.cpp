@@ -140,6 +140,7 @@ void MasterPalette::addPalette(Palette* sp)
 MasterPalette::MasterPalette(QWidget* parent)
    : QWidget(parent, Qt::Dialog)
       {
+      setObjectName("MasterPalette");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -195,6 +196,8 @@ MasterPalette::MasterPalette(QWidget* parent)
       connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
       connect(treeWidget, &QTreeWidget::itemClicked, this, &MasterPalette::clicked);
       retranslate(true);
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -238,6 +241,7 @@ void MasterPalette::clicked(QTreeWidgetItem* item, int)
 
 void MasterPalette::closeEvent(QCloseEvent* ev)
       {
+      MuseScore::saveGeometry(this);
       if (timeDialog->dirty())
             timeDialog->save();
       if (keyEditor->dirty())

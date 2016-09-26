@@ -37,6 +37,8 @@ class BendProperties : public QDialog, public Ui::BendDialog {
       Bend* bend;
       QButtonGroup* bendTypes;
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void bendTypeChanged(int);
 

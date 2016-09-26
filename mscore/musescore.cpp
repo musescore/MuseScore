@@ -290,6 +290,7 @@ void MuseScore::cmdInsertMeasures()
 InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("InsertMeasuresDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       insmeasures->selectAll();
@@ -305,6 +306,16 @@ void InsertMeasuresDialog::accept()
       if (mscore->currentScore())
             mscore->currentScoreView()->cmdInsertMeasures(n, Element::Type::MEASURE);
       done(1);
+      }
+
+//---------------------------------------------------------
+// InsertMeasuresDialog hideEvent
+//---------------------------------------------------------
+
+void InsertMeasuresDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
       }
 
 //---------------------------------------------------------
