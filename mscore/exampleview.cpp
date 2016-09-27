@@ -129,7 +129,7 @@ void ExampleView::drawBackground(QPainter*, const QRectF&) const
 
 void ExampleView::drawElements(QPainter& painter, const QList<Element*>& el)
       {
-      foreach (Element* e, el) {
+      for (Element* e : el) {
             e->itemDiscovered = 0;
             QPointF pos(e->pagePos());
             painter.translate(pos);
