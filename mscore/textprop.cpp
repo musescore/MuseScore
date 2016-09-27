@@ -49,6 +49,18 @@ TextProp::TextProp(QWidget* parent)
       g3->addButton(circleButton);
       g3->addButton(boxButton);
 
+      alignLeft->setIcon(*icons[int(Icons::textLeft_ICON)]);
+      alignRight->setIcon(*icons[int(Icons::textRight_ICON)]);
+      alignHCenter->setIcon(*icons[int(Icons::textCenter_ICON)]);
+      alignVCenter->setIcon(*icons[int(Icons::textVCenter_ICON)]);
+      alignTop->setIcon(*icons[int(Icons::textTop_ICON)]);
+      alignBaseline->setIcon(*icons[int(Icons::textBaseline_ICON)]);
+      alignBottom->setIcon(*icons[int(Icons::textBaseline_ICON)]);
+
+      fontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      fontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+      fontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+
       connect(mmUnit, SIGNAL(toggled(bool)), SLOT(mmToggled(bool)));
       connect(resetToStyle, SIGNAL(clicked()), SLOT(doResetToTextStyle()));
       connect(resetToStyle, SIGNAL(clicked()), SIGNAL(resetToStyleClicked()));
