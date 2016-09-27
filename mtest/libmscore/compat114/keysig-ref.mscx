@@ -120,7 +120,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <bottomGap>7</bottomGap>
         <Text>
           <style>Title</style>
           <text><font face="Times New Roman"/>keysig</text>
