@@ -1008,13 +1008,15 @@ Element* System::prevElement()
 
 qreal System::minDistance(System* s2) const
       {
-      const qreal systemFrameDistance = score()->styleP(StyleIdx::systemFrameDistance);
-      const qreal frameSystemDistance = score()->styleP(StyleIdx::frameSystemDistance);
+//      const qreal systemFrameDistance = score()->styleP(StyleIdx::systemFrameDistance);
+//      const qreal frameSystemDistance = score()->styleP(StyleIdx::frameSystemDistance);
 
       if (vbox() && !s2->vbox())
-            return qMax(frameSystemDistance, -s2->minTop());
+//            return qMax(frameSystemDistance, -s2->minTop());
+            return qMax(vbox()->bottomGap(), -s2->minTop());
       else if (!vbox() && s2->vbox())
-            return qMax(systemFrameDistance, -minBottom());
+//            return qMax(systemFrameDistance, -minBottom());
+            return qMax(s2->vbox()->topGap(), -minBottom());
       else if (vbox() && s2->vbox())
             return 0.0;
 
