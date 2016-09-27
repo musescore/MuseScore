@@ -46,7 +46,7 @@ void Box::layout()
       {
       MeasureBase::layout();
       for (Element* e : el()) {
-            if (e->type() != Element::Type::LAYOUT_BREAK)
+            if (!e->isLayoutBreak())
                   e->layout();
             }
       }
@@ -86,7 +86,7 @@ void Box::draw(QPainter* painter) const
 void Box::startEdit(MuseScoreView*, const QPointF&)
       {
       editMode = true;
-      if (type() == Element::Type::HBOX)
+      if (isHBox())
             undoPushProperty(P_ID::BOX_WIDTH);
       else
             undoPushProperty(P_ID::BOX_HEIGHT);
@@ -107,7 +107,7 @@ bool Box::edit(MuseScoreView*, Grip, int /*key*/, Qt::KeyboardModifiers, const Q
 
 void Box::editDrag(const EditData& ed)
       {
-      if (type() == Element::Type::VBOX) {
+      if (isVBox()) {
             _boxHeight = Spatium((ed.pos.y() - abbox().y()) / spatium());
             if (ed.vRaster) {
                   qreal vRaster = 1.0 / MScore::vRaster();
@@ -148,7 +148,7 @@ void Box::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
       *defaultGrip = Grip::START;
       QRectF r(abbox());
-      if (type() == Element::Type::HBOX)
+      if (isHBox())
             grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
       else if (type() == Element::Type::VBOX)
             grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
@@ -194,9 +194,12 @@ void Box::writeProperties(Xml& xml) const
 
 void Box::read(XmlReader& e)
       {
-      _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
-      _boxHeight = Spatium(0); // override default set in constructor
-      _boxWidth = Spatium(0);
+      _leftMargin      = 0.0;
+      _rightMargin     = 0.0;
+      _topMargin       = 0.0;
+      _bottomMargin    = 0.0;
+      _boxHeight       = Spatium(0);     // override default set in constructor
+      _boxWidth        = Spatium(0);
       bool keepMargins = false;        // whether original margins have to be kept when reading old file
 
       while (e.readNextStartElement()) {
@@ -220,8 +223,11 @@ void Box::read(XmlReader& e)
       // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
       // for backward compatibility set them to 0 in all other cases
 
-      if (score()->mscVersion() <= 114 && (type() == Element::Type::HBOX || type() == Element::Type::VBOX) && !keepMargins)  {
-            _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
+      if (score()->mscVersion() <= 114 && (isHBox() || isVBox()) && !keepMargins)  {
+            _leftMargin   = 0.0;
+            _rightMargin  = 0.0;
+            _topMargin    = 0.0;
+            _bottomMargin = 0.0;
             }
       }
 
@@ -240,11 +246,13 @@ bool Box::readProperties(XmlReader& e)
             _topGap = e.readDouble();
             if (score()->mscVersion() >= 206)
                   _topGap *= score()->spatium();
+            topGapStyle = PropertyStyle::UNSTYLED;
             }
       else if (tag == "bottomGap") {
             _bottomGap = e.readDouble();
              if (score()->mscVersion() >= 206)
                   _bottomGap *= score()->spatium();
+            bottomGapStyle = PropertyStyle::UNSTYLED;
             }
       else if (tag == "leftMargin")
             _leftMargin = e.readDouble();
@@ -256,8 +264,8 @@ bool Box::readProperties(XmlReader& e)
             _bottomMargin = e.readDouble();
       else if (tag == "Text") {
             Text* t;
-            if (type() == Element::Type::TBOX) {
-                  t = static_cast<TBox*>(this)->text();
+            if (isTBox()) {
+                  t = toTBox(this)->text();
                   t->read(e);
                   }
             else {
@@ -363,9 +371,11 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::TOP_GAP:
                   _topGap = v.toDouble();
+                  topGapStyle = PropertyStyle::UNSTYLED;
                   break;
             case P_ID::BOTTOM_GAP:
                   _bottomGap = v.toDouble();
+                  bottomGapStyle = PropertyStyle::UNSTYLED;
                   break;
             case P_ID::LEFT_MARGIN:
                   _leftMargin = v.toDouble();
@@ -398,17 +408,86 @@ QVariant Box::propertyDefault(P_ID id) const
                   return Spatium(0.0);
 
             case P_ID::TOP_GAP:
+                  return isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance);
             case P_ID::BOTTOM_GAP:
-                  return 0.0;
+                  return isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance);
 
             case P_ID::LEFT_MARGIN:
             case P_ID::RIGHT_MARGIN:
             case P_ID::TOP_MARGIN:
             case P_ID::BOTTOM_MARGIN:
-                  return BOX_MARGIN;
+                  return 0.0;
             default:
                   return MeasureBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyStyle Box::propertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::TOP_GAP:
+                  return topGapStyle;
+            case P_ID::BOTTOM_GAP:
+                  return bottomGapStyle;
+            default:
+                  return MeasureBase::propertyStyle(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Box::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_ID::TOP_GAP:
+                  setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
+                  topGapStyle = PropertyStyle::STYLED;
+                  break;
+            case P_ID::BOTTOM_GAP:
+                  setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
+                  bottomGapStyle = PropertyStyle::STYLED;
+                  break;
+            default:
+                  return MeasureBase::resetProperty(id);
+            }
+      score()->setLayoutAll();
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Box::styleChanged()
+      {
+      if (topGapStyle == PropertyStyle::STYLED)
+            setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
+      if (bottomGapStyle == PropertyStyle::STYLED)
+            setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
+      score()->setLayoutAll();
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Box::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::TOP_GAP:
+                  return isHBox() ? StyleIdx::NOSTYLE : StyleIdx::systemFrameDistance;
+            case P_ID::BOTTOM_GAP:
+                  return isHBox() ? StyleIdx::NOSTYLE : StyleIdx::frameSystemDistance;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------
@@ -417,16 +496,16 @@ QVariant Box::propertyDefault(P_ID id) const
 
 void Box::copyValues(Box* origin)
       {
-      _boxHeight = origin->boxHeight();
-      _boxWidth = origin->boxWidth();
+      _boxHeight    = origin->boxHeight();
+      _boxWidth     = origin->boxWidth();
 
-      qreal factor = magS() / origin->magS();
-      _bottomGap = origin->bottomGap() * factor;
-      _topGap = origin->topGap() * factor;
+      qreal factor  = magS() / origin->magS();
+      _bottomGap    = origin->bottomGap() * factor;
+      _topGap       = origin->topGap() * factor;
       _bottomMargin = origin->bottomMargin() * factor;
-      _topMargin = origin->topMargin() * factor;
-      _leftMargin = origin->leftMargin() * factor;
-      _rightMargin = origin->rightMargin() * factor;
+      _topMargin    = origin->topMargin() * factor;
+      _leftMargin   = origin->leftMargin() * factor;
+      _rightMargin  = origin->rightMargin() * factor;
       }
 
 //---------------------------------------------------------
@@ -635,6 +714,8 @@ VBox::VBox(Score* score)
    : Box(score)
       {
       setBoxHeight(Spatium(10.0));
+      setTopGap(score->styleP(StyleIdx::systemFrameDistance));
+      setBottomGap(score->styleP(StyleIdx::frameSystemDistance));
       }
 
 //---------------------------------------------------------

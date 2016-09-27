@@ -3146,8 +3146,10 @@ System* Score::collectSystem(LayoutContext& lc)
       system->setInstrumentNames(lc.startWithLongNames);
 
       qreal xo;
-      if (lc.curMeasure->isHBox())
-            xo = point(toHBox(lc.curMeasure)->boxWidth());
+      if (lc.curMeasure->isHBox()) {
+            HBox* b = toHBox(lc.curMeasure);
+            xo = point(b->boxWidth()) + b->topGap() + b->bottomGap();
+            }
       else
             xo = 0;
       system->layoutSystem(xo);
@@ -3167,8 +3169,10 @@ System* Score::collectSystem(LayoutContext& lc)
             qreal cautionaryW = 0.0;
             qreal ww          = 0.0;
 
-            if (lc.curMeasure->isHBox())
-                  ww = point(toHBox(lc.curMeasure)->boxWidth());
+            if (lc.curMeasure->isHBox()) {
+                  HBox* b = toHBox(lc.curMeasure);
+                  ww = point(b->boxWidth()) + b->topGap() + b->bottomGap();
+                  }
             else if (lc.curMeasure->isMeasure()) {
                   Measure* m = toMeasure(lc.curMeasure);
 
@@ -3383,8 +3387,10 @@ System* Score::collectSystem(LayoutContext& lc)
       minWidth           = system->leftMargin();
       qreal totalWeight  = 0.0;
       for (MeasureBase* mb : system->measures()) {
-            if (mb->isHBox())
-                  minWidth += point(static_cast<Box*>(mb)->boxWidth());
+            if (mb->isHBox()) {
+                  HBox* b = toHBox(mb);
+                  minWidth += point(b->boxWidth()) + b->topGap() + b->bottomGap();
+                  }
             else if (mb->isMeasure()) {
                   Measure* m    = toMeasure(mb);
                   minWidth     += m->width();
@@ -3431,8 +3437,9 @@ System* Score::collectSystem(LayoutContext& lc)
                         ms->lines->layout();
                   }
             else if (mb->isHBox()) {
-                  mb->setPos(pos);
-                  ww = point(toHBox(mb)->boxWidth());
+                  HBox* b = toHBox(mb);
+                  mb->setPos(pos + QPointF(b->topGap(), 0.0));
+                  ww = point(b->boxWidth()) + b->topGap() + b->bottomGap();
                   mb->layout();
                   }
             else if (mb->isVBox()) {
