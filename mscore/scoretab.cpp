@@ -58,6 +58,9 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab->setFocusPolicy(Qt::ClickFocus);
       tab->setTabsClosable(true);
+//      tab->setChangeCurrentOnDrag(true);
+//      tab->setAcceptDrops(true);
+      tab->setMovable(true);
 
       tab2 = new QTabBar(this);
       tab2->setExpanding(false);
