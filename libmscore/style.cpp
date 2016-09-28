@@ -674,9 +674,10 @@ void MStyle::set(const StyleIdx t, const QVariant& val)
       if (t == StyleIdx::spatium)
             precomputeValues();
       else {
-            qreal _spatium = value(StyleIdx::spatium).toDouble();
-            if (!strcmp(styleTypes[idx].valueType(), "Ms::Spatium"))
+            if (!strcmp(styleTypes[idx].valueType(), "Ms::Spatium")) {
+                  qreal _spatium = value(StyleIdx::spatium).toDouble();
                   _precomputedValues[idx] = _values[idx].value<Spatium>().val() * _spatium;
+                  }
             }
       }
 
@@ -757,10 +758,8 @@ void MStyle::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else {
-                  QString val(e.readElementText());
-                  convertToUnit(tag, val);
-                  }
+            else
+                  convertToUnit(tag, e.readElementText());
             }
 
       // if we just specified a new chord description file

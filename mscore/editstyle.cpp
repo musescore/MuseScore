@@ -487,12 +487,12 @@ void EditStyle::buttonClicked(QAbstractButton* b)
       {
       switch (buttonBox->standardButton(b)) {
             case QDialogButtonBox::Ok:
-                  cs->endCmd(false);
                   done(1);
+                  cs->endCmd();
                   break;
             case QDialogButtonBox::Cancel:
-                  cs->endCmd(true);
                   done(0);
+                  cs->endCmd(true);
                   break;
             case QDialogButtonBox::NoButton:
             default:
@@ -522,7 +522,6 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 
 void EditStyle::applyToAllParts()
       {
-//      getValues();
       for (Excerpt* e : cs->masterScore()->excerpts()) {
             e->partScore()->undo(new ChangeStyle(e->partScore(), *cs->style()));
             e->partScore()->update();
@@ -817,6 +816,7 @@ void EditStyle::setSwingParams(bool checked)
             swingBox->setEnabled(true);
             }
       cs->undo(new ChangeStyleVal(cs, StyleIdx::swingUnit, val));
+      cs->update();
       }
 
 //---------------------------------------------------------
@@ -828,25 +828,28 @@ void EditStyle::setChordStyle(bool checked)
       if (!checked)
             return;
       QVariant val;
+      QString file;
       if (chordsStandard->isChecked()) {
-            val = QString("std");
-            chordDescriptionFile->setText("chords_std.xml");
-            cs->undo(new ChangeStyleVal(cs, StyleIdx::chordsXmlFile, false));
-            chordsXmlFile->setChecked(false);
-            chordDescriptionGroup->setEnabled(false);
+            val  = QString("std");
+            file = "chords_std.xml";
             }
       else if (chordsJazz->isChecked()) {
-            val = QString("jazz");
-            chordDescriptionFile->setText("chords_jazz.xml");
-            cs->undo(new ChangeStyleVal(cs, StyleIdx::chordsXmlFile, false));
-            chordsXmlFile->setChecked(false);
-            chordDescriptionGroup->setEnabled(false);
+            val  = QString("jazz");
+            file = "chords_jazz.xml";
             }
       else {
             val = QString("custom");
             chordDescriptionGroup->setEnabled(true);
             }
       cs->undo(new ChangeStyleVal(cs, StyleIdx::chordStyle, val));
+      if (!file.isEmpty()) {
+            cs->undo(new ChangeStyleVal(cs, StyleIdx::chordsXmlFile, false));
+            chordsXmlFile->setChecked(false);
+            chordDescriptionGroup->setEnabled(false);
+            chordDescriptionFile->setText(file);
+            cs->undo(new ChangeStyleVal(cs, StyleIdx::chordDescriptionFile, file));
+            cs->update();
+            }
       }
 
 //---------------------------------------------------------

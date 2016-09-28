@@ -55,7 +55,6 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       virtual void hideEvent(QHideEvent*);
       QVariant getValue(StyleIdx idx);
-//      void getValues();
       void setValues();
 
       void applyToAllParts();

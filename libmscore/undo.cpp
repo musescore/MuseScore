@@ -2744,11 +2744,6 @@ static void updateTimeSigs(void*, Element* e)
             }
       }
 
-static void updateStyle(void*, Element* e)
-      {
-      e->styleChanged();
-      }
-
 //---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
@@ -2764,9 +2759,7 @@ void ChangeStyle::flip()
             score->scanElements(0, updateTimeSigs);
             }
       score->setStyle(style);
-      score->scanElements(0, updateStyle);
-      score->setLayoutAll();
-
+      score->styleChanged();
       style = tmp;
       }
 
@@ -2777,9 +2770,14 @@ void ChangeStyle::flip()
 void ChangeStyleVal::flip()
       {
       QVariant v = score->style(idx);
-      score->style()->set(idx, value);
-      score->scanElements(0, updateStyle);
-      score->setLayoutAll();
+      if (v != value) {
+            score->style()->set(idx, value);
+            if (idx == StyleIdx::chordDescriptionFile) {
+                  score->style()->chordList()->unload();
+                  score->style()->chordList()->read(value.toString());
+                  }
+            score->styleChanged();
+            }
       value = v;
       }
 
