@@ -1511,14 +1511,13 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       Segment::Type segmentType = Segment::Type::ChordRest;
 
       Tuplet* t = cr->tuplet();
+
       foreach (Staff* staff, ostaff->staffList()) {
             QList<int> tracks;
             if (staff->excerpt() && !staff->excerpt()->tracks().isEmpty())
                   tracks = staff->excerpt()->tracks().values(strack);
-            else if (staff->excerpt())
-                  tracks.append(staff->idx() * VOICES + cr->voice());
             else
-                  tracks.append(score()->staffIdx(staff) * VOICES + cr->voice());
+                  tracks.append(staff->idx() * VOICES + cr->voice());
 
             for (int ntrack : tracks) {
                   if (ntrack < staff->part()->startTrack() || ntrack >= staff->part()->endTrack())
@@ -1532,7 +1531,6 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 
                   ChordRest* newcr = (staff == ostaff) ? cr : toChordRest(cr->linkedClone());
                   newcr->setScore(score);
-
 
                   newcr->setTrack(ntrack);
                   newcr->setParent(seg);
