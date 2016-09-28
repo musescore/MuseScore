@@ -1197,6 +1197,26 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
+//   updateStyle
+//---------------------------------------------------------
+
+static void updateStyle(void*, Element* e)
+      {
+      e->styleChanged();
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    must be called after every style change
+//---------------------------------------------------------
+
+void Score::styleChanged()
+      {
+      scanElements(0, updateStyle);
+      setLayoutAll();
+      }
+
+//---------------------------------------------------------
 //   getCreateMeasure
 //    - return Measure for tick
 //    - create new Measure(s) if there is no measure for
@@ -2884,7 +2904,7 @@ void Score::collectMatch(void* data, Element* e)
       ElementPattern* p = static_cast<ElementPattern*>(data);
       if (p->type != int(e->type()))
             return;
-      
+
       if (p->type == int(Element::Type::NOTE)) {
             if (p->subtype < 0) {
                   if (!(toNote(e)->chord()->isGrace()))

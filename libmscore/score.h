@@ -828,6 +828,7 @@ class Score : public QObject, public ScoreElement {
       void setInputTrack(int t)                { inputState().setTrack(t);    }
 
       void spatiumChanged(qreal oldValue, qreal newValue);
+      void styleChanged();
 
       PasteState cmdPaste(const QMimeData* ms, MuseScoreView* view);
       PasteState pasteStaff(XmlReader&, Segment* dst, int staffIdx);
