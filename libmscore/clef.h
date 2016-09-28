@@ -39,30 +39,38 @@ static const int NO_CLEF = -1000;
 enum class ClefType : signed char {
       INVALID = -1,
       G = 0,
-      G1,
-      G2,
-      G3,
-      F,
-      F8,
-      F15,
-      F_B,
-      F_C,
+      G15_MB,
+      G8_VB,
+      G8_VA,
+      G15_MA,
+      G8_VB_O,
+      G8_VB_P,
+      G_1,
       C1,
       C2,
       C3,
       C4,
-      TAB,
-      TAB4,
-      PERC,
       C5,
-      G4,
+      C_19C,
+      C3_F18C,
+      C4_F18C,
+      C3_F20C,
+      C4_F20C,
+      F,
+      F15_MB,
+      F8_VB,
       F_8VA,
       F_15MA,
+      F_B,
+      F_C,
+      F_F18C,
+      F_19C,
+      PERC,
       PERC2,
+      TAB,
+      TAB4,
       TAB_SERIF,
       TAB4_SERIF,
-      G5,
-      G3_O,
       MAX
       };
 
@@ -92,10 +100,11 @@ class ClefInfo {
 
       const char* _tag;        ///< comprehensive name for instruments.xml
       const char* _sign;       ///< Name for musicXml.
-      int _line;               ///< Line for musicXml.
+      int _line;               ///< Line for musicXml and for positioning on the staff
       int _octChng;            ///< Octave change for musicXml.
       int _pitchOffset;        ///< Pitch offset for line 0.
       signed char _lines[14];
+      SymId _symId;
       const char* _name;
       StaffGroup _staffGroup;
 
@@ -105,6 +114,7 @@ class ClefInfo {
       static int line(ClefType t)              { return clefTable[int(t)]._line;        }
       static int octChng(ClefType t)           { return clefTable[int(t)]._octChng;     }
       static int pitchOffset(ClefType t)       { return clefTable[int(t)]._pitchOffset; }
+      static SymId symId(ClefType t)           { return clefTable[int(t)]._symId;       }
       static const signed char* lines(ClefType t)     { return clefTable[int(t)]._lines;       }
       static const char* name(ClefType t)      { return clefTable[int(t)]._name;        }
       static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)]._staffGroup;  }

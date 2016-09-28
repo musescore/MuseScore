@@ -145,7 +145,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       treeWidget->clear();
 
-      addPalette(MuseScore::newClefsPalette(false));
+      addPalette(MuseScore::newClefsPalette(false, true));
       keyEditor = new KeyEditor;
 
       keyItem = new QTreeWidgetItem();
