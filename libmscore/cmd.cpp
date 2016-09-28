@@ -2715,61 +2715,126 @@ void Score::cmdExplode()
       Segment* endSegment = selection().endSegment();
       Measure* startMeasure = startSegment->measure();
       Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasure();
-      deselectAll();
-      select(startMeasure, SelectType::RANGE, srcStaff);
-      select(endMeasure, SelectType::RANGE, srcStaff);
-      startSegment = selection().startSegment();
-      endSegment = selection().endSegment();
 
-      if (srcStaff == lastStaff - 1) {
-            // only one staff was selected up front - determine number of staves
-            // loop through all chords looking for maximum number of notes
-            int n = 0;
-            for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
-                  Element* e = s->element(srcTrack);
-                  if (e && e->type() == Element::Type::CHORD) {
-                        Chord* c = toChord(e);
-                        n = qMax(n, int(c->notes().size()));
-                        }
-                  }
-            lastStaff = qMin(nstaves(), srcStaff + n);
-            }
+      int lTick = endMeasure->endTick();
+      bool voice = false;
 
-      // make our own copy of selection, since pasting modifies actual selection
-      Selection srcSelection(selection());
-
-      // copy to all destination staves
-      Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
-      for (int i = 1; srcStaff + i < lastStaff; ++i) {
-            int track = (srcStaff + i) * VOICES;
-            ChordRest* cr = toChordRest(firstCRSegment->element(track));
-            if (cr) {
-                  XmlReader e(srcSelection.mimeData());
-                  e.setPasteMode(true);
-                  if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR)
-                        qDebug("explode: paste failed");
+      for (Measure* m = startMeasure; m && m->tick() != lTick; m = m->nextMeasure()) {
+            if (m->hasVoices(srcStaff)) {
+                  voice = true;
+                  break;
                   }
             }
-
-      // loop through each staff removing all but one note from each chord
-      for (int i = 0; srcStaff + i < lastStaff; ++i) {
-            int track = (srcStaff + i) * VOICES;
-            for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
-                  Element* e = s->element(track);
-                  if (e && e->type() == Element::Type::CHORD) {
-                        Chord* c = toChord(e);
-                        std::vector<Note*> notes = c->notes();
-                        int nnotes = notes.size();
-                        // keep note "i" from top, which is backwards from nnotes - 1
-                        // reuse notes if there are more instruments than notes
-                        int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);
-                        int keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), 0);
-                        Note* keepNote = c->notes()[keepIndex];
-                        foreach (Note* n, notes) {
-                              if (n != keepNote)
-                                    undoRemoveElement(n);
+      if (! voice) {
+            // force complete measures
+            deselectAll();
+            select(startMeasure, SelectType::RANGE, srcStaff);
+            select(endMeasure, SelectType::RANGE, srcStaff);
+            startSegment = selection().startSegment();
+            endSegment = selection().endSegment();
+            if (srcStaff == lastStaff - 1) {
+                  // only one staff was selected up front - determine number of staves
+                  // loop through all chords looking for maximum number of notes
+                  int n = 0;
+                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                        Element* e = s->element(srcTrack);
+                        if (e && e->type() == Element::Type::CHORD) {
+                              Chord* c = toChord(e);
+                              n = qMax(n, int(c->notes().size()));
                               }
                         }
+                  lastStaff = qMin(nstaves(), srcStaff + n);
+                  }
+
+            // make our own copy of selection, since pasting modifies actual selection
+            Selection srcSelection(selection());
+
+            // copy to all destination staves
+            Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
+            for (int i = 1; srcStaff + i < lastStaff; ++i) {
+                  int track = (srcStaff + i) * VOICES;
+                  ChordRest* cr = toChordRest(firstCRSegment->element(track));
+                  if (cr) {
+                        XmlReader e(srcSelection.mimeData());
+                        e.setPasteMode(true);
+                        if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR)
+                              qDebug("explode: paste failed");
+                        }
+                  }
+
+            // loop through each staff removing all but one note from each chord
+            for (int i = 0; srcStaff + i < lastStaff; ++i) {
+                  int track = (srcStaff + i) * VOICES;
+                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                        Element* e = s->element(track);
+                        if (e && e->type() == Element::Type::CHORD) {
+                              Chord* c = toChord(e);
+                              std::vector<Note*> notes = c->notes();
+                              int nnotes = notes.size();
+                              // keep note "i" from top, which is backwards from nnotes - 1
+                              // reuse notes if there are more instruments than notes
+                              int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);
+                              int keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), 0);
+                              Note* keepNote = c->notes()[keepIndex];
+                              foreach (Note* n, notes) {
+                                    if (n != keepNote)
+                                          undoRemoveElement(n);
+                                    }
+                              }
+                        }
+                  }
+            }
+      else {
+            int sTracks[VOICES];
+            int dTracks[VOICES];
+            if (srcStaff == lastStaff - 1)
+                  lastStaff = qMin(nstaves(), srcStaff + VOICES);
+
+            for (int i = 0; i < VOICES; i++) {
+                  sTracks[i] = -1;
+                  dTracks[i] = -1;
+                  }
+            int full = 0;
+
+            for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
+                  for (int i = srcTrack; i < srcTrack + VOICES && full != VOICES; i ++) {
+                        bool t = true;
+                        for (int j = 0; j < VOICES; j++) {
+                              if (i == sTracks[j]) {
+                                    t = false;
+                                    break;
+                                    }
+                              }
+
+                        if (!seg->measure()->hasVoice(i) || seg->measure()->isOnlyRests(i) || !t)
+                              continue;
+                        sTracks[full] = i;
+
+                        for(int j = srcTrack + full * VOICES; j < lastStaff * VOICES; j++) {
+                              if (i == j) {
+                                    dTracks[full] = j;
+                                    break;
+                                    }
+                              for(Measure* m = seg->measure(); m && m->tick() < lTick; m = m->nextMeasure()) {
+                                    if (!m->hasVoice(j) || (m->hasVoice(j) && m->isOnlyRests(j)))
+                                          dTracks[full] = j;
+                                    else {
+                                          dTracks[full] = -1;
+                                          break;
+                                          }
+                                    }
+                              if (dTracks[full] != -1)
+                                    break;
+                              }
+                        full++;
+                        }
+                  }
+
+            for (int i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES ; i += VOICES, j++) {
+                  int strack = sTracks[j % VOICES];
+                  int dtrack = dTracks[j % VOICES];
+                  if (strack != -1 && strack != dtrack && dtrack != -1)
+                        undo(new CloneVoice(startSegment, lTick, startSegment, strack, dtrack, -1, false));
                   }
             }
 
