@@ -3665,7 +3665,6 @@ bool Score::collectPage(LayoutContext& lc)
             return false;
 
       const qreal slb = styleP(StyleIdx::staffLowerBorder);
-      const qreal sub = styleP(StyleIdx::staffUpperBorder);
       bool breakPages = layoutMode() != LayoutMode::SYSTEM;
 
       Page* page = getEmptyPage(lc);
@@ -3685,8 +3684,7 @@ bool Score::collectPage(LayoutContext& lc)
             else {
                   // this is the first system on page
                   VBox* vbox = s2->vbox();
-                  distance = vbox ? vbox->topGap() : sub;
-                  distance = qMax(distance, -s2->minTop());
+                  distance   = vbox ? 0.0 : styleP(StyleIdx::staffUpperBorder);
                   }
             distance += _staves.front()->userDist();
 
