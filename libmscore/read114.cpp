@@ -542,6 +542,62 @@ static void readNote(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readClefType
+//---------------------------------------------------------
+
+static ClefType readClefType(const QString& s)
+      {
+      ClefType ct = ClefType::G;
+      bool ok;
+      int i = s.toInt(&ok);
+      if (ok) {
+            // convert obsolete old coding
+            switch (i) {
+                  default:
+                  case  0: ct = ClefType::G; break;
+                  case  1: ct = ClefType::G1; break;
+                  case  2: ct = ClefType::G2; break;
+                  case  3: ct = ClefType::G3; break;
+                  case  4: ct = ClefType::F; break;
+                  case  5: ct = ClefType::F8; break;
+                  case  6: ct = ClefType::F15; break;
+                  case  7: ct = ClefType::F_B; break;
+                  case  8: ct = ClefType::F_C; break;
+                  case  9: ct = ClefType::C1; break;
+                  case 10: ct = ClefType::C2; break;
+                  case 11: ct = ClefType::C3; break;
+                  case 12: ct = ClefType::C4; break;
+                  case 13: ct = ClefType::TAB; break;
+                  case 14: ct = ClefType::PERC; break;
+                  case 15: ct = ClefType::C5; break;
+                  case 16: ct = ClefType::G4; break;
+                  case 17: ct = ClefType::F_8VA; break;
+                  case 18: ct = ClefType::F_15MA; break;
+                  case 19: ct = ClefType::PERC; break;      // PERC2 no longer supported
+                  case 20: ct = ClefType::TAB_SERIF; break;
+                  }
+            }
+      return ct;
+      }
+
+//---------------------------------------------------------
+//   readClef
+//---------------------------------------------------------
+
+static void readClef(Clef* clef, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  clef->setClefType(readClefType(e.readElementText()));
+            else if (!clef->readProperties(e))
+                  e.unknown();
+            }
+      if (clef->clefType() == ClefType::INVALID)
+            clef->setClefType(ClefType::G);
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -882,54 +938,65 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Clef") {
                   Clef* clef = new Clef(m->score());
                   clef->setTrack(e.track());
-                  clef->read(e);
+                  readClef(clef, e);
+                  if (m->score()->mscVersion() < 113)
+                        clef->setUserOff(QPointF());
                   clef->setGenerated(false);
-
-                  // there may be more than one clef segment for same tick position
-                  if (!segment) {
-                        // this is the first segment of measure
-                        segment = m->getSegment(Segment::Type::Clef, e.tick());
+                  // MS3 doesn't support wrong clef for staff type: Default to G
+                  if (clef->clefType() == ClefType::TAB
+                      || (clef->clefType() == ClefType::PERC && !staff->isDrumStaff())
+                      || (clef->clefType() != ClefType::PERC && staff->isDrumStaff())) {
+                        clef->setClefType(ClefType::G);
+                        staff->clefList().erase(e.tick());
+                        staff->clefList().insert(std::pair<int,ClefType>(e.tick(), ClefType::G));
                         }
-                  else {
-                        bool firstSegment = false;
-                        // the first clef may be missing and is added later in layout
-                        for (Segment* s = m->segments().first(); s && s->tick() == e.tick(); s = s->next()) {
-                              if (s->segmentType() == Segment::Type::Clef
-                                    // hack: there may be other segment types which should
-                                    // generate a clef at current position
-                                 || s->segmentType() == Segment::Type::StartRepeatBarLine
-                                 ) {
-                                    firstSegment = true;
-                                    break;
-                                    }
+                  if (clef) {
+                        // there may be more than one clef segment for same tick position
+                        if (!segment) {
+                              // this is the first segment of measure
+                              segment = m->getSegment(Segment::Type::Clef, e.tick());
                               }
-                        if (firstSegment) {
-                              Segment* ns = 0;
-                              if (segment->next()) {
-                                    ns = segment->next();
-                                    while (ns && ns->tick() < e.tick())
-                                          ns = ns->next();
-                                    }
-                              segment = 0;
-                              for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
-                                    if (s->segmentType() == Segment::Type::Clef) {
-                                          segment = s;
+                        else {
+                              bool firstSegment = false;
+                              // the first clef may be missing and is added later in layout
+                              for (Segment* s = m->segments().first(); s && s->tick() == e.tick(); s = s->next()) {
+                                    if (s->segmentType() == Segment::Type::Clef
+                                          // hack: there may be other segment types which should
+                                          // generate a clef at current position
+                                       || s->segmentType() == Segment::Type::StartRepeatBarLine
+                                       ) {
+                                          firstSegment = true;
                                           break;
                                           }
                                     }
-                              if (!segment) {
-                                    segment = new Segment(m, Segment::Type::Clef, e.tick());
-                                    m->segments().insert(segment, ns);
+                              if (firstSegment) {
+                                    Segment* ns = 0;
+                                    if (segment->next()) {
+                                          ns = segment->next();
+                                          while (ns && ns->tick() < e.tick())
+                                                ns = ns->next();
+                                          }
+                                    segment = 0;
+                                    for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
+                                          if (s->segmentType() == Segment::Type::Clef) {
+                                                segment = s;
+                                                break;
+                                                }
+                                          }
+                                    if (!segment) {
+                                          segment = new Segment(m, Segment::Type::Clef, e.tick());
+                                          m->segments().insert(segment, ns);
+                                          }
+                                    }
+                              else {
+                                    // this is the first clef: move to left
+                                    segment = m->getSegment(Segment::Type::Clef, e.tick());
                                     }
                               }
-                        else {
-                              // this is the first clef: move to left
-                              segment = m->getSegment(Segment::Type::Clef, e.tick());
-                              }
+                        if (e.tick() != m->tick())
+                              clef->setSmall(true);         // layout does this ?
+                        segment->add(clef);
                         }
-                  if (e.tick() != m->tick())
-                        clef->setSmall(true);         // layout does this ?
-                  segment->add(clef);
                   }
             else if (tag == "TimeSig") {
                   TimeSig* ts = new TimeSig(m->score());
@@ -1244,7 +1311,7 @@ static void readStaff(Staff* staff, XmlReader& e)
                   while (e.readNextStartElement()) {
                         if (e.name() == "clef") {
                               int tick    = e.intAttribute("tick", 0);
-                              ClefType ct = Clef::clefType(e.attribute("idx", "0"));
+                              ClefType ct = readClefType(e.attribute("idx", "0"));
                               staff->clefList().insert(std::pair<int,ClefType>(_score->fileDivision(tick), ct));
                               e.readNext();
                               }

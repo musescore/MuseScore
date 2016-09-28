@@ -65,6 +65,7 @@ void TestCompat114::compat_data()
       QTest::newRow("tremolo2notes") << "tremolo2notes";
       QTest::newRow("accidentals") << "accidentals";
       QTest::newRow("slurs") << "slurs";
+      QTest::newRow("clefs") << "clefs";
       QTest::newRow("clef_missing_first") << "clef_missing_first";
       QTest::newRow("hor_frame_and_mmrest") << "hor_frame_and_mmrest";
       QTest::newRow("chord_symbol") << "chord_symbol";
