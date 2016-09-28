@@ -1,45 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="2.06">
+  <programVersion>2.0.3</programVersion>
+  <programRevision>3c7a69d</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
-      <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
-      <bracketWidth>0.35</bracketWidth>
-      <bracketDistance>0.25</bracketDistance>
-      <clefLeftMargin>0.5</clefLeftMargin>
-      <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <minNoteDistance>0.4</minNoteDistance>
-      <measureSpacing>1.14</measureSpacing>
-      <ledgerLineWidth>0.12</ledgerLineWidth>
-      <beamWidth>0.48</beamWidth>
-      <beamMinLen>1.25</beamMinLen>
-      <propertyDistanceStem>0.5</propertyDistanceStem>
-      <harmonyY>0</harmonyY>
-      <chordStyle>custom</chordStyle>
-      <chordsXmlFile>1</chordsXmlFile>
-      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <voltaY>0</voltaY>
-      <keySigNaturals>1</keySigNaturals>
-      <tupletOufOfStaff>0</tupletOufOfStaff>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
       <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
+        <page-height>1683.36</page-height>
+        <page-width>1190.88</page-width>
         <page-margins type="even">
           <left-margin>56.6929</left-margin>
           <right-margin>56.6929</right-margin>
@@ -53,7 +25,7 @@
           <bottom-margin>113.386</bottom-margin>
           </page-margins>
         </page-layout>
-      <Spatium>1.764</Spatium>
+      <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -62,9 +34,11 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2016-09-29</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -85,26 +59,43 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
+        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
           </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
           </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
@@ -112,17 +103,12 @@
           </Articulation>
         <Channel>
           <program value="73"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -132,7 +118,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>accidentalSharp</subtype>
+              <subtype>sharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
@@ -142,7 +128,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>accidentalFlat</subtype>
+              <subtype>flat</subtype>
               </Accidental>
             <pitch>71</pitch>
             <tpc>7</tpc>
@@ -152,7 +138,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>accidentalDoubleSharp</subtype>
+              <subtype>double sharp</subtype>
               </Accidental>
             <pitch>74</pitch>
             <tpc>28</tpc>
@@ -162,7 +148,7 @@
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
-              <subtype>accidentalDoubleFlat</subtype>
+              <subtype>double flat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>0</tpc>
@@ -175,7 +161,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalNatural</subtype>
+              <subtype>natural</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -186,7 +172,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalBakiyeFlat</subtype>
+              <subtype>flat-slash</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -197,7 +183,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalBuyukMucennebFlat</subtype>
+              <subtype>flat-slash2</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -208,7 +194,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalThreeQuarterTonesFlatZimmermann</subtype>
+              <subtype>mirrored-flat2</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -216,52 +202,6 @@
           </Chord>
         </Measure>
       <Measure number="3">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalQuarterToneFlatStein</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalQuarterToneSharpStein</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
@@ -270,7 +210,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalBuyukMucennebSharp</subtype>
+              <subtype>mirrored-flat</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -281,7 +221,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalKucukMucennebSharp</subtype>
+              <subtype>sharp-slash</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -292,7 +232,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalThreeQuarterTonesSharpStein</subtype>
+              <subtype>sharp-slash2</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -303,7 +243,53 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalThreeQuarterTonesSharpArrowUp</subtype>
+              <subtype>sharp-slash3</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <role>1</role>
+              <subtype>sharp-slash4</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <role>1</role>
+              <subtype>sharp arrow up</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <role>1</role>
+              <subtype>sharp arrow down</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <role>1</role>
+              <subtype>flat arrow up</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -316,7 +302,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalQuarterToneSharpArrowDown</subtype>
+              <subtype>flat arrow down</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -327,7 +313,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalNatural</subtype>
+              <subtype>natural arrow up</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -338,7 +324,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalQuarterToneFlatArrowUp</subtype>
+              <subtype>natural arrow down</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -349,7 +335,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalThreeQuarterTonesFlatArrowDown</subtype>
+              <subtype>sori</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -357,52 +343,6 @@
           </Chord>
         </Measure>
       <Measure number="6">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalQuarterToneSharpNaturalArrowUp</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalQuarterToneFlatNaturalArrowDown</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="7">
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
@@ -411,7 +351,7 @@
           <Note>
             <Accidental>
               <role>1</role>
-              <subtype>accidentalSori</subtype>
+              <subtype>koron</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -420,25 +360,32 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <role>1</role>
-              <subtype>accidentalKoron</subtype>
-              </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
         </Measure>
-      <Measure number="8">
+      <Measure number="7">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>accidentalSharp</subtype>
+              <subtype>sharp</subtype>
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
@@ -449,7 +396,7 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>accidentalFlat</subtype>
+              <subtype>flat</subtype>
               </Accidental>
             <pitch>71</pitch>
             <tpc>7</tpc>
@@ -460,7 +407,7 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>accidentalDoubleSharp</subtype>
+              <subtype>double sharp</subtype>
               </Accidental>
             <pitch>74</pitch>
             <tpc>28</tpc>
@@ -471,21 +418,74 @@
           <Note>
             <Accidental>
               <bracket>1</bracket>
-              <subtype>accidentalDoubleFlat</subtype>
+              <subtype>double flat</subtype>
               </Accidental>
             <pitch>70</pitch>
             <tpc>0</tpc>
             </Note>
           </Chord>
         </Measure>
+      <Measure number="8">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>natural</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>flat-slash</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>flat-slash2</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>mirrored-flat2</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
       <Measure number="9">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalNatural</subtype>
+              <subtype>mirrored-flat</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -497,7 +497,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalBakiyeFlat</subtype>
+              <subtype>sharp-slash</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -509,7 +509,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalBuyukMucennebFlat</subtype>
+              <subtype>sharp-slash2</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -521,7 +521,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalThreeQuarterTonesFlatZimmermann</subtype>
+              <subtype>sharp-slash3</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -535,7 +535,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalQuarterToneFlatStein</subtype>
+              <subtype>sharp-slash4</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -547,7 +547,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalNatural</subtype>
+              <subtype>sharp arrow up</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -559,7 +559,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalNatural</subtype>
+              <subtype>sharp arrow down</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -571,7 +571,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalQuarterToneSharpStein</subtype>
+              <subtype>flat arrow up</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -579,6 +579,56 @@
           </Chord>
         </Measure>
       <Measure number="11">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>flat arrow down</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>natural arrow up</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>natural arrow down</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <bracket>1</bracket>
+              <role>1</role>
+              <subtype>sori</subtype>
+              </Accidental>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="12">
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
@@ -588,7 +638,7 @@
             <Accidental>
               <bracket>1</bracket>
               <role>1</role>
-              <subtype>accidentalBuyukMucennebSharp</subtype>
+              <subtype>koron</subtype>
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -597,11 +647,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalKucukMucennebSharp</subtype>
-              </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -609,11 +654,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalThreeQuarterTonesSharpStein</subtype>
-              </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -621,144 +661,10 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalThreeQuarterTonesSharpArrowUp</subtype>
-              </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="12">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalQuarterToneSharpArrowDown</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalQuarterToneFlatArrowUp</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalThreeQuarterTonesFlatArrowDown</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="13">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalQuarterToneSharpNaturalArrowUp</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalQuarterToneFlatNaturalArrowDown</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalNatural</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="14">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalSori</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <bracket>1</bracket>
-              <role>1</role>
-              <subtype>accidentalKoron</subtype>
-              </Accidental>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>

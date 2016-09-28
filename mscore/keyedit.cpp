@@ -290,7 +290,7 @@ KeyEditor::KeyEditor(QWidget* parent)
       l = new QVBoxLayout();
       l->setContentsMargins(0, 0, 0, 0);
       frame_3->setLayout(l);
-      sp1 = MuseScore::newAccidentalsPalette();
+      sp1 = MuseScore::newAccidentalsPalette(false, true);
       PaletteScrollArea* accPalette = new PaletteScrollArea(sp1);
       QSizePolicy policy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
       accPalette->setSizePolicy(policy1);

@@ -269,7 +269,7 @@ Palette* MuseScore::newKeySigPalette(bool basic)
 //   newAccidentalsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newAccidentalsPalette(bool basic)
+Palette* MuseScore::newAccidentalsPalette(bool basic, bool master)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Accidentals"));
@@ -290,10 +290,11 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   }
             }
       else {
+            int end = master ? int(AccidentalType::END) : int(AccidentalType::SHARP_SHARP);
             Accidental* s = new Accidental(gscore);
             s->setAccidentalType(AccidentalType::NONE);
             sp->append(s, s->subtypeUserName());
-            for (int i = int(AccidentalType::SHARP); i < int(AccidentalType::END); ++i) {
+            for (int i = int(AccidentalType::FLAT); i < end; ++i) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(AccidentalType(i));
                   if (s->symbol() != SymId::noSym)
@@ -1256,7 +1257,7 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newKeySigPalette());
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBracketsPalette());
-      paletteBox->addPalette(newAccidentalsPalette());
+      paletteBox->addPalette(newAccidentalsPalette(false, false));
       paletteBox->addPalette(newArticulationsPalette(false));
       paletteBox->addPalette(newBreathPalette());
       paletteBox->addPalette(newGraceNotePalette(false));
