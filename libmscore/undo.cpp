@@ -1002,10 +1002,13 @@ void Score::undoAddElement(Element* element)
       {
       QList<Staff* > staffList;
       Staff* ostaff = element->staff();
-      int strack = score()->staffIdx(ostaff) * VOICES + element->track() % VOICES;
-
-      if (ostaff && ostaff->excerpt() && strack > -1)
-            strack = ostaff->excerpt()->tracks().key(strack, -1);
+      int strack = -1;
+      if (ostaff) {
+            if (ostaff->excerpt() && strack > -1)
+                  strack = ostaff->excerpt()->tracks().key(strack, -1);
+            else
+                  strack = ostaff->idx() * VOICES + element->track() % VOICES;
+            }
 
       Element::Type et = element->type();
 
@@ -1026,7 +1029,7 @@ void Score::undoAddElement(Element* element)
 
             foreach (Staff* staff, staffList) {
                   Score* score  = staff->score();
-                  int staffIdx  = score->staffIdx(staff);
+                  int staffIdx  = staff->idx();
                   int ntrack    = staffIdx * VOICES;
                   Element* ne;
 
@@ -1187,7 +1190,7 @@ void Score::undoAddElement(Element* element)
 
       foreach (Staff* staff, ostaff->staffList()) {
             Score* score = staff->score();
-            int staffIdx = score->staffIdx(staff);
+            int staffIdx = staff->idx();
 
             QList<int> tr;
             if (staff->excerpt() && strack > -1)
@@ -1503,7 +1506,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       Q_ASSERT(cr->isChordRest());
 
       Staff* ostaff = cr->staff();
-      int strack = score()->staffIdx(ostaff) * VOICES + cr->voice();
+      int strack = ostaff->idx() * VOICES + cr->voice();
 
       if (ostaff->excerpt() && !ostaff->excerpt()->tracks().isEmpty())
             strack = ostaff->excerpt()->tracks().key(strack, -1);
@@ -2601,7 +2604,7 @@ void ChangeStaff::flip()
 
       Score* score = staff->score();
       if (invisibleChanged) {
-            int staffIdx = score->staffIdx(staff);
+            int staffIdx = staff->idx();
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
