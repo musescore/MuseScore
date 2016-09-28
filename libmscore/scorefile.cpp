@@ -565,7 +565,7 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
                   OmrPage* page = masterScore()->omr()->page(i);
                   const QImage& image = page->image();
                   if (!image.save(&cbuf, "PNG")) {
-                        MScore::lastError = QString("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height());
+                        MScore::lastError = tr("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height());
                         return false;
                         }
                   uz.addFile(path, cbuf.data());
