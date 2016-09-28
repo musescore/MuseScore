@@ -3543,13 +3543,13 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       if (c == "G" && i == 0 && line == 2)
             clef = ClefType::G;
       else if (c == "G" && i == 1 && line == 2)
-            clef = ClefType::G1;
+            clef = ClefType::G8_VA;
       else if (c == "G" && i == 2 && line == 2)
-            clef = ClefType::G2;
+            clef = ClefType::G15_MA;
       else if (c == "G" && i == -1 && line == 2)
-            clef = ClefType::G3;
+            clef = ClefType::G8_VB;
       else if (c == "G" && i == 0 && line == 1)
-            clef = ClefType::G4;
+            clef = ClefType::G_1;
       else if (c == "F" && i == 0 && line == 3)
             clef = ClefType::F_B;
       else if (c == "F" && i == 0 && line == 4)
@@ -3559,9 +3559,9 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       else if (c == "F" && i == 2 && line == 4)
             clef = ClefType::F_15MA;
       else if (c == "F" && i == -1 && line == 4)
-            clef = ClefType::F8;
+            clef = ClefType::F8_VB;
       else if (c == "F" && i == -2 && line == 4)
-            clef = ClefType::F15;
+            clef = ClefType::F15_MB;
       else if (c == "F" && i == 0 && line == 5)
             clef = ClefType::F_C;
       else if (c == "C") {

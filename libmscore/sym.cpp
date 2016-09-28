@@ -2650,6 +2650,10 @@ QVector<const char*> Sym::symNames = {
       "noteheadDoubleWholeAlt",           // double whole with double side bars
       "4stringTabClefSerif",              // TAB clef in script style
       "6stringTabClefSerif",              // TAB clef in script style
+      "cClefFrench",
+      "cClefFrench20C",
+      "fClefFrench",
+      "fClef19thCentury",
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
@@ -5274,6 +5278,10 @@ QVector<QString> Sym::symUserNames = {
       "noteheadDoubleWholeAlt",           // double whole with double side bars
       "4StringTabClefSerif",              // TAB clef in script style
       "6StringTabClefSerif",              // TAB clef in script style
+      "cClefFrench",
+      "cClefFrench20C",
+      "fClefFrench",
+      "fClef19thCentury",
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
@@ -5980,6 +5988,22 @@ void ScoreFont::load()
                   {     QString("6stringTabClef"),
                         QString("6stringTabClefSerif"),
                         SymId::sixStringTabClefSerif
+                  },
+                  {     QString("cClef"),
+                        QString("cClefFrench"),
+                        SymId::cClefFrench
+                  },
+                  {     QString("cClef"),
+                        QString("cClefFrench20C"),
+                        SymId::cClefFrench20C
+                  },
+                  {     QString("fClef"),
+                        QString("fClefFrench"),
+                        SymId::fClefFrench
+                  },
+                  {     QString("fClef"),
+                        QString("fClef19thCentury"),
+                        SymId::fClef19thCentury
                   },
                   {     QString("noteheadBlack"),
                         QString("noteheadBlackOversized"),

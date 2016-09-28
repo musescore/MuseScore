@@ -701,7 +701,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newBracketsPalette();
       static Palette* newBreathPalette();
       static Palette* newArpeggioPalette();
-      static Palette* newClefsPalette(bool basic);
+      static Palette* newClefsPalette(bool basic, bool master);
       static Palette* newGraceNotePalette(bool basic);
       static Palette* newBagpipeEmbellishmentPalette();
       static Palette* newKeySigPalette(bool basic = false);

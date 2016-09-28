@@ -713,24 +713,32 @@ Palette* MuseScore::newArpeggioPalette()
 //   newClefsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newClefsPalette(bool basic)
+Palette* MuseScore::newClefsPalette(bool basic, bool master)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Clefs"));
       sp->setMag(0.8);
       sp->setGrid(33, 60);
       sp->setYOffset(0.5);
-      static std::vector<ClefType> clefs1  {
+      static std::vector<ClefType> clefsBasic  {
             ClefType::G,   ClefType::F, ClefType::C3, ClefType::C4
             };
-      static std::vector<ClefType> clefs2  {
-            ClefType::G,     ClefType::G1,  ClefType::G2,  ClefType::G3,    ClefType::G3_O,
-            ClefType::G5,    ClefType::G4,  ClefType::C1,  ClefType::C2,    ClefType::C3,
-            ClefType::C4,    ClefType::C5,  ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
-            ClefType::F8,    ClefType::F15, ClefType::F_B, ClefType::F_C,   ClefType::PERC,
+      static std::vector<ClefType> clefsAdvanced  {
+            ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
+            ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
+            ClefType::C4,    ClefType::C5, ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
+            ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::PERC,
+            ClefType::PERC2, ClefType::TAB, ClefType::TAB4
+            };
+      static std::vector<ClefType> clefsMaster  {
+            ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
+            ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
+            ClefType::C4,    ClefType::C5,  ClefType::C_19C, ClefType::C3_F18C, ClefType::C4_F18C, ClefType::C3_F20C, ClefType::C4_F20C,
+             ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
+            ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,  ClefType::PERC,
             ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
             };
-      for (ClefType j : basic ? clefs1 : clefs2) {
+      for (ClefType j : master ?  clefsMaster : (basic ? clefsBasic : clefsAdvanced)) {
             Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));
             sp->append(k, qApp->translate("clefTable", ClefInfo::name(j)));
@@ -1244,7 +1252,7 @@ void MuseScore::setAdvancedPalette()
       {
       mscore->getPaletteBox();
       paletteBox->clear();
-      paletteBox->addPalette(newClefsPalette(false));
+      paletteBox->addPalette(newClefsPalette(false, false));
       paletteBox->addPalette(newKeySigPalette());
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBracketsPalette());
@@ -1308,7 +1316,7 @@ void MuseScore::setBasicPalette()
       {
       mscore->getPaletteBox();
       paletteBox->clear();
-      paletteBox->addPalette(newClefsPalette(true));
+      paletteBox->addPalette(newClefsPalette(true, false));
       paletteBox->addPalette(newKeySigPalette(true));
       paletteBox->addPalette(newTimePalette());
 //      paletteBox->addPalette(newBracketsPalette());
