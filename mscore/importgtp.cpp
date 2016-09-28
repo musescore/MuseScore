@@ -2394,9 +2394,9 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             s->linkTo(staff);
             p->staves()->append(s);
             pscore->staves().append(s);
-            stavesMap.append(score->staffIdx(staff));
+            stavesMap.append(staff->idx());
 
-            for (int i = score->staffIdx(staff) * VOICES, j = 0; i < score->staffIdx(staff) * VOICES + VOICES; i++, j++)
+            for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++)
                   tracks.insert(i, j);
 
             pscore->setName(part->partName());

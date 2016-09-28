@@ -2009,7 +2009,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
       //
       for (Staff* staff : staves()) {
             int barLineSpan = staff->barLineSpan();
-            int idx = staffIdx(staff);
+            int idx = staff->idx();
             int n = nstaves();
             if (idx + barLineSpan > n) {
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);

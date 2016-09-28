@@ -47,7 +47,7 @@ namespace Ms {
 
 int Staff::idx() const
       {
-      return score()->staffIdx(this);
+      return score()->staves().indexOf((Staff*)this, 0);
       }
 
 //---------------------------------------------------------
@@ -479,13 +479,13 @@ int Staff::currentKeyTick(int tick) const
 
 void Staff::write(Xml& xml) const
       {
-      int idx = score()->staffIdx(this);
+      int idx = this->idx();
       xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
       if (linkedStaves()) {
             Score* s = masterScore();
             foreach(Staff* staff, linkedStaves()->staves()) {
                   if ((staff->score() == s) && (staff != this))
-                        xml.tag("linkedTo", s->staffIdx(staff) + 1);
+                        xml.tag("linkedTo", staff->idx() + 1);
                   }
             }
 
@@ -660,7 +660,7 @@ void Staff::read(XmlReader& e)
                               }
                         }
                   else {
-                        int idx = score()->staffIdx(this);
+                        int idx = this->idx();
                         if (v >= 0 && v < idx)
                               linkTo(score()->staff(v));
                         }
@@ -972,7 +972,7 @@ void Staff::setStaffType(const StaffType* st)
       _staffType = *st;
 
       if (linesNew != linesOld) {
-            int sIdx = score()->staffIdx(this);
+            int sIdx = this->idx();
             if (sIdx < 0) {                     // staff does not belong to score (yet?)
                   if (linesNew == 1) {          // 1-line staves have special bar lines
                         _barLineFrom = BARLINE_SPAN_1LINESTAFF_FROM;

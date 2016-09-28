@@ -2715,10 +2715,10 @@ bool Measure::isFullMeasureRest() const
 
 bool Measure::isRepeatMeasure(Staff* staff) const
       {
-      int staffIdx = score()->staffIdx(staff);
-      int strack        = staffIdx * VOICES;
-      int etrack        = (staffIdx + 1) * VOICES;
-      Segment* s        = first(Segment::Type::ChordRest);
+      int staffIdx = staff->idx();
+      int strack   = staffIdx * VOICES;
+      int etrack   = (staffIdx + 1) * VOICES;
+      Segment* s   = first(Segment::Type::ChordRest);
 
       if (s == 0)
             return false;

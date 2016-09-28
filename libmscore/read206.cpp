@@ -1206,7 +1206,7 @@ static bool readScore(Score* score, XmlReader& e)
       //
       for (Staff* st : score->staves()) {
             int barLineSpan = st->barLineSpan();
-            int idx = score->staffIdx(st);
+            int idx = st->idx();
             int n = score->nstaves();
             if (idx + barLineSpan > n) {
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);

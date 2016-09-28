@@ -657,23 +657,6 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
       }
 
 //---------------------------------------------------------
-//   staffIdx
-//
-///  Return index for the first staff of \a part.
-//---------------------------------------------------------
-
-int Score::staffIdx(const Part* part) const
-      {
-      int idx = 0;
-      foreach(Part* p, _parts) {
-            if (p == part)
-                  break;
-            idx += p->nstaves();
-            }
-      return idx;
-      }
-
-//---------------------------------------------------------
 //   setShowInvisible
 //---------------------------------------------------------
 
@@ -1971,7 +1954,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       if (firstAppendedMeasure) {
             Segment* seg = firstAppendedMeasure->getSegment(Segment::Type::KeySig, tickOfAppend);
             for (Staff* st : score->staves()) {
-                  int staffIdx = score->staffIdx(st);
+                  int staffIdx = st->idx();
                   Staff* joinedStaff = staff(staffIdx);
                   // special case for initial "C" key signature - these have no explicit element
                   if (!seg->element(staffIdx * VOICES)) {
@@ -2248,7 +2231,7 @@ void Score::insertStaff(Staff* staff, int ridx)
 
 void Score::removeStaff(Staff* staff)
       {
-      int idx = staffIdx(staff);
+      int idx = staff->idx();
       for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
             Spanner* s = i->second;
             if (s->staffIdx() > idx) {
@@ -4337,5 +4320,23 @@ void Score::addRefresh(const QRectF& r)
       _updateState.refresh |= r;
       cmdState().setUpdateMode(UpdateMode::Update);
       }
+
+//---------------------------------------------------------
+//   staffIdx
+//
+///  Return index for the first staff of \a part.
+//---------------------------------------------------------
+
+int Score::staffIdx(const Part* part) const
+      {
+      int idx = 0;
+      for (Part* p : _parts) {
+            if (p == part)
+                  break;
+            idx += p->nstaves();
+            }
+      return idx;
+      }
+
 }
 

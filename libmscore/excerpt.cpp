@@ -152,7 +152,7 @@ void createExcerpt(Excerpt* excerpt)
                   score->undo(new LinkStaff(s, staff));
                   p->staves()->append(s);
                   score->staves().append(s);
-                  srcStaves.append(oscore->staffIdx(staff));
+                  srcStaves.append(staff->idx());
                   }
             score->appendPart(p);
             }
@@ -283,7 +283,7 @@ void deleteExcerpt(Excerpt* excerpt)
                         }
                   }
             if (staff) {
-                  int staffIdx = partScore->staffIdx(s);
+                  int staffIdx = s->idx();
                   // unlink the spanners
                   for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
                         Spanner* s = i->second;
@@ -776,8 +776,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
       score->undo(new LinkStaff(srcStaff, dstStaff));
 
-      int srcStaffIdx = score->staffIdx(srcStaff);
-      int dstStaffIdx = score->staffIdx(dstStaff);
+      int srcStaffIdx = srcStaff->idx();
+      int dstStaffIdx = dstStaff->idx();
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             int sTrack = srcStaffIdx * VOICES;
@@ -968,8 +968,8 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
 
       TieMap tieMap;
 
-      int srcStaffIdx = oscore->staffIdx(srcStaff);
-      int dstStaffIdx = score->staffIdx(dstStaff);
+      int srcStaffIdx = srcStaff->idx();
+      int dstStaffIdx = dstStaff->idx();
 
       int sTrack = srcStaffIdx * VOICES;
       int eTrack = sTrack + VOICES;
