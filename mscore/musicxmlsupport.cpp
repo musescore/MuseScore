@@ -474,7 +474,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
             case AccidentalType::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
             case AccidentalType::NATURAL_ARROW_UP:   s = "natural-up";           break;
             case AccidentalType::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
-            case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            //case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
             case AccidentalType::FLAT_ARROW_DOWN:    s = "flat-down";            break;
             case AccidentalType::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
             case AccidentalType::SHARP_ARROW_UP:     s = "sharp-up";             break;
