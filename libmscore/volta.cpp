@@ -158,14 +158,12 @@ Volta::Volta(Score* s)
       setContinueTextPlace(PlaceText::BELOW);
 
       setBeginHook(true);
-      Spatium hook(s->styleS(StyleIdx::voltaHook));
-      setBeginHookHeight(hook);
-      setEndHookHeight(hook);
       setAnchor(Anchor::MEASURE);
 
-      setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
-      lineWidthStyle = PropertyStyle::STYLED;
-      lineStyleStyle = PropertyStyle::STYLED;
+      resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
+      resetProperty(P_ID::END_HOOK_HEIGHT);
+      resetProperty(P_ID::LINE_WIDTH);
+      resetProperty(P_ID::LINE_STYLE);
       }
 
 //---------------------------------------------------------
