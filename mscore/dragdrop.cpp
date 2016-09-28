@@ -217,8 +217,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
       const QMimeData* data = event->mimeData();
 
-      if (data->hasFormat(mimeSymbolListFormat)
-         || data->hasFormat(mimeStaffListFormat)) {
+      if (data->hasFormat(mimeSymbolListFormat) || data->hasFormat(mimeStaffListFormat)) {
             event->acceptProposedAction();
             return;
             }
@@ -475,7 +474,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       if (dragElement) {
             bool applyUserOffset = false;
             _score->startCmd();
-            dragElement->setScore(_score);      // CHECK: should already be ok
+            Q_ASSERT(dragElement->score() == score());
             _score->addRefresh(dragElement->canvasBoundingRect());
             switch (dragElement->type()) {
                   case Element::Type::VOLTA:
@@ -485,9 +484,9 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::Type::HAIRPIN:
                   case Element::Type::TEXTLINE:
                         {
-                        dragElement->setScore(score());
                         Spanner* spanner = static_cast<Spanner*>(dragElement);
                         score()->cmdAddSpanner(spanner, pos);
+                        score()->setUpdateAll();
                         event->acceptProposedAction();
                         }
                         break;
@@ -588,8 +587,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                         _score->addRefresh(el->canvasBoundingRect());
 
                         // HACK ALERT!
-                        if (el->type() == Element::Type::MEASURE && dragElement->type() == Element::Type::LAYOUT_BREAK) {
-                              Measure* m = static_cast<Measure*>(el);
+                        if (el->isMeasure() && dragElement->isLayoutBreak()) {
+                              Measure* m = toMeasure(el);
                               if (m->isMMRest())
                                     el = m->mmRestLast();
                               }
@@ -608,7 +607,6 @@ void ScoreView::dropEvent(QDropEvent* event)
                         delete dragElement;
                         break;
                   }
-
             dragElement = 0;
             setDropTarget(0); // this also resets dropRectangle and dropAnchor
             score()->endCmd();

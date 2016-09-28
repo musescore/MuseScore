@@ -164,8 +164,8 @@ TextLine::TextLine(const TextLine& tl)
 
 void TextLine::styleChanged()
       {
-      triggerLayout();
       TextLineBase::styleChanged();
+      triggerLayout();
       }
 
 //---------------------------------------------------------

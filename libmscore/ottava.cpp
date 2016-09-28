@@ -189,7 +189,7 @@ void OttavaSegment::styleChanged()
 Ottava::Ottava(Score* s)
    : TextLineBase(s)
       {
-      _numbersOnly        = score()->styleB(StyleIdx::ottavaNumbersOnly);
+      _numbersOnly = score()->styleB(StyleIdx::ottavaNumbersOnly);
       setOttavaType(Type::OTTAVA_8VA);
       setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));

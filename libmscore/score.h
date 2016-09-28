@@ -686,6 +686,7 @@ class Score : public QObject, public ScoreElement {
       virtual inline CmdState& cmdState();
       virtual inline void addLayoutFlags(LayoutFlags);
       virtual inline void setInstrumentsChanged(bool);
+      void addRefresh(const QRectF&);
 
       bool playNote() const                 { return _updateState._playNote; }
       void setPlayNote(bool v)              { _updateState._playNote = v;    }
@@ -693,8 +694,6 @@ class Score : public QObject, public ScoreElement {
       void setPlayChord(bool v)             { _updateState._playChord = v;    }
       bool selectionChanged() const         { return _updateState._selectionChanged; }
       void setSelectionChanged(bool val)    { _updateState._selectionChanged = val;  }
-
-      void addRefresh(const QRectF&);
 
       void changeVoice(int);
 

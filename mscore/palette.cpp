@@ -318,14 +318,19 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
       dropData.element    = e;
 
       if (target->acceptDrop(dropData)) {
-            Element* ne = e->clone();
-            ne->setScore(score);
+            // use same code path as drag&drop
 
-            dropData.element    = ne;
-            ne = target->drop(dropData);
-            if (ne)
-                  score->select(ne, SelectType::SINGLE, 0);
-            viewer->setDropTarget(0);     // acceptDrop sets dropTarget
+            QByteArray a = e->mimeData(QPointF());
+            XmlReader e(a);
+            Fraction duration;  // dummy
+            QPointF dragOffset;
+            Element::Type type = Element::readType(e, &dragOffset, &duration);
+            dropData.element = Element::create(type, score);
+            dropData.element->read(e);
+
+            Element* el = target->drop(dropData);
+            if (el)
+                  score->select(el, SelectType::SINGLE, 0);
             }
       }
 
@@ -392,7 +397,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   else
                         qDebug("nowhere to place drum note");
                   }
-            else if (element->type() == Element::Type::SLUR && addSingle) {
+            else if (element->isSlur() && addSingle) {
                   viewer->cmdAddSlur();
                   }
             else if (element->isSLine() && element->type() != Element::Type::GLISSANDO && addSingle) {
@@ -402,8 +407,14 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                         endSegment = endSegment->nextCR(cr2->track());
                   // TODO - handle cross-voice selections
                   int idx = cr1->staffIdx();
-                  Spanner* spanner = static_cast<Spanner*>(element->clone());
-                  spanner->setScore(score);
+
+                  QByteArray a = element->mimeData(QPointF());
+                  XmlReader e(a);
+                  Fraction duration;  // dummy
+                  QPointF dragOffset;
+                  Element::Type type = Element::readType(e, &dragOffset, &duration);
+                  Spanner* spanner = static_cast<Spanner*>(Element::create(type, score));
+                  spanner->read(e);
                   score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
                   }
             else {

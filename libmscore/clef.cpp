@@ -370,9 +370,9 @@ void Clef::read(XmlReader& e)
 void Clef::write(Xml& xml) const
       {
       xml.stag(name());
-      if(_clefTypes._concertClef != ClefType::INVALID)
+      if (_clefTypes._concertClef != ClefType::INVALID)
             xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
-      if(_clefTypes._transposingClef != ClefType::INVALID)
+      if (_clefTypes._transposingClef != ClefType::INVALID)
             xml.tag("transposingClefType", ClefInfo::tag(_clefTypes._transposingClef));
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
