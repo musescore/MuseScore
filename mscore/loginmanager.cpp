@@ -381,7 +381,8 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
 
       QHttpPart filePart;
       filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
-      filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_data\"; filename=\"temp.mscz\""));
+      QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(qrand() % 100000);
+      filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
       QFile *file = new QFile(path);
       file->open(QIODevice::ReadOnly);
       filePart.setBodyDevice(file);
