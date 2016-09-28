@@ -3241,6 +3241,7 @@ void Measure::stretchMeasure(qreal targetWidth)
                         break;
                         }
                   }
+
             //---------------------------------------------------
             //    distribute stretch to segments
             //---------------------------------------------------
