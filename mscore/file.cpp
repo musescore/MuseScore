@@ -2578,6 +2578,9 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       if (trimMargin >= 0 && score->npages() == 1)
             p.translate(-r.topLeft());
 
+      double pr = MScore::pixelRatio;
+      MScore::pixelRatio = DPI / printer.logicalDpiX();
+
       for (Page* page : score->pages()) {
             // 1st pass: StaffLines
             for  (System* s : page->systems()) {
@@ -2599,13 +2602,11 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                         //
                         bool byMeasure = false;
                         for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
-                              if (mb->type() == Element::Type::HBOX
-                               || mb->type() == Element::Type::VBOX
-                               || !static_cast<Measure*>(mb)->visible(i)) {
+                              if (mb->isHBox() || mb->isVBox() || !toMeasure(mb)->visible(i)) {
                                     byMeasure = true;
                                     break;
+                                    }
                               }
-                        }
                         if (byMeasure) { // Draw visible staff lines by measure
                               for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
                                     if (mb->type() != Element::Type::HBOX
@@ -2614,9 +2615,9 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                                           StaffLines* sl = static_cast<Measure*>(mb)->staffLines(i);
                                           printer.setElement(sl);
                                           paintElement(p, sl);
+                                          }
                                     }
                               }
-                        }
                         else { // Draw staff lines once per system
                               StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
                               StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
@@ -2625,9 +2626,9 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                                                     - firstSL->pagePos().x());
                               printer.setElement(firstSL);
                               paintElement(p, firstSL);
+                              }
                         }
                   }
-            }
             // 2nd pass: the rest of the elements
             QList<Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
@@ -2657,6 +2658,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             }
 
       // Clean up and return
+      MScore::pixelRatio = pr;
       score->setPrinting(false);
       MScore::pdfPrinting = false;
       p.end(); // Writes MuseScore SVG file to disk, finally
