@@ -279,10 +279,10 @@ static void readAccidental(Accidental* a, XmlReader& e)
                                     at = AccidentalType::MIRRORED_FLAT;
                                     break;
                               case 20:
-                                    at = AccidentalType::MIRRORED_FLAT_SLASH;
+                                    at = AccidentalType::NONE;//AccidentalType::MIRRORED_FLAT_SLASH;
                                     break;
                               case 21:
-                                    at = AccidentalType::FLAT_FLAT_SLASH;
+                                    at = AccidentalType::NONE;//AccidentalType::FLAT_FLAT_SLASH;
                                     break;
                               case 22:
                                     at = AccidentalType::SHARP_SLASH;
@@ -303,7 +303,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                                     at = AccidentalType::SHARP_ARROW_DOWN;
                                     break;
                               case 28:
-                                    at = AccidentalType::SHARP_ARROW_BOTH;
+                                    at = AccidentalType::NONE;//AccidentalType::SHARP_ARROW_BOTH;
                                     break;
                               case 29:
                                     at = AccidentalType::FLAT_ARROW_UP;
@@ -312,7 +312,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                                     at = AccidentalType::FLAT_ARROW_DOWN;
                                     break;
                               case 31:
-                                    at = AccidentalType::FLAT_ARROW_BOTH;
+                                    at = AccidentalType::NONE;//AccidentalType::FLAT_ARROW_BOTH;
                                     break;
                               case 32:
                                     at = AccidentalType::NATURAL_ARROW_UP;
@@ -321,7 +321,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                                     at = AccidentalType::NATURAL_ARROW_DOWN;
                                     break;
                               case 34:
-                                    at = AccidentalType::NATURAL_ARROW_BOTH;
+                                    at = AccidentalType::NONE;//AccidentalType::NATURAL_ARROW_BOTH;
                                     break;
                               default:
                                     at = AccidentalType::NONE;
@@ -329,8 +329,28 @@ static void readAccidental(Accidental* a, XmlReader& e)
                               }
                         a->setAccidentalType(at);
                         }
-                  else
-                        a->setSubtype(text);
+                  else {
+                        const static std::map<QString, AccidentalType> accMap = {
+                           {"none", AccidentalType::NONE}, {"sharp", AccidentalType::SHARP},
+                           {"flat", AccidentalType::FLAT}, {"natural", AccidentalType::NATURAL},
+                           {"double sharp", AccidentalType::SHARP2}, {"double flat", AccidentalType::FLAT2},
+                           {"flat-slash", AccidentalType::FLAT_SLASH}, {"flat-slash2", AccidentalType::FLAT_SLASH2},
+                           {"mirrored-flat2", AccidentalType::MIRRORED_FLAT2}, {"mirrored-flat", AccidentalType::MIRRORED_FLAT},
+                           {"sharp-slash", AccidentalType::SHARP_SLASH}, {"sharp-slash2", AccidentalType::SHARP_SLASH2},
+                           {"sharp-slash3", AccidentalType::SHARP_SLASH3}, {"sharp-slash4", AccidentalType::SHARP_SLASH4},
+                           {"sharp arrow up", AccidentalType::SHARP_ARROW_UP}, {"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN},
+                           {"flat arrow up", AccidentalType::FLAT_ARROW_UP}, {"flat arrow down", AccidentalType::FLAT_ARROW_DOWN},
+                           {"natural arrow up", AccidentalType::NATURAL_ARROW_UP}, {"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN},
+                           {"sori", AccidentalType::SORI}, {"koron", AccidentalType::KORON}
+                        };
+                        auto it = accMap.find(text);
+                        if (it == accMap.end()) {
+                              qDebug("invalid type %s", qPrintable(text));
+                              a->setAccidentalType(AccidentalType::NONE);
+                              }
+                        else
+                              a->setAccidentalType(it->second);
+                        }
                   }
             else if (tag == "role") {
                   AccidentalRole r = AccidentalRole(e.readInt());
@@ -441,8 +461,8 @@ static void readNote(Note* note, XmlReader& e)
                               case 7: at = AccidentalType::FLAT_SLASH2; break;
                               case 8: at = AccidentalType::MIRRORED_FLAT2; break;
                               case 9: at = AccidentalType::MIRRORED_FLAT; break;
-                              case 10: at = AccidentalType::MIRRORED_FLAT_SLASH; break;
-                              case 11: at = AccidentalType::FLAT_FLAT_SLASH; break;
+                              case 10: at = AccidentalType::NONE; break; // AccidentalType::MIRRORED_FLAT_SLASH
+                              case 11: at = AccidentalType::NONE; break; // AccidentalType::FLAT_FLAT_SLASH
 
                               case 12: at = AccidentalType::SHARP_SLASH; break;
                               case 13: at = AccidentalType::SHARP_SLASH2; break;
@@ -451,13 +471,13 @@ static void readNote(Note* note, XmlReader& e)
 
                               case 16: at = AccidentalType::SHARP_ARROW_UP; break;
                               case 17: at = AccidentalType::SHARP_ARROW_DOWN; break;
-                              case 18: at = AccidentalType::SHARP_ARROW_BOTH; break;
+                              case 18: at = AccidentalType::NONE; break; // AccidentalType::SHARP_ARROW_BOTH
                               case 19: at = AccidentalType::FLAT_ARROW_UP; break;
                               case 20: at = AccidentalType::FLAT_ARROW_DOWN; break;
-                              case 21: at = AccidentalType::FLAT_ARROW_BOTH; break;
+                              case 21: at = AccidentalType::NONE; break; // AccidentalType::FLAT_ARROW_BOTH
                               case 22: at = AccidentalType::NATURAL_ARROW_UP; break;
                               case 23: at = AccidentalType::NATURAL_ARROW_DOWN; break;
-                              case 24: at = AccidentalType::NATURAL_ARROW_BOTH; break;
+                              case 24: at = AccidentalType::NONE; break; // AccidentalType::NATURAL_ARROW_BOTH
                               case 25: at = AccidentalType::SORI; break;
                               case 26: at = AccidentalType::KORON; break;
                               }

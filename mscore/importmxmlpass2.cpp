@@ -1941,7 +1941,7 @@ static void markUserAccidentals(const int firstStaff,
                                       && !accTmp.value(ln, false))) {
                                     nt->accidental()->setRole(AccidentalRole::USER);
                                     }
-                              else if (nt->accidental()->accidentalType() > AccidentalType::NATURAL
+                              else if (Accidental::isMicrotonal(nt->accidental()->accidentalType())
                                        && nt->accidental()->accidentalType() < AccidentalType::END) {
                                     // microtonal accidental
                                     nt->accidental()->setRole(AccidentalRole::USER);

@@ -160,7 +160,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       treeWidget->addTopLevelItem(timeItem);
 
       addPalette(MuseScore::newBracketsPalette());
-      addPalette(MuseScore::newAccidentalsPalette(false));
+      addPalette(MuseScore::newAccidentalsPalette(false, true));
       addPalette(MuseScore::newArticulationsPalette(false));
       addPalette(MuseScore::newBreathPalette());
       addPalette(MuseScore::newGraceNotePalette(false));

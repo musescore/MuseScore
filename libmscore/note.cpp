@@ -1663,7 +1663,7 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (!(_accidental && _accidental->accidentalType() > AccidentalType::NATURAL)) {
+      if (!(_accidental && Accidental::isMicrotonal(_accidental->accidentalType()))) {
             // calculate accidental
             AccidentalType acci = AccidentalType::NONE;
 
