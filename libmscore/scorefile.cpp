@@ -915,11 +915,15 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         if (mscVersion() < 114)
                               return FileError::FILE_TOO_OLD;
                         }
+                  Score::FileError error;
                   if (mscVersion() == 114)
-                        return read114(e);
-                  if (mscVersion() <= 206)
-                        return read206(e);
-                  return read300(e);
+                        error = read114(e);
+                  else if (mscVersion() <= 206)
+                        error = read206(e);
+                  else
+                        error = read300(e);
+                  setExcerptsChanged(false);
+                  return error;
                   }
             else
                   e.unknown();

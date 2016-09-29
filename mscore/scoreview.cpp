@@ -3713,11 +3713,10 @@ void ScoreView::select(QMouseEvent* ev)
             cloneElement(curElement);
             return;
             }
-      Element::Type type = curElement->type();
       int dragStaffIdx = 0;
-      if (type == Element::Type::MEASURE) {
+      if (curElement->isMeasure()) {
             System* dragSystem = (System*)(curElement->parent());
-            dragStaffIdx  = getStaff(dragSystem, data.startMove);
+            dragStaffIdx       = getStaff(dragSystem, data.startMove);
             }
       if ((ev->type() == QEvent::MouseButtonRelease) && ((!curElement->selected() || addSelect)))
             return;
@@ -3734,7 +3733,7 @@ void ScoreView::select(QMouseEvent* ev)
             else if (keyState & Qt::ShiftModifier)
                   st = SelectType::RANGE;
             else if (keyState & Qt::ControlModifier) {
-                  if (type == Element::Type::MEASURE)
+                  if (curElement->isMeasure())
                         return;
                   if (curElement->selected()) {
                         if (ev->type() == QEvent::MouseButtonPress) {
@@ -3750,9 +3749,9 @@ void ScoreView::select(QMouseEvent* ev)
                   addSelect = true;
                   st = SelectType::ADD;
                   }
-            if (curElement && curElement->isKeySig() && (keyState != Qt::ControlModifier) && st == SelectType::SINGLE) {
+            if (curElement->isKeySig() && (keyState != Qt::ControlModifier) && st == SelectType::SINGLE) {
                   // special case: select for all staves
-                  Segment* s = static_cast<Segment*>(curElement->parent());
+                  Segment* s = toKeySig(curElement)->segment();
                   bool first = true;
                   for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
                         Element* e = s->element(staffIdx * VOICES);
@@ -3789,7 +3788,7 @@ bool ScoreView::mousePress(QMouseEvent* ev)
       data.startMove = imatrix.map(QPointF(startMoveI));
       curElement     = elementNear(data.startMove);
 
-      if (curElement && curElement->type() == Element::Type::MEASURE) {
+      if (curElement && curElement->isMeasure()) {
             System* dragSystem = (System*)(curElement->parent());
             int dragStaffIdx  = getStaff(dragSystem, data.startMove);
             if (dragStaffIdx < 0)
