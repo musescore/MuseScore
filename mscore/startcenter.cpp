@@ -150,7 +150,7 @@ void Startcenter::readSettings()
       MuseScore::restoreGeometry(this);
       }
 
-#if 0
+#ifdef USE_WEBENGINE
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------

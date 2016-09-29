@@ -104,6 +104,13 @@ option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
 option(BUILD_PCH "Build using precompiled headers." OFF)
+option(BUILD_WEBENGINE "Build with webengine" OFF)
+if (MINGW)
+    set(BUILD_WEBENGINE OFF)
+endif(MINGW)
+if (BUILD_WEBENGINE)
+    set (USE_WEBENGINE 1)
+endif (BUILD_WEBENGINE)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
