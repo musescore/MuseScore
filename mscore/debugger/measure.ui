@@ -26,7 +26,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="prevButton">
+         <widget class="QToolButton" name="prevButton">
           <property name="toolTip">
            <string notr="true"/>
           </property>
@@ -40,7 +40,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="nextButton">
+         <widget class="QToolButton" name="nextButton">
           <property name="text">
            <string notr="true"/>
           </property>
