@@ -172,8 +172,7 @@ void Preferences::init()
       oscPort                 = 5282;
       singlePalette           = false;
 
-      styleName               = "light";   // ??
-      globalStyle             = MuseScoreStyleType::LIGHT;
+      globalStyle             = MuseScoreStyleType::LIGHT_OXYGEN;
 #ifdef Q_OS_MAC
       animations              = false;
 #else
@@ -316,6 +315,13 @@ void Preferences::write()
 
       s.setValue("useOsc", useOsc);
       s.setValue("oscPort", oscPort);
+      QString styleName = "light";
+      if (globalStyle == MuseScoreStyleType::DARK_OXYGEN)
+            styleName = "dark";
+      else if (globalStyle == MuseScoreStyleType::DARK_FUSION)
+            styleName = "dark_fusion";
+      else if (globalStyle == MuseScoreStyleType::LIGHT_FUSION)
+            styleName = "light_fusion";
       s.setValue("style", styleName);
       s.setValue("animations", animations);
       s.setValue("singlePalette", singlePalette);
@@ -454,11 +460,15 @@ void Preferences::read()
 
       useOsc                 = s.value("useOsc", useOsc).toBool();
       oscPort                = s.value("oscPort", oscPort).toInt();
-      styleName              = s.value("style", styleName).toString();
-      if (styleName == "dark")
-            globalStyle  = MuseScoreStyleType::DARK;
-      else
-            globalStyle  = MuseScoreStyleType::LIGHT;
+      QString sName          = s.value("style", "light").toString();
+      if (sName == "dark")
+            globalStyle  = MuseScoreStyleType::DARK_OXYGEN;
+      else if (sName == "light")
+            globalStyle  = MuseScoreStyleType::LIGHT_OXYGEN;
+      else if (sName == "dark_fusion")
+            globalStyle  = MuseScoreStyleType::DARK_FUSION;
+      else if (sName == "light_fusion")
+            globalStyle  = MuseScoreStyleType::LIGHT_FUSION;
 
       animations       = s.value("animations",       animations).toBool();
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
@@ -1461,14 +1471,8 @@ void PreferenceDialog::apply()
 
       prefs.useOsc  = oscServer->isChecked();
       prefs.oscPort = oscPort->value();
-      if (styleName->currentIndex() == int(MuseScoreStyleType::DARK)) {
-            prefs.styleName = "dark";
-            prefs.globalStyle = MuseScoreStyleType::DARK;
-            }
-      else {
-            prefs.styleName = "light";
-            prefs.globalStyle = MuseScoreStyleType::LIGHT;
-            }
+
+      prefs.globalStyle = MuseScoreStyleType(styleName->currentIndex());
 
       prefs.animations = animations->isChecked();
       MgStyleConfigData::animationsEnabled = prefs.animations;

@@ -151,7 +151,7 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       bl->addStretch(10);
 
       view->document()->setDefaultStyleSheet(
-            preferences.globalStyle == MuseScoreStyleType::DARK ? cssDark : css);
+            preferences.isThemeDark() ? cssDark : css);
 
       toolbar->setLayout(bl);
       }
