@@ -254,27 +254,27 @@ static void readAccidental(Accidental* a, XmlReader& e)
                         a->setHasBracket(i);
                   }
             else if (tag == "subtype") {
-                  const char* n[] = {
-                     "none", "sharp", "flat", "double sharp", "double flat", "natural",
-                     "flat-slash", "flat-slash2", "mirrored-flat2", "mirrored-flat",
-                     "mirrored-flat-slash", "flat-flat-slash", "sharp-slash", "sharp-slash2",
-                     "sharp-slash3", "sharp-slash4", "sharp arrow up", "sharp arrow down",
-                     "sharp arrow both", "flat arrow up", "flat arrow down", "flat arrow both",
-                     "natural arrow up", "natural arrow down", "natural arrow both", "sori",
-                     "koron"
-                     };
-                  QString s = e.readElementText();
-                  int idx = 0;
-                  for (const char* p : n) {
-                        if (s == p)
-                              break;
-                        ++idx;
-                        }
-                  if (idx == sizeof(n)/sizeof(*n)) {
-                        qDebug("invalid type %s", qPrintable(s));
+                  QString text = e.readElementText();
+                  const static std::map<QString, AccidentalType> accMap = {
+                           {"none", AccidentalType::NONE}, {"sharp", AccidentalType::SHARP},
+                           {"flat", AccidentalType::FLAT}, {"natural", AccidentalType::NATURAL},
+                           {"double sharp", AccidentalType::SHARP2}, {"double flat", AccidentalType::FLAT2},
+                           {"flat-slash", AccidentalType::FLAT_SLASH}, {"flat-slash2", AccidentalType::FLAT_SLASH2},
+                           {"mirrored-flat2", AccidentalType::MIRRORED_FLAT2}, {"mirrored-flat", AccidentalType::MIRRORED_FLAT},
+                           {"sharp-slash", AccidentalType::SHARP_SLASH}, {"sharp-slash2", AccidentalType::SHARP_SLASH2},
+                           {"sharp-slash3", AccidentalType::SHARP_SLASH3}, {"sharp-slash4", AccidentalType::SHARP_SLASH4},
+                           {"sharp arrow up", AccidentalType::SHARP_ARROW_UP}, {"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN},
+                           {"flat arrow up", AccidentalType::FLAT_ARROW_UP}, {"flat arrow down", AccidentalType::FLAT_ARROW_DOWN},
+                           {"natural arrow up", AccidentalType::NATURAL_ARROW_UP}, {"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN},
+                           {"sori", AccidentalType::SORI}, {"koron", AccidentalType::KORON}
+                        };
+                  auto it = accMap.find(text);
+                  if (it == accMap.end()) {
+                        qDebug("invalid type %s", qPrintable(text));
+                        a->setAccidentalType(AccidentalType::NONE);
                         }
                   else
-                        a->setAccidentalType(AccidentalType(idx));
+                        a->setAccidentalType(it->second);
                   }
             else if (tag == "role") {
                   AccidentalRole r = AccidentalRole(e.readInt());
