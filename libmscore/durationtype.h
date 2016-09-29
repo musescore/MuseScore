@@ -88,7 +88,7 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
 void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::TDuration)
+Q_DECLARE_METATYPE(Ms::TDuration);
 
 #endif
 

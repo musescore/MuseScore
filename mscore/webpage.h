@@ -80,7 +80,7 @@ class MyWebPage: public QWebPage
 
 class MyWebView: public QWebView
       {
-      //Q_OBJECT
+      Q_OBJECT
 
       MyWebPage m_page;
       QProgressBar* progressBar;
