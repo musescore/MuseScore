@@ -447,7 +447,7 @@ ClefType OveClefToClef(OVE::ClefType type){
                   break;
                   }
             case OVE::ClefType::Treble8va:{
-                  clef = ClefType::G1;
+                  clef = ClefType::G8_VA;
                   break;
                   }
             case OVE::ClefType::Bass8va:{
@@ -455,11 +455,11 @@ ClefType OveClefToClef(OVE::ClefType type){
                   break;
                   }
             case OVE::ClefType::Treble8vb:{
-                  clef = ClefType::G3;
+                  clef = ClefType::G8_VB;
                   break;
                   }
             case OVE::ClefType::Bass8vb:{
-                  clef = ClefType::F8;
+                  clef = ClefType::F8_VB;
                   break;
                   }
             case OVE::ClefType::Percussion1:{
