@@ -1917,6 +1917,7 @@ void MuseScore::dropEvent(QDropEvent* event)
 //---------------------------------------------------------
 //   changeEvent
 //---------------------------------------------------------
+
 void MuseScore::changeEvent(QEvent *e)
       {
       QMainWindow::changeEvent(e);
@@ -4028,30 +4029,6 @@ const char* stateName(ScoreState s)
       }
 
 //---------------------------------------------------------
-//   excerptsChanged
-//---------------------------------------------------------
-
-void MuseScore::excerptsChanged(MasterScore* s)
-      {
-      if (tab2) {
-//            ScoreView* v = tab2->view();
-//            if (v && v->score() == s) {
-                  tab2->updateExcerpts();
-//                  }
-            }
-      if (tab1) {
-            ScoreView* v = tab1->view();
-            if (v && v->score()->masterScore() == s) {
-                  tab1->updateExcerpts();
-                  }
-            else if (v == 0) {
-                  tab1->setExcerpt(0);
-                  tab1->updateExcerpts();
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   scorePageLayoutChanged
 //---------------------------------------------------------
 
@@ -4573,7 +4550,22 @@ void MuseScore::endCmd()
                   }
             MasterScore* ms = cs->masterScore();
             if (ms->excerptsChanged()) {
-                  excerptsChanged(ms);
+                  if (tab2) {
+//                      ScoreView* v = tab2->view();
+//                      if (v && v->score() == ms) {
+                              tab2->updateExcerpts();
+//                            }
+                        }
+                  if (tab1) {
+                        ScoreView* v = tab1->view();
+                        if (v && v->score()->masterScore() == ms) {
+                              tab1->updateExcerpts();
+                              }
+                        else if (v == 0) {
+                              tab1->setExcerpt(0);
+                              tab1->updateExcerpts();
+                              }
+                        }
                   ms->setExcerptsChanged(false);
                   }
             if (ms->instrumentsChanged()) {

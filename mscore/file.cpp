@@ -760,8 +760,8 @@ void MuseScore::newFile()
             xs->setExcerpt(x);
             score->excerpts().append(x);
             createExcerpt(x);
-            score->setExcerptsChanged(true);
             }
+      score->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
