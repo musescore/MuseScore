@@ -34,6 +34,7 @@ PaletteBoxButton::PaletteBoxButton(Palette* p, QWidget* parent)
       setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
       setArrowType(Qt::RightArrow);
       showPalette(false);
+      setObjectName("palette");
       }
 
 //---------------------------------------------------------

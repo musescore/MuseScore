@@ -676,6 +676,16 @@
               <string>Light</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Dark Fusion</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Light Fusion</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="2" column="2">

@@ -57,8 +57,10 @@ enum {
       };
 
 enum class MuseScoreStyleType : char {
-      DARK,
-      LIGHT
+      DARK_OXYGEN = 0,
+      LIGHT_OXYGEN,
+      DARK_FUSION,
+      LIGHT_FUSION
       };
 
 // MusicXML export break values
@@ -161,7 +163,7 @@ struct Preferences {
       bool useOsc;
       int oscPort;
       bool singlePalette;
-      QString styleName;
+      //QString styleName;
       MuseScoreStyleType globalStyle;
       bool animations;
 
@@ -192,6 +194,8 @@ struct Preferences {
       void read();
       void init();
       bool readDefaultStyle();
+      bool isThemeDark() { return globalStyle == MuseScoreStyleType::DARK_OXYGEN || globalStyle == MuseScoreStyleType::DARK_FUSION;}
+      bool isOxygen() { return globalStyle == MuseScoreStyleType::DARK_OXYGEN || globalStyle == MuseScoreStyleType::LIGHT_OXYGEN;}
       };
 
 //---------------------------------------------------------

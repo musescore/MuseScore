@@ -121,7 +121,7 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   f.open(QIODevice::ReadOnly);
                   QByteArray ba = f.readAll();
                   if (mode == QIcon::Disabled) {
-                        if (Ms::preferences.globalStyle == Ms::MuseScoreStyleType::LIGHT) {
+                        if (!Ms::preferences.isThemeDark()) {
                               if (state == QIcon::On)
                                     ba.replace("fill:#3b3f45", "fill:#8daac7");
                               else
@@ -130,20 +130,20 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                         else {
                               if (state == QIcon::On)
                                     ba.replace("fill:#3b3f45", "fill:#4171a2");
-			      else
+                              else
                                     ba.replace("fill:#3b3f45", "fill:#a0a0a0");
                               }
                         }
                   else {
-                        if (Ms::preferences.globalStyle == Ms::MuseScoreStyleType::LIGHT) {
+                        if (!Ms::preferences.isThemeDark()) {
                               if (state == QIcon::On)
                                     ba.replace("fill:#3b3f45", "fill:#4171a2");
                               }
                         else {
                               if (state == QIcon::On)
                                     ba.replace("fill:#3b3f45", "fill:#78afe6");
-			      else
-				    ba.replace("fill:#3b3f45", "fill:#eff0f1");
+			            else
+                                    ba.replace("fill:#3b3f45", "fill:#eff0f1");
                               }
                         }
                   renderer->load(ba);

@@ -321,7 +321,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            QColor c(preferences.globalStyle == MuseScoreStyleType::DARK ? Qt::yellow : Qt::blue);
+            QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::blue);
 
             // ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(c.name()) : "");
