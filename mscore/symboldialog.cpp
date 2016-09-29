@@ -56,7 +56,6 @@ void SymbolDialog::createSymbols()
       sp->clear();
       for (auto name : (*smuflRanges())[range]) {
             SymId id     = Sym::name2id(name);
-
             if (search->text().isEmpty()
                || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
                   Symbol* s = new Symbol(gscore);

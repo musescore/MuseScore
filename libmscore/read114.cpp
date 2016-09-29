@@ -555,12 +555,12 @@ static ClefType readClefType(const QString& s)
             switch (i) {
                   default:
                   case  0: ct = ClefType::G; break;
-                  case  1: ct = ClefType::G1; break;
-                  case  2: ct = ClefType::G2; break;
-                  case  3: ct = ClefType::G3; break;
+                  case  1: ct = ClefType::G8_VA; break;
+                  case  2: ct = ClefType::G15_MA; break;
+                  case  3: ct = ClefType::G8_VB; break;
                   case  4: ct = ClefType::F; break;
-                  case  5: ct = ClefType::F8; break;
-                  case  6: ct = ClefType::F15; break;
+                  case  5: ct = ClefType::F8_VB; break;
+                  case  6: ct = ClefType::F15_MB; break;
                   case  7: ct = ClefType::F_B; break;
                   case  8: ct = ClefType::F_C; break;
                   case  9: ct = ClefType::C1; break;
@@ -570,7 +570,7 @@ static ClefType readClefType(const QString& s)
                   case 13: ct = ClefType::TAB; break;
                   case 14: ct = ClefType::PERC; break;
                   case 15: ct = ClefType::C5; break;
-                  case 16: ct = ClefType::G4; break;
+                  case 16: ct = ClefType::G_1; break;
                   case 17: ct = ClefType::F_8VA; break;
                   case 18: ct = ClefType::F_15MA; break;
                   case 19: ct = ClefType::PERC; break;      // PERC2 no longer supported

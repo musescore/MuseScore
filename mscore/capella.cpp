@@ -691,12 +691,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         int off;
                         switch (clef) {
                               case ClefType::G:      off = 0; break;
-                              case ClefType::G1:     off = 7; break;
-                              case ClefType::G2:     off = 14; break;
-                              case ClefType::G3:     off = -7; break;
+                              case ClefType::G8_VA:  off = 7; break;
+                              case ClefType::G15_MA: off = 14; break;
+                              case ClefType::G8_VB:  off = -7; break;
                               case ClefType::F:      off = -14; break;
-                              case ClefType::F8:     off = -21; break;
-                              case ClefType::F15:    off = -28; break;
+                              case ClefType::F8_VB:  off = -21; break;
+                              case ClefType::F15_MB: off = -28; break;
                               case ClefType::F_B:    off = -14; break;
                               case ClefType::F_C:    off = -14; break;
                               case ClefType::C1:     off = -7; break;
@@ -704,7 +704,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               case ClefType::C3:     off = -7; break;
                               case ClefType::C4:     off = -7; break;
                               case ClefType::C5:     off = -7; break;
-                              case ClefType::G4:     off = 0; break;
+                              case ClefType::G_1:     off = 0; break;
                               case ClefType::F_8VA:  off = -7; break;
                               case ClefType::F_15MA: off = 0; break;
                               default:          off = 0; qDebug("clefType %d not implemented", int(clef));
@@ -2291,8 +2291,8 @@ ClefType CapClef::clefType(Form form, ClefLine line, Oct oct)
       int idx = int(form) + (int(line) << 3) + (int(oct) << 5);
       switch (idx) {
             case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::G;
-            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_ALTA) << 5):  return ClefType::G1;
-            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::G3;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_ALTA) << 5):  return ClefType::G8_VA;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::G8_VB;
 
             case int(Form::C) + (int(ClefLine::L1) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C1;
             case int(Form::C) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C2;
@@ -2301,7 +2301,7 @@ ClefType CapClef::clefType(Form form, ClefLine line, Oct oct)
             case int(Form::C) + (int(ClefLine::L5) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C5;
 
             case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F;
-            case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::F8;
+            case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::F8_VB;
             case int(Form::F) + (int(ClefLine::L3) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F_B;
             case int(Form::F) + (int(ClefLine::L5) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F_C;
 
