@@ -135,10 +135,7 @@ double Pattern::match(const QImage* img, int col, int row, double bg_parm) const
       uchar b  = (b1 >> shift) | (b2 << (7 - shift));
       uchar v = a ^ b;
       k += Omr::bitsSetTable[v];
-      }
 #endif
-
-      
       }
 
 //---------------------------------------------------------
