@@ -1127,6 +1127,8 @@ MuseScore::MuseScore()
       menuTools->addAction(getAction("copy-lyrics-to-clipboard"));
       menuTools->addAction(getAction("fotomode"));
 
+      menuTools->addAction(getAction("del-empty-measures"));
+
       //---------------------
       //    Menu Plugins
       //---------------------

@@ -2607,6 +2607,8 @@ void Score::cmd(const QAction* a)
             cmdSlashRhythm();
       else if (cmd == "resequence-rehearsal-marks")
             cmdResequenceRehearsalMarks();
+      else if (cmd == "del-empty-measures")
+            cmdRemoveEmptyTrailingMeasures();
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
@@ -3237,4 +3239,27 @@ void Score::addRemoveBreaks(int interval, bool lock)
 
       }
 
+//---------------------------------------------------------
+//   cmdRemoveEmptyTrailingMeasures
+//---------------------------------------------------------
+
+void Score::cmdRemoveEmptyTrailingMeasures()
+      {
+      MasterScore* score = masterScore();
+      Measure* firstMeasure;
+      Measure* lastMeasure = score->lastMeasure();
+      if (!lastMeasure->isFullMeasureRest())
+            return;
+      firstMeasure = lastMeasure;
+      for (firstMeasure = lastMeasure;;) {
+            Measure* m = firstMeasure->prevMeasure();
+            if (!m || !m->isFullMeasureRest())
+                  break;
+            firstMeasure = m;
+            }
+      startCmd();
+      deleteMeasures(firstMeasure, lastMeasure);
+      endCmd();
+      }
 }
+
