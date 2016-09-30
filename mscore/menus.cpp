@@ -493,7 +493,7 @@ Palette* MuseScore::newFingeringPalette()
       for (int i = int(ArticulationType::ARTICULATIONS_PROPER); i < int(ArticulationType::ARTICULATIONS); ++i) {
             Articulation* s = new Articulation(gscore);
             s->setArticulationType(ArticulationType(i));
-            sp->append(s, qApp->translate("Fingering", s->subtypeUserName().toUtf8().constData()));
+            sp->append(s, s->userName());
             }
       return sp;
       }
@@ -572,7 +572,7 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
             for (auto i : art) {
                   Articulation* s = new Articulation(gscore);
                   s->setArticulationType(i);
-                  sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
+                  sp->append(s, s->userName());
                   }
             }
       else {
@@ -580,7 +580,7 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
             for (int i = 0; i < int(ArticulationType::ARTICULATIONS_PROPER); ++i) {
                   Articulation* s = new Articulation(gscore);
                   s->setArticulationType(ArticulationType(i));
-                  sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
+                  sp->append(s, s->userName());
                   }
             Bend* bend = new Bend(gscore);
             bend->points().append(PitchValue(0,    0, false));
@@ -1086,7 +1086,7 @@ Palette* MuseScore::newTempoPalette(bool basic, bool master)
 //      st->setXmlText(tr("Swing"));
 //      st->setSwing(true);
 //      sp->append(st, tr("Swing"), QString(), 1.3);
-//      
+//
 //      st = new StaffText(gscore);
 //      st->setTextStyleType(TextStyleType::TEMPO);
 //      st->setXmlText(tr("Straight"));
@@ -1126,7 +1126,7 @@ Palette* MuseScore::newTextPalette()
       InstrumentChange* is = new InstrumentChange(gscore);
       is->setXmlText(tr("Change Instr."));
       sp->append(is, tr("Instrument change"));
-            
+
       RehearsalMark* rhm = new RehearsalMark(gscore);
       rhm->setXmlText("B1");
       sp->append(rhm, tr("Rehearsal mark"));

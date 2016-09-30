@@ -56,14 +56,14 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
                   subtype->setText(qApp->translate("TextStyle", e->subtypeName().toUtf8()));
                   break;
             case Element::Type::ARTICULATION: // comes translated, but from a different method
-                  subtype->setText(static_cast<const Articulation*>(e)->subtypeUserName());
+                  subtype->setText(static_cast<const Articulation*>(e)->userName());
                   break;
             // other come translated or don't need any or are too difficult to implement
             default: subtype->setText(e->subtypeName());
             }
       sameSubtype->setEnabled(e->subtype() != -1);
       subtype->setEnabled(e->subtype() != -1);
-      inSelection->setEnabled(e->score()->selection().isRange());    
+      inSelection->setEnabled(e->score()->selection().isRange());
       }
 
 //---------------------------------------------------------

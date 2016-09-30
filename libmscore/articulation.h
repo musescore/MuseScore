@@ -53,11 +53,8 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
 struct ArticulationInfo {
       SymId upSym;
       SymId downSym;
-      const char* name;           // as stored in score files
-      QString description;    // user-visible, translatable, name
-      qreal timeStretch;      // for fermata
-      MScore::OrnamentStyle ornamentStyle; // or ornaments such as trill
-      bool playArticulation;
+      const char* name;                    // as stored in score files
+      qreal timeStretch;                   // for fermata
       ArticulationShowIn flags;
       };
 
@@ -114,18 +111,19 @@ class Articulation : public Element {
       virtual void styleChanged() override;
       StyleIdx getPropertyStyle(P_ID id) const override;
 
-      QString subtypeUserName() const;
+      QString userName() const;
 
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
       void setDirection(Direction d);
-      Direction direction() const   { return _direction; }
+      Direction direction() const           { return _direction; }
 
       ChordRest* chordRest() const;
       Segment* segment() const;
       Measure* measure() const;
       System* system() const;
       Page* page() const;
+      SymId symId() const;
 
       static ArticulationInfo articulationList[];
 

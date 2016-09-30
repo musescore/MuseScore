@@ -90,8 +90,6 @@ class NoteHead : public Symbol {
       virtual NoteHead* clone() const override    { return new NoteHead(*this); }
       virtual Element::Type type() const override { return Element::Type::NOTEHEAD; }
 
-      virtual void write(Xml& xml) const override;
-
       Group headGroup() const;
 
       static const char* groupToGroupName(Group group);

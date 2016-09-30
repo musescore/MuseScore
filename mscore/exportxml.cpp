@@ -1960,7 +1960,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         // ignore, handled with technical
                         break;
                   default:
-                        qDebug("unknown chord attribute %s", qPrintable(a->subtypeUserName()));
+                        qDebug("unknown chord attribute %s", qPrintable(a->userName()));
                         break;
                   }
             }
@@ -2132,7 +2132,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         // ignore, handled with technical
                         break;
                   default:
-                        qDebug("unknown chord attribute %s", qPrintable(a->subtypeUserName()));
+                        qDebug("unknown chord attribute %s", qPrintable(a->userName()));
                         break;
                   }
             }

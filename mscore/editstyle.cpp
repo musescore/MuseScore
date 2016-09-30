@@ -312,7 +312,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
             QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 0.9);
             QIcon icon(ct);
-            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", ai->description.toUtf8().constData()));
+            QTableWidgetItem* item = new QTableWidgetItem(icon, Sym::id2userName(ai->upSym));
 
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             articulationTable->setItem(i, 0, item);
