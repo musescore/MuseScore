@@ -3409,13 +3409,22 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
-
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL,
          "edit-toolbars",
          QT_TRANSLATE_NOOP("action","Customize Toolbars..."),
          QT_TRANSLATE_NOOP("action","Customize toolbars"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         "del-empty-measures",
+         QT_TRANSLATE_NOOP("action","Remove empty trailing measures"),
+         QT_TRANSLATE_NOOP("action","Remove empty trailing measures"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
