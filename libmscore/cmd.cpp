@@ -3248,7 +3248,7 @@ void Score::cmdRemoveEmptyTrailingMeasures()
       MasterScore* score = masterScore();
       Measure* firstMeasure;
       Measure* lastMeasure = score->lastMeasure();
-      if (!lastMeasure->isFullMeasureRest())
+      if (!lastMeasure || !lastMeasure->isFullMeasureRest())
             return;
       firstMeasure = lastMeasure;
       for (firstMeasure = lastMeasure;;) {
