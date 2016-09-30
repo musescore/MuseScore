@@ -3423,13 +3423,12 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL,
          "del-empty-measures",
-         QT_TRANSLATE_NOOP("action","Remove empty trailing measures"),
+         QT_TRANSLATE_NOOP("action","Remove Empty Trailing Measures"),
          QT_TRANSLATE_NOOP("action","Remove empty trailing measures"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
-
 #ifndef NDEBUG
       {
          MsWidget::MAIN_WINDOW,
