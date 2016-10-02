@@ -1045,6 +1045,9 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
       popup->addAction(getAction("swap"));
+            
+      if (obj->type() == Element::Type::BAR_LINE || obj->type() == Element::Type::REST || obj->type() == Element::Type::NOTE)
+            popup->addAction(getAction("time-delete"));
 
       QMenu* selMenu = popup->addMenu(tr("Select"));
       selMenu->addAction(getAction("select-similar"));
@@ -1151,6 +1154,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addAction(getAction("paste"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
+      popup->addAction(getAction("time-delete"));
       popup->addAction(getAction("insert-measure"));
       popup->addSeparator();
 
@@ -2861,6 +2865,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddPitch(5, false, true);
       else if (cmd == "insert-b")
             cmdAddPitch(6, false, true);
+//      else if (cmd == "insert-rest")
+//            cmdEnterRest(false, true);
       else if (cmd == "chord-text") {
             if (noteEntryMode())          // force out of entry mode
                   sm->postEvent(new CommandEvent("note-input"));
@@ -3633,7 +3639,6 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
             popup->addAction(getAction("edit-style"));
             popup->addAction(getAction("edit-text-style"));
             popup->addAction(getAction("page-settings"));
-            popup->addAction(getAction("load-style"));
             _score->setLayoutAll();
             _score->update();
             popup->popup(gp);
