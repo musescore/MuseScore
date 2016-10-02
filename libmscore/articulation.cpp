@@ -26,23 +26,41 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   Articulation::articulationList
+//   Articulation::articulationList, keep in sync with enum ArticulationType in mscore.h
+//   and also with styleType[] in style.cpp
 //---------------------------------------------------------
 
 #define PT    ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
 #define TR(a) QT_TRANSLATE_NOOP("articulation", a)
 
-ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATIONS)] = {
+ArticulationInfo Articulation::articulationList[] = {
       { SymId::fermataAbove,              SymId::fermataBelow,              "fermata",                   1.0, PT },
-      { SymId::fermataShortAbove,         SymId::fermataShortBelow,         "shortfermata",              1.0, PT },
       { SymId::fermataLongAbove,          SymId::fermataLongBelow,          "longfermata",               1.0, PT },
+      { SymId::fermataLongHenzeAbove,     SymId::fermataLongHenzeBelow,     "longfermata-henze",         1.0, PT },
+      { SymId::fermataShortAbove,         SymId::fermataShortBelow,         "shortfermata",              1.0, PT },
+      { SymId::fermataShortHenzeAbove,    SymId::fermataShortHenzeBelow,    "shortfermata-henze",        1.0, PT },
       { SymId::fermataVeryLongAbove,      SymId::fermataVeryLongBelow,      "verylongfermata",           1.0, PT },
+      { SymId::fermataVeryShortAbove,     SymId::fermataVeryShortBelow,     "veryshortfermata",          1.0, PT },
+
+      // Articulations
+
       { SymId::articAccentAbove,          SymId::articAccentBelow,          "sforzato",                  1.0, PT },
       { SymId::articStaccatoAbove,        SymId::articStaccatoBelow,        "staccato",                  1.0, PT },
-      { SymId::articStaccatissimoAbove,   SymId::articStaccatissimoBelow,   "staccatissimo",             1.0, PT },
       { SymId::articTenutoAbove,          SymId::articTenutoBelow,          "tenuto",                    1.0, PT },
-      { SymId::articTenutoStaccatoAbove,  SymId::articTenutoStaccatoBelow,  "portato",                   1.0, PT },
+      { SymId::articStaccatissimoAbove,   SymId::articStaccatissimoBelow,   "staccatissimo",             1.0, PT },
+      { SymId::articStaccatissimoStrokeAbove, SymId::articStaccatissimoStrokeBelow, "staccatissimo",     1.0, PT },
+      { SymId::articStaccatissimoWedgeAbove,  SymId::articStaccatissimoWedgeBelow,  "staccatissimo",     1.0, PT },
       { SymId::articMarcatoAbove,         SymId::articMarcatoBelow,         "marcato",                   1.0, PT },
+      { SymId::articMarcatoStaccatoAbove, SymId::articMarcatoStaccatoBelow, "staccato",                  1.0, PT },
+      { SymId::articAccentStaccatoAbove,  SymId::articAccentStaccatoBelow,  "staccato",                  1.0, PT },
+      { SymId::articTenutoStaccatoAbove,  SymId::articTenutoStaccatoBelow,  "portato",                   1.0, PT },
+/* TODO, map to existing playback method and if so which?
+      { SymId::articTenutoAccentAbove,    SymId::articTenutoAccentBelow,    "tenuto-accent",             1.0, PT },
+      { SymId::articStressAbove,          SymId::articStressBelow,          "stress",                    1.0, PT },
+      { SymId::articUnstressAbove,        SymId::articUnstressBelow,        "unstress",                  1.0, PT },
+      { SymId::articLaissezVibrerAbove,   SymId::articLaissezVibrerBelow,   "laissez-vibrer",            1.0, PT },
+      { SymId::articMarcatoTenutoAbove,   SymId::articMarcatoTenutoBelow,   "marcato-tenuto",            1.0, PT },
+*/
       { SymId::guitarFadeIn,              SymId::guitarFadeIn,              "fadein",                    1.0, PT },
       { SymId::guitarFadeOut,             SymId::guitarFadeOut,             "fadeout",                   1.0, PT },
       { SymId::guitarVolumeSwell,         SymId::guitarVolumeSwell,         "volumeswell",               1.0, PT },
@@ -52,6 +70,7 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
       { SymId::wiggleVibratoLargeSlowest, SymId::wiggleVibratoLargeSlowest, "wigglevibratolargeslowest", 1.0, PT },
       { SymId::brassMuteOpen,             SymId::brassMuteOpen,             "ouvert",                    1.0, PT },
       { SymId::brassMuteClosed,           SymId::brassMuteClosed,           "plusstop",                  1.0, PT },
+      { SymId::stringsHarmonic,           SymId::stringsHarmonic,           "harmonic",                  1.0, PT },
       { SymId::stringsUpBow,              SymId::stringsUpBow,              "upbow",                     1.0, PT },
       { SymId::stringsDownBow,            SymId::stringsDownBow,            "downbow",                   1.0, PT },
       { SymId::ornamentTurnInverted,      SymId::ornamentTurnInverted,      "reverseturn",               1.0, PT },
@@ -106,7 +125,7 @@ void Articulation::setArticulationType(ArticulationType idx)
       _articulationType = idx;
       _anchor           = score()->style()->articulationAnchor(int(_articulationType));
       anchorStyle       = PropertyStyle::STYLED;
-      _timeStretch      = articulationList[int(articulationType())].timeStretch;
+      _timeStretch      = articulationList[int(_articulationType)].timeStretch;
 
       // TODO: layout() can be empty?
       SymId sym = _up ? articulationList[int(_articulationType)].upSym : articulationList[int(_articulationType)].downSym;
@@ -180,7 +199,7 @@ void Articulation::write(Xml& xml) const
 
 QString Articulation::subtypeName() const
       {
-      return articulationList[int(articulationType())].name;
+      return articulationList[int(_articulationType)].name;
       }
 
 //---------------------------------------------------------
@@ -355,7 +374,7 @@ QString Articulation::userName() const
 
 void Articulation::layout()
       {
-      SymId sym = _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
+      SymId sym = _up ? articulationList[int(_articulationType)].upSym : articulationList[int(_articulationType)].downSym;
       QRectF b(symBbox(sym));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
       }
@@ -456,7 +475,7 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                   return int(score()->style()->articulationAnchor(int(_articulationType)));
 
             case P_ID::TIME_STRETCH:
-                  return articulationList[int(articulationType())].timeStretch;
+                  return articulationList[int(_articulationType)].timeStretch;
 
             case P_ID::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));

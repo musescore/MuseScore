@@ -2671,7 +2671,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
       ArticulationType st = a->articulationType();
 
       // TENUTO and STACCATO: always near the notehead (or stem end if beyond a stem)
-      if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::Sforzatoaccent) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
+      if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::AccentStaccato
+           || st == ArticulationType::MarcatoStaccato || st == ArticulationType::Sforzatoaccent)
+          && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             bool alignToStem = false;
             // if there area voices, articulation is on stem side
@@ -2704,7 +2706,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         qreal dy = (score()->styleS(StyleIdx::beamWidth).val() + 1) * _spatium2;
                         pos.ry() += bottom ? dy : - dy;
                         }
-                  alignToStem = (st == ArticulationType::Staccato && articulations().size() == 1);
+                  alignToStem = ((st == ArticulationType::Staccato || st == ArticulationType::AccentStaccato
+                                  || st == ArticulationType::MarcatoStaccato)
+                                 && articulations().size() == 1);
                   }
             else {                              // if articulation is not beyond a stem
                   int lline;                    // logical line of note

@@ -1995,7 +1995,7 @@ Element* Element::prevElement()
 
 QString Element::accessibleInfo() const
       {
-      return userName();
+      return Element::userName();
       }
 
 //---------------------------------------------------------

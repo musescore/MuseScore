@@ -1230,6 +1230,7 @@ static bool addMxmlArticulationToChord(ChordRest* cr, QString mxmlName)
       map["turn"]             = ArticulationType::Turn;
       map["inverted-turn"]    = ArticulationType::Reverseturn;
       map["stopped"]          = ArticulationType::Plusstop;
+// TODO      map["harmonic"]         = ArticulationType::Harmonic;
       map["up-bow"]           = ArticulationType::Upbow;
       map["down-bow"]         = ArticulationType::Downbow;
       map["detached-legato"]  = ArticulationType::Portato;

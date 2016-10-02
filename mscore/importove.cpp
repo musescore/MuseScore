@@ -1888,6 +1888,9 @@ void OveToMScore::convertArticulation(
                   break;
                   }
             case OVE::ArticulationType::Natural_Harmonic :{
+                  Articulation* a = new Articulation(score_);
+                  a->setArticulationType(ArticulationType::Harmonic);
+                  cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Artificial_Harmonic :{

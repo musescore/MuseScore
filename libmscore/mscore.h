@@ -167,20 +167,36 @@ constexpr Direction Direction_UP(1);
 constexpr Direction Direction_DOWN(2);
 
 //---------------------------------------------------------
-//   ArticulationType
+//   ArticulationType, keep in syc with array Articulation::articulationList[] in articulation.cpp
 //---------------------------------------------------------
 
 enum class ArticulationType : char {
       Fermata,
-      Shortfermata,
       Longfermata,
+      LongfermataHenze,
+      Shortfermata,
+      ShortfermataHenze,
       Verylongfermata,
+      VeryShortfermata,
+
       Sforzatoaccent,
       Staccato,
-      Staccatissimo,
       Tenuto,
-      Portato,
+      Staccatissimo,
+      StaccatissimoStroke,
+      StaccatissimoWedge,
       Marcato,
+      MarcatoStaccato,
+      AccentStaccato,
+      Portato, // rather TenutoStaccato?
+/* TODO
+      TenutoAccent,
+      Stress,
+      Unstress,
+      LaissezVibrer,
+      MarcatoTenuto,
+*/
+
       FadeIn,
       FadeOut,
       VolumeSwell,
@@ -190,6 +206,7 @@ enum class ArticulationType : char {
       WiggleVibratoLargeSlowest,
       Ouvert,
       Plusstop,
+      Harmonic,
       Upbow,
       Downbow,
       Reverseturn,
@@ -209,7 +226,7 @@ enum class ArticulationType : char {
       Schleifer,
       Snappizzicato,
       ARTICULATIONS_PROPER,
-      ThumbPosition = ARTICULATIONS_PROPER,
+      ThumbPosition = ArticulationType::ARTICULATIONS_PROPER,
       LuteFingThumb,
       LuteFingFirst,
       LuteFingSecond,

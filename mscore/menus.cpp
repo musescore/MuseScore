@@ -580,7 +580,7 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
             for (int i = 0; i < int(ArticulationType::ARTICULATIONS_PROPER); ++i) {
                   Articulation* s = new Articulation(gscore);
                   s->setArticulationType(ArticulationType(i));
-                  sp->append(s, s->userName());
+                  sp->append(s, s->userName()); // TODO: get rid of " above" for those articulations having it
                   }
             Bend* bend = new Bend(gscore);
             bend->points().append(PitchValue(0,    0, false));

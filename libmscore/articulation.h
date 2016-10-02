@@ -142,13 +142,16 @@ class Articulation : public Element {
       QString channelName() const           { return _channelName; }
       void setChannelName(const QString& s) { _channelName = s;    }
 
-      const ArticulationInfo* articulationInfo() const { return &articulationList[int(articulationType())]; }
+      const ArticulationInfo* articulationInfo() const { return &articulationList[int(_articulationType)]; }
 
       static QString idx2name(int idx);
-      bool isFermata() { return _articulationType == ArticulationType::Fermata ||
-                                _articulationType == ArticulationType::Shortfermata ||
-                                _articulationType == ArticulationType::Longfermata ||
-                                _articulationType == ArticulationType::Verylongfermata; }
+      bool isFermata() { return _articulationType == ArticulationType::Fermata
+                             || _articulationType == ArticulationType::VeryShortfermata
+                             || _articulationType == ArticulationType::Shortfermata
+                             || _articulationType == ArticulationType::Longfermata
+                             || _articulationType == ArticulationType::Verylongfermata
+                             || _articulationType == ArticulationType::LongfermataHenze
+                             || _articulationType == ArticulationType::ShortfermataHenze; }
 
       QString accessibleInfo() const override;
       };

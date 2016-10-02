@@ -86,15 +86,15 @@
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <fermataAnchor>2</fermataAnchor>
-      <shortfermataAnchor>2</shortfermataAnchor>
       <longfermataAnchor>2</longfermataAnchor>
+      <shortfermataAnchor>2</shortfermataAnchor>
       <verylongfermataAnchor>2</verylongfermataAnchor>
       <sforzatoAnchor>1</sforzatoAnchor>
       <staccatoAnchor>1</staccatoAnchor>
-      <staccatissimoAnchor>1</staccatissimoAnchor>
       <tenutoAnchor>1</tenutoAnchor>
-      <portatoAnchor>1</portatoAnchor>
+      <staccatissimoAnchor>1</staccatissimoAnchor>
       <marcatoAnchor>1</marcatoAnchor>
+      <portatoAnchor>1</portatoAnchor>
       <ouvertAnchor>1</ouvertAnchor>
       <plusstopAnchor>1</plusstopAnchor>
       <upbowAnchor>1</upbowAnchor>
