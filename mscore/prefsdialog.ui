@@ -2812,12 +2812,12 @@
          </property>
          <layout class="QVBoxLayout">
           <item>
-           <widget class="QRadioButton" name="useImportBuildinStyle">
+           <widget class="QRadioButton" name="useImportBuiltinStyle">
             <property name="accessibleName">
-             <string>Build in style</string>
+             <string>Built-in style</string>
             </property>
             <property name="text">
-             <string>Built in style</string>
+             <string>Built-in style</string>
             </property>
            </widget>
           </item>
@@ -3689,7 +3689,7 @@
   <tabstop>rememberLastMidiConnections</tabstop>
   <tabstop>useJackTransport</tabstop>
   <tabstop>becomeTimebaseMaster</tabstop>
-  <tabstop>useImportBuildinStyle</tabstop>
+  <tabstop>useImportBuiltinStyle</tabstop>
   <tabstop>useImportStyleFile</tabstop>
   <tabstop>importStyleFile</tabstop>
   <tabstop>styleFileButton</tabstop>

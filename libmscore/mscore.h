@@ -302,7 +302,7 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 
 //---------------------------------------------------------
 //   Text Style Type
-//    Enumerate the list of build in text styles.
+//    Enumerate the list of built-in text styles.
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
 MS_QML_ENUM(TextStyleType, signed char,\

@@ -526,7 +526,7 @@
         <string>Small</string>
        </property>
        <property name="text">
-        <string>Small </string>
+        <string>Small</string>
        </property>
       </widget>
      </item>

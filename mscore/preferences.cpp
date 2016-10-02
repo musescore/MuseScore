@@ -942,7 +942,7 @@ void PreferenceDialog::updateValues()
             case 1:  shortestNoteIndex = 4; break;
             }
       shortestNote->setCurrentIndex(shortestNoteIndex);
-      useImportBuildinStyle->setChecked(prefs.importStyleFile.isEmpty());
+      useImportBuiltinStyle->setChecked(prefs.importStyleFile.isEmpty());
       useImportStyleFile->setChecked(!prefs.importStyleFile.isEmpty());
 
       QList<QByteArray> charsets = QTextCodec::availableCodecs();
