@@ -458,7 +458,6 @@ void MuseScore::preferencesChanged()
 void MuseScore::populateNoteInputMenu()
       {
       entryTools->clear();
-      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
 
       for (const auto s : _noteInputMenuEntries) {
             if (!*s)
@@ -489,10 +488,9 @@ void MuseScore::populateNoteInputMenu()
                         }
                   else if (strncmp(s, "voice-", 6) == 0) {
                         AccessibleToolButton* tb = new AccessibleToolButton(this, a);
+                        tb->setObjectName("voice");
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
-                        if (!Ms::preferences.isThemeDark())
-                              tb->setStyleSheet(vbsh);
                         QPalette p(tb->palette());
                         int i = atoi(s+6) - 1;
                         p.setColor(QPalette::Base, MScore::selectColor[i]);
@@ -5564,89 +5562,53 @@ int main(int argc, char* av[])
             }
 
       if (!converterMode && !pluginMode) {
-            struct PaletteItem {
-                  QPalette::ColorRole role;
-                  const char* name;
-                  const char* color;
-                  };
 
+            // set UI Theme
             if (preferences.isOxygen()) {
                   MgStyleConfigData::animationsEnabled = preferences.animations;
                   QApplication::setStyle(new MgStyle);
             } else
                   QApplication::setStyle(QStyleFactory::create("Fusion"));
 
+            QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+            // set UI Color Palette
             QPalette p(QApplication::palette());
-            QSettings s;
-            if (preferences.isThemeDark()) {
-                  static const PaletteItem pi[] = {
-                        { QPalette::Window,          "WindowColor",          "#525252" },
-                        { QPalette::WindowText,      "WindowTextColor",      "#FFFFFF" },
-                        { QPalette::Base,            "BaseColor",            "#424242" },
-                        { QPalette::AlternateBase,   "AlternateBaseColor",   "#626262" },
-                        { QPalette::Text,            "TextColor",            "#FFFFFF" },
-                        { QPalette::Button,          "ButtonColor",          "#525252" },
-                        { QPalette::ButtonText,      "ButtonTextColor",      "#FFFFFF" },
-                        { QPalette::BrightText,      "BrightTextColor",      "#000000" },
-
-//                            { QPalette::Light,           "LightColor",           "#00FF00" },
-//                            { QPalette::Midlight,        "MidlightTextColor",    "#00FF00" },
-//                            { QPalette::Dark,            "DarkTextColor",        "#00FF00" },
-//                            { QPalette::Mid,             "MidColor",             "#00FF00" },
-//                            { QPalette::Shadow,          "ShadowColor",          "#00FF00" },
-                        { QPalette::Highlight,       "HighlightColor",       "#88bff6" },
-//                            { QPalette::HighlightedText, "HighlightedTextColor", "#00FF00" },
-                        { QPalette::Link,            "HighlightedTextColor", "#00ffff" },
-                        { QPalette::LinkVisited,     "HighlightedTextColor", "#00ffff" },
-                        { QPalette::ToolTipBase,     "ToolTipBaseColor",     "#808080" },
-                        { QPalette::ToolTipText,     "ToolTipTextColor",     "#000000" },
-                        };
-                  for (auto i : pi)
-                        p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
-                  }
-            else {
-                  static const PaletteItem pi[] = {
-                        { QPalette::Window,        "WindowColor",        "#e3e3e3"  },
-                        { QPalette::WindowText,    "WindowTextColor",    "#333333"  },
-                        { QPalette::Base,          "BaseColor",          "#f9f9f9"  },
-                        { QPalette::AlternateBase, "AlternateBaseColor", "#eeeeee"  },
-                        { QPalette::Text,          "TextColor",          "#333333"  },
-                        { QPalette::Button,        "ButtonColor",        "#c9c9c9"  },
-                        { QPalette::ButtonText,    "ButtonTextColor",    "#333333"  },
-                        { QPalette::BrightText,    "BrightTextColor",    "#000000"  },
-                        { QPalette::ToolTipBase,   "ToolTipBaseColor",   "#fefac2"  },
-                        { QPalette::ToolTipText,   "ToolTipTextColor",   "#000000"  },
-                        { QPalette::Link,          "LinkColor",          "#3a80c6"  },
-                        { QPalette::LinkVisited,   "LinkVisitedColor",   "#3a80c6"  },
-                        };
-                  for (auto i : pi)
-                        p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
+            QString jsonPaletteFilename = "palette_light.json";
+            if (preferences.isThemeDark())
+                  jsonPaletteFilename = "palette_dark.json";
+            QFile jsonPalette(QString(":/themes/%1").arg(jsonPaletteFilename));
+            // read from Documents TODO: remove this
+            if (QFile::exists(QString("%1/%2").arg(wd, jsonPaletteFilename)))
+                  jsonPalette.setFileName(QString("%1/%2").arg(wd, jsonPaletteFilename));
+            if (jsonPalette.open(QFile::ReadOnly | QFile::Text)) {
+                  QJsonDocument d = QJsonDocument::fromJson(jsonPalette.readAll());
+                  QJsonObject o = d.object();
+                  QMetaEnum metaEnum = QMetaEnum::fromType<QPalette::ColorRole>();
+                  for (int i = 0; i < metaEnum.keyCount(); ++i) {
+                        QJsonValue v = o.value(metaEnum.valueToKey(i));
+                        if (!v.isUndefined())
+                              p.setColor(static_cast<QPalette::ColorRole>(metaEnum.value(i)), QColor(v.toString()));
+                        }
                   }
             QApplication::setPalette(p);
 
-            qApp->setStyleSheet(
-                  "*:disabled {\n"
-                  "   color: gray\n"
-                  "}\n"
-                  "QGroupBox {\n"
-                  "font-weight: bold;\n"
-                  "}\n"
-                  "QGroupBox::title {\n"
-                  "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
-                  "}\n"
-                  "QDockWidget {\n"
-                  "   border: 1px solid lightgray;\n"
-                  "   titlebar-close-icon: url(:/data/icons/png/window-close.png);\n"
-                  "   titlebar-normal-icon: url(:/data/icons/png/window-float.png);\n"
-                  "   }\n"
-                  "QTabBar::close-button {\n"
-                  "   image: url(:/data/icons/png/window-close.png);\n"
-              "   }\n"
-                  "QTabBar::close-button:hover {\n"
-              "   image: url(:/data/icons/png/window-close-hover.png);\n"
-              "   }\n"
-              "QToolButton#palette { border: none; }"
-              );
+            // set UI Style
+            QString css;
+            QString styleFilename("style.css");
+            QFile fstyle(QString(":/themes/%1").arg(styleFilename));
+            // read from Documents TODO: remove this
+            if (QFile::exists(QString("%1/%2").arg(wd, styleFilename)))
+                  fstyle.setFileName(QString("%1/%2").arg(wd, styleFilename));
+            if (fstyle.open(QFile::ReadOnly | QFile::Text)) {
+                  QTextStream in(&fstyle);
+                  css = in.readAll();
+                  }
+            css.replace("$voice1-bgcolor", MScore::selectColor[0].name(QColor::HexRgb));
+            css.replace("$voice2-bgcolor", MScore::selectColor[1].name(QColor::HexRgb));
+            css.replace("$voice3-bgcolor", MScore::selectColor[2].name(QColor::HexRgb));
+            css.replace("$voice4-bgcolor", MScore::selectColor[3].name(QColor::HexRgb));
+            qApp->setStyleSheet(css);
+
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
             }
       else

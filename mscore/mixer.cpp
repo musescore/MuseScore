@@ -127,8 +127,6 @@ void PartEdit::setPart(Part* p, Channel* a)
                         tb->setChecked(staff->playbackVoice(voice));
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
-                        // if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
-                        //      tb->setStyleSheet(vbsh);
                         QPalette p(tb->palette());
                         p.setColor(QPalette::Base, MScore::selectColor[voice]);
                         tb->setPalette(p);
