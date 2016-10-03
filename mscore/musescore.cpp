@@ -491,6 +491,7 @@ void MuseScore::populateNoteInputMenu()
                         tb->setObjectName("voice");
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
+                        tb->setProperty((QString("voice%1").arg(atoi(s+6))).toUtf8().data(), true);
                         QPalette p(tb->palette());
                         int i = atoi(s+6) - 1;
                         p.setColor(QPalette::Base, MScore::selectColor[i]);
