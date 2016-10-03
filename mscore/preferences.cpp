@@ -215,18 +215,18 @@ void Preferences::write()
       s.setValue("fgUseColor",         fgUseColor);
       s.setValue("bgWallpaper",        bgWallpaper);
       s.setValue("fgWallpaper",        fgWallpaper);
-      s.setValue("fgColor",            fgColor);
-      s.setValue("bgColor",            MScore::bgColor);
+      s.setValue("fgColor",            fgColor.name(QColor::NameFormat::HexArgb));
+      s.setValue("bgColor",            MScore::bgColor.name(QColor::NameFormat::HexArgb));
       s.setValue("iconHeight",         iconHeight);
       s.setValue("iconWidth",          iconWidth);
 
-      s.setValue("selectColor1",       MScore::selectColor[0]);
-      s.setValue("selectColor2",       MScore::selectColor[1]);
-      s.setValue("selectColor3",       MScore::selectColor[2]);
-      s.setValue("selectColor4",       MScore::selectColor[3]);
-      s.setValue("dropColor",          MScore::dropColor);
-      s.setValue("defaultColor",       MScore::defaultColor);
-      s.setValue("pianoHlColor",       pianoHlColor);
+      s.setValue("selectColor1",       MScore::selectColor[0].name(QColor::NameFormat::HexArgb));
+      s.setValue("selectColor2",       MScore::selectColor[1].name(QColor::NameFormat::HexArgb));
+      s.setValue("selectColor3",       MScore::selectColor[2].name(QColor::NameFormat::HexArgb));
+      s.setValue("selectColor4",       MScore::selectColor[3].name(QColor::NameFormat::HexArgb));
+      s.setValue("dropColor",          MScore::dropColor.name(QColor::NameFormat::HexArgb));
+      s.setValue("defaultColor",       MScore::defaultColor.name(QColor::NameFormat::HexArgb));
+      s.setValue("pianoHlColor",       pianoHlColor.name(QColor::NameFormat::HexArgb));
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
       s.setValue("playChordOnAddNote", playChordOnAddNote);
@@ -254,8 +254,8 @@ void Preferences::write()
       s.setValue("portaudioDevice",    portaudioDevice);
       s.setValue("portMidiInput",   portMidiInput);
 
-      s.setValue("layoutBreakColor",   MScore::layoutBreakColor);
-      s.setValue("frameMarginColor",   MScore::frameMarginColor);
+      s.setValue("layoutBreakColor",   MScore::layoutBreakColor.name(QColor::NameFormat::HexArgb));
+      s.setValue("frameMarginColor",   MScore::frameMarginColor.name(QColor::NameFormat::HexArgb));
       s.setValue("antialiasedDrawing", antialiasedDrawing);
       switch(sessionStart) {
             case SessionStart::EMPTY:  s.setValue("sessionStart", "empty"); break;
@@ -356,6 +356,21 @@ void Preferences::write()
       }
 
 //---------------------------------------------------------
+//   readColor
+//---------------------------------------------------------
+
+QColor Preferences::readColor(QString key, QColor def) {
+     QSettings s;
+     QVariant v = s.value(key, def);
+     if (v.type() == QVariant::Color)
+           return v.value<QColor>();
+     else {
+           QColor c(v.toString());
+           return c.isValid() ? c : def;
+      }
+}
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -367,19 +382,19 @@ void Preferences::read()
       fgUseColor              = s.value("fgUseColor", fgUseColor).toBool();
       bgWallpaper             = s.value("bgWallpaper", bgWallpaper).toString();
       fgWallpaper             = s.value("fgWallpaper", fgWallpaper).toString();
-      fgColor                 = s.value("fgColor", fgColor).value<QColor>();
-      MScore::bgColor         = s.value("bgColor", MScore::bgColor).value<QColor>();
+      fgColor                 = readColor("fgColor", fgColor);
+      MScore::bgColor         = readColor("bgColor", MScore::bgColor);
       iconHeight              = s.value("iconHeight", iconHeight).toInt();
       iconWidth               = s.value("iconWidth", iconWidth).toInt();
 
-      MScore::selectColor[0]  = s.value("selectColor1", MScore::selectColor[0]).value<QColor>();
-      MScore::selectColor[1]  = s.value("selectColor2", MScore::selectColor[1]).value<QColor>();
-      MScore::selectColor[2]  = s.value("selectColor3", MScore::selectColor[2]).value<QColor>();
-      MScore::selectColor[3]  = s.value("selectColor4", MScore::selectColor[3]).value<QColor>();
+      MScore::selectColor[0]  = readColor("selectColor1", MScore::selectColor[0]);
+      MScore::selectColor[1]  = readColor("selectColor2", MScore::selectColor[1]);
+      MScore::selectColor[2]  = readColor("selectColor3", MScore::selectColor[2]);
+      MScore::selectColor[3]  = readColor("selectColor4", MScore::selectColor[3]);
 
-      MScore::defaultColor    = s.value("defaultColor", MScore::defaultColor).value<QColor>();
-      MScore::dropColor       = s.value("dropColor",    MScore::dropColor).value<QColor>();
-      pianoHlColor            = s.value("pianoHlColor", pianoHlColor).value<QColor>();
+      MScore::defaultColor    = readColor("defaultColor", MScore::defaultColor);
+      MScore::dropColor       = readColor("dropColor",    MScore::dropColor);
+      pianoHlColor            = readColor("pianoHlColor", pianoHlColor);
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
@@ -406,8 +421,8 @@ void Preferences::read()
       alsaFragments      = s.value("alsaFragments", alsaFragments).toInt();
       portaudioDevice    = s.value("portaudioDevice", portaudioDevice).toInt();
       portMidiInput      = s.value("portMidiInput", portMidiInput).toString();
-      MScore::layoutBreakColor   = s.value("layoutBreakColor", MScore::layoutBreakColor).value<QColor>();
-      MScore::frameMarginColor   = s.value("frameMarginColor", MScore::frameMarginColor).value<QColor>();
+      MScore::layoutBreakColor   = readColor("layoutBreakColor", MScore::layoutBreakColor);
+      MScore::frameMarginColor   = readColor("frameMarginColor", MScore::frameMarginColor);
       antialiasedDrawing      = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
