@@ -192,6 +192,7 @@ struct Preferences {
       Preferences();
       void write();
       void read();
+      QColor readColor(QString key, QColor def);
       void init();
       bool readDefaultStyle();
       bool isThemeDark() { return globalStyle == MuseScoreStyleType::DARK_OXYGEN || globalStyle == MuseScoreStyleType::DARK_FUSION;}
