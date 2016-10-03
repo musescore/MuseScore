@@ -67,6 +67,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice1" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="1" column="1">
@@ -75,6 +78,9 @@
             <string>2</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice2" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -87,6 +93,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice3" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="1" column="3">
@@ -95,6 +104,9 @@
             <string>4</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice4" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -110,6 +122,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice1" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="2" column="1">
@@ -118,6 +133,9 @@
             <string>2</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice2" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -130,6 +148,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice3" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="2" column="3">
@@ -138,6 +159,9 @@
             <string>4</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice4" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -153,6 +177,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice1" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="3" column="1">
@@ -161,6 +188,9 @@
             <string>2</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice2" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -173,6 +203,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice3" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="3" column="3">
@@ -181,6 +214,9 @@
             <string>4</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice4" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -196,6 +232,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice1" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="4" column="1">
@@ -204,6 +243,9 @@
             <string>2</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice2" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -216,6 +258,9 @@
            <property name="checkable">
             <bool>true</bool>
            </property>
+           <property name="voice3" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="4" column="3">
@@ -224,6 +269,9 @@
             <string>4</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="voice4" stdset="0">
             <bool>true</bool>
            </property>
           </widget>

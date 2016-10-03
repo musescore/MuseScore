@@ -78,7 +78,6 @@ void TracksView::initHorizontalView()
       _frozenHTableView->setAutoScroll(false);
       _frozenHTableView->setFocusPolicy(Qt::StrongFocus);
 
-      _frozenHTableView->setStyleSheet("QTableView { border: none; }");
       _frozenHTableView->setItemDelegate(_delegate);
 
       _frozenHTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -98,7 +97,6 @@ void TracksView::initVerticalView()
       _frozenVTableView->setAutoScroll(false);
       _frozenVTableView->setFocusPolicy(Qt::StrongFocus);
 
-      _frozenVTableView->setStyleSheet("QTableView { border: none; }");
       _frozenVTableView->setItemDelegate(_delegate);
 
       _frozenVTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -120,7 +118,6 @@ void TracksView::initCornerView()
       _frozenCornerTableView->setSelectionMode(SingleSelection);
       _frozenCornerTableView->setFocusPolicy(Qt::StrongFocus);
 
-      _frozenCornerTableView->setStyleSheet("QTableView { border: none; }");
       _frozenCornerTableView->setItemDelegate(_delegate);
 
       _frozenCornerTableView->horizontalScrollBar()->setDisabled(true);
