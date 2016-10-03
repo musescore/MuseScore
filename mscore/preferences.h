@@ -187,6 +187,7 @@ struct Preferences {
       Preferences();
       void write();
       void read();
+      QColor readColor(QString key, QColor def);
       void init();
       bool readDefaultStyle();
       };
