@@ -120,10 +120,17 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       if (!_currentMeasure)
             return;
 
+      // Don't show panel if staff names are visible
+      if (_currentMeasure == _score->firstMeasure() && _sv->toPhysical(_currentMeasure->canvasPos()).x() > 0) {
+            _visible = false;
+            return;
+            }
+
       qreal _xPosMeasure       = _currentMeasure->canvasX();
       qreal _measureWidth      = _currentMeasure->width();
       int tick                 = _currentMeasure->tick();
       Fraction _currentTimeSig = _currentMeasure->timesig();
+      //qDebug() << "_sv->xoffset()=" <<_sv->xoffset() << " _sv->mag()="<< _sv->mag() <<" s->x=" << s->x() << " width=" << _width << " currentMeasure=" << _currentMeasure->x() << " _xPosMeasure=" << _xPosMeasure;
 
       //---------------------------------------------------------
       //   findElementWidths
@@ -252,13 +259,6 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       _rect = QRect(0, _y, _width, _height);
 
       //====================
-
-      // Don't show panel if staff names are visible
-      if (_sv->xoffset() / _sv->mag() + _xPosMeasure > 0) {
-            _visible = false;
-            return;
-            }
-      //qDebug() << "_sv->xoffset()=" <<_sv->xoffset() << " _sv->mag()="<< _sv->mag() <<" s->x=" << s->x() << " width=" << _width << " currentMeasue=" << _currentMeasure->x() << " _xPosMeasure=" << _xPosMeasure;
 
       painter.save();
 
