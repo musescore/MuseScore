@@ -563,9 +563,14 @@ MuseScore::MuseScore()
 
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
-
-      for (auto i : { "file-new", "file-open", "file-save", "print", "undo", "redo"})
-            fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
+      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
+            for (auto i : { "file-new", "file-open", "file-save", "print", "undo", "redo"})
+                  fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
+            }
+      else {
+            for (auto i : { "file-new", "file-open", "file-save", "print", "redo", "undo"})
+                  fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
+            }
 
       fileTools->addSeparator();
       mag = new MagBox;

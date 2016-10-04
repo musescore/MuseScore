@@ -74,10 +74,16 @@ PluginCreator::PluginCreator(QWidget* parent)
       editTools->setObjectName("EditOperations");
       actionUndo->setIcon(*icons[int(Icons::undo_ICON)]);
       actionUndo->setShortcut(QKeySequence(QKeySequence::Undo));
-      editTools->addAction(actionUndo);
       actionRedo->setIcon(*icons[int(Icons::redo_ICON)]);
       actionRedo->setShortcut(QKeySequence(QKeySequence::Redo));
-      editTools->addAction(actionRedo);
+      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
+            editTools->addAction(actionUndo);
+            editTools->addAction(actionRedo);
+            }
+      else {
+            editTools->addAction(actionUndo);
+            editTools->addAction(actionRedo);
+            }
       actionUndo->setEnabled(false);
       actionRedo->setEnabled(false);
 
