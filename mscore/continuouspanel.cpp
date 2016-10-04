@@ -325,11 +325,11 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
                   // Draw staff lines
                   StaffLines newStaffLines(*toStaffLines(e));
-                  newStaffLines.setWidth(bg.width());
                   newStaffLines.setParent(parent);
                   newStaffLines.setTrack(e->track());
                   newStaffLines.layout();
                   newStaffLines.setColor(color);
+                  newStaffLines.setWidth(bg.width());
                   newStaffLines.draw(&painter);
 
                   // Draw barline
@@ -380,8 +380,9 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   clef.setTrack(e->track());
                   clef.setColor(color);
                   clef.layout();
-                  posX += _score->styleP(StyleIdx::clefLeftMargin) + _widthClef;
-                  clef.drawAt(&painter, QPointF(posX, 0.0));
+                  posX += _score->styleP(StyleIdx::clefLeftMargin);
+                  clef.drawAt(&painter, QPointF(posX, clef.pos().y()));
+                  posX += _widthClef;
 
                   // Draw the current KeySignature
                   KeySig newKs(_score);
