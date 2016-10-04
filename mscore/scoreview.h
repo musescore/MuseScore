@@ -395,6 +395,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void pageTop();
       void pageEnd();
       QPointF toLogical(const QPoint& p) const { return imatrix.map(QPointF(p)); }
+      QPointF toPhysical(const QPointF& p) const {return _matrix.map(p); }
       QRectF toLogical(const QRectF& r) const  { return imatrix.mapRect(r); }
       QRect toPhysical(const QRectF& r) const  { return _matrix.mapRect(r).toRect(); }
 
