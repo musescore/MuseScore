@@ -44,6 +44,10 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
       connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
       nextButton->setEnabled(_m->nextMeasure() != 0);
       previousButton->setEnabled(_m->prevMeasure() != 0);
+      if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft) {
+            horizontalLayout_2->removeWidget(nextButton);
+            horizontalLayout_2->insertWidget(0, nextButton);
+            }
       }
 
 //---------------------------------------------------------
