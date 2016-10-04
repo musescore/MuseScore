@@ -155,7 +155,7 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
       findElementWidths(elementsCurrent);
 
       // Don't show panel if staff names are visible
-      if (_sv->xoffset() / _sv->mag() + _xPosMeasure > 0) {
+      if (_currentMeasure == _score->firstMeasure() && _sv->toPhysical(_currentMeasure->canvasPos()).x() > 0) {
             _visible = false;
             return;
             }
