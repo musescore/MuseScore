@@ -4773,7 +4773,7 @@
                   <barlineSpan>2</barlineSpan>
                   <clef staff="2">F</clef>
                   <aPitchRange>45-96</aPitchRange>
-                  <pPitchRange>33-108</pPitchRange>
+                  <pPitchRange>36-96</pPitchRange>
                   <Channel>
                         <program value="12"/>
                   </Channel>
@@ -4791,7 +4791,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-96</aPitchRange>
-                  <pPitchRange>33-108</pPitchRange>
+                  <pPitchRange>36-96</pPitchRange>
                   <Channel>
                         <program value="12"/>
                   </Channel>
