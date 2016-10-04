@@ -49,8 +49,14 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       QWidget* mainWidget = new QWidget;
       QToolBar* tb = addToolBar(tr("Toolbar 1"));
-      tb->addAction(getAction("undo"));
-      tb->addAction(getAction("redo"));
+      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
+            tb->addAction(getAction("undo"));
+            tb->addAction(getAction("redo"));
+            }
+      else {
+            tb->addAction(getAction("redo"));
+            tb->addAction(getAction("undo"));
+            }
       tb->addSeparator();
 #ifdef HAS_MIDI
       tb->addAction(getAction("midi-on"));
