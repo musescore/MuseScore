@@ -20,7 +20,13 @@ brew install bottles/libsndfile*
 brew install bottles/portaudio*
 
 # additional dependencies
-brew install jack lame ruby
+brew install jack lame
+
+#update ruby
+rvm uninstall 2.0.0-p648
+rvm uninstall 2.0.0-p643
+rvm uninstall 2.0.0
+rvm get head
 
 #install Qt
 which -s qmake
@@ -48,7 +54,6 @@ if [[ "$QMAKE_VERSION" != "${QT_LONG_VERSION}" ]]; then
 else
   echo "Qt ${QT_LONG_VERSION} already installed"
 fi
-
 
 
 
