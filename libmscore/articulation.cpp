@@ -347,6 +347,8 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                         case SymId::articTenutoBelow:
                         case SymId::articTenutoStaccatoAbove:
                         case SymId::articTenutoStaccatoBelow:
+                        case SymId::articMarcatoAbove:
+                        case SymId::articMarcatoBelow:
                         case SymId::guitarFadeIn:
                         case SymId::guitarFadeOut:
                         case SymId::guitarVolumeSwell:
