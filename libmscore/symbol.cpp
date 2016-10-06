@@ -233,7 +233,9 @@ FSymbol::FSymbol(const FSymbol& s)
 void FSymbol::draw(QPainter* painter) const
       {
       QString s;
-      painter->setFont(_font);
+      QFont f(_font);
+      f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+      painter->setFont(f);
       if (_code & 0xffff0000) {
             s = QChar(QChar::highSurrogate(_code));
             s += QChar(QChar::lowSurrogate(_code));
@@ -252,7 +254,7 @@ void FSymbol::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("font",     _font.family());
-      xml.tag("fontsize", _font.pixelSize());
+      xml.tag("fontsize", _font.pointSizeF());
       xml.tag("code",     _code);
       BSymbol::writeProperties(xml);
       xml.etag();
@@ -269,7 +271,7 @@ void FSymbol::read(XmlReader& e)
             if (tag == "font")
                   _font.setFamily(e.readElementText());
             else if (tag == "fontsize")
-                  _font.setPointSize(e.readInt());
+                  _font.setPointSizeF(e.readDouble());
             else if (tag == "code")
                   _code = e.readInt();
             else if (!BSymbol::readProperties(e))
