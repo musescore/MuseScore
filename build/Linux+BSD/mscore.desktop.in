@@ -1,5 +1,5 @@
 [Desktop Entry]
-Version=1.1@This_is_version_of_Desktop_Entry_Specification@@It_is_NOT_MuseScore_version@
+Version=1.0@This_is_version_of_Desktop_Entry_Specification@@It_is_NOT_MuseScore_version@
 Name=@MUSESCORE_NAME_VERSION@@Variables_substituted_by_CMAKE_on_installation@
 GenericName=Music notation
 GenericName[de]=Notensatz
