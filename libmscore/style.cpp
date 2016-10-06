@@ -31,6 +31,8 @@ namespace Ms {
 // 120 dpi           screen resolution
 //  spatium = 20/4 points
 
+// keep in sync with enum StyleIdx in style.h
+
 static const StyleType styleTypes[] {
       { StyleIdx::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0)  },
       { StyleIdx::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0)  },
@@ -269,15 +271,22 @@ static const StyleType styleTypes[] {
       { StyleIdx::spatium,                 "Spatium",                 SPATIUM20 },
 
       { StyleIdx::fermataAnchor,                   "fermataAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::shortfermataAnchor,              "shortfermataAnchor",              int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::longfermataAnchor,               "longfermataAnchor",               int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::longfermataHenzeAnchor,          "longfermataHenzeAnchor",          int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::shortfermataAnchor,              "shortfermataAnchor",              int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::shortfermataHenzeAnchor,         "shortfermataHenzeAnchor",         int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::verylongfermataAnchor,           "verylongfermataAnchor",           int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::veryshortfermataAnchor,          "veryshortfermataAnchor",          int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::sforzatoAnchor,                  "sforzatoAnchor",                  int(ArticulationAnchor::CHORD) },
       { StyleIdx::staccatoAnchor,                  "staccatoAnchor",                  int(ArticulationAnchor::CHORD) },
-      { StyleIdx::staccatissimoAnchor,             "staccatissimoAnchor",             int(ArticulationAnchor::CHORD) },
       { StyleIdx::tenutoAnchor,                    "tenutoAnchor",                    int(ArticulationAnchor::CHORD) },
-      { StyleIdx::portatoAnchor,                   "portatoAnchor",                   int(ArticulationAnchor::CHORD) },
+      { StyleIdx::staccatissimoAnchor,             "staccatissimoAnchor",             int(ArticulationAnchor::CHORD) },
+      { StyleIdx::staccatissimoStrokeAnchor,       "staccatissimoStrokeAnchor",       int(ArticulationAnchor::CHORD) },
+      { StyleIdx::staccatissimoWedgeAnchor,        "staccatissimoWedgeAnchor",        int(ArticulationAnchor::CHORD) },
       { StyleIdx::marcatoAnchor,                   "marcatoAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::marcatostaccatoAnchor,           "marcatostaccatoAnchor",           int(ArticulationAnchor::CHORD) },
+      { StyleIdx::accentstaccatoAnchor,            "accentstaccatoAnchor",            int(ArticulationAnchor::CHORD) },
+      { StyleIdx::portatoAnchor,                   "portatoAnchor",                   int(ArticulationAnchor::CHORD) },
       { StyleIdx::fadeinAnchor,                    "fadeinAnchor",                    int(ArticulationAnchor::CHORD) },
       { StyleIdx::fadeoutAnchor,                   "fadeoutAnchor",                   int(ArticulationAnchor::CHORD) },
       { StyleIdx::volumeswellAnchor,               "volumeswellAnchor",               int(ArticulationAnchor::CHORD) },
@@ -287,6 +296,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::wigglevibratolargeslowestAnchor, "wigglevibratolargeslowestAnchor", int(ArticulationAnchor::CHORD) },
       { StyleIdx::ouvertAnchor,                    "ouvertAnchor",                    int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::plusstopAnchor,                  "plusstopAnchor",                  int(ArticulationAnchor::TOP_STAFF) },
+      { StyleIdx::harmonicAnchor,                  "harmonicAnchor",                  int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::upbowAnchor,                     "upbowAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::downbowAnchor,                   "downbowAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
       { StyleIdx::reverseturnAnchor,               "reverseturnAnchor",               int(ArticulationAnchor::TOP_STAFF) },
@@ -852,7 +862,7 @@ void MStyle::setPageFormat(const PageFormat& pf)
 
 ArticulationAnchor MStyle::articulationAnchor(int id) const
       {
-      StyleIdx sid = StyleIdx(int(StyleIdx::fermataAnchor) + id);
+      StyleIdx sid = articulationAnchorIdx(id);
       return ArticulationAnchor(value(sid).toInt());
       }
 

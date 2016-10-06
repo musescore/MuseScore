@@ -972,7 +972,7 @@ void EditStyle::anchorChanged(int i)
       {
       QComboBox* cb = qobject_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
       int val = cb->currentData().toInt();
-      StyleIdx idx = StyleIdx(int(StyleIdx::fermataAnchor) + i);
+      StyleIdx idx = MStyle::articulationAnchorIdx(i);
       cs->undo(new ChangeStyleVal(cs, idx, QVariant(val)));
       cs->update();
       }

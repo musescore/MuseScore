@@ -1791,7 +1791,9 @@ void Score::cmdFlip()
                   }
             else if (e->isArticulation()) {
                   Articulation* a = toArticulation(e);
-                  if (a->articulationType() == ArticulationType::Staccato
+                  if (  a->articulationType() == ArticulationType::Staccato
+                     || a->articulationType() == ArticulationType::AccentStaccato
+                     || a->articulationType() == ArticulationType::MarcatoStaccato
                      || a->articulationType() == ArticulationType::Tenuto
                      || a->articulationType() == ArticulationType::Sforzatoaccent
                      || a->articulationType() == ArticulationType::FadeIn

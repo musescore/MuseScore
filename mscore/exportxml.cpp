@@ -1849,22 +1849,30 @@ static void fermatas(const QVector<Articulation*>& cra, Xml& xml, Notations& not
       {
       for (const Articulation* a : cra) {
             ArticulationType at = a->articulationType();
-            if (at == ArticulationType::Fermata
-                || at == ArticulationType::Shortfermata
-                || at == ArticulationType::Longfermata
-                || at == ArticulationType::Verylongfermata) {
+            if ( at == ArticulationType::Fermata
+              || at == ArticulationType::VeryShortfermata
+              || at == ArticulationType::Shortfermata
+              || at == ArticulationType::Longfermata
+              || at == ArticulationType::Verylongfermata
+              || at == ArticulationType::LongfermataHenze
+              || at == ArticulationType::ShortfermataHenze ) {
                   notations.tag(xml);
                   QString tagName = "fermata";
                   tagName += QString(" type=\"%1\"").arg(a->up() ? "upright" : "inverted");
                   tagName += color2xml(a);
                   if (at == ArticulationType::Fermata)
                         xml.tagE(tagName);
-                  else if (at == ArticulationType::Shortfermata)
+                  // MusicXML does not support the very short fermata nor the short fermata Henze,
+                  // export as short fermata (better than not exporting at all)
+                  else if ( at == ArticulationType::Shortfermata
+                         || at == ArticulationType::VeryShortfermata
+                         || at == ArticulationType::ShortfermataHenze )
                         xml.tag(tagName, "angled");
-                  // MusicXML does not support the very long fermata,
+                  // MusicXML does not support the very long fermata nor the long fermata Henze,
                   // export as long fermata (better than not exporting at all)
-                  else if (at == ArticulationType::Longfermata
-                           || at == ArticulationType::Verylongfermata)
+                  else if ( at == ArticulationType::Longfermata
+                         || at == ArticulationType::Verylongfermata
+                         || at == ArticulationType::LongfermataHenze )
                         xml.tag(tagName, "square");
                   }
             }
@@ -1886,9 +1894,12 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       for (const Articulation* a : na) {
             switch (a->articulationType()) {
                   case ArticulationType::Fermata:
+                  case ArticulationType::VeryShortfermata:
                   case ArticulationType::Shortfermata:
                   case ArticulationType::Longfermata:
                   case ArticulationType::Verylongfermata:
+                  case ArticulationType::LongfermataHenze:
+                  case ArticulationType::ShortfermataHenze:
                         // ignore, already handled
                         break;
                   case ArticulationType::Sforzatoaccent:
@@ -1898,6 +1909,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         xml.tagE("accent");
                         }
                         break;
+                  case ArticulationType::AccentStaccato:
+                  case ArticulationType::MarcatoStaccato:
                   case ArticulationType::Staccato:
                         {
                         notations.tag(xml);
@@ -1905,6 +1918,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         xml.tagE("staccato");
                         }
                         break;
+                  case ArticulationType::StaccatissimoWedge:
+                  case ArticulationType::StaccatissimoStroke:
                   case ArticulationType::Staccatissimo:
                         {
                         notations.tag(xml);
@@ -1953,6 +1968,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         // ignore, handled with ornaments
                         break;
                   case ArticulationType::Plusstop:
+                  case ArticulationType::Harmonic:
                   case ArticulationType::Upbow:
                   case ArticulationType::Downbow:
                   case ArticulationType::Snappizzicato:
@@ -2007,15 +2023,29 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       for (const Articulation* a : na) {
             switch (a->articulationType()) {
                   case ArticulationType::Fermata:
+                  case ArticulationType::VeryShortfermata:
                   case ArticulationType::Shortfermata:
                   case ArticulationType::Longfermata:
                   case ArticulationType::Verylongfermata:
+                  case ArticulationType::LongfermataHenze:
+                  case ArticulationType::ShortfermataHenze:
                   case ArticulationType::Sforzatoaccent:
                   case ArticulationType::Staccato:
-                  case ArticulationType::Staccatissimo:
                   case ArticulationType::Tenuto:
+                  case ArticulationType::Staccatissimo:
+                  case ArticulationType::StaccatissimoWedge:
+                  case ArticulationType::StaccatissimoStroke:
                   case ArticulationType::Marcato:
+                  case ArticulationType::MarcatoStaccato:
+                  case ArticulationType::AccentStaccato:
                   case ArticulationType::Portato:
+/* TODO
+                  case ArticulationType::TenutoAccent:
+                  case ArticulationType::Stress:
+                  case ArticulationType::Unstress:
+                  case ArticulationType::LaissezVibrer:
+                  case ArticulationType::MarcatoTenuto:
+*/
                         // ignore, already handled
                         break;
                   case ArticulationType::Reverseturn:
@@ -2125,6 +2155,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         }
                         break;
                   case ArticulationType::Plusstop:
+                  case ArticulationType::Harmonic:
                   case ArticulationType::Upbow:
                   case ArticulationType::Downbow:
                   case ArticulationType::Snappizzicato:
@@ -2149,6 +2180,17 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         technical.tag(xml);
                         xml.tagE("stopped");
                         }
+                        break;
+                  case ArticulationType::Harmonic:
+/* TODO
+                        {
+                        notations.tag(xml);
+                        technical.tag(xml);
+                        xml.stag("harmonic");
+                        xml.tagE("natural");
+                        xml.etag();
+                        }
+*/
                         break;
                   case ArticulationType::Upbow:
                         {

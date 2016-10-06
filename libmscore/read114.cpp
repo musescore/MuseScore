@@ -1619,11 +1619,10 @@ static void readStyle(MStyle* style, XmlReader& e)
                                     }
                               }
                         }
-                  if (idx2 < int(ArticulationType::ARTICULATIONS))
-                        continue;
-                  QString val(e.readElementText());
-                  style->convertToUnit(tag, val);
-
+                  if (idx2 == int(ArticulationType::ARTICULATIONS)) {
+                        QString val(e.readElementText());
+                        style->convertToUnit(tag, val);
+                        }
                   }
             }
 

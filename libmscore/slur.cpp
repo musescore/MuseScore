@@ -742,14 +742,18 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
             Articulation* a = al.at(1);
             if (a->up() == c->up())
                   return yo;
-            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
+            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato
+                     || a->articulationType() == ArticulationType::AccentStaccato
+                     || a->articulationType() == ArticulationType::MarcatoStaccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       else if (al.size() >= 1) {
             Articulation* a = al.at(0);
             if (a->up() == c->up())
                   return yo;
-            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
+            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato
+                     || a->articulationType() == ArticulationType::AccentStaccato
+                     || a->articulationType() == ArticulationType::MarcatoStaccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       return yo;
