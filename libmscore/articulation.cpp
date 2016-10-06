@@ -349,6 +349,33 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                         case SymId::articTenutoStaccatoBelow:
                         case SymId::articMarcatoAbove:
                         case SymId::articMarcatoBelow:
+
+                        case SymId::articAccentStaccatoAbove:
+                        case SymId::articAccentStaccatoBelow:
+                        case SymId::articLaissezVibrerAbove:
+                        case SymId::articLaissezVibrerBelow:
+                        case SymId::articMarcatoStaccatoAbove:
+                        case SymId::articMarcatoStaccatoBelow:
+                        case SymId::articMarcatoTenutoAbove:
+                        case SymId::articMarcatoTenutoBelow:
+                        case SymId::articStaccatissimoStrokeAbove:
+                        case SymId::articStaccatissimoStrokeBelow:
+                        case SymId::articStaccatissimoWedgeAbove:
+                        case SymId::articStaccatissimoWedgeBelow:
+                        case SymId::articStressAbove:
+                        case SymId::articStressBelow:
+                        case SymId::articTenutoAccentAbove:
+                        case SymId::articTenutoAccentBelow:
+                        case SymId::articUnstressAbove:
+                        case SymId::articUnstressBelow:
+
+                        case SymId::articSoftAccentAbove:
+                        case SymId::articSoftAccentBelow:
+                        case SymId::articSoftAccentStaccatoAbove:
+                        case SymId::articSoftAccentStaccatoBelow:
+                        case SymId::articSoftAccentTenutoBelow:
+                        case SymId::articSoftAccentTenutoStaccatoBelow:
+
                         case SymId::guitarFadeIn:
                         case SymId::guitarFadeOut:
                         case SymId::guitarVolumeSwell:
