@@ -12,6 +12,9 @@
 
 #include "score.h"
 #include "iname.h"
+#include "staff.h"
+#include "part.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -32,9 +35,7 @@ InstrumentName::InstrumentName(Score* s)
 
 QString InstrumentName::instrumentNameTypeName() const
       {
-      if (instrumentNameType() == InstrumentNameType::SHORT)
-            return QString("short");
-      return QString("long");
+      return instrumentNameType() == InstrumentNameType::SHORT ? "short" : "long";
       }
 
 //---------------------------------------------------------
@@ -45,19 +46,39 @@ void InstrumentName::setInstrumentNameType(const QString& s)
       {
       if (s == "short")
             setInstrumentNameType(InstrumentNameType::SHORT);
-      if (s == "long")
+      else if (s == "long")
             setInstrumentNameType(InstrumentNameType::LONG);
       else
             qDebug("InstrumentName::setSubtype: unknown <%s>", qPrintable(s));
       }
 
+//---------------------------------------------------------
+//   setInstrumentNameType
+//---------------------------------------------------------
+
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
-      if (st == InstrumentNameType::SHORT)
-            setTextStyleType(TextStyleType::INSTRUMENT_SHORT);
+      setTextStyleType(st == InstrumentNameType::SHORT ? TextStyleType::INSTRUMENT_SHORT : TextStyleType::INSTRUMENT_LONG);
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void InstrumentName::endEdit()
+      {
+      Text::endEdit();
+      Part* part = staff()->part();
+      Instrument* instrument = new Instrument(*part->instrument());
+
+      QString s = plainText();
+
+      if (_instrumentNameType == InstrumentNameType::LONG)
+            instrument->setLongName(s);
       else
-            setTextStyleType(TextStyleType::INSTRUMENT_LONG);
+            instrument->setShortName(s);
+      score()->undo(new ChangePart(part, instrument, part->name()));
       }
 
 }
