@@ -443,7 +443,7 @@ const char* Articulation::articulationName() const
                   return "sforzato";
 
             default:
-                  return "";
+                  return "---";
             }
       }
 

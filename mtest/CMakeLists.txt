@@ -181,7 +181,7 @@ subdirs (
         libmscore/layout
         libmscore/parts
         libmscore/measure
-#        libmscore/midi                 # one disabled
+        libmscore/midi                 # one disabled
         libmscore/midimapping
         libmscore/note
         libmscore/repeat
