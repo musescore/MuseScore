@@ -5512,15 +5512,15 @@ QVector<oldName> oldNames = {
       {"d128flag",                              SymId::flag128thDown },             // flags.d7
 
       {"alto clef",                       SymId::cClef },                     // clefs.C
-      {"calto clef",                      SymId::cClef },                     // clefs.C_change stylistic alternate in SMuFL, better use the large one than nothing
+      {"calto clef",                      SymId::cClefChange },               // clefs.C_change
       {"bass clef",                       SymId::fClef },                     // clefs.F
-      {"cbass clef",                      SymId::fClef },                     // clefs.F_change stylistic alternate in SMuFL
+      {"cbass clef",                      SymId::fClefChange },               // clefs.F_change
       {"trebleclef",                      SymId::gClef },                     // clefs.G
-      {"ctrebleclef",                     SymId::gClef },                     // clefs.G_change stylistic alternate in SMuFL
+      {"ctrebleclef",                     SymId::gClefChange },               // clefs.G_change
       {"percussion clef",                 SymId::unpitchedPercussionClef1 },  // clefs.percussion
       {"cpercussion clef",                SymId::unpitchedPercussionClef1 },  // clefs.percussion_change stylistic alternate in SMuFL
       {"tab clef",                        SymId::sixStringTabClef },          // clefs.tab
-      {"ctab clef",                       SymId::sixStringTabClef },         // clefs.tab_change  stylistic alternate in SMuFL
+      {"ctab clef",                       SymId::sixStringTabClef },          // clefs.tab_change  stylistic alternate in SMuFL
       {"four four meter",                 SymId::timeSigCommon },             // timesig.C44
       {"allabreve",                       SymId::timeSigCutCommon },          // timesig.C22
       {"pedalasterisk",                   SymId::keyboardPedalUp },           // pedal.*
