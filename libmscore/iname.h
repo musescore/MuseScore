@@ -41,6 +41,7 @@ class InstrumentName : public Text  {
       InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
       void setInstrumentNameType(InstrumentNameType v);
       void setInstrumentNameType(const QString& s);
+      virtual void endEdit() override;
       };
 
 
