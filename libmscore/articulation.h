@@ -86,6 +86,7 @@ class Articulation : public Element {
       void setSymId(SymId id);
       virtual int subtype() const override      { return int(_symId); }
       QString userName() const;
+      const char* articulationName() const;  // type-name of articulation; used for midi rendering
 
       virtual void layout() override;
 

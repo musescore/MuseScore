@@ -380,7 +380,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
                   for (Articulation* a : chord->articulations())
-                        instr->updateVelocity(&velocity,channel, a->subtypeName());
+                        instr->updateVelocity(&velocity,channel, a->articulationName());
 
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesBefore())
@@ -1437,7 +1437,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
                         if (!a->playArticulation())
                               continue;
                         if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle()))
-                              instr->updateGateTime(&gateTime, channel, a->subtypeName());
+                              instr->updateGateTime(&gateTime, channel, a->articulationName());
                         }
                   }
             }

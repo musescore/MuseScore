@@ -412,6 +412,43 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
+//   articulationName
+//---------------------------------------------------------
+
+const char* Articulation::articulationName() const
+      {
+      switch (_symId) {
+            case SymId::articStaccatissimoAbove:
+            case SymId::articStaccatissimoBelow:
+                  return "staccatissimo";
+
+            case SymId::articStaccatoAbove:
+            case SymId::articStaccatoBelow:
+                  return "staccato";
+
+            case SymId::articTenutoStaccatoAbove:
+            case SymId::articTenutoStaccatoBelow:
+                  return "portato";
+
+            case SymId::articTenutoAbove:
+            case SymId::articTenutoBelow:
+                  return "tenuto";
+
+            case SymId::articMarcatoAbove:
+            case SymId::articMarcatoBelow:
+                  return "marcato";
+
+            case SymId::articAccentAbove:
+            case SymId::articAccentBelow:
+                  return "sforzato";
+
+            default:
+                  return "";
+            }
+      }
+
+
+//---------------------------------------------------------
 //   propertyStyle
 //---------------------------------------------------------
 
