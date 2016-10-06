@@ -288,15 +288,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       tupletBracketType->addItem(tr("Nothing"), int(Tuplet::BracketType::SHOW_NO_BRACKET));
 
       pageList->setCurrentRow(0);
-
-      articulationTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-      QStringList headers;
-      headers << tr("Symbol") << tr("Anchor");
-      articulationTable->setHorizontalHeaderLabels(headers);
-      articulationTable->setColumnWidth(0, 200);
-      articulationTable->setColumnWidth(1, 180);
-      articulationTable->setRowCount(int(ArticulationType::ARTICULATIONS));
-
       accidentalsGroup->setVisible(false); // disable, not yet implemented
 
       musicalSymbolFont->clear();
@@ -305,30 +296,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             musicalSymbolFont->addItem(i.name(), i.name());
             ++idx;
             }
-
-      anchorMapper  = new QSignalMapper(this);
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
-            ArticulationInfo* ai = &Articulation::articulationList[i];
-
-            QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 0.9);
-            QIcon icon(ct);
-            QTableWidgetItem* item = new QTableWidgetItem(icon, Sym::id2userName(ai->upSym));
-
-            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            articulationTable->setItem(i, 0, item);
-
-            QComboBox* cb = new QComboBox();
-            cb->addItem(tr("Above Staff"), int(ArticulationAnchor::TOP_STAFF));
-            cb->addItem(tr("Below Staff"), int(ArticulationAnchor::BOTTOM_STAFF));
-            cb->addItem(tr("Chord Automatic"), int(ArticulationAnchor::CHORD));
-            cb->addItem(tr("Above Chord"), int(ArticulationAnchor::TOP_CHORD));
-            cb->addItem(tr("Below Chord"), int(ArticulationAnchor::BOTTOM_CHORD));
-
-            connect(cb, SIGNAL(currentIndexChanged(int)), anchorMapper, SLOT(map()));
-            anchorMapper->setMapping(cb, i);
-            articulationTable->setCellWidget(i, 1, cb);
-            }
-      connect(anchorMapper, SIGNAL(mapped(int)), SLOT(anchorChanged(int)));
 
       static const SymId ids[] = {
             SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
@@ -606,8 +573,6 @@ QVariant EditStyle::getValue(StyleIdx idx)
 
 void EditStyle::setValues()
       {
-      anchorMapper->blockSignals(true);
-
       const MStyle& lstyle = *cs->style();
       for (const StyleWidget& sw : styleWidgets) {
             if (sw.widget)
@@ -729,6 +694,7 @@ void EditStyle::setValues()
       radioFBModern->setChecked(lstyle.value(StyleIdx::figuredBassStyle).toInt() == 0);
       radioFBHistoric->setChecked(lstyle.value(StyleIdx::figuredBassStyle).toInt() == 1);
 
+#if 0 // TODO-ws
       for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
             if (cb == 0)
@@ -744,6 +710,7 @@ void EditStyle::setValues()
                   }
             cb->setCurrentIndex(idx);
             }
+#endif
 
       QString mfont(lstyle.value(StyleIdx::MusicalSymbolFont).toString());
       int idx = 0;
@@ -778,8 +745,6 @@ void EditStyle::setValues()
       radioKeySigNatNone->setChecked  (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::NONE));
       radioKeySigNatBefore->setChecked(lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::BEFORE));
       radioKeySigNatAfter->setChecked (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::AFTER));
-
-      anchorMapper->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -961,19 +926,6 @@ void EditStyle::resetStyleValue(int i)
       StyleIdx idx = (StyleIdx)i;
       cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle()->value(idx)));
       setValues();
-      cs->update();
-      }
-
-//---------------------------------------------------------
-//   anchorChanged
-//---------------------------------------------------------
-
-void EditStyle::anchorChanged(int i)
-      {
-      QComboBox* cb = qobject_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
-      int val = cb->currentData().toInt();
-      StyleIdx idx = StyleIdx(int(StyleIdx::fermataAnchor) + i);
-      cs->undo(new ChangeStyleVal(cs, idx, QVariant(val)));
       cs->update();
       }
 

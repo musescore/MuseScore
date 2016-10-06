@@ -7,7 +7,7 @@
       <track>0</track>
       <durationType>quarter</durationType>
       <Articulation>
-        <subtype>fermata</subtype>
+        <subtype>fermataAbove</subtype>
         <track>0</track>
         </Articulation>
       <Note>
@@ -20,7 +20,7 @@
       <track>0</track>
       <durationType>quarter</durationType>
       <Articulation>
-        <subtype>staccatissimo</subtype>
+        <subtype>articStaccatissimoAbove</subtype>
         <track>0</track>
         </Articulation>
       <Note>

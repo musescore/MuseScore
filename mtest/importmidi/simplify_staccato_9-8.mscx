@@ -104,7 +104,7 @@
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>67</pitch>

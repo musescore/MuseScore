@@ -49,6 +49,7 @@
 #include "utils.h"
 #include "accidental.h"
 #include "fingering.h"
+#include "read206.h"
 
 namespace Ms {
 
@@ -633,7 +634,34 @@ static void readChord(Chord* chord, XmlReader& e)
                   readNote(note, e);
                   chord->add(note);
                   }
+            else if (tag == "Attribute" || tag == "Articulation") {
+                  Articulation* atr = new Articulation(chord->score());
+                  atr->setTrack(chord->track());
+                  readArticulation(atr, e);
+                  chord->add(atr);
+                  }
             else if (chord->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readRest
+//---------------------------------------------------------
+
+static void readRest(Rest* rest, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Attribute" || tag == "Articulation") {
+                  Articulation* atr = new Articulation(rest->score());
+                  atr->setTrack(rest->track());
+                  readArticulation(atr, e);
+                  rest->add(atr);
+                  }
+            else if (rest->readProperties(e))
                   ;
             else
                   e.unknown();
@@ -850,7 +878,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
-                  rest->read(e);
+                  readRest(rest, e);
                   segment = m->getSegment(rest, e.tick());
                   segment->add(rest);
 
@@ -1547,6 +1575,10 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
       }
 
+//---------------------------------------------------------
+//   readStyle
+//---------------------------------------------------------
+
 static void readStyle(MStyle* style, XmlReader& e)
       {
       QString oldChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
@@ -1593,10 +1625,9 @@ static void readStyle(MStyle* style, XmlReader& e)
                               }
                         }
                   // for compatibility:
-                  if (tag == "oddHeader" || tag == "evenHeader"
-                     || tag == "oddFooter" || tag == "evenFooter")
+                  if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter")
                         tag += "C";
-
+#if 0 // TODO-ws
                   int idx2;
                   for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
                         ArticulationInfo& ai =  Articulation::articulationList[idx2];
@@ -1621,9 +1652,9 @@ static void readStyle(MStyle* style, XmlReader& e)
                         }
                   if (idx2 < int(ArticulationType::ARTICULATIONS))
                         continue;
+#endif
                   QString val(e.readElementText());
                   style->convertToUnit(tag, val);
-
                   }
             }
 

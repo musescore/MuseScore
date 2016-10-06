@@ -74,6 +74,7 @@
 #include "sequencer.h"
 #include "tremolo.h"
 #include "rehearsalmark.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -1442,20 +1443,20 @@ void Score::upDown(bool up, UpDownMode mode)
 ///   Called from padToggle() to add note prefix/accent.
 //---------------------------------------------------------
 
-void Score::addArticulation(ArticulationType attr)
+void Score::addArticulation(SymId attr)
       {
       QSet<Chord*> set;
-      foreach(Element* el, selection().elements()) {
-            if (el->type() == Element::Type::NOTE || el->type() == Element::Type::CHORD) {
-                  Chord* cr = nullptr;
+      for (Element* el : selection().elements()) {
+            if (el->isNote() || el->isChord()) {
+                  Chord* cr = 0;
                   // apply articulation on a given chord only once
-                  if (el->type() == Element::Type::NOTE) {
+                  if (el->isNote()) {
                         cr = toNote(el)->chord();
                         if (set.contains(cr))
                               continue;
                         }
                   Articulation* na = new Articulation(this);
-                  na->setArticulationType(attr);
+                  na->setSymId(attr);
                   if (!addArticulation(el, na))
                         delete na;
                   if (cr)
@@ -1612,7 +1613,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
 bool Score::addArticulation(Element* el, Articulation* a)
       {
       ChordRest* cr;
-      if (el->type() == Element::Type::NOTE)
+      if (el->isNote())
             cr = toNote(el)->chord();
       else if (el->isRest() || el->isChord() || el->isRepeatMeasure())
             cr = toChordRest(el);
@@ -2345,15 +2346,15 @@ void Score::cmd(const QAction* a)
                   upDown(false, UpDownMode::CHROMATIC);
             }
       else if (cmd == "add-staccato")
-            addArticulation(ArticulationType::Staccato);
+            addArticulation(SymId::articStaccatoAbove);
       else if (cmd == "add-tenuto")
-            addArticulation(ArticulationType::Tenuto);
+            addArticulation(SymId::articTenutoAbove);
       else if (cmd == "add-marcato")
-            addArticulation(ArticulationType::Marcato);
+            addArticulation(SymId::articMarcatoAbove);
       else if (cmd == "add-sforzato")
-            addArticulation(ArticulationType::Sforzatoaccent);
+            addArticulation(SymId::articAccentAbove);
       else if (cmd == "add-trill")
-            addArticulation(ArticulationType::Trill);
+            addArticulation(SymId::ornamentTrill);
       else if (cmd == "add-8va")
             cmdAddOttava(Ottava::Type::OTTAVA_8VA);
       else if (cmd == "add-8vb")

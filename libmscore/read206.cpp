@@ -36,6 +36,7 @@
 #include "breath.h"
 #include "repeat.h"
 #include "utils.h"
+#include "read206.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -384,7 +385,169 @@ static void readChord(Chord* chord, XmlReader& e)
                   readNote(note, e);
                   chord->add(note);
                   }
+            else if (tag == "Articulation") {
+                  Articulation* atr = new Articulation(chord->score());
+                  atr->setTrack(chord->track());
+                  atr->read(e);
+                  chord->add(atr);
+                  }
             else if (chord->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   ArticulationNames
+//---------------------------------------------------------
+
+static struct ArticulationNames {
+      SymId id;
+      const char* name;
+      } articulationNames[] = {
+      { SymId::fermataAbove,              "fermata",                   },
+      { SymId::fermataShortAbove,         "shortfermata",              },
+      { SymId::fermataLongAbove,          "longfermata",               },
+      { SymId::fermataVeryLongAbove,      "verylongfermata",           },
+      { SymId::articAccentAbove,          "sforzato",                  },
+      { SymId::articStaccatoAbove,        "staccato",                  },
+      { SymId::articStaccatissimoAbove,   "staccatissimo",             },
+      { SymId::articTenutoAbove,          "tenuto",                    },
+      { SymId::articTenutoStaccatoAbove,  "portato",                   },
+      { SymId::articMarcatoAbove,         "marcato",                   },
+      { SymId::guitarFadeIn,              "fadein",                    },
+      { SymId::guitarFadeOut,             "fadeout",                   },
+      { SymId::guitarVolumeSwell,         "volumeswell",               },
+      { SymId::wiggleSawtooth,            "wigglesawtooth",            },
+      { SymId::wiggleSawtoothWide,        "wigglesawtoothwide",        },
+      { SymId::wiggleVibratoLargeFaster,  "wigglevibratolargefaster",  },
+      { SymId::wiggleVibratoLargeSlowest, "wigglevibratolargeslowest", },
+      { SymId::brassMuteOpen,             "ouvert",                    },
+      { SymId::brassMuteClosed,           "plusstop",                  },
+      { SymId::stringsUpBow,              "upbow",                     },
+      { SymId::stringsDownBow,            "downbow",                   },
+      { SymId::ornamentTurnInverted,      "reverseturn",               },
+      { SymId::ornamentTurn,              "turn",                      },
+      { SymId::ornamentTrill,             "trill",                     },
+      { SymId::ornamentMordent,           "prall",                     },
+      { SymId::ornamentMordentInverted,   "mordent",                   },
+      { SymId::ornamentTremblement,       "prallprall",                },
+      { SymId::ornamentPrallMordent,      "prallmordent",              },
+      { SymId::ornamentUpPrall,           "upprall",                   },
+      { SymId::ornamentDownPrall,         "downprall",                 },
+      { SymId::ornamentUpMordent,         "upmordent",                 },
+      { SymId::ornamentDownMordent,       "downmordent",               },
+      { SymId::ornamentPrallDown,         "pralldown",                 },
+      { SymId::ornamentPrallUp,           "prallup",                   },
+      { SymId::ornamentLinePrall,         "lineprall",                 },
+      { SymId::ornamentPrecompSlide,      "schleifer",                 },
+      { SymId::pluckedSnapPizzicatoAbove, "snappizzicato",             },
+      { SymId::stringsThumbPosition,      "thumb",                     },
+      { SymId::luteFingeringRHThumb,      "lutefingeringthumb",        },
+      { SymId::luteFingeringRHFirst,      "lutefingering1st",          },
+      { SymId::luteFingeringRHSecond,     "lutefingering2nd",          },
+      { SymId::luteFingeringRHThird,      "lutefingering3rd",          }
+      };
+
+//---------------------------------------------------------
+//   oldArticulationNames2SymId
+//---------------------------------------------------------
+
+SymId oldArticulationNames2SymId(const QString& s)
+      {
+      for (auto i : articulationNames) {
+            if (i.name == s)
+                  return i.id;
+            }
+      return SymId::noSym;
+      }
+
+//---------------------------------------------------------
+//   readArticulation
+//---------------------------------------------------------
+
+void readArticulation(Articulation* a, XmlReader& e)
+      {
+      a->setSymId(SymId::fermataAbove);      // default -- backward compatibility (no type = ufermata in 1.2)
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype") {
+                  QString s = e.readElementText();
+                  if (s[0].isDigit()) {
+                        int oldType = s.toInt();
+                        a->setSymId(articulationNames[oldType].id);
+                        }
+                  else {
+                        a->setSymId(oldArticulationNames2SymId(s));
+                        if (a->symId() == SymId::noSym) {
+                              struct {
+                                    const char* name;
+                                    bool up;
+                                    SymId id;
+                                    } al[] =
+                                    {
+                                    { "fadein",                    true,  SymId::guitarFadeIn },
+                                    { "fadeout",                   true,  SymId::guitarFadeOut },
+                                    { "volumeswell",               true,  SymId::guitarVolumeSwell },
+                                    { "wigglesawtooth",            true,  SymId::wiggleSawtooth },
+                                    { "wigglesawtoothwide",        true,  SymId::wiggleSawtoothWide },
+                                    { "wigglevibratolargefaster",  true,  SymId::wiggleVibratoLargeFaster },
+                                    { "wigglevibratolargeslowest", true,  SymId::wiggleVibratoLargeSlowest },
+                                    { "umarcato",                  true,  SymId::articMarcatoAbove },
+                                    { "dmarcato",                  false, SymId::articMarcatoBelow },
+                                    { "ufermata",                  true,  SymId::fermataAbove },
+                                    { "dfermata",                  false, SymId::fermataBelow },
+                                    { "ushortfermata",             true,  SymId::fermataShortAbove },
+                                    { "dshortfermata",             false, SymId::fermataShortBelow },
+                                    { "ulongfermata",              true,  SymId::fermataLongAbove },
+                                    { "dlongfermata",              false, SymId::fermataLongBelow },
+                                    { "uverylongfermata",          true,  SymId::fermataVeryLongAbove },
+                                    { "dverylongfermata",          false, SymId::fermataVeryLongBelow },
+
+                                    // watch out, bug in 1.2 uportato and dportato are reversed
+                                    { "dportato",                  true,  SymId::articTenutoStaccatoAbove },
+                                    { "uportato",                  false, SymId::articTenutoStaccatoBelow },
+                                    { "ustaccatissimo",            true,  SymId::articStaccatissimoAbove },
+                                    { "dstaccatissimo",            false, SymId::articStaccatissimoBelow }
+                                    };
+                              int i;
+                              int n = sizeof(al) / sizeof(*al);
+                              for (i = 0; i < n; ++i) {
+                                    if (s == al[i].name) {
+                                          a->setSymId(al[i].id);
+                                          a->setUp(al[i].up);
+                                          a->setDirection(a->up() ? Direction_UP : Direction_DOWN);
+                                          break;
+                                          }
+                                    }
+                              if (i == n)
+                                    qDebug("Articulation: unknown type <%s>", qPrintable(s));
+                              }
+                        }
+                  }
+             else if (a->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readRest
+//---------------------------------------------------------
+
+static void readRest(Rest* rest, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Articulation") {
+                  Articulation* atr = new Articulation(rest->score());
+                  atr->setTrack(rest->track());
+                  readArticulation(atr, e);
+                  rest->add(atr);
+                  }
+            else if (rest->readProperties(e))
                   ;
             else
                   e.unknown();
@@ -498,7 +661,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
-                  rest->read(e);
+                  readRest(rest, e);
                   segment = m->getSegment(rest, e.tick());
                   segment->add(rest);
 

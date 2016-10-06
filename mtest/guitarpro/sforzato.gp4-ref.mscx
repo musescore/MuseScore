@@ -134,7 +134,7 @@
           <lid>13</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>sforzato</subtype>
+            <subtype>articAccentAbove</subtype>
             <lid>12</lid>
             </Articulation>
           <Note>
@@ -313,7 +313,7 @@
             <lid>13</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>sforzato</subtype>
+              <subtype>articAccentAbove</subtype>
               <lid>12</lid>
               </Articulation>
             <Note>
@@ -355,7 +355,7 @@
             <lid>13</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>sforzato</subtype>
+              <subtype>articAccentAbove</subtype>
               <lid>12</lid>
               </Articulation>
             <Note>

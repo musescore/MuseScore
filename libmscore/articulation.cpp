@@ -26,92 +26,52 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   Articulation::articulationList
-//---------------------------------------------------------
-
-#define PT    ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
-#define TR(a) QT_TRANSLATE_NOOP("articulation", a)
-
-ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATIONS)] = {
-      { SymId::fermataAbove,              SymId::fermataBelow,              "fermata",                   1.0, PT },
-      { SymId::fermataShortAbove,         SymId::fermataShortBelow,         "shortfermata",              1.0, PT },
-      { SymId::fermataLongAbove,          SymId::fermataLongBelow,          "longfermata",               1.0, PT },
-      { SymId::fermataVeryLongAbove,      SymId::fermataVeryLongBelow,      "verylongfermata",           1.0, PT },
-      { SymId::articAccentAbove,          SymId::articAccentBelow,          "sforzato",                  1.0, PT },
-      { SymId::articStaccatoAbove,        SymId::articStaccatoBelow,        "staccato",                  1.0, PT },
-      { SymId::articStaccatissimoAbove,   SymId::articStaccatissimoBelow,   "staccatissimo",             1.0, PT },
-      { SymId::articTenutoAbove,          SymId::articTenutoBelow,          "tenuto",                    1.0, PT },
-      { SymId::articTenutoStaccatoAbove,  SymId::articTenutoStaccatoBelow,  "portato",                   1.0, PT },
-      { SymId::articMarcatoAbove,         SymId::articMarcatoBelow,         "marcato",                   1.0, PT },
-      { SymId::guitarFadeIn,              SymId::guitarFadeIn,              "fadein",                    1.0, PT },
-      { SymId::guitarFadeOut,             SymId::guitarFadeOut,             "fadeout",                   1.0, PT },
-      { SymId::guitarVolumeSwell,         SymId::guitarVolumeSwell,         "volumeswell",               1.0, PT },
-      { SymId::wiggleSawtooth,            SymId::wiggleSawtooth,            "wigglesawtooth",            1.0, PT },
-      { SymId::wiggleSawtoothWide,        SymId::wiggleSawtoothWide,        "wigglesawtoothwide",        1.0, PT },
-      { SymId::wiggleVibratoLargeFaster,  SymId::wiggleVibratoLargeFaster,  "wigglevibratolargefaster",  1.0, PT },
-      { SymId::wiggleVibratoLargeSlowest, SymId::wiggleVibratoLargeSlowest, "wigglevibratolargeslowest", 1.0, PT },
-      { SymId::brassMuteOpen,             SymId::brassMuteOpen,             "ouvert",                    1.0, PT },
-      { SymId::brassMuteClosed,           SymId::brassMuteClosed,           "plusstop",                  1.0, PT },
-      { SymId::stringsUpBow,              SymId::stringsUpBow,              "upbow",                     1.0, PT },
-      { SymId::stringsDownBow,            SymId::stringsDownBow,            "downbow",                   1.0, PT },
-      { SymId::ornamentTurnInverted,      SymId::ornamentTurnInverted,      "reverseturn",               1.0, PT },
-      { SymId::ornamentTurn,              SymId::ornamentTurn,              "turn",                      1.0, PT },
-      { SymId::ornamentTrill,             SymId::ornamentTrill,             "trill",                     1.0, PT },
-      { SymId::ornamentMordent,           SymId::ornamentMordent,           "prall",                     1.0, PT },
-      { SymId::ornamentMordentInverted,   SymId::ornamentMordentInverted,   "mordent",                   1.0, PT },
-      { SymId::ornamentTremblement,       SymId::ornamentTremblement,       "prallprall",                1.0, PT },
-      { SymId::ornamentPrallMordent,      SymId::ornamentPrallMordent,      "prallmordent",              1.0, PT },
-      { SymId::ornamentUpPrall,           SymId::ornamentUpPrall,           "upprall",                   1.0, PT },
-      { SymId::ornamentDownPrall,         SymId::ornamentDownPrall,         "downprall",                 1.0, PT },
-      { SymId::ornamentUpMordent,         SymId::ornamentUpMordent,         "upmordent",                 1.0, PT },
-      { SymId::ornamentDownMordent,       SymId::ornamentDownMordent,       "downmordent",               1.0, PT },
-      { SymId::ornamentPrallDown,         SymId::ornamentPrallDown,         "pralldown",                 1.0, PT },
-      { SymId::ornamentPrallUp,           SymId::ornamentPrallUp,           "prallup",                   1.0, PT },
-      { SymId::ornamentLinePrall,         SymId::ornamentLinePrall,         "lineprall",                 1.0, PT },
-      { SymId::ornamentPrecompSlide,      SymId::ornamentPrecompSlide,      "schleifer",                 1.0, PT },
-      { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoBelow, "snappizzicato",             1.0, PT },
-
-      // Fingerings
-
-      { SymId::stringsThumbPosition,      SymId::stringsThumbPosition,      "thumb",                     1.0, PT },
-      { SymId::luteFingeringRHThumb,      SymId::luteFingeringRHThumb,      "lutefingeringthumb",        1.0, ArticulationShowIn::TABLATURE },
-      { SymId::luteFingeringRHFirst,      SymId::luteFingeringRHFirst,      "lutefingering1st",          1.0, ArticulationShowIn::TABLATURE },
-      { SymId::luteFingeringRHSecond,     SymId::luteFingeringRHSecond,     "lutefingering2nd",          1.0, ArticulationShowIn::TABLATURE },
-      { SymId::luteFingeringRHThird,      SymId::luteFingeringRHThird,      "lutefingering3rd",          1.0, ArticulationShowIn::TABLATURE },
-      };
-#undef PT
-#undef TR
-
-//---------------------------------------------------------
 //   Articulation
 //---------------------------------------------------------
 
 Articulation::Articulation(Score* s)
    : Element(s)
       {
-      _direction = Direction_AUTO;
-      _up = true;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      setArticulationType(ArticulationType::Fermata);
-      _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
+      _symId         = SymId::noSym;
+      _anchor        = ArticulationAnchor::TOP_STAFF;
+      _direction     = Direction_AUTO;
+      _up            = true;
+      _timeStretch   = 1.0;
+      _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
       }
 
-//---------------------------------------------------------
-//   setArticulationType
-//---------------------------------------------------------
-
-void Articulation::setArticulationType(ArticulationType idx)
+Articulation::Articulation(SymId id, Score* s)
+   : Articulation(s)
       {
-      _articulationType = idx;
-      _anchor           = score()->style()->articulationAnchor(int(_articulationType));
-      anchorStyle       = PropertyStyle::STYLED;
-      _timeStretch      = articulationList[int(articulationType())].timeStretch;
+      setSymId(id);
+      }
 
-      // TODO: layout() can be empty?
-      SymId sym = _up ? articulationList[int(_articulationType)].upSym : articulationList[int(_articulationType)].downSym;
-      QRectF b(symBbox(sym));
-      setbbox(b.translated(-0.5 * b.width(), 0.0));
+//---------------------------------------------------------
+//   setSymId
+//---------------------------------------------------------
+
+void Articulation::setSymId(SymId id)
+      {
+      _symId  = id;
+      _anchor = ArticulationAnchor(propertyDefault(P_ID::ARTICULATION_ANCHOR).toInt());
+      }
+
+//---------------------------------------------------------
+//   setUp
+//---------------------------------------------------------
+
+void Articulation::setUp(bool val)
+      {
+      if (val != _up) {
+            QString s = Sym::id2name(_symId);
+            if (s.endsWith(_up ? "Above" : "Below")) {
+                  QString s2 = s.left(s.size() - 5) + (val ? "Above" : "Below");
+                  _symId = Sym::name2id(s2);
+                  }
+            _up = val;
+            }
       }
 
 //---------------------------------------------------------
@@ -120,36 +80,54 @@ void Articulation::setArticulationType(ArticulationType idx)
 
 void Articulation::read(XmlReader& e)
       {
-      setArticulationType(ArticulationType::Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "subtype")
-                  setSubtype(e.readElementText());
-            else if (tag == "channel") {
-                  _channelName = e.attribute("name");
-                  e.readNext();
-                  }
-            else if (tag == "anchor") {
-                  _anchor = ArticulationAnchor(e.readInt());
-                  anchorStyle = PropertyStyle::UNSTYLED;
-                  }
-            else if (tag == "direction")
-                  readProperty(e, P_ID::DIRECTION);
-            else if ( tag == "ornamentStyle")
-                  setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
-            else if ( tag == "play")
-                  setPlayArticulation(e.readBool());
-            else if (tag == "timeStretch")
-                  _timeStretch = e.readDouble();
-            else if (tag == "offset") {
-                  if (score()->mscVersion() > 114)
-                        Element::readProperties(e);
-                  else
-                        e.skipCurrentElement(); // ignore manual layout in older scores
-                  }
-            else if (!Element::readProperties(e))
+            if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+extern SymId oldArticulationNames2SymId(const QString&);
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Articulation::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "subtype") {
+            QString s = e.readElementText();
+            SymId id = Sym::name2id(s);
+            if (id == SymId::noSym)
+                  id = oldArticulationNames2SymId(s);       // compatibility hack for "old" 3.0 scores
+            setSymId(id);
+            }
+      else if (tag == "channel") {
+            _channelName = e.attribute("name");
+            e.readNext();
+            }
+      else if (tag == "anchor")
+            _anchor = ArticulationAnchor(e.readInt());
+      else if (tag == "direction")
+            readProperty(e, P_ID::DIRECTION);
+      else if ( tag == "ornamentStyle")
+            setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
+      else if ( tag == "play")
+            setPlayArticulation(e.readBool());
+      else if (tag == "timeStretch")
+            _timeStretch = e.readDouble();
+      else if (tag == "offset") {
+            if (score()->mscVersion() > 114)
+                  Element::readProperties(e);
+            else
+                  e.skipCurrentElement(); // ignore manual layout in older scores
+            }
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -164,101 +142,22 @@ void Articulation::write(Xml& xml) const
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, P_ID::DIRECTION);
-      xml.tag("subtype", subtypeName());
+      xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, P_ID::TIME_STRETCH);
       writeProperty(xml, P_ID::PLAY);
       writeProperty(xml, P_ID::ORNAMENT_STYLE);
       Element::writeProperties(xml);
-      if (anchorStyle == PropertyStyle::UNSTYLED)
-            xml.tag("anchor", int(_anchor));
+      writeProperty(xml, P_ID::ARTICULATION_ANCHOR);
       xml.etag();
       }
 
 //---------------------------------------------------------
-//   subtypeName
+//   userName
 //---------------------------------------------------------
 
-QString Articulation::subtypeName() const
+QString Articulation::userName() const
       {
-      return articulationList[int(articulationType())].name;
-      }
-
-//---------------------------------------------------------
-//   setSubtype
-//---------------------------------------------------------
-
-void Articulation::setSubtype(const QString& s)
-      {
-      if (s.isEmpty()) {
-            qDebug("Articulation::setSubtype: empty subtype");
-            setArticulationType(ArticulationType::Fermata);            // something to debug...
-            return;
-            }
-
-      if (s[0].isDigit()) {         // for backward compatibility
-            setArticulationType(ArticulationType(s.toInt()));
-            return;
-            }
-      int st;
-      for (st = 0; st < int(ArticulationType::ARTICULATIONS); ++st) {
-            if (articulationList[st].name == s)
-                  break;
-            }
-      if (st == int(ArticulationType::ARTICULATIONS)) {
-            struct {
-                  const char* name;
-                  bool up;
-                  ArticulationType type;
-                  } al[] = {
-                  { "fadein",                 true,  ArticulationType::FadeIn },
-                  { "fadeout",                true,  ArticulationType::FadeOut },
-                  { "volumeswell",            true,  ArticulationType::VolumeSwell },
-                  { "wigglesawtooth",         true,  ArticulationType::WiggleSawtooth },
-                  { "wigglesawtoothwide",     true,  ArticulationType::WiggleSawtoothWide },
-                  { "wigglevibratolargefaster",  true,  ArticulationType::WiggleVibratoLargeFaster },
-                  { "wigglevibratolargeslowest", true,  ArticulationType::WiggleVibratoLargeSlowest },
-                  { "umarcato",               true,  ArticulationType::Marcato },
-                  { "dmarcato",               false, ArticulationType::Marcato },
-                  { "ufermata",               true,  ArticulationType::Fermata },
-                  { "dfermata",               false, ArticulationType::Fermata },
-                  { "ushortfermata",          true,  ArticulationType::Shortfermata },
-                  { "dshortfermata",          false, ArticulationType::Shortfermata },
-                  { "ulongfermata",           true,  ArticulationType::Longfermata },
-                  { "dlongfermata",           false, ArticulationType::Longfermata },
-                  { "uverylongfermata",       true,  ArticulationType::Verylongfermata },
-                  { "dverylongfermata",       false, ArticulationType::Verylongfermata },
-                  // watch out, bug in 1.2 uportato and dportato are reversed
-                  { "dportato",               true,  ArticulationType::Portato },
-                  { "uportato",               false, ArticulationType::Portato },
-                  { "ustaccatissimo",         true,  ArticulationType::Staccatissimo },
-                  { "dstaccatissimo",         false, ArticulationType::Staccatissimo }
-                  };
-
-            int i;
-            int n = sizeof(al) / sizeof(*al);
-            for (i = 0; i < n; ++i) {
-                  if (s == al[i].name) {
-                        _up = al[i].up;
-                        _direction = (_up ? Direction_UP : Direction_DOWN);
-                        st  = int(al[i].type);
-                        break;
-                        }
-                  }
-            if (i == n) {
-                  st = 0;
-                  qDebug("Articulation: unknown <%s>", qPrintable(s));
-                  }
-            }
-      setArticulationType(ArticulationType(st));
-      }
-
-//---------------------------------------------------------
-//   idx2name
-//---------------------------------------------------------
-
-QString Articulation::idx2name(int idx)
-      {
-      return articulationList[idx].name;
+      return Sym::id2userName(symId());
       }
 
 //---------------------------------------------------------
@@ -267,6 +166,7 @@ QString Articulation::idx2name(int idx)
 
 void Articulation::draw(QPainter* painter) const
       {
+#if 0
       SymId sym = symId();
       ArticulationShowIn flags = articulationList[int(articulationType())].flags;
       if (staff()) {
@@ -279,17 +179,9 @@ void Articulation::draw(QPainter* painter) const
                         return;
                   }
             }
+#endif
       painter->setPen(curColor());
-      drawSymbol(sym, painter, QPointF(-0.5 * width(), 0.0));
-      }
-
-//---------------------------------------------------------
-//   symId
-//---------------------------------------------------------
-
-SymId Articulation::symId() const
-      {
-      return _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
+      drawSymbol(_symId, painter, QPointF(-0.5 * width(), 0.0));
       }
 
 //---------------------------------------------------------
@@ -307,15 +199,15 @@ Segment* Articulation::segment() const
       {
       ChordRest* cr = chordRest();
       if (!cr)
-            return nullptr;
+            return 0;
 
-      Segment* s = nullptr;
+      Segment* s = 0;
       if (cr->isGrace()) {
             if (cr->parent())
-                  s = static_cast<Segment*>(cr->parent()->parent());
+                  s = toSegment(cr->parent()->parent());
             }
       else
-            s = static_cast<Segment*>(cr->parent());
+            s = toSegment(cr->parent());
 
       return s;
       }
@@ -323,28 +215,19 @@ Segment* Articulation::segment() const
 Measure* Articulation::measure() const
       {
       Segment* s = segment();
-      return static_cast<Measure*>(s ? s->parent() : 0);
+      return toMeasure(s ? s->parent() : 0);
       }
 
 System* Articulation::system() const
       {
       Measure* m = measure();
-      return static_cast<System*>(m ? m->parent() : 0);
+      return toSystem(m ? m->parent() : 0);
       }
 
 Page* Articulation::page() const
       {
       System* s = system();
       return static_cast<Page*>(s ? s->parent() : 0);
-      }
-
-//---------------------------------------------------------
-//   userName
-//---------------------------------------------------------
-
-QString Articulation::userName() const
-      {
-      return Sym::id2userName(symId());
       }
 
 //---------------------------------------------------------
@@ -355,8 +238,7 @@ QString Articulation::userName() const
 
 void Articulation::layout()
       {
-      SymId sym = _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
-      QRectF b(symBbox(sym));
+      QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
       }
 
@@ -367,8 +249,8 @@ void Articulation::layout()
 void Articulation::setDirection(Direction d)
       {
       _direction = d;
-      if (d != Direction_AUTO)
-            _up = (d == Direction_UP);
+//      if (d != Direction_AUTO)
+//            _up = (d == Direction_UP);
       }
 
 //---------------------------------------------------------
@@ -377,11 +259,13 @@ void Articulation::setDirection(Direction d)
 
 void Articulation::reset()
       {
+#if 0
       if (_direction != Direction_AUTO)
             undoChangeProperty(P_ID::DIRECTION, Direction_AUTO);
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(a));
+#endif
       Element::reset();
       }
 
@@ -422,7 +306,6 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
                   setDirection(v.value<Direction>());
                   break;
             case P_ID::ARTICULATION_ANCHOR:
-                  anchorStyle = PropertyStyle::UNSTYLED;
                   setAnchor(ArticulationAnchor(v.toInt()));
                   break;
             case P_ID::PLAY:
@@ -453,10 +336,38 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                   return Direction_AUTO;
 
             case P_ID::ARTICULATION_ANCHOR:
-                  return int(score()->style()->articulationAnchor(int(_articulationType)));
+                  switch (_symId) {
+                        case SymId::articAccentAbove:
+                        case SymId::articAccentBelow:
+                        case SymId::articStaccatoAbove:
+                        case SymId::articStaccatoBelow:
+                        case SymId::articStaccatissimoAbove:
+                        case SymId::articStaccatissimoBelow:
+                        case SymId::articTenutoAbove:
+                        case SymId::articTenutoBelow:
+                        case SymId::articTenutoStaccatoAbove:
+                        case SymId::articTenutoStaccatoBelow:
+                        case SymId::guitarFadeIn:
+                        case SymId::guitarFadeOut:
+                        case SymId::guitarVolumeSwell:
+                        case SymId::wiggleSawtooth:
+                        case SymId::wiggleSawtoothWide:
+                        case SymId::wiggleVibratoLargeFaster:
+                        case SymId::wiggleVibratoLargeSlowest:
+                              return int(ArticulationAnchor::CHORD);
+
+                        case SymId::luteFingeringRHThumb:
+                        case SymId::luteFingeringRHFirst:
+                        case SymId::luteFingeringRHSecond:
+                        case SymId::luteFingeringRHThird:
+                              return int(ArticulationAnchor::BOTTOM_CHORD);
+
+                        default:
+                              return int(ArticulationAnchor::TOP_STAFF);
+                        }
 
             case P_ID::TIME_STRETCH:
-                  return articulationList[int(articulationType())].timeStretch;
+                  return 1.0; // articulationList[int(articulationType())].timeStretch;
 
             case P_ID::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
@@ -480,10 +391,8 @@ PropertyStyle Articulation::propertyStyle(P_ID id) const
       switch (id) {
             case P_ID::DIRECTION:
             case P_ID::TIME_STRETCH:
-                  return PropertyStyle::NOSTYLE;
-
             case P_ID::ARTICULATION_ANCHOR:
-                  return anchorStyle;
+                  return PropertyStyle::NOSTYLE;
 
             default:
                   break;
@@ -498,8 +407,6 @@ PropertyStyle Articulation::propertyStyle(P_ID id) const
 StyleIdx Articulation::getPropertyStyle(P_ID id) const
       {
       switch (id) {
-            case P_ID::ARTICULATION_ANCHOR:
-                  return MStyle::articulationAnchorIdx(int(_articulationType));
             default:
                   break;
             }
@@ -520,7 +427,6 @@ void Articulation::resetProperty(P_ID id)
                   return;
             case P_ID::ARTICULATION_ANCHOR:
                   setProperty(id, propertyDefault(id));
-                  anchorStyle = PropertyStyle::STYLED;
                   return;
 
             default:
@@ -530,23 +436,52 @@ void Articulation::resetProperty(P_ID id)
       }
 
 //---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Articulation::styleChanged()
-      {
-      if (anchorStyle == PropertyStyle::STYLED)
-            _anchor = score()->style()->articulationAnchor(int(_articulationType));
-      }
-
-//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
 qreal Articulation::mag() const
       {
       return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
+      }
+
+//---------------------------------------------------------
+//   isFermata
+//---------------------------------------------------------
+
+bool Articulation::isFermata() const
+      {
+      return    _symId == SymId::fermataAbove         || _symId == SymId::fermataBelow
+             || _symId == SymId::fermataShortAbove    || _symId == SymId::fermataShortBelow
+             || _symId == SymId::fermataLongAbove     || _symId == SymId::fermataLongBelow
+             || _symId == SymId::fermataVeryLongAbove || _symId == SymId::fermataVeryLongBelow;
+      }
+
+bool Articulation::isTenuto() const
+      {
+      return _symId == SymId::articTenutoAbove   || _symId == SymId::articTenutoBelow;
+      }
+
+bool Articulation::isStaccato() const
+      {
+      return _symId == SymId::articStaccatoAbove || _symId == SymId::articStaccatoBelow;
+      }
+
+bool Articulation::isAccent() const
+      {
+      return _symId == SymId::articAccentAbove   || _symId == SymId::articAccentBelow;
+      }
+
+//---------------------------------------------------------
+//   isLuteFingering
+//---------------------------------------------------------
+
+bool Articulation::isLuteFingering() const
+      {
+      return _symId == SymId::stringsThumbPosition
+         || _symId == SymId::luteFingeringRHThumb
+         || _symId == SymId::luteFingeringRHFirst
+         || _symId == SymId::luteFingeringRHSecond
+         || _symId == SymId::luteFingeringRHThird;
       }
 
 //---------------------------------------------------------

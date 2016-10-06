@@ -1848,23 +1848,20 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 static void fermatas(const QVector<Articulation*>& cra, Xml& xml, Notations& notations)
       {
       for (const Articulation* a : cra) {
-            ArticulationType at = a->articulationType();
-            if (at == ArticulationType::Fermata
-                || at == ArticulationType::Shortfermata
-                || at == ArticulationType::Longfermata
-                || at == ArticulationType::Verylongfermata) {
+            if (a->isFermata()) {
                   notations.tag(xml);
                   QString tagName = "fermata";
                   tagName += QString(" type=\"%1\"").arg(a->up() ? "upright" : "inverted");
                   tagName += color2xml(a);
-                  if (at == ArticulationType::Fermata)
+                  SymId id = a->symId();
+                  if (id == SymId::fermataAbove || id == SymId::fermataBelow)
                         xml.tagE(tagName);
-                  else if (at == ArticulationType::Shortfermata)
+                  else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow)
                         xml.tag(tagName, "angled");
                   // MusicXML does not support the very long fermata,
                   // export as long fermata (better than not exporting at all)
-                  else if (at == ArticulationType::Longfermata
-                           || at == ArticulationType::Verylongfermata)
+                  else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
+                     || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
                         xml.tag(tagName, "square");
                   }
             }
@@ -1884,79 +1881,86 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       // then the attributes whose elements are children of <articulations>
       Articulations articulations;
       for (const Articulation* a : na) {
-            switch (a->articulationType()) {
-                  case ArticulationType::Fermata:
-                  case ArticulationType::Shortfermata:
-                  case ArticulationType::Longfermata:
-                  case ArticulationType::Verylongfermata:
+            switch (a->symId()) {
+                  case SymId::fermataAbove:
+                  case SymId::fermataBelow:
+                  case SymId::fermataShortAbove:
+                  case SymId::fermataShortBelow:
+                  case SymId::fermataLongAbove:
+                  case SymId::fermataLongBelow:
+                  case SymId::fermataVeryLongAbove:
+                  case SymId::fermataVeryLongBelow:
                         // ignore, already handled
                         break;
-                  case ArticulationType::Sforzatoaccent:
-                        {
+
+                  case SymId::articAccentAbove:
+                  case SymId::articAccentBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("accent");
-                        }
                         break;
-                  case ArticulationType::Staccato:
-                        {
+
+                  case SymId::articStaccatoAbove:
+                  case SymId::articStaccatoBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("staccato");
-                        }
                         break;
-                  case ArticulationType::Staccatissimo:
-                        {
+
+                  case SymId::articStaccatissimoAbove:
+                  case SymId::articStaccatissimoBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("staccatissimo");
-                        }
                         break;
-                  case ArticulationType::Tenuto:
-                        {
+
+                  case SymId::articTenutoAbove:
+                  case SymId::articTenutoBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("tenuto");
-                        }
                         break;
-                  case ArticulationType::Marcato:
-                        {
+
+                  case SymId::articMarcatoAbove:
+                  case SymId::articMarcatoBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         if (a->up())
                               xml.tagE("strong-accent type=\"up\"");
                         else
                               xml.tagE("strong-accent type=\"down\"");
-                        }
                         break;
-                  case ArticulationType::Portato:
-                        {
+
+                  case SymId::articTenutoStaccatoAbove:
+                  case SymId::articTenutoStaccatoBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("detached-legato");
-                        }
                         break;
-                  case ArticulationType::Reverseturn:
-                  case ArticulationType::Turn:
-                  case ArticulationType::Trill:
-                  case ArticulationType::Prall:
-                  case ArticulationType::Mordent:
-                  case ArticulationType::PrallPrall:
-                  case ArticulationType::PrallMordent:
-                  case ArticulationType::UpPrall:
-                  case ArticulationType::DownPrall:
-                  case ArticulationType::UpMordent:
-                  case ArticulationType::DownMordent:
-                  case ArticulationType::PrallDown:
-                  case ArticulationType::PrallUp:
-                  case ArticulationType::LinePrall:
+
+                  case SymId::ornamentTurnInverted:
+                  case SymId::ornamentTurn:
+                  case SymId::ornamentTrill:
+                  case SymId::ornamentMordent:
+                  case SymId::ornamentMordentInverted:
+                  case SymId::ornamentTremblement:
+                  case SymId::ornamentPrallMordent:
+                  case SymId::ornamentUpPrall:
+                  case SymId::ornamentDownPrall:
+                  case SymId::ornamentUpMordent:
+                  case SymId::ornamentDownMordent:
+                  case SymId::ornamentPrallDown:
+                  case SymId::ornamentPrallUp:
+                  case SymId::ornamentLinePrall:
+                  case SymId::ornamentPrecompSlide:
                         // ignore, handled with ornaments
-                        break;
-                  case ArticulationType::Plusstop:
-                  case ArticulationType::Upbow:
-                  case ArticulationType::Downbow:
-                  case ArticulationType::Snappizzicato:
-                  case ArticulationType::ThumbPosition:
+
+                  case SymId::brassMuteOpen:
+                  case SymId::brassMuteClosed:
+                  case SymId::stringsUpBow:
+                  case SymId::stringsDownBow:
+                  case SymId::pluckedSnapPizzicatoAbove:
+                  case SymId::stringsThumbPosition:
                         // ignore, handled with technical
                         break;
                   default:
@@ -2005,130 +2009,114 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       // then the attributes whose elements are children of <ornaments>
       Ornaments ornaments;
       for (const Articulation* a : na) {
-            switch (a->articulationType()) {
-                  case ArticulationType::Fermata:
-                  case ArticulationType::Shortfermata:
-                  case ArticulationType::Longfermata:
-                  case ArticulationType::Verylongfermata:
-                  case ArticulationType::Sforzatoaccent:
-                  case ArticulationType::Staccato:
-                  case ArticulationType::Staccatissimo:
-                  case ArticulationType::Tenuto:
-                  case ArticulationType::Marcato:
-                  case ArticulationType::Portato:
+            switch (a->symId()) {
+                  case SymId::fermataAbove:
+                  case SymId::fermataBelow:
+                  case SymId::fermataShortAbove:
+                  case SymId::fermataShortBelow:
+                  case SymId::fermataLongAbove:
+                  case SymId::fermataLongBelow:
+                  case SymId::fermataVeryLongAbove:
+                  case SymId::fermataVeryLongBelow:
+                  case SymId::articAccentAbove:
+                  case SymId::articAccentBelow:
+                  case SymId::articStaccatoAbove:
+                  case SymId::articStaccatoBelow:
+                  case SymId::articStaccatissimoAbove:
+                  case SymId::articStaccatissimoBelow:
+                  case SymId::articTenutoAbove:
+                  case SymId::articTenutoBelow:
+                  case SymId::articMarcatoAbove:
+                  case SymId::articMarcatoBelow:
+                  case SymId::articTenutoStaccatoAbove:
+                  case SymId::articTenutoStaccatoBelow:
                         // ignore, already handled
                         break;
-                  case ArticulationType::Reverseturn:
-                        {
+
+                  case SymId::ornamentTurnInverted:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-turn");
-                        }
                         break;
-                  case ArticulationType::Turn:
-                        {
+                  case SymId::ornamentTurn:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("turn");
-                        }
                         break;
-                  case ArticulationType::Trill:
-                        {
+                  case SymId::ornamentTrill:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("trill-mark");
-                        }
                         break;
-                  case ArticulationType::Prall:
-                        {
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tagE("inverted-mordent");
-                        }
-                        break;
-                  case ArticulationType::Mordent:
-                        {
+                  case SymId::ornamentMordentInverted:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent");
-                        }
+                        // xml.tagE("inverted-mordent");
                         break;
-                  case ArticulationType::PrallPrall:
-                        {
+                  case SymId::ornamentMordent:
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        // xml.tagE("mordent");
+                        xml.tagE("inverted-mordent");
+                        break;
+                  case SymId::ornamentTremblement:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\"");
-                        }
                         break;
-                  case ArticulationType::PrallMordent:
-                        {
+                  case SymId::ornamentPrallMordent:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent long=\"yes\"");
-                        }
                         break;
-                  case ArticulationType::UpPrall:
-                        {
+                  case SymId::ornamentUpPrall:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"below\"");
-                        }
                         break;
-                  case ArticulationType::DownPrall:
-                        {
+                  case SymId::ornamentDownPrall:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");
-                        }
                         break;
-                  case ArticulationType::UpMordent:
-                        {
+                  case SymId::ornamentUpMordent:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent long=\"yes\" approach=\"below\"");
-                        }
                         break;
-                  case ArticulationType::DownMordent:
-                        {
+                  case SymId::ornamentDownMordent:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent long=\"yes\" approach=\"above\"");
-                        }
                         break;
-                  case ArticulationType::PrallDown:
-                        {
+                  case SymId::ornamentPrallDown:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" departure=\"below\"");
-                        }
                         break;
-                  case ArticulationType::PrallUp:
-                        {
+                  case SymId::ornamentPrallUp:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" departure=\"above\"");
-                        }
                         break;
-                  case ArticulationType::LinePrall:
-                        {
+                  case SymId::ornamentLinePrall:
                         // MusicXML 3.0 does not distinguish between downprall and lineprall
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");
-                        }
                         break;
-                  case ArticulationType::Schleifer:
-                        {
+                  case SymId::ornamentPrecompSlide:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("schleifer");
-                        }
                         break;
-                  case ArticulationType::Plusstop:
-                  case ArticulationType::Upbow:
-                  case ArticulationType::Downbow:
-                  case ArticulationType::Snappizzicato:
-                  case ArticulationType::ThumbPosition:
+                  case SymId::brassMuteOpen:
+                  case SymId::brassMuteClosed:
+                  case SymId::stringsUpBow:
+                  case SymId::stringsDownBow:
+                  case SymId::pluckedSnapPizzicatoAbove:
+                  case SymId::stringsThumbPosition:
                         // ignore, handled with technical
                         break;
                   default:
@@ -2136,54 +2124,43 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         break;
                   }
             }
+
       tremoloSingleStartStop(chord, notations, ornaments, xml);
       wavyLineStartStop(chord, notations, ornaments, trillStart, trillStop);
       ornaments.etag(xml);
 
       // and finally the attributes whose elements are children of <technical>
       for (const Articulation* a : na) {
-            switch (a->articulationType()) {
-                  case ArticulationType::Plusstop:
-                        {
+            switch (a->symId()) {
+                  case SymId::brassMuteClosed:
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("stopped");
-                        }
                         break;
-                  case ArticulationType::Upbow:
-                        {
+                  case SymId::stringsUpBow:
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("up-bow");
-                        }
                         break;
-                  case ArticulationType::Downbow:
-                        {
+                  case SymId::stringsDownBow:
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("down-bow");
-                        }
                         break;
-                  case ArticulationType::Snappizzicato:
-                        {
+                  case SymId::pluckedSnapPizzicatoAbove:
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("snap-pizzicato");
-                        }
                         break;
-                  case ArticulationType::Ouvert:
-                        {
+                  case SymId::brassMuteOpen:
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("open-string");
-                        }
                         break;
-                  case ArticulationType::ThumbPosition:
-                        {
+                  case SymId::stringsThumbPosition:
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("thumb-position");
-                        }
                         break;
                   default:
                         // others silently ignored

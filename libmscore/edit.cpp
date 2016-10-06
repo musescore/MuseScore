@@ -57,6 +57,7 @@
 #include "textframe.h"
 #include "accidental.h"
 #include "tremolo.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -1791,16 +1792,16 @@ void Score::cmdFlip()
                   }
             else if (e->isArticulation()) {
                   Articulation* a = toArticulation(e);
-                  if (a->articulationType() == ArticulationType::Staccato
-                     || a->articulationType() == ArticulationType::Tenuto
-                     || a->articulationType() == ArticulationType::Sforzatoaccent
-                     || a->articulationType() == ArticulationType::FadeIn
-                     || a->articulationType() == ArticulationType::FadeOut
-                     || a->articulationType() == ArticulationType::VolumeSwell
-                     || a->articulationType() == ArticulationType::WiggleSawtooth
-                     || a->articulationType() == ArticulationType::WiggleSawtoothWide
-                     || a->articulationType() == ArticulationType::WiggleVibratoLargeFaster
-                     || a->articulationType() == ArticulationType::WiggleVibratoLargeSlowest) {
+                  if (a->isStaccato()
+                     || a->isTenuto()
+                     || a->isAccent()
+                     || a->symId() == SymId::guitarFadeIn
+                     || a->symId() == SymId::guitarFadeOut
+                     || a->symId() == SymId::guitarVolumeSwell
+                     || a->symId() == SymId::wiggleSawtooth
+                     || a->symId() == SymId::wiggleSawtoothWide
+                     || a->symId() == SymId::wiggleVibratoLargeFaster
+                     || a->symId() == SymId::wiggleVibratoLargeSlowest) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == ArticulationAnchor::TOP_CHORD)
                               aa = ArticulationAnchor::BOTTOM_CHORD;

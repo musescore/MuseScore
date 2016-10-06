@@ -164,7 +164,7 @@
           <lid>11</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>trill</subtype>
+            <subtype>ornamentTrill</subtype>
             <lid>10</lid>
             </Articulation>
           <Note>
@@ -376,7 +376,7 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>trill</subtype>
+              <subtype>ornamentTrill</subtype>
               <lid>10</lid>
               </Articulation>
             <Note>
@@ -435,7 +435,7 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>trill</subtype>
+              <subtype>ornamentTrill</subtype>
               <lid>10</lid>
               </Articulation>
             <Note>

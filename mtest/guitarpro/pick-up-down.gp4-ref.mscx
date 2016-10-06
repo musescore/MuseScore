@@ -121,7 +121,7 @@
           <lid>10</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>downbow</subtype>
+            <subtype>stringsDownBow</subtype>
             <lid>9</lid>
             </Articulation>
           <Note>
@@ -147,7 +147,7 @@
           <lid>15</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>upbow</subtype>
+            <subtype>stringsUpBow</subtype>
             <lid>14</lid>
             </Articulation>
           <Note>
@@ -313,7 +313,7 @@
             <lid>10</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>downbow</subtype>
+              <subtype>stringsDownBow</subtype>
               <lid>9</lid>
               </Articulation>
             <Note>
@@ -339,7 +339,7 @@
             <lid>15</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>upbow</subtype>
+              <subtype>stringsUpBow</subtype>
               <lid>14</lid>
               </Articulation>
             <Note>
@@ -373,7 +373,7 @@
             <lid>10</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>downbow</subtype>
+              <subtype>stringsDownBow</subtype>
               <lid>9</lid>
               </Articulation>
             <Note>
@@ -399,7 +399,7 @@
             <lid>15</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>upbow</subtype>
+              <subtype>stringsUpBow</subtype>
               <lid>14</lid>
               </Articulation>
             <Note>

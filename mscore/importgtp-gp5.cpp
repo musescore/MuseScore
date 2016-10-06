@@ -49,6 +49,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/notedot.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/sym.h"
 #include "preferences.h"
 
 
@@ -712,7 +713,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
       if (modMask2 & EFFECT_STACATTO) {
             Chord* chord = note->chord();
             Articulation* a = new Articulation(chord->score());
-            a->setArticulationType(ArticulationType::Staccato);
+            a->setSymId(SymId::articStaccatoAbove);
             chord->add(a);
             }
       if (modMask2 & EFFECT_PALM_MUTE)
@@ -753,7 +754,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             // add the trill articulation to the note
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(ArticulationType::Trill);
+            art->setSymId(SymId::ornamentTrill);
             if (!note->score()->addArticulation(note, art))
                   delete art;
 
@@ -863,7 +864,7 @@ bool GuitarPro5::readNote(int string, Note* note)
       // check if a note is supposed to be accented, and give it the marcato type
       if (noteBits & NOTE_MARCATO) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(ArticulationType::Marcato);
+            art->setSymId(SymId::articMarcatoAbove);
             if (!note->score()->addArticulation(note, art))
                   delete art;
       }
@@ -871,7 +872,7 @@ bool GuitarPro5::readNote(int string, Note* note)
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & NOTE_SFORZATO) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(ArticulationType::Sforzatoaccent);
+            art->setSymId(SymId::articAccentAbove);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }

@@ -117,7 +117,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -127,7 +127,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>74</pitch>
@@ -137,7 +137,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>76</pitch>
@@ -147,7 +147,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>77</pitch>
@@ -177,7 +177,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -187,7 +187,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>74</pitch>
@@ -197,7 +197,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>76</pitch>

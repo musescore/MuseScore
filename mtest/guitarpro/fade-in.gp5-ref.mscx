@@ -109,8 +109,9 @@
           <lid>8</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fadein</subtype>
+            <subtype>guitarFadeIn</subtype>
             <lid>7</lid>
+            <anchor>0</anchor>
             </Articulation>
           <Note>
             <lid>9</lid>
@@ -277,8 +278,9 @@
             <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fadein</subtype>
+              <subtype>guitarFadeIn</subtype>
               <lid>7</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>9</lid>
@@ -333,8 +335,9 @@
             <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fadein</subtype>
+              <subtype>guitarFadeIn</subtype>
               <lid>7</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>9</lid>

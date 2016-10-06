@@ -2650,7 +2650,7 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
 
 //---------------------------------------------------------
 //   layoutArticulation
-//    called from chord()->layoutArticulations()
+//    called from ChordRest()->layoutArticulations()
 //---------------------------------------------------------
 
 QPointF Chord::layoutArticulation(Articulation* a)
@@ -2668,10 +2668,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
       qreal x         = centerX();
       qreal y         = 0.0;
 
-      ArticulationType st = a->articulationType();
-
       // TENUTO and STACCATO: always near the notehead (or stem end if beyond a stem)
-      if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::Sforzatoaccent) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
+      if ((a->isTenuto() || a->isStaccato() || a->isAccent())
+         && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             bool alignToStem = false;
             // if there area voices, articulation is on stem side
@@ -2704,7 +2703,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         qreal dy = (score()->styleS(StyleIdx::beamWidth).val() + 1) * _spatium2;
                         pos.ry() += bottom ? dy : - dy;
                         }
-                  alignToStem = (st == ArticulationType::Staccato && articulations().size() == 1);
+                  alignToStem = a->isStaccato() && articulations().size() == 1;
                   }
             else {                              // if articulation is not beyond a stem
                   int lline;                    // logical line of note
@@ -2712,7 +2711,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   int staffOff;                 // offset that should account for line spacing
                   int extraOff = 0;             // offset that should not acocunt for line spacing
                   int lines = (staff()->lines() - 1) * 2;               // num. of staff positions within staff
-                  int add = (st == ArticulationType::Sforzatoaccent ? 1 : 0); // sforzato accent needs more offset
+                  int add   = a->isAccent() ? 1 : 0; // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
                         lline = downLine();                             // logical line of chord lowest note
                         line = scale ? lline : lline * (lld / pld);     // corresponding physical line
@@ -2766,8 +2765,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             }
 
       // Lute fingering are always in the middle of the space right below the fret mark,
-      else if (staff() && staff()->staffGroup() == StaffGroup::TAB
-                  && st >= ArticulationType::LuteFingThumb && st <= ArticulationType::LuteFingThird) {
+      else if (staff() && staff()->staffGroup() == StaffGroup::TAB && a->isLuteFingering()) {
             // lute fing. glyphs are vertically registered in the middle of bottom space;
             // move down of half a space to have the glyph on the line
             y = chordBotY + _spatium * 0.5;
@@ -2867,17 +2865,13 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   }
             }
 
-      qreal dist;                               // distance between occupied area and articulation
-      switch(st) {
-            case ArticulationType::Marcato:
-                  dist = 1.0 * _spatium;
-                  break;
-            case ArticulationType::Sforzatoaccent:
-                  dist = 1.5 * _spatium;
-                  break;
-            default:
-                  dist = score()->styleP(StyleIdx::propertyDistance);
-            }
+      qreal dist;  // distance between occupied area and articulation
+      if (a->symId() == SymId::articMarcatoAbove || a->symId() == SymId::articMarcatoBelow)
+            dist = 1.0 * _spatium;
+      else if (a->isAccent())
+            dist = 1.5 * _spatium;
+      else
+            dist = score()->styleP(StyleIdx::propertyDistance);
 
       if (aa == ArticulationAnchor::CHORD || aa == ArticulationAnchor::TOP_CHORD || aa == ArticulationAnchor::BOTTOM_CHORD) {
             bool bottom;

@@ -22,6 +22,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/articulation.h"
+#include "libmscore/sym.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/note/")
@@ -349,8 +350,7 @@ void TestNote::grace()
 
       // articulation
       score->startCmd();
-      Articulation* ar = new Articulation(score);
-      ar->setArticulationType(ArticulationType::Sforzatoaccent);
+      Articulation* ar = new Articulation(SymId::articAccentAbove, score);
       ar->setParent(gc);
       ar->setTrack(gc->track());
       score->undoAddElement(ar);

@@ -99,7 +99,7 @@
           <durationType>half</durationType>
           <Articulation>
             <direction>down</direction>
-            <subtype>fermata</subtype>
+            <subtype>fermataBelow</subtype>
             </Articulation>
           </Rest>
         <Rest>

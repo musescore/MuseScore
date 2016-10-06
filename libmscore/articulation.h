@@ -50,14 +50,6 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
       return static_cast<unsigned char>(a1) & static_cast<unsigned char>(a2);
       }
 
-struct ArticulationInfo {
-      SymId upSym;
-      SymId downSym;
-      const char* name;                    // as stored in score files
-      qreal timeStretch;                   // for fermata
-      ArticulationShowIn flags;
-      };
-
 //---------------------------------------------------------
 //   @@ Articulation
 ///    articulation marks
@@ -66,21 +58,22 @@ struct ArticulationInfo {
 class Articulation : public Element {
       Q_OBJECT
 
-      ArticulationType _articulationType;
+      SymId _symId;
       Direction _direction;
       QString _channelName;
 
       ArticulationAnchor _anchor;
-      PropertyStyle anchorStyle;
 
       bool _up;
-      qreal _timeStretch;      // for fermata
-      MScore::OrnamentStyle _ornamentStyle; // for use in ornaments such as trill
+      qreal _timeStretch;                       // for fermata
+      MScore::OrnamentStyle _ornamentStyle;     // for use in ornaments such as trill
       bool _playArticulation;
+
       virtual void draw(QPainter*) const;
 
    public:
       Articulation(Score*);
+      Articulation(SymId, Score*);
       Articulation &operator=(const Articulation&) = delete;
 
       virtual Articulation* clone() const override   { return new Articulation(*this); }
@@ -88,17 +81,17 @@ class Articulation : public Element {
 
       virtual qreal mag() const override;
 
-      void setArticulationType(ArticulationType);
-      ArticulationType articulationType() const { return _articulationType; }
 
-      virtual int subtype() const override      { return int(_articulationType); }
-      void setSubtype(const QString& s);
-      QString subtypeName() const;
+      SymId symId() const                       { return _symId; }
+      void setSymId(SymId id);
+      virtual int subtype() const override      { return int(_symId); }
+      QString userName() const;
 
       virtual void layout() override;
 
       virtual void read(XmlReader&) override;
       virtual void write(Xml& xml) const override;
+      virtual bool readProperties(XmlReader&) override;
 
       virtual void reset() override;
       virtual QLineF dragAnchor() const override;
@@ -108,13 +101,10 @@ class Articulation : public Element {
       virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
-      virtual void styleChanged() override;
       StyleIdx getPropertyStyle(P_ID id) const override;
 
-      QString userName() const;
-
       bool up() const                       { return _up; }
-      void setUp(bool val)                  { _up = val;  }
+      void setUp(bool val);
       void setDirection(Direction d);
       Direction direction() const           { return _direction; }
 
@@ -123,9 +113,6 @@ class Articulation : public Element {
       Measure* measure() const;
       System* system() const;
       Page* page() const;
-      SymId symId() const;
-
-      static ArticulationInfo articulationList[];
 
       ArticulationAnchor anchor() const     { return _anchor;      }
       void setAnchor(ArticulationAnchor v)  { _anchor = v;         }
@@ -142,15 +129,13 @@ class Articulation : public Element {
       QString channelName() const           { return _channelName; }
       void setChannelName(const QString& s) { _channelName = s;    }
 
-      const ArticulationInfo* articulationInfo() const { return &articulationList[int(articulationType())]; }
-
-      static QString idx2name(int idx);
-      bool isFermata() { return _articulationType == ArticulationType::Fermata ||
-                                _articulationType == ArticulationType::Shortfermata ||
-                                _articulationType == ArticulationType::Longfermata ||
-                                _articulationType == ArticulationType::Verylongfermata; }
-
       QString accessibleInfo() const override;
+
+      bool isFermata() const;
+      bool isTenuto() const;
+      bool isStaccato() const;
+      bool isAccent() const;
+      bool isLuteFingering() const;
       };
 
 }     // namespace Ms

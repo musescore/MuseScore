@@ -167,57 +167,6 @@ constexpr Direction Direction_UP(1);
 constexpr Direction Direction_DOWN(2);
 
 //---------------------------------------------------------
-//   ArticulationType
-//---------------------------------------------------------
-
-enum class ArticulationType : char {
-      Fermata,
-      Shortfermata,
-      Longfermata,
-      Verylongfermata,
-      Sforzatoaccent,
-      Staccato,
-      Staccatissimo,
-      Tenuto,
-      Portato,
-      Marcato,
-      FadeIn,
-      FadeOut,
-      VolumeSwell,
-      WiggleSawtooth,
-      WiggleSawtoothWide,
-      WiggleVibratoLargeFaster,
-      WiggleVibratoLargeSlowest,
-      Ouvert,
-      Plusstop,
-      Upbow,
-      Downbow,
-      Reverseturn,
-      Turn,
-      Trill,
-      Prall,
-      Mordent,
-      PrallPrall,
-      PrallMordent,
-      UpPrall,
-      DownPrall,
-      UpMordent,
-      DownMordent,
-      PrallDown,
-      PrallUp,
-      LinePrall,
-      Schleifer,
-      Snappizzicato,
-      ARTICULATIONS_PROPER,
-      ThumbPosition = ARTICULATIONS_PROPER,
-      LuteFingThumb,
-      LuteFingFirst,
-      LuteFingSecond,
-      LuteFingThird,
-      ARTICULATIONS
-      };
-
-//---------------------------------------------------------
 //   BracketType
 //    System Brackets
 //---------------------------------------------------------

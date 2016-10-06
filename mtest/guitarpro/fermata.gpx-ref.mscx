@@ -175,7 +175,7 @@
           <lid>15</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermata</subtype>
+            <subtype>fermataAbove</subtype>
             <lid>14</lid>
             </Articulation>
           <Note>
@@ -210,7 +210,7 @@
           <lid>22</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermata</subtype>
+            <subtype>fermataAbove</subtype>
             <lid>21</lid>
             </Articulation>
           <Note>
@@ -225,7 +225,7 @@
           <lid>25</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermata</subtype>
+            <subtype>fermataAbove</subtype>
             <lid>24</lid>
             </Articulation>
           </Rest>
@@ -233,7 +233,7 @@
           <lid>27</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermata</subtype>
+            <subtype>fermataAbove</subtype>
             <lid>26</lid>
             </Articulation>
           <Note>
@@ -257,7 +257,7 @@
           <lid>32</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermata</subtype>
+            <subtype>fermataAbove</subtype>
             <lid>31</lid>
             </Articulation>
           <Note>
@@ -478,7 +478,7 @@
             <lid>15</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>14</lid>
               </Articulation>
             <Note>
@@ -513,7 +513,7 @@
             <lid>22</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>21</lid>
               </Articulation>
             <Note>
@@ -528,7 +528,7 @@
             <lid>25</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>24</lid>
               </Articulation>
             </Rest>
@@ -536,7 +536,7 @@
             <lid>27</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>26</lid>
               </Articulation>
             <Note>
@@ -560,7 +560,7 @@
             <lid>32</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>31</lid>
               </Articulation>
             <Note>
@@ -631,7 +631,7 @@
             <lid>15</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>14</lid>
               </Articulation>
             <Note>
@@ -663,7 +663,7 @@
             <lid>22</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>21</lid>
               </Articulation>
             <Note>
@@ -678,7 +678,7 @@
             <lid>25</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>24</lid>
               </Articulation>
             </Rest>
@@ -686,7 +686,7 @@
             <lid>27</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>26</lid>
               </Articulation>
             <Note>
@@ -707,7 +707,7 @@
             <lid>32</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>fermata</subtype>
+              <subtype>fermataAbove</subtype>
               <lid>31</lid>
               </Articulation>
             <Note>

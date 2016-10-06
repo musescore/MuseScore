@@ -109,7 +109,7 @@
           <lid>8</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>marcato</subtype>
+            <subtype>articMarcatoAbove</subtype>
             <lid>7</lid>
             </Articulation>
           <Note>
@@ -256,7 +256,7 @@
             <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>marcato</subtype>
+              <subtype>articMarcatoAbove</subtype>
               <lid>7</lid>
               </Articulation>
             <Note>
@@ -291,7 +291,7 @@
             <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>marcato</subtype>
+              <subtype>articMarcatoAbove</subtype>
               <lid>7</lid>
               </Articulation>
             <Note>

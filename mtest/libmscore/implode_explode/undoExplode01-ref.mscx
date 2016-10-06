@@ -304,7 +304,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>marcato</subtype>
+            <subtype>articMarcatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>77</pitch>
@@ -452,7 +452,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>marcato</subtype>
+            <subtype>articMarcatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -600,7 +600,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>marcato</subtype>
+            <subtype>articMarcatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>69</pitch>
@@ -748,7 +748,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>marcato</subtype>
+            <subtype>articMarcatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>65</pitch>

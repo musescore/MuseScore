@@ -1155,10 +1155,10 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet, bool& tuplImpl,
  Add Articulation to Chord.
  */
 
-static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QString dir)
+static void addArticulationToChord(ChordRest* cr, SymId articSym, QString dir)
       {
       Articulation* na = new Articulation(cr->score());
-      na->setArticulationType(articSym);
+      na->setSymId(articSym);
       if (dir == "up") {
             na->setUp(true);
             na->setAnchor(ArticulationAnchor::TOP_STAFF);
@@ -1180,24 +1180,34 @@ static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QSt
 
 static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QString attrAppr, QString attrDep)
       {
-      ArticulationType articSym = ArticulationType::ARTICULATIONS; // legal but impossible ArticulationType value here indicating "not found"
+      SymId articSym = SymId::noSym; // legal but impossible ArticulationType value here indicating "not found"
       if (name == "inverted-mordent") {
-            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = ArticulationType::Prall;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = ArticulationType::PrallPrall;
-            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = ArticulationType::UpPrall;
-            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = ArticulationType::DownPrall;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") articSym = ArticulationType::PrallDown;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") articSym = ArticulationType::PrallUp;
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "")
+                  articSym = SymId::ornamentMordent;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "")
+                  articSym = SymId::ornamentTremblement;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "")
+                  articSym = SymId::ornamentUpPrall;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "")
+                  articSym = SymId::ornamentDownPrall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below")
+                  articSym = SymId::ornamentPrallDown;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above")
+                  articSym = SymId::ornamentPrallUp;
             }
       else if (name == "mordent") {
-            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = ArticulationType::Mordent;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = ArticulationType::PrallMordent;
-            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = ArticulationType::UpMordent;
-            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = ArticulationType::DownMordent;
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "")
+                  articSym = SymId::ornamentMordentInverted;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "")
+                  articSym = SymId::ornamentPrallMordent;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "")
+                  articSym = SymId::ornamentUpMordent;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "")
+                  articSym = SymId::ornamentDownMordent;
             }
-      if (articSym != ArticulationType::ARTICULATIONS) {
+      if (articSym != SymId::noSym) {
             Articulation* na = new Articulation(cr->score());
-            na->setArticulationType(articSym);
+            na->setSymId(articSym);
             cr->add(na);
             }
       else
@@ -1222,22 +1232,22 @@ static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QSt
 
 static bool addMxmlArticulationToChord(ChordRest* cr, QString mxmlName)
       {
-      QMap<QString, ArticulationType> map; // map MusicXML articulation name to MuseScore symbol
-      map["accent"]           = ArticulationType::Sforzatoaccent;
-      map["staccatissimo"]    = ArticulationType::Staccatissimo;
-      map["staccato"]         = ArticulationType::Staccato;
-      map["tenuto"]           = ArticulationType::Tenuto;
-      map["turn"]             = ArticulationType::Turn;
-      map["inverted-turn"]    = ArticulationType::Reverseturn;
-      map["stopped"]          = ArticulationType::Plusstop;
-      map["up-bow"]           = ArticulationType::Upbow;
-      map["down-bow"]         = ArticulationType::Downbow;
-      map["detached-legato"]  = ArticulationType::Portato;
-      map["spiccato"]         = ArticulationType::Staccatissimo;
-      map["snap-pizzicato"]   = ArticulationType::Snappizzicato;
-      map["schleifer"]        = ArticulationType::Schleifer;
-      map["open-string"]      = ArticulationType::Ouvert;
-      map["thumb-position"]   = ArticulationType::ThumbPosition;
+      QMap<QString, SymId> map; // map MusicXML articulation name to MuseScore symbol
+      map["accent"]           = SymId::articAccentAbove;
+      map["staccatissimo"]    = SymId::articStaccatissimoAbove;
+      map["staccato"]         = SymId::articStaccatoAbove;
+      map["tenuto"]           = SymId::articTenutoAbove;
+      map["turn"]             = SymId::ornamentTurn;
+      map["inverted-turn"]    = SymId::ornamentTurnInverted;
+      map["stopped"]          = SymId::brassMuteClosed;
+      map["up-bow"]           = SymId::stringsUpBow;
+      map["down-bow"]         = SymId::stringsDownBow;
+      map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
+      map["spiccato"]         = SymId::articStaccatissimoAbove;
+      map["snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
+      map["schleifer"]        = SymId::ornamentPrecompSlide;
+      map["open-string"]      = SymId::brassMuteOpen;
+      map["thumb-position"]   = SymId::stringsThumbPosition;
 
       if (map.contains(mxmlName)) {
             addArticulationToChord(cr, map.value(mxmlName), "");
@@ -1311,7 +1321,7 @@ static void addTextToNote(int l, int c, QString txt, TextStyleType style, Score*
  Note: MusicXML common.mod: "The fermata type is upright if not specified."
  */
 
-static void addFermata(ChordRest* cr, const QString type, const ArticulationType articSym)
+static void addFermata(ChordRest* cr, const QString type, const SymId articSym)
       {
       if (type == "upright" || type == "")
             addArticulationToChord(cr, articSym, "up");
@@ -5552,9 +5562,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else if (_e.name() == "strong-accent") {
                               QString strongAccentType = _e.attributes().value("type").toString();
                               if (strongAccentType == "up" || strongAccentType == "")
-                                    addArticulationToChord(cr, ArticulationType::Marcato, "up");
+                                    addArticulationToChord(cr, SymId::articMarcatoAbove, "up");
                               else if (strongAccentType == "down")
-                                    addArticulationToChord(cr, ArticulationType::Marcato, "down");
+                                    addArticulationToChord(cr, SymId::articMarcatoAbove, "down");
                               else
                                     logError(QString("unknown mercato type %1").arg(strongAccentType));
                               _e.readNext();
@@ -5596,7 +5606,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               skipLogCurrElem();
                         else if (_e.name() == "delayed-turn") {
                               // TODO: actually this should be offset a bit to the right
-                              addArticulationToChord(cr, ArticulationType::Turn, "");
+                              addArticulationToChord(cr, SymId::ornamentTurn, "");
                               _e.readNext();
                               }
                         else if (_e.name() == "inverted-mordent"
@@ -5614,7 +5624,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   // note that mscore wavy line already implicitly includes a trillsym
                   // so don't add an additional one
                   if (trillMark && wavyLineType != "start")
-                        addArticulationToChord(cr, ArticulationType::Trill, "");
+                        addArticulationToChord(cr, SymId::ornamentTrill, "");
                   }
             else if (_e.name() == "technical") {
                   while (_e.readNextStartElement()) {
@@ -5906,11 +5916,11 @@ void MusicXMLParserPass2::fermata(ChordRest* cr)
       QString fermata     = _e.readElementText();
 
       if (fermata == "normal" || fermata == "")
-            addFermata(cr, fermataType, ArticulationType::Fermata);
+            addFermata(cr, fermataType, SymId::fermataAbove);
       else if (fermata == "angled")
-            addFermata(cr, fermataType, ArticulationType::Shortfermata);
+            addFermata(cr, fermataType, SymId::fermataShortAbove);
       else if (fermata == "square")
-            addFermata(cr, fermataType, ArticulationType::Longfermata);
+            addFermata(cr, fermataType, SymId::fermataLongAbove);
       else
             logError(QString("unknown fermata '%1'").arg(fermata));
       }
