@@ -489,12 +489,14 @@ Palette* MuseScore::newFingeringPalette()
             f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
+#if 0 // TODO-ws
       // include additional symbol-based fingerings (temporarily?) implemented as articulations
       for (int i = int(ArticulationType::ARTICULATIONS_PROPER); i < int(ArticulationType::ARTICULATIONS); ++i) {
             Articulation* s = new Articulation(gscore);
             s->setArticulationType(ArticulationType(i));
             sp->append(s, s->userName());
             }
+#endif
       return sp;
       }
 
@@ -560,26 +562,68 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
       sp->setDrawGrid(true);
 
       if (basic) {
-            static std::vector<ArticulationType> art {
-                  ArticulationType::Fermata,
-                  ArticulationType::Sforzatoaccent,
-                  ArticulationType::Staccato,
-                  ArticulationType::Tenuto,
-                  ArticulationType::Portato,
-                  ArticulationType::Marcato,
-                  ArticulationType::Trill
+            static std::vector<SymId> art {
+                  SymId::fermataAbove,
+                  SymId::articAccentAbove,
+                  SymId::articStaccatoAbove,
+                  SymId::articTenutoAbove,
+                  SymId::articTenutoStaccatoAbove,
+                  SymId::articMarcatoAbove,
+                  SymId::ornamentTrill
                   };
             for (auto i : art) {
-                  Articulation* s = new Articulation(gscore);
-                  s->setArticulationType(i);
+                  Articulation* s = new Articulation(i, gscore);
                   sp->append(s, s->userName());
                   }
             }
       else {
             // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-            for (int i = 0; i < int(ArticulationType::ARTICULATIONS_PROPER); ++i) {
-                  Articulation* s = new Articulation(gscore);
-                  s->setArticulationType(ArticulationType(i));
+            static std::vector<SymId> art {
+                  SymId::fermataAbove,
+                  SymId::fermataShortAbove,
+                  SymId::fermataLongAbove,
+                  SymId::fermataVeryLongAbove,
+                  SymId::articAccentAbove,
+                  SymId::articStaccatoAbove,
+                  SymId::articStaccatissimoAbove,
+                  SymId::articTenutoAbove,
+                  SymId::articTenutoStaccatoAbove,
+                  SymId::articMarcatoAbove,
+                  SymId::guitarFadeIn,
+                  SymId::guitarFadeOut,
+                  SymId::guitarVolumeSwell,
+                  SymId::wiggleSawtooth,
+                  SymId::wiggleSawtoothWide,
+                  SymId::wiggleVibratoLargeFaster,
+                  SymId::wiggleVibratoLargeSlowest,
+                  SymId::brassMuteOpen,
+                  SymId::brassMuteClosed,
+                  SymId::stringsUpBow,
+                  SymId::stringsDownBow,
+                  SymId::ornamentTurnInverted,
+                  SymId::ornamentTurn,
+                  SymId::ornamentTrill,
+                  SymId::ornamentMordent,
+                  SymId::ornamentMordentInverted,
+                  SymId::ornamentTremblement,
+                  SymId::ornamentPrallMordent,
+                  SymId::ornamentUpPrall,
+                  SymId::ornamentDownPrall,
+                  SymId::ornamentUpMordent,
+                  SymId::ornamentDownMordent,
+                  SymId::ornamentPrallDown,
+                  SymId::ornamentPrallUp,
+                  SymId::ornamentLinePrall,
+                  SymId::ornamentPrecompSlide,
+                  SymId::pluckedSnapPizzicatoAbove,
+                  // SymId::stringsThumbPosition,
+                  // SymId::luteFingeringRHThumb,
+                  // SymId::luteFingeringRHFirst,
+                  // SymId::luteFingeringRHSecond,
+                  // SymId::luteFingeringRHThird,
+                  };
+            for (auto i : art) {
+                  Articulation* s = new Articulation(i, gscore);
                   sp->append(s, s->userName());
                   }
             Bend* bend = new Bend(gscore);

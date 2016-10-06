@@ -167,7 +167,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -177,7 +177,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>74</pitch>
@@ -187,7 +187,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>76</pitch>
@@ -197,7 +197,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>77</pitch>
@@ -227,7 +227,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -237,7 +237,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -247,7 +247,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -257,7 +257,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>tenuto</subtype>
+            <subtype>articTenutoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>74</pitch>
@@ -280,7 +280,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>60</pitch>
@@ -290,7 +290,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>62</pitch>
@@ -300,7 +300,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>64</pitch>
@@ -310,7 +310,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>65</pitch>

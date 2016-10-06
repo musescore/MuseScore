@@ -1,0 +1,7 @@
+#!/bin/sh
+
+S=../../../build.debug/mtest/libmscore/compat206
+
+cp $S/accidentals-test.mscx accidentals-ref.mscx
+cp $S/breath-test.mscx breath-ref.mscx
+cp $S/clefs-test.mscx clefs-ref.mscx

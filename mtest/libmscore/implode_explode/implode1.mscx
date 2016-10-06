@@ -319,7 +319,7 @@
         <Chord>
           <durationType>half</durationType>
           <Articulation>
-            <subtype>fadeout</subtype>
+            <subtype>guitarFadeOut</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -365,7 +365,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>76</pitch>
@@ -399,7 +399,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fadeout</subtype>
+            <subtype>guitarFadeOut</subtype>
             </Articulation>
           <Note>
             <pitch>79</pitch>
@@ -436,7 +436,7 @@
           <track>9</track>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fadeout</subtype>
+            <subtype>guitarFadeOut</subtype>
             <track>9</track>
             </Articulation>
           <Note>
@@ -557,7 +557,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>69</pitch>
@@ -586,7 +586,7 @@
           <track>9</track>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoBelow</subtype>
             <track>9</track>
             </Articulation>
           <Note>
@@ -637,7 +637,7 @@
         <Chord>
           <durationType>half</durationType>
           <Articulation>
-            <subtype>fadeout</subtype>
+            <subtype>guitarFadeOut</subtype>
             </Articulation>
           <Note>
             <pitch>48</pitch>
@@ -769,7 +769,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>50</pitch>

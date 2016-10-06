@@ -147,8 +147,9 @@
           <lid>9</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>volumeswell</subtype>
+            <subtype>guitarVolumeSwell</subtype>
             <lid>8</lid>
+            <anchor>0</anchor>
             </Articulation>
           <Note>
             <lid>10</lid>
@@ -353,8 +354,9 @@
             <lid>9</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>volumeswell</subtype>
+              <subtype>guitarVolumeSwell</subtype>
               <lid>8</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>10</lid>
@@ -409,8 +411,9 @@
             <lid>9</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>volumeswell</subtype>
+              <subtype>guitarVolumeSwell</subtype>
               <lid>8</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>10</lid>

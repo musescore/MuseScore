@@ -637,7 +637,8 @@ class Score : public QObject, public ScoreElement {
       ChordRest* searchNote(int tick, int track) const;
 
       // undo/redo ops
-      void addArticulation(ArticulationType);
+      void addArticulation(SymId);
+      bool addArticulation(Element*, Articulation* atr);
       void changeAccidental(AccidentalType);
       void changeAccidental(Note* oNote, Ms::AccidentalType);
 
@@ -751,7 +752,6 @@ class Score : public QObject, public ScoreElement {
       Segment* tick2leftSegment(int tick) const;
       Segment* tick2rightSegment(int tick) const;
       void fixTicks();
-      bool addArticulation(Element*, Articulation* atr);
 
       void cmd(const QAction*);
       int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }

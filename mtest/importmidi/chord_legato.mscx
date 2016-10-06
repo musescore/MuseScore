@@ -137,7 +137,7 @@
           <dots>1</dots>
           <durationType>32nd</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>64</pitch>

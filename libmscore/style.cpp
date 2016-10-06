@@ -268,57 +268,15 @@ static const StyleType styleTypes[] {
       { StyleIdx::ornamentStyle,           "ornamentStyle",           int(MScore::OrnamentStyle::DEFAULT) },
       { StyleIdx::spatium,                 "Spatium",                 SPATIUM20 },
 
-      { StyleIdx::fermataAnchor,                   "fermataAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::shortfermataAnchor,              "shortfermataAnchor",              int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::longfermataAnchor,               "longfermataAnchor",               int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::verylongfermataAnchor,           "verylongfermataAnchor",           int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::sforzatoAnchor,                  "sforzatoAnchor",                  int(ArticulationAnchor::CHORD) },
-      { StyleIdx::staccatoAnchor,                  "staccatoAnchor",                  int(ArticulationAnchor::CHORD) },
-      { StyleIdx::staccatissimoAnchor,             "staccatissimoAnchor",             int(ArticulationAnchor::CHORD) },
-      { StyleIdx::tenutoAnchor,                    "tenutoAnchor",                    int(ArticulationAnchor::CHORD) },
-      { StyleIdx::portatoAnchor,                   "portatoAnchor",                   int(ArticulationAnchor::CHORD) },
-      { StyleIdx::marcatoAnchor,                   "marcatoAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::fadeinAnchor,                    "fadeinAnchor",                    int(ArticulationAnchor::CHORD) },
-      { StyleIdx::fadeoutAnchor,                   "fadeoutAnchor",                   int(ArticulationAnchor::CHORD) },
-      { StyleIdx::volumeswellAnchor,               "volumeswellAnchor",               int(ArticulationAnchor::CHORD) },
-      { StyleIdx::wigglesawtoothAnchor,            "wigglesawtoothAnchor",            int(ArticulationAnchor::CHORD) },
-      { StyleIdx::wigglesawtoothwideAnchor,        "wigglesawtoothwideAnchor",        int(ArticulationAnchor::CHORD) },
-      { StyleIdx::wigglevibratolargefasterAnchor,  "wigglevibratolargefasterAnchor",  int(ArticulationAnchor::CHORD) },
-      { StyleIdx::wigglevibratolargeslowestAnchor, "wigglevibratolargeslowestAnchor", int(ArticulationAnchor::CHORD) },
-      { StyleIdx::ouvertAnchor,                    "ouvertAnchor",                    int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::plusstopAnchor,                  "plusstopAnchor",                  int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::upbowAnchor,                     "upbowAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::downbowAnchor,                   "downbowAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::reverseturnAnchor,               "reverseturnAnchor",               int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::turnAnchor,                      "turnAnchor",                      int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::trillAnchor,                     "trillAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::prallAnchor,                     "prallAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::mordentAnchor,                   "mordentAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::prallprallAnchor,                "prallprallAnchor",                int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::prallmordentAnchor,              "prallmordentAnchor",              int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::upprallAnchor,                   "upprallAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::downprallAnchor,                 "downprallAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::upmordentAnchor,                 "upmordentAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::downmordentAnchor,               "downmordentAnchor",               int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::pralldownAnchor,                 "pralldownAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::prallupAnchor,                   "prallupAnchor",                   int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::lineprallAnchor,                 "lineprallAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::schleiferAnchor,                 "schleiferAnchor",                 int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::snappizzicatoAnchor,             "snappizzicatoAnchor",             int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::thumbAnchor,                     "thumbAnchor",                     int(ArticulationAnchor::TOP_STAFF) },
-      { StyleIdx::lutefingeringthumbAnchor,        "lutefingeringthumbAnchor",        int(ArticulationAnchor::BOTTOM_CHORD) },
-      { StyleIdx::lutefingering1stAnchor,          "lutefingering1stAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
-      { StyleIdx::lutefingering2ndAnchor,          "lutefingering2ndAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
-      { StyleIdx::lutefingering3rdAnchor,          "lutefingering3rdAnchor",          int(ArticulationAnchor::BOTTOM_CHORD) },
       { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
-      { StyleIdx::dynamicsMinDistance,             "dynamicsMinDistance",               Spatium(0.5) },
-      { StyleIdx::autoplaceVerticalAlignRange,     "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
+      { StyleIdx::dynamicsMinDistance,              "dynamicsMinDistance",               Spatium(0.5) },
+      { StyleIdx::autoplaceVerticalAlignRange,      "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
 
       { StyleIdx::textLinePlacement,         "textLinePlacement",         int(Element::Placement::ABOVE)  },
       { StyleIdx::textLinePosAbove,          "textLinePosAbove",          Spatium(-3.5) },
       { StyleIdx::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
 
-      { StyleIdx::tremoloBarLineWidth,          "tremoloBarLineWidth",          Spatium(0.1) },
+      { StyleIdx::tremoloBarLineWidth,       "tremoloBarLineWidth",       Spatium(0.1) },
       };
 
 //---------------------------------------------------------
@@ -705,8 +663,10 @@ void MStyle::convertToUnit(const QString& tag, const QString& val)
                         set(idx, QVariant(val));
                   else
                         qFatal("MStyle::load: unhandled type %s", type);
+                  return;
                   }
             }
+      qDebug("MStyle::load: unhandled style value %s", qPrintable(tag));
       }
 
 //---------------------------------------------------------
@@ -846,18 +806,4 @@ void MStyle::setPageFormat(const PageFormat& pf)
       _pageFormat.copy(pf);
       }
 
-//---------------------------------------------------------
-//   articulationAnchor
-//---------------------------------------------------------
-
-ArticulationAnchor MStyle::articulationAnchor(int id) const
-      {
-      StyleIdx sid = StyleIdx(int(StyleIdx::fermataAnchor) + id);
-      return ArticulationAnchor(value(sid).toInt());
-      }
-
-StyleIdx MStyle::articulationAnchorIdx(int id)
-      {
-      return StyleIdx(int(StyleIdx::fermataAnchor) + id);
-      }
 }

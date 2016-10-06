@@ -344,7 +344,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>marcato</subtype>
+            <subtype>articMarcatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>65</pitch>

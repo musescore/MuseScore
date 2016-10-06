@@ -99,7 +99,7 @@
           <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>trill</subtype>
+            <subtype>ornamentTrill</subtype>
             </Articulation>
           <StemDirection>up</StemDirection>
           <Note>
@@ -113,7 +113,7 @@
           <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>trill</subtype>
+            <subtype>ornamentTrill</subtype>
             </Articulation>
           <StemDirection>up</StemDirection>
           <Note>
@@ -127,7 +127,7 @@
           <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>trill</subtype>
+            <subtype>ornamentTrill</subtype>
             </Articulation>
           <StemDirection>up</StemDirection>
           <Note>
@@ -141,7 +141,7 @@
           <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>trill</subtype>
+            <subtype>ornamentTrill</subtype>
             </Articulation>
           <StemDirection>down</StemDirection>
           <Note>

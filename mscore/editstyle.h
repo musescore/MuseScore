@@ -51,7 +51,6 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       QPushButton* buttonApplyToAllParts;
       QButtonGroup* stemGroups[VOICES];
       QVector<StyleWidget> styleWidgets;
-      QSignalMapper* anchorMapper;
 
       virtual void hideEvent(QHideEvent*);
       QVariant getValue(StyleIdx idx);
@@ -71,7 +70,6 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void lyricsDashMaxLengthValueChanged(double);
       void resetStyleValue(int);
       void valueChanged(int);
-      void anchorChanged(int);
 
       void on_comboFBFont_currentIndexChanged(int index);
 

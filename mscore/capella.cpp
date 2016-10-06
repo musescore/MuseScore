@@ -87,11 +87,11 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
 //   addArticulationText
 //---------------------------------------------------------
 
-static void addArticulationText(Score* score, ChordRest* cr, int track, const QString& name)
+static void addArticulationText(Score* score, ChordRest* cr, int track, SymId symId)
       {
       Articulation* na = new Articulation(score);
       na->setTrack(track);
-      na->setSubtype(name);
+      na->setSymId(symId);
       cr->add(na);
       }
 
@@ -200,10 +200,10 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                 addDynamic(score, s, track, "z");
                                                 break;
                                           case 'k':   // fermata down
-                                                addArticulationText(score, cr, track, QString("dfermata"));
+                                                addArticulationText(score, cr, track, SymId::fermataBelow);
                                                 break;
                                           case 'u':   // fermata up
-                                                addArticulationText(score, cr, track, QString("ufermata"));
+                                                addArticulationText(score, cr, track, SymId::fermataAbove);
                                                 break;
                                           case 'd':   // da capo D.C.
                                           case 'e':   // dal segno D.S.
@@ -231,6 +231,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           }
                                     if (cr->type() == Element::Type::CHORD)
                                           switch (code) {
+#if 0 // TODO-ws
                                                 case 't':   //  trill
                                                       addArticulationText(score, cr, track, QString("trill"));
                                                       break;
@@ -280,6 +281,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                 case 211:   // alt. reverse turn
                                                       addArticulationText(score, cr, track, QString("reverseturn"));
                                                       break;
+#endif
                                                 case 172:   // arpeggio (short)
                                                 case 173:   // arpeggio (long)
                                                       {
@@ -764,12 +766,14 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
                         processBasicDrawObj(o->objects, s, track, chord);
                         switch (o->articulation) {
+#if 0 // TODO-ws
                               case 1:   addArticulationText(score, chord, track, QString("staccato")); break;
                               case 2:   addArticulationText(score, chord, track, QString("tenuto")); break;
                               case 3:   addArticulationText(score, chord, track, QString("portato")); break;
                               case 4:   addArticulationText(score, chord, track, QString("staccatissimo")); break;
                               case 5:   addArticulationText(score, chord, track, QString("sforzato")); break;
                               case 6:   addArticulationText(score, chord, track, QString("marcato")); break;
+#endif
                               case 7:   // "weak beat"
                               case 8:   // "strong beat"
                               default:  if(o->articulation) qDebug("Articulation # %d not implemented", o->articulation); break;

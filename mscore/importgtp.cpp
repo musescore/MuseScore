@@ -54,6 +54,7 @@
 #include "libmscore/ottava.h"
 #include "libmscore/notedot.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/sym.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -801,18 +802,18 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
             addPop(chord->upNote());
       else if (beatEffect == 4) {
             Articulation* a = new Articulation(chord->score());
-            a->setArticulationType(ArticulationType::FadeIn);
+            a->setSymId(SymId::guitarFadeIn);
             a->setAnchor(ArticulationAnchor::TOP_STAFF);
             chord->add(a);
             }
       else if (beatEffect == 5) {
             Articulation* a = new Articulation(chord->score());
-            a->setArticulationType(ArticulationType::Upbow);
+            a->setSymId(SymId::stringsUpBow);
             chord->add(a);
             }
       else if (beatEffect == 6) {
             Articulation* art = new Articulation(chord->score());
-            art->setArticulationType(ArticulationType::Downbow);
+            art->setSymId(SymId::stringsDownBow);
             chord->add(art);
             }
       }

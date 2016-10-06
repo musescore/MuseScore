@@ -113,7 +113,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>sforzato</subtype>
+            <subtype>articAccentAbove</subtype>
             </Articulation>
           <appoggiatura/>
           <Note>

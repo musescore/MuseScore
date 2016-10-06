@@ -235,7 +235,7 @@
           <lid>22</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>sforzato</subtype>
+            <subtype>articAccentBelow</subtype>
             <lid>21</lid>
             </Articulation>
           <Note>
@@ -1134,7 +1134,7 @@
             <lid>22</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>sforzato</subtype>
+              <subtype>articAccentBelow</subtype>
               <lid>21</lid>
               </Articulation>
             <Note>

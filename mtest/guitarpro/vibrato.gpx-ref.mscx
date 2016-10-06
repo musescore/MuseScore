@@ -139,8 +139,9 @@
           <lid>7</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>wigglevibratolargefaster</subtype>
+            <subtype>wiggleVibratoLargeFaster</subtype>
             <lid>6</lid>
+            <anchor>0</anchor>
             </Articulation>
           <Note>
             <lid>8</lid>
@@ -168,8 +169,9 @@
           <lid>14</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>wigglevibratolargeslowest</subtype>
+            <subtype>wiggleVibratoLargeSlowest</subtype>
             <lid>13</lid>
+            <anchor>0</anchor>
             </Articulation>
           <Note>
             <lid>15</lid>
@@ -197,8 +199,9 @@
           <lid>21</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>wigglesawtooth</subtype>
+            <subtype>wiggleSawtooth</subtype>
             <lid>20</lid>
+            <anchor>0</anchor>
             </Articulation>
           <Note>
             <lid>22</lid>
@@ -226,8 +229,9 @@
           <lid>28</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>wigglesawtoothwide</subtype>
+            <subtype>wiggleSawtoothWide</subtype>
             <lid>27</lid>
+            <anchor>0</anchor>
             </Articulation>
           <Note>
             <lid>29</lid>
@@ -411,8 +415,9 @@
             <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglevibratolargefaster</subtype>
+              <subtype>wiggleVibratoLargeFaster</subtype>
               <lid>6</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>8</lid>
@@ -440,8 +445,9 @@
             <lid>14</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglevibratolargeslowest</subtype>
+              <subtype>wiggleVibratoLargeSlowest</subtype>
               <lid>13</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>15</lid>
@@ -469,8 +475,9 @@
             <lid>21</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglesawtooth</subtype>
+              <subtype>wiggleSawtooth</subtype>
               <lid>20</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>22</lid>
@@ -498,8 +505,9 @@
             <lid>28</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglesawtoothwide</subtype>
+              <subtype>wiggleSawtoothWide</subtype>
               <lid>27</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>29</lid>
@@ -533,8 +541,9 @@
             <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglevibratolargefaster</subtype>
+              <subtype>wiggleVibratoLargeFaster</subtype>
               <lid>6</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>8</lid>
@@ -562,8 +571,9 @@
             <lid>14</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglevibratolargeslowest</subtype>
+              <subtype>wiggleVibratoLargeSlowest</subtype>
               <lid>13</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>15</lid>
@@ -591,8 +601,9 @@
             <lid>21</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglesawtooth</subtype>
+              <subtype>wiggleSawtooth</subtype>
               <lid>20</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>22</lid>
@@ -620,8 +631,9 @@
             <lid>28</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>wigglesawtoothwide</subtype>
+              <subtype>wiggleSawtoothWide</subtype>
               <lid>27</lid>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <lid>29</lid>

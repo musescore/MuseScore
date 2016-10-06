@@ -49,6 +49,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/notedot.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/sym.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -214,7 +215,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & NOTE_SFORZATO) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(ArticulationType::Sforzatoaccent);
+            art->setSymId(SymId::articAccentAbove);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }
@@ -346,7 +347,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             if (modMask2 & EFFECT_STACATTO) {   // staccato
                   Chord* chord = note->chord();
                   Articulation* a = new Articulation(chord->score());
-                  a->setArticulationType(ArticulationType::Staccato);
+                  a->setSymId(SymId::articStaccatoAbove);
                   chord->add(a);
                   }
             if (modMask2 & EFFECT_PALM_MUTE)
@@ -388,7 +389,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
                   // add the trill articulation to the note
                   Articulation* art = new Articulation(note->score());
-                  art->setArticulationType(ArticulationType::Trill);
+                  art->setSymId(SymId::ornamentTrill);
                   if (!note->score()->addArticulation(note, art))
                         delete art;
 

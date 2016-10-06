@@ -65,6 +65,7 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
+#include "libmscore/sym.h"
 
 using namespace Ms;
 
@@ -1705,7 +1706,7 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Major_Trill :
             case OVE::ArticulationType::Minor_Trill :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Trill);
+                  a->setSymId(SymId::ornamentTrill);
                   cr->add(a);
                   break;
                   }
@@ -1715,19 +1716,19 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Inverted_Short_Mordent :
             case OVE::ArticulationType::Inverted_Long_Mordent :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Prall);
+                  a->setSymId(SymId::ornamentMordent);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Short_Mordent :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Mordent);
+                  a->setSymId(SymId::ornamentMordentInverted);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Turn :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Turn);
+                  a->setSymId(SymId::ornamentTurn);
                   cr->add(a);
                   break;
                   }
@@ -1760,93 +1761,93 @@ void OveToMScore::convertArticulation(
                   }
             case OVE::ArticulationType::Marcato :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Sforzatoaccent);
+                  a->setSymId(SymId::articAccentAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Marcato_Dot :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Sforzatoaccent);
+                  a->setSymId(SymId::articAccentAbove);
                   cr->add(a);
 
                   a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Staccato);
+                  a->setSymId(SymId::articStaccatoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Heavy_Attack :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Sforzatoaccent);
+                  a->setSymId(SymId::articAccentAbove);
                   cr->add(a);
 
                   a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Tenuto);
+                  a->setSymId(SymId::articTenutoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::SForzando :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
-                  a->setArticulationType(ArticulationType::Marcato);
+                  a->setSymId(SymId::articMarcatoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::SForzando_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(false);
-                  a->setArticulationType(ArticulationType::Marcato);
+                  a->setSymId(SymId::articMarcatoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::SForzando_Dot :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
-                  a->setArticulationType(ArticulationType::Marcato);
+                  a->setSymId(SymId::articMarcatoAbove);
                   cr->add(a);
 
                   a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Staccato);
+                  a->setSymId(SymId::articStaccatoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::SForzando_Dot_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(false);
-                  a->setArticulationType(ArticulationType::Marcato);
+                  a->setSymId(SymId::articMarcatoAbove);
                   cr->add(a);
 
                   a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Staccato);
+                  a->setSymId(SymId::articStaccatoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Heavier_Attack :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
-                  a->setArticulationType(ArticulationType::Marcato);
+                  a->setSymId(SymId::articMarcatoAbove);
                   cr->add(a);
 
                   a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Tenuto);
+                  a->setSymId(SymId::articTenutoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Staccatissimo :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
-                  a->setArticulationType(ArticulationType::Staccatissimo);
+                  a->setSymId(SymId::articStaccatissimoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Staccato :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Staccato);
+                  a->setSymId(SymId::articStaccatoAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Tenuto :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Tenuto);
+                  a->setSymId(SymId::articTenutoAbove);
                   cr->add(a);
                   break;
                   }
@@ -1863,26 +1864,26 @@ void OveToMScore::convertArticulation(
                   }
             case OVE::ArticulationType::Up_Bow :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Upbow);
+                  a->setSymId(SymId::stringsUpBow);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Down_Bow :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Downbow);
+                  a->setSymId(SymId::stringsDownBow);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Up_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Upbow);
+                  a->setSymId(SymId::stringsUpBow);
                   a->setUserYoffset(5.3);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Down_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Downbow);
+                  a->setSymId(SymId::stringsDownBow);
                   a->setUserYoffset(5.3);
                   cr->add(a);
                   break;
@@ -1902,7 +1903,7 @@ void OveToMScore::convertArticulation(
                   }
             case OVE::ArticulationType::Plus_Sign :{
                   Articulation* a = new Articulation(score_);
-                  a->setArticulationType(ArticulationType::Plusstop);
+                  a->setSymId(SymId::brassMuteClosed);
                   cr->add(a);
                   break;
                   }
@@ -1924,14 +1925,14 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Fermata :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
-                  a->setArticulationType(ArticulationType::Fermata);
+                  a->setSymId(SymId::fermataAbove);
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Fermata_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setDirection(Direction::DOWN);
-                  a->setArticulationType(ArticulationType::Fermata);
+                  a->setSymId(SymId::fermataBelow);
                   cr->add(a);
                   break;
                   }

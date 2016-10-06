@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
-    <height>640</height>
+    <width>999</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -136,6 +136,9 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
+      <property name="currentIndex">
+       <number>17</number>
+      </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <property name="spacing">
@@ -6229,60 +6232,17 @@
             </layout>
            </item>
            <item>
-            <widget class="QTableWidget" name="articulationTable">
-             <property name="wordWrap">
-              <bool>false</bool>
+            <spacer name="verticalSpacer_25">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-             <property name="cornerButtonEnabled">
-              <bool>false</bool>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
              </property>
-             <property name="rowCount">
-              <number>35</number>
-             </property>
-             <property name="columnCount">
-              <number>2</number>
-             </property>
-             <attribute name="verticalHeaderVisible">
-              <bool>false</bool>
-             </attribute>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <column/>
-             <column/>
-            </widget>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -7932,7 +7892,6 @@
   <tabstop>articulationMag</tabstop>
   <tabstop>propertyDistanceStem</tabstop>
   <tabstop>propertyDistance</tabstop>
-  <tabstop>articulationTable</tabstop>
   <tabstop>accidentalTable</tabstop>
   <tabstop>radioKeySigNatNone</tabstop>
   <tabstop>radioKeySigNatBefore</tabstop>

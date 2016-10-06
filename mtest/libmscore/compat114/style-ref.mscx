@@ -85,30 +85,6 @@
       <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
-      <fermataAnchor>2</fermataAnchor>
-      <shortfermataAnchor>2</shortfermataAnchor>
-      <longfermataAnchor>2</longfermataAnchor>
-      <verylongfermataAnchor>2</verylongfermataAnchor>
-      <sforzatoAnchor>1</sforzatoAnchor>
-      <staccatoAnchor>1</staccatoAnchor>
-      <staccatissimoAnchor>1</staccatissimoAnchor>
-      <tenutoAnchor>1</tenutoAnchor>
-      <portatoAnchor>1</portatoAnchor>
-      <marcatoAnchor>1</marcatoAnchor>
-      <ouvertAnchor>1</ouvertAnchor>
-      <plusstopAnchor>1</plusstopAnchor>
-      <upbowAnchor>1</upbowAnchor>
-      <downbowAnchor>1</downbowAnchor>
-      <turnAnchor>1</turnAnchor>
-      <trillAnchor>1</trillAnchor>
-      <prallAnchor>1</prallAnchor>
-      <mordentAnchor>1</mordentAnchor>
-      <prallprallAnchor>1</prallprallAnchor>
-      <prallmordentAnchor>1</prallmordentAnchor>
-      <upprallAnchor>1</upprallAnchor>
-      <upmordentAnchor>1</upmordentAnchor>
-      <downmordentAnchor>1</downmordentAnchor>
-      <thumbAnchor>1</thumbAnchor>
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>

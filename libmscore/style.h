@@ -93,9 +93,9 @@ enum class StyleIdx : int {
       timesigLeftMargin,
 
       clefKeyRightMargin,
-/**/      clefKeyDistance,
-/**/      clefTimesigDistance,
-/**/      keyTimesigDistance,
+      clefKeyDistance,
+      clefTimesigDistance,
+      keyTimesigDistance,
       keyBarlineDistance,
       systemHeaderDistance,
       systemHeaderTimeSigDistance,
@@ -169,7 +169,6 @@ enum class StyleIdx : int {
       smallClefMag,
       genClef,
       genKeysig,
-//      genTimesig,
       genCourtesyTimesig,
       genCourtesyKeysig,
       genCourtesyClef,
@@ -280,49 +279,6 @@ enum class StyleIdx : int {
       ornamentStyle,
       spatium,
 
-      fermataAnchor,
-      shortfermataAnchor,
-      longfermataAnchor,
-      verylongfermataAnchor,
-      sforzatoAnchor,
-      staccatoAnchor,
-      staccatissimoAnchor,
-      tenutoAnchor,
-      portatoAnchor,
-      marcatoAnchor,
-      fadeinAnchor,
-      fadeoutAnchor,
-      volumeswellAnchor,
-      wigglesawtoothAnchor,
-      wigglesawtoothwideAnchor,
-      wigglevibratolargefasterAnchor,
-      wigglevibratolargeslowestAnchor,
-      ouvertAnchor,
-      plusstopAnchor,
-      upbowAnchor,
-      downbowAnchor,
-      reverseturnAnchor,
-      turnAnchor,
-      trillAnchor,
-      prallAnchor,
-      mordentAnchor,
-      prallprallAnchor,
-      prallmordentAnchor,
-      upprallAnchor,
-      downprallAnchor,
-      upmordentAnchor,
-      downmordentAnchor,
-      pralldownAnchor,
-      prallupAnchor,
-      lineprallAnchor,
-      schleiferAnchor,
-      snappizzicatoAnchor,
-      thumbAnchor,
-      lutefingeringthumbAnchor,
-      lutefingering1stAnchor,
-      lutefingering2ndAnchor,
-      lutefingering3rdAnchor,
-
       autoplaceHairpinDynamicsDistance,
       dynamicsMinDistance,
       autoplaceVerticalAlignRange,
@@ -408,9 +364,6 @@ class MStyle {
       const PageFormat* pageFormat() const { return &_pageFormat; }
 
       void setPageFormat(const PageFormat& pf);
-
-      ArticulationAnchor articulationAnchor(int id) const;
-      static StyleIdx articulationAnchorIdx(int id);
 
       static const char* valueType(const StyleIdx);
       static const char* valueName(const StyleIdx);

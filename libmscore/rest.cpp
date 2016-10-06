@@ -231,9 +231,8 @@ Element* Rest::drop(const DropData& data)
       switch (e->type()) {
             case Element::Type::ARTICULATION:
                   {
-                  Articulation* a = static_cast<Articulation*>(e);
-                  if (!a->isFermata()
-                     || !score()->addArticulation(this, a)) {
+                  Articulation* a = toArticulation(e);
+                  if (!a->isFermata() || !score()->addArticulation(this, a)) {
                         delete e;
                         e = 0;
                         }

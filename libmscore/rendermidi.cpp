@@ -49,6 +49,7 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -1019,9 +1020,9 @@ int totalTiedNoteTicks(Note* note)
 // sustainp, true means the last note of the body is sustained to fill remaining time slice
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, int requestedTicksPerNote,
-   const vector<int> & prefix, const vector<int> & body,
-   bool repeatp, bool sustainp, const vector<int> & suffix,
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
+   const vector<int>& prefix, const vector<int>& body,
+   bool repeatp, bool sustainp, const vector<int>& suffix,
    int fastestFreq=16, int slowestFreq=8 // 16 Hz and 8 Hz
    )
       {
@@ -1176,7 +1177,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       }
 
 // This struct specifies how to render an articulation.
-//   atype - the articulation type to implement, such as ArticulationType::Turn
+//   atype - the articulation type to implement, such as SymId::ornamentTurn
 //   ostyles - the actual ornament has a property called ornamentStyle whose value is
 //             a value of type MScore::OrnamentStyle.  This ostyles field indicates the
 //             the set of ornamentStyles which apply to this rendition.
@@ -1201,8 +1202,9 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 //    suffix - similar to prefix but played once at the end of the rendered ornament.
 //    repeatp  - whether the body is repeatable in its entirety.
 //    sustainp - whether the final note of the body should be sustained to fill the remaining duration.
+
 struct OrnamentExcursion {
-      ArticulationType atype;
+      SymId atype;
       set<MScore::OrnamentStyle> ostyles;
       int duration;
       vector<int> prefix;
@@ -1217,27 +1219,28 @@ set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
 set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
 int _16th = MScore::division / 4;
 int _32nd = _16th / 2;
+
 vector<OrnamentExcursion> excursions = {
-      //  articulation type           set of  duration       body         repeatp      suffix
-      //                              styles          prefix                    sustainp
-      {ArticulationType::Turn,        any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
-      ,{ArticulationType::Reverseturn, any,     _32nd, {},    {-1,0,1,0},   false, true, {}}
-      ,{ArticulationType::Trill,       baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
-      ,{ArticulationType::Trill,       defstyle,_32nd, {0,1}, {0,1},        true,  true, {}}
-      ,{ArticulationType::Plusstop,    baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
-      ,{ArticulationType::Mordent,     any,     _32nd, {},    {0,-1,0},     false, true, {}}
-      ,{ArticulationType::Prall,       defstyle,_32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
-      ,{ArticulationType::Prall,       baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
-      ,{ArticulationType::PrallPrall,  any,     _32nd, {1,0}, {1,0},        false, true, {}}
-      ,{ArticulationType::PrallMordent,any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
-      ,{ArticulationType::LinePrall,   any,     _32nd, {2,2,2},{1,0},       true,  true, {}}
-      ,{ArticulationType::UpPrall,     any,     _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
-      ,{ArticulationType::UpMordent,   any,     _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
-      ,{ArticulationType::DownPrall,   any,     _16th, {1,1,1,0}, {1,0},    true,  true, {}} // p136 Cadence Appuyee [1] [2]
-      ,{ArticulationType::DownMordent, any,     _16th, {1,1,1,0}, {1,0},    true,  true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
-      ,{ArticulationType::PrallUp,     any,     _16th, {1,0}, {1,0},        true,  true, {-1,0}} // p136 Double Cadence [1]
-      ,{ArticulationType::PrallDown,   any,     _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
-      ,{ArticulationType::Schleifer,   any,     _32nd, {},    {0},          false, true, {}}
+      //  articulation type            set of  duration       body         repeatp      suffix
+      //                               styles          prefix                    sustainp
+      { SymId::ornamentTurn,                any, _32nd, {},    {1,0,-1,0},   false, true, {}}
+      ,{SymId::ornamentTurnInverted,        any, _32nd, {},    {-1,0,1,0},   false, true, {}}
+      ,{SymId::ornamentTrill,           baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
+      ,{SymId::ornamentTrill,          defstyle, _32nd, {0,1}, {0,1},        true,  true, {}}
+      ,{SymId::brassMuteClosed,         baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
+      ,{SymId::ornamentMordentInverted,     any, _32nd, {},    {0,-1,0},     false, true, {}}
+      ,{SymId::ornamentMordent,        defstyle, _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
+      ,{SymId::ornamentMordent,         baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
+      ,{SymId::ornamentTremblement,         any, _32nd, {1,0}, {1,0},        false, true, {}}
+      ,{SymId::ornamentPrallMordent,        any, _32nd, {},    {1,0,-1,0},   false, true, {}}
+      ,{SymId::ornamentLinePrall,           any, _32nd, {2,2,2},{1,0},       true,  true, {}}
+      ,{SymId::ornamentUpPrall,             any, _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
+      ,{SymId::ornamentUpMordent,           any, _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
+      ,{SymId::ornamentDownPrall,           any, _16th, {1,1,1,0}, {1,0},    true,  true, {}} // p136 Cadence Appuyee [1] [2]
+      ,{SymId::ornamentDownMordent,         any, _16th, {1,1,1,0}, {1,0},    true,  true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
+      ,{SymId::ornamentPrallUp,             any, _16th, {1,0}, {1,0},        true,  true, {-1,0}} // p136 Double Cadence [1]
+      ,{SymId::ornamentPrallDown,           any, _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
+      ,{SymId::ornamentPrecompSlide,        any, _32nd, {},    {0},          false, true, {}}
 
       // [1] Some of the articulations/ornaments in the excursions table above come from
       // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
@@ -1251,13 +1254,12 @@ vector<OrnamentExcursion> excursions = {
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, ArticulationType articulationType, MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, SymId articulationType, MScore::OrnamentStyle ornamentStyle)
       {
       if (!note->staff()->isPitchedStaff()) // not enough info in tab staff
             return false;
 
       vector<int> emptypattern = {};
-
       for (auto& oe : excursions) {
             if (oe.atype == articulationType
                && ( 0 == oe.ostyles.size()
@@ -1272,13 +1274,14 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 //---------------------------------------------------------
 //   renderNoteArticulation
 //---------------------------------------------------------
+
 bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
       {
-      map<Trill::Type,ArticulationType> articulationMap = {
-            {Trill::Type::TRILL_LINE,      ArticulationType::Trill}
-           ,{Trill::Type::UPPRALL_LINE,    ArticulationType::UpPrall}
-           ,{Trill::Type::DOWNPRALL_LINE,  ArticulationType::DownPrall}
-           ,{Trill::Type::PRALLPRALL_LINE, ArticulationType::Trill}
+      map<Trill::Type,SymId> articulationMap = {
+            {Trill::Type::TRILL_LINE,      SymId::ornamentTrill      }
+           ,{Trill::Type::UPPRALL_LINE,    SymId::ornamentUpPrall    }
+           ,{Trill::Type::DOWNPRALL_LINE,  SymId::ornamentDownPrall  }
+           ,{Trill::Type::PRALLPRALL_LINE, SymId::ornamentTrill      }
             };
       auto it = articulationMap.find(trillType);
       if (it == articulationMap.cend() )
@@ -1397,12 +1400,14 @@ Trill* findFirstTrill(Chord *chord) {
 // already merged into the articulation.
 // So this predicate, graceNotesMerged, checks for this condition to avoid calling
 // functions which would re-emit the grace notes by a different algorithm.
-bool graceNotesMerged(Chord* chord) {
-      if ( findFirstTrill(chord) )
+
+bool graceNotesMerged(Chord* chord)
+      {
+      if (findFirstTrill(chord))
             return true;
       for (Articulation* a : chord->articulations())
             for (auto& oe : excursions)
-                  if ( oe.atype == a->articulationType() )
+                  if ( oe.atype == a->symId() )
                         return true;
       return false;
       }
@@ -1429,9 +1434,9 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
                   }
             else {
                   for (Articulation* a : chord->articulations()) {
-                        if ( false == a->playArticulation())
+                        if (!a->playArticulation())
                               continue;
-                        if (! renderNoteArticulation(events, note, false, a->articulationType(), a->ornamentStyle()))
+                        if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle()))
                               instr->updateGateTime(&gateTime, channel, a->subtypeName());
                         }
                   }

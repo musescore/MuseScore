@@ -213,7 +213,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>sforzato</subtype>
+            <subtype>articAccentBelow</subtype>
             </Articulation>
           <Note>
             <pitch>67</pitch>

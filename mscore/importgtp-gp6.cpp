@@ -54,6 +54,7 @@
 #include "libmscore/ottava.h"
 #include "libmscore/marker.h"
 #include "libmscore/notedot.h"
+#include "libmscore/sym.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -971,7 +972,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       }
                                                 if (trill) {
                                                       Articulation* art = new Articulation(note->score());
-                                                      art->setArticulationType(ArticulationType::Trill);
+                                                      art->setSymId(SymId::ornamentTrill);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
                                                       }
@@ -997,13 +998,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       QString value = wahNode.toElement().text();
                                                       if (!value.compare("Open")) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Ouvert);
+                                                            art->setSymId(SymId::brassMuteOpen);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
                                                       else if (!value.compare("Closed")) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Plusstop);
+                                                            art->setSymId(SymId::brassMuteClosed);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
@@ -1013,13 +1014,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       int value = accentNode.toElement().text().toInt();
                                                       if (value == 4) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Marcato);
+                                                            art->setSymId(SymId::articMarcatoAbove);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
                                                       else if (value == 8) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Sforzatoaccent);
+                                                            art->setSymId(SymId::articAccentAbove);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
@@ -1030,25 +1031,25 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       // guitar pro represents the turns the other way to what we do
                                                       if (!value.compare("InvertedTurn")) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Turn);
+                                                            art->setSymId(SymId::ornamentTurn);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
                                                       else if (!value.compare("Turn")) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Reverseturn);
+                                                            art->setSymId(SymId::ornamentTurnInverted);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
                                                       else if (!value.compare("LowerMordent")) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Mordent);
+                                                            art->setSymId(SymId::ornamentMordentInverted);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
                                                       else if (!value.compare("UpperMordent")) {
                                                             Articulation* art = new Articulation(note->score());
-                                                            art->setArticulationType(ArticulationType::Prall);
+                                                            art->setSymId(SymId::ornamentMordent);
                                                             if (!note->score()->addArticulation(note, art))
                                                                   delete art;
                                                             }
@@ -1063,13 +1064,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             if (!argument.compare("PickStroke")) {
                                                                   if (!currentProperty.firstChild().toElement().text().compare("Up")) {
                                                                         Articulation* art = new Articulation(note->score());
-                                                                        art->setArticulationType(ArticulationType::Upbow);
+                                                                        art->setSymId(SymId::stringsUpBow);
                                                                         if (!note->score()->addArticulation(note, art))
                                                                               delete art;
                                                                         }
                                                                   else if (!currentProperty.firstChild().toElement().text().compare("Down")) {
                                                                         Articulation* art = new Articulation(note->score());
-                                                                        art->setArticulationType(ArticulationType::Downbow);
+                                                                        art->setSymId(SymId::stringsDownBow);
                                                                         if (!note->score()->addArticulation(note, art))
                                                                               delete art;
                                                                         }
@@ -1095,9 +1096,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   Articulation* art = new Articulation(note->score());
 
                                                                   if (!currentProperty.firstChild().toElement().text().compare("Slight"))
-                                                                        art->setArticulationType(ArticulationType::WiggleSawtooth);
+                                                                        art->setSymId(SymId::wiggleSawtooth);
                                                                   else
-                                                                        art->setArticulationType(ArticulationType::WiggleSawtoothWide);
+                                                                        art->setSymId(SymId::wiggleSawtoothWide);
                                                                   art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                                                   if (!note->score()->addArticulation(note, art))
                                                                         delete art;
@@ -1242,7 +1243,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QDomNode swellNode = currentNode.parentNode().firstChildElement("Fadding");
                                                 if (!swellNode.isNull()) {
                                                       Articulation* art = new Articulation(note->score());
-                                                      art->setArticulationType(ArticulationType::VolumeSwell);
+                                                      art->setSymId(SymId::guitarVolumeSwell);
                                                       art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
@@ -1251,9 +1252,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (!noteVibrato.isNull()) {
                                                       Articulation* art = new Articulation(note->score());
                                                       if (!noteVibrato.toElement().text().compare("Slight"))
-                                                            art->setArticulationType(ArticulationType::WiggleVibratoLargeFaster);
+                                                            art->setSymId(SymId::wiggleVibratoLargeFaster);
                                                       else
-                                                            art->setArticulationType(ArticulationType::WiggleVibratoLargeSlowest);
+                                                            art->setSymId(SymId::wiggleVibratoLargeSlowest);
                                                       art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
@@ -1411,7 +1412,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               Fraction targetIndex = fermataToFraction((*fermataIter).index, ((*fermataIter).timeDivision));
                               if (fermataIndex == targetIndex) {
                                     Articulation* art = new Articulation(score);
-                                    art->setArticulationType(ArticulationType::Fermata);
+                                    art->setSymId(SymId::fermataAbove);
                                     art->setUp(true);
                                     art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                     cr->add(art);

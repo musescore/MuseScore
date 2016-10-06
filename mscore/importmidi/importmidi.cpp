@@ -37,6 +37,7 @@
 #include "libmscore/bracket.h"
 #include "libmscore/drumset.h"
 #include "libmscore/box.h"
+#include "libmscore/sym.h"
 #include "libmscore/pitchspelling.h"
 #include "importmidi_meter.h"
 #include "importmidi_chord.h"
@@ -552,7 +553,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                         && startChordTick == startChordTickFrac   // first chord in tied chord sequence
                         && midiChords.begin()->isStaccato()) {
                   Articulation* a = new Articulation(chord->score());
-                  a->setArticulationType(ArticulationType::Staccato);
+                  a->setSymId(SymId::articStaccatoAbove);
                   chord->add(a);
                   }
 
