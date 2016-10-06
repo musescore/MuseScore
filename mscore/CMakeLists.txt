@@ -590,7 +590,7 @@ if (APPLE)
      install (FILES
       ../fonts/gootville/GootvilleText.otf
       ../fonts/mscore/MScoreText.ttf
-      ../fonts/MuseJazz.ttf
+      ../fonts/musejazz/MuseJazzText.ttf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSerifItalic.ttf

@@ -3,5 +3,6 @@
         <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/mscore.ttf</file>
         <file alias="fonts/gootville/Gootville.otf">../fonts/gootville/Gootville.otf</file>
         <file alias="fonts/bravura/Bravura.otf">../fonts/bravura/Bravura.otf</file>
+        <file alias="fonts/musejazz/MuseJazz.otf">../fonts/musejazz/MuseJazz.otf</file>
         </qresource>
 </RCC>
