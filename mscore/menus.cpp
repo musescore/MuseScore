@@ -646,45 +646,117 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
 //   newOrnamentsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newOrnamentsPalette(bool basic)
+Palette* MuseScore::newOrnamentsPalette()
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Ornaments"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      if (basic) {
-            static std::vector<SymId> art {
-                  SymId::ornamentTrill
-                  };
-            for (auto i : art) {
-                  Articulation* s = new Articulation(i, gscore);
-                  sp->append(s, s->userName());
-                  }
+      // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
+      static std::vector<SymId> art {
+            SymId::ornamentTurnInverted,
+            SymId::ornamentTurn,
+            SymId::ornamentTrill,
+            SymId::ornamentMordent,
+            SymId::ornamentMordentInverted,
+            SymId::ornamentTremblement,
+            SymId::ornamentPrallMordent,
+            SymId::ornamentUpPrall,
+            SymId::ornamentDownPrall,
+            SymId::ornamentUpMordent,
+            SymId::ornamentDownMordent,
+            SymId::ornamentPrallDown,
+            SymId::ornamentPrallUp,
+            SymId::ornamentLinePrall,
+            SymId::ornamentPrecompSlide,
+            };
+      for (auto i : art) {
+            Articulation* s = new Articulation(i, gscore);
+            sp->append(s, s->userName());
             }
-      else {
-            // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-            static std::vector<SymId> art {
-                  SymId::ornamentTurnInverted,
-                  SymId::ornamentTurn,
-                  SymId::ornamentTrill,
-                  SymId::ornamentMordent,
-                  SymId::ornamentMordentInverted,
-                  SymId::ornamentTremblement,
-                  SymId::ornamentPrallMordent,
-                  SymId::ornamentUpPrall,
-                  SymId::ornamentDownPrall,
-                  SymId::ornamentUpMordent,
-                  SymId::ornamentDownMordent,
-                  SymId::ornamentPrallDown,
-                  SymId::ornamentPrallUp,
-                  SymId::ornamentLinePrall,
-                  SymId::ornamentPrecompSlide,
-                  };
-            for (auto i : art) {
-                  Articulation* s = new Articulation(i, gscore);
-                  sp->append(s, s->userName());
-                  }
+      return sp;
+      }
+
+//---------------------------------------------------------
+//   newAkkordeonPalette
+//---------------------------------------------------------
+
+Palette* MuseScore::newAkkordeonPalette()
+      {
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Akkordeon"));
+      sp->setGrid(42, 25);
+      sp->setDrawGrid(true);
+
+      // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
+      static std::vector<SymId> art {
+            SymId::accdnCombDot,
+            SymId::accdnCombLH2RanksEmpty,
+            SymId::accdnCombLH3RanksEmptySquare,
+            SymId::accdnCombRH3RanksEmpty,
+            SymId::accdnCombRH4RanksEmpty,
+            SymId::accdnDiatonicClef,
+            SymId::accdnLH2Ranks16Round,
+            SymId::accdnLH2Ranks8Plus16Round,
+            SymId::accdnLH2Ranks8Round,
+            SymId::accdnLH2RanksFullMasterRound,
+
+            SymId::accdnLH2RanksMasterPlus16Round,
+            SymId::accdnLH2RanksMasterRound,
+            SymId::accdnLH3Ranks2Plus8Square,
+            SymId::accdnLH3Ranks2Square,
+            SymId::accdnLH3Ranks8Square,
+            SymId::accdnLH3RanksDouble8Square,
+            SymId::accdnLH3RanksTuttiSquare,
+            SymId::accdnPull,
+            SymId::accdnPush,
+            SymId::accdnRH3RanksAccordion,
+
+            SymId::accdnRH3RanksAuthenticMusette,
+            SymId::accdnRH3RanksBandoneon,
+            SymId::accdnRH3RanksBassoon,
+            SymId::accdnRH3RanksClarinet,
+            SymId::accdnRH3RanksDoubleTremoloLower8ve,
+            SymId::accdnRH3RanksDoubleTremoloUpper8ve,
+            SymId::accdnRH3RanksFullFactory,
+            SymId::accdnRH3RanksHarmonium,
+            SymId::accdnRH3RanksImitationMusette,
+            SymId::accdnRH3RanksLowerTremolo8,
+
+            SymId::accdnRH3RanksMaster,
+            SymId::accdnRH3RanksOboe,
+            SymId::accdnRH3RanksOrgan,
+            SymId::accdnRH3RanksPiccolo,
+            SymId::accdnRH3RanksTremoloLower8ve,
+            SymId::accdnRH3RanksTremoloUpper8ve,
+            SymId::accdnRH3RanksTwoChoirs,
+            SymId::accdnRH3RanksUpperTremolo8,
+            SymId::accdnRH3RanksViolin,
+            SymId::accdnRH4RanksAlto,
+
+            SymId::accdnRH4RanksBassAlto,
+            SymId::accdnRH4RanksMaster,
+            SymId::accdnRH4RanksSoftBass,
+            SymId::accdnRH4RanksSoftTenor,
+            SymId::accdnRH4RanksSoprano,
+            SymId::accdnRH4RanksTenor,
+            SymId::accdnRicochet2,
+            SymId::accdnRicochet3,
+            SymId::accdnRicochet4,
+            SymId::accdnRicochet5,
+
+            SymId::accdnRicochet6,
+            SymId::accdnRicochetStem2,
+            SymId::accdnRicochetStem3,
+            SymId::accdnRicochetStem4,
+            SymId::accdnRicochetStem5,
+            SymId::accdnRicochetStem6
+            };
+      for (auto i : art) {
+            Symbol* s = new Symbol(gscore);
+            s->setSym(i);
+            sp->append(s, Sym::id2userName(i));
             }
       return sp;
       }
@@ -1351,7 +1423,8 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newBracketsPalette());
       paletteBox->addPalette(newAccidentalsPalette(false, false));
       paletteBox->addPalette(newArticulationsPalette(false));
-      paletteBox->addPalette(newOrnamentsPalette(false));
+      paletteBox->addPalette(newOrnamentsPalette());
+      paletteBox->addPalette(newAkkordeonPalette());
       paletteBox->addPalette(newBreathPalette());
       paletteBox->addPalette(newGraceNotePalette(false));
       paletteBox->addPalette(newNoteHeadsPalette());
