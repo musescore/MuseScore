@@ -4,6 +4,7 @@
       <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
       <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
       <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
+      <file alias="fonts/musejazz/metadata.json">../fonts/musejazz/metadata.json</file>
       <file alias="fonts/smufl/glyphnames.json">../fonts/smufl/glyphnames.json</file>
       <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
       <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>

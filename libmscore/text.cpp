@@ -2319,6 +2319,7 @@ bool Text::readProperties(XmlReader& e)
             _text = e.readXml();
             // 2.0 and 2.0.1 had unicode symbols
             _text.replace("<sym>unicode", "<sym>met");
+            _text.replace("<font face=\"MuseJazz\"/>", "<font face=\"MuseJazz Text\"/>");
             }
       else if (tag == "html-data")
             setXmlText(convertFromHtml(e.readXml().trimmed()));

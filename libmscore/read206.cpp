@@ -1151,6 +1151,8 @@ static void readStyle(MStyle* style, XmlReader& e)
                   s.read(e);
                   // convert old 2.0 text styles
                   s.setName(convertOldTextStyleNames(s.name()));
+                  if (s.family() == "MuseJazz")
+                        s.setFamily("MuseJazz Text");
                   style->setTextStyle(s);
                   }
             else if (tag == "Spatium")
@@ -1265,6 +1267,8 @@ static bool readScore(Score* score, XmlReader& e)
             else if (tag == "Style") {
                   qreal sp = score->style()->value(StyleIdx::spatium).toDouble();
                   readStyle(score->style(), e);
+                  if (score->style()->value(StyleIdx::MusicalTextFont).toString() == "MuseJazz")
+                        score->style()->set(StyleIdx::MusicalTextFont, "MuseJazz Text");
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (score->layoutMode() == LayoutMode::FLOAT) {
                         // style should not change spatium in

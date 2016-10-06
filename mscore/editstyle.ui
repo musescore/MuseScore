@@ -175,6 +175,11 @@
                  <string notr="true">Gonville</string>
                 </property>
                </item>
+               <item>
+                <property name="text">
+                 <string notr="true">MuseJazz</string>
+                </property>
+               </item>
               </widget>
              </item>
              <item row="0" column="0">
