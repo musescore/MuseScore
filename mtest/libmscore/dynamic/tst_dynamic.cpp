@@ -96,6 +96,11 @@ void TestDynamic::test1()
     QCOMPARE(d->velocity(), 57);
     delete d;
 
+    dynamic->setDynRange(Dynamic::Range::VOICE);
+    d = static_cast<Dynamic*>(writeReadElement(dynamic));
+    QCOMPARE(d->dynRange(), Dynamic::Range::VOICE);
+    delete d;
+
     dynamic->setDynRange(Dynamic::Range::STAFF);
     d = static_cast<Dynamic*>(writeReadElement(dynamic));
     QCOMPARE(d->dynRange(), Dynamic::Range::STAFF);
@@ -109,6 +114,11 @@ void TestDynamic::test1()
     dynamic->setDynRange(Dynamic::Range::SYSTEM);
     d = static_cast<Dynamic*>(writeReadElement(dynamic));
     QCOMPARE(d->dynRange(), Dynamic::Range::SYSTEM);
+    delete d;
+
+    dynamic->setProperty(Pid::DYNAMIC_RANGE, int(Dynamic::Range::VOICE));
+    d = static_cast<Dynamic*>(writeReadElement(dynamic));
+    QCOMPARE(d->dynRange(), Dynamic::Range::VOICE);
     delete d;
 
     dynamic->setProperty(Pid::DYNAMIC_RANGE, int(Dynamic::Range::STAFF));

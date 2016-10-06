@@ -24,7 +24,7 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  enum (Dynamic.STAFF, .PART, .SYSTEM)
+//   @P range  enum (Dynamic.STAFF, .PART, .SYSTEM, .VOICE)
 //-----------------------------------------------------------------------------
 
 class Dynamic final : public TextBase
@@ -64,7 +64,7 @@ public:
     };
 
     enum class Range : char {
-        STAFF, PART, SYSTEM
+        STAFF, PART, SYSTEM, VOICE
     };
 
     enum class Speed : char {
@@ -83,7 +83,7 @@ private:
 
     mutable QPointF dragOffset;
     int _velocity;       // associated midi velocity 0-127
-    Range _dynRange;     // STAFF, PART, SYSTEM
+    Range _dynRange;     // STAFF, PART, SYSTEM, VOICE
 
     int _changeInVelocity         { 128 };
     Speed _velChangeSpeed         { Speed::NORMAL };

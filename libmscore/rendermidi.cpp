@@ -847,6 +847,7 @@ void Score::updateHairpin(Hairpin* h)
     }
 
     switch (h->dynRange()) {
+    case Dynamic::Range::VOICE:         // FALLTHROUGH, TODO
     case Dynamic::Range::STAFF:
         st->velocities().addRamp(tick, tick2, veloChange, method, direction);
         break;
@@ -916,6 +917,7 @@ void Score::updateVelo()
 
                 int dStaffIdx = d->staffIdx();
                 switch (d->dynRange()) {
+                case Dynamic::Range::VOICE:               // FALLTHROUGH, TODO
                 case Dynamic::Range::STAFF:
                     if (dStaffIdx == staffIdx) {
                         velo.addFixed(tick, v);

@@ -73,7 +73,7 @@ public:
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P dynRange     enum (Dynamic.STAFF, Dynamic.PART, Dynamic.SYSTEM)
+//   @P dynRange     enum (Dynamic.STAFF, Dynamic.PART, Dynamic.SYSTEM, Dynamic.VOICE)
 //   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DECRESCENDO)
 //   @P veloChange   int
 //---------------------------------------------------------
