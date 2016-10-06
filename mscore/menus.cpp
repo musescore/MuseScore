@@ -557,7 +557,7 @@ Palette* MuseScore::newNoteHeadsPalette()
 Palette* MuseScore::newArticulationsPalette(bool basic)
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations && Ornaments"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
@@ -583,12 +583,28 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
                   SymId::fermataShortAbove,
                   SymId::fermataLongAbove,
                   SymId::fermataVeryLongAbove,
+
                   SymId::articAccentAbove,
                   SymId::articStaccatoAbove,
                   SymId::articStaccatissimoAbove,
                   SymId::articTenutoAbove,
                   SymId::articTenutoStaccatoAbove,
                   SymId::articMarcatoAbove,
+                  SymId::articAccentStaccatoAbove,
+                  SymId::articLaissezVibrerAbove,
+                  SymId::articMarcatoStaccatoAbove,
+                  SymId::articMarcatoTenutoAbove,
+                  SymId::articStaccatissimoStrokeAbove,
+                  SymId::articStaccatissimoWedgeAbove,
+                  SymId::articStressAbove,
+                  SymId::articTenutoAccentBelow,
+                  SymId::articUnstressAbove,
+
+                  SymId::articSoftAccentAbove,                    // supplemental articulations
+                  SymId::articSoftAccentStaccatoAbove,
+                  SymId::articSoftAccentTenutoAbove,
+                  SymId::articSoftAccentTenutoStaccatoAbove,
+
                   SymId::guitarFadeIn,
                   SymId::guitarFadeOut,
                   SymId::guitarVolumeSwell,
@@ -600,21 +616,6 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
                   SymId::brassMuteClosed,
                   SymId::stringsUpBow,
                   SymId::stringsDownBow,
-                  SymId::ornamentTurnInverted,
-                  SymId::ornamentTurn,
-                  SymId::ornamentTrill,
-                  SymId::ornamentMordent,
-                  SymId::ornamentMordentInverted,
-                  SymId::ornamentTremblement,
-                  SymId::ornamentPrallMordent,
-                  SymId::ornamentUpPrall,
-                  SymId::ornamentDownPrall,
-                  SymId::ornamentUpMordent,
-                  SymId::ornamentDownMordent,
-                  SymId::ornamentPrallDown,
-                  SymId::ornamentPrallUp,
-                  SymId::ornamentLinePrall,
-                  SymId::ornamentPrecompSlide,
                   SymId::pluckedSnapPizzicatoAbove,
                   // SymId::stringsThumbPosition,
                   // SymId::luteFingeringRHThumb,
@@ -637,6 +638,53 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
             tb->points().append(PitchValue(30, -100, false));
             tb->points().append(PitchValue(60,    0, false));
             sp->append(tb, qApp->translate("articulation", "Tremolo bar"));
+            }
+      return sp;
+      }
+
+//---------------------------------------------------------
+//   newOrnamentsPalette
+//---------------------------------------------------------
+
+Palette* MuseScore::newOrnamentsPalette(bool basic)
+      {
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Ornaments"));
+      sp->setGrid(42, 25);
+      sp->setDrawGrid(true);
+
+      if (basic) {
+            static std::vector<SymId> art {
+                  SymId::ornamentTrill
+                  };
+            for (auto i : art) {
+                  Articulation* s = new Articulation(i, gscore);
+                  sp->append(s, s->userName());
+                  }
+            }
+      else {
+            // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
+            static std::vector<SymId> art {
+                  SymId::ornamentTurnInverted,
+                  SymId::ornamentTurn,
+                  SymId::ornamentTrill,
+                  SymId::ornamentMordent,
+                  SymId::ornamentMordentInverted,
+                  SymId::ornamentTremblement,
+                  SymId::ornamentPrallMordent,
+                  SymId::ornamentUpPrall,
+                  SymId::ornamentDownPrall,
+                  SymId::ornamentUpMordent,
+                  SymId::ornamentDownMordent,
+                  SymId::ornamentPrallDown,
+                  SymId::ornamentPrallUp,
+                  SymId::ornamentLinePrall,
+                  SymId::ornamentPrecompSlide,
+                  };
+            for (auto i : art) {
+                  Articulation* s = new Articulation(i, gscore);
+                  sp->append(s, s->userName());
+                  }
             }
       return sp;
       }
@@ -1303,6 +1351,7 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newBracketsPalette());
       paletteBox->addPalette(newAccidentalsPalette(false, false));
       paletteBox->addPalette(newArticulationsPalette(false));
+      paletteBox->addPalette(newOrnamentsPalette(false));
       paletteBox->addPalette(newBreathPalette());
       paletteBox->addPalette(newGraceNotePalette(false));
       paletteBox->addPalette(newNoteHeadsPalette());
