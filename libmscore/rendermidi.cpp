@@ -1261,8 +1261,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 
       vector<int> emptypattern = {};
       for (auto& oe : excursions) {
-            if (oe.atype == articulationType
-               && ( 0 == oe.ostyles.size()
+            if (oe.atype == articulationType && ( 0 == oe.ostyles.size()
                   || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
                      return renderNoteArticulation(events, note, chromatic, oe.duration,
                                                    oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix);
