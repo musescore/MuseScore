@@ -440,7 +440,6 @@ void Segment::add(Element* el)
 
       switch (el->type()) {
             case Element::Type::REPEAT_MEASURE:
-                  measure()->setRepeatMeasure(true);
                   _elist[track] = el;
                   _empty = false;
                   break;
@@ -583,7 +582,6 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::REPEAT_MEASURE:
-                  measure()->setRepeatMeasure(false);
                   _elist[track] = 0;
                   break;
 
