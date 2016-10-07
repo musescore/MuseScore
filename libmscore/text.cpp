@@ -2292,7 +2292,7 @@ bool Text::readProperties(XmlReader& e)
                         case 31: st = TextStyleType::STRING_NUMBER;  break;
 
                         case 32: st = TextStyleType::OTTAVA;  break;
-                        case 33: st = TextStyleType::BENCH;   break;
+                        case 33: st = TextStyleType::BEND;   break;
                         case 34: st = TextStyleType::HEADER;  break;
                         case 35: st = TextStyleType::FOOTER;  break;
                         case 0:
