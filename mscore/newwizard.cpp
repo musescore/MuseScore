@@ -269,7 +269,7 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       if(fil.isEmpty()){
           fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
           }
-      
+
       QDir myTemplatesDir(preferences.myTemplatesPath);
       fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
 
@@ -349,7 +349,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       QGroupBox* b1 = new QGroupBox;
       b1->setTitle(tr("Key Signature"));
       b1->setAccessibleName(title());
-      sp = MuseScore::newKeySigPalette();
+      sp = MuseScore::newKeySigPalette(PaletteType::BASIC); // TODO: switch palette depending on workspace
       sp->setSelectable(true);
       sp->setDisableDoubleClick(true);
       sp->setSelected(14);

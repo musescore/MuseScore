@@ -145,7 +145,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       treeWidget->clear();
 
-      addPalette(MuseScore::newClefsPalette(false, true));
+      addPalette(MuseScore::newClefsPalette(PaletteType::MASTER));
       keyEditor = new KeyEditor;
 
       keyItem = new QTreeWidgetItem();
@@ -160,25 +160,26 @@ MasterPalette::MasterPalette(QWidget* parent)
       treeWidget->addTopLevelItem(timeItem);
 
       addPalette(MuseScore::newBracketsPalette());
-      addPalette(MuseScore::newAccidentalsPalette(false, true));
-      addPalette(MuseScore::newArticulationsPalette(false));
+      addPalette(MuseScore::newAccidentalsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newArticulationsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newOrnamentsPalette());
       addPalette(MuseScore::newBreathPalette());
-      addPalette(MuseScore::newGraceNotePalette(false));
+      addPalette(MuseScore::newGraceNotePalette(PaletteType::MASTER));
       addPalette(MuseScore::newNoteHeadsPalette());
-      addPalette(MuseScore::newLinesPalette(false));
-      addPalette(MuseScore::newBarLinePalette(false));
+      addPalette(MuseScore::newLinesPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newBarLinePalette(PaletteType::MASTER));
       addPalette(MuseScore::newArpeggioPalette());
       addPalette(MuseScore::newTremoloPalette());
       addPalette(MuseScore::newTextPalette());
-      addPalette(MuseScore::newTempoPalette(false, true));
-      addPalette(MuseScore::newDynamicsPalette(false, true));
+      addPalette(MuseScore::newTempoPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newDynamicsPalette(PaletteType::MASTER));
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newFretboardDiagramPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
       addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newFramePalette());
-      addPalette(MuseScore::newBeamPalette(false));
+      addPalette(MuseScore::newBeamPalette(PaletteType::MASTER));
 
       symbolItem = new QTreeWidgetItem();
       symbolItem->setData(0, Qt::UserRole, -1);

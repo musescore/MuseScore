@@ -104,7 +104,7 @@ void populateIconPalette(Palette* p, const IconAction* a)
 //   newBeamPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBeamPalette(bool basic)
+Palette* MuseScore::newBeamPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
@@ -131,7 +131,18 @@ Palette* MuseScore::newBeamPalette(bool basic)
             { IconType::NONE,     ""}
             };
 
-      populateIconPalette(sp, basic ? bpa1 : bpa2);
+      const IconAction* a;
+      switch (t) {
+            case PaletteType::MASTER:
+            case PaletteType::ADVANCED:
+                  a = bpa2;
+                  break;
+            case PaletteType::BASIC:
+                  a = bpa1;
+                  sp->setMoreElements(true);
+                  break;
+            }
+      populateIconPalette(sp, a);
       return sp;
       }
 
@@ -175,54 +186,50 @@ Palette* MuseScore::newFramePalette()
 //   newDynamicsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newDynamicsPalette(bool basic, bool master)
+Palette* MuseScore::newDynamicsPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Dynamics"));
       sp->setMag(.8);
-      if (master)
-            sp->setGrid(60, 28);
-      else
-            sp->setGrid(42, 28);
       sp->setDrawGrid(true);
 
-      if (master) {
-            const char* array[] = {
-                  "pppppp", "ppppp", "pppp",
-                  "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
-                  "ffff", "fffff", "ffffff",
-                  "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
-                  "rfz", "rf", "fz", "m", "r", "s", "z", "n"
-                  };
-            for (const char* c : array) {
-                  Dynamic* dynamic = new Dynamic(gscore);
-                  dynamic->setDynamicType(c);
-                  sp->append(dynamic, dynamic->dynamicTypeName());
-                  }
+      static const std::vector<const char*> array1 = {
+            "pppppp", "ppppp", "pppp",
+            "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
+            "ffff", "fffff", "ffffff",
+            "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+            "rfz", "rf", "fz", "m", "r", "s", "z", "n"
+            };
+      static const std::vector<const char*> array2 = {
+            "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"
+            };
+      static const std::vector<const char*> array3 = {
+            "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
+            "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+            "rfz", "rf", "fz", "m", "r", "s", "z", "n"
+            };
+      const std::vector<const char*>* array;
+      switch (t) {
+            case PaletteType::MASTER:
+                  array = &array1;
+                  sp->setGrid(60, 28);
+                  break;
+            case PaletteType::ADVANCED:
+                  array = &array3;
+                  sp->setGrid(42, 28);
+                  sp->setMoreElements(true);
+                  break;
+            case PaletteType::BASIC:
+                  array = &array2;
+                  sp->setGrid(42, 28);
+                  sp->setMoreElements(true);
+                  break;
             }
-      else if (basic) {
-            const char* array[] = {
-                  "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"
-                  };
-            for (const char* c :  array) {
-                  Dynamic* dynamic = new Dynamic(gscore);
-                  dynamic->setDynamicType(c);
-                  sp->append(dynamic, dynamic->dynamicTypeName());
-                  }
+      for (const char* c :  *array) {
+            Dynamic* dynamic = new Dynamic(gscore);
+            dynamic->setDynamicType(c);
+            sp->append(dynamic, dynamic->dynamicTypeName());
             }
-      else {
-            const char* array[] = {
-                  "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
-                  "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
-                  "rfz", "rf", "fz", "m", "r", "s", "z", "n"
-                  };
-            for (const char* c :  array) {
-                  Dynamic* dynamic = new Dynamic(gscore);
-                  dynamic->setDynamicType(c);
-                  sp->append(dynamic, dynamic->dynamicTypeName());
-                  }
-            }
-
       return sp;
       }
 
@@ -230,7 +237,7 @@ Palette* MuseScore::newDynamicsPalette(bool basic, bool master)
 //   newKeySigPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newKeySigPalette(bool basic)
+Palette* MuseScore::newKeySigPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Key Signatures"));
@@ -238,29 +245,37 @@ Palette* MuseScore::newKeySigPalette(bool basic)
       sp->setGrid(56, 64);
       sp->setYOffset(0.5);
 
-      for (int i = 0; i < 7; ++i) {
-            KeySig* k = new KeySig(gscore);
-            k->setKey(Key(i + 1));
-            sp->append(k, qApp->translate("MuseScore", keyNames[i*2]));
-            }
-      for (int i = -7; i < 0; ++i) {
-            KeySig* k = new KeySig(gscore);
-            k->setKey(Key(i));
-            sp->append(k, qApp->translate("MuseScore", keyNames[(7 + i) * 2 + 1]));
-            }
-      KeySig* k = new KeySig(gscore);
-      k->setKey(Key::C);
-      sp->append(k, qApp->translate("MuseScore", keyNames[14]));
+      switch (t) {
+            case PaletteType::BASIC: {
+                  for (int i = 0; i < 7; ++i) {
+                        KeySig* k = new KeySig(gscore);
+                        k->setKey(Key(i + 1));
+                        sp->append(k, qApp->translate("MuseScore", keyNames[i*2]));
+                        }
+                  for (int i = -7; i < 0; ++i) {
+                        KeySig* k = new KeySig(gscore);
+                        k->setKey(Key(i));
+                        sp->append(k, qApp->translate("MuseScore", keyNames[(7 + i) * 2 + 1]));
+                        }
+                  KeySig* k = new KeySig(gscore);
+                  k->setKey(Key::C);
+                  sp->append(k, qApp->translate("MuseScore", keyNames[14]));
+                  sp->setMoreElements(true);
+                  }
+                  // fall through
 
-      if (!basic) {
-            // atonal key signature
-            KeySigEvent nke;
-            nke.setKey(Key::C);
-            nke.setCustom(true);
-            nke.setMode(KeyMode::NONE);
-            KeySig* nk = new KeySig(gscore);
-            nk->setKeySigEvent(nke);
-            sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
+            case PaletteType::MASTER:
+            case PaletteType::ADVANCED: {
+                  // atonal key signature
+                  KeySigEvent nke;
+                  nke.setKey(Key::C);
+                  nke.setCustom(true);
+                  nke.setMode(KeyMode::NONE);
+                  KeySig* nk = new KeySig(gscore);
+                  nk->setKeySigEvent(nke);
+                  sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
+                  }
+                  break;
             }
       return sp;
       }
@@ -269,40 +284,63 @@ Palette* MuseScore::newKeySigPalette(bool basic)
 //   newAccidentalsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newAccidentalsPalette(bool basic, bool master)
+Palette* MuseScore::newAccidentalsPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Accidentals"));
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      if (basic) {
-            static AccidentalType types[] = {
-                  AccidentalType::NONE,
-                  AccidentalType::SHARP,
-                  AccidentalType::FLAT,
-                  AccidentalType::NATURAL
-                  };
-            for (auto i : types) {
+      switch (t) {
+            case PaletteType::MASTER: {
+                  int end = int(AccidentalType::END);
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(AccidentalType(i));
+                  s->setAccidentalType(AccidentalType::NONE);
                   sp->append(s, s->subtypeUserName());
+                  for (int i = int(AccidentalType::FLAT); i < end; ++i) {
+                        Accidental* s = new Accidental(gscore);
+                        s->setAccidentalType(AccidentalType(i));
+                        if (s->symbol() != SymId::noSym)
+                              sp->append(s, s->subtypeUserName());
+                        else
+                              delete s;
+                        }
                   }
-            }
-      else {
-            int end = master ? int(AccidentalType::END) : int(AccidentalType::SHARP_SHARP);
-            Accidental* s = new Accidental(gscore);
-            s->setAccidentalType(AccidentalType::NONE);
-            sp->append(s, s->subtypeUserName());
-            for (int i = int(AccidentalType::FLAT); i < end; ++i) {
+                  break;
+            case PaletteType::ADVANCED: {
+                  int end = int(AccidentalType::SHARP_SHARP);
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(AccidentalType(i));
-                  if (s->symbol() != SymId::noSym)
-                        sp->append(s, s->subtypeUserName());
-                  else
-                        delete s;
+                  s->setAccidentalType(AccidentalType::NONE);
+                  sp->append(s, s->subtypeUserName());
+                  for (int i = int(AccidentalType::FLAT); i < end; ++i) {
+                        Accidental* s = new Accidental(gscore);
+                        s->setAccidentalType(AccidentalType(i));
+                        if (s->symbol() != SymId::noSym)
+                              sp->append(s, s->subtypeUserName());
+                        else
+                              delete s;
+                        }
                   }
+                  sp->setMoreElements(true);
+                  break;
+
+            case PaletteType::BASIC: {
+                  static AccidentalType types[] = {
+                        AccidentalType::NONE,
+                        AccidentalType::SHARP,
+                        AccidentalType::FLAT,
+                        AccidentalType::NATURAL
+                        };
+                  for (auto i : types) {
+                        Accidental* s = new Accidental(gscore);
+                        s->setAccidentalType(AccidentalType(i));
+                        sp->append(s, s->subtypeUserName());
+                        }
+                  }
+                  sp->setMoreElements(true);
+                  break;
             }
+
       Icon* ik = new Icon(gscore);
       ik->setIconType(IconType::BRACKETS);
       const Shortcut* s = Shortcut::getShortcut("add-brackets");
@@ -317,7 +355,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic, bool master)
 //   newBarLinePalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBarLinePalette(bool basic)
+Palette* MuseScore::newBarLinePalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Barlines"));
@@ -334,8 +372,8 @@ Palette* MuseScore::newBarLinePalette(bool basic)
             sp->append(b, BarLine::userTypeName(bti->type));
             }
 
-      if (!basic) {
-      // bar line spans
+      if (t != PaletteType::BASIC) {
+            // bar line spans
             struct {
                   int         from, to;
                   const char* userName;
@@ -353,6 +391,8 @@ Palette* MuseScore::newBarLinePalette(bool basic)
                   sp->append(b, qApp->translate("Palette", span.userName));
                   }
             }
+      else
+            sp->setMoreElements(true);
       return sp;
       }
 
@@ -554,90 +594,97 @@ Palette* MuseScore::newNoteHeadsPalette()
 //   newArticulationsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newArticulationsPalette(bool basic)
+Palette* MuseScore::newArticulationsPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      if (basic) {
-            static std::vector<SymId> art {
-                  SymId::fermataAbove,
-                  SymId::articAccentAbove,
-                  SymId::articStaccatoAbove,
-                  SymId::articTenutoAbove,
-                  SymId::articTenutoStaccatoAbove,
-                  SymId::articMarcatoAbove,
-                  SymId::ornamentTrill
-                  };
-            for (auto i : art) {
-                  Articulation* s = new Articulation(i, gscore);
-                  sp->append(s, s->userName());
+      switch (t) {
+            case PaletteType::BASIC: {
+                  static const std::vector<SymId> art {
+                        SymId::fermataAbove,
+                        SymId::articAccentAbove,
+                        SymId::articStaccatoAbove,
+                        SymId::articTenutoAbove,
+                        SymId::articTenutoStaccatoAbove,
+                        SymId::articMarcatoAbove,
+                        SymId::ornamentTrill
+                        };
+                  for (auto i : art) {
+                        Articulation* s = new Articulation(i, gscore);
+                        sp->append(s, s->userName());
+                        }
                   }
-            }
-      else {
-            // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-            static std::vector<SymId> art {
-                  SymId::fermataAbove,
-                  SymId::fermataShortAbove,
-                  SymId::fermataLongAbove,
-                  SymId::fermataVeryLongAbove,
+                  sp->setMoreElements(true);
+                  break;
 
-                  SymId::articAccentAbove,
-                  SymId::articStaccatoAbove,
-                  SymId::articStaccatissimoAbove,
-                  SymId::articTenutoAbove,
-                  SymId::articTenutoStaccatoAbove,
-                  SymId::articMarcatoAbove,
-                  SymId::articAccentStaccatoAbove,
-                  SymId::articLaissezVibrerAbove,
-                  SymId::articMarcatoStaccatoAbove,
-                  SymId::articMarcatoTenutoAbove,
-                  SymId::articStaccatissimoStrokeAbove,
-                  SymId::articStaccatissimoWedgeAbove,
-                  SymId::articStressAbove,
-                  SymId::articTenutoAccentBelow,
-                  SymId::articUnstressAbove,
+            case PaletteType::MASTER:
+            case PaletteType::ADVANCED: {
+                  // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
+                  static const std::vector<SymId> art {
+                        SymId::fermataAbove,
+                        SymId::fermataShortAbove,
+                        SymId::fermataLongAbove,
+                        SymId::fermataVeryLongAbove,
 
-                  SymId::articSoftAccentAbove,                    // supplemental articulations
-                  SymId::articSoftAccentStaccatoAbove,
-                  SymId::articSoftAccentTenutoAbove,
-                  SymId::articSoftAccentTenutoStaccatoAbove,
+                        SymId::articAccentAbove,
+                        SymId::articStaccatoAbove,
+                        SymId::articStaccatissimoAbove,
+                        SymId::articTenutoAbove,
+                        SymId::articTenutoStaccatoAbove,
+                        SymId::articMarcatoAbove,
+                        SymId::articAccentStaccatoAbove,
+                        SymId::articLaissezVibrerAbove,
+                        SymId::articMarcatoStaccatoAbove,
+                        SymId::articMarcatoTenutoAbove,
+                        SymId::articStaccatissimoStrokeAbove,
+                        SymId::articStaccatissimoWedgeAbove,
+                        SymId::articStressAbove,
+                        SymId::articTenutoAccentBelow,
+                        SymId::articUnstressAbove,
 
-                  SymId::guitarFadeIn,
-                  SymId::guitarFadeOut,
-                  SymId::guitarVolumeSwell,
-                  SymId::wiggleSawtooth,
-                  SymId::wiggleSawtoothWide,
-                  SymId::wiggleVibratoLargeFaster,
-                  SymId::wiggleVibratoLargeSlowest,
-                  SymId::brassMuteOpen,
-                  SymId::brassMuteClosed,
-                  SymId::stringsUpBow,
-                  SymId::stringsDownBow,
-                  SymId::pluckedSnapPizzicatoAbove,
-                  // SymId::stringsThumbPosition,
-                  // SymId::luteFingeringRHThumb,
-                  // SymId::luteFingeringRHFirst,
-                  // SymId::luteFingeringRHSecond,
-                  // SymId::luteFingeringRHThird,
-                  };
-            for (auto i : art) {
-                  Articulation* s = new Articulation(i, gscore);
-                  sp->append(s, s->userName());
+                        SymId::articSoftAccentAbove,                    // supplemental articulations
+                        SymId::articSoftAccentStaccatoAbove,
+                        SymId::articSoftAccentTenutoAbove,
+                        SymId::articSoftAccentTenutoStaccatoAbove,
+
+                        SymId::guitarFadeIn,
+                        SymId::guitarFadeOut,
+                        SymId::guitarVolumeSwell,
+                        SymId::wiggleSawtooth,
+                        SymId::wiggleSawtoothWide,
+                        SymId::wiggleVibratoLargeFaster,
+                        SymId::wiggleVibratoLargeSlowest,
+                        SymId::brassMuteOpen,
+                        SymId::brassMuteClosed,
+                        SymId::stringsUpBow,
+                        SymId::stringsDownBow,
+                        SymId::pluckedSnapPizzicatoAbove,
+                        // SymId::stringsThumbPosition,
+                        // SymId::luteFingeringRHThumb,
+                        // SymId::luteFingeringRHFirst,
+                        // SymId::luteFingeringRHSecond,
+                        // SymId::luteFingeringRHThird,
+                        };
+                  for (auto i : art) {
+                        Articulation* s = new Articulation(i, gscore);
+                        sp->append(s, s->userName());
+                        }
+                  Bend* bend = new Bend(gscore);
+                  bend->points().append(PitchValue(0,    0, false));
+                  bend->points().append(PitchValue(15, 100, false));
+                  bend->points().append(PitchValue(60, 100, false));
+                  sp->append(bend, qApp->translate("articulation", "Bend"));
+
+                  TremoloBar* tb = new TremoloBar(gscore);
+                  tb->points().append(PitchValue(0,     0, false));     // "Dip"
+                  tb->points().append(PitchValue(30, -100, false));
+                  tb->points().append(PitchValue(60,    0, false));
+                  sp->append(tb, qApp->translate("articulation", "Tremolo bar"));
                   }
-            Bend* bend = new Bend(gscore);
-            bend->points().append(PitchValue(0,    0, false));
-            bend->points().append(PitchValue(15, 100, false));
-            bend->points().append(PitchValue(60, 100, false));
-            sp->append(bend, qApp->translate("articulation", "Bend"));
-
-            TremoloBar* tb = new TremoloBar(gscore);
-            tb->points().append(PitchValue(0,     0, false));     // "Dip"
-            tb->points().append(PitchValue(30, -100, false));
-            tb->points().append(PitchValue(60,    0, false));
-            sp->append(tb, qApp->translate("articulation", "Tremolo bar"));
+                  break;
             }
       return sp;
       }
@@ -654,7 +701,7 @@ Palette* MuseScore::newOrnamentsPalette()
       sp->setDrawGrid(true);
 
       // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-      static std::vector<SymId> art {
+      static const std::vector<SymId> art {
             SymId::ornamentTurnInverted,
             SymId::ornamentTurn,
             SymId::ornamentTrill,
@@ -878,7 +925,7 @@ Palette* MuseScore::newArpeggioPalette()
 //   newClefsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newClefsPalette(bool basic, bool master)
+Palette* MuseScore::newClefsPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Clefs"));
@@ -903,7 +950,26 @@ Palette* MuseScore::newClefsPalette(bool basic, bool master)
             ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,  ClefType::PERC,
             ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
             };
-      for (ClefType j : master ?  clefsMaster : (basic ? clefsBasic : clefsAdvanced)) {
+      std::vector<ClefType>* items;
+      bool more;
+      switch (t) {
+            case PaletteType::MASTER:
+                  more = false;
+                  items = &clefsMaster;
+                  break;
+            case PaletteType::ADVANCED:
+                  more = true;
+                  items = &clefsAdvanced;
+                  break;
+            case PaletteType::BASIC:
+                  more = true;
+                  items = &clefsBasic;
+                  break;
+            }
+      sp->setMoreElements(more);
+      connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
+
+      for (ClefType j : *items) {
             Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));
             sp->append(k, qApp->translate("clefTable", ClefInfo::name(j)));
@@ -915,12 +981,12 @@ Palette* MuseScore::newClefsPalette(bool basic, bool master)
 //   newGraceNotePalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newGraceNotePalette(bool basic)
+Palette* MuseScore::newGraceNotePalette(PaletteType t)
       {
-      Palette* notePalette = new Palette;
-      notePalette->setName(QT_TRANSLATE_NOOP("Palette", "Grace Notes"));
-      notePalette->setGrid(32, 40);
-      notePalette->setDrawGrid(true);
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Grace Notes"));
+      sp->setGrid(32, 40);
+      sp->setDrawGrid(true);
       static const IconAction gna1[] = {
             { IconType::ACCIACCATURA,  "acciaccatura" },
             { IconType::APPOGGIATURA,  "appoggiatura" },
@@ -939,8 +1005,19 @@ Palette* MuseScore::newGraceNotePalette(bool basic)
             { IconType::GRACE32_AFTER, "grace32after" },
             { IconType::NONE,          "" }
             };
-      populateIconPalette(notePalette, basic ? gna1 : gna2);
-      return notePalette;
+      const IconAction* a;
+      switch (t) {
+            case PaletteType::MASTER:
+            case PaletteType::ADVANCED:
+                  a = gna2;
+                  break;
+            case PaletteType::BASIC:
+                  a = gna1;
+                  sp->setMoreElements(true);
+                  break;
+            }
+      populateIconPalette(sp, a);
+      return sp;
       }
 
 //---------------------------------------------------------
@@ -967,7 +1044,7 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
 //   newLinesPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newLinesPalette(bool basic)
+Palette* MuseScore::newLinesPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Lines"));
@@ -1018,7 +1095,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       volta->setEndings(il);
       sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Seconda volta"));
 
-      if (!basic) {
+      if (t != PaletteType::BASIC) {
             volta = new Volta(gscore);
             volta->setVoltaType(Volta::Type::CLOSED);
             volta->setLen(w);
@@ -1049,7 +1126,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
-      if (!basic) {
+      if (t != PaletteType::BASIC) {
             ottava = new Ottava(gscore);
             ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
             ottava->setLen(w);
@@ -1073,7 +1150,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
             }
 
       Pedal* pedal;
-      if (!basic) {
+      if (t != PaletteType::BASIC) {
             pedal = new Pedal(gscore);
             pedal->setLen(w);
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
@@ -1121,7 +1198,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       pedal->setEndHook(true);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
-      if (!basic) {
+      if (t != PaletteType::BASIC) {
             for (int i = 0; i < trillTableSize(); i++) {
                   Trill* trill = new Trill(gscore);
                   trill->setTrillType(trillTable[i].type);
@@ -1143,6 +1220,8 @@ Palette* MuseScore::newLinesPalette(bool basic)
             Ambitus* a = new Ambitus(gscore);
             sp->append(a, QT_TRANSLATE_NOOP("Palette", "Ambitus"));
             }
+      else
+            sp->setMoreElements(true);
 
       return sp;
       }
@@ -1181,12 +1260,12 @@ struct TempoPattern {
 //   newTempoPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTempoPalette(bool basic, bool master)
+Palette* MuseScore::newTempoPalette(PaletteType t)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Tempo"));
       sp->setMag(0.65);
-      if (master)
+      if (t == PaletteType::MASTER)
             sp->setGrid(116, 28);
       else
             sp->setGrid(66, 28);
@@ -1223,9 +1302,9 @@ Palette* MuseScore::newTempoPalette(bool basic, bool master)
             TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/1.0, true, false, true, false, false),
             };
       for (TempoPattern tp : tps) {
-            if (!tp.basic && basic)
+            if (!tp.basic && t == PaletteType::BASIC)
                   continue;
-            if (tp.masterOnly && !master)
+            if (tp.masterOnly && t != PaletteType::MASTER)
                   continue;
             TempoText* tt = new TempoText(gscore);
             tt->setFollowText(tp.followText);
@@ -1237,25 +1316,13 @@ Palette* MuseScore::newTempoPalette(bool basic, bool master)
             else if (tp.italian) {
                   tt->setTempo(tp.f);
                   sp->append(tt, tr("Tempo text"), QString(), 1.3);
-            }
+                  }
             else {
                   tt->setTempo(tp.f);
                   sp->append(tt, tr("Tempo text"), QString(), 1.5);
                   }
-            };
-
-//      (swing text and tempo text don't currently overlap properties)
-//      StaffText* st = new StaffText(gscore);
-//      st->setTextStyleType(TextStyleType::TEMPO);
-//      st->setXmlText(tr("Swing"));
-//      st->setSwing(true);
-//      sp->append(st, tr("Swing"), QString(), 1.3);
-//
-//      st = new StaffText(gscore);
-//      st->setTextStyleType(TextStyleType::TEMPO);
-//      st->setXmlText(tr("Straight"));
-//      st->setSwing(false);
-//      sp->append(st, tr("Straight"), QString(), 1.3);
+            }
+      sp->setMoreElements(t == PaletteType::BASIC);
 
       return sp;
       }
@@ -1281,11 +1348,6 @@ Palette* MuseScore::newTextPalette()
       st->setTextStyleType(TextStyleType::SYSTEM);
       st->setXmlText(tr("System Text"));
       sp->append(st, tr("System text"));
-
-//      st = new StaffText(gscore);
-//      st->setTextStyleType(TextStyleType::EXPRESSION);
-//      st->setXmlText(tr("Expression"));
-//      sp->append(st, tr("Staff expression text"));
 
       InstrumentChange* is = new InstrumentChange(gscore);
       is->setXmlText(tr("Change Instr."));
@@ -1417,62 +1479,31 @@ void MuseScore::setAdvancedPalette()
       {
       mscore->getPaletteBox();
       paletteBox->clear();
-      paletteBox->addPalette(newClefsPalette(false, false));
-      paletteBox->addPalette(newKeySigPalette());
+      paletteBox->addPalette(newClefsPalette(PaletteType::ADVANCED));
+      paletteBox->addPalette(newKeySigPalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBracketsPalette());
-      paletteBox->addPalette(newAccidentalsPalette(false, false));
-      paletteBox->addPalette(newArticulationsPalette(false));
+      paletteBox->addPalette(newAccidentalsPalette(PaletteType::ADVANCED));
+      paletteBox->addPalette(newArticulationsPalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newOrnamentsPalette());
       paletteBox->addPalette(newAkkordeonPalette());
       paletteBox->addPalette(newBreathPalette());
-      paletteBox->addPalette(newGraceNotePalette(false));
+      paletteBox->addPalette(newGraceNotePalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newNoteHeadsPalette());
-      paletteBox->addPalette(newLinesPalette(false));
-      paletteBox->addPalette(newBarLinePalette(false));
+      paletteBox->addPalette(newLinesPalette(PaletteType::ADVANCED));
+      paletteBox->addPalette(newBarLinePalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newArpeggioPalette());
       paletteBox->addPalette(newTremoloPalette());
       paletteBox->addPalette(newTextPalette());
-      paletteBox->addPalette(newTempoPalette(false));
-      paletteBox->addPalette(newDynamicsPalette(false));
+      paletteBox->addPalette(newTempoPalette(PaletteType::ADVANCED));
+      paletteBox->addPalette(newDynamicsPalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newFingeringPalette());
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newFretboardDiagramPalette());
       paletteBox->addPalette(newBagpipeEmbellishmentPalette());
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newFramePalette());
-      paletteBox->addPalette(newBeamPalette(false));
-
-#if 0
-      //-----------------------------------
-      //    staff state changes
-      //-----------------------------------
-
-      sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Staff Changes"));
-      sp->setMag(.7);
-      sp->setGrid(42, 36);
-      sp->setDrawGrid(true);
-
-      StaffState* st = new StaffState(gscore);
-      st->setSubtype(StaffStateType::VISIBLE);
-      sp->append(st, tr("Set visible"));
-
-      st = new StaffState(gscore);
-      st->setSubtype(StaffStateType::INVISIBLE);
-      sp->append(st, tr("Set invisible"));
-
-      st = new StaffState(gscore);
-      st->setSubtype(StaffStateType::TYPE);
-      sp->append(st, tr("Change staff type"));
-
-      st = new StaffState(gscore);
-      st->setSubtype(StaffStateType::INSTRUMENT);
-      sp->append(st, tr("Change instrument"));
-
-      paletteBox->addPalette(sp);
-#endif
-
+      paletteBox->addPalette(newBeamPalette(PaletteType::ADVANCED));
       }
 
 //---------------------------------------------------------
@@ -1483,29 +1514,20 @@ void MuseScore::setBasicPalette()
       {
       mscore->getPaletteBox();
       paletteBox->clear();
-      paletteBox->addPalette(newClefsPalette(true, false));
-      paletteBox->addPalette(newKeySigPalette(true));
+      paletteBox->addPalette(newClefsPalette(PaletteType::BASIC));
+      paletteBox->addPalette(newKeySigPalette(PaletteType::BASIC));
       paletteBox->addPalette(newTimePalette());
-//      paletteBox->addPalette(newBracketsPalette());
-      paletteBox->addPalette(newAccidentalsPalette(true));
-      paletteBox->addPalette(newArticulationsPalette(true));
-//      paletteBox->addPalette(newBreathPalette());
-      paletteBox->addPalette(newGraceNotePalette(true));
-//      paletteBox->addPalette(newNoteHeadsPalette());
-      paletteBox->addPalette(newLinesPalette(true));
-      paletteBox->addPalette(newBarLinePalette(true));
-//      paletteBox->addPalette(newArpeggioPalette());
-//      paletteBox->addPalette(newTremoloPalette());
+      paletteBox->addPalette(newAccidentalsPalette(PaletteType::BASIC));
+      paletteBox->addPalette(newArticulationsPalette(PaletteType::BASIC));
+      paletteBox->addPalette(newGraceNotePalette(PaletteType::BASIC));
+      paletteBox->addPalette(newLinesPalette(PaletteType::BASIC));
+      paletteBox->addPalette(newBarLinePalette(PaletteType::BASIC));
       paletteBox->addPalette(newTextPalette());
-      paletteBox->addPalette(newTempoPalette(true));
-      paletteBox->addPalette(newDynamicsPalette(true));
-//      paletteBox->addPalette(newFingeringPalette());
+      paletteBox->addPalette(newTempoPalette(PaletteType::BASIC));
+      paletteBox->addPalette(newDynamicsPalette(PaletteType::BASIC));
       paletteBox->addPalette(newRepeatsPalette());
-//      paletteBox->addPalette(newFretboardDiagramPalette());
-//      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
       paletteBox->addPalette(newBreaksPalette());
-//      paletteBox->addPalette(newFramePalette());
-      paletteBox->addPalette(newBeamPalette(true));
+      paletteBox->addPalette(newBeamPalette(PaletteType::BASIC));
       }
 
 //---------------------------------------------------------
