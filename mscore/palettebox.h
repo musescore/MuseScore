@@ -40,7 +40,6 @@ class PaletteBox : public QDockWidget {
    private slots:
       void paletteCmd(PaletteCommand, int);
       void closeAll();
-      void displayMore(const QString& paletteName);
       void workspaceSelected(int idx);
       void newWorkspaceClicked();
       void setSinglePalette(bool);

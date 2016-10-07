@@ -100,6 +100,9 @@ enum class SelState : char;
 enum class IconType : signed char;
 enum class MagIdx : char;
 
+
+enum class PaletteType { MASTER, ADVANCED, BASIC };
+
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
 extern const char* voiceActions[];
@@ -365,7 +368,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* saveImageDialog       { 0 };
       QFileDialog* loadChordStyleDialog  { 0 };
       QFileDialog* saveChordStyleDialog  { 0 };
-//      QFileDialog* loadSoundFontDialog   { 0 };
       QFileDialog* loadSfzFileDialog     { 0 };
       QFileDialog* loadBackgroundDialog  { 0 };
       QFileDialog* loadScanDialog        { 0 };
@@ -685,30 +687,30 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void allowShowMidiPanel(const QString &file);
       void setMidiReopenInProgress(const QString &file);
 
-      static Palette* newTempoPalette(bool basic, bool master = false);
+      static Palette* newTempoPalette(PaletteType);
       static Palette* newTextPalette();
       static Palette* newTimePalette();
       static Palette* newRepeatsPalette();
       static Palette* newBreaksPalette();
-      static Palette* newBeamPalette(bool basic);
-      static Palette* newDynamicsPalette(bool basic, bool master = false);
+      static Palette* newBeamPalette(PaletteType);
+      static Palette* newDynamicsPalette(PaletteType);
       static Palette* newFramePalette();
       static Palette* newFingeringPalette();
       static Palette* newTremoloPalette();
       static Palette* newNoteHeadsPalette();
-      static Palette* newArticulationsPalette(bool basic);
+      static Palette* newArticulationsPalette(PaletteType);
       static Palette* newOrnamentsPalette();
       static Palette* newAkkordeonPalette();
       static Palette* newBracketsPalette();
       static Palette* newBreathPalette();
       static Palette* newArpeggioPalette();
-      static Palette* newClefsPalette(bool basic, bool master);
-      static Palette* newGraceNotePalette(bool basic);
+      static Palette* newClefsPalette(PaletteType);
+      static Palette* newGraceNotePalette(PaletteType);
       static Palette* newBagpipeEmbellishmentPalette();
-      static Palette* newKeySigPalette(bool basic = false);
-      static Palette* newAccidentalsPalette(bool basic = false, bool master = false);
-      static Palette* newBarLinePalette(bool basic);
-      static Palette* newLinesPalette(bool basic);
+      static Palette* newKeySigPalette(PaletteType);
+      static Palette* newAccidentalsPalette(PaletteType);
+      static Palette* newBarLinePalette(PaletteType);
+      static Palette* newLinesPalette(PaletteType);
       static Palette* newFretboardDiagramPalette();
 
       Inspector* inspector()           { return _inspector; }

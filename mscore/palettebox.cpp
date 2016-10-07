@@ -385,22 +385,12 @@ bool PaletteBox::read(XmlReader& e)
                   p->setName(name);
                   p->read(e);
                   addPalette(p);
-                  connect(p, SIGNAL(displayMore(const QString&)),
-                     SLOT(displayMore(const QString&)));
+                  connect(p, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   }
             else
                   e.unknown();
             }
       return true;
-      }
-
-//---------------------------------------------------------
-//   displayMore
-//---------------------------------------------------------
-
-void PaletteBox::displayMore(const QString& s)
-      {
-      mscore->showMasterPalette(s);
       }
 
 //---------------------------------------------------------

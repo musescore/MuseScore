@@ -150,7 +150,6 @@ class Palette : public QWidget {
       void startDragElement(Element*);
       void boxClicked(int);
       void changed();
-      void moreButtonClicked();
       void displayMore(const QString& paletteName);
 
    public:
