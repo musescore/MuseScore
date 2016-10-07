@@ -790,6 +790,7 @@ MuseScore::MuseScore()
 
       entryTools = addToolBar("");
       entryTools->setObjectName("entry-tools");
+      connect(entryTools, SIGNAL(visibilityChanged(bool)), SLOT(toolbarVisibilityChanged(bool)));
 
       populateNoteInputMenu();
 
@@ -5252,6 +5253,21 @@ QFileInfoList MuseScore::recentScores() const
                   fil.append(fi);
             }
       return fil;
+      }
+
+//---------------------------------------------------------
+//   toolbarVisibilityChanged
+//    This disables the ability to hide the connected
+//    widget.
+//---------------------------------------------------------
+
+void MuseScore::toolbarVisibilityChanged(bool val)
+      {
+      if (!val) {
+            QObject* s = sender();
+            QWidget* w = static_cast<QWidget*>(s);
+            w->setVisible(true);
+            }
       }
 
 }
