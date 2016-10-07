@@ -2285,7 +2285,7 @@ bool Text::readProperties(XmlReader& e)
                         case 23: st = TextStyleType::STAFF;          break;
                         case 24: st = TextStyleType::HARMONY;        break;
                         case 25: st = TextStyleType::REHEARSAL_MARK; break;
-                        case 26: st = TextStyleType::REPEAT;         break;
+                        case 26: st = TextStyleType::REPEAT_RIGHT;   break;
                         case 27: st = TextStyleType::VOLTA;          break;
                         case 28: st = TextStyleType::FRAME;          break;
                         case 29: st = TextStyleType::TEXTLINE;       break;
@@ -2532,9 +2532,9 @@ QVariant Text::propertyDefault(P_ID id) const
             case Element::Type::INSTRUMENT_CHANGE: idx = TextStyleType::INSTRUMENT_CHANGE; break;
             // case Element::Type::INSTRUMENT_NAME: would need to differentiate long & short
             // probably best handle this with another override
-            case Element::Type::JUMP:              idx = TextStyleType::REPEAT; break;
+            case Element::Type::JUMP:              idx = TextStyleType::REPEAT_RIGHT; break;
             case Element::Type::LYRICS:            idx = TextStyleType::LYRIC1; break;
-            case Element::Type::MARKER:            idx = TextStyleType::REPEAT; break;
+            case Element::Type::MARKER:            idx = TextStyleType::REPEAT_RIGHT; break;
             case Element::Type::REHEARSAL_MARK:    idx = TextStyleType::REHEARSAL_MARK; break;
             case Element::Type::STAFF_TEXT:        idx = TextStyleType::STAFF; break;
             case Element::Type::TEMPO_TEXT:        idx = TextStyleType::TEMPO; break;

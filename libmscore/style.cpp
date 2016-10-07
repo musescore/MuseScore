@@ -359,7 +359,7 @@ void initStyle(MStyle* s)
          AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(), OffsetType::ABS));
 
       // dynamics size is 12pt for bravura-text
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, false,false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, true,false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true));
@@ -402,11 +402,6 @@ void initStyle(MStyle* s)
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Right"), ff,  12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
-         false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
-
-      // for backward compatibility
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text"), ff,  12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
@@ -574,8 +569,6 @@ TextStyleType MStyle::textStyleType(const QString& name) const
             if (_textStyles[i].name() == name)
                   return TextStyleType(i);
             }
-      if (name == "Dynamics2")
-            return TextStyleType::DYNAMICS;
       qDebug("TextStyleType <%s> not found", qPrintable(name));
       return TextStyleType::DEFAULT;
       }

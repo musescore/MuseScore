@@ -272,7 +272,7 @@
         <xoffset>0</xoffset>
         <yoffset>-4</yoffset>
         <offsetType>spatium</offsetType>
-        <name>Repeat Text</name>
+        <name>Repeat Text Right</name>
         <family>MuseJazz</family>
         <size>13</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
