@@ -83,7 +83,6 @@ class MeasureBase : public Element {
 
       bool _repeatEnd        { false };
       bool _repeatStart      { false };
-      bool _repeatMeasure    { false };
       bool _repeatJump       { false };
       bool _irregular        { true  };        ///< Irregular measure, do not count
       bool _lineBreak        { false };        ///< Forced line break
@@ -168,12 +167,10 @@ class MeasureBase : public Element {
 
       bool repeatEnd() const             { return _repeatEnd;     }
       bool repeatStart() const           { return _repeatStart;   }
-      bool repeatMeasure() const         { return _repeatMeasure; }
       bool repeatJump() const            { return _repeatJump;    }
 
       void setRepeatEnd(bool v)          { _repeatEnd = v;     }
       void setRepeatStart(bool v)        { _repeatStart = v;   }
-      void setRepeatMeasure(bool v)      { _repeatMeasure = v; }
       void setRepeatJump(bool v)         { _repeatJump = v;    }
 
 

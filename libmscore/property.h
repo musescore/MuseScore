@@ -150,7 +150,6 @@ enum class P_ID : int {
 
       REPEAT_END,
       REPEAT_START,
-      REPEAT_MEASURE,
       REPEAT_JUMP,
 
       MEASURE_NUMBER_MODE,

@@ -158,7 +158,6 @@ static const PropertyData propertyList[] = {
 
       { P_ID::REPEAT_END,          true,  0,               P_TYPE::BOOL    },
       { P_ID::REPEAT_START,        true,  0,               P_TYPE::BOOL    },
-      { P_ID::REPEAT_MEASURE,      true,  0,               P_TYPE::BOOL    },
       { P_ID::REPEAT_JUMP,         true,  0,               P_TYPE::BOOL    },
 
       { P_ID::MEASURE_NUMBER_MODE, false, "measureNumberMode",     P_TYPE::INT     },
