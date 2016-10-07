@@ -5335,6 +5335,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with -o <file>.pdf, export score + parts"));
+      parser.addOption(QCommandLineOption(      "no-fallback-font", "will not use Bravura as fallback musical font"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with -o, ignore warnings reg. score being corrupted or from wrong version"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
@@ -5359,6 +5360,7 @@ int main(int argc, char* av[])
       externalIcons = parser.isSet("i");
       midiInputTrace = parser.isSet("I");
       midiOutputTrace = parser.isSet("O");
+      MScore::useFallbackFont = !parser.isSet("no-fallback-font");
 
       if ((converterMode = parser.isSet("o"))) {
             MScore::noGui = true;

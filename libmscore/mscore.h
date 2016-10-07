@@ -471,6 +471,7 @@ class MScore : public QObject {
       static bool showMeasureShapes;
       static bool showBoundingRect;
       static bool showCorruptedMeasures;
+      static bool useFallbackFont;
 // #endif
       static bool debugMode;
       static bool testMode;
