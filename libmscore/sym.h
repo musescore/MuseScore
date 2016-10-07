@@ -2810,21 +2810,22 @@ class ScoreFont {
       void draw(const std::vector<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
-      qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }
-      qreal width(SymId id, qreal mag) const          { return sym(id).bbox().width() * mag;  }
-      qreal advance(SymId id, qreal mag) const        { return sym(id).advance() * mag;  }
+      qreal height(SymId id, qreal mag) const         { return bbox(id, mag).height(); }
+      qreal width(SymId id, qreal mag) const          { return bbox(id, mag).width();  }
+      qreal advance(SymId id, qreal mag) const;
       qreal width(const std::vector<SymId>&, qreal mag) const;
 
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
-      QPointF stemDownNW(SymId id, qreal mag) const   { return sym(id).stemDownNW() * mag;   }
-      QPointF stemUpSE(SymId id, qreal mag) const     { return sym(id).stemUpSE() * mag;   }
-      QPointF cutOutNE(SymId id, qreal mag) const     { return sym(id).cutOutNE() * mag; }
-      QPointF cutOutNW(SymId id, qreal mag) const     { return sym(id).cutOutNW() * mag; }
-      QPointF cutOutSE(SymId id, qreal mag) const     { return sym(id).cutOutSE() * mag; }
-      QPointF cutOutSW(SymId id, qreal mag) const     { return sym(id).cutOutSW() * mag; }
+      QPointF stemDownNW(SymId id, qreal mag) const;
+      QPointF stemUpSE(SymId id, qreal mag) const;
+      QPointF cutOutNE(SymId id, qreal mag) const;
+      QPointF cutOutNW(SymId id, qreal mag) const;
+      QPointF cutOutSE(SymId id, qreal mag) const;
+      QPointF cutOutSW(SymId id, qreal mag) const;
 
       bool isValid(SymId id) const                    { return sym(id).isValid(); }
+      bool useFallbackFont(SymId id) const;
       };
 
 extern void initScoreFonts();

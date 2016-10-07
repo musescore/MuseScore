@@ -58,8 +58,6 @@ void SystemDivider::layout()
                   sid = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
                   break;
             }
-      if (!symIsValid(sid))
-            sf = sf->fallbackFont();
       setSym(sid, sf);
       Symbol::layout();
       }
@@ -118,8 +116,6 @@ void SystemDivider::read(XmlReader& e)
       if (e.attribute("type") == "left") {
             _dividerType = SystemDivider::Type::LEFT;
             SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
-            if (!symIsValid(sym))
-                  sf = sf->fallbackFont();
             setSym(sym, sf);
             setAlign(a | AlignmentFlags::LEFT);
             setXoff(score()->styleB(StyleIdx::dividerLeftX));
@@ -128,8 +124,6 @@ void SystemDivider::read(XmlReader& e)
       else {
             _dividerType = SystemDivider::Type::RIGHT;
             SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
-            if (!symIsValid(sym))
-                  sf = sf->fallbackFont();
             setSym(sym, sf);
             setAlign(a | AlignmentFlags::RIGHT);
             setXoff(score()->styleB(StyleIdx::dividerRightX));

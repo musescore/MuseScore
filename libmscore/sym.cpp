@@ -5610,7 +5610,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
             return;
             }
       if (!isValid(id)) {
-            if (this != ScoreFont::fallbackFont())
+            if (MScore::useFallbackFont && this != ScoreFont::fallbackFont())
                   fallbackFont()->draw(id, painter, mag, pos, worldScale);
             else
                   qDebug("ScoreFont::draw: invalid sym %d", int(id));
@@ -6144,12 +6144,21 @@ bool ScoreFont::initGlyphNamesJson()
       }
 
 //---------------------------------------------------------
+//   useFallbackFont
+//---------------------------------------------------------
+
+bool ScoreFont::useFallbackFont(SymId id) const
+      {
+      return MScore::useFallbackFont && !sym(id).isValid() && this != ScoreFont::fallbackFont();
+      }
+
+//---------------------------------------------------------
 //   bbox
 //---------------------------------------------------------
 
 const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       {
-      if (!sym(id).isValid() && this != ScoreFont::fallbackFont())
+      if (useFallbackFont(id))
             return fallbackFont()->bbox(id, mag);
       QRectF r = sym(id).bbox();
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
@@ -6161,14 +6170,63 @@ const QRectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
       QPointF pos;
       for (SymId id : s) {
             r |= bbox(id, mag).translated(pos);
-            pos.rx() += sym(id).advance() * mag;
+            pos.rx() += advance(id, mag);
             }
       return r;
+      }
+
+qreal ScoreFont::advance(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->advance(id, mag);
+      return sym(id).advance() * mag;
       }
 
 qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
       {
       return bbox(s, mag).width();
+      }
+
+QPointF ScoreFont::stemDownNW(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->stemDownNW(id, mag);
+      return sym(id).stemDownNW() * mag;
+      }
+
+QPointF ScoreFont::stemUpSE(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->stemUpSE(id, mag);
+      return sym(id).stemUpSE() * mag;
+      }
+
+QPointF ScoreFont::cutOutNE(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->cutOutNE(id, mag);
+      return sym(id).cutOutNE() * mag;
+      }
+
+QPointF ScoreFont::cutOutNW(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->cutOutNW(id, mag);
+      return sym(id).cutOutNW() * mag;
+      }
+
+QPointF ScoreFont::cutOutSE(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->cutOutSE(id, mag);
+      return sym(id).cutOutSE() * mag;
+      }
+
+QPointF ScoreFont::cutOutSW(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->cutOutSW(id, mag);
+      return sym(id).cutOutSW() * mag;
       }
 
 //---------------------------------------------------------

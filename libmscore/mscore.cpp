@@ -60,7 +60,7 @@
 
 namespace Ms {
 
-bool MScore::debugMode;
+bool MScore::debugMode = false;
 bool MScore::testMode = false;
 
 // #ifndef NDEBUG
@@ -70,6 +70,7 @@ bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;
 bool MScore::showBoundingRect    = false;
 bool MScore::showCorruptedMeasures = true;
+bool MScore::useFallbackFont       = true;
 // #endif
 
 bool  MScore::saveTemplateMode = false;
