@@ -1435,6 +1435,10 @@ Score::FileError MasterScore::read206(XmlReader& e)
       {
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style()->set(style206[i].idx, style206[i].val);
+      // old text style default
+      TextStyle ts = style()->textStyle("Rehearsal Mark");
+      ts.setSquare(false);
+      style()->setTextStyle(ts);
 
       qDebug("read206");
       while (e.readNextStartElement()) {

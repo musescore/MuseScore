@@ -1716,8 +1716,11 @@ Score::FileError MasterScore::read114(XmlReader& e)
       TextStyle ts = style()->textStyle("Chord Symbol");
       ts.setYoff(-4.0);
       style()->setTextStyle(ts);
-      TempoMap tm;
+      ts = style()->textStyle("Rehearsal Mark");
+      ts.setSquare(false);
+      style()->setTextStyle(ts);
 
+      TempoMap tm;
       while (e.readNextStartElement()) {
             e.setTrack(-1);
             const QStringRef& tag(e.name());
