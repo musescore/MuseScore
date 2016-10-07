@@ -429,7 +429,6 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<i
                   nm->setRepeatCount(m->repeatCount());
                   nm->setRepeatStart(m->repeatStart());
                   nm->setRepeatEnd(m->repeatEnd());
-                  nm->setRepeatMeasure(m->repeatMeasure());
                   nm->setRepeatJump(m->repeatJump());
 
                   nm->setIrregular(m->irregular());

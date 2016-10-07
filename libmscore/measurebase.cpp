@@ -47,7 +47,6 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       _irregular     = m._irregular;
       _repeatEnd     = m._repeatEnd;
       _repeatStart   = m._repeatStart;
-      _repeatMeasure = m._repeatMeasure;
       _repeatJump    = m._repeatJump;
 
       for (Element* e : m._el)
@@ -315,8 +314,6 @@ QVariant MeasureBase::getProperty(P_ID id) const
                   return repeatEnd();
             case P_ID::REPEAT_START:
                   return repeatStart();
-            case P_ID::REPEAT_MEASURE:
-                  return repeatMeasure();
             case P_ID::REPEAT_JUMP:
                   return repeatJump();
             default:
@@ -336,9 +333,6 @@ bool MeasureBase::setProperty(P_ID id, const QVariant& value)
                   break;
             case P_ID::REPEAT_START:
                   setRepeatStart(value.toBool());
-                  break;
-            case P_ID::REPEAT_MEASURE:
-                  setRepeatMeasure(value.toBool());
                   break;
             case P_ID::REPEAT_JUMP:
                   setRepeatJump(value.toBool());
@@ -361,7 +355,6 @@ QVariant MeasureBase::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::REPEAT_END:
             case P_ID::REPEAT_START:
-            case P_ID::REPEAT_MEASURE:
             case P_ID::REPEAT_JUMP:
                   return false;
             default:
