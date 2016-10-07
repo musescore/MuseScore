@@ -23,3 +23,4 @@ cp $S/text_scaling-test.mscx             text_scaling-ref.mscx
 cp $S/textstyles-test.mscx               textstyles-ref.mscx
 cp $S/title-test.mscx                    title-ref.mscx
 cp $S/tremolo2notes-test.mscx            tremolo2notes-ref.mscx
+cp $S/markers-test.mscx                  markers-ref.mscx

@@ -5,11 +5,12 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <minSystemDistance>9.2</minSystemDistance>
       <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
-      <bracketDistance>0.25</bracketDistance>
+      <bracketDistance>0.2</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <minNoteDistance>0.4</minNoteDistance>
@@ -18,6 +19,7 @@
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
       <harmonyY>0</harmonyY>
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
@@ -102,6 +104,10 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -141,6 +147,11 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
@@ -150,75 +161,141 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          <Tremolo>
-            <subtype>c8</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
         </Measure>
       <Measure number="2">
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          <Tremolo>
-            <subtype>c16</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>coda</sym></text>
+          <label>codab</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
         </Measure>
       <Measure number="3">
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          <Tremolo>
-            <subtype>c32</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <durationType>whole</durationType>
-          <duration>1/2</duration>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>codaSquare</sym></text>
+          <label>varcoda</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>coda</sym><sym>coda</sym></text>
+          <label>codetta</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <Marker>
+          <text><font face="Times New Roman"/>Fine</text>
+          <label>fine</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Jump>
+          <text><font face="Times New Roman"/>D.C.</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Jump>
+          <text><font face="Times New Roman"/>D.C. al Fine</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>fine</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Jump>
+          <text><font face="Times New Roman"/>D.C. al Coda</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Jump>
+          <text><font face="Times New Roman"/>D.S. al Coda</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Jump>
+          <text><font face="Times New Roman"/>D.S. al Fine</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>fine</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Jump>
+          <text><font face="Times New Roman"/>D.S.</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <Marker>
+          <text><font face="Times New Roman"/>To Coda</text>
+          <label>coda</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>

@@ -333,7 +333,6 @@ MS_QML_ENUM(TextStyleType, signed char,\
       REHEARSAL_MARK,\
       REPEAT_LEFT,       /* align to start of measure */\
       REPEAT_RIGHT,      /* align to end of measure */\
-      REPEAT,            /* obsolete */\
       VOLTA,\
       FRAME,\
       \

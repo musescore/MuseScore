@@ -49,6 +49,7 @@
 #include "utils.h"
 #include "accidental.h"
 #include "fingering.h"
+#include "marker.h"
 #include "read206.h"
 
 namespace Ms {
@@ -1148,6 +1149,17 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Element* el = Element::name2Element(tag, m->score());
                   el->setTrack(e.track());
                   el->read(e);
+                  
+                  if (el->isMarker()) {
+                        Marker* m = toMarker(el);
+                        if (m->markerType() == Marker::Type::SEGNO || m->markerType() == Marker::Type::CODA  ||
+                            m->markerType() == Marker::Type::VARCODA || m->markerType() == Marker::Type::CODETTA) {
+                              // force the marker type for correct display
+                              m->setXmlText("");
+                              m->setMarkerType(m->markerType());
+                              m->setTextStyleType(TextStyleType::REPEAT_LEFT);
+                              }
+                        }
                   m->add(el);
                   }
             else if (tag == "Image") {
@@ -1506,6 +1518,10 @@ static QString convertOldTextStyleNames(const QString& s)
             rs = "Text Line";
       else if (s == "Tuplets")
             rs = "Tuplet";
+      else if (s == "Dynamics2")
+            rs = "Dynamics";
+      else if (s == "Repeat Text")
+            rs = "Repeat Text Right";
       return rs;
       }
 
@@ -1719,6 +1735,9 @@ Score::FileError MasterScore::read114(XmlReader& e)
       ts = style()->textStyle("Rehearsal Mark");
       ts.setSquare(false);
       ts.setFrameRound(20);
+      style()->setTextStyle(ts);
+      ts = style()->textStyle("Dynamics");
+      ts.setItalic(false);
       style()->setTextStyle(ts);
 
       TempoMap tm;

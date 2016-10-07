@@ -399,6 +399,19 @@ static void readChord(Chord* chord, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   convertOldTextStyleNames
+//---------------------------------------------------------
+
+static QString convertOldTextStyleNames(const QString& s)
+      {
+      QString rs(s);
+      // convert 2.0 text styles
+      if (s == "Repeat Text")
+            rs = "Repeat Text Right";
+      return rs;
+      }
+
+//---------------------------------------------------------
 //   ArticulationNames
 //---------------------------------------------------------
 
@@ -1136,6 +1149,8 @@ static void readStyle(MStyle* style, XmlReader& e)
             if (tag == "TextStyle") {
                   TextStyle s;
                   s.read(e);
+                  // convert old 2.0 text styles
+                  s.setName(convertOldTextStyleNames(s.name()));
                   style->setTextStyle(s);
                   }
             else if (tag == "Spatium")
@@ -1439,6 +1454,9 @@ Score::FileError MasterScore::read206(XmlReader& e)
       TextStyle ts = style()->textStyle("Rehearsal Mark");
       ts.setSquare(false);
       ts.setFrameRound(20);
+      style()->setTextStyle(ts);
+      ts = style()->textStyle("Dynamics");
+      ts.setItalic(false);
       style()->setTextStyle(ts);
 
       qDebug("read206");
