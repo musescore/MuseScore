@@ -395,7 +395,7 @@ void initStyle(MStyle* s)
          true,
          true,    // hasFrame
          true,    // square
-         Spatium(.2), Spatium(.5), 20, Qt::black, false, true));
+         Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Left"), ff,  20, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,

@@ -909,7 +909,8 @@ void Text::draw(QPainter* p) const
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor fColor = frameColor();
-                  QPen pen(fColor, textStyle().frameWidth().val() * spatium());
+                  QPen pen(fColor, textStyle().frameWidth().val() * spatium(), Qt::SolidLine,
+                     Qt::SquareCap, Qt::MiterJoin);
                   p->setPen(pen);
                   }
             else
@@ -919,10 +920,10 @@ void Text::draw(QPainter* p) const
             if (textStyle().circle())
                   p->drawArc(frame, 0, 5760);
             else {
-                  int r2 = textStyle().frameRound() * lrint((frame.width() / frame.height()));
+                  int r2 = textStyle().frameRound();
                   if (r2 > 99)
                         r2 = 99;
-                  p->drawRoundRect(frame, textStyle().frameRound(), r2);
+                  p->drawRoundedRect(frame, textStyle().frameRound(), r2);
                   }
             }
       p->setBrush(Qt::NoBrush);

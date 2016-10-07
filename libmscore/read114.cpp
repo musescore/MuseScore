@@ -1718,6 +1718,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
       style()->setTextStyle(ts);
       ts = style()->textStyle("Rehearsal Mark");
       ts.setSquare(false);
+      ts.setFrameRound(20);
       style()->setTextStyle(ts);
 
       TempoMap tm;
