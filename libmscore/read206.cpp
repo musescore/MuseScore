@@ -1438,6 +1438,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
       // old text style default
       TextStyle ts = style()->textStyle("Rehearsal Mark");
       ts.setSquare(false);
+      ts.setFrameRound(20);
       style()->setTextStyle(ts);
 
       qDebug("read206");

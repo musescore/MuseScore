@@ -1152,7 +1152,8 @@ void Harmony::draw(QPainter* painter) const
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor color = frameColor();
-                  QPen pen(color, textStyle().frameWidth().val() * spatium());
+                  QPen pen(color, textStyle().frameWidth().val() * spatium(), Qt::SolidLine,
+                     Qt::SquareCap, Qt::MiterJoin);
                   painter->setPen(pen);
                   }
             else
@@ -1162,10 +1163,10 @@ void Harmony::draw(QPainter* painter) const
             if (textStyle().circle())
                   painter->drawArc(frame, 0, 5760);
             else {
-                  int r2 = textStyle().frameRound() * lrint((frame.width() / frame.height()));
+                  int r2 = textStyle().frameRound();
                   if (r2 > 99)
                         r2 = 99;
-                  painter->drawRoundRect(frame, textStyle().frameRound(), r2);
+                  painter->drawRoundedRect(frame, textStyle().frameRound(), r2);
                   }
             }
       painter->setBrush(Qt::NoBrush);
