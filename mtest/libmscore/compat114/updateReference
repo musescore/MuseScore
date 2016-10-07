@@ -1,6 +1,10 @@
 #!/bin/sh
 
-S=../../../build.debug/mtest/libmscore/compat114
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/compat114/Debug
+else
+   S=../../../build.debug/mtest/libmscore/compat114
+fi
 
 cp $S/accidentals-test.mscx              accidentals-ref.mscx
 cp $S/articulations-test.mscx            articulations-ref.mscx
