@@ -108,6 +108,23 @@ private slots:
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
+
+      void measureRepeat_m1_r1() { mxmlIoTestRef("testMeasureRepeat_m1_r1"); } // ensure a "start" tag in m2, no need for "stop" tag
+      void measureRepeat_m1_r1_m3() { mxmlIoTestRef("testMeasureRepeat_m1_r1_m3"); } // ensure a "stop" tag in m3
+      void measureRepeat_m1_r1_r1_r1() { mxmlIoTestRef("testMeasureRepeat_m1_r1_r1_r1"); } // ensure a series of single-measure repeats all write source notes from m1, and no need for intermediary stop&start tags
+      void measureRepeat_repeatStaffUnspecified() { mxmlIoTestRef("testMeasureRepeat_repeatStaffUnspecified"); } // m2 has measure-repeat, but no staff # specified.  Finale NotePad2012 import will create measure repeat on both staves. MuseScore shall do the same. Note when exporting, will generate measure-repeat for each staff.
+      void measureRepeat_bottomStaffOnly() { mxmlIoTestRef("testMeasureRepeat_bottomStaffOnly"); } // m2 has measure-repeat in bottom staff only of a part
+      void measureRepeat_topStaffOnly() { mxmlIoTestRef("testMeasureRepeat_topStaffOnly"); } // m2 has measure-repeat in top staff only of a part
+      void measureRepeat_bothStavesOfPart() { mxmlIoTestRef("testMeasureRepeat_bothStavesOfPart"); }
+      void measureRepeat_r2_r2_m3() { mxmlIoTestRef("testMeasureRepeat_r2_r2_m3"); } // bogus input, starting with two-measure repeat without any notes in 2nd meas
+      void measureRepeat_2_bar_repeat() { mxmlIoTestRef("testMeasureRepeat_2_bar_repeat"); } // two measures, then a two-measure repeat
+      void measureRepeat_2_bar_repeat_wrong() { mxmlIoTestRef("testMeasureRepeat_2_bar_repeat_wrong"); } // bogus input, incomplete two-measure repeat
+      void measureRepeat_m1_m2_r2_r2_r2_m6_m7() { mxmlIoTestRef("testMeasureRepeat_m1_m2_r2_r2_r2_m6_m7"); } // two two-measure repeats, but second one is incomplete (only 1 measure). Should still import & output, even though bad score.
+      void measureRepeat_multiple_staves() { mxmlIoTestRef("testMeasureRepeat_multiple_staves"); } // multi part, with repeats on different staves
+      void measureRepeat_4_bar_repeat() { mxmlIoTestRef("testMeasureRepeat_4_bar_repeat"); } // single staff, 4 meas followed by 4-bar repeat
+      void measureRepeat_multiple_staves_4meas_repeat() { mxmlIoTestRef("testMeasureRepeat_multiple_staves_4meas_repeat"); } // multi part, with repeats on different staves, and a 4 measure repeat
+      void measureRepeat_nSlashes_change() { mxmlIoTestRef("testMeasureRepeat_nSlashes_change"); } // make sure to stop & start for different number of slahes
+
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
       void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }

@@ -57,6 +57,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/textline.h"
 #include "libmscore/barline.h"
+#include "libmscore/repeat.h"
 
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
@@ -335,7 +336,7 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
 //---------------------------------------------------------
 
 /**
- Fill gaps in first voice of every staff in this measure for this part with rest(s).
+ Fill gaps in first voice of every staff in this measure for this part with rest(s), unless covered by multi-measure rest in that staff
  */
 
 static void fillGapsInFirstVoices(Measure* measure, Part* part)
@@ -355,12 +356,14 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
       for (int st = 0; st < part->nstaves(); ++st) {
             int track = (staffIdx + st) * VOICES;
             int endOfLastCR = measTick;
+            bool noChordRests = true;
             for (Segment* s = measure->first(); s; s = s->next()) {
                   // qDebug("fillGIFV   segment %p tp %s", s, s->subTypeName());
                   Element* el = s->element(track);
                   if (el) {
                         // qDebug(" el[%d] %p", track, el);
                         if (s->isChordRestType()) {
+                              noChordRests = false;
                               ChordRest* cr  = static_cast<ChordRest*>(el);
                               int crTick     = cr->tick();
                               int crLen      = cr->globalDuration().ticks();
@@ -380,7 +383,8 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
                               }
                         }
                   }
-            if (nextMeasTick > endOfLastCR) {
+            // don't fillGap if inside a multi-measure repeat segment (which by design will have no chord rests after their first measure)
+            if (nextMeasTick > endOfLastCR && !(noChordRests && measure->findRepeatMeasureElementCoveringThisMeasure(track))) {
                   /*
                    qDebug("fillGIFV   measure end GAP: track %d tick %d - %d",
                    track, endOfLastCR, nextMeasTick);
@@ -1429,9 +1433,9 @@ MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass
 void MusicXMLParserPass2::initPartState(const QString& partId)
       {
       _timeSigDura = Fraction(0, 0);             // invalid
-      int nstaves = _pass1.getPart(partId)->nstaves();
-      _tuplets.resize(nstaves * VOICES);
-      _tuplImpls.resize(nstaves * VOICES);
+      _nstaves = _pass1.getPart(partId)->nstaves();
+      _tuplets.resize(_nstaves * VOICES);
+      _tuplImpls.resize(_nstaves * VOICES);
       _tie    = 0;
       _lastVolta = 0;
       _hasDrumset = false;
@@ -1458,6 +1462,11 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       //      glissandoColor = "";
       _multiMeasureRestCount = -1;
       _extendedLyrics.init();
+
+      // reset the vectors that keep track of measure repeats
+      _measureRepeatSize.assign(_nstaves, 0);
+      _measureRepeatCounter.assign(_nstaves, 0);
+      _measureRepeatSlashes.assign(_nstaves, 1); // one slash by default according to MusicXML
       }
 
 //---------------------------------------------------------
@@ -2081,7 +2090,6 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         if (mTime > mDura)
                               mDura = mTime;
                         }
-                  //qDebug("added note %p chord %p gac %d", n, n ? n->chord() : 0, gac);
                   }
             else if (_e.name() == "forward") {
                   Fraction dura;
@@ -2140,12 +2148,38 @@ void MusicXMLParserPass2::measure(const QString& partId,
             mTime.reduce();
             }
 
+
       // convert remaining grace chords to grace after
       gac = gcl.size();
       addGraceChordsAfter(prevChord, gcl, gac);
 
-      // fill possible gaps in voice 1
       Part* part = _pass1.getPart(partId); // should not fail, we only get here if the part exists
+      const int scoreRelStaff = _score->staffIdx(part);
+
+      // single/multi measure repeat handling
+      for (int i = 0; i < _nstaves; i++) {
+            if (_measureRepeatSize[i] > 0) {
+                  qDebug("inside meas repeat sequence of size %d, _measureRepeatCounter = %d, _measureRepeatSlashes = %d, in part's staff #%d", _measureRepeatSize[i], _measureRepeatCounter[i], _measureRepeatSlashes[i], i);
+                  if (_measureRepeatCounter[i] == _measureRepeatSize[i]) {
+                        qDebug("creating RepeatMeasure element and resetting counter");
+                        _measureRepeatCounter[i] = 0;
+                        int staffIdx = scoreRelStaff + i;
+
+                        //Add a Repeat Measure element to current measure of duration _measureRepeatSize measures.
+                        Segment* seg = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                        RepeatMeasure* rm = new RepeatMeasure(_score, _measureRepeatSize[i], _measureRepeatSlashes[i]);
+                        rm->setTrack(staffIdx * VOICES);
+                        rm->setParent(seg);
+                        rm->setDurationType(TDuration::DurationType::V_MEASURE); // can this go in the constructor?
+                        rm->setDuration(measure->stretchedLen(_score->staff(staffIdx)));
+                        seg->add(rm);
+                        }
+
+                  _measureRepeatCounter[i] ++;
+                  }
+            }
+
+      // fill possible gaps in voice 1
       fillGapsInFirstVoices(measure, part);
 
       // can't have beams extending into the next measure
@@ -2159,7 +2193,6 @@ void MusicXMLParserPass2::measure(const QString& partId,
             measure->setTimesig(_timeSigDura);
 
       // mark superfluous accidentals as user accidentals
-      const int scoreRelStaff = _score->staffIdx(part);
       const Key key = _score->staff(scoreRelStaff)->keySigEvent(time.ticks()).key();
       markUserAccidentals(scoreRelStaff, part->nstaves(), key, measure, alterMap);
 
@@ -2169,6 +2202,8 @@ void MusicXMLParserPass2::measure(const QString& partId,
             measure->setBreakMultiMeasureRest(true);
             }
 
+      qDebug() << _e.isEndElement();
+      qDebug() << _e.name();
       Q_ASSERT(_e.isEndElement() && _e.name() == "measure");
       }
 
@@ -2214,12 +2249,22 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
 
 /**
  Parse the /score-partwise/part/measure/measure-style node.
- Initializes the "in multi-measure rest" state
+ Initializes the "in multi-measure rest" state and the "in multi-measure repeat" state
  */
 
 void MusicXMLParserPass2::measureStyle(Measure* measure)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "measure-style");
+
+      QStringRef staffNumber = _e.attributes().value("number"); // staff number relative to part
+      int startStaff = 0; // by default measure-repeat will cover all staves in part if no staff number was specified
+      int endStaff = _nstaves-1;
+      if (!staffNumber.isEmpty()) {
+            int n = staffNumber.toInt(); // a staff number was specified for this particular measure-repeat
+            if (n < 1 || n > _nstaves)
+                  logError(QString("measure-repeat staff number can only be int from 1 to nStaves."));
+            startStaff = endStaff = n-1; // convert to 0-based indexing
+            }
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "multiple-rest") {
@@ -2231,6 +2276,42 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                         }
                   else
                         logError(QString("multiple-rest %1 not supported").arg(multipleRest));
+                  }
+            else if (_e.name() == "measure-repeat" ) {
+                  QStringRef type = _e.attributes().value("type");
+                  if (type == "start") {
+
+                        // get a valid number of slashes
+                        int measureRepeatSlashes = 1; // default
+                        QStringRef slashes = _e.attributes().value("slashes");
+                        if (!slashes.isEmpty()) {
+                              if (slashes.toInt() > 0)
+                                    measureRepeatSlashes = slashes.toInt();
+                              else
+                                    logError(QString("measure-repeat slashes can only be positive int...will use default of 1"));
+                              }
+
+                        // get a valid size
+                        int measureRepeatSize = _e.readElementText().toInt();
+                        if (measureRepeatSize <= 0)
+                              logError(QString("measure-repeat of size %1 not supported, must be positive int").arg(measureRepeatSize));
+
+                        // apply measure repeat to all staves of part if "number" not specified or to specified staff
+                        for (int i = startStaff; i <= endStaff; i++ ) {
+                              _measureRepeatSize[i] = measureRepeatSize;
+                              _measureRepeatCounter[i] = measureRepeatSize; // setting this counter to the size will trigger creation of a measure-repeat element at end of processing this measure
+                              _measureRepeatSlashes[i] = measureRepeatSlashes;
+                              }
+                        }
+                  else if (type == "stop") {
+                        for (int i = startStaff; i <= endStaff; i++ ) {
+                              _measureRepeatSize[i] = 0; // indicates that multi-measure repeat sequence has stopped
+                              _measureRepeatSlashes[i] = 1; // reset to default
+                              }
+                        _e.skipCurrentElement(); // since not reading any text inside stop tag, we are done with this element
+                        }
+                  else
+                        logError(QString("measure-repeat type can only be start or stop"));
                   }
             else
                   skipLogCurrElem();
@@ -4111,7 +4192,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool unpitched = false;
       QString instrId;
 
-
       while (_e.readNextStartElement() && !elementMustBePostponed(_e)) {
             if (_e.name() == "accidental")
                   acc = accidental();
@@ -4184,6 +4264,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // convert staff to zero-based (in case of error, staff will be -1)
       staff--;
+
+      // don't import the note if this staff is currently inside a measure repeat section. Only add notes to score if not within measure repeat sequence.
+      // MusicXML spec requires repeat measures to contain the notes of the repeat, but musescore's score will only contain the repeat measure element, without the notes.
+      if (_measureRepeatSize[staff] > 0)
+            return 0;
 
       // Bug fix for Sibelius 7.1.3 which does not write <voice> for notes with <chord>
       if (!chord)

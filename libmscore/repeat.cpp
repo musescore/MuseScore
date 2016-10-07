@@ -21,11 +21,14 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   RepeatMeasure
+///   default size is a single-measure repeat
 //---------------------------------------------------------
 
-RepeatMeasure::RepeatMeasure(Score* score)
+RepeatMeasure::RepeatMeasure(Score* score, int repeatMeasureSize, int slashes)
    : Rest(score)
       {
+      _repeatMeasureSize = repeatMeasureSize;
+      _repeatMeasureSlashes = slashes;
       }
 
 //---------------------------------------------------------
@@ -77,7 +80,7 @@ void RepeatMeasure::layout()
 Fraction RepeatMeasure::duration() const
       {
       if (measure())
-            return measure()->stretchedLen(staff());
+            return measure()->stretchedLen(staff()) * _repeatMeasureSize;
       return Fraction(0, 1);
       }
 

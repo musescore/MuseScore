@@ -444,6 +444,10 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+      // todo fix me: properly handle cases where no starting segment (e.g. 2nd or later measure of a multi-measure repeat)
+      if (!startSegment())
+            return;
+
       for (Element* e : _el)
             e->setSelected(false);
       _el.clear();

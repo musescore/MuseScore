@@ -200,6 +200,13 @@ private:
       FiguredBass* _figBass;                      ///< Current figured bass element (to attach to next note)
       int _multiMeasureRestCount;
       MusicXmlLyricsExtend _extendedLyrics;       ///< Lyrics with "extend" requiring fixup
+
+      int _nstaves;                               ///< Number of staves in the current part
+      std::vector<int> _measureRepeatSize;        ///< The number of measures in a multi (or single) measure repeat zone for each staff
+                                                  ///  Equals 0 if staff not in a multi-measure repeat sequence
+      std::vector<int> _measureRepeatCounter;     ///< Will increment after read every measure in a multi-measure repeat sequence for each staff
+                                                  ///  Once reaches _multiMeasureRepeatSize for a staff, then add a new element and reset this counter
+      std::vector<int> _measureRepeatSlashes;     ///< The slashes attribute specifies the number of slashes to use in the repeat sign. It is 1 if not specified. Keep track for each staff.
       };
 
 //---------------------------------------------------------

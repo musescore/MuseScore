@@ -27,6 +27,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
+#include "libmscore/repeat.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
@@ -607,7 +608,7 @@ void Debugger::updateElement(Element* el)
                   case Element::Type::MEASURE:          ew = new MeasureView;         break;
                   case Element::Type::CHORD:            ew = new ChordDebug;          break;
                   case Element::Type::NOTE:             ew = new ShowNoteWidget;      break;
-                  case Element::Type::REPEAT_MEASURE:
+                  case Element::Type::REPEAT_MEASURE:   ew = new RepeatMeasureView;   break;
                   case Element::Type::REST:             ew = new RestView;            break;
                   case Element::Type::CLEF:             ew = new ClefView;            break;
                   case Element::Type::TIMESIG:          ew = new TimeSigView;         break;
@@ -1276,6 +1277,68 @@ void RestView::setElement(Element* e)
 void RestView::beamClicked()
       {
       emit elementChanged(static_cast<Rest*>(element())->beam());
+      }
+
+//---------------------------------------------------------
+//   RepeatMeasureView
+//---------------------------------------------------------
+
+RepeatMeasureView::RepeatMeasureView()
+   : ShowElementBase()
+      {
+      // chord rest
+      crb.setupUi(addWidget());
+
+      rmb.setupUi(addWidget());
+
+      connect(crb.lyrics,       SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+
+      // not used for RepeatMeasures, although used for rests:
+     // connect(crb.beamButton,   SIGNAL(clicked()), SLOT(beamClicked()));
+     // connect(crb.tupletButton, SIGNAL(clicked()), SLOT(tupletClicked()));
+     // connect(crb.attributes,   SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void RepeatMeasureView::setElement(Element* e)
+      {
+      const RepeatMeasure* rm = toRepeatMeasure(e);
+      ShowElementBase::setElement(e);
+
+      crb.tick->setValue(rm->tick());
+      crb.ticks->setValue(rm->actualTicks());
+      crb.durationType->setText(rm->durationType().name());
+      crb.duration->setText(rm->duration().print());
+      crb.move->setValue(rm->staffMove());
+
+      // stuff that doesn't matter for RepeatMeasures (although are used for Rest)
+      crb.beamButton->setEnabled(false);
+      crb.tupletButton->setEnabled(false);
+      crb.upFlag->setChecked(false);
+      crb.beamMode->setCurrentIndex(0);
+      crb.attributes->clear();
+      crb.dots->setValue(false);
+      crb.attributes->clear();
+
+      crb.lyrics->clear();
+      for (Lyrics* lyrics : rm->lyrics()) {
+            QString s;
+            s.setNum(qptrdiff(lyrics), 16);
+            QListWidgetItem* item = new QListWidgetItem(s);
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
+            crb.lyrics->addItem(item);
+            }
+
+      rmb.sym->setValue(int(rm->sym()));
+      rmb.dotline->setValue(rm->getDotline()); // I don't actually know what this dotline is and if it is relevant to RepeatMeasures
+      rmb.mmWidth->setValue(rm->mmWidth());
+      rmb.gap->setChecked(rm->isGap());
+
+      rmb.repeatMeasureSlashes->setValue(rm->repeatMeasureSlashes());
+      rmb.repeatMeasureSize->setValue(rm->repeatMeasureSize());
       }
 
 //---------------------------------------------------------

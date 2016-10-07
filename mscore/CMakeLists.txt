@@ -59,6 +59,7 @@ QT5_WRAP_UI (ui_headers
       debugger/box.ui
       debugger/keysig.ui
       debugger/rest.ui
+      debugger/repeatmeasure.ui
       debugger/articulationbase.ui
       debugger/accidental.ui
       debugger/clef.ui

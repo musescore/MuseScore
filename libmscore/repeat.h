@@ -29,9 +29,11 @@ class RepeatMeasure : public Rest {
       Q_OBJECT
 
       QPainterPath path;
+      int _repeatMeasureSize;
+      int _repeatMeasureSlashes;                 // MusicXML says: "The slashes attribute specifies the number of slashes to use in the repeat sign. It is 1 if not specified."
 
    public:
-      RepeatMeasure(Score*);
+      RepeatMeasure(Score*, int repeatMeasureSize = 1, int slashes = 1);
       RepeatMeasure &operator=(const RepeatMeasure&) = delete;
       virtual RepeatMeasure* clone() const override   { return new RepeatMeasure(*this); }
       virtual Element* linkedClone() override         { return Element::linkedClone(); }
@@ -40,6 +42,9 @@ class RepeatMeasure : public Rest {
       virtual void layout() override;
       virtual Fraction duration() const override;
       Fraction actualDuration() const { return Rest::duration(); }
+      int repeatMeasureSize() const { return _repeatMeasureSize; }
+      int repeatMeasureSlashes() const { return _repeatMeasureSlashes; }
+      void setRepeatMeasureSize(int repeatMeasureSize) { _repeatMeasureSize = repeatMeasureSize; }
 
       virtual QString accessibleInfo() const override;
       };

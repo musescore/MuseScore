@@ -49,6 +49,7 @@
 #include "ui_articulationbase.h"
 #include "ui_keysig.h"
 #include "ui_rest.h"
+#include "ui_repeatmeasure.h"
 #include "ui_stem.h"
 #include "ui_box.h"
 #include "ui_harmony.h"
@@ -285,6 +286,25 @@ class RestView : public ShowElementBase {
 
    public:
       RestView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   RepeatMeasureView
+//---------------------------------------------------------
+
+class RepeatMeasureView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::ChordRestBase crb;
+      Ui::RepeatMeasure rmb;
+
+   private slots:
+    //  void tupletClicked();
+    //  void beamClicked();
+
+   public:
+      RepeatMeasureView();
       virtual void setElement(Element*);
       };
 

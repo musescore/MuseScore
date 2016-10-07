@@ -509,10 +509,10 @@ Chord* Measure::findChord(int t, int track)
 
 //---------------------------------------------------------
 //   findChordRest
-///   Search for chord or rest at position \a tick at \a staff in \a voice.
+///   Search for chord or rest at position \a tick at \a track in \a voice.
 //---------------------------------------------------------
 
-ChordRest* Measure::findChordRest(int t, int track)
+ChordRest* Measure::findChordRest(int t, int track) const
       {
       t -= tick();
       for (const Segment& seg : _segments) {
@@ -550,7 +550,7 @@ Segment* Measure::tick2segment(int t, Segment::Type st)
 /// Search for a segment of type \a st at position \a t.
 //---------------------------------------------------------
 
-Segment* Measure::findSegment(Segment::Type st, int t)
+Segment* Measure::findSegment(Segment::Type st, int t) const
       {
       t -= tick();
       Segment* s;
@@ -2963,42 +2963,45 @@ void Measure::stretchMeasure(qreal targetWidth)
             minimumWidth += s.width();
             }
 
-      //---------------------------------------------------
-      //    compute 1/Force for a given Extend
-      //---------------------------------------------------
+      if (!springs.empty()) { // can possibly have no elements if is 2nd or later measure of a multi-measure repeat
 
-      if (targetWidth > minimumWidth) {
-            qreal force = 0;
-            qreal c     = 0.0;
-            for (auto i = springs.begin();;) {
-                  c            += i->second->stretch();
-                  minimumWidth -= i->second->width();
-                  qreal f       = (targetWidth - minimumWidth) / c;
-                  ++i;
-                  if (i == springs.end() || f <= i->first) {
-                        force = f;
-                        break;
+            //---------------------------------------------------
+            //    compute 1/Force for a given Extend
+            //---------------------------------------------------
+
+            if (targetWidth > minimumWidth) {
+                  qreal force = 0;
+                  qreal c     = 0.0;
+                  for (auto i = springs.begin();;) {
+                        c            += i->second->stretch();
+                        minimumWidth -= i->second->width();
+                        qreal f       = (targetWidth - minimumWidth) / c;
+                        ++i;
+                        if (i == springs.end() || f <= i->first) {
+                              force = f;
+                              break;
+                              }
                         }
-                  }
 
-            //---------------------------------------------------
-            //    distribute stretch to segments
-            //---------------------------------------------------
+                  //---------------------------------------------------
+                  //    distribute stretch to segments
+                  //---------------------------------------------------
 
-            for (auto& i : springs) {
-                  qreal width = force * i.second->stretch();
-                  if (width > i.second->width())
-                        i.second->setWidth(width);
-                  }
+                  for (auto& i : springs) {
+                        qreal width = force * i.second->stretch();
+                        if (width > i.second->width())
+                              i.second->setWidth(width);
+                        }
 
-            //---------------------------------------------------
-            //    move segments to final position
-            //---------------------------------------------------
+                  //---------------------------------------------------
+                  //    move segments to final position
+                  //---------------------------------------------------
 
-            qreal x = first()->pos().x();
-            for (Segment& s : _segments) {
-                  s.rxpos() = x;
-                  x += s.width();
+                  qreal x = first()->pos().x();
+                  for (Segment& s : _segments) {
+                        s.rxpos() = x;
+                        x += s.width();
+                        }
                   }
             }
 
@@ -3778,6 +3781,72 @@ qreal Measure::basicWidth() const
       return w;
       }
 
+//---------------------------------------------------------
+//   findRepeatMeasureElement
+//    If this measure has a RepeatMeasure element measure
+//    at first tick, then return it, else return null.
+//---------------------------------------------------------
+
+RepeatMeasure* Measure::findRepeatMeasureElement(int track) const
+      {
+      // search for RepeatMeasure element at first tick of measure
+      RepeatMeasure* repeatMeasure = 0;
+      ChordRest* cr0 = findChordRest(tick(), track);
+      if (cr0 && cr0->type() == Element::Type::REPEAT_MEASURE)
+            repeatMeasure = static_cast<RepeatMeasure*>(cr0);
+      return repeatMeasure;
+      }
+
+//---------------------------------------------------------
+//   findRepeatMeasureElementCoveringThisMeasure
+//    If this measure has a RepeatMeasure element measure
+//    or if this measure doesn't have any ChordRests at all
+//    but an earlier measure has a RepeatMeasure element
+//    which has a large enough duration to cover this measure,
+//    then return that multi-measure repeat.
+//---------------------------------------------------------
+
+RepeatMeasure* Measure::findRepeatMeasureElementCoveringThisMeasure(int track) const
+      {
+      // iterate backwards through the score
+      for (const Measure *m = this; m; m = m->prevMeasure()) {
+            RepeatMeasure* repeatMeasure = m->findRepeatMeasureElement(track);
+            if (repeatMeasure)
+                  return repeatMeasure; // found the repeat measure element covering this
+
+            // if we find an actual rest or note in this measure, then is not covered
+            if (findChordRest(tick(), track))
+                  return 0;
+            }
+      return 0; // reached the beginning of score without finding any repeat measure element
+      }
+
+//---------------------------------------------------------
+//   findSourceMeasureOfMMRepeat
+//    Search recursively backwards through score untill
+//    find a non (multi-)measure-repeat measure.
+//---------------------------------------------------------
+
+const Measure* Measure::findSourceMeasureOfMMRepeat(int track) const
+      {
+      // if there is a repeat-measure element covering this measure,
+      RepeatMeasure* repeatMeasure = findRepeatMeasureElementCoveringThisMeasure(track);
+      if (repeatMeasure) {
+            // jump backwards by a number of measures equal to the size of the MeasureRepeat
+            const Measure* m = this;
+            for (int duration = repeatMeasure->repeatMeasureSize(); duration > 0 && m; duration--)
+                  m = m->prevMeasure();
+
+            // if there is a measure there, then see if itself is covered by another MeasureRepeat
+            if (m)
+                  return m->findSourceMeasureOfMMRepeat(track);
+            else {
+                  qDebug("repeat points measure before start of score");
+                  return 0;
+                  }
+            }
+      else
+            return this; // no repeat measure covers this measure, so this is the source measure
+      }
 
 }
-

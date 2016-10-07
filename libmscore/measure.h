@@ -184,7 +184,7 @@ class Measure : public MeasureBase {
       void layout2();
 
       Chord* findChord(int tick, int track);
-      ChordRest* findChordRest(int tick, int track);
+      ChordRest* findChordRest(int tick, int track) const;
       int snap(int tick, const QPointF p) const;
       int snapNote(int tick, const QPointF p, int staff) const;
 
@@ -212,7 +212,7 @@ class Measure : public MeasureBase {
 
       Segment* undoGetSegment(Segment::Type st, int tick);  // deprecated
       Segment* getSegment(Segment::Type st, int tick);      // deprecated
-      Segment* findSegment(Segment::Type st, int tick);     // deprecated
+      Segment* findSegment(Segment::Type st, int tick) const;    // deprecated
 
       Segment* undoGetSegmentR(Segment::Type st, int rtick);
       Segment* getSegmentR(Segment::Type st, int rtick);
@@ -283,6 +283,10 @@ class Measure : public MeasureBase {
       qreal basicStretch() const;
       qreal basicWidth() const;
       virtual qreal computeMinWidth(bool isFirstMeasureInSystem);
+
+      RepeatMeasure* findRepeatMeasureElement(int track) const;
+      RepeatMeasure* findRepeatMeasureElementCoveringThisMeasure(int track) const;
+      const Measure* findSourceMeasureOfMMRepeat(int track) const;
       };
 
 }     // namespace Ms
