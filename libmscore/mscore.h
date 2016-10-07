@@ -342,7 +342,7 @@ MS_QML_ENUM(TextStyleType, signed char,\
       OTTAVA,\
       PEDAL,\
       HAIRPIN,\
-      BENCH,\
+      BEND,\
       HEADER,\
       FOOTER,\
       INSTRUMENT_CHANGE,\
