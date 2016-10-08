@@ -555,6 +555,10 @@
     <seq>Ctrl+T</seq>
     </SC>
   <SC>
+    <key>expression-text</key>
+    <seq>Ctrl+E</seq>
+    </SC>
+  <SC>
     <key>chord-text</key>
     <seq>Ctrl+K</seq>
     </SC>
@@ -612,7 +616,7 @@
     </SC>
   <SC>
     <key>edit-element</key>
-    <seq>Ctrl+E</seq>
+    <seq>Alt+Shift+E</seq>
     </SC>
   <SC>
     <key>reset</key>

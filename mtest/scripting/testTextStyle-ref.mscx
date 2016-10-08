@@ -135,7 +135,7 @@
       <Measure number="3">
         <StaffText>
           <style>String Number</style>
-          <text>Styled Technique Text</text>
+          <text>Styled Expression Text</text>
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
