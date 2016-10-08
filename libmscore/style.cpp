@@ -320,49 +320,30 @@ static const QString ff("FreeSerif");
 void initStyle(MStyle* s)
       {
 #define MM(x) ((x)/INCH)
+#define N(x)  QT_TRANSLATE_NOOP ("TextStyle", x)
+#define LT    AlignmentFlags::LEFT | AlignmentFlags::TOP
 
       // this is an empty style, no offsets are allowed
       // never show this style
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", ""), ff, 10, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, false, false,
-         false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
-         QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", ""), ff, 10, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, false, false, false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black), QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Title"),    ff, 24, false, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Subtitle"), ff, 14, false, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(0, MM(10)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Composer"), ff, 12, false, false, false,
-         AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyricist"), ff, 12, false, false, false,
-         AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Odd Lines"),          ff, 11, false, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Even Lines"),         ff, 11, false, false, false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Fingering"),                 ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "LH Guitar Fingering"),       ff,  8, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(-0.5, 0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "RH Guitar Fingering"),       ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"),             ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(0, -2.0), OffsetType::SPATIUM, true, false,
-         true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Long)"),    ff, 12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Short)"),   ff, 12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Part)"),    ff, 18, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Title"),                   ff, 24, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,      QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Subtitle"),                ff, 14, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,      QPointF(0, MM(10)), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Composer"),                ff, 12, false, false, false, AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM,   QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Lyricist"),                ff, 12, false, false, false, AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM,   QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Lyrics Odd Lines"),        ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Lyrics Even Lines"),       ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Fingering"),               ff,  8, false, false, false, AlignmentFlags::CENTER,                             QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("LH Guitar Fingering"),     ff,  8, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER,    QPointF(-0.5, 0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("RH Guitar Fingering"),     ff,  8, false, false, false, AlignmentFlags::CENTER,                             QPointF(),        OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("String Number"),           ff,  8, false, false, false, AlignmentFlags::CENTER,                             QPointF(0, -2.0), OffsetType::SPATIUM, true, true, true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
+      s->addTextStyle(TextStyle(N("Instrument Name (Long)"),  ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER,    QPointF(),        OffsetType::ABS, true));
+      s->addTextStyle(TextStyle(N("Instrument Name (Short)"), ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER,    QPointF(),        OffsetType::ABS, true));
+      s->addTextStyle(TextStyle(N("Instrument Name (Part)"),  ff, 18, false, false, false, LT, QPointF(),        OffsetType::ABS));
 
       // dynamics size is 12pt for bravura-text
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, true,false,
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, true, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM,
@@ -440,6 +421,7 @@ void initStyle(MStyle* s)
          TextStyleHidden::IN_EDITOR));                                         // don't show in Style Editor
 
 #undef MM
+#undef N
 
 #ifndef NDEBUG
       int i = 0;

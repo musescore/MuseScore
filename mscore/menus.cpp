@@ -529,14 +529,17 @@ Palette* MuseScore::newFingeringPalette()
             f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
-#if 0 // TODO-ws
+
+      static const std::vector<SymId> lute {
+         SymId::stringsThumbPosition,
+         SymId::luteFingeringRHThumb, SymId::luteFingeringRHFirst,
+         SymId::luteFingeringRHSecond, SymId::luteFingeringRHThird
+         };
       // include additional symbol-based fingerings (temporarily?) implemented as articulations
-      for (int i = int(ArticulationType::ARTICULATIONS_PROPER); i < int(ArticulationType::ARTICULATIONS); ++i) {
-            Articulation* s = new Articulation(gscore);
-            s->setArticulationType(ArticulationType(i));
+      for (auto i : lute) {
+            Articulation* s = new Articulation(i, gscore);
             sp->append(s, s->userName());
             }
-#endif
       return sp;
       }
 
