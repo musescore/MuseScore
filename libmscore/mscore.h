@@ -320,7 +320,7 @@ MS_QML_ENUM(TextStyleType, signed char,\
       INSTRUMENT_SHORT,\
       INSTRUMENT_EXCERPT,\
       DYNAMICS,\
-      TECHNIQUE,\
+      EXPRESSION,\
       TEMPO,\
       METRONOME,\
       MEASURE_NUMBER,\

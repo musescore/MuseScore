@@ -58,6 +58,7 @@ void TestCompat206::compat_data()
       QTest::newRow("breath") <<  "breath";
       QTest::newRow("clefs") <<  "clefs";
       QTest::newRow("markers") <<  "markers";
+      QTest::newRow("textstyles") <<  "textstyles";
       }
 
 //---------------------------------------------------------

@@ -1344,13 +1344,14 @@ Palette* MuseScore::newTextPalette()
 
       StaffText* st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::STAFF);
-      st->setXmlText(tr("Staff Text")); // Technique
-      sp->append(st, tr("Staff text")); // Staff technique text
+      st->setXmlText(tr("Staff Text"));
+      sp->append(st, tr("Staff text"));
 
       st = new StaffText(gscore);
-      st->setTextStyleType(TextStyleType::SYSTEM);
-      st->setXmlText(tr("System Text"));
-      sp->append(st, tr("System text"));
+      st->setTextStyleType(TextStyleType::EXPRESSION);
+      st->setXmlText(tr("Expression"));
+      st->setPlacement(Element::Placement::BELOW);
+      sp->append(st, tr("Expression text"));
 
       InstrumentChange* is = new InstrumentChange(gscore);
       is->setXmlText(tr("Change Instr."));
@@ -1365,6 +1366,11 @@ Palette* MuseScore::newTextPalette()
       st->setXmlText(tr("Swing"));
       st->setSwing(true);
       sp->append(st, tr("Swing"));
+
+      st = new StaffText(gscore);
+      st->setTextStyleType(TextStyleType::SYSTEM);
+      st->setXmlText(tr("System Text"));
+      sp->append(st, tr("System text"));
 
       return sp;
       }
