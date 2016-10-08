@@ -448,7 +448,8 @@ void MuseScore::preferencesChanged()
       getAction("midi-on")->setEnabled(preferences.enableMidiInput);
       _statusBar->setVisible(preferences.showStatusBar);
 
-      updateNewWizard();
+      delete newWizard;
+      newWizard = 0;
       }
 
 //---------------------------------------------------------

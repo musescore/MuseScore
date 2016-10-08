@@ -161,9 +161,8 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
       {
       setTitle(tr("Create New Score"));
       setSubTitle(tr("This wizard creates a new score"));
-      //crash setAccessibleName(title());
-      setAccessibleName(tr("Create New Score"));
-      setAccessibleDescription(subTitle());
+      setAccessibleName(QWizardPage::title());
+      setAccessibleDescription(QWizardPage::subTitle());
 
       w = new TitleWizard;
 
@@ -189,19 +188,19 @@ void NewWizardPage1::initializePage()
 NewWizardPage2::NewWizardPage2(QWidget* parent)
    : QWizardPage(parent)
       {
+      setFinalPage(true);
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Define a set of instruments. Each instrument"
                      " is represented by one or more staves"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
-      complete = false;
-      w = new InstrumentsWidget;
+      w        = new InstrumentsWidget;
       QGridLayout* grid = new QGridLayout;
       grid->setSpacing(0);
       grid->setContentsMargins(0, 0, 0, 0);
       grid->addWidget(w, 0, 0);
       setLayout(grid);
-      connect(w, SIGNAL(completeChanged(bool)), this, SLOT(setComplete(bool)));
+      connect(w, SIGNAL(completeChanged(bool)), SLOT(setComplete(bool)));
       }
 
 //---------------------------------------------------------
@@ -210,6 +209,7 @@ NewWizardPage2::NewWizardPage2(QWidget* parent)
 
 void NewWizardPage2::initializePage()
       {
+      complete = false;
       w->init();
       }
 
@@ -221,6 +221,15 @@ void NewWizardPage2::setComplete(bool val)
       {
       complete = val;
       emit completeChanged();
+      }
+
+//---------------------------------------------------------
+//   isComplete
+//---------------------------------------------------------
+
+bool NewWizardPage2::isComplete() const
+      {
+      return complete;
       }
 
 //---------------------------------------------------------
@@ -239,6 +248,7 @@ void NewWizardPage2::createInstruments(Score* s)
 NewWizardPage3::NewWizardPage3(QWidget* parent)
    : QWizardPage(parent)
       {
+      setFinalPage(true);
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Create Time Signature"));
       setAccessibleName(title());
@@ -257,6 +267,7 @@ NewWizardPage3::NewWizardPage3(QWidget* parent)
 NewWizardPage4::NewWizardPage4(QWidget* parent)
    : QWizardPage(parent)
       {
+      setFinalPage(true);
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Select Template File:"));
       setAccessibleName(title());
@@ -312,7 +323,8 @@ void NewWizardPage4::fileAccepted(const QString& s)
       {
       path = s;
       templateFileBrowser->show();
-      wizard()->next();
+      if (wizard()->currentPage() == this)
+            wizard()->next();
       }
 
 //---------------------------------------------------------
@@ -341,6 +353,7 @@ QString NewWizardPage4::templatePath() const
 NewWizardPage5::NewWizardPage5(QWidget* parent)
    : QWizardPage(parent)
       {
+      setFinalPage(true);
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Select Key Signature and Tempo:"));
       setAccessibleName(title());
@@ -413,23 +426,31 @@ NewWizard::NewWizard(QWidget* parent)
       setOption(QWizard::HaveFinishButtonOnEarlyPages, true);
       setOption(QWizard::HaveNextButtonOnLastPage, true);
 
-
       p1 = new NewWizardPage1;
       p2 = new NewWizardPage2;
       p3 = new NewWizardPage3;
       p4 = new NewWizardPage4;
       p5 = new NewWizardPage5;
 
-      setPage(int(Page::Type), p1);
-      setPage(int(Page::Template), p4);
-      setPage(int(Page::Instruments), p2);
-      setPage(int(Page::Timesig), p3);
-      setPage(int(Page::Keysig), p5);
-      p2->setFinalPage(true);
-      p3->setFinalPage(true);
-      p4->setFinalPage(true);
-      p5->setFinalPage(true);
+//  enum Page { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
+
+      setPage(Page::Type,        p1);
+      setPage(Page::Instruments, p2);
+      setPage(Page::Template,    p4);
+      setPage(Page::Keysig,      p5);
+      setPage(Page::Timesig,     p3);
+
       resize(840, 560);
+      connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      }
+
+//---------------------------------------------------------
+//   idChanged
+//---------------------------------------------------------
+
+void NewWizard::idChanged(int id)
+      {
+      // printf("\n===\nWizard: id changed %d\n", id);
       }
 
 //---------------------------------------------------------
@@ -438,22 +459,26 @@ NewWizard::NewWizard(QWidget* parent)
 
 int NewWizard::nextId() const
       {
-      switch(Page(currentId())) {
+      int next;
+      switch (Page(currentId())) {
             case Page::Type:
-                  return int(Page::Template);
-            case Page::Template: {
-                  if (emptyScore())
-                        return int(Page::Instruments);
-                  return int(Page::Keysig);
-                  }
+                  next = Page::Template;
+                  break;
+            case Page::Template:
+                  next = emptyScore() ? Page::Instruments : Page::Keysig;
+                  break;
             case Page::Instruments:
-                  return int(Page::Keysig);
+                  next = Page::Keysig;
+                  break;
             case Page::Keysig:
-                  return int(Page::Timesig);
+                  next = Page::Timesig;
+                  break;
             case Page::Timesig:
             default:
-                  return int(Page::Invalid);
+                  next = Page::Invalid;
+                  break;
             }
+      return next;
       }
 
 //---------------------------------------------------------
@@ -464,7 +489,8 @@ bool NewWizard::emptyScore() const
       {
       QString p = p4->templatePath();
       QFileInfo fi(p);
-      return fi.completeBaseName() == "00-Blank";
+      bool val = fi.completeBaseName() == "00-Blank";
+      return val;
       }
 }
 

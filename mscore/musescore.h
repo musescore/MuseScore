@@ -34,6 +34,7 @@
 #include "uploadscoredialog.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
+#include "newwizard.h"
 
 namespace Ms {
 
@@ -457,7 +458,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showModeText(const QString&);
       void addRecentScore(const QString& scorePath);
 
-      void updateNewWizard();
       void updateViewModeCombo();
       void switchLayoutMode(LayoutMode);
 
