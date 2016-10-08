@@ -1868,6 +1868,13 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "expression-text",
+         QT_TRANSLATE_NOOP("action","Expression Text"),
+         QT_TRANSLATE_NOOP("action","Expression text")
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "frame-text",
          QT_TRANSLATE_NOOP("action","Text"),

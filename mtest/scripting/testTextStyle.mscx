@@ -134,8 +134,8 @@
         </Measure>
       <Measure number="3">
         <StaffText>
-          <style>Technique</style>
-          <text>Styled Technique Text</text>
+          <style>Expression</style>
+          <text>Styled Expression Text</text>
           </StaffText>
         <Rest>
           <durationType>measure</durationType>

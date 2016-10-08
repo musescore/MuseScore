@@ -159,17 +159,6 @@
         <halign>left</halign>
         <valign>baseline</valign>
         <xoffset>0</xoffset>
-        <yoffset>-2</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Technique</name>
-        <family>MuseJazz</family>
-        <size>12</size>
-        <italic>1</italic>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
         <yoffset>-4</yoffset>
         <offsetType>spatium</offsetType>
         <name>Tempo</name>
@@ -317,6 +306,17 @@
         <size>8</size>
         <italic>1</italic>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        </TextStyle>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-2</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Technique</name>
+        <family>MuseJazz</family>
+        <size>12</size>
+        <italic>1</italic>
         </TextStyle>
       <TextStyle>
         <halign>center</halign>

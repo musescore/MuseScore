@@ -2880,6 +2880,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::SYSTEM);
       else if (cmd == "staff-text")
             cmdAddText(TEXT::STAFF);
+      else if (cmd == "expression-text")
+            cmdAddText(TEXT::EXPRESSION);
       else if (cmd == "rehearsalmark-text")
             cmdAddText(TEXT::REHEARSAL_MARK);
       else if (cmd == "instrument-change-text")
@@ -5612,6 +5614,18 @@ void ScoreView::cmdAddText(TEXT type)
                         s->setTrack(cr->track());
                         s->setTextStyleType(TextStyleType::STAFF);
                         }
+                  s->setParent(cr->segment());
+                  }
+                  break;
+            case TEXT::EXPRESSION:
+                  {
+                  ChordRest* cr = _score->getSelectedChordRest();
+                  if (!cr)
+                        break;
+                  s = new StaffText(_score);
+                  s->setTrack(cr->track());
+                  s->setTextStyleType(TextStyleType::EXPRESSION);
+                  s->setPlacement(Element::Placement::BELOW);
                   s->setParent(cr->segment());
                   }
                   break;
