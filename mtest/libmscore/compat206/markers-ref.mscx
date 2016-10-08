@@ -8,6 +8,7 @@
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
       <pedalY>0</pedalY>
       <trillY>0</trillY>
       <minMMRestWidth>0</minMMRestWidth>
@@ -76,6 +77,12 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -85,11 +92,11 @@
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
-      <trackName>Flûte</trackName>
+      <trackName>Flute</trackName>
       <Instrument>
-        <longName>Flûte</longName>
+        <longName>Flute</longName>
         <shortName>Fl.</shortName>
-        <trackName>Flûte</trackName>
+        <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
@@ -130,6 +137,11 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -139,38 +151,146 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <Breath>
-          <symbol>breathMarkComma</symbol>
-          </Breath>
         </Measure>
       <Measure number="2">
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segnoSerpent1</sym></text>
+          <label>varsegno</label>
+          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <Breath>
-          <symbol>caesuraCurved</symbol>
-          <pause>2</pause>
-          </Breath>
         </Measure>
       <Measure number="3">
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>coda</sym></text>
+          <label>codab</label>
+          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <Breath>
-          <symbol>caesura</symbol>
-          <pause>2</pause>
-          </Breath>
         </Measure>
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>codaSquare</sym></text>
+          <label>varcoda</label>
+          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
+        </Measure>
+      <Measure number="5">
+        <Marker>
+          <text>Fine</text>
+          <label>fine</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Marker>
+          <text>To Coda</text>
+          <label>coda</label>
+          </Marker>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Jump>
+          <text>D.C.</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Jump>
+          <text>D.C. al Fine</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>fine</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Jump>
+          <text>D.C. al Coda</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Jump>
+          <text>D.S. al Coda</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Jump>
+          <text>D.S. al Fine</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>fine</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Jump>
+          <text>D.S.</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <RepeatMeasure>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </RepeatMeasure>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>

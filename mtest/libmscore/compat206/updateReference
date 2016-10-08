@@ -10,3 +10,4 @@ cp $S/accidentals-test.mscx accidentals-ref.mscx
 cp $S/articulations-test.mscx articulations-ref.mscx
 cp $S/breath-test.mscx breath-ref.mscx
 cp $S/clefs-test.mscx clefs-ref.mscx
+cp $S/markers-test.mscx markers-ref.mscx
