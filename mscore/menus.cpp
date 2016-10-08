@@ -245,24 +245,24 @@ Palette* MuseScore::newKeySigPalette(PaletteType t)
       sp->setGrid(56, 64);
       sp->setYOffset(0.5);
 
+      for (int i = 0; i < 7; ++i) {
+            KeySig* k = new KeySig(gscore);
+            k->setKey(Key(i + 1));
+            sp->append(k, qApp->translate("MuseScore", keyNames[i*2]));
+            }
+      for (int i = -7; i < 0; ++i) {
+            KeySig* k = new KeySig(gscore);
+            k->setKey(Key(i));
+            sp->append(k, qApp->translate("MuseScore", keyNames[(7 + i) * 2 + 1]));
+            }
+      KeySig* k = new KeySig(gscore);
+      k->setKey(Key::C);
+      sp->append(k, qApp->translate("MuseScore", keyNames[14]));
+
       switch (t) {
-            case PaletteType::BASIC: {
-                  for (int i = 0; i < 7; ++i) {
-                        KeySig* k = new KeySig(gscore);
-                        k->setKey(Key(i + 1));
-                        sp->append(k, qApp->translate("MuseScore", keyNames[i*2]));
-                        }
-                  for (int i = -7; i < 0; ++i) {
-                        KeySig* k = new KeySig(gscore);
-                        k->setKey(Key(i));
-                        sp->append(k, qApp->translate("MuseScore", keyNames[(7 + i) * 2 + 1]));
-                        }
-                  KeySig* k = new KeySig(gscore);
-                  k->setKey(Key::C);
-                  sp->append(k, qApp->translate("MuseScore", keyNames[14]));
+            case PaletteType::BASIC:
                   sp->setMoreElements(true);
-                  }
-                  // fall through
+                  break;
 
             case PaletteType::MASTER:
             case PaletteType::ADVANCED: {
