@@ -199,6 +199,8 @@ void Palette::setMag(qreal val)
 
 void Palette::contextMenuEvent(QContextMenuEvent* event)
       {
+      if (!_showContextMenu)
+            return;
       int i = idx(event->pos());
       if (i == -1) {
             // palette context menu
