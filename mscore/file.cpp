@@ -468,13 +468,6 @@ QString MuseScore::createDefaultName() const
       return name;
       }
 
-
-void MuseScore::updateNewWizard()
-      {
-      if (newWizard != 0)
-            newWizard = new NewWizard(this);
-      }
-
 //---------------------------------------------------------
 //   newFile
 //    create new score
@@ -482,9 +475,10 @@ void MuseScore::updateNewWizard()
 
 void MuseScore::newFile()
       {
-      if (newWizard == 0)
+      if (!newWizard)
             newWizard = new NewWizard(this);
-      newWizard->restart();
+      else
+            newWizard->restart();
       if (newWizard->exec() != QDialog::Accepted)
             return;
       int measures            = newWizard->measures();
