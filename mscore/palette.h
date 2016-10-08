@@ -123,6 +123,7 @@ class Palette : public QWidget {
       qreal _yOffset;         // in spatium units of "gscore"
 
       bool _moreElements;
+      bool _showContextMenu { true };
 
       void redraw(const QRect&);
       virtual void paintEvent(QPaintEvent*);
@@ -199,6 +200,7 @@ class Palette : public QWidget {
       bool moreElements() const      { return _moreElements; }
       void setMoreElements(bool val);
       bool filter(const QString& text);
+      void setShowContextMenu(bool val) { _showContextMenu = val; }
 
       virtual int heightForWidth(int) const;
       virtual QSize sizeHint() const;
