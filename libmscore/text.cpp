@@ -2271,7 +2271,7 @@ bool Text::readProperties(XmlReader& e)
                         case 11: st = TextStyleType::INSTRUMENT_EXCERPT; break;
 
                         case 12: st = TextStyleType::DYNAMICS;  break;
-                        case 13: st = TextStyleType::TECHNIQUE;   break;
+                        case 13: st = TextStyleType::STAFF;     break; // TextStyleType::TECHNIQUE
                         case 14: st = TextStyleType::TEMPO;     break;
                         case 15: st = TextStyleType::METRONOME; break;
                         case 16: st = TextStyleType::FOOTER;    break;  // TextStyleType::COPYRIGHT

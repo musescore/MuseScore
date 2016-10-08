@@ -10,7 +10,7 @@ MuseScore {
                               if (seg.annotations[i].textStyleType === TextStyleType.SYSTEM) {
                                     seg.annotations[i].textStyleType = TextStyleType.FIGURED_BASS;
                               }
-                              else if (seg.annotations[i].textStyleType === TextStyleType.TECHNIQUE) {
+                              else if (seg.annotations[i].textStyleType === TextStyleType.EXPRESSION) {
                                     seg.annotations[i].textStyleType = TextStyleType.STRING_NUMBER;
                               }
                         }

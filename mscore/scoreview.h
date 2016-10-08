@@ -66,6 +66,7 @@ enum class TEXT : char {
       PART,
       SYSTEM,
       STAFF,
+      EXPRESSION,
       REHEARSAL_MARK,
       INSTRUMENT_CHANGE
       };

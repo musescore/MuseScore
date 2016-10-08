@@ -1054,6 +1054,7 @@ MuseScore::MuseScore()
       menuAddText->addSeparator();
       menuAddText->addAction(getAction("system-text"));
       menuAddText->addAction(getAction("staff-text"));
+      menuAddText->addAction(getAction("expression-text"));
       menuAddText->addAction(getAction("chord-text"));
       menuAddText->addAction(getAction("rehearsalmark-text"));
       menuAddText->addAction(getAction("instrument-change-text"));
