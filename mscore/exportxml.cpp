@@ -1724,11 +1724,17 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
             else {
                   // trill stop before trill start
                   n = findTrill(0);
-                  trills[n] = tr;
+                  if (n >= 0)
+                        trills[n] = tr;
+                  else
+                        qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                               chord, chord->staffIdx(), chord->tick());
                   }
-            notations.tag(xml);
-            ornaments.tag(xml);
-            xml.tagE(QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1));
+            if (n >= 0) {
+                  notations.tag(xml);
+                  ornaments.tag(xml);
+                  xml.tagE(QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1));
+                  }
             trillStop.remove(chord);
             }
       if (trillStart.contains(chord)) {
@@ -1738,15 +1744,20 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                   qDebug("wavyLineStartStop error");
             else {
                   n = findTrill(0);
-                  trills[n] = tr;
-                  // mscore only supports wavy-line with trill-mark
-                  notations.tag(xml);
-                  ornaments.tag(xml);
-                  xml.tagE("trill-mark");
-                  QString tagName = "wavy-line type=\"start\"";
-                  tagName += QString(" number=\"%1\"").arg(n + 1);
-                  tagName += color2xml(tr);
-                  xml.tagE(tagName);
+                  if (n >= 0) {
+                        trills[n] = tr;
+                        // mscore only supports wavy-line with trill-mark
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("trill-mark");
+                        QString tagName = "wavy-line type=\"start\"";
+                        tagName += QString(" number=\"%1\"").arg(n + 1);
+                        tagName += color2xml(tr);
+                        xml.tagE(tagName);
+                        }
+                  else
+                        qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                               chord, chord->staffIdx(), chord->tick());
                   trillStart.remove(chord);
                   }
             }
@@ -3332,18 +3343,23 @@ int ExportMusicXml::findOttava(const Ottava* ot) const
 
 void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       {
-      Ottava::Type st = ot->ottavaType();
-      directionTag(xml, attr, ot);
-      xml.stag("direction-type");
-
       int n = findOttava(ot);
       if (n >= 0)
             ottavas[n] = 0;
       else {
             n = findOttava(0);
-            ottavas[n] = ot;
+            if (n >= 0)
+                  ottavas[n] = ot;
+            else {
+                  qDebug("too many overlapping ottavas (ot %p staff %d tick %d)", ot, staff, tick);
+                  return;
+                  }
             }
 
+      directionTag(xml, attr, ot);
+      xml.stag("direction-type");
+
+      Ottava::Type st = ot->ottavaType();
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
@@ -3416,6 +3432,19 @@ int ExportMusicXml::findBracket(const TextLine* tl) const
 
 void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       {
+      int n = findBracket(tl);
+      if (n >= 0)
+            brackets[n] = 0;
+      else {
+            n = findBracket(0);
+            if (n >= 0)
+                  brackets[n] = tl;
+            else {
+                  qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick);
+                  return;
+                  }
+            }
+      
       QString rest;
       QPointF p;
 
@@ -3466,14 +3495,6 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             else
                   lineEnd = "down";
             rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
-            }
-
-      int n = findBracket(tl);
-      if (n >= 0)
-            brackets[n] = 0;
-      else {
-            n = findBracket(0);
-            brackets[n] = tl;
             }
 
       if (preferences.musicxmlExportLayout && p.x() != 0)
