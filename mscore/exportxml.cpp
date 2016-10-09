@@ -1477,7 +1477,8 @@ void ExportMusicXml::barlineRight(Measure* m)
       if (needBarStyle) {
             if (!visible) {
                   xml.tag("bar-style", QString("none"));
-            } else {
+                  }
+            else {
                   switch (bst) {
                         case BarLineType::DOUBLE:
                               xml.tag("bar-style", QString("light-light"));
@@ -1872,7 +1873,7 @@ static void fermatas(const QVector<Articulation*>& cra, Xml& xml, Notations& not
                   // MusicXML does not support the very long fermata,
                   // export as long fermata (better than not exporting at all)
                   else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
-                     || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
+                           || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
                         xml.tag(tagName, "square");
                   }
             }
@@ -2924,7 +2925,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                   else if (el->isDynamic()) {
                         tagname += " placement=\"";
                         tagname += el->placement() == Element::Placement::ABOVE
-                           ? "above" : "below";
+                              ? "above" : "below";
                         tagname += "\"";
                         }
                   else {
@@ -3296,7 +3297,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
 
       directionTag(xml, attr, hp);
       xml.stag("direction-type");
-            
+
       if (hp->tick() == tick) {
             if ( hp->hairpinType() == HairpinType::CRESC_HAIRPIN ) {
                   if ( hp->hairpinCircledTip() ) {
@@ -3442,7 +3443,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
                   return;
                   }
             }
-      
+
       QString rest;
       QPointF p;
 
