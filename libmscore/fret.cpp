@@ -35,7 +35,7 @@ FretDiagram::FretDiagram(Score* score)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
       font.setFamily("FreeSans");
-      font.setPixelSize(4.0 * mag());
+      font.setPointSize(4.0 * mag());
       }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
@@ -287,8 +287,10 @@ void FretDiagram::draw(QPainter* painter) const
             }
       QFont scaledFont(font);
       scaledFont.setPointSizeF(font.pointSize() * _userMag);
-      painter->setFont(scaledFont);
       QFontMetricsF fm(scaledFont, MScore::paintDevice());
+      scaledFont.setPointSizeF(scaledFont.pointSizeF() * MScore::pixelRatio);
+
+      painter->setFont(scaledFont);
       qreal dotd = stringDist * .6;
 
       for (int i = 0; i < _strings; ++i) {
@@ -326,7 +328,7 @@ void FretDiagram::draw(QPainter* painter) const
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(StyleIdx::fretNumMag);
             QFont scaledFont(font);
-            scaledFont.setPointSizeF(font.pointSize() * fretNumMag * _userMag);
+            scaledFont.setPointSizeF(font.pointSize() * fretNumMag * _userMag * MScore::pixelRatio);
             painter->setFont(scaledFont);
             if (score()->styleI(StyleIdx::fretNumPos) == 0)
                   painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
