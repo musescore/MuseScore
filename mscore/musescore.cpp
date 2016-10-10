@@ -5265,10 +5265,10 @@ QMenu* MuseScore::createPopupMenu()
       QMenu* m = QMainWindow::createPopupMenu();
       QList<QAction*> al = m->actions();
       for (QAction* a : al) {
-            if (a->text() == "Text Tools")
+            if (_textTools && a->text() == _textTools->windowTitle())
                   m->removeAction(a);
-            else if (a->text() == "Note Input")
-                  a->setEnabled(false);
+            else if (entryTools && a->text() == entryTools->windowTitle())
+                  m->removeAction(a);
             }
       return m;
       }
