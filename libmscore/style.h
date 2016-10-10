@@ -54,6 +54,7 @@ enum class StyleIdx : int {
       lyricsDashMaxDistance,
       lyricsDashForce,
       lyricsAlignVerseNumber,
+      lyricsLineThickness,
 
       figuredBassFontFamily,
       figuredBassFontSize,
@@ -70,6 +71,7 @@ enum class StyleIdx : int {
       endBarWidth,
       doubleBarDistance,
       endBarDistance,
+      repeatBarlineDotSeparation,
       repeatBarTips,
       startBarlineSingle,
       startBarlineMultiple,

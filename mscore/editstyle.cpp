@@ -89,6 +89,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::lyricsDashMaxDistance,   false, lyricsDashMaxDistance,   resetLyricsDashMaxDistance },
       { StyleIdx::lyricsDashForce,         false, lyricsDashForce,         resetLyricsDashForce },
       { StyleIdx::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber },
+      { StyleIdx::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness },
 
       { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     0 },
       { StyleIdx::frameSystemDistance,     false, frameSystemDistance,     0 },
@@ -100,6 +101,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::endBarDistance,          false, endBarDistance,          0 },
       { StyleIdx::doubleBarWidth,          false, doubleBarWidth,          0 },
       { StyleIdx::doubleBarDistance,       false, doubleBarDistance,       0 },
+      { StyleIdx::repeatBarlineDotSeparation, false, repeatBarlineDotSeparation, 0 },
+
       { StyleIdx::barGraceDistance,        false, barGraceDistance,        resetBarGraceDistance },
       { StyleIdx::useStandardNoteNames,    false, useStandardNoteNames,    0 },
       { StyleIdx::useGermanNoteNames,      false, useGermanNoteNames,      0 },
