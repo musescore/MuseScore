@@ -198,6 +198,7 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
       QString cmd = "diff";
       QStringList args;
       args.append("-u");
+      args.append("--strip-trailing-cr");
       args.append(saveName);
       args.append(root + "/" + compareWith);
       QProcess p;

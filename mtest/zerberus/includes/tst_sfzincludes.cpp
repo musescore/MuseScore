@@ -52,7 +52,7 @@ void TestSfzIncludes::testincludes()
       Zerberus* synth = new Zerberus();
       Ms::preferences.mySoundfontsPath += ";" + root;
       synth->loadInstrument("includeMain.sfz");
-      QCOMPARE(synth->instrument(0)->zones().size(), (unsigned long) 2);
+      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 2);
       QCOMPARE(synth->instrument(0)->zones().front()->keyLo, (char) 23);
       QCOMPARE(synth->instrument(0)->zones().front()->keyHi, (char) 42);
       QCOMPARE(synth->instrument(0)->zones().front()->keyBase, (char) 40);
