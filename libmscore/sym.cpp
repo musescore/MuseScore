@@ -5636,7 +5636,6 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                   font->setStyleStrategy(QFont::NoFontMerging);
                   font->setHintingPreference(QFont::PreferVerticalHinting);
                   qreal size = 20.0 * MScore::pixelRatio;
-                  //font->setPixelSize(lrint(size));
                   font->setPointSize(size);
                   }
             qreal imag = 1.0 / mag;
