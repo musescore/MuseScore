@@ -791,7 +791,6 @@ MuseScore::MuseScore()
 
       entryTools = addToolBar("");
       entryTools->setObjectName("entry-tools");
-      connect(entryTools, SIGNAL(visibilityChanged(bool)), SLOT(toolbarVisibilityChanged(bool)));
 
       populateNoteInputMenu();
 
@@ -5258,18 +5257,20 @@ QFileInfoList MuseScore::recentScores() const
       }
 
 //---------------------------------------------------------
-//   toolbarVisibilityChanged
-//    This disables the ability to hide the connected
-//    widget.
+//   createPopupMenu
 //---------------------------------------------------------
 
-void MuseScore::toolbarVisibilityChanged(bool val)
+QMenu* MuseScore::createPopupMenu()
       {
-      if (!val) {
-            QObject* s = sender();
-            QWidget* w = static_cast<QWidget*>(s);
-            w->setVisible(true);
+      QMenu* m = QMainWindow::createPopupMenu();
+      QList<QAction*> al = m->actions();
+      for (QAction* a : al) {
+            if (a->text() == "Text Tools")
+                  m->removeAction(a);
+            else if (a->text() == "Note Input")
+                  a->setEnabled(false);
             }
+      return m;
       }
 
 }

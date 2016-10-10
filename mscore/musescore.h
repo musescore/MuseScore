@@ -510,7 +510,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void switchLayoutMode(int);
       void showMidiImportPanel();
       void changeWorkspace(QAction*);
-      void toolbarVisibilityChanged(bool);
+
+      virtual QMenu* createPopupMenu() override;
 
    public slots:
       virtual void cmd(QAction* a);
