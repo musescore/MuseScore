@@ -588,7 +588,8 @@ void Mixer::updateSolo(bool val)
       for (int i = 0; i < vb->count(); i++ ){
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(i));
             PartEdit* pe    = (PartEdit*)(wi->widget());
-            pe->mute->setEnabled(!val);
+            if (pe)
+                  pe->mute->setEnabled(!val);
             }
       }
 
