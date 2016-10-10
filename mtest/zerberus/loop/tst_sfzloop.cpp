@@ -60,7 +60,7 @@ void TestSfzLoop::initTestCase()
 
 void TestSfzLoop::testEnvelopesParsing()
       {
-      QCOMPARE(synth->instrument(0)->zones().size(), (unsigned long) 4);
+      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 4);
 
       std::list<Zone *>::iterator curZone = synth->instrument(0)->zones().begin();
       QCOMPARE((*curZone)->keyLo, (char) 20);

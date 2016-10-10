@@ -28,6 +28,17 @@ target_link_libraries(
       midi
       qzip
       z
+      )
+
+if (OMR)
+      target_link_libraries(${TARGET} omr poppler)
+      if (OCR)
+            target_link_libraries(${TARGET} tesseract_api)
+      endif (OCR)
+endif (OMR)
+
+target_link_libraries(
+      ${TARGET}
       ${QT_LIBRARIES}
       mscore_freetype
       z
@@ -38,13 +49,6 @@ if (NOT MINGW AND NOT APPLE)
       dl
       pthread)
 endif (NOT MINGW AND NOT APPLE)
-
-if (OMR)
-      target_link_libraries(${TARGET} omr poppler)
-      if (OCR)
-            target_link_libraries(${TARGET} tesseract_api)
-      endif (OCR)
-endif (OMR)
 
 if (APPLE)
 target_link_libraries(${TARGET} ${OsxFrameworks})

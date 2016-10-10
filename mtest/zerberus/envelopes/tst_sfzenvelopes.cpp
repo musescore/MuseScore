@@ -60,7 +60,7 @@ void TestSfzEnvelopes::initTestCase()
 
 void TestSfzEnvelopes::testEnvelopesParsing()
       {
-      QCOMPARE(synth->instrument(0)->zones().size(), (unsigned long) 1);
+      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 1);
       QCOMPARE(synth->instrument(0)->zones().front()->ampegDelay, 0.01f * 1000.0f);
       QCOMPARE(synth->instrument(0)->zones().front()->ampegStart, 20.0f / 100.0f); // 20 percent
       QCOMPARE(synth->instrument(0)->zones().front()->ampegAttack, 0.01f * 1000.0f);

@@ -55,7 +55,7 @@ void TestOpcodes::testOpcodes()
 
       std::list<Zone *>::iterator curZone = synth->instrument(0)->zones().begin();
 
-      QCOMPARE(synth->instrument(0)->zones().size(), (unsigned long) 6);
+      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 6);
       QCOMPARE((*curZone)->keyLo, (char) 60);
       QCOMPARE((*curZone)->keyHi, (char) 70);
       QCOMPARE((*curZone)->keyBase, (char) 40);
