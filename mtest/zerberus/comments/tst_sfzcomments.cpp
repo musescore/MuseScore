@@ -53,7 +53,7 @@ void TestSfzComments::testcomments()
       Ms::preferences.mySoundfontsPath += ";" + root;
       synth->loadInstrument("commentTest.sfz");
 
-      QCOMPARE(synth->instrument(0)->zones().size(), (unsigned long) 3);
+      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 3);
 
       std::list<Zone *>::iterator curZone = synth->instrument(0)->zones().begin();
       QCOMPARE((*curZone)->keyLo, (char) 60);
