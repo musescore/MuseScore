@@ -5600,13 +5600,15 @@ int main(int argc, char* av[])
             QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
             // set UI Color Palette
             QPalette p(QApplication::palette());
-            QString jsonPaletteFilename = "palette_light.json";
+            QString jsonPaletteFilename = "palette_light_fusion.json";
             if (preferences.isThemeDark())
-                  jsonPaletteFilename = "palette_dark.json";
+                  jsonPaletteFilename = preferences.isOxygen() ? "palette_dark_oxygen.json" : "palette_dark_fusion.json";
+            else
+                  jsonPaletteFilename = preferences.isOxygen() ? "palette_light_oxygen.json" : "palette_light_fusion.json";
             QFile jsonPalette(QString(":/themes/%1").arg(jsonPaletteFilename));
             // read from Documents TODO: remove this
-            if (QFile::exists(QString("%1/%2").arg(wd, jsonPaletteFilename)))
-                  jsonPalette.setFileName(QString("%1/%2").arg(wd, jsonPaletteFilename));
+            if (QFile::exists(QString("%1/%2").arg(wd, "ms_palette.json")))
+                  jsonPalette.setFileName(QString("%1/%2").arg(wd, "ms_palette.json"));
             if (jsonPalette.open(QFile::ReadOnly | QFile::Text)) {
                   QJsonDocument d = QJsonDocument::fromJson(jsonPalette.readAll());
                   QJsonObject o = d.object();
@@ -5621,11 +5623,15 @@ int main(int argc, char* av[])
 
             // set UI Style
             QString css;
-            QString styleFilename("style.css");
+            QString styleFilename("style_light_fusion.css");
+            if (preferences.isThemeDark())
+                  styleFilename = preferences.isOxygen() ? "style_dark_oxygen.css" : "style_dark_fusion.css";
+            else
+                  styleFilename = preferences.isOxygen() ? "style_light_oxygen.css" : "style_light_fusion.css";
             QFile fstyle(QString(":/themes/%1").arg(styleFilename));
             // read from Documents TODO: remove this
-            if (QFile::exists(QString("%1/%2").arg(wd, styleFilename)))
-                  fstyle.setFileName(QString("%1/%2").arg(wd, styleFilename));
+            if (QFile::exists(QString("%1/%2").arg(wd, "ms_style.css")))
+                  fstyle.setFileName(QString("%1/%2").arg(wd, "ms_style.css"));
             if (fstyle.open(QFile::ReadOnly | QFile::Text)) {
                   QTextStream in(&fstyle);
                   css = in.readAll();

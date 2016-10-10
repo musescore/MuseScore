@@ -1,0 +1,53 @@
+*:disabled {
+ color: gray
+}
+
+QGroupBox {
+  font-weight: bold;
+}
+
+QGroupBox::title {
+ subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;
+}
+
+QDockWidget {
+ border: 1px solid lightgray;
+ titlebar-close-icon: url(:/data/icons/png/window-close.png);
+ titlebar-normal-icon: url(:/data/icons/png/window-float.png);
+}
+
+QTabBar::close-button {
+ image: url(:/data/icons/png/window-close.png);
+}
+
+QTabBar::close-button:hover {
+ image: url(:/data/icons/png/window-close-hover.png);
+}
+
+QToolButton#palette {
+ border: none;
+}
+
+/* staff text properties */
+QToolButton[voice1="true"]:checked, QToolButton[voice1="true"]:pressed { color: white; background: $voice1-bgcolor; }
+QToolButton[voice2="true"]:checked, QToolButton[voice2="true"]:pressed { color: white; background: $voice2-bgcolor; }
+QToolButton[voice3="true"]:checked, QToolButton[voice3="true"]:pressed { color: white; background: $voice3-bgcolor; }
+QToolButton[voice4="true"]:checked, QToolButton[voice4="true"]:pressed { color: white; background: $voice4-bgcolor; }
+
+/* Toolbar voice selector */
+QToolButton#voice:checked, QToolButton#voice:pressed { color: white; }
+
+/* Mainly in midi import */
+QTableView { border: none; }
+
+/* dock and main area separator */
+QMainWindow::separator {
+    background: #C8C8C8;
+    width: 1px; /* when vertical */
+    height: 1px; /* when horizontal */
+}
+
+QMainWindow::separator:hover {
+    background: gray;
+}
+
