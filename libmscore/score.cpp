@@ -1754,13 +1754,10 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt* ex)
+void MasterScore::addExcerpt(Excerpt* ex)
       {
-      if (!ex)
-            ex = new Excerpt(this);
-      excerpts().append(ex);
-      ex->setPartScore(score);
-      ex->setTitle(score->fileInfo()->completeBaseName());
+      Score* score = ex->partScore();
+
       for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
@@ -1772,8 +1769,8 @@ void MasterScore::addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt*
                         }
                   }
             }
-      if (tracks.isEmpty()) { // SHOULDN'T HAPPEN, protected in the UI
-            qDebug() << "Empty tracklist when adding excerpt. Something is wrong.";
+      if (ex->tracks().isEmpty()) {                         // SHOULDN'T HAPPEN, protected in the UI
+            QMultiMap<int, int> tracks;
             for (Staff* s : score->staves()) {
                   LinkedStaves* ls = s->linkedStaves();
                   if (ls == 0)
@@ -1788,9 +1785,7 @@ void MasterScore::addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt*
                   }
             ex->setTracks(tracks);
             }
-      else
-            ex->setTracks(tracks);
-
+      excerpts().append(ex);
       setExcerptsChanged(true);
       }
 
@@ -1798,20 +1793,14 @@ void MasterScore::addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt*
 //   removeExcerpt
 //---------------------------------------------------------
 
-void MasterScore::removeExcerpt(Score* score)
+void MasterScore::removeExcerpt(Excerpt* ex)
       {
-      for (Excerpt* ex : excerpts()) {
-            if (ex->partScore() == score) {
-                  if (excerpts().removeOne(ex)) {
-                        setExcerptsChanged(true);
-                        delete ex;
-                        return;
-                        }
-                  else
-                        qDebug("removeExcerpt:: ex not found");
-                  }
+      if (excerpts().removeOne(ex)) {
+            setExcerptsChanged(true);
+            // delete ex;
             }
-      qDebug("Score::removeExcerpt: excerpt not found");
+      else
+            qDebug("removeExcerpt:: ex not found");
       }
 
 //---------------------------------------------------------
@@ -3609,6 +3598,7 @@ void Score::setImportedFilePath(const QString& filePath)
       _importedFilePath = filePath;
       }
 
+#if 0
 //---------------------------------------------------------
 //   title
 //---------------------------------------------------------
@@ -3682,6 +3672,7 @@ QString Score::poet()
 
       return fn.simplified();
       }
+#endif
 
 //---------------------------------------------------------
 //   nmeasure
@@ -4286,19 +4277,6 @@ void MasterScore::setTempomap(TempoMap* tm)
       }
 
 //---------------------------------------------------------
-//   setName
-//---------------------------------------------------------
-
-void Score::setName(const QString& ss)
-      {
-      QString s(ss);
-      s.replace('/', '_');    // for sanity
-      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
-            s += ".mscz";
-      info.setFile(s);
-      }
-
-//---------------------------------------------------------
 //   removeOmr
 //---------------------------------------------------------
 
@@ -4309,6 +4287,33 @@ void MasterScore::removeOmr()
       delete _omr;
 #endif
       _omr = 0;
+      }
+
+//---------------------------------------------------------
+//   setName
+//---------------------------------------------------------
+
+void MasterScore::setName(const QString& ss)
+      {
+      QString s(ss);
+      s.replace('/', '_');    // for sanity
+      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
+            s += ".mscz";
+      info.setFile(s);
+      }
+
+//---------------------------------------------------------
+//   title
+//---------------------------------------------------------
+
+QString MasterScore::title() const
+      {
+      return fileInfo()->completeBaseName();
+      }
+
+QString Score::title() const
+      {
+      return _excerpt->title();
       }
 
 //---------------------------------------------------------

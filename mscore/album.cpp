@@ -174,7 +174,7 @@ bool Album::createScore(const QString& fn, bool addPageBreak, bool addSectionBre
             }
       if (!joinExcerpt) {
             for (Excerpt* ex : score->excerpts())
-                  score->removeExcerpt(ex->partScore());
+                  score->removeExcerpt(ex);
             }
 
       for (AlbumItem* item : _scores) {

@@ -1333,10 +1333,10 @@ static bool readScore(Score* score, XmlReader& e)
                         Score* s = new Score(m, MScore::baseStyle());
                         Excerpt* ex = new Excerpt(m);
 
-                        s->setExcerpt(ex);
                         ex->setPartScore(s);
+                        ex->setTracks(e.tracks());
                         s->read(e);
-                        m->addExcerpt(s, e.tracks(), ex);
+                        m->addExcerpt(ex);
                         }
                   }
             else if (tag == "PageList") {
@@ -1352,8 +1352,8 @@ static bool readScore(Score* score, XmlReader& e)
                   }
             else if (tag == "name") {
                   QString n = e.readElementText();
-                  if (!score->isMaster()) //ignore the name if it's not a child score
-                        score->setName(n);
+                  if (!score->isMaster())             //ignore the name if it's not a child score
+                        score->excerpt()->setTitle(n);
                   }
             else if (tag == "layoutMode") {
                   QString s = e.readElementText();

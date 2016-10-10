@@ -40,7 +40,7 @@ QAccessible::Role AccessibleScoreView::role() const{
 QString AccessibleScoreView::text(QAccessible::Text t) const {
       switch (t) {
             case QAccessible::Name:
-                  return tr("Score %1").arg(s->score()->fileInfo()->completeBaseName());
+                  return tr("Score %1").arg(s->score()->name());
             case QAccessible::Value:
                   return s->score()->accessibleInfo();
             default:

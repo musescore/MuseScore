@@ -240,7 +240,7 @@ bool Score::write(Xml& xml, bool selectionOnly)
                   }
             }
       else
-            xml.tag("name", fileInfo()->completeBaseName());
+            xml.tag("name", excerpt()->title());
       xml.etag();
 
       if (unhide) {

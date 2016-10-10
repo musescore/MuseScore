@@ -48,13 +48,14 @@ class Excerpt : public QObject {
 
       QList<Part*>& parts()                { return _parts;     }
       void setParts(const QList<Part*>& p) { _parts = p;        }
-      MasterScore* oscore() const          { return _oscore;    }
+
 
       QMultiMap<int, int>& tracks()                  { return _tracks;    }
-      void setTracks(const QMultiMap<int, int> t)    { _tracks = t;       }
+      void setTracks(const QMultiMap<int, int>& t)   { _tracks = t;       }
 
-      void setPartScore(Score* s)          { _partScore = s;    }
+      MasterScore* oscore() const          { return _oscore;    }
       Score* partScore() const             { return _partScore; }
+      void setPartScore(Score* s);
 
       void read(XmlReader&);
 

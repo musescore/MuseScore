@@ -843,11 +843,10 @@ class ChangeImage : public UndoCommand {
 //---------------------------------------------------------
 
 class AddExcerpt : public UndoCommand {
-      Score* score;
-      QMultiMap<int, int> tracks;
+      Excerpt* excerpt;
 
    public:
-      AddExcerpt(Score* s, QMultiMap<int, int>& t) : score(s), tracks(t) {}
+      AddExcerpt(Excerpt* ex) : excerpt(ex) {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("AddExcerpt")
@@ -858,11 +857,10 @@ class AddExcerpt : public UndoCommand {
 //---------------------------------------------------------
 
 class RemoveExcerpt : public UndoCommand {
-      Score* score;
-      QMultiMap<int, int> tracks;
+      Excerpt* excerpt;
 
    public:
-      RemoveExcerpt(Score* s, QMultiMap<int, int>& t) : score(s), tracks(t) {}
+      RemoveExcerpt(Excerpt* ex) : excerpt(ex) {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("RemoveExcerpt")
@@ -877,11 +875,26 @@ class SwapExcerpt : public UndoCommand {
       int pos1;
       int pos2;
 
+      void flip();
+
    public:
       SwapExcerpt(MasterScore* s, int p1, int p2) : score(s), pos1(p1), pos2(p2) {}
-      virtual void undo();
-      virtual void redo();
       UNDO_NAME("SwapExcerpt")
+      };
+
+//---------------------------------------------------------
+//   ChangeExcerptTitle
+//---------------------------------------------------------
+
+class ChangeExcerptTitle : public UndoCommand {
+      Excerpt* excerpt;
+      QString title;
+
+      void flip();
+
+   public:
+      ChangeExcerptTitle(Excerpt* x, const QString& t) : excerpt(x), title(t) {}
+      UNDO_NAME("ChangeExcerptTitle")
       };
 
 //---------------------------------------------------------
