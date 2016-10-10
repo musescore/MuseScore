@@ -22,6 +22,7 @@
 #define __EXCERPTSDIALOG_H__
 
 #include "ui_excerptsdialog.h"
+#include "libmscore/excerpt.h"
 
 namespace Ms {
 
@@ -39,7 +40,7 @@ class ExcerptItem : public QListWidgetItem {
 
    public:
       ExcerptItem(Excerpt*, QListWidget* parent = 0);
-      Excerpt* excerpt() const { return _excerpt; }
+      Excerpt* excerpt() { return _excerpt; }
       };
 
 //---------------------------------------------------------
@@ -47,7 +48,7 @@ class ExcerptItem : public QListWidgetItem {
 //---------------------------------------------------------
 
 class PartItem : public QTreeWidgetItem {
-      Part*                   _part;
+      Part* _part;
 
    public:
       PartItem(Part*, QTreeWidget* parent = 0);
@@ -105,7 +106,7 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void partClicked(QTreeWidgetItem*, int);
       void createExcerptClicked(QListWidgetItem*);
       void titleChanged(const QString&);
-      bool isInPartsList(Excerpt* e);
+      ExcerptItem* isInPartsList(Excerpt* e);
 
       QMultiMap<int, int> mapTracks();
       void assignTracks(QMultiMap<int, int> );
@@ -114,9 +115,8 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void addButtonClicked();
       void removeButtonClicked();
 
-      public:
-            ExcerptsDialog(MasterScore*, QWidget* parent = 0);
-
+   public:
+      ExcerptsDialog(MasterScore*, QWidget* parent = 0);
       };
 
 

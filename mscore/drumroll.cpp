@@ -194,7 +194,7 @@ void DrumrollEditor::setStaff(Staff* st)
       {
       staff = st;
       _score = staff->score();
-      setWindowTitle(tr("MuseScore: <%1> Staff: %2").arg(_score->fileInfo()->completeBaseName()).arg(st->idx()));
+      setWindowTitle(tr("MuseScore: <%1> Staff: %2").arg(_score->masterScore()->fileInfo()->completeBaseName()).arg(st->idx()));
       TempoMap* tl = _score->tempomap();
       TimeSigMap*  sl = _score->sigmap();
       for (int i = 0; i < 3; ++i)

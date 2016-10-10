@@ -318,16 +318,15 @@ class MasterScore;
 // not to be documented?
 //   @  pageFormat      PageFormat        the page format for the score
 //   @P parts           array[Part]       the list of parts (read only)
-//   @P poet            string            poet of the score (read only)
-//   @P subtitle        string            subtitle of the score (read only)
-//   @P title           string            title of the score (read only)
+///////   @P poet            string            poet of the score (read only)
+///////   @P subtitle        string            subtitle of the score (read only)
+///////   @P title           string            title of the score (read only)
 //
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
 class Score : public QObject, public ScoreElement {
       Q_OBJECT
-      Q_PROPERTY(QString                        composer          READ composer)
       Q_PROPERTY(int                            duration          READ duration)
       Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
       Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
@@ -347,9 +346,10 @@ class Score : public QObject, public ScoreElement {
       Q_PROPERTY(int                            ntracks           READ ntracks)
       Q_PROPERTY(Ms::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
       Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
-      Q_PROPERTY(QString                        poet              READ poet)
-      Q_PROPERTY(QString                        subtitle          READ subtitle)
-      Q_PROPERTY(QString                        title             READ title)
+//      Q_PROPERTY(QString                        composer          READ composer)
+//      Q_PROPERTY(QString                        poet              READ poet)
+//      Q_PROPERTY(QString                        subtitle          READ subtitle)
+//      Q_PROPERTY(QString                        title             READ title)
 
    public:
       enum class FileError : char {
@@ -371,7 +371,7 @@ class Score : public QObject, public ScoreElement {
       int _linkId { 0 };
       MasterScore* _masterScore;
       QList<MuseScoreView*> viewer;
-      Excerpt* _excerpt = 0;
+      Excerpt* _excerpt  { 0 };
 
       QString _mscoreVersion;
       int _mscoreRevision;
@@ -405,7 +405,6 @@ class Score : public QObject, public ScoreElement {
       bool _created { false };            ///< file is never saved, has generated name
       QString _tmpName;                   ///< auto saved with this name if not empty
       QString _importedFilePath;          // file from which the score was imported, or empty
-
 
       bool _showInvisible         { true  };
       bool _showUnprintable       { true  };
@@ -507,7 +506,6 @@ class Score : public QObject, public ScoreElement {
       void createBeams(Measure*);
 
    protected:
-      QFileInfo info;
       int _fileDivision; ///< division of current loading *.msc file
       LayoutMode _layoutMode { LayoutMode::PAGE };
       SynthesizerState _synthesizerState;
@@ -1066,10 +1064,11 @@ class Score : public QObject, public ScoreElement {
       Element* firstElement();
       Element* lastElement();
 
-      QString title();
-      QString subtitle();
-      QString composer();
-      QString poet();
+//      QString title();
+//      QString subtitle();
+//      QString composer();
+//      QString poet();
+
       int nmeasures();
       bool hasLyrics();
       bool hasHarmonies();
@@ -1103,16 +1102,14 @@ class Score : public QObject, public ScoreElement {
       bool checkKeys();
       bool checkClefs();
 
-      QFileInfo* fileInfo()               { return &info; }
-      const QFileInfo* fileInfo() const   { return &info; }
-      void setName(const QString& s);
-
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       virtual inline QQueue<MidiInputEvent>* midiInputQueue();
       virtual inline std::list<MidiInputEvent>* activeMidiPitches();
+
+      virtual QString title() const;
 
       friend class ChangeSynthesizerState;
       friend class Chord;
@@ -1150,34 +1147,36 @@ class MasterScore : public Score {
       void removeDeletedMidiMapping();
       int updateMidiMapping();
 
+      QFileInfo info;
+
    public:
       MasterScore();
       MasterScore(const MStyle*);
       virtual ~MasterScore();
       MasterScore* clone();
 
-      virtual bool isMaster() const override                    { return true;        }
-      virtual UndoStack* undoStack() const override             { return _undo;       }
-      virtual TimeSigMap* sigmap() const override               { return _sigmap;     }
-      virtual TempoMap* tempomap() const override               { return _tempomap;   }
-      virtual RepeatList* repeatList()  const override          { return _repeatList; }
-      virtual QList<Excerpt*>& excerpts() override              { return _excerpts;   }
-      virtual const QList<Excerpt*>& excerpts() const override  { return _excerpts;   }
-      virtual QQueue<MidiInputEvent>* midiInputQueue() override         { return &_midiInputQueue;    }
-      virtual std::list<MidiInputEvent>* activeMidiPitches() override   { return &_activeMidiPitches; }
+      virtual bool isMaster() const override                          { return true;        }
+      virtual UndoStack* undoStack() const override                   { return _undo;       }
+      virtual TimeSigMap* sigmap() const override                     { return _sigmap;     }
+      virtual TempoMap* tempomap() const override                     { return _tempomap;   }
+      virtual RepeatList* repeatList()  const override                { return _repeatList; }
+      virtual QList<Excerpt*>& excerpts() override                    { return _excerpts;   }
+      virtual const QList<Excerpt*>& excerpts() const override        { return _excerpts;   }
+      virtual QQueue<MidiInputEvent>* midiInputQueue() override       { return &_midiInputQueue;    }
+      virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
 
-      virtual void setUpdateAll() override                  { _cmdState.setUpdateMode(UpdateMode::UpdateAll);  }
-      virtual void setLayoutAll() override                  { _cmdState.setUpdateMode(UpdateMode::LayoutAll);  }
-      virtual void setLayout(int t) override                { _cmdState.setTick(t); }
-      virtual CmdState& cmdState() override                 { return _cmdState; }
-      virtual void addLayoutFlags(LayoutFlags val) override { _cmdState.layoutFlags |= val; }
-      virtual void setInstrumentsChanged(bool val) override { _cmdState._instrumentsChanged = val; }
+      virtual void setUpdateAll() override                            { _cmdState.setUpdateMode(UpdateMode::UpdateAll);  }
+      virtual void setLayoutAll() override                            { _cmdState.setUpdateMode(UpdateMode::LayoutAll);  }
+      virtual void setLayout(int t) override                          { _cmdState.setTick(t);                 }
+      virtual CmdState& cmdState() override                           { return _cmdState;                     }
+      virtual void addLayoutFlags(LayoutFlags val) override           { _cmdState.layoutFlags |= val;         }
+      virtual void setInstrumentsChanged(bool val) override           { _cmdState._instrumentsChanged = val;  }
 
-      void setExcerptsChanged(bool val)     { _cmdState._excerptsChanged = val; }
-      bool excerptsChanged() const          { return _cmdState._excerptsChanged; }
-      bool instrumentsChanged() const       { return _cmdState._instrumentsChanged; }
+      void setExcerptsChanged(bool val)                               { _cmdState._excerptsChanged = val;     }
+      bool excerptsChanged() const                                    { return _cmdState._excerptsChanged;    }
+      bool instrumentsChanged() const                                 { return _cmdState._instrumentsChanged; }
 
-      Revisions* revisions()                { return _revisions; }
+      Revisions* revisions()                                          { return _revisions;                    }
 
       bool isSavable() const;
       void setTempomap(TempoMap* tm);
@@ -1214,8 +1213,15 @@ class MasterScore : public Score {
       void updateChannel();
       void setSoloMute();
 
-      void addExcerpt(Score* score, QMultiMap<int, int>& tracks, Excerpt* ex = 0);
-      void removeExcerpt(Score*);
+      void addExcerpt(Excerpt*);
+      void removeExcerpt(Excerpt*);
+      void deleteExcerpt(Excerpt*);
+
+      QFileInfo* fileInfo()               { return &info; }
+      const QFileInfo* fileInfo() const   { return &info; }
+      void setName(const QString&);
+
+      virtual QString title() const;
       };
 
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }

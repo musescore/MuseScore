@@ -2400,7 +2400,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++)
                   tracks.insert(i, j);
 
-            pscore->setName(part->partName());
+//            pscore->setName(part->partName());
             Excerpt* excerpt = new Excerpt(score);
             excerpt->setTracks(tracks);
             excerpt->setPartScore(pscore);

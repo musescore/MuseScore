@@ -1577,6 +1577,7 @@ void MuseScore::addRecentScore(const QString& scorePath)
             _recentScores.removeLast();
       }
 
+#if 0
 //---------------------------------------------------------
 //   updateTabNames
 //---------------------------------------------------------
@@ -1586,16 +1587,17 @@ void MuseScore::updateTabNames()
       for (int i = 0; i < tab1->count(); ++i) {
             ScoreView* view = tab1->view(i);
             if (view)
-                  tab1->setTabText(i, view->score()->fileInfo()->completeBaseName());
+                  tab1->setTabText(i, view->score()->masterScore()->fileInfo()->completeBaseName());
             }
       if (tab2) {
             for (int i = 0; i < tab2->count(); ++i) {
                   ScoreView* view = tab2->view(i);
                   if (view)
-                        tab2->setTabText(i, view->score()->fileInfo()->completeBaseName());
+                        tab2->setTabText(i, view->score()->masterScore()->fileInfo()->completeBaseName());
                   }
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   loadScoreList
@@ -1762,11 +1764,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             magChanged(midx);
             }
 
-      if (!cs->isMaster())
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->fileInfo()->completeBaseName()
-               + "-" + cs->fileInfo()->completeBaseName());
-      else
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->fileInfo()->completeBaseName());
+      setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->title());
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(StyleIdx::concertPitch));
@@ -2509,12 +2507,10 @@ static bool doConvert(Score* cs, QString fn)
                         for (Excerpt* e : excerpts) {
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
-                              nscore->setExcerpt(e);
-                              nscore->masterScore()->setName(e->title()); // needed before AddExcerpt
                               nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                              cs->startCmd();
-                              cs->undo(new AddExcerpt(nscore, e->tracks()));
                               createExcerpt(e);
+                              cs->startCmd();
+                              cs->undo(new AddExcerpt(e));
                               cs->endCmd();
                               }
                         }
@@ -2536,11 +2532,11 @@ static bool doConvert(Score* cs, QString fn)
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
                               nscore->setExcerpt(e);
-                              nscore->setName(e->title()); // needed before AddExcerpt
+                              // nscore->setName(e->title()); // needed before AddExcerpt
                               nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                              cs->startCmd();
-                              cs->undo(new AddExcerpt(nscore, e->tracks()));
                               createExcerpt(e);
+                              cs->startCmd();
+                              cs->undo(new AddExcerpt(e));
                               cs->endCmd();
                               }
                         }
