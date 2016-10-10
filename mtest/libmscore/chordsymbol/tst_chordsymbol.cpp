@@ -148,7 +148,6 @@ void TestChordSymbol::testNoSystem()
       ::createExcerpt(ex);
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
       nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       //
@@ -167,7 +166,6 @@ void TestChordSymbol::testNoSystem()
       ::createExcerpt(ex);
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
       nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       score->setExcerptsChanged(true);
