@@ -144,14 +144,14 @@ void TestParts::createParts(MasterScore* score)
 
       Excerpt* ex = new Excerpt(score);
       ex->setPartScore(nscore);
-      nscore->setExcerpt(ex);
-      score->excerpts().append(ex);
-      ex->setTitle(parts.front()->longName());
       ex->setParts(parts);
+      ex->setTitle(parts.front()->partName());
       ::createExcerpt(ex);
+      score->excerpts().append(ex);
+//      ex->setTitle(parts.front()->longName());
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
+//      nscore->setName(parts.front()->partName());
 
       //
       // create second part
@@ -162,14 +162,14 @@ void TestParts::createParts(MasterScore* score)
 
       ex = new Excerpt(score);
       ex->setPartScore(nscore);
-      nscore->setExcerpt(ex);
-      score->excerpts().append(ex);
-      ex->setTitle(parts.front()->longName());
       ex->setParts(parts);
+      ex->setTitle(parts.front()->partName());
       ::createExcerpt(ex);
+      score->excerpts().append(ex);
+//      ex->setTitle(parts.front()->longName());
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
+//      nscore->setName(parts.front()->partName());
 
       score->setExcerptsChanged(true);
       }
@@ -204,7 +204,7 @@ void TestParts::voicesExcerpt()
       ::createExcerpt(ex);
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
+//      nscore->setName(parts.front()->partName());
 
       //
       // create second part
@@ -226,7 +226,7 @@ void TestParts::voicesExcerpt()
       ::createExcerpt(ex);
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
+//      nscore->setName(parts.front()->partName());
 
       score->setExcerptsChanged(true);
 

@@ -423,6 +423,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <metaTag name="partName">Flute</metaTag>
       <PageList>
         <Page>
           <System>
@@ -475,6 +476,10 @@
             <lid>1</lid>
             <style>Title</style>
             <text>Style Score</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Flute</text>
             </Text>
           </VBox>
         <Measure number="1">
@@ -656,6 +661,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <metaTag name="partName">Oboe</metaTag>
       <PageList>
         <Page>
           <System>
@@ -709,6 +715,10 @@
             <lid>1</lid>
             <style>Title</style>
             <text>Style Score</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Oboe</text>
             </Text>
           </VBox>
         <Measure number="1">

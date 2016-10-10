@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando01.mscx            glissando01-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning01.mscx    glissando-cloning01-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning02.mscx    glissando-cloning02-ref.mscx

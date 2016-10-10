@@ -300,18 +300,17 @@ void TestSpanners::spanners05()
       parts.append(score->parts().at(0));
       Score* nscore = new Score(score);
 
-      Excerpt ex(score);
-      ex.setPartScore(nscore);
-      nscore->setExcerpt(&ex);
-      ex.setTitle(parts.front()->longName());
-      ex.setParts(parts);
-      ::createExcerpt(&ex);
+      Excerpt* ex = new Excerpt(score);
+      ex->setPartScore(nscore);
+      ex->setTitle(parts.front()->longName());
+      ex->setParts(parts);
+      ::createExcerpt(ex);
       QVERIFY(nscore);
 
-      nscore->setName(parts.front()->partName());
+//      nscore->setName(parts.front()->partName());
 
-      QMultiMap<int, int> tracks;
-      score->Score::undo(new AddExcerpt(nscore, tracks));
+//      QMultiMap<int, int> tracks;
+      score->Score::undo(new AddExcerpt(ex));
 
       QVERIFY(saveCompareScore(score, "glissando-cloning02.mscx", DIR + "glissando-cloning02-ref.mscx"));
       delete score;
