@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>712</width>
+    <width>740</width>
     <height>538</height>
    </rect>
   </property>
@@ -275,76 +275,6 @@
           </item>
           <item>
            <spacer name="horizontalSpacer_15">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QGroupBox" name="autoSave">
-         <property name="accessibleName">
-          <string>Auto Save</string>
-         </property>
-         <property name="title">
-          <string>Auto Save</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>9</number>
-          </property>
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Save every:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="autoSaveTime">
-            <property name="accessibleName">
-             <string>Select delay (in minutes) between auto saves</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>minutes</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -661,75 +591,108 @@
           <string>Theme</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_30">
+              <property name="text">
+               <string>Icon width:</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignLeft">
+             <widget class="QSpinBox" name="iconWidth">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="accessibleName">
+               <string>Icon Width</string>
+              </property>
+              <property name="minimum">
+               <number>5</number>
+              </property>
+              <property name="value">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Icon height:</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignLeft">
+             <widget class="QSpinBox" name="iconHeight">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="accessibleName">
+               <string>Icon Height</string>
+              </property>
+              <property name="minimum">
+               <number>5</number>
+              </property>
+              <property name="value">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
           <item row="0" column="0">
-           <widget class="QComboBox" name="styleName">
-            <property name="accessibleName">
-             <string>Select style</string>
-            </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <property name="text">
-              <string>Dark</string>
-             </property>
+             <widget class="QComboBox" name="styleName">
+              <property name="maximumSize">
+               <size>
+                <width>1234</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="accessibleName">
+               <string>Select style</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Dark</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Light</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Dark Fusion</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Light Fusion</string>
+               </property>
+              </item>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Light</string>
-             </property>
+             <widget class="QCheckBox" name="animations">
+              <property name="accessibleName">
+               <string>Animations</string>
+              </property>
+              <property name="text">
+               <string>Animations</string>
+              </property>
+             </widget>
             </item>
-            <item>
-             <property name="text">
-              <string>Dark Fusion</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Light Fusion</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="iconHeight">
-            <property name="accessibleName">
-             <string>Icon Height</string>
-            </property>
-            <property name="minimum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>Icon size:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="iconWidth">
-            <property name="accessibleName">
-             <string>Icon Width</string>
-            </property>
-            <property name="minimum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="animations">
-            <property name="accessibleName">
-             <string>Animations</string>
-            </property>
-            <property name="text">
-             <string>Animations</string>
-            </property>
-           </widget>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -746,6 +709,76 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="3" column="1">
+        <widget class="QGroupBox" name="autoSave">
+         <property name="accessibleName">
+          <string>Auto Save</string>
+         </property>
+         <property name="title">
+          <string>Auto Save</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>9</number>
+          </property>
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
+           <number>9</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Save every:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="autoSaveTime">
+            <property name="accessibleName">
+             <string>Select delay (in minutes) between auto saves</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>minutes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -3316,19 +3349,6 @@
        <string>Export</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="4" column="0">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
@@ -3587,6 +3607,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="4" column="0">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -3858,10 +3891,6 @@
   <tabstop>myImagesButton</tabstop>
   <tabstop>language</tabstop>
   <tabstop>updateTranslation</tabstop>
-  <tabstop>styleName</tabstop>
-  <tabstop>animations</tabstop>
-  <tabstop>iconWidth</tabstop>
-  <tabstop>iconHeight</tabstop>
   <tabstop>autoSave</tabstop>
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
