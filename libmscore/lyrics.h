@@ -56,7 +56,6 @@ class Lyrics : public Text {
       static const int  TEMP_MELISMA_TICKS      = 1;
 
       // metrics for dashes and melisma; all in sp. units:
-      static constexpr qreal  MELISMA_DEFAULT_LINE_THICKNESS      = 0.10;     // for melisma line only;
       static constexpr qreal  MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
       static constexpr qreal  LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
 // WORD_MIN_DISTANCE has never been implemented

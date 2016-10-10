@@ -403,10 +403,11 @@ void BarLine::draw(QPainter* painter) const
                   {
                   qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * _mag;
                   qreal d1  = score()->styleP(StyleIdx::endBarDistance) * _mag;
+                  qreal d2  = score()->styleP(StyleIdx::repeatBarlineDotSeparation) * _mag;
 
                   qreal x2   =  lw2 * .5;                               // thick line (lw2)
                   qreal x1   =  lw2 + d1 + lw * .5;                     // thin line (lw)
-                  qreal x0   =  lw2 + d1 + lw + d1;                     // dot position
+                  qreal x0   =  lw2 + d2 + lw + d1;                     // dot position
 
                   drawDots(painter, x0);
 
@@ -426,10 +427,11 @@ void BarLine::draw(QPainter* painter) const
             case BarLineType::END_REPEAT:
                   {
                   qreal lw2  = score()->styleP(StyleIdx::endBarWidth) * _mag;
-                  qreal d1   = score()->styleP(StyleIdx::endBarDistance) * _mag;
+                  qreal d1  = score()->styleP(StyleIdx::repeatBarlineDotSeparation) * _mag;
+                  qreal d2   = score()->styleP(StyleIdx::endBarDistance) * _mag;
                   qreal dotw = symWidth(SymId::repeatDot);
                   qreal x1   =  dotw + d1 + lw * .5;
-                  qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;
+                  qreal x2   =  dotw + d2 + lw + d1 + lw2 * .5;
 
                   drawDots(painter, 0.0);
                   painter->drawLine(QLineF(x1, y1, x1, y2));
@@ -450,12 +452,13 @@ void BarLine::draw(QPainter* painter) const
                   {
                   qreal lw2  = score()->styleP(StyleIdx::endBarWidth) * _mag;
                   qreal d1   = score()->styleP(StyleIdx::endBarDistance) * _mag;
+                  qreal d2  = score()->styleP(StyleIdx::repeatBarlineDotSeparation) * _mag;
                   qreal dotw = symWidth(SymId::repeatDot);
 
-                  qreal x1   =  dotw + d1 + lw * .5;                                // thin bar
+                  qreal x1   =  dotw + d2 + lw * .5;                                // thin bar
                   qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;                     // thick bar
                   qreal x3   =  dotw + d1 + lw + d1 + lw2 + d1 + lw * .5;           // thin bar
-                  qreal x4   =  dotw + d1 + lw + d1 + lw2 + d1 + lw + d1;           // dot position
+                  qreal x4   =  dotw + d2 + lw + d1 + lw2 + d1 + lw + d1;           // dot position
 
                   drawDots(painter, .0);
                   drawDots(painter, x4);
@@ -952,11 +955,11 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
                   break;
             case BarLineType::START_REPEAT:
                   dw += dotwidth + (score->styleP(StyleIdx::endBarWidth)
-                     + 2 * score->styleP(StyleIdx::endBarDistance)) * mag;
+                     +  (score->styleP(StyleIdx::repeatBarlineDotSeparation) + score->styleP(StyleIdx::endBarDistance))) * mag;
                   break;
             case BarLineType::END_REPEAT:
                   dw += dotwidth + (score->styleP(StyleIdx::endBarWidth)
-                     + 2 * score->styleP(StyleIdx::endBarDistance)) * mag;
+                     + (score->styleP(StyleIdx::repeatBarlineDotSeparation) + score->styleP(StyleIdx::endBarDistance))) * mag;
                   break;
             case BarLineType::END:
                   dw += (score->styleP(StyleIdx::endBarWidth)
@@ -965,7 +968,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
             case  BarLineType::END_START_REPEAT:
                   dw += 2 * dotwidth + (score->styleP(StyleIdx::barWidth)
                      + score->styleP(StyleIdx::endBarWidth)
-                     + 4 * score->styleP(StyleIdx::endBarDistance)) * mag;
+                     + 2 * (score->styleP(StyleIdx::repeatBarlineDotSeparation) + score->styleP(StyleIdx::endBarDistance))) * mag;
                   break;
             case BarLineType::BROKEN:
             case BarLineType::NORMAL:

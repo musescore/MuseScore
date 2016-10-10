@@ -621,7 +621,7 @@ void LyricsLine::layout()
       {
       bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
       if (lyrics()->ticks()) {              // melisma
-            setLineWidth(Spatium(Lyrics::MELISMA_DEFAULT_LINE_THICKNESS));
+            setLineWidth(score()->styleS(StyleIdx::lyricsLineThickness));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
                   lyrics()->setTicks(0);

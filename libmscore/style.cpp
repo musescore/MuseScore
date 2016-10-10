@@ -50,6 +50,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsDashMaxDistance,   "lyricsDashMaxDistance",   Spatium(16.0) },
       { StyleIdx::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { StyleIdx::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
+      { StyleIdx::lyricsLineThickness,     "lyricsLineThickness",     Spatium(0.1) },
 
       { StyleIdx::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 
@@ -67,6 +68,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::endBarWidth,             "endBarWidth",             Spatium(0.5) },       // 0.5
       { StyleIdx::doubleBarDistance,       "doubleBarDistance",       Spatium(0.30) },
       { StyleIdx::endBarDistance,          "endBarDistance",          Spatium(0.40) },     // 0.3
+      { StyleIdx::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(0.40) },
       { StyleIdx::repeatBarTips,           "repeatBarTips",           QVariant(false) },
       { StyleIdx::startBarlineSingle,      "startBarlineSingle",      QVariant(false) },
       { StyleIdx::startBarlineMultiple,    "startBarlineMultiple",    QVariant(true) },
