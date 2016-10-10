@@ -172,7 +172,7 @@ void Preferences::init()
       oscPort                 = 5282;
       singlePalette           = false;
 
-      globalStyle             = MuseScoreStyleType::LIGHT_OXYGEN;
+      globalStyle             = MuseScoreStyleType::LIGHT_FUSION;
 #ifdef Q_OS_MAC
       animations              = false;
 #else
@@ -315,13 +315,13 @@ void Preferences::write()
 
       s.setValue("useOsc", useOsc);
       s.setValue("oscPort", oscPort);
-      QString styleName = "light";
+      QString styleName = "light_fusion";
       if (globalStyle == MuseScoreStyleType::DARK_OXYGEN)
             styleName = "dark";
+      else if (globalStyle == MuseScoreStyleType::LIGHT_OXYGEN)
+            styleName = "light_oxygen";
       else if (globalStyle == MuseScoreStyleType::DARK_FUSION)
             styleName = "dark_fusion";
-      else if (globalStyle == MuseScoreStyleType::LIGHT_FUSION)
-            styleName = "light_fusion";
       s.setValue("style", styleName);
       s.setValue("animations", animations);
       s.setValue("singlePalette", singlePalette);
@@ -475,7 +475,7 @@ void Preferences::read()
 
       useOsc                 = s.value("useOsc", useOsc).toBool();
       oscPort                = s.value("oscPort", oscPort).toInt();
-      QString sName          = s.value("style", "light").toString();
+      QString sName          = s.value("style", "light_fusion").toString();
       if (sName == "dark")
             globalStyle  = MuseScoreStyleType::DARK_OXYGEN;
       else if (sName == "light")
