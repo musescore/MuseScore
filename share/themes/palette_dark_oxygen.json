@@ -1,0 +1,15 @@
+{
+"Window":        "#525252",
+"WindowText":    "#FFFFFF",
+"Base":          "#424242",
+"AlternateBase": "#626262",
+"Text":          "#FFFFFF",
+"Button":        "#525252",
+"ButtonText":    "#FFFFFF",
+"BrightText":    "#000000",
+"Highlight":     "#88bff6",
+"Link":          "#00ffff",
+"LinkVisited":   "#00ffff",
+"ToolTipBase":   "#808080",
+"ToolTipText":   "#000000"
+}

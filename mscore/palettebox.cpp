@@ -48,14 +48,14 @@ PaletteBox::PaletteBox(QWidget* parent)
       hl->addWidget(workspaceList);
       addWorkspaceButton = new QToolButton;
 
-      addWorkspaceButton->setMinimumHeight(27);
+      addWorkspaceButton->setMinimumHeight(24);
       hl->addWidget(addWorkspaceButton);
 
       setWidget(w);
 
       searchBox = new QLineEdit(this);
-      searchBox->setPlaceholderText(tr("Filter"));
       searchBox->setClearButtonEnabled(true);
+      searchBox->setPlaceholderText(tr("Filter"));
       connect(searchBox, SIGNAL(textChanged(const QString&)), this, SLOT(filterPalettes(const QString&)));
       QHBoxLayout* hlSearch = new QHBoxLayout;
       hlSearch->setContentsMargins(5,0,5,0);
