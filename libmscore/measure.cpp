@@ -2031,14 +2031,20 @@ void Measure::checkMeasure(int staffIdx)
             int ticks = seg->tick() - stick;
 
             while (seg) {
-                  if (ticks > 1) {
-                        Fraction f = Fraction::fromTicks(ticks);
-
-                        Rest* rest = new Rest(score());
-                        rest->setDuration(f);
-                        rest->setTrack(track);
-                        rest->setGap(true);
-                        score()->undoAddCR(rest, this, stick);
+                  // !HACK, it was > 1, but for some tuplets it can happen to have 1 tick difference...
+                  // 4 is a 512th...
+                  if (ticks > 3) {
+                        TDuration d;
+                        d.setVal(ticks);
+                        if (d.isValid()) {
+                              Fraction f = Fraction::fromTicks(ticks);
+                              Rest* rest = new Rest(score());
+                              rest->setDuration(f);
+                              rest->setDurationType(d);
+                              rest->setTrack(track);
+                              rest->setGap(true);
+                              score()->undoAddCR(rest, this, stick);
+                              }
                         }
 
                   pseg = seg;
