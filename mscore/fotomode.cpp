@@ -773,11 +773,13 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
-      if (ext == "svg") mag = 1; // SVG is not scaled, it's scalable.
+      if (ext == "svg")
+            mag = 1; // SVG is not scaled, it's scalable.
 
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
 
+      double pr = MScore::pixelRatio;
       if (ext == "pdf") {
             QPrinter printer(QPrinter::HighResolution);
             mag = printer.logicalDpiX() / DPI;
@@ -789,6 +791,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setOutputFileName(fn);
             if (ext == "pdf")
                   printer.setOutputFormat(QPrinter::PdfFormat);
+            MScore::pixelRatio = DPI / printer.logicalDpiX();
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
             }
@@ -800,6 +803,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setTitle(_score->title());
             printer.setSize(QSize(w, h));
             printer.setViewBox(QRect(0, 0, w, h));
+            MScore::pixelRatio = DPI / printer.logicalDpiX();
             QPainter p(&printer);
             MScore::pdfPrinting = true;
             paintRect(printMode, p, r, mag);
@@ -811,12 +815,14 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
             printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
             printer.fill(transparent ? 0 : 0xffffffff);
+            MScore::pixelRatio = 1.0 / mag;
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
             printer.save(fn, "png");
             }
       else
             qDebug("unknown extension <%s>", qPrintable(ext));
+      MScore::pixelRatio = pr;
       return true;
       }
 
