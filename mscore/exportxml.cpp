@@ -1477,7 +1477,8 @@ void ExportMusicXml::barlineRight(Measure* m)
       if (needBarStyle) {
             if (!visible) {
                   xml.tag("bar-style", QString("none"));
-            } else {
+                  }
+            else {
                   switch (bst) {
                         case BarLineType::DOUBLE:
                               xml.tag("bar-style", QString("light-light"));
@@ -1744,11 +1745,17 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
             else {
                   // trill stop before trill start
                   n = findTrill(0);
-                  trills[n] = tr;
+                  if (n >= 0)
+                        trills[n] = tr;
+                  else
+                        qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                               chord, chord->staffIdx(), chord->tick());
                   }
-            notations.tag(xml);
-            ornaments.tag(xml);
-            xml.tagE(QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1));
+            if (n >= 0) {
+                  notations.tag(xml);
+                  ornaments.tag(xml);
+                  xml.tagE(QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1));
+                  }
             trillStop.remove(chord);
             }
       if (trillStart.contains(chord)) {
@@ -1758,15 +1765,20 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                   qDebug("wavyLineStartStop error");
             else {
                   n = findTrill(0);
-                  trills[n] = tr;
-                  // mscore only supports wavy-line with trill-mark
-                  notations.tag(xml);
-                  ornaments.tag(xml);
-                  xml.tagE("trill-mark");
-                  QString tagName = "wavy-line type=\"start\"";
-                  tagName += QString(" number=\"%1\"").arg(n + 1);
-                  tagName += color2xml(tr);
-                  xml.tagE(tagName);
+                  if (n >= 0) {
+                        trills[n] = tr;
+                        // mscore only supports wavy-line with trill-mark
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("trill-mark");
+                        QString tagName = "wavy-line type=\"start\"";
+                        tagName += QString(" number=\"%1\"").arg(n + 1);
+                        tagName += color2xml(tr);
+                        xml.tagE(tagName);
+                        }
+                  else
+                        qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                               chord, chord->staffIdx(), chord->tick());
                   trillStart.remove(chord);
                   }
             }
@@ -1861,7 +1873,7 @@ static void fermatas(const QVector<Articulation*>& cra, Xml& xml, Notations& not
                   // MusicXML does not support the very long fermata,
                   // export as long fermata (better than not exporting at all)
                   else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
-                     || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
+                           || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
                         xml.tag(tagName, "square");
                   }
             }
@@ -2913,7 +2925,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                   else if (el->isDynamic()) {
                         tagname += " placement=\"";
                         tagname += el->placement() == Element::Placement::ABOVE
-                           ? "above" : "below";
+                              ? "above" : "below";
                         tagname += "\"";
                         }
                   else {
@@ -3270,16 +3282,21 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 
 void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       {
-      directionTag(xml, attr, hp);
-      xml.stag("direction-type");
-
       int n = findHairpin(hp);
       if (n >= 0)
             hairpins[n] = 0;
       else {
             n = findHairpin(0);
-            hairpins[n] = hp;
+            if (n >= 0)
+                  hairpins[n] = hp;
+            else {
+                  qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick);
+                  return;
+                  }
             }
+
+      directionTag(xml, attr, hp);
+      xml.stag("direction-type");
 
       if (hp->tick() == tick) {
             if ( hp->hairpinType() == HairpinType::CRESC_HAIRPIN ) {
@@ -3325,18 +3342,23 @@ int ExportMusicXml::findOttava(const Ottava* ot) const
 
 void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       {
-      Ottava::Type st = ot->ottavaType();
-      directionTag(xml, attr, ot);
-      xml.stag("direction-type");
-
       int n = findOttava(ot);
       if (n >= 0)
             ottavas[n] = 0;
       else {
             n = findOttava(0);
-            ottavas[n] = ot;
+            if (n >= 0)
+                  ottavas[n] = ot;
+            else {
+                  qDebug("too many overlapping ottavas (ot %p staff %d tick %d)", ot, staff, tick);
+                  return;
+                  }
             }
 
+      directionTag(xml, attr, ot);
+      xml.stag("direction-type");
+
+      Ottava::Type st = ot->ottavaType();
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
@@ -3409,6 +3431,19 @@ int ExportMusicXml::findBracket(const TextLine* tl) const
 
 void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       {
+      int n = findBracket(tl);
+      if (n >= 0)
+            brackets[n] = 0;
+      else {
+            n = findBracket(0);
+            if (n >= 0)
+                  brackets[n] = tl;
+            else {
+                  qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick);
+                  return;
+                  }
+            }
+
       QString rest;
       QPointF p;
 
@@ -3459,14 +3494,6 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             else
                   lineEnd = "down";
             rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
-            }
-
-      int n = findBracket(tl);
-      if (n >= 0)
-            brackets[n] = 0;
-      else {
-            n = findBracket(0);
-            brackets[n] = tl;
             }
 
       if (preferences.musicxmlExportLayout && p.x() != 0)
