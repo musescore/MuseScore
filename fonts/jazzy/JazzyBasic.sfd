@@ -1,0 +1,2374 @@
+SplineFontDB: 3.0
+FontName: JazzyBasic
+FullName: JazzyBasic
+FamilyName: JazzyBasic
+Weight: Regular
+Copyright: Designed by Grzegorz Pruchniakowski.\n\nThis basic edition of Jazzy font is licensed under the SIL Open Font License (http://scripts.sil.org/OFL).\n\nThe JazzyBasic font templates based on SMuFL and Bravura, designed by Daniel Spreadbury at Steinberg.
+Version: 0.85
+ItalicAngle: 0
+UnderlinePosition: -50
+UnderlineWidth: 50
+Ascent: 800
+Descent: 200
+sfntRevision: 0x00010000
+LayerCount: 2
+Layer: 0 0 "Warstwa t+AUIA-a"  1
+Layer: 1 0 "Plan pierwszy"  0
+XUID: [1021 328 455137713 13776491]
+FSType: 0
+OS2Version: 3
+OS2_WeightWidthSlopeOnly: 0
+OS2_UseTypoMetrics: 1
+CreationTime: 1378800000
+ModificationTime: 1378800000
+PfmFamily: 81
+TTFWeight: 400
+TTFWidth: 5
+LineGap: 0
+VLineGap: 0
+Panose: 5 6 0 0 0 0 0 0 0 0
+OS2TypoAscent: 2012
+OS2TypoAOffset: 0
+OS2TypoDescent: -2012
+OS2TypoDOffset: 0
+OS2TypoLinegap: 0
+OS2WinAscent: 2012
+OS2WinAOffset: 0
+OS2WinDescent: 2012
+OS2WinDOffset: 0
+HheadAscent: 2012
+HheadAOffset: 0
+HheadDescent: -2012
+HheadDOffset: 0
+OS2SubXSize: 650
+OS2SubYSize: 600
+OS2SubXOff: 0
+OS2SubYOff: 75
+OS2SupXSize: 650
+OS2SupYSize: 600
+OS2SupXOff: 0
+OS2SupYOff: 350
+OS2StrikeYSize: 50
+OS2StrikeYPos: 165
+OS2Vendor: 'G.P.'
+OS2CodePages: 00000001.00000000
+OS2UnicodeRanges: 00000000.12004000.01000000.00000000
+Lookup: 3 0 0 "'ss01' Styl 1 w tablicy 0"  {"Podtablica 'ss01' Styl 1 w tablicy 0"  } ['ss01' ('DFLT' <'dflt' > ) ]
+Lookup: 3 0 0 "'ss02' Styl 2 w tablicy 1"  {"Podtablica 'ss02' Styl 2 w tablicy 1"  } ['ss02' ('DFLT' <'dflt' > ) ]
+Lookup: 3 0 0 "'ss03' Styl 3 w tablicy 2"  {"Podtablica 'ss03' Styl 3 w tablicy 2"  } ['ss03' ('DFLT' <'dflt' > ) ]
+Lookup: 3 0 0 "'ss04' Styl 4 w tablicy 3"  {"Podtablica 'ss04' Styl 4 w tablicy 3"  } ['ss04' ('DFLT' <'dflt' > ) ]
+Lookup: 3 0 0 "'salt' Alternatywy stylistyczne w tablicy 4"  {"Podtablica 'salt' Alternatywy stylistyczne w tablicy 4"  } ['salt' ('DFLT' <'dflt' > ) ]
+Lookup: 4 0 1 "'liga' Ligatury zwyk+AUIA-e w tablicy 5"  {"Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5"  } ['liga' ('DFLT' <'dflt' > ) ]
+Lookup: 4 0 0 "'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6"  {"Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6"  } ['ccmp' ('DFLT' <'dflt' > ) ]
+Lookup: 258 0 0 "'kern' Kerning poziomy w tablicy 0"  {"Podtablica 'kern' Kerning poziomy w tablicy 0"  } ['kern' ('DFLT' <'dflt' > ) ]
+MarkAttachClasses: 1
+DEI: 91125
+LangName: 1033 
+Encoding: UnicodeFull
+Compacted: 1
+UnicodeInterp: none
+NameList: Adobe Glyph List
+DisplaySize: -96
+AntiAlias: 1
+FitToEm: 1
+WinInfo: 0 10 5
+BeginPrivate: 5
+BlueScale 8 0.039625
+BlueShift 2 20
+StdHW 4 [78]
+StdVW 4 [90]
+ExpansionFactor 4 0.06
+EndPrivate
+Grid
+79.5996 419.2 m 0
+ 79.5996 2819.2 l 0
+EndSplineSet
+TeXData: 1 0 0 314572 157286 104857 0 1048576 104857 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
+BeginChars: 1114113 111
+
+StartChar: .notdef
+Encoding: 1114112 -1 0
+Width: 300
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: space
+Encoding: 32 32 1
+Width: 300
+GlyphClass: 2
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: u0266D
+Encoding: 9837 9837 2
+Width: 190
+GlyphClass: 2
+Flags: W
+HStem: 108 78<83.9903 145.55> 108 52<73.0977 112.038>
+VStem: 0 48<-71.9748 75.3699> 154 36<-9.89758 96.6426>
+LayerCount: 2
+Fore
+SplineSet
+0 -12 m 0xb0
+ 0 178 34 512 76 512 c 0
+ 100 512 100 476 100 456 c 0
+ 100 416 72 250 62 208 c 0
+ 58 192 56 180 56 172 c 0
+ 56 164 60 160 66 160 c 0x70
+ 80 160 88 166 96 172 c 0
+ 106 180 118 186 136 186 c 0
+ 188 186 190 86 190 46 c 0
+ 190 -78 80 -154 40 -154 c 0
+ 0 -154 0 -94 0 -12 c 0xb0
+48 -72 m 1
+ 130 -36 154 -4 154 56 c 0
+ 154 80 140 108 104 108 c 0xb0
+ 74 108 48 66 48 -72 c 1
+EndSplineSet
+EndChar
+
+StartChar: u0266E
+Encoding: 9838 9838 3
+Width: 200
+GlyphClass: 2
+Flags: W
+HStem: 80 98<76.4085 154.966>
+VStem: 0 42<-105.152 53.9257> 156 44<-45.1247 76.1722>
+LayerCount: 2
+Fore
+SplineSet
+0 -30 m 0
+ 0 138 44 378 74 378 c 0
+ 82 378 90 364 90 340 c 0
+ 90 276 52 136 52 136 c 1
+ 52 136 94 178 130 178 c 0
+ 188 178 200 92 200 -6 c 0
+ 200 -166 158 -424 128 -424 c 0
+ 112 -424 110 -402 110 -374 c 0
+ 110 -326 138 -144 138 -144 c 1
+ 138 -144 100 -190 60 -190 c 0
+ 0 -190 0 -114 0 -30 c 0
+42 -30 m 0
+ 42 -70 50 -106 50 -106 c 1
+ 50 -106 100 -102 124 -66 c 0
+ 156 -18 156 72 156 72 c 1
+ 156 72 134 80 118 80 c 0
+ 92 80 76 76 62 54 c 0
+ 48 32 42 0 42 -30 c 0
+EndSplineSet
+EndChar
+
+StartChar: u0266F
+Encoding: 9839 9839 4
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: -136 70<11.3807 153.988> -124 74<110 234.698> 80 80<36.1304 167.293> 106 72<126.164 249.341>
+VStem: 0 260
+LayerCount: 2
+Fore
+SplineSet
+0 -104 m 0x88
+ 0 -90 36 -66 74 -66 c 0x88
+ 104 -66 120 -62 134 -58 c 0
+ 148 -54 164 -50 198 -50 c 0
+ 224 -50 244 -74 244 -104 c 0
+ 244 -120 206 -124 190 -124 c 0x48
+ 160 -124 150 -126 136 -130 c 0
+ 122 -134 108 -136 66 -136 c 0
+ 46 -136 0 -128 0 -104 c 0x88
+24 114 m 0
+ 24 128 46 160 84 160 c 0x28
+ 114 160 128 164 142 168 c 0
+ 156 172 178 178 202 178 c 0
+ 228 178 260 158 260 128 c 0
+ 260 112 220 106 204 106 c 0x18
+ 172 106 160 100 146 92 c 0
+ 132 84 116 80 76 80 c 0x28
+ 56 80 24 90 24 114 c 0
+48 -332 m 0
+ 48 -188 76 378 116 378 c 0
+ 126 378 128 362 128 338 c 0
+ 128 162 96 -384 64 -384 c 0
+ 48 -384 48 -360 48 -332 c 0
+150 -274 m 0
+ 150 -130 180 436 220 436 c 0
+ 230 436 230 420 230 396 c 0
+ 230 220 198 -326 166 -326 c 0
+ 150 -326 150 -302 150 -274 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE003
+Encoding: 57347 57347 5
+Width: 400
+GlyphClass: 2
+Flags: W
+HStem: -80 140<15.1875 140.152>
+VStem: 344 56<147.591 281.375>
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 2
+ 0 10 10 60 62 60 c 0
+ 292 60 344 104 344 276 c 0
+ 344 286 344 294 352 294 c 0
+ 386 294 400 242 400 226 c 0
+ 400 108 266 -80 0 -80 c 1
+ 0 0 l 2
+EndSplineSet
+EndChar
+
+StartChar: uniE004
+Encoding: 57348 57348 6
+Width: 400
+VWidth: 808
+GlyphClass: 2
+Flags: W
+HStem: -60 140<15.1875 140.152>
+VStem: 344 56<-281.375 -147.591>
+LayerCount: 2
+Fore
+Refer: 5 57347 N 1 0 0 -1 0 0 2
+EndChar
+
+StartChar: uniE005
+Encoding: 57349 57349 7
+Width: 400
+GlyphClass: 2
+Flags: W
+HStem: -80 140<259.848 384.812>
+VStem: 0 56<147.591 281.375>
+LayerCount: 2
+Fore
+Refer: 5 57347 N -1 0 0 1 400 0 2
+EndChar
+
+StartChar: uniE006
+Encoding: 57350 57350 8
+Width: 400
+VWidth: 808
+GlyphClass: 2
+Flags: W
+HStem: -60 140<259.848 384.812>
+VStem: 0 56<-281.375 -147.591>
+LayerCount: 2
+Fore
+Refer: 5 57347 N -1 -0 0 -1 400 0 2
+EndChar
+
+StartChar: uniE044
+Encoding: 57412 57412 9
+Width: 100
+GlyphClass: 2
+Flags: W
+HStem: 76 100<10.9422 89.6216>
+VStem: 0 100<84.6868 165.149>
+LayerCount: 2
+Fore
+SplineSet
+0 138 m 0
+ 0 158 6 176 44 176 c 0
+ 80 176 100 148 100 128 c 0
+ 100 92 76 76 46 76 c 0
+ 12 76 0 114 0 138 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE047
+Encoding: 57415 57415 10
+Width: 244
+GlyphClass: 2
+Flags: W
+HStem: -394 46<34.1582 139.607> -128 94<-235.022 -158.076> 34 104<168.524 236.467> 348 46<-132.423 -46.8027>
+VStem: -244 94<-120.586 -41.8394> -244 86<171.357 310.75> -72 98<-335.995 -263.595> -44 104<254.73 343.63> 156 88<41.4434 125.002> 164 80<-311.198 -174.631>
+LayerCount: 2
+Fore
+SplineSet
+-244 -72 m 0xf8
+ -244 -52 -238 -34 -200 -34 c 0
+ -164 -34 -150 -62 -150 -82 c 0
+ -150 -118 -168 -128 -198 -128 c 0
+ -232 -128 -244 -96 -244 -72 c 0xf8
+-244 212 m 0xf640
+ -244 332 -174 394 -66 394 c 0
+ 34 394 60 318 60 268 c 0
+ 60 240 52 160 0 160 c 0
+ -42 160 -74 194 -74 222 c 0
+ -74 230 -70 250 -60 264 c 0
+ -56 270 -44 290 -44 310 c 0xf540
+ -44 334 -50 348 -86 348 c 0
+ -146 348 -158 284 -158 238 c 0
+ -158 180 -110 126 -24 72 c 0
+ 74 10 244 -104 244 -210 c 0
+ 244 -330 178 -394 70 -394 c 0
+ -30 -394 -72 -320 -72 -270 c 0
+ -72 -212 -54 -166 0 -166 c 0
+ 28 -166 70 -178 70 -218 c 0
+ 70 -244 60 -254 46 -264 c 0
+ 32 -274 26 -280 26 -298 c 0
+ 26 -336 52 -348 88 -348 c 0
+ 140 -348 164 -310 164 -238 c 0
+ 164 -166 94 -120 0 -64 c 0
+ -112 2 -244 82 -244 212 c 0xf640
+-228 -352 m 0
+ -228 -292 172 356 206 356 c 0
+ 208 356 210 354 210 352 c 0
+ 210 292 -190 -356 -224 -356 c 0
+ -226 -356 -228 -354 -228 -352 c 0
+156 80 m 0xf080
+ 156 110 180 138 212 138 c 0
+ 236 138 244 108 244 84 c 0
+ 244 50 220 34 196 34 c 0
+ 180 34 156 48 156 80 c 0xf080
+EndSplineSet
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE047.salt01
+EndChar
+
+StartChar: uniE048
+Encoding: 57416 57416 11
+Width: 468
+GlyphClass: 2
+Flags: W
+HStem: -206 38<184 248.658> -44 86<12.5978 63.8809> 162 48<221 344>
+VStem: 0 64<-40.2104 26.8122> 158 48<-202.749 -38.2975> 326 76<35.2147 143.978>
+LayerCount: 2
+Fore
+SplineSet
+0 -10 m 0
+ 0 34 52 42 112 42 c 0
+ 222 42 468 42 468 -16 c 0
+ 468 -30 454 -44 438 -44 c 0
+ 428 -44 422 -42 408 -36 c 0
+ 394 -30 360 -28 348 -28 c 0
+ 318 -28 254 -30 206 -34 c 0
+ 144 -40 90 -44 44 -44 c 0
+ 16 -44 0 -38 0 -10 c 0
+64 -34 m 0
+ 64 -134 146 -206 230 -206 c 0
+ 330 -206 402 -52 402 68 c 0
+ 402 144 378 210 308 210 c 0
+ 172 210 64 84 64 -34 c 0
+118 -26 m 0
+ 118 68 176 162 266 162 c 0
+ 310 162 326 116 326 60 c 0
+ 326 -36 274 -168 208 -168 c 0
+ 160 -168 118 -120 118 -26 c 0
+158 -136 m 0
+ 158 40 212 300 282 300 c 0
+ 300 300 306 280 306 268 c 0
+ 306 198 282 140 256 84 c 0
+ 230 28 206 -30 206 -108 c 0
+ 206 -130 212 -162 218 -190 c 0
+ 224 -218 230 -248 230 -270 c 0
+ 230 -290 218 -298 206 -298 c 0
+ 172 -298 158 -230 158 -136 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE048.salt01
+EndChar
+
+StartChar: uniE050
+Encoding: 57424 57424 12
+Width: 584
+GlyphClass: 2
+Flags: W
+HStem: -618 40<236.136 364.275> -238 66<236.06 463.016> 112 108<245.719 416.693> 944 192<251.391 328.123>
+VStem: 0 96<-45.8181 167.578> 128 102<-550.998 -455> 150 60<-25.7799 79.4269> 196 54<693.512 1015> 400 46<783.396 919.824> 416 38<-513.179 -257.752> 524 60<-117.734 14.9286>
+LayerCount: 2
+Fore
+SplineSet
+0 50 m 0xfaa0
+ 0 228 176 476 284 626 c 0
+ 332 692 400 794 400 860 c 0
+ 400 912 374 944 308 944 c 0
+ 280 944 250 906 250 830 c 0xf9a0
+ 250 642 318 256 390 -28 c 0
+ 436 -208 454 -396 454 -444 c 0
+ 454 -532 404 -618 282 -618 c 0
+ 208 -618 128 -564 128 -484 c 0
+ 128 -426 136 -370 200 -370 c 0
+ 254 -370 306 -408 306 -456 c 0
+ 306 -476 230 -502 230 -540 c 0xfc60
+ 230 -564 248 -578 308 -578 c 0
+ 368 -578 416 -524 416 -414 c 0
+ 416 -374 402 -228 350 -50 c 0
+ 262 250 196 720 196 960 c 0xf960
+ 196 1070 230 1136 274 1136 c 0
+ 366 1136 446 948 446 860 c 0
+ 446 710 360 584 266 464 c 0
+ 112 268 96 128 96 50 c 0
+ 96 -108 232 -172 358 -172 c 0
+ 484 -172 524 -110 524 -56 c 0
+ 524 24 438 112 330 112 c 0
+ 276 112 210 92 210 26 c 0
+ 210 -14 236 -48 264 -66 c 0
+ 270 -70 274 -74 274 -78 c 0
+ 274 -82 270 -86 260 -86 c 0
+ 190 -86 150 -8 150 60 c 0
+ 150 138 194 220 306 220 c 0
+ 510 220 584 94 584 -32 c 0
+ 584 -168 510 -238 346 -238 c 0
+ 158 -238 0 -136 0 50 c 0xfaa0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE050.ss01
+EndChar
+
+StartChar: uniE05C
+Encoding: 57436 57436 13
+Width: 642
+GlyphClass: 2
+Flags: W
+HStem: -500 38<358.812 482.527> -184 104<303.156 377.698> -104 74<413.837 516.405> 52 58<398.534 511.637> 66 106<305.129 379.068> 438 62<357.236 485.955>
+VStem: 0 134<-496.79 486.936> 170 36<-501.942 -16 16 501.231> 246 90<339.178 417.941> 258 88<-434 -341> 548 92<-379.484 -156.553 183.565 376.142>
+LayerCount: 2
+Fore
+SplineSet
+0 432 m 2x8720
+ 0 496 46 508 106 508 c 0
+ 134 508 134 470 134 444 c 2
+ 134 -470 l 2
+ 134 -502 78 -508 38 -508 c 0
+ 22 -508 0 -498 0 -466 c 2
+ 0 432 l 2x8720
+170 476 m 2
+ 170 490 178 502 194 502 c 0
+ 204 502 206 488 206 482 c 2
+ 206 16 l 1
+ 216 24 238 56 244 84 c 0
+ 254 128 282 172 310 172 c 0xcf60
+ 358 172 366 164 396 134 c 0
+ 416 114 438 110 462 110 c 0
+ 520 110 554 172 554 282 c 0
+ 554 386 482 438 412 438 c 0
+ 370 438 336 408 336 376 c 0
+ 336 322 404 342 404 288 c 0
+ 404 244 352 224 310 224 c 0
+ 248 224 246 316 246 376 c 0
+ 246 436 284 500 398 500 c 0
+ 512 500 642 448 642 282 c 0
+ 642 160 540 52 432 52 c 0x97a0
+ 416 52 400 56 386 60 c 0
+ 372 64 356 66 344 66 c 0
+ 324 66 290 44 290 0 c 0
+ 290 -64 314 -80 354 -80 c 0xcfa0
+ 364 -80 382 -78 408 -56 c 0
+ 434 -34 454 -30 464 -30 c 0
+ 572 -30 640 -150 640 -272 c 0
+ 640 -404 564 -500 412 -500 c 0
+ 342 -500 258 -448 258 -368 c 0
+ 258 -314 258 -240 320 -240 c 0
+ 382 -240 414 -254 414 -306 c 0
+ 414 -344 346 -372 346 -416 c 0
+ 346 -444 378 -462 418 -462 c 0
+ 528 -462 548 -346 548 -252 c 0
+ 548 -202 548 -104 464 -104 c 0xa760
+ 424 -104 402 -124 386 -150 c 0
+ 378 -164 366 -184 328 -184 c 0xc760
+ 268 -184 256 -146 242 -78 c 0
+ 238 -58 218 -26 206 -16 c 1
+ 206 -490 l 2
+ 206 -500 194 -502 186 -502 c 0
+ 176 -502 170 -494 170 -484 c 2
+ 170 476 l 2
+EndSplineSet
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE05C.salt01
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE05C.ss01
+EndChar
+
+StartChar: uniE062
+Encoding: 57442 57442 14
+Width: 642
+GlyphClass: 2
+Flags: W
+HStem: -510 24<1.18652 50.7504> -168 104<568.441 635.914> 74 94<558.978 634.692> 204 46<124.003 278.195>
+VStem: 0 92<72.7379 153.016> 332 140<-114.523 114.754> 556 86<-161.883 -76.3806 77.7952 161.25>
+LayerCount: 2
+Fore
+SplineSet
+0 76 m 0
+ 0 134 50 250 200 250 c 0
+ 464 250 472 56 472 0 c 0
+ 472 -206 224 -510 12 -510 c 0
+ 2 -510 0 -506 0 -502 c 0
+ 0 -494 12 -490 24 -486 c 0
+ 218 -422 332 -234 332 0 c 0
+ 332 106 322 204 200 204 c 0
+ 96 204 92 138 92 106 c 0
+ 92 74 148 64 148 10 c 0
+ 148 -34 108 -48 66 -48 c 0
+ 4 -48 0 16 0 76 c 0
+550 130 m 0
+ 550 150 556 168 594 168 c 0
+ 630 168 642 140 642 120 c 0
+ 642 84 626 74 596 74 c 0
+ 562 74 550 106 550 130 c 0
+556 -122 m 0
+ 556 -90 580 -64 612 -64 c 0
+ 638 -64 642 -96 642 -120 c 0
+ 642 -154 620 -168 596 -168 c 0
+ 580 -168 556 -154 556 -122 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE062.salt01 uniE062.salt02
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE062.ss01
+EndChar
+
+StartChar: uniE080
+Encoding: 57472 57472 15
+Width: 384
+GlyphClass: 2
+Flags: W
+HStem: -244 60<114.619 186.572> 184 60<160.861 261.344>
+VStem: 0 100<-172.498 65.2623> 284 100<-55.7235 161.158>
+LayerCount: 2
+Fore
+SplineSet
+0 -66 m 0
+ 0 126 118 244 242 244 c 0
+ 310 244 384 202 384 104 c 0
+ 384 -126 272 -244 166 -244 c 0
+ 68 -244 0 -202 0 -66 c 0
+100 -52 m 0
+ 100 -104 100 -184 146 -184 c 0
+ 186 -184 284 -78 284 50 c 0
+ 284 120 274 184 220 184 c 0
+ 120 184 100 60 100 -52 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE080.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE080.ss01
+EndChar
+
+StartChar: uniE081
+Encoding: 57473 57473 16
+Width: 218
+GlyphClass: 2
+Flags: W
+VStem: 98 120<-19.1569 136>
+LayerCount: 2
+Fore
+SplineSet
+0 40 m 0
+ 0 84 90 244 134 244 c 0
+ 158 244 186 240 200 234 c 0
+ 218 226 218 214 218 190 c 0
+ 218 40 184 -206 130 -232 c 0
+ 118 -238 96 -244 74 -244 c 0
+ 52 -244 50 -224 50 -200 c 0
+ 50 -144 62 -86 74 -30 c 0
+ 86 26 98 82 98 136 c 1
+ 82 104 34 26 12 26 c 0
+ 8 26 0 28 0 40 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE081.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE081.ss01
+EndChar
+
+StartChar: uniE082
+Encoding: 57474 57474 17
+Width: 390
+GlyphClass: 2
+Flags: W
+HStem: -244 94<100.021 276.38> -228 90<54.3779 202.881> 204 40<150.003 255.008>
+VStem: 62 68<81.1904 186.055> 290 100<60.0281 172.123>
+LayerCount: 2
+Fore
+SplineSet
+0 -212 m 0xb8
+ 0 -94 84 -42 176 -2 c 0
+ 236 24 290 64 290 108 c 0
+ 290 168 250 204 194 204 c 0
+ 144 204 130 158 130 110 c 0
+ 130 88 128 78 100 78 c 0
+ 64 78 62 110 62 146 c 0
+ 62 216 122 244 212 244 c 0
+ 302 244 390 204 390 114 c 0
+ 390 20 260 -38 196 -58 c 0
+ 132 -78 84 -108 54 -146 c 1
+ 62 -140 74 -138 88 -138 c 0x78
+ 102 -138 118 -138 136 -142 c 0
+ 164 -148 180 -150 204 -150 c 0
+ 220 -150 242 -146 270 -132 c 0
+ 290 -122 306 -114 324 -114 c 0
+ 354 -114 358 -156 358 -164 c 0
+ 358 -214 282 -244 232 -244 c 0xb8
+ 204 -244 194 -242 164 -234 c 0
+ 140 -228 140 -228 110 -228 c 0x78
+ 90 -228 74 -232 60 -236 c 0
+ 46 -240 32 -244 18 -244 c 0
+ 4 -244 0 -226 0 -212 c 0xb8
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE082.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE082.ss01
+EndChar
+
+StartChar: uniE083
+Encoding: 57475 57475 18
+Width: 390
+GlyphClass: 2
+Flags: W
+HStem: -244 60<92.3224 223.383> -20 24<178 206.013> 204 40<150.003 255.008>
+VStem: 0 92<-181.842 -92.7943> 62 68<81.1904 186.055> 246 100<-161.9 -44.5751> 290 100<71.9993 172.123>
+LayerCount: 2
+Fore
+SplineSet
+0 -150 m 0xf4
+ 0 -110 12 -70 76 -70 c 0
+ 94 -70 106 -88 106 -98 c 0
+ 106 -108 104 -114 100 -126 c 0
+ 96 -138 92 -150 92 -162 c 0
+ 92 -182 108 -184 158 -184 c 0
+ 208 -184 246 -162 246 -102 c 0xf4
+ 246 -48 206 -20 168 -20 c 0
+ 158 -20 148 -20 138 -28 c 0
+ 130 -34 124 -36 120 -36 c 0
+ 110 -36 96 -30 96 -10 c 0
+ 96 20 136 30 166 36 c 0
+ 224 48 290 64 290 108 c 0
+ 290 168 250 204 194 204 c 0
+ 144 204 130 158 130 110 c 0
+ 130 88 128 78 100 78 c 0
+ 64 78 62 110 62 146 c 0
+ 62 216 122 244 212 244 c 0
+ 302 244 390 204 390 114 c 0xea
+ 390 20 254 8 178 4 c 1
+ 304 4 346 -52 346 -102 c 0
+ 346 -192 278 -244 172 -244 c 0
+ 66 -244 0 -200 0 -150 c 0xf4
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE083.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE083.ss01
+EndChar
+
+StartChar: uniE084
+Encoding: 57476 57476 19
+Width: 390
+GlyphClass: 2
+Flags: W
+HStem: -122 34<50 195.923> -104 36<114.406 389.967>
+VStem: 188 118<-215.112 -112.411>
+LayerCount: 2
+Fore
+SplineSet
+0 -106 m 0xa0
+ 0 -102 0 -90 14 -76 c 0
+ 54 -36 76 -8 106 36 c 0
+ 136 80 170 128 224 198 c 0
+ 244 224 268 244 304 244 c 0
+ 310 244 326 242 326 224 c 0
+ 326 170 214 66 118 -20 c 0
+ 86 -48 64 -72 50 -88 c 1xa0
+ 84 -88 114 -84 144 -80 c 0
+ 190 -74 268 -68 310 -68 c 0
+ 344 -68 390 -68 390 -86 c 0
+ 390 -104 360 -104 316 -104 c 0x60
+ 272 -104 208 -110 160 -116 c 0
+ 126 -120 100 -122 66 -122 c 0
+ 18 -122 0 -122 0 -106 c 0xa0
+188 -198 m 0
+ 188 -148 196 -106 208 -56 c 0
+ 220 -6 246 56 280 94 c 0
+ 298 114 316 134 336 134 c 0
+ 346 134 350 130 350 110 c 0
+ 350 50 344 20 328 -26 c 0
+ 318 -56 312 -90 306 -138 c 0
+ 294 -242 256 -244 222 -244 c 0
+ 188 -244 188 -224 188 -198 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE084.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE084.ss01
+EndChar
+
+StartChar: uniE085
+Encoding: 57477 57477 20
+Width: 372
+GlyphClass: 2
+Flags: W
+HStem: -244 60<92.3224 223.383> 20 54<105.37 207.169> 140 70<217.745 340.418>
+VStem: 0 92<-181.842 -92.7943> 246 100<-161.9 -17.7268>
+LayerCount: 2
+Fore
+SplineSet
+0 -150 m 0
+ 0 -110 12 -70 76 -70 c 0
+ 94 -70 106 -88 106 -98 c 0
+ 106 -108 104 -114 100 -126 c 0
+ 96 -138 92 -150 92 -162 c 0
+ 92 -182 108 -184 158 -184 c 0
+ 208 -184 246 -162 246 -102 c 0
+ 246 -50 236 20 126 20 c 0
+ 100 20 78 10 62 -2 c 0
+ 54 -8 48 -10 44 -10 c 0
+ 34 -10 24 -6 24 8 c 0
+ 24 34 34 58 58 104 c 0
+ 82 150 132 244 164 244 c 0
+ 184 244 210 236 226 228 c 0
+ 246 218 264 210 288 210 c 0
+ 298 210 320 214 330 224 c 0
+ 336 230 342 234 352 234 c 0
+ 368 234 372 210 372 196 c 0
+ 372 152 322 140 266 140 c 0
+ 222 140 184 150 160 168 c 1
+ 104 58 l 1
+ 140 74 170 74 198 74 c 0
+ 292 74 346 12 346 -102 c 0
+ 346 -192 278 -244 172 -244 c 0
+ 66 -244 0 -200 0 -150 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE085.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE085.ss01
+EndChar
+
+StartChar: uniE086
+Encoding: 57478 57478 21
+Width: 336
+GlyphClass: 2
+Flags: W
+HStem: -244 60<116.174 215.06> -12 80<120.405 224.361> 176 68<195.563 295.689>
+VStem: 0 100<-172.239 12.7564> 236 100<-162.786 -22.898>
+LayerCount: 2
+Fore
+SplineSet
+0 -100 m 0
+ 0 98 100 244 310 244 c 0
+ 316 244 330 238 330 224 c 0
+ 330 210 290 194 240 176 c 0
+ 166 150 106 94 100 34 c 1
+ 136 60 178 68 218 68 c 0
+ 286 68 336 12 336 -102 c 0
+ 336 -190 242 -244 152 -244 c 0
+ 40 -244 0 -174 0 -100 c 0
+100 -72 m 0
+ 100 -122 102 -184 152 -184 c 0
+ 202 -184 236 -162 236 -102 c 0
+ 236 -50 230 -12 180 -12 c 0
+ 130 -12 100 -12 100 -72 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE086.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE086.ss01
+EndChar
+
+StartChar: uniE087
+Encoding: 57479 57479 22
+Width: 390
+GlyphClass: 2
+Flags: W
+HStem: -38 70<42.3784 246> -26 44<92.9302 206> 150 88<7.57727 149.259> 150 74<98.3067 281.149>
+DStem2: 74 -180 190 -184 0.494767 0.869026<-24.4776 192.212 278.911 400.378>
+LayerCount: 2
+Fore
+SplineSet
+0 200 m 0x20
+ 0 214 4 238 44 238 c 0x20
+ 84 238 108 234 130 230 c 0
+ 152 226 172 224 208 224 c 0
+ 222 224 246 226 270 234 c 0
+ 300 244 330 244 348 244 c 0
+ 358 244 390 242 390 224 c 0
+ 390 148 344 74 304 10 c 0
+ 264 -54 228 -116 190 -184 c 0
+ 180 -202 152 -244 118 -244 c 0
+ 88 -244 60 -242 60 -222 c 0
+ 60 -206 68 -190 74 -180 c 0
+ 132 -92 196 22 240 106 c 0
+ 250 124 264 148 282 166 c 1
+ 262 152 254 150 238 150 c 0x10
+ 222 150 210 152 196 156 c 0
+ 182 160 166 160 150 160 c 0
+ 134 160 130 160 100 154 c 0
+ 82 150 70 150 50 150 c 0
+ 30 150 0 162 0 200 c 0x20
+38 -10 m 0
+ 38 4 44 32 82 32 c 0x80
+ 102 32 112 32 134 26 c 0
+ 156 20 164 18 200 18 c 0
+ 206 18 228 18 240 22 c 0
+ 252 26 270 30 284 30 c 0
+ 310 30 344 10 344 -20 c 0
+ 344 -36 302 -42 286 -42 c 0
+ 276 -42 260 -38 246 -34 c 0
+ 228 -28 210 -26 192 -26 c 0x40
+ 176 -26 176 -26 140 -34 c 0
+ 122 -38 112 -38 92 -38 c 0x80
+ 72 -38 38 -34 38 -10 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE087.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE087.ss01
+EndChar
+
+StartChar: uniE088
+Encoding: 57480 57480 23
+Width: 400
+GlyphClass: 2
+Flags: W
+HStem: -244 60<102.799 267.353> 204 40<174.909 313.118>
+VStem: 0 76<-158.72 -69.518> 82 80<96.4382 184.385> 288 100<-163.964 -72.9214> 338 62<78.4093 182.339>
+LayerCount: 2
+Fore
+SplineSet
+0 -90 m 0xf8
+ 0 -24 90 10 142 24 c 1
+ 114 42 82 70 82 106 c 0
+ 82 210 158 244 264 244 c 0
+ 370 244 400 190 400 112 c 0xf4
+ 400 70 350 24 316 14 c 1
+ 364 -14 388 -42 388 -90 c 0
+ 388 -190 318 -244 168 -244 c 0
+ 78 -244 0 -180 0 -90 c 0xf8
+76 -106 m 0
+ 76 -166 130 -184 176 -184 c 0
+ 244 -184 288 -162 288 -132 c 0xf8
+ 288 -92 282 -70 192 -26 c 1
+ 164 -34 76 -62 76 -106 c 0
+162 150 m 0
+ 162 100 198 80 260 50 c 1
+ 294 60 338 84 338 112 c 0xf4
+ 338 164 318 204 258 204 c 0
+ 212 204 162 200 162 150 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE088.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE088.ss01
+EndChar
+
+StartChar: uniE089
+Encoding: 57481 57481 24
+Width: 336
+GlyphClass: 2
+Flags: W
+HStem: -244 68<40.3106 140.437> -68 80<111.639 215.595> 184 60<120.94 219.826>
+VStem: 0 100<22.898 162.786> 236 100<-12.7564 172.239>
+LayerCount: 2
+Fore
+Refer: 21 57478 N -1 0 0 -1 336 0 2
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE089.ss04
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE089.ss01
+EndChar
+
+StartChar: uniE08A
+Encoding: 57482 57482 25
+Width: 400
+GlyphClass: 2
+Flags: W
+HStem: -262 212<172 336> -262 48<134.308 265.23>
+VStem: 0 88<-158.003 62.1354> 306 94<88.0284 180.935> 488.8 55.2<-181.502 230.534>
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 0xb8
+ 0 140 98 244 244 244 c 0
+ 320 244 400 206 400 126 c 0
+ 400 86 396 30 316 30 c 0
+ 226 30 306 106 306 136 c 0
+ 306 258 88 150 88 -32 c 0
+ 88 -156 128 -214 190 -214 c 0x78
+ 364 -214 306 -50 336 -50 c 0
+ 360 -50 376 -262 172 -262 c 0
+ 26 -262 0 -172 0 0 c 0xb8
+EndSplineSet
+Refer: 27 57490 N -1.2 0 0 1.6 544 46 2
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE08A.ss04
+EndChar
+
+StartChar: uniE08B
+Encoding: 57483 57483 26
+Width: 400
+GlyphClass: 2
+Flags: W
+HStem: -262 48<134.308 265.23> -262 212<172 336>
+VStem: 0 88<-158.003 62.1354> 306 94<88.0284 180.935> 488.8 55.2<-181.502 230.534>
+LayerCount: 2
+Fore
+SplineSet
+168 -332 m 0x38
+ 168 -188 196 378 236 378 c 0
+ 246 378 248 362 248 338 c 0
+ 248 162 216 -384 184 -384 c 0
+ 168 -384 168 -360 168 -332 c 0x38
+EndSplineSet
+Refer: 25 57482 N 1 0 0 1 0 0 2
+AlternateSubs2: "Podtablica 'ss04' Styl 4 w tablicy 3" uniE08B.ss04
+EndChar
+
+StartChar: uniE092
+Encoding: 57490 57490 27
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 0 46<-142.188 115.334>
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 0
+ 0 12 4 182 64 256 c 0
+ 72 266 82 276 98 276 c 0
+ 112 276 120 266 120 250 c 0
+ 120 250 120 234 114 220 c 0
+ 82 146 46 98 46 0 c 0
+ 46 -98 62 -150 98 -240 c 0
+ 102 -250 104 -254 104 -258 c 0
+ 104 -264 100 -268 92 -268 c 0
+ 90 -268 86 -268 78 -256 c 0
+ 26 -178 0 -102 0 0 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE093
+Encoding: 57491 57491 28
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 74 46<-107.334 150.188>
+LayerCount: 2
+Fore
+Refer: 27 57490 N -1 -0 0 -1 120 8 2
+EndChar
+
+StartChar: uniE094
+Encoding: 57492 57492 29
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 0 46<-142.188 115.334>
+LayerCount: 2
+Fore
+Refer: 27 57490 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE095
+Encoding: 57493 57493 30
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 74 46<-107.334 150.188>
+LayerCount: 2
+Fore
+Refer: 28 57491 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE0A2
+Encoding: 57506 57506 31
+Width: 450
+GlyphClass: 2
+Flags: W
+HStem: -142 52<156.409 275.544> 90 52<184.7 286.477>
+VStem: 0 144<-77.54 38.2605> 306 144<-26.413 72.1795>
+LayerCount: 2
+Fore
+SplineSet
+0 -24 m 0
+ 0 68 132 142 236 142 c 0
+ 356 142 450 94 450 36 c 0
+ 450 -56 306 -142 190 -142 c 0
+ 74 -142 0 -82 0 -24 c 0
+144 -28 m 0
+ 144 -74 166 -90 214 -90 c 0
+ 268 -90 306 -54 306 0 c 0
+ 306 54 288 90 234 90 c 0
+ 180 90 144 30 144 -28 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE0A2.ss01
+EndChar
+
+StartChar: uniE0A3
+Encoding: 57507 57507 32
+Width: 316
+GlyphClass: 2
+Flags: W
+HStem: -114 74<48.1576 196.783> 56 82<96.6445 237.775>
+VStem: 0 80<-38.3247 39.9829> 240 76<-17.0214 50.2102>
+LayerCount: 2
+Fore
+SplineSet
+0 -24 m 0
+ 0 68 84 138 188 138 c 0
+ 258 138 316 94 316 36 c 0
+ 316 -56 186 -114 82 -114 c 0
+ 16 -114 0 -82 0 -24 c 0
+80 -8 m 0
+ 80 -38 84 -40 120 -40 c 0
+ 176 -40 240 -28 240 22 c 0
+ 240 52 212 56 174 56 c 0
+ 118 56 80 42 80 -8 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE0A3.ss01
+EndChar
+
+StartChar: uniE0A4
+Encoding: 57508 57508 33
+Width: 316
+GlyphClass: 2
+Flags: W
+HStem: -114 252<94.3459 196.958>
+VStem: 0 316<-26.25 50.8647>
+LayerCount: 2
+Fore
+SplineSet
+0 -24 m 0
+ 0 68 84 138 188 138 c 0
+ 258 138 316 94 316 36 c 0
+ 316 -56 186 -114 82 -114 c 0
+ 16 -114 0 -82 0 -24 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE0A4.ss01
+EndChar
+
+StartChar: uniE0F5
+Encoding: 57589 57589 34
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 0 46<-142.188 115.334>
+LayerCount: 2
+Fore
+Refer: 27 57490 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE0F6
+Encoding: 57590 57590 35
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 74 46<-107.334 150.188>
+LayerCount: 2
+Fore
+Refer: 28 57491 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE1E7
+Encoding: 57831 57831 36
+Width: 140
+VWidth: 1048
+GlyphClass: 2
+Flags: W
+HStem: -59.8 120<13.1306 107.546>
+VStem: 0 120<-49.3759 47.1786>
+LayerCount: 2
+Fore
+Refer: 9 57412 N 1.2 0 0 1.2 0 -151 2
+EndChar
+
+StartChar: uniE240
+Encoding: 57920 57920 37
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: -20 20G<0 85>
+VStem: 200 60<-671.615 -421.694>
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 1
+ 170 -66 260 -332 260 -500 c 0
+ 260 -624 210 -840 148 -840 c 0
+ 132 -840 128 -830 128 -824 c 0
+ 128 -820 132 -812 138 -800 c 0
+ 182 -706 200 -636 200 -536 c 0
+ 200 -382 104 -286 0 -222 c 1
+ 0 0 l 1
+EndSplineSet
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE240.salt03
+AlternateSubs2: "Podtablica 'ss03' Styl 3 w tablicy 2" uniE240.ss03
+AlternateSubs2: "Podtablica 'ss02' Styl 2 w tablicy 1" uniE240.ss02
+EndChar
+
+StartChar: uniE241
+Encoding: 57921 57921 38
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: 0 20<0 85>
+VStem: 200 60<421.694 671.615>
+LayerCount: 2
+Fore
+Refer: 37 57920 N 1 0 0 -1 0 0 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE241.salt02
+AlternateSubs2: "Podtablica 'ss03' Styl 3 w tablicy 2" uniE241.ss03
+EndChar
+
+StartChar: uniE242
+Encoding: 57922 57922 39
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: -320 20<0 85> -20 20G<0 85>
+VStem: 200 60<-971.615 -721.694 -648.193 -424.14>
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 1
+ 170 -66 260 -332 260 -500 c 0
+ 260 -800 200 -800 200 -800 c 1
+ 200 -536 l 1
+ 200 -382 104 -286 0 -222 c 1
+ 0 0 l 1
+EndSplineSet
+Refer: 37 57920 N 1 0 0 1 0 -300 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE242.salt03
+AlternateSubs2: "Podtablica 'ss03' Styl 3 w tablicy 2" uniE242.ss03
+AlternateSubs2: "Podtablica 'ss02' Styl 2 w tablicy 1" uniE242.ss02
+EndChar
+
+StartChar: uniE243
+Encoding: 57923 57923 40
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: 0 20<0 85> 300 20<0 85>
+VStem: 200 60<424.14 648.193 721.694 971.615>
+LayerCount: 2
+Fore
+Refer: 39 57922 N 1 0 0 -1 0 0 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE243.salt02
+AlternateSubs2: "Podtablica 'ss03' Styl 3 w tablicy 2" uniE243.ss03
+EndChar
+
+StartChar: uniE244
+Encoding: 57924 57924 41
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: -620 20<0 85> -320 20<0 85> -20 20G<0 85>
+VStem: 200 60<-1271.62 -1021.69 -948.193 -724.14 -648.193 -424.14>
+CounterMasks: 1 e0
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 1
+ 170 -66 260 -332 260 -500 c 0
+ 260 -800 200 -800 200 -800 c 1
+ 200 -536 l 1
+ 200 -382 104 -286 0 -222 c 1
+ 0 0 l 1
+EndSplineSet
+Refer: 39 57922 N 1 0 0 1 0 -300 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE244.salt03
+AlternateSubs2: "Podtablica 'ss03' Styl 3 w tablicy 2" uniE244.ss03
+AlternateSubs2: "Podtablica 'ss02' Styl 2 w tablicy 1" uniE244.ss02
+EndChar
+
+StartChar: uniE245
+Encoding: 57925 57925 42
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: 0 20<0 85> 300 20<0 85> 600 20<0 85>
+VStem: 200 60<424.14 648.193 724.14 948.193 1021.69 1271.62>
+CounterMasks: 1 e0
+LayerCount: 2
+Fore
+Refer: 41 57924 N 1 0 0 -1 0 0 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE245.salt02
+AlternateSubs2: "Podtablica 'ss03' Styl 3 w tablicy 2" uniE245.ss03
+EndChar
+
+StartChar: uniE260
+Encoding: 57952 57952 43
+Width: 190
+GlyphClass: 2
+Flags: W
+HStem: 108 52<73.0977 112.038> 108 78<83.9903 145.55>
+VStem: 0 48<-71.9748 75.3699> 154 36<-9.89758 96.6426>
+LayerCount: 2
+Fore
+Refer: 2 9837 N 1 0 0 1 0 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE260.ss01
+EndChar
+
+StartChar: uniE261
+Encoding: 57953 57953 44
+Width: 200
+GlyphClass: 2
+Flags: W
+HStem: 80 98<76.4085 154.966>
+VStem: 0 42<-105.152 53.9257> 156 44<-45.1247 76.1722>
+LayerCount: 2
+Fore
+Refer: 3 9838 N 1 0 0 1 0 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE261.ss01
+EndChar
+
+StartChar: uniE262
+Encoding: 57954 57954 45
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: -136 70<11.3807 153.988> -124 74<110 234.698> 80 80<36.1304 167.293> 106 72<126.164 249.341>
+VStem: 0 260
+LayerCount: 2
+Fore
+Refer: 4 9839 N 1 0 0 1 0 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE262.ss01
+EndChar
+
+StartChar: uniE263
+Encoding: 57955 57955 46
+Width: 260
+GlyphClass: 2
+Flags: W
+HStem: -130 94<193.019 250.719> 36 94<193.019 250.719>
+VStem: 0 260<-108 -86 86 108>
+LayerCount: 2
+Fore
+SplineSet
+0 -104 m 0
+ 0 -86 0 -62 24 -50 c 0
+ 82 -20 142 34 184 96 c 0
+ 204 126 212 130 230 130 c 0
+ 248 130 260 120 260 84 c 0
+ 260 54 236 44 204 36 c 0
+ 158 24 100 -28 72 -88 c 0
+ 56 -124 52 -130 32 -130 c 0
+ 2 -130 0 -108 0 -104 c 0
+0 104 m 0
+ 0 108 2 130 32 130 c 0
+ 52 130 56 124 72 88 c 0
+ 100 28 158 -24 204 -36 c 0
+ 236 -44 260 -54 260 -84 c 0
+ 260 -120 248 -130 230 -130 c 0
+ 212 -130 204 -126 184 -96 c 0
+ 142 -34 82 20 24 50 c 0
+ 0 62 0 86 0 104 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE264
+Encoding: 57956 57956 47
+Width: 380
+GlyphClass: 2
+Flags: W
+HStem: 108 52<73.0977 112.038 263.098 302.038> 108 78<83.9903 145.55 273.99 335.55>
+VStem: 0 48<-71.9748 75.3699> 154 36<-9.89758 96.6426> 190 48<-71.9748 75.3699> 344 36<-9.89758 96.6426>
+LayerCount: 2
+Fore
+Refer: 2 9837 N 1 0 0 1 190 0 2
+Refer: 2 9837 N 1 0 0 1 0 0 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE264.salt01
+EndChar
+
+StartChar: uniE26A
+Encoding: 57962 57962 48
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 0 46<-142.188 115.334>
+LayerCount: 2
+Fore
+Refer: 27 57490 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE26B
+Encoding: 57963 57963 49
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 74 46<-107.334 150.188>
+LayerCount: 2
+Fore
+Refer: 28 57491 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE4A0
+Encoding: 58528 58528 50
+Width: 440
+GlyphClass: 2
+Flags: W
+VStem: 360 80<88 168>
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 0
+ 0 30 360 128 360 128 c 1
+ 360 128 0 226 0 256 c 0
+ 0 286 440 158 440 128 c 0
+ 440 98 0 -30 0 0 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE4A0.salt01
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4A0.ss01
+EndChar
+
+StartChar: uniE4A1
+Encoding: 58529 58529 51
+Width: 440
+VWidth: 744
+GlyphClass: 2
+Flags: W
+VStem: 360 80<-168 -88>
+LayerCount: 2
+Fore
+Refer: 50 58528 N 1 0 0 1 0 -256 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE4A1.salt01
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4A1.ss01
+EndChar
+
+StartChar: uniE4A2
+Encoding: 58530 58530 52
+Width: 100
+VWidth: 924
+GlyphClass: 2
+Flags: W
+HStem: 0 100<10.9422 89.6216>
+VStem: 0 100<8.68678 89.1489>
+LayerCount: 2
+Fore
+Refer: 9 57412 N 1 0 0 1 0 -76 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4A2.ss01
+EndChar
+
+StartChar: uniE4A3
+Encoding: 58531 58531 53
+Width: 100
+VWidth: 824
+GlyphClass: 2
+Flags: W
+HStem: -100 100<10.9422 89.6216>
+VStem: 0 100<-91.3132 -10.8511>
+LayerCount: 2
+Fore
+Refer: 9 57412 N 1 0 0 1 0 -176 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4A3.ss01
+EndChar
+
+StartChar: uniE4A4
+Encoding: 58532 58532 54
+Width: 304
+GlyphClass: 2
+Flags: W
+HStem: 0 50<3.34225 272.235>
+VStem: 0 304<6.75 33.0961>
+LayerCount: 2
+Fore
+SplineSet
+0 16 m 0
+ 0 32 16 50 56 50 c 0
+ 198 50 304 42 304 16 c 0
+ 304 0 172 0 142 0 c 0
+ 12 0 0 0 0 16 c 0
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4A4.ss01
+EndChar
+
+StartChar: uniE4A5
+Encoding: 58533 58533 55
+Width: 304
+VWidth: 950
+GlyphClass: 2
+Flags: W
+HStem: -50 50<3.34225 272.235>
+VStem: 0 304<-43.25 -16.9039>
+LayerCount: 2
+Fore
+Refer: 54 58532 N 1 0 0 1 0 -50 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4A5.ss01
+EndChar
+
+StartChar: uniE4AC
+Encoding: 58540 58540 56
+Width: 256
+GlyphClass: 2
+Flags: W
+LayerCount: 2
+Fore
+Refer: 50 58528 N 0 1 -1 0 256 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4AC.ss01
+EndChar
+
+StartChar: uniE4AD
+Encoding: 58541 58541 57
+Width: 256
+GlyphClass: 2
+Flags: W
+LayerCount: 2
+Fore
+Refer: 56 58540 N 1 0 0 -1 0 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4AD.ss01
+EndChar
+
+StartChar: uniE4B2
+Encoding: 58546 58546 58
+Width: 304
+GlyphClass: 2
+Flags: W
+HStem: 0 100<112.942 191.622> 150 50<3.34225 272.235>
+VStem: 0 304<156.75 183.096> 102 100<8.68678 89.1489>
+LayerCount: 2
+Fore
+Refer: 54 58532 N 1 0 0 1 0 150 2
+Refer: 52 58530 N 1 0 0 1 102 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4B2.ss01
+EndChar
+
+StartChar: uniE4B3
+Encoding: 58547 58547 59
+Width: 304
+GlyphClass: 2
+Flags: W
+HStem: -200 50<3.34225 272.235> -100 100<112.942 191.622>
+VStem: 0 304<-193.25 -166.904> 102 100<-91.3132 -10.8511>
+LayerCount: 2
+Fore
+Refer: 54 58532 N 1 0 0 1 0 -200 2
+Refer: 53 58531 N 1 0 0 1 102 0 2
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE4B3.ss01
+EndChar
+
+StartChar: uniE4C0
+Encoding: 58560 58560 60
+Width: 560
+GlyphClass: 2
+Flags: W
+HStem: 0 106<241.561 303.397> 232 122<239.518 458.567>
+VStem: 0 18<2.58814 57.0028> 212 118<24.7901 76.1597> 506 54<61.2625 264>
+LayerCount: 2
+Fore
+SplineSet
+0 10 m 0
+ 0 216 176 354 366 354 c 0
+ 462 354 560 318 560 210 c 0
+ 560 134 532 0 502 0 c 0
+ 490 0 490 6 490 10 c 0
+ 490 14 490 16 496 28 c 0
+ 502 40 506 68 506 102 c 0
+ 506 232 410 232 354 232 c 0
+ 220 232 46 178 18 34 c 0
+ 14 14 10 0 6 0 c 0
+ 0 0 0 4 0 10 c 0
+212 26 m 0
+ 212 72 258 106 298 106 c 0
+ 324 106 330 76 330 50 c 0
+ 330 24 256 0 230 0 c 0
+ 216 0 212 12 212 26 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE4C1
+Encoding: 58561 58561 61
+Width: 560
+VWidth: 646
+GlyphClass: 2
+Flags: W
+HStem: -354 122<101.433 320.482> -106 106<256.603 318.439>
+VStem: 0 54<-264 -61.2625> 230 118<-76.1597 -24.7901> 542 18<-57.0028 -2.58814>
+LayerCount: 2
+Fore
+Refer: 60 58560 N -1 0 0 -1 560 0 2
+EndChar
+
+StartChar: uniE4E3
+Encoding: 58595 58595 62
+Width: 330
+VWidth: 875
+GlyphClass: 2
+Flags: W
+HStem: -125 125<16.0312 313.969>
+VStem: 0 330
+LayerCount: 2
+Fore
+SplineSet
+0 -115 m 1
+ 18 -10 l 1
+ 18 -10 20 0 30 0 c 2
+ 322 0 l 2
+ 330 0 330 -10 330 -10 c 1
+ 312 -115 l 1
+ 312 -115 310 -125 300 -125 c 2
+ 8 -125 l 2
+ 0 -125 0 -115 0 -115 c 1
+EndSplineSet
+EndChar
+
+StartChar: uniE4E4
+Encoding: 58596 58596 63
+Width: 330
+GlyphClass: 2
+Flags: W
+HStem: 0 125<16.0312 313.969>
+VStem: 0 330
+LayerCount: 2
+Fore
+Refer: 62 58595 N 1 0 0 1 0 125 2
+EndChar
+
+StartChar: uniE4E5
+Encoding: 58597 58597 64
+Width: 242
+GlyphClass: 2
+Flags: W
+VStem: 0 106<-258.279 -146.17> 100 28<144 236>
+LayerCount: 2
+Fore
+SplineSet
+0 36 m 0x80
+ 0 68 32 88 62 106 c 0
+ 82 118 100 130 100 144 c 0x40
+ 100 158 86 168 70 176 c 0
+ 42 190 0 212 0 300 c 0x80
+ 0 320 0 388 62 388 c 0
+ 124 388 128 250 128 236 c 0x40
+ 128 196 166 190 196 186 c 0
+ 226 182 242 178 242 162 c 0
+ 242 128 136 44 136 44 c 1
+ 136 44 240 -4 240 -50 c 0
+ 240 -70 222 -86 194 -100 c 0
+ 154 -120 106 -146 106 -208 c 0
+ 106 -252 146 -280 174 -298 c 0
+ 190 -308 200 -316 200 -322 c 0
+ 200 -330 188 -338 146 -338 c 0
+ 74 -338 0 -270 0 -174 c 0
+ 0 -86 104 -16 104 -16 c 1
+ 104 -16 0 -2 0 36 c 0x80
+EndSplineSet
+EndChar
+
+StartChar: uniE4E6
+Encoding: 58598 58598 65
+Width: 250
+GlyphClass: 2
+Flags: W
+HStem: 50 28<82.0288 130.88>
+VStem: 0 78<97.6727 181> 170 80<112.529 198.784>
+LayerCount: 2
+Fore
+SplineSet
+0 158 m 0
+ 0 204 22 240 58 240 c 0
+ 96 240 128 226 128 188 c 0
+ 128 164 120 148 98 138 c 0
+ 86 132 78 122 78 112 c 0
+ 78 92 84 78 110 78 c 0
+ 146 78 162 94 170 134 c 0
+ 178 174 192 224 228 224 c 0
+ 242 224 250 216 250 202 c 0
+ 250 140 100 -262 30 -262 c 0
+ 14 -262 0 -252 0 -232 c 0
+ 0 -184 22 -160 40 -144 c 0
+ 102 -90 132 8 132 40 c 0
+ 132 48 130 50 124 50 c 0
+ 64 50 0 94 0 158 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE4E7
+Encoding: 58599 58599 66
+Width: 330
+GlyphClass: 2
+Flags: W
+HStem: -234 28<82.0288 131.759> 10 28<162.029 222.695>
+VStem: 0 78<-186.327 -103> 80 78<57.6727 141> 224 106<-23 169> 250 80<55.8149 158.784>
+LayerCount: 2
+Fore
+SplineSet
+0 -126 m 0xf8
+ 0 -80 22 -44 58 -44 c 0
+ 96 -44 128 -58 128 -96 c 0
+ 128 -120 120 -136 98 -146 c 0
+ 86 -152 78 -162 78 -172 c 0
+ 78 -192 84 -206 110 -206 c 0
+ 192 -206 224 -32 224 -14 c 0xf8
+ 224 4 218 10 204 10 c 0
+ 144 10 80 54 80 118 c 0
+ 80 164 102 200 138 200 c 0
+ 176 200 208 186 208 148 c 0
+ 208 124 200 108 178 98 c 0
+ 166 92 158 82 158 72 c 0
+ 158 52 164 38 190 38 c 0
+ 226 38 242 54 250 94 c 0xf4
+ 258 134 272 184 308 184 c 0
+ 322 184 330 176 330 162 c 0
+ 330 52 100 -546 30 -546 c 0
+ 14 -546 0 -536 0 -516 c 0
+ 0 -468 22 -444 40 -428 c 0
+ 102 -374 132 -276 132 -244 c 0
+ 132 -236 130 -234 124 -234 c 0
+ 64 -234 0 -190 0 -126 c 0xf8
+EndSplineSet
+EndChar
+
+StartChar: uniE4E8
+Encoding: 58600 58600 67
+Width: 330
+GlyphClass: 2
+Flags: W
+HStem: -234 28<82.0288 131.759> 10 28<162.029 222.695>
+VStem: 0 78<-186.327 -103> 80 78<57.6727 141> 224 106<-23 169> 250 80<55.8149 158.784>
+LayerCount: 2
+Fore
+Refer: 66 58599 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE4F4
+Encoding: 58612 58612 68
+Width: 330
+GlyphClass: 2
+Flags: W
+HStem: -125 125<16.0312 313.969> -12 24<-105.991 435.991>
+VStem: 0 330
+LayerCount: 2
+Fore
+SplineSet
+-106 0 m 0xa0
+ -106 12 -94 12 -94 12 c 1
+ 424 12 l 1x60
+ 424 12 436 12 436 0 c 0xa0
+ 436 -12 424 -12 424 -12 c 1
+ -94 -12 l 1x60
+ -94 -12 -106 -12 -106 0 c 0xa0
+EndSplineSet
+Refer: 62 58595 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE4F5
+Encoding: 58613 58613 69
+Width: 330
+VWidth: 1113
+GlyphClass: 2
+Flags: W
+HStem: -12 24<-105.991 435.991> 0 125<16.0312 313.969>
+VStem: 0 330
+LayerCount: 2
+Fore
+Refer: 68 58612 N -1 0 0 -1 330 0 2
+EndChar
+
+StartChar: uniE510
+Encoding: 58640 58640 70
+Width: 400
+VWidth: 1244
+GlyphClass: 2
+Flags: W
+HStem: 0 60<102.799 267.353> 448 40<174.909 313.118>
+VStem: 0 76<85.2804 174.482> 82 80<340.438 428.385> 288 100<80.0365 171.079> 338 62<322.409 426.339>
+LayerCount: 2
+Fore
+Refer: 23 57480 N 1 0 0 1 0 244 2
+EndChar
+
+StartChar: uniE51A
+Encoding: 58650 58650 71
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 0 46<-142.188 115.334>
+LayerCount: 2
+Fore
+Refer: 27 57490 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE51B
+Encoding: 58651 58651 72
+Width: 120
+GlyphClass: 2
+Flags: W
+VStem: 74 46<-107.334 150.188>
+LayerCount: 2
+Fore
+Refer: 28 57491 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniE520
+Encoding: 58656 58656 73
+Width: 280
+GlyphClass: 2
+Flags: W
+HStem: -20 80<125.358 216.014> 202 74<108 228.379>
+VStem: 72 48<124.599 186.716> 236 44<75.9273 193.893>
+LayerCount: 2
+Fore
+SplineSet
+-26 -138 m 0
+ -26 -106 -8 -48 14 16 c 0
+ 44 100 72 182 72 256 c 0
+ 72 276 98 276 118 276 c 0
+ 252 276 280 228 280 160 c 0
+ 280 56 232 -20 148 -20 c 0
+ 88 -20 78 28 78 28 c 1
+ 78 28 52 -170 0 -170 c 0
+ -16 -170 -26 -156 -26 -138 c 0
+120 108 m 0
+ 120 84 130 60 160 60 c 0
+ 230 60 236 102 236 150 c 0
+ 236 198 200 202 180 202 c 0
+ 132 202 120 158 120 108 c 0
+EndSplineSet
+Kerns2: 70 -31 "Podtablica 'kern' Kerning poziomy w tablicy 0" 
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE520.ss01
+EndChar
+
+StartChar: uniE521
+Encoding: 58657 58657 74
+Width: 364
+GlyphClass: 2
+Flags: W
+HStem: 0 21G<23 57 147 182 280 324> 236 36<131.79 175.921 248.485 299.384>
+VStem: 0 98<31.5582 174.524> 126 96<27.5311 127.257> 176 38<220 235.32> 300 64<132.614 235.861>
+LayerCount: 2
+Fore
+SplineSet
+0 72 m 0xec
+ 0 152 40 272 174 272 c 0
+ 214 272 214 220 214 220 c 1xec
+ 214 220 242 276 294 276 c 0
+ 346 276 364 230 364 178 c 0
+ 364 98 352 0 296 0 c 0
+ 264 0 250 20 250 42 c 0
+ 250 64 258 84 270 112 c 0
+ 284 146 300 186 300 220 c 0
+ 300 236 290 236 282 236 c 0
+ 238 236 230 180 222 120 c 0
+ 214 60 206 0 158 0 c 0
+ 136 0 126 16 126 40 c 0xf4
+ 126 70 142 114 156 150 c 0
+ 168 180 176 204 176 220 c 0
+ 176 230 172 236 162 236 c 0
+ 122 236 108 176 98 116 c 0
+ 88 56 76 0 38 0 c 0
+ 8 0 0 32 0 72 c 0xec
+EndSplineSet
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE521.ss01
+EndChar
+
+StartChar: uniE522
+Encoding: 58658 58658 75
+Width: 312
+GlyphClass: 2
+Flags: W
+HStem: 240 74<16.641 299.621> 470 50<270.517 325.761>
+VStem: 324 68<381.581 468.149>
+LayerCount: 2
+Fore
+SplineSet
+0 -108 m 0
+ 0 -84 24 -32 52 24 c 0
+ 96 112 126 234 138 342 c 0
+ 150 450 226 520 302 520 c 0
+ 392 520 392 438 392 420 c 0
+ 392 390 376 380 360 380 c 0
+ 344 380 324 384 324 412 c 0
+ 324 440 332 470 322 470 c 0
+ 226 470 194 304 166 144 c 0
+ 140 -6 106 -152 40 -152 c 0
+ 22 -152 0 -142 0 -108 c 0
+0 268 m 0
+ 0 306 82 314 176 314 c 0
+ 224 314 312 302 312 278 c 0
+ 312 240 180 240 150 240 c 0
+ 78 240 0 244 0 268 c 0
+EndSplineSet
+Kerns2: 72 -117 "Podtablica 'kern' Kerning poziomy w tablicy 0"  70 -110 "Podtablica 'kern' Kerning poziomy w tablicy 0" 
+AlternateSubs2: "Podtablica 'ss01' Styl 1 w tablicy 0" uniE522.ss01
+EndChar
+
+StartChar: uniE52A
+Encoding: 58666 58666 76
+Width: 840
+GlyphClass: 3
+Flags: W
+HStem: -20 80<125.358 216.014 405.358 496.014 685.358 776.014> 202 74<108 228.379 388 508.379 668 788.379>
+VStem: 72 48<124.599 186.716> 236 44<75.9273 193.893> 352 48<124.599 186.716> 516 44<75.9273 193.893> 632 48<124.599 186.716> 796 44<75.9273 193.893>
+LayerCount: 2
+Fore
+Refer: 73 58656 N 1 0 0 1 560 0 2
+Refer: 73 58656 N 1 0 0 1 280 0 2
+Refer: 73 58656 N 1 0 0 1 0 0 2
+LCarets2: 2 0 0 
+Ligature2: "Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6" uniE520 uniE520 uniE520
+Ligature2: "Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5" uniE520 uniE520 uniE520
+EndChar
+
+StartChar: uniE52B
+Encoding: 58667 58667 77
+Width: 560
+GlyphClass: 3
+Flags: W
+HStem: -20 80<125.358 216.014 405.358 496.014> 202 74<108 228.379 388 508.379>
+VStem: 72 48<124.599 186.716> 236 44<75.9273 193.893> 352 48<124.599 186.716> 516 44<75.9273 193.893>
+LayerCount: 2
+Fore
+Refer: 73 58656 N 1 0 0 1 0 0 2
+Refer: 73 58656 N 1 0 0 1 280 0 2
+LCarets2: 1 0 
+Ligature2: "Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6" uniE520 uniE520
+Ligature2: "Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5" uniE520 uniE520
+EndChar
+
+StartChar: uniE52C
+Encoding: 58668 58668 78
+Width: 644
+GlyphClass: 3
+Flags: W
+HStem: -20 80<489.358 580.014> 0 21<23 57 147 182 280 324> 202 74<472 592.379> 236 36<131.79 175.921 248.485 299.384>
+VStem: 0 98<31.5582 174.524> 126 96<27.5311 127.257> 176 38<220 235.32> 300 64<132.614 235.861> 436 48<124.599 186.716> 600 44<75.9273 193.893>
+LayerCount: 2
+Fore
+Refer: 73 58656 N 1 0 0 1 364 0 2
+Refer: 74 58657 N 1 0 0 1 0 0 2
+LCarets2: 1 0 
+Ligature2: "Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6" uniE521 uniE520
+Ligature2: "Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5" uniE521 uniE520
+EndChar
+
+StartChar: uniE52D
+Encoding: 58669 58669 79
+Width: 676
+GlyphClass: 3
+Flags: W
+HStem: 0 21<23 57 147 182 280 324> 236 36<131.79 175.921 248.485 299.384> 240 74<380.641 663.621> 470 50<634.517 689.761>
+VStem: 0 98<31.5582 174.524> 126 96<27.5311 127.257> 176 38<220 235.32> 300 64<132.614 235.861> 688 68<381.581 468.149>
+LayerCount: 2
+Fore
+Refer: 75 58658 N 1 0 0 1 364 0 2
+Refer: 74 58657 N 1 0 0 1 0 0 2
+LCarets2: 1 0 
+Ligature2: "Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6" uniE521 uniE522
+Ligature2: "Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5" uniE521 uniE522
+EndChar
+
+StartChar: uniE52F
+Encoding: 58671 58671 80
+Width: 624
+GlyphClass: 3
+Flags: W
+HStem: 240 74<16.641 299.621 328.641 611.621> 470 50<270.517 325.761 582.517 637.761>
+VStem: 324 68<381.581 468.149> 636 68<381.581 468.149>
+LayerCount: 2
+Fore
+Refer: 75 58658 N 1 0 0 1 312 0 2
+Refer: 75 58658 N 1 0 0 1 0 0 2
+LCarets2: 1 0 
+Ligature2: "Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6" uniE522 uniE522
+Ligature2: "Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5" uniE522 uniE522
+EndChar
+
+StartChar: uniE530
+Encoding: 58672 58672 81
+Width: 936
+GlyphClass: 3
+Flags: W
+HStem: 240 74<16.641 299.621 328.641 611.621 640.641 923.621> 470 50<270.517 325.761 582.517 637.761 894.517 949.761>
+VStem: 324 68<381.581 468.149> 636 68<381.581 468.149> 948 68<381.581 468.149>
+CounterMasks: 1 38
+LayerCount: 2
+Fore
+Refer: 75 58658 N 1 0 0 1 624 0 2
+Refer: 75 58658 N 1 0 0 1 0 0 2
+Refer: 75 58658 N 1 0 0 1 312 0 2
+LCarets2: 2 0 0 
+Ligature2: "Podtablica 'ccmp' Sk+AUIA-adanie/dekompozycja glif+APMA-w w tablicy 6" uniE522 uniE522 uniE522
+Ligature2: "Podtablica 'liga' Ligatury zwyk+AUIA-e w tablicy 5" uniE522 uniE522 uniE522
+EndChar
+
+StartChar: uniE566
+Encoding: 58726 58726 82
+Width: 600
+GlyphClass: 2
+Flags: W
+HStem: -10 38<106 208.914> 202 38<0.547852 113.698> 226 44<371.825 446.245>
+VStem: 74 76<28.4099 162.279> 232 18<28 54> 290 242<153 232>
+LayerCount: 2
+Fore
+SplineSet
+0 224 m 0xdc
+ 0 240 26 240 38 240 c 0xdc
+ 214 240 294 270 338 270 c 0xbc
+ 362 270 362 240 362 240 c 1xdc
+ 362 240 394 272 442 272 c 0
+ 486 272 532 248 532 212 c 0
+ 532 192 520 176 500 176 c 0
+ 468 176 434 226 402 226 c 0
+ 386 226 368 214 354 170 c 0
+ 334 110 324 -10 268 -10 c 0
+ 240 -10 232 8 232 24 c 0
+ 232 64 290 114 290 204 c 0
+ 290 216 288 226 274 226 c 0xbc
+ 210 226 200 202 84 202 c 0
+ 48 202 0 204 0 224 c 0xdc
+74 54 m 0
+ 74 160 188 406 240 406 c 0
+ 252 406 258 398 258 388 c 0
+ 258 378 250 360 246 350 c 0
+ 196 228 150 146 150 50 c 0
+ 150 38 154 28 166 28 c 0
+ 192 28 226 38 250 54 c 1
+ 250 28 l 1
+ 226 12 160 -10 124 -10 c 0
+ 88 -10 74 18 74 54 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniE650
+Encoding: 58960 58960 83
+Width: 776
+GlyphClass: 2
+Flags: W
+HStem: 0 60<533.271 617.497> 0 46<309.821 419.793> 150 80<151.358 242.014> 214 64<558.366 641.85> 226 52<369.113 435.187> 372 74<134 254.379>
+VStem: 98 48<294.599 356.716> 246 64<47.2576 90.6416> 262 44<245.927 363.893> 436 38<168.272 224.703> 462 64<64.8006 180.982>
+LayerCount: 2
+Fore
+SplineSet
+246 106 m 0x4f40
+ 246 196 334 278 398 278 c 0
+ 462 278 474 238 474 208 c 0
+ 474 116 310 86 310 86 c 1
+ 310 86 298 46 342 46 c 0
+ 422 46 452 102 452 64 c 0
+ 452 16 362 0 330 0 c 0
+ 266 0 246 34 246 106 c 0x4f40
+316 120 m 1
+ 316 120 436 156 436 196 c 0
+ 436 214 430 226 410 226 c 0
+ 356 226 316 120 316 120 c 1
+462 114 m 0x9620
+ 462 218 534 278 618 278 c 0
+ 658 278 660 244 660 244 c 1
+ 660 244 698 446 750 446 c 0
+ 768 446 776 436 776 418 c 0
+ 776 386 738 324 724 264 c 0
+ 696 148 688 0 582 0 c 0
+ 512 0 462 46 462 114 c 0x9620
+526 118 m 0
+ 526 70 548 60 568 60 c 0
+ 616 60 638 100 638 150 c 0xa620
+ 638 174 654 214 624 214 c 0
+ 554 214 526 166 526 118 c 0
+EndSplineSet
+Refer: 73 58656 N 1 0 0 1 26 170 2
+AlternateSubs2: "Podtablica 'salt' Alternatywy stylistyczne w tablicy 4" uniE650.salt01
+EndChar
+
+StartChar: uniE655
+Encoding: 58965 58965 84
+Width: 410
+GlyphClass: 2
+Flags: W
+HStem: 134 88<286.255 358.041> 212 32<196 258> 264 102<351.195 394.654> 272 24<112.582 139.828> 280 28<288.627 331.719> 328 26<228.454 255.625>
+VStem: 28 102<361.747 411.173> 146 24<251.152 269.121> 180 46<360.012 421.086> 256 30<267.5 279.933 309.765 327.843> 274 110<158.218 211.983>
+LayerCount: 2
+Fore
+SplineSet
+0 262 m 0x53a0
+ 0 292 36 316 74 316 c 0
+ 112 316 128 296 138 296 c 0x53a0
+ 144 296 146 304 146 326 c 0
+ 146 348 96 354 70 354 c 0
+ 44 354 28 360 28 374 c 0
+ 28 378 28 382 32 388 c 0
+ 54 422 102 466 128 466 c 0
+ 144 466 150 454 150 440 c 0
+ 150 426 148 412 140 400 c 0
+ 136 394 130 384 130 378 c 0
+ 130 368 148 360 166 360 c 0
+ 180 360 180 368 180 384 c 0
+ 180 400 160 416 160 438 c 0
+ 160 448 166 460 180 472 c 0
+ 198 488 234 506 260 506 c 0
+ 274 506 284 500 284 486 c 0
+ 284 468 282 462 266 440 c 0
+ 252 420 226 412 226 388 c 0
+ 226 370 228 354 244 354 c 0
+ 268 354 284 374 284 402 c 0
+ 284 444 316 478 346 478 c 0
+ 370 478 378 464 378 448 c 0
+ 378 420 362 394 328 372 c 0
+ 306 358 286 366 286 326 c 0
+ 286 316 298 308 312 308 c 0x0fc0
+ 320 308 326 310 332 316 c 0
+ 350 334 354 366 380 366 c 0
+ 394 366 410 356 410 332 c 0
+ 410 304 394 264 350 264 c 0x23c0
+ 330 264 316 280 302 280 c 0
+ 292 280 286 270 286 240 c 0x0bc0
+ 286 224 294 222 306 222 c 0
+ 318 222 340 228 356 228 c 0
+ 372 228 384 222 384 196 c 0
+ 384 158 328 134 290 134 c 0x8ba0
+ 270 134 250 136 250 150 c 0
+ 250 160 262 168 266 174 c 0
+ 274 186 274 192 274 200 c 0
+ 274 208 270 212 258 212 c 0
+ 242 212 232 186 222 170 c 0
+ 206 144 182 126 166 126 c 0
+ 158 126 144 128 144 144 c 0
+ 144 152 156 162 172 178 c 0
+ 178 184 180 188 180 194 c 0
+ 180 202 172 208 164 208 c 0
+ 156 208 146 204 136 196 c 0
+ 114 178 86 124 56 124 c 0
+ 30 124 12 136 12 162 c 0
+ 12 188 68 220 100 232 c 0
+ 128 242 140 254 140 262 c 0
+ 140 270 132 272 112 272 c 0
+ 88 272 62 226 34 226 c 0
+ 18 226 0 232 0 262 c 0x53a0
+170 262 m 0
+ 170 250 178 244 196 244 c 0
+ 236 244 256 284 256 312 c 0
+ 256 322 250 328 238 328 c 0x47c0
+ 196 328 170 292 170 262 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniEAA0
+Encoding: 60064 60064 85
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+SplineSet
+-12 212 m 0
+ -12 216 -10 219 8 237 c 0
+ 26 255 47 272 76 272 c 0
+ 112 272 143 234 143 234 c 1
+ 143 234 174 196 202 196 c 0
+ 219 196 227 199 236 207 c 0
+ 245 215 249 218 252 218 c 0
+ 255 218 258 216 258 212 c 0
+ 258 208 256 205 238 187 c 0
+ 220 169 199 152 170 152 c 0
+ 134 152 103 190 103 190 c 1
+ 103 190 72 228 44 228 c 0
+ 27 228 19 225 10 217 c 0
+ 1 209 -3 206 -6 206 c 0
+ -9 206 -12 208 -12 212 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniEAA1
+Encoding: 60065 60065 86
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA2
+Encoding: 60066 60066 87
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA3
+Encoding: 60067 60067 88
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA4
+Encoding: 60068 60068 89
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA5
+Encoding: 60069 60069 90
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA6
+Encoding: 60070 60070 91
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA7
+Encoding: 60071 60071 92
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA8
+Encoding: 60072 60072 93
+Width: 246
+GlyphClass: 2
+Flags: W
+HStem: 152 44<159.48 223.892> 228 44<22.1082 86.52>
+VStem: -12 270<208 216>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAA9
+Encoding: 60073 60073 94
+Width: 270
+VWidth: 902
+GlyphClass: 2
+Flags: W
+HStem: 54 44<171.48 235.892> 130 44<34.1082 98.52>
+VStem: 0 270<110 118>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 12 -98 2
+EndChar
+
+StartChar: uniEAAA
+Encoding: 60074 60074 95
+Width: 270
+VWidth: 902
+GlyphClass: 2
+Flags: W
+HStem: 54 44<34.1082 98.52> 130 44<171.48 235.892>
+VStem: 0 270<110 118>
+LayerCount: 2
+Fore
+Refer: 85 60064 N -1 0 0 1 258 -98 2
+EndChar
+
+StartChar: uniEAAD
+Encoding: 60077 60077 96
+Width: 250
+GlyphClass: 2
+Flags: W
+HStem: 0 228<-20 40.2796>
+VStem: -26 276
+LayerCount: 2
+Fore
+SplineSet
+-26 19 m 0
+ -26 24 -25 28 -22 32 c 0
+ -6 53 0 83 0 114 c 0
+ 0 145 -6 175 -22 196 c 0
+ -25 200 -26 204 -26 209 c 0
+ -26 219 -20 228 -8 228 c 0
+ 1 228 8 224 8 224 c 1
+ 53 198 143 155 193 143 c 0
+ 243 131 250 128 250 114 c 0
+ 250 100 243 97 193 85 c 0
+ 143 73 53 30 8 4 c 1
+ 8 4 1 0 -8 0 c 0
+ -20 0 -26 9 -26 19 c 0
+EndSplineSet
+EndChar
+
+StartChar: uniEAAE
+Encoding: 60078 60078 97
+Width: 250
+GlyphClass: 2
+Flags: W
+HStem: 0 228<-20 40.2796>
+VStem: -26 276
+LayerCount: 2
+Fore
+Refer: 96 60077 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniEAAF
+Encoding: 60079 60079 98
+Width: 246
+VWidth: 848
+GlyphClass: 2
+Flags: W
+HStem: 0 44<159.48 223.892> 76 44<22.1082 86.52>
+VStem: -12 270<56 64>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 -152 2
+EndChar
+
+StartChar: uniEAB0
+Encoding: 60080 60080 99
+Width: 246
+VWidth: 848
+GlyphClass: 2
+Flags: W
+HStem: 0 44<159.48 223.892> 76 44<22.1082 86.52>
+VStem: -12 270<56 64>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 -152 2
+EndChar
+
+StartChar: uniEAB1
+Encoding: 60081 60081 100
+Width: 246
+VWidth: 848
+GlyphClass: 2
+Flags: W
+HStem: 0 44<159.48 223.892> 76 44<22.1082 86.52>
+VStem: -12 270<56 64>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 -152 2
+EndChar
+
+StartChar: uniEAB2
+Encoding: 60082 60082 101
+Width: 246
+VWidth: 848
+GlyphClass: 2
+Flags: W
+HStem: 0 44<159.48 223.892> 76 44<22.1082 86.52>
+VStem: -12 270<56 64>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 -152 2
+EndChar
+
+StartChar: uniEAB3
+Encoding: 60083 60083 102
+Width: 246
+VWidth: 848
+GlyphClass: 2
+Flags: W
+HStem: 0 44<159.48 223.892> 76 44<22.1082 86.52>
+VStem: -12 270<56 64>
+LayerCount: 2
+Fore
+Refer: 85 60064 N 1 0 0 1 0 -152 2
+EndChar
+
+StartChar: uniEB78
+Encoding: 60280 60280 103
+Width: 228
+VWidth: 1024
+GlyphClass: 2
+Flags: W
+LayerCount: 2
+Fore
+Refer: 96 60077 N 0 1 -1 0 228 26 2
+EndChar
+
+StartChar: uniEB7A
+Encoding: 60282 60282 104
+Width: 276
+GlyphClass: 2
+Flags: W
+HStem: 0 228<6 66.2796>
+VStem: 0 276
+LayerCount: 2
+Fore
+Refer: 96 60077 N 1 0 0 1 26 0 2
+EndChar
+
+StartChar: uniEB7C
+Encoding: 60284 60284 105
+Width: 228
+VWidth: 1024
+GlyphClass: 2
+Flags: W
+LayerCount: 2
+Fore
+Refer: 96 60077 N 0 -1 1 0 0 250 2
+EndChar
+
+StartChar: uniEB7E
+Encoding: 60286 60286 106
+Width: 276
+GlyphClass: 2
+Flags: W
+HStem: 0 228<209.72 270>
+VStem: 0 276
+LayerCount: 2
+Fore
+Refer: 96 60077 N -1 0 0 1 250 0 2
+EndChar
+
+StartChar: u1D15E
+Encoding: 119134 119134 107
+Width: 316
+GlyphClass: 2
+Flags: W
+HStem: -114 74<48.1576 196.783> 56 82<96.6445 237.775>
+VStem: 0 80<-38.3247 39.9829> 240 76<-17.0214 50.2102> 276 40<110 839.985>
+LayerCount: 2
+Fore
+SplineSet
+276 110 m 1xe8
+ 276 820 l 1
+ 276 820 276 840 296 840 c 0
+ 316 840 316 820 316 820 c 1xe8
+ 316 40 l 25xf0
+ 276 110 l 1xe8
+EndSplineSet
+Refer: 32 57507 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: u1D15F
+Encoding: 119135 119135 108
+Width: 316
+GlyphClass: 2
+Flags: W
+HStem: -114 252<94.3459 196.958>
+VStem: 0 316<-26.25 50.8647> 276 40<110 839.985>
+LayerCount: 2
+Fore
+SplineSet
+276 110 m 1xa0
+ 276 820 l 1
+ 276 820 276 840 296 840 c 0
+ 316 840 316 820 316 820 c 1xa0
+ 316 40 l 25xc0
+ 276 110 l 1xa0
+EndSplineSet
+Refer: 33 57508 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: u1D160
+Encoding: 119136 119136 109
+Width: 316
+GlyphClass: 2
+Flags: W
+HStem: -114 252<94.3459 196.958> 800 20<316 401>
+VStem: 0 316<-26.25 50.8647> 276 40<110 839.985> 516 60<148.385 398.306>
+LayerCount: 2
+Fore
+Refer: 37 57920 N 1 0 0 1 316 820 2
+Refer: 108 119135 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: u1D16D
+Encoding: 119149 119149 110
+Width: 100
+VWidth: 904
+GlyphClass: 2
+Flags: W
+HStem: -20 100<10.9422 89.6216>
+VStem: 0 100<-11.3132 69.1489>
+LayerCount: 2
+Fore
+Refer: 9 57412 N 1 0 0 1 0 -96 2
+EndChar
+EndChars
+EndSplineFont

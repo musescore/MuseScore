@@ -27,6 +27,7 @@ endif (OMR)
 QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Gootville.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Jazzy.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MuseJazz.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc

@@ -281,6 +281,7 @@ void MScore::init()
             ":/fonts/mscore-BC.ttf",
             ":/fonts/bravura/BravuraText.otf",
             ":/fonts/gootville/GootvilleText.otf",
+            ":/fonts/jazzy/JazzyBasicText.otf",
             ":/fonts/mscore/MScoreText.ttf",
             };
 
