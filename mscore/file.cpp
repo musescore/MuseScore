@@ -2171,7 +2171,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
             if (!cs->isMaster())
                   name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->title()));
             else
-                  name = QString("%1/%2").arg(saveDirectory).arg(cs->fileInfo()->completeBaseName());
+                  name = QString("%1/%2").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName());
             }
       else
 #endif
