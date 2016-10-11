@@ -562,7 +562,7 @@ void FiguredBassItem::draw(QPainter* painter) const
 #endif
       // (use the same font selection as used in layout() above)
       qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * spatium() / SPATIUM20;
-      f.setPointSizeF(m);
+      f.setPointSizeF(m * MScore::pixelRatio);
 
       painter->setFont(f);
       painter->setBrush(Qt::NoBrush);
