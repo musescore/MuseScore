@@ -153,7 +153,7 @@ QPointF LineSegment::getGrip(Grip grip) const
 QPointF LineSegment::gripAnchor(Grip grip) const
       {
       // Middle or aperture grip have no anchor
-      if (grip == Grip::MIDDLE || grip == Grip::APERTURE)
+      if (!system() || grip == Grip::MIDDLE || grip == Grip::APERTURE)
             return QPointF(0, 0);
       // note-anchored spanners are relative to the system
       qreal y = spanner()->anchor() == Spanner::Anchor::NOTE ?
@@ -203,13 +203,13 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
               || (spannerSegmentType() == SpannerSegmentType::END && curGrip == Grip::END))))
             return false;
 
-      LineSegment* ls = 0;
-      SLine* l        = line();
-      SpannerSegmentType st = spannerSegmentType();
-      int track   = l->track();
-      int track2  = l->track2();    // assumed to be same as track
+      LineSegment* ls       = 0;
+      SpannerSegmentType st = spannerSegmentType(); // may change later
+      SLine* l              = line();
+      int track             = l->track();
+      int track2            = l->track2();    // assumed to be same as track
 
-      switch(l->anchor()) {
+      switch (l->anchor()) {
             case Spanner::Anchor::SEGMENT:
                   {
                   Segment* s1 = spanner()->startSegment();
@@ -252,8 +252,8 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                   break;
             case Spanner::Anchor::NOTE:
                   {
-                  Note* note1       = static_cast<Note*>(l->startElement());
-                  Note* note2       = static_cast<Note*>(l->endElement());
+                  Note* note1       = toNote(l->startElement());
+                  Note* note2       = toNote(l->endElement());
                   Note* oldNote1    = note1;
                   Note* oldNote2    = note2;
                   if (!note1 && !note2) {
@@ -261,7 +261,7 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                         return true;            // accept the event without doing anything
                         }
 
-                  switch(key) {
+                  switch (key) {
                         case Qt::Key_Left:
                               if (curGrip == Grip::START)
                                     note1 = prevChordNote(note1);
@@ -288,22 +288,21 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                               break;
                         default:
                               return true;
-                  }
+                        }
 
                   // check prevChordNote() and nextchordNote() didn't return null
                   // OR Score::upAlt() and Score::downAlt() didn't return non-Note (notably rests)
                   // OR spanner duration is > 0
                   // OR note1 and note2 didn't end up in different instruments
                   // if this is the case, accepts the event and return without doing nothing
-                  if (note1 == 0 || note2 == 0
-                              || note1->type() != Element::Type::NOTE || note2->type() != Element::Type::NOTE
-                              || note1->chord()->tick() >= note2->chord()->tick()
-                              || note1->chord()->staff()->part()->instrument(note1->chord()->tick())
-                                    != note2->chord()->staff()->part()->instrument(note2->chord()->tick()) )
+                  if (!note1 || !note2
+                     || !note1->isNote() || !note2->isNote()
+                     || note1->chord()->tick() >= note2->chord()->tick()
+                     || note1->chord()->staff()->part()->instrument(note1->chord()->tick())
+                     != note2->chord()->staff()->part()->instrument(note2->chord()->tick()) )
                         return true;
-                  if (note1 != oldNote1 || note2 != oldNote2) {
+                  if (note1 != oldNote1 || note2 != oldNote2)
                         spanner()->setNoteSpan(note1, note2);          // set new spanner span
-                        }
                   }
                   break;
             default:
@@ -342,11 +341,11 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                         l->setTicks(m2->endTick() - m1->tick());
                         }
                   }
-      }
+            }
+      triggerLayout();
+      score()->update();
 
-      score()->doLayout();     // needed to compute multi measure rests
-
-//      l->layout();
+      l->layout();            // recompute segment list, segment type may change
 
       LineSegment* nls = 0;
       if (st == SpannerSegmentType::SINGLE) {
@@ -359,13 +358,15 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
             nls = l->frontSegment();
       else if (st == SpannerSegmentType::END)
             nls = l->backSegment();
+      else
+            qDebug("spannerSegmentType %d", int(spannerSegmentType()));
 
       if (nls && (nls != this))
             sv->changeEditElement(nls);
       if (ls)
             score()->undoRemoveElement(ls);
 
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
@@ -866,16 +867,17 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
 #if 1
-      QList<SpannerSegment*> sl;
-      for (SpannerSegment* ss : segments) {
-            if (ss->system())
-                  sl.push_back(ss);
-            else {
-                  qDebug("delete spanner segment %s", ss->name());
-                  delete ss;
-                  }
-            }
-      segments.swap(sl);
+                  QList<SpannerSegment*> sl;
+                  for (SpannerSegment* ss : segments) {
+                        if (ss->system())
+                              sl.push_back(ss);
+                        else {
+                              qDebug("delete spanner segment %s", ss->name());
+                              score()->selection().remove(ss);
+                              delete ss;
+                              }
+                        }
+                  segments.swap(sl);
 #endif
                   }
                   break;
