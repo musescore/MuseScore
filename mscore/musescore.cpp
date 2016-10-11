@@ -4519,17 +4519,15 @@ void MuseScore::endCmd()
 
             // For multiple notes selected check if they all have same pitch and tuning
             bool samePitch = true;
-            int pitch = 0;
+            int pitch    = -1;
             float tuning = 0;
-            for (int i = 0; i < cs->selection().elements().size(); ++i) {
-                  const auto& element = cs->selection().elements()[i];
-                  if (element->type() != Element::Type::NOTE) {
+            for (Element* e : cs->selection().elements()) {
+                  if (!e->isNote()) {
                         samePitch = false;
                         break;
                         }
-
-                  const auto& note = static_cast<Note*>(element);
-                  if (i == 0) {
+                  Note* note = toNote(e);
+                  if (pitch == -1) {
                         pitch = note->ppitch();
                         tuning = note->tuning();
                         }
@@ -4538,7 +4536,7 @@ void MuseScore::endCmd()
                         break;
                         }
                   }
-            if (samePitch && !cs->selection().elements().empty())
+            if (samePitch && pitch >= 0)
                   e = cs->selection().elements()[0];
 
             NoteEntryMethod entryMethod = cs->noteEntryMethod();
