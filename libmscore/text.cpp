@@ -2319,10 +2319,14 @@ bool Text::readProperties(XmlReader& e)
             _text = e.readXml();
             // 2.0 and 2.0.1 had unicode symbols
             _text.replace("<sym>unicode", "<sym>met");
-            _text.replace("<font face=\"MuseJazz\"/>", "<font face=\"MuseJazz Text\"/>");
+            if (score()->mscVersion() == 206)
+                  _text.replace("<font face=\"MuseJazz\"/>", "<font face=\"MuseJazz Text\"/>");
             }
-      else if (tag == "html-data")
-            setXmlText(convertFromHtml(e.readXml().trimmed()));
+      else if (tag == "html-data") { // 114 only
+            QString t = e.readXml().trimmed();
+            t.replace("font-family:'MuseJazz';", "font-family:'MuseJazz Text';");
+            setXmlText(convertFromHtml(t));
+            }
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
       else if (tag == "frameWidth") {           // obsolete

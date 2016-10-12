@@ -1826,6 +1826,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
 
                   // convert 1.2 text styles
                   s.setName(convertOldTextStyleNames(s.name()));
+                  if (s.family() == "MuseJazz")
+                        s.setFamily("MuseJazz Text");
 
                   if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
                         s.setAlign((s.align() & ~ Align(AlignmentFlags::VMASK)) | AlignmentFlags::BASELINE);
