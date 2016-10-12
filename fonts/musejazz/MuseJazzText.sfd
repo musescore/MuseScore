@@ -1,20 +1,20 @@
 SplineFontDB: 3.0
-FontName: MuseJazz-Book
-FullName: MuseJazz
-FamilyName: MuseJazz
-Weight: Book
-Copyright: Created by Werner Schweer
+FontName: MuseJazzText
+FullName: MuseJazz Text
+FamilyName: MuseJazz Text
+Weight: Normal
+Copyright: Copyright \\251 2016 Werner Schweer. This font is licensed under the SIL Open Font License \\(http://scripts.sil.org/OFL\\).
 Version: 003.100
-DefaultBaseFilename: MuseJazz
 ItalicAngle: 0
 UnderlinePosition: -204
 UnderlineWidth: 102
 Ascent: 1638
 Descent: 410
+InvalidEm: 0
 sfntRevision: 0x00030000
 LayerCount: 2
-Layer: 0 1 "Back"  1
-Layer: 1 1 "Fore"  0
+Layer: 0 1 "Back" 1
+Layer: 1 1 "Fore" 0
 XUID: [1021 983 26586 7056]
 BaseHoriz: 0
 FSType: 8
@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1271071127
-ModificationTime: 1432999827
+ModificationTime: 1476182926
 PfmFamily: 65
 TTFWeight: 400
 TTFWidth: 5
@@ -43,7 +43,7 @@ HheadAOffset: 1
 HheadDescent: 0
 HheadDOffset: 1
 OS2Vendor: 'PfEd'
-Lookup: 258 0 0 "Kern Pairs"  {"Kern Pairs-1" [300,30,0] } ['kern' ('DFLT' <'dflt' > 'latn' <'dflt' > ) ]
+Lookup: 258 0 0 "Kern Pairs" { "Kern Pairs-1" [300,30,0] } ['kern' ('DFLT' <'dflt' > 'latn' <'dflt' > ) ]
 MarkAttachClasses: 1
 DEI: 91125
 ShortTable: cvt  2
@@ -68,7 +68,7 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "" "" "" "" "" "" "" "" "" "" "" "Copyright (c) 2009, Werner Schweer,,, (<ws@seh.de>),+AAoA-with Reserved Font Name MuseJazz.+AAoACgAA-This Font Software is licensed under the SIL Open Font License, Version 1.1.+AAoA-This license is copied below, and is also available with a FAQ at:+AAoA-http://scripts.sil.org/OFL+AAoACgAK------------------------------------------------------------+AAoA-SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007+AAoA------------------------------------------------------------+AAoACgAA-PREAMBLE+AAoA-The goals of the Open Font License (OFL) are to stimulate worldwide+AAoA-development of collaborative font projects, to support the font creation+AAoA-efforts of academic and linguistic communities, and to provide a free and+AAoA-open framework in which fonts may be shared and improved in partnership+AAoA-with others.+AAoACgAA-The OFL allows the licensed fonts to be used, studied, modified and+AAoA-redistributed freely as long as they are not sold by themselves. The+AAoA-fonts, including any derivative works, can be bundled, embedded, +AAoA-redistributed and/or sold with any software provided that any reserved+AAoA-names are not used by derivative works. The fonts and derivatives,+AAoA-however, cannot be released under any other type of license. The+AAoA-requirement for fonts to remain under this license does not apply+AAoA-to any document created using the fonts or their derivatives.+AAoACgAA-DEFINITIONS+AAoAIgAA-Font Software+ACIA refers to the set of files released by the Copyright+AAoA-Holder(s) under this license and clearly marked as such. This may+AAoA-include source files, build scripts and documentation.+AAoACgAi-Reserved Font Name+ACIA refers to any names specified as such after the+AAoA-copyright statement(s).+AAoACgAi-Original Version+ACIA refers to the collection of Font Software components as+AAoA-distributed by the Copyright Holder(s).+AAoACgAi-Modified Version+ACIA refers to any derivative made by adding to, deleting,+AAoA-or substituting -- in part or in whole -- any of the components of the+AAoA-Original Version, by changing formats or by porting the Font Software to a+AAoA-new environment.+AAoACgAi-Author+ACIA refers to any designer, engineer, programmer, technical+AAoA-writer or other person who contributed to the Font Software.+AAoACgAA-PERMISSION & CONDITIONS+AAoA-Permission is hereby granted, free of charge, to any person obtaining+AAoA-a copy of the Font Software, to use, study, copy, merge, embed, modify,+AAoA-redistribute, and sell modified and unmodified copies of the Font+AAoA-Software, subject to the following conditions:+AAoACgAA-1) Neither the Font Software nor any of its individual components,+AAoA-in Original or Modified Versions, may be sold by itself.+AAoACgAA-2) Original or Modified Versions of the Font Software may be bundled,+AAoA-redistributed and/or sold with any software, provided that each copy+AAoA-contains the above copyright notice and this license. These can be+AAoA-included either as stand-alone text files, human-readable headers or+AAoA-in the appropriate machine-readable metadata fields within text or+AAoA-binary files as long as those fields can be easily viewed by the user.+AAoACgAA-3) No Modified Version of the Font Software may use the Reserved Font+AAoA-Name(s) unless explicit written permission is granted by the corresponding+AAoA-Copyright Holder. This restriction only applies to the primary font name as+AAoA-presented to the users.+AAoACgAA-4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font+AAoA-Software shall not be used to promote, endorse or advertise any+AAoA-Modified Version, except to acknowledge the contribution(s) of the+AAoA-Copyright Holder(s) and the Author(s) or with their explicit written+AAoA-permission.+AAoACgAA-5) The Font Software, modified or unmodified, in part or in whole,+AAoA-must be distributed entirely under this license, and must not be+AAoA-distributed under any other license. The requirement for fonts to+AAoA-remain under this license does not apply to any document created+AAoA-using the Font Software.+AAoACgAA-TERMINATION+AAoA-This license becomes null and void if any of the above conditions are+AAoA-not met.+AAoACgAA-DISCLAIMER+AAoA-THE FONT SOFTWARE IS PROVIDED +ACIA-AS IS+ACIA, WITHOUT WARRANTY OF ANY KIND,+AAoA-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF+AAoA-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT+AAoA-OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE+AAoA-COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,+AAoA-INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL+AAoA-DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING+AAoA-FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM+AAoA-OTHER DEALINGS IN THE FONT SOFTWARE." "http://scripts.sil.org/ofl" 
+LangName: 1033 "" "" "" "" "" "" "" "" "" "" "" "" "" "Copyright (c) 2009, Werner Schweer,,, (<ws@seh.de>),+AAoA-with Reserved Font Name MuseJazz.+AAoACgAA-This Font Software is licensed under the SIL Open Font License, Version 1.1.+AAoA-This license is copied below, and is also available with a FAQ at:+AAoA-http://scripts.sil.org/OFL+AAoACgAK------------------------------------------------------------+AAoA-SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007+AAoA------------------------------------------------------------+AAoACgAA-PREAMBLE+AAoA-The goals of the Open Font License (OFL) are to stimulate worldwide+AAoA-development of collaborative font projects, to support the font creation+AAoA-efforts of academic and linguistic communities, and to provide a free and+AAoA-open framework in which fonts may be shared and improved in partnership+AAoA-with others.+AAoACgAA-The OFL allows the licensed fonts to be used, studied, modified and+AAoA-redistributed freely as long as they are not sold by themselves. The+AAoA-fonts, including any derivative works, can be bundled, embedded, +AAoA-redistributed and/or sold with any software provided that any reserved+AAoA-names are not used by derivative works. The fonts and derivatives,+AAoA-however, cannot be released under any other type of license. The+AAoA-requirement for fonts to remain under this license does not apply+AAoA-to any document created using the fonts or their derivatives.+AAoACgAA-DEFINITIONS+AAoAIgAA-Font Software+ACIA refers to the set of files released by the Copyright+AAoA-Holder(s) under this license and clearly marked as such. This may+AAoA-include source files, build scripts and documentation.+AAoACgAi-Reserved Font Name+ACIA refers to any names specified as such after the+AAoA-copyright statement(s).+AAoACgAi-Original Version+ACIA refers to the collection of Font Software components as+AAoA-distributed by the Copyright Holder(s).+AAoACgAi-Modified Version+ACIA refers to any derivative made by adding to, deleting,+AAoA-or substituting -- in part or in whole -- any of the components of the+AAoA-Original Version, by changing formats or by porting the Font Software to a+AAoA-new environment.+AAoACgAi-Author+ACIA refers to any designer, engineer, programmer, technical+AAoA-writer or other person who contributed to the Font Software.+AAoACgAA-PERMISSION & CONDITIONS+AAoA-Permission is hereby granted, free of charge, to any person obtaining+AAoA-a copy of the Font Software, to use, study, copy, merge, embed, modify,+AAoA-redistribute, and sell modified and unmodified copies of the Font+AAoA-Software, subject to the following conditions:+AAoACgAA-1) Neither the Font Software nor any of its individual components,+AAoA-in Original or Modified Versions, may be sold by itself.+AAoACgAA-2) Original or Modified Versions of the Font Software may be bundled,+AAoA-redistributed and/or sold with any software, provided that each copy+AAoA-contains the above copyright notice and this license. These can be+AAoA-included either as stand-alone text files, human-readable headers or+AAoA-in the appropriate machine-readable metadata fields within text or+AAoA-binary files as long as those fields can be easily viewed by the user.+AAoACgAA-3) No Modified Version of the Font Software may use the Reserved Font+AAoA-Name(s) unless explicit written permission is granted by the corresponding+AAoA-Copyright Holder. This restriction only applies to the primary font name as+AAoA-presented to the users.+AAoACgAA-4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font+AAoA-Software shall not be used to promote, endorse or advertise any+AAoA-Modified Version, except to acknowledge the contribution(s) of the+AAoA-Copyright Holder(s) and the Author(s) or with their explicit written+AAoA-permission.+AAoACgAA-5) The Font Software, modified or unmodified, in part or in whole,+AAoA-must be distributed entirely under this license, and must not be+AAoA-distributed under any other license. The requirement for fonts to+AAoA-remain under this license does not apply to any document created+AAoA-using the Font Software.+AAoACgAA-TERMINATION+AAoA-This license becomes null and void if any of the above conditions are+AAoA-not met.+AAoACgAA-DISCLAIMER+AAoA-THE FONT SOFTWARE IS PROVIDED +ACIA-AS IS+ACIA, WITHOUT WARRANTY OF ANY KIND,+AAoA-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF+AAoA-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT+AAoA-OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE+AAoA-COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,+AAoA-INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL+AAoA-DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING+AAoA-FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM+AAoA-OTHER DEALINGS IN THE FONT SOFTWARE." "http://scripts.sil.org/ofl"
 GaspTable: 1 65535 2 0
 Encoding: UnicodeFull
 Compacted: 1
@@ -77,17 +77,17 @@ NameList: Adobe Glyph List
 DisplaySize: -48
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 0 38 14
+WinInfo: 0 38 13
 BeginPrivate: 0
 EndPrivate
 Grid
 -24426 2662 m 0
- -24426 -1434 l 0
+ -24426 -1434 l 1024
 -2048 1080 m 0
- 4096 1080 l 0
-  Named: "x-height" 
--2048 1035 m 0
-  Named: "x-height" 
+ 4096 1080 l 1024
+  Named: "x-height"
+-2048 1035 m 1024
+  Named: "x-height"
 EndSplineSet
 TeXData: 1 0 0 250880 125440 83626 530944 -1048576 83626 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
 BeginChars: 1114112 308
@@ -1117,7 +1117,7 @@ SplineSet
  746 1122 746 1122 708 1173 c 5,102,-1
 EndSplineSet
 Validated: 1
-Kerns2: 72 63 "Kern Pairs-1"  38 32 "Kern Pairs-1"  37 32 "Kern Pairs-1"  33 32 "Kern Pairs-1"  32 -144 "Kern Pairs-1"  58 25 "Kern Pairs-1"  30 32 "Kern Pairs-1"  54 25 "Kern Pairs-1"  26 32 "Kern Pairs-1"  53 25 "Kern Pairs-1"  52 25 "Kern Pairs-1"  24 16 "Kern Pairs-1"  51 25 "Kern Pairs-1"  23 32 "Kern Pairs-1"  49 25 "Kern Pairs-1"  48 25 "Kern Pairs-1"  20 32 "Kern Pairs-1"  19 16 "Kern Pairs-1"  46 -50 "Kern Pairs-1"  18 48 "Kern Pairs-1"  17 48 "Kern Pairs-1"  16 48 "Kern Pairs-1"  14 32 "Kern Pairs-1" 
+Kerns2: 72 63 "Kern Pairs-1" 38 32 "Kern Pairs-1" 37 32 "Kern Pairs-1" 33 32 "Kern Pairs-1" 32 -144 "Kern Pairs-1" 58 25 "Kern Pairs-1" 30 32 "Kern Pairs-1" 54 25 "Kern Pairs-1" 26 32 "Kern Pairs-1" 53 25 "Kern Pairs-1" 52 25 "Kern Pairs-1" 24 16 "Kern Pairs-1" 51 25 "Kern Pairs-1" 23 32 "Kern Pairs-1" 49 25 "Kern Pairs-1" 48 25 "Kern Pairs-1" 20 32 "Kern Pairs-1" 19 16 "Kern Pairs-1" 46 -50 "Kern Pairs-1" 18 48 "Kern Pairs-1" 17 48 "Kern Pairs-1" 16 48 "Kern Pairs-1" 14 32 "Kern Pairs-1"
 EndChar
 
 StartChar: B
@@ -1171,7 +1171,7 @@ SplineSet
  605 674 605 674 516 724 c 0,60,61
  457 757 457 757 397 757 c 0,62,63
  366 757 366 757 334 748 c 0,29,30
-112 -12 m 1,64,-1
+112 -12 m 1025,64,-1
 672 911 m 1,65,66
  748 888 748 888 804 847.5 c 128,-1,67
  860 807 860 807 890.5 755.5 c 128,-1,68
@@ -1222,7 +1222,7 @@ SplineSet
  688 925 688 925 672 911 c 1,65,66
 EndSplineSet
 Validated: 1
-Kerns2: 211 220 "Kern Pairs-1"  65 16 "Kern Pairs-1"  37 16 "Kern Pairs-1"  63 16 "Kern Pairs-1"  35 32 "Kern Pairs-1"  62 16 "Kern Pairs-1"  34 32 "Kern Pairs-1"  61 16 "Kern Pairs-1"  33 32 "Kern Pairs-1"  32 -32 "Kern Pairs-1"  58 32 "Kern Pairs-1"  30 32 "Kern Pairs-1"  29 32 "Kern Pairs-1"  55 16 "Kern Pairs-1"  27 48 "Kern Pairs-1"  54 16 "Kern Pairs-1"  26 32 "Kern Pairs-1"  53 16 "Kern Pairs-1"  25 16 "Kern Pairs-1"  52 32 "Kern Pairs-1"  24 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  23 32 "Kern Pairs-1"  209 189 "Kern Pairs-1"  213 147 "Kern Pairs-1"  49 32 "Kern Pairs-1"  48 48 "Kern Pairs-1"  20 32 "Kern Pairs-1"  19 48 "Kern Pairs-1"  18 65 "Kern Pairs-1"  45 16 "Kern Pairs-1"  17 48 "Kern Pairs-1"  44 16 "Kern Pairs-1"  16 48 "Kern Pairs-1"  43 32 "Kern Pairs-1"  15 48 "Kern Pairs-1"  14 32 "Kern Pairs-1" 
+Kerns2: 211 220 "Kern Pairs-1" 65 16 "Kern Pairs-1" 37 16 "Kern Pairs-1" 63 16 "Kern Pairs-1" 35 32 "Kern Pairs-1" 62 16 "Kern Pairs-1" 34 32 "Kern Pairs-1" 61 16 "Kern Pairs-1" 33 32 "Kern Pairs-1" 32 -32 "Kern Pairs-1" 58 32 "Kern Pairs-1" 30 32 "Kern Pairs-1" 29 32 "Kern Pairs-1" 55 16 "Kern Pairs-1" 27 48 "Kern Pairs-1" 54 16 "Kern Pairs-1" 26 32 "Kern Pairs-1" 53 16 "Kern Pairs-1" 25 16 "Kern Pairs-1" 52 32 "Kern Pairs-1" 24 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 23 32 "Kern Pairs-1" 209 189 "Kern Pairs-1" 213 147 "Kern Pairs-1" 49 32 "Kern Pairs-1" 48 48 "Kern Pairs-1" 20 32 "Kern Pairs-1" 19 48 "Kern Pairs-1" 18 65 "Kern Pairs-1" 45 16 "Kern Pairs-1" 17 48 "Kern Pairs-1" 44 16 "Kern Pairs-1" 16 48 "Kern Pairs-1" 43 32 "Kern Pairs-1" 15 48 "Kern Pairs-1" 14 32 "Kern Pairs-1"
 EndChar
 
 StartChar: C
@@ -1294,7 +1294,7 @@ SplineSet
  627 1586 627 1586 731 1600 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 231 "Kern Pairs-1"  211 262 "Kern Pairs-1"  37 48 "Kern Pairs-1"  63 16 "Kern Pairs-1"  35 48 "Kern Pairs-1"  62 16 "Kern Pairs-1"  34 48 "Kern Pairs-1"  33 48 "Kern Pairs-1"  58 16 "Kern Pairs-1"  30 32 "Kern Pairs-1"  55 16 "Kern Pairs-1"  26 48 "Kern Pairs-1"  25 32 "Kern Pairs-1"  24 32 "Kern Pairs-1"  23 32 "Kern Pairs-1"  209 199 "Kern Pairs-1"  145 31 "Kern Pairs-1"  49 16 "Kern Pairs-1"  48 16 "Kern Pairs-1"  20 48 "Kern Pairs-1"  18 32 "Kern Pairs-1"  144 31 "Kern Pairs-1"  17 64 "Kern Pairs-1"  16 48 "Kern Pairs-1"  15 16 "Kern Pairs-1"  14 64 "Kern Pairs-1"  13 -48 "Kern Pairs-1" 
+Kerns2: 213 231 "Kern Pairs-1" 211 262 "Kern Pairs-1" 37 48 "Kern Pairs-1" 63 16 "Kern Pairs-1" 35 48 "Kern Pairs-1" 62 16 "Kern Pairs-1" 34 48 "Kern Pairs-1" 33 48 "Kern Pairs-1" 58 16 "Kern Pairs-1" 30 32 "Kern Pairs-1" 55 16 "Kern Pairs-1" 26 48 "Kern Pairs-1" 25 32 "Kern Pairs-1" 24 32 "Kern Pairs-1" 23 32 "Kern Pairs-1" 209 199 "Kern Pairs-1" 145 31 "Kern Pairs-1" 49 16 "Kern Pairs-1" 48 16 "Kern Pairs-1" 20 48 "Kern Pairs-1" 18 32 "Kern Pairs-1" 144 31 "Kern Pairs-1" 17 64 "Kern Pairs-1" 16 48 "Kern Pairs-1" 15 16 "Kern Pairs-1" 14 64 "Kern Pairs-1" 13 -48 "Kern Pairs-1"
 EndChar
 
 StartChar: D
@@ -1367,7 +1367,7 @@ SplineSet
  373 1602 373 1602 388 1604 c 0,36,37
 EndSplineSet
 Validated: 1
-Kerns2: 270 -73 "Kern Pairs-1"  213 115 "Kern Pairs-1"  211 189 "Kern Pairs-1"  77 -42 "Kern Pairs-1"  72 -115 "Kern Pairs-1"  38 -64 "Kern Pairs-1"  37 32 "Kern Pairs-1"  36 -16 "Kern Pairs-1"  63 16 "Kern Pairs-1"  35 32 "Kern Pairs-1"  62 16 "Kern Pairs-1"  34 48 "Kern Pairs-1"  33 32 "Kern Pairs-1"  32 -65 "Kern Pairs-1"  31 -32 "Kern Pairs-1"  29 16 "Kern Pairs-1"  55 -48 "Kern Pairs-1"  27 32 "Kern Pairs-1"  26 32 "Kern Pairs-1"  25 16 "Kern Pairs-1"  24 32 "Kern Pairs-1"  50 -81 "Kern Pairs-1"  22 -96 "Kern Pairs-1"  209 157 "Kern Pairs-1"  21 -75 "Kern Pairs-1"  48 16 "Kern Pairs-1"  20 48 "Kern Pairs-1"  19 32 "Kern Pairs-1"  18 48 "Kern Pairs-1"  17 32 "Kern Pairs-1"  16 32 "Kern Pairs-1"  15 48 "Kern Pairs-1"  14 48 "Kern Pairs-1"  41 -60 "Kern Pairs-1"  13 -96 "Kern Pairs-1" 
+Kerns2: 270 -73 "Kern Pairs-1" 213 115 "Kern Pairs-1" 211 189 "Kern Pairs-1" 77 -42 "Kern Pairs-1" 72 -115 "Kern Pairs-1" 38 -64 "Kern Pairs-1" 37 32 "Kern Pairs-1" 36 -16 "Kern Pairs-1" 63 16 "Kern Pairs-1" 35 32 "Kern Pairs-1" 62 16 "Kern Pairs-1" 34 48 "Kern Pairs-1" 33 32 "Kern Pairs-1" 32 -65 "Kern Pairs-1" 31 -32 "Kern Pairs-1" 29 16 "Kern Pairs-1" 55 -48 "Kern Pairs-1" 27 32 "Kern Pairs-1" 26 32 "Kern Pairs-1" 25 16 "Kern Pairs-1" 24 32 "Kern Pairs-1" 50 -81 "Kern Pairs-1" 22 -96 "Kern Pairs-1" 209 157 "Kern Pairs-1" 21 -75 "Kern Pairs-1" 48 16 "Kern Pairs-1" 20 48 "Kern Pairs-1" 19 32 "Kern Pairs-1" 18 48 "Kern Pairs-1" 17 32 "Kern Pairs-1" 16 32 "Kern Pairs-1" 15 48 "Kern Pairs-1" 14 48 "Kern Pairs-1" 41 -60 "Kern Pairs-1" 13 -96 "Kern Pairs-1"
 EndChar
 
 StartChar: E
@@ -1378,7 +1378,7 @@ Flags: W
 LayerCount: 2
 Fore
 SplineSet
-590 16 m 1,0,-1
+590 16 m 1025,0,-1
 249 966 m 1,1,2
  317 958 317 958 448.5 956.5 c 128,-1,3
  580 955 580 955 602 954 c 0,4,5
@@ -1486,7 +1486,7 @@ SplineSet
  249 978 249 978 249 966 c 1,1,2
 EndSplineSet
 Validated: 1
-Kerns2: 270 21 "Kern Pairs-1"  213 168 "Kern Pairs-1"  211 136 "Kern Pairs-1"  77 42 "Kern Pairs-1"  72 52 "Kern Pairs-1"  35 16 "Kern Pairs-1"  33 32 "Kern Pairs-1"  30 16 "Kern Pairs-1"  26 16 "Kern Pairs-1"  25 0 "Kern Pairs-1"  24 32 "Kern Pairs-1"  23 32 "Kern Pairs-1"  209 157 "Kern Pairs-1"  48 32 "Kern Pairs-1"  20 48 "Kern Pairs-1"  18 48 "Kern Pairs-1"  16 48 "Kern Pairs-1"  14 48 "Kern Pairs-1" 
+Kerns2: 270 21 "Kern Pairs-1" 213 168 "Kern Pairs-1" 211 136 "Kern Pairs-1" 77 42 "Kern Pairs-1" 72 52 "Kern Pairs-1" 35 16 "Kern Pairs-1" 33 32 "Kern Pairs-1" 30 16 "Kern Pairs-1" 26 16 "Kern Pairs-1" 25 0 "Kern Pairs-1" 24 32 "Kern Pairs-1" 23 32 "Kern Pairs-1" 209 157 "Kern Pairs-1" 48 32 "Kern Pairs-1" 20 48 "Kern Pairs-1" 18 48 "Kern Pairs-1" 16 48 "Kern Pairs-1" 14 48 "Kern Pairs-1"
 EndChar
 
 StartChar: F
@@ -1583,7 +1583,7 @@ SplineSet
  510 945 510 945 582 945 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -94 "Kern Pairs-1"  270 -63 "Kern Pairs-1"  213 210 "Kern Pairs-1"  211 189 "Kern Pairs-1"  77 -335 "Kern Pairs-1"  72 -336 "Kern Pairs-1"  66 -150 "Kern Pairs-1"  242 -63 "Kern Pairs-1"  258 -73 "Kern Pairs-1"  65 -100 "Kern Pairs-1"  64 -100 "Kern Pairs-1"  63 -50 "Kern Pairs-1"  62 -84 "Kern Pairs-1"  170 -94 "Kern Pairs-1"  140 -31 "Kern Pairs-1"  172 -84 "Kern Pairs-1"  171 -147 "Kern Pairs-1"  61 -125 "Kern Pairs-1"  60 -50 "Kern Pairs-1"  59 -150 "Kern Pairs-1"  31 -65 "Kern Pairs-1"  58 -123 "Kern Pairs-1"  30 -32 "Kern Pairs-1"  57 -232 "Kern Pairs-1"  56 -198 "Kern Pairs-1"  28 -64 "Kern Pairs-1"  250 -178 "Kern Pairs-1"  261 -73 "Kern Pairs-1"  139 -42 "Kern Pairs-1"  190 -21 "Kern Pairs-1"  262 -105 "Kern Pairs-1"  55 -182 "Kern Pairs-1"  27 -49 "Kern Pairs-1"  54 -132 "Kern Pairs-1"  53 -132 "Kern Pairs-1"  52 -16 "Kern Pairs-1"  24 16 "Kern Pairs-1"  50 -147 "Kern Pairs-1"  22 -64 "Kern Pairs-1"  209 189 "Kern Pairs-1"  145 31 "Kern Pairs-1"  49 -82 "Kern Pairs-1"  47 -280 "Kern Pairs-1"  46 -82 "Kern Pairs-1"  165 -115 "Kern Pairs-1"  45 -172 "Kern Pairs-1"  44 -200 "Kern Pairs-1"  193 -63 "Kern Pairs-1"  253 -115 "Kern Pairs-1"  43 -192 "Kern Pairs-1"  42 -100 "Kern Pairs-1"  247 -241 "Kern Pairs-1"  188 -252 "Kern Pairs-1"  160 -168 "Kern Pairs-1"  138 -94 "Kern Pairs-1"  162 -115 "Kern Pairs-1"  161 -199 "Kern Pairs-1"  41 -200 "Kern Pairs-1"  13 -240 "Kern Pairs-1" 
+Kerns2: 271 -94 "Kern Pairs-1" 270 -63 "Kern Pairs-1" 213 210 "Kern Pairs-1" 211 189 "Kern Pairs-1" 77 -335 "Kern Pairs-1" 72 -336 "Kern Pairs-1" 66 -150 "Kern Pairs-1" 242 -63 "Kern Pairs-1" 258 -73 "Kern Pairs-1" 65 -100 "Kern Pairs-1" 64 -100 "Kern Pairs-1" 63 -50 "Kern Pairs-1" 62 -84 "Kern Pairs-1" 170 -94 "Kern Pairs-1" 140 -31 "Kern Pairs-1" 172 -84 "Kern Pairs-1" 171 -147 "Kern Pairs-1" 61 -125 "Kern Pairs-1" 60 -50 "Kern Pairs-1" 59 -150 "Kern Pairs-1" 31 -65 "Kern Pairs-1" 58 -123 "Kern Pairs-1" 30 -32 "Kern Pairs-1" 57 -232 "Kern Pairs-1" 56 -198 "Kern Pairs-1" 28 -64 "Kern Pairs-1" 250 -178 "Kern Pairs-1" 261 -73 "Kern Pairs-1" 139 -42 "Kern Pairs-1" 190 -21 "Kern Pairs-1" 262 -105 "Kern Pairs-1" 55 -182 "Kern Pairs-1" 27 -49 "Kern Pairs-1" 54 -132 "Kern Pairs-1" 53 -132 "Kern Pairs-1" 52 -16 "Kern Pairs-1" 24 16 "Kern Pairs-1" 50 -147 "Kern Pairs-1" 22 -64 "Kern Pairs-1" 209 189 "Kern Pairs-1" 145 31 "Kern Pairs-1" 49 -82 "Kern Pairs-1" 47 -280 "Kern Pairs-1" 46 -82 "Kern Pairs-1" 165 -115 "Kern Pairs-1" 45 -172 "Kern Pairs-1" 44 -200 "Kern Pairs-1" 193 -63 "Kern Pairs-1" 253 -115 "Kern Pairs-1" 43 -192 "Kern Pairs-1" 42 -100 "Kern Pairs-1" 247 -241 "Kern Pairs-1" 188 -252 "Kern Pairs-1" 160 -168 "Kern Pairs-1" 138 -94 "Kern Pairs-1" 162 -115 "Kern Pairs-1" 161 -199 "Kern Pairs-1" 41 -200 "Kern Pairs-1" 13 -240 "Kern Pairs-1"
 EndChar
 
 StartChar: G
@@ -1670,7 +1670,7 @@ SplineSet
  719 1579 719 1579 838 1595 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 270 -84 "Kern Pairs-1"  213 178 "Kern Pairs-1"  211 147 "Kern Pairs-1"  72 -42 "Kern Pairs-1"  37 48 "Kern Pairs-1"  63 32 "Kern Pairs-1"  35 48 "Kern Pairs-1"  62 32 "Kern Pairs-1"  34 48 "Kern Pairs-1"  33 64 "Kern Pairs-1"  32 -32 "Kern Pairs-1"  30 16 "Kern Pairs-1"  57 -32 "Kern Pairs-1"  29 16 "Kern Pairs-1"  56 -65 "Kern Pairs-1"  27 32 "Kern Pairs-1"  26 16 "Kern Pairs-1"  25 16 "Kern Pairs-1"  52 16 "Kern Pairs-1"  24 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  23 32 "Kern Pairs-1"  50 -97 "Kern Pairs-1"  209 168 "Kern Pairs-1"  20 48 "Kern Pairs-1"  19 48 "Kern Pairs-1"  18 48 "Kern Pairs-1"  17 64 "Kern Pairs-1"  16 48 "Kern Pairs-1"  15 48 "Kern Pairs-1"  14 48 "Kern Pairs-1"  13 -80 "Kern Pairs-1" 
+Kerns2: 270 -84 "Kern Pairs-1" 213 178 "Kern Pairs-1" 211 147 "Kern Pairs-1" 72 -42 "Kern Pairs-1" 37 48 "Kern Pairs-1" 63 32 "Kern Pairs-1" 35 48 "Kern Pairs-1" 62 32 "Kern Pairs-1" 34 48 "Kern Pairs-1" 33 64 "Kern Pairs-1" 32 -32 "Kern Pairs-1" 30 16 "Kern Pairs-1" 57 -32 "Kern Pairs-1" 29 16 "Kern Pairs-1" 56 -65 "Kern Pairs-1" 27 32 "Kern Pairs-1" 26 16 "Kern Pairs-1" 25 16 "Kern Pairs-1" 52 16 "Kern Pairs-1" 24 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 23 32 "Kern Pairs-1" 50 -97 "Kern Pairs-1" 209 168 "Kern Pairs-1" 20 48 "Kern Pairs-1" 19 48 "Kern Pairs-1" 18 48 "Kern Pairs-1" 17 64 "Kern Pairs-1" 16 48 "Kern Pairs-1" 15 48 "Kern Pairs-1" 14 48 "Kern Pairs-1" 13 -80 "Kern Pairs-1"
 EndChar
 
 StartChar: H
@@ -1750,7 +1750,7 @@ SplineSet
  53 4 53 4 44 19 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 31 "Kern Pairs-1"  213 210 "Kern Pairs-1"  211 210 "Kern Pairs-1"  77 94 "Kern Pairs-1"  72 63 "Kern Pairs-1"  37 48 "Kern Pairs-1"  36 16 "Kern Pairs-1"  35 32 "Kern Pairs-1"  34 32 "Kern Pairs-1"  33 48 "Kern Pairs-1"  30 32 "Kern Pairs-1"  27 32 "Kern Pairs-1"  26 48 "Kern Pairs-1"  25 16 "Kern Pairs-1"  24 64 "Kern Pairs-1"  50 -49 "Kern Pairs-1"  209 189 "Kern Pairs-1"  145 42 "Kern Pairs-1"  19 48 "Kern Pairs-1"  18 65 "Kern Pairs-1"  144 21 "Kern Pairs-1"  17 48 "Kern Pairs-1" 
+Kerns2: 271 31 "Kern Pairs-1" 213 210 "Kern Pairs-1" 211 210 "Kern Pairs-1" 77 94 "Kern Pairs-1" 72 63 "Kern Pairs-1" 37 48 "Kern Pairs-1" 36 16 "Kern Pairs-1" 35 32 "Kern Pairs-1" 34 32 "Kern Pairs-1" 33 48 "Kern Pairs-1" 30 32 "Kern Pairs-1" 27 32 "Kern Pairs-1" 26 48 "Kern Pairs-1" 25 16 "Kern Pairs-1" 24 64 "Kern Pairs-1" 50 -49 "Kern Pairs-1" 209 189 "Kern Pairs-1" 145 42 "Kern Pairs-1" 19 48 "Kern Pairs-1" 18 65 "Kern Pairs-1" 144 21 "Kern Pairs-1" 17 48 "Kern Pairs-1"
 EndChar
 
 StartChar: I
@@ -1819,7 +1819,7 @@ SplineSet
  372 652 372 652 384 724 c 16,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -42 "Kern Pairs-1"  66 -165 "Kern Pairs-1"  65 -181 "Kern Pairs-1"  64 -132 "Kern Pairs-1"  63 -116 "Kern Pairs-1"  35 32 "Kern Pairs-1"  62 -132 "Kern Pairs-1"  34 48 "Kern Pairs-1"  61 -116 "Kern Pairs-1"  33 32 "Kern Pairs-1"  60 -132 "Kern Pairs-1"  59 -132 "Kern Pairs-1"  58 -116 "Kern Pairs-1"  57 -132 "Kern Pairs-1"  56 -132 "Kern Pairs-1"  55 -116 "Kern Pairs-1"  54 -116 "Kern Pairs-1"  26 48 "Kern Pairs-1"  53 -116 "Kern Pairs-1"  51 0 "Kern Pairs-1"  50 -82 "Kern Pairs-1"  209 178 "Kern Pairs-1"  211 189 "Kern Pairs-1"  145 42 "Kern Pairs-1"  213 231 "Kern Pairs-1"  49 -50 "Kern Pairs-1"  20 48 "Kern Pairs-1"  47 -132 "Kern Pairs-1"  46 -165 "Kern Pairs-1"  18 80 "Kern Pairs-1"  144 21 "Kern Pairs-1"  45 -100 "Kern Pairs-1"  17 48 "Kern Pairs-1"  44 -100 "Kern Pairs-1"  16 48 "Kern Pairs-1"  253 -73 "Kern Pairs-1"  43 -100 "Kern Pairs-1"  42 -50 "Kern Pairs-1"  14 48 "Kern Pairs-1"  41 -100 "Kern Pairs-1"  13 -97 "Kern Pairs-1" 
+Kerns2: 271 -42 "Kern Pairs-1" 66 -165 "Kern Pairs-1" 65 -181 "Kern Pairs-1" 64 -132 "Kern Pairs-1" 63 -116 "Kern Pairs-1" 35 32 "Kern Pairs-1" 62 -132 "Kern Pairs-1" 34 48 "Kern Pairs-1" 61 -116 "Kern Pairs-1" 33 32 "Kern Pairs-1" 60 -132 "Kern Pairs-1" 59 -132 "Kern Pairs-1" 58 -116 "Kern Pairs-1" 57 -132 "Kern Pairs-1" 56 -132 "Kern Pairs-1" 55 -116 "Kern Pairs-1" 54 -116 "Kern Pairs-1" 26 48 "Kern Pairs-1" 53 -116 "Kern Pairs-1" 51 0 "Kern Pairs-1" 50 -82 "Kern Pairs-1" 209 178 "Kern Pairs-1" 211 189 "Kern Pairs-1" 145 42 "Kern Pairs-1" 213 231 "Kern Pairs-1" 49 -50 "Kern Pairs-1" 20 48 "Kern Pairs-1" 47 -132 "Kern Pairs-1" 46 -165 "Kern Pairs-1" 18 80 "Kern Pairs-1" 144 21 "Kern Pairs-1" 45 -100 "Kern Pairs-1" 17 48 "Kern Pairs-1" 44 -100 "Kern Pairs-1" 16 48 "Kern Pairs-1" 253 -73 "Kern Pairs-1" 43 -100 "Kern Pairs-1" 42 -50 "Kern Pairs-1" 14 48 "Kern Pairs-1" 41 -100 "Kern Pairs-1" 13 -97 "Kern Pairs-1"
 EndChar
 
 StartChar: J
@@ -1892,7 +1892,7 @@ SplineSet
  808 650 l 16,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -115 "Kern Pairs-1"  270 -52 "Kern Pairs-1"  77 -94 "Kern Pairs-1"  72 -137 "Kern Pairs-1"  66 -146 "Kern Pairs-1"  242 -83 "Kern Pairs-1"  258 -63 "Kern Pairs-1"  65 -130 "Kern Pairs-1"  64 -130 "Kern Pairs-1"  63 -97 "Kern Pairs-1"  62 -113 "Kern Pairs-1"  170 -115 "Kern Pairs-1"  140 -42 "Kern Pairs-1"  172 -63 "Kern Pairs-1"  171 -84 "Kern Pairs-1"  61 -150 "Kern Pairs-1"  60 -113 "Kern Pairs-1"  59 -178 "Kern Pairs-1"  58 -130 "Kern Pairs-1"  30 -32 "Kern Pairs-1"  57 -211 "Kern Pairs-1"  56 -227 "Kern Pairs-1"  250 -178 "Kern Pairs-1"  261 -94 "Kern Pairs-1"  139 -94 "Kern Pairs-1"  190 -105 "Kern Pairs-1"  262 -105 "Kern Pairs-1"  55 -198 "Kern Pairs-1"  54 -146 "Kern Pairs-1"  53 -130 "Kern Pairs-1"  50 -113 "Kern Pairs-1"  209 126 "Kern Pairs-1"  211 105 "Kern Pairs-1"  213 178 "Kern Pairs-1"  49 -81 "Kern Pairs-1"  47 -243 "Kern Pairs-1"  46 -113 "Kern Pairs-1"  164 -31 "Kern Pairs-1"  165 -105 "Kern Pairs-1"  45 -182 "Kern Pairs-1"  44 -227 "Kern Pairs-1"  16 48 "Kern Pairs-1"  193 -126 "Kern Pairs-1"  253 -105 "Kern Pairs-1"  43 -178 "Kern Pairs-1"  42 -113 "Kern Pairs-1"  247 -199 "Kern Pairs-1"  188 -178 "Kern Pairs-1"  160 -115 "Kern Pairs-1"  138 -147 "Kern Pairs-1"  162 -157 "Kern Pairs-1"  161 -167 "Kern Pairs-1"  41 -247 "Kern Pairs-1"  13 -176 "Kern Pairs-1" 
+Kerns2: 271 -115 "Kern Pairs-1" 270 -52 "Kern Pairs-1" 77 -94 "Kern Pairs-1" 72 -137 "Kern Pairs-1" 66 -146 "Kern Pairs-1" 242 -83 "Kern Pairs-1" 258 -63 "Kern Pairs-1" 65 -130 "Kern Pairs-1" 64 -130 "Kern Pairs-1" 63 -97 "Kern Pairs-1" 62 -113 "Kern Pairs-1" 170 -115 "Kern Pairs-1" 140 -42 "Kern Pairs-1" 172 -63 "Kern Pairs-1" 171 -84 "Kern Pairs-1" 61 -150 "Kern Pairs-1" 60 -113 "Kern Pairs-1" 59 -178 "Kern Pairs-1" 58 -130 "Kern Pairs-1" 30 -32 "Kern Pairs-1" 57 -211 "Kern Pairs-1" 56 -227 "Kern Pairs-1" 250 -178 "Kern Pairs-1" 261 -94 "Kern Pairs-1" 139 -94 "Kern Pairs-1" 190 -105 "Kern Pairs-1" 262 -105 "Kern Pairs-1" 55 -198 "Kern Pairs-1" 54 -146 "Kern Pairs-1" 53 -130 "Kern Pairs-1" 50 -113 "Kern Pairs-1" 209 126 "Kern Pairs-1" 211 105 "Kern Pairs-1" 213 178 "Kern Pairs-1" 49 -81 "Kern Pairs-1" 47 -243 "Kern Pairs-1" 46 -113 "Kern Pairs-1" 164 -31 "Kern Pairs-1" 165 -105 "Kern Pairs-1" 45 -182 "Kern Pairs-1" 44 -227 "Kern Pairs-1" 16 48 "Kern Pairs-1" 193 -126 "Kern Pairs-1" 253 -105 "Kern Pairs-1" 43 -178 "Kern Pairs-1" 42 -113 "Kern Pairs-1" 247 -199 "Kern Pairs-1" 188 -178 "Kern Pairs-1" 160 -115 "Kern Pairs-1" 138 -147 "Kern Pairs-1" 162 -157 "Kern Pairs-1" 161 -167 "Kern Pairs-1" 41 -247 "Kern Pairs-1" 13 -176 "Kern Pairs-1"
 EndChar
 
 StartChar: K
@@ -1987,7 +1987,7 @@ SplineSet
  400 1257 400 1257 386 1230 c 24,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 220 "Kern Pairs-1"  211 147 "Kern Pairs-1"  77 73 "Kern Pairs-1"  72 52 "Kern Pairs-1"  38 32 "Kern Pairs-1"  37 64 "Kern Pairs-1"  35 48 "Kern Pairs-1"  34 48 "Kern Pairs-1"  33 48 "Kern Pairs-1"  30 32 "Kern Pairs-1"  28 32 "Kern Pairs-1"  26 48 "Kern Pairs-1"  25 32 "Kern Pairs-1"  24 32 "Kern Pairs-1"  23 32 "Kern Pairs-1"  209 147 "Kern Pairs-1"  145 31 "Kern Pairs-1"  21 32 "Kern Pairs-1"  20 48 "Kern Pairs-1"  18 64 "Kern Pairs-1"  17 80 "Kern Pairs-1"  16 48 "Kern Pairs-1"  14 48 "Kern Pairs-1" 
+Kerns2: 213 220 "Kern Pairs-1" 211 147 "Kern Pairs-1" 77 73 "Kern Pairs-1" 72 52 "Kern Pairs-1" 38 32 "Kern Pairs-1" 37 64 "Kern Pairs-1" 35 48 "Kern Pairs-1" 34 48 "Kern Pairs-1" 33 48 "Kern Pairs-1" 30 32 "Kern Pairs-1" 28 32 "Kern Pairs-1" 26 48 "Kern Pairs-1" 25 32 "Kern Pairs-1" 24 32 "Kern Pairs-1" 23 32 "Kern Pairs-1" 209 147 "Kern Pairs-1" 145 31 "Kern Pairs-1" 21 32 "Kern Pairs-1" 20 48 "Kern Pairs-1" 18 64 "Kern Pairs-1" 17 80 "Kern Pairs-1" 16 48 "Kern Pairs-1" 14 48 "Kern Pairs-1"
 EndChar
 
 StartChar: L
@@ -2053,7 +2053,7 @@ SplineSet
  38 70 38 70 38 83 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 77 63 "Kern Pairs-1"  72 52 "Kern Pairs-1"  65 -113 "Kern Pairs-1"  62 -16 "Kern Pairs-1"  60 -81 "Kern Pairs-1"  50 -97 "Kern Pairs-1"  46 -113 "Kern Pairs-1" 
+Kerns2: 77 63 "Kern Pairs-1" 72 52 "Kern Pairs-1" 65 -113 "Kern Pairs-1" 62 -16 "Kern Pairs-1" 60 -81 "Kern Pairs-1" 50 -97 "Kern Pairs-1" 46 -113 "Kern Pairs-1"
 EndChar
 
 StartChar: M
@@ -2169,7 +2169,7 @@ SplineSet
  1388 702 1388 702 1384 560 c 16,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 199 "Kern Pairs-1"  211 189 "Kern Pairs-1"  38 16 "Kern Pairs-1"  37 48 "Kern Pairs-1"  35 48 "Kern Pairs-1"  34 32 "Kern Pairs-1"  33 64 "Kern Pairs-1"  30 64 "Kern Pairs-1"  29 16 "Kern Pairs-1"  27 32 "Kern Pairs-1"  26 65 "Kern Pairs-1"  24 48 "Kern Pairs-1"  23 32 "Kern Pairs-1"  209 168 "Kern Pairs-1"  145 10 "Kern Pairs-1"  20 48 "Kern Pairs-1"  19 16 "Kern Pairs-1"  18 97 "Kern Pairs-1"  144 21 "Kern Pairs-1"  17 80 "Kern Pairs-1"  16 64 "Kern Pairs-1"  15 32 "Kern Pairs-1"  14 96 "Kern Pairs-1" 
+Kerns2: 213 199 "Kern Pairs-1" 211 189 "Kern Pairs-1" 38 16 "Kern Pairs-1" 37 48 "Kern Pairs-1" 35 48 "Kern Pairs-1" 34 32 "Kern Pairs-1" 33 64 "Kern Pairs-1" 30 64 "Kern Pairs-1" 29 16 "Kern Pairs-1" 27 32 "Kern Pairs-1" 26 65 "Kern Pairs-1" 24 48 "Kern Pairs-1" 23 32 "Kern Pairs-1" 209 168 "Kern Pairs-1" 145 10 "Kern Pairs-1" 20 48 "Kern Pairs-1" 19 16 "Kern Pairs-1" 18 97 "Kern Pairs-1" 144 21 "Kern Pairs-1" 17 80 "Kern Pairs-1" 16 64 "Kern Pairs-1" 15 32 "Kern Pairs-1" 14 96 "Kern Pairs-1"
 EndChar
 
 StartChar: N
@@ -2278,7 +2278,7 @@ SplineSet
  40 781 40 781 40 838 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 157 "Kern Pairs-1"  211 168 "Kern Pairs-1"  77 63 "Kern Pairs-1"  72 52 "Kern Pairs-1"  209 136 "Kern Pairs-1"  144 10 "Kern Pairs-1" 
+Kerns2: 213 157 "Kern Pairs-1" 211 168 "Kern Pairs-1" 77 63 "Kern Pairs-1" 72 52 "Kern Pairs-1" 209 136 "Kern Pairs-1" 144 10 "Kern Pairs-1"
 EndChar
 
 StartChar: O
@@ -2354,7 +2354,7 @@ SplineSet
  297 691 297 691 300 679 c 1,49,50
 EndSplineSet
 Validated: 1
-Kerns2: 270 -63 "Kern Pairs-1"  213 178 "Kern Pairs-1"  211 210 "Kern Pairs-1"  66 -32 "Kern Pairs-1"  38 -64 "Kern Pairs-1"  37 48 "Kern Pairs-1"  35 48 "Kern Pairs-1"  34 48 "Kern Pairs-1"  33 64 "Kern Pairs-1"  59 -48 "Kern Pairs-1"  58 -16 "Kern Pairs-1"  30 32 "Kern Pairs-1"  57 -97 "Kern Pairs-1"  56 -65 "Kern Pairs-1"  55 -32 "Kern Pairs-1"  54 -16 "Kern Pairs-1"  26 64 "Kern Pairs-1"  25 48 "Kern Pairs-1"  24 64 "Kern Pairs-1"  23 32 "Kern Pairs-1"  50 -81 "Kern Pairs-1"  22 -80 "Kern Pairs-1"  209 189 "Kern Pairs-1"  48 48 "Kern Pairs-1"  20 48 "Kern Pairs-1"  47 -48 "Kern Pairs-1"  19 32 "Kern Pairs-1"  18 64 "Kern Pairs-1"  17 64 "Kern Pairs-1"  44 -48 "Kern Pairs-1"  16 80 "Kern Pairs-1"  43 -16 "Kern Pairs-1"  15 32 "Kern Pairs-1"  42 -48 "Kern Pairs-1"  14 112 "Kern Pairs-1"  41 -65 "Kern Pairs-1"  13 -112 "Kern Pairs-1" 
+Kerns2: 270 -63 "Kern Pairs-1" 213 178 "Kern Pairs-1" 211 210 "Kern Pairs-1" 66 -32 "Kern Pairs-1" 38 -64 "Kern Pairs-1" 37 48 "Kern Pairs-1" 35 48 "Kern Pairs-1" 34 48 "Kern Pairs-1" 33 64 "Kern Pairs-1" 59 -48 "Kern Pairs-1" 58 -16 "Kern Pairs-1" 30 32 "Kern Pairs-1" 57 -97 "Kern Pairs-1" 56 -65 "Kern Pairs-1" 55 -32 "Kern Pairs-1" 54 -16 "Kern Pairs-1" 26 64 "Kern Pairs-1" 25 48 "Kern Pairs-1" 24 64 "Kern Pairs-1" 23 32 "Kern Pairs-1" 50 -81 "Kern Pairs-1" 22 -80 "Kern Pairs-1" 209 189 "Kern Pairs-1" 48 48 "Kern Pairs-1" 20 48 "Kern Pairs-1" 47 -48 "Kern Pairs-1" 19 32 "Kern Pairs-1" 18 64 "Kern Pairs-1" 17 64 "Kern Pairs-1" 44 -48 "Kern Pairs-1" 16 80 "Kern Pairs-1" 43 -16 "Kern Pairs-1" 15 32 "Kern Pairs-1" 42 -48 "Kern Pairs-1" 14 112 "Kern Pairs-1" 41 -65 "Kern Pairs-1" 13 -112 "Kern Pairs-1"
 EndChar
 
 StartChar: P
@@ -2462,7 +2462,7 @@ SplineSet
  428 884 l 1,108,109
 EndSplineSet
 Validated: 1
-Kerns2: 271 -73 "Kern Pairs-1"  270 -42 "Kern Pairs-1"  213 178 "Kern Pairs-1"  211 241 "Kern Pairs-1"  77 -314 "Kern Pairs-1"  72 -304 "Kern Pairs-1"  38 -32 "Kern Pairs-1"  37 48 "Kern Pairs-1"  35 48 "Kern Pairs-1"  62 16 "Kern Pairs-1"  34 48 "Kern Pairs-1"  61 -100 "Kern Pairs-1"  33 32 "Kern Pairs-1"  32 16 "Kern Pairs-1"  59 -65 "Kern Pairs-1"  31 16 "Kern Pairs-1"  58 -75 "Kern Pairs-1"  30 16 "Kern Pairs-1"  57 -243 "Kern Pairs-1"  29 16 "Kern Pairs-1"  56 -81 "Kern Pairs-1"  250 -189 "Kern Pairs-1"  261 -94 "Kern Pairs-1"  262 -84 "Kern Pairs-1"  55 -192 "Kern Pairs-1"  27 32 "Kern Pairs-1"  54 -81 "Kern Pairs-1"  26 64 "Kern Pairs-1"  25 16 "Kern Pairs-1"  24 32 "Kern Pairs-1"  51 16 "Kern Pairs-1"  23 32 "Kern Pairs-1"  50 -146 "Kern Pairs-1"  22 -112 "Kern Pairs-1"  209 220 "Kern Pairs-1"  145 31 "Kern Pairs-1"  49 -50 "Kern Pairs-1"  21 -32 "Kern Pairs-1"  48 16 "Kern Pairs-1"  20 48 "Kern Pairs-1"  47 -211 "Kern Pairs-1"  18 64 "Kern Pairs-1"  144 10 "Kern Pairs-1"  45 -100 "Kern Pairs-1"  17 48 "Kern Pairs-1"  44 -146 "Kern Pairs-1"  16 80 "Kern Pairs-1"  193 -105 "Kern Pairs-1"  253 -84 "Kern Pairs-1"  43 -97 "Kern Pairs-1"  15 32 "Kern Pairs-1"  42 -48 "Kern Pairs-1"  14 64 "Kern Pairs-1"  247 -220 "Kern Pairs-1"  188 -189 "Kern Pairs-1"  160 -199 "Kern Pairs-1"  138 -105 "Kern Pairs-1"  162 -126 "Kern Pairs-1"  161 -189 "Kern Pairs-1"  41 -200 "Kern Pairs-1"  13 -224 "Kern Pairs-1" 
+Kerns2: 271 -73 "Kern Pairs-1" 270 -42 "Kern Pairs-1" 213 178 "Kern Pairs-1" 211 241 "Kern Pairs-1" 77 -314 "Kern Pairs-1" 72 -304 "Kern Pairs-1" 38 -32 "Kern Pairs-1" 37 48 "Kern Pairs-1" 35 48 "Kern Pairs-1" 62 16 "Kern Pairs-1" 34 48 "Kern Pairs-1" 61 -100 "Kern Pairs-1" 33 32 "Kern Pairs-1" 32 16 "Kern Pairs-1" 59 -65 "Kern Pairs-1" 31 16 "Kern Pairs-1" 58 -75 "Kern Pairs-1" 30 16 "Kern Pairs-1" 57 -243 "Kern Pairs-1" 29 16 "Kern Pairs-1" 56 -81 "Kern Pairs-1" 250 -189 "Kern Pairs-1" 261 -94 "Kern Pairs-1" 262 -84 "Kern Pairs-1" 55 -192 "Kern Pairs-1" 27 32 "Kern Pairs-1" 54 -81 "Kern Pairs-1" 26 64 "Kern Pairs-1" 25 16 "Kern Pairs-1" 24 32 "Kern Pairs-1" 51 16 "Kern Pairs-1" 23 32 "Kern Pairs-1" 50 -146 "Kern Pairs-1" 22 -112 "Kern Pairs-1" 209 220 "Kern Pairs-1" 145 31 "Kern Pairs-1" 49 -50 "Kern Pairs-1" 21 -32 "Kern Pairs-1" 48 16 "Kern Pairs-1" 20 48 "Kern Pairs-1" 47 -211 "Kern Pairs-1" 18 64 "Kern Pairs-1" 144 10 "Kern Pairs-1" 45 -100 "Kern Pairs-1" 17 48 "Kern Pairs-1" 44 -146 "Kern Pairs-1" 16 80 "Kern Pairs-1" 193 -105 "Kern Pairs-1" 253 -84 "Kern Pairs-1" 43 -97 "Kern Pairs-1" 15 32 "Kern Pairs-1" 42 -48 "Kern Pairs-1" 14 64 "Kern Pairs-1" 247 -220 "Kern Pairs-1" 188 -189 "Kern Pairs-1" 160 -199 "Kern Pairs-1" 138 -105 "Kern Pairs-1" 162 -126 "Kern Pairs-1" 161 -189 "Kern Pairs-1" 41 -200 "Kern Pairs-1" 13 -224 "Kern Pairs-1"
 EndChar
 
 StartChar: Q
@@ -2554,7 +2554,7 @@ SplineSet
  296 687 296 687 299 675 c 1,63,64
 EndSplineSet
 Validated: 1
-Kerns2: 213 157 "Kern Pairs-1"  211 199 "Kern Pairs-1"  77 94 "Kern Pairs-1"  72 52 "Kern Pairs-1"  38 32 "Kern Pairs-1"  37 64 "Kern Pairs-1"  35 48 "Kern Pairs-1"  34 32 "Kern Pairs-1"  33 48 "Kern Pairs-1"  30 32 "Kern Pairs-1"  29 16 "Kern Pairs-1"  28 16 "Kern Pairs-1"  27 16 "Kern Pairs-1"  26 48 "Kern Pairs-1"  24 48 "Kern Pairs-1"  23 32 "Kern Pairs-1"  209 199 "Kern Pairs-1"  20 32 "Kern Pairs-1"  19 48 "Kern Pairs-1"  18 48 "Kern Pairs-1"  144 31 "Kern Pairs-1"  17 48 "Kern Pairs-1"  16 64 "Kern Pairs-1"  193 63 "Kern Pairs-1"  253 63 "Kern Pairs-1"  15 48 "Kern Pairs-1"  14 48 "Kern Pairs-1" 
+Kerns2: 213 157 "Kern Pairs-1" 211 199 "Kern Pairs-1" 77 94 "Kern Pairs-1" 72 52 "Kern Pairs-1" 38 32 "Kern Pairs-1" 37 64 "Kern Pairs-1" 35 48 "Kern Pairs-1" 34 32 "Kern Pairs-1" 33 48 "Kern Pairs-1" 30 32 "Kern Pairs-1" 29 16 "Kern Pairs-1" 28 16 "Kern Pairs-1" 27 16 "Kern Pairs-1" 26 48 "Kern Pairs-1" 24 48 "Kern Pairs-1" 23 32 "Kern Pairs-1" 209 199 "Kern Pairs-1" 20 32 "Kern Pairs-1" 19 48 "Kern Pairs-1" 18 48 "Kern Pairs-1" 144 31 "Kern Pairs-1" 17 48 "Kern Pairs-1" 16 64 "Kern Pairs-1" 193 63 "Kern Pairs-1" 253 63 "Kern Pairs-1" 15 48 "Kern Pairs-1" 14 48 "Kern Pairs-1"
 EndChar
 
 StartChar: R
@@ -2642,7 +2642,7 @@ SplineSet
  394 1329 394 1329 385 1303 c 1,77,78
 EndSplineSet
 Validated: 1
-Kerns2: 213 178 "Kern Pairs-1"  211 210 "Kern Pairs-1"  77 73 "Kern Pairs-1"  72 42 "Kern Pairs-1"  61 16 "Kern Pairs-1"  33 48 "Kern Pairs-1"  55 16 "Kern Pairs-1"  209 210 "Kern Pairs-1"  145 21 "Kern Pairs-1"  49 16 "Kern Pairs-1"  43 0 "Kern Pairs-1"  42 0 "Kern Pairs-1"  41 16 "Kern Pairs-1"  13 0 "Kern Pairs-1" 
+Kerns2: 213 178 "Kern Pairs-1" 211 210 "Kern Pairs-1" 77 73 "Kern Pairs-1" 72 42 "Kern Pairs-1" 61 16 "Kern Pairs-1" 33 48 "Kern Pairs-1" 55 16 "Kern Pairs-1" 209 210 "Kern Pairs-1" 145 21 "Kern Pairs-1" 49 16 "Kern Pairs-1" 43 0 "Kern Pairs-1" 42 0 "Kern Pairs-1" 41 16 "Kern Pairs-1" 13 0 "Kern Pairs-1"
 EndChar
 
 StartChar: S
@@ -2729,7 +2729,7 @@ SplineSet
  225 0 225 0 144 12 c 24,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 241 "Kern Pairs-1"  211 220 "Kern Pairs-1"  37 48 "Kern Pairs-1"  35 48 "Kern Pairs-1"  34 48 "Kern Pairs-1"  33 48 "Kern Pairs-1"  30 32 "Kern Pairs-1"  57 -32 "Kern Pairs-1"  56 -65 "Kern Pairs-1"  26 48 "Kern Pairs-1"  25 16 "Kern Pairs-1"  24 32 "Kern Pairs-1"  23 16 "Kern Pairs-1"  50 -113 "Kern Pairs-1"  209 189 "Kern Pairs-1"  145 31 "Kern Pairs-1"  20 48 "Kern Pairs-1"  19 16 "Kern Pairs-1"  18 48 "Kern Pairs-1"  144 21 "Kern Pairs-1"  17 48 "Kern Pairs-1"  16 64 "Kern Pairs-1"  15 48 "Kern Pairs-1"  14 48 "Kern Pairs-1"  13 -64 "Kern Pairs-1" 
+Kerns2: 213 241 "Kern Pairs-1" 211 220 "Kern Pairs-1" 37 48 "Kern Pairs-1" 35 48 "Kern Pairs-1" 34 48 "Kern Pairs-1" 33 48 "Kern Pairs-1" 30 32 "Kern Pairs-1" 57 -32 "Kern Pairs-1" 56 -65 "Kern Pairs-1" 26 48 "Kern Pairs-1" 25 16 "Kern Pairs-1" 24 32 "Kern Pairs-1" 23 16 "Kern Pairs-1" 50 -113 "Kern Pairs-1" 209 189 "Kern Pairs-1" 145 31 "Kern Pairs-1" 20 48 "Kern Pairs-1" 19 16 "Kern Pairs-1" 18 48 "Kern Pairs-1" 144 21 "Kern Pairs-1" 17 48 "Kern Pairs-1" 16 64 "Kern Pairs-1" 15 48 "Kern Pairs-1" 14 48 "Kern Pairs-1" 13 -64 "Kern Pairs-1"
 EndChar
 
 StartChar: T
@@ -2770,7 +2770,7 @@ SplineSet
  38 1392 l 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -94 "Kern Pairs-1"  270 -31 "Kern Pairs-1"  213 210 "Kern Pairs-1"  211 136 "Kern Pairs-1"  77 -199 "Kern Pairs-1"  72 -231 "Kern Pairs-1"  66 -292 "Kern Pairs-1"  242 -136 "Kern Pairs-1"  258 -199 "Kern Pairs-1"  65 -243 "Kern Pairs-1"  37 48 "Kern Pairs-1"  64 -227 "Kern Pairs-1"  63 -195 "Kern Pairs-1"  35 32 "Kern Pairs-1"  62 -210 "Kern Pairs-1"  34 48 "Kern Pairs-1"  170 -126 "Kern Pairs-1"  140 -52 "Kern Pairs-1"  172 -126 "Kern Pairs-1"  171 -189 "Kern Pairs-1"  61 -268 "Kern Pairs-1"  33 16 "Kern Pairs-1"  60 -130 "Kern Pairs-1"  59 -243 "Kern Pairs-1"  31 -96 "Kern Pairs-1"  58 -268 "Kern Pairs-1"  30 -32 "Kern Pairs-1"  57 -276 "Kern Pairs-1"  29 -128 "Kern Pairs-1"  56 -292 "Kern Pairs-1"  28 -64 "Kern Pairs-1"  250 -304 "Kern Pairs-1"  261 -115 "Kern Pairs-1"  139 -63 "Kern Pairs-1"  190 -136 "Kern Pairs-1"  262 -199 "Kern Pairs-1"  55 -284 "Kern Pairs-1"  27 -48 "Kern Pairs-1"  54 -243 "Kern Pairs-1"  26 32 "Kern Pairs-1"  53 -243 "Kern Pairs-1"  52 -32 "Kern Pairs-1"  24 16 "Kern Pairs-1"  50 -97 "Kern Pairs-1"  22 -64 "Kern Pairs-1"  209 147 "Kern Pairs-1"  49 -110 "Kern Pairs-1"  21 -32 "Kern Pairs-1"  48 -50 "Kern Pairs-1"  20 16 "Kern Pairs-1"  47 -292 "Kern Pairs-1"  19 -112 "Kern Pairs-1"  46 -211 "Kern Pairs-1"  18 32 "Kern Pairs-1"  164 -63 "Kern Pairs-1"  165 -115 "Kern Pairs-1"  45 -300 "Kern Pairs-1"  17 32 "Kern Pairs-1"  44 -260 "Kern Pairs-1"  16 32 "Kern Pairs-1"  193 -126 "Kern Pairs-1"  253 -252 "Kern Pairs-1"  43 -276 "Kern Pairs-1"  15 -80 "Kern Pairs-1"  42 -146 "Kern Pairs-1"  14 16 "Kern Pairs-1"  247 -304 "Kern Pairs-1"  188 -263 "Kern Pairs-1"  160 -157 "Kern Pairs-1"  138 -147 "Kern Pairs-1"  162 -241 "Kern Pairs-1"  161 -283 "Kern Pairs-1"  41 -300 "Kern Pairs-1"  13 -240 "Kern Pairs-1" 
+Kerns2: 271 -94 "Kern Pairs-1" 270 -31 "Kern Pairs-1" 213 210 "Kern Pairs-1" 211 136 "Kern Pairs-1" 77 -199 "Kern Pairs-1" 72 -231 "Kern Pairs-1" 66 -292 "Kern Pairs-1" 242 -136 "Kern Pairs-1" 258 -199 "Kern Pairs-1" 65 -243 "Kern Pairs-1" 37 48 "Kern Pairs-1" 64 -227 "Kern Pairs-1" 63 -195 "Kern Pairs-1" 35 32 "Kern Pairs-1" 62 -210 "Kern Pairs-1" 34 48 "Kern Pairs-1" 170 -126 "Kern Pairs-1" 140 -52 "Kern Pairs-1" 172 -126 "Kern Pairs-1" 171 -189 "Kern Pairs-1" 61 -268 "Kern Pairs-1" 33 16 "Kern Pairs-1" 60 -130 "Kern Pairs-1" 59 -243 "Kern Pairs-1" 31 -96 "Kern Pairs-1" 58 -268 "Kern Pairs-1" 30 -32 "Kern Pairs-1" 57 -276 "Kern Pairs-1" 29 -128 "Kern Pairs-1" 56 -292 "Kern Pairs-1" 28 -64 "Kern Pairs-1" 250 -304 "Kern Pairs-1" 261 -115 "Kern Pairs-1" 139 -63 "Kern Pairs-1" 190 -136 "Kern Pairs-1" 262 -199 "Kern Pairs-1" 55 -284 "Kern Pairs-1" 27 -48 "Kern Pairs-1" 54 -243 "Kern Pairs-1" 26 32 "Kern Pairs-1" 53 -243 "Kern Pairs-1" 52 -32 "Kern Pairs-1" 24 16 "Kern Pairs-1" 50 -97 "Kern Pairs-1" 22 -64 "Kern Pairs-1" 209 147 "Kern Pairs-1" 49 -110 "Kern Pairs-1" 21 -32 "Kern Pairs-1" 48 -50 "Kern Pairs-1" 20 16 "Kern Pairs-1" 47 -292 "Kern Pairs-1" 19 -112 "Kern Pairs-1" 46 -211 "Kern Pairs-1" 18 32 "Kern Pairs-1" 164 -63 "Kern Pairs-1" 165 -115 "Kern Pairs-1" 45 -300 "Kern Pairs-1" 17 32 "Kern Pairs-1" 44 -260 "Kern Pairs-1" 16 32 "Kern Pairs-1" 193 -126 "Kern Pairs-1" 253 -252 "Kern Pairs-1" 43 -276 "Kern Pairs-1" 15 -80 "Kern Pairs-1" 42 -146 "Kern Pairs-1" 14 16 "Kern Pairs-1" 247 -304 "Kern Pairs-1" 188 -263 "Kern Pairs-1" 160 -157 "Kern Pairs-1" 138 -147 "Kern Pairs-1" 162 -241 "Kern Pairs-1" 161 -283 "Kern Pairs-1" 41 -300 "Kern Pairs-1" 13 -240 "Kern Pairs-1"
 EndChar
 
 StartChar: U
@@ -2823,7 +2823,7 @@ SplineSet
  26 276 26 276 26 327 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 262 "Kern Pairs-1"  211 231 "Kern Pairs-1"  72 -63 "Kern Pairs-1"  37 48 "Kern Pairs-1"  35 80 "Kern Pairs-1"  34 97 "Kern Pairs-1"  33 48 "Kern Pairs-1"  32 16 "Kern Pairs-1"  57 -81 "Kern Pairs-1"  29 32 "Kern Pairs-1"  56 -81 "Kern Pairs-1"  55 -48 "Kern Pairs-1"  27 48 "Kern Pairs-1"  26 48 "Kern Pairs-1"  25 48 "Kern Pairs-1"  24 48 "Kern Pairs-1"  23 32 "Kern Pairs-1"  50 -97 "Kern Pairs-1"  22 -48 "Kern Pairs-1"  209 199 "Kern Pairs-1"  145 52 "Kern Pairs-1"  21 -16 "Kern Pairs-1"  48 32 "Kern Pairs-1"  20 48 "Kern Pairs-1"  19 32 "Kern Pairs-1"  18 48 "Kern Pairs-1"  144 31 "Kern Pairs-1"  17 65 "Kern Pairs-1"  16 81 "Kern Pairs-1"  15 48 "Kern Pairs-1"  14 48 "Kern Pairs-1"  41 -65 "Kern Pairs-1"  13 -113 "Kern Pairs-1" 
+Kerns2: 213 262 "Kern Pairs-1" 211 231 "Kern Pairs-1" 72 -63 "Kern Pairs-1" 37 48 "Kern Pairs-1" 35 80 "Kern Pairs-1" 34 97 "Kern Pairs-1" 33 48 "Kern Pairs-1" 32 16 "Kern Pairs-1" 57 -81 "Kern Pairs-1" 29 32 "Kern Pairs-1" 56 -81 "Kern Pairs-1" 55 -48 "Kern Pairs-1" 27 48 "Kern Pairs-1" 26 48 "Kern Pairs-1" 25 48 "Kern Pairs-1" 24 48 "Kern Pairs-1" 23 32 "Kern Pairs-1" 50 -97 "Kern Pairs-1" 22 -48 "Kern Pairs-1" 209 199 "Kern Pairs-1" 145 52 "Kern Pairs-1" 21 -16 "Kern Pairs-1" 48 32 "Kern Pairs-1" 20 48 "Kern Pairs-1" 19 32 "Kern Pairs-1" 18 48 "Kern Pairs-1" 144 31 "Kern Pairs-1" 17 65 "Kern Pairs-1" 16 81 "Kern Pairs-1" 15 48 "Kern Pairs-1" 14 48 "Kern Pairs-1" 41 -65 "Kern Pairs-1" 13 -113 "Kern Pairs-1"
 EndChar
 
 StartChar: V
@@ -2911,7 +2911,7 @@ SplineSet
  833 1466 833 1466 836 1472 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -42 "Kern Pairs-1"  213 231 "Kern Pairs-1"  211 220 "Kern Pairs-1"  77 -63 "Kern Pairs-1"  72 -147 "Kern Pairs-1"  66 -113 "Kern Pairs-1"  38 -16 "Kern Pairs-1"  65 -81 "Kern Pairs-1"  37 48 "Kern Pairs-1"  64 -97 "Kern Pairs-1"  63 -81 "Kern Pairs-1"  35 48 "Kern Pairs-1"  62 -48 "Kern Pairs-1"  34 48 "Kern Pairs-1"  170 -42 "Kern Pairs-1"  171 -21 "Kern Pairs-1"  61 -100 "Kern Pairs-1"  33 48 "Kern Pairs-1"  59 -97 "Kern Pairs-1"  58 -65 "Kern Pairs-1"  57 -146 "Kern Pairs-1"  56 -130 "Kern Pairs-1"  55 -150 "Kern Pairs-1"  54 -81 "Kern Pairs-1"  26 32 "Kern Pairs-1"  53 -81 "Kern Pairs-1"  24 32 "Kern Pairs-1"  50 -113 "Kern Pairs-1"  22 -48 "Kern Pairs-1"  209 178 "Kern Pairs-1"  145 21 "Kern Pairs-1"  49 -32 "Kern Pairs-1"  48 16 "Kern Pairs-1"  47 -195 "Kern Pairs-1"  19 -65 "Kern Pairs-1"  46 -32 "Kern Pairs-1"  18 48 "Kern Pairs-1"  45 -100 "Kern Pairs-1"  17 48 "Kern Pairs-1"  44 -113 "Kern Pairs-1"  16 65 "Kern Pairs-1"  193 -42 "Kern Pairs-1"  253 -84 "Kern Pairs-1"  43 -113 "Kern Pairs-1"  42 -65 "Kern Pairs-1"  14 48 "Kern Pairs-1"  247 -189 "Kern Pairs-1"  188 -136 "Kern Pairs-1"  160 -115 "Kern Pairs-1"  138 -84 "Kern Pairs-1"  162 -126 "Kern Pairs-1"  161 -126 "Kern Pairs-1"  41 -166 "Kern Pairs-1"  13 -208 "Kern Pairs-1" 
+Kerns2: 271 -42 "Kern Pairs-1" 213 231 "Kern Pairs-1" 211 220 "Kern Pairs-1" 77 -63 "Kern Pairs-1" 72 -147 "Kern Pairs-1" 66 -113 "Kern Pairs-1" 38 -16 "Kern Pairs-1" 65 -81 "Kern Pairs-1" 37 48 "Kern Pairs-1" 64 -97 "Kern Pairs-1" 63 -81 "Kern Pairs-1" 35 48 "Kern Pairs-1" 62 -48 "Kern Pairs-1" 34 48 "Kern Pairs-1" 170 -42 "Kern Pairs-1" 171 -21 "Kern Pairs-1" 61 -100 "Kern Pairs-1" 33 48 "Kern Pairs-1" 59 -97 "Kern Pairs-1" 58 -65 "Kern Pairs-1" 57 -146 "Kern Pairs-1" 56 -130 "Kern Pairs-1" 55 -150 "Kern Pairs-1" 54 -81 "Kern Pairs-1" 26 32 "Kern Pairs-1" 53 -81 "Kern Pairs-1" 24 32 "Kern Pairs-1" 50 -113 "Kern Pairs-1" 22 -48 "Kern Pairs-1" 209 178 "Kern Pairs-1" 145 21 "Kern Pairs-1" 49 -32 "Kern Pairs-1" 48 16 "Kern Pairs-1" 47 -195 "Kern Pairs-1" 19 -65 "Kern Pairs-1" 46 -32 "Kern Pairs-1" 18 48 "Kern Pairs-1" 45 -100 "Kern Pairs-1" 17 48 "Kern Pairs-1" 44 -113 "Kern Pairs-1" 16 65 "Kern Pairs-1" 193 -42 "Kern Pairs-1" 253 -84 "Kern Pairs-1" 43 -113 "Kern Pairs-1" 42 -65 "Kern Pairs-1" 14 48 "Kern Pairs-1" 247 -189 "Kern Pairs-1" 188 -136 "Kern Pairs-1" 160 -115 "Kern Pairs-1" 138 -84 "Kern Pairs-1" 162 -126 "Kern Pairs-1" 161 -126 "Kern Pairs-1" 41 -166 "Kern Pairs-1" 13 -208 "Kern Pairs-1"
 EndChar
 
 StartChar: W
@@ -3003,7 +3003,7 @@ SplineSet
  292 1404 292 1404 304 1256 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -52 "Kern Pairs-1"  270 -73 "Kern Pairs-1"  213 220 "Kern Pairs-1"  211 199 "Kern Pairs-1"  77 -115 "Kern Pairs-1"  72 -178 "Kern Pairs-1"  66 -146 "Kern Pairs-1"  65 -81 "Kern Pairs-1"  37 32 "Kern Pairs-1"  64 -97 "Kern Pairs-1"  63 -65 "Kern Pairs-1"  35 32 "Kern Pairs-1"  62 -65 "Kern Pairs-1"  34 32 "Kern Pairs-1"  170 -63 "Kern Pairs-1"  171 -42 "Kern Pairs-1"  61 -150 "Kern Pairs-1"  60 -48 "Kern Pairs-1"  59 -146 "Kern Pairs-1"  31 -48 "Kern Pairs-1"  58 -125 "Kern Pairs-1"  57 -195 "Kern Pairs-1"  56 -211 "Kern Pairs-1"  55 -200 "Kern Pairs-1"  27 -48 "Kern Pairs-1"  54 -130 "Kern Pairs-1"  26 48 "Kern Pairs-1"  53 -113 "Kern Pairs-1"  24 32 "Kern Pairs-1"  50 -113 "Kern Pairs-1"  22 -81 "Kern Pairs-1"  209 147 "Kern Pairs-1"  145 21 "Kern Pairs-1"  49 -66 "Kern Pairs-1"  47 -243 "Kern Pairs-1"  19 -97 "Kern Pairs-1"  46 -97 "Kern Pairs-1"  45 -150 "Kern Pairs-1"  44 -162 "Kern Pairs-1"  193 -52 "Kern Pairs-1"  253 -105 "Kern Pairs-1"  43 -178 "Kern Pairs-1"  42 -130 "Kern Pairs-1"  247 -252 "Kern Pairs-1"  188 -157 "Kern Pairs-1"  160 -136 "Kern Pairs-1"  138 -84 "Kern Pairs-1"  162 -94 "Kern Pairs-1"  161 -126 "Kern Pairs-1"  41 -200 "Kern Pairs-1"  13 -240 "Kern Pairs-1" 
+Kerns2: 271 -52 "Kern Pairs-1" 270 -73 "Kern Pairs-1" 213 220 "Kern Pairs-1" 211 199 "Kern Pairs-1" 77 -115 "Kern Pairs-1" 72 -178 "Kern Pairs-1" 66 -146 "Kern Pairs-1" 65 -81 "Kern Pairs-1" 37 32 "Kern Pairs-1" 64 -97 "Kern Pairs-1" 63 -65 "Kern Pairs-1" 35 32 "Kern Pairs-1" 62 -65 "Kern Pairs-1" 34 32 "Kern Pairs-1" 170 -63 "Kern Pairs-1" 171 -42 "Kern Pairs-1" 61 -150 "Kern Pairs-1" 60 -48 "Kern Pairs-1" 59 -146 "Kern Pairs-1" 31 -48 "Kern Pairs-1" 58 -125 "Kern Pairs-1" 57 -195 "Kern Pairs-1" 56 -211 "Kern Pairs-1" 55 -200 "Kern Pairs-1" 27 -48 "Kern Pairs-1" 54 -130 "Kern Pairs-1" 26 48 "Kern Pairs-1" 53 -113 "Kern Pairs-1" 24 32 "Kern Pairs-1" 50 -113 "Kern Pairs-1" 22 -81 "Kern Pairs-1" 209 147 "Kern Pairs-1" 145 21 "Kern Pairs-1" 49 -66 "Kern Pairs-1" 47 -243 "Kern Pairs-1" 19 -97 "Kern Pairs-1" 46 -97 "Kern Pairs-1" 45 -150 "Kern Pairs-1" 44 -162 "Kern Pairs-1" 193 -52 "Kern Pairs-1" 253 -105 "Kern Pairs-1" 43 -178 "Kern Pairs-1" 42 -130 "Kern Pairs-1" 247 -252 "Kern Pairs-1" 188 -157 "Kern Pairs-1" 160 -136 "Kern Pairs-1" 138 -84 "Kern Pairs-1" 162 -94 "Kern Pairs-1" 161 -126 "Kern Pairs-1" 41 -200 "Kern Pairs-1" 13 -240 "Kern Pairs-1"
 EndChar
 
 StartChar: X
@@ -3090,7 +3090,7 @@ SplineSet
  1002 1279 1002 1279 1002 1275 c 128,-1,1
 EndSplineSet
 Validated: 1
-Kerns2: 213 168 "Kern Pairs-1"  211 220 "Kern Pairs-1"  77 63 "Kern Pairs-1"  72 94 "Kern Pairs-1"  33 32 "Kern Pairs-1"  26 32 "Kern Pairs-1"  25 16 "Kern Pairs-1"  24 32 "Kern Pairs-1"  209 157 "Kern Pairs-1"  20 32 "Kern Pairs-1"  18 32 "Kern Pairs-1"  17 32 "Kern Pairs-1"  16 32 "Kern Pairs-1"  14 48 "Kern Pairs-1" 
+Kerns2: 213 168 "Kern Pairs-1" 211 220 "Kern Pairs-1" 77 63 "Kern Pairs-1" 72 94 "Kern Pairs-1" 33 32 "Kern Pairs-1" 26 32 "Kern Pairs-1" 25 16 "Kern Pairs-1" 24 32 "Kern Pairs-1" 209 157 "Kern Pairs-1" 20 32 "Kern Pairs-1" 18 32 "Kern Pairs-1" 17 32 "Kern Pairs-1" 16 32 "Kern Pairs-1" 14 48 "Kern Pairs-1"
 EndChar
 
 StartChar: Y
@@ -3167,7 +3167,7 @@ SplineSet
  501 1077 501 1077 512 1096 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -42 "Kern Pairs-1"  213 241 "Kern Pairs-1"  211 199 "Kern Pairs-1"  77 -157 "Kern Pairs-1"  72 -200 "Kern Pairs-1"  66 -179 "Kern Pairs-1"  38 -32 "Kern Pairs-1"  37 48 "Kern Pairs-1"  35 32 "Kern Pairs-1"  34 48 "Kern Pairs-1"  170 -84 "Kern Pairs-1"  171 -84 "Kern Pairs-1"  61 -150 "Kern Pairs-1"  33 48 "Kern Pairs-1"  59 -162 "Kern Pairs-1"  31 -65 "Kern Pairs-1"  58 -113 "Kern Pairs-1"  30 16 "Kern Pairs-1"  57 -227 "Kern Pairs-1"  29 -65 "Kern Pairs-1"  56 -195 "Kern Pairs-1"  250 -210 "Kern Pairs-1"  261 -94 "Kern Pairs-1"  190 -21 "Kern Pairs-1"  262 -73 "Kern Pairs-1"  55 -200 "Kern Pairs-1"  27 -48 "Kern Pairs-1"  54 -162 "Kern Pairs-1"  26 32 "Kern Pairs-1"  53 -145 "Kern Pairs-1"  24 32 "Kern Pairs-1"  50 -146 "Kern Pairs-1"  22 -65 "Kern Pairs-1"  209 189 "Kern Pairs-1"  145 21 "Kern Pairs-1"  49 -48 "Kern Pairs-1"  21 -48 "Kern Pairs-1"  20 32 "Kern Pairs-1"  47 -260 "Kern Pairs-1"  19 -97 "Kern Pairs-1"  46 -81 "Kern Pairs-1"  18 32 "Kern Pairs-1"  164 -42 "Kern Pairs-1"  144 31 "Kern Pairs-1"  165 -73 "Kern Pairs-1"  45 -150 "Kern Pairs-1"  17 32 "Kern Pairs-1"  44 -226 "Kern Pairs-1"  16 48 "Kern Pairs-1"  193 -63 "Kern Pairs-1"  253 -94 "Kern Pairs-1"  43 -195 "Kern Pairs-1"  42 -129 "Kern Pairs-1"  14 48 "Kern Pairs-1"  247 -241 "Kern Pairs-1"  160 -168 "Kern Pairs-1"  138 -115 "Kern Pairs-1"  162 -147 "Kern Pairs-1"  161 -105 "Kern Pairs-1"  41 -232 "Kern Pairs-1"  13 -240 "Kern Pairs-1" 
+Kerns2: 271 -42 "Kern Pairs-1" 213 241 "Kern Pairs-1" 211 199 "Kern Pairs-1" 77 -157 "Kern Pairs-1" 72 -200 "Kern Pairs-1" 66 -179 "Kern Pairs-1" 38 -32 "Kern Pairs-1" 37 48 "Kern Pairs-1" 35 32 "Kern Pairs-1" 34 48 "Kern Pairs-1" 170 -84 "Kern Pairs-1" 171 -84 "Kern Pairs-1" 61 -150 "Kern Pairs-1" 33 48 "Kern Pairs-1" 59 -162 "Kern Pairs-1" 31 -65 "Kern Pairs-1" 58 -113 "Kern Pairs-1" 30 16 "Kern Pairs-1" 57 -227 "Kern Pairs-1" 29 -65 "Kern Pairs-1" 56 -195 "Kern Pairs-1" 250 -210 "Kern Pairs-1" 261 -94 "Kern Pairs-1" 190 -21 "Kern Pairs-1" 262 -73 "Kern Pairs-1" 55 -200 "Kern Pairs-1" 27 -48 "Kern Pairs-1" 54 -162 "Kern Pairs-1" 26 32 "Kern Pairs-1" 53 -145 "Kern Pairs-1" 24 32 "Kern Pairs-1" 50 -146 "Kern Pairs-1" 22 -65 "Kern Pairs-1" 209 189 "Kern Pairs-1" 145 21 "Kern Pairs-1" 49 -48 "Kern Pairs-1" 21 -48 "Kern Pairs-1" 20 32 "Kern Pairs-1" 47 -260 "Kern Pairs-1" 19 -97 "Kern Pairs-1" 46 -81 "Kern Pairs-1" 18 32 "Kern Pairs-1" 164 -42 "Kern Pairs-1" 144 31 "Kern Pairs-1" 165 -73 "Kern Pairs-1" 45 -150 "Kern Pairs-1" 17 32 "Kern Pairs-1" 44 -226 "Kern Pairs-1" 16 48 "Kern Pairs-1" 193 -63 "Kern Pairs-1" 253 -94 "Kern Pairs-1" 43 -195 "Kern Pairs-1" 42 -129 "Kern Pairs-1" 14 48 "Kern Pairs-1" 247 -241 "Kern Pairs-1" 160 -168 "Kern Pairs-1" 138 -115 "Kern Pairs-1" 162 -147 "Kern Pairs-1" 161 -105 "Kern Pairs-1" 41 -232 "Kern Pairs-1" 13 -240 "Kern Pairs-1"
 EndChar
 
 StartChar: Z
@@ -3260,7 +3260,7 @@ SplineSet
  37 66 37 66 37 78 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 -52 "Kern Pairs-1"  213 241 "Kern Pairs-1"  211 210 "Kern Pairs-1"  66 -97 "Kern Pairs-1"  65 -146 "Kern Pairs-1"  37 48 "Kern Pairs-1"  64 -81 "Kern Pairs-1"  63 -65 "Kern Pairs-1"  35 48 "Kern Pairs-1"  62 -32 "Kern Pairs-1"  34 48 "Kern Pairs-1"  61 -48 "Kern Pairs-1"  33 48 "Kern Pairs-1"  60 -48 "Kern Pairs-1"  59 -65 "Kern Pairs-1"  58 -65 "Kern Pairs-1"  57 -97 "Kern Pairs-1"  29 -64 "Kern Pairs-1"  56 -113 "Kern Pairs-1"  55 -97 "Kern Pairs-1"  27 -32 "Kern Pairs-1"  54 -65 "Kern Pairs-1"  26 48 "Kern Pairs-1"  53 -97 "Kern Pairs-1"  24 32 "Kern Pairs-1"  23 32 "Kern Pairs-1"  50 -113 "Kern Pairs-1"  22 -48 "Kern Pairs-1"  209 189 "Kern Pairs-1"  145 42 "Kern Pairs-1"  49 -16 "Kern Pairs-1"  21 -32 "Kern Pairs-1"  20 32 "Kern Pairs-1"  47 -97 "Kern Pairs-1"  19 -65 "Kern Pairs-1"  46 -113 "Kern Pairs-1"  18 48 "Kern Pairs-1"  144 21 "Kern Pairs-1"  45 -97 "Kern Pairs-1"  17 48 "Kern Pairs-1"  44 -81 "Kern Pairs-1"  16 65 "Kern Pairs-1"  253 -31 "Kern Pairs-1"  43 -97 "Kern Pairs-1"  15 -48 "Kern Pairs-1"  42 -97 "Kern Pairs-1"  14 48 "Kern Pairs-1"  41 -80 "Kern Pairs-1"  13 -97 "Kern Pairs-1" 
+Kerns2: 271 -52 "Kern Pairs-1" 213 241 "Kern Pairs-1" 211 210 "Kern Pairs-1" 66 -97 "Kern Pairs-1" 65 -146 "Kern Pairs-1" 37 48 "Kern Pairs-1" 64 -81 "Kern Pairs-1" 63 -65 "Kern Pairs-1" 35 48 "Kern Pairs-1" 62 -32 "Kern Pairs-1" 34 48 "Kern Pairs-1" 61 -48 "Kern Pairs-1" 33 48 "Kern Pairs-1" 60 -48 "Kern Pairs-1" 59 -65 "Kern Pairs-1" 58 -65 "Kern Pairs-1" 57 -97 "Kern Pairs-1" 29 -64 "Kern Pairs-1" 56 -113 "Kern Pairs-1" 55 -97 "Kern Pairs-1" 27 -32 "Kern Pairs-1" 54 -65 "Kern Pairs-1" 26 48 "Kern Pairs-1" 53 -97 "Kern Pairs-1" 24 32 "Kern Pairs-1" 23 32 "Kern Pairs-1" 50 -113 "Kern Pairs-1" 22 -48 "Kern Pairs-1" 209 189 "Kern Pairs-1" 145 42 "Kern Pairs-1" 49 -16 "Kern Pairs-1" 21 -32 "Kern Pairs-1" 20 32 "Kern Pairs-1" 47 -97 "Kern Pairs-1" 19 -65 "Kern Pairs-1" 46 -113 "Kern Pairs-1" 18 48 "Kern Pairs-1" 144 21 "Kern Pairs-1" 45 -97 "Kern Pairs-1" 17 48 "Kern Pairs-1" 44 -81 "Kern Pairs-1" 16 65 "Kern Pairs-1" 253 -31 "Kern Pairs-1" 43 -97 "Kern Pairs-1" 15 -48 "Kern Pairs-1" 42 -97 "Kern Pairs-1" 14 48 "Kern Pairs-1" 41 -80 "Kern Pairs-1" 13 -97 "Kern Pairs-1"
 EndChar
 
 StartChar: asciicircum
@@ -3410,7 +3410,7 @@ SplineSet
  631 616 631 616 656 772 c 1,85,86
 EndSplineSet
 Validated: 1
-Kerns2: 65 32 "Kern Pairs-1"  63 48 "Kern Pairs-1"  62 48 "Kern Pairs-1"  60 0 "Kern Pairs-1"  53 0 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -75 "Kern Pairs-1"  48 32 "Kern Pairs-1"  46 16 "Kern Pairs-1"  44 -32 "Kern Pairs-1"  41 -32 "Kern Pairs-1" 
+Kerns2: 65 32 "Kern Pairs-1" 63 48 "Kern Pairs-1" 62 48 "Kern Pairs-1" 60 0 "Kern Pairs-1" 53 0 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -75 "Kern Pairs-1" 48 32 "Kern Pairs-1" 46 16 "Kern Pairs-1" 44 -32 "Kern Pairs-1" 41 -32 "Kern Pairs-1"
 EndChar
 
 StartChar: b
@@ -3530,7 +3530,7 @@ SplineSet
  370 572 l 1,103,104
 EndSplineSet
 Validated: 1
-Kerns2: 270 -115 "Kern Pairs-1"  77 -94 "Kern Pairs-1"  72 -115 "Kern Pairs-1"  66 -16 "Kern Pairs-1"  65 48 "Kern Pairs-1"  63 48 "Kern Pairs-1"  62 48 "Kern Pairs-1"  58 -16 "Kern Pairs-1"  54 16 "Kern Pairs-1"  53 16 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 48 "Kern Pairs-1"  50 -75 "Kern Pairs-1"  145 -52 "Kern Pairs-1"  48 32 "Kern Pairs-1"  41 -97 "Kern Pairs-1" 
+Kerns2: 270 -115 "Kern Pairs-1" 77 -94 "Kern Pairs-1" 72 -115 "Kern Pairs-1" 66 -16 "Kern Pairs-1" 65 48 "Kern Pairs-1" 63 48 "Kern Pairs-1" 62 48 "Kern Pairs-1" 58 -16 "Kern Pairs-1" 54 16 "Kern Pairs-1" 53 16 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 48 "Kern Pairs-1" 50 -75 "Kern Pairs-1" 145 -52 "Kern Pairs-1" 48 32 "Kern Pairs-1" 41 -97 "Kern Pairs-1"
 EndChar
 
 StartChar: c
@@ -3600,7 +3600,7 @@ SplineSet
  242 -7 242 -7 198 -7 c 0,0,-1
 EndSplineSet
 Validated: 1
-Kerns2: 65 32 "Kern Pairs-1"  63 48 "Kern Pairs-1"  62 48 "Kern Pairs-1"  61 32 "Kern Pairs-1"  51 25 "Kern Pairs-1"  49 32 "Kern Pairs-1"  41 -16 "Kern Pairs-1" 
+Kerns2: 65 32 "Kern Pairs-1" 63 48 "Kern Pairs-1" 62 48 "Kern Pairs-1" 61 32 "Kern Pairs-1" 51 25 "Kern Pairs-1" 49 32 "Kern Pairs-1" 41 -16 "Kern Pairs-1"
 EndChar
 
 StartChar: d
@@ -3686,7 +3686,7 @@ SplineSet
  239 316 239 316 255 291 c 0,80,81
 EndSplineSet
 Validated: 1
-Kerns2: 213 231 "Kern Pairs-1"  211 252 "Kern Pairs-1"  65 48 "Kern Pairs-1"  63 64 "Kern Pairs-1"  62 64 "Kern Pairs-1"  54 16 "Kern Pairs-1"  53 16 "Kern Pairs-1"  52 64 "Kern Pairs-1"  51 64 "Kern Pairs-1"  209 199 "Kern Pairs-1"  145 52 "Kern Pairs-1"  49 64 "Kern Pairs-1"  48 48 "Kern Pairs-1"  144 21 "Kern Pairs-1"  45 60 "Kern Pairs-1"  44 -32 "Kern Pairs-1"  43 16 "Kern Pairs-1"  42 16 "Kern Pairs-1" 
+Kerns2: 213 231 "Kern Pairs-1" 211 252 "Kern Pairs-1" 65 48 "Kern Pairs-1" 63 64 "Kern Pairs-1" 62 64 "Kern Pairs-1" 54 16 "Kern Pairs-1" 53 16 "Kern Pairs-1" 52 64 "Kern Pairs-1" 51 64 "Kern Pairs-1" 209 199 "Kern Pairs-1" 145 52 "Kern Pairs-1" 49 64 "Kern Pairs-1" 48 48 "Kern Pairs-1" 144 21 "Kern Pairs-1" 45 60 "Kern Pairs-1" 44 -32 "Kern Pairs-1" 43 16 "Kern Pairs-1" 42 16 "Kern Pairs-1"
 EndChar
 
 StartChar: e
@@ -3750,7 +3750,7 @@ SplineSet
  451 924 451 924 393 903 c 0,68,69
 EndSplineSet
 Validated: 1
-Kerns2: 52 32 "Kern Pairs-1"  51 48 "Kern Pairs-1"  50 -97 "Kern Pairs-1"  48 32 "Kern Pairs-1" 
+Kerns2: 52 32 "Kern Pairs-1" 51 48 "Kern Pairs-1" 50 -97 "Kern Pairs-1" 48 32 "Kern Pairs-1"
 EndChar
 
 StartChar: f
@@ -3834,7 +3834,7 @@ SplineSet
  202 7 202 7 195 36 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 270 -52 "Kern Pairs-1"  213 199 "Kern Pairs-1"  211 262 "Kern Pairs-1"  77 -189 "Kern Pairs-1"  72 -189 "Kern Pairs-1"  66 -81 "Kern Pairs-1"  62 -16 "Kern Pairs-1"  61 -80 "Kern Pairs-1"  59 -113 "Kern Pairs-1"  58 -64 "Kern Pairs-1"  57 -211 "Kern Pairs-1"  56 -128 "Kern Pairs-1"  250 -147 "Kern Pairs-1"  261 -84 "Kern Pairs-1"  262 -84 "Kern Pairs-1"  55 -208 "Kern Pairs-1"  54 -65 "Kern Pairs-1"  50 -75 "Kern Pairs-1"  209 210 "Kern Pairs-1"  145 31 "Kern Pairs-1"  49 -48 "Kern Pairs-1"  47 -200 "Kern Pairs-1"  164 -52 "Kern Pairs-1"  144 21 "Kern Pairs-1"  165 -31 "Kern Pairs-1"  45 -60 "Kern Pairs-1"  44 -181 "Kern Pairs-1"  193 -10 "Kern Pairs-1"  253 -94 "Kern Pairs-1"  43 -192 "Kern Pairs-1"  42 -129 "Kern Pairs-1"  247 -210 "Kern Pairs-1"  188 -84 "Kern Pairs-1"  160 -136 "Kern Pairs-1"  161 -137 "Kern Pairs-1"  41 -175 "Kern Pairs-1" 
+Kerns2: 270 -52 "Kern Pairs-1" 213 199 "Kern Pairs-1" 211 262 "Kern Pairs-1" 77 -189 "Kern Pairs-1" 72 -189 "Kern Pairs-1" 66 -81 "Kern Pairs-1" 62 -16 "Kern Pairs-1" 61 -80 "Kern Pairs-1" 59 -113 "Kern Pairs-1" 58 -64 "Kern Pairs-1" 57 -211 "Kern Pairs-1" 56 -128 "Kern Pairs-1" 250 -147 "Kern Pairs-1" 261 -84 "Kern Pairs-1" 262 -84 "Kern Pairs-1" 55 -208 "Kern Pairs-1" 54 -65 "Kern Pairs-1" 50 -75 "Kern Pairs-1" 209 210 "Kern Pairs-1" 145 31 "Kern Pairs-1" 49 -48 "Kern Pairs-1" 47 -200 "Kern Pairs-1" 164 -52 "Kern Pairs-1" 144 21 "Kern Pairs-1" 165 -31 "Kern Pairs-1" 45 -60 "Kern Pairs-1" 44 -181 "Kern Pairs-1" 193 -10 "Kern Pairs-1" 253 -94 "Kern Pairs-1" 43 -192 "Kern Pairs-1" 42 -129 "Kern Pairs-1" 247 -210 "Kern Pairs-1" 188 -84 "Kern Pairs-1" 160 -136 "Kern Pairs-1" 161 -137 "Kern Pairs-1" 41 -175 "Kern Pairs-1"
 EndChar
 
 StartChar: g
@@ -3915,7 +3915,7 @@ SplineSet
  464 338 464 338 561 438 c 9,73,74
 EndSplineSet
 Validated: 1
-Kerns2: 77 63 "Kern Pairs-1"  72 84 "Kern Pairs-1"  65 32 "Kern Pairs-1"  64 32 "Kern Pairs-1"  63 32 "Kern Pairs-1"  62 32 "Kern Pairs-1"  61 32 "Kern Pairs-1"  59 16 "Kern Pairs-1"  58 80 "Kern Pairs-1"  54 48 "Kern Pairs-1"  53 32 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  49 32 "Kern Pairs-1"  48 48 "Kern Pairs-1"  44 25 "Kern Pairs-1"  43 32 "Kern Pairs-1" 
+Kerns2: 77 63 "Kern Pairs-1" 72 84 "Kern Pairs-1" 65 32 "Kern Pairs-1" 64 32 "Kern Pairs-1" 63 32 "Kern Pairs-1" 62 32 "Kern Pairs-1" 61 32 "Kern Pairs-1" 59 16 "Kern Pairs-1" 58 80 "Kern Pairs-1" 54 48 "Kern Pairs-1" 53 32 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 49 32 "Kern Pairs-1" 48 48 "Kern Pairs-1" 44 25 "Kern Pairs-1" 43 32 "Kern Pairs-1"
 EndChar
 
 StartChar: h
@@ -3993,7 +3993,7 @@ SplineSet
  512 841 512 841 440 782 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 77 21 "Kern Pairs-1"  72 21 "Kern Pairs-1"  50 -50 "Kern Pairs-1" 
+Kerns2: 77 21 "Kern Pairs-1" 72 21 "Kern Pairs-1" 50 -50 "Kern Pairs-1"
 EndChar
 
 StartChar: i
@@ -4056,7 +4056,7 @@ SplineSet
  180 1364 180 1364 180 1413 c 0,31,32
 EndSplineSet
 Validated: 1
-Kerns2: 213 231 "Kern Pairs-1"  211 220 "Kern Pairs-1"  66 -40 "Kern Pairs-1"  140 21 "Kern Pairs-1"  56 -49 "Kern Pairs-1"  139 21 "Kern Pairs-1"  55 -40 "Kern Pairs-1"  50 -65 "Kern Pairs-1"  209 189 "Kern Pairs-1"  145 84 "Kern Pairs-1"  47 -48 "Kern Pairs-1"  46 -40 "Kern Pairs-1"  144 63 "Kern Pairs-1"  45 -32 "Kern Pairs-1"  44 -49 "Kern Pairs-1"  43 -32 "Kern Pairs-1"  42 -32 "Kern Pairs-1"  41 -64 "Kern Pairs-1" 
+Kerns2: 213 231 "Kern Pairs-1" 211 220 "Kern Pairs-1" 66 -40 "Kern Pairs-1" 140 21 "Kern Pairs-1" 56 -49 "Kern Pairs-1" 139 21 "Kern Pairs-1" 55 -40 "Kern Pairs-1" 50 -65 "Kern Pairs-1" 209 189 "Kern Pairs-1" 145 84 "Kern Pairs-1" 47 -48 "Kern Pairs-1" 46 -40 "Kern Pairs-1" 144 63 "Kern Pairs-1" 45 -32 "Kern Pairs-1" 44 -49 "Kern Pairs-1" 43 -32 "Kern Pairs-1" 42 -32 "Kern Pairs-1" 41 -64 "Kern Pairs-1"
 EndChar
 
 StartChar: j
@@ -4140,7 +4140,7 @@ SplineSet
  256 1377 256 1377 256 1416 c 0,81,82
 EndSplineSet
 Validated: 1
-Kerns2: 213 199 "Kern Pairs-1"  211 157 "Kern Pairs-1"  62 32 "Kern Pairs-1"  140 20 "Kern Pairs-1"  60 -16 "Kern Pairs-1"  59 -48 "Kern Pairs-1"  56 -65 "Kern Pairs-1"  139 10 "Kern Pairs-1"  55 -48 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  209 168 "Kern Pairs-1"  145 31 "Kern Pairs-1"  48 32 "Kern Pairs-1"  47 -97 "Kern Pairs-1"  144 21 "Kern Pairs-1"  43 -32 "Kern Pairs-1"  42 -32 "Kern Pairs-1"  41 -48 "Kern Pairs-1" 
+Kerns2: 213 199 "Kern Pairs-1" 211 157 "Kern Pairs-1" 62 32 "Kern Pairs-1" 140 20 "Kern Pairs-1" 60 -16 "Kern Pairs-1" 59 -48 "Kern Pairs-1" 56 -65 "Kern Pairs-1" 139 10 "Kern Pairs-1" 55 -48 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 209 168 "Kern Pairs-1" 145 31 "Kern Pairs-1" 48 32 "Kern Pairs-1" 47 -97 "Kern Pairs-1" 144 21 "Kern Pairs-1" 43 -32 "Kern Pairs-1" 42 -32 "Kern Pairs-1" 41 -48 "Kern Pairs-1"
 EndChar
 
 StartChar: k
@@ -4247,7 +4247,7 @@ SplineSet
  48 111 l 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 271 52 "Kern Pairs-1"  213 252 "Kern Pairs-1"  211 262 "Kern Pairs-1"  77 42 "Kern Pairs-1"  72 31 "Kern Pairs-1"  65 48 "Kern Pairs-1"  63 64 "Kern Pairs-1"  62 64 "Kern Pairs-1"  60 50 "Kern Pairs-1"  58 64 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -16 "Kern Pairs-1"  209 231 "Kern Pairs-1"  145 73 "Kern Pairs-1"  49 32 "Kern Pairs-1"  48 64 "Kern Pairs-1"  144 42 "Kern Pairs-1"  45 20 "Kern Pairs-1"  44 48 "Kern Pairs-1"  253 52 "Kern Pairs-1" 
+Kerns2: 271 52 "Kern Pairs-1" 213 252 "Kern Pairs-1" 211 262 "Kern Pairs-1" 77 42 "Kern Pairs-1" 72 31 "Kern Pairs-1" 65 48 "Kern Pairs-1" 63 64 "Kern Pairs-1" 62 64 "Kern Pairs-1" 60 50 "Kern Pairs-1" 58 64 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -16 "Kern Pairs-1" 209 231 "Kern Pairs-1" 145 73 "Kern Pairs-1" 49 32 "Kern Pairs-1" 48 64 "Kern Pairs-1" 144 42 "Kern Pairs-1" 45 20 "Kern Pairs-1" 44 48 "Kern Pairs-1" 253 52 "Kern Pairs-1"
 EndChar
 
 StartChar: m
@@ -4348,7 +4348,7 @@ SplineSet
  62 506 62 506 62 664 c 0,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 72 10 "Kern Pairs-1"  48 25 "Kern Pairs-1" 
+Kerns2: 72 10 "Kern Pairs-1" 48 25 "Kern Pairs-1"
 EndChar
 
 StartChar: n
@@ -4406,7 +4406,7 @@ SplineSet
  21 71 l 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 60 50 "Kern Pairs-1"  55 16 "Kern Pairs-1" 
+Kerns2: 60 50 "Kern Pairs-1" 55 16 "Kern Pairs-1"
 EndChar
 
 StartChar: o
@@ -4475,7 +4475,7 @@ SplineSet
  283 572 283 572 283 462 c 0,58,59
 EndSplineSet
 Validated: 1
-Kerns2: 270 -42 "Kern Pairs-1"  65 16 "Kern Pairs-1"  63 32 "Kern Pairs-1"  62 32 "Kern Pairs-1"  61 16 "Kern Pairs-1"  60 -16 "Kern Pairs-1"  58 16 "Kern Pairs-1"  54 16 "Kern Pairs-1"  53 32 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -65 "Kern Pairs-1"  48 16 "Kern Pairs-1"  45 16 "Kern Pairs-1"  41 -25 "Kern Pairs-1" 
+Kerns2: 270 -42 "Kern Pairs-1" 65 16 "Kern Pairs-1" 63 32 "Kern Pairs-1" 62 32 "Kern Pairs-1" 61 16 "Kern Pairs-1" 60 -16 "Kern Pairs-1" 58 16 "Kern Pairs-1" 54 16 "Kern Pairs-1" 53 32 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -65 "Kern Pairs-1" 48 16 "Kern Pairs-1" 45 16 "Kern Pairs-1" 41 -25 "Kern Pairs-1"
 EndChar
 
 StartChar: p
@@ -4579,7 +4579,7 @@ SplineSet
  688 811 688 811 678 811 c 0,100,101
 EndSplineSet
 Validated: 33
-Kerns2: 270 -52 "Kern Pairs-1"  72 -31 "Kern Pairs-1"  63 16 "Kern Pairs-1"  62 16 "Kern Pairs-1"  52 16 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -48 "Kern Pairs-1" 
+Kerns2: 270 -52 "Kern Pairs-1" 72 -31 "Kern Pairs-1" 63 16 "Kern Pairs-1" 62 16 "Kern Pairs-1" 52 16 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -48 "Kern Pairs-1"
 EndChar
 
 StartChar: q
@@ -4674,7 +4674,7 @@ SplineSet
  287 550 287 550 287 426 c 0,99,100
 EndSplineSet
 Validated: 1
-Kerns2: 72 105 "Kern Pairs-1"  61 0 "Kern Pairs-1" 
+Kerns2: 72 105 "Kern Pairs-1" 61 0 "Kern Pairs-1"
 EndChar
 
 StartChar: r
@@ -4744,7 +4744,7 @@ SplineSet
  39 7 39 7 32 36 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 270 -178 "Kern Pairs-1"  271 -31 "Kern Pairs-1"  77 -283 "Kern Pairs-1"  72 -294 "Kern Pairs-1"  66 -50 "Kern Pairs-1"  65 0 "Kern Pairs-1"  63 16 "Kern Pairs-1"  62 32 "Kern Pairs-1"  60 -16 "Kern Pairs-1"  59 -60 "Kern Pairs-1"  58 -48 "Kern Pairs-1"  57 -208 "Kern Pairs-1"  56 -112 "Kern Pairs-1"  250 -168 "Kern Pairs-1"  263 -105 "Kern Pairs-1"  221 -94 "Kern Pairs-1"  261 -94 "Kern Pairs-1"  139 -126 "Kern Pairs-1"  190 -73 "Kern Pairs-1"  223 -126 "Kern Pairs-1"  262 -94 "Kern Pairs-1"  55 -176 "Kern Pairs-1"  54 -48 "Kern Pairs-1"  53 -16 "Kern Pairs-1"  52 16 "Kern Pairs-1"  51 16 "Kern Pairs-1"  50 -100 "Kern Pairs-1"  145 -136 "Kern Pairs-1"  49 -64 "Kern Pairs-1"  47 -200 "Kern Pairs-1"  164 -42 "Kern Pairs-1"  45 -75 "Kern Pairs-1"  44 -162 "Kern Pairs-1"  193 -84 "Kern Pairs-1"  253 -115 "Kern Pairs-1"  43 -192 "Kern Pairs-1"  42 -80 "Kern Pairs-1"  247 -210 "Kern Pairs-1"  163 -94 "Kern Pairs-1"  188 -136 "Kern Pairs-1"  174 -189 "Kern Pairs-1"  160 -157 "Kern Pairs-1"  138 -157 "Kern Pairs-1"  162 -115 "Kern Pairs-1"  176 -147 "Kern Pairs-1"  161 -147 "Kern Pairs-1"  41 -240 "Kern Pairs-1" 
+Kerns2: 270 -178 "Kern Pairs-1" 271 -31 "Kern Pairs-1" 77 -283 "Kern Pairs-1" 72 -294 "Kern Pairs-1" 66 -50 "Kern Pairs-1" 65 0 "Kern Pairs-1" 63 16 "Kern Pairs-1" 62 32 "Kern Pairs-1" 60 -16 "Kern Pairs-1" 59 -60 "Kern Pairs-1" 58 -48 "Kern Pairs-1" 57 -208 "Kern Pairs-1" 56 -112 "Kern Pairs-1" 250 -168 "Kern Pairs-1" 263 -105 "Kern Pairs-1" 221 -94 "Kern Pairs-1" 261 -94 "Kern Pairs-1" 139 -126 "Kern Pairs-1" 190 -73 "Kern Pairs-1" 223 -126 "Kern Pairs-1" 262 -94 "Kern Pairs-1" 55 -176 "Kern Pairs-1" 54 -48 "Kern Pairs-1" 53 -16 "Kern Pairs-1" 52 16 "Kern Pairs-1" 51 16 "Kern Pairs-1" 50 -100 "Kern Pairs-1" 145 -136 "Kern Pairs-1" 49 -64 "Kern Pairs-1" 47 -200 "Kern Pairs-1" 164 -42 "Kern Pairs-1" 45 -75 "Kern Pairs-1" 44 -162 "Kern Pairs-1" 193 -84 "Kern Pairs-1" 253 -115 "Kern Pairs-1" 43 -192 "Kern Pairs-1" 42 -80 "Kern Pairs-1" 247 -210 "Kern Pairs-1" 163 -94 "Kern Pairs-1" 188 -136 "Kern Pairs-1" 174 -189 "Kern Pairs-1" 160 -157 "Kern Pairs-1" 138 -157 "Kern Pairs-1" 162 -115 "Kern Pairs-1" 176 -147 "Kern Pairs-1" 161 -147 "Kern Pairs-1" 41 -240 "Kern Pairs-1"
 EndChar
 
 StartChar: s
@@ -4847,9 +4847,9 @@ SplineSet
  454.183 391.817 454.183 391.817 445 396 c 0,143,144
  433.763 401.119 433.763 401.119 384 426 c 0,145,146
  382 427 382 427 262 484 c 0,0,1
-160 540 m 1,147,-1
+160 540 m 1025,147,-1
 EndSplineSet
-Kerns2: 65 48 "Kern Pairs-1"  64 16 "Kern Pairs-1"  63 48 "Kern Pairs-1"  62 64 "Kern Pairs-1"  61 16 "Kern Pairs-1"  60 25 "Kern Pairs-1"  58 32 "Kern Pairs-1"  57 25 "Kern Pairs-1"  54 16 "Kern Pairs-1"  53 16 "Kern Pairs-1"  52 16 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -48 "Kern Pairs-1"  49 32 "Kern Pairs-1"  48 32 "Kern Pairs-1"  47 -32 "Kern Pairs-1"  46 25 "Kern Pairs-1"  45 25 "Kern Pairs-1"  43 25 "Kern Pairs-1" 
+Kerns2: 65 48 "Kern Pairs-1" 64 16 "Kern Pairs-1" 63 48 "Kern Pairs-1" 62 64 "Kern Pairs-1" 61 16 "Kern Pairs-1" 60 25 "Kern Pairs-1" 58 32 "Kern Pairs-1" 57 25 "Kern Pairs-1" 54 16 "Kern Pairs-1" 53 16 "Kern Pairs-1" 52 16 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -48 "Kern Pairs-1" 49 32 "Kern Pairs-1" 48 32 "Kern Pairs-1" 47 -32 "Kern Pairs-1" 46 25 "Kern Pairs-1" 45 25 "Kern Pairs-1" 43 25 "Kern Pairs-1"
 EndChar
 
 StartChar: t
@@ -4931,7 +4931,7 @@ SplineSet
  35 872 35 872 24 872 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 60 -50 "Kern Pairs-1"  52 16 "Kern Pairs-1"  51 16 "Kern Pairs-1"  50 -16 "Kern Pairs-1"  145 -42 "Kern Pairs-1"  48 16 "Kern Pairs-1"  47 -48 "Kern Pairs-1"  253 52 "Kern Pairs-1"  41 -16 "Kern Pairs-1" 
+Kerns2: 60 -50 "Kern Pairs-1" 52 16 "Kern Pairs-1" 51 16 "Kern Pairs-1" 50 -16 "Kern Pairs-1" 145 -42 "Kern Pairs-1" 48 16 "Kern Pairs-1" 47 -48 "Kern Pairs-1" 253 52 "Kern Pairs-1" 41 -16 "Kern Pairs-1"
 EndChar
 
 StartChar: u
@@ -4995,7 +4995,7 @@ SplineSet
  108 899 108 899 114 922 c 16,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 65 16 "Kern Pairs-1"  63 32 "Kern Pairs-1"  62 32 "Kern Pairs-1"  52 16 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -48 "Kern Pairs-1"  145 -52 "Kern Pairs-1"  48 32 "Kern Pairs-1" 
+Kerns2: 65 16 "Kern Pairs-1" 63 32 "Kern Pairs-1" 62 32 "Kern Pairs-1" 52 16 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -48 "Kern Pairs-1" 145 -52 "Kern Pairs-1" 48 32 "Kern Pairs-1"
 EndChar
 
 StartChar: v
@@ -5055,7 +5055,7 @@ SplineSet
  46 488 l 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 270 -126 "Kern Pairs-1"  77 -146 "Kern Pairs-1"  72 -157 "Kern Pairs-1"  65 60 "Kern Pairs-1"  64 25 "Kern Pairs-1"  63 40 "Kern Pairs-1"  62 50 "Kern Pairs-1"  60 40 "Kern Pairs-1"  57 -60 "Kern Pairs-1"  55 -64 "Kern Pairs-1"  52 64 "Kern Pairs-1"  51 48 "Kern Pairs-1"  50 -40 "Kern Pairs-1"  145 -52 "Kern Pairs-1"  48 25 "Kern Pairs-1"  47 -100 "Kern Pairs-1"  46 40 "Kern Pairs-1"  44 -60 "Kern Pairs-1"  43 -60 "Kern Pairs-1"  41 -112 "Kern Pairs-1" 
+Kerns2: 270 -126 "Kern Pairs-1" 77 -146 "Kern Pairs-1" 72 -157 "Kern Pairs-1" 65 60 "Kern Pairs-1" 64 25 "Kern Pairs-1" 63 40 "Kern Pairs-1" 62 50 "Kern Pairs-1" 60 40 "Kern Pairs-1" 57 -60 "Kern Pairs-1" 55 -64 "Kern Pairs-1" 52 64 "Kern Pairs-1" 51 48 "Kern Pairs-1" 50 -40 "Kern Pairs-1" 145 -52 "Kern Pairs-1" 48 25 "Kern Pairs-1" 47 -100 "Kern Pairs-1" 46 40 "Kern Pairs-1" 44 -60 "Kern Pairs-1" 43 -60 "Kern Pairs-1" 41 -112 "Kern Pairs-1"
 EndChar
 
 StartChar: w
@@ -5141,7 +5141,7 @@ SplineSet
  621 138 621 138 607 146 c 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 270 -73 "Kern Pairs-1"  77 -52 "Kern Pairs-1"  72 -63 "Kern Pairs-1"  57 -81 "Kern Pairs-1"  56 -32 "Kern Pairs-1"  55 -64 "Kern Pairs-1"  52 32 "Kern Pairs-1"  51 32 "Kern Pairs-1"  50 -65 "Kern Pairs-1"  145 -31 "Kern Pairs-1"  48 16 "Kern Pairs-1"  47 -81 "Kern Pairs-1"  41 -80 "Kern Pairs-1" 
+Kerns2: 270 -73 "Kern Pairs-1" 77 -52 "Kern Pairs-1" 72 -63 "Kern Pairs-1" 57 -81 "Kern Pairs-1" 56 -32 "Kern Pairs-1" 55 -64 "Kern Pairs-1" 52 32 "Kern Pairs-1" 51 32 "Kern Pairs-1" 50 -65 "Kern Pairs-1" 145 -31 "Kern Pairs-1" 48 16 "Kern Pairs-1" 47 -81 "Kern Pairs-1" 41 -80 "Kern Pairs-1"
 EndChar
 
 StartChar: x
@@ -5218,7 +5218,7 @@ SplineSet
  -7 43 l 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 50 -96 "Kern Pairs-1"  145 -31 "Kern Pairs-1"  47 -32 "Kern Pairs-1"  41 -48 "Kern Pairs-1" 
+Kerns2: 50 -96 "Kern Pairs-1" 145 -31 "Kern Pairs-1" 47 -32 "Kern Pairs-1" 41 -48 "Kern Pairs-1"
 EndChar
 
 StartChar: y
@@ -5302,7 +5302,7 @@ SplineSet
  32 -561 32 -561 2 -559 c 1,0,-1
 EndSplineSet
 Validated: 33
-Kerns2: 270 -31 "Kern Pairs-1"  63 25 "Kern Pairs-1"  62 25 "Kern Pairs-1"  51 40 "Kern Pairs-1"  145 -21 "Kern Pairs-1"  48 40 "Kern Pairs-1" 
+Kerns2: 270 -31 "Kern Pairs-1" 63 25 "Kern Pairs-1" 62 25 "Kern Pairs-1" 51 40 "Kern Pairs-1" 145 -21 "Kern Pairs-1" 48 40 "Kern Pairs-1"
 EndChar
 
 StartChar: z
@@ -5355,7 +5355,7 @@ SplineSet
  94 813 l 1,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 270 52 "Kern Pairs-1"  271 42 "Kern Pairs-1"  77 52 "Kern Pairs-1"  72 73 "Kern Pairs-1"  253 73 "Kern Pairs-1" 
+Kerns2: 270 52 "Kern Pairs-1" 271 42 "Kern Pairs-1" 77 52 "Kern Pairs-1" 72 73 "Kern Pairs-1" 253 73 "Kern Pairs-1"
 EndChar
 
 StartChar: exclam
@@ -5981,7 +5981,7 @@ SplineSet
  215 329 215 329 219 329 c 8,0,1
 EndSplineSet
 Validated: 1
-Kerns2: 72 21 "Kern Pairs-1"  74 63 "Kern Pairs-1" 
+Kerns2: 72 21 "Kern Pairs-1" 74 63 "Kern Pairs-1"
 EndChar
 
 StartChar: dollar
@@ -7237,7 +7237,7 @@ Flags: W
 LayerCount: 2
 Fore
 SplineSet
--922 467 m 24,0,-1
+-922 467 m 1048,0,-1
 147 867 m 0,1,2
  141 866 141 866 136 866 c 0,3,4
  60 866 60 866 16 1034 c 0,5,6
@@ -8893,7 +8893,7 @@ SplineSet
  1366 1074 1366 1074 1356 1094 c 0,16,17
  1342 1119 1342 1119 1317 1119 c 0,18,19
  1306 1119 1306 1119 1292 1114 c 0,0,1
-1292 1114 m 0,20,-1
+1292 1114 m 1024,20,-1
 246 1150 m 1,21,22
  208 1136 208 1136 186 1076 c 0,23,24
  172 1039 172 1039 172 1010 c 0,25,26
@@ -8905,7 +8905,7 @@ SplineSet
  319 1099 319 1099 310 1122 c 0,36,37
  296 1155 296 1155 269 1155 c 0,38,39
  258 1155 258 1155 246 1150 c 1,21,22
-246 1150 m 0,40,-1
+246 1150 m 1024,40,-1
 739 1162 m 0,41,42
  702 1150 702 1150 675 1087 c 0,43,44
  654 1040 654 1040 654 1005 c 0,45,46
@@ -8917,7 +8917,7 @@ SplineSet
  813 1117 813 1117 808 1133 c 0,57,58
  797 1167 797 1167 766 1167 c 0,59,60
  754 1167 754 1167 739 1162 c 0,41,42
-739 1162 m 0,61,-1
+739 1162 m 1024,61,-1
 305 794 m 1,62,63
  303 792 303 792 290 783 c 128,-1,64
  277 774 277 774 272.5 771 c 128,-1,65
@@ -10815,7 +10815,7 @@ Flags: W
 LayerCount: 2
 Fore
 SplineSet
--819 940 m 24,0,-1
+-819 940 m 1048,0,-1
 143 1232 m 0,1,2
  138 1231 138 1231 133 1231 c 0,3,4
  65 1231 65 1231 25 1353 c 0,5,6
@@ -11127,7 +11127,7 @@ SplineSet
  84 1512 84 1512 130 1512 c 28,49,50
 EndSplineSet
 Validated: 33
-Kerns2: 167 80 "Kern Pairs-1"  169 97 "Kern Pairs-1"  168 81 "Kern Pairs-1" 
+Kerns2: 167 80 "Kern Pairs-1" 169 97 "Kern Pairs-1" 168 81 "Kern Pairs-1"
 EndChar
 
 StartChar: dotlessi
@@ -11300,7 +11300,7 @@ Fore
 Refer: 129 768 S 1.05552 0 0 0.689376 218 776 2
 Refer: 21 73 N 0.9975 0 0 0.9975 0 -37 3
 Validated: 32769
-Kerns2: 211 178 "Kern Pairs-1"  209 199 "Kern Pairs-1"  213 210 "Kern Pairs-1" 
+Kerns2: 211 178 "Kern Pairs-1" 209 199 "Kern Pairs-1" 213 210 "Kern Pairs-1"
 EndChar
 
 StartChar: Iacute
@@ -11312,7 +11312,7 @@ Fore
 Refer: 130 769 N 1.17596 0 0 0.712178 283 746 2
 Refer: 21 73 N 0.9975 0 0 0.9975 0 -32 3
 Validated: 32769
-Kerns2: 211 189 "Kern Pairs-1"  209 189 "Kern Pairs-1"  213 199 "Kern Pairs-1" 
+Kerns2: 211 189 "Kern Pairs-1" 209 189 "Kern Pairs-1" 213 199 "Kern Pairs-1"
 EndChar
 
 StartChar: Icircumflex
@@ -11324,7 +11324,7 @@ Fore
 Refer: 131 770 N 0.95 0 0 0.818101 204 561 2
 Refer: 21 73 S 0.9975 0 0 0.9975 0 -26 3
 Validated: 32769
-Kerns2: 211 178 "Kern Pairs-1"  209 178 "Kern Pairs-1"  213 189 "Kern Pairs-1" 
+Kerns2: 211 178 "Kern Pairs-1" 209 178 "Kern Pairs-1" 213 189 "Kern Pairs-1"
 EndChar
 
 StartChar: Idieresis
@@ -11336,7 +11336,7 @@ Fore
 Refer: 136 776 N 0.95 0 0 0.95 201 333 2
 Refer: 21 73 N 0.9975 0 0 0.988 0 0 3
 Validated: 32769
-Kerns2: 211 189 "Kern Pairs-1"  209 210 "Kern Pairs-1"  213 220 "Kern Pairs-1" 
+Kerns2: 211 189 "Kern Pairs-1" 209 210 "Kern Pairs-1" 213 220 "Kern Pairs-1"
 EndChar
 
 StartChar: agrave
@@ -11470,7 +11470,7 @@ SplineSet
  54 31 54 31 54 38 c 0,24,25
 EndSplineSet
 Validated: 33
-Kerns2: 167 16 "Kern Pairs-1"  145 65 "Kern Pairs-1"  169 48 "Kern Pairs-1"  168 112 "Kern Pairs-1" 
+Kerns2: 167 16 "Kern Pairs-1" 145 65 "Kern Pairs-1" 169 48 "Kern Pairs-1" 168 112 "Kern Pairs-1"
 EndChar
 
 StartChar: iacute
@@ -11527,7 +11527,7 @@ SplineSet
  39 1252 39 1252 42 1261 c 1,31,32
 EndSplineSet
 Validated: 33
-Kerns2: 167 97 "Kern Pairs-1"  145 48 "Kern Pairs-1"  169 129 "Kern Pairs-1"  168 65 "Kern Pairs-1" 
+Kerns2: 167 97 "Kern Pairs-1" 145 48 "Kern Pairs-1" 169 129 "Kern Pairs-1" 168 65 "Kern Pairs-1"
 EndChar
 
 StartChar: icircumflex
@@ -11586,7 +11586,7 @@ SplineSet
  -14 1190 -14 1190 -32 1234 c 16,31,32
 EndSplineSet
 Validated: 33
-Kerns2: 167 48 "Kern Pairs-1"  145 113 "Kern Pairs-1"  169 113 "Kern Pairs-1"  168 96 "Kern Pairs-1" 
+Kerns2: 167 48 "Kern Pairs-1" 145 113 "Kern Pairs-1" 169 113 "Kern Pairs-1" 168 96 "Kern Pairs-1"
 EndChar
 
 StartChar: ugrave
@@ -12017,7 +12017,7 @@ Fore
 Refer: 132 771 N 0.823926 0 0 0.784867 104 612 2
 Refer: 21 73 S 0.9975 0 0 0.966 0 -16 3
 Validated: 32769
-Kerns2: 209 199 "Kern Pairs-1"  211 220 "Kern Pairs-1"  213 210 "Kern Pairs-1" 
+Kerns2: 209 199 "Kern Pairs-1" 211 220 "Kern Pairs-1" 213 210 "Kern Pairs-1"
 EndChar
 
 StartChar: itilde
@@ -12029,7 +12029,7 @@ Fore
 Refer: 132 771 S 0.810894 0 0 1 -173 -72 2
 Refer: 146 305 S 1 0 0 1 0 0 3
 Validated: 32769
-Kerns2: 212 136 "Kern Pairs-1"  210 136 "Kern Pairs-1"  213 441 "Kern Pairs-1"  159 115 "Kern Pairs-1"  158 126 "Kern Pairs-1"  156 126 "Kern Pairs-1"  157 157 "Kern Pairs-1"  60 63 "Kern Pairs-1"  52 178 "Kern Pairs-1"  51 220 "Kern Pairs-1"  50 84 "Kern Pairs-1"  22 84 "Kern Pairs-1"  211 482 "Kern Pairs-1"  48 220 "Kern Pairs-1"  42 73 "Kern Pairs-1" 
+Kerns2: 212 136 "Kern Pairs-1" 210 136 "Kern Pairs-1" 213 441 "Kern Pairs-1" 159 115 "Kern Pairs-1" 158 126 "Kern Pairs-1" 156 126 "Kern Pairs-1" 157 157 "Kern Pairs-1" 60 63 "Kern Pairs-1" 52 178 "Kern Pairs-1" 51 220 "Kern Pairs-1" 50 84 "Kern Pairs-1" 22 84 "Kern Pairs-1" 211 482 "Kern Pairs-1" 48 220 "Kern Pairs-1" 42 73 "Kern Pairs-1"
 EndChar
 
 StartChar: Imacron
@@ -12041,7 +12041,7 @@ Fore
 Refer: 133 772 N 0.95 0 0 0.92 141 339 2
 Refer: 21 73 N 0.9975 0 0 0.966 0 0 3
 Validated: 32769
-Kerns2: 211 220 "Kern Pairs-1"  213 210 "Kern Pairs-1" 
+Kerns2: 211 220 "Kern Pairs-1" 213 210 "Kern Pairs-1"
 EndChar
 
 StartChar: imacron
@@ -12053,7 +12053,7 @@ Fore
 Refer: 133 772 S 1 0 0 1 -209 -119 2
 Refer: 146 305 N 1 0 0 1 0 0 3
 Validated: 32769
-Kerns2: 208 157 "Kern Pairs-1"  212 147 "Kern Pairs-1"  209 420 "Kern Pairs-1"  159 147 "Kern Pairs-1"  158 147 "Kern Pairs-1"  156 126 "Kern Pairs-1"  157 157 "Kern Pairs-1"  60 73 "Kern Pairs-1"  52 157 "Kern Pairs-1"  51 210 "Kern Pairs-1"  50 94 "Kern Pairs-1"  49 168 "Kern Pairs-1"  48 210 "Kern Pairs-1"  42 94 "Kern Pairs-1"  213 472 "Kern Pairs-1" 
+Kerns2: 208 157 "Kern Pairs-1" 212 147 "Kern Pairs-1" 209 420 "Kern Pairs-1" 159 147 "Kern Pairs-1" 158 147 "Kern Pairs-1" 156 126 "Kern Pairs-1" 157 157 "Kern Pairs-1" 60 73 "Kern Pairs-1" 52 157 "Kern Pairs-1" 51 210 "Kern Pairs-1" 50 94 "Kern Pairs-1" 49 168 "Kern Pairs-1" 48 210 "Kern Pairs-1" 42 94 "Kern Pairs-1" 213 472 "Kern Pairs-1"
 EndChar
 
 StartChar: Ibreve
@@ -12065,7 +12065,7 @@ Fore
 Refer: 137 774 N 0.879477 0 0 0.814937 156 567 2
 Refer: 21 73 N 0.9975 0 0 0.966 0 -16 3
 Validated: 32769
-Kerns2: 209 178 "Kern Pairs-1"  211 231 "Kern Pairs-1"  213 199 "Kern Pairs-1" 
+Kerns2: 209 178 "Kern Pairs-1" 211 231 "Kern Pairs-1" 213 199 "Kern Pairs-1"
 EndChar
 
 StartChar: ibreve
@@ -12077,7 +12077,7 @@ Fore
 Refer: 137 774 S 1 0 0 1 -188 -101 2
 Refer: 146 305 N 1 0 0 1 0 0 3
 Validated: 32769
-Kerns2: 210 189 "Kern Pairs-1"  208 199 "Kern Pairs-1"  211 483 "Kern Pairs-1"  209 483 "Kern Pairs-1"  159 189 "Kern Pairs-1"  158 157 "Kern Pairs-1"  157 189 "Kern Pairs-1"  60 136 "Kern Pairs-1"  52 241 "Kern Pairs-1"  51 273 "Kern Pairs-1"  50 126 "Kern Pairs-1"  49 241 "Kern Pairs-1"  48 283 "Kern Pairs-1"  42 168 "Kern Pairs-1" 
+Kerns2: 210 189 "Kern Pairs-1" 208 199 "Kern Pairs-1" 211 483 "Kern Pairs-1" 209 483 "Kern Pairs-1" 159 189 "Kern Pairs-1" 158 157 "Kern Pairs-1" 157 189 "Kern Pairs-1" 60 136 "Kern Pairs-1" 52 241 "Kern Pairs-1" 51 273 "Kern Pairs-1" 50 126 "Kern Pairs-1" 49 241 "Kern Pairs-1" 48 283 "Kern Pairs-1" 42 168 "Kern Pairs-1"
 EndChar
 
 StartChar: Idotaccent
@@ -12312,7 +12312,7 @@ SplineSet
  521 501 521 501 508 561 c 24,30,31
 EndSplineSet
 Validated: 1
-Kerns2: 32 -383 "Kern Pairs-1" 
+Kerns2: 32 -383 "Kern Pairs-1"
 EndChar
 
 StartChar: exclamdown
@@ -12369,7 +12369,7 @@ SplineSet
  334 897 334 897 334 890 c 0,32,33
 EndSplineSet
 Validated: 1
-Kerns2: 65 132 "Kern Pairs-1"  32 -234 "Kern Pairs-1"  50 200 "Kern Pairs-1" 
+Kerns2: 65 132 "Kern Pairs-1" 32 -234 "Kern Pairs-1" 50 200 "Kern Pairs-1"
 EndChar
 
 StartChar: omacron
@@ -13741,7 +13741,7 @@ Flags: W
 LayerCount: 2
 Fore
 SplineSet
--146 395 m 24,0,-1
+-146 395 m 1048,0,-1
 810 783 m 24,1,2
  782 806 782 806 655 822 c 24,3,4
  564 834 564 834 507 822 c 24,5,6
@@ -14224,7 +14224,7 @@ Fore
 Refer: 22 74 N 1 0 0 1 887 -12 2
 Refer: 21 73 N 1 0 0 1 0 0 2
 Validated: 32769
-Kerns2: 66 -147 "Kern Pairs-1"  65 -105 "Kern Pairs-1"  64 -73 "Kern Pairs-1"  63 -52 "Kern Pairs-1"  62 -42 "Kern Pairs-1"  61 -115 "Kern Pairs-1"  60 -63 "Kern Pairs-1"  59 -157 "Kern Pairs-1"  58 -115 "Kern Pairs-1"  57 -231 "Kern Pairs-1"  56 -220 "Kern Pairs-1"  55 -178 "Kern Pairs-1"  54 -105 "Kern Pairs-1"  53 -84 "Kern Pairs-1"  50 -126 "Kern Pairs-1"  49 -52 "Kern Pairs-1"  48 -31 "Kern Pairs-1"  47 -178 "Kern Pairs-1"  46 -126 "Kern Pairs-1"  45 -136 "Kern Pairs-1"  44 -178 "Kern Pairs-1"  43 -147 "Kern Pairs-1"  42 -94 "Kern Pairs-1"  41 -189 "Kern Pairs-1"  38 -63 "Kern Pairs-1"  31 -115 "Kern Pairs-1"  30 -42 "Kern Pairs-1"  29 -84 "Kern Pairs-1"  28 -84 "Kern Pairs-1"  27 -63 "Kern Pairs-1"  25 -42 "Kern Pairs-1"  22 -105 "Kern Pairs-1"  21 -52 "Kern Pairs-1"  19 -84 "Kern Pairs-1"  16 31 "Kern Pairs-1"  15 -84 "Kern Pairs-1"  13 -199 "Kern Pairs-1" 
+Kerns2: 66 -147 "Kern Pairs-1" 65 -105 "Kern Pairs-1" 64 -73 "Kern Pairs-1" 63 -52 "Kern Pairs-1" 62 -42 "Kern Pairs-1" 61 -115 "Kern Pairs-1" 60 -63 "Kern Pairs-1" 59 -157 "Kern Pairs-1" 58 -115 "Kern Pairs-1" 57 -231 "Kern Pairs-1" 56 -220 "Kern Pairs-1" 55 -178 "Kern Pairs-1" 54 -105 "Kern Pairs-1" 53 -84 "Kern Pairs-1" 50 -126 "Kern Pairs-1" 49 -52 "Kern Pairs-1" 48 -31 "Kern Pairs-1" 47 -178 "Kern Pairs-1" 46 -126 "Kern Pairs-1" 45 -136 "Kern Pairs-1" 44 -178 "Kern Pairs-1" 43 -147 "Kern Pairs-1" 42 -94 "Kern Pairs-1" 41 -189 "Kern Pairs-1" 38 -63 "Kern Pairs-1" 31 -115 "Kern Pairs-1" 30 -42 "Kern Pairs-1" 29 -84 "Kern Pairs-1" 28 -84 "Kern Pairs-1" 27 -63 "Kern Pairs-1" 25 -42 "Kern Pairs-1" 22 -105 "Kern Pairs-1" 21 -52 "Kern Pairs-1" 19 -84 "Kern Pairs-1" 16 31 "Kern Pairs-1" 15 -84 "Kern Pairs-1" 13 -199 "Kern Pairs-1"
 EndChar
 
 StartChar: ij
