@@ -2508,7 +2508,7 @@ static bool doConvert(Score* cs, QString fn)
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
                               nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                              createExcerpt(e);
+                              Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
                               cs->endCmd();
@@ -2534,7 +2534,7 @@ static bool doConvert(Score* cs, QString fn)
                               nscore->setExcerpt(e);
                               // nscore->setName(e->title()); // needed before AddExcerpt
                               nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                              createExcerpt(e);
+                              Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
                               cs->endCmd();

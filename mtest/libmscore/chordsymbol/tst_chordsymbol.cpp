@@ -145,7 +145,7 @@ void TestChordSymbol::testNoSystem()
       score->excerpts().append(ex);
       ex->setTitle(parts.front()->longName());
       ex->setParts(parts);
-      ::createExcerpt(ex);
+      Excerpt::createExcerpt(ex);
       QVERIFY(nscore);
 
 //      nscore->setTitle(parts.front()->partName());
@@ -164,7 +164,7 @@ void TestChordSymbol::testNoSystem()
       score->excerpts().append(ex);
       ex->setTitle(parts.front()->longName());
       ex->setParts(parts);
-      ::createExcerpt(ex);
+      Excerpt::createExcerpt(ex);
       QVERIFY(nscore);
 
 //      nscore->setTitle(parts.front()->partName());

@@ -276,7 +276,7 @@ void MuseScore::editInstrList()
 
                         Staff* linkedStaff = part->staves()->front();
                         if (sli->linked() && linkedStaff != staff) {
-                              cloneStaff(linkedStaff, staff);
+                              Excerpt::cloneStaff(linkedStaff, staff);
                               linked.append(staff);
                               }
                         }
@@ -342,7 +342,7 @@ void MuseScore::editInstrList()
                                     }
                               masterScore->undoInsertStaff(staff, rstaff, linkedStaff == 0);
                               if (linkedStaff)
-                                    cloneStaff(linkedStaff, staff);
+                                    Excerpt::cloneStaff(linkedStaff, staff);
                               else {
                                     if (firstStaff)
                                           masterScore->adjustKeySigs(staffIdx, staffIdx+1, tmpKeymap);

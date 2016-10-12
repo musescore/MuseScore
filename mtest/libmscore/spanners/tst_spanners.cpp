@@ -277,7 +277,7 @@ void TestSpanners::spanners04()
       newStaff->setKey(0, ke);
 
       score->undoInsertStaff(newStaff, 1, false);
-      cloneStaff(oldStaff, newStaff);
+      Excerpt::cloneStaff(oldStaff, newStaff);
 
       QVERIFY(saveCompareScore(score, "glissando-cloning01.mscx", DIR + "glissando-cloning01-ref.mscx"));
       delete score;
@@ -304,7 +304,7 @@ void TestSpanners::spanners05()
       ex->setPartScore(nscore);
       ex->setTitle(parts.front()->longName());
       ex->setParts(parts);
-      ::createExcerpt(ex);
+      Excerpt::createExcerpt(ex);
       QVERIFY(nscore);
 
 //      nscore->setName(parts.front()->partName());
