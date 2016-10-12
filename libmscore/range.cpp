@@ -561,7 +561,7 @@ bool ScoreRange::write(Score* score, int tick) const
                         for (Staff* nstaff : linkedStaves->staves()) {
                               if (nstaff == ostaff)
                                     continue;
-                              cloneStaff2(ostaff, nstaff, tick, tick + dl->duration().ticks());
+                              Excerpt::cloneStaff2(ostaff, nstaff, tick, tick + dl->duration().ticks());
                               }
                         }
                   }
