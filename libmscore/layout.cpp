@@ -3633,13 +3633,13 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (SpannerSegment* ss : system->spannerSegments()) {
                         Spanner* sp = ss->spanner();
                         if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
-                              // spanner shape must be translated from system coordinate space to measure coordinate space
-                              if (ss->type() == Element::Type::LYRICSLINE_SEGMENT) {
-                                    m->staffShape(sp->staffIdx()).add(ss->shape().translated(-m->pos()));
-                                    }
-                              else {
-                                    m->staffShape(sp->staffIdx()).add(ss->shape().translated(ss->pos() - m->pos()));
-                                    }
+                              // spanner shape must be translated from system coordinate space
+                              // to measure coordinate space
+                              Shape* shape = &m->staffShape(sp->staffIdx());
+                              if (ss->isLyricsLineSegment())
+                                    shape->add(ss->shape().translated(-m->pos()));
+                              else
+                                    shape->add(ss->shape().translated(ss->pos() - m->pos()));
                               }
                         }
                   }
