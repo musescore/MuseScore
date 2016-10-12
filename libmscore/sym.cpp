@@ -34,9 +34,10 @@ namespace Ms {
 static const int FALLBACK_FONT = 0;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts {
-      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  ),
-      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
-      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" )
+      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"  ),
+      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"   ),
+      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
+      ScoreFont("MuseJazz",   "MuseJazz",     ":/fonts/musejazz/", "MuseJazz.otf" ),
       };
 
 QJsonObject ScoreFont::_glyphnamesJson;
@@ -5753,7 +5754,7 @@ void initScoreFonts()
       QFont::insertSubstitution("MScore Text",    "Bravura Text");
       QFont::insertSubstitution("Gootville Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont",      "Bravura Text");
-      QFont::insertSubstitution("MuseJazz",       "Bravura Text");
+      QFont::insertSubstitution("MuseJazz Text",   "Bravura Text");
       ScoreFont::fallbackFont();   // load fallback font
       }
 
