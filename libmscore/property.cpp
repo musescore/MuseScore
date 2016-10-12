@@ -252,6 +252,9 @@ static const PropertyData propertyList[] = {
       { P_ID::SYMBOL,              true,  "symbol",                P_TYPE::SYMID },
       { P_ID::PLAY_REPEATS,        false, "playRepeats",           P_TYPE::BOOL  },
 
+      { P_ID::REPEAT_MEASURE_SIZE, true, "repeatMeasureSize",      P_TYPE::INT   },
+      { P_ID::REPEAT_MEASURE_SLASHES,true,"repeatMeasureSlashes",  P_TYPE::INT   },
+
       { P_ID::END,                 false, "",                      P_TYPE::INT   }
       };
 

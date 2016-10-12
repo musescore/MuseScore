@@ -408,8 +408,9 @@ Palette* MuseScore::newRepeatsPalette()
       sp->setGrid(75, 28);
       sp->setDrawGrid(true);
 
-      RepeatMeasure* rm = new RepeatMeasure(gscore);
-      sp->append(rm, tr("Repeat measure sign"));
+      sp->append(new RepeatMeasure(gscore, 1, 1), tr("Single-measure repeat sign"))->drawStaff = false;
+      sp->append(new RepeatMeasure(gscore, 2, 2), tr("Two-measure repeat sign"))->drawStaff = false;
+      sp->append(new RepeatMeasure(gscore, 4, 4), tr("Four-measure repeat sign"))->drawStaff = false;
 
       for (int i = 0; i < markerTypeTableSize(); i++) {
             if(markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl

@@ -244,6 +244,9 @@ enum class P_ID : int {
 
       PLAY_REPEATS,
 
+      REPEAT_MEASURE_SIZE,
+      REPEAT_MEASURE_SLASHES,
+
       END
       };
 

@@ -29,6 +29,7 @@
 #include "stafftype.h"
 #include "icon.h"
 #include "image.h"
+#include "repeat.h"
 
 namespace Ms {
 
@@ -261,10 +262,14 @@ Element* Rest::drop(const DropData& data)
                   }
                   break;
             case Element::Type::REPEAT_MEASURE:
+                  {
+                  RepeatMeasure* rm = static_cast<RepeatMeasure*>(e);
+                  int repeatMeasureSize = rm->repeatMeasureSize();
+                  int repeatMeasureSlashes = rm->repeatMeasureSlashes();
                   delete e;
-                  if (durationType().type() == TDuration::DurationType::V_MEASURE) {
-                        measure()->cmdInsertRepeatMeasure(staffIdx());
-                        }
+                  if (durationType().type() == TDuration::DurationType::V_MEASURE)
+                        return measure()->cmdInsertRepeatMeasure(staffIdx(), repeatMeasureSize, repeatMeasureSlashes);
+                  }
                   break;
 
             case Element::Type::SYMBOL:
@@ -665,10 +670,14 @@ void Rest::reset()
 
 qreal Rest::mag() const
       {
-      qreal m = staff()->mag();
-      if (small())
-            m *= score()->styleD(StyleIdx::smallNoteMag);
-      return m;
+      if (staff()) {
+            qreal m = staff()->mag();
+            if (small())
+                  m *= score()->styleD(StyleIdx::smallNoteMag);
+            return m;
+            }
+      else
+            return 1.0;
       }
 
 //---------------------------------------------------------

@@ -1374,8 +1374,11 @@ Element* Measure::drop(const DropData& data)
 
             case Element::Type::REPEAT_MEASURE:
                   {
+                  RepeatMeasure* rm = static_cast<RepeatMeasure*>(e);
+                  int repeatMeasureSize = rm->repeatMeasureSize();
+                  int repeatMeasureSlashes = rm->repeatMeasureSlashes();
                   delete e;
-                  return cmdInsertRepeatMeasure(staffIdx);
+                  return cmdInsertRepeatMeasure(staffIdx, repeatMeasureSize, repeatMeasureSlashes);
                   }
             case Element::Type::ICON:
                   switch(toIcon(e)->iconType()) {
@@ -1411,20 +1414,23 @@ Element* Measure::drop(const DropData& data)
 //   cmdInsertRepeatMeasure
 //---------------------------------------------------------
 
-RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
+RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx, int repeatMeasureSize, int repeatMeasureSlashes)
       {
       //
       // see also cmdDeleteSelection()
       //
       score()->select(0, SelectType::SINGLE, 0);
-      for (Segment* s = first(); s; s = s->next()) {
-            if (s->segmentType() & Segment::Type::ChordRest) {
-                  int strack = staffIdx * VOICES;
-                  int etrack = strack + VOICES;
-                  for (int track = strack; track < etrack; ++track) {
-                        Element* el = s->element(track);
-                        if (el)
-                              score()->undoRemoveElement(el);
+      Measure* m = this;
+      for (int i = 0; m && i < repeatMeasureSize; m = m->nextMeasure(), i++ ) {
+            for (Segment* s = m->first(); s; s = s->next()) {
+                  if (s->segmentType() & Segment::Type::ChordRest) {
+                        int strack = staffIdx * VOICES;
+                        int etrack = strack + VOICES;
+                        for (int track = strack; track < etrack; ++track) {
+                              Element* el = s->element(track);
+                              if (el)
+                                    score()->undoRemoveElement(el);
+                              }
                         }
                   }
             }
@@ -1432,11 +1438,11 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       // add repeat measure
       //
       Segment* seg = undoGetSegment(Segment::Type::ChordRest, tick());
-      RepeatMeasure* rm = new RepeatMeasure(score());
+      RepeatMeasure* rm = new RepeatMeasure(score(), repeatMeasureSize, repeatMeasureSlashes);
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
-      rm->setDurationType(TDuration::DurationType::V_MEASURE);
-      rm->setDuration(stretchedLen(score()->staff(staffIdx)));
+      rm->setDurationType(TDuration::DurationType::V_MEASURE);  // maybe needs to handle multi-measures?...maybe new durationtype?
+      rm->setDuration(stretchedLen(score()->staff(staffIdx)));  // maybe needs to handle multi-measures?
       score()->undoAddCR(rm, this, tick());
       for (Element* e : el()) {
             if (e->isSlur() && e->staffIdx() == staffIdx)

@@ -16,12 +16,15 @@
 #include "system.h"
 #include "measure.h"
 #include "mscore.h"
+#include "undo.h"
+#include <QPointF>
 
 namespace Ms {
 
 //---------------------------------------------------------
 //   RepeatMeasure
 ///   default size is a single-measure repeat
+///   default slashes is 1.
 //---------------------------------------------------------
 
 RepeatMeasure::RepeatMeasure(Score* score, int repeatMeasureSize, int slashes)
@@ -31,15 +34,119 @@ RepeatMeasure::RepeatMeasure(Score* score, int repeatMeasureSize, int slashes)
       _repeatMeasureSlashes = slashes;
       }
 
+RepeatMeasure::RepeatMeasure(const RepeatMeasure& rm, bool link)
+   : Rest(rm, link)
+      {
+      if (link)
+            score()->undo(new Link(const_cast<RepeatMeasure*>(&rm), this)); //don't know need to do this linking here, but just following rest's constructor
+      _repeatMeasureSize    = rm._repeatMeasureSize;
+      _repeatMeasureSlashes = rm._repeatMeasureSlashes;
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant RepeatMeasure::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::REPEAT_MEASURE_SIZE:
+                  return _repeatMeasureSize;
+            case P_ID::REPEAT_MEASURE_SLASHES:
+                  return _repeatMeasureSlashes;
+            default:
+                  return Rest::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant RepeatMeasure::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::REPEAT_MEASURE_SIZE:
+                  return 1;
+            case P_ID::REPEAT_MEASURE_SLASHES:
+                  return 1;
+            default:
+                  return Rest::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool RepeatMeasure::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::REPEAT_MEASURE_SIZE:
+                  _repeatMeasureSize = v.toInt();
+                  break;
+
+            case P_ID::REPEAT_MEASURE_SLASHES:
+                  _repeatMeasureSlashes = v.toInt();
+                  break;
+            default:
+                  return Rest::setProperty(propertyId, v);
+            }
+      return true;
+      }
+
+//--------------------------------------------------
+//   Rest::write
+//---------------------------------------------------------
+
+void RepeatMeasure::write(Xml& xml) const
+      {
+      xml.stag(name());
+      writeProperty(xml, P_ID::REPEAT_MEASURE_SIZE);
+      writeProperty(xml, P_ID::REPEAT_MEASURE_SLASHES);
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Rest::read
+//---------------------------------------------------------
+
+void RepeatMeasure::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "repeatMeasureSize")
+                  _repeatMeasureSize = e.readInt();
+            else if (tag == "repeatMeasureSlashes")
+                  _repeatMeasureSlashes = e.readInt();
+            else if (Element::readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void RepeatMeasure::draw(QPainter* painter) const
       {
-      painter->setBrush(QBrush(curColor()));
-      painter->setPen(Qt::NoPen);
-      painter->drawPath(path);
+      qreal _spatium = spatium();
+      QPointF yoffset(0.0, 2.0 * _spatium);
+      if (repeatMeasureSlashes() == 1)
+            drawSymbol(SymId::repeat1Bar, painter, yoffset);
+      else if (repeatMeasureSlashes() == 2)
+            drawSymbol(SymId::repeat2Bars, painter, yoffset); // maybe add xoffset too?
+      else if (repeatMeasureSlashes() == 4)
+            drawSymbol(SymId::repeat4Bars, painter, yoffset); // maybe add xoffset too?
+      else {
+            // fallback to generalized
+            painter->setBrush(QBrush(curColor()));
+            painter->setPen(Qt::NoPen);
+            painter->drawPath(path);
+            }
       }
 
 //---------------------------------------------------------

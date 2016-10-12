@@ -222,7 +222,7 @@ class Measure : public MeasureBase {
       void barLinesSetSpan(Segment*);
       void setEndBarLineType(BarLineType val, int track, bool visible = true, QColor color = QColor());
 
-      RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
+      RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx, int repeatMeasureSize = 1, int repeatMeasureSlashes = 1);
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
