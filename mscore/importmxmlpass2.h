@@ -206,7 +206,7 @@ private:
                                                   ///  Equals 0 if staff not in a multi-measure repeat sequence
       std::vector<int> _measureRepeatCounter;     ///< Will increment after read every measure in a multi-measure repeat sequence for each staff
                                                   ///  Once reaches _multiMeasureRepeatSize for a staff, then add a new element and reset this counter
-      std::vector<int> _measureRepeatSlashes;     ///< The slashes attribute specifies the number of slashes to use in the repeat sign. It is 1 if not specified. Keep track for each staff.
+      std::vector<int> _measureRepeatSlashes;     ///< The slashes attribute specifies the number of slashes to use in the repeat sign. It is 1 if not specified according to MusicXML. Keep track for each staff.
       };
 
 //---------------------------------------------------------

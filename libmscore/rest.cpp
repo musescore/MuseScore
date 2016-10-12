@@ -447,7 +447,7 @@ int Rest::getDotline(TDuration::DurationType durationType)
       }
 
 //---------------------------------------------------------
-//   centerX
+//   computeLineOffset
 //---------------------------------------------------------
 
 int Rest::computeLineOffset()

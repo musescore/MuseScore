@@ -1428,12 +1428,20 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx, int repeatMeasureSi
                         int etrack = strack + VOICES;
                         for (int track = strack; track < etrack; ++track) {
                               Element* el = s->element(track);
-                              if (el)
-                                    score()->undoRemoveElement(el);
+                              if (el) {
+                                    if (el->isRepeatMeasure()) {
+                                          qWarning("Removing an already-existing MeasureRepeat might mess up the score...TODO: will have to figure out desired behavior for this situation.");
+                                          i = repeatMeasureSize; // dont' delete any more segments
+                                          break;
+                                          }
+                                    else
+                                          score()->undoRemoveElement(el);
+                                    }
                               }
                         }
                   }
             }
+
       //
       // add repeat measure
       //
@@ -1448,6 +1456,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx, int repeatMeasureSi
             if (e->isSlur() && e->staffIdx() == staffIdx)
                   score()->undoRemoveElement(e);
             }
+
       return rm;
       }
 
@@ -2505,7 +2514,8 @@ bool Measure::isRepeatMeasure(Staff* staff) const
 
       for (int track = strack; track < etrack; ++track) {
             Element* e = s->element(track);
-            if (e && e->isRepeatMeasure())
+
+            if (e && e->type() == Element::Type::REPEAT_MEASURE) // I'm wondering if I should modify this function to include if belongs to multi-measure repeat, using findRepeatMeasureElement()
                   return true;
             }
       return false;
@@ -2969,15 +2979,15 @@ void Measure::stretchMeasure(qreal targetWidth)
             minimumWidth += s.width();
             }
 
-      if (!springs.empty()) { // can possibly have no elements if is 2nd or later measure of a multi-measure repeat
+      //---------------------------------------------------
+      //    compute 1/Force for a given Extend
+      //---------------------------------------------------
 
-            //---------------------------------------------------
-            //    compute 1/Force for a given Extend
-            //---------------------------------------------------
-
-            if (targetWidth > minimumWidth) {
-                  qreal force = 0;
-                  qreal c     = 0.0;
+      if (targetWidth > minimumWidth) {
+            qreal force = 0;
+            qreal c     = 0.0;
+            qreal x;
+            if (springs.size() > 0) {
                   for (auto i = springs.begin();;) {
                         c            += i->second->stretch();
                         minimumWidth -= i->second->width();
@@ -2999,15 +3009,21 @@ void Measure::stretchMeasure(qreal targetWidth)
                               i.second->setWidth(width);
                         }
 
-                  //---------------------------------------------------
-                  //    move segments to final position
-                  //---------------------------------------------------
+                  x = first()->pos().x();
+                  }
+            else {
+                  // can possibly have no elements if is 2nd or later measure of a multi-measure repeat
+                  // todo: this is a HACK...probably need to figure out a better way to deal with measures without any elements...
+                  x = width();
+                  }
 
-                  qreal x = first()->pos().x();
-                  for (Segment& s : _segments) {
-                        s.rxpos() = x;
-                        x += s.width();
-                        }
+            //---------------------------------------------------
+            //    move segments to final position
+            //---------------------------------------------------
+
+            for (Segment& s : _segments) {
+                  s.rxpos() = x;
+                  x += s.width();
                   }
             }
 
@@ -3021,7 +3037,10 @@ void Measure::stretchMeasure(qreal targetWidth)
                         continue;
                   Element::Type t = e->type();
                   int staffIdx    = e->staffIdx();
-                  if (t == Element::Type::REPEAT_MEASURE || (t == Element::Type::REST && (isMMRest() || toRest(e)->isFullMeasureRest()))) {
+
+                  // if full measure rest, multi-measure rest, or single-measure measure-repeat
+                  if ((t == Element::Type::REST && (isMMRest() || toRest(e)->isFullMeasureRest()))
+                   || (t == Element::Type::REPEAT_MEASURE && reinterpret_cast<RepeatMeasure*>(e)->repeatMeasureSize() == 1)) {
                         //
                         // element has to be centered in free space
                         //    x1 - left measure position of free space

@@ -1332,11 +1332,6 @@ void RepeatMeasureView::setElement(Element* e)
             crb.lyrics->addItem(item);
             }
 
-      rmb.sym->setValue(int(rm->sym()));
-      rmb.dotline->setValue(rm->getDotline()); // I don't actually know what this dotline is and if it is relevant to RepeatMeasures
-      rmb.mmWidth->setValue(rm->mmWidth());
-      rmb.gap->setChecked(rm->isGap());
-
       rmb.repeatMeasureSlashes->setValue(rm->repeatMeasureSlashes());
       rmb.repeatMeasureSize->setValue(rm->repeatMeasureSize());
       }

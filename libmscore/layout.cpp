@@ -3276,6 +3276,25 @@ System* Score::collectSystem(LayoutContext& lc)
                                     cr->beam()->layout();
                                     s->staffShape(cr->staffIdx()).add(cr->beam()->shape().translated(-(cr->segment()->pos()+mb->pos())));
                                     }
+
+                              // put multi-measure rest elements in the middle barline if even number of measures, or in middle of center measure if odd number of measures
+                              if (e->type() == Element::Type::REPEAT_MEASURE) {
+
+                                    RepeatMeasure* rm = reinterpret_cast<RepeatMeasure*>(e);
+
+                                    // position in center of measures covered
+                                    qreal middleX = rm->sumMeasureWidthsMutltiMeasureRepeatHalfway(reinterpret_cast<Measure*>(mb), system->lastMeasure());
+                                    middleX -= s->x(); // adjust for initial segment's xoffset
+
+                                    middleX -= rm->bbox().width() / 2.0; // adjust for boundary box width so is center justified
+
+                                    qreal middleY = e->staff()->height() * .5; // center vertically in staff
+                                    // todo need to put in particular staff
+
+                                    e->setPos(middleX, middleY);
+
+                                    e->adjustReadPos();  // donno if this is needed
+                                    }
                               }
                         }
                   for (Element* e : s->annotations()) {

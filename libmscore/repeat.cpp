@@ -28,19 +28,21 @@ namespace Ms {
 //---------------------------------------------------------
 
 RepeatMeasure::RepeatMeasure(Score* score, int repeatMeasureSize, int slashes)
-   : Rest(score)
+   : ChordRest(score)
       {
       _repeatMeasureSize = repeatMeasureSize;
       _repeatMeasureSlashes = slashes;
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       }
 
 RepeatMeasure::RepeatMeasure(const RepeatMeasure& rm, bool link)
-   : Rest(rm, link)
+   : ChordRest(rm, link)
       {
       if (link)
             score()->undo(new Link(const_cast<RepeatMeasure*>(&rm), this)); //don't know need to do this linking here, but just following rest's constructor
       _repeatMeasureSize    = rm._repeatMeasureSize;
       _repeatMeasureSlashes = rm._repeatMeasureSlashes;
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       }
 
 //---------------------------------------------------------
@@ -55,7 +57,7 @@ QVariant RepeatMeasure::getProperty(P_ID propertyId) const
             case P_ID::REPEAT_MEASURE_SLASHES:
                   return _repeatMeasureSlashes;
             default:
-                  return Rest::getProperty(propertyId);
+                  return ChordRest::getProperty(propertyId);
             }
       }
 
@@ -71,7 +73,7 @@ QVariant RepeatMeasure::propertyDefault(P_ID propertyId) const
             case P_ID::REPEAT_MEASURE_SLASHES:
                   return 1;
             default:
-                  return Rest::propertyDefault(propertyId);
+                  return ChordRest::propertyDefault(propertyId);
             }
       }
 
@@ -90,13 +92,13 @@ bool RepeatMeasure::setProperty(P_ID propertyId, const QVariant& v)
                   _repeatMeasureSlashes = v.toInt();
                   break;
             default:
-                  return Rest::setProperty(propertyId, v);
+                  return ChordRest::setProperty(propertyId, v);
             }
       return true;
       }
 
 //--------------------------------------------------
-//   Rest::write
+//   write
 //---------------------------------------------------------
 
 void RepeatMeasure::write(Xml& xml) const
@@ -109,7 +111,7 @@ void RepeatMeasure::write(Xml& xml) const
       }
 
 //---------------------------------------------------------
-//   Rest::read
+//   read
 //---------------------------------------------------------
 
 void RepeatMeasure::read(XmlReader& e)
@@ -128,24 +130,49 @@ void RepeatMeasure::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   symbol
+///   returns SymId of the repeat symbol glyph if have one with the number of slahes
+//---------------------------------------------------------
+
+SymId RepeatMeasure::symbol() const
+      {
+      if (repeatMeasureSlashes() == 1)
+            return SymId::repeat1Bar;
+      else if (repeatMeasureSlashes() == 2)
+            return SymId::repeat2Bars;
+      else if (repeatMeasureSlashes() == 4)
+            return SymId::repeat4Bars;
+      else
+            return SymId::noSym; // no symbol available with the particular number of slahes
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
+static const qreal numberHeight = 2.15; // .05sp above top of slahses
+
 void RepeatMeasure::draw(QPainter* painter) const
       {
-      qreal _spatium = spatium();
-      QPointF yoffset(0.0, 2.0 * _spatium);
-      if (repeatMeasureSlashes() == 1)
-            drawSymbol(SymId::repeat1Bar, painter, yoffset);
-      else if (repeatMeasureSlashes() == 2)
-            drawSymbol(SymId::repeat2Bars, painter, yoffset); // maybe add xoffset too?
-      else if (repeatMeasureSlashes() == 4)
-            drawSymbol(SymId::repeat4Bars, painter, yoffset); // maybe add xoffset too?
-      else {
-            // fallback to generalized
+      // if no glpyh is available, draw by hand, else use glpyh.
+      if (symbol() == SymId::noSym) {
             painter->setBrush(QBrush(curColor()));
             painter->setPen(Qt::NoPen);
             painter->drawPath(path);
+            }
+      else {
+            painter->setPen(curColor());
+            drawSymbol(symbol(), painter, QPointF());
+            }
+
+      // draw number of measures above the symbol
+      if (_repeatMeasureSize > 1) { // maybe use some other condition about toggling display of number...maybe customized via inspector or preferences or style? ...use same condition in layout
+
+            std::vector<Ms::SymId> repeatMeasureSizeSymbols = toTimeSigString(QString("%1").arg(_repeatMeasureSize));
+            qreal y = -spatium() * numberHeight;                                                // place above the slashes
+            qreal x = bbox().width() * .5 - symBbox(repeatMeasureSizeSymbols).width() * .5;     // center justification
+            painter->setPen(curColor());
+            drawSymbols(repeatMeasureSizeSymbols, painter, QPointF(x, y));
             }
       }
 
@@ -155,29 +182,79 @@ void RepeatMeasure::draw(QPainter* painter) const
 
 void RepeatMeasure::layout()
       {
-      for (Element* e : _el)
-            e->layout();
+      if (symbol() == SymId::noSym) {
+            path      = QPainterPath();
 
-      qreal sp  = spatium();
+            // total width of symbol = (lw + ls) * (_repeatMeasureSlashes - 1) + w;
+            qreal sp  = spatium();
+            qreal y   = -sp;       // top is one sp above the middle staffline
+            qreal w   = sp * 2.4;  // tip-to-tip horizontal span of each slash
+            qreal h   = sp * 2.0;  // vertical span of each slash
+            qreal lw  = sp * .50;  // slash width
+            qreal ls  = sp * .50;  // space between slashes
+            qreal r   = sp * .20;  // dot radius
 
-      qreal y   = sp;
-      qreal w   = sp * 2.4;
-      qreal h   = sp * 2.0;
-      qreal lw  = sp * .50;  // line width
-      qreal r   = sp * .20;  // dot radius
+            qreal xoffset = 0.0;
+            // draw each slash
+            for (int i=0; i<_repeatMeasureSlashes; i++ ) {
+                  path.moveTo(xoffset + w - lw,     y);
+                  path.lineTo(xoffset + w     ,     y);
+                  path.lineTo(xoffset     + lw, h + y);
+                  path.lineTo(xoffset         , h + y);
+                  path.closeSubpath();
+                  xoffset += lw + ls;
+                  }
 
-      path      = QPainterPath();
+            // dots on each side
+            path.addEllipse(QRectF(                  + w * .25 - r, y+h * .25 - r, r * 2.0, r * 2.0 ));
+            path.addEllipse(QRectF(xoffset - lw - ls + w * .75 - r, y+h * .75 - r, r * 2.0, r * 2.0 ));
 
-      path.moveTo(w - lw, y);
-      path.lineTo(w,  y);
-      path.lineTo(lw,  h+y);
-      path.lineTo(0.0, h+y);
-      path.closeSubpath();
-      path.addEllipse(QRectF(w * .25 - r, y+h * .25 - r, r * 2.0, r * 2.0 ));
-      path.addEllipse(QRectF(w * .75 - r, y+h * .75 - r, r * 2.0, r * 2.0 ));
+            setbbox(path.boundingRect());
+            }
+      else {
+            // adjust y offset if symbol in palette so vertically centered (why I need to do this, I'm not sure)
+            if (parent() == 0)
+                  setPos(0.0, 1.0 * spatium());
 
-      setbbox(path.boundingRect());
-//      _space.setRw(width());
+            // figure out box for the particular symbol
+            QRectF bbox = symBbox(symbol());
+            bbox.moveTop(-bbox.top()); // for some reason the symbol returns a negative value for top
+            setbbox(bbox);
+            }
+
+      if (_repeatMeasureSize > 1) { // maybe some condition here to toggle display of number...but make sure same condition as in draw
+            // add approximate space above symbol for display of number
+            addbbox(QRectF(0, -spatium() * (numberHeight + 1) , width(), spatium() * 2.0));
+            }
+      }
+//---------------------------------------------------------
+//   sumMeasureWidthsMutltiMeasureRepeatHalfway
+///   helper function to determine horizontal offset a multi-measure repeat should be displayed based on the laid-out widths of subsequent measures.
+///   If encounter last measure of the system before reach center of covered measures, then will place element at final barline of system
+//---------------------------------------------------------
+
+qreal RepeatMeasure::sumMeasureWidthsMutltiMeasureRepeatHalfway(const Measure* const startingMeasure, const Measure* const lastMeasureOfSystem)
+      {
+      qreal sumMeasureWidths = 0.0; //-m->x();
+      const MeasureBase* m = startingMeasure;
+      for (int i = 0; i < _repeatMeasureSize / 2; i++) { // todo: handle situation where HBox is inbetween
+
+            sumMeasureWidths += m->width(); // add this measure's width to cumulative sum
+
+            if (m == lastMeasureOfSystem || (m->next() && m->next()->isHBox()))  // if forced line break or layout determined system was over or HBox
+                  return sumMeasureWidths;
+
+            m = m->next();
+            if (m == 0) {
+                  qWarning("Somehow have a multi-measure repeat at end of score, such that multi-meas repeat covers measures outside of range");
+                  return sumMeasureWidths; // just use the width have summed so far
+                  }
+            }
+
+      if (_repeatMeasureSize & 1)
+            return sumMeasureWidths + m->width() / 2.0; // if odd number of measures, midX will be halfway through the middle measure
+      else
+            return sumMeasureWidths; // if even, will place elemnt right on barline
       }
 
 //---------------------------------------------------------
@@ -198,6 +275,92 @@ Fraction RepeatMeasure::duration() const
 QString RepeatMeasure::accessibleInfo() const
       {
       return Element::accessibleInfo();
+      }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void RepeatMeasure::scanElements(void* data, void (*func)(void*, Element*), bool all)
+      {
+      ChordRest::scanElements(data, func, all);
+      func(data, this);
+      }
+
+//////////
+// the following are copied from Rest code...may need to modify for repeat measure
+//////////
+
+//---------------------------------------------------------
+//   centerX
+//---------------------------------------------------------
+
+qreal RepeatMeasure::centerX() const
+      {
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   upPos
+//---------------------------------------------------------
+
+qreal RepeatMeasure::upPos() const
+      {
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   downPos
+//---------------------------------------------------------
+
+qreal RepeatMeasure::downPos() const
+      {
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   upLine
+//---------------------------------------------------------
+
+int RepeatMeasure::upLine() const
+      {
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   downLine
+//---------------------------------------------------------
+
+int RepeatMeasure::downLine() const
+      {
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   stemPos
+//---------------------------------------------------------
+
+QPointF RepeatMeasure::stemPos() const
+      {
+      return QPointF(0,0);
+      }
+
+//---------------------------------------------------------
+//   stemPosBeam
+//---------------------------------------------------------
+
+QPointF RepeatMeasure::stemPosBeam() const
+      {
+      return QPointF(0,0);
+      }
+
+//---------------------------------------------------------
+//   stemPosX
+//---------------------------------------------------------
+
+qreal RepeatMeasure::stemPosX() const
+      {
+      return 0.0;
       }
 
 }

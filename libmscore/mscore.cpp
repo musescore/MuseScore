@@ -25,7 +25,8 @@
 #include "volta.h"
 #include "ottava.h"
 #include "trill.h"
-#include "repeat.h"
+//#include "repeat.h"
+#include "rest.h"
 #include "jump.h"
 #include "marker.h"
 #include "layoutbreak.h"
@@ -402,6 +403,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
             qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
+            //qmlRegisterType<RepeatMeasure> ("MuseScore", 1, 0, "RepeatMeasure"); // don't know if should or not
             qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
             qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
             qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");

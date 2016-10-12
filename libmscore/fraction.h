@@ -34,7 +34,7 @@ class Fraction {
 
       void setNumerator(int v)   { _numerator = v;              }
       void setDenominator(int v) { _denominator = v;               }
-      void set(int n, int d)     { _numerator = n; _denominator = d; }
+      void set(int z, int n)     { _numerator = z; _denominator = n; }
 
       bool isZero() const        { return _numerator == 0;      }
 

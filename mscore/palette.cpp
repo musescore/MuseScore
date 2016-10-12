@@ -44,6 +44,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
 #include "paletteBoxButton.h"
+#include "libmscore/repeat.h"
 
 namespace Ms {
 
@@ -806,7 +807,7 @@ static void paintPaletteElement(void* data, Element* e)
       QPainter* p = static_cast<QPainter*>(data);
       p->save();
       p->translate(e->pos());
-      e->draw(p);
+      e->draw(p);      
       p->restore();
       }
 
@@ -969,6 +970,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
                   p.setPen(QPen(color));
                   el->scanElements(&p, paintPaletteElement);
+
                   p.restore();
                   }
             if (cells[idx]->visible)

@@ -1466,7 +1466,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       // reset the vectors that keep track of measure repeats
       _measureRepeatSize.assign(_nstaves, 0);
       _measureRepeatCounter.assign(_nstaves, 0);
-      _measureRepeatSlashes.assign(_nstaves, 1); // one slash by default according to MusicXML
+      _measureRepeatSlashes.assign(_nstaves, 0); // I'm going to use 0 here to represent that input xml did not specify.  Note: although MusicXML specs say one slash is default, if I don't read a slash value for multi-measure repeat, then I'm going to create a repeat measure element with the number of slashes equal to the number of measures.  This is consistent with Sibelius's MusicXML export, which doesn't save the number of slashes, although they actually render their elements with a number of slashes equal to the number of measures.  Finale does, however, output the slashes option.
       }
 
 //---------------------------------------------------------
@@ -2167,7 +2167,14 @@ void MusicXMLParserPass2::measure(const QString& partId,
 
                         //Add a Repeat Measure element to current measure of duration _measureRepeatSize measures.
                         Segment* seg = measure->getSegment(Segment::Type::ChordRest, measure->tick());
-                        RepeatMeasure* rm = new RepeatMeasure(_score, _measureRepeatSize[i], _measureRepeatSlashes[i]);
+                        RepeatMeasure* rm = new RepeatMeasure(_score, _measureRepeatSize[i]);
+
+                        // if slashes not specified, then use same number of slashes as number of measures
+                        if (_measureRepeatSlashes[i] == 0)
+                              rm->setRepeatMeasureSlashes(_measureRepeatSize[i]);
+                        else
+                              rm->setRepeatMeasureSlashes(_measureRepeatSlashes[i]);
+
                         rm->setTrack(staffIdx * VOICES);
                         rm->setParent(seg);
                         rm->setDurationType(TDuration::DurationType::V_MEASURE); // can this go in the constructor?
@@ -2282,7 +2289,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                   if (type == "start") {
 
                         // get a valid number of slashes
-                        int measureRepeatSlashes = 1; // default
+                        int measureRepeatSlashes = 0; // default unread value
                         QStringRef slashes = _e.attributes().value("slashes");
                         if (!slashes.isEmpty()) {
                               if (slashes.toInt() > 0)
@@ -2306,7 +2313,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                   else if (type == "stop") {
                         for (int i = startStaff; i <= endStaff; i++ ) {
                               _measureRepeatSize[i] = 0; // indicates that multi-measure repeat sequence has stopped
-                              _measureRepeatSlashes[i] = 1; // reset to default
+                              _measureRepeatSlashes[i] = 0; // indicates default unread value
                               }
                         _e.skipCurrentElement(); // since not reading any text inside stop tag, we are done with this element
                         }

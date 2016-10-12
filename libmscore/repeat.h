@@ -14,7 +14,7 @@
 #define __REPEAT_H__
 
 #include "text.h"
-#include "rest.h"
+#include "chordrest.h"
 
 namespace Ms {
 
@@ -25,7 +25,7 @@ class Segment;
 //   @@ RepeatMeasure
 //---------------------------------------------------------
 
-class RepeatMeasure : public Rest {
+class RepeatMeasure : public ChordRest {
       Q_OBJECT
       Q_PROPERTY(int  _repeatMeasureSize        READ repeatMeasureSize        WRITE setRepeatMeasureSize)
       Q_PROPERTY(int  _repeatMeasureSlashes     READ repeatMeasureSlashes     WRITE setRepeatMeasureSlashes)
@@ -35,6 +35,7 @@ class RepeatMeasure : public Rest {
       int _repeatMeasureSlashes;                 // MusicXML says: "The slashes attribute specifies the number of slashes to use in the repeat sign. It is 1 if not specified."
 
    public:
+      SymId symbol() const;
       RepeatMeasure(Score*, int repeatMeasureSize = 1, int slashes = 1);
       RepeatMeasure(const RepeatMeasure&, bool link = false);
       RepeatMeasure &operator=(const RepeatMeasure&) = delete;
@@ -44,7 +45,7 @@ class RepeatMeasure : public Rest {
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
       virtual Fraction duration() const override;
-      Fraction actualDuration() const { return Rest::duration(); }
+      Fraction actualDuration() const { return ChordRest::duration(); }
 
       int repeatMeasureSize() const { return _repeatMeasureSize; }
       int repeatMeasureSlashes() const { return _repeatMeasureSlashes; }
@@ -60,6 +61,23 @@ class RepeatMeasure : public Rest {
       virtual void write(Xml& xml) const override;
 
       virtual QString accessibleInfo() const override;
+
+    //  virtual Element* drop(const DropData&) override; todo: implement special version
+      virtual Measure* measure() const          { return parent() ? (Measure*)(parent()->parent()) : 0; }
+      virtual Beam* beam() const                { return 0; } // RepeatMeasures can't be "beamed"
+
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+
+      virtual qreal upPos() const;
+      virtual qreal downPos() const;
+      virtual qreal centerX() const;
+      virtual int upLine() const;
+      virtual int downLine() const;
+      virtual QPointF stemPos() const;
+      virtual qreal stemPosX() const;
+      virtual QPointF stemPosBeam() const;
+
+      qreal sumMeasureWidthsMutltiMeasureRepeatHalfway(const Measure* const startingMeasure, const Measure* const lastMeasureOfSystem);
       };
 
 
