@@ -716,6 +716,7 @@ VBox::VBox(Score* score)
       setBoxHeight(Spatium(10.0));
       setTopGap(score->styleP(StyleIdx::systemFrameDistance));
       setBottomGap(score->styleP(StyleIdx::frameSystemDistance));
+      setLineBreak(true);
       }
 
 //---------------------------------------------------------

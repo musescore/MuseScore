@@ -129,7 +129,7 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
 void MeasureBase::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == Element::Type::LAYOUT_BREAK) {
+      if (e->isLayoutBreak()) {
             LayoutBreak* b = toLayoutBreak(e);
 #ifndef NDEBUG
             foreach (Element* ee, _el) {
@@ -141,16 +141,19 @@ void MeasureBase::add(Element* e)
                   }
 #endif
             switch (b->layoutBreakType()) {
-                  case LayoutBreak::Type::PAGE:
+                  case LayoutBreak::PAGE:
                         _pageBreak = true;
                         break;
-                  case LayoutBreak::Type::LINE:
+                  case LayoutBreak::LINE:
                         _lineBreak = true;
                         break;
-                  case LayoutBreak::Type::SECTION:
+                  case LayoutBreak::SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
                         score()->setLayoutAll();
+                        break;
+                  case LayoutBreak::NOBREAK:
+                        _noBreak = true;
                         break;
                   }
             }
@@ -167,16 +170,19 @@ void MeasureBase::remove(Element* el)
       if (el->isLayoutBreak()) {
             LayoutBreak* lb = toLayoutBreak(el);
             switch (lb->layoutBreakType()) {
-                  case LayoutBreak::Type::PAGE:
+                  case LayoutBreak::PAGE:
                         _pageBreak = false;
                         break;
-                  case LayoutBreak::Type::LINE:
+                  case LayoutBreak::LINE:
                         _lineBreak = false;
                         break;
-                  case LayoutBreak::Type::SECTION:
+                  case LayoutBreak::SECTION:
                         _sectionBreak = 0;
                         score()->setPause(endTick(), 0);
                         score()->setLayoutAll();
+                        break;
+                  case LayoutBreak::NOBREAK:
+                        _noBreak = false;
                         break;
                   }
             }
@@ -274,11 +280,19 @@ void MeasureBase::layout()
                   continue;
             if (element->isLayoutBreak()) {
                   qreal _spatium = spatium();
-                  qreal x = -_spatium - element->width() + width()
+                  qreal x;
+                  qreal y;
+                  if (toLayoutBreak(element)->isNoBreak()) {
+                        x = width() - element->width() * .5;
+                        y = -(_spatium + element->height());
+                        }
+                  else {
+                        x = -_spatium - element->width() + width()
                             - breakCount * (element->width() + _spatium * .8);
-                  qreal y = -2 * _spatium - element->height();
+                        y = -2 * _spatium - element->height();
+                        breakCount++;
+                        }
                   element->setPos(x, y);
-                  breakCount++;
                   }
             else
                   element->layout();
@@ -369,6 +383,25 @@ QVariant MeasureBase::propertyDefault(P_ID propertyId) const
 
 void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
       {
+      switch (type) {
+            case LayoutBreak::LINE:
+                  if (lineBreak() == v)
+                        return;
+                  break;
+            case LayoutBreak::PAGE:
+                  if (pageBreak() == v)
+                        return;
+                  break;
+            case LayoutBreak::SECTION:
+                  if ((_sectionBreak && v) || (!_sectionBreak && !v))  //ugh!
+                        return;
+                  break;
+            case LayoutBreak::NOBREAK:
+                  if (noBreak() == v)
+                        return;
+                  break;
+            }
+
       if (v) {
             LayoutBreak* lb = new LayoutBreak(score());
             lb->setLayoutBreakType(type);

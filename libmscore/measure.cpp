@@ -1213,36 +1213,63 @@ Element* Measure::drop(const DropData& data)
                      data.modifiers & Qt::ControlModifier);
                   return 0;
 
-            case Element::Type::LAYOUT_BREAK:
-                  {
-                  LayoutBreak* lb = static_cast<LayoutBreak*>(e);
-                  if (
-                        (lb->layoutBreakType() == LayoutBreak::Type::PAGE && pageBreak())
-                     || (lb->layoutBreakType() == LayoutBreak::Type::LINE && lineBreak())
-                     || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && sectionBreak())
-                     ) {
-                        //
-                        // if break already set
-                        //
-                        delete lb;
-                        break;
+            case Element::Type::LAYOUT_BREAK: {
+                  LayoutBreak* b = toLayoutBreak(e);
+                  switch (b->layoutBreakType()) {
+                        case  LayoutBreak::PAGE:
+                              if (pageBreak()) {
+                                    delete b;
+                                    b = 0;
+                                    }
+                              else
+                                    setLineBreak(false);
+                              break;
+                        case  LayoutBreak::LINE:
+                              if (lineBreak()) {
+                                    delete b;
+                                    b = 0;
+                                    }
+                              else
+                                    setPageBreak(false);
+                              break;
+                        case  LayoutBreak::SECTION:
+                              if (sectionBreak()) {
+                                    delete b;
+                                    b = 0;
+                                    }
+                              else
+                                    setLineBreak(false);
+                              break;
+                        case LayoutBreak::NOBREAK:
+                              if (noBreak()) {
+                                    delete b;
+                                    b = 0;
+                                    }
+                              else {
+                                    setLineBreak(false);
+                                    setPageBreak(false);
+                                    }
+                              break;
                         }
                   // make sure there is only LayoutBreak::Type::LINE or LayoutBreak::Type::PAGE
-                  if ((lb->layoutBreakType() != LayoutBreak::Type::SECTION) && (pageBreak() || lineBreak())) {
+                  if (!b->isSectionBreak() && (pageBreak() || lineBreak())) {
                         for (Element* le : el()) {
-                              if (le->type() == Element::Type::LAYOUT_BREAK
-                                 && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::Type::LINE
-                                  || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::Type::PAGE)) {
-                                    score()->undoChangeElement(le, e);
+                              if (!le->isLayoutBreak())
+                                    continue;
+                              LayoutBreak* bb = toLayoutBreak(le);
+                              if (bb->isLineBreak() || bb->isPageBreak()) {
+                                    bb->undoChangeProperty(P_ID::LAYOUT_BREAK, int(b->layoutBreakType()));
                                     break;
                                     }
                               }
                         break;
                         }
-                  lb->setTrack(-1);       // these are system elements
-                  lb->setParent(this);
-                  score()->undoAddElement(lb);
-                  return lb;
+                  if (b) {
+                        b->setTrack(-1);       // these are system elements
+                        b->setParent(this);
+                        score()->undoAddElement(b);
+                        }
+                  return b;
                   }
 
             case Element::Type::SPACER:

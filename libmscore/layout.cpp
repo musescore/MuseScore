@@ -3209,10 +3209,28 @@ System* Score::collectSystem(LayoutContext& lc)
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure
 
-            if (!lineMode && (system->measures().size() > 1) && (minWidth + ww > systemWidth)) {
-                  system->measures().pop_back();
-                  lc.curMeasure->setSystem(oldSystem);
-                  break;
+            if (!lineMode) {
+                  bool tooWide = minWidth + ww > systemWidth;
+                  if ((system->measures().size() > 1) && tooWide) {
+                        if (lc.prevMeasure->noBreak() && system->measures().size() > 2) {
+                              // remove last two measures
+                              // TODO: check more measures for noBreak()
+                              system->measures().pop_back();
+                              system->measures().pop_back();
+                              lc.curMeasure->setSystem(oldSystem);
+                              lc.prevMeasure->setSystem(oldSystem);
+                              lc.nextMeasure = lc.curMeasure;
+                              lc.curMeasure = lc.prevMeasure;
+                              lc.prevMeasure = lc.curMeasure->prevMeasure();
+                              break;
+                              }
+                        else if (!lc.prevMeasure->noBreak()) {
+                              // remove last measure
+                              system->measures().pop_back();
+                              lc.curMeasure->setSystem(oldSystem);
+                              break;
+                              }
+                        }
                   }
 
             if (lc.prevMeasure && lc.prevMeasure->isMeasure() && lc.prevMeasure->system() == system) {
@@ -3224,15 +3242,12 @@ System* Score::collectSystem(LayoutContext& lc)
                   ww += v * stretch;
                   }
 
+            MeasureBase* mb = lc.curMeasure;
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
                   case LayoutMode::SYSTEM:
-                        pbreak = lc.curMeasure->pageBreak()
-                                 || lc.curMeasure->lineBreak()
-                                 || lc.curMeasure->sectionBreak()
-                                 || lc.curMeasure->isVBox()
-                                 || lc.curMeasure->isTBox();
+                        pbreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
@@ -3250,11 +3265,13 @@ System* Score::collectSystem(LayoutContext& lc)
             getNextMeasure(lc);
             minWidth += ww;
 
-            Element::Type nt = lc.curMeasure ? lc.curMeasure->type() : Element::Type::INVALID;
-            if (!lineMode
-               && (pbreak || nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX
-                 || (minWidth + minMeasureWidth > systemWidth))) {
-                  break;      // break system
+            // Element::Type nt = lc.curMeasure ? lc.curMeasure->type() : Element::Type::INVALID;
+            mb = lc.curMeasure;
+            bool tooWide = false; // minWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
+            if (!lineMode) {
+                  if ((pbreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide)) {
+                        break;      // break system
+                        }
                   }
 
             // whether the measure actually has courtesy elements or whether we added space for hypothetical ones,

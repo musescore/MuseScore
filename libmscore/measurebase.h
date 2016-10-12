@@ -78,15 +78,18 @@ class MeasureBase : public Element {
       LayoutBreak* _sectionBreak { 0 };
 
       int _tick              { 0 };
-      int _no                { 0            };    ///< Measure number, counting from zero
-      int _noOffset          { 0            };    ///< Offset to measure number
+      int _no                { 0 };       ///< Measure number, counting from zero
+      int _noOffset          { 0 };       ///< Offset to measure number
 
       bool _repeatEnd        { false };
       bool _repeatStart      { false };
       bool _repeatJump       { false };
       bool _irregular        { true  };        ///< Irregular measure, do not count
+
       bool _lineBreak        { false };        ///< Forced line break
       bool _pageBreak        { false };        ///< Forced page break
+      bool _noBreak          { false };
+
       bool _hasSystemHeader  { false };
       bool _hasSystemTrailer { false };
       bool _hasCourtesyKeySig { false };
@@ -127,15 +130,18 @@ class MeasureBase : public Element {
 
       bool lineBreak() const                 { return _lineBreak; }
       bool pageBreak() const                 { return _pageBreak; }
+      bool noBreak() const                   { return _noBreak;   }
       LayoutBreak* sectionBreak() const      { return _sectionBreak; }
       void setLineBreak(bool v)              { _lineBreak = v;    }
       void setPageBreak(bool v)              { _pageBreak = v;    }
       void setSectionBreak(LayoutBreak* v)   { _sectionBreak = v; }
+      void setNoBreak(bool v)                { _noBreak = v;      }
 
       void undoSetBreak(bool v, LayoutBreak::Type type);
-      void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::Type::LINE);}
-      void undoSetPageBreak(bool v)          {  undoSetBreak(v, LayoutBreak::Type::PAGE);}
-      void undoSetSectionBreak(bool v)       {  undoSetBreak(v, LayoutBreak::Type::SECTION);}
+      void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::LINE);}
+      void undoSetPageBreak(bool v)          {  undoSetBreak(v, LayoutBreak::PAGE);}
+      void undoSetSectionBreak(bool v)       {  undoSetBreak(v, LayoutBreak::SECTION);}
+      void undoSetNoBreak(bool v)            {  undoSetBreak(v, LayoutBreak::NOBREAK);}
 
       virtual void moveTicks(int diff)       { setTick(tick() + diff); }
 
