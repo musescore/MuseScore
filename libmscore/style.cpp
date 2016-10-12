@@ -10,7 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <unordered_map>
 #include "mscore.h"
 #include "style.h"
 #include "xml.h"
