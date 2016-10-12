@@ -724,6 +724,7 @@ void EditStyle::setValues()
                   }
             ++idx;
             }
+      musicalTextFont->blockSignals(true);
       musicalTextFont->clear();
       // CAUTION: the second element, the itemdata, is a font family name!
       // It's also stored in score file as the musicalTextFont
@@ -734,6 +735,7 @@ void EditStyle::setValues()
       QString tfont(lstyle.value(StyleIdx::MusicalTextFont).toString());
       idx = musicalTextFont->findData(tfont);
       musicalTextFont->setCurrentIndex(idx);
+      musicalTextFont->blockSignals(false);
 
       toggleHeaderOddEven(lstyle.value(StyleIdx::headerOddEven).toBool());
 
@@ -912,8 +914,25 @@ void EditStyle::valueChanged(int i)
       {
       StyleIdx idx = (StyleIdx)i;
       QVariant val = getValue(idx);
+      bool setValue = false;
+      if (idx == StyleIdx::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
+              ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
+              if (scoreFont) {
+                    for (auto i : scoreFont->engravingDefaults()) {
+                          cs->undo(new ChangeStyleVal(cs, i.first, i.second));
+                          }
+                    if (scoreFont->textEnclosureThickness()) {
+                           TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
+                           ts.setFrameWidth(Spatium(scoreFont->textEnclosureThickness()));
+                           cs->undo(new ChangeTextStyle(cs, ts));
+                           }
+                    }
+              setValue = true;
+              }
       cs->undo(new ChangeStyleVal(cs, idx, val));
       cs->update();
+      if (setValue)
+            setValues();
 
       const StyleWidget& sw = styleWidget(idx);
       if (sw.reset)
