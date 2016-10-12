@@ -613,11 +613,16 @@ void Measure::add(Element* e)
 
             case Element::Type::SPACER:
                   {
-                  Spacer* sp = static_cast<Spacer*>(e);
-                  if (sp->spacerType() == SpacerType::UP)
-                        _mstaves[e->staffIdx()]->_vspacerUp = sp;
-                  else if (sp->spacerType() == SpacerType::DOWN)
-                        _mstaves[e->staffIdx()]->_vspacerDown = sp;
+                  Spacer* sp = toSpacer(e);
+                  switch (sp->spacerType()) {
+                        case SpacerType::UP:
+                              _mstaves[e->staffIdx()]->_vspacerUp = sp;
+                              break;
+                        case SpacerType::DOWN:
+                        case SpacerType::FIXED:
+                              _mstaves[e->staffIdx()]->_vspacerDown = sp;
+                              break;
+                        }
                   }
                   break;
             case Element::Type::SEGMENT:
@@ -689,16 +694,21 @@ void Measure::remove(Element* e)
       Q_ASSERT(e->parent() == this);
       Q_ASSERT(e->score() == score());
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::TEXT:
                   _mstaves[e->staffIdx()]->setNoText(static_cast<Text*>(0));
                   break;
 
             case Element::Type::SPACER:
-                  if (toSpacer(e)->spacerType() == SpacerType::DOWN)
-                        _mstaves[e->staffIdx()]->_vspacerDown = 0;
-                  else if (toSpacer(e)->spacerType() == SpacerType::UP)
-                        _mstaves[e->staffIdx()]->_vspacerUp = 0;
+                  switch (toSpacer(e)->spacerType()) {
+                        case SpacerType::DOWN:
+                        case SpacerType::FIXED:
+                              _mstaves[e->staffIdx()]->_vspacerDown = 0;
+                              break;
+                        case SpacerType::UP:
+                              _mstaves[e->staffIdx()]->_vspacerUp = 0;
+                              break;
+                        }
                   break;
 
             case Element::Type::SEGMENT:
@@ -1277,6 +1287,33 @@ Element* Measure::drop(const DropData& data)
                   Spacer* spacer = static_cast<Spacer*>(e);
                   spacer->setTrack(staffIdx * VOICES);
                   spacer->setParent(this);
+                  if (spacer->spacerType() == SpacerType::FIXED) {
+                        qreal gap = spatium() * 10;
+                        System* s = system();
+                        if (staffIdx == score()->nstaves()-1) {
+                              System* ns = 0;
+                              for (System* ts : score()->systems()) {
+                                    if (ns) {
+                                          ns = ts;
+                                          break;
+                                          }
+                                    if (ts  == s)
+                                          ns = ts;
+                                    }
+                              if (ns) {
+                                    qreal y1 = s->staffYpage(staffIdx);
+                                    qreal y2 = ns->staffYpage(0);
+                                    printf("=====%f  %f\n", y1, y2);
+                                    gap = y2 - y1 - score()->staff(staffIdx)->height();
+                                    }
+                              }
+                        else {
+                              qreal y1 = s->staffYpage(staffIdx);
+                              qreal y2 = s->staffYpage(staffIdx+1);
+                              gap = y2 - y1 - score()->staff(staffIdx)->height();
+                              }
+                        spacer->setGap(gap);
+                        }
                   score()->undoAddElement(spacer);
                   return spacer;
                   }
@@ -1546,8 +1583,12 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
 
       if (mstaff->_vspacerUp)
             xml.tag("vspacerUp", mstaff->_vspacerUp->gap() / _spatium);
-      if (mstaff->_vspacerDown)
-            xml.tag("vspacerDown", mstaff->_vspacerDown->gap() / _spatium);
+      if (mstaff->_vspacerDown) {
+            if (mstaff->_vspacerDown->spacerType() == SpacerType::FIXED)
+                  xml.tag("vspacerFixed", mstaff->_vspacerDown->gap() / _spatium);
+            else
+                  xml.tag("vspacerDown", mstaff->_vspacerDown->gap() / _spatium);
+            }
       if (!mstaff->_visible)
             xml.tag("visible", mstaff->_visible);
       if (mstaff->_slashStyle)
@@ -1966,6 +2007,15 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (_mstaves[staffIdx]->_vspacerDown == 0) {
                         Spacer* spacer = new Spacer(score());
                         spacer->setSpacerType(SpacerType::DOWN);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->_vspacerDown->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "vspacerFixed") {
+                  if (_mstaves[staffIdx]->_vspacerDown == 0) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::FIXED);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }

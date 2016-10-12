@@ -82,7 +82,8 @@ class System : public Element {
       QList<Bracket*> _brackets;
       QList<SpannerSegment*> _spannerSegments;
 
-      qreal _leftMargin   { 0.0    };     ///< left margin for instrument name, brackets etc.
+      qreal _leftMargin      { 0.0    };     ///< left margin for instrument name, brackets etc.
+      mutable bool fixedDownDistance { false };
 
    public:
       System(Score*);
@@ -155,6 +156,7 @@ class System : public Element {
       void removeGeneratedElements();
 
       void moveBracket(int staffIdx, int srcCol, int dstCol);
+      bool hasFixedDownDistance() const { return fixedDownDistance; }
       };
 
 typedef QList<System*>::iterator iSystem;

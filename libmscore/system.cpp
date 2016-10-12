@@ -398,8 +398,14 @@ void System::layout2()
                   dist    = qMax(dist, d);
 
                   Spacer* sp = m->mstaff(si1)->_vspacerDown;
-                  if (sp)
-                        dist = qMax(dist, staff->height() + sp->gap());
+                  if (sp) {
+                        if (sp->spacerType() == SpacerType::FIXED) {
+                              dist = staff->height() + sp->gap();
+                              break;
+                              }
+                        else
+                              dist = qMax(dist, staff->height() + sp->gap());
+                        }
                   sp = m->mstaff(si2)->_vspacerUp;
                   if (sp)
                         dist = qMax(dist, sp->gap());
@@ -1024,46 +1030,57 @@ qreal System::minDistance(System* s2) const
       qreal dist                = score()->styleP(StyleIdx::minSystemDistance);
       int lastStaff             = _staves.size() - 1;
 
+      fixedDownDistance = false;
+
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
                   Q_ASSERT(!m->mstaves().empty());
                   Spacer* sp = m->mstaves().back()->_vspacerDown;
-                  if (sp)
-                        dist = qMax(dist, sp->gap());
+                  if (sp) {
+                        if (sp->spacerType() == SpacerType::FIXED) {
+                              dist = sp->gap();
+                              fixedDownDistance = true;
+                              break;
+                              }
+                        else
+                              dist = qMax(dist, sp->gap());
+                        }
                   }
             }
-      for (MeasureBase* mb2 : s2->ml) {
-            if (mb2->isMeasure()) {
-                  Measure* m = toMeasure(mb2);
-                  Q_ASSERT(!m->mstaves().empty());
-                  Spacer* sp = m->mstaves().front()->_vspacerUp;
-                  if (sp)
-                        dist = qMax(dist, sp->gap());
+      if (!fixedDownDistance) {
+            for (MeasureBase* mb2 : s2->ml) {
+                  if (mb2->isMeasure()) {
+                        Measure* m = toMeasure(mb2);
+                        Q_ASSERT(!m->mstaves().empty());
+                        Spacer* sp = m->mstaves().front()->_vspacerUp;
+                        if (sp)
+                              dist = qMax(dist, sp->gap());
+                        }
                   }
-            }
 
-      for (MeasureBase* mb1 : ml) {
-            if (!mb1->isMeasure())
-                  continue;
-            Measure* m1 = toMeasure(mb1);
-            qreal bx1 = m1->x();
-            qreal bx2 = m1->x() + m1->width();
+            for (MeasureBase* mb1 : ml) {
+                  if (!mb1->isMeasure())
+                        continue;
+                  Measure* m1 = toMeasure(mb1);
+                  qreal bx1 = m1->x();
+                  qreal bx2 = m1->x() + m1->width();
 
-            for (MeasureBase* mb2 : s2->measures()) {
-                  if (!mb2->isMeasure())
-                        continue;
-                  Measure* m2 = toMeasure(mb2);
-                  qreal ax1 = mb2->x();
-                  if (ax1 >= bx2)
-                        break;
-                  qreal ax2 = mb2->x() + mb2->width();
-                  if (ax2 < bx1)
-                        continue;
-                  Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
-                  Shape s2 = m2->staffShape(0).translated(m2->pos());
-                  qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
-                  dist = qMax(dist, d - m1->mstaff(lastStaff)->lines->height());
+                  for (MeasureBase* mb2 : s2->measures()) {
+                        if (!mb2->isMeasure())
+                              continue;
+                        Measure* m2 = toMeasure(mb2);
+                        qreal ax1 = mb2->x();
+                        if (ax1 >= bx2)
+                              break;
+                        qreal ax2 = mb2->x() + mb2->width();
+                        if (ax2 < bx1)
+                              continue;
+                        Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
+                        Shape s2 = m2->staffShape(0).translated(m2->pos());
+                        qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
+                        dist = qMax(dist, d - m1->mstaff(lastStaff)->lines->height());
+                        }
                   }
             }
       return dist;
