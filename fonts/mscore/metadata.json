@@ -3,15 +3,40 @@
     "fontVersion": 0.1,
 
     "engravingDefaults": {
-        "tieEndpointThickness": 0.1,
-        "tieMidpointThickness": 0.22
+        "arrowShaftThickness": 0.16,
+        "barlineSeparation": 0.4,
+        "beamSpacing": 0.25,
+        "beamThickness": 0.5,
+        "bracketThickness": 0.45,
+        "dashedBarlineDashLength": 0.5,
+        "dashedBarlineGapLength": 0.25,
+        "dashedBarlineThickness": 0.16,
+        "hairpinThickness": 0.13,
+        "legerLineExtension": 0.6,
+        "legerLineThickness": 0.16,
+        "lyricLineThickness": 0.1,
+        "octaveLineThickness": 0.1,
+        "pedalLineThickness": 0.15,
+        "repeatBarlineDotSeparation": 0.4,
+        "repeatEndingLineThickness": 0.1,
+        "slurEndpointThickness": 0.07,
+        "slurMidpointThickness": 0.15,
+        "staffLineThickness": 0.08,
+        "stemThickness": 0.13,
+        "subBracketThickness": 0.16,
+        "textEnclosureThickness": 0.2,
+        "thickBarlineThickness": 0.5,
+        "thinBarlineThickness": 0.16,
+        "tieEndpointThickness": 0.07,
+        "tieMidpointThickness": 0.15,
+        "tupletBracketThickness": 0.1
     },
-    
+
     "glyphsWithAlternates": {
         "6stringTabClef": {
-            "alternates": [ 
+            "alternates": [
                 {
-                    "codepoint": "U+E1A2", 
+                    "codepoint": "U+E1A2",
                     "name": "6stringTabClefSerif"
                 }
             ]
@@ -19,11 +44,11 @@
         "noteheadDoubleWhole": {
             "alternates": [
                 {
-                    "codepoint": "U+E1BA", 
+                    "codepoint": "U+E1BA",
                     "name": "noteheadDoubleWholeAlt"
                 }
             ]
-        } 
+        }
     },
 
     "glyphsWithAnchors": {

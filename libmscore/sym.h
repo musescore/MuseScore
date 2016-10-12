@@ -24,6 +24,7 @@ class QPainter;
 namespace Ms {
 
 class TextStyle;
+enum class StyleIdx;
 
 //---------------------------------------------------------
 //   SymId
@@ -2772,6 +2773,8 @@ class ScoreFont {
       QString _filename;
       QByteArray fontImage;
       QCache<GlyphKey, GlyphPixmap>* cache { 0 };
+      std::list<std::pair<StyleIdx, QVariant>> _engravingDefaults;
+      double _textEnclosureThickness = 0;
       mutable QFont* font { 0 };
 
       static QVector<ScoreFont> _scoreFonts;
@@ -2791,6 +2794,8 @@ class ScoreFont {
 
       const QString& name() const           { return _name;   }
       const QString& family() const         { return _family; }
+      std::list<std::pair<StyleIdx, QVariant>> engravingDefaults()  { return _engravingDefaults; }
+      double textEnclosureThickness() { return _textEnclosureThickness; }
 
       QString fontPath() const { return _fontPath; }
 
