@@ -117,7 +117,7 @@ static void localSetScore(void* score, Element* element)
 //   createExcerpt
 //---------------------------------------------------------
 
-void createExcerpt(Excerpt* excerpt)
+void Excerpt::createExcerpt(Excerpt* excerpt)
       {
       MasterScore* oscore = excerpt->oscore();
       Score* score        = excerpt->partScore();
@@ -401,7 +401,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
 //   cloneStaves
 //---------------------------------------------------------
 
-void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& trackList)
+void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& trackList)
       {
       TieMap  tieMap;
 
@@ -769,7 +769,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<i
 //    staves are in same score
 //---------------------------------------------------------
 
-void cloneStaff(Staff* srcStaff, Staff* dstStaff)
+void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
       {
       Score* score = srcStaff->score();
       TieMap tieMap;
@@ -947,7 +947,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 //    staves are potentially in different scores
 //---------------------------------------------------------
 
-void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
+void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
       {
       Score* oscore = srcStaff->score();
       Score* score  = dstStaff->score();

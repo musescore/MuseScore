@@ -2409,7 +2409,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-            cloneStaves(score, pscore, stavesMap, tracks);
+            Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
 
             if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
@@ -2422,7 +2422,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   StaffType st = *StaffType::preset(sts);
                   s1->setStaffType(&st);
                   s1->setLines(lines);
-                  cloneStaff(s,s1);
+                  Excerpt::cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
             pscore->appendPart(p);
