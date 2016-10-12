@@ -461,6 +461,9 @@ Palette* MuseScore::newBreaksPalette()
       sp->setGrid(42, 36);
       sp->setDrawGrid(true);
 
+      struct BreakItem {
+            LayoutBreak b;
+            };
       LayoutBreak* lb = new LayoutBreak(gscore);
       lb->setLayoutBreakType(LayoutBreak::Type::LINE);
       PaletteCell* cell = sp->append(lb, tr("Line break"));
@@ -476,6 +479,11 @@ Palette* MuseScore::newBreaksPalette()
       cell = sp->append(lb, tr("Section break"));
       cell->mag = 1.2;
 
+      lb = new LayoutBreak(gscore);
+      lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
+      cell = sp->append(lb, tr("Don't break"));
+      cell->mag = 1.2;
+
       Spacer* spacer = new Spacer(gscore);
       spacer->setSpacerType(SpacerType::DOWN);
       spacer->setGap(3 * _spatium);
@@ -487,6 +495,9 @@ Palette* MuseScore::newBreaksPalette()
       spacer->setGap(3 * _spatium);
       cell = sp->append(spacer, tr("Staff spacer up"));
       cell->mag = .7;
+
+
+
       return sp;
       }
 

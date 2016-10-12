@@ -32,20 +32,20 @@ class LayoutBreak : public Element {
       Q_OBJECT
 
    public:
-      enum class Type : char {
-            PAGE, LINE, SECTION
+      enum Type {
+            PAGE, LINE, SECTION, NOBREAK
             };
    private:
       Q_PROPERTY(Ms::LayoutBreak::Type layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
       Q_ENUMS(Type)
 
-      Type _layoutBreakType;
       qreal lw;
       QPainterPath path;
       QPainterPath path2;
       qreal _pause;
       bool _startWithLongNames;
       bool _startWithMeasureOne;
+      Type _layoutBreakType;
 
       virtual void draw(QPainter*) const override;
       void layout0();
@@ -75,6 +75,11 @@ class LayoutBreak : public Element {
       void setStartWithLongNames(bool v)  { _startWithLongNames = v;     }
       bool startWithMeasureOne() const    { return _startWithMeasureOne; }
       void setStartWithMeasureOne(bool v) { _startWithMeasureOne = v;    }
+
+      bool isPageBreak() const    { return _layoutBreakType == PAGE;    }
+      bool isLineBreak() const    { return _layoutBreakType == LINE;    }
+      bool isSectionBreak() const { return _layoutBreakType == SECTION; }
+      bool isNoBreak() const      { return _layoutBreakType == NOBREAK; }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

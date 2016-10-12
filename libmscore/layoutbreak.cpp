@@ -98,7 +98,7 @@ void LayoutBreak::draw(QPainter* painter) const
       stroker.setJoinStyle(Qt::MiterJoin);
       stroker.setCapStyle(Qt::SquareCap);
 
-      QVector<qreal> dashes ;
+      QVector<qreal> dashes;
       dashes.append(1);
       dashes.append(3);
       stroker.setDashPattern(dashes);
@@ -110,7 +110,6 @@ void LayoutBreak::draw(QPainter* painter) const
          lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
       painter->setBrush(Qt::NoBrush);
       painter->drawPath(path2);
-
       }
 
 //---------------------------------------------------------
@@ -128,7 +127,7 @@ void LayoutBreak::layout0()
       QRectF rect(0.0, 0.0, w, h);
       path.addRect(rect);
 
-      switch(layoutBreakType()) {
+      switch (layoutBreakType()) {
             case Type::LINE:
                   path2.moveTo(w * .8, h * .3);
                   path2.lineTo(w * .8, h * .6);
@@ -161,6 +160,21 @@ void LayoutBreak::layout0()
 
                   path2.moveTo(w*.55, h*.21); // 0.01 to avoid overlap
                   path2.lineTo(w*.55, h*.79);
+                  break;
+
+            case Type::NOBREAK:
+                  path2.moveTo(w * .1,  h * .5);
+                  path2.lineTo(w * .9,  h * .5);
+
+                  path2.moveTo(w * .7, h * .3);
+                  path2.lineTo(w * .5, h * .5);
+                  path2.lineTo(w * .7, h * .7);
+                  path2.lineTo(w * .7, h * .3);
+
+                  path2.moveTo(w * .3,  h * .3);
+                  path2.lineTo(w * .5,  h * .5);
+                  path2.lineTo(w * .3,  h * .7);
+                  path2.lineTo(w * .3,  h * .3);
                   break;
 
             default:

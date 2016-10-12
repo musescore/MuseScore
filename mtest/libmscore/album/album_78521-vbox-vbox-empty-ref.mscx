@@ -97,17 +97,11 @@
       <VBox>
         <height>10</height>
         <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         </VBox>
       <VBox>
         <height>10</height>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
