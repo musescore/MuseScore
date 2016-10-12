@@ -271,7 +271,7 @@ void MScore::init()
       //
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       static const char* fonts[] = {
-            ":/fonts/musejazz/MuseJazz.ttf",
+            ":/fonts/musejazz/MuseJazzText.ttf",
             ":/fonts/FreeSans.ttf",
             ":/fonts/FreeSerif.ttf",
             ":/fonts/FreeSerifBold.ttf",
