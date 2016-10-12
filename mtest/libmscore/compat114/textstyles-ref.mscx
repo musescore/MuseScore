@@ -40,7 +40,7 @@
         <valign>top</valign>
         <offsetType>absolute</offsetType>
         <name>Title</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>28</size>
         <bold>1</bold>
         </TextStyle>
@@ -51,7 +51,7 @@
         <yoffset>10</yoffset>
         <offsetType>absolute</offsetType>
         <name>Subtitle</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>14</size>
         </TextStyle>
       <TextStyle>
@@ -59,7 +59,7 @@
         <valign>bottom</valign>
         <offsetType>absolute</offsetType>
         <name>Composer</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         </TextStyle>
       <TextStyle>
@@ -67,7 +67,7 @@
         <valign>bottom</valign>
         <offsetType>absolute</offsetType>
         <name>Lyricist</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         </TextStyle>
       <TextStyle>
@@ -77,7 +77,7 @@
         <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
         <name>Lyrics Odd Lines</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>10</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -88,7 +88,7 @@
         <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
         <name>Lyrics Even Lines</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>10</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -97,7 +97,7 @@
         <valign>center</valign>
         <offsetType>absolute</offsetType>
         <name>Fingering</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>8</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -108,7 +108,7 @@
         <yoffset>-5</yoffset>
         <offsetType>spatium</offsetType>
         <name>String Number</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>8</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <frameWidthS>0.1</frameWidthS>
@@ -122,7 +122,7 @@
         <valign>center</valign>
         <offsetType>absolute</offsetType>
         <name>Instrument Name (Long)</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -131,7 +131,7 @@
         <valign>center</valign>
         <offsetType>absolute</offsetType>
         <name>Instrument Name (Short)</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -140,7 +140,7 @@
         <valign>bottom</valign>
         <offsetType>absolute</offsetType>
         <name>Instrument Name (Part)</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>18</size>
         </TextStyle>
       <TextStyle>
@@ -150,7 +150,7 @@
         <yoffset>8</yoffset>
         <offsetType>spatium</offsetType>
         <name>Dynamics</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <italic>1</italic>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -162,7 +162,7 @@
         <yoffset>-4</yoffset>
         <offsetType>spatium</offsetType>
         <name>Tempo</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <bold>1</bold>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -173,7 +173,7 @@
         <valign>top</valign>
         <offsetType>spatium</offsetType>
         <name>Metronome</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <bold>1</bold>
         </TextStyle>
@@ -182,7 +182,7 @@
         <valign>center</valign>
         <offsetType>spatium</offsetType>
         <name>Measure Number</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>8</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -193,7 +193,7 @@
         <yoffset>6</yoffset>
         <offsetType>spatium</offsetType>
         <name>Translator</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>11</size>
         </TextStyle>
       <TextStyle>
@@ -201,7 +201,7 @@
         <valign>center</valign>
         <offsetType>spatium</offsetType>
         <name>Tuplet</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>8</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -212,7 +212,7 @@
         <yoffset>-4</yoffset>
         <offsetType>spatium</offsetType>
         <name>System</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>10</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <systemFlag>1</systemFlag>
@@ -224,7 +224,7 @@
         <yoffset>5.5</yoffset>
         <offsetType>spatium</offsetType>
         <name>Staff</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>10</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -235,7 +235,7 @@
         <yoffset>-2.5</yoffset>
         <offsetType>spatium</offsetType>
         <name>Chord Symbol</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>15</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -246,7 +246,7 @@
         <yoffset>-4</yoffset>
         <offsetType>spatium</offsetType>
         <name>Rehearsal Mark</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <frameWidthS>0.15</frameWidthS>
@@ -262,7 +262,7 @@
         <yoffset>-4</yoffset>
         <offsetType>spatium</offsetType>
         <name>Repeat Text Right</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>13</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <systemFlag>1</systemFlag>
@@ -274,7 +274,7 @@
         <yoffset>-0.1</yoffset>
         <offsetType>spatium</offsetType>
         <name>Volta</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>9</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -283,7 +283,7 @@
         <valign>top</valign>
         <offsetType>spatium</offsetType>
         <name>Frame</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>11</size>
         <bold>1</bold>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -293,7 +293,7 @@
         <valign>center</valign>
         <offsetType>spatium</offsetType>
         <name>Text Line</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
@@ -302,7 +302,7 @@
         <valign>baseline</valign>
         <offsetType>spatium</offsetType>
         <name>Glissando</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>8</size>
         <italic>1</italic>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
@@ -314,7 +314,7 @@
         <yoffset>-2</yoffset>
         <offsetType>spatium</offsetType>
         <name>Technique</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>12</size>
         <italic>1</italic>
         </TextStyle>
@@ -325,7 +325,7 @@
         <yoffset>-10</yoffset>
         <offsetType>absolute</offsetType>
         <name>Copyright</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>9</size>
         </TextStyle>
       <TextStyle>
@@ -335,7 +335,7 @@
         <yoffset>-10</yoffset>
         <offsetType>absolute</offsetType>
         <name>Page Number Odd</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>10</size>
         </TextStyle>
       <TextStyle>
@@ -345,7 +345,7 @@
         <yoffset>-10</yoffset>
         <offsetType>absolute</offsetType>
         <name>Page Number Even</name>
-        <family>MuseJazz</family>
+        <family>MuseJazz Text</family>
         <size>10</size>
         </TextStyle>
       <ChordList>
