@@ -752,7 +752,7 @@ void MuseScore::newFile()
             x->setPartScore(xs);
             xs->setExcerpt(x);
             score->excerpts().append(x);
-            createExcerpt(x);
+            Excerpt::createExcerpt(x);
             }
       score->setExcerptsChanged(true);
       }

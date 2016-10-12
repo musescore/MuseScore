@@ -2144,7 +2144,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   Score* nscore = new Score(this);
                   excerpt->setPartScore(nscore);
                   nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                  Ms::createExcerpt(excerpt);
+                  Excerpt::createExcerpt(excerpt);
                   }
             }
 

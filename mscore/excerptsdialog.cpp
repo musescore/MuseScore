@@ -506,7 +506,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
 
       qDebug() << " + Add part : " << e->title();
       score->undo(new AddExcerpt(e));
-      createExcerpt(e);
+      Excerpt::createExcerpt(e);
 
       // a new excerpt is created in AddExcerpt, make sure the parts are filed
       for (Excerpt* ee : e->oscore()->excerpts()) {
