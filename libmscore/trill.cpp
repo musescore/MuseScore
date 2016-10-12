@@ -122,8 +122,9 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 void TrillSegment::layout()
       {
-      if (parent())
-            rypos() += score()->styleS(StyleIdx::trillY).val() * spatium();
+      if (autoplace())
+            setUserOff(QPointF());
+
       if (staff())
             setMag(staff()->mag());
       if (isSingleType() || isBeginType()) {
@@ -165,7 +166,39 @@ void TrillSegment::layout()
             }
       else
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-      adjustReadPos();
+
+      if (parent()) {
+            qreal yo = score()->styleP(StyleIdx::trillY);
+            if (trill()->placeBelow())
+                  yo = -yo + staff()->height() + bbox().height();
+            // setPos(0.0, yo);
+            rypos() = yo;
+            if (autoplace()) {
+                  qreal minDistance = spatium();
+                  Shape s1 = shape().translated(pos());
+                  if (trill()->placeAbove()) {
+                        qreal d  = system()->topDistance(staffIdx(), s1);
+                        if (d > -minDistance)
+                              rUserYoffset() = -d - minDistance;
+                        }
+                  else {
+                        qreal d  = system()->bottomDistance(staffIdx(), s1);
+                        if (d > -minDistance)
+                              rUserYoffset() = d + minDistance;
+                        }
+                  }
+            else
+                  adjustReadPos();
+            }
+      }
+
+//---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape TrillSegment::shape() const
+      {
+      return Shape(bbox());
       }
 
 //---------------------------------------------------------
@@ -209,6 +242,7 @@ QVariant TrillSegment::getProperty(P_ID id) const
       switch (id) {
             case P_ID::TRILL_TYPE:
             case P_ID::ORNAMENT_STYLE:
+            case P_ID::PLACEMENT:
             case P_ID::PLAY:
                   return trill()->getProperty(id);
             default:
@@ -225,6 +259,7 @@ bool TrillSegment::setProperty(P_ID id, const QVariant& v)
       switch (id) {
             case P_ID::TRILL_TYPE:
             case P_ID::ORNAMENT_STYLE:
+            case P_ID::PLACEMENT:
             case P_ID::PLAY:
                   return trill()->setProperty(id, v);
             default:
@@ -241,6 +276,7 @@ QVariant TrillSegment::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::TRILL_TYPE:
             case P_ID::ORNAMENT_STYLE:
+            case P_ID::PLACEMENT:
             case P_ID::PLAY:
                   return trill()->propertyDefault(id);
             default:
@@ -273,6 +309,7 @@ Trill::Trill(Score* s)
       _accidental = 0;
       _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
+      setPlacement(Element::Placement::ABOVE);
       }
 
 Trill::~Trill()
@@ -527,6 +564,8 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
                   return int(MScore::OrnamentStyle::DEFAULT);
             case P_ID::PLAY:
                   return true;
+            case P_ID::PLACEMENT:
+                  return int(Element::Placement::ABOVE);
             default:
                   return SLine::propertyDefault(propertyId);
             }

@@ -348,6 +348,7 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Element::reset()
       {
       undoChangeProperty(P_ID::AUTOPLACE, propertyDefault(P_ID::AUTOPLACE));
+      undoChangeProperty(P_ID::PLACEMENT, propertyDefault(P_ID::PLACEMENT));
       }
 
 //---------------------------------------------------------
