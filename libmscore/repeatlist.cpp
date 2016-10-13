@@ -436,16 +436,16 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                                     append(rs);
                                     rs = nullptr;
                                     // now jump
-                                    /*if (jump->playRepeats()) { // reset playbackCounts will retrigger all repeats
+                                    if (jump->playRepeats()) { // reset playbackCounts will retrigger all repeats
                                           for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure())
                                                 m->setPlaybackCount(0);
                                           }
-                                    else {*/ // set each measure to have it play it's final time, but only from our jumptarget on until the current measure
+                                    else { // set each measure to have it play it's final time, but only from our jumptarget on until the current measure
                                           for (Measure* m = jumpToMeasure; (m && (m != currentMeasure->nextMeasure())); m = m->nextMeasure()) {
                                                 if (m->playbackCount() != 0)
                                                       m->setPlaybackCount(m->playbackCount() - 1);
                                                 }
-                                          /*}*/
+                                          }
                                     currentMeasure = jumpToMeasure;
                                     startFrom = findStartRepeat(currentMeasure); // not yet happy with these, but not worse than before
                                     startFromRepeatStartCount = findStartFromRepeatCount(startFrom, sectionEndMeasure);

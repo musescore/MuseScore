@@ -45,6 +45,7 @@ Jump::Jump(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setTextStyleType(TextStyleType::REPEAT_RIGHT);
       setLayoutToParentWidth(true);
+      _playRepeats = false;
       }
 
 //---------------------------------------------------------
@@ -100,6 +101,8 @@ void Jump::read(XmlReader& e)
                   _playUntil = e.readElementText();
             else if (tag == "continueAt")
                   _continueAt = e.readElementText();
+            else if (tag == "playRepeats")
+                  _playRepeats = e.readBool();
             else if (!Text::readProperties(e))
                   e.unknown();
             }
@@ -117,6 +120,7 @@ void Jump::write(Xml& xml) const
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);
       xml.tag("continueAt", _continueAt);
+      xml.tag("playRepeats", _playRepeats);
       xml.etag();
       }
 
@@ -160,6 +164,8 @@ QVariant Jump::getProperty(P_ID propertyId) const
                   return playUntil();
             case P_ID::CONTINUE_AT:
                   return continueAt();
+            case P_ID::PLAY_REPEATS:
+                  return playRepeats();
             default:
                   break;
             }
@@ -182,12 +188,16 @@ bool Jump::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::CONTINUE_AT:
                   setContinueAt(v.toString());
                   break;
+            case P_ID::PLAY_REPEATS:
+                  setPlayRepeats(v.toInt());
+                  break;
             default:
                   if (!Text::setProperty(propertyId, v))
                         return false;
                   break;
             }
       score()->setLayoutAll(true);
+      score()->setPlaylistDirty();
       return true;
       }
 
@@ -202,6 +212,9 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
             case P_ID::PLAY_UNTIL:
             case P_ID::CONTINUE_AT:
                   return QString("");
+
+            case P_ID::PLAY_REPEATS:
+                  return false;
 
             default:
                   break;
