@@ -302,7 +302,7 @@ void RepeatList::unwind()
                   // starting measure of section will be the first non-NULL actual Measure encountered
                   if (sectionStartMeasureBase == NULL)
                         sectionStartMeasureBase = mb;
-            }
+                  }
 
             // if found section break or reached final MeasureBase of score, then unwind
             if (mb->sectionBreak() || !mb->nextMeasure()) {
@@ -310,7 +310,8 @@ void RepeatList::unwind()
                   // only unwind if section starts and ends with actual real measure
                   if (sectionStartMeasureBase && sectionEndMeasureBase) {
                         unwindSection(reinterpret_cast<Measure*>(sectionStartMeasureBase), reinterpret_cast<Measure*>(sectionEndMeasureBase));
-                        sectionStartMeasureBase = sectionEndMeasureBase = NULL; // reset to NULL to indicate that don't know starting Measure of next section after starting new section
+                        sectionStartMeasureBase = 0; // reset to NULL to indicate that don't know starting Measure of next section after starting new section
+                        sectionEndMeasureBase   = 0;
                         }
                   else {
                         qDebug( "Will not unroll a section that doesn't start or end with an actual measure. sectionStartMeasureBase = %p, sectionEndMeasureBase = %p",
@@ -344,15 +345,15 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
       int loop            = 0; // keeps track of how many times have repeated a :| (Repeat::END)
       int repeatCount     = 0;
       bool isGoto         = false;
+      bool playRepeats    = false;
 
       for (Measure* nm = sectionStartMeasure; nm; ) {
             m = nm;
             m->setPlaybackCount(m->playbackCount() + 1);
-//            Repeat flags = m->repeatFlags();
-            bool doJump = false; // process jump after endrepeat
+            bool doJump = false;          // process jump after endrepeat
 
             // during any DC or DS, will take last time through repeat
-            if (isGoto && m->repeatEnd())
+            if (isGoto && !playRepeats && m->repeatEnd())
                   loop = m->repeatCount() - 1;
 
             if (endRepeat) {
@@ -371,10 +372,8 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                         isGoto = false;
                         }
                   }
-            else if (m->repeatJump()) { // Jumps are only accepted outside of other repeats
+            else if (m->repeatJump())     // Jumps are only accepted outside of other repeats
                   doJump = true;
-                  }
-
 
             if (isGoto && (endRepeat == m)) {
                   if (continueAt == 0)
@@ -402,25 +401,32 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                         }
                   else if (endRepeat == 0) {
                         if (m->playbackCount() >= m->repeatCount())
-                             break;
+                              break;
                         endRepeat   = m;
                         repeatCount = m->repeatCount();
                         loop        = 1;
-                        nm = jumpToStartRepeat(m);
+                        nm          = jumpToStartRepeat(m);
                         continue;
+                        }
+                  else {
+                        ++loop;
+                        if (loop < repeatCount) {
+                              nm = jumpToStartRepeat(m);
+                              continue;
+                              }
                         }
                   }
             if (doJump && !isGoto) {
-                  Jump* s = 0;
-                  foreach(Element* e, m->el()) {
-                        if (e->type() == Element::Type::JUMP) {
-                              s = static_cast<Jump*>(e);
+                  Jump* jump = 0;
+                  foreach (Element* e, m->el()) {
+                        if (e->isJump()) {
+                              jump = toJump(e);
                               break;
                               }
                         }
                   // jump only once
-                  if (jumps.contains(s)) {
-                        if (endRepeat == _score->searchLabelWithinSectionFirst(s->playUntil(), sectionStartMeasure, sectionEndMeasure))
+                  if (jumps.contains(jump)) {
+                        if (endRepeat == _score->searchLabelWithinSectionFirst(jump->playUntil(), sectionStartMeasure, sectionEndMeasure))
                               endRepeat = 0;
 
                         nm = m->nextMeasure();
@@ -429,14 +435,15 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                         else
                               continue;
                         }
-                  jumps.append(s);
-                  if (s) {
-                        nm          = _score->searchLabelWithinSectionFirst(s->jumpTo()    , sectionStartMeasure, sectionEndMeasure);
-                        endRepeat   = _score->searchLabelWithinSectionFirst(s->playUntil() , sectionStartMeasure, sectionEndMeasure);
-                        continueAt  = _score->searchLabelWithinSectionFirst(s->continueAt(), sectionStartMeasure, sectionEndMeasure);
+                  jumps.append(jump);
+                  if (jump) {
+                        nm          = _score->searchLabelWithinSectionFirst(jump->jumpTo()    , sectionStartMeasure, sectionEndMeasure);
+                        endRepeat   = _score->searchLabelWithinSectionFirst(jump->playUntil() , sectionStartMeasure, sectionEndMeasure);
+                        continueAt  = _score->searchLabelWithinSectionFirst(jump->continueAt(), sectionStartMeasure, sectionEndMeasure);
 
                         if (nm && endRepeat) {
                               isGoto      = true;
+                              playRepeats = jump->playRepeats();
                               rs->len = m->endTick() - rs->tick;
                               append(rs);
                               rs = new RepeatSegment;

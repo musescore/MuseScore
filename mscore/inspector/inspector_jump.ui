@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>340</width>
-    <height>124</height>
+    <width>356</width>
+    <height>163</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -159,6 +159,30 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetContinueAt">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Continue at' value</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QCheckBox" name="playRepeats">
+       <property name="text">
+        <string>Play repeats</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QToolButton" name="resetPlayRepeats">
        <property name="toolTip">
         <string>Reset to default</string>
        </property>

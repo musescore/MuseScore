@@ -242,6 +242,8 @@ enum class P_ID : int {
       PLAYBACK_VOICE4,
       SYMBOL,
 
+      PLAY_REPEATS,
+
       END
       };
 
