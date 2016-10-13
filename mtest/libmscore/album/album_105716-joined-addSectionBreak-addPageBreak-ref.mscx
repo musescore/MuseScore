@@ -159,10 +159,10 @@
         </Measure>
       <Measure number="1">
         <LayoutBreak>
-          <subtype>section</subtype>
+          <subtype>page</subtype>
           </LayoutBreak>
         <LayoutBreak>
-          <subtype>page</subtype>
+          <subtype>section</subtype>
           </LayoutBreak>
         <TimeSig>
           <sigN>4</sigN>

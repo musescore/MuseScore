@@ -567,7 +567,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
                   // save section break to reinstate after rewrite
                   if (lm->sectionBreak())
-                        sectionBreak = new LayoutBreak(*lm->sectionBreak());
+                        sectionBreak = new LayoutBreak(*lm->sectionBreakElement());
 
                   if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                         if (staffIdx >= 0) {
@@ -635,7 +635,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                   while (!m->isMeasure()) {
                         if (m->sectionBreak()) {
                               // frame has a section break; we can stop skipping ahead
-                              sectionBreak = m->sectionBreak();
+                              sectionBreak = m->sectionBreakElement();
                               break;
                               }
                         m = m->next();

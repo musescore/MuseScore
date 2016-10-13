@@ -108,9 +108,6 @@
         </Measure>
       <Measure number="2">
         <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         <Rest>

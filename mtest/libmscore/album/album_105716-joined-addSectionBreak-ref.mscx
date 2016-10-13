@@ -96,9 +96,6 @@
     <Staff id="1">
       <Measure number="1">
         <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         <TimeSig>
@@ -116,9 +113,6 @@
           </BarLine>
         </Measure>
       <Measure number="1">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
@@ -160,9 +154,6 @@
       <Measure number="1">
         <LayoutBreak>
           <subtype>section</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
-          <subtype>line</subtype>
           </LayoutBreak>
         <TimeSig>
           <sigN>4</sigN>

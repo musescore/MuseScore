@@ -75,8 +75,6 @@ class MeasureBase : public Element {
 
       ElementList _el;                    ///< Measure(/tick) relative -elements: with defined start time
                                           ///< but outside the staff
-      LayoutBreak* _sectionBreak { 0 };
-
       int _tick              { 0 };
       int _no                { 0 };       ///< Measure number, counting from zero
       int _noOffset          { 0 };       ///< Offset to measure number
@@ -88,6 +86,7 @@ class MeasureBase : public Element {
 
       bool _lineBreak        { false };        ///< Forced line break
       bool _pageBreak        { false };        ///< Forced page break
+      bool _sectionBreak     { false };
       bool _noBreak          { false };
 
       bool _hasSystemHeader  { false };
@@ -95,6 +94,7 @@ class MeasureBase : public Element {
       bool _hasCourtesyKeySig { false };
 
    protected:
+      void cleanupLayoutBreaks(bool undo);
 
    public:
       MeasureBase(Score* score = 0);
@@ -131,11 +131,13 @@ class MeasureBase : public Element {
       bool lineBreak() const                 { return _lineBreak; }
       bool pageBreak() const                 { return _pageBreak; }
       bool noBreak() const                   { return _noBreak;   }
-      LayoutBreak* sectionBreak() const      { return _sectionBreak; }
+      bool sectionBreak() const              { return _sectionBreak; }
       void setLineBreak(bool v)              { _lineBreak = v;    }
       void setPageBreak(bool v)              { _pageBreak = v;    }
-      void setSectionBreak(LayoutBreak* v)   { _sectionBreak = v; }
+      void setSectionBreak(bool v)           { _sectionBreak = v; }
       void setNoBreak(bool v)                { _noBreak = v;      }
+
+      LayoutBreak* sectionBreakElement() const;
 
       void undoSetBreak(bool v, LayoutBreak::Type type);
       void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::LINE);}

@@ -554,7 +554,7 @@ void Ambitus::updateRange()
       int   trk;
       Measure* meas     = segment()->measure();
       Segment* segm     = meas->findSegment(Segment::Type::ChordRest, segment()->tick());
-      bool     stop     = meas->sectionBreak() != nullptr;
+      bool     stop     = meas->sectionBreak();
       while (segm) {
             // moved to another measure?
             if (segm->measure() != meas) {
@@ -563,7 +563,7 @@ void Ambitus::updateRange()
                         break;
                   // update meas and stop condition
                   meas = segm->measure();
-                  stop = meas->sectionBreak() != nullptr;
+                  stop = meas->sectionBreak();
                   }
             // scan all relevant tracks of this segment for chords
             for (trk=firstTrack; trk <= lastTrack; trk++)

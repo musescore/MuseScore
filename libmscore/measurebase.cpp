@@ -41,7 +41,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       _tick          = m._tick;
       _lineBreak     = m._lineBreak;
       _pageBreak     = m._pageBreak;
-      _sectionBreak  = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
+      _sectionBreak  = m._sectionBreak;
       _no            = m._no;
       _noOffset      = m._noOffset;
       _irregular     = m._irregular;
@@ -81,8 +81,6 @@ ElementList MeasureBase::takeElements()
 void MeasureBase::setScore(Score* score)
       {
       Element::setScore(score);
-      if (_sectionBreak)
-            _sectionBreak->setScore(score);
       for (Element* e : _el)
             e->setScore(score);
       }
@@ -131,29 +129,30 @@ void MeasureBase::add(Element* e)
       e->setParent(this);
       if (e->isLayoutBreak()) {
             LayoutBreak* b = toLayoutBreak(e);
-#ifndef NDEBUG
-            foreach (Element* ee, _el) {
-                  if (ee->isLayoutBreak() && toLayoutBreak(ee)->layoutBreakType() == b->layoutBreakType()) {
-                        if (MScore::debugMode)
-                              qDebug("warning: layout break already set");
-                        return;
-                        }
-                  }
-#endif
             switch (b->layoutBreakType()) {
                   case LayoutBreak::PAGE:
-                        _pageBreak = true;
+                        _pageBreak    = true;
+                        _lineBreak    = false;
+                        _noBreak      = false;
                         break;
                   case LayoutBreak::LINE:
-                        _lineBreak = true;
+                        _pageBreak    = false;
+                        _lineBreak    = true;
+                        _sectionBreak = false;
+                        _noBreak      = false;
                         break;
                   case LayoutBreak::SECTION:
-                        _sectionBreak = b;
-//does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
+                        _lineBreak    = false;
+                        _sectionBreak = true;
+                        _noBreak      = false;
+      //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
                         score()->setLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
-                        _noBreak = true;
+                        _pageBreak    = false;
+                        _lineBreak    = true;
+                        _sectionBreak = false;
+                        _noBreak      = true;
                         break;
                   }
             }
@@ -177,7 +176,7 @@ void MeasureBase::remove(Element* el)
                         _lineBreak = false;
                         break;
                   case LayoutBreak::SECTION:
-                        _sectionBreak = 0;
+                        _sectionBreak = false;
                         score()->setPause(endTick(), 0);
                         score()->setLayoutAll();
                         break;
@@ -264,7 +263,7 @@ Measure* MeasureBase::prevMeasureMM() const
 
 qreal MeasureBase::pause() const
       {
-      return _sectionBreak ? _sectionBreak->pause() : 0.0;
+      return _sectionBreak ? sectionBreakElement()->pause() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -391,14 +390,23 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             case LayoutBreak::PAGE:
                   if (pageBreak() == v)
                         return;
+                  if (v && lineBreak())
+                        setLineBreak(false);
                   break;
             case LayoutBreak::SECTION:
-                  if ((_sectionBreak && v) || (!_sectionBreak && !v))  //ugh!
+                  if (sectionBreak() == v)
                         return;
+                  if (v && lineBreak())
+                        setLineBreak(false);
                   break;
             case LayoutBreak::NOBREAK:
                   if (noBreak() == v)
                         return;
+                  if (v) {
+                        setLineBreak(false);
+                        setPageBreak(false);
+                        setSectionBreak(false);
+                        }
                   break;
             }
 
@@ -409,15 +417,44 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             lb->setParent(this);
             score()->undoAddElement(lb);
             }
-      else {
-            // remove layout break
-            for (Element* e : el()) {
-                  if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == type) {
-                        score()->undoRemoveElement(e);
-                        return;
+      cleanupLayoutBreaks(true);
+      }
+
+//---------------------------------------------------------
+//   cleanupLayoutBreaks
+//---------------------------------------------------------
+
+void MeasureBase::cleanupLayoutBreaks(bool undo)
+      {
+      // remove unneeded layout breaks
+      std::vector<Element*> toDelete;
+      for (Element* e : el()) {
+            if (e->isLayoutBreak()) {
+                  switch (toLayoutBreak(e)->layoutBreakType()) {
+                        case LayoutBreak::LINE:
+                              if (!lineBreak())
+                                    toDelete.push_back(e);
+                              break;
+                        case LayoutBreak::PAGE:
+                              if (!pageBreak())
+                                    toDelete.push_back(e);
+                              break;
+                        case LayoutBreak::SECTION:
+                              if (!sectionBreak())
+                                    toDelete.push_back(e);
+                              break;
+                        case LayoutBreak::NOBREAK:
+                              if (!noBreak())
+                                    toDelete.push_back(e);
+                              break;
                         }
                   }
-            qDebug("no break found");
+            }
+      for (Element* e : toDelete) {
+            if (undo)
+                  score()->undoRemoveElement(e);
+            else
+                  _el.remove(e);
             }
       }
 
@@ -457,7 +494,31 @@ bool MeasureBase::readProperties(XmlReader& e)
       if (tag == "LayoutBreak") {
             LayoutBreak* lb = new LayoutBreak(score());
             lb->read(e);
-            add(lb);
+            bool doAdd = true;
+            switch (lb->layoutBreakType()) {
+                  case LayoutBreak::LINE:
+                        if (lineBreak())
+                              doAdd = false;
+                        break;
+                  case LayoutBreak::PAGE:
+                        if (pageBreak())
+                              doAdd = false;
+                        break;
+                  case LayoutBreak::SECTION:
+                        if (sectionBreak())
+                              doAdd = false;
+                        break;
+                  case LayoutBreak::NOBREAK:
+                        if (noBreak())
+                              doAdd = false;
+                        break;
+                  }
+            if (doAdd) {
+                  add(lb);
+                  cleanupLayoutBreaks(false);
+                  }
+            else
+                  delete lb;
             }
       else if (Element::readProperties(e))
             ;
@@ -481,6 +542,21 @@ int MeasureBase::index() const
             m = m->next();
             }
       return  -1;
+      }
+
+//---------------------------------------------------------
+//   sectionBreakElement
+//---------------------------------------------------------
+
+LayoutBreak* MeasureBase::sectionBreakElement() const
+      {
+      if (_sectionBreak) {
+            for (Element* e : el()) {
+                  if (e->isLayoutBreak() && toLayoutBreak(e)->isSectionBreak())
+                        return toLayoutBreak(e);
+                  }
+            }
+      return 0;
       }
 }
 
