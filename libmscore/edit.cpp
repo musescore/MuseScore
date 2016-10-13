@@ -1792,30 +1792,26 @@ void Score::cmdFlip()
                   }
             else if (e->isArticulation()) {
                   Articulation* a = toArticulation(e);
-                  if (a->isStaccato()
-                     || a->isTenuto()
-                     || a->isAccent()
-                     || a->symId() == SymId::guitarFadeIn
-                     || a->symId() == SymId::guitarFadeOut
-                     || a->symId() == SymId::guitarVolumeSwell
-                     || a->symId() == SymId::wiggleSawtooth
-                     || a->symId() == SymId::wiggleSawtoothWide
-                     || a->symId() == SymId::wiggleVibratoLargeFaster
-                     || a->symId() == SymId::wiggleVibratoLargeSlowest) {
-                        ArticulationAnchor aa = a->anchor();
-                        if (aa == ArticulationAnchor::TOP_CHORD)
+                  ArticulationAnchor aa = a->anchor();
+                  switch (aa) {
+                        case ArticulationAnchor::TOP_CHORD:
                               aa = ArticulationAnchor::BOTTOM_CHORD;
-                        else if (aa == ArticulationAnchor::BOTTOM_CHORD)
+                              break;
+                        case ArticulationAnchor::BOTTOM_CHORD:
                               aa = ArticulationAnchor::TOP_CHORD;
-                        else if (aa == ArticulationAnchor::CHORD)
+                              break;
+                        case ArticulationAnchor::CHORD:
                               aa = a->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
-                        if (aa != a->anchor())
-                              undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
+                              break;
+                        case ArticulationAnchor::TOP_STAFF:
+                              aa = ArticulationAnchor::BOTTOM_STAFF;
+                              break;
+                        case ArticulationAnchor::BOTTOM_STAFF:
+                              aa = ArticulationAnchor::TOP_STAFF;
+                              break;
                         }
-                  else {
-                        Direction d = a->up() ? Direction::DOWN : Direction::UP;
-                        undoChangeProperty(a, P_ID::DIRECTION, d);
-                        }
+                  // undoChangeProperty(a, P_ID::DIRECTION, a->up() ? Direction::DOWN : Direction::UP);
+                  undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
                   }
             else if (e->isTuplet()) {
                   Tuplet* tuplet = toTuplet(e);
