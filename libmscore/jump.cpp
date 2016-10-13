@@ -120,7 +120,7 @@ void Jump::write(Xml& xml) const
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);
       xml.tag("continueAt", _continueAt);
-      xml.tag("playRepeats", _playRepeats);
+      writeProperty(xml, P_ID::PLAY_REPEATS);
       xml.etag();
       }
 
