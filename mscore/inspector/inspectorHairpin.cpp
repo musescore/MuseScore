@@ -45,6 +45,7 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { P_ID::DASH_GAP_LEN,        0, 0, l.dashGapLength,     l.resetDashGapLength     },
             { P_ID::HAIRPIN_CIRCLEDTIP,  0, 0, h.hairpinCircledTip, h.resetHairpinCircledTip },
             { P_ID::HAIRPIN_TYPE,        0, 0, h.hairpinType,       0                        },
+            { P_ID::PLACEMENT,           0, 0, h.placement,         h.resetPlacement         },
             { P_ID::DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
             { P_ID::VELO_CHANGE,         0, 0, h.veloChange,        h.resetVeloChange        },
             { P_ID::HAIRPIN_HEIGHT,      0, 0, h.hairpinHeight,     h.resetHairpinHeight     },

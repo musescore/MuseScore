@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>84</height>
+    <width>323</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -135,7 +135,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -148,7 +148,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QCheckBox" name="playArticulation">
        <property name="text">
         <string>Play</string>
@@ -158,7 +158,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
+     <item row="2" column="3">
       <widget class="QToolButton" name="resetOrnamentStyle">
        <property name="toolTip">
         <string>Reset to default</string>
@@ -175,7 +175,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
+     <item row="2" column="1" colspan="2">
       <widget class="QComboBox" name="ornamentStyle">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -198,13 +198,54 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="3">
+     <item row="3" column="3">
       <widget class="QToolButton" name="resetPlayArticulation">
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Play' value</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Placement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QComboBox" name="placement">
+       <property name="accessibleName">
+        <string>Placement</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Above</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Below</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QToolButton" name="resetPlacement">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Placement' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
