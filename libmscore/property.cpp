@@ -250,6 +250,7 @@ static const PropertyData propertyList[] = {
       { P_ID::PLAYBACK_VOICE3,     false, "playbackVoice3",        P_TYPE::BOOL  },
       { P_ID::PLAYBACK_VOICE4,     false, "playbackVoice4",        P_TYPE::BOOL  },
       { P_ID::SYMBOL,              true,  "symbol",                P_TYPE::SYMID },
+      { P_ID::PLAY_REPEATS,        false, "playRepeats",           P_TYPE::BOOL  },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT   }
       };

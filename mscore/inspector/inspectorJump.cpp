@@ -28,10 +28,11 @@ InspectorJump::InspectorJump(QWidget* parent)
       j.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle      },
-            { P_ID::JUMP_TO,            0, false, j.jumpTo,     j.resetJumpTo     },
-            { P_ID::PLAY_UNTIL,         0, false, j.playUntil,  j.resetPlayUntil  },
-            { P_ID::CONTINUE_AT,        0, false, j.continueAt, j.resetContinueAt }
+            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,       t.resetStyle       },
+            { P_ID::JUMP_TO,            0, false, j.jumpTo,      j.resetJumpTo      },
+            { P_ID::PLAY_UNTIL,         0, false, j.playUntil,   j.resetPlayUntil   },
+            { P_ID::CONTINUE_AT,        0, false, j.continueAt,  j.resetContinueAt  },
+            { P_ID::PLAY_REPEATS,       0, false, j.playRepeats, j.resetPlayRepeats }
             };
 
       mapSignals(iiList);
