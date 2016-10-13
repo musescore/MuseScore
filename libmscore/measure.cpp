@@ -1261,24 +1261,12 @@ Element* Measure::drop(const DropData& data)
                                     }
                               break;
                         }
-                  // make sure there is only LayoutBreak::Type::LINE or LayoutBreak::Type::PAGE
-                  if (!b->isSectionBreak() && (pageBreak() || lineBreak())) {
-                        for (Element* le : el()) {
-                              if (!le->isLayoutBreak())
-                                    continue;
-                              LayoutBreak* bb = toLayoutBreak(le);
-                              if (bb->isLineBreak() || bb->isPageBreak()) {
-                                    bb->undoChangeProperty(P_ID::LAYOUT_BREAK, int(b->layoutBreakType()));
-                                    break;
-                                    }
-                              }
-                        break;
-                        }
                   if (b) {
                         b->setTrack(-1);       // these are system elements
                         b->setParent(this);
                         score()->undoAddElement(b);
                         }
+                  cleanupLayoutBreaks(true);
                   return b;
                   }
 
