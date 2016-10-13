@@ -171,7 +171,6 @@ void TrillSegment::layout()
             qreal yo = score()->styleP(StyleIdx::trillY);
             if (trill()->placeBelow())
                   yo = -yo + staff()->height() + bbox().height();
-            // setPos(0.0, yo);
             rypos() = yo;
             if (autoplace()) {
                   qreal minDistance = spatium();
