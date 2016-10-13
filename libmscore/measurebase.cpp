@@ -150,7 +150,7 @@ void MeasureBase::add(Element* e)
                         break;
                   case LayoutBreak::NOBREAK:
                         _pageBreak    = false;
-                        _lineBreak    = true;
+                        _lineBreak    = false;
                         _sectionBreak = false;
                         _noBreak      = true;
                         break;
