@@ -185,9 +185,6 @@
         </Measure>
       <Measure number="6">
         <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         <Chord>

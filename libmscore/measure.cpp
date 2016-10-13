@@ -2945,7 +2945,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->setTick(tick());
       m->setLineBreak(lineBreak());
       m->setPageBreak(pageBreak());
-      m->setSectionBreak(sectionBreak() ? new LayoutBreak(*sectionBreak()) : 0);
+      m->setSectionBreak(sectionBreak() ? new LayoutBreak(*sectionBreakElement()) : 0);
 
       int tracks = sc->nstaves() * VOICES;
       TupletMap tupletMap;

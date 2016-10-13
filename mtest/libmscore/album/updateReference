@@ -4,8 +4,8 @@ cp ../../../build.debug/mtest/libmscore/album/album01.mscx   album01-ref.mscx
 cp ../../../build.debug/mtest/libmscore/album/album_105641-no-initial-clef.mscx   album_105641-no-initial-clef-ref.mscx
 cp ../../../build.debug/mtest/libmscore/album/album_105716-joined-addSectionBreak-addPageBreak.mscx   album_105716-joined-addSectionBreak-addPageBreak-ref.mscx
 cp ../../../build.debug/mtest/libmscore/album/album_105716-joined-noaddBreak.mscx   album_105716-joined-noaddBreak-ref.mscx
+cp ../../../build.debug/mtest/libmscore/album/album_105716-joined-addSectionBreak.mscx album_105716-joined-addSectionBreak-ref.mscx
+cp ../../../build.debug/mtest/libmscore/album/album_105716-joined-addPageBreak.mscx album_105716-joined-addPageBreak-ref.mscx
 cp ../../../build.debug/mtest/libmscore/album/album_76101.mscx   album_76101-ref.mscx
 cp ../../../build.debug/mtest/libmscore/album/album_78521-vbox-vbox-empty.mscx album_78521-vbox-vbox-empty-ref.mscx
-
-
 

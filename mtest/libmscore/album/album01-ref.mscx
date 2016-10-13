@@ -211,9 +211,6 @@
         </Measure>
       <Measure number="4">
         <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         <endSpanner id="4"/>

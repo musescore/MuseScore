@@ -151,9 +151,6 @@
     <Staff id="1">
       <Measure number="1">
         <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         <TimeSig>

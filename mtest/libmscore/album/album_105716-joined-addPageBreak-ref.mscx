@@ -150,9 +150,6 @@
         </Measure>
       <Measure number="1">
         <LayoutBreak>
-          <subtype>section</subtype>
-          </LayoutBreak>
-        <LayoutBreak>
           <subtype>page</subtype>
           </LayoutBreak>
         <TimeSig>

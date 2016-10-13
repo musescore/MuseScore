@@ -3666,7 +3666,7 @@ System* Score::collectSystem(LayoutContext& lc)
       Measure* lm  = system->lastMeasure();
       if (lm) {
             lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-            lc.startWithLongNames = lc.firstSystem && lm->sectionBreak()->startWithLongNames();
+            lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
             }
       lc.systemChanged      = lc.systemOldMeasure != (system->measures().empty() ? 0 : system->measures().back());
       return system;
