@@ -92,7 +92,6 @@ void HairpinSegment::layout()
                   if (autoplace()) {
                         qreal dx        = sd->bbox().right() + sd->pos().x()
                                              + sd->segment()->pos().x() + sd->measure()->pos().x();
-                        // hardcoded distance between Dynamic and Hairpin: 0.5sp
                         qreal dist      = dx - pos().x() + score()->styleP(StyleIdx::autoplaceHairpinDynamicsDistance);
                         rUserXoffset()  = dist;
                         rUserXoffset2() = -dist;
@@ -108,7 +107,6 @@ void HairpinSegment::layout()
                         rUserXoffset2() -= ed->bbox().width();
                         qreal dx         = ed->bbox().left() + ed->pos().x()
                                            + ed->segment()->pos().x() + ed->measure()->pos().x();
-                        // hardcoded distance between Hairpin and Dynamic: 0.5sp
                         ed->rUserXoffset() = pos2().x() + pos().x() - dx + score()->styleP(StyleIdx::autoplaceHairpinDynamicsDistance);
                         }
                   else
@@ -120,11 +118,11 @@ void HairpinSegment::layout()
       if (type == HairpinType::DECRESC_LINE || type == HairpinType::CRESC_LINE) {
             twoLines = false;
             TextLineBaseSegment::layout();
-            drawCircledTip = false;
-            if (parent())
-                  rypos() += score()->styleP(StyleIdx::hairpinY);
+            drawCircledTip   = false;
+            circledTipRadius = 0.0;
             }
       else {
+            twoLines  = true;
             delete _text;
             delete _endText;
             _text    = 0;
@@ -146,7 +144,6 @@ void HairpinSegment::layout()
             circledTipRadius = drawCircledTip ? 0.6 * _spatium * .5 : 0.0;
 
             QLine l1, l2;
-            twoLines  = true;
 
             switch (type) {
                   case HairpinType::CRESC_HAIRPIN: {
