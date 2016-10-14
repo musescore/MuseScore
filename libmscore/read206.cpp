@@ -1169,6 +1169,11 @@ static void readStyle(MStyle* style, XmlReader& e)
                   style->chordList()->clear();
                   style->chordList()->read(e);
                   style->setCustomChordList(true);
+                  for (ChordFont f : style->chordList()->fonts) {
+                        if (f.family == "MuseJazz") {
+                              f.family = "MuseJazz Text";
+                              }
+                        }
                   chordListTag = true;
                   }
             else {
