@@ -5924,13 +5924,10 @@ void ScoreFont::load()
             };
       for (auto i : oo.keys()) {
             for (auto mapping : engravingDefaultsMapping) {
-                  if (i == mapping.first) {
+                  if (i == mapping.first)
                         _engravingDefaults.push_back(std::make_pair(mapping.second, oo.value(i).toDouble()));
-                        break;
-                        }
-                  else if (i == "textEnclosureThickness") {
+                  else if (i == "textEnclosureThickness")
                         _textEnclosureThickness = oo.value(i).toDouble();
-                        }
                   }
             }
       _engravingDefaults.push_back(std::make_pair(StyleIdx::MusicalTextFont, QString("%1 Text").arg(_family)));
