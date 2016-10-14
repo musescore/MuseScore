@@ -1623,6 +1623,11 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "ChordList") {
                   style->chordList()->clear();
                   style->chordList()->read(e);
+                  for (ChordFont f : style->chordList()->fonts) {
+                        if (f.family == "MuseJazz") {
+                              f.family = "MuseJazz Text";
+                              }
+                        }
                   style->setCustomChordList(true);
                   chordListTag = true;
                   }
