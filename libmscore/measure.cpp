@@ -1429,17 +1429,21 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx, int repeatMeasureSi
                         for (int track = strack; track < etrack; ++track) {
                               Element* el = s->element(track);
                               if (el) {
-                                    if (el->isRepeatMeasure()) {
-                                          qWarning("Removing an already-existing MeasureRepeat might mess up the score...TODO: will have to figure out desired behavior for this situation.");
-                                          i = repeatMeasureSize; // dont' delete any more segments
-                                          break;
-                                          }
-                                    else
+                                 //   if (el->isRepeatMeasure()) {
+                                 //         qWarning("Removing an already-existing MeasureRepeat might mess up the score...TODO: will have to figure out desired behavior for this situation.");
+                                 //         i = repeatMeasureSize; // dont' delete any more segments
+                                 //         break;
+                                 //        }
+                                 //   else
                                           score()->undoRemoveElement(el);
                                     }
                               }
                         }
                   }
+
+            // try to force all measures covered by multi-measure repeat to layout on one system
+            if (i < repeatMeasureSize-1)
+                  m->setNoBreak(true);
             }
 
       //

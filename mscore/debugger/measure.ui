@@ -331,13 +331,6 @@
         <property name="spacing">
          <number>2</number>
         </property>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="pageBreak">
-          <property name="text">
-           <string notr="true">Page Break</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="3" colspan="2">
          <widget class="QCheckBox" name="breakMultiMeasureRest">
           <property name="text">
@@ -358,10 +351,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="lineBreak">
+        <item row="1" column="3">
+         <widget class="QPushButton" name="mmRest">
           <property name="text">
-           <string notr="true">Line Break</string>
+           <string notr="true">mmRest</string>
           </property>
          </widget>
         </item>
@@ -369,6 +362,20 @@
          <widget class="QCheckBox" name="sectionBreak">
           <property name="text">
            <string notr="true">Section Break</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="lineBreak">
+          <property name="text">
+           <string notr="true">Line Break</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="pageBreak">
+          <property name="text">
+           <string notr="true">Page Break</string>
           </property>
          </widget>
         </item>
@@ -385,10 +392,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
-         <widget class="QPushButton" name="mmRest">
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="hasSystemTrailer">
           <property name="text">
-           <string notr="true">mmRest</string>
+           <string notr="true">SystemTrailer</string>
           </property>
          </widget>
         </item>
@@ -406,10 +413,10 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="hasSystemTrailer">
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="hasVoices">
           <property name="text">
-           <string notr="true">SystemTrailer</string>
+           <string notr="true">hasVoices</string>
           </property>
          </widget>
         </item>
@@ -420,10 +427,10 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="3">
-         <widget class="QCheckBox" name="hasVoices">
+        <item row="1" column="4">
+         <widget class="QCheckBox" name="noBreak">
           <property name="text">
-           <string notr="true">hasVoices</string>
+           <string>noBreak</string>
           </property>
          </widget>
         </item>

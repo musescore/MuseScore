@@ -774,6 +774,7 @@ void MeasureView::setElement(Element* e)
       mb.lineBreak->setChecked(m->lineBreak());
       mb.pageBreak->setChecked(m->pageBreak());
       mb.sectionBreak->setChecked(m->sectionBreak());
+      mb.noBreak->setChecked(m->noBreak());
       mb.irregular->setChecked(m->irregular());
       mb.repeatCount->setValue(m->repeatCount());
       mb.breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
