@@ -645,7 +645,10 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
                         SymId::fermataAbove,
                         SymId::fermataShortAbove,
                         SymId::fermataLongAbove,
+                        SymId::fermataLongHenzeAbove,
+                        SymId::fermataShortHenzeAbove,
                         SymId::fermataVeryLongAbove,
+                        SymId::fermataVeryShortAbove,
 
                         SymId::articAccentAbove,
                         SymId::articStaccatoAbove,
@@ -677,6 +680,7 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
                         SymId::wiggleVibratoLargeSlowest,
                         SymId::brassMuteOpen,
                         SymId::brassMuteClosed,
+                        SymId::stringsHarmonic,
                         SymId::stringsUpBow,
                         SymId::stringsDownBow,
                         SymId::pluckedSnapPizzicatoAbove,

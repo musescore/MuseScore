@@ -1240,6 +1240,7 @@ static bool addMxmlArticulationToChord(ChordRest* cr, QString mxmlName)
       map["turn"]             = SymId::ornamentTurn;
       map["inverted-turn"]    = SymId::ornamentTurnInverted;
       map["stopped"]          = SymId::brassMuteClosed;
+// TODO map["harmonic"]         = SymId::stringsHarmonic;
       map["up-bow"]           = SymId::stringsUpBow;
       map["down-bow"]         = SymId::stringsDownBow;
       map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
