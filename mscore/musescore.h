@@ -417,6 +417,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addRecentScore(const QString& scorePath);
 
       void updateNewWizard();
+      virtual QMenu* createPopupMenu() override;
 
    private slots:
       void cmd(QAction* a, const QString& cmd);

@@ -4838,6 +4838,22 @@ QFileInfoList MuseScore::recentScores() const
       return fil;
       }
 
+//---------------------------------------------------------
+//   createPopupMenu
+//---------------------------------------------------------
+
+QMenu* MuseScore::createPopupMenu()
+      {
+      QMenu* m = QMainWindow::createPopupMenu();
+      QList<QAction*> al = m->actions();
+      for (QAction* a : al) {
+            // textTool visibility is handled differently
+            if (_textTools && a->text() == _textTools->windowTitle())
+                  m->removeAction(a);
+            }
+      return m;
+      }
+
 }
 
 using namespace Ms;
