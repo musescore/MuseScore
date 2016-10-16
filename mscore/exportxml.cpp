@@ -1868,12 +1868,16 @@ static void fermatas(const QVector<Articulation*>& cra, Xml& xml, Notations& not
                   SymId id = a->symId();
                   if (id == SymId::fermataAbove || id == SymId::fermataBelow)
                         xml.tagE(tagName);
-                  else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow)
-                        xml.tag(tagName, "angled");
-                  // MusicXML does not support the very long fermata,
+                  // MusicXML does not support the very short fermata nor short fermata (Henze),
+                  // export as short fermata (better than not exporting at all)
+                  else if (id == SymId::fermataShortAbove      || id == SymId::fermataShortBelow
+                        || id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow
+                        || id == SymId::fermataVeryShortAbove  || id == SymId::fermataVeryShortBelow)                        xml.tag(tagName, "angled");
+                  // MusicXML does not support the very long fermata  nor long fermata (Henze),
                   // export as long fermata (better than not exporting at all)
-                  else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
-                           || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
+                  else if (id == SymId::fermataLongAbove       || id == SymId::fermataLongBelow
+                        || id == SymId::fermataLongHenzeAbove  || id == SymId::fermataLongHenzeBelow
+                        || id == SymId::fermataVeryLongAbove   || id == SymId::fermataVeryLongBelow)
                         xml.tag(tagName, "square");
                   }
             }
@@ -1898,8 +1902,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   case SymId::fermataBelow:
                   case SymId::fermataShortAbove:
                   case SymId::fermataShortBelow:
+                  case SymId::fermataShortHenzeAbove:
+                  case SymId::fermataShortHenzeBelow:
                   case SymId::fermataLongAbove:
                   case SymId::fermataLongBelow:
+                  case SymId::fermataLongHenzeAbove:
+                  case SymId::fermataLongHenzeBelow:
+                  case SymId::fermataVeryShortAbove:
+                  case SymId::fermataVeryShortBelow:
                   case SymId::fermataVeryLongAbove:
                   case SymId::fermataVeryLongBelow:
                         // ignore, already handled
@@ -1914,6 +1924,10 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
                   case SymId::articStaccatoAbove:
                   case SymId::articStaccatoBelow:
+                  case SymId::articAccentStaccatoAbove:
+                  case SymId::articAccentStaccatoBelow:
+                  case SymId::articMarcatoStaccatoAbove:
+                  case SymId::articMarcatoStaccatoBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("staccato");
@@ -1921,6 +1935,10 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
                   case SymId::articStaccatissimoAbove:
                   case SymId::articStaccatissimoBelow:
+                  case SymId::articStaccatissimoStrokeAbove:
+                  case SymId::articStaccatissimoStrokeBelow:
+                  case SymId::articStaccatissimoWedgeAbove:
+                  case SymId::articStaccatissimoWedgeBelow:
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("staccatissimo");
@@ -1969,6 +1987,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
                   case SymId::brassMuteOpen:
                   case SymId::brassMuteClosed:
+                  case SymId::stringsHarmonic:
                   case SymId::stringsUpBow:
                   case SymId::stringsDownBow:
                   case SymId::pluckedSnapPizzicatoAbove:
@@ -2026,8 +2045,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   case SymId::fermataBelow:
                   case SymId::fermataShortAbove:
                   case SymId::fermataShortBelow:
+                  case SymId::fermataShortHenzeAbove:
+                  case SymId::fermataShortHenzeBelow:
                   case SymId::fermataLongAbove:
                   case SymId::fermataLongBelow:
+                  case SymId::fermataLongHenzeAbove:
+                  case SymId::fermataLongHenzeBelow:
+                  case SymId::fermataVeryShortAbove:
+                  case SymId::fermataVeryShortBelow:
                   case SymId::fermataVeryLongAbove:
                   case SymId::fermataVeryLongBelow:
                   case SymId::articAccentAbove:
@@ -2125,6 +2150,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         break;
                   case SymId::brassMuteOpen:
                   case SymId::brassMuteClosed:
+                  case SymId::stringsHarmonic:
                   case SymId::stringsUpBow:
                   case SymId::stringsDownBow:
                   case SymId::pluckedSnapPizzicatoAbove:
@@ -2148,6 +2174,13 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("stopped");
+                        break;
+                  case SymId::stringsHarmonic:
+                        notations.tag(xml);
+                        technical.tag(xml);
+                        xml.stag("harmonic");
+                        xml.tagE("natural");
+                        xml.etag();
                         break;
                   case SymId::stringsUpBow:
                         notations.tag(xml);
