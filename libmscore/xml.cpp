@@ -514,6 +514,12 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::BARLINE_TYPE:
                   tag(name, BarLine::barLineTypeName(BarLineType(data.toInt())));
                   break;
+            case P_TYPE::HEAD_GROUP:
+                  tag(name, NoteHead::group2name(NoteHead::Group(data.toInt())));
+                  break;
+            case P_TYPE::HEAD_TYPE:
+                  tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
+                  break;
             default:
                   Q_ASSERT(false);
             }

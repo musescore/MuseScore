@@ -340,7 +340,7 @@
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -359,7 +359,7 @@
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -376,7 +376,7 @@
               </Tie>
             <pitch>73</pitch>
             <tpc>21</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -393,7 +393,7 @@
             <endSpanner id="2"/>
             <pitch>73</pitch>
             <tpc>21</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -408,7 +408,7 @@
               </Accidental>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -422,7 +422,7 @@
               </Accidental>
             <pitch>73</pitch>
             <tpc>21</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -442,7 +442,7 @@
             <track>1</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -461,7 +461,7 @@
             <track>1</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -478,7 +478,7 @@
               </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -498,7 +498,7 @@
             <endSpanner id="3"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -512,7 +512,7 @@
             <track>1</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -525,7 +525,7 @@
             <track>1</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -557,7 +557,7 @@
             <track>2</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -575,7 +575,7 @@
               </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -596,7 +596,7 @@
             <endSpanner id="4"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -611,7 +611,7 @@
             <track>2</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -625,7 +625,7 @@
             <track>2</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -653,7 +653,7 @@
             <track>3</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>9</fixedLine>
@@ -673,7 +673,7 @@
             <track>3</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>9</fixedLine>
@@ -691,7 +691,7 @@
               </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>9</fixedLine>
@@ -712,7 +712,7 @@
             <endSpanner id="5"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>9</fixedLine>
@@ -727,7 +727,7 @@
             <track>3</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>9</fixedLine>
@@ -741,7 +741,7 @@
             <track>3</track>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>9</fixedLine>
@@ -761,7 +761,7 @@
           <Note>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -777,7 +777,7 @@
           <Note>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -791,7 +791,7 @@
               </Tie>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -808,7 +808,7 @@
             <endSpanner id="6"/>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -820,7 +820,7 @@
           <Note>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -831,7 +831,7 @@
           <Note>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -851,7 +851,7 @@
             <track>5</track>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -870,7 +870,7 @@
             <track>5</track>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -887,7 +887,7 @@
               </Tie>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -907,7 +907,7 @@
             <endSpanner id="7"/>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -921,7 +921,7 @@
             <track>5</track>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -934,7 +934,7 @@
             <track>5</track>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>

@@ -53,12 +53,13 @@ void TestCompat206::initTestCase()
 void TestCompat206::compat_data()
       {
       QTest::addColumn<QString>("file");
-      QTest::newRow("accidentals") <<  "accidentals";
+      QTest::newRow("accidentals")   <<  "accidentals";
       QTest::newRow("articulations") <<  "articulations";
-      QTest::newRow("breath") <<  "breath";
-      QTest::newRow("clefs") <<  "clefs";
-      QTest::newRow("markers") <<  "markers";
-      QTest::newRow("textstyles") <<  "textstyles";
+      QTest::newRow("breath")        <<  "breath";
+      QTest::newRow("clefs")         <<  "clefs";
+      QTest::newRow("markers")       <<  "markers";
+      QTest::newRow("noteheads")     <<  "noteheads";
+      QTest::newRow("textstyles")    <<  "textstyles";
       }
 
 //---------------------------------------------------------

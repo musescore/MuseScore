@@ -277,6 +277,8 @@ enum class P_TYPE : char {
       INT_LIST,
       GLISSANDO_STYLE,
       BARLINE_TYPE,
+      HEAD_TYPE,         // enum class Notehead::Type
+      HEAD_GROUP,       // enum class Notehead::Group
       ZERO_INT,         // displayed with offset +1
       };
 
