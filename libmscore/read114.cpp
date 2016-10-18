@@ -497,6 +497,75 @@ static void readNote(Note* note, XmlReader& e)
                   e.skipCurrentElement(); // ignore manual layout in older scores
             else if (tag == "move")
                   note->chord()->setStaffMove(e.readInt());
+            else if (tag == "head") {
+                  int i = e.readInt();
+                  NoteHead::Group val;
+                  switch (i) {
+                        case 1:
+                              val = NoteHead::Group::HEAD_CROSS;
+                              break;
+                        case 2:
+                              val = NoteHead::Group::HEAD_DIAMOND;
+                              break;
+                        case 3:
+                              val = NoteHead::Group::HEAD_TRIANGLE;
+                              break;
+                        case 4:
+                              val = NoteHead::Group::HEAD_MI;
+                              break;
+                        case 5:
+                              val = NoteHead::Group::HEAD_SLASH;
+                              break;
+                        case 6:
+                              val = NoteHead::Group::HEAD_XCIRCLE;
+                              break;
+                        case 7:
+                              val = NoteHead::Group::HEAD_DO;
+                              break;
+                        case 8:
+                              val = NoteHead::Group::HEAD_RE;
+                              break;
+                        case 9:
+                              val = NoteHead::Group::HEAD_FA;
+                              break;
+                        case 10:
+                              val = NoteHead::Group::HEAD_LA;
+                              break;
+                        case 11:
+                              val = NoteHead::Group::HEAD_TI;
+                              break;
+                        case 12:
+                              val = NoteHead::Group::HEAD_SOL;
+                              break;
+                        case 13:
+                              val = NoteHead::Group::HEAD_BREVIS_ALT;
+                              break;
+                        default:
+                             val = NoteHead::Group::HEAD_NORMAL;
+                        }
+                  note->setHeadGroup(val);
+                  }
+            else if (tag == "headType") {
+                  int i = e.readInt();
+                  NoteHead::Type val;
+                  switch (i) {
+                        case 1:
+                              val = NoteHead::Type::HEAD_WHOLE;
+                              break;
+                        case 2:
+                              val = NoteHead::Type::HEAD_HALF;
+                              break;
+                        case 3:
+                              val = NoteHead::Type::HEAD_QUARTER;
+                              break;
+                        case 4:
+                              val = NoteHead::Type::HEAD_BREVIS;
+                              break;
+                        default:
+                              val = NoteHead::Type::HEAD_AUTO;
+                        }
+                  note->setHeadType(val);
+                  }
             else if (note->readProperties(e))
                   ;
             else

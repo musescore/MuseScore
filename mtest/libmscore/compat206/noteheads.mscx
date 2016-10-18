@@ -1,73 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="2.06">
+  <programVersion>2.0.3</programVersion>
+  <programRevision>3c7a69d</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
-      <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
-      <bracketWidth>0.35</bracketWidth>
-      <bracketDistance>0.25</bracketDistance>
-      <clefLeftMargin>0.5</clefLeftMargin>
-      <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <minNoteDistance>0.4</minNoteDistance>
-      <measureSpacing>1.14</measureSpacing>
-      <ledgerLineWidth>0.12</ledgerLineWidth>
-      <beamWidth>0.48</beamWidth>
-      <beamMinLen>1.25</beamMinLen>
-      <propertyDistanceStem>0.5</propertyDistanceStem>
-      <harmonyY>0</harmonyY>
-      <chordStyle>custom</chordStyle>
-      <chordsXmlFile>1</chordsXmlFile>
-      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <voltaY>0</voltaY>
-      <keySigNaturals>1</keySigNaturals>
-      <tupletOufOfStaff>0</tupletOufOfStaff>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>8</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Dynamics</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Rehearsal Mark</name>
-        <family>FreeSerif</family>
-        <size>14</size>
-        <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0.2</frameWidthS>
-        <paddingWidthS>0.5</paddingWidthS>
-        <frameRound>20</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
       <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
+        <page-height>1683.36</page-height>
+        <page-width>1190.88</page-width>
         <page-margins type="even">
           <left-margin>56.6929</left-margin>
           <right-margin>56.6929</right-margin>
@@ -81,23 +26,25 @@
           <bottom-margin>113.386</bottom-margin>
           </page-margins>
         </page-layout>
-      <Spatium>1.764</Spatium>
+      <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer"></metaTag>
+    <metaTag name="composer">Composer</metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle"></metaTag>
+    <metaTag name="workTitle">Title</metaTag>
     <PageList>
       <Page>
         <System>
@@ -113,44 +60,55 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <trackName>Flute</trackName>
-        <minPitchP>59</minPitchP>
-        <maxPitchP>98</maxPitchP>
-        <minPitchA>60</minPitchA>
-        <maxPitchA>93</maxPitchA>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
           </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
           </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="73"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
+          <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -168,7 +126,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>cross</head>
+            <head>1</head>
             </Note>
           </Chord>
         <Chord>
@@ -176,7 +134,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>diamond</head>
+            <head>2</head>
             </Note>
           </Chord>
         <Chord>
@@ -184,7 +142,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
+            <head>3</head>
             </Note>
           </Chord>
         </Measure>
@@ -194,7 +152,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>mi</head>
+            <head>4</head>
             </Note>
           </Chord>
         <Chord>
@@ -202,7 +160,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>slash</head>
+            <head>5</head>
             </Note>
           </Chord>
         <Chord>
@@ -210,7 +168,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>xcircle</head>
+            <head>6</head>
             </Note>
           </Chord>
         <Chord>
@@ -218,7 +176,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>do</head>
+            <head>7</head>
             </Note>
           </Chord>
         </Measure>
@@ -228,7 +186,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>re</head>
+            <head>8</head>
             </Note>
           </Chord>
         <Chord>
@@ -236,7 +194,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>fa</head>
+            <head>9</head>
             </Note>
           </Chord>
         <Chord>
@@ -244,7 +202,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>la</head>
+            <head>10</head>
             </Note>
           </Chord>
         <Chord>
@@ -252,7 +210,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>ti</head>
+            <head>11</head>
             </Note>
           </Chord>
         </Measure>
@@ -265,7 +223,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>sol</head>
+            <head>12</head>
             </Note>
           </Chord>
         <Chord>
@@ -273,7 +231,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>altbrevis</head>
+            <head>13</head>
             </Note>
           </Chord>
         <Rest>
@@ -286,7 +244,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>whole</headType>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -294,8 +252,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>cross</head>
-            <headType>whole</headType>
+            <head>1</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -303,8 +261,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>diamond</head>
-            <headType>whole</headType>
+            <head>2</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -312,8 +270,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
-            <headType>whole</headType>
+            <head>3</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         </Measure>
@@ -323,8 +281,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>mi</head>
-            <headType>whole</headType>
+            <head>4</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -332,8 +290,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>slash</head>
-            <headType>whole</headType>
+            <head>5</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -341,8 +299,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>xcircle</head>
-            <headType>whole</headType>
+            <head>6</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -350,8 +308,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>do</head>
-            <headType>whole</headType>
+            <head>7</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         </Measure>
@@ -361,8 +319,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>re</head>
-            <headType>whole</headType>
+            <head>8</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -370,8 +328,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>fa</head>
-            <headType>whole</headType>
+            <head>9</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -379,8 +337,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>la</head>
-            <headType>whole</headType>
+            <head>10</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -388,8 +346,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>ti</head>
-            <headType>whole</headType>
+            <head>11</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         </Measure>
@@ -402,8 +360,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>sol</head>
-            <headType>whole</headType>
+            <head>12</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Chord>
@@ -411,8 +369,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>altbrevis</head>
-            <headType>whole</headType>
+            <head>13</head>
+            <headType>0</headType>
             </Note>
           </Chord>
         <Rest>
@@ -425,7 +383,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>half</headType>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -433,8 +391,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>cross</head>
-            <headType>half</headType>
+            <head>1</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -442,8 +400,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>diamond</head>
-            <headType>half</headType>
+            <head>2</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -451,8 +409,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
-            <headType>half</headType>
+            <head>3</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         </Measure>
@@ -462,8 +420,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>mi</head>
-            <headType>half</headType>
+            <head>4</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -471,8 +429,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>slash</head>
-            <headType>half</headType>
+            <head>5</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -480,8 +438,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>xcircle</head>
-            <headType>half</headType>
+            <head>6</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -489,8 +447,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>do</head>
-            <headType>half</headType>
+            <head>7</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         </Measure>
@@ -500,8 +458,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>re</head>
-            <headType>half</headType>
+            <head>8</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -509,8 +467,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>fa</head>
-            <headType>half</headType>
+            <head>9</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -518,8 +476,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>la</head>
-            <headType>half</headType>
+            <head>10</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -527,8 +485,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>ti</head>
-            <headType>half</headType>
+            <head>11</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         </Measure>
@@ -541,8 +499,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>sol</head>
-            <headType>half</headType>
+            <head>12</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Chord>
@@ -550,8 +508,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>altbrevis</head>
-            <headType>half</headType>
+            <head>13</head>
+            <headType>1</headType>
             </Note>
           </Chord>
         <Rest>
@@ -564,7 +522,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -572,8 +530,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>cross</head>
-            <headType>breve</headType>
+            <head>1</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -581,8 +539,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>diamond</head>
-            <headType>breve</headType>
+            <head>2</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -590,8 +548,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
-            <headType>breve</headType>
+            <head>3</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         </Measure>
@@ -601,7 +559,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>4</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -609,8 +568,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>slash</head>
-            <headType>breve</headType>
+            <head>5</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -618,8 +577,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>xcircle</head>
-            <headType>breve</headType>
+            <head>6</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -627,7 +586,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>7</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         </Measure>
@@ -637,7 +597,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>8</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -645,7 +606,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>9</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -653,7 +615,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>10</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -661,17 +624,22 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>11</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         </Measure>
       <Measure number="16">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <headType>breve</headType>
+            <head>12</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Chord>
@@ -679,8 +647,8 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>altbrevis</head>
-            <headType>breve</headType>
+            <head>13</head>
+            <headType>3</headType>
             </Note>
           </Chord>
         <Rest>

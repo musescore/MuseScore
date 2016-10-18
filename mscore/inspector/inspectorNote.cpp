@@ -55,13 +55,15 @@ InspectorNote::InspectorNote(QWidget* parent)
       // fix order of noteheads
       //
       for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i) {
-            n.noteHeadGroup->addItem(qApp->translate("noteheadnames", NoteHead::groupToGroupName(heads[i])));
+            n.noteHeadGroup->addItem(NoteHead::group2userName(heads[i]));
             n.noteHeadGroup->setItemData(i, QVariant(int(heads[i])));
             }
 
       // noteHeadType starts at -1: correct values and count one item more (HEAD_AUTO)
-      for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i)
-            n.noteHeadType->setItemData(i, i-1);
+      for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i) {
+            n.noteHeadType->addItem(NoteHead::type2userName(NoteHead::Type(i - 1)));
+            n.noteHeadType->setItemData(i, i - 1);
+            }
 
       const std::vector<InspectorItem> iiList = {
             { P_ID::SMALL,          0, 0, n.small,         n.resetSmall         },

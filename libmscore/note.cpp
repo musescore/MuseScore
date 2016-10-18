@@ -99,23 +99,99 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
    }
 };
 
+struct NoteHeadName {
+   const char* name;
+   const char* username;
+};
+
 // same order as NoteHead::Group
-static const char* noteHeadNames[] = {
-      QT_TRANSLATE_NOOP("noteheadnames", "Normal"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Cross"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Diamond"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Triangle"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Mi"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Slash"),
-      QT_TRANSLATE_NOOP("noteheadnames", "XCircle"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Do"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Re"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Fa"),
-      QT_TRANSLATE_NOOP("noteheadnames", "La"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Ti"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Sol"),
-      QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis")
+static NoteHeadName noteHeadGroupNames[] = {
+      {"normal",    QT_TRANSLATE_NOOP("noteheadnames", "Normal") },
+      {"cross",     QT_TRANSLATE_NOOP("noteheadnames", "Cross") },
+      {"diamond",   QT_TRANSLATE_NOOP("noteheadnames", "Diamond") },
+      {"triangle",  QT_TRANSLATE_NOOP("noteheadnames", "Triangle") },
+      {"mi",        QT_TRANSLATE_NOOP("noteheadnames", "Mi") },
+      {"slash",     QT_TRANSLATE_NOOP("noteheadnames", "Slash") },
+      {"xcircle",   QT_TRANSLATE_NOOP("noteheadnames", "XCircle") },
+      {"do",        QT_TRANSLATE_NOOP("noteheadnames", "Do") },
+      {"re",        QT_TRANSLATE_NOOP("noteheadnames", "Re") },
+      {"fa",        QT_TRANSLATE_NOOP("noteheadnames", "Fa") },
+      {"la",        QT_TRANSLATE_NOOP("noteheadnames", "La") },
+      {"ti",        QT_TRANSLATE_NOOP("noteheadnames", "Ti") },
+      {"sol",       QT_TRANSLATE_NOOP("noteheadnames", "Sol") },
+      {"altbrevis", QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis") }
       };
+
+// same order as NoteHead::Type
+static NoteHeadName noteHeadTypeNames[] = {
+      {"auto",    QT_TRANSLATE_NOOP("noteheadnames", "Auto") },
+      {"whole",   QT_TRANSLATE_NOOP("noteheadnames", "Whole") },
+      {"half",    QT_TRANSLATE_NOOP("noteheadnames", "Half") },
+      {"quarter", QT_TRANSLATE_NOOP("noteheadnames", "Quarter") },
+      {"breve",   QT_TRANSLATE_NOOP("noteheadnames", "Breve") },
+      };
+
+//---------------------------------------------------------
+//   group2userName
+//---------------------------------------------------------
+
+QString NoteHead::group2userName(NoteHead::Group group)
+      {
+      return qApp->translate("noteheadnames", noteHeadGroupNames[int(group)].username);
+      }
+
+//---------------------------------------------------------
+//   type2userName
+//---------------------------------------------------------
+
+QString NoteHead::type2userName(NoteHead::Type type)
+      {
+      return qApp->translate("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
+      }
+
+//---------------------------------------------------------
+//   group2name
+//---------------------------------------------------------
+
+QString NoteHead::group2name(NoteHead::Group group)
+      {
+      return noteHeadGroupNames[int(group)].name;
+      }
+
+//---------------------------------------------------------
+//   type2name
+//---------------------------------------------------------
+
+QString NoteHead::type2name(NoteHead::Type type)
+      {
+      return noteHeadTypeNames[int(type) + 1].name;
+      }
+
+//---------------------------------------------------------
+//   name2group
+//---------------------------------------------------------
+
+NoteHead::Group NoteHead::name2group(QString s)
+      {
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
+            if (noteHeadGroupNames[i].name == s)
+                  return NoteHead::Group(i);
+            }
+      return NoteHead::Group::HEAD_NORMAL;
+      }
+
+//---------------------------------------------------------
+//   name2type
+//---------------------------------------------------------
+
+NoteHead::Type NoteHead::name2type(QString s)
+      {
+      for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i) {
+            if (noteHeadTypeNames[i].name == s)
+                  return NoteHead::Type(i - 1);
+            }
+      return NoteHead::Type::HEAD_AUTO;
+      }
 
 //---------------------------------------------------------
 //   noteHead
@@ -128,12 +204,13 @@ SymId Note::noteHead(int direction, NoteHead::Group g, NoteHead::Type t)
 
 //---------------------------------------------------------
 //   headGroup
+//   used only when dropping a notehead from the palette
+//   they are either half note, either double whole
 //---------------------------------------------------------
 
 NoteHead::Group NoteHead::headGroup() const
       {
       Group group = Group::HEAD_INVALID;
-
       for (int i = 0; i < int(Group::HEAD_GROUPS); ++i) {
             if (noteHeads[0][i][1] == _sym || noteHeads[0][i][3] == _sym) {
                   group = (Group)i;
@@ -902,10 +979,7 @@ bool Note::readProperties(XmlReader& e)
       else if (tag == "ghost")
             setGhost(e.readInt());
       else if (tag == "headType")
-            if (score()->mscVersion() <= 114)
-                  setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt() - 1);
-            else
-                  setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt());
+            setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e));
       else if (tag == "veloType")
             setProperty(P_ID::VELO_TYPE, Ms::getProperty(P_ID::VELO_TYPE, e));
       else if (tag == "line")
@@ -2428,21 +2502,12 @@ int Note::qmlDotsCount()
       }
 
 //---------------------------------------------------------
-//   groupToGroupName
-//---------------------------------------------------------
-
-const char* NoteHead::groupToGroupName(NoteHead::Group group)
-      {
-      return noteHeadNames[int(group)];
-      }
-
-//---------------------------------------------------------
 //   subtypeName
 //---------------------------------------------------------
 
 QString Note::subtypeName() const
       {
-      return qApp->translate("noteheadnames", NoteHead::groupToGroupName(_headGroup));
+      return NoteHead::group2userName(_headGroup);
       }
 
 //---------------------------------------------------------

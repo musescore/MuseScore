@@ -219,31 +219,6 @@
        <property name="frame">
         <bool>true</bool>
        </property>
-       <item>
-        <property name="text">
-         <string>Auto</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Whole</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Half</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Quarter</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Breve</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="4" column="0">

@@ -92,7 +92,12 @@ class NoteHead : public Symbol {
 
       Group headGroup() const;
 
-      static const char* groupToGroupName(Group group);
+      static QString group2userName(Group group);
+      static QString type2userName(Type type);
+      static QString group2name(Group group);
+      static QString type2name(Type type);
+      static Group name2group(QString s);
+      static Type name2type(QString s);
       };
 
 //---------------------------------------------------------
@@ -462,9 +467,6 @@ class Note : public Element {
       int offTimeType() const    { return _offTimeType; }
       int onTimeType() const     { return _onTimeType; }
       };
-
-// extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];
-
 
 }     // namespace Ms
 

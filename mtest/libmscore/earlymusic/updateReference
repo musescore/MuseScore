@@ -1,4 +1,10 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/earlymusic/mensurstrich01.mscx   mensurstrich01.mscx
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/earlymusic/Debug
+else
+   S=../../../build.debug/mtest/libmscore/earlymusic
+fi
+
+cp $S/mensurstrich01.mscx   mensurstrich01-ref.mscx
 
