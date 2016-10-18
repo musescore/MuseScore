@@ -291,6 +291,96 @@ static void readAccidental(Accidental* a, XmlReader& e)
             }
       }
 
+static NoteHead::Group convertHeadGroup(int i)
+      {
+      NoteHead::Group val;
+      switch (i) {
+            case 1:
+                  val = NoteHead::Group::HEAD_CROSS;
+                  break;
+            case 2:
+                  val = NoteHead::Group::HEAD_DIAMOND;
+                  break;
+            case 3:
+                  val = NoteHead::Group::HEAD_TRIANGLE;
+                  break;
+            case 4:
+                  val = NoteHead::Group::HEAD_MI;
+                  break;
+            case 5:
+                  val = NoteHead::Group::HEAD_SLASH;
+                  break;
+            case 6:
+                  val = NoteHead::Group::HEAD_XCIRCLE;
+                  break;
+            case 7:
+                  val = NoteHead::Group::HEAD_DO;
+                  break;
+            case 8:
+                  val = NoteHead::Group::HEAD_RE;
+                  break;
+            case 9:
+                  val = NoteHead::Group::HEAD_FA;
+                  break;
+            case 10:
+                  val = NoteHead::Group::HEAD_LA;
+                  break;
+            case 11:
+                  val = NoteHead::Group::HEAD_TI;
+                  break;
+            case 12:
+                  val = NoteHead::Group::HEAD_SOL;
+                  break;
+            case 13:
+                  val = NoteHead::Group::HEAD_BREVIS_ALT;
+                  break;
+            default:
+                  val = NoteHead::Group::HEAD_NORMAL;
+            }
+      return val;
+      }
+
+static NoteHead::Type convertHeadType(int i)
+      {
+      NoteHead::Type val;
+      switch (i) {
+            case 0:
+                  val = NoteHead::Type::HEAD_WHOLE;
+                  break;
+            case 1:
+                  val = NoteHead::Type::HEAD_HALF;
+                  break;
+            case 2:
+                  val = NoteHead::Type::HEAD_QUARTER;
+                  break;
+            case 3:
+                  val = NoteHead::Type::HEAD_BREVIS;
+                  break;
+            default:
+                  val = NoteHead::Type::HEAD_AUTO;;
+            }
+      return val;
+      }
+
+//---------------------------------------------------------
+//   readAmbitus
+//---------------------------------------------------------
+
+static void readAmbitus(Ambitus* ambitus, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "head")
+                  ambitus->setNoteHeadGroup(convertHeadGroup(e.readInt()));
+            else if (tag == "headType")
+                  ambitus->setNoteHeadType(convertHeadType(e.readInt()));
+            else if (ambitus->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
 //---------------------------------------------------------
 //   readNote
 //---------------------------------------------------------
@@ -310,71 +400,12 @@ static void readNote(Note* note, XmlReader& e)
                   }
             else if (tag == "head") {
                   int i = e.readInt();
-                  NoteHead::Group val;
-                  switch (i) {
-                        case 1:
-                              val = NoteHead::Group::HEAD_CROSS;
-                              break;
-                        case 2:
-                              val = NoteHead::Group::HEAD_DIAMOND;
-                              break;
-                        case 3:
-                              val = NoteHead::Group::HEAD_TRIANGLE;
-                              break;
-                        case 4:
-                              val = NoteHead::Group::HEAD_MI;
-                              break;
-                        case 5:
-                              val = NoteHead::Group::HEAD_SLASH;
-                              break;
-                        case 6:
-                              val = NoteHead::Group::HEAD_XCIRCLE;
-                              break;
-                        case 7:
-                              val = NoteHead::Group::HEAD_DO;
-                              break;
-                        case 8:
-                              val = NoteHead::Group::HEAD_RE;
-                              break;
-                        case 9:
-                              val = NoteHead::Group::HEAD_FA;
-                              break;
-                        case 10:
-                              val = NoteHead::Group::HEAD_LA;
-                              break;
-                        case 11:
-                              val = NoteHead::Group::HEAD_TI;
-                              break;
-                        case 12:
-                              val = NoteHead::Group::HEAD_SOL;
-                              break;
-                        case 13:
-                              val = NoteHead::Group::HEAD_BREVIS_ALT;
-                              break;
-                        default:
-                              val = NoteHead::Group::HEAD_NORMAL;
-                        }
+                  NoteHead::Group val = convertHeadGroup(i);
                   note->setHeadGroup(val);
                   }
             else if (tag == "headType") {
                   int i = e.readInt();
-                  NoteHead::Type val;
-                  switch (i) {
-                        case 0:
-                              val = NoteHead::Type::HEAD_WHOLE;
-                              break;
-                        case 1:
-                              val = NoteHead::Type::HEAD_HALF;
-                              break;
-                        case 2:
-                              val = NoteHead::Type::HEAD_QUARTER;
-                              break;
-                        case 3:
-                              val = NoteHead::Type::HEAD_BREVIS;
-                              break;
-                        default:
-                              val = NoteHead::Type::HEAD_AUTO;;
-                        }
+                  NoteHead::Type val = convertHeadType(i);
                   note->setHeadType(val);
                   }
             else if (note->readProperties(e))
@@ -1097,7 +1128,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   }
             else if (tag == "Ambitus") {
                   Ambitus* range = new Ambitus(score);
-                  range->read(e);
+                  readAmbitus(range, e);
                   segment = m->getSegment(Segment::Type::Ambitus, e.tick());
                   range->setParent(segment);          // a parent segment is needed for setTrack() to work
                   range->setTrack(trackZeroVoice(e.track()));

@@ -6,9 +6,11 @@ else
    S=../../../build.debug/mtest/libmscore/compat206
 fi
 
-cp $S/accidentals-test.mscx accidentals-ref.mscx
-cp $S/articulations-test.mscx articulations-ref.mscx
-cp $S/breath-test.mscx breath-ref.mscx
-cp $S/clefs-test.mscx clefs-ref.mscx
-cp $S/markers-test.mscx markers-ref.mscx
-cp $S/textstyles-test.mscx textstyles-ref.mscx
+cp $S/accidentals-test.mscx     accidentals-ref.mscx
+cp $S/ambitus-test.mscx         ambitus-ref.mscx
+cp $S/articulations-test.mscx   articulations-ref.mscx
+cp $S/breath-test.mscx          breath-ref.mscx
+cp $S/clefs-test.mscx           clefs-ref.mscx
+cp $S/markers-test.mscx         markers-ref.mscx
+cp $S/noteheads-test.mscx       noteheads-ref.mscx
+cp $S/textstyles-test.mscx      textstyles-ref.mscx
