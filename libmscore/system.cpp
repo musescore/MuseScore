@@ -817,7 +817,7 @@ int System::snapNote(int tick, const QPointF p, int staff) const
 Measure* System::firstMeasure() const
       {
       auto i = std::find_if(ml.begin(), ml.end(), [](MeasureBase* mb){return mb->isMeasure();});
-      return i != ml.end() ? static_cast<Measure*>(*i) : 0;
+      return i != ml.end() ? toMeasure(*i) : 0;
       }
 
 //---------------------------------------------------------
@@ -827,7 +827,7 @@ Measure* System::firstMeasure() const
 Measure* System::lastMeasure() const
       {
       auto i = std::find_if(ml.rbegin(), ml.rend(), [](MeasureBase* mb){return mb->isMeasure();});
-      return i != ml.rend() ? static_cast<Measure*>(*i) : 0;
+      return i != ml.rend() ? toMeasure(*i) : 0;
       }
 
 //---------------------------------------------------------
@@ -1152,27 +1152,6 @@ qreal System::minBottom() const
                   dist = qMax(dist, s->staffShape(staffIdx).bottom());
             }
       return dist - spatium() * 4;
-      }
-
-//-------------------------------------------------------------------
-//   removeGeneratedElements (System Header + TimeSig Announce)
-//    helper function
-//-------------------------------------------------------------------
-
-void System::removeGeneratedElements()
-      {
-      auto fm = std::find_if(ml.begin(), ml.end(), [](MeasureBase* mb){return mb->isMeasure();});
-      auto lm = std::find_if(ml.rbegin(), ml.rend(), [](MeasureBase* mb){return mb->isMeasure();});
-
-      for (auto im = fm; im != ml.end(); ++im) {
-            if (!(*im)->isMeasure())
-                  continue;
-            Measure* m = toMeasure(*im);
-            if (m != *fm && m->hasSystemHeader())
-                  m->removeSystemHeader();
-            if (m != *lm && m->hasSystemTrailer())
-                  m->removeSystemTrailer();
-            }
       }
 
 //---------------------------------------------------------

@@ -595,7 +595,7 @@ void Debugger::updateElement(Element* el)
                   }
             }
       if (!found)
-            qDebug("Debugger: element not found %s\n", el->name());
+            qDebug("Debugger: element not found %s", el->name());
 
       setWindowTitle(QString("MuseScore: Debugger: ") + el->name());
 

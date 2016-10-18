@@ -192,14 +192,46 @@ Timewise insert/delete notes/rests
         style value if they are styled.
 
 ====================================================================
-      implementation details
+      Implementation Details
 ====================================================================
 
-      * why do we need to layout MasterScore and all parts?
+Measure layout
+      A measure is layouted in four different contexts:
+            - first measure in a system
+                  - the measure is prepended by a system header
 
-            Layout can remove elements which are user modified for example spanner segments.
-            This needs to be undoable. Layout cannot be delayed bc. we then cannot associate
-            any changes to the proper command frame in the undo stack.
+            - last measure in a system
+                  - the measure has a system trailer
+
+            - in the middle of a system
+
+            - is the only measure in a system
+                  - the measure has a system header and a system trailer
+
+BarLine handling
+
+      A measure can have four kind of barlines, contained in a special typed Segment:
+
+            - BeginBarLine
+                  this barline is also called the "systemic barline"
+                  - automatically created for every System
+                  - a BarLine can be dropped on a horizontal frame which adds
+                    a BeginBarLine to the next measure
+                  - overrides the EndBarLine of a previous measure in the system
+
+            - StartRepeatBarLine
+                  - after a horizontal frame it overrides a BeginBarLine
+                  - is prepended by a system header if in the first system measure
+                  - sets the _repeatStart measure flag
+
+            - BarLine
+                  - is in the middle of a measure and has no semantic (repeat etc.)
+                    (tick > start tick of measure and tick < end tick of measure)
+
+            - EndBarLine
+                  - is created automatically
+                  - maybe not the last Segment in a Measure (cautionary elements can follow)
+
 
 
 ====================================================================

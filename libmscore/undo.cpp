@@ -3684,7 +3684,7 @@ void ChangeDrumset::flip()
 //   undoChangeBarLine
 //---------------------------------------------------------
 
-void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
+void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginBarLine)
       {
       int tick = measure->tick();
 
@@ -3697,18 +3697,38 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType)
                   case BarLineType::NORMAL:
                   case BarLineType::DOUBLE:
                   case BarLineType::BROKEN:
-                  case BarLineType::DOTTED:
-                        {
-                        s->undoChangeProperty(m, P_ID::REPEAT_END, false);
-                        if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
-                        Segment* segment = m->findSegment(Segment::Type::EndBarLine, m->endTick());
-                        if (segment) {
+                  case BarLineType::DOTTED: {
+                        Segment* segment;
+                        if (!beginBarLine) {
+                              s->undoChangeProperty(m, P_ID::REPEAT_END, false);
+                              if (nm)
+                                    s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
+                              segment = m->findSegment(Segment::Type::EndBarLine, m->endTick());
+                              if (segment) {
+                                    for (Element* e : segment->elist()) {
+                                          if (e) {
+                                                BarLine* bl = toBarLine(e);
+                                                bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
+                                                bl->undoChangeProperty(P_ID::GENERATED, false);
+                                                }
+                                          }
+                                    }
+                              }
+                        else {
+                              segment = m->undoGetSegment(Segment::Type::BeginBarLine, tick);
                               for (Element* e : segment->elist()) {
                                     if (e) {
                                           BarLine* bl = toBarLine(e);
                                           bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
                                           bl->undoChangeProperty(P_ID::GENERATED, false);
+                                          }
+                                    else {
+                                          BarLine* bl = new BarLine(s);
+                                          bl->setBarLineType(barType);
+                                          bl->setParent(segment);
+                                          bl->setTrack(0);
+                                          bl->setSpan(s->nstaves());
+                                          undo(new AddElement(bl));
                                           }
                                     }
                               }

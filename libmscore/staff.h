@@ -110,19 +110,20 @@ class Staff : public QObject, public ScoreElement {
       std::map<int,TimeSig*> timesigs;
 
       QList <BracketItem> _brackets;
-      int _barLineSpan   { 1     };    ///< 0 - no bar line, 1 - span this staff, ...
-      int _barLineFrom   { 0     };    ///< line of start staff to draw the barline from (0 = staff top line, ...)
-      int _barLineTo;                  ///< line of end staff to draw the bar line to (0= staff top line, ...)
-      bool _small        { false };
-      bool _invisible    { false };
-      bool _cutaway      { false };
-      bool _showIfEmpty  { false };    ///< show this staff if system is empty and hideEmptyStaves is true
-      bool _hideSystemBarLine  { false }; // no system barline if not preceeded by staff with barline
+      int _barLineSpan         { 1     };    ///< 0 - no bar line, 1 - span this staff, ...
+      int _barLineFrom         { 0     };    ///< line of start staff to draw the barline from (0 = staff top line, ...)
+      int _barLineTo;                        ///< line of end staff to draw the bar line to (0= staff top line, ...)
+
+      bool _small              { false };
+      bool _invisible          { false };
+      bool _cutaway            { false };
+      bool _showIfEmpty        { false };       ///< show this staff if system is empty and hideEmptyStaves is true
+      bool _hideSystemBarLine  { false };       // no system barline if not preceeded by staff with barline
       HideMode _hideWhenEmpty  { HideMode::AUTO };    // hide empty staves
 
-      QColor _color      { MScore::defaultColor };
-      qreal _userDist    { 0.0   };        ///< user edited extra distance
-      qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
+      QColor _color            { MScore::defaultColor };
+      qreal _userDist          { 0.0   };       ///< user edited extra distance
+      qreal _userMag           { 1.0   };       // allowed 0.1 - 10.0
 
       StaffType _staffType;
       LinkedStaves* _linkedStaves { nullptr };

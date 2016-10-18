@@ -41,6 +41,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
       setLayout(_layout);
+
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       connect(styleMapper, SIGNAL(mapped(int)), SLOT(setStyleClicked(int)));

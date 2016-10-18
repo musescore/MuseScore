@@ -55,7 +55,7 @@ class TestMeasure : public QObject, public MTest
       void spanner_C();
       void spanner_D();
       void deleteLast();
-      void minWidth();
+//      void minWidth();
 
       void gap();
       void checkMeasure();
@@ -184,6 +184,7 @@ void TestMeasure::insertBfKeyChange()
 //   minWidth
 //---------------------------------------------------------
 
+#if 0
 void TestMeasure::minWidth()
       {
       MasterScore* score = readScore(DIR + "measure-2.mscx");
@@ -210,6 +211,7 @@ void TestMeasure::minWidth()
             QCOMPARE(measuresSystem[i], int(score->systems().at(i)->measures().size()));
             }
       }
+#endif
 
 //---------------------------------------------------------
 ///   spanner_a

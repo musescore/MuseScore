@@ -160,8 +160,6 @@ class Measure : public MeasureBase {
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }
 
-      qreal minWidth1() const;
-
       Fraction timesig() const             { return _timesig;     }
       void setTimesig(const Fraction& f)   { _timesig = f;        }
       Fraction len() const                 { return _len;         }
@@ -218,8 +216,8 @@ class Measure : public MeasureBase {
       Segment* findSegment(Segment::Type st, int tick);
 
       qreal createEndBarLines(bool);
+      void barLinesSetSpan(Segment*);
       void setEndBarLineType(BarLineType val, int track, bool visible = true, QColor color = QColor());
-      void setStartRepeatBarLine();
 
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
 
@@ -269,14 +267,19 @@ class Measure : public MeasureBase {
       Element* prevElementStaff(int staff);
       virtual QString accessibleInfo() const override;
 
-      void removeSystemHeader();
-      void removeSystemTrailer();
+      void addSystemHeader(bool firstSystem);
+      void addSystemTrailer(Measure* nm);
+      bool removeSystemHeader();
+      bool removeSystemTrailer();
 
       const BarLine* endBarLine() const;
       BarLineType endBarLineType() const;
       bool endBarLineVisible() const;
       Shape& staffShape(int staffIdx) { return mstaff(staffIdx)->shape(); }
       virtual void triggerLayout() const override;
+      qreal basicStretch() const;
+      qreal basicWidth() const;
+      virtual qreal computeMinWidth(bool isFirstMeasureInSystem);
       };
 
 }     // namespace Ms

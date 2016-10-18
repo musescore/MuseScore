@@ -21,6 +21,7 @@
 #include "segment.h"
 #include "tempo.h"
 #include "xml.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -156,6 +157,7 @@ void MeasureBase::add(Element* e)
                         break;
                   }
             }
+      triggerLayout();
       _el.push_back(e);
       }
 
@@ -198,11 +200,11 @@ Measure* MeasureBase::nextMeasure() const
       {
       MeasureBase* m = _next;
       for (;;) {
-            if (m == 0 || m->type() == Element::Type::MEASURE)
+            if (m == 0 || m->isMeasure())
                   break;
             m = m->_next;
             }
-      return static_cast<Measure*>(m);
+      return toMeasure(m);
       }
 
 //---------------------------------------------------------
@@ -225,8 +227,8 @@ Measure* MeasureBase::prevMeasure() const
       {
       MeasureBase* m = prev();
       while (m) {
-            if (m->type() == Element::Type::MEASURE)
-                  return static_cast<Measure*>(m);
+            if (m->isMeasure())
+                  return toMeasure(m);
             m = m->prev();
             }
       return 0;
@@ -240,8 +242,8 @@ Measure* MeasureBase::prevMeasureMM() const
       {
       MeasureBase* m = prev();
       while (m) {
-            if (m->type() == Element::Type::MEASURE) {
-                  Measure* mm = static_cast<Measure*>(m);
+            if (m->isMeasure()) {
+                  Measure* mm = toMeasure(m);
                   if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                         if (mm->mmRestCount() >= 0) {
                               if (mm->hasMMRest())
@@ -467,7 +469,7 @@ MeasureBase* MeasureBase::nextMM() const
       if (_next
          && _next->isMeasure()
          && score()->styleB(StyleIdx::createMultiMeasureRests)
-         && static_cast<Measure*>(_next)->hasMMRest()) {
+         && toMeasure(_next)->hasMMRest()) {
             return toMeasure(_next)->mmRest();
             }
       return _next;
