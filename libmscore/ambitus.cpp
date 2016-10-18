@@ -213,44 +213,57 @@ void Ambitus::write(Xml& xml) const
 void Ambitus::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "head")
-                  setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
-            else if (tag == "headType")
-                  setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e).toInt());
-            else if (tag == "mirror")
-                  setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e).toInt());
-            else if (tag == "hasLine")
-                  setHasLine(e.readInt());
-            else if (tag == "lineWidth")
-                  setProperty(P_ID::LINE_WIDTH, Ms::getProperty(P_ID::LINE_WIDTH, e));
-            else if (tag == "topPitch")
-                  _topPitch = e.readInt();
-            else if (tag == "bottomPitch")
-                  _bottomPitch = e.readInt();
-            else if (tag == "topTpc")
-                  _topTpc = e.readInt();
-            else if (tag == "bottomTpc")
-                  _bottomTpc = e.readInt();
-            else if (tag == "topAccidental") {
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Accidental")
-                              _topAccid.read(e);
-                        else
-                              e.skipCurrentElement();
-                        }
-                  }
-            else if (tag == "bottomAccidental") {
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Accidental")
-                              _bottomAccid.read(e);
-                        else
-                              e.skipCurrentElement();
-                        }
-                  }
-            else if (!Element::readProperties(e))
+            if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Ambitus::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "head")
+            setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
+      else if (tag == "headType")
+            setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e));
+      else if (tag == "mirror")
+            setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e).toInt());
+      else if (tag == "hasLine")
+            setHasLine(e.readInt());
+      else if (tag == "lineWidth")
+            setProperty(P_ID::LINE_WIDTH, Ms::getProperty(P_ID::LINE_WIDTH, e));
+      else if (tag == "topPitch")
+            _topPitch = e.readInt();
+      else if (tag == "bottomPitch")
+            _bottomPitch = e.readInt();
+      else if (tag == "topTpc")
+            _topTpc = e.readInt();
+      else if (tag == "bottomTpc")
+            _bottomTpc = e.readInt();
+      else if (tag == "topAccidental") {
+            while (e.readNextStartElement()) {
+                  if (e.name() == "Accidental")
+                        _topAccid.read(e);
+                  else
+                        e.skipCurrentElement();
+                  }
+            }
+      else if (tag == "bottomAccidental") {
+            while (e.readNextStartElement()) {
+                  if (e.name() == "Accidental")
+                        _bottomAccid.read(e);
+                  else
+                        e.skipCurrentElement();
+                  }
+            }
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
