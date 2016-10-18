@@ -89,7 +89,12 @@ Inspector::Inspector(QWidget* parent)
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       sa = new QScrollArea;
       sa->setFrameShape(QFrame::NoFrame);
+      sa->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
       sa->setWidgetResizable(true);
+
+//      setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+//      sa->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+
       setWidget(sa);
       sa->setFocusPolicy(Qt::NoFocus);
 

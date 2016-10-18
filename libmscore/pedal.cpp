@@ -36,9 +36,8 @@ void PedalSegment::layout()
             qreal minDistance = spatium() * .7;
             Shape s1 = shape().translated(pos());
             qreal d  = system()->bottomDistance(staffIdx(), s1);
-            if (d > -minDistance) {
+            if (d > -minDistance)
                   rUserYoffset() = d + minDistance;
-                  }
             }
       else
             adjustReadPos();

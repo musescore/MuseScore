@@ -115,6 +115,9 @@ class HBox : public Box {
       virtual void endEditDrag() override;
       void layout2();
       virtual bool isMovable() const override;
+      virtual qreal computeMinWidth(bool /*isFirstMeasureInSystem*/) {
+            return point(boxWidth()) + topGap() + bottomGap();  // top/bottom is really left/right
+            }
       };
 
 //---------------------------------------------------------

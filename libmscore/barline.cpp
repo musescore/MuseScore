@@ -620,8 +620,8 @@ Element* BarLine::drop(const DropData& data)
             //    and next measure if this is a EndBarLine.
             //---------------------------------------------
 
+            Measure* m  = segment()->measure();
             if (segment()->isEndBarLineType()) {
-                  Measure* m  = segment()->measure();
                   if (st == BarLineType::START_REPEAT) {
                         if (m->nextMeasureMM())
                               score()->undoChangeBarLine(m->nextMeasureMM(), st);
@@ -629,16 +629,14 @@ Element* BarLine::drop(const DropData& data)
                   else
                         score()->undoChangeBarLine(m, st);
                   }
-            else if (segment()->isBeginBarLineType()) {
-                  undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(st));
-                  undoChangeProperty(P_ID::GENERATED, false);
-                  }
+            else if (segment()->isBeginBarLineType())
+                  score()->undoChangeBarLine(m, st);
 
             delete e;
             return 0;
             }
 
-      else if (type == Element::Type::ARTICULATION) {
+      else if (type == Type::ARTICULATION) {
             Articulation* atr = toArticulation(e);
             atr->setParent(this);
             atr->setTrack(track());

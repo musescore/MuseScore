@@ -189,6 +189,7 @@ class MeasureBase : public Element {
 
       bool hasCourtesyKeySig() const     { return _hasCourtesyKeySig; }
       void setHasCourtesyKeySig(int val) { _hasCourtesyKeySig = val; }
+      virtual qreal computeMinWidth(bool /*isFirstMeasureInSystem*/) { return 0.0; };
 
       int index() const;
       };

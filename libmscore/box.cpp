@@ -25,6 +25,8 @@
 #include "stafftext.h"
 #include "icon.h"
 #include "xml.h"
+#include "measure.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -556,18 +558,18 @@ void HBox::layout2()
 
 bool Box::acceptDrop(const DropData& data) const
       {
-      Element::Type type = data.element->type();
+      Element::Type t = data.element->type();
       if (data.element->flag(ElementFlag::ON_STAFF))
             return false;
-      switch (type) {
-            case Element::Type::LAYOUT_BREAK:
-            case Element::Type::TEXT:
-            case Element::Type::STAFF_TEXT:
-            case Element::Type::IMAGE:
-            case Element::Type::SYMBOL:
+      switch (t) {
+            case Type::LAYOUT_BREAK:
+            case Type::TEXT:
+            case Type::STAFF_TEXT:
+            case Type::IMAGE:
+            case Type::SYMBOL:
                   return true;
-            case Element::Type::ICON:
-                  switch(static_cast<Icon*>(data.element)->iconType()) {
+            case Type::ICON:
+                  switch (toIcon(data.element)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:
@@ -577,6 +579,8 @@ bool Box::acceptDrop(const DropData& data) const
                               break;
                         }
                   break;
+            case Type::BAR_LINE:
+                  return type() == Type::HBOX;
             default:
                   break;
             }
@@ -593,14 +597,14 @@ Element* Box::drop(const DropData& data)
       if (e->flag(ElementFlag::ON_STAFF))
             return 0;
       switch (e->type()) {
-            case Element::Type::LAYOUT_BREAK:
+            case Type::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (pageBreak() || lineBreak()) {
                         if (
-                           (lb->layoutBreakType() == LayoutBreak::Type::PAGE && pageBreak())
-                           || (lb->layoutBreakType() == LayoutBreak::Type::LINE && lineBreak())
-                           || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && sectionBreak())
+                           (lb->isPageBreak() && pageBreak())
+                           || (lb->isLineBreak() && lineBreak())
+                           || (lb->isSectionBreak() && sectionBreak())
                            ) {
                               //
                               // if break already set
@@ -622,7 +626,7 @@ Element* Box::drop(const DropData& data)
                   return lb;
                   }
 
-            case Element::Type::STAFF_TEXT:
+            case Type::STAFF_TEXT:
                   {
                   Text* text = new Text(score());
                   text->setTextStyleType(TextStyleType::FRAME);
@@ -633,8 +637,8 @@ Element* Box::drop(const DropData& data)
                   return text;
                   }
 
-            case Element::Type::ICON:
-                  switch(static_cast<Icon*>(e)->iconType()) {
+            case Type::ICON:
+                  switch (toIcon(e)->iconType()) {
                         case IconType::VFRAME:
                               score()->insertMeasure(Element::Type::VBOX, this);
                               break;
@@ -652,12 +656,23 @@ Element* Box::drop(const DropData& data)
                         }
                   break;
 
-            case Element::Type::TEXT:
-            case Element::Type::IMAGE:
-            case Element::Type::SYMBOL:
+            case Type::TEXT:
+            case Type::IMAGE:
+            case Type::SYMBOL:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
+
+            case Type::BAR_LINE: {
+printf("drop barline\n");
+                  MeasureBase* mb = next();
+                  if (!mb || !mb->isMeasure()) {
+                        delete e;
+                        return 0;
+                        }
+                  score()->undoChangeBarLine(toMeasure(mb), toBarLine(e)->barLineType(), true);
+                  }
+                  return 0;
 
             default:
                   return 0;

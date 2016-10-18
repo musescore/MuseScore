@@ -153,7 +153,6 @@ class System : public Element {
       qreal bottomDistance(int staffIdx, const Shape&) const;
       qreal minTop() const;
       qreal minBottom() const;
-      void removeGeneratedElements();
 
       void moveBracket(int staffIdx, int srcCol, int dstCol);
       bool hasFixedDownDistance() const { return fixedDownDistance; }

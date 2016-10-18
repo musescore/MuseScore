@@ -2060,31 +2060,18 @@ void Score::deleteItem(Element* el)
                   break;
 
             case Element::Type::BAR_LINE: {
-                  BarLine* bl           = toBarLine(el);
-                  Segment* seg          = bl->segment();
-                  Measure* m            = seg->measure();
-                  Segment::Type segType = seg->segmentType();
-
-                  if (segType & (Segment::Type::BeginBarLine | Segment::Type::BarLine))
-                        undoRemoveElement(el);
-                  else if (segType == Segment::Type::EndBarLine) {
-                        m->undoResetProperty(P_ID::REPEAT_END);
-                        Measure* nm = m->nextMeasure();
-                        if (nm && m->system() == nm->system())
-                              nm->undoResetProperty(P_ID::REPEAT_START);
-                        for (Element* e : seg->elist()) {
-                              if (!e)
-                                    continue;
-                              BarLine* b = toBarLine(e);
-                              b->undoChangeProperty(P_ID::GENERATED, true);
-                              b->undoResetProperty(P_ID::BARLINE_TYPE);
-                              b->undoResetProperty(P_ID::BARLINE_SPAN);
-                              b->undoResetProperty(P_ID::BARLINE_SPAN_FROM);
-                              b->undoResetProperty(P_ID::BARLINE_SPAN_TO);
-                              }
-                        }
-                  else if (segType == Segment::Type::StartRepeatBarLine)
+                  BarLine* bl = toBarLine(el);
+                  Measure* m = bl->segment()->measure();
+                  if (bl->barLineType() == BarLineType::START_REPEAT)
                         m->undoChangeProperty(P_ID::REPEAT_START, false);
+                  else if (bl->barLineType() == BarLineType::END_REPEAT)
+                        m->undoChangeProperty(P_ID::REPEAT_END, false);
+                  else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
+                        m->undoChangeProperty(P_ID::REPEAT_START, false);
+                        m->undoChangeProperty(P_ID::REPEAT_END, false);
+                        }
+                  else
+                        undoRemoveElement(el);
                   }
                   break;
 
@@ -2420,7 +2407,7 @@ void Score::cmdDeleteSelection()
                         ChordRest* cr = toChordRest(e);
                         if (tick == -1) {
                               // first ChordRest found:
-                              int offset = cr->tick() - s->measure()->tick();
+                              int offset = cr->rtick();
                               if (cr->measure()->tick() >= s1->tick() && offset) {
                                     f = Fraction::fromTicks(offset);
                                     tick = s->measure()->tick();

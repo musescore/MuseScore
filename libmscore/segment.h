@@ -102,6 +102,8 @@ class Segment : public Element {
 
       mutable bool _empty;                // cached value
       mutable bool _written { false };    // used for write()
+      bool _isHeader        { false };
+      bool _isTrailer       { false };
 
       void init();
       void checkEmpty() const;
@@ -174,18 +176,22 @@ class Segment : public Element {
       Type segmentType() const                   { return _segmentType; }
       void setSegmentType(Type t);
 
-      void removeGeneratedElements();
-      bool empty() const                       { return _empty; }
+      bool empty() const                         { return _empty;     }
+      bool isHeader() const                      { return _isHeader;  }
+      bool isTrailer() const                     { return _isTrailer; }
+      void setIsHeader(bool val)                 { _isHeader = val;   }
+      void setIsTrailer(bool val)                { _isTrailer = val;  }
+
       void fixStaffIdx();
 
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
       void setTick(int);
       virtual int tick() const override          { return _tick + parent()->tick(); }
-      virtual int rtick() const override         { return _tick; } // tickposition relative to measure start
-      void setRtick(int val)                     { _tick = val; }
+      virtual int rtick() const override         { return _tick;  } // tickposition relative to measure start
+      void setRtick(int val)                     { _tick = val;   }
       int ticks() const                          { return _ticks; }
-      void setTicks(int val)                     { _ticks = val; }
+      void setTicks(int val)                     { _ticks = val;  }
 
       bool splitsTuplet() const;
 

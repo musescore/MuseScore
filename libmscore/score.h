@@ -473,7 +473,6 @@ class Score : public QObject, public ScoreElement {
       void createMMRest(Measure*, Measure*, const Fraction&);
       bool layoutSystem1(qreal& minWidth, bool, bool);
       QList<System*> layoutSystemRow(qreal w, bool, bool);
-      void addSystemHeader(Measure* m, bool);
       System* getNextSystem(LayoutContext&);
       bool doReLayout();
 
@@ -492,7 +491,7 @@ class Score : public QObject, public ScoreElement {
       void addAudioTrack();
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick, const Interval&);
-      qreal cautionaryWidth(Measure* m, bool& hasCourtesy);
+      qreal cautionaryWidth(Measure* m, bool* hasCourtesy);
 
       void selectSingle(Element* e, int staffIdx);
       void selectAdd(Element* e);
@@ -611,7 +610,7 @@ class Score : public QObject, public ScoreElement {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
-      void undoChangeBarLine(Measure*, BarLineType);
+      void undoChangeBarLine(Measure*, BarLineType, bool beginBarLine = false);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
@@ -1023,7 +1022,6 @@ class Score : public QObject, public ScoreElement {
       //@ creates and returns a cursor to be used to navigate the score
       Q_INVOKABLE Ms::Cursor* newCursor();
 #endif
-      qreal computeMinWidth(Segment* fs, bool isFirstMeasureInSystem);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }

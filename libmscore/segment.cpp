@@ -685,19 +685,6 @@ Segment::Type Segment::segmentType(Element::Type type)
       }
 
 //---------------------------------------------------------
-//   removeGeneratedElements
-//---------------------------------------------------------
-
-void Segment::removeGeneratedElements()
-      {
-      for (unsigned i = 0; i < _elist.size(); ++i) {
-            if (_elist[i] && _elist[i]->generated())
-                  _elist[i] = 0;
-            }
-      checkEmpty();
-      }
-
-//---------------------------------------------------------
 //   sortStaves
 //---------------------------------------------------------
 
