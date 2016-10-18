@@ -3154,8 +3154,6 @@ System* Score::collectSystem(LayoutContext& lc)
             if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
                   qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
                   minWidth += w;
-                  if (w > 0.0)
-                        printf("===================endBarLine changed\n");
                   }
             hideEmptyStaves(system, lc.firstSystem);
 
@@ -3201,11 +3199,11 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         }
 
+#ifndef NDEBUG
                   if (!(qFuzzyCompare(oldMinWidth, minWidth) && qFuzzyCompare(oldMinWidth, rw)))
                         printf("==layoutSystem old %.1f new %.1f real %.1f\n", oldMinWidth, minWidth, rw);
-
-                  minWidth = oldMinWidth;       // DEBUG
-
+                  minWidth = oldMinWidth;       // DEBUG: make differences visible
+#endif
                   rest = systemWidth - minWidth;
                   //
                   // dont stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
