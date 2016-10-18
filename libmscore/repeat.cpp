@@ -150,8 +150,6 @@ SymId RepeatMeasure::symbol() const
 //   draw
 //---------------------------------------------------------
 
-static const qreal numberHeight = 2.15; // .05sp above top of slahses
-
 void RepeatMeasure::draw(QPainter* painter) const
       {
       // if no glpyh is available, draw by hand, else use glpyh.
@@ -169,10 +167,10 @@ void RepeatMeasure::draw(QPainter* painter) const
       if (_repeatMeasureSize > 1) { // maybe use some other condition about toggling display of number...maybe customized via inspector or preferences or style? ...use same condition in layout
 
             std::vector<Ms::SymId> repeatMeasureSizeSymbols = toTimeSigString(QString("%1").arg(_repeatMeasureSize));
-            qreal y = -spatium() * numberHeight;                                                // place above the slashes
-            qreal x = bbox().width() * .5 - symBbox(repeatMeasureSizeSymbols).width() * .5;     // center justification
+            qreal numberYOffset = - spatium() * 1.5 - y();                                // place above the top of staff
+            qreal numberXOffset = bbox().width() * .5 - symBbox(repeatMeasureSizeSymbols).width() * .5; // center justification
             painter->setPen(curColor());
-            drawSymbols(repeatMeasureSizeSymbols, painter, QPointF(x, y));
+            drawSymbols(repeatMeasureSizeSymbols, painter, QPointF(numberXOffset, numberYOffset));
             }
       }
 
@@ -187,7 +185,7 @@ void RepeatMeasure::layout()
 
             // total width of symbol = (lw + ls) * (_repeatMeasureSlashes - 1) + w;
             qreal sp  = spatium();
-            qreal y   = -sp;       // top is one sp above the middle staffline
+            qreal top = -sp;       // top of symbol is one sp above center
             qreal w   = sp * 2.4;  // tip-to-tip horizontal span of each slash
             qreal h   = sp * 2.0;  // vertical span of each slash
             qreal lw  = sp * .50;  // slash width
@@ -197,17 +195,17 @@ void RepeatMeasure::layout()
             qreal xoffset = 0.0;
             // draw each slash
             for (int i=0; i<_repeatMeasureSlashes; i++ ) {
-                  path.moveTo(xoffset + w - lw,     y);
-                  path.lineTo(xoffset + w     ,     y);
-                  path.lineTo(xoffset     + lw, h + y);
-                  path.lineTo(xoffset         , h + y);
+                  path.moveTo(xoffset + w - lw, top);
+                  path.lineTo(xoffset + w     , top);
+                  path.lineTo(xoffset     + lw, top + h);
+                  path.lineTo(xoffset         , top + h);
                   path.closeSubpath();
                   xoffset += lw + ls;
                   }
 
             // dots on each side
-            path.addEllipse(QRectF(                  + w * .25 - r, y+h * .25 - r, r * 2.0, r * 2.0 ));
-            path.addEllipse(QRectF(xoffset - lw - ls + w * .75 - r, y+h * .75 - r, r * 2.0, r * 2.0 ));
+            path.addEllipse(QRectF(                  + w * .25 - r, top + h * .25 - r, r * 2.0, r * 2.0 ));
+            path.addEllipse(QRectF(xoffset - lw - ls + w * .75 - r, top + h * .75 - r, r * 2.0, r * 2.0 ));
 
             setbbox(path.boundingRect());
             }
@@ -224,7 +222,7 @@ void RepeatMeasure::layout()
 
       if (_repeatMeasureSize > 1) { // maybe some condition here to toggle display of number...but make sure same condition as in draw
             // add approximate space above symbol for display of number
-            addbbox(QRectF(0, -spatium() * (numberHeight + 1) , width(), spatium() * 2.0));
+            addbbox(QRectF(0, - y() - 3.0 * spatium(), width(), spatium() * 2.0));
             }
       }
 //---------------------------------------------------------

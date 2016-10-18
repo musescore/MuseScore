@@ -3289,7 +3289,6 @@ System* Score::collectSystem(LayoutContext& lc)
                                     middleX -= rm->bbox().width() / 2.0; // adjust for boundary box width so is center justified
 
                                     qreal middleY = e->staff()->height() * .5; // center vertically in staff
-                                    // todo need to put in particular staff
 
                                     e->setPos(middleX, middleY);
 
