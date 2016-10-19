@@ -710,6 +710,8 @@ MuseScore::MuseScore()
       getAction("redo")->setEnabled(false);
       getAction("paste")->setEnabled(false);
       getAction("swap")->setEnabled(false);
+      getAction("delete")->setEnabled(false);
+      getAction("time-delete")->setEnabled(false);
       selectionChanged(SelState::NONE);
 
       //---------------------------------------------------
@@ -738,7 +740,7 @@ MuseScore::MuseScore()
       viewModeCombo->setFocusPolicy(Qt::TabFocus);
 #endif
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
-      viewModeCombo->addItem("",       int(LayoutMode::PAGE));
+      viewModeCombo->addItem("", int(LayoutMode::PAGE));
       viewModeCombo->addItem("", int(LayoutMode::LINE));
       viewModeCombo->addItem("", int(LayoutMode::SYSTEM));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
@@ -854,12 +856,13 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("copy"));
       menuEdit->addAction(getAction("paste"));
       menuEdit->addAction(getAction("swap"));
-
+      menuEdit->addAction(getAction("delete"));
+      menuEdit->addAction(getAction("time-delete"));
       menuEdit->addSeparator();
+
       menuEdit->addAction(getAction("select-all"));
       menuEdit->addAction(getAction("select-section"));
       menuEdit->addAction(getAction("find"));
-
       menuEdit->addSeparator();
 
       menuEdit->addAction(getAction("instruments"));
@@ -883,6 +886,18 @@ MuseScore::MuseScore()
 
       menuView = mb->addMenu("");
       menuView->setObjectName("View");
+
+      a = getAction("page-view");
+      a->setCheckable(true);
+      menuView->addAction(a);
+      a = getAction("continuous-view");
+      a->setCheckable(true);
+      menuView->addAction(a);
+      a = getAction("single-page");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      menuView->addSeparator();
 
       a = getAction("toggle-palette");
       a->setCheckable(true);
@@ -924,24 +939,46 @@ MuseScore::MuseScore()
       a = getAction("toggle-piano");
       a->setCheckable(true);
       menuView->addAction(a);
-
-      menuView->addSeparator();
-      menuView->addAction(getAction("zoomin"));
-      menuView->addAction(getAction("zoomout"));
       menuView->addSeparator();
 
-//      a = getAction("toggle-transport");
-//      a->setCheckable(true);
-//      a->setChecked(transportTools->isVisible());
-//      connect(transportTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-//      menuView->addAction(a);
+      menuToolbars = new QMenu();
 
-//      a = getAction("toggle-noteinput");
-//      a->setCheckable(true);
-//      a->setChecked(true);
-//      menuView->addAction(a);
+      a = getAction("toggle-fileoperations");
+      a->setCheckable(true);
+      a->setChecked(fileTools->isVisible());
+      connect(fileTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
 
-      menuView->addAction(getAction("edit-toolbars"));
+      a = getAction("toggle-transport");
+      a->setCheckable(true);
+      a->setChecked(transportTools->isVisible());
+      connect(transportTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-concertpitch");
+      a->setCheckable(true);
+      a->setChecked(cpitchTools->isVisible());
+      connect(cpitchTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-imagecapture");
+      a->setCheckable(true);
+      a->setChecked(fotoTools->isVisible());
+      connect(fotoTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-noteinput");
+      a->setCheckable(true);
+      a->setChecked(entryTools->isVisible());
+      connect(entryTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      menuToolbars->addSeparator();
+
+      menuToolbars->addAction(getAction("edit-toolbars"));
+
+      menuView->addMenu(menuToolbars);
+
       menuWorkspaces = new QMenu();
       connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
       menuView->addMenu(menuWorkspaces);
@@ -950,8 +987,8 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       a->setChecked(true);
       menuView->addAction(a);
-
       menuView->addSeparator();
+
       a = getAction("split-h");
       a->setCheckable(true);
       menuView->addAction(a);
@@ -959,12 +996,21 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuView->addAction(a);
 
+      menuZoom = new QMenu("");
+      menuZoom->addAction(getAction("zoomin"));
+      menuZoom->addAction(getAction("zoomout"));
+      menuZoom->addSeparator();
+      menuZoom->addAction(getAction("zoom100"));
+      menuView->addMenu(menuZoom);
+      menuView->addSeparator();
+
       menuView->addSeparator();
       menuView->addAction(getAction("show-invisible"));
       menuView->addAction(getAction("show-unprintable"));
       menuView->addAction(getAction("show-frames"));
       menuView->addAction(getAction("show-pageborders"));
       menuView->addAction(getAction("mark-irregular"));
+      menuView->addAction(getAction("show-corrupted-measures"));      
       menuView->addSeparator();
 
       a = getAction("fullscreen");
@@ -991,6 +1037,7 @@ MuseScore::MuseScore()
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
+      menuAddPitch->addAction(getAction("rest"));
       menuAddPitch->addSeparator();
       for (int i = 0; i < 7; ++i) {
             char buffer[8];
@@ -998,6 +1045,14 @@ MuseScore::MuseScore()
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
+      menuAddPitch->addSeparator();
+      for (int i = 0; i < 7; ++i) {
+            char buffer[8];
+            sprintf(buffer, "insert-%c", "cdefgab"[i]);
+            a = getAction(buffer);
+            menuAddPitch->addAction(a);
+            }
+//      menuAddPitch->addAction(getAction("insert-rest"));
       menuAdd->addMenu(menuAddPitch);
 
       menuAddInterval = new QMenu();
@@ -1093,7 +1148,6 @@ MuseScore::MuseScore()
       menuFormat->addSeparator();
 
       menuFormat->addAction(getAction("reset-beammode"));
-      menuFormat->addAction(getAction("reset-groupings"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();
 
@@ -1127,6 +1181,7 @@ MuseScore::MuseScore()
       menuTools->addSeparator();
 
       menuTools->addAction(getAction("pitch-spell"));
+      menuTools->addAction(getAction("reset-groupings"));
       menuTools->addAction(getAction("resequence-rehearsal-marks"));
       menuTools->addSeparator();
 
@@ -1282,7 +1337,9 @@ void MuseScore::retranslate(bool firstStart)
       openRecent->setTitle(tr("Open &Recent"));
       menuEdit->setTitle(tr("&Edit"));
       menuView->setTitle(tr("&View"));
+      menuToolbars->setTitle(tr("&Toolbars"));
       menuWorkspaces->setTitle(tr("W&orkspaces"));
+      menuZoom->setTitle(tr("&Zoom"));
       pref->setText(tr("&Preferences..."));
       menuAdd->setTitle(tr("&Add"));
       menuAddMeasures->setTitle(tr("&Measures"));
@@ -3349,10 +3406,20 @@ void MuseScore::readSettings()
       splitter->restoreState(settings.value("splitter").toByteArray());
       settings.endGroup();
 
-//      QAction* a = getAction("toggle-transport");
-//      a->setChecked(!transportTools->isHidden());
-//      a = getAction("toggle-noteinput");
-//      a->setChecked(!entryTools->isHidden());
+      QAction* a = getAction("toggle-fileoperations");
+      a->setChecked(!fileTools->isHidden());
+
+      a = getAction("toggle-transport");
+      a->setChecked(!transportTools->isHidden());
+
+      a = getAction("toggle-concertpitch");
+      a->setChecked(!cpitchTools->isHidden());
+
+      a = getAction("toggle-imagecapture");
+      a->setChecked(!fotoTools->isHidden());
+            
+      a = getAction("toggle-noteinput");
+      a->setChecked(!entryTools->isHidden());
       }
 
 //---------------------------------------------------------
@@ -4734,10 +4801,16 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showSelectionWindow(a->isChecked());
       else if (cmd == "show-keys")
             ;
-//      else if (cmd == "toggle-transport")
-//            transportTools->setVisible(!transportTools->isVisible());
-//      else if (cmd == "toggle-noteinput")
-//            entryTools->setVisible(!entryTools->isVisible());
+      else if (cmd == "toggle-fileoperations")
+            fileTools->setVisible(!fileTools->isVisible());
+      else if (cmd == "toggle-transport")
+            transportTools->setVisible(!transportTools->isVisible());
+      else if (cmd == "toggle-concertpitch")
+            cpitchTools->setVisible(!cpitchTools->isVisible());
+      else if (cmd == "toggle-imagecapture")
+            fotoTools->setVisible(!fotoTools->isVisible());
+      else if (cmd == "toggle-noteinput")
+            entryTools->setVisible(!entryTools->isVisible());
       else if (cmd == "help")
             showContextHelp();
       else if (cmd == "follow")
@@ -4756,13 +4829,18 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   showFullScreen();
             else
                   showNormal();
-
 #ifdef Q_OS_MAC
             // Qt Bug: Toolbar goes into unified mode
             // after switching back from fullscreen
             setUnifiedTitleAndToolBarOnMac(false);
 #endif
             }
+      else if (cmd == "page-view")
+            switchLayoutMode(LayoutMode::PAGE);
+      else if (cmd == "continuous-view")
+            switchLayoutMode(LayoutMode::LINE);
+      else if (cmd == "single-page")
+            switchLayoutMode(LayoutMode::SYSTEM);
       else if (cmd == "config-raster")
             editRaster();
       else if (cmd == "hraster" || cmd == "vraster")  // value in [hv]RasterAction already set
@@ -5110,6 +5188,32 @@ void MuseScore::switchLayoutMode(LayoutMode mode)
       cv->pageTop();
       if (m && m != cs->firstMeasure())
             cv->adjustCanvasPosition(m, false);
+      
+      QAction* a;
+      if (mode == LayoutMode::PAGE) {
+            a = getAction("page-view");
+            a->setChecked(true);
+            a = getAction("continuous-view");
+            a->setChecked(false);
+            a = getAction("single-page");
+            a->setChecked(false);
+            }
+      else if (mode == LayoutMode::LINE) {
+            a = getAction("page-view");
+            a->setChecked(false);
+            a = getAction("continuous-view");
+            a->setChecked(true);
+            a = getAction("single-page");
+            a->setChecked(false);
+            }
+      else if (mode == LayoutMode::SYSTEM) {
+            a = getAction("page-view");
+            a->setChecked(false);
+            a = getAction("continuous-view");
+            a->setChecked(false);
+            a = getAction("single-page");
+            a->setChecked(true);
+            }
       }
 
 //---------------------------------------------------------

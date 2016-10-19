@@ -480,6 +480,15 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "rest",
+         QT_TRANSLATE_NOOP("action","Rest"),
+         QT_TRANSLATE_NOOP("action","Enter rest"),
+         0,
+         Icons::quartrest_ICON
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
          "chord-a",
          QT_TRANSLATE_NOOP("action","Add A to Chord"),
          QT_TRANSLATE_NOOP("action","Add note A to chord")
@@ -575,15 +584,13 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Insert G"),
          QT_TRANSLATE_NOOP("action","Insert note G")
          },
-      {
-         MsWidget::SCORE_TAB,
-         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
-         "rest",
-         QT_TRANSLATE_NOOP("action","Rest"),
-         QT_TRANSLATE_NOOP("action","Enter rest"),
-         0,
-         Icons::quartrest_ICON
-         },
+//      {
+//         MsWidget::SCORE_TAB,
+//         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+//         "insert-rest",
+//         QT_TRANSLATE_NOOP("action","Insert Rest"),
+//         QT_TRANSLATE_NOOP("action","Insert rest")
+//         },
       {
          MsWidget::SCORE_TAB,
          STATE_NOTE_ENTRY_METHOD_REALTIME_AUTO | STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL,
@@ -684,8 +691,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "reset-groupings",
-         QT_TRANSLATE_NOOP("action","Reset Note and Rest Groupings"),
-         QT_TRANSLATE_NOOP("action","Reset note and rest groupings"),
+         QT_TRANSLATE_NOOP("action","Regroup Rhythms"),
+         QT_TRANSLATE_NOOP("action","Regroup rhythms"),
          QT_TRANSLATE_NOOP("action","Combine rests and tied notes from selection and resplit at rhythmical locations"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
@@ -1118,9 +1125,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "time-delete",
-         QT_TRANSLATE_NOOP("action","Timewise Delete"),
-         QT_TRANSLATE_NOOP("action","Timewise delete"),
-         QT_TRANSLATE_NOOP("action","Delete element and duration"),
+         QT_TRANSLATE_NOOP("action","Remove"),
+         QT_TRANSLATE_NOOP("action","Remove"),
+         QT_TRANSLATE_NOOP("action","Remove note/rest and shorten measure, or remove selected measure, or remove barline and merge measures"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CMD
@@ -1796,20 +1803,41 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
-//      {
-//         MsWidget::MAIN_WINDOW,
-//         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
-//         "toggle-transport",
-//         QT_TRANSLATE_NOOP("action","Transport"),
-//         QT_TRANSLATE_NOOP("action","Transport toolbar")
-//         },
-//      {
-//         MsWidget::MAIN_WINDOW,
-//         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
-//         "toggle-noteinput",
-//         QT_TRANSLATE_NOOP("action","Note Input"),
-//         QT_TRANSLATE_NOOP("action","Note input toolbar")
-//         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-fileoperations",
+         QT_TRANSLATE_NOOP("action","File Operations"),
+         QT_TRANSLATE_NOOP("action","File Operations toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-transport",
+         QT_TRANSLATE_NOOP("action","Transport"),
+         QT_TRANSLATE_NOOP("action","Transport toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-concertpitch",
+         QT_TRANSLATE_NOOP("action","Concert Pitch"),
+         QT_TRANSLATE_NOOP("action","Concert Pitch toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-imagecapture",
+         QT_TRANSLATE_NOOP("action","Image Capture"),
+         QT_TRANSLATE_NOOP("action","Image Capture toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-noteinput",
+         QT_TRANSLATE_NOOP("action","Note Input"),
+         QT_TRANSLATE_NOOP("action","Note Input toolbar")
+         },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
@@ -2284,8 +2312,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "show-unprintable",
-         QT_TRANSLATE_NOOP("action","Show Unprintable"),
-         QT_TRANSLATE_NOOP("action","Show unprintable"),
+         QT_TRANSLATE_NOOP("action","Show Non-Printing"),
+         QT_TRANSLATE_NOOP("action","Show non-printing`"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
@@ -2317,7 +2345,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "mark-irregular",
-         QT_TRANSLATE_NOOP("action","Mark irregular measures"),
+         QT_TRANSLATE_NOOP("action","Mark Irregular Measures"),
          QT_TRANSLATE_NOOP("action","Mark irregular measures"),
          0,
          Icons::Invalid_ICON,
@@ -2401,6 +2429,27 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Zoom to 100%")
          },
       {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         "page-view",
+         QT_TRANSLATE_NOOP("action","Page View"),
+         QT_TRANSLATE_NOOP("action","Page view")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         "continuous-view",
+         QT_TRANSLATE_NOOP("action","Continuous View"),
+         QT_TRANSLATE_NOOP("action","Continuous view")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         "single-page",
+         QT_TRANSLATE_NOOP("action","Single Page View"),
+         QT_TRANSLATE_NOOP("action","Single page view")
+         },
+      {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "mirror-note",
@@ -2413,7 +2462,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
          "edit-style",
          QT_TRANSLATE_NOOP("action","General Style..."),
          QT_TRANSLATE_NOOP("action","Edit general style"),
@@ -2423,7 +2472,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
          "edit-text-style",
          QT_TRANSLATE_NOOP("action","Text Styles..."),
          QT_TRANSLATE_NOOP("action","Edit text styles"),
@@ -2516,15 +2565,15 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "split-h",
-         QT_TRANSLATE_NOOP("action","Documents Side by Side"),
-         QT_TRANSLATE_NOOP("action","Display documents side by side")
+         QT_TRANSLATE_NOOP("action","Split View Left/Right"),
+         QT_TRANSLATE_NOOP("action","Split view left and right")
          },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "split-v",
-         QT_TRANSLATE_NOOP("action","Documents Stacked"),
-         QT_TRANSLATE_NOOP("action","Display documents stacked")
+         QT_TRANSLATE_NOOP("action","Split View Top/Bottom"),
+         QT_TRANSLATE_NOOP("action","Split view top and bottom")
          },
       {
          MsWidget::MAIN_WINDOW,
