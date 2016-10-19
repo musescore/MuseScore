@@ -3069,7 +3069,10 @@ void Measure::stretchMeasure(qreal targetWidth)
 
                               rest->setMMWidth(w);
                               qreal x = x1 - s.x() + d;
-                              e->setPos(x, e->staff()->height() * .5);   // center vertically in measure
+
+                              qreal middleY = (e->staff()->lines() > 1) ? e->staff()->height() * .5 : 0; // center vertically in staff. Note: repeats on single-staff lines should have y offset = 0.
+
+                              e->setPos(x, middleY);   // center vertically in measure
                               rest->layout();
                               s.createShape(staffIdx);
                               }

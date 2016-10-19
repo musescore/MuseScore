@@ -163,7 +163,7 @@ void RepeatMeasure::draw(QPainter* painter) const
             drawSymbol(symbol(), painter, QPointF());
             }
 
-      // draw number of measures above the symbol
+      // draw number of measures above the repeat measure's parent y position (i.e. above the top of the staff)
       if (_repeatMeasureSize > 1) { // maybe use some other condition about toggling display of number...maybe customized via inspector or preferences or style? ...use same condition in layout
 
             std::vector<Ms::SymId> repeatMeasureSizeSymbols = toTimeSigString(QString("%1").arg(_repeatMeasureSize));

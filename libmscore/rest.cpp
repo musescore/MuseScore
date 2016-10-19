@@ -104,23 +104,22 @@ void Rest::draw(QPainter* painter) const
             painter->setPen(pen);
 
             qreal w  = _mmWidth;
-            qreal y  = 0.0;
+            qreal middleY  = 0.0;
             qreal x1 = 0.0;
             qreal x2 =  w;
             pw *= .5;
-            painter->drawLine(QLineF(x1 + pw, y, x2 - pw, y));
+            painter->drawLine(QLineF(x1 + pw, middleY, x2 - pw, middleY));
 
             // draw vertical lines:
             pen.setWidthF(_spatium * .2);
             painter->setPen(pen);
-            painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
-            painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
+            painter->drawLine(QLineF(x1, middleY - _spatium, x1, middleY + _spatium));
+            painter->drawLine(QLineF(x2, middleY - _spatium, x2, middleY + _spatium));
 
             std::vector<Ms::SymId> s = toTimeSigString(QString("%1").arg(n));
-            y  = -_spatium * 1.5 - staff()->height() *.5;
-            qreal x = center(x1, x2);
-            x -= symBbox(s).width() * .5;
-            drawSymbols(s, painter, QPointF(x, y));
+            qreal numberYOffset = -_spatium * 1.5 - y(); // numbers go above parent's y
+            qreal numberXOffset = center(x1, x2) - symBbox(s).width() * .5;
+            drawSymbols(s, painter, QPointF(numberXOffset, numberYOffset));
             }
       else {
             drawSymbol(_sym, painter);
@@ -346,9 +345,8 @@ void Rest::layout()
             qreal w        = _mmWidth + _spatium * verticalLineWidth*.5;
             bbox().setRect(-_spatium * verticalLineWidth*.5, -h * .5, w, h);
 
-            // text
-            qreal y  = -_spatium * 2.5 - staff()->height() *.5;
-            addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
+            // text is placed above parent's y position
+            addbbox(QRectF(0, -y() - _spatium * 2.5, w, _spatium * 2));         // approximation
             return;
             }
 
