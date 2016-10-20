@@ -108,7 +108,7 @@ class FiguredBassItem : public Element {
             BACKSLASH,
             SLASH,
                   NUMOF
-      };
+            };
       enum class Parenthesis : char {
             NONE = 0,
             ROUNDOPEN,
@@ -116,12 +116,12 @@ class FiguredBassItem : public Element {
             SQUAREDOPEN,
             SQUAREDCLOSED,
                   NUMOF
-      };
+            };
       enum class ContLine : char {
             NONE = 0,
             SIMPLE,                     // cont. line stops at f.b. element end
             EXTENDED                    // cont. line joins with next element, if possible
-      };
+            };
 
       enum class Style : char {
             MODERN = 0,
@@ -177,7 +177,6 @@ class FiguredBassItem : public Element {
       virtual void      write(Xml& xml) const override;
 
       // read / write MusicXML
-//      void              readMusicXML(XmlReader& de, bool paren);
       void              writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
       bool              startsWithParenthesis() const;
 
@@ -221,7 +220,7 @@ class FiguredBassItem : public Element {
       virtual QVariant  getProperty(P_ID propertyId) const override;
       virtual bool      setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant  propertyDefault(P_ID) const override;
-};
+      };
 
 //---------------------------------------------------------
 //   FiguredBassFont
@@ -237,7 +236,7 @@ struct FiguredBassFont {
       QChar             displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
 
       bool read(XmlReader&);
-};
+      };
 
 //---------------------------------------------------------
 //   @@ FiguredBass
@@ -281,7 +280,6 @@ class FiguredBass : public Text {
       virtual FiguredBass*    clone() const override     { return new FiguredBass(*this); }
       virtual Element::Type   type() const override      { return Element::Type::FIGURED_BASS; }
       virtual void      draw(QPainter* painter) const override;
-//      virtual bool      edit(MuseScoreView*msv, int currGrip, int key, Qt::KeyboardModifiers modifiers, const QString& _s) override;
       virtual void      endEdit() override;
       virtual void      layout() override;
       virtual void      read(XmlReader&) override;
@@ -291,7 +289,6 @@ class FiguredBass : public Text {
       virtual void      write(Xml& xml) const override;
 
       // read / write MusicXML
-//      bool              readMusicXML(XmlReader& de, int divisions);
       void              writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
 //DEBUG

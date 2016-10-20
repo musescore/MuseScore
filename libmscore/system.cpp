@@ -228,7 +228,6 @@ void System::layoutSystem(qreal xo1)
       //  layout  SysStaff and StaffLines
       //---------------------------------------------------
 
-      // xoff2 += xo1;
       _leftMargin = xoff2;
 
 

@@ -2314,7 +2314,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                   KeySig* keysig = new KeySig(this);
                   keysig->setTrack(staffIdx * VOICES);
                   keysig->setKeySigEvent(nKey);
-                  Segment* s = measure->getSegment(keysig, tick);
+                  Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
                   s->add(keysig);
                   }
             }

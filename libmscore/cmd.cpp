@@ -2666,7 +2666,7 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
                   }
 #endif
             if (createSegment) {
-                  cs = new Segment(cr->measure(), Segment::Type::Clef, tick);
+                  cs = new Segment(cr->measure(), Segment::Type::Clef, tick - cr->measure()->tick());
                   cs->setNext(s);
                   score->undo(new AddElement(cs));
                   }

@@ -210,10 +210,13 @@ class Measure : public MeasureBase {
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
 
-      Segment* undoGetSegment(Segment::Type st, int tick);
-      Segment* getSegment(Element* el, int tick);
-      Segment* getSegment(Segment::Type st, int tick);
-      Segment* findSegment(Segment::Type st, int tick);
+      Segment* undoGetSegment(Segment::Type st, int tick);  // deprecated
+      Segment* getSegment(Segment::Type st, int tick);      // deprecated
+      Segment* findSegment(Segment::Type st, int tick);     // deprecated
+
+      Segment* undoGetSegmentR(Segment::Type st, int rtick);
+      Segment* getSegmentR(Segment::Type st, int rtick);
+      Segment* findSegmentR(Segment::Type st, int rtick);
 
       qreal createEndBarLines(bool);
       void barLinesSetSpan(Segment*);

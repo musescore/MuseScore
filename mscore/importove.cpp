@@ -767,7 +767,7 @@ void OveToMScore::convertSignatures(){
                         ts->setTrack(staffIdx * VOICES);
                         ts->setSig(Fraction(tt.numerator_, tt.denominator_), subtype);
 
-                        Segment* seg = measure->getSegment(ts, tt.tick_);
+                        Segment* seg = measure->getSegment(Segment::Type::TimeSig, tt.tick_);
                         seg->add(ts);
                         }
                   }
@@ -799,7 +799,7 @@ void OveToMScore::convertSignatures(){
                                           keysig->setTrack((staffCount+j) * VOICES);
                                           keysig->setKeySigEvent(ke);
 
-                                          Segment* s = measure->getSegment(keysig, tick);
+                                          Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
                                           s->add(keysig);
 
                                           createKey = true;
@@ -824,7 +824,7 @@ void OveToMScore::convertSignatures(){
                               keysig->setTrack((staffCount+j) * VOICES);
                               keysig->setKeySigEvent(KeySigEvent());
 
-                              Segment* s = measure->getSegment(keysig, 0);
+                              Segment* s = measure->getSegment(Segment::Type::KeySig, 0);
                               s->add(keysig);
                               }
                         }
@@ -851,7 +851,7 @@ void OveToMScore::convertSignatures(){
                         clef->setClefType(clefType);
                         clef->setTrack((staffCount+j)*VOICES);
 
-                        Segment* s = measure->getSegment(clef, 0);
+                        Segment* s = measure->getSegment(Segment::Type::Clef, 0);
                         s->add(clef);
                         }
 
@@ -871,7 +871,7 @@ void OveToMScore::convertSignatures(){
                                     clef->setClefType(clefType);
                                     clef->setTrack((staffCount+j)*VOICES);
 
-                                    Segment* s = measure->getSegment(clef, absTick);
+                                    Segment* s = measure->getSegment(Segment::Type::Clef, absTick);
                                     s->add(clef);
                                     }
                               }
@@ -1433,7 +1433,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
             cr->setDuration(measure->len());
             cr->setDurationType(TDuration::DurationType::V_MEASURE);
             cr->setTrack(track);
-            Segment* s = measure->getSegment(cr, absTick);
+            Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
             s->add(cr);
             }
       QList<Ms::Chord*> graceNotes;
@@ -1451,7 +1451,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   cr->setDurationType(duration);
                   cr->setTrack(noteTrack);
                   cr->setVisible(container->getShow());
-                  Segment* s = measure->getSegment(cr, tick);
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
                   s->add(cr);
 
                   QList<OVE::Note*> notes = container->getNotesRests();
@@ -1517,7 +1517,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         cr->setDuration(cr->durationType().fraction());
 
                         if(!container->getIsGrace()) {
-                              Segment* s = measure->getSegment(cr, tick);
+                              Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
                               s->add(cr);
                               }
                         else {

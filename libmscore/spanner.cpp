@@ -156,8 +156,8 @@ void SpannerSegment::reset()
 void SpannerSegment::setSelected(bool f)
       {
       for (SpannerSegment* ss : _spanner->spannerSegments())
-            ss->_selected = f;
-      _spanner->_selected = f;
+            ss->Element::setSelected(f);
+      _spanner->setSelected(f);
       }
 
 //---------------------------------------------------------
@@ -168,11 +168,11 @@ void SpannerSegment::setVisible(bool f)
       {
       if (_spanner) {
             for (SpannerSegment* ss : _spanner->spannerSegments())
-                  ss->_visible = f;
-            _spanner->_visible = f;
+                  ss->Element::setVisible(f);
+            _spanner->setVisible(f);
             }
       else
-            _visible = f;
+            setVisible(f);
       }
 
 //---------------------------------------------------------
@@ -790,8 +790,8 @@ Measure* Spanner::endMeasure() const
 void Spanner::setSelected(bool f)
       {
       for (SpannerSegment* ss : spannerSegments())
-            ss->setSelected(f);
-      _selected = f;
+            ss->Element::setSelected(f);
+      Element::setSelected(f);
       }
 
 //---------------------------------------------------------
@@ -801,8 +801,8 @@ void Spanner::setSelected(bool f)
 void Spanner::setVisible(bool f)
       {
       for (SpannerSegment* ss : spannerSegments())
-            ss->setVisible(f);
-      _visible = f;
+            ss->Element::setVisible(f);
+      Element::setVisible(f);
       }
 
 //---------------------------------------------------------

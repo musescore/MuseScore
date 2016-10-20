@@ -61,6 +61,9 @@ static constexpr int MSCVERSION = 300;
 
 //    3.00  (Version 3.0 alpha)
 
+
+
+
 class MStyle;
 class Sequencer;
 

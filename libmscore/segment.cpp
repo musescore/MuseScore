@@ -78,7 +78,7 @@ void Segment::setElement(int track, Element* el)
       if (el) {
             el->setParent(this);
             _elist[track] = el;
-            _empty = false;
+            setEmpty(false);
             }
       else {
             _elist[track] = 0;
@@ -113,7 +113,6 @@ Segment::Segment(Measure* m)
       {
       setParent(m);
       init();
-      _empty = true;
       }
 
 Segment::Segment(Measure* m, Type st, int t)
@@ -121,9 +120,8 @@ Segment::Segment(Measure* m, Type st, int t)
       {
       setParent(m);
       _segmentType = st;
-      setTick(t);
+      _tick = t;
       init();
-      _empty = true;
       }
 
 //---------------------------------------------------------
@@ -135,7 +133,6 @@ Segment::Segment(const Segment& s)
       {
       _next               = 0;
       _prev               = 0;
-      _empty              = s._empty;           // cached value
       _segmentType        = s._segmentType;
       _tick               = s._tick;
       _extraLeadingSpace  = s._extraLeadingSpace;
@@ -441,7 +438,7 @@ void Segment::add(Element* el)
       switch (el->type()) {
             case Element::Type::REPEAT_MEASURE:
                   _elist[track] = el;
-                  _empty = false;
+                  setEmpty(false);
                   break;
 
             case Element::Type::DYNAMIC:
@@ -485,7 +482,7 @@ void Segment::add(Element* el)
                         el->staff()->setClef(static_cast<Clef*>(el));
                         updateNoteLines(this, el->track());
                         }
-                  _empty = false;
+                  setEmpty(false);
                   break;
 
             case Element::Type::TIMESIG:
@@ -493,7 +490,7 @@ void Segment::add(Element* el)
                   checkElement(el, track);
                   _elist[track] = el;
                   el->staff()->addTimeSig(static_cast<TimeSig*>(el));
-                  _empty = false;
+                  setEmpty(false);
                   break;
 
             case Element::Type::KEYSIG:
@@ -502,7 +499,7 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   if (!el->generated())
                         el->staff()->setKey(tick(), static_cast<KeySig*>(el)->keySigEvent());
-                  _empty = false;
+                  setEmpty(false);
                   break;
 
             case Element::Type::CHORD:
@@ -536,14 +533,14 @@ void Segment::add(Element* el)
                         checkElement(el, track);
                         _elist[track] = el;
                         }
-                  _empty = false;
+                  setEmpty(false);
                   break;
 
             case Element::Type::AMBITUS:
                   Q_ASSERT(_segmentType == Type::Ambitus);
                   checkElement(el, track);
                   _elist[track] = el;
-                  _empty = false;
+                  setEmpty(false);
                   break;
 
             default:
@@ -732,36 +729,16 @@ void Segment::fixStaffIdx()
 void Segment::checkEmpty() const
       {
       if (!_annotations.empty()) {
-            _empty = false;
+            setEmpty(false);
             return;
             }
-      _empty = true;
+      setEmpty(true);
       for (const Element* e : _elist) {
             if (e) {
-                  _empty = false;
+                  setEmpty(false);
                   break;
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   tick
-//---------------------------------------------------------
-
-#if 0
-int Segment::tick() const
-      {
-      return _tick + measure()->tick();
-      }
-#endif
-
-//---------------------------------------------------------
-//   setTick
-//---------------------------------------------------------
-
-void Segment::setTick(int t)
-      {
-      _tick = t - measure()->tick();
       }
 
 //---------------------------------------------------------
@@ -784,9 +761,9 @@ void Segment::swapElements(int i1, int i2)
 
 void Segment::write(Xml& xml) const
       {
-      if (_written)
+      if (written())
             return;
-      _written = true;
+      setWritten(true);
       if (_extraLeadingSpace.isZero())
             return;
       xml.stag(name());

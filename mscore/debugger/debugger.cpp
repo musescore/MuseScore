@@ -1771,6 +1771,7 @@ void ShowElementBase::setElement(Element* e)
       eb.droptarget->setChecked(e->dropTarget());
       eb.generated->setChecked(e->generated());
       eb.visible->setChecked(e->visible());
+      eb.enabled->setChecked(e->enabled());
       eb.track->setValue(e->track());
       eb.z->setValue(e->z());
       eb.posx->setValue(e->ipos().x());

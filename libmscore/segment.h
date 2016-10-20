@@ -100,14 +100,11 @@ class Segment : public Element {
       int _ticks;
       Type _segmentType { Type::Invalid };
 
-      mutable bool _empty;                // cached value
-      mutable bool _written { false };    // used for write()
-      bool _isHeader        { false };
-      bool _isTrailer       { false };
-
       void init();
       void checkEmpty() const;
       void checkElement(Element*, int track);
+
+      void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
 
    protected:
       Element* getElement(int staff);     //??
@@ -157,10 +154,10 @@ class Segment : public Element {
       void setElement(int track, Element* el);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      Measure* measure() const            { return (Measure*)parent(); }
-      System* system() const              { return (System*)parent()->parent(); }
-      qreal x() const                     { return ipos().x();         }
-      void setX(qreal v)                  { rxpos() = v;               }
+      Measure* measure() const                   { return (Measure*)parent(); }
+      System* system() const                     { return (System*)parent()->parent(); }
+      qreal x() const                            { return ipos().x();         }
+      void setX(qreal v)                         { rxpos() = v;               }
 
       void insertStaff(int staff);
       void removeStaff(int staff);
@@ -176,17 +173,17 @@ class Segment : public Element {
       Type segmentType() const                   { return _segmentType; }
       void setSegmentType(Type t);
 
-      bool empty() const                         { return _empty;     }
-      bool isHeader() const                      { return _isHeader;  }
-      bool isTrailer() const                     { return _isTrailer; }
-      void setIsHeader(bool val)                 { _isHeader = val;   }
-      void setIsTrailer(bool val)                { _isTrailer = val;  }
+      bool empty() const                         { return flag(ElementFlag::EMPTY); }
+      bool written() const                       { return flag(ElementFlag::WRITTEN); }
+      void setWritten(bool val) const            { setFlag(ElementFlag::WRITTEN, val); }
+      bool trailer() const                       { return flag(ElementFlag::TRAILER); }
+      void setTrailer(bool val)                  { setFlag(ElementFlag::TRAILER, val); }
 
       void fixStaffIdx();
 
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
-      void setTick(int);
+      void setTick(int t)                        { _tick = t - parent()->tick(); }
       virtual int tick() const override          { return _tick + parent()->tick(); }
       virtual int rtick() const override         { return _tick;  } // tickposition relative to measure start
       void setRtick(int val)                     { _tick = val;   }
@@ -207,8 +204,7 @@ class Segment : public Element {
 
       Spatium extraLeadingSpace() const          { return _extraLeadingSpace;  }
       void setExtraLeadingSpace(Spatium v)       { _extraLeadingSpace = v;     }
-      bool written() const                       { return _written; }
-      void setWritten(bool val)                  { _written = val; }
+
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
 

@@ -153,7 +153,7 @@ void SwingDetector::applySwing()
       const int startTick = first->segment()->tick();
       ChordRest *last = elements.back();
       last->segment()->remove(last);
-      Segment *s = last->measure()->getSegment(last, startTick + MScore::division / 2);
+      Segment *s = last->measure()->getSegment(Segment::Type::ChordRest, startTick + MScore::division / 2);
       s->add(last);
 
       if (elements.size() == 3) {

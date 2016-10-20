@@ -638,7 +638,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           rest->setDuration(nm->len());
                                           rest->setDurationType(nm->len().ticks());
                                           rest->setTrack(track);
-                                          Segment* segment = nm->getSegment(rest, nm->tick());
+                                          Segment* segment = nm->getSegment(Segment::Type::ChordRest, nm->tick());
                                           segment->add(rest);
                                           }
 

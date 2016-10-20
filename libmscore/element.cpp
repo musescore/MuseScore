@@ -272,17 +272,12 @@ QString Element::userName() const
 Element::Element(Score* s) :
    QObject(0), ScoreElement(s)
       {
-      _selected      = false;
-      _generated     = false;
-      _visible       = true;
       _placement     = Placement::BELOW;
-      _flags         = ElementFlag::SELECTABLE;
       _track         = -1;
       _color         = MScore::defaultColor;
       _mag           = 1.0;
       _tag           = 1;
       itemDiscovered = false;
-      _autoplace     = true;
       _z             = -1;
       }
 
@@ -290,9 +285,6 @@ Element::Element(const Element& e)
    : QObject(0), ScoreElement(e)
       {
       _parent     = e._parent;
-      _selected   = e._selected;
-      _generated  = e._generated;
-      _visible    = e._visible;
       _z          = e._z;
       _placement  = e._placement;
       _flags      = e._flags;
@@ -305,7 +297,6 @@ Element::Element(const Element& e)
       _bbox       = e._bbox;
       _tag        = e._tag;
       itemDiscovered = false;
-      _autoplace  = e._autoplace;
       }
 
 //---------------------------------------------------------
@@ -337,7 +328,7 @@ void Element::adjustReadPos()
 
 void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (all || _visible || score()->showInvisible())
+      if (all || visible() || score()->showInvisible())
             func(data, this);
       }
 
@@ -511,7 +502,7 @@ QPointF Element::pagePos() const
 
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
-            if (parent()->type() == Element::Type::SEGMENT)
+            if (parent()->isSegment())
                   system = toSegment(parent())->system();
             else if (parent()->isMeasure())           // used in measure number
                   system = toMeasure(parent())->system();
@@ -543,14 +534,16 @@ QPointF Element::canvasPos() const
 
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
-            if (parent()->type() == Element::Type::SEGMENT)
+            if (parent()->isSegment())
                   system = toSegment(parent())->system();
             else if (parent()->isMeasure())     // used in measure number
                   system = toMeasure(parent())->system();
             else if (parent()->isSystem())
                   system = toSystem(parent());
+            else if (parent()->isChord())       // grace chord
+                  system = toSegment(parent()->parent())->system();
             else {
-                  Q_ASSERT(false);
+                  qFatal("this %s parent %s\n", name(), parent()->name());
                   }
             if (system) {
                   p.ry() += system->staffYpage(vStaffIdx());      // system->staff(si)->y() + system->y();
@@ -660,13 +653,13 @@ void Element::writeProperties(Xml& xml) const
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
-      if (!_autoplace && !userOff().isNull()) {
-            if (type() == Element::Type::VOLTA_SEGMENT
-                || type() == Element::Type::GLISSANDO_SEGMENT
+      if (!autoplace() && !userOff().isNull()) {
+            if (isVoltaSegment()
+                || isGlissandoSegment()
                 || isChordRest()
                 || isRehearsalMark()
                 || isDynamic()
-                || type() == Element::Type::SYSTEM_DIVIDER
+                || isSystemDivider()
                 || (xml.clipboardmode && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
             else
@@ -709,7 +702,7 @@ bool Element::readProperties(XmlReader& e)
             e.readInt();
       else if (tag == "userOff") {
             _userOff = e.readPoint();
-            _autoplace = false;
+            setAutoplace(false);
             }
       else if (tag == "lid") {
             int id = e.readInt();
@@ -741,12 +734,12 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "offset") {
             setUserOff(e.readPoint() * spatium());
-            _autoplace = false;
+            setAutoplace(false);
             }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
             _readPos = pt * score()->spatium();
-            _autoplace = false;
+            setAutoplace(false);
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
@@ -1440,10 +1433,10 @@ QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::TRACK:     return track();
-            case P_ID::GENERATED: return _generated;
+            case P_ID::GENERATED: return generated();
             case P_ID::COLOR:     return color();
-            case P_ID::VISIBLE:   return _visible;
-            case P_ID::SELECTED:  return _selected;
+            case P_ID::VISIBLE:   return visible();
+            case P_ID::SELECTED:  return selected();
             case P_ID::USER_OFF:  return _userOff;
             case P_ID::PLACEMENT: return int(_placement);
             case P_ID::AUTOPLACE: return autoplace();
@@ -1464,7 +1457,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   setTrack(v.toInt());
                   break;
             case P_ID::GENERATED:
-                  _generated = v.toBool();
+                  setGenerated(v.toBool());
                   break;
             case P_ID::COLOR:
                   setColor(v.value<QColor>());

@@ -797,6 +797,9 @@ class Score : public QObject, public ScoreElement {
       const PageFormat* pageFormat() const     { return style()->pageFormat(); }
       void setPageFormat(const PageFormat& pf) { style()->setPageFormat(pf);   }
 
+      bool genCourtesyTimesig() const          { return styleB(StyleIdx::genCourtesyTimesig); }
+      bool genCourtesyClef() const             { return styleB(StyleIdx::genCourtesyClef); }
+
       // These position are in ticks and not uticks
       int playPos() const                      { return pos(POS::CURRENT);   }
       void setPlayPos(int tick)                { setPos(POS::CURRENT, tick); }
@@ -810,9 +813,9 @@ class Score : public QObject, public ScoreElement {
 
       bool noteEntryMode() const               { return inputState().noteEntryMode(); }
       void setNoteEntryMode(bool val)          { inputState().setNoteEntryMode(val); }
-      NoteEntryMethod noteEntryMethod() const         { return inputState().noteEntryMethod();        }
-      void setNoteEntryMethod(NoteEntryMethod m)      { inputState().setNoteEntryMethod(m);           }
-      bool usingNoteEntryMethod(NoteEntryMethod m)    { return inputState().usingNoteEntryMethod(m);  }
+      NoteEntryMethod noteEntryMethod() const      { return inputState().noteEntryMethod();        }
+      void setNoteEntryMethod(NoteEntryMethod m)   { inputState().setNoteEntryMethod(m);           }
+      bool usingNoteEntryMethod(NoteEntryMethod m) { return inputState().usingNoteEntryMethod(m);  }
       int inputPos() const;
       int inputTrack() const                   { return inputState().track(); }
       const InputState& inputState() const     { return _is;                  }
@@ -993,6 +996,10 @@ class Score : public QObject, public ScoreElement {
 
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm)     { _layoutMode = lm;   }
+
+      bool floatMode() const                { return layoutMode() == LayoutMode::FLOAT; }
+      bool pageMode() const                 { return layoutMode() == LayoutMode::PAGE; }
+      bool lineMode() const                 { return layoutMode() == LayoutMode::LINE; }
 
       Tuplet* searchTuplet(XmlReader& e, int id);
       void cmdSelectAll();

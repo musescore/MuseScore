@@ -275,7 +275,7 @@ void Page::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       for (System* s :_systems) {
             for (MeasureBase* m : s->measures())
-                  m->scanElements(data, func, false);
+                  m->scanElements(data, func, all);
             s->scanElements(data, func, all);
             }
       func(data, this);

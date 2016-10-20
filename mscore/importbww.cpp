@@ -249,7 +249,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
             Ms::Clef* clef = new Ms::Clef(score);
             clef->setClefType(Ms::ClefType::G);
             clef->setTrack(0);
-            Ms::Segment* s = currentMeasure->getSegment(clef, tick);
+            Ms::Segment* s = currentMeasure->getSegment(Ms::Segment::Type::Clef, tick);
             s->add(clef);
             // keysig
             Ms::KeySigEvent key;
@@ -257,13 +257,13 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
             Ms::KeySig* keysig = new Ms::KeySig(score);
             keysig->setKeySigEvent(key);
             keysig->setTrack(0);
-            s = currentMeasure->getSegment(keysig, tick);
+            s = currentMeasure->getSegment(Ms::Segment::Type::KeySig, tick);
             s->add(keysig);
             // timesig
             Ms::TimeSig* timesig = new Ms::TimeSig(score);
             timesig->setSig(Ms::Fraction(beats, beat));
             timesig->setTrack(0);
-            s = currentMeasure->getSegment(timesig, tick);
+            s = currentMeasure->getSegment(Ms::Segment::Type::TimeSig, tick);
             s->add(timesig);
             qDebug("tempo %d", tempo);
             }
@@ -380,7 +380,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       cr->add(note);
       // add chord to measure
       if (!grace) {
-            Ms::Segment* s = currentMeasure->getSegment(cr, tick);
+            Ms::Segment* s = currentMeasure->getSegment(Ms::Segment::Type::ChordRest, tick);
             s->add(cr);
             if (!currentGraceNotes.isEmpty()) {
                   for (int i = currentGraceNotes.size() - 1; i >=0; i--)

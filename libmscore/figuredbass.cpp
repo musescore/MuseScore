@@ -85,7 +85,7 @@ FiguredBassItem::~FiguredBassItem()
 
 bool FiguredBassItem::parse(QString& str)
       {
-      int               retVal;
+      int retVal;
 
       parseParenthesis(str, 0);
       retVal = parsePrefixSuffix(str, true);          // prefix
@@ -392,20 +392,20 @@ QString FiguredBassItem::normalizedText() const
 //---------------------------------------------------------
 
 void FiguredBassItem::write(Xml& xml) const
-{
+      {
       xml.stag("FiguredBassItem");
       xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
                     .arg(int(parenth[0])) .arg(int(parenth[1])) .arg(int(parenth[2])) .arg(int(parenth[3])) .arg(int(parenth[4])) );
-      if(_prefix != Modifier::NONE)
+      if (_prefix != Modifier::NONE)
             xml.tag(QString("prefix"), int(_prefix));
-      if(_digit != FBIDigitNone)
+      if (_digit != FBIDigitNone)
             xml.tag(QString("digit"), _digit);
-      if(_suffix != Modifier::NONE)
+      if (_suffix != Modifier::NONE)
             xml.tag(QString("suffix"), int(_suffix));
-      if(_contLine != ContLine::NONE)
+      if (_contLine != ContLine::NONE)
             xml.tag("continuationLine", int(_contLine));
       xml.etag();
-}
+      }
 
 //---------------------------------------------------------
 //   FiguredBassItem read()
@@ -572,12 +572,12 @@ void FiguredBassItem::draw(QPainter* painter) const
 
       // continuation line
       qreal lineEndX = 0.0;
-      if (_contLine > ContLine::NONE) {
-            qreal lineStartX   = textWidth;                       // by default, line starts right after text
+      if (_contLine != ContLine::NONE) {
+            qreal lineStartX  = textWidth;                       // by default, line starts right after text
             if (lineStartX > 0.0)
                   lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;    // if some text, give some room after it
             lineEndX = figuredBass()->printedLineLength();        // by default, line ends with item duration
-            if(lineEndX - lineStartX < 1.0)                       // if line length < 1 sp, ignore it
+            if (lineEndX - lineStartX < 1.0)                       // if line length < 1 sp, ignore it
                   lineEndX = 0.0;
 
             // if extended cont.line and no closing parenthesis: look at next FB element
@@ -605,7 +605,7 @@ void FiguredBassItem::draw(QPainter* painter) const
             }
 
       // closing cont.line parenthesis
-      if(parenth[4] != Parenthesis::NONE) {
+      if (parenth[4] != Parenthesis::NONE) {
             int x = lineEndX > 0.0 ? lineEndX : textWidth;
             painter->drawText(QRectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
                   g_FBFonts.at(font).displayParenthesis[int(parenth[4])]);
@@ -1059,7 +1059,7 @@ void FiguredBass::layout()
       qreal yOff  = score()->styleD(StyleIdx::figuredBassYOffset);
       qreal _sp   = spatium();
       // if 'our' style, force 'our' style data from FiguredBass parameters
-      if(textStyleType() == TextStyleType::FIGURED_BASS) {
+      if (textStyleType() == TextStyleType::FIGURED_BASS) {
             TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
                         false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, yOff),
                         OffsetType::SPATIUM);
@@ -1069,10 +1069,10 @@ void FiguredBass::layout()
 
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
-      if(editMode() || items.size() < 1 || textStyleType() != TextStyleType::FIGURED_BASS) {
+      if (editMode() || items.size() < 1 || textStyleType() != TextStyleType::FIGURED_BASS) {
             Text::layout();
             return;
-      }
+            }
 
       // VERTICAL POSITION:
       yOff *= _sp;                                    // convert spatium value to raster units
@@ -1081,11 +1081,11 @@ void FiguredBass::layout()
       // BOUNDING BOX and individual item layout (if requried)
       createLayout();                                 // prepare structs and data expected by Text methods
       // if element could be parsed into items, layout each element
-      if(items.size() > 0) {
+      if (items.size() > 0) {
             layoutLines();
             bbox().setRect(0, 0, _lineLenghts.at(0), 0);
             // layout each item and enlarge bbox to include items bboxes
-            for(FiguredBassItem* item : items) {
+            for (FiguredBassItem* item : items) {
                   item->layout();
                   addbbox(item->bbox().translated(item->pos()));
                   }
@@ -1102,42 +1102,43 @@ void FiguredBass::layout()
 
 void FiguredBass::layoutLines()
       {
-      if(_ticks <= 0 || segment() == nullptr) {
-NoLen:
+      if (_ticks <= 0 || !segment()) {
             _lineLenghts.resize(1);                         // be sure to always have
             _lineLenghts[0] = 0;                            // at least 1 item in array
             return;
             }
 
-      ChordRest * lastCR;                                   // the last ChordRest of this
-      Segment *   nextSegm;                                 // the Segment beyond this' segment
-      int         nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
+      ChordRest* lastCR;                                   // the last ChordRest of this
+      Segment *  nextSegm;                                 // the Segment beyond this' segment
+      int        nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
       // locate the measure containing the last tick of this; it is either:
       // the same measure containing nextTick, if nextTick is not the first tick of a measure
       //    (and line should stop right before it)
       // or the previous measure, if nextTick is the first tick of a measure
       //    (and line should stop before any measure terminal segment (bar, clef, ...) )
+
       Measure* m = score()->tick2measure(nextTick-1);
-      if (m != 0) {
+      if (m) {
             // locate the first segment (of ANY type) right after this' last tick
-            for (nextSegm = m->first(Segment::Type::All); nextSegm; ) {
-                  if(nextSegm->tick() >= nextTick)
+            for (nextSegm = m->first(Segment::Type::All); nextSegm; nextSegm = nextSegm->next()) {
+                  if (nextSegm->tick() >= nextTick)
                         break;
-                  nextSegm = nextSegm->next();
                   }
             // locate the last ChordRest of this
             if (nextSegm)
                   lastCR = nextSegm->prev1()->nextChordRest(track(), true);
             }
-      if (m == 0 || nextSegm == 0) {
+      if (!m || !nextSegm) {
             qDebug("FiguredBass layout: no segment found for tick %d", nextTick);
-            goto NoLen;
+            _lineLenghts.resize(1);                         // be sure to always have
+            _lineLenghts[0] = 0;                            // at least 1 item in array
+            return;
             }
 
       // get length of printed lines from horiz. page position of lastCR
       // (enter a bit 'into' the ChordRest for clarity)
-      _printedLineLength = lastCR ? lastCR->pageX() - pageX() + 1.5*spatium() : 3 * spatium();
+      _printedLineLength = lastCR ? lastCR->pageX() - pageX() + 1.5 * spatium() : 3 * spatium();
 
       // get duration indicator line(s) from page position of nextSegm
       const QList<System*>& systems = score()->systems();
@@ -1174,7 +1175,7 @@ qDebug("FiguredBass: duration indicator end line not implemented");
                   _lineLenghts[segIdx] = len;
             }
       // if more array items than needed, truncate array
-      if(_lineLenghts.size() > segIdx)
+      if (_lineLenghts.size() > segIdx)
             _lineLenghts.resize(segIdx);
       }
 
@@ -1185,22 +1186,22 @@ qDebug("FiguredBass: duration indicator end line not implemented");
 void FiguredBass::draw(QPainter* painter) const
       {
       // if not printing, draw duration line(s)
-      if( !score()->printing() ) {
-            foreach(qreal len, _lineLenghts)
-                  if(len > 0) {
+      if (!score()->printing() ) {
+            for (qreal len : _lineLenghts) {
+                  if (len > 0) {
                         painter->setPen(QPen(Qt::lightGray, 1));
                         painter->drawLine(0.0, -2, len, -2);      // -2: 2 rast. un. above digits
                         }
+                  }
             }
       // if in edit mode or with custom style, use standard text drawing
-      if(editMode() || textStyleType() != TextStyleType::FIGURED_BASS)
+      if (editMode() || textStyleType() != TextStyleType::FIGURED_BASS)
             Text::draw(painter);
-      // not edit mode:
-      else {
-            if(items.size() < 1)                            // if not parseable into f.b. items
+      else {                                                // not edit mode:
+            if (items.size() < 1)                           // if not parseable into f.b. items
                   Text::draw(painter);                      // draw as standard text
             else
-                  for(FiguredBassItem* item : items) {      // if parseable into f.b. items
+                  for (FiguredBassItem* item : items) {     // if parseable into f.b. items
                         painter->translate(item->pos());    // draw each item in its proper position
                         item->draw(painter);
                         painter->translate(-item->pos());
@@ -1218,10 +1219,10 @@ void FiguredBass::draw(QPainter* painter) const
 //---------------------------------------------------------
 
 void FiguredBass::startEdit(MuseScoreView * msv, const QPointF & pt)
-{
+      {
       Text::layout();               // convert layout to standard Text conventions
       Text::startEdit(msv, pt);
-}
+      }
 
 void FiguredBass::endEdit()
       {

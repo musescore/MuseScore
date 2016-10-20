@@ -5075,15 +5075,15 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       Fraction f = measure->len();
       int ticksPerBeat = f.ticks() / ((f.numerator()>3 && (f.numerator()%3)==0 && f.denominator()>4) ? f.numerator()/3 : f.numerator());
       int tickInBar = tick - measure->tick();
-      int newTick = measure->tick() + ((tickInBar+(back?-1:ticksPerBeat))/ticksPerBeat)*ticksPerBeat;
+      int newTick   = ((tickInBar + (back?-1:ticksPerBeat)) / ticksPerBeat) * ticksPerBeat;
 
       // look for next/prev beat, note, rest or chord
       for (;;) {
             segment = back ? segment->prev1(Segment::Type::ChordRest) : segment->next1(Segment::Type::ChordRest);
 
-            if (!segment || (back ? (segment->tick() < newTick) : (segment->tick() > newTick))) {
+            if (!segment || (back ? (segment->rtick() < newTick) : (segment->rtick() > newTick))) {
                   // no segment or moved past the beat - create new segment
-                  if (!back && newTick >= measure->tick() + f.ticks()) {
+                  if (!back && newTick >= f.ticks()) {
                         // next bar, if any
                         measure = measure->nextMeasure();
                         if (!measure) {
@@ -5100,7 +5100,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
                   break;
                   }
 
-            if (segment->tick() == newTick)
+            if (segment->rtick() == newTick)
                   break;
 
             if (noterest) {
@@ -5174,7 +5174,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       while (segment && segment->tick() < newTick)
             segment = segment->next1(Segment::Type::ChordRest);
       if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
-            segment = new Segment(measure, Segment::Type::ChordRest, newTick);
+            segment = new Segment(measure, Segment::Type::ChordRest, newTick - measure->tick());
             if (!segment) {
                   qDebug("harmonyTicksTab: no next segment");
                   return;
@@ -6122,7 +6122,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       while (nextSegm && nextSegm->tick() < nextSegTick)
             nextSegm = nextSegm->next1(Segment::Type::ChordRest);
       if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-            nextSegm = new Segment(measure, Segment::Type::ChordRest, nextSegTick);
+            nextSegm = new Segment(measure, Segment::Type::ChordRest, nextSegTick - measure->tick());
             if (!nextSegm) {
                   qDebug("figuredBassTicksTab: no next segment");
                   return;

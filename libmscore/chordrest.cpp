@@ -773,7 +773,7 @@ Element* ChordRest::drop(const DropData& data)
                         for (Staff* st  : staff()->staffList()) {
                               Score* score = st->score();
                               Measure* measure = score->tick2measure(m->tick());
-                              Segment* seg = measure->undoGetSegment(Segment::Type::BarLine, tick());
+                              Segment* seg = measure->undoGetSegmentR(Segment::Type::BarLine, rtick());
                               BarLine* l;
                               if (obl == 0)
                                     obl = l = bl->clone();

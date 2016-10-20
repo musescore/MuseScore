@@ -76,7 +76,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
                         Staff* staff = part->staff(0);
                         ts->setTrack(staff->idx() * VOICES);
                         Measure* measure = score->tick2measure(curTick);
-                        Segment* s = measure->getSegment(ts, curTick);
+                        Segment* s = measure->getSegment(Segment::Type::TimeSig, curTick);
                         s->add(ts);
                         }
                   }
@@ -277,7 +277,7 @@ void MuseData::readNote(Part* part, const QString& s)
       d.setVal(ticks);
       chord->setDurationType(d);
 
-      Segment* segment = measure->getSegment(chord, tick);
+      Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
 
       voice = 0;
       for (; voice < VOICES; ++voice) {
@@ -466,7 +466,7 @@ void MuseData::readRest(Part* part, const QString& s)
       rest->setDuration(d.fraction());
       chordRest  = rest;
       rest->setTrack(gstaff * VOICES);
-      Segment* segment = measure->getSegment(rest, tick);
+      Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
 
       voice = 0;
       for (; voice < VOICES; ++voice) {

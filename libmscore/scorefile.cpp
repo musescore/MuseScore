@@ -1062,6 +1062,8 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
             if (!xml.canWriteVoice(track))
                   continue;
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
+                  if (!segment->enabled())
+                        continue;
                   if (track == 0)
                         segment->setWritten(false);
                   Element* e = segment->element(track);
