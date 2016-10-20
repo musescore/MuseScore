@@ -702,7 +702,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newNoteHeadsPalette();
       static Palette* newArticulationsPalette(PaletteType);
       static Palette* newOrnamentsPalette();
-      static Palette* newAkkordeonPalette();
+      static Palette* newAccordionPalette();
       static Palette* newBracketsPalette();
       static Palette* newBreathPalette();
       static Palette* newArpeggioPalette();

@@ -748,13 +748,13 @@ Palette* MuseScore::newOrnamentsPalette()
       }
 
 //---------------------------------------------------------
-//   newAkkordeonPalette
+//   newAccordionPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newAkkordeonPalette()
+Palette* MuseScore::newAccordionPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Akkordeon"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Accordion"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
@@ -1514,7 +1514,7 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newAccidentalsPalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newArticulationsPalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newOrnamentsPalette());
-      paletteBox->addPalette(newAkkordeonPalette());
+      //paletteBox->addPalette(newAccordionPalette());
       paletteBox->addPalette(newBreathPalette());
       paletteBox->addPalette(newGraceNotePalette(PaletteType::ADVANCED));
       paletteBox->addPalette(newNoteHeadsPalette());
