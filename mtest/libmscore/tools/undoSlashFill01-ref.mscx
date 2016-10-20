@@ -109,14 +109,14 @@
         <trackName>Drumset</trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">
-          <head>0</head>
+          <head>normal</head>
           <line>7</line>
           <voice>1</voice>
           <name>Acoustic Bass Drum</name>
           <stem>2</stem>
           </Drum>
         <Drum pitch="36">
-          <head>0</head>
+          <head>normal</head>
           <line>7</line>
           <voice>1</voice>
           <name>Bass Drum 1</name>
@@ -124,14 +124,14 @@
           <shortcut>B</shortcut>
           </Drum>
         <Drum pitch="37">
-          <head>1</head>
+          <head>cross</head>
           <line>3</line>
           <voice>0</voice>
           <name>Side Stick</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="38">
-          <head>0</head>
+          <head>normal</head>
           <line>3</line>
           <voice>0</voice>
           <name>Acoustic Snare</name>
@@ -139,21 +139,21 @@
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="40">
-          <head>0</head>
+          <head>normal</head>
           <line>3</line>
           <voice>0</voice>
           <name>Electric Snare</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="41">
-          <head>0</head>
+          <head>normal</head>
           <line>5</line>
           <voice>0</voice>
           <name>Low Floor Tom</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="42">
-          <head>1</head>
+          <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Closed Hi-Hat</name>
@@ -161,21 +161,22 @@
           <shortcut>G</shortcut>
           </Drum>
         <Drum pitch="43">
-          <head>0</head>
+          <head>normal</head>
           <line>5</line>
           <voice>1</voice>
           <name>High Floor Tom</name>
           <stem>2</stem>
           </Drum>
         <Drum pitch="44">
-          <head>1</head>
+          <head>cross</head>
           <line>9</line>
           <voice>1</voice>
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
+          <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="45">
-          <head>0</head>
+          <head>normal</head>
           <line>2</line>
           <voice>0</voice>
           <name>Low Tom</name>
@@ -183,28 +184,28 @@
           <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="46">
-          <head>1</head>
+          <head>cross</head>
           <line>1</line>
           <voice>0</voice>
           <name>Open Hi-Hat</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="47">
-          <head>0</head>
+          <head>normal</head>
           <line>1</line>
           <voice>0</voice>
           <name>Low-Mid Tom</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="48">
-          <head>0</head>
+          <head>normal</head>
           <line>0</line>
           <voice>0</voice>
           <name>Hi-Mid Tom</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="49">
-          <head>1</head>
+          <head>cross</head>
           <line>-2</line>
           <voice>0</voice>
           <name>Crash Cymbal 1</name>
@@ -212,7 +213,7 @@
           <shortcut>C</shortcut>
           </Drum>
         <Drum pitch="50">
-          <head>0</head>
+          <head>normal</head>
           <line>0</line>
           <voice>0</voice>
           <name>High Tom</name>
@@ -220,7 +221,7 @@
           <shortcut>E</shortcut>
           </Drum>
         <Drum pitch="51">
-          <head>1</head>
+          <head>cross</head>
           <line>0</line>
           <voice>0</voice>
           <name>Ride Cymbal 1</name>
@@ -228,63 +229,63 @@
           <shortcut>D</shortcut>
           </Drum>
         <Drum pitch="52">
-          <head>1</head>
+          <head>cross</head>
           <line>-3</line>
           <voice>0</voice>
           <name>Chinese Cymbal</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="53">
-          <head>2</head>
+          <head>diamond</head>
           <line>0</line>
           <voice>0</voice>
           <name>Ride Bell</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="54">
-          <head>2</head>
+          <head>diamond</head>
           <line>2</line>
           <voice>0</voice>
           <name>Tambourine</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="55">
-          <head>1</head>
+          <head>cross</head>
           <line>-3</line>
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="56">
-          <head>3</head>
+          <head>triangle</head>
           <line>1</line>
           <voice>0</voice>
           <name>Cowbell</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="57">
-          <head>1</head>
+          <head>cross</head>
           <line>-3</line>
           <voice>0</voice>
           <name>Crash Cymbal 2</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="59">
-          <head>1</head>
+          <head>cross</head>
           <line>2</line>
           <voice>0</voice>
           <name>Ride Cymbal 2</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="63">
-          <head>1</head>
+          <head>cross</head>
           <line>4</line>
           <voice>0</voice>
           <name>Open Hi Conga</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="64">
-          <head>1</head>
+          <head>cross</head>
           <line>6</line>
           <voice>0</voice>
           <name>Low Conga</name>
@@ -345,7 +346,7 @@
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -357,7 +358,7 @@
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -391,7 +392,7 @@
             <track>1</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -405,7 +406,7 @@
             <track>1</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -419,7 +420,7 @@
             <track>1</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -433,7 +434,7 @@
             <track>1</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -478,7 +479,7 @@
             <track>2</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -493,7 +494,7 @@
             <track>2</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -508,7 +509,7 @@
             <track>2</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -523,7 +524,7 @@
             <track>2</track>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>-1</fixedLine>
@@ -540,7 +541,7 @@
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -552,7 +553,7 @@
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -564,7 +565,7 @@
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -576,7 +577,7 @@
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -604,7 +605,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -616,7 +617,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -630,7 +631,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -642,7 +643,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -654,7 +655,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -666,7 +667,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -680,7 +681,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -692,7 +693,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -704,7 +705,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -716,7 +717,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -730,7 +731,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -742,7 +743,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -754,7 +755,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>
@@ -766,7 +767,7 @@
           <Note>
             <pitch>0</pitch>
             <tpc>14</tpc>
-            <head>5</head>
+            <head>slash</head>
             <play>0</play>
             <fixed>1</fixed>
             <fixedLine>4</fixedLine>

@@ -596,7 +596,7 @@ Palette* MuseScore::newNoteHeadsPalette()
                   sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_BREVIS);
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
-            sp->append(nh, qApp->translate("noteheadnames", NoteHead::groupToGroupName(NoteHead::Group(i))));
+            sp->append(nh, NoteHead::group2userName(NoteHead::Group(i)));
             }
       Icon* ik = new Icon(gscore);
       ik->setIconType(IconType::BRACKETS);

@@ -1,7 +1,10 @@
 #!/bin/bash
 
-BUILD=../../../build.debug
-#BUILD=../../../../MuseScore-build
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/tools/Debug
+else
+   S=../../../build.debug/mtest/libmscore/tools
+fi
 
 for a in undoAddLineBreaks \
    undoExplode undoImplode undoImplodeVoice undoSlashFill \
@@ -9,6 +12,6 @@ for a in undoAddLineBreaks \
    undoChangeVoice undoResequencePart undoSlashFill undoSlashRhythm \
    undoResequenceMeasure; do
       echo ${a}
-      cp $BUILD/mtest/libmscore/tools/${a}01-test.mscx ${a}01-ref.mscx
-      cp $BUILD/mtest/libmscore/tools/${a}02-test.mscx ${a}02-ref.mscx
+      cp $S/${a}01-test.mscx ${a}01-ref.mscx
+      cp $S/${a}02-test.mscx ${a}02-ref.mscx
       done

@@ -72,6 +72,7 @@ void TestCompat114::compat_data()
       QTest::newRow("style") << "style";
       QTest::newRow("text_scaling") << "text_scaling";
       QTest::newRow("markers") << "markers";
+      QTest::newRow("drumset") << "drumset";
       }
 
 //---------------------------------------------------------

@@ -155,6 +155,7 @@ class Instrument {
       ~Instrument();
 
       void read(XmlReader&, Part *part);
+      bool readProperties(XmlReader&, Part* , bool* customDrumset);
       void write(Xml& xml, Part *part) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;
@@ -188,6 +189,8 @@ class Instrument {
       const QList<MidiArticulation>& articulation() const    { return _articulation; }
 
       const QList<Channel*>& channel() const                 { return _channel; }
+      void appendChannel(Channel* c)                         { _channel.append(c); }
+      void clearChannels()                                   { _channel.clear(); }
 
       void setMidiActions(const QList<NamedEventList>& l)    { _midiActions = l;  }
       void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }

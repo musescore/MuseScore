@@ -197,7 +197,7 @@
               </Text>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <head>1</head>
+            <head>cross</head>
             <fret>0</fret>
             <string>1</string>
             <ghost>1</ghost>
@@ -231,7 +231,7 @@
             <lid>22</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
-            <head>1</head>
+            <head>cross</head>
             <fret>0</fret>
             <string>2</string>
             <ghost>1</ghost>
@@ -262,7 +262,7 @@
               </Text>
             <pitch>33</pitch>
             <tpc>17</tpc>
-            <head>1</head>
+            <head>cross</head>
             <fret>0</fret>
             <string>2</string>
             <ghost>1</ghost>
@@ -306,7 +306,7 @@
               </Text>
             <pitch>33</pitch>
             <tpc>17</tpc>
-            <head>1</head>
+            <head>cross</head>
             <fret>0</fret>
             <string>2</string>
             <ghost>1</ghost>
@@ -553,7 +553,7 @@
                 </Text>
               <pitch>38</pitch>
               <tpc>16</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>1</string>
               <ghost>1</ghost>
@@ -587,7 +587,7 @@
               <lid>22</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>2</string>
               <ghost>1</ghost>
@@ -618,7 +618,7 @@
                 </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>2</string>
               <ghost>1</ghost>
@@ -662,7 +662,7 @@
                 </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>2</string>
               <ghost>1</ghost>
@@ -798,7 +798,7 @@
                 </Text>
               <pitch>38</pitch>
               <tpc>16</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>1</string>
               <ghost>1</ghost>
@@ -832,7 +832,7 @@
               <lid>22</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>2</string>
               <ghost>1</ghost>
@@ -863,7 +863,7 @@
                 </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>2</string>
               <ghost>1</ghost>
@@ -907,7 +907,7 @@
                 </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
-              <head>1</head>
+              <head>cross</head>
               <fret>0</fret>
               <string>2</string>
               <ghost>1</ghost>
