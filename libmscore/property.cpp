@@ -54,8 +54,8 @@ static const PropertyData propertyList[] = {
       { P_ID::LINE,                false, "line",          P_TYPE::INT    },
       { P_ID::FIXED,               false, "fixed",         P_TYPE::BOOL   },
       { P_ID::FIXED_LINE,          false, "fixedLine",     P_TYPE::INT    },
-      { P_ID::HEAD_TYPE,           false, "headType",      P_TYPE::INT    },
-      { P_ID::HEAD_GROUP,          false, "head",          P_TYPE::INT  },
+      { P_ID::HEAD_TYPE,           false, "headType",      P_TYPE::HEAD_TYPE   },
+      { P_ID::HEAD_GROUP,          false, "head",          P_TYPE::HEAD_GROUP  },
       { P_ID::VELO_TYPE,           false, "veloType",      P_TYPE::VALUE_TYPE  },
       { P_ID::VELO_OFFSET,         false, "velocity",      P_TYPE::INT  },
       { P_ID::ARTICULATION_ANCHOR, false, "anchor",        P_TYPE::INT  },
@@ -400,6 +400,10 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::SYMID:
                   return QVariant::fromValue(Sym::name2id(e.readElementText()));
                   break;
+            case P_TYPE::HEAD_GROUP:
+                  return QVariant::fromValue(NoteHead::name2group(e.readElementText()));;
+            case P_TYPE::HEAD_TYPE:
+                  return QVariant::fromValue(NoteHead::name2type(e.readElementText()));
             case P_TYPE::POINT_MM:              // not supported
             case P_TYPE::TDURATION:
             case P_TYPE::SIZE_MM:

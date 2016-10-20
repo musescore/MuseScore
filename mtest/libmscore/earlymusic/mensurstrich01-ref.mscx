@@ -161,7 +161,7 @@
               </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>13</head>
+            <head>altbrevis</head>
             </Note>
           </Chord>
         </Measure>
@@ -172,7 +172,7 @@
             <endSpanner id="2"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>13</head>
+            <head>altbrevis</head>
             </Note>
           </Chord>
         </Measure>
@@ -259,7 +259,7 @@
               </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>13</head>
+            <head>altbrevis</head>
             </Note>
           </Chord>
         </Measure>

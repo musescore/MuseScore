@@ -29,6 +29,7 @@
 #include "keysig.h"
 #include "stafftext.h"
 #include "dynamic.h"
+#include "drumset.h"
 #include "timesig.h"
 #include "slur.h"
 #include "chord.h"
@@ -291,6 +292,191 @@ static void readAccidental(Accidental* a, XmlReader& e)
             }
       }
 
+static NoteHead::Group convertHeadGroup(int i)
+      {
+      NoteHead::Group val;
+      switch (i) {
+            case 1:
+                  val = NoteHead::Group::HEAD_CROSS;
+                  break;
+            case 2:
+                  val = NoteHead::Group::HEAD_DIAMOND;
+                  break;
+            case 3:
+                  val = NoteHead::Group::HEAD_TRIANGLE;
+                  break;
+            case 4:
+                  val = NoteHead::Group::HEAD_MI;
+                  break;
+            case 5:
+                  val = NoteHead::Group::HEAD_SLASH;
+                  break;
+            case 6:
+                  val = NoteHead::Group::HEAD_XCIRCLE;
+                  break;
+            case 7:
+                  val = NoteHead::Group::HEAD_DO;
+                  break;
+            case 8:
+                  val = NoteHead::Group::HEAD_RE;
+                  break;
+            case 9:
+                  val = NoteHead::Group::HEAD_FA;
+                  break;
+            case 10:
+                  val = NoteHead::Group::HEAD_LA;
+                  break;
+            case 11:
+                  val = NoteHead::Group::HEAD_TI;
+                  break;
+            case 12:
+                  val = NoteHead::Group::HEAD_SOL;
+                  break;
+            case 13:
+                  val = NoteHead::Group::HEAD_BREVIS_ALT;
+                  break;
+            default:
+                  val = NoteHead::Group::HEAD_NORMAL;
+            }
+      return val;
+      }
+
+static NoteHead::Type convertHeadType(int i)
+      {
+      NoteHead::Type val;
+      switch (i) {
+            case 0:
+                  val = NoteHead::Type::HEAD_WHOLE;
+                  break;
+            case 1:
+                  val = NoteHead::Type::HEAD_HALF;
+                  break;
+            case 2:
+                  val = NoteHead::Type::HEAD_QUARTER;
+                  break;
+            case 3:
+                  val = NoteHead::Type::HEAD_BREVIS;
+                  break;
+            default:
+                  val = NoteHead::Type::HEAD_AUTO;;
+            }
+      return val;
+      }
+
+//---------------------------------------------------------
+//   readDrumset
+//---------------------------------------------------------
+
+static void readDrumset(Drumset* ds, XmlReader& e)
+      {
+      int pitch = e.intAttribute("pitch", -1);
+      if (pitch < 0 || pitch > 127) {
+            qDebug("load drumset: invalid pitch %d", pitch);
+            return;
+            }
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "head")
+                  ds->drum(pitch).notehead = convertHeadGroup(e.readInt());
+            else if (ds->readProperties(e, pitch))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readInstrument
+//---------------------------------------------------------
+
+static void readInstrument(Instrument *i, Part* p, XmlReader& e)
+      {
+      int program = -1;
+      int bank    = 0;
+      int chorus  = 30;
+      int reverb  = 30;
+      int volume  = 100;
+      int pan     = 60;
+      bool customDrumset = false;
+      i->clearChannels();       // remove default channel
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Drum") {
+                  // if we see one of this tags, a custom drumset will
+                  // be created
+                  if (!i->drumset())
+                        i->setDrumset(new Drumset(*smDrumset));
+                  if (!customDrumset) {
+                        i->drumset()->clear();
+                        customDrumset = true;
+                        }
+                  readDrumset(i->drumset(), e);
+                  }
+
+            else if (i->readProperties(e, p, &customDrumset))
+                  ;
+            else
+                 e.unknown();
+            }
+      if (i->channel().empty()) {      // for backward compatibility
+            Channel* a = new Channel;
+            a->chorus  = chorus;
+            a->reverb  = reverb;
+            a->name    = "normal";
+            a->program = program;
+            a->bank    = bank;
+            a->volume  = volume;
+            a->pan     = pan;
+            i->appendChannel(a);
+            }
+      if (i->useDrumset()) {
+            if (i->channel()[0]->bank == 0)
+                  i->channel()[0]->bank = 128;
+            i->channel()[0]->updateInitList();
+            }
+      }
+
+static void readPart(Part* part, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Instrument") {
+                  Instrument* i = part->instrument();
+                  readInstrument(i, part, e);
+                  Drumset* ds = i->drumset();
+                  Staff*   s = part->staff(0);
+                  int lld = s ? qRound(s->logicalLineDistance()) : 1;
+                  if (ds && s && lld > 1) {
+                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
+                              ds->drum(i).line /= lld;
+                        }
+                  }
+            else if (part->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readAmbitus
+//---------------------------------------------------------
+
+static void readAmbitus(Ambitus* ambitus, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "head")
+                  ambitus->setNoteHeadGroup(convertHeadGroup(e.readInt()));
+            else if (tag == "headType")
+                  ambitus->setNoteHeadType(convertHeadType(e.readInt()));
+            else if (ambitus->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
 //---------------------------------------------------------
 //   readNote
 //---------------------------------------------------------
@@ -307,6 +493,16 @@ static void readNote(Note* note, XmlReader& e)
                   a->setTrack(note->track());
                   readAccidental(a, e);
                   note->add(a);
+                  }
+            else if (tag == "head") {
+                  int i = e.readInt();
+                  NoteHead::Group val = convertHeadGroup(i);
+                  note->setHeadGroup(val);
+                  }
+            else if (tag == "headType") {
+                  int i = e.readInt();
+                  NoteHead::Type val = convertHeadType(i);
+                  note->setHeadType(val);
                   }
             else if (note->readProperties(e))
                   ;
@@ -1028,7 +1224,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   }
             else if (tag == "Ambitus") {
                   Ambitus* range = new Ambitus(score);
-                  range->read(e);
+                  readAmbitus(range, e);
                   segment = m->getSegment(Segment::Type::Ambitus, e.tick());
                   range->setParent(segment);          // a parent segment is needed for setTrack() to work
                   range->setTrack(trackZeroVoice(e.track()));
@@ -1304,7 +1500,7 @@ static bool readScore(Score* score, XmlReader& e)
                   }
             else if (tag == "Part") {
                   Part* part = new Part(score);
-                  part->read(e);
+                  readPart(part, e);
                   score->parts().push_back(part);
                   }
             else if ((tag == "HairPin")

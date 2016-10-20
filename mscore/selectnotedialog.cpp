@@ -43,7 +43,7 @@ SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       n = _n;
-      notehead->setText(NoteHead::groupToGroupName(n->headGroup()));
+      notehead->setText(NoteHead::group2userName(n->headGroup()));
       pitch->setText(n->tpcUserName());
       type->setText(n->noteTypeUserName());
       duration->setText(n->chord()->durationUserName());

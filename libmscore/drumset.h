@@ -60,6 +60,7 @@ class Drumset {
 
       void save(Xml&) const;
       void load(XmlReader&);
+      bool readProperties(XmlReader&, int);
       void clear();
       int nextPitch(int) const;
       int prevPitch(int) const;

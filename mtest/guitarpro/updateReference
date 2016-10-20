@@ -1,7 +1,11 @@
 #!/bin/bash
 
-MSCORE=../../build.debug/mtest/guitarpro
-#MSCORE=../../../MuseScore-build/mtest/guitarpro
+if [ "`uname`" = 'Darwin' ]; then
+   MSCORE=../../build.xcode/mtest/guitarpro/Debug
+else
+   MSCORE=../../build.debug/mtest/guitarpro
+fi
+
 
 cp   $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
 cp   $MSCORE/slur.gp4.mscx slur.gp4-ref.mscx
